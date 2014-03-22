@@ -149,21 +149,23 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $userAction = $defaultUserAction;
             } else {
 ?>
-        <header>
-            <h2>
-                <i class="icon-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
-            </h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="icon-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
+                </h2>
+            </div>
         </header>
-        <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
+        <p class="alert alert-danger"><?php echo $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
-            <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <input type="hidden" name="user_id" value="<?php echo $userId; ?>" />
+            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
             <p class="text-center">
                 <button class="btn btn-danger" type="submit">
-                    <?php print $PMF_LANG["ad_gen_yes"]; ?>
+                    <?php echo $PMF_LANG["ad_gen_yes"]; ?>
                 </button>
                 <a class="btn btn-info" href="?action=user">
-                    <?php print $PMF_LANG["ad_gen_no"]; ?>
+                    <?php echo $PMF_LANG["ad_gen_no"]; ?>
                 </a>
             </p>
         </form>
@@ -290,63 +292,68 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     // show new user form
     if ($userAction == 'add' && $permission['adduser']) {
 ?>
-        <header>
-            <h2><i class="fa fa-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
+            </div>
         </header>
 
-        <div id="user_message"><?php print $message; ?></div>
+        <div id="user_message"><?php echo $message; ?></div>
         <div id="user_create">
 
-            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" accept-charset="utf-8">
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" role="form"
+                  accept-charset="utf-8">
+            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
 
-            <div class="control-group">
-                <label class="control-label" for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
-                <div class="controls">
-                    <input type="text" name="user_name" id="user_name" required tabindex="1"
-                           value="<?php print (isset($user_name) ? $user_name : ''); ?>" />
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="user_name"><?php echo $PMF_LANG["ad_adus_name"]; ?></label>
+                <div class="col-lg-3">
+                    <input type="text" name="user_name" id="user_name" required tabindex="1" class="form-control"
+                           value="<?php echo (isset($user_name) ? $user_name : ''); ?>" />
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="user_realname"><?php print $PMF_LANG["ad_user_realname"]; ?></label>
-                <div class="controls">
-                <input type="text" name="user_realname" id="user_realname" required tabindex="2"
-                   value="<?php print (isset($user_realname) ? $user_realname : ''); ?>" />
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="user_realname"><?php echo $PMF_LANG["ad_user_realname"]; ?></label>
+                <div class="col-lg-3">
+                <input type="text" name="user_realname" id="user_realname" required tabindex="2" class="form-control"
+                   value="<?php echo (isset($user_realname) ? $user_realname : ''); ?>" />
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="user_email"><?php print $PMF_LANG["ad_entry_email"]; ?></label>
-                <div class="controls">
-                    <input type="email" name="user_email" id="user_email" required tabindex="3"
-                           value="<?php print (isset($user_email) ? $user_email : ''); ?>" />
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="user_email"><?php echo $PMF_LANG["ad_entry_email"]; ?></label>
+                <div class="col-lg-3">
+                    <input type="email" name="user_email" id="user_email" required tabindex="3" class="form-control"
+                           value="<?php echo (isset($user_email) ? $user_email : ''); ?>" />
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label" for="password"><?php print $PMF_LANG["ad_adus_password"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="user_password" id="password" required tabindex="4"
-                           value="<?php print (isset($user_password) ? $user_password : ''); ?>" />
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="password"><?php echo $PMF_LANG["ad_adus_password"]; ?></label>
+                <div class="col-lg-3">
+                    <input type="password" name="user_password" id="password" required tabindex="4" class="form-control"
+                           value="<?php echo (isset($user_password) ? $user_password : ''); ?>" />
                 </div>
             </div>
 
-             <div class="control-group">
-                 <label class="control-label" for="password_confirm"><?php print $PMF_LANG["ad_passwd_con"]; ?></label>
-                 <div class="controls">
-                    <input type="password" name="user_password_confirm" id="password_confirm" required
-                           tabindex="5" value="<?php print (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
+             <div class="form-group">
+                 <label class="col-lg-2 control-label" for="password_confirm"><?php echo $PMF_LANG["ad_passwd_con"]; ?></label>
+                 <div class="col-lg-3">
+                    <input type="password" name="user_password_confirm" id="password_confirm" required class="form-control"
+                           tabindex="5" value="<?php echo (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
                  </div>
             </div>
 
-            <div class="form-actions">
-                <button class="btn btn-success" type="submit">
-                    <?php print $PMF_LANG["ad_gen_save"]; ?>
-                </button>
-                <a class="btn btn-info" href="?action=user">
-                    <?php print $PMF_LANG['ad_gen_cancel']; ?>
-                </a>
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-10">
+                    <button class="btn btn-success" type="submit">
+                        <?php echo $PMF_LANG["ad_gen_save"]; ?>
+                    </button>
+                    <a class="btn btn-info" href="?action=user">
+                        <?php echo $PMF_LANG['ad_gen_cancel']; ?>
+                    </a>
+                </div>
             </div>
         </form>
 </div> <!-- end #user_create -->
@@ -359,14 +366,14 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="icon-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                    <i class="fa fa-user fa-fw"></i> <?php echo $PMF_LANG['ad_user']; ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
                         </a>
                         <?php if ($permission['edituser']): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="icon-list"></i> <?php print $PMF_LANG['list_all_users']; ?>
+                            <i class="icon-list"></i> <?php echo $PMF_LANG['list_all_users']; ?>
                         </a>
                         <?php endif; ?>
                     </div>
@@ -392,40 +399,45 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $("#user_list_select").val(data.user_id);
                 // Append input fields
                 $('#user_data_table').append(
-                    '<div class="control-group">' +
-                        '<label class="control-label"><?php print $PMF_LANG["ad_user_realname"]; ?></label>' +
-                        '<div class="controls">' +
-                            '<input type="text" name="display_name" value="' + data.display_name + '" required />' +
+                    '<div class="form-group">' +
+                        '<label class="col-lg-3 control-label"><?php echo $PMF_LANG["ad_user_realname"]; ?></label>' +
+                        '<div class="col-lg-9">' +
+                            '<input type="text" name="display_name" value="' + data.display_name + '" class="form-control" required>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="control-group">' +
-                        '<label class="control-label"><?php print $PMF_LANG["ad_entry_email"]; ?></label>' +
-                        '<div class="controls">' +
-                            '<input type="email" name="email" value="' + data.email + '" required />' +
+                    '<div class="form-group">' +
+                        '<label class="col-lg-3 control-label"><?php echo $PMF_LANG["ad_entry_email"]; ?></label>' +
+                        '<div class="col-lg-9">' +
+                            '<input type="email" name="email" value="' + data.email + '" class="form-control" required>' +
                         '</div>' +
                     '</div>' +
-                    '<input type="hidden" name="last_modified" value="' + data.last_modified + '" />'
+                    '<input type="hidden" name="last_modified" value="' + data.last_modified + '">'
                 );
             });
         }
         /* ]]> */
         </script>
-        <div id="user_message"><?php print $message; ?></div>
+        <div id="user_message"><?php echo $message; ?></div>
 
         <div class="row">
             <div class="col-lg-4" id="userAccounts">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <?php print $PMF_LANG["ad_user_username"]; ?>
+                        <?php echo $PMF_LANG["ad_user_username"]; ?>
                     </div>
 
                     <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-                          method="post" accept-charset="utf-8">
+                          method="post" accept-charset="utf-8" class="form-horizontal">
                     <div class="panel-body">
-
-                        <label for="user_list_autocomplete"><?php print $PMF_LANG['ad_auth_user']; ?>:</label>
-                        <input type="search" id="user_list_autocomplete" name="user_list_search" data-provide="typeahead"
-                            class="form-search">
+                        <div class="form-group">
+                            <label class="control-label col-lg-3" for="user_list_autocomplete">
+                                <?php echo $PMF_LANG['ad_auth_user']; ?>:
+                            </label>
+                            <div class="col-lg-9">
+                                <input type="search" id="user_list_autocomplete" name="user_list_search"
+                                       data-provide="typeahead" class="form-control">
+                            </div>
+                        </div>
                         <script type="text/javascript">
                         //<![CDATA[
                         var mappedIds,
@@ -453,9 +465,9 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                         </script>
                     </div>
                     <div class="panel-footer">
-                        <input type="hidden" id="user_list_select" name="user_list_select" value="" />
+                        <input type="hidden" id="user_list_select" name="user_list_select" value="">
                         <button class="btn btn-danger" type="submit">
-                            <?php print $PMF_LANG['ad_gen_delete']; ?>
+                            <?php echo $PMF_LANG['ad_gen_delete']; ?>
                         </button>
                     </div>
                     </form>
@@ -464,24 +476,29 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             <div class="col-lg-4" id="userDetails">
                 <div class="panel panel-default">
                     <div class="panel-heading" id="user_data_legend">
-                        <?php print $PMF_LANG["ad_user_profou"]; ?>
+                        <?php echo $PMF_LANG["ad_user_profou"]; ?>
                     </div>
-                    <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8">
+                    <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
+                          class="form-horizontal">
                         <div class="panel-body">
                             <input id="update_user_id" type="hidden" name="user_id" value="0" />
-                                <label for="user_status_select" class="small">
-                                    <?php print $PMF_LANG['ad_user_status']; ?>
+                            <div class="form-group">
+                                <label for="user_status_select" class="col-lg-3 control-label">
+                                    <?php echo $PMF_LANG['ad_user_status']; ?>
                                 </label>
-                                <select id="user_status_select" name="user_status" >
-                                    <option value="active"><?php print $PMF_LANG['ad_user_active']; ?></option>
-                                    <option value="blocked"><?php print $PMF_LANG['ad_user_blocked']; ?></option>
-                                    <option value="protected"><?php print $PMF_LANG['ad_user_protected']; ?></option>
-                                </select>
+                                <div class="col-lg-9">
+                                    <select id="user_status_select" class="form-control" name="user_status">
+                                        <option value="active"><?php echo $PMF_LANG['ad_user_active']; ?></option>
+                                        <option value="blocked"><?php echo $PMF_LANG['ad_user_blocked']; ?></option>
+                                        <option value="protected"><?php echo $PMF_LANG['ad_user_protected']; ?></option>
+                                    </select>
+                                </div>
+                            </div>
                             <div id="user_data_table"></div>
                         </div>
                         <div class="panel-footer">
                             <button class="btn btn-primary" type="submit">
-                                <?php print $PMF_LANG["ad_gen_save"]; ?>
+                                <?php echo $PMF_LANG["ad_gen_save"]; ?>
                             </button>
                         </div>
                     </form>
@@ -489,10 +506,10 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
             <div class="col-lg-4" id="userRights">
                 <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
                     <div class="panel panel-default">
                         <div class="panel-heading" id="user_rights_legend">
-                            <?php print $PMF_LANG["ad_user_rights"]; ?>
+                            <?php echo $PMF_LANG["ad_user_rights"]; ?>
                         </div>
                         <div class="panel-body">
                             <input id="rights_user_id" type="hidden" name="user_id" value="0" />
@@ -500,17 +517,17 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                             <ul class="list-group">
                                 <li class="list-group-item text-center">
                                     <a class="btn btn-primary btn-sm" href="javascript:formCheckAll('rightsForm')">
-                                        <?php print $PMF_LANG['ad_user_checkall']; ?>
+                                        <?php echo $PMF_LANG['ad_user_checkall']; ?>
                                     </a>
                                     <a class="btn btn-primary btn-sm" href="javascript:formUncheckAll('rightsForm')">
-                                        <?php print $PMF_LANG['ad_user_uncheckall']; ?>
+                                        <?php echo $PMF_LANG['ad_user_uncheckall']; ?>
                                     </a>
                                 </li>
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
                                 <li class="list-group-item">
                                     <label class="checkbox">
-                                    <input id="user_right_<?php print $right['right_id']; ?>" type="checkbox"
-                                           name="user_rights[]" value="<?php print $right['right_id']; ?>"/>
+                                    <input id="user_right_<?php echo $right['right_id']; ?>" type="checkbox"
+                                           name="user_rights[]" value="<?php echo $right['right_id']; ?>"/>
                                 <?php
                                 if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
                                     echo $PMF_LANG['rightsLanguage'][$right['name']];
@@ -525,7 +542,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                         </div>
                         <div class="panel-footer">
                             <button class="btn btn-primary" type="submit">
-                                <?php print $PMF_LANG["ad_gen_save"]; ?>
+                                <?php echo $PMF_LANG["ad_gen_save"]; ?>
                             </button>
                         </div>
                     </div>
@@ -570,24 +587,24 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-user"></i> <?php print $PMF_LANG['ad_user']; ?>
+                    <i class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user']; ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="icon-plus"></i> <?php print $PMF_LANG["ad_user_add"]; ?>
+                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
                         </a>
                     </div>
                 </h2>
             </div>
         </header>
-        <div id="user_message"><?php print $message; ?></div>
+        <div id="user_message"><?php echo $message; ?></div>
         <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php print $PMF_LANG['ad_entry_id'] ?></th>
-                <th><?php print $PMF_LANG['ad_user_status'] ?></th>
-                <th><?php print $PMF_LANG['msgNewContentName'] ?></th>
-                <th><?php print $PMF_LANG['ad_auth_user'] ?></th>
-                <th><?php print $PMF_LANG['msgNewContentMail'] ?></th>
+                <th><?php echo $PMF_LANG['ad_entry_id'] ?></th>
+                <th><?php echo $PMF_LANG['ad_user_status'] ?></th>
+                <th><?php echo $PMF_LANG['msgNewContentName'] ?></th>
+                <th><?php echo $PMF_LANG['ad_auth_user'] ?></th>
+                <th><?php echo $PMF_LANG['msgNewContentMail'] ?></th>
                 <th colspan="2">&nbsp;</th>
             </tr>
         </thead>
@@ -615,8 +632,8 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
 
             ?>
-            <tr class="row_user_id_<?php print $user->getUserId() ?>">
-                <td><?php print $user->getUserId() ?></td>
+            <tr class="row_user_id_<?php echo $user->getUserId() ?>">
+                <td><?php echo $user->getUserId() ?></td>
                 <td><i class="<?php
                 switch($user->getStatus()) {
                     case 'active':
@@ -629,23 +646,23 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                         echo 'icon-ok-sign';
                         break;
                 } ?>"></i></td>
-                <td><?php print $user->getUserData('display_name') ?></td>
-                <td><?php print $user->getLogin() ?></td>
+                <td><?php echo $user->getUserData('display_name') ?></td>
+                <td><?php echo $user->getLogin() ?></td>
                 <td>
-                    <a href="mailto:<?php print $user->getUserData('email') ?>">
-                        <?php print $user->getUserData('email') ?>
+                    <a href="mailto:<?php echo $user->getUserData('email') ?>">
+                        <?php echo $user->getUserData('email') ?>
                     </a>
                 </td>
                 <td>
-                    <a href="?action=user&amp;user_id=<?php print $user->getUserData('user_id')?>" class="btn btn-info">
-                        <?php print $PMF_LANG['ad_user_edit'] ?>
+                    <a href="?action=user&amp;user_id=<?php echo $user->getUserData('user_id')?>" class="btn btn-info">
+                        <?php echo $PMF_LANG['ad_user_edit'] ?>
                     </a>
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a onclick="deleteUser(<?php print $user->getUserData('user_id') ?>); return false;"
+                    <a onclick="deleteUser(<?php echo $user->getUserData('user_id') ?>); return false;"
                        href="javascript:;" class="btn btn-danger">
-                        <?php print $PMF_LANG['ad_user_delete'] ?>
+                        <?php echo $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>
                 </td>
@@ -664,7 +681,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
  */
 function deleteUser(userId)
 {
-    if (confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>')) {
+    if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
         $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
         function(response) {
             $('#user_message').html(response);
@@ -677,5 +694,5 @@ function deleteUser(userId)
 <?php 
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
