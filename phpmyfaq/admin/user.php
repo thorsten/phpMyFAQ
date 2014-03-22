@@ -51,7 +51,12 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $message    = '';
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
-        if ($userId == 0) {
+        $csrfOkay   = true;
+        $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $csrfOkay = false;
+        }
+        if ($userId === 0 && !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user       = new PMF_User($faqConfig);
@@ -70,6 +75,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']);
             $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
+            $user     = new PMF_User_CurrentUser($faqConfig);
         }
     }
 
@@ -473,6 +479,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             </div>
             <div class="span4" id="userRights">
                 <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
                     <fieldset>
                         <legend id="user_rights_legend"><?php print $PMF_LANG["ad_user_rights"]; ?></legend>
                         <input id="rights_user_id" type="hidden" name="user_id" value="0" />

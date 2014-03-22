@@ -196,6 +196,7 @@ class PMF_User
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
+
         if (!$this->addAuth($authLocal, $this->getAuthSource('type'))) {
             return;
         }
@@ -203,7 +204,7 @@ class PMF_User
         // additionally, set given $auth objects
         if (count($auth) > 0) {
             foreach ($auth as $name => $authObject) {
-		if (!$authObject instanceof PMF_Auth_Driver && !$this->addAuth($authObject, $name)) {
+                if (!$authObject instanceof PMF_Auth_Driver && !$this->addAuth($authObject, $name)) {
                     break;
                 }
             }
@@ -502,7 +503,7 @@ class PMF_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-		$this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
             } else {
                 $success = true;
             }
@@ -683,10 +684,10 @@ class PMF_User
     {
         $message = '';
         foreach ($this->errors as $error) {
-	    $message .= $error . "<br>\n";
+            $message .= $error . "<br>\n";
         }
         $this->errors = [];
-	return $message . '<br>' . implode('<br>', debug_backtrace());
+        return $message . '<br>' . implode('<br>', debug_backtrace());
     }
 
     /**

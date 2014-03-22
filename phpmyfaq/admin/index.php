@@ -78,6 +78,11 @@ PMF_Attachment_Factory::init(
 );
 
 //
+// Create a new phpMyFAQ system object
+//
+$faqSystem = new PMF_System();
+
+//
 // Create a new FAQ object
 //
 $faq = new PMF_Faq($faqConfig);

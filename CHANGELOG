@@ -1,10 +1,16 @@
+<<<<<<< HEAD
 phpMyFAQ 2.9.0-dev
 Codename "Proteus"
+=======
+phpMyFAQ 2.8.9
+Codename "Perdita"
+>>>>>>> 860fc795d82658c9e314f24640bb602fbf188bd5
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+<<<<<<< HEAD
 Version 2.9.0-dev 2014-01-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
@@ -22,9 +28,23 @@ Version 2.9.0-dev 2014-01-
 - updated bundled TinyMCE to version 4.0.12 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.6 - 2014-
+Version 2.8.9 - 2014-
+
+Version 2.8.8 - 2014-03-18
+- improved API security (Thorsten)
+- fixed search with Hebrew characters (Thorsten)
+- fixed PDF export with Czech and Slovak characters (Thorsten)
+- fixed a lot of bugs (Thorsten)
+
+Version 2.8.7 - 2014-02-05
+- fixed PHP 5.4 related issue introduced in 2.8.6 (Thorsten)
+
+Version 2.8.6 - 2014-02-04
+- fixed IE8/9 only XSS and CSRF vulnerabilities (JPCERT, Thorsten)
 - updated Hungarian translation
+- updated Spanish translation (Luis Carvalho)
 - updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.5 - 2013-12-31
 - fixed SSO logins with mod_auth_kerb (Stephane Lapie)

@@ -49,9 +49,8 @@ if (!is_null($showCaptcha)) {
 
 $currentCategory = $cat;
 
-$recordId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$solutionId     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
-$highlight      = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+$recordId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 
 // Get all data from the FAQ record
 if (0 == $solutionId) {

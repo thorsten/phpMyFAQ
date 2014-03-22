@@ -46,7 +46,7 @@ if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
 
     <?php print $message ?>
 
-    <form class="form-horizontal" action="index.php" method="post" accept-charset="utf-8">
+    <form class="form-horizontal" action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
 
     <div class="control-group">
         <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>

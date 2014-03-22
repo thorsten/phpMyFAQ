@@ -24,9 +24,10 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'inc/Bootstrap.php';
 
-$action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-$code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$action       = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$ajaxlang     = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+$code         = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$currentToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
 $Language     = new PMF_Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
@@ -51,7 +52,9 @@ PMF_String::init($languageCode);
 
 // Check captcha
 $captcha = new PMF_Captcha($faqConfig);
-$captcha->setSessionId($sids);
+$captcha->setSessionId(
+    PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
+);
 
 // Send headers
 $http = new PMF_Helper_Http();
@@ -286,8 +289,8 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question)) &&
-            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
+            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
+            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
             PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
@@ -763,6 +766,11 @@ switch ($action) {
     // Save user data from UCP
     case 'saveuserdata':
 
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
+            $message = array('error' => $PMF_LANG['ad_msg_noauth']);
+            break;
+        }
+
         $userId   = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
         $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email    = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
@@ -850,4 +858,4 @@ switch ($action) {
         break;
 }
 
-print json_encode($message);
+echo json_encode($message);

@@ -287,6 +287,6 @@ class PMF_String_Mbstring extends PMF_String_Abstract
     {
         $str = (string) $str;
 
-        return self::isUTF8($str) ?  $str . 'u' : $str;
+        return parent::isUTF8($str) ?  $str . 'u' : $str;
     }
 }    

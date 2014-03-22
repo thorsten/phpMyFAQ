@@ -292,18 +292,21 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <select name="language" size="1" id="language" class="form-control">
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+                                    $options = array();
                                     while ($dat = @readdir($dir)) {
-                                        if (substr($dat, -4) == '.php') {
-                                            printf('<option value="%s"', $dat);
+                                        $option = '';
+                                        if (substr($dat, -4) === '.php') {
+                                            $option .= sprintf('<option value="%s"', $dat);
                                             if ($dat == "language_en.php") {
-                                                echo ' selected="selected"';
+                                                $option .= ' selected="selected"';
                                             }
-                                            printf(
-                                                '>%s</option>',
-                                                $languageCodes[substr(strtoupper($dat), 9, 2)]
-                                            );
+                                            $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
+                                            $option  .= sprintf('>%s</option>', $language);
+                                            $options[$language] = $option;
                                         }
                                     }
+                                    ksort($options);
+                                    echo implode("\n", $options);
                                 } else {
                                     echo '<option>english</option>';
                                 }

@@ -108,7 +108,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($user->login($faqusername, $faqpassword)) {
         if ($user->getStatus() != 'blocked') {
-            $auth   = true;
+            $auth = true;
             if (empty($action)) {
                 $action = $faqaction; // SSO logins don't have $faqaction
             }
@@ -446,7 +446,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     $usersOnline = '';
 }
 
-$systemUri      = $faqConfig->get('main.referenceURL') . '/';
+$faqSystem = new PMF_System();
 
 $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
@@ -457,7 +457,7 @@ $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
-$faqLink        = new PMF_Link($systemUri, $faqConfig);
+$faqLink        = new PMF_Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
 $currentPageUrl = $faqLink->getCurrentUrl();
 
 if (is_null($error)) {
@@ -469,10 +469,10 @@ if (is_null($error)) {
 $tplMainPage = array(
     'msgLoginUser'         => $PMF_LANG['msgLoginUser'],
     'title'                => $faqConfig->get('main.titleFAQ') . $title,
-    'baseHref'             => $systemUri,
+    'baseHref'             => $faqSystem->getSystemUri($faqConfig),
     'version'              => $faqConfig->get('main.currentVersion'),
     'header'               => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
-    'metaTitle'            => str_replace('"', '', $faqConfig->get('main.titleFAQ')),
+    'metaTitle'            => str_replace('"', '', $faqConfig->get('main.titleFAQ') . $title),
     'metaDescription'      => $metaDescription,
     'metaKeywords'         => $keywords,
     'metaPublisher'        => $faqConfig->get('main.metaPublisher'),
@@ -495,7 +495,7 @@ $tplMainPage = array(
     'sendPassword'         => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
     'loginHeader'          => $PMF_LANG['msgLoginUser'],
     'loginMessage'         => $loginMessage,
-    'writeLoginPath'       => $systemUri . '?' . PMF_Filter::getFilteredQueryString(),
+    'writeLoginPath'       => $faqSystem->getSystemUri($faqConfig) . '?' . PMF_Filter::getFilteredQueryString(),
     'faqloginaction'       => $action,
     'login'                => $PMF_LANG['ad_auth_ok'],
     'username'             => $PMF_LANG['ad_auth_user'],
@@ -526,7 +526,7 @@ if ('main' == $action || 'show' == $action) {
                 'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
                 'msgSearch'                     => sprintf(
                     '<a class="help" href="%sindex.php?action=search">%s</a>',
-                    $systemUri,
+                    $faqSystem->getSystemUri($faqConfig),
                     $PMF_LANG["msgAdvancedSearch"]
                  )
             )
@@ -541,7 +541,7 @@ if ('main' == $action || 'show' == $action) {
                 'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
                 'msgSearch'       => sprintf(
                     '<a class="help" href="%sindex.php?action=search">%s</a>',
-                    $systemUri,
+                    $faqSystem->getSystemUri($faqConfig),
                     $PMF_LANG["msgAdvancedSearch"]
                 )
             )
@@ -563,18 +563,18 @@ if (!isset($stickyRecordsParams['error'])) {
 
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = array(
-        "msgSearch"           => '<a href="' . $systemUri . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
-        'msgAddContent'       => '<a href="' . $systemUri . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
-        "msgQuestion"         => '<a href="' . $systemUri . 'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
-        "msgOpenQuestions"    => '<a href="' . $systemUri . 'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
-        'msgHelp'             => '<a href="' . $systemUri . 'help.html">'.$PMF_LANG["msgHelp"].'</a>',
-        "msgContact"          => '<a href="' . $systemUri . 'contact.html">'.$PMF_LANG["msgContact"].'</a>',
-        'msgGlossary'         => '<a href="' . $systemUri . 'glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
-        "backToHome"          => '<a href="' . $systemUri . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
-        "allCategories"       => '<a href="' . $systemUri . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        'showInstantResponse' => '<a href="' . $systemUri . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
-        'showSitemap'         => '<a href="' . $systemUri . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'          => $systemUri . 'opensearch.html');
+        "msgSearch"           => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'search.html">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
+        'msgAddContent'       => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">'.$PMF_LANG["msgAddContent"].'</a>',
+        "msgQuestion"         => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'ask.html">'.$PMF_LANG["msgQuestion"].'</a>',
+        "msgOpenQuestions"    => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'open.html">'.$PMF_LANG["msgOpenQuestions"].'</a>',
+        'msgHelp'             => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'help.html">'.$PMF_LANG["msgHelp"].'</a>',
+        "msgContact"          => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'contact.html">'.$PMF_LANG["msgContact"].'</a>',
+        'msgGlossary'         => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
+        "backToHome"          => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
+        "allCategories"       => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
+        'showInstantResponse' => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
+        'showSitemap'         => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
+        'opensearch'          => $faqSystem->getSystemUri($faqConfig) . 'opensearch.html');
 } else {
     $tplNavigation = array(
         "msgSearch"           => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG["msgAdvancedSearch"].'</a>',
@@ -588,7 +588,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         "backToHome"          => '<a href="index.php?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
         'showInstantResponse' => '<a href="index.php?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch'          => $systemUri . 'opensearch.php');
+        'opensearch'          => $faqSystem->getSystemUri($faqConfig) . 'opensearch.php');
 }
 
 $tplNavigation['faqHome']             = $faqConfig->get('main.referenceURL');
@@ -604,13 +604,13 @@ if (isset($auth)) {
     if (in_array(true, $permission)) {
         $adminSection = sprintf(
             '<a href="%s">%s</a>',
-            $systemUri . 'admin/index.php',
+            $faqSystem->getSystemUri($faqConfig) . 'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
         $adminSection = sprintf(
             '<a href="%s">%s</a>',
-            $systemUri . 'index.php?action=ucp',
+            $faqSystem->getSystemUri($faqConfig) . 'index.php?action=ucp',
             $PMF_LANG['headerUserControlPanel']
         );
     }

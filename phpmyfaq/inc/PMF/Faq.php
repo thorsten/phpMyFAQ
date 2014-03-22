@@ -363,7 +363,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             %s
-            GROUP BY fd.id
+            GROUP BY fd.id, fd.lang, fcr.category_id, fv.visits
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -3069,9 +3069,9 @@ class PMF_Faq
                 );
             }
         } else {
-            if (-1 === $this->user) {
+            if (-1 !== $this->user) {
                 return sprintf(
-                    "AND fdu.user_id = %d",
+                    "AND ( fdu.user_id = %d OR fdu.user_id = -1 )",
                     $this->user
                 );
             } else {

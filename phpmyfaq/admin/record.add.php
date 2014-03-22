@@ -138,7 +138,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);
             // Insert the tags
             if ($tags != '') {
-                $tagging->saveTags($recordId, explode(',',$tags));
+                $tagging->saveTags($recordId, explode(',', trim($tags)));
             }
             
             // Add user permissions

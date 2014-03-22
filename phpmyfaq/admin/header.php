@@ -163,22 +163,22 @@ switch ($action) {
 }
 ?>
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
+<!--[if lt IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php print $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></title>
-    <base href="<?php print $faqConfig->get('main.referenceURL'); ?>/admin/" />
+    <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></title>
+    <base href="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/" />
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2014 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
@@ -193,10 +193,10 @@ switch ($action) {
     <script src="../assets/js/autosave.js"></script>
 <?php endif; ?>
 
-    <link rel="shortcut icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/<?php print PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body dir="<?php print $PMF_LANG["dir"]; ?>">
+<body dir="<?php echo $PMF_LANG["dir"]; ?>">
 
 <nav class="navbar navbar-fixed-top hidden-print" role="navigation">
     <div class="navbar-header">
