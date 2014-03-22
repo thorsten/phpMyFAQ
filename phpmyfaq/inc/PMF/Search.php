@@ -101,12 +101,12 @@ class PMF_Search
     /**
      * The main search function for the full text search
      *
-     * @param string  $searchterm   Text/Number (solution id)
+     * @param string  $searchTerm   Text/Number (solution id)
      * @param boolean $allLanguages true to search over all languages
      *
      * @return  array
      */
-    public function search($searchterm, $allLanguages = true)
+    public function search($searchTerm, $allLanguages = true)
     {
         $fdTable   = PMF_Db::getTablePrefix() . 'faqdata';
         $fcrTable  = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
@@ -127,7 +127,7 @@ class PMF_Search
             $condition = array_merge($selectedCategory, $condition);
         }
 
-        if ((!$allLanguages) && (!is_numeric($searchterm))) {
+        if ((!$allLanguages) && (!is_numeric($searchTerm))) {
             $selectedLanguage = array($fdTable . '.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
@@ -146,13 +146,13 @@ class PMF_Search
                     $fdTable . '.lang = ' . $fcrTable . '.record_lang'))
                ->setConditions($condition);
         
-        if (is_numeric($searchterm)) {
+        if (is_numeric($searchTerm)) {
             $search->setMatchingColumns(array($fdTable . '.solution_id'));
         } else {
             $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
         }
         
-        $result = $search->search($searchterm);
+        $result = $search->search($searchTerm);
         
         if (!$this->_config->getDb()->numRows($result)) {
             return [];
@@ -164,12 +164,12 @@ class PMF_Search
     /**
      * Logging of search terms for improvements
      *
-     * @param  string $searchterm Search term
+     * @param  string $searchTerm Search term
      * @return void
      */
-    public function logSearchTerm($searchterm)
+    public function logSearchTerm($searchTerm)
     {
-        if (PMF_String::strlen($searchterm) == 0) {
+        if (PMF_String::strlen($searchTerm) == 0) {
             return;
         }
         
@@ -183,7 +183,7 @@ class PMF_Search
             $this->_table,
             $this->_config->getDb()->nextId($this->_table, 'id'),
             $this->_config->getLanguage()->getLanguage(),
-            $this->_config->getDb()->escape($searchterm),
+            $this->_config->getDb()->escape($searchTerm),
             $date->format('Y-m-d H:i:s')
         );
         
@@ -191,12 +191,12 @@ class PMF_Search
     }
 
     /**
-     * Deletes a searchterm
+     * Deletes a search term
      *
-     * @param string $searchterm
+     * @param string $searchTerm
      * @return boolean
      */
-    public function deleteSearchTerm($searchterm)
+    public function deleteSearchTerm($searchTerm)
     {
         $query = sprintf("
             DELETE FROM
@@ -204,12 +204,24 @@ class PMF_Search
             WHERE
                 searchterm = '%s'",
             $this->_table,
-            $searchterm
+            $searchTerm
         );
 
         return $this->_config->getDb()->query($query);
     }
-    
+
+    /**
+     * Deletes all search terms
+     *
+     * @return boolean
+     */
+    public function deleteAllSearchTerms()
+    {
+        $query = sprintf("DELETE FROM %s", $this->_table);
+
+        return $this->_config->getDb()->query($query);
+    }
+
     /**
      * Returns the most popular searches
      *
@@ -253,18 +265,16 @@ class PMF_Search
     }
     
     /**
-     * Returns row count from the faqsearches table
+     * Returns row count from the "faqsearches" table
      *
      * @return integer
      */
     public function getSearchesCount()
     {
-        $sql = sprintf("
-            SELECT 
-                COUNT(1) AS count 
-            FROM 
-                %s",
-        $this->_table);
+        $sql = sprintf(
+            "SELECT COUNT(1) AS count FROM %s",
+            $this->_table
+        );
     
         $result = $this->_config->getDb()->query($sql);
 
