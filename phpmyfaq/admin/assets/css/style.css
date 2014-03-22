@@ -7128,13 +7128,9 @@ button.close {
 .fa-plus-square-o:before {
   content: "\f196";
 }
-/* Global Styles */
-/* ------------------------------- */
 body {
   background-color: #f8f8f8;
 }
-/* Wrappers */
-/* ------------------------------- */
 #wrapper {
   width: 100%;
 }

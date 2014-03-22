@@ -213,7 +213,7 @@ switch ($action) {
         </div>
 
         <?php if (isset($auth) && in_array(true, $permission)): ?>
-        <ul class="nav navbar-nav navbar-right">
+        <ul class="nav navbar-nav navbar-top-links navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <b class="fa fa-user"></b>
@@ -237,19 +237,14 @@ switch ($action) {
                 </ul>
             </li>
         </ul>
-
-        <?php else: ?>
-        <ul class="nav navbar-top-links">
-            <li><a href="../index.php?action=password"><?php echo $PMF_LANG["lostPassword"]; ?></a></li>
-        </ul>
         <?php endif; ?>
     </nav>
 
 
 
+    <?php if (isset($auth) && in_array(true, $permission)): ?>
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
-            <?php if (isset($auth) && in_array(true, $permission)) { ?>
             <ul class="nav" id="side-menu">
                 <li class="sidebar-userinfo">
                     <div class="userpanel">
@@ -334,8 +329,10 @@ switch ($action) {
                     </div>
                 </li>
             </ul>
-            <?php } ?>
         </div>
     </nav>
+    <?php endif; ?>
+
+
 
     <div id="page-wrapper">

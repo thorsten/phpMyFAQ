@@ -19,10 +19,15 @@
  */
 
 ?>
-
-    <header>
-        <h2>phpMyFAQ Login</h2>
-    </header>
+        <div class="row">
+            <div class="col-md-4 col-md-offset-4">
+                <div class="login-panel panel panel-default">
+                    <div class="panel-heading">
+                        <header>
+                            <h3 class="panel-title">phpMyFAQ Login</h3>
+                        </header>
+                    </div>
+                    <div class="panel-body">
 <?php
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
@@ -44,44 +49,50 @@ if ($action == 'logout') {
 if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
-    <?php print $message ?>
+                        <?php echo $message ?>
 
-    <form class="form-horizontal" action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
+                        <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                              accept-charset="utf-8" role="form">
+                            <fieldset>
 
-    <div class="control-group">
-        <label class="control-label" for="faqusername"><?php print $PMF_LANG["ad_auth_user"]; ?></label>
-        <div class="controls">
-            <input type="text" name="faqusername" id="faqusername" required="required" />
-        </div>
-    </div>
+                                <div class="form-group">
+                                    <input type="text" name="faqusername" id="faqusername"  class="form-control"
+                                           placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>" required>
+                                </div>
 
-    <div class="control-group">
-        <label class="control-label" for="faqpassword"><?php print $PMF_LANG["ad_auth_passwd"]; ?></label>
-        <div class="controls">
-            <input type="password" name="faqpassword" id="faqpassword" required="required" />
-        </div>
-    </div>
+                                <div class="form-group">
+                                    <input type="password" name="faqpassword" id="faqpassword" class="form-control"
+                                           placeholder="<?php echo $PMF_LANG['ad_auth_passwd'] ?>" required>
+                                </div>
 
-    <div class="control-group">
-        <div class="controls">
-            <label class="checkbox">
-                <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                <?php print $PMF_LANG['rememberMe'] ?>
-            </label>
-        </div>
-    </div>
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
+                                        <?php echo $PMF_LANG['rememberMe'] ?>
+                                    </label>
+                                </div>
 
-    <div class="form-actions">
-        <button class="btn btn-primary" type="submit">
-            <?php print $PMF_LANG["ad_auth_ok"]; ?>
-        </button>
-    </div>
+                                <div class="form-group">
+                                    <button class="btn btn-lg btn-success btn-block" type="submit">
+                                        <?php echo $PMF_LANG['msgLoginUser'] ?>
+                                    </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <p class="pull-right">
+                                        <a href="../index.php?action=password"><?php echo $PMF_LANG['lostPassword'] ?></a>
+                                    </p>
+                                </div>
+                            </fieldset>
 <?php
 } else {
-    printf('<p><a href="https://%s%s">%s</a></p>',
+    printf(
+        '<p><a href="https://%s%s">%s</a></p>',
         $_SERVER['HTTP_HOST'],
         $_SERVER['REQUEST_URI'],
         $PMF_LANG['msgSecureSwitch']);
 }
 ?>
-</form>
+                        </form>
+                    </div>
+                </div>
