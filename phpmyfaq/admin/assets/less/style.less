@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 2.9 default layout
+ * phpMyFAQ 2.9 default layout for admin
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -8,82 +8,17 @@
  * @category  phpMyFAQ
  * @package   Layout
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-17
  */
 
 //
-// Global values from phpMyFAQ frontend
-// ------------------------------------
-@import "../../../assets/template/default/less/style.less";
+// Bootstrap
+//
+@import "../../../../components/bootstrap/less/bootstrap";
 
 //
-// Global admin styles
+// Admin definitions
 //
-header {
-  h2 {
-    #gradient > .vertical(#6C737E, #3C4049);
-    font-size: 18px;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    margin-bottom: 1.25em;
-    padding: 5px 10px;
-  }
-  h3 {
-    #gradient > .vertical(#FAFAFA, #E9E9E9);
-    border: 1px solid #D5D5D5;
-    font-size: 15px;
-    padding: 2px 10px;
-  }
-}
-
-section {
-  margin-bottom: 1.5em;
-}
-
-.userpanel {
-  margin: 10px 5px;
-  img {
-    border: 2px solid @gray-darker;
-    margin-right: 5px;
-    float: left;
-  }
-  small {
-    color: @gray-light;
-  }
-}
-
-// Dashboard
-.dashboard-stat {
-  background: white;
-  border: 1px solid #D5D5D5;
-  height: 70px;
-  padding: 15px;
-  font-style: italic;
-  text-align: center;
-  span {
-    font-size: 18px;
-    font-weight: 600;
-    font-style: normal;
-    display: block;
-    margin-bottom: 0.4em;
-    a {
-      color: @gray;
-    }
-  }
-}
-
-// Configuration
-.form-horizontal {
-  .admin-config-label {
-    float: left;
-    width: 240px;
-    padding-top: 5px;
-    text-align: right;
-  }
-  .admin-config-control {
-    margin-left: 260px;
-  }
-}
