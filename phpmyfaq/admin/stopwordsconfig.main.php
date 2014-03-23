@@ -27,29 +27,36 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($permission['editconfig']) {
-    printf('<header><h2><i class="icon-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_stopwordsconfig']);
+    printf(
+        '<header class="row"><div class="col-lg-12"><h2><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
+        $PMF_LANG['ad_menu_stopwordsconfig']
+    );
 
     $sortedLanguageCodes = $languageCodes;
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
 ?>
-        <p>
-            <?php echo $PMF_LANG['ad_stopwords_desc'] ?>
-        </p>
-        <p>
-            <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)" id="stopwords_lang_selector">
-            <option value="none">---</option>
-<?php foreach($sortedLanguageCodes as $key => $value) { ?>
-    <option value="<?php echo strtolower($key); ?>"><?php echo $value; ?></option>    
-<?php } ?>
-            </select>
-            <span id="stopwords_loading_indicator"></span>
-        </p>
+    <div class="row">
+        <div class="col-lg-12">
 
-        <div id="stopwords_content"></div>
+            <p>
+                <?php echo $PMF_LANG['ad_stopwords_desc'] ?>
+            </p>
+            <p>
+                <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)"
+                        id="stopwords_lang_selector">
+                <option value="none">---</option>
+    <?php foreach($sortedLanguageCodes as $key => $value) { ?>
+        <option value="<?php echo strtolower($key); ?>"><?php echo $value; ?></option>
+    <?php } ?>
+                </select>
+                <span id="stopwords_loading_indicator"></span>
+            </p>
 
-        <script type="text/javascript">
-        /* <![CDATA[ */
+            <div id="stopwords_content"></div>
+
+            <script type="text/javascript">
+            /* <![CDATA[ */
 
         /**
          * column count in the stop words table
@@ -139,7 +146,7 @@ if ($permission['editconfig']) {
             elem_id = elem_id || buildStopWordInputElemId();
             stopword = stopword || '';
             var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWordHandleEnter(this.id, event)" onfocus="saveOldValue(this.id)"';
-            var element = '<input id="' + elem_id + '" value="' + stopword + '" ' + attrs + ' />';
+            var element = '<input class="form-control" id="' + elem_id + '" value="' + stopword + '" ' + attrs + '>';
 
             return element;
         }
@@ -291,6 +298,8 @@ if ($permission['editconfig']) {
         }
         /* ]]> */
         </script>
+        </div>
+    </div>
 <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
