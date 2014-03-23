@@ -106,7 +106,7 @@ if ($permission['editcateg']) {
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
         }
     }
 
@@ -164,7 +164,7 @@ if ($permission['editcateg']) {
                 $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups'])) {
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
             } else {
-                printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+                printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
             }
         } else {
             if ($category->updateCategory($categoryData)) {
@@ -174,7 +174,7 @@ if ($permission['editcateg']) {
                 $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups']);
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
-                printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+                printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
             }
         }
 
@@ -198,7 +198,7 @@ if ($permission['editcateg']) {
             $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
         }
     }
 
@@ -215,7 +215,7 @@ if ($permission['editcateg']) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
-                '<p class="alert alert-error">%s<br />%s</p>',
+                '<p class="alert alert-danger">%s<br />%s</p>',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );
@@ -234,7 +234,7 @@ if ($permission['editcateg']) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
-                '<p class="alert alert-error">%s<br />%s</p>',
+                '<p class="alert alert-danger">%s<br />%s</p>',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );

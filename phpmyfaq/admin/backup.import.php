@@ -91,7 +91,7 @@ if ($permission['restore']) {
                 $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
                 $kg         = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
-                    printf('<div style="alert alert-error"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                    printf('<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
                         "\n");
@@ -137,7 +137,7 @@ if ($permission['restore']) {
                 $errorMessage = 'Undefined error.';
                 break;
         }
-        printf('<p class="alert alert-error">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
+        printf('<p class="alert alert-danger">%s (%s)</p>', $PMF_LANG['ad_csv_no'], $errorMessage);
     }
 } else {
     print $PMF_LANG['err_NotAuth'];

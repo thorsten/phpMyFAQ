@@ -161,7 +161,7 @@ if ($permission['editbt']) {
             PMF_Helper_Linkverifier::linkOndemandJavascript($recordId, $recordLang);
         } else {
             printf(
-                '<p class="alert alert-error">%s</p>',
+                '<p class="alert alert-danger">%s</p>',
                 print $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
             );
         }

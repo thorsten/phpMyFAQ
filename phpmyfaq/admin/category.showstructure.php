@@ -59,7 +59,7 @@ if ($permission['editcateg']) {
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
         } else {
-            printf('<p class="alert alert-error">%s</p>', $faqConfig->getDb()->error());
+            printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
         }
     }
 

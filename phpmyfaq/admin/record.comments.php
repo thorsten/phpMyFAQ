@@ -164,7 +164,7 @@ if ($permission['delcomment']) {
                             html('<p class="alert alert-success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
                         $('#returnMessage').
-                            html('<p class="alert alert-error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
+                            html('<p class="alert alert-danger"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });

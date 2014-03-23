@@ -384,17 +384,17 @@ class PMF_Installer
     public function checkBasicStuff()
     {
         if (!$this->checkMinimumPhpVersion()) {
-            printf('<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
+            printf('<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>', PMF_System::VERSION_MINIMUM_PHP);
             PMF_System::renderFooter();
         }
 
         if (! function_exists('date_default_timezone_set')) {
-            echo '<p class="alert alert-error">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
+            echo '<p class="alert alert-danger">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
             PMF_System::renderFooter();
         }
 
         if (! $this->_system->checkDatabase()) {
-            echo '<p class="alert alert-error">No supported database detected! Please install one of the following' .
+            echo '<p class="alert alert-danger">No supported database detected! Please install one of the following' .
                 ' database systems and enable the corresponding PHP extension in php.ini:</p>';
             echo '<ul>';
             foreach ($this->_system->getSupportedDatabases() as $database) {
@@ -405,7 +405,7 @@ class PMF_Installer
         }
 
         if (! $this->_system->checkRequiredExtensions()) {
-            echo '<p class="alert alert-error">The following extensions are missing! Please enable the PHP extension(s) in ' .
+            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in ' .
                 'php.ini.</p>';
             echo '<ul>';
             foreach ($this->_system->getMissingExtensions() as $extension) {
@@ -416,17 +416,17 @@ class PMF_Installer
         }
 
         if (! $this->_system->checkRegisterGlobals()) {
-            echo '<p class="alert alert-error">Please disable register_globals!</p>';
+            echo '<p class="alert alert-danger">Please disable register_globals!</p>';
             PMF_System::renderFooter();
         }
 
         if (! $this->_system->checkMagicQuotesGpc()) {
-            echo '<p class="alert alert-error">Please disable magic_quotes_gpc!</p>';
+            echo '<p class="alert alert-danger">Please disable magic_quotes_gpc!</p>';
             PMF_System::renderFooter();
         }
 
         if (! $this->_system->checkphpMyFAQInstallation()) {
-            echo '<p class="alert alert-error">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
+            echo '<p class="alert alert-danger">It seems you\'re already running a version of phpMyFAQ. Please use the ' .
                 '<a href="update.php">update script</a>.</p>';
             PMF_System::renderFooter();
         }
@@ -441,25 +441,25 @@ class PMF_Installer
     {
         if (! $this->checkMinimumPhpVersion()) {
             printf(
-                '<p class="alert alert-error">Sorry, but you need PHP %s or later!</p>',
+                '<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>',
                 PMF_System::VERSION_MINIMUM_PHP
             );
             PMF_System::renderFooter();
         }
 
         if (! is_readable(PMF_ROOT_DIR . '/inc/data.php') && ! is_readable(PMF_ROOT_DIR . '/config/database.php')) {
-            echo '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
+            echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br />' .
                 'Please use the <a href="setup.php">install script</a>.</p>';
             PMF_System::renderFooter();
         }
 
         if (! $this->_system->checkRegisterGlobals()) {
-            echo '<p class="alert alert-error">Please disable register_globals!</p>';
+            echo '<p class="alert alert-danger">Please disable register_globals!</p>';
             PMF_System::renderFooter();
         }
 
         if (! $this->_system->checkMagicQuotesGpc()) {
-            echo '<p class="alert alert-error">Please disable magic_quotes_gpc!</p>';
+            echo '<p class="alert alert-danger">Please disable magic_quotes_gpc!</p>';
             PMF_System::renderFooter();
         }
     }
@@ -493,7 +493,7 @@ class PMF_Installer
 
         if (1 <= $numDirs) {
             printf(
-                '<p class="alert alert-error">The following %s could not be created or %s not writable:</p><ul>',
+                '<p class="alert alert-danger">The following %s could not be created or %s not writable:</p><ul>',
                 (1 < $numDirs) ? 'directories' : 'directory',
                 (1 < $numDirs) ? 'are' : 'is'
             );
@@ -501,7 +501,7 @@ class PMF_Installer
                 echo "<li>$dir</li>\n";
             }
             printf(
-                '</ul><p class="alert alert-error">Please create %s manually and/or change access to chmod 755 (or ' .
+                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 755 (or ' .
                     'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
@@ -518,25 +518,25 @@ class PMF_Installer
     public function checkNoncriticalSettings()
     {
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-            echo '<p class="alert alert-error">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
+            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
                 ' in some directories.</p>';
         }
         if (! extension_loaded('gd')) {
-            echo '<p class="alert alert-error">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
+            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
                 'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
         }
         if (! function_exists('imagettftext')) {
-            echo '<p class="alert alert-error">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
                 'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
                 'protection will be quite easy to break.</p>';
         }
         if (! extension_loaded('curl') || ! extension_loaded('openssl')) {
-            echo '<p class="alert alert-error">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
+            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
                 'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
                 ' support.</p>';
         }
         if (! extension_loaded('fileinfo')) {
-            echo '<p class="alert alert-error">You don\'t have Fileinfo support enabled in your PHP installation. ' .
+            echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. ' .
                 'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
                 'functionality.</p>';
         }
@@ -574,25 +574,25 @@ class PMF_Installer
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
             if (! file_exists(PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php')) {
                 printf(
-                    '<p class="alert alert-error"><strong>Error:</strong> Invalid server type: %s</p>',
+                    '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
                 );
                 PMF_System::renderFooter(true);
             }
         } else {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please select a database type.</p>\n";
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please select a database type.</p>\n";
             PMF_System::renderFooter(true);
         }
 
         $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
         if (is_null($dbSetup['dbServer']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database server.</p>\n";
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database server.</p>\n";
             PMF_System::renderFooter(true);
         }
 
         $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
         if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database username.</p>\n";
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
             PMF_System::renderFooter(true);
         }
 
@@ -604,14 +604,14 @@ class PMF_Installer
 
         $dbSetup['dbDatabaseName'] = PMF_Filter::filterInput(INPUT_POST, 'sql_db', FILTER_SANITIZE_STRING);
         if (is_null($dbSetup['dbDatabaseName']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a database name.</p>\n";
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database name.</p>\n";
             PMF_System::renderFooter(true);
         }
 
         if (PMF_System::isSqlite($dbSetup['dbType'])) {
             $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
             if (is_null($dbSetup['dbServer'])) {
-                echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
                 PMF_System::renderFooter(true);
             }
         }
@@ -621,7 +621,7 @@ class PMF_Installer
         $db = PMF_Db::factory($dbSetup['dbType']);
         $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
         if (!$db) {
-            printf("<p class=\"alert alert-error\"><strong>DB Error:</strong> %s</p>\n", $db->error());
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             PMF_System::renderFooter(true);
         }
 
@@ -636,19 +636,19 @@ class PMF_Installer
             // check LDAP entries
             $ldapSetup['ldapServer'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_server', FILTER_SANITIZE_STRING);
             if (is_null($ldapSetup['ldapServer'])) {
-                echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP server.</p>\n";
                 PMF_System::renderFooter(true);
             }
 
             $ldapSetup['ldapPort'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_port', FILTER_VALIDATE_INT);
             if (is_null($ldapSetup['ldapPort'])) {
-                echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP port.</p>\n";
                 PMF_System::renderFooter(true);
             }
 
             $ldapSetup['ldapBase'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_base', FILTER_SANITIZE_STRING);
             if (is_null($ldapSetup['ldapBase'])) {
-                echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a LDAP base search DN.</p>\n";
                 PMF_System::renderFooter(true);
             }
 
@@ -667,7 +667,7 @@ class PMF_Installer
                 $ldapSetup['ldapPassword']
             );
             if (!$ldap) {
-                echo "<p class=\"alert alert-error\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>LDAP Error:</strong> " . $ldap->error() . "</p>\n";
                 PMF_System::renderFooter(true);
             }
         }
@@ -675,30 +675,30 @@ class PMF_Installer
         // check loginname
         $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
         if (is_null($loginname)) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Please add a loginname for your account.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a loginname for your account.</p>';
             PMF_System::renderFooter(true);
         }
 
         // check user entries
         $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
         if (is_null($password)) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Please add a password for the your account.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your account.</p>';
             PMF_System::renderFooter(true);
         }
 
         $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
         if (is_null($password_retyped)) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Please add a retyped password.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a retyped password.</p>';
             PMF_System::renderFooter(true);
         }
 
         if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are too short.' .
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too short.' .
                 ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
             PMF_System::renderFooter(true);
         }
         if ($password != $password_retyped) {
-            echo '<p class="alert alert-error"><strong>Error:</strong> Your password and retyped password are not equal.' .
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not equal.' .
                 ' Please check your password and your retyped password.</p>';
             PMF_System::renderFooter(true);
         }
@@ -713,7 +713,7 @@ class PMF_Installer
 
         // Write the DB variables in database.php
         if (! $instanceSetup->createDatabaseFile($dbSetup)) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>";
             $this->_system->cleanInstallation();
             PMF_System::renderFooter(true);
         }
@@ -721,7 +721,7 @@ class PMF_Installer
         // check LDAP if available
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
             if (! $instanceSetup->createLdapFile($ldapSetup, '')) {
-                echo "<p class=\"alert alert-error\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>";
                 $this->_system->cleanInstallation();
                 PMF_System::renderFooter(true);
             }
@@ -732,7 +732,7 @@ class PMF_Installer
         $db = PMF_Db::factory($dbSetup['dbType']);
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
         if (!$db) {
-            echo "<p class=\"alert alert-error\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+            echo "<p class=\"alert alert-danger\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
             $this->_system->cleanInstallation();
             PMF_System::renderFooter(true);
         }
@@ -754,9 +754,9 @@ class PMF_Installer
         foreach ($query as $executeQuery) {
             $result = @$db->query($executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
             us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
-                printf('<p class="alert alert-error"><strong>DB error:</strong> %s</p>', $db->error());
+                printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->_system->dropTables($uninst);
                 $this->_system->cleanInstallation();
@@ -788,7 +788,7 @@ class PMF_Installer
         $admin = new PMF_User($configuration);
         if (! $admin->createUser($loginname, $password, 1)) {
             printf(
-                "<p class=\"alert alert-error\"><strong>Fatal installation error:</strong><br>" .
+                "<p class=\"alert alert-danger\"><strong>Fatal installation error:</strong><br>" .
                 "Couldn't create the admin user: %s</p>\n",
                 $admin->error()
             );
@@ -836,13 +836,13 @@ class PMF_Installer
         if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
             echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
         } else {
-            echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
+            echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
         }
         // Remove 'update.php' file
         if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/update.php')) {
             echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
         } else {
-            echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
+            echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
         }
     }
 

@@ -136,7 +136,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     if ($logging->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
+        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_adminlog_delete_failure']);
     }
 } else {
     echo $PMF_LANG["err_NotAuth"];

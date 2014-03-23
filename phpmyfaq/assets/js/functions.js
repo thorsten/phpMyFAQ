@@ -238,7 +238,7 @@ $(document).ready(function () {
             success:  function (json) {
                 if (json.success === undefined) {
                     $("#" + formName + 's').html(
-                        '<p class="alert alert-error">' +
+                        '<p class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         json.error +
                         '</p>'
@@ -313,7 +313,7 @@ $(document).ready(function () {
             success:  function (json) {
                 if (json.success === undefined) {
                     $('#votings').append(
-                        '<p class="alert alert-error">' +
+                        '<p class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         json.error +
                         '</p>'
@@ -354,7 +354,7 @@ $(document).ready(function () {
             success:  function (json) {
                 if (json.result === undefined && json.success === undefined) {
                     $('#qerror').html(
-                        '<p class="alert alert-error">' +
+                        '<p class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         json.error +
                         '</p>'

@@ -31,7 +31,7 @@
 <?php
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
-        '<p class="alert alert-error">%s%s</p>',
+        '<p class="alert alert-danger">%s%s</p>',
         '<a class="close" data-dismiss="alert" href="#">&times;</a>',
         $error
     );

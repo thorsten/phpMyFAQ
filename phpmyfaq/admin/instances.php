@@ -77,7 +77,7 @@ if ($permission['editinstances']) {
             );
         } else {
             printf(
-                '<p class="alert alert-error">%s%s<br/>%s</p>',
+                '<p class="alert alert-danger">%s%s<br/>%s</p>',
                 '<a class="close" data-dismiss="alert" href="#">&times;</a>',
                 $PMF_LANG['ad_entryins_fail'],
                 $faqConfig->getDb()->error()
@@ -216,7 +216,7 @@ if ($permission['editinstances']) {
                 function(data) {
                     if (typeof(data.added) === 'undefined') {
                         $('.table').after(
-                            '<div class="alert alert-error">Could not add instance</div>'
+                            '<div class="alert alert-danger">Could not add instance</div>'
                         );
                     } else {
                         $('.modal').modal('hide');
@@ -255,7 +255,7 @@ if ($permission['editinstances']) {
                     function(data) {
                         if (typeof(data.deleted) === 'undefined') {
                             $('.table').after(
-                                '<div class="alert alert-error">' +
+                                '<div class="alert alert-danger">' +
                                 '<?php echo $PMF_LANG["ad_instance_error_cannotdelete"] ?> ' + data.error +
                                 '</div>'
                             );

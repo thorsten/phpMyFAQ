@@ -220,7 +220,7 @@ if ($permission['editbt']|| $permission['addbt']) {
 <?php
         } else {
             printf(
-                '<p class="alert alert-error">%s</p>',
+                '<p class="alert alert-danger">%s</p>',
                 $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
             );
         }
@@ -231,7 +231,7 @@ if ($permission['editbt']|| $permission['addbt']) {
             $PMF_LANG['ad_entry_aor']
         );
         printf(
-            '<p class="alert alert-error">%s</p>', $PMF_LANG['ad_entryins_fail']
+            '<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_entryins_fail']
         );
 ?>
     <form action="?action=editpreview" method="post" accept-charset="utf-8">

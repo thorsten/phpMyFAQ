@@ -411,7 +411,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     if ($news->addNewsEntry($newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_news_insertfail']);
+        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_insertfail']);
     }
     printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('updatenews' == $action && $permission["editnews"]) {
@@ -453,7 +453,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     if ($news->updateNewsEntry($newsId, $newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_news_updatefail']);
+        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_updatefail']);
     }
     printf('<div class="control-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
 } elseif ('deletenews' == $action && $permission["delnews"]) {

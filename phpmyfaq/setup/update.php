@@ -159,7 +159,7 @@ if ($step === 1) {
                 <?php
                 // 2.5 versions only
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
-                    echo '<p class="alert alert-error"><strong>Please change the directory ../template and its ' .
+                    echo '<p class="alert alert-danger"><strong>Please change the directory ../template and its ' .
                          'contents writable (777 on Linux/UNIX).</strong></p>';
                 }
 
@@ -171,7 +171,7 @@ if ($step === 1) {
                     );
                 } else {
                     printf(
-                        '<p class="alert alert-error">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-danger">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                     echo '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
@@ -206,7 +206,7 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
@@ -217,7 +217,7 @@ if ($step == 2) {
     // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
@@ -229,7 +229,7 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
         if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
             !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkLdapSetupFile = true;
@@ -255,7 +255,7 @@ if ($step == 2) {
 <?php
         PMF_System::renderFooter();
     } else {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
+        echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
         PMF_System::renderFooter();
     }
 }
@@ -737,11 +737,11 @@ if ($step == 3) {
             }
             if (!$result) {
                 echo "</div>";
-                echo '<p class="alert alert-error"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
                       'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.' .
                       '</p>';
                 printf(
-                    '<p class="alert alert-error"><strong>DB error:</strong> %s</p>',
+                    '<p class="alert alert-danger"><strong>DB error:</strong> %s</p>',
                     $faqConfig->getDb()->error()
                 );
                 printf(
@@ -864,7 +864,7 @@ if ($step == 3) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
@@ -889,13 +889,13 @@ if ($step == 3) {
     if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
     }
 
     PMF_System::renderFooter();

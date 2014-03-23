@@ -49,11 +49,11 @@ if ($permission["passwd"]) {
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
-                printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_passwd_fail"]);
             }
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
         } else {
-            printf('<p class="alert alert-error">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+            printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_passwd_fail"]);
         }
     }
 ?>

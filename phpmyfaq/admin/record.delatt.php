@@ -42,7 +42,7 @@ if ($permission['delattachment']) {
     if ($att && $att->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
     } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_att_delfail']);
+        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_att_delfail']);
     }
     printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId, $recordLang, $PMF_LANG['ad_entry_back']);

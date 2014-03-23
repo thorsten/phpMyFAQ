@@ -49,7 +49,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_save_success'] . '</p>';
         } else {
-            echo '<p class="alert alert-error"><a href="#" class="close" data-dismiss="alert">×</a>';
+            echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_save_error'];
             echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             echo $faqConfig->getDb()->error() . '</p>';
@@ -64,7 +64,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_update_success'] . '</p>';
         } else {
-            echo '<p class="alert alert-error"><a href="#" class="close" data-dismiss="alert">×</a>';
+            echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_update_error'];
             echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             echo $faqConfig->getDb()->error() . '</p>';
@@ -77,7 +77,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_delete_success'] . '</p>';
         } else {
-            echo '<p class="alert alert-error"><a href="#" class="close" data-dismiss="alert">×</a>';
+            echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_delete_error'];
             echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
             echo $faqConfig->getDb()->error() . '</p>';

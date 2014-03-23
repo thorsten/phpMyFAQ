@@ -53,7 +53,7 @@ $tt                 = new PMF_TransTool;
         <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
         <?php if(!$isTransDirWritable):
-            echo '<p class="alert alert-error">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
+            echo '<p class="alert alert-danger">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
         endif; ?>
 
         <table class="table table-striped">
