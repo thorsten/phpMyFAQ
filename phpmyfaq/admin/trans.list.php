@@ -37,35 +37,39 @@ $transDir           = new DirectoryIterator($langDir);
 $isTransDirWritable = is_writable($langDir);
 $tt                 = new PMF_TransTool;
 ?>
-        <header>
-            <h2>
-                <i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
-                <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=transadd">
-                        <i class="icon-plus"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
-                    </a>
-                </div>
-                <?php endif; ?>
-            </h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2>
+                    <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
+                    <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
+                        <div class="pull-right">
+                            <a class="btn btn-success" href="?action=transadd">
+                                <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
+                            </a>
+                        </div>
+                    <?php endif; ?>
+                </h2>
+            </div>
         </header>
 
-        <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
+        <div class="row">
+            <div class="col-lg-12">
+                <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
 
-        <?php if(!$isTransDirWritable):
-            echo '<p class="alert alert-danger">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
-        endif; ?>
+                <?php if(!$isTransDirWritable):
+                    echo '<p class="alert alert-danger">'. $PMF_LANG['msgLangDirIsntWritable'] . "</p>";
+                endif; ?>
 
-        <table class="table table-striped">
-        <thead>
-            <tr>
-                <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
-                <th colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></th>
-                <th><?php echo $PMF_LANG['msgTransToolWritable'] ?></th>
-                <th><?php echo $PMF_LANG['msgTransToolPercent'] ?></th>
-            </tr>
-        </thead>
-        <tbody>
+                <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
+                        <th colspan="3"><?php echo $PMF_LANG['msgTransToolActions'] ?></th>
+                        <th><?php echo $PMF_LANG['msgTransToolWritable'] ?></th>
+                        <th><?php echo $PMF_LANG['msgTransToolPercent'] ?></th>
+                    </tr>
+                </thead>
+                <tbody>
 <?php
     $sortedLangList = [];
     
@@ -89,6 +93,10 @@ $tt                 = new PMF_TransTool;
     while (list(,$lang) = each($sortedLangList)) { 
         $isLangFileWritable = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
         $showActions        = $isTransDirWritable && $isLangFileWritable;
+        $percents           = $tt->getTranslatedPercentage(
+            $langDir . DIRECTORY_SEPARATOR . "language_en.php",
+            $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
+        );
         ?>
             <tr class="lang_<?php echo $lang ?>_container">
                 <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
@@ -127,16 +135,18 @@ $tt                 = new PMF_TransTool;
                 <?php else: ?>
                 <td><i class="icon-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
                 <?php endif; ?>
-                <td><?php echo $tt->getTranslatedPercentage(
-                    $langDir . DIRECTORY_SEPARATOR . "language_en.php",
-                    $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
-                ); ?>%</td>
+                <td>
+                    <?php echo $percents ?>%
+                    <meter value="<?php echo $percents ?>" max="100" min="0" title="<?php echo $percents ?>%">
+                </td>
             </tr>
         <?php 
     }
 ?>
-        </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
         <script>
         /**
          * Remove a language file
