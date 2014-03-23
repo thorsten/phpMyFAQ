@@ -27,18 +27,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-    <header>
-        <h2>
-            <i class="icon-wrench"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
-            <?php if ($permission['addinstances'] && is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
-            <div class="pull-right">
-                <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                    <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
-                </a>
-            </div>
-            <?php endif; ?>
-        </h2>
+    <header class="row">
+        <div class="col-lg-12">
+            <h2>
+                <i class="fa fa-wrench fa-fw"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
+                <?php if ($permission['addinstances'] && is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
+                    <div class="pull-right">
+                        <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
+                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
+                        </a>
+                    </div>
+                <?php endif; ?>
+            </h2>
+        </div>
     </header>
+
+    <div class="row">
+        <div class="col-lg-12">
 <?php
 if ($permission['editinstances']) {
 
@@ -48,7 +53,7 @@ if ($permission['editinstances']) {
     // Check, if /multisite is writeable
     if (! is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
         printf(
-            '<p class="alert alert-error">%s</p>',
+            '<p class="alert alert-danger">%s</p>',
             $PMF_LANG["ad_instance_error_notwritable"]
         );
     }
@@ -121,59 +126,75 @@ if ($permission['editinstances']) {
     </table>
 
     <div class="modal fade" id="pmf-modal-add-instance">
-        <div class="modal-header">
-            <a class="close" data-dismiss="modal">×</a>
-            <h3><?php echo $PMF_LANG["ad_instance_add"] ?></h3>
-        </div>
-        <div class="modal-body">
-            <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
-                <div class="control-group">
-                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_url"] ?>:</label>
-                    <div class="controls">
-                        <div class="input-prepend input-append">
-                            <span class="add-on">http://</span>
-                            <input class="span2" type="text" name="url" id="url" required="required">
-                            <span class="add-on">.<?php print $_SERVER['SERVER_NAME'] ?></span>
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <a class="close" data-dismiss="modal">×</a>
+                    <h3><?php echo $PMF_LANG["ad_instance_add"] ?></h3>
+                </div>
+                <div class="modal-body">
+                    <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
+                        <div class="form-group">
+                            <label class="control-label col-lg-4">
+                                <?php echo $PMF_LANG["ad_instance_url"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <div class="input-group">
+                                    <span class="input-group-addon">http://</span>
+                                    <input class="form-control" type="text" name="url" id="url" required>
+                                    <span class="input-group-addon">.<?php print $_SERVER['SERVER_NAME'] ?></span>
+                                </div>
+                            </div>
                         </div>
-                    </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4">
+                                <?php echo $PMF_LANG["ad_instance_path"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" name="instance" id="instance" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4">
+                                <?php echo $PMF_LANG["ad_instance_name"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" name="comment" id="comment" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="email">
+                                <?php echo $PMF_LANG["ad_instance_email"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="email" name="email" id="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4">
+                                <?php echo $PMF_LANG["ad_instance_admin"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="text" name="admin" id="admin" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="control-label col-lg-4" for="password">
+                                <?php echo $PMF_LANG["ad_instance_password"] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <input class="form-control" type="password" name="password" id="password" required>
+                            </div>
+                        </div>
+                    </form>
                 </div>
-                <div class="control-group">
-                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_path"] ?>:</label>
-                    <div class="controls">
-                        <input type="text" name="instance" id="instance" required="required">
-                    </div>
+                <div class="modal-footer">
+                    <p><?php echo $PMF_LANG["ad_instance_hint"] ?></p>
+                    <button class="btn btn-primary pmf-instance-add">
+                        <?php echo $PMF_LANG["ad_instance_button"] ?>
+                    </button>
                 </div>
-                <div class="control-group">
-                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_name"] ?>:</label>
-                    <div class="controls">
-                        <input type="text" name="comment" id="comment" required="required">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="email"><?php echo $PMF_LANG["ad_instance_email"] ?>:</label>
-                    <div class="controls">
-                        <input type="email" name="email" id="email" required="required" />
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label"><?php echo $PMF_LANG["ad_instance_admin"] ?>:</label>
-                    <div class="controls">
-                        <input type="text" name="admin" id="admin" required="required">
-                    </div>
-                </div>
-                <div class="control-group">
-                    <label class="control-label" for="password"><?php echo $PMF_LANG["ad_instance_password"] ?>:</label>
-                    <div class="controls">
-                        <input type="password" name="password" id="password" required="required" />
-                    </div>
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <p><?php echo $PMF_LANG["ad_instance_hint"] ?></p>
-            <button class="btn btn-primary pmf-instance-add">
-                <?php echo $PMF_LANG["ad_instance_button"] ?>
-            </button>
+            </div>
         </div>
     </div>
 
@@ -247,6 +268,9 @@ if ($permission['editinstances']) {
             }
         });
     </script>
+
+    </div>
+    </div>
 <?php
 } else {
     print $PMF_LANG['err_NotAuth'];
