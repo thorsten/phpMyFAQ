@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (!$permission["edittranslation"]) {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
     return;
 }
 
@@ -80,28 +80,35 @@ $pageBar    = $pagination->render();
 $leftNPlurals  = (int)$_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
 $rightNPlurals = (int)$rightVarsOnly['PMF_LANG[nplurals]'];
 
-printf('<header><h2><i class="fa fa-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
-printf('<p style="color: red;">%s</p>', $PMF_LANG['msgTransToolNoteFileSaving']);
+printf(
+    '<header class="row"><div class="col-lg-12"><h2><i class="fa fa-wrench"></i> %s</h2></div></header>',
+    $PMF_LANG['ad_menu_translations']
+);
 
 $NPluralsErrorReported = false;
 ?>
-        <form id="transDiffForm" accept-charset="utf-8">
-        <table class="list" style="width: 100%">
-        <tr>
-            <th><?php print $PMF_LANG['msgVariable'] ?></th>
-            <th>en</th>
-            <th><?php print $translateLang ?></th>
-        </tr>
+        <div class="row">
+            <div class="col-lg-12">
+                <p class="alert alert-info">
+                    <?php echo $PMF_LANG['msgTransToolNoteFileSaving'] ?>
+                </p>
+                <form id="transDiffForm" accept-charset="utf-8">
+                <table class="table table-hover">
+                <tr>
+                    <th><?php echo $PMF_LANG['msgVariable'] ?></th>
+                    <th>en</th>
+                    <th><?php echo $translateLang ?></th>
+                </tr>
         <?php while(list($key, $line) = each($leftVarsOnly)): ?>
         <?php
     // These parameters are not real translations, so don't offer to translate them
     if ($tt->isKeyIgnorable($key)) {
-        print "<tr>\n";
-        print "<td>".$key."</td>\n";
-        print '<td><input style="width: 300px;" type="text" value="'.PMF_String::htmlspecialchars($line).'" disabled="disabled" /></td>'."\n";
-        print '<td><input style="width: 300px;" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" disabled="disabled" />';
-        print '<input type="hidden" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" /></td>'."\n";
-        print "</tr>\n";
+        echo "<tr>\n";
+        echo "<td>" . $key . "</td>\n";
+        echo '<td><input class="form-control" type="text" value="'.PMF_String::htmlspecialchars($line).'" disabled="disabled" /></td>'."\n";
+        echo '<td><input class="form-control" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" disabled="disabled" />';
+        echo '<input type="hidden" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" /></td>'."\n";
+        echo "</tr>\n";
         continue;
     }
 
@@ -117,91 +124,92 @@ $NPluralsErrorReported = false;
         if ($rightNPlurals == -1) {
             // Report missing plural form support once.
             if (!$NPluralsErrorReported) {
-                print "<tr>\n";
-                print '<td class="text-center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'], $translateLang)."</td>\n";
-                print "</tr>\n";
+                echo "<tr>\n";
+                echo '<td class="text-center" colspan="3">'.sprintf($PMF_LANG['msgTransToolLanguagePluralNotSet'], $translateLang)."</td>\n";
+                echo "</tr>\n";
                 $NPluralsErrorReported = true;
             }
             continue;
         }
         /**
-         * We print one box for English and one for other language
+         * We echo one box for English and one for other language
          * because other language will always have at least 1 form
          */
-        print "<tr>\n";
-        print "<td>".$key."</td>\n";
-        print '<td><input style="width: 300px;" type="text" value="'.PMF_String::htmlspecialchars($line).'" disabled="disabled" /></td>'."\n";
+        echo "<tr>\n";
+        echo "<td>".$key."</td>\n";
+        echo '<td><input class="form-control" type="text" value="'.PMF_String::htmlspecialchars($line).'" disabled="disabled" /></td>'."\n";
         if (array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
            $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line)))
-            print '<td><input style="width: 300px;" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" /></td>'."\n";
+            echo '<td><input class="form-control" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key]).'" /></td>'."\n";
         else
-            print '<td><input style="width: 300px;border-color: red;" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($line).'" /></td>'."\n";
-        print "</tr>\n";
+            echo '<td><input style="width: 300px;border-color: red;" type="text" name="'.$key.'" value="'.PMF_String::htmlspecialchars($line).'" /></td>'."\n";
+        echo "</tr>\n";
 
         // Add second English form and translation
         $key2 = str_replace('[0]', '[1]', $key);
-        print "<tr>\n";
-        print "<td>".$key2."</td>\n";
-        print '<td><input style="width: 300px;" type="text" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" disabled="disabled" /></td>'."\n";
+        echo "<tr>\n";
+        echo "<td>".$key2."</td>\n";
+        echo '<td><input class="form-control" type="text" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" disabled="disabled" /></td>'."\n";
         if ($rightNPlurals == 1) {
             // Other language has only one form
-            print '<td><input style="width: 300px;" type="text" value="'.$PMF_LANG['msgTransToolLanguageOnePlural'].'" disabled="disabled" /></td>'."\n";
+            echo '<td><input class="form-control" type="text" value="'.$PMF_LANG['msgTransToolLanguageOnePlural'].'" disabled="disabled" /></td>'."\n";
         } else {
             if (array_key_exists($key2, $rightVarsOnly))
-                print '<td><input style="width: 300px;" type="text" name="'.$key2.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key2]).'" /></td>'."\n";
+                echo '<td><input class="form-control" type="text" name="'.$key2.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$key2]).'" /></td>'."\n";
             else
-                print '<td><input style="width: 300px;border-color: red;" type="text" name="'.$key2.'" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" /></td>'."\n";
+                echo '<td><input class="form-control alert-danger" type="text" name="'.$key2.'" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" /></td>'."\n";
         }
-        print "</tr>\n";
+        echo "</tr>\n";
 
         // Other language has more than 2 forms
         for ($i = 2; $i < $rightNPlurals; $i++) {
             $keyI = str_replace('[0]', "[$i]", $key);
-            print "<tr>\n";
-            print "<td>".$keyI."</td>\n";
-            print '<td><input style="width: 300px;" type="text" value="" disabled="disabled" /></td>'."\n";
+            echo "<tr>\n";
+            echo "<td>".$keyI."</td>\n";
+            echo '<td><input class="form-control" type="text" value="" disabled="disabled" /></td>'."\n";
             if (array_key_exists($keyI, $rightVarsOnly) && $leftVarsOnly[$key2] != $rightVarsOnly[$key])
-                print '<td><input style="width: 300px;" type="text" name="'.$keyI.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$keyI]).'" /></td>'."\n";
+                echo '<td><input class="form-control" type="text" name="'.$keyI.'" value="'.PMF_String::htmlspecialchars($rightVarsOnly[$keyI]).'" /></td>'."\n";
             else
-                print '<td><input style="width: 300px;border-color: red;" type="text" name="'.$keyI.'" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" /></td>'."\n";
-            print "</tr>\n";
+                echo '<td><input class="form-control alert-danger" type="text" name="'.$keyI.'" value="'.PMF_String::htmlspecialchars($leftVarsOnly[$key2]).'" /></td>'."\n";
+            echo "</tr>\n";
         }
         // We do not need to process this $key any further
         continue;
     }
 ?>
-        <tr>
-            <td><?php print $key?></td>
-            <td><input style="width: 300px;" type="text" value="<?php print PMF_String::htmlspecialchars($line) ?>" disabled="disabled" /></td>
-            <?php
-                if (array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
-                   $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))):
-            ?>
-            <td><input style="width: 300px;" type="text" name="<?php print $key?>" value="<?php print PMF_String::htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
-            <?php else: ?>
-            <td><input style="width: 300px;border-color: red;" type="text" name="<?php print $key?>" value="<?php print PMF_String::htmlspecialchars($line) ?>" /></td>
-            <?php endif; ?>
-        </tr>
-        <?php endwhile; ?>
-        <tr>
-            <td colspan="3"><?php print $pageBar; ?></td>
-        </tr>
-        <tr>
-            <td>&nbsp;</td>
-            <td>
-                <button class="btn btn-inverse" type="button" onclick="location.href='?action=translist'">
-                    <?php print $PMF_LANG['msgCancel'] ?>
-                </button>
-            </td>
-            <td>
-                <button class="btn btn-success" type="button"
-                        onclick="save()"<?php if (!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) { print ' disabled="disabled"'; } ?>>
-                    <?php print $PMF_LANG['msgSave'] ?>
-                </button>
-            </td>
-        </tr>
-        </table>
-        </form>
+                <tr>
+                    <td><?php echo $key?></td>
+                    <td><input class="form-control" type="text" value="<?php echo PMF_String::htmlspecialchars($line) ?>" disabled="disabled" /></td>
+                    <?php
+                        if (array_key_exists($key, $rightVarsOnly) && ($line != $rightVarsOnly[$key] ||
+                           $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))):
+                    ?>
+                    <td><input class="form-control" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
+                    <?php else: ?>
+                    <td><input class="form-control alert-danger" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($line) ?>" /></td>
+                    <?php endif; ?>
+                </tr>
+                <?php endwhile; ?>
+                <tr>
+                    <td colspan="3"><?php echo $pageBar; ?></td>
+                </tr>
+                <tr>
+                    <td>&nbsp;</td>
+                    <td colspan="2">
+                        <button class="btn btn-inverse" type="button" onclick="location.href='?action=translist'">
+                            <?php echo $PMF_LANG['msgCancel'] ?>
+                        </button>
+                        <button class="btn btn-success" type="button"
+                                onclick="save()"<?php if (!is_writable(PMF_ROOT_DIR . "/lang/language_$translateLang.php")) { echo ' disabled="disabled"'; } ?>>
+                            <?php echo $PMF_LANG['msgSave'] ?>
+                        </button>
+                    </td>
+                </tr>
+                </table>
+                </form>
+
+            </div>
+        </div>
         <script>
 
         /**
@@ -273,22 +281,22 @@ $NPluralsErrorReported = false;
          */
         function save()
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php print $PMF_LANG['msgSaving3Dots'] ?>');
+            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
 
             if(savePageBuffer()) {
                 $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
                         null,
                         function (retval, status) {
                             if (1*retval > 0 && 'success' == status) {
-                                $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolFileSaved'] ?>');
+                                $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSaved'] ?>');
                                 document.location = '?action=translist'
                             } else {
-                                $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
+                                $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
                             }
                         }
                 )
             } else {
-                 $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
+                 $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorSavingFile'] ?>');
             }
         }
         </script>
