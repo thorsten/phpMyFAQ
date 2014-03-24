@@ -26,38 +26,67 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2 class="page-header"><i class="fa fa-download-alt"></i> %s</h2></header>', $PMF_LANG['ad_csv_backup']);
-
 if ($permission['backup']) {
 ?>
-        <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8">
-        <fieldset>
-            <legend><?php print $PMF_LANG["ad_csv_head"]; ?></legend>
-            <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
-            <p>
-                <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                    <i class="fa fa-download fa fa-white"></i> <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
-                </a>
-                <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                    <i class="fa fa-download fa fa-white"></i> <?php print $PMF_LANG["ad_csv_linklog"]; ?>
-                </a>
-            </p>
-        </fieldset>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_backup'] ?>
+                </h2>
+            </div>
+        </header>
 
-        <fieldset>
-            <legend><?php print $PMF_LANG["ad_csv_head2"]; ?></legend>
-            <p><?php print $PMF_LANG["ad_csv_restore"]; ?></p>
-            <p>
-                <label><?php print $PMF_LANG["ad_csv_file"]; ?>:</label>
-                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-                <input type="file" name="userfile" size="30" />
-                <button class="btn btn-primary" type="submit">
-                    <i class="fa fa-upload fa fa-white"></i> <?php print $PMF_LANG["ad_csv_ok"]; ?>
-                </button>
-            </p>
-        </fieldset>
-        </form>
+        <div class="row">
+            <div class="col-lg-6">
+
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <?php echo $PMF_LANG["ad_csv_head"]; ?>
+                    </div>
+                    <div class="panel-body">
+                        <p><?php echo $PMF_LANG["ad_csv_make"]; ?></p>
+                        <div class="text-center">
+                            <a class="btn btn-primary" href="backup.export.php?action=backup_content">
+                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG["ad_csv_linkdat"]; ?>
+                            </a>
+                            <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
+                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG["ad_csv_linklog"]; ?>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-6">
+                <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8"
+                    class="form-horizontal">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
+                    <div class="panel panel-danger">
+                        <div class="panel-heading">
+                            <?php echo $PMF_LANG["ad_csv_head2"]; ?>
+                        </div>
+                        <div class="panel-body">
+                            <p><?php echo $PMF_LANG["ad_csv_restore"]; ?></p>
+                            <div class="form-group">
+                                <label class="col-lg-4 control-label"><?php echo $PMF_LANG["ad_csv_file"]; ?>:</label>
+                                <div class="col-lg-8">
+                                    <input type="file" name="userfile">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-lg-offset-4 col-lg-8">
+                                    <button class="btn btn-primary" type="submit">
+                                        <i class="fa fa-upload fa fa-white"></i> <?php echo $PMF_LANG["ad_csv_ok"]; ?>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
 <?php
 } else {
-	print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }
