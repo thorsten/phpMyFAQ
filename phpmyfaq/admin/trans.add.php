@@ -27,80 +27,87 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (!$permission["addtranslation"]) {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
     return;
 }
 
 if (isset($_SESSION['trans'])) {
     unset($_SESSION['trans']);
 }
-
-printf('<header><h2><i class="fa fa-wrench"></i> %s</h2></header>', $PMF_LANG['ad_menu_translations']);
 ?>
-        <form id="newTranslationForm" accept-charset="utf-8">
-        <table class="list" style="width: 100%">
-        <tr>
-            <td><?php print $PMF_LANG['msgLanguage'] ?></td>
-            <td><select name="translang" id="translang">
-            <?php
-            $avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
-            foreach ($languageCodes as $langCode => $langName):
-                if (!in_array(strtolower($langCode), $avaliableLanguages)):
-            ?>
-            <option value="<?php print $langCode ?>"><?php print $langName ?></option>
-            <?php endif; endforeach; ?>
-            </select></td>
-        </tr>
-        <tr>
-            <td><?php print $PMF_LANG['msgTransToolLanguageDir'] ?></td>
-            <td><select name="langdir"><option>ltr</option><option>rtl</option></select></td>
-        </tr>
-        <tr>
-            <td><?php print $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] ?></td>
-            <td><input name="langnplurals" /></td>
-        </tr>
-        <tr>
-            <td><?php print $PMF_LANG['msgTransToolLanguageDesc'] ?></td>
-            <td><textarea name="langdesc"></textarea></td>
-        </tr>
-        <tr class="author_1_container">
-            <td><?php print $PMF_LANG['msgAuthor'] ?></td>
-            <td><input name="author[]" /></td>
-        </tr>
-        <tr>
-            <td colspan="2"><a href="javascript: addAuthorContainer();"><?php print $PMF_LANG['msgTransToolAddAuthor'] ?></a></td>
-        </tr>
-        <tr>
-            <td colspan="2"><input type="button" value="<?php print $PMF_LANG['msgTransToolCreateTranslation'] ?>" onclick="save()" /></td>
-        </tr>
-        </table>
-        </form>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2>
+                    <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
+                </h2>
+            </div>
+        </header>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" id="newTranslationForm" accept-charset="utf-8">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                            <?php echo $PMF_LANG['msgLanguage'] ?>
+                        </label>
+                        <div class="col-lg-4">
+                            <select name="translang" id="translang" class="form-control">
+                                <?php
+                                $avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
+                                foreach ($languageCodes as $langCode => $langName):
+                                    if (!in_array(strtolower($langCode), $avaliableLanguages)):
+                                        ?>
+                                        <option value="<?php echo $langCode ?>"><?php echo $langName ?></option>
+                                    <?php endif; endforeach; ?>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                            <?php echo $PMF_LANG['msgTransToolLanguageDir'] ?>
+                        </label>
+                        <div class="col-lg-4">
+                            <select name="langdir" class="form-control">
+                                <option>ltr</option>
+                                <option>rtl</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                            <?php echo $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] ?>
+                        </label>
+                        <div class="col-lg-4">
+                            <input type="number" min="1" max="10" step="1" class="form-control" name="langnplurals">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                            <?php echo $PMF_LANG['msgTransToolLanguageDesc'] ?>
+                        </label>
+                        <div class="col-lg-4">
+                            <textarea class="form-control" rows="3" name="langdesc"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">
+                            <?php echo $PMF_LANG['msgAuthor'] ?>
+                        </label>
+                        <div class="col-lg-4">
+                            <input type="text" class="form-control" name="author[]">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <input type="button" class="btn btn-primary"
+                                   value="<?php echo $PMF_LANG['msgTransToolCreateTranslation'] ?>"
+                                   onclick="save()">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
         <script>
-        var max_author = 1
-
-        /**
-         * Add an author input field to the form
-         * @return void
-         */
-        function addAuthorContainer()
-        {
-            var next_max_author = max_author + 1;
-            var next_author_html = '<tr class="author_' + next_max_author + '_container">' +
-                                    '<td>Author</td><td><input name="author[]" />' +
-                                    '<a href="javascript: delAuthorContainer(\'author_' + next_max_author + '_container\');void(0);" >' +
-                                    ' <?php print $PMF_LANG['msgTransToolRemove']?></a></td></tr>';
-            $('.author_' + max_author + '_container').after(next_author_html);
-            max_author++
-        }
-
-
-        function delAuthorContainer(id)
-        {
-            $('.' + id).fadeOut('slow');
-            $('.' + id).removeAttr('innerHTML');
-        }
-
-
         /**
          * Send the form data to the server to save
          * a new translation and redirect to the edit form
@@ -108,7 +115,7 @@ printf('<header><h2><i class="fa fa-wrench"></i> %s</h2></header>', $PMF_LANG['a
          */
         function save()
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php print $PMF_LANG['msgAdding3Dots'] ?>');
+            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
 
             var data = {}
             var form = document.getElementById('newTranslationForm')
@@ -126,10 +133,10 @@ printf('<header><h2><i class="fa fa-wrench"></i> %s</h2></header>', $PMF_LANG['a
                    data,
                    function(retval, status) {
                        if(1*retval > 0 && 'success' == status) {
-                           $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolTransCreated'] ?>');
+                           $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolTransCreated'] ?>');
                            document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
                        } else {
-                           $('#saving_data_indicator').html('<?php print $PMF_LANG['msgTransToolCouldntCreateTrans'] ?>');
+                           $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolCouldntCreateTrans'] ?>');
                        }
                    }
             );
