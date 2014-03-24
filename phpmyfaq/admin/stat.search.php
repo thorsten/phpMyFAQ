@@ -26,10 +26,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
+                </h2>
+            </div>
+        </header>
 
+        <div class="row">
+            <div class="col-lg-12">
+<?php
 if ($permission['viewlog']) {
-
-    printf('<header><h2 class="page-header"><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -61,23 +70,23 @@ if ($permission['viewlog']) {
     );
     $pagination = new PMF_Pagination($faqConfig, $options);
 ?>
-        <div id="ajaxresponse"></div>
-        <table class="table table-striped">
-        <thead>
-        <tr>
-            <th><?php echo $PMF_LANG['ad_searchstats_search_term'] ?></th>
-            <th><?php echo $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
-            <th><?php echo $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
-            <th colspan="2"><?php echo $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
-            <th>&nbsp;</th>
-        </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <td colspan="6"><?php echo $pagination->render(); ?></td>
-            </tr>
-        </tfoot>
-        <tbody>
+                <div id="ajaxresponse"></div>
+                <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th><?php echo $PMF_LANG['ad_searchstats_search_term'] ?></th>
+                    <th><?php echo $PMF_LANG['ad_searchstats_search_term_count'] ?></th>
+                    <th><?php echo $PMF_LANG['ad_searchstats_search_term_lang'] ?></th>
+                    <th colspan="2"><?php echo $PMF_LANG['ad_searchstats_search_term_percentage'] ?></th>
+                    <th>&nbsp;</th>
+                </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="6"><?php echo $pagination->render(); ?></td>
+                    </tr>
+                </tfoot>
+                <tbody>
 <?php 
 
     $counter = $displayedCounter = 0;
@@ -98,56 +107,58 @@ if ($permission['viewlog']) {
         
         $num = round(($searchItem['number']*100 / $searchesCount), 2);
 ?>
-        <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
-            <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
-            <td><?php echo $searchItem['number'] ?></td>
-            <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-            <td>
-                <div class="progress progress-info" style="width: 50px;">
-                    <div class="bar" style="width: <?php echo $num; ?>%;"></div>
-                </div>
-            </td>
-            <td><?php echo $num; ?>%</td>
-            <td>
-                <a class="btn btn-danger" href="javascript:;"
-                   onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
-                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="fa fa-trash"></span>
-                </a>
-            </td>
-        </tr>
+                <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
+                    <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
+                    <td><?php echo $searchItem['number'] ?></td>
+                    <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+                    <td>
+                        <div class="progress progress-info" style="width: 50px;">
+                            <div class="bar" style="width: <?php echo $num; ?>%;"></div>
+                        </div>
+                    </td>
+                    <td><?php echo $num; ?>%</td>
+                    <td>
+                        <a class="btn btn-danger" href="javascript:;"
+                           onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
+                            <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="fa fa-trash-o"></span>
+                        </a>
+                    </td>
+                </tr>
 <?php
     }
 ?>
-        </tbody>
-        </table>
-        <script type="text/javascript">
-        /* <![CDATA[ */
-        /**
-         * Ajax call to delete search term
-         *
-         * @param searchterm
-         * @param searchId
-         */
-        function deleteSearchTerm(searchterm, searchId)
-        {
-            if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
-                $.getJSON("index.php?action=ajax&ajax=search&ajaxaction=delete_searchterm&searchterm=" + searchterm,
-                function(response) {
-                    if (response == 1) {
-                        $('#ajaxresponse').
-                            html('<?php printf('<p class="success">%s</p>', $PMF_LANG['ad_search_delsuc']) ?>');
-                        $('.row_search_id_' + searchId).fadeOut('slow');
-                    } else {
-                        $('#ajaxresponse').
-                            html('<?php printf('<p class="error">%s</p>', $PMF_LANG['ad_search_delfail']) ?>');
+                </tbody>
+                </table>
+                <script type="text/javascript">
+                /* <![CDATA[ */
+                /**
+                 * Ajax call to delete search term
+                 *
+                 * @param searchterm
+                 * @param searchId
+                 */
+                function deleteSearchTerm(searchterm, searchId)
+                {
+                    if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
+                        $.getJSON("index.php?action=ajax&ajax=search&ajaxaction=delete_searchterm&searchterm=" + searchterm,
+                        function(response) {
+                            if (response == 1) {
+                                $('#ajaxresponse').
+                                    html('<?php printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_search_delsuc']) ?>');
+                                $('.row_search_id_' + searchId).fadeOut('slow');
+                            } else {
+                                $('#ajaxresponse').
+                                    html('<?php printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_search_delfail']) ?>');
+                            }
+                        });
                     }
-                });
-            }
-        }
-        /* ]]> */
-        </script>
-<?php 
-
+                }
+                /* ]]> */
+                </script>
+<?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+?>
+            </div>
+        </div>
