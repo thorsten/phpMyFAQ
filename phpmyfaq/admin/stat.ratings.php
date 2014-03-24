@@ -36,21 +36,25 @@ if ($permission['viewlog']) {
     $numratings  = count($ratingdata);
     $oldcategory = 0;
 ?>
-        <header>
-            <h2 class="page-header"><i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
+            </div>
         </header>
 
-        <table class="table table-striped">
-        <tbody>
+        <div class="row">
+            <div class="col-lg-12">
+                <table class="table table-striped">
+                    <tbody>
 <?php
     foreach ($ratingdata as $data) {
         if ($data['category_id'] != $oldcategory) {
 ?>
-            <tr>
-                <th colspan="6" style="text-align: left;">
-                    <h4><?php echo $category->categoryName[$data['category_id']]['name']; ?></h4>
-                </th>
-            </tr>
+                    <tr>
+                        <th colspan="6" style="text-align: left;">
+                            <h4><?php echo $category->categoryName[$data['category_id']]['name']; ?></h4>
+                        </th>
+                    </tr>
 <?php
         }
 
@@ -62,61 +66,61 @@ if ($permission['viewlog']) {
             $data['lang']
         );
 ?>
-            <tr>
-                <td><?php echo $data['id']; ?></td>
-                <td><?php echo $data['lang']; ?></td>
-                <td>
-                    <a href="<?php echo $url ?>" title="<?php echo $question; ?>">
-                        <?php echo PMF_Utils::makeShorterText($question, 14); ?>
-                    </a>
-                </td>
-                <td style="width: 60px;"><?php echo $data['usr']; ?></td>
-                <td style="width: 60px;">
-                    <?php
-                    if (round($data['num'] * 20) > 75) {
-                        $progressBar = 'success';
-                    } elseif (round($data['num'] * 20) < 25) {
-                        $progressBar = 'danger';
-                    } else {
-                        $progressBar = 'info';
-                    }
-                    ?>
-                    <div class="progress progress-<?php echo $progressBar ?>" style="width: 50px;">
-                        <div class="bar" style="width: <?php echo round($data['num'] * 20); ?>%;"></div>
-                    </div>
-                </td>
-                <td style="width: 60px;"><?php echo round($data['num'] * 20); ?>%</td>
-            </tr>
+                    <tr>
+                        <td><?php echo $data['id']; ?></td>
+                        <td><?php echo $data['lang']; ?></td>
+                        <td>
+                            <a href="<?php echo $url ?>" title="<?php echo $question; ?>">
+                                <?php echo PMF_Utils::makeShorterText($question, 14); ?>
+                            </a>
+                        </td>
+                        <td><?php echo $data['usr']; ?></td>
+                        <td>
+                            <?php
+                            if (round($data['num'] * 20) > 75) {
+                                $progressBar = 'success';
+                            } elseif (round($data['num'] * 20) < 25) {
+                                $progressBar = 'danger';
+                            } else {
+                                $progressBar = 'info';
+                            }
+                            ?>
+                            <meter value="<?php echo round($data['num'] * 20); ?>" max="100" min="0" low="25" optimum="75"></meter>
+                        </td>
+                        <td><?php echo round($data['num'] * 20); ?>%</td>
+                    </tr>
 <?php
         $oldcategory = $data['category_id'];
     }
 ?>
-        </tbody>
+                    </tbody>
 <?php if ($numratings > 0) { ?>
-        <tfoot>
-            <tr>
-                <td colspan="6">
-                    <small>
-                    <span style="color: green; font-weight: bold;">
-                        <?php echo $PMF_LANG["ad_rs_green"] ?>
-                    </span>
-                    <?php echo $PMF_LANG["ad_rs_ahtf"] ?>,
-                    <span style="color: red; font-weight: bold;">
-                        <?php echo $PMF_LANG["ad_rs_red"] ?>
-                    </span>
-                    <?php echo $PMF_LANG["ad_rs_altt"] ?>
-                    </small>
-                </td>
-            </tr>
-        </tfoot>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6">
+                                <small>
+                                <span style="color: green; font-weight: bold;">
+                                    <?php echo $PMF_LANG["ad_rs_green"] ?>
+                                </span>
+                                <?php echo $PMF_LANG["ad_rs_ahtf"] ?>,
+                                <span style="color: red; font-weight: bold;">
+                                    <?php echo $PMF_LANG["ad_rs_red"] ?>
+                                </span>
+                                <?php echo $PMF_LANG["ad_rs_altt"] ?>
+                                </small>
+                            </td>
+                        </tr>
+                    </tfoot>
 <?php } else { ?>
-        <tfoot>
-            <tr>
-                <td colspan="6"><?php echo $PMF_LANG["ad_rs_no"] ?></td>
-            </tr>
-        </tfoot>
+                    <tfoot>
+                        <tr>
+                            <td colspan="6"><?php echo $PMF_LANG["ad_rs_no"] ?></td>
+                        </tr>
+                    </tfoot>
 <?php } ?>
-        </table>
+                </table>
+            </div>
+        </div>
 <?php
 } else {
     echo $PMF_LANG["err_NotAuth"];
