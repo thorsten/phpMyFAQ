@@ -38,7 +38,7 @@ if ($permission['viewlog']) {
     $date        = new PMF_Date($faqConfig);
 ?>
         <header>
-            <h2><i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
+            <h2 class="page-header"><i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'] . ' ' . date("Y-m-d", $day); ?></h2>
         </header>
 
         <table class="table table-striped">

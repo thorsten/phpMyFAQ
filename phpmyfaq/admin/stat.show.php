@@ -30,7 +30,7 @@ if ($permission['viewlog']) {
 
     $sid = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    printf('<header><h2><i class="fa fa-tasks"></i> %s "<span style="color: Red;">%d</span>"</h2></header>',
+    printf('<header><h2 class="page-header"><i class="fa fa-tasks"></i> %s "<span style="color: Red;">%d</span>"</h2></header>',
         $PMF_LANG['ad_sess_session'],
         $sid);
 

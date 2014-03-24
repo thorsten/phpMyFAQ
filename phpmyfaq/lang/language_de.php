@@ -472,7 +472,7 @@ $PMF_LANG["err_NotAuth"] = "<strong>Sie haben keine ausreichende Berechtigung hi
 $PMF_LANG["msgPreviusPage"] = "vorherige Seite";
 $PMF_LANG["msgNextPage"] = "nächste Seite";
 $PMF_LANG["msgPageDoublePoint"] = "Seite: ";
-$PMF_LANG["msgMainCategory"] = "übergeordnete Kategorie";
+$PMF_LANG["msgMainCategory"] = "Übergeordnete Kategorie";
 
 // Added v1.2.4 - 30.01.2003 - Thorsten
 $PMF_LANG["ad_passwdsuc"] = "Das Passwort wurde erfolgreich geändert!";

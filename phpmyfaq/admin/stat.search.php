@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['viewlog']) {
 
-    printf('<header><h2><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
+    printf('<header><h2 class="page-header"><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);

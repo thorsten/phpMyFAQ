@@ -32,7 +32,7 @@ $news = new PMF_News($faqConfig);
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post" accept-charset="utf-8">
@@ -158,7 +158,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('news' == $action && $permission["editnews"]) {
 ?>
         <header>
-            <h2>
+            <h2 class="page-header">
                 <i class="fa fa-pencil"></i> <?php echo $PMF_LANG["msgNews"] ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="?action=addnews">
@@ -212,7 +212,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = $news->getNewsEntry($id, true);
 ?>
         <header>
-            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" action="?action=updatenews" method="post" accept-charset="utf-8">
@@ -376,7 +376,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('savenews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
@@ -417,7 +417,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 ?>
         <header>
-            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
@@ -459,7 +459,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('deletenews' == $action && $permission["delnews"]) {
 ?>
         <header>
-            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');

@@ -37,7 +37,7 @@ if (isset($_SESSION['trans'])) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2>
+                <h2 class="page-header">
                     <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
                 </h2>
             </div>

@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2><i class="fa fa-lock fa-fw"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
+                <h2 class="page-header"><i class="fa fa-lock fa-fw"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
             </div>
         </header>
 <?php

@@ -37,7 +37,7 @@ if ($permission['viewlog']) {
     $oldcategory = 0;
 ?>
         <header>
-            <h2><i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
+            <h2 class="page-header"><i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
         </header>
 
         <table class="table table-striped">

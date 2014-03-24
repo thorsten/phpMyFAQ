@@ -20,7 +20,7 @@
 
 ?>
     <header>
-        <h2><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+        <h2 class="page-header"><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
     </header>
 
     <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>

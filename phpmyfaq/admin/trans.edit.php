@@ -81,7 +81,7 @@ $leftNPlurals  = (int)$_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
 $rightNPlurals = (int)$rightVarsOnly['PMF_LANG[nplurals]'];
 
 printf(
-    '<header class="row"><div class="col-lg-12"><h2><i class="fa fa-wrench"></i> %s</h2></div></header>',
+    '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench"></i> %s</h2></div></header>',
     $PMF_LANG['ad_menu_translations']
 );
 

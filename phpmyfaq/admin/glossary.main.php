@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2>
+            <h2 class="page-header">
                 <i class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="?action=addglossary">

@@ -112,7 +112,7 @@ if ($permission['editbt']) {
         $logging->logAdmin($user, 'Beitragsave ' . $recordId);
 
         printf(
-            '<header><h2><i class="fa fa-pencil"></i> %s</h2></header>',
+            '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
             $PMF_LANG['ad_entry_aor']
         );
 

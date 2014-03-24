@@ -39,7 +39,7 @@ $tt                 = new PMF_TransTool;
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2>
+                <h2 class="page-header">
                     <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
                     <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
                         <div class="pull-right">

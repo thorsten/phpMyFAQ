@@ -195,7 +195,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     // Start header
 ?>
         <header>
-            <h2>
+            <h2 class="page-header">
 <?php
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf(

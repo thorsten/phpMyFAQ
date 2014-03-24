@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_stat_sess']);
+printf('<header><h2 class="page-header"><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_stat_sess']);
 
 if ($permission['viewlog']) {
     

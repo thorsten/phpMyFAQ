@@ -99,7 +99,7 @@ if ($permission['editbt']|| $permission['addbt']) {
         // new entry
         $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreatesave');
-        printf("<h2>%s</h2>\n", $PMF_LANG['ad_entry_aor']);
+        printf("<h2 class="page-header">%s</h2>\n", $PMF_LANG['ad_entry_aor']);
 
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
@@ -227,7 +227,7 @@ if ($permission['editbt']|| $permission['addbt']) {
 
     } else {
         printf(
-            '<header><h2><i class="fa fa-pencil"></i> %s</h2></header>',
+            '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
             $PMF_LANG['ad_entry_aor']
         );
         printf(

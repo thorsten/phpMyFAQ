@@ -44,7 +44,10 @@ $pagination = new PMF_Pagination(
     )
 );
 
-printf('<header><h2><i class="fa fa-file"></i> %s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
+printf(
+    '<header><h2 class="page-header"><i class="fa fa-file"></i> %s</h2></header>',
+    $PMF_LANG['ad_menu_attachment_admin']
+);
 
 ?>
         <table class="table table-striped">

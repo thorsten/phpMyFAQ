@@ -138,7 +138,7 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2>
+                <h2 class="page-header">
                     <i class="fa fa-user fa-fw"></i><?php echo $PMF_LANG['ad_group_deleteGroup'] ?> "<?php echo $group_data['name']; ?>"
                 </h2>
             </div>
@@ -244,7 +244,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2><i class="fa fa-user fa-fw"></i> <?php echo $PMF_LANG['ad_group_add']; ?></h2>
+                <h2 class="page-header"><i class="fa fa-user fa-fw"></i> <?php echo $PMF_LANG['ad_group_add']; ?></h2>
             </div>
         </header>
 
@@ -303,7 +303,7 @@ if ($groupAction == 'list') {
 
         <header class="row">
             <div class="col-lg-12">
-                <h2>
+                <h2 class="page-header">
                     <i class="fa fa-user"></i> <?php echo $PMF_LANG['ad_menu_group_administration']; ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=group&amp;group_action=add">

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['editconfig']) {
     printf(
-        '<header class="row"><div class="col-lg-12"><h2><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
+        '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
         $PMF_LANG['ad_menu_stopwordsconfig']
     );
 
