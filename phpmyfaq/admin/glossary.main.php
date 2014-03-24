@@ -25,7 +25,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
 ?>
         <header class="row">
             <div class="col-lg-12">
