@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+            <h2 class="page-header"><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
 if ($permission['editcateg']) {

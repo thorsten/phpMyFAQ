@@ -38,16 +38,21 @@ if ($permission["editcateg"]) {
                     $PMF_LANG['ad_categ_move'],
                     $category->categoryName[$id]['name']);
 ?>
-        <header>
-            <h2><i class="fa fa-list"></i> <?php print $header ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-list"></i> <?php echo $header ?></h2>
+            </div>
         </header>
-        <form class="form-horizontal" action="?action=pastecategory" method="post" accept-charset="utf-8">
-            <input type="hidden" name="cat" value="<?php print $id; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
-            <div class="control-group">
-                <label class="control-label"><?php print $PMF_LANG["ad_categ_paste2"]; ?></label>
-                <div class="controls">
-                    <select name="after" size="1">
+
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="?action=pastecategory" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="cat" value="<?php echo $id; ?>">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG["ad_categ_paste2"]; ?></label>
+                        <div class="col-lg-4">
+                            <select name="after" size="1" class="form-control">
 <?php
 
     foreach ($category->catTree as $cat) {
@@ -65,16 +70,20 @@ if ($permission["editcateg"]) {
     }
 
 ?>
-                    </select>
-                </div>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <button class="btn btn-primary" type="submit" name="submit">
+                                <?php echo $PMF_LANG["ad_categ_updatecateg"]; ?>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" name="submit">
-                    <?php print $PMF_LANG["ad_categ_updatecateg"]; ?>
-                </button>
-            </div>
-        </form>
+        </div>
 <?php
 } else {
-    print $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG["err_NotAuth"];
 }

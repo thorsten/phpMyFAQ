@@ -27,11 +27,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-
-        <header>
-            <h2><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_categ_deletesure']; ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-list"></i> <?php echo $PMF_LANG['ad_categ_deletesure'] ?></h2>
+            </div>
         </header>
-
 <?php
 if ($permission['delcateg']) {
     $category = new PMF_Category($faqConfig, [], false);
@@ -40,43 +40,49 @@ if ($permission['delcateg']) {
     $categories = $category->getAllCategories();
     $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
-        <form class="form-horizontal" action="?action=removecategory" method="post" accept-charset="utf-8">
-            <input type="hidden" name="cat" value="<?php print $id; ?>" />
-            <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="?action=removecategory" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="cat" value="<?php echo $id; ?>" />
+                    <input type="hidden" name="lang" value="<?php echo $LANGCODE; ?>" />
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
 
-            <div class="control-group">
-                <label class="control-label"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>
-                <div class="controls">
-                    <?php print $categories[$id]['name']; ?>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_titel']; ?>:</label>
+                        <div class="col-lg-4">
+                            <p class="form-control-static"><?php echo $categories[$id]['name']; ?></p>
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label class="control-label"><?php print $PMF_LANG['ad_categ_desc']; ?>:</label>
-                <div class="controls">
-                    <?php print $categories[$id]['description']; ?>
-                    <label class="radio">
-                        <input type="radio" checked name="deleteall" value="yes" />
-                        <?php print $PMF_LANG['ad_categ_deletealllang']; ?>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="deleteall" value="no" />
-                        <?php print $PMF_LANG['ad_categ_deletethislang']; ?>
-                    </label>
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_desc']; ?>:</label>
+                        <div class="col-lg-4">
+                            <?php echo $categories[$id]['description']; ?>
+                            <label class="radio">
+                                <input type="radio" checked name="deleteall" value="yes" />
+                                <?php echo $PMF_LANG['ad_categ_deletealllang']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" name="deleteall" value="no" />
+                                <?php echo $PMF_LANG['ad_categ_deletethislang']; ?>
+                            </label>
+                        </div>
+                    </div>
 
-            <div class="form-actions">
-                <button class="btn btn-danger" type="submit" name="submit">
-                    <?php print $PMF_LANG['ad_categ_del_yes']; ?>
-                </button>
-                <a class="btn btn-success" onclick="javascript:history.back();">
-                    <?php print $PMF_LANG['ad_categ_del_no']; ?>
-                </a>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <button class="btn btn-danger" type="submit" name="submit">
+                                <?php echo $PMF_LANG['ad_categ_del_yes']; ?>
+                            </button>
+                            <a class="btn btn-success" onclick="javascript:history.back();">
+                                <?php echo $PMF_LANG['ad_categ_del_no']; ?>
+                            </a>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

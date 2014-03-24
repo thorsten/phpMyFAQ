@@ -55,34 +55,42 @@ if ($permission['editcateg']) {
     $header = $PMF_LANG['ad_categ_edit_1'] . ' ' . $categories[$categoryId]['name'] . ' ' . $PMF_LANG['ad_categ_edit_2'];
 ?>
 
-        <header>
-            <h2><i class="fa fa-list"></i> <?php echo $header; ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-list fa-fw"></i> <?php echo $header; ?></h2>
+            </div>
         </header>
 
+        <div class="row">
+            <div class="col-lg-12">
+                
+            </div>
+        </div>
         <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php echo $categoryId; ?>">
             <input type="hidden" id="catlang" name="catlang" value="<?php echo $categories[$categoryId]['lang']; ?>">
             <input type="hidden" name="parent_id" value="<?php echo $categories[$categoryId]['parent_id']; ?>">
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
 
-            <div class="control-group">
-                <label><?php echo $PMF_LANG['ad_categ_titel']; ?>:</label>
-                <div class="controls">
-                    <input type="text" id="name" name="name" value="<?php echo $categories[$categoryId]['name']; ?>">
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_titel']; ?>:</label>
+                <div class="col-lg-4">
+                    <input type="text" id="name" name="name" value="<?php echo $categories[$categoryId]['name']; ?>"
+                        class="form-control">
                 </div>
             </div>
 
-            <div class="control-group">
-                <label><?php echo $PMF_LANG['ad_categ_desc']; ?>:</label>
-                <div class="controls">
-                    <textarea id="description" name="description" rows="3" cols="80"><?php echo $categories[$categoryId]['description']; ?></textarea>
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_desc']; ?>:</label>
+                <div class="col-lg-4">
+                    <textarea id="description" name="description" rows="3" class="form-control"><?php echo $categories[$categoryId]['description']; ?></textarea>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label><?php echo $PMF_LANG['ad_categ_owner']; ?>:</label>
-                <div class="controls">
-                    <select name="user_id" size="1">
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_owner']; ?>:</label>
+                <div class="col-lg-4">
+                    <select name="user_id" size="1" class="form-control">
                         <?php echo $user->getAllUserOptions($categories[$categoryId]['user_id']); ?>
                     </select>
                 </div>
@@ -90,9 +98,9 @@ if ($permission['editcateg']) {
 <?php
     if ($faqConfig->get('security.permLevel') != 'basic') {
 ?>
-            <div class="control-group">
-                <label><?php echo $PMF_LANG['ad_entry_grouppermission']; ?></label>
-                <div class="controls">
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_entry_grouppermission']; ?></label>
+                <div class="col-lg-4">
                     <label class="radio">
                         <input type="radio" name="grouppermission" value="all" <?php echo ($allGroups ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_all_groups']; ?>
@@ -101,7 +109,7 @@ if ($permission['editcateg']) {
                         <input type="radio" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>
                     </label>
-                    <select name="restricted_groups[]" size="3" multiple>
+                    <select name="restricted_groups[]" size="3" class="form-control" multiple>
                         <?php echo $user->perm->getAllGroupsOptions($groupPermission); ?>
                     </select>
                 </div>
@@ -113,9 +121,9 @@ if ($permission['editcateg']) {
 <?php 
     }
 ?>
-            <div class="control-group">
-                <label><?php echo $PMF_LANG['ad_entry_userpermission']; ?></label>
-                <div class="controls">
+            <div class="form-group">
+                <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_entry_userpermission']; ?></label>
+                <div class="col-lg-4">
                     <label class="radio">
                         <input type="radio" name="userpermission" value="all" <?php echo ($allUsers ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_all_users']; ?>
@@ -124,16 +132,18 @@ if ($permission['editcateg']) {
                         <input type="radio" name="userpermission" value="restricted" <?php echo ($restrictedUsers ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
                     </label>
-                    <select name="restricted_users" size="1">
+                    <select name="restricted_users" class="form-control" size="1">
                         <?php echo $user->getAllUserOptions($userPermission[0]); ?>
                     </select>
                 </div>
             </div>
 
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" name="submit">
-                    <?php echo $PMF_LANG['ad_categ_updatecateg']; ?>
-                </button>
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-4">
+                    <button class="btn btn-primary" type="submit" name="submit">
+                        <?php echo $PMF_LANG['ad_categ_updatecateg']; ?>
+                    </button>
+                </div>
             </div>
     </form>
 <?php
