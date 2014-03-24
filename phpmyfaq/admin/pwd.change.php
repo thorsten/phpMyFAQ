@@ -27,8 +27,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        <header>
-            <h2><i class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2><i class="fa fa-lock fa-fw"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
+            </div>
         </header>
 <?php
 if ($permission["passwd"]) {
@@ -49,43 +51,64 @@ if ($permission["passwd"]) {
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
-                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+                printf(
+                    '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
+                    $PMF_LANG["ad_passwd_fail"]
+                );
             }
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_passwdsuc"]);
+            printf(
+                '<p class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
+                $PMF_LANG["ad_passwdsuc"]
+            );
         } else {
-            printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_passwd_fail"]);
+            printf(
+                '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
+                $PMF_LANG["ad_passwd_fail"]
+            );
         }
     }
 ?>
-        <form class="form-horizontal" action="?action=passwd" method="post" accept-charset="utf-8">
-        <input type="hidden" name="save" value="newpassword" />
-            <div class="control-group">
-                <label class="control-label" for="opass"><?php echo $PMF_LANG["ad_passwd_old"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="opass" id="opass" required="required" />
-                </div>
-            </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <form class="form-horizontal" action="?action=passwd" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="save" value="newpassword" />
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="opass">
+                            <?php echo $PMF_LANG["ad_passwd_old"]; ?>
+                        </label>
+                        <div class="col-lg-3">
+                            <input type="password" name="opass" id="opass" class="form-control" required>
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label class="control-label" for="npass"><?php echo $PMF_LANG["ad_passwd_new"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="npass" id="npass" required="required" />
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="npass">
+                            <?php echo $PMF_LANG["ad_passwd_new"]; ?>
+                        </label>
+                        <div class="col-lg-3">
+                            <input type="password" name="npass" id="npass" class="form-control" required>
+                        </div>
+                    </div>
 
-            <div class="control-group">
-                <label class="control-label" for="bpass"><?php echo $PMF_LANG["ad_passwd_con"]; ?></label>
-                <div class="controls">
-                    <input type="password" name="bpass" id="bpass" required="required"  />
-                </div>
-            </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="bpass">
+                            <?php echo $PMF_LANG["ad_passwd_con"]; ?>
+                        </label>
+                        <div class="col-lg-3">
+                            <input type="password" name="bpass" id="bpass" class="form-control" required>
+                        </div>
+                    </div>
 
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit">
-                    <?php echo $PMF_LANG["ad_passwd_change"]; ?>
-                </button>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-3">
+                            <button class="btn btn-primary" type="submit">
+                                <?php echo $PMF_LANG["ad_passwd_change"]; ?>
+                            </button>
+                        </div>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
 <?php
 } else {
     echo $PMF_LANG["err_NotAuth"];
