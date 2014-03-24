@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2><i class="icon-list-ul"></i> %s</h2></header>', $PMF_LANG['ad_glossary_add']);
+printf('<header><h2><i class="fa fa-list-ul"></i> %s</h2></header>', $PMF_LANG['ad_glossary_add']);
 
 if ($permission['addglossary']) {
 ?>

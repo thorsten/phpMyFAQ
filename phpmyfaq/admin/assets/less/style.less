@@ -1,6 +1,8 @@
 /**
  * phpMyFAQ 2.9 default layout for admin
  *
+ * Based on SB Admin v2 from http://startbootstrap.com/sb-admin-v2
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -25,12 +27,13 @@
 @import "../../../../components/font-awesome/less/font-awesome";
 
 //
+// Colors
+//
+@import "colors";
+
+//
 // Admin definitions
 //
-
-body {
-    background-color: #f8f8f8;
-}
 
 #wrapper {
     width: 100%;
@@ -39,7 +42,6 @@ body {
 #page-wrapper {
     padding: 0 15px;
     min-height: 568px;
-    background-color: #fff;
 }
 
 @media(min-width:768px) {

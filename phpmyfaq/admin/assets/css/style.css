@@ -1,6 +1,8 @@
 /**
  * phpMyFAQ 2.9 default layout for admin
  *
+ * Based on SB Admin v2 from http://startbootstrap.com/sb-admin-v2
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -7128,16 +7130,12 @@ button.close {
 .fa-plus-square-o:before {
   content: "\f196";
 }
-body {
-  background-color: #f8f8f8;
-}
 #wrapper {
   width: 100%;
 }
 #page-wrapper {
   padding: 0 15px;
   min-height: 568px;
-  background-color: #fff;
 }
 @media (min-width: 768px) {
   #page-wrapper {
@@ -7151,9 +7149,6 @@ body {
 .navbar-static-side ul li {
   border-bottom: 1px solid #e7e7e7;
 }
-/* Navigation */
-/* ------------------------------- */
-/* Top Right Navigation Dropdown Styles */
 .navbar-top-links li {
   display: inline-block;
 }

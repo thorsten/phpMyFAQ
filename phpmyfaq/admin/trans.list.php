@@ -103,7 +103,7 @@ $tt                 = new PMF_TransTool;
                 <?php if($permission["edittranslation"] && $showActions): ?>
                 <td>
                     <a class="btn btn-primary" href="?action=transedit&amp;translang=<?php echo $lang ?>" >
-                        <i class="icon-edit icon-white"></i>
+                        <i class="fa fa-edit fa fa-white"></i>
                         <?php echo $PMF_LANG['msgEdit'] ?>
                     </a>
                 </td>
@@ -113,7 +113,7 @@ $tt                 = new PMF_TransTool;
                 <?php if($permission["deltranslation"] && $showActions): ?>
                 <td>
                     <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
-                        <i class="icon-remove icon-white"></i>
+                        <i class="fa fa-remove fa fa-white"></i>
                         <?php echo $PMF_LANG['msgDelete'] ?>
                     </a>
                 </td>
@@ -123,7 +123,7 @@ $tt                 = new PMF_TransTool;
                 <?php if($permission["edittranslation"] && $showActions): ?>
                 <td>
                     <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
-                        <i class="icon-upload icon-white"></i>
+                        <i class="fa fa-upload fa fa-white"></i>
                         <?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>
                     </a>
                 </td>
@@ -131,9 +131,9 @@ $tt                 = new PMF_TransTool;
                 <td><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></td>
                 <?php endif;?>
                 <?php if($isLangFileWritable): ?>
-                <td><i class="icon-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
+                <td><i class="fa fa-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
                 <?php else: ?>
-                <td><i class="icon-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
+                <td><i class="fa fa-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
                 <?php endif; ?>
                 <td>
                     <?php echo $percents ?>%

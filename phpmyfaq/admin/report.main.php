@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($permission['reports']) {
 ?>
     <header>
-        <h2><i class="icon-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
+        <h2><i class="fa fa-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
     </header>
 
     <form class="form-horizontal" action="?action=reportview" method="post" accept-charset="utf-8">

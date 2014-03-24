@@ -63,10 +63,10 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
 ?>
     <header>
         <h2>
-            <i class="icon-tasks"></i> <?php echo $PMF_LANG["ad_menu_adminlog"]; ?>
+            <i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_menu_adminlog"]; ?>
             <div class="pull-right">
                 <a class="btn btn-danger" href="?action=deleteadminlog">
-                    <i class="icon-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+                    <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
                 </a>
             </div>
         </h2>

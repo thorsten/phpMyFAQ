@@ -44,7 +44,7 @@ $pagination = new PMF_Pagination(
     )
 );
 
-printf('<header><h2><i class="icon-file"></i> %s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
+printf('<header><h2><i class="fa fa-file"></i> %s</h2></header>', $PMF_LANG['ad_menu_attachment_admin']);
 
 ?>
         <table class="table table-striped">
@@ -66,7 +66,7 @@ printf('<header><h2><i class="icon-file"></i> %s</h2></header>', $PMF_LANG['ad_m
                     <td>
                         <a href="javascript:deleteAttachment(<?php print $item->id ?>); void(0);" class="btn btn-danger"
                            title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
-                            <i class="icon-trash"></i>
+                            <i class="fa fa-trash"></i>
                         </a>
                     </td>
                 </tr>

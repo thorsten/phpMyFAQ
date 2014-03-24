@@ -100,7 +100,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Main">
-                            <i class="icon-home icon-white"></i>
+                            <i class="fa fa-home fa fa-white"></i>
                             <?php echo $PMF_LANG['mainControlCenter']; ?>
                         </button>
                     </p>
@@ -108,7 +108,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Records">
-                            <i class="icon-th-list icon-white"></i>
+                            <i class="fa fa-th-list fa fa-white"></i>
                             <?php echo $PMF_LANG['recordsControlCenter']; ?>
                         </button>
                     </p>
@@ -116,7 +116,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Search">
-                            <i class="icon-search icon-white"></i>
+                            <i class="fa fa-search fa fa-white"></i>
                             <?php echo $PMF_LANG['searchControlCenter']; ?>
                         </button>
                     </p>
@@ -124,7 +124,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Security">
-                            <i class="icon-warning-sign icon-white"></i>
+                            <i class="fa fa-warning-sign fa fa-white"></i>
                             <?php echo $PMF_LANG['securityControlCenter']; ?>
                         </button>
                     </p>
@@ -132,7 +132,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig"  data-toggle="Spam">
-                            <i class="icon-thumbs-down icon-white"></i>
+                            <i class="fa fa-thumbs-down fa fa-white"></i>
                             <?php echo $PMF_LANG['spamControlCenter']; ?>
                         </button>
                     </p>
@@ -140,7 +140,7 @@ if ($permission['editconfig']) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="SocialNetworks">
-                            <i class="icon-retweet icon-white"></i>
+                            <i class="fa fa-retweet fa fa-white"></i>
                             <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
                         </button>
                     </p>

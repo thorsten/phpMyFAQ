@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['viewlog']) {
 
-    printf('<header><h2><i class="icon-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
+    printf('<header><h2><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_searchstats']);
 
     $perpage = 15;
     $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
@@ -111,7 +111,7 @@ if ($permission['viewlog']) {
             <td>
                 <a class="btn btn-danger" href="javascript:;"
                    onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
-                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
+                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="fa fa-trash"></span>
                 </a>
             </td>
         </tr>

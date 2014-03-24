@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-printf('<header><h2><i class="icon-download-alt"></i> %s</h2></header>', $PMF_LANG['ad_csv_backup']);
+printf('<header><h2><i class="fa fa-download-alt"></i> %s</h2></header>', $PMF_LANG['ad_csv_backup']);
 
 if ($permission['backup']) {
 ?>
@@ -36,10 +36,10 @@ if ($permission['backup']) {
             <p><?php print $PMF_LANG["ad_csv_make"]; ?></p>
             <p>
                 <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                    <i class="icon-download icon-white"></i> <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
+                    <i class="fa fa-download fa fa-white"></i> <?php print $PMF_LANG["ad_csv_linkdat"]; ?>
                 </a>
                 <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                    <i class="icon-download icon-white"></i> <?php print $PMF_LANG["ad_csv_linklog"]; ?>
+                    <i class="fa fa-download fa fa-white"></i> <?php print $PMF_LANG["ad_csv_linklog"]; ?>
                 </a>
             </p>
         </fieldset>
@@ -52,7 +52,7 @@ if ($permission['backup']) {
                 <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
                 <input type="file" name="userfile" size="30" />
                 <button class="btn btn-primary" type="submit">
-                    <i class="icon-upload icon-white"></i> <?php print $PMF_LANG["ad_csv_ok"]; ?>
+                    <i class="fa fa-upload fa fa-white"></i> <?php print $PMF_LANG["ad_csv_ok"]; ?>
                 </button>
             </p>
         </fieldset>

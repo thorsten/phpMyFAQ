@@ -204,14 +204,14 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             $selectedRevisionId
         );
         printf(
-            '<i class="icon-pencil"></i> %s <span class="text-error">%s</span> %s %s',
+            '<i class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s',
             $PMF_LANG['ad_entry_edit_1'],
             (0 === $faqData['id'] ? '' : $faqData['id']),
             $PMF_LANG['ad_entry_edit_2'],
             $currentRevision
         );
     } else {
-        printf('<i class="icon-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
+        printf('<i class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
     }
     // Revisions
     if ($permission["changebtrevs"]) {
@@ -314,7 +314,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                     );
                                     if ($permission['delattachment']) {
                                         printf(
-                                            '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="icon-trash icon-white"></i></a>',
+                                            '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash fa fa-white"></i></a>',
                                             $faqData['id'],
                                             $att->getId(),
                                             $faqData['lang']

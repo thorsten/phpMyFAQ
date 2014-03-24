@@ -162,7 +162,7 @@ $faqSession   = new PMF_Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="icon-check icon-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
+                                <i class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
                             </button>
                         </form>
                     <?php
@@ -241,7 +241,7 @@ $faqSession   = new PMF_Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="icon-certificate icon-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
+                                <i class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
                             </button>
                         </form>
                     <?php

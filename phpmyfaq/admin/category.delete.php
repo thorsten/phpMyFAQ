@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
 
         <header>
-            <h2><i class="icon-list"></i> <?php print $PMF_LANG['ad_categ_deletesure']; ?></h2>
+            <h2><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_categ_deletesure']; ?></h2>
         </header>
 
 <?php

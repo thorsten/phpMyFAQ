@@ -32,7 +32,7 @@ $news = new PMF_News($faqConfig);
 if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post" accept-charset="utf-8">
@@ -159,10 +159,10 @@ if ('addnews' == $action && $permission["addnews"]) {
 ?>
         <header>
             <h2>
-                <i class="icon-pencil"></i> <?php echo $PMF_LANG["msgNews"] ?>
+                <i class="fa fa-pencil"></i> <?php echo $PMF_LANG["msgNews"] ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="?action=addnews">
-                        <i class="icon-plus icon-white"></i> <?php echo $PMF_LANG["ad_menu_news_add"] ?>
+                        <i class="fa fa-plus fa fa-white"></i> <?php echo $PMF_LANG["ad_menu_news_add"] ?>
                     </a>
                 </div>
             </h2>
@@ -187,11 +187,11 @@ if ('addnews' == $action && $permission["addnews"]) {
             <td><?php echo $date->format($newsItem['date']); ?></td>
             <td>
                 <a class="btn btn-primary" href="?action=editnews&amp;id=<?php echo $newsItem['id']; ?>">
-                    <span title="<?php echo $PMF_LANG["ad_news_update"]; ?>" class="icon-edit"></span>
+                    <span title="<?php echo $PMF_LANG["ad_news_update"]; ?>" class="fa fa-edit"></span>
                 </a>
                 &nbsp;&nbsp;
                 <a class="btn btn-danger" href="?action=deletenews&amp;id=<?php echo $newsItem['id']; ?>">
-                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="icon-trash"></span>
+                    <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="fa fa-trash"></span>
                 </a>
             </td>
         </tr>
@@ -212,7 +212,7 @@ if ('addnews' == $action && $permission["addnews"]) {
     $newsData = $news->getNewsEntry($id, true);
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 
         <form class="form-horizontal" action="?action=updatenews" method="post" accept-charset="utf-8">
@@ -376,7 +376,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('savenews' == $action && $permission["addnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
@@ -417,7 +417,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('updatenews' == $action && $permission["editnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
@@ -459,7 +459,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 } elseif ('deletenews' == $action && $permission["delnews"]) {
 ?>
         <header>
-            <h2><i class="icon-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
+            <h2><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_news_data']; ?></h2>
         </header>
 <?php
     $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');

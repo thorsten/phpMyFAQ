@@ -29,10 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header>
             <h2>
-                <i class="icon-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
+                <i class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="?action=addglossary">
-                        <i class="icon-plus icon-white"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                        <i class="fa fa-plus fa fa-white"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
                     </a>
                 </div>
             </h2>
@@ -112,7 +112,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             $items['id']
         );
         printf(
-            '<span title="%s"><i class="icon-trash icon-white"></i></span></a></td>',
+            '<span title="%s"><i class="fa fa-trash fa fa-white"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';

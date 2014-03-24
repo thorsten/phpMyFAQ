@@ -138,7 +138,7 @@ if ($groupAction == 'delete_confirm' && $permission['delgroup']) {
 ?>
         <header>
             <h2>
-                <i class="icon-user"></i>  <?php echo $PMF_LANG['ad_group_deleteGroup'] ?> "<?php echo $group_data['name']; ?>"
+                <i class="fa fa-user"></i>  <?php echo $PMF_LANG['ad_group_deleteGroup'] ?> "<?php echo $group_data['name']; ?>"
             </h2>
         </header>
         <p><?php print $PMF_LANG['ad_group_deleteQuestion']; ?></p>
@@ -236,7 +236,7 @@ if ($groupAction == 'add' && $permission['addgroup']) {
     $user = new PMF_User_CurrentUser($faqConfig);
 ?>
         <header>
-            <h2><i class="icon-user"></i> <?php print $PMF_LANG['ad_group_add']; ?></h2>
+            <h2><i class="fa fa-user"></i> <?php print $PMF_LANG['ad_group_add']; ?></h2>
         </header>
 
         <div id="user_message"><?php print $message; ?></div>
@@ -287,10 +287,10 @@ if ($groupAction == 'list') {
 
         <header>
             <h2>
-                <i class="icon-user"></i> <?php print $PMF_LANG['ad_menu_group_administration']; ?>
+                <i class="fa fa-user"></i> <?php print $PMF_LANG['ad_menu_group_administration']; ?>
                 <div class="pull-right">
                     <a class="btn btn-success" href="?action=group&amp;group_action=add">
-                        <i class="icon-plus"></i> <?php print $PMF_LANG['ad_group_add_link']; ?>
+                        <i class="fa fa-plus"></i> <?php print $PMF_LANG['ad_group_add_link']; ?>
                     </a>
                 </div>
             </h2>

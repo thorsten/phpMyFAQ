@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2><i class="icon-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+            <h2><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
 if ($permission['editcateg']) {
@@ -103,7 +103,7 @@ if ($permission['editcateg']) {
         if ($cat['lang'] != $LANGCODE) {
            // translate category
            printf(
-               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="icon-share"></span></a></a>',
+               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -132,7 +132,7 @@ if ($permission['editcateg']) {
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="label label-success"><i class="icon-check icon-white"></i></span></td>',
+                    '<span title="%s: %s" class="label label-success"><i class="fa fa-check fa fa-white"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
@@ -143,7 +143,7 @@ if ($permission['editcateg']) {
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
                 printf(
-                    '<span title="%s" class="label label-inverse"><i class="icon-share icon-white"></i></span></a>',
+                    '<span title="%s" class="label label-inverse"><i class="fa fa-share fa fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }

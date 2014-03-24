@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <?php if ($permission['addinstances'] && is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
                     <div class="pull-right">
                         <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
+                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -109,14 +109,14 @@ if ($permission['editinstances']) {
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
-                    <i class="icon-pencil"></i>
+                    <i class="fa fa-pencil"></i>
                 </a>
                 <?php endif; ?>
             </td>
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
-                   class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i>
+                   class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i>
                 </a>
                 <?php endif; ?>
             </td>
@@ -228,11 +228,11 @@ if ($permission['editinstances']) {
                             '<td>' + comment + '</td>' +
                             '<td>' +
                             '<a href="?action=editinstance&instance_id=' + data.added +
-                            '" class="btn btn-info"><i class="icon-pencil"></i></a>' +
+                            '" class="btn btn-info"><i class="fa fa-pencil"></i></a>' +
                             '</td>' +
                             '<td>' +
                             '<a href="javascript:;" id="delete-instance-' + data.added +
-                            '" class="btn btn-danger pmf-instance-delete"><i class="icon-trash"></i></a>' +
+                            '" class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i></a>' +
                             '</td>' +
                             '</tr>'
                         );

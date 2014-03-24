@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($permission['reports']) {
 
-    printf('<header><h2><i class="icon-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_reports']);
+    printf('<header><h2><i class="fa fa-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_reports']);
 
     $useCategory     = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
     $useSubcategory  = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);

@@ -152,7 +152,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="icon-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
+                    <i class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
                 </h2>
             </div>
         </header>
@@ -369,11 +369,11 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                     <i class="fa fa-user fa-fw"></i> <?php echo $PMF_LANG['ad_user']; ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
+                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
                         </a>
                         <?php if ($permission['edituser']): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="icon-list"></i> <?php echo $PMF_LANG['list_all_users']; ?>
+                            <i class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users']; ?>
                         </a>
                         <?php endif; ?>
                     </div>
@@ -590,7 +590,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                     <i class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user']; ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="icon-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
+                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
                         </a>
                     </div>
                 </h2>
@@ -637,13 +637,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 <td><i class="<?php
                 switch($user->getStatus()) {
                     case 'active':
-                        echo "icon-ok";
+                        echo "fa fa-ok";
                         break;
                     case 'blocked':
-                        echo 'icon-lock';
+                        echo 'fa fa-lock';
                         break;
                     case 'protected':
-                        echo 'icon-ok-sign';
+                        echo 'fa fa-ok-sign';
                         break;
                 } ?>"></i></td>
                 <td><?php echo $user->getUserData('display_name') ?></td>

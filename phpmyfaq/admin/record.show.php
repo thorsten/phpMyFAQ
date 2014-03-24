@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 printf(
-    '<header><h2><i class="icon-pencil"></i> %s</h2><header>',
+    '<header><h2><i class="fa fa-pencil"></i> %s</h2><header>',
     $PMF_LANG['ad_entry_aor']
 );
 
@@ -323,7 +323,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?>
         <p>
             <a class="btn showhideCategory" data-category-id="<?php echo $cid; ?>">
-                <i class="icon icon-arrow-right"></i>
+                <i class="icon fa fa-arrow-right"></i>
                 <strong><?php echo $category->getPath($cid); ?></strong> <?php echo $catInfo;?>
             </a>
         </p>
@@ -408,7 +408,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                        id="active_record_<?php print $cid . '_' . $record['id'] ?>"
                     <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
                 <?php }  else { ?>
-                <span class="label label-important"><i class="icon-white icon-ban-circle"></i></span>
+                <span class="label label-important"><i class="fa fa-white fa fa-ban-circle"></i></span>
                 <?php } ?>
             </td>
             <td>
@@ -435,14 +435,14 @@ if ($permission['editbt'] || $permission['delbt']) {
             <td style="width: 16px;">
                 <a class="btn btn-info" href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
                    title="<?php print $PMF_LANG['ad_categ_copy']; ?>">
-                    <i class="icon-share"></i>
+                    <i class="fa fa-share"></i>
                 </a>
             </td>
             <td style="width: 16px;">
                 <a class="btn btn-danger" href="javascript:void(0);"
                    onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
                    title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
-                    <i class="icon-trash"></i>
+                    <i class="fa fa-trash"></i>
                 </a>
             </td>
         </tr>

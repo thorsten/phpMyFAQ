@@ -127,7 +127,7 @@ if ($permission['editconfig']) {
             }
 
             html += '</table>';
-            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i class="icon-add icon-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
+            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
             return html;
         }
