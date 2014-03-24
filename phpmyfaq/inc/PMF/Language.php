@@ -246,7 +246,7 @@ class PMF_Language
         global $languageCodes;
         
         $onChange  = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
-        $output    = '<select class="language" name="' . $id . '" id="' . $id . '" size="1"' . $onChange . ">\n";
+        $output    = '<select class="form-control" name="' . $id . '" id="' . $id . '" size="1"' . $onChange . ">\n";
         $languages = self::getAvailableLanguages();
         
         if (count($languages) > 0) {

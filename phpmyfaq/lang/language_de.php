@@ -867,7 +867,7 @@ $PMF_LANG["ad_searchstats_search_term_percentage"] = "Anteil";
 
 // added 2.5.0-beta - 2009-03-31 by Anatoliy
 $PMF_LANG["ad_record_sticky"] = "Wichtig";
-$PMF_LANG["ad_entry_sticky"] = "Wichtig";
+$PMF_LANG["ad_entry_sticky"] = "Wichtige FAQ";
 $PMF_LANG["stickyRecordsHeader"] = "Wichtige FAQs";
 
 // added 2.5.0-beta - 2009-04-01 by Anatoliy
