@@ -27,16 +27,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        <header>
-            <h2 class="page-header">
-                <i class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
-                <div class="pull-right">
-                    <a class="btn btn-success" href="?action=addglossary">
-                        <i class="fa fa-plus fa fa-white"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
-                    </a>
-                </div>
-            </h2>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
+                    <div class="pull-right">
+                        <a class="btn btn-success" href="?action=addglossary">
+                            <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                        </a>
+                    </div>
+                </h2>
+            </div>
         </header>
+
+        <div class="row">
+            <div class="col-lg-12">
 <?php
 if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
 
@@ -112,7 +117,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
             $items['id']
         );
         printf(
-            '<span title="%s"><i class="fa fa-trash fa fa-white"></i></span></a></td>',
+            '<span title="%s"><i class="fa fa-trash-o"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';
@@ -122,3 +127,6 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
 } else {
     echo $PMF_LANG["err_NotAuth"];
 }
+?>
+            </div>
+        </div>
