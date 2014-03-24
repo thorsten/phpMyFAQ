@@ -107,23 +107,19 @@ if ($permission['viewlog']) {
         
         $num = round(($searchItem['number']*100 / $searchesCount), 2);
 ?>
-                <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
-                    <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
-                    <td><?php echo $searchItem['number'] ?></td>
-                    <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-                    <td>
-                        <div class="progress progress-info" style="width: 50px;">
-                            <div class="bar" style="width: <?php echo $num; ?>%;"></div>
-                        </div>
-                    </td>
-                    <td><?php echo $num; ?>%</td>
-                    <td>
-                        <a class="btn btn-danger" href="javascript:;"
-                           onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
-                            <span title="<?php echo $PMF_LANG["ad_news_delete"]; ?>" class="fa fa-trash-o"></span>
-                        </a>
-                    </td>
-                </tr>
+                    <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
+                        <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
+                        <td><?php echo $searchItem['number'] ?></td>
+                        <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+                        <td><meter max="100" value="<?php echo $num; ?>"></td>
+                        <td><?php echo $num; ?>%</td>
+                        <td>
+                            <a class="btn btn-danger" href="javascript:;" title="<?php echo $PMF_LANG["ad_news_delete"]; ?>"
+                               onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
+                                <i class="fa fa-trash-o"></i>
+                            </a>
+                        </td>
+                    </tr>
 <?php
     }
 ?>
