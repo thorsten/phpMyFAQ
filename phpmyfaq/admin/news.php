@@ -145,7 +145,7 @@ if ('addnews' == $action && $permission["addnews"]) {
                 </div>
             </fieldset>
 
-            <div class="form-actions">
+            <div class="form-group">
                 <button class="btn btn-primary" type="submit">
                     <?php echo $PMF_LANG['ad_news_add']; ?>
                 </button>
@@ -340,7 +340,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             </div>
         </fieldset>
 
-        <div class="form-actions">
+        <div class="form-group">
             <button class="btn btn-primary" type="submit">
                 <?php echo $PMF_LANG['ad_news_edit']; ?>
             </button>

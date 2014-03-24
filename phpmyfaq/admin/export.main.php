@@ -100,7 +100,7 @@ if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
                 </div>
             </fieldset>
 
-            <div class="form-actions">
+            <div class="form-group">
                 <button class="btn btn-primary" type="submit" name="submitExport">
                     <?php echo $PMF_LANG['ad_menu_export']; ?>
                 </button>

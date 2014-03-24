@@ -200,7 +200,7 @@ if ($permission['viewlog']) {
                 </div>
             </div>
 
-            <div class="form-actions">
+            <div class="form-group">
                 <button class="btn btn-primary" type="submit" name="statdelete">
                     <?php print $PMF_LANG['ad_stat_delete']; ?>
                 </button>

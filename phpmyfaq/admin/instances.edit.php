@@ -71,7 +71,7 @@ if ($permission['editinstances']) {
             ?>
             </div>
         </div>
-        <div class="form-actions">
+        <div class="form-group">
             <button class="btn btn-primary" type="submit">
                 <?php echo $PMF_LANG["ad_instance_button"] ?>
             </button>
