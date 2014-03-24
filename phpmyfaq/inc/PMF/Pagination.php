@@ -119,7 +119,7 @@ class PMF_Pagination
      *
      * @var string
      */
-    protected $layoutTpl = '<div class="pagination pagination-centered"><ul>{LAYOUT_CONTENT}</ul></div>';
+    protected $layoutTpl = '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>';
 
     /**
      * Current page index
