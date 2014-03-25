@@ -25,12 +25,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
+        <header>
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_menu_searchfaqs'] ?>
+                </h2>
+            </div>
+        <header>
 
-printf(
-    '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2><header>',
-    $PMF_LANG['ad_menu_searchfaqs']
-);
 
+        <div class="row">
+            <div class="col-lg-12">
+<?php
 if ($permission['editbt'] || $permission['delbt']) {
 
     $searchcat  = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
@@ -50,43 +57,51 @@ if ($permission['editbt'] || $permission['delbt']) {
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 ?>
 
-    <form action="?action=view" method="post" class="form-horizontal form-search" accept-charset="utf-8">
+                <form action="?action=view" method="post" class="form-horizontal" accept-charset="utf-8">
 
-        <div class="control-group">
-            <label class="control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
-            <div class="input-append" style="margin-left: 20px;">
-                <input class="search-query" type="search" name="searchterm" autofocus
-                       value="<?php print $searchterm; ?>" />
-                <button class="btn btn-primary" type="submit" name="submit">
-                    <?php print $PMF_LANG["msgSearch"]; ?>
-                </button>
-            </div>
-        </div>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
+                        <div class="col-lg-4">
+                            <input class="form-control" type="search" name="searchterm" autofocus
+                                   value="<?php print $searchterm; ?>" />
 
-        <?php if ($linkVerifier->isReady() == true): ?>
-        <div class="control-group">
-            <div class="controls">
-                <label class="checkbox">
-                    <input type="checkbox" name="linkstate" value="linkbad" />
-                    <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
-                </label>
-            </div>
-        </div>
-        <?php endif; ?>
+                        </div>
+                    </div>
 
-        <div class="control-group">
-            <label class="control-label"><?php print $PMF_LANG["msgCategory"]; ?>:</label>
-            <div class="controls">
-                <select name="searchcat">
-                    <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-                    <?php print $categoryHelper->renderOptions($searchcat); ?>
-                </select>
-            </div>
-        </div>
+                    <?php if ($linkVerifier->isReady() == true): ?>
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <label class="checkbox">
+                                <input type="checkbox" name="linkstate" value="linkbad" />
+                                <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
+                            </label>
+                        </div>
+                    </div>
+                    <?php endif; ?>
 
-    </form>
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label"><?php print $PMF_LANG["msgCategory"]; ?>:</label>
+                        <div class="col-lg-4">
+                            <select name="searchcat" class="form-control">
+                                <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
+                                <?php print $categoryHelper->renderOptions($searchcat); ?>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <button class="btn btn-primary" type="submit" name="submit">
+                                <?php print $PMF_LANG["msgSearch"]; ?>
+                            </button>
+                        </div>
+                    </div>
+                </form>
 
 <?php
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
+?>
+            </div>
+        </div>

@@ -324,7 +324,7 @@ if ('addnews' == $action && $permission["addnews"]) {
                             </label>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="langTo"><?php echo $PMF_LANG["ad_entry_locale"]; ?>:</label>
                         <div class="col-lg-4">
