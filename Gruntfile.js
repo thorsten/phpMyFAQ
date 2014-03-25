@@ -1,5 +1,24 @@
-/*global module:false*/
+/**
+ * phpMyFAQ Gruntfile.js
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Development
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2013-2014 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2013-06-23
+ */
+
+/*global module:false, require:false */
+
 module.exports = function(grunt) {
+
+    'use strict';
 
     // Load all tasks
     require('load-grunt-tasks')(grunt);
@@ -10,13 +29,8 @@ module.exports = function(grunt) {
         meta: {
             version: '2.9'
         },
-        banner: '/*! phpMyFAQ v2.9 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
-        bower: {
-            install: {
-                // just run 'grunt bower:install' and you'll see files from your Bower packages in lib directory
-            }
-        },
         copy: {
             tinymce: {
                 files: [

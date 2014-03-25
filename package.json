@@ -14,11 +14,11 @@
     "grunt-contrib-less": "~0.6.1",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.4.4",
-    "grunt-bower-task": "~0.2.3",
-    "load-grunt-tasks": "~0.1.0"
+    "load-grunt-tasks": "~0.1.0",
+    "grunt-exec": "^0.4.5"
   },
   "scripts": {
-    "preinstall": "npm install bower less grunt-cli -g",
+    "preinstall": "npm install bower less grunt-cli jake -g",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
