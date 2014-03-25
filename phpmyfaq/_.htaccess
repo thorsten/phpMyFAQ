@@ -139,10 +139,11 @@ RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging
 RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
 
-# rest/json API
+# REST/JSON API
 # * http://[...]/api/<ACTION>/<LANGUAGE CODE>/<...>
 RewriteRule api/getVersion                        api.php?action=getVersion [L,QSA]
 RewriteRule api/getApiVersion                     api.php?action=getApiVersion [L,QSA]
+RewriteRule api/getCount                          api.php?action=getCount [L,QSA]
 RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$     api.php?action=search&lang=$1&q=$2 [L,QSA]
 RewriteRule api/getCategories                     api.php?action=getCategories [L,QSA]
 RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)       api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
