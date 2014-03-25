@@ -1,17 +1,11 @@
-<<<<<<< HEAD
 phpMyFAQ 2.9.0-dev
 Codename "Proteus"
-=======
-phpMyFAQ 2.8.9
-Codename "Perdita"
->>>>>>> 860fc795d82658c9e314f24640bb602fbf188bd5
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-<<<<<<< HEAD
-Version 2.9.0-dev 2014-01-
+Version 2.9.0-dev 2014-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)
@@ -20,12 +14,12 @@ Version 2.9.0-dev 2014-01-
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added frontend dependency management using Bower (Thorsten)
 - added support for PDO_MYSQL (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
 - updated bundled jQuery to version 1.10.2 (Thorsten)
-- updated bundled Bootstrap to version 3.0.3 (Thorsten)
+- updated bundled Bootstrap to version 3.1.1 (Thorsten)
 - updated bundled Font Awesome to version 4.0.3 (Thorsten)
-- updated bundled Modernizr to version 2.7.1 (Thorsten)
-- updated bundled TinyMCE to version 4.0.12 (Thorsten)
+- updated bundled Modernizr to version 2.7.2 (Thorsten)
+- updated bundled TinyMCE to version 4.0.20 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
 Version 2.8.9 - 2014-
