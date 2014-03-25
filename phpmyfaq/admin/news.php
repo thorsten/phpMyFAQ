@@ -75,7 +75,9 @@ if ('addnews' == $action && $permission["addnews"]) {
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label" for="active"><?php echo $PMF_LANG['ad_news_set_active']; ?></label>
+                        <label class="col-lg-2 control-label" for="active">
+                            <?php echo $PMF_LANG['ad_news_set_active']; ?>:
+                        </label>
                         <div class="col-lg-4">
                             <label class="checkbox">
                                 <input type="checkbox" name="active" id="active" value="y">
@@ -269,7 +271,9 @@ if ('addnews' == $action && $permission["addnews"]) {
                     </div>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label" for="active"><?php echo $PMF_LANG['ad_news_set_active']; ?></label>
+                        <label class="col-lg-2 control-label" for="active">
+                            <?php echo $PMF_LANG['ad_news_set_active']; ?>:
+                        </label>
                         <div class="col-lg-4">
                             <label class="checkbox">
                                 <input type="checkbox" name="active" id="active" value="y"

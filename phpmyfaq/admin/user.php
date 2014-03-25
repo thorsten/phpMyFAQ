@@ -294,7 +294,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-user"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
+                <h2 class="page-header"><i class="fa fa-user fa-fw"></i> <?php echo $PMF_LANG["ad_adus_adduser"] ?></h2>
             </div>
         </header>
 
@@ -605,13 +605,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 <th><?php echo $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?php echo $PMF_LANG['ad_auth_user'] ?></th>
                 <th><?php echo $PMF_LANG['msgNewContentMail'] ?></th>
-                <th colspan="2">&nbsp;</th>
+                <th colspan="3">&nbsp;</th>
             </tr>
         </thead>
         <?php if ($perPage < $numUsers): ?>
         <tfoot>
             <tr>
-                <td colspan="7"><?php echo $pagination->render(); ?></td>
+                <td colspan="8"><?php echo $pagination->render(); ?></td>
             </tr>
         </tfoot>
         <?php endif; ?>
@@ -637,15 +637,15 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 <td><i class="<?php
                 switch($user->getStatus()) {
                     case 'active':
-                        echo "fa fa-ok";
+                        echo "fa fa-check";
                         break;
                     case 'blocked':
                         echo 'fa fa-lock';
                         break;
                     case 'protected':
-                        echo 'fa fa-ok-sign';
+                        echo 'fa fa-thumb-tack';
                         break;
-                } ?>"></i></td>
+                } ?> icon_user_id_<?php echo $user->getUserId() ?>"></i></td>
                 <td><?php echo $user->getUserData('display_name') ?></td>
                 <td><?php echo $user->getLogin() ?></td>
                 <td>
@@ -657,6 +657,14 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                     <a href="?action=user&amp;user_id=<?php echo $user->getUserData('user_id')?>" class="btn btn-info">
                         <?php echo $PMF_LANG['ad_user_edit'] ?>
                     </a>
+                </td>
+                <td>
+                    <?php if ($user->getStatus() === 'blocked'): ?>
+                        <a onclick="activateUser(<?php echo $user->getUserData('user_id') ?>); return false;"
+                           href="javascript:;" class="btn btn-success btn_user_id_<?php echo $user->getUserId() ?>"">
+                            <?php echo $PMF_LANG['ad_news_set_active'] ?>
+                        </a>
+                    <?php endif; ?>
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
@@ -672,25 +680,45 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             ?>
         </tbody>
         </table>
-<script type="text/javascript">
-/* <![CDATA[ */
-/**
- * Ajax call to delete user
- *
- * @param userId
- */
-function deleteUser(userId)
-{
-    if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
-        $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
-        function(response) {
-            $('#user_message').html(response);
-            $('.row_user_id_' + userId).fadeOut('slow');
-        });
-    }
-}
-/* ]]> */
-</script>
+
+        <script type="text/javascript">
+        /* <![CDATA[ */
+
+        /**
+         * Ajax call to delete user
+         *
+         * @param userId
+         */
+        function deleteUser(userId) {
+            if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
+                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
+                function(response) {
+                    $('#user_message').html(response);
+                    $('.row_user_id_' + userId).fadeOut('slow');
+                });
+            }
+        }
+
+
+        /**
+         * Ajax call to delete user
+         *
+         * @param userId
+         */
+        function activateUser(userId) {
+            if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
+                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId,
+                    function() {
+                        var icon = $('.icon_user_id_' + userId);
+                        icon.toggleClass('fa-lock fa-check');
+                        $('.btn_user_id_' + userId).remove();
+                        console.log($(this));
+                    });
+            }
+        }
+
+        /* ]]> */
+        </script>
 <?php 
     }
 } else {

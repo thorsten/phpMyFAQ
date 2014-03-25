@@ -66,6 +66,12 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
             print json_encode($user->perm->getUserRights($userId));
             break;
 
+        case 'activate_user':
+            $user->getUserById($userId);
+            $user->setStatus('active');
+            echo json_encode($user->getStatus());
+            break;
+
         case 'delete_user':
             $user->getUserById($userId);
             if ($user->getStatus() == 'protected' || $userId == 1) {
