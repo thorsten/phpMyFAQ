@@ -723,6 +723,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         return '';
     }
 
+    /*
     $('#tags').typeahead({
         source: function (query, process) {
             return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
@@ -744,8 +745,10 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             })
         }
     });
+    */
 
     $(function() {
+        /*
         // DatePicker
         $('.date-pick').datePicker();
         $('#date').datePicker({startDate: '1900-01-01'});
@@ -760,6 +763,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                 );
             }
         });
+        */
 
         // Show help for keywords and users
         $('#keywords').focus(function() { showHelp('keywords'); });

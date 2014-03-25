@@ -185,7 +185,7 @@ switch ($action) {
 
     <script src="../assets/js/phpmyfaq.min.js"></script>
     <script src="assets/js/sidebar.js"></script>
-    <script src="editor/tiny_mce.js?<?php echo time(); ?>"></script>
+    <script src="assets/js/editor/tinymce.full.min.js?<?php echo time(); ?>"></script>
 
 <?php if ($edAutosave): ?>
     <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>

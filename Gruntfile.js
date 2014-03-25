@@ -17,6 +17,36 @@ module.exports = function(grunt) {
                 // just run 'grunt bower:install' and you'll see files from your Bower packages in lib directory
             }
         },
+        copy: {
+            tinymce: {
+                files: [
+                    {
+                        expand: true,
+                        src: 'components/tinymce/js/tinymce/tinymce.full.min.js',
+                        flatten: true,
+                        dest: 'phpmyfaq/admin/assets/js/editor'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/plugins/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/js/editor/plugins/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/skins/',
+                        src: '**/*.!(less)',
+                        dest: 'phpmyfaq/admin/assets/js/editor/skins/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/themes/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/js/editor/themes/'
+                    }
+                ]
+            }
+        },
         concat: {
             options: {
                 banner: '<%= banner %>',

@@ -76,15 +76,20 @@ if (isset($auth)) {
 <script>
 /*<![CDATA[*/ //<!--
 $().tooltip({placement: 'bottom'})
-tinyMCE.init({
+
+tinymce.init({
     // General options
     mode     : "exact",
-    language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
+    //language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
     elements : "<?php print ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
     width    : "500",
     height   : "480",
-    theme    : "advanced",
-    plugins  : "spellchecker,pagebreak,style,layer,table,save,advhr,advimage,advlink,emotions,iespell,inlinepopups,insertdatetime,preview,media,searchreplace,print,contextmenu,paste,directionality,fullscreen,noneditable,visualchars,nonbreaking,xhtmlxtras,template,syntaxhl,phpmyfaq",
+    theme    : "modern",
+    plugins: [
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
+        "save table contextmenu directionality emoticons template paste textcolor"
+    ],
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
@@ -118,9 +123,7 @@ tinyMCE.init({
     }
 });
 
-/**
- *
- */
+/*
 function phpMyFAQSave()
 {
     $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
@@ -143,6 +146,7 @@ function phpMyFAQSave()
     $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
     $('#temporarySaveButton').remove();
 }
+*/
 
 // --> /*]]>*/
 </script>
