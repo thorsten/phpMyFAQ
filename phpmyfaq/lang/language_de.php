@@ -1158,3 +1158,4 @@ $LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (Stan
 $LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Kommentare vom Gästen (Standard: aktiviert)");
 $LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Fragen vom Gästen (Standard: aktiviert)");
 $LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Erlaube neue FAQs vom Gästen (Standard: aktiviert)");
+$PMF_LANG["ad_searchterm_del"] = 'Alle gespeicherten Suchwörter löschen';

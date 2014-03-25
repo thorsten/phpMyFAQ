@@ -31,6 +31,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
+                    <div class="pull-right">
+                        <a class="btn btn-danger" href="?action=truncatesearchterms">
+                            <i class="fa fa-trash-o fa-fw"></i> <?php echo $PMF_LANG['ad_searchterm_del'] ?>
+                        </a>
+                    </div>
                 </h2>
             </div>
         </header>
@@ -45,9 +50,18 @@ if ($permission['viewlog']) {
     $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
     
     $search        = new PMF_Search($faqConfig);
+
+    if ('truncatesearchterms' === $action) {
+        if ($search->deleteAllSearchTerms()) {
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_searchterm_del_suc"]);
+        } else {
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_searchterm_del_err"]);
+        }
+    }
+
     $searchesCount = $search->getSearchesCount();
     $searchesList  = $search->getMostPopularSearches($searchesCount + 1, true);
-    
+
     if (is_null($pages)) {
         $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
     }

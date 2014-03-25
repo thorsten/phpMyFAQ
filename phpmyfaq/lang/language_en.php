@@ -1201,3 +1201,6 @@ $LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds (defa
 $LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Allow comments for guests (default: enabled)");
 $LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Allow adding questions for guests (default: enabled)");
 $LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Allow adding new FAQs (default: enabled)");
+$PMF_LANG["ad_searchterm_del"] = 'Delete all logged search terms';
+$PMF_LANG["ad_searchterm_del_suc"] = 'Deleted successfully all search terms.';
+$PMF_LANG["ad_searchterm_del_err"] = 'Couldn\'t delete all search terms.';

@@ -324,6 +324,7 @@ if (isset($auth) && in_array(true, $permission)) {
             case "sessionbrowse":     require 'stat.browser.php'; break;
             case "viewsession":       require 'stat.show.php'; break;
             case "statistics":        require 'stat.ratings.php'; break;
+            case 'truncatesearchterms':
             case "searchstats":       require 'stat.search.php'; break;
             // Reports
             case 'reports':           require 'report.main.php'; break;
