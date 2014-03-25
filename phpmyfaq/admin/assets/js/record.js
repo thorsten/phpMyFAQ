@@ -8,20 +8,18 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013 phpMyFAQ Team
+ * @copyright 2013-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-11-17
  */
 
+/*global $:false */
+
 $(document).ready(function() {
-    "use strict";
-    $(".showhideCategory").click(function(event) {
-        var categoryId = $("#category_" + $(this).data("category-id"));
-        if (categoryId.css("display") === "none") {
-            categoryId.fadeIn("slow");
-        } else {
-            categoryId.fadeOut("slow");
-        }
+    'use strict';
+    $('.showhideCategory').click(function(event) {
+        event.preventDefault();
+        $('#category_' + $(this).data('category-id')).toggle(1000);
     });
 });
