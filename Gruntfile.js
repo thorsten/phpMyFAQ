@@ -1,6 +1,9 @@
 /*global module:false*/
 module.exports = function(grunt) {
 
+    // Load all tasks
+    require('load-grunt-tasks')(grunt);
+
     // Project configuration.
     grunt.initConfig({
         // Metadata.
@@ -46,23 +49,7 @@ module.exports = function(grunt) {
             }
         },
         jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                unused: true,
-                boss: true,
-                eqnull: true,
-                browser: true,
-                globals: {
-                    "jQuery": true
-                }
-            },
+            jshintrc: '.jshintrc',
             gruntfile: {
                 src: 'Gruntfile.js'
             },
@@ -74,10 +61,10 @@ module.exports = function(grunt) {
         less: {
             development: {
                 files: {
-                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/less/style.less",
-                    //"phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/less/style.rtl.less",
-                    "phpmyfaq/assets/template/default/css/style.css": "phpmyfaq/assets/template/default/less/style.less",
-                    //"phpmyfaq/assets/template/default/css/style.rtl.css": "phpmyfaq/assets/template/default/less/style.rtl.less"
+                    'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
+                    //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
+                    'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
+                    //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
                 }
             }
         },
@@ -88,10 +75,10 @@ module.exports = function(grunt) {
                     keepSpecialComments: 0
                 },
                 files: {
-                    "phpmyfaq/admin/assets/css/style.min.css": "phpmyfaq/admin/assets/css/style.css",
-                    //"phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/css/style.rtl.css",
-                    "phpmyfaq/assets/template/default/css/style.min.css": ["phpmyfaq/assets/template/default/css/style.css"],
-                    //"phpmyfaq/assets/template/default/css/style.rtl.min.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
+                    'phpmyfaq/admin/assets/css/style.min.css': 'phpmyfaq/admin/assets/css/style.css',
+                    //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/css/style.rtl.css',
+                    'phpmyfaq/assets/template/default/css/style.min.css': ['phpmyfaq/assets/template/default/css/style.css']
+                    //'phpmyfaq/assets/template/default/css/style.rtl.min.css': ['phpmyfaq/assets/template/default/css/style.rtl.css']
                 }
             }
         },
@@ -100,26 +87,18 @@ module.exports = function(grunt) {
                 files: '<%= jshint.gruntfile.src %>',
                 tasks: ['jshint:gruntfile']
             },
-            lib_test: {
-                files: '<%= jshint.lib_test.src %>',
-                tasks: ['jshint:lib_test', 'qunit']
+            css: {
+                files: ['phpmyfaq/admin/assets/less/style.less', 'phpmyfaq/assets/template/default/less/style.less'],
+                tasks: ['less', 'cssmin']
             }
         }
     });
 
-    // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-csslint');
-
     // Default task.
     grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']);
 
+    // Watcher
+    grunt.event.on('watch', function(action, filepath, target) {
+        grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+    });
 };
