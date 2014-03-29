@@ -838,6 +838,7 @@ if ($step == 3) {
         $faqConfig->add('records.allowQuestionsForGuests', 'true');
         $faqConfig->add('records.allowNewFaqsForGuests', 'true');
         $faqConfig->add('records.hideEmptyCategories', 'false');
+        $faqConfig->add('search.searchForSolutionId', 'true');
     }
 
     // Always the last step: Update version number

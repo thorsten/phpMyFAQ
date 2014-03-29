@@ -1205,3 +1205,4 @@ $PMF_LANG["ad_searchterm_del"] = 'Delete all logged search terms';
 $PMF_LANG["ad_searchterm_del_suc"] = 'Deleted successfully all search terms.';
 $PMF_LANG["ad_searchterm_del_err"] = 'Couldn\'t delete all search terms.';
 $LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Hide empty categories (default: disabled)");
+$LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Search for solution ID (default: enabled)");

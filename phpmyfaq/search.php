@@ -163,7 +163,7 @@ try {
 }
 
 if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
-    0 < $faqSearchResult->getNumberOfResults()) {
+    0 < $faqSearchResult->getNumberOfResults() && $faqConfig->get('search.searchForSolutionId')) {
 
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();

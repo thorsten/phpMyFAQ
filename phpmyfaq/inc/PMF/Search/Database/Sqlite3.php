@@ -55,7 +55,7 @@ class PMF_Search_Database_Sqlite3 extends PMF_Search_Database
      */
     public function search($searchTerm)
     {
-        if (is_numeric($searchTerm)) {
+        if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
             $query = sprintf("

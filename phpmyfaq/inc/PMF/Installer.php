@@ -329,12 +329,14 @@ class PMF_Installer
         'records.allowCommentsForGuests'          => 'true',
         'records.allowQuestionsForGuests'         => 'true',
         'records.allowNewFaqsForGuests'           => 'true',
+        'records.hideEmptyCategories'             => 'false',
 
         'search.useAjaxSearchOnStartpage'         => 'false',
         'search.numberSearchTerms'                => '10',
         'search.relevance'                        => 'thema,content,keywords',
         'search.enableRelevance'                  => 'false',
         'search.enableHighlighting'               => 'true',
+        'search.searchForSolutionId'              => 'true',
 
         'security.permLevel'                      => 'basic',
         'security.ipCheck'                        => 'false',
