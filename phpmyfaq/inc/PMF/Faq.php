@@ -1597,13 +1597,15 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
-                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['url'][]    = $row['url'];
-                    $output['visits'][] = $this->plr->GetMsg('plmsgViews', $row['visits']);
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                    $output['preview'][] = $row['thema'];
+                    $output['url'][]     = $row['url'];
+                    $output['visits'][]  = $this->plr->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['url'][]    = $row['url'];
-                    $output['voted'][]  = sprintf(
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                    $output['preview'][] = $row['thema'];
+                    $output['url'][]     = $row['url'];
+                    $output['voted'][]   = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
                         $this->pmf_lang['msgVoteFrom'],
@@ -1631,9 +1633,10 @@ class PMF_Faq
         
         if (count ($result) > 0) {
             foreach ($result as $row) {
-                $output['url'][]   =  $row['url'];
-                $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['date'][]  = $date->format(PMF_Date::createIsoDate($row['datum']));
+                $output['url'][]     =  $row['url'];
+                $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                $output['preview'][] = $row['thema'];
+                $output['date'][]    = $date->format(PMF_Date::createIsoDate($row['datum']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -3001,8 +3004,9 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 $output[] = array(
-                    'title' => PMF_Utils::makeShorterText($row['thema'], 8),
-                    'url'   => $row['url']
+                    'title'   => PMF_Utils::makeShorterText($row['thema'], 8),
+                    'preview' => $row['thema'],
+                    'url'     => $row['url']
                 );
             }
         } else {
@@ -3012,7 +3016,7 @@ class PMF_Faq
             $html = '';
             foreach ($output as $entry) {
                 $html .= sprintf(
-                    '<li><a href="%s">%s</a></li>',
+                    '<li><a class="sticky-faqs" data-toggle="tooltip" data-placement="top" title="%s" href="%s">%s</a></li>',
                     $entry['url'],
                     $entry['title']
                 );

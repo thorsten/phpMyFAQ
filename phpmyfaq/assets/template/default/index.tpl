@@ -187,5 +187,11 @@
 
 </footer>
 
+<script>
+    $('.topten').tooltip();
+    $('.latest-entries').tooltip();
+    $('.sticky-faqs').tooltip();
+</script>
+
 </body>
 </html>

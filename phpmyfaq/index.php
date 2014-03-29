@@ -660,9 +660,10 @@ if (!isset($toptenParams['error'])) {
         'rightBox',
         'toptenList',
         array(
-            'toptenUrl'    => $toptenParams['url'],
-            'toptenTitle'  => $toptenParams['title'],
-            'toptenVisits' => $toptenParams[$param]
+            'toptenUrl'     => $toptenParams['url'],
+            'toptenTitle'   => $toptenParams['title'],
+            'toptenPreview' => $toptenParams['preview'],
+            'toptenVisits'  => $toptenParams[$param]
         )
     );
 } else {
@@ -681,9 +682,10 @@ if (!isset($latestEntriesParams['error'])) {
         'rightBox',
         'latestEntriesList',
         array(
-            'latestEntriesUrl'   => $latestEntriesParams['url'],
-            'latestEntriesTitle' => $latestEntriesParams['title'],
-            'latestEntriesDate'  => $latestEntriesParams['date']
+            'latestEntriesUrl'     => $latestEntriesParams['url'],
+            'latestEntriesTitle'   => $latestEntriesParams['title'],
+            'latestEntriesPreview' => $latestEntriesParams['preview'],
+            'latestEntriesDate'    => $latestEntriesParams['date']
         )
     );
 } else {
