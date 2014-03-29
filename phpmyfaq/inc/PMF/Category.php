@@ -135,6 +135,7 @@ class PMF_Category
     public function __construct(PMF_Configuration $config, $groups = [], $withperm = true)
     {
         $this->_config = $config;
+
         $this->setGroups($groups);
         $this->setLanguage($this->_config->getLanguage()->getLanguage());
 
@@ -176,13 +177,14 @@ class PMF_Category
 
         if ($withperm) {
             $where = sprintf("
-            WHERE
-                ( fg.group_id IN (%s)
-            OR
-                (fu.user_id = %d AND fg.group_id IN (%s)))",
-            implode(', ', $this->groups),
-            $this->user,
-            implode(', ', $this->groups));
+                WHERE
+                    ( fg.group_id IN (%s)
+                OR
+                    (fu.user_id = %d AND fg.group_id IN (%s)))",
+                implode(', ', $this->groups),
+                $this->user,
+                implode(', ', $this->groups)
+            );
         }
 
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
@@ -580,8 +582,10 @@ class PMF_Category
     */
     public function viewTree()
     {
-        global $sids, $PMF_LANG, $plr;
+        global $sids, $plr;
+
         $totFaqRecords = 0;
+        $number = [];
 
         $query = sprintf("
             SELECT
@@ -610,20 +614,30 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
+
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $number[$row->category_id] = $row->number;
             }
         }
+
         $output = "<ul>\n";
-        $open = 0;
+        $open   = 0;
         $this->expandAll();
 
         for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
 
-            list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-            $level = $this->treeTab[$y]['level'];
+            list($hasChild, $categoryName, $parent, $description) = $this->getLineDisplay($y);
+            $level     = $this->treeTab[$y]['level'];
             $leveldiff = $open - $level;
+
+            if (!isset($number[$parent])) {
+                $number[$parent] = 0;
+            }
+
+            if ($this->_config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
+                continue;
+            }
 
             if ($leveldiff > 1) {
                 $output .= '</li>';
@@ -632,10 +646,6 @@ class PMF_Category
                         str_repeat("\t", $level + $i + 1),
                         str_repeat("\t", $level + $i));
                 }
-            }
-
-            if (!isset($number[$parent])) {
-                $number[$parent] = 0;
             }
 
             if ($level < $open) {
@@ -658,19 +668,19 @@ class PMF_Category
             }
 
             if (0 === $number[$parent] && 0 === $level) {
-                $num_entries = '';
+                $numFaqs = '';
             } else {
                 $totFaqRecords += $number[$parent];
-                $num_entries = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries',$number[$parent]);
+                $numFaqs = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->_config->get('main.enableRssFeeds')) {
-                    $num_entries .= sprintf(
+                    $numFaqs .= sprintf(
                         ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS"></a>',
                         $parent,
                         $this->language,
                         $parent
                     );
                 }
-                $num_entries .= ')</span>';
+                $numFaqs .= ')</span>';
             }
 
             $url = sprintf(
@@ -684,7 +694,7 @@ class PMF_Category
             $oLink->text      = $categoryName;
             $oLink->tooltip   = $description;
 
-            $output .= $oLink->toHtmlAnchor() . $num_entries;
+            $output .= $oLink->toHtmlAnchor() . $numFaqs;
             $open    = $level;
         }
 
@@ -695,6 +705,7 @@ class PMF_Category
         $output .= "\t</li>\n";
         $output .= "\t</ul>\n";
         $output .= '<span id="totFaqRecords" style="display: none;">'.$totFaqRecords."</span>\n";
+
         return $output;
     }
 
