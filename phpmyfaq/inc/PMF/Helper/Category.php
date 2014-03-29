@@ -61,7 +61,7 @@ class PMF_Helper_Category extends PMF_Helper
         if ($numCategories > 0) {
             for ($y = 0 ;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
                 
-                list($symbol, $name, $categoryId, $description) = $this->Category->getLineDisplay($y);
+                list($hasChild, $name, $categoryId, $description) = $this->Category->getLineDisplay($y);
 
                 if ($activeCategory == $categoryId) {
                     $isActive = true;
