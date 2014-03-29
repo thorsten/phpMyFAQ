@@ -1515,6 +1515,7 @@ class PMF_Category
             PMF_Db::getTablePrefix());
 
         $result = $this->_config->getDb()->query($query);
+
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $numRecordsByCat[$row->category_id] = $row->number;

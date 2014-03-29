@@ -450,7 +450,7 @@ $faqSystem = new PMF_System();
 
 $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
-
+$categoryHelper->setConfiguration($faqConfig);
 
 $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');

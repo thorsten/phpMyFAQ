@@ -57,6 +57,7 @@ class PMF_Helper_Category extends PMF_Helper
         $open          = 0;
         $output        = '';
         $numCategories = $this->Category->height();
+        $numFaqs       = $this->Category->getNumberOfRecordsOfCategory();
         
         if ($numCategories > 0) {
             for ($y = 0 ;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
@@ -71,6 +72,11 @@ class PMF_Helper_Category extends PMF_Helper
 
                 $level     = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
+
+                if ($this->_config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId]) &&
+                    '-' === $hasChild) {
+                    continue;
+                }
 
                 if ($leveldiff > 1) {
                     $output .= '</li>';
