@@ -114,6 +114,7 @@ define("PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE", 20);
  * you can choose
  *
  * - hash (default)
+ * - bcrypt (PHP 5.5+, experimental)
  * - sha1
  * - crypt
  * - md5 (default before phpMyFAQ 2.8)
@@ -148,7 +149,7 @@ $denyUploadExts = [];
  *
  * @var array
  */
-$botBlacklist = array(
+$botBlacklist = [
     'nustcrape',
     'webpost',
     'GoogleBot',
@@ -164,7 +165,7 @@ $botBlacklist = array(
     'spider',
     'Yahoo! Slurp',
     'htdig'
-);
+];
 
 /****************************************************************************
  *                  DO NOT CHANGE ANYTHING BELOW THIS LINE!                 *
@@ -175,7 +176,7 @@ $botBlacklist = array(
  *
  * @var array
  */
-$allowedVariables = array(
+$allowedVariables = [
     'add'             => 1,
     'artikel'         => 1,
     'ask'             => 1,
@@ -203,14 +204,14 @@ $allowedVariables = array(
     'translate'       => 1,
     'ucp'             => 1,
     'writecomment'    => 1
-);
+];
 
 /**
  * ISO 639 language code list - DO NOT CHANGE!
  *
  * @var  array
  */
-$languageCodes = array(
+$languageCodes = [
     'AF' =>     'Afghanistan',
     'AA' =>     'Afar',
     'AB' =>     'Abkhazian',
@@ -352,7 +353,7 @@ $languageCodes = array(
     'YO' =>     'Yoruba',
     'ZH' =>     'Chinese (Simplified)',
     'ZU' =>     'Zulu'
-);
+];
 
 //
 // Define some internal constants
@@ -362,8 +363,8 @@ $languageCodes = array(
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
 // Misc parameters
-define('PMF_LANGUAGE_EXPIRED_TIME', 3600); // 30 minutes
-define('PMF_SESSION_EXPIRED_TIME', 3600); // 30 minutes
+define('PMF_LANGUAGE_EXPIRED_TIME', 3600);      // 30 minutes
+define('PMF_SESSION_EXPIRED_TIME', 3600);       // 30 minutes
 define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
 
 //
