@@ -83,7 +83,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     {
         $this->_config         = $config;
         $this->_ldapConfig     = $this->_config->getLdapConfig();
-        $this->ldapServer     = $this->_config->getLdapServer();
+        $this->ldapServer      = $this->_config->getLdapServer();
         $this->multipleServers = $this->_ldapConfig['ldap_use_multiple_servers'];
         
         parent::__construct($this->_config);
