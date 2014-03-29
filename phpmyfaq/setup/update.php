@@ -831,11 +831,13 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishPort');
         $faqConfig->delete('cache.varnishSecret');
         $faqConfig->delete('cache.varnishTimeout');
+
         $faqConfig->add('search.enableHighlighting', 'true');
         $faqConfig->add('main.enableRssFeeds', 'true');
         $faqConfig->add('records.allowCommentsForGuests', 'true');
         $faqConfig->add('records.allowQuestionsForGuests', 'true');
         $faqConfig->add('records.allowNewFaqsForGuests', 'true');
+        $faqConfig->add('records.hideEmptyCategories', 'false');
     }
 
     // Always the last step: Update version number

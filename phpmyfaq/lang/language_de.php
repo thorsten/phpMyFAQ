@@ -1159,3 +1159,4 @@ $LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Erla
 $LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Fragen vom Gästen (Standard: aktiviert)");
 $LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Erlaube neue FAQs vom Gästen (Standard: aktiviert)");
 $PMF_LANG["ad_searchterm_del"] = 'Alle gespeicherten Suchwörter löschen';
+$LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Leere Kategorien verbergen (Standard: deaktiviert)");
