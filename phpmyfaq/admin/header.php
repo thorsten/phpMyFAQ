@@ -213,7 +213,7 @@ switch ($action) {
         </div>
 
         <?php if (isset($auth) && in_array(true, $permission)): ?>
-        <ul class="nav navbar-nav navbar-top-links navbar-right">
+        <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <b class="fa fa-user"></b>
@@ -236,6 +236,12 @@ switch ($action) {
                     </li>
                 </ul>
             </li>
+            <li>
+                <form action="index.php<?php echo (isset($action) ? '?action=' . $action : ''); ?>" method="post"
+                      class="navbar-form navbar-right" role="form" accept-charset="utf-8">
+                    <?php echo PMF_Language::selectLanguages($LANGCODE, true); ?>
+                </form>
+            </li>
         </ul>
         <?php endif; ?>
     </nav>
@@ -248,16 +254,13 @@ switch ($action) {
             <ul class="nav" id="side-menu">
                 <li class="sidebar-userinfo">
                     <div class="userpanel">
+                        <small><?php echo $PMF_LANG['ad_user_loggedin'] ?></small><br>
                         <?php
                         if ($faqConfig->get('main.enableGravatarSupport')) {
                             $avatar = new PMF_Services_Gravatar($faqConfig);
-                            echo $avatar->getImage($user->getUserData('email'), array('size' => 30));
+                            echo $avatar->getImage($user->getUserData('email'), array('size' => 45));
                         }
-                        printf(
-                            '%s<br><small>%s</small>',
-                            $user->getUserData('display_name'),
-                            $user->getUserData('email')
-                        );
+                        echo $user->getUserData('display_name');
                         ?>
                     </div>
                 </li>

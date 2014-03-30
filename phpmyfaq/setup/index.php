@@ -75,7 +75,7 @@ $loader->register();
     <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
 
-    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
+    <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>

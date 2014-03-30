@@ -63,7 +63,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
 
-    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
+    <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
@@ -81,27 +81,23 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 </div>
 <![endif]-->
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <nav class="nav-collapse">
-                <ul class="nav">
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="../">Back to your FAQ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+<div class="navbar navbar-default navbar-static-top">
+    <nav class="container">
+        <ul class="nav navbar-nav">
+            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+            <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+            <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+            <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="../">Back to your FAQ</a></li>
+        </ul>
+    </nav>
 </div>
 
-<section id="content" class="phpmyfaq-setup">
+<section id="content">
     <div class="container">
         <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
+            <div class="jumbotron">
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
             </div>
         </div>
