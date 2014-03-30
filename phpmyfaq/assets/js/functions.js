@@ -35,7 +35,7 @@ var toggleFieldset,
     saveVoting;
 
 $(document).ready(function () {
-    "use strict";
+    'use strict';
     /**
      * Open a small popup to upload an attachment
      *
@@ -46,7 +46,7 @@ $(document).ready(function () {
         var popup = window.open(
             pic,
             title,
-            "width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no"
+            'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
         );
         popup.focus();
     };
@@ -61,7 +61,7 @@ $(document).ready(function () {
             f = checkBox.form,
             i = 0;
         for (i = 0; i < f.elements.length; i += 1) {
-            if (f.elements[i].type === "checkbox") {
+            if (f.elements[i].type === 'checkbox') {
                 f.elements[i].checked = v;
             }
         }
@@ -75,10 +75,10 @@ $(document).ready(function () {
      * @param cat
      */
     addEngine = function addEngine(uri, name, ext, cat) {
-        if ((typeof window.sidebar === "object") && (typeof window.sidebar.addSearchEngine === "function")) {
-            window.sidebar.addSearchEngine(uri + "/" + name + ".src", uri + "/images/" + name + "." + ext, name, cat);
+        if ((typeof window.sidebar === 'object') && (typeof window.sidebar.addSearchEngine === 'function')) {
+            window.sidebar.addSearchEngine(uri + '/' + name + '.src', uri + '/images/' + name + '.' + ext, name, cat);
         } else {
-            window.alert("Mozilla Firefox is needed to install the search plugin!");
+            window.alert('Mozilla Firefox is needed to install the search plugin!');
         }
     };
 
@@ -89,7 +89,7 @@ $(document).ready(function () {
      * @return void
      */
     selectSelectAll = function selectSelectAll(select_id) {
-        var selectOptions = $("#" + select_id + " option"),
+        var selectOptions = $('#' + select_id + ' option'),
             i = 0;
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = true;
@@ -103,7 +103,7 @@ $(document).ready(function () {
      * @return void
      */
     selectUnselectAll = function selectUnselectAll(select_id) {
-        var selectOptions = $("#" + select_id + " option"),
+        var selectOptions = $('#' + select_id + ' option'),
             i = 0;
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = false;
@@ -117,13 +117,10 @@ $(document).ready(function () {
      * @return  void
      */
     formCheckAll = function formCheckAll(form_id) {
-        var inputElements = $("#" + form_id + " input"),
-            i,
-            ele;
-        for (i = 0; ele = inputElements[i]; i += 1) {
-            if (ele.type === "checkbox") {
-                ele.checked = true;
-            }
+        var inputElements = $('#' + form_id + ' input'),
+            i;
+        for (i = 0; i < inputElements.length; i = 1 + 1) {
+            inputElements[i].checked = true;
         }
     };
 
@@ -134,13 +131,10 @@ $(document).ready(function () {
      * @return  void
      */
     formUncheckAll = function formUncheckAll(form_id) {
-        var inputElements = $("#" + form_id + ' input'),
-            i,
-            ele;
-        for (i = 0; ele = inputElements[i]; i += 1) {
-            if (ele.type === "checkbox") {
-                ele.checked = false;
-            }
+        var inputElements = $('#' + form_id + ' input'),
+            i;
+        for (i = 0; i < inputElements.length; i = 1 + 1) {
+            inputElements[i].checked = false;
         }
     };
 
@@ -150,9 +144,9 @@ $(document).ready(function () {
      * @return void
      */
     infoBox = function infoBox(infobox_id) {
-        var domId = $("#" + infobox_id);
-        if (domId.css("display") === "none") {
-            $(".faqTabContent").hide();
+        var domId = $('#' + infobox_id);
+        if (domId.css('display') === 'none') {
+            $('.faqTabContent').hide();
             domId.show();
         } else {
             domId.hide();
@@ -190,7 +184,7 @@ $(document).ready(function () {
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
                 '<a class="label label-important" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
-                '<i class="icon-trash icon-white"></i></a>' +
+                '<i class="fa fa-trash"></i></a>' +
                 '</li>'
             );
         window.close();
@@ -227,7 +221,7 @@ $(document).ready(function () {
         var formValues = $('#formValues');
 
         $('#loader').show();
-        $('#loader').fadeIn(400).html('<img src="assets/img/ajax-loader.gif" />Saving ...');
+        $('#loader').fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
 
         $.ajax({
             type:     'post',
@@ -237,7 +231,7 @@ $(document).ready(function () {
             cache:    false,
             success:  function (json) {
                 if (json.success === undefined) {
-                    $("#" + formName + 's').html(
+                    $('#' + formName + 's').html(
                         '<p class="alert alert-danger">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         json.error +
@@ -245,15 +239,15 @@ $(document).ready(function () {
                     );
                     $('#loader').hide();
                 } else {
-                    $("#" + formName + 's').html(
+                    $('#' + formName + 's').html(
                         '<p class="alert alert-success">' +
                         '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
                         json.success +
                         '</p>'
                     );
-                    $("#" + formName + 's').fadeIn("slow");
+                    $('#' + formName + 's').fadeIn('slow');
                     $('#loader').hide();
-                    $("#" + formName + 'Form').hide();
+                    $('#' + formName + 'Form').hide();
                     $('#formValues')[0].reset();
                     // @todo add reload of content
                 }
@@ -276,13 +270,13 @@ $(document).ready(function () {
 
             if (search.length > 0) {
                 $.ajax({
-                    type:    "POST",
-                    url:     "ajaxresponse.php",
-                    data:    "search=" + search + "&ajaxlanguage=" + language + "&searchcategory=" + category,
+                    type:    'POST',
+                    url:     'ajaxresponse.php',
+                    data:    'search=' + search + '&ajaxlanguage=' + language + '&searchcategory=' + category,
                     success: function (searchresults) {
-                        $("#instantresponse").empty();
+                        $('#instantresponse').empty();
                         if (searchresults.length > 0) {
-                            $("#instantresponse").append(searchresults);
+                            $('#instantresponse').append(searchresults);
                         }
                     }
                 });
@@ -314,19 +308,17 @@ $(document).ready(function () {
                 if (json.success === undefined) {
                     $('#votings').append(
                         '<p class="alert alert-danger">' +
-                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        json.error +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +                        json.error +
                         '</p>'
                     );
                     $('#loader').hide();
                 } else {
                     $('#votings').append(
                         '<p class="alert alert-success">' +
-                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        json.success +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +                        json.success +
                         '</p>');
                     $('#rating').empty().append(json.rating);
-                    $('#votings').fadeIn("slow");
+                    $('#votings').fadeIn('slow');
                     $('#loader').hide();
                 }
             }
@@ -343,7 +335,7 @@ $(document).ready(function () {
         var formValues = $('#formValues');
 
         $('#loader').show();
-        $('#loader').fadeIn(400).html('<img src="assets/img/ajax-loader.gif" />Saving ...');
+        $('#loader').fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
 
         $.ajax({
             type:     'post',
@@ -355,8 +347,7 @@ $(document).ready(function () {
                 if (json.result === undefined && json.success === undefined) {
                     $('#qerror').html(
                         '<p class="alert alert-danger">' +
-                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
-                        json.error +
+                        '<button type="button" class="close" data-dismiss="alert">&times;</button>' +                        json.error +
                         '</p>'
                     );
                     $('#loader').hide();
@@ -364,7 +355,7 @@ $(document).ready(function () {
                     $('#qerror').empty();
                     $('#questionForm').fadeOut('slow');
                     $('#answerForm').html(json.result);
-                    $('#answerForm').fadeIn("slow");
+                    $('#answerForm').fadeIn('slow');
                     $('#loader').hide();
                     $('#formValues').append('<input type="hidden" name="save" value="1" />');
                     $('#captcha').val('');
@@ -375,7 +366,7 @@ $(document).ready(function () {
                         json.success +
                         '</p>'
                     );
-                    $('#answers').fadeIn("slow");
+                    $('#answers').fadeIn('slow');
                     $('#answerForm').fadeOut('slow');
                     $('#loader').hide();
                     $('#formValues').hide();
@@ -387,13 +378,13 @@ $(document).ready(function () {
     };
 
 
-    $("#captcha-button").click(function() {
-        var action = $(this).data("action");
+    $('#captcha-button').click(function() {
+        var action = $(this).data('action');
         $.ajax({
             url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
             success: function () {
-                var captcha = $("#captcha");
-                $("#captchaImage").attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
+                var captcha = $('#captcha');
+                $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
                 captcha.val('');
                 captcha.focus();
             }
