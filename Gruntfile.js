@@ -149,7 +149,7 @@ module.exports = function(grunt) {
                 }
             },
             css: {
-                files: ['phpmyfaq/admin/assets/less/style.less', 'phpmyfaq/assets/template/default/less/style.less'],
+                files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/template/default/less/*.less'],
                 tasks: ['less', 'cssmin'],
                 options: {
                     livereload: true,
