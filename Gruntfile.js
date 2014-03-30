@@ -143,11 +143,17 @@ module.exports = function(grunt) {
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
+                tasks: ['jshint:gruntfile'],
+                options: {
+                    reload: true
+                }
             },
             css: {
                 files: ['phpmyfaq/admin/assets/less/style.less', 'phpmyfaq/assets/template/default/less/style.less'],
-                tasks: ['less', 'cssmin']
+                tasks: ['less', 'cssmin'],
+                options: {
+                    livereload: true,
+                }
             }
         }
     });
