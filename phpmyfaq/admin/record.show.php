@@ -275,8 +275,8 @@ if ($permission['editbt'] || $permission['delbt']) {
     }
 
     if (count($faq->faqRecords) > 0) {
-        $old     = 0;
-        $all_ids = array();
+        $old    = 0;
+        $faqIds = array();
 
         $visits    = new PMF_Visits($faqConfig);
         $numVisits = array();
@@ -449,7 +449,7 @@ if ($permission['editbt'] || $permission['delbt']) {
 <?php
             $old = $cid;
             
-            $all_ids[$cid][] = $record['id'];
+            $faqIds[$cid][] = $record['id'];
         }
 ?>
         </tbody>
@@ -473,7 +473,10 @@ if ($permission['editbt'] || $permission['delbt']) {
         {
             var id_map = [];
 <?php 
-foreach ($all_ids as $categoryId => $recordIds) {
+foreach ($faqIds as $categoryId => $recordIds) {
+    if ('' === $categoryId) {
+        $categoryId = 0;
+    }
     echo "                id_map[" . $categoryId . "] = [" . implode(',', $recordIds) . "];\n";
 }
 ?>
