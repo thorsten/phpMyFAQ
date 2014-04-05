@@ -94,6 +94,15 @@ class PMF_User_CurrentUser extends PMF_User
     private $_rememberMe = false;
 
     /**
+     * Login successful or auth failure:
+     * 1 -> success
+     * 0 -> failure
+     *
+     * @var int
+     */
+    private $loginState = 1;
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration $config
@@ -199,20 +208,24 @@ class PMF_User_CurrentUser extends PMF_User
             );
             $res = $this->config->getDb()->query($update);
             if (!$res) {
+                $this->setSuccess(false);
                 return false;
                 break;
             }
-            
-            // return true
+
+            // Login successfull
+            $this->setSuccess(true);
             return true;
             break;
         }
         
         // raise errors and return false
         if ($loginError == $count) {
+            $this->setSuccess(false);
             $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
         }
         if ($passwordError > 0) {
+            $this->setSuccess(false);
             $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
         }
         return false;
@@ -283,7 +296,8 @@ class PMF_User_CurrentUser extends PMF_User
             SELECT
                 session_id,
                 session_timestamp,
-                ip
+                ip,
+                success
             FROM
                 %sfaquser
             WHERE
@@ -563,6 +577,32 @@ class PMF_User_CurrentUser extends PMF_User
                 user_id = %d",
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($rememberMe),
+            $this->getUserId()
+        );
+
+        return $this->config->getDb()->query($update);
+    }
+
+    /**
+     * Sets login succuess/failure
+     *
+     * @param boolean $success
+     *
+     * @return boolean
+     */
+    protected function setSuccess($success)
+    {
+        $this->loginState = (int) $success;
+
+        $update = sprintf("
+            UPDATE
+                %sfaquser
+            SET
+                success = %d
+            WHERE
+                user_id = %d",
+            PMF_Db::getTablePrefix(),
+            $this->loginState,
             $this->getUserId()
         );
 
