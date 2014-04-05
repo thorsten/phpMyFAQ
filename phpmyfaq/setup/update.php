@@ -835,6 +835,44 @@ if ($step == 3) {
         $faqConfig->add('records.allowNewFaqsForGuests', 'true');
         $faqConfig->add('records.hideEmptyCategories', 'false');
         $faqConfig->add('search.searchForSolutionId', 'true');
+
+
+        if ('sqlite' === $DB['type']) {
+            $query[] = "BEGIN TRANSACTION";
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_temp (
+                                user_id INT(11) NOT NULL,
+                                login VARCHAR(25) NOT NULL,
+                                session_id VARCHAR(150) NULL,
+                                session_timestamp INT(11) NULL,
+                                ip VARCHAR(15) NULL,
+                                account_status VARCHAR(50) NULL,
+                                last_login TIMESTAMP(14) NULL,
+                                auth_source VARCHAR(100) NULL,
+                                member_since TIMESTAMP(14) NULL,
+                                PRIMARY KEY(user_id))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquser";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser";
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser (
+                                user_id INT(11) NOT NULL,
+                                login VARCHAR(25) NOT NULL,
+                                session_id VARCHAR(150) NULL,
+                                session_timestamp INT(11) NULL,
+                                ip VARCHAR(15) NULL,
+                                account_status VARCHAR(50) NULL,
+                                last_login TIMESTAMP(14) NULL,
+                                auth_source VARCHAR(100) NULL,
+                                member_since TIMESTAMP(14) NULL,
+                                remember_me VARCHAR(150) NULL,
+                                success INT(1) NULL DEFAULT 1,
+                                PRIMARY KEY(user_id))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser SELECT user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since, '' FROM " . PMF_Db::getTablePrefix() . "faquser_temp";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_temp";
+            $query[] = "COMMIT";
+        } elseif ('sqlite3' === $DB['type']) {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
+        } else {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD success INT(1) NULL DEFAULT 1";
+        }
     }
 
     // Always the last step: Update version number

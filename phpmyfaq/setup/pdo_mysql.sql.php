@@ -332,6 +332,7 @@ last_login VARCHAR(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since VARCHAR(14) NULL,
 remember_me VARCHAR(150) NULL,
+success INT(1) NULL DEFAULT 1,
 PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
