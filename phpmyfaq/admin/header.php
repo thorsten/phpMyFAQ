@@ -212,7 +212,7 @@ switch ($action) {
             </a>
         </div>
 
-        <?php if (isset($auth) && in_array(true, $permission)): ?>
+        <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
