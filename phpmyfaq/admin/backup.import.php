@@ -36,7 +36,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 
 if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
 
-    printf("<header><h2 class="page-header">%s</h2></header>\n", $PMF_LANG['ad_csv_rest']);
+    printf('<header><h2 class="page-header">%s</h2></header>', $PMF_LANG['ad_csv_rest']);
 
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
         
