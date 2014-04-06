@@ -835,7 +835,7 @@ if ($step == 3) {
         $faqConfig->add('records.allowNewFaqsForGuests', 'true');
         $faqConfig->add('records.hideEmptyCategories', 'false');
         $faqConfig->add('search.searchForSolutionId', 'true');
-
+        $faqConfig->add('socialnetworks.disableAll', 'false');
 
         if ('sqlite' === $DB['type']) {
             $query[] = "BEGIN TRANSACTION";

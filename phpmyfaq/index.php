@@ -691,15 +691,12 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
         'rightBox',
         'socialLinks',
         array(
-            'writeDiggMsgTag'        => 'Digg it!',
-            'writeFacebookMsgTag'    => 'Share on Facebook',
-            'writeTwitterMsgTag'     => 'Share on Twitter',
             'writePDFTag'            => $PMF_LANG['msgPDF'],
             'writePrintMsgTag'       => $PMF_LANG['msgPrintArticle'],
             'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
-            'link_digg'              => $faqServices->getDiggLink(),
-            'link_facebook'          => $faqServices->getShareOnFacebookLink(),
-            'link_twitter'           => $faqServices->getShareOnTwitterLink(),
+            'shareOnDigg'            => $faqHelper->renderDiggShareLink($faqServices->getDiggLink()),
+            'shareOnFacebook'        => $faqHelper->renderFacebookShareLink($faqServices->getShareOnFacebookLink()),
+            'shareOnTwitter'         => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
             'link_email'             => $faqServices->getSuggestLink(),
             'link_pdf'               => $faqServices->getPdfLink(),
             'facebookLikeButton'     => $faqHelper->renderFacebookLikeButton($faqServices->getLink())
