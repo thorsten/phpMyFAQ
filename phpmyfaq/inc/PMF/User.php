@@ -241,7 +241,7 @@ class PMF_User
         if (isset($this->userId) && is_int($this->userId)) {
             return (int)$this->userId;
         }
-        $this->userId  = -1;
+        $this->userId   = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
         
         return -1;

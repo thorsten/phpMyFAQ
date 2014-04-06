@@ -218,7 +218,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Does the user have the right to add a comment?
-if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
+if ((-1 !== $user->getUserId() && false === $faqConfig->get('records.allowCommentsForGuests')) ||
+    ($faq->faqRecord['active'] !== 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(
