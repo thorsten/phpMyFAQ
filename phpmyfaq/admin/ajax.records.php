@@ -43,7 +43,7 @@ switch($ajax_action) {
 
     // save active FAQs
     case 'save_active_records':
-        if ($permission['approverec']) {
+        if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
                 
@@ -60,7 +60,7 @@ switch($ajax_action) {
 
     // save sticky FAQs
     case 'save_sticky_records':
-        if ($permission['editbt']) {
+        if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
@@ -78,7 +78,7 @@ switch($ajax_action) {
 
     // search FAQs for suggestions
     case 'search_records':
-        if ($permission['editbt']) {
+        if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
             $faq             = new PMF_Faq($faqConfig);
             $faqSearch       = new PMF_Search($faqConfig);
@@ -104,7 +104,7 @@ switch($ajax_action) {
 
     // delete FAQs
     case 'delete_record':
-        if ($permission['delbt']) {
+        if ($user->perm->checkRight($user->getUserId(), 'delbt')) {
 
             $recordId   = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
             $recordLang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
@@ -122,7 +122,7 @@ switch($ajax_action) {
 
     // delete open questions
     case 'delete_question':
-        if ($permission['delquestion']) {
+        if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
 
             $checks  = array(
                 'filter'  => FILTER_VALIDATE_INT,

@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['viewlog']) {
+if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     $sid = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 

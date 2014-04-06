@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <h2 class="page-header"><i class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
     </header>
 <?php
-if ($permission['editinstances']) {
+if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
     $instanceId = PMF_Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 

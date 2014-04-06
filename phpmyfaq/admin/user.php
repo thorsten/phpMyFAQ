@@ -29,7 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['edituser'] || $permission['deluser'] || $permission['adduser']) {
+if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
+    $user->perm->checkRight($user->getUserId(), 'deluser') ||
+    $user->perm->checkRight($user->getUserId(), 'adduser')) {
+
     // set some parameters
     $selectSize        = 10;
     $defaultUserAction = 'list';
@@ -47,7 +50,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // update user rights
-    if ($userAction == 'update_rights' && $permission['edituser']) {
+    if ($userAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $message    = '';
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -80,7 +83,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // update user data
-    if ($userAction == 'update_data' && $permission['edituser']) {
+    if ($userAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $message    = '';
         $userAction = $defaultUserAction;
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -133,7 +136,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // delete user confirmation
-    if ($userAction == 'delete_confirm' && $permission['deluser']) {
+    if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
         $message    = '';
         $user       = new PMF_User_CurrentUser($faqConfig);
 
@@ -175,7 +178,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // delete user
-    if ($userAction == 'delete' && $permission['deluser']) {
+    if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
         $message    = '';
         $user       = new PMF_User($faqConfig);
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -216,7 +219,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // save new user
-    if ($userAction == 'addsave' && $permission['adduser']) {
+    if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
         $user                  = new PMF_User($faqConfig);
         $message               = '';
         $messages              = [];
@@ -290,7 +293,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // show new user form
-    if ($userAction == 'add' && $permission['adduser']) {
+    if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -371,7 +374,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
                             <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_user_add"]; ?>
                         </a>
-                        <?php if ($permission['edituser']): ?>
+                        <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
                             <i class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users']; ?>
                         </a>
@@ -558,7 +561,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
     }
 
     // show list of all users
-    if ($userAction == 'listallusers' && $permission['edituser']) {
+    if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
 
         $allUsers  = $user->getAllUsers();
         $numUsers  = count($allUsers);

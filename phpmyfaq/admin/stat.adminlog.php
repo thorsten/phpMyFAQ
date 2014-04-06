@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $logging = new PMF_Logging($faqConfig);
 
-if ($permission['adminlog'] && 'adminlog' == $action) {
+if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
 
     $date    = new PMF_Date($faqConfig);
     $perpage = 15;
@@ -131,7 +131,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
     </table>
 
 <?php
-} elseif ($permission['adminlog'] && 'deleteadminlog' == $action) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action) {
 
     if ($logging->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);

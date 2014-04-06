@@ -26,7 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
+    $user->perm->checkRight($user->getUserId(), 'addbt')) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -215,7 +216,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
         printf('<i class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
     }
     // Revisions
-    if ($permission["changebtrevs"]) {
+    if ($user->perm->checkRight($user->getUserId(), "changebtrevs")) {
 
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) {
@@ -305,7 +306,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
 
 
                         <!-- Attachments -->
-                        <?php if ($permission['addattachment']): ?>
+                        <?php if ($user->perm->checkRight($user->getUserId(), 'addattachment')): ?>
                             <div class="form-group">
                                 <label class="col-lg-4 control-label">
                                     <?php echo $PMF_LANG['ad_menu_attachments'] ?>:
@@ -320,7 +321,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                                 $att->buildUrl(),
                                                 $att->getFilename()
                                             );
-                                            if ($permission['delattachment']) {
+                                            if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
                                                 printf(
                                                     '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash"></i></a>',
                                                     $faqData['id'],
@@ -573,7 +574,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
-                                <?php if($permission['approverec']):
+                                <?php if($user->perm->checkRight($user->getUserId(), 'approverec')):
                                     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
                                         $suf = ' checked';
                                         $sul = null;
@@ -841,8 +842,8 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     /* ]]> */
     </script>
 <?php
-} elseif ($permission["editbt"] != 1 && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), "editbt") !== 1 && !PMF_Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG["err_NotAuth"];
-} elseif ($permission["editbt"] && PMF_Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), "editbt") && PMF_Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG["no_cats"];
 }

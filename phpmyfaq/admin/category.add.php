@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($permission['addcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

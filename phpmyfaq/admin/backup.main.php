@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['backup']) {
+if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 ?>
         <header class="row">
             <div class="col-lg-12">

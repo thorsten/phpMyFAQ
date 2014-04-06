@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['reports']) {
+if ($user->perm->checkRight($user->getUserId(), 'reports')) {
 ?>
         <header class="row">
             <div class="col-lg-12">

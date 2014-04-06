@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </div>
         </header>
 <?php
-if ($permission["passwd"]) {
+if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
     
     // If we have to save a new password, do that first
     $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);

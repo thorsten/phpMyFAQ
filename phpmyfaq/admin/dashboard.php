@@ -129,7 +129,7 @@ $faqSession   = new PMF_Session($faqConfig);
     </section>
 
     <?php endif; ?>
-    <?php if ($permission['editconfig']): ?>
+    <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
 
     <section class="row">
         <div class="col-lg-6">

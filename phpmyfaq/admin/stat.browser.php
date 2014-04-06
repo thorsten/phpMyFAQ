@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['viewlog']) {
+if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     $perpage   = 50;
     $day       = PMF_Filter::filterInput(INPUT_POST, 'day', FILTER_VALIDATE_INT);

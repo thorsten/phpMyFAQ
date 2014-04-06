@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['editconfig']) {
+if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     $faqSystem = new PMF_System();
 ?>
     <header class="row">

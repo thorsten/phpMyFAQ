@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($permission['editglossary']) {
+if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
     $id           = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $glossary     = new PMF_Glossary($faqConfig);
     $glossaryItem = $glossary->getGlossaryItem($id);

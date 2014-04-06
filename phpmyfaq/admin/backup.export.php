@@ -41,28 +41,10 @@ if ($user) {
     unset($user);
 }
 
-//
-// Get current user rights
-//
-$permission = [];
-if ($auth === true) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
 header('Content-Type: application/octet-stream');
 header('Pragma: no-cache');
 
-if ($permission['backup']) {
+if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
     $tables       = $tableNames = $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
     $tablePrefix  = (PMF_Db::getTablePrefix() !== '') ? PMF_Db::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';

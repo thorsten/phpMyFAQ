@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['editconfig']) {
+if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     printf(
         '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
         $PMF_LANG['ad_menu_stopwordsconfig']

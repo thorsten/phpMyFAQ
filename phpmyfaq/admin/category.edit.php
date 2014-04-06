@@ -26,12 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['editcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
     $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+
     $category   = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+
     $categories     = $category->getAllCategories();
     $userPermission = $category->getPermissions('user', array($categoryId));
 

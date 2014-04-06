@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['viewlog']) {
+if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

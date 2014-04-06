@@ -29,7 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $groupId    = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
-if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
+if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
+    $user->perm->checkRight($user->getUserId(), 'edituser') ||
+    $user->perm->checkRight($user->getUserId(), 'deluser')) {
     
     $user      = new PMF_User($faqConfig);
     $userList  = $user->getAllUsers();

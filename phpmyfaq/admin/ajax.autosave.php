@@ -28,8 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $do = PMF_Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
-if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
-    'saveentry' == $do && $permission['editbt']) {
+if ('insertentry' === $do &&
+    ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'addbt')) ||
+    'saveentry' === $do && $user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     $user     = PMF_User_CurrentUser::getFromSession($faqConfig);
 

@@ -18,7 +18,7 @@
  * @since     2009-04-01
  */
 
-if (!defined('IS_VALID_PHPMYFAQ') || !$permission['editconfig']) {
+if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId(), 'editconfig')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

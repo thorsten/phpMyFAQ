@@ -26,7 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission["editcateg"]) {
+if ($user->perm->checkRight($user->getUserId(), "editcateg")) {
+
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -34,9 +35,7 @@ if ($permission["editcateg"]) {
     
     $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
-    $header    = sprintf('%s: <em>%s</em>',
-                    $PMF_LANG['ad_categ_move'],
-                    $category->categoryName[$id]['name']);
+    $header    = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $category->categoryName[$id]['name']);
 ?>
         <header class="row">
             <div class="col-lg-12">

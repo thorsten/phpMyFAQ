@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <h2 class="page-header"><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
-if ($permission['editcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);

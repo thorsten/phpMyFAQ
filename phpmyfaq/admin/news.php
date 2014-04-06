@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new PMF_News($faqConfig);
 
-if ('addnews' == $action && $permission["addnews"]) {
+if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -163,7 +163,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             </div>
         </div>
 <?php
-} elseif ('news' == $action && $permission["editnews"]) {
+} elseif ('news' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -221,7 +221,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             </div>
         </div>
 <?php
-} elseif ('editnews' == $action && $permission['editnews']) {
+} elseif ('editnews' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
 ?>
@@ -392,7 +392,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         </div>
 <?php
     }
-} elseif ('savenews' == $action && $permission["addnews"]) {
+} elseif ('savenews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -443,7 +443,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             </div>
         </div>
 <?php
-} elseif ('updatenews' == $action && $permission["editnews"]) {
+} elseif ('updatenews' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -494,7 +494,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             </div>
         </div>
 <?php
-} elseif ('deletenews' == $action && $permission["delnews"]) {
+} elseif ('deletenews' == $action && $user->perm->checkRight($user->getUserId(), "delnews")) {
 ?>
         <header class="row">
             <div class="col-lg-12">

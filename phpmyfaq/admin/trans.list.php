@@ -41,7 +41,7 @@ $tt                 = new PMF_TransTool;
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
-                    <?php if($permission["addtranslation"] && $isTransDirWritable): ?>
+                    <?php if($user->perm->checkRight($user->getUserId(), "addtranslation") && $isTransDirWritable): ?>
                         <div class="pull-right">
                             <a class="btn btn-success" href="?action=transadd">
                                 <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
@@ -100,7 +100,7 @@ $tt                 = new PMF_TransTool;
         ?>
             <tr class="lang_<?php echo $lang ?>_container">
                 <td><?php echo $languageCodes[strtoupper($lang)] ?></td>
-                <?php if($permission["edittranslation"] && $showActions): ?>
+                <?php if($user->perm->checkRight($user->getUserId(), "edittranslation") && $showActions): ?>
                 <td>
                     <a class="btn btn-primary" href="?action=transedit&amp;translang=<?php echo $lang ?>" >
                         <i class="fa fa-edit fa fa-white"></i>
@@ -110,7 +110,7 @@ $tt                 = new PMF_TransTool;
                 <?php else: ?>
                 <td><?php echo $PMF_LANG['msgEdit'] ?></td>
                 <?php endif; ?>
-                <?php if($permission["deltranslation"] && $showActions): ?>
+                <?php if($user->perm->checkRight($user->getUserId(), "deltranslation") && $showActions): ?>
                 <td>
                     <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
                         <i class="fa fa-remove fa fa-white"></i>
@@ -120,7 +120,7 @@ $tt                 = new PMF_TransTool;
                 <?php else: ?>
                 <td><?php echo $PMF_LANG['msgDelete'] ?></td>
                 <?php endif; ?>
-                <?php if($permission["edittranslation"] && $showActions): ?>
+                <?php if($user->perm->checkRight($user->getUserId(), "edittranslation") && $showActions): ?>
                 <td>
                     <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
                         <i class="fa fa-upload fa fa-white"></i>

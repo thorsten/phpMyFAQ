@@ -42,11 +42,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($permission['addglossary'] || $permission['editglossary'] || $permission['delglossary']) {
+if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
+    $user->perm->checkRight($user->getUserId(), 'editglossary') ||
+    $user->perm->checkRight($user->getUserId(), 'delglossary')) {
 
     $glossary = new PMF_Glossary($faqConfig);
 
-    if ('saveglossary' == $action && $permission['addglossary']) {
+    if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary')) {
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->addGlossaryItem($item, $definition)) {
@@ -60,7 +62,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         }
     }
 
-    if ('updateglossary' == $action && $permission['editglossary']) {
+    if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary')) {
         $id         = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -75,7 +77,7 @@ if ($permission['addglossary'] || $permission['editglossary'] || $permission['de
         }
     }
 
-    if ('deleteglossary' == $action && $permission['editglossary']) {
+    if ('deleteglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary')) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';

@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($permission['editbt'] || $permission['delbt']) {
+if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -353,7 +353,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                 &nbsp;<?php echo $PMF_LANG['ad_record_sticky'] ?>
             </th>
             <th style="width: 84px;">
-                <?php if ($permission['approverec']) { ?>
+                <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                 <input type="checkbox" id="active_category_block_<?php echo $cid; ?>"
                        onclick="saveStatusForCategory(<?php echo $cid; ?>, 'active')"
                        <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
@@ -407,7 +407,7 @@ if ($permission['editbt'] || $permission['delbt']) {
                     <?php echo ($record['sticky'] ? 'checked' :  '    ') ?>>
             </td>
             <td>
-                <?php if ($permission['approverec'] && isset($numVisits[$record['id']])) { ?>
+                <?php if ($user->perm->checkRight($user->getUserId(), 'approverec') && isset($numVisits[$record['id']])) { ?>
                 <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                        onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'active');"
                        id="active_record_<?php echo $cid . '_' . $record['id'] ?>"

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-if ('delete' == $ajax_action && $permission['delcomment']) {
+if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
 
     $comment    = new PMF_Comment($faqConfig);
     $checkFaqs  = array(

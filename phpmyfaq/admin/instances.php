@@ -31,7 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="col-lg-12">
             <h2 class="page-header">
                 <i class="fa fa-wrench fa-fw"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
-                <?php if ($permission['addinstances'] && is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
+                <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
+                          is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
                     <div class="pull-right">
                         <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
                             <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
@@ -45,7 +46,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="row">
         <div class="col-lg-12">
 <?php
-if ($permission['editinstances']) {
+if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
     $instance   = new PMF_Instance($faqConfig);
     $instanceId = PMF_Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);

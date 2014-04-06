@@ -49,10 +49,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if ('category' != $action && 'content' != $action &&
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
-    $permission['editcateg'] = false;
+    $csrfCheck = false;
+} else {
+    $csrfCheck = true;
 }
 
-if ($permission['editcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Save a new category
     if ($action == 'savecategory') {
@@ -188,7 +190,7 @@ if ($permission['editcateg']) {
     }
 
     // Deletes an existing category
-    if ($permission['delcateg'] && $action == 'removecategory') {
+    if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
 
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);

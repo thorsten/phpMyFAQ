@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
+if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
         $category = new PMF_Category($faqConfig);

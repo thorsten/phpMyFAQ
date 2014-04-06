@@ -30,7 +30,7 @@ $category = new PMF_Category($faqConfig, [], false);
 $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 
-if ($permission['editbt']) {
+if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     // Get submit action
     $submit = PMF_Filter::filterInputArray(
@@ -58,7 +58,7 @@ if ($permission['editbt']) {
     );
     $recordLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags       = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-    $active     = 'yes' == PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING) && $permission['approverec'] ? 'yes' : 'no';
+    $active     = 'yes' == PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING) && $user->perm->checkRight($user->getUserId(), 'approverec') ? 'yes' : 'no';
     $sticky     = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
     $content    = PMF_Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     $keywords   = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);

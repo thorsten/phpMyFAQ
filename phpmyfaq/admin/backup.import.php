@@ -29,10 +29,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-    $permission['restore'] = false; 
+    $csrfCheck = false;
+} else {
+    $csrfCheck = true;
 }
 
-if ($permission['restore']) {
+if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
 
     printf("<header><h2 class="page-header">%s</h2></header>\n", $PMF_LANG['ad_csv_rest']);
 

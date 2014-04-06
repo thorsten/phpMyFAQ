@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (!$permission["addtranslation"]) {
+if (!$user->perm->checkRight($user->getUserId(), "addtranslation")) {
     echo $PMF_LANG['err_NotAuth'];
     return;
 }

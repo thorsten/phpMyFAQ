@@ -33,7 +33,7 @@ printf(
 
 echo '<div id="returnMessage"></div>';
 
-if ($permission['delcomment']) {
+if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
 
     $comment  = new PMF_Comment($faqConfig);
     $category = new PMF_Category($faqConfig, [], false);

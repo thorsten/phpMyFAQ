@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 
 <?php
-if ($permission['addglossary']) {
+if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
 ?>
                 <form class="form-horizontal" action="?action=saveglossary" method="post" accept-charset="utf-8">
                     <div class="form-group">

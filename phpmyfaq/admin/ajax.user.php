@@ -35,7 +35,9 @@ $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
+if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
+    $user->perm->checkRight($user->getUserId(), 'edituser') ||
+    $user->perm->checkRight($user->getUserId(), 'deluser')) {
 
     $user = new PMF_User($faqConfig);
     

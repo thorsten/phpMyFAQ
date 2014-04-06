@@ -43,7 +43,7 @@ if (! is_null($autoCompleteValue)) {
     $tags = $oTag->getAllTags();
 }
 
-if ($permission['editbt']) {
+if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $i = 0;
     $tagNames = [];
     foreach ($tags as $tagName) {

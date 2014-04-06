@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['editconfig']) {
+if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
     $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
 
