@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Check user permissions
-if (!$faqConfig->get('records.allowNewFaqsForGuests')) {
+if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests'))) {
     header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
 }
 
