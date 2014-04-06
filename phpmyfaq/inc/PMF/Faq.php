@@ -3017,6 +3017,7 @@ class PMF_Faq
             foreach ($output as $entry) {
                 $html .= sprintf(
                     '<li><a class="sticky-faqs" data-toggle="tooltip" data-placement="top" title="%s" href="%s">%s</a></li>',
+                    $entry['preview'],
                     $entry['url'],
                     $entry['title']
                 );
