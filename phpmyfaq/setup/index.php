@@ -48,7 +48,6 @@ session_name('phpmyfaq-setup');
 session_start();
 
 require PMF_ROOT_DIR . '/config/constants.php';
-require PMF_ROOT_DIR . '/setup/questionnaire.php';
 
 //
 // Setting up PSR-0 autoloader for Symfony Components
@@ -78,17 +77,16 @@ $loader->register();
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
-    <script src="../assets/js/libs/jquery.min.js"></script>
+    <script src="../assets/js/phpmyfaq.min.js"></script>
 
     <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/default/apple-touch-icon.png">
 
     <script type="text/javascript">
         function selectDatabaseSetup(field) {
             switch (field.value) {
             case 'sqlite':
             case 'sqlite3':
-                $('#dbsqlite').show();
+                $('#dbsqlite').show().removeClass('hide');
                 $('#dbdatafull').hide();
                 break;
             default:
@@ -117,14 +115,20 @@ $loader->register();
 <section id="content">
     <div class="container">
         <div class="row">
-            <div class="jumbotron">
+            <div class="jumbotron text-center">
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</h1>
                 <p>
                     Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a>
-                    carefully before starting the phpMyFAQ setup? :-)
+                    carefully before starting the phpMyFAQ setup?
                 </p>
+                <h4 class="alert alert-danger text-center">
+                    <i class="fa fa-info-circle fa-fw"></i>
+                    phpMyFAQ <?php echo PMF_System::getVersion(); ?> is an early development version, please don't use
+                    it in production!
+                </h4>
             </div>
         </div>
+
         <div class="row">
 <?php
 //
@@ -368,13 +372,16 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         </div>
 
         <div class="row" style="padding-left: 20px; text-align: center;">
-
-            <button class="btn btn-primary btn-lg" type="submit">
-                   Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
-            </button>
+            <div class="form-group">
+                <button class="btn btn-success btn-lg" type="submit">
+                       Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
+                </button>
+            </div>
         </div>
+
         <div class="row">
-            <p class="alert alert-info" style="margin-top: 20px;">
+            <p class="alert alert-info text-center">
+                <i class="fa fa-info-circle fa-fw"></i>
                 Your password will be saved with a <strong><?php echo PMF_ENCRYPTION_TYPE; ?></strong>
                 encryption. You can change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
@@ -388,155 +395,6 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
-
-        <script type="text/javascript">
-        //<![CDATA[
-        var iframect = 0;
-
-        function iframeUpdated() {
-            if (iframect++ == 0) {
-                return;
-            }
-
-            $('#questionnaireForm').hide();
-            $('#questionnaireThanks').show();
-        }
-
-        function hide(item) {
-            $('#configliste').hide();
-        }
-
-        function show(item) {
-            $('#configliste').show();
-        }
-        //]]>
-        </script>
-        <iframe onload="iframeUpdated();" name="questionaireResult" style="display:none"></iframe>
-        <form action="http://www.phpmyfaq.de/stats/getstatdata.php" method="post" target="questionaireResult"
-              id="questionnaireForm" class="form-horizontal">
-
-            <p>
-                For further development we would like to get some feedback from our users. Therefore we'd ask you to
-                take a few minutes of your time to answer a few questions.
-            </p>
-            <p class="alert alert-success">
-                If you don't want to participate in the survey, you can directly visit
-                <a href="../index.php">your version of phpMyFAQ</a> or login into your
-                <a href="../admin/index.php">admin section</a>.
-            </p>
-
-            <h3>The survey</h3>
-
-            <fieldset>
-                <legend>General questions</legend>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">How do you act like?</label>
-                        <div class="col-sm-8">
-                        <select name="q[individual]">
-                            <option value="as an individual">as an individual</option>
-                            <option value="as an organisation">as an organisation</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">What kind of organisation is that?</label>
-                    <div class="col-sm-8">
-                        <select name="q[organisation]">
-                             <option value="private held">privately held</option>
-                             <option value="public held">publicly held</option>
-                             <option value="government organisation">governmental organisation</option>
-                             <option value="foundation">foundation</option>
-                             <option value="other">other</option>
-                         </select>
-                    </div>
-                </div>
-             </fieldset>
-
-            <fieldset>
-                <legend>Technical questions</legend>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Where did you install phpMyFAQ?</label>
-                    <div class="col-sm-8">
-                        <select name="q[server]">
-                            <option value="server run by a hosting company">server run by a hosting company</option>
-                            <option value="public server run by you/your organisation">public server run by you/your organisation</option>
-                            <option value="private server run by you/your organisation">private server run by you/your organisation</option>
-                            <option value="Don't know">Don't know</option>
-                        </select>
-                    </div>
-                </div>
-            </fieldset>
-
-            <fieldset>
-                <legend>Beyond our own nose</legend>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Which PHP software do you also use?</label>
-                    <div class="col-sm-8">
-                        <input type="text" name="q[other]" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="col-sm-4 control-label">Are you using other web technologies?</label>
-                    <div class="col-sm-8">
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="ASP" />ASP
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="ASP.NET" />ASP.NET
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="jsp" />JAVA JSP
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="perl" />Perl
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="ruby" />Ruby / Ruby on Rails
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="python" />Python
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="clojure" />Clojure
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="scala" />Scala
-                        </label>
-                        <label class="checkbox inline">
-                            <input type="checkbox" name="q[other][]" value="go" />Go
-                        </label>
-                    </div>
-                </div>
-             </fieldset>
-
-            <p class="alert alert-info">
-                In addition to your input we're going to submit some information about your system setup for statistical
-                purposes.
-            </p>
-            <p class="alert alert-info">
-                We are not storing any personal information. You can see the data by clicking
-                <a href="#" onclick="show('configliste'); return false;">here</a>.
-            </p>
-
-            <div id="configliste" class="hide">
-                <a href="#" onclick="hide('configliste'); return false;">hide again</a>
-                <?php
-                $installer->printDataList();
-                ?>
-            </div>
-            <p style="text-align: center;">
-                <button class="btn btn-primary" type="submit">
-                    Click here to submit the data and finish the installation process
-                </button>
-            </p>
-        </form>
-        <div id="questionnaireThanks" style="display:none;">
-            <p class="alert alert-success"><b>Thank you for giving your feedback!</b></p>
-            <p>
-                You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
-                <a href="../admin/index.php">admin section</a>.
-            </p>
-        </div>
 <?php
     $installer->cleanUpFiles();
     PMF_System::renderFooter();
