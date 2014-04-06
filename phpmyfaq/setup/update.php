@@ -96,14 +96,21 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 
 <section id="content">
     <div class="container">
-        <div class="row" style="padding-left: 20px;">
-            <div class="jumbotron">
+        <div class="row">
+            <div class="jumbotron text-center">
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
+                <?php
+                $version = $faqConfig->get('main.currentVersion');
+                if (version_compare($version, '2.8.0-alpha2', '>=')) {
+                    if (! $faqConfig->get('main.maintenanceMode')) {
+                        echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is ' .
+                             'not in maintenance mode, you should enable the maintenance mode in your administration ' .
+                             'backend before running the update!</p>';
+                    }
+                }
+                ?>
             </div>
         </div>
-        <div class="row" style="padding-left: 20px;">
-            <div class="span1">&nbsp;</div>
-            <div class="span10">
 <?php
 
 $installer = new PMF_Installer();
@@ -111,33 +118,40 @@ $installer->checkPreUpgrade();
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) {
-
-    $version = $faqConfig->get('main.currentVersion');
 ?>
         <form action="update.php?step=2" method="post">
-            <input name="version" type="hidden" value="<?php echo $version; ?>"/>
-            <fieldset>
-                <legend>
-                    <strong>
-                        phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 1 of 3)
-                    </strong>
-                </legend>
-
-                <p class="alert alert-info">
+        <input name="version" type="hidden" value="<?php echo $version; ?>">
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="active">
+                        <a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="update.php?step=2">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step1">
+            <div class="col-lg-12">
+                <p class="alert alert-info text-center">
                     <strong>
                         Please create a full backup of your database, your templates, attachments and uploaded images
                         before running this update.
                     </strong>
                 </p>
 
-<?php
-    if (version_compare($version, '2.8.0-alpha2', '>=')) {
-        if (! $faqConfig->get('main.maintenanceMode')) {
-            echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is not in ' .
-            'maintenance mode, you should enable the maintenance mode in your administration backend.</p>';
-        }
-    }
-?>
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
                     <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
@@ -155,37 +169,38 @@ if ($step === 1) {
                 <?php
                 // 2.5 versions only
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
-                    echo '<p class="alert alert-danger"><strong>Please change the directory ../template and its ' .
-                         'contents writable (777 on Linux/UNIX).</strong></p>';
+                    echo '<p class="alert alert-danger text-center"><strong>Please change the directory ../template ' .
+                         'and its contents writable (777 on Linux/UNIX).</strong></p>';
                 }
 
                 // We only support updates from 2.5+
                 if (version_compare($version, '2.5.0', '>')) {
                     printf(
-                        '<p class="alert alert-success">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                 } else {
                     printf(
-                        '<p class="alert alert-danger">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-danger text-center">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                     echo '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
                 if ('hash' !== PMF_ENCRYPTION_TYPE) {
                     printf(
-                        '<p class="alert alert-info">Your passwords are currently encoded with a %s() method.</p>',
+                        '<p class="alert alert-info text-center">Your passwords are currently encoded with a %s() method.</p>',
                         PMF_ENCRYPTION_TYPE
                     );
                 }
                 ?>
 
                 <p style="text-align: center">
-                    <button class="btn btn-primary btn-large" type="submit">
+                    <button class="btn btn-primary btn-lg" type="submit">
                         Go to step 2 of 3
                     </button>
                 </p>
-            </fieldset>
+            </div>
+        </div>
         </form>
 <?php
     PMF_System::renderFooter();
@@ -236,17 +251,39 @@ if ($step == 2) {
     if ($checkDatabaseSetupFile) {
 ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php echo $version; ?>" />
-        <fieldset>
-            <legend><strong>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 2 of 3)</strong></legend>
-            <p>A backup of your database configuration file has been made.</p>
-            <p>The configuration will be updated after the next step.</p>
-            <p style="text-align: center;">
-                <button class="btn btn-primary btn-large" type="submit">
-                    Go to step 3 of 3
-                </button>
-            </p>
-        </fieldset>
+        <input type="hidden" name="version" value="<?php echo $version; ?>">
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="update.php?step=3">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                   </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step2">
+            <div class="col-lg-12">
+                <p>A backup of your database configuration file has been made.</p>
+                <p>The configuration will be updated after the next step.</p>
+                <p style="text-align: center;">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        Go to step 3 of 3
+                    </button>
+                </p>
+            </div>
+        </div>
         </form>
 <?php
         PMF_System::renderFooter();
@@ -258,7 +295,32 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
+?>
 
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step2">
+            <div class="col-lg-12">
+<?php
     $images = [];
 
     //
@@ -723,7 +785,7 @@ if ($step == 3) {
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {
-        echo '<div class="center">';
+        echo '<div class="text-center">';
         $count = 0;
         foreach ($query as $key => $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);

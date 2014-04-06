@@ -94,7 +94,7 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    
+
     $user = new PMF_User_CurrentUser($faqConfig);
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
