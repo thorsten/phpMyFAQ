@@ -93,7 +93,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
 $expired = (date('YmdHis') > $news['dateEnd']);
 
 // Does the user have the right to add a comment?
-if ((-1 !== $user->getUserId() && false === $faqConfig->get('records.allowCommentsForGuests')) ||
+if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
     (!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
