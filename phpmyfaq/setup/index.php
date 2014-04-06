@@ -395,6 +395,11 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
+
+        <p>
+            You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
+            <a href="../admin/index.php">admin section</a>.
+         </p>
 <?php
     $installer->cleanUpFiles();
     PMF_System::renderFooter();
