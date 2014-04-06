@@ -187,7 +187,7 @@ class PMF_User
         if (!$this->addPerm($perm)) {
             return;
         }
-        
+
         // authentication objects
         // always make a 'local' $auth object (see: $authData)
         $this->authContainer = [];
@@ -199,7 +199,7 @@ class PMF_User
         if (!$this->addAuth($authLocal, $this->getAuthSource('type'))) {
             return;
         }
-        
+
         // additionally, set given $auth objects
         if (count($auth) > 0) {
             foreach ($auth as $name => $authObject) {
@@ -208,6 +208,7 @@ class PMF_User
                 }
             }
         }
+
         // user data object
         $this->userdata = new PMF_User_UserData($this->config);
     }

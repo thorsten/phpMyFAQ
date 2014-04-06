@@ -94,6 +94,7 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
+    
     $user = new PMF_User_CurrentUser($faqConfig);
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
@@ -115,14 +116,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         } else {
             $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
-            $user            = null;
             $action          = 'password' === $action ? 'password' : 'login';
         }
     } else {
         // error
         $error           = $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
-        $user            = null;
         $action          = 'password' === $action ? 'password' : 'login';
     }
 
@@ -136,7 +135,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     if ($user instanceof PMF_User_CurrentUser) {
         $auth = true;
     } else {
-        $user = null;
+        $user = new PMF_User_CurrentUser($faqConfig);
+
     }
 }
 
@@ -145,8 +145,8 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 //
 if ('logout' === $action && isset($auth)) {
     $user->deleteFromSession(true);
-    $user = $auth = null;
-    $action = 'main';
+    $auth      = null;
+    $action    = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
         header('Location: ' . $ssoLogout);
