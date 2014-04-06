@@ -174,7 +174,11 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-        return $result->num_rows;
+        try {
+            return $result->num_rows;
+        } catch (PMF_Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**

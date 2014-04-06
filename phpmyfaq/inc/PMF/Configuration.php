@@ -68,7 +68,8 @@ class PMF_Configuration
      */
     public function getAll()
     {
-        $query = sprintf("
+        $config = [];
+        $query  = sprintf("
             SELECT
                 config_name, config_value
             FROM
@@ -102,17 +103,22 @@ class PMF_Configuration
         if (!isset($this->config[$item])) {
             $this->getAll();
         }
-        switch ($this->config[$item]) {
-            case 'true':
-                return true;
-                break;
-            case 'false':
-                return false;
-                break;
-            default:
-                return $this->config[$item];
-                break;
+
+        if (isset($this->config[$item])) {
+            switch ($this->config[$item]) {
+                case 'true':
+                    return true;
+                    break;
+                case 'false':
+                    return false;
+                    break;
+                default:
+                    return $this->config[$item];
+                    break;
+            }
         }
+
+        return null;
     }
 
     /**
