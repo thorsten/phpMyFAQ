@@ -141,24 +141,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 }
 
 //
-// Get current user rights
-//
-$permission = [];
-if (isset($auth)) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
-//
 // Logout
 //
 if ('logout' === $action && isset($auth)) {
@@ -601,7 +583,7 @@ $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-    if (in_array(true, $permission)) {
+    if (count($user->perm->getAllUserRights($user->getUserId()))) {
         $adminSection = sprintf(
             '<a href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig) . 'admin/index.php',

@@ -88,31 +88,14 @@ if (isset($message['error'])) {
     exit();
 }
 
-
-// get user rights
-$permission = [];
-if ($isLoggedIn) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
-
 // Save user generated content
 switch ($action) {
 
     // Comments
     case 'savecomment':
 
-        if (!$faqConfig->get('records.allowCommentsForGuests') && $permission['addcomment']) {
+        if (!$faqConfig->get('records.allowCommentsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addcomment')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -250,7 +233,8 @@ switch ($action) {
 
     case 'savefaq':
 
-        if (!$faqConfig->get('records.allowNewFaqsForGuests') && $permission['addfaq']) {
+        if (!$faqConfig->get('records.allowNewFaqsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addfaq')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -424,7 +408,8 @@ switch ($action) {
 
     case 'savequestion':
 
-        if (!$faqConfig->get('records.allowQuestionsForGuests') && $permission['addquestion']) {
+        if (!$faqConfig->get('records.allowQuestionsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addquestion')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }

@@ -81,7 +81,7 @@ if (strlen($news['link']) > 0) {
 
 // Show link to edit the news?
 $editThisEntry = '';
-if (isset($permission['editnews'])) {
+if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
                         '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
                         PMF_Link::getSystemRelativeUri('index.php'),

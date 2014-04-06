@@ -61,22 +61,6 @@ if ($user) {
     $user = null;
 }
 
-// Get current user rights
-$permission = [];
-if (isset($auth)) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
 // Get current user and group id - default: -1
 if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_user   = $user->getUserId();
@@ -120,7 +104,7 @@ $headers = array(
     "Cache-Control: must-revalidate, post-check=0, pre-check=0",
 );
 
-if (true === $getAll && $permission['export']) {
+if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
 
     $filename = 'FAQs.pdf';
     $pdfFile  = $pdf->generate(0, true, $lang);

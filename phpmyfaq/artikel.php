@@ -204,7 +204,7 @@ $relatedFaqs  = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 
 // Show link to edit the faq?
 $editThisEntry = '';
-if (isset($permission['editbt']) && $permission['editbt']) {
+if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
         '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
@@ -249,7 +249,7 @@ if (!empty($switchLanguage)) {
     );
 }
 
-if (isset($permission['addtranslation']) && $permission['addtranslation']) {
+if ($user->perm->checkRight($user->getUserId(), 'addtranslation')) {
     $tpl->parseBlock(
         'writeContent',
         'addTranslation',
