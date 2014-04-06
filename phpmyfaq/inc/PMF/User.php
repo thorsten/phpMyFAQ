@@ -79,7 +79,7 @@ class PMF_User
     /**
      * Permission container
      *
-     * @var PMF_Perm
+     * @var PMF_Perm_Basic|PMF_Perm_Medium
      */
     public $perm = null;
 
@@ -183,8 +183,7 @@ class PMF_User
     {
         $this->config = $config;
 
-        $permLevel = $this->config->get('security.permLevel');
-        $perm      = PMF_Perm::selectPerm($permLevel, $this->config);
+        $perm = PMF_Perm::selectPerm($this->config->get('security.permLevel'), $this->config);
         if (!$this->addPerm($perm)) {
             return;
         }

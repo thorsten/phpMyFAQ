@@ -40,6 +40,13 @@ class PMF_Helper_Administration
     private $permission = [];
 
     /**
+     * User object
+     *
+     * @var PMF_User
+     */
+    private $user = null;
+
+    /**
      * Adds a menu entry according to user permissions.
      * ',' stands for 'or', '*' stands for 'and'
      *
@@ -124,12 +131,22 @@ class PMF_Helper_Administration
     /**
      * Setter for permission aray
      *
-     * @param array $permission Array of permissions
+     * @param PMF_User $user User object
      *
      * @return void
      */
-    public function setPermission(Array $permission)
+    public function setUser(PMF_User $user)
     {
-        $this->permission = $permission;
+        // read all rights, set them FALSE
+        $allRights = $user->perm->getAllRightsData();
+        foreach ($allRights as $right) {
+            $this->permission[$right['name']] = false;
+        }
+        // check user rights, set them TRUE
+        $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+        foreach ($allRights as $right) {
+            if (in_array($right['right_id'], $allUserRights))
+                $this->permission[$right['name']] = true;
+        }
     }
 }

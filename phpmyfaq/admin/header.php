@@ -41,7 +41,7 @@ $configurationPage = false;
 $edAutosave        = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new PMF_Helper_Administration();
-$adminHelper->setPermission($permission);
+$adminHelper->setUser($user);
 
 switch ($action) {
     case 'user':
@@ -248,7 +248,7 @@ switch ($action) {
 
 
 
-    <?php if (isset($auth) && in_array(true, $permission)): ?>
+    <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">

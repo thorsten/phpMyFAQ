@@ -161,22 +161,6 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 }
 
-// get user rights
-$permission = [];
-if (isset($auth)) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
 // logout
 if ($action == 'logout' && $auth) {
     $user->deleteFromSession(true);
@@ -211,7 +195,7 @@ if (is_null($_ajax)) {
 }
 
 // if performing AJAX operation, needs to branch before header.php
-if (isset($auth) && in_array(true, $permission)) {
+if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0) {
     if (isset($action) && isset($_ajax)) {
         if ($action == 'ajax') {
 
@@ -265,7 +249,7 @@ switch($action) {
 require 'header.php';
 
 // User is authenticated
-if (isset($auth) && in_array(true, $permission)) {
+if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0) {
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {
