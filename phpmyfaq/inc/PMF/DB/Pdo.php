@@ -68,13 +68,15 @@ abstract class PMF_DB_Pdo implements PMF_DB_Driver
     abstract public function connect($host, $user, $password, $database = '');
 
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param string $query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
      * @return PDOStatement $statement
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);

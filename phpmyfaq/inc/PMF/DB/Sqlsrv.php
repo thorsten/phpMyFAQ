@@ -105,14 +105,17 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
            'Database'     => $database,
            'CharacterSet' => 'UTF-8');
     }
-    
+
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param  string $query Query
-     * @return mixed
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);

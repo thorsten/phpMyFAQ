@@ -49,14 +49,15 @@ interface PMF_DB_Driver
     public function connect($host, $user, $password, $db = '');
 
     /**
-     * Sends a query to the database.
-     *
      * This function sends a query to the database.
      *
-     * @param   string $query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
      * @return  mixed $result
      */
-    public function query($query);
+    public function query($query, $offset = 0, $rowcount = 0);
 
     /**
      * Escapes a string for use in a query

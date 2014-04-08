@@ -87,13 +87,15 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param string $query Query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return resource
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);

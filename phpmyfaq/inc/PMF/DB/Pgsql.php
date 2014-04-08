@@ -91,12 +91,15 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param   string $query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
      * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
