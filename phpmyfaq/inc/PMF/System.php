@@ -87,13 +87,13 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB (ext/mysqli)'),
-        'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL / MariaDB (PDO_MYSQL, experimental)'),
-        'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL'),
+        'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
+        'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x (PDO_MYSQL, experimental)'),
+        'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
         'sqlite'    => array(self::VERSION_MINIMUM_PHP, 'SQLite (deprecated)'),
-        'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (only PHP 5.3+, experimental)'),
-        'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2005 / 2008'),
-        'sqlsrv'    => array(self::VERSION_MINIMUM_PHP, 'SQL Server Driver for PHP (experimental)')
+        'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (experimental)'),
+        'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
+        'sqlsrv'    => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP')
     );
 
     /**

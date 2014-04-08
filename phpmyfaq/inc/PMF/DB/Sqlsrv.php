@@ -1,7 +1,7 @@
 <?php
 /**
  * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver
- * for PHP from Microsoft.
+ * for PHP from Microsoft for Microsoft SQL Server 2012 or later
  *
  * PHP Version 5.4
  *
