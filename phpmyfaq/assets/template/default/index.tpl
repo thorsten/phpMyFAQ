@@ -90,7 +90,7 @@
 
 <section id="content" class="container">
     <div class="row">
-        <div class="col-md-9" id="mainContent">
+        <div class="col-md-8" id="mainContent">
             [globalSearchBox]
             <section class="well hidden-print" id="searchBox">
                 <form id="search" action="{writeSendAdress}" method="get" class="form-search" accept-charset="utf-8">
@@ -121,7 +121,7 @@
             {writeContent}
 
         </div>
-        <div class="col-md-3 hidden-print" id="rightContent">
+        <div class="col-md-4 hidden-print" id="rightContent">
 
             {rightBox}
 
