@@ -101,8 +101,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
             $this->sqllog .= PMF_Utils::debug($query);
         }
 
-
-        if (0 < $offset && 0 < $rowcount) {
+        if (0 < $rowcount) {
             $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
         }
 

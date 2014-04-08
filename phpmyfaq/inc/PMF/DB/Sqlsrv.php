@@ -120,13 +120,20 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
         $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
+        }
+
         $result  = sqlsrv_query($this->conn, $query, [], $options);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
-        return $result;
 
+        return $result;
     }
 
     /**

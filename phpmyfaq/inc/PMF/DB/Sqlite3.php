@@ -92,7 +92,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
             $this->sqllog .= PMF_Utils::debug($query);
         }
 
-        if (0 < $offset && 0 < $rowcount) {
+        if (0 < $rowcount) {
             $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
         }
 
