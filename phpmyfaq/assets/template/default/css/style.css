@@ -5960,6 +5960,7 @@ footer ul.footer-menu {
   list-style: none outside none;
 }
 footer ul.footer-menu li {
+  color: #b4bcc2;
   float: left;
   list-style: none outside none;
   margin-right: 22px;

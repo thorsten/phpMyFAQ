@@ -1,7 +1,4 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="{metaLanguage}" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="{metaLanguage}" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="{metaLanguage}" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
@@ -53,6 +50,16 @@
 
         <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
             <ul class="nav navbar-nav">
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories
+                    <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li>{allCategories}</li>
+                        <li class="divider"></li>
+                        [categoryListSection]
+                        {showCategories}
+                        [/categoryListSection]
+                    </ul>
+                </li>
                 <li class="{activeQuickfind}">{showInstantResponse}</li>
                 <li class="{activeAddContent}">{msgAddContent}</li>
                 <li class="{activeAddQuestion}">{msgQuestion}</li>
@@ -83,22 +90,7 @@
 
 <section id="content" class="container">
     <div class="row">
-        <div class="col-md-3 hidden-print" id="leftContent">
-            <div class="well categories">
-                <ul class="nav nav-list">
-                    <li class="home">{backToHome}</li>
-                    <li>{allCategories}</li>
-                    <li class="divider-horizontal"></li>
-                    [categoryListSection]
-                    {showCategories}
-                    [/categoryListSection]
-                </ul>
-                <div class="users-online">
-                    <small>{userOnline}</small>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-6" id="mainContent">
+        <div class="col-md-9" id="mainContent">
             [globalSearchBox]
             <section class="well hidden-print" id="searchBox">
                 <form id="search" action="{writeSendAdress}" method="get" class="form-search" accept-charset="utf-8">
@@ -150,14 +142,15 @@
 <footer id="footer" class="hidden-print">
     <div class="container">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-9">
                 <ul class="footer-menu">
+                    <li>{userOnline}</li>
                     <li>{showSitemap}</li>
                     <li>{msgContact}</li>
                     <li>{msgGlossary}</li>
                 </ul>
             </div>
-            <div class="col-md-6">
+            <div class="col-md-3">
                 <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
                     {switchLanguages}
                     <input type="hidden" name="action" value="" />
