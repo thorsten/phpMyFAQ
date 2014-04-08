@@ -1879,52 +1879,50 @@ class PMF_Faq
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
+
+            GROUP BY
+                id
             ORDER BY
                 fv.visits DESC';
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->_config->getDb()->query($query, 0, $count);
         $topten = [];
         $data   = [];
 
-        $i = 1;
-        $oldId = 0;
-        while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
-            if ($oldId != $row->id) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
 
-                if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
-                        continue;
-                    }
+            if ($this->groupSupport) {
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    continue;
                 }
-
-                $data['visits']     = $row->visits;
-                $data['thema']      = $row->thema;
-                $data['date']       = $row->datum;
-                $data['last_visit'] = $row->last_visit;
-
-                $title = $row->thema;
-                $url   = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri(),
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang
-                );
-                $oLink = new PMF_Link($url, $this->_config);
-                $oLink->itemTitle = $row->thema;
-                $oLink->tooltip   = $title;
-                $data['url']      = $oLink->toString();
-
-                $topten[] = $data;
-                $i++;
+            } else {
+                if (!in_array($row->user_id, array(-1, $this->user))) {
+                    continue;
+                }
             }
-            $oldId = $row->id;
+
+            $data['visits']     = $row->visits;
+            $data['thema']      = $row->thema;
+            $data['date']       = $row->datum;
+            $data['last_visit'] = $row->last_visit;
+
+            $title = $row->thema;
+            $url   = sprintf(
+                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+            $oLink = new PMF_Link($url, $this->_config);
+            $oLink->itemTitle = $row->thema;
+            $oLink->tooltip   = $title;
+            $data['url']      = $oLink->toString();
+
+            $topten[] = $data;
         }
+
 
         return $topten;
     }
@@ -1985,51 +1983,47 @@ class PMF_Faq
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
+            GROUP BY
+                id
             ORDER BY
                 fd.datum DESC';
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->_config->getDb()->query($query, 0, $count);
         $latest = [];
         $data = [];
 
-        $i = 0;
-        $oldId = 0;
-        while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
-            if ($oldId != $row->id) {
+        while (($row = $this->_config->getDb()->fetchObject($result))) {
 
-                if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
-                        continue;
-                    }
+            if ($this->groupSupport) {
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    continue;
                 }
-
-                $data['datum']   = $row->datum;
-                $data['thema']   = $row->thema;
-                $data['content'] = $row->content;
-                $data['visits']  = $row->visits;
-
-                $title = $row->thema;
-                $url   = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri(),
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang
-                );
-                $oLink = new PMF_Link($url, $this->_config);
-                $oLink->itemTitle = $row->thema;
-                $oLink->tooltip   = $title;
-                $data['url']      = $oLink->toString();
-
-                $latest[] = $data;
-                $i++;
+            } else {
+                if (!in_array($row->user_id, array(-1, $this->user))) {
+                    continue;
+                }
             }
-            $oldId = $row->id;
+
+            $data['datum']   = $row->datum;
+            $data['thema']   = $row->thema;
+            $data['content'] = $row->content;
+            $data['visits']  = $row->visits;
+
+            $title = $row->thema;
+            $url   = sprintf(
+                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+            $oLink = new PMF_Link($url, $this->_config);
+            $oLink->itemTitle = $row->thema;
+            $oLink->tooltip   = $title;
+            $data['url']      = $oLink->toString();
+
+            $latest[] = $data;
         }
 
         return $latest;
