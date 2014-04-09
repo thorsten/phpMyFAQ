@@ -138,14 +138,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $auth = true;
         } else {
             $error = $PMF_LANG['ad_auth_fail'];
-            $user  = null;
         }
     } else {
         // error
         $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nErrors: ' . implode(', ', $user->errors));
         $error = $PMF_LANG['ad_auth_fail'];
-        $user  = null;
     }
 } else {
     // Try to authenticate with cookie information
@@ -156,15 +154,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($user instanceof PMF_User_CurrentUser) {
         $auth = true;
-    } else {
-        $user = null;
+    }  else {
+        $user = new PMF_User_CurrentUser($faqConfig);
     }
 }
 
 // logout
 if ($action == 'logout' && $auth) {
     $user->deleteFromSession(true);
-    $user = null;
     $auth = null;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
