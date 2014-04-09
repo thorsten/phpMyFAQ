@@ -2717,6 +2717,8 @@ class PMF_Faq
                 fcr.category_id = '.$category.'
             AND
                 fd.lang = \''.$this->_config->getLanguage()->getLanguage().'\'
+            GROUP BY
+                fd.id
             ORDER BY
                 fd.id';
 
