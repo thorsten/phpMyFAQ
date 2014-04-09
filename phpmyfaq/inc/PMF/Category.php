@@ -806,7 +806,7 @@ class PMF_Category
      * @param string  $useCssClass       Use CSS class "breadcrumb"
      * @return string
      */
-    public function getPath($id, $separator = ' &raquo; ', $renderAsMicroData = false, $useCssClass = 'breadcrumb')
+    public function getPath($id, $separator = ' / ', $renderAsMicroData = false, $useCssClass = 'breadcrumb')
     {
         global $sids;
 
@@ -859,7 +859,7 @@ class PMF_Category
             return sprintf(
                 '<ul class="%s">%s</ul>',
                 $useCssClass,
-                implode('<li class="divider">' . $separator . '</li>', $temp)
+                implode('', $temp)
             );
         } else {
             return implode($separator, $temp);
