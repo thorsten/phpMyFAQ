@@ -358,7 +358,8 @@ class PMF_Installer
         'socialnetworks.twitterConsumerSecret'    => '',
         'socialnetworks.twitterAccessTokenKey'    => '',
         'socialnetworks.twitterAccessTokenSecret' => '',
-        'socialnetworks.enableFacebookSupport'    => 'false'
+        'socialnetworks.enableFacebookSupport'    => 'false',
+        'socialnetworks.disableAll'               => 'false'
     );
 
     /**
