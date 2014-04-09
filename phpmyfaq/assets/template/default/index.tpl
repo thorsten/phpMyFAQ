@@ -50,7 +50,7 @@
 
         <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Categories
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{headerCategories}
                     <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>{allCategories}</li>

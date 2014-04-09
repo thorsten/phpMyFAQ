@@ -66,7 +66,7 @@ $PMF_LANG["msgUserOnline"] = " Users online";
 $PMF_LANG["msgBack2Home"] = "Back to main page";
 
 // Contentpages
-$PMF_LANG["msgFullCategories"] = "Categories with FAQs";
+$PMF_LANG["msgFullCategories"] = "Categories";
 $PMF_LANG["msgFullCategoriesIn"] = "Categories with FAQs in ";
 $PMF_LANG["msgSubCategories"] = "Subcategories";
 $PMF_LANG["msgEntries"] = "FAQs";

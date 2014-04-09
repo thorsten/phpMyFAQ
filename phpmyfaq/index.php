@@ -465,6 +465,7 @@ $tplMainPage = array(
     'currentPageUrl'       => $currentPageUrl,
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
+    'headerCategories'     => $PMF_LANG['msgFullCategories'],
     'msgCategory'          => $PMF_LANG['msgCategory'],
     'msgExportAllFaqs'     => $PMF_LANG['msgExportAllFaqs'],
     'languageBox'          => $PMF_LANG['msgLangaugeSubmit'],
