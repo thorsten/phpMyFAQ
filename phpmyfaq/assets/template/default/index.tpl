@@ -56,7 +56,7 @@
                         <li>{allCategories}</li>
                         <li class="divider"></li>
                         [categoryListSection]
-                        {showCategories}
+                        {categoryDropDown}
                         [/categoryListSection]
                     </ul>
                 </li>

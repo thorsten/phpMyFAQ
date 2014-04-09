@@ -494,8 +494,8 @@ $tpl->parseBlock(
     'index',
     'categoryListSection',
     array(
-        'showCategories' => $categoryHelper->renderNavigation($cat),
-        'topCategories'  => $categoryHelper->renderMainCategories(),
+        'showCategories'   => $categoryHelper->renderNavigation($cat),
+        'categoryDropDown' => $categoryHelper->renderCategoryDropDown($cat)
     )
 );
 
