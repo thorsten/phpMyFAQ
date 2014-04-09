@@ -694,7 +694,6 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
             'writePDFTag'            => $PMF_LANG['msgPDF'],
             'writePrintMsgTag'       => $PMF_LANG['msgPrintArticle'],
             'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],
-            'shareOnDigg'            => $faqHelper->renderDiggShareLink($faqServices->getDiggLink()),
             'shareOnFacebook'        => $faqHelper->renderFacebookShareLink($faqServices->getShareOnFacebookLink()),
             'shareOnTwitter'         => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
             'link_email'             => $faqServices->getSuggestLink(),

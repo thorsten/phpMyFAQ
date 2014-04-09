@@ -101,25 +101,6 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Renders a Share on Digg link
-     *
-     * @param string $url
-     *
-     * @return string
-     */
-    public function renderDiggShareLink($url)
-    {
-        if (empty($url) || $this->_config->get('socialnetworks.disableAll') === true) {
-            return '';
-        }
-
-        return sprintf(
-            '<a href="%s" target="_blank"><img src="assets/img/digg.png" alt="Digg It!" width="32" height="32"></a>',
-            $url
-        );
-    }
-
-    /**
      * Renders a Share on Facebook link
      *
      * @param string $url
@@ -133,7 +114,7 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         return sprintf(
-            '<a href="%s" target="_blank"><img src="assets/img/facebook.png" alt="Digg It!" width="32" height="32"></a>',
+            '<a href="%s" target="_blank"><img src="assets/img/facebook.png" alt="Share on Facebook" width="32" height="32"></a>',
             $url
         );
     }

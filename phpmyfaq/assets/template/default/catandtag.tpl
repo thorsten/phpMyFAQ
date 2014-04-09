@@ -3,7 +3,6 @@
             <div id="social">
                 {shareOnFacebook}
                 {shareOnTwitter}
-                {shareOnDigg}
                 <a href="{link_email}">
                     <img src="assets/img/email.png" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="32" height="32" >
                 </a>

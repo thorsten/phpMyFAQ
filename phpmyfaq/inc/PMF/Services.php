@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract class for various services, e.g. Twitter, Facebook, Digg, ...
+ * Abstract class for various services, e.g. Twitter, Facebook
  *
  * PHP Version 5.4
  *
@@ -94,28 +94,6 @@ class PMF_Services
         $link->itemTitle = $this->question;
 
         return urlencode($link->toString());
-    }
-
-    /**
-     * Returns the current "Digg It!" URL
-     *
-     * @return string
-     */
-    public function getDiggLink()
-    {
-        $url = sprintf(
-            '%sindex.php?action=artikel&amp;cat=%s&amp;id=%d&amp;artlang=%s&amp;title=%s',
-            $this->_config->get('main.referenceURL'),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage(),
-            $this->getQuestion()
-        );
-
-        $link = new PMF_Link($url, $this->_config);
-        $link->itemTitle = $this->question;
-
-        return sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($link->toString()));
     }
 
     /**
