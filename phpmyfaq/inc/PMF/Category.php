@@ -674,7 +674,7 @@ class PMF_Category
                 $numFaqs = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->_config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
-                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><img id="category_%d_RSS" src="assets/img/feed.png" width="16" height="16" alt="RSS"></a>',
+                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i class="fa fa-rss"></i></a>',
                         $parent,
                         $this->language,
                         $parent

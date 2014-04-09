@@ -3,7 +3,7 @@
                 <h2>
                     {msgOpenQuestions}
                     <a href="feed/openquestions/rss.php" target="_blank">
-                        <img src="assets/img/feed.png" width="16" height="16" alt="RSS" />
+                        <i class="fa fa-rss"></i>
                     </a>
                 </h2>
             </header>

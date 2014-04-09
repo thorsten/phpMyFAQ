@@ -20,7 +20,7 @@
         [/socialLinks]
         <section class="well">
             <header>
-                <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><img src="assets/img/feed.png" width="16" height="16" alt="RSS" /></a></h3>
+                <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><i class="fa fa-rss"></i></a></h3>
             </header>
             <ol>
                 [toptenList]
@@ -34,7 +34,7 @@
 
         <section class="well">
             <header>
-                <h3>{writeNewestHeader} <a href="feed/latest/rss.php" target="_blank"><img src="assets/img/feed.png" width="16" height="16" alt="RSS" /></a></h3>
+                <h3>{writeNewestHeader} <a href="feed/latest/rss.php" target="_blank"><i class="fa fa-rss"></i></a></h3>
             </header>
             <ol>
                 [latestEntriesList]
