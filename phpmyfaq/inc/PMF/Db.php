@@ -140,7 +140,7 @@ class PMF_Db
     }
     
     /**
-     * Error page
+     * Error page, if the database connection is not possible
      *
      * @param string $method
      *
@@ -154,12 +154,14 @@ class PMF_Db
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
                 <style type="text/css">
-                @import url(assets/template/default/style.css);
+                @import url(assets/template/default/css/style.min.css);
                 </style>
             </head>
             <body>
-                <p class="error">The connection to the database server could not be established.</p>
-                <p class="error">The error message of the database server:<br />' . $method . '</p>
+                <div class="container">
+                <p class="alert alert-danger">The connection to the database server could not be established.</p>
+                <p class="alert alert-danger">The error message of the database server:<br />' . $method . '</p>
+                </div>
             </body>
             </html>';
     }

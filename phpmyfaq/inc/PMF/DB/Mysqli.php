@@ -66,6 +66,8 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param string $password Password
      * @param string $database Database name
      *
+     * @throws PMF_Exception
+     *
      * @return  boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
@@ -82,7 +84,9 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         }
 
         if ('' !== $database) {
-            return $this->conn->select_db($database);
+            if (! $this->conn->select_db($database)) {
+                throw new PMF_Exception('Cannot connect to database ' . $database);
+            }
         }
 
         return true;
