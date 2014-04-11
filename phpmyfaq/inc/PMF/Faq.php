@@ -363,7 +363,6 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             %s
-            GROUP BY fd.id, fd.lang, fcr.category_id, fv.visits
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
