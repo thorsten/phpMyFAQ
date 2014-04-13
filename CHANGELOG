@@ -5,7 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.9 - 2014-
+Version 2.8.9 - 2014-04-
+- updated Thai translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.8 - 2014-03-18
 - improved API security (Thorsten)
