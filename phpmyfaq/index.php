@@ -204,10 +204,14 @@ if (!$internal) {
             $pmfExeptions[] = $e->getMessage();
         }
     } else {
-        if (!is_null($sidCookie)) {
-            $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
-        } else {
-            $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+        try {
+            if (!is_null($sidCookie)) {
+                $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
+            } else {
+                $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+            }
+        } catch (PMF_Exception $e) {
+            $pmfExeptions[] = $e->getMessage();
         }
     }
 }
