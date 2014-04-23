@@ -284,14 +284,12 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     echo $faqData['title'] ?></textarea>
                             </div>
                         </div>
-                        <!-- Answer -->
-                        <div class="form-group">
-                            <div class="col-lg-12">
-                                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                                <textarea id="answer" name="answer" class="form-control" rows="10">
-                                    <?php echo $faqData['content'] ?>
-                                </textarea>
-                            </div>
+                    </div>
+                    <!-- Answer -->
+                    <div class="control-group">
+                        <div class="controls">
+                            <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                            <textarea id="answer" name="answer" class="span8"><?php echo $faqData['content'] ?></textarea>
                         </div>
 
                         <!-- Language -->
@@ -469,13 +467,10 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </div>
                         </div>
                     </div>
-
-                    <?php if (is_numeric($faqData['id']) && $faqData['id'] > 0): ?>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog_history']; ?>
-                            </a>
+                    <div class="control-group">
+                        <label class="control-label" for="changed"><?php echo $PMF_LANG["ad_entry_changed"]; ?></label>
+                        <div class="controls">
+                            <textarea name="changed" id="changed" class="span8"><?php echo $faqData['changed'] ?></textarea>
                         </div>
 
                         <div id="collapseViewChangelog" class="panel-collapse collapse">
