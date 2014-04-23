@@ -48,9 +48,7 @@ if ($permission['editglossary']) {
                     <?php echo $PMF_LANG['ad_glossary_definition']; ?>:
                 </label>
                 <div class="controls">
-                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required>
-<?php echo $glossaryItem['definition']; ?>
-                    </textarea>
+                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required><?php echo $glossaryItem['definition']; ?></textarea>
                 </div>
             </div>
 

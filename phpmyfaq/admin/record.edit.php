@@ -282,9 +282,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <div class="controls">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                            <textarea id="answer" name="answer" class="span8">
-                                <?php echo $faqData['content'] ?>
-                            </textarea>
+                            <textarea id="answer" name="answer" class="span11"><?php echo $faqData['content'] ?></textarea>
                         </div>
                     </div>
                 </fieldset>
@@ -417,9 +415,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label" for="changed"><?php echo $PMF_LANG["ad_entry_changed"]; ?></label>
                         <div class="controls">
-                            <textarea name="changed" id="changed" class="span8">
-                                <?php echo $faqData['changed'] ?>
-                            </textarea>
+                            <textarea name="changed" id="changed" class="span8"><?php echo $faqData['changed'] ?></textarea>
                         </div>
                     </div>
                 </fieldset>
