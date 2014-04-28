@@ -1,3 +1,25 @@
+CHANGED FILES FROM 2.8.8 -> 2.8.9
+
+./admin/dashboard.php
+./admin/footer.php
+./admin/header.php
+./admin/index.php
+./admin/loginform.php
+./admin/record.show.php
+./assets/template/default/add.tpl
+./assets/template/default/artikel.tpl
+./assets/template/default/news.tpl
+./inc/PMF/Faq.php
+./inc/PMF/Mail.php
+./inc/PMF/News.php
+./inc/PMF/Services.php
+./inc/PMF/System.php
+./lang/language_de.php
+./lang/language_th.php
+./artikel.php
+
+
+
 CHANGED FILES FROM 2.8.7 -> 2.8.8
 
 ./admin/ajax.config.php
