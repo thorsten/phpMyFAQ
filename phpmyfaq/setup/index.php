@@ -48,7 +48,6 @@ session_name('phpmyfaq-setup');
 session_start();
 
 require PMF_ROOT_DIR . '/config/constants.php';
-require PMF_ROOT_DIR . '/setup/questionnaire.php';
 
 //
 // Setting up PSR-0 autoloader for Symfony Components

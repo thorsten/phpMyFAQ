@@ -52,6 +52,7 @@ if ($user instanceof PMF_User) {
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
             'ucpGravatarImage'       => $gravatarImg,
             'userid'                 => $user->getUserId(),
+            'csrf'                   => $user->getCsrfTokenFromSession(),
             'msgRealName'            => $PMF_LANG['ad_user_name'],
             'realname'               => $user->getUserData('display_name'),
             'msgEmail'               => $PMF_LANG['msgNewContentMail'],

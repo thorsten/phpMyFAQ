@@ -13,9 +13,6 @@
  * Passwords are usually encrypted before stored in a database. For
  * and security, a password encryption method may be chosen. See documentation
  * Enc class for further details.
- * Instead of calling the database-specific subclasses directly, the static
- * selectDb(dbtype) may be called which returns a valid database-specific
- * object. See documentation of the static method selectDb for further details.
  *
  * PHP Version 5.4
  *

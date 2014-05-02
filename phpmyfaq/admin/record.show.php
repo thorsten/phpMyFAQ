@@ -26,13 +26,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
+        <header>
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_entry_aor'] ?>
+                </h2>
+            </div>
+        <header>
 
-printf(
-    '<header><h2><i class="icon-pencil"></i> %s</h2><header>',
-    $PMF_LANG['ad_entry_aor']
-);
-
-if ($permission['editbt'] || $permission['delbt']) {
+        <div class="row">
+            <div class="col-lg-12">
+<?php
+if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
 
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -275,8 +280,9 @@ if ($permission['editbt'] || $permission['delbt']) {
     }
 
     if (count($faq->faqRecords) > 0) {
-        $old     = 0;
-        $all_ids = [];
+
+        $old    = 0;
+        $faqIds = [];
 
         $visits    = new PMF_Visits($faqConfig);
         $numVisits = [];
@@ -318,24 +324,24 @@ if ($permission['editbt'] || $permission['delbt']) {
                 if ($old == 0) {
                     printf('<a name="cat_%d"></a>', $cid);
                 } else {
-                    print "        </tbody>\n        </table>\n        </div>";
+                    echo "        </tbody>\n        </table>\n        </div>";
                 }
 ?>
         <p>
             <a class="btn showhideCategory" data-category-id="<?php echo $cid; ?>">
-                <i class="icon icon-arrow-right"></i>
+                <i class="icon fa fa-arrow-right"></i>
                 <strong><?php echo $category->getPath($cid); ?></strong> <?php echo $catInfo;?>
             </a>
         </p>
-        <div id="category_<?php print $cid; ?>" class="categorybox <?php print ($selectedCategory == $cid) ? '' : 'hide'; ?>">
+        <div id="category_<?php echo $cid; ?>" style="display: none;">
         <table class="table table-striped">
         <thead>
         <tr>
             <th colspan="2" style="width: 24px;">
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=desc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=id&amp;sortby=desc">
                     &uarr;
                 </a>
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=id&amp;sortby=asc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=id&amp;sortby=asc">
                     &darr;
                 </a>
             </th>
@@ -343,31 +349,31 @@ if ($permission['editbt'] || $permission['delbt']) {
                 #
             </th>
             <th style="width: 72px;">
-                <input type="checkbox" id="sticky_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
+                <input type="checkbox" id="sticky_category_block_<?php echo $cid; ?>"
+                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'sticky')" />
                 &nbsp;<?php echo $PMF_LANG['ad_record_sticky'] ?>
             </th>
             <th style="width: 84px;">
-                <?php if ($permission['approverec']) { ?>
-                <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')"
+                <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
+                <input type="checkbox" id="active_category_block_<?php echo $cid; ?>"
+                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'active')"
                        <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
                 &nbsp;<?php echo $PMF_LANG['ad_record_active'] ?>
                 <?php } ?>
             </th>
             <th>
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=desc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=title&amp;sortby=desc">
                     &uarr;
                 </a>
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=title&amp;sortby=asc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=title&amp;sortby=asc">
                     &darr;
                 </a>
             </th>
             <th>
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=desc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=date&amp;sortby=desc">
                     &uarr;
                 </a>
-                <a href="?action=view&amp;category=<?php print $cid; ?>&amp;orderby=date&amp;sortby=asc">
+                <a href="?action=view&amp;category=<?php echo $cid; ?>&amp;orderby=date&amp;sortby=asc">
                     &darr;
                 </a>
             </th>
@@ -382,39 +388,39 @@ if ($permission['editbt'] || $permission['delbt']) {
 ?>
         <tr id="record_<?php echo $record['id'] . '_' . $record['lang']; ?>">
             <td style="width: 24px; text-align: right;">
-                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>">
-                    <?php print $record['id']; ?>
+                <a href="?action=editentry&amp;id=<?php echo $record['id']; ?>&amp;lang=<?php echo $record['lang']; ?>">
+                    <?php echo $record['id']; ?>
                 </a>
             </td>
             <td style="width: 16px;">
-                <?php print $record['lang']; ?>
+                <?php echo $record['lang']; ?>
             </td>
             <td style="width: 24px;">
-                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
-                   title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'">
-                    <?php print $record['solution_id']; ?>
+                <a href="?action=editentry&amp;id=<?php echo $record['id']; ?>&amp;lang=<?php echo $record['lang']; ?>"
+                   title="<?php echo $PMF_LANG["ad_user_edit"]; ?> '<?php echo str_replace("\"", "´", $record['title']); ?>'">
+                    <?php echo $record['solution_id']; ?>
                 </a>
             </td>
             <td style="width: 56px;">
-                <input type="checkbox" lang="<?php print $record['lang'] ?>"
-                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
-                       id="sticky_record_<?php print $cid . '_' . $record['id'] ?>"
-                    <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> />
+                <input type="checkbox" lang="<?php echo $record['lang'] ?>"
+                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
+                       id="sticky_record_<?php echo $cid . '_' . $record['id'] ?>"
+                    <?php echo ($record['sticky'] ? 'checked' :  '    ') ?>>
             </td>
             <td>
-                <?php if ($permission['approverec'] && isset($numVisits[$record['id']])) { ?>
-                <input type="checkbox" lang="<?php print $record['lang'] ?>"
-                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
-                       id="active_record_<?php print $cid . '_' . $record['id'] ?>"
-                    <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
+                <?php if ($user->perm->checkRight($user->getUserId(), 'approverec') && isset($numVisits[$record['id']])) { ?>
+                <input type="checkbox" lang="<?php echo $record['lang'] ?>"
+                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                       id="active_record_<?php echo $cid . '_' . $record['id'] ?>"
+                    <?php echo ('yes' == $record['active'] ? 'checked' : '    ') ?>>
                 <?php }  else { ?>
-                <span class="label label-important"><i class="icon-white icon-ban-circle"></i></span>
+                <span class="label label-important"><i class="fa fa-white fa fa-ban-circle"></i></span>
                 <?php } ?>
             </td>
             <td>
-                <a href="?action=editentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
-                   title="<?php print $PMF_LANG["ad_user_edit"]; ?> '<?php print str_replace("\"", "´", $record['title']); ?>'">
-                    <?php print $record['title']; ?>
+                <a href="?action=editentry&amp;id=<?php echo $record['id']; ?>&amp;lang=<?php echo $record['lang']; ?>"
+                   title="<?php echo $PMF_LANG["ad_user_edit"]; ?> '<?php echo str_replace("\"", "´", $record['title']); ?>'">
+                    <?php echo $record['title']; ?>
                 </a>
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
@@ -427,29 +433,29 @@ if ($permission['editbt'] || $permission['delbt']) {
         }
 ?></td>
             <td style="width: 48px;">
-                <?php print $date->format($record['date']); ?>
+                <?php echo $date->format($record['date']); ?>
             </td>
             <td style="width: 96px;">
-                <?php print $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
+                <?php echo $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>
             </td>
             <td style="width: 16px;">
-                <a class="btn btn-info" href="?action=copyentry&amp;id=<?php print $record['id']; ?>&amp;lang=<?php print $record['lang']; ?>"
-                   title="<?php print $PMF_LANG['ad_categ_copy']; ?>">
-                    <i class="icon-share"></i>
+                <a class="btn btn-info" href="?action=copyentry&amp;id=<?php echo $record['id']; ?>&amp;lang=<?php echo $record['lang']; ?>"
+                   title="<?php echo $PMF_LANG['ad_categ_copy']; ?>">
+                    <i class="fa fa-share"></i>
                 </a>
             </td>
             <td style="width: 16px;">
                 <a class="btn btn-danger" href="javascript:void(0);"
-                   onclick="javascript:deleteRecord(<?php print $record['id']; ?>, '<?php print $record['lang']; ?>'); return false;"
-                   title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
-                    <i class="icon-trash"></i>
+                   onclick="javascript:deleteRecord(<?php echo $record['id']; ?>, '<?php echo $record['lang']; ?>'); return false;"
+                   title="<?php echo $PMF_LANG["ad_user_delete"]; ?>">
+                    <i class="fa fa-trash-o"></i>
                 </a>
             </td>
         </tr>
 <?php
             $old = $cid;
             
-            $all_ids[$cid][] = $record['id'];
+            $faqIds[$cid][] = $record['id'];
         }
 ?>
         </tbody>
@@ -473,7 +479,10 @@ if ($permission['editbt'] || $permission['delbt']) {
         {
             var id_map = [];
 <?php 
-foreach ($all_ids as $categoryId => $recordIds) {
+foreach ($faqIds as $categoryId => $recordIds) {
+    if ('' === $categoryId) {
+        $categoryId = 0;
+    }
     echo "                id_map[" . $categoryId . "] = [" . implode(',', $recordIds) . "];\n";
 }
 ?>
@@ -536,7 +545,7 @@ foreach ($all_ids as $categoryId => $recordIds) {
             }
 
             $.get("index.php", data, null);
-            $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+            $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
         }
 
         /**
@@ -549,7 +558,7 @@ foreach ($all_ids as $categoryId => $recordIds) {
          */
         function deleteRecord(record_id, record_lang)
         {
-            if (confirm('<?php print addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
+            if (confirm('<?php echo addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
                 $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                 $.ajax({
                     type:    "POST",
@@ -557,7 +566,7 @@ foreach ($all_ids as $categoryId => $recordIds) {
                     data:    "record_id=" + record_id + "&record_lang=" + record_lang,
                     success: function(msg) {
                         $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
-                        $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_delsuc']; ?>');
+                        $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_delsuc']; ?>');
                     }
                 });
             }
@@ -567,8 +576,11 @@ foreach ($all_ids as $categoryId => $recordIds) {
         </script>
 <?php
     } else {
-        print $PMF_LANG['err_nothingFound'];
+        echo $PMF_LANG['err_nothingFound'];
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
+?>
+            </div>
+        </div>

@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission["passwd"]) {
+if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
     $templateVars = array(
         'PMF_LANG'       => $PMF_LANG,
         'successMessage' => '',
@@ -62,6 +62,7 @@ if ($permission["passwd"]) {
         ->display($templateVars);
 
     unset($templateVars);
+
 } else {
     require 'noperm.php';
 }

@@ -79,7 +79,7 @@ class PMF_User
     /**
      * Permission container
      *
-     * @var PMF_Perm
+     * @var PMF_Perm_Basic|PMF_Perm_Medium
      */
     public $perm = null;
 
@@ -183,12 +183,11 @@ class PMF_User
     {
         $this->config = $config;
 
-        $permLevel = $this->config->get('security.permLevel');
-        $perm      = PMF_Perm::selectPerm($permLevel, $this->config);
+        $perm = PMF_Perm::selectPerm($this->config->get('security.permLevel'), $this->config);
         if (!$this->addPerm($perm)) {
             return;
         }
-        
+
         // authentication objects
         // always make a 'local' $auth object (see: $authData)
         $this->authContainer = [];
@@ -196,18 +195,20 @@ class PMF_User
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
+
         if (!$this->addAuth($authLocal, $this->getAuthSource('type'))) {
             return;
         }
-        
+
         // additionally, set given $auth objects
         if (count($auth) > 0) {
             foreach ($auth as $name => $authObject) {
-                if (!$this->addAuth($authObject, $name)) {
+                if (!$authObject instanceof PMF_Auth_Driver && !$this->addAuth($authObject, $name)) {
                     break;
                 }
             }
         }
+
         // user data object
         $this->userdata = new PMF_User_UserData($this->config);
     }
@@ -241,7 +242,7 @@ class PMF_User
         if (isset($this->userId) && is_int($this->userId)) {
             return (int)$this->userId;
         }
-        $this->userId  = -1;
+        $this->userId   = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
         
         return -1;
@@ -496,12 +497,13 @@ class PMF_User
             $pass = $this->createPassword();
         }
         $success = false;
+
         foreach ($this->authContainer as $name => $auth) {
             if ($auth->setReadOnly()) {
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in Auth '.$name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
             } else {
                 $success = true;
             }
@@ -682,10 +684,10 @@ class PMF_User
     {
         $message = '';
         foreach ($this->errors as $error) {
-            $message .= $error."\n";
+            $message .= $error . "<br>\n";
         }
         $this->errors = [];
-        return $message;
+        return $message . '<br>' . implode('<br>', debug_backtrace());
     }
 
     /**
@@ -714,8 +716,8 @@ class PMF_User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param  PMF_Auth $auth Auth object
-     * @param  string   $name Auth name
+     * @param  PMF_Auth_Driver $auth PMF_Auth_Driver object
+     * @param  string          $name Auth name
      * @return boolean
      */
     public function addAuth($auth, $name)

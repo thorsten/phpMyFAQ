@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new PMF_News($faqConfig);
 
-if ('addnews' == $action && $permission["addnews"]) {
+if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
     $twig->loadTemplate('news/add.twig')
         ->display(
             array(
@@ -40,7 +40,7 @@ if ('addnews' == $action && $permission["addnews"]) {
             )
         );
 
-} elseif ('news' == $action && $permission["editnews"]) {
+} elseif ('news' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
     $date       = new PMF_Date($faqConfig);
     $newsHeader = $news->getNewsHeader();
     foreach($newsHeader as $key => $newsItem) {
@@ -56,7 +56,7 @@ if ('addnews' == $action && $permission["addnews"]) {
         );
 
     unset($date, $newsHeader, $key, $newsItem);
-} elseif ('editnews' == $action && $permission['editnews']) {
+} elseif ('editnews' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
     $id       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
     $dateStart = ($newsData['dateStart'] != '00000000000000' ? PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
@@ -81,7 +81,8 @@ if ('addnews' == $action && $permission["addnews"]) {
                 'newsData' => $newsData
             )
         );
-} elseif ('savenews' == $action && $permission["addnews"]) {
+} elseif ('savenews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
+
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -120,7 +121,8 @@ if ('addnews' == $action && $permission["addnews"]) {
                 'success'  => $success
             )
         );
-} elseif ('updatenews' == $action && $permission["editnews"]) {
+} elseif ('updatenews' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
+
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd   = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header    = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -160,7 +162,8 @@ if ('addnews' == $action && $permission["addnews"]) {
                 'success'  => $success
             )
         );
-} elseif ('deletenews' == $action && $permission["delnews"]) {
+} elseif ('deletenews' == $action && $user->perm->checkRight($user->getUserId(), "delnews")) {
+
     $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
     $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 

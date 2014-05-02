@@ -26,10 +26,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
+        <header>
+            <div class="col-lg-12">
+                <h2 class="page-header">
+                    <i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_stat_sess'] ?>
+                </h2>
+            </div>
+        </header>
 
-printf('<header><h2><i class="icon-tasks"></i> %s</h2></header>', $PMF_LANG['ad_stat_sess']);
-
-if ($permission['viewlog']) {
+        <div class="row">
+            <div class="col-lg-12">
+<?php
+if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     
     $session    = new PMF_Session($faqConfig);
     $date       = new PMF_Date($faqConfig);
@@ -63,12 +72,12 @@ if ($permission['viewlog']) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     }
 ?>
-        <form action="?action=sessionbrowse" method="post" accept-charset="utf-8">
+                <form action="?action=sessionbrowse" method="post" accept-charset="utf-8">
 
-        <table class="table table-striped">
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_days"]; ?>:</td>
-                <td>
+                <table class="table table-striped">
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_days"]; ?>:</td>
+                        <td>
 <?php
     $danz  = 0;
     $first = 9999999999999999999999999;
@@ -89,19 +98,19 @@ if ($permission['viewlog']) {
 
     print $danz;
 ?>
-                </td>
-            </tr>
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_vis"]; ?>:</td>
-                <td><?php print $vanz = $session->getNumberOfSessions(); ?></td>
-            </tr>
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</td>
-                <td><?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></td>
-            </tr>
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_fien"]; ?>:</td>
-                <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_vis"]; ?>:</td>
+                        <td><?php print $vanz = $session->getNumberOfSessions(); ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</td>
+                        <td><?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></td>
+                    </tr>
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_fien"]; ?>:</td>
+                        <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $first))) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
@@ -112,11 +121,11 @@ if ($permission['viewlog']) {
         print $PMF_LANG["ad_sess_noentry"];
     }
 ?>
-                </td>
-            </tr>
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_laen"]; ?>:</td>
-                <td>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_laen"]; ?>:</td>
+                        <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $last))) {
         $fp = fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $last), "r");
@@ -143,11 +152,11 @@ if ($permission['viewlog']) {
     closedir($dir);
     sort($trackingDates);
 ?>
-                </td>
-            </tr>
-            <tr>
-                <td><?php print $PMF_LANG["ad_stat_browse"]; ?>:</td>
-                <td><select name="day" size="1">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><?php print $PMF_LANG["ad_stat_browse"]; ?>:</td>
+                        <td class="col-lg-2"><select name="day" size="1">
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
@@ -159,23 +168,23 @@ if ($permission['viewlog']) {
         print "</option>\n";
     }
 ?>
-                </select>
-                    <button class="btn btn-primary" type="submit" name="statbrowse">
-                        <?php print $PMF_LANG["ad_stat_ok"]; ?>
-                    </button>
-                </td>
-            </tr>
-        </table>
-        </form>
+                        </select>
+                            <button class="btn btn-primary" type="submit" name="statbrowse">
+                                <?php print $PMF_LANG["ad_stat_ok"]; ?>
+                            </button>
+                        </td>
+                    </tr>
+                </table>
+                </form>
 
-        <form action="?action=viewsessions" method="post" class="form-horizontal">
-        <fieldset>
-            <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
+                <form action="?action=viewsessions" method="post" class="form-horizontal">
+                <fieldset>
+                    <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
 
-            <div class="control-group">
-                <label class="control-label" for="month"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
-                <div class="controls">
-                    <select name="month" id="month" size="1">
+                    <div class="control-group">
+                        <label class="control-label" for="month"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
+                        <div class="controls">
+                            <select name="month" id="month" size="1">
 <?php
     $oldValue = mktime(0, 0, 0, 1, 1, 1970);
     $isFirstDate = true;
@@ -196,18 +205,21 @@ if ($permission['viewlog']) {
         }
     }
 ?>
-                </select>
-                </div>
-            </div>
+                        </select>
+                        </div>
+                    </div>
 
-            <div class="form-actions">
-                <button class="btn btn-primary" type="submit" name="statdelete">
-                    <?php print $PMF_LANG['ad_stat_delete']; ?>
-                </button>
-            </div>
-        </fieldset>
-        </form>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit" name="statdelete">
+                            <?php print $PMF_LANG['ad_stat_delete']; ?>
+                        </button>
+                    </div>
+                </fieldset>
+                </form>
 <?php
 } else {
     print $PMF_LANG["err_NotAuth"];
 }
+?>
+            </div>
+        </div>

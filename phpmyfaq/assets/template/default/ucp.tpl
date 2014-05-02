@@ -9,6 +9,7 @@
 
     <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
     <input type="hidden" name="userid" value="{userid}" />
+    <input type="hidden" name="csrf" value="{csrf}" />
 
         <div class="form-group">
             <label class="col-sm-4 control-label" for="name">{msgRealName}:</label>

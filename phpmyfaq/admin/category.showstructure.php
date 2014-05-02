@@ -27,13 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-?>
-        <header>
-            <h2><i class="icon-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
-        </header>
-<?php
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
-if ($permission['editcateg']) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

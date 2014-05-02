@@ -27,13 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 printf(
-    '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
+    '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
     $PMF_LANG['ad_comment_administration']
 );
 
 echo '<div id="returnMessage"></div>';
 
-if ($permission['delcomment']) {
+if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
 
     $comment  = new PMF_Comment($faqConfig);
     $category = new PMF_Category($faqConfig, [], false);
@@ -164,7 +164,7 @@ if ($permission['delcomment']) {
                             html('<p class="alert alert-success"><?php print $PMF_LANG['ad_entry_commentdelsuc']; ?></p>');
                     } else {
                         $('#returnMessage').
-                            html('<p class="alert alert-error"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
+                            html('<p class="alert alert-danger"><?php print $PMF_LANG["ad_entry_commentdelfail"] ?></p>');
                     }
                 }
             });

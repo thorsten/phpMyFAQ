@@ -27,11 +27,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 printf(
-    '<header><h2><i class="icon-pencil"></i> %s</h2></header>',
+    '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
     $PMF_LANG['ad_entry_aor']
 );
 
-if ($permission['delattachment']) {
+if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
 
     $recordId   = PMF_Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
@@ -42,7 +42,7 @@ if ($permission['delattachment']) {
     if ($att && $att->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
     } else {
-        printf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_att_delfail']);
+        printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_att_delfail']);
     }
     printf('<p><a href="?action=editentry&amp;id=%d&amp;lang=%s">%s</a></p>',
         $recordId, $recordLang, $PMF_LANG['ad_entry_back']);

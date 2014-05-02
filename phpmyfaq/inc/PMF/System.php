@@ -53,7 +53,7 @@ class PMF_System
     /**
      * API version
      */
-    const VERSION_API = 1;
+    const VERSION_API = 2;
 
     /**
      * Minimum required PHP version
@@ -86,11 +86,13 @@ class PMF_System
      * @var  array
      */
     private $_supportedDatabases = array(
-        'mysqli'  => 'MySQL, MariaDB',
-        'pgsql'   => 'PostgreSQL',
-        'sqlite'  => 'SQLite (deprecated)',
-        'sqlite3' => 'SQLite 3 (experimental)',
-        'sqlsrv'  => 'MS SQL Server Driver for PHP'
+        'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
+        'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x (PDO_MYSQL, experimental)'),
+        'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
+        'sqlite'    => array(self::VERSION_MINIMUM_PHP, 'SQLite (deprecated)'),
+        'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3 (experimental)'),
+        'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
+        'sqlsrv'    => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP')
     );
 
     /**
@@ -206,6 +208,30 @@ class PMF_System
             }
         }
         return $retVal;
+    }
+
+    /**
+     * Checks if the system URI is running with http or https
+     *
+     * @param PMF_Configuration $faqConfig
+     *
+     * @return mixed
+     */
+    public function getSystemUri(PMF_Configuration $faqConfig)
+    {
+        $mainUrl = $faqConfig->get('main.referenceURL');
+
+        if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
+            if (false === strpos($mainUrl, 'https')) {
+                $mainUrl = str_replace('http://', 'https://', $mainUrl);
+            }
+        }
+
+        if ('/' !== substr($mainUrl, -1)) {
+            $mainUrl .= '/';
+        }
+
+        return $mainUrl;
     }
 
     /**
@@ -410,7 +436,7 @@ class PMF_System
             );
         }
         printf(
-            '</div></div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
+            '</div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
             COPYRIGHT
         );
         exit(-1);

@@ -109,7 +109,8 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
             $this->getJoinedTable(),
             $this->getJoinedColumns(),
             $this->getMatchingColumns(),
-            $searchTerm);
+            $searchTerm
+        );
 
         $this->resultSet = $this->_config->getDb()->query($query);
     }

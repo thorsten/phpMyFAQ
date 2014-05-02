@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['reports']) {
+if ($user->perm->checkRight($user->getUserId(), 'reports')) {
     
     $useCategory     = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
     $useSubcategory  = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);

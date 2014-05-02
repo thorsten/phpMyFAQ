@@ -1,5 +1,7 @@
 /**
- * phpMyFAQ 2.9 default layout
+ * phpMyFAQ 2.9 default layout for admin
+ *
+ * Based on SB Admin v2 from http://startbootstrap.com/sb-admin-v2
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -8,82 +10,156 @@
  * @category  phpMyFAQ
  * @package   Layout
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2013 phpMyFAQ Team
+ * @copyright 2010-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-17
  */
 
 //
-// Global values from phpMyFAQ frontend
-// ------------------------------------
-@import "../../../assets/template/default/less/style.less";
+// Bootstrap
+//
+@import "../../../../components/bootstrap/less/bootstrap";
 
 //
-// Global admin styles
+// Font Awesome
 //
-header {
-  h2 {
-    #gradient > .vertical(#6C737E, #3C4049);
-    font-size: 18px;
-    color: white;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
-    margin-bottom: 1.25em;
-    padding: 5px 10px;
-  }
-  h3 {
-    #gradient > .vertical(#FAFAFA, #E9E9E9);
-    border: 1px solid #D5D5D5;
-    font-size: 15px;
-    padding: 2px 10px;
+@import "../../../../components/font-awesome/less/font-awesome";
+
+//
+// Webfonts
+//
+@import url("//fonts.googleapis.com/css?family=Lato:400,700,400italic");
+
+
+//
+// Colors
+//
+@import "colors";
+
+//
+// Wrapper
+//
+#wrapper {
+    width: 100%;
+}
+
+#page-wrapper {
+  padding: 0 15px;
+  min-height: 568px;
+  background-color: white;
+}
+
+@media(min-width:768px) {
+  #page-wrapper {
+    position: inherit;
+    margin: 0 0 0 250px;
+    padding: 0 30px;
+    min-height: 568px;
+    border-left: 1px solid #e7e7e7;
   }
 }
 
-section {
-  margin-bottom: 1.5em;
+//
+// Top navigation bar
+//
+.navbar-nav.navbar-right:last-child {
+  margin-right: 15px;
 }
 
-.userpanel {
-  margin: 10px 5px;
-  img {
-    border: 2px solid @gray-darker;
-    margin-right: 5px;
-    float: left;
-  }
-  small {
-    color: @gray-light;
-  }
-}
-
-// Dashboard
-.dashboard-stat {
-  background: white;
-  border: 1px solid #D5D5D5;
-  height: 70px;
-  padding: 15px;
-  font-style: italic;
-  text-align: center;
-  span {
-    font-size: 18px;
-    font-weight: 600;
-    font-style: normal;
-    display: block;
-    margin-bottom: 0.4em;
-    a {
-      color: @gray;
+//
+// Main navigation
+//
+.navbar-static-side {
+  height: 100%;
+  ul {
+    li {
+      color: @gray-lighter;
+      border-bottom: 1px solid #e7e7e7;
+      a {
+        color: @navbar-default-link-color;
+      }
     }
   }
 }
 
-// Configuration
-.form-horizontal {
-  .admin-config-label {
-    float: left;
-    width: 240px;
-    padding-top: 5px;
-    text-align: right;
+.sidebar-userinfo, .sidebar-adminlog, .sidebar-sessioninfo {
+  padding: 15px;
+  img {
+    padding: 10px 10px 0 0;
   }
-  .admin-config-control {
-    margin-left: 260px;
+}
+
+.sidebar-userinfo {
+  padding-top: 0;
+}
+
+.arrow {
+  float: right;
+}
+
+.fa.arrow:before {
+  content: "\f104";
+}
+
+.active > a > .fa.arrow:before {
+  content: "\f107";
+}
+
+.nav-second-level {
+  li {
+    border-bottom: none !important;
+    &.active {
+      background-color: @gray-darker;
+      &:after {
+        content:'';
+        display: block;
+        position: absolute;
+        top: 5px;
+        right: -1px;
+        width: 0;
+        height: 0;
+        border-color: transparent white transparent transparent;
+        border-style: solid;
+        border-width: 15px;
+      }
+    }
+    a {
+      padding-left: 37px;
+      color: @navbar-default-link-color;
+    }
   }
+}
+
+@media(min-width:768px) {
+  .navbar-static-side {
+    background-color: @navbar-default-bg;
+    z-index: 1;
+    position: absolute;
+    width: 250px;
+  }
+}
+
+//
+// Footer
+//
+footer {
+  padding: 15px 30px 0 0;
+  a {
+    color: @text-color;
+    text-decoration: underline;
+  }
+}
+
+//
+// Pages
+//
+
+// Login Page
+.login-panel {
+  margin-top: 25%;
+}
+
+#answer {
+  height: 250px;
 }

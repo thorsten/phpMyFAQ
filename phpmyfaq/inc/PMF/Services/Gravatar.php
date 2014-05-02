@@ -17,6 +17,10 @@
  * @since     2013-01-14
  */
 
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
 /**
  * PMF_Services_Gravatar
  *

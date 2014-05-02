@@ -57,7 +57,7 @@ try {
 // Define the header of the page
 $newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
 if ($faqConfig->get('main.enableRssFeeds')) {
-    $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><img id="newsRSS" src="assets/img/feed.png" width="16" height="16" alt="RSS" /></a>';
+    $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
 } else {
     $newsFeed = '';
 }
@@ -84,7 +84,7 @@ if (strlen($news['link']) > 0) {
 
 // Show link to edit the news?
 $editThisEntry = '';
-if (isset($permission['editnews'])) {
+if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
                         '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
                         PMF_Link::getSystemRelativeUri('index.php'),
@@ -96,7 +96,8 @@ if (isset($permission['editnews'])) {
 $expired = (date('YmdHis') > $news['dateEnd']);
 
 // Does the user have the right to add a comment?
-if ((!$news['active']) || (!$news['allowComments']) || $expired) {
+if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
+    (!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(

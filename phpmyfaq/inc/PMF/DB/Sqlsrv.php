@@ -1,7 +1,7 @@
 <?php
 /**
  * The PMF_DB_Sqlsrv class provides methods and functions for SQL Server Driver
- * for PHP from Microsoft.
+ * for PHP from Microsoft for Microsoft SQL Server 2012 or later
  *
  * PHP Version 5.4
  *
@@ -89,18 +89,6 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     }
 
     /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database)
-    {
-        return true;
-    }
-
-    /**
      * Sets the connection options
      *
      * @param  string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
@@ -117,25 +105,35 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
            'Database'     => $database,
            'CharacterSet' => 'UTF-8');
     }
-    
+
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param  string $query Query
-     * @return mixed
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
         $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
+        }
+
         $result  = sqlsrv_query($this->conn, $query, [], $options);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
-        return $result;
 
+        return $result;
     }
 
     /**

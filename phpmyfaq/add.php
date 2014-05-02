@@ -26,6 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+// Check user permissions
+if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests'))) {
+    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
+}
+
 $captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId($sids);
 

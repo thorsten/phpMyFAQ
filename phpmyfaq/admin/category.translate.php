@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission["editcateg"]) {
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -55,6 +55,7 @@ if ($permission["editcateg"]) {
         );
 
     unset($category, $id, $user_permission, $group_permission, $selectedLanguage);
+
 } else {
     require 'noperm.php';
 }

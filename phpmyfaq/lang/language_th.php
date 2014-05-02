@@ -10,7 +10,6 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'th';
 $PMF_LANG['language'] = 'thai';
@@ -142,7 +141,7 @@ $PMF_LANG['ad_menu_startpage'] = 'หน้าหลัก';
 $PMF_LANG['ad_msg_identify'] = 'โปรดยืนยันตัวคุณ';
 $PMF_LANG['ad_msg_passmatch'] = 'รหัสผ่านทั้งสอง<strong>ต้องตรงกัน</strong>!';
 $PMF_LANG['ad_msg_savedsuc_1'] = 'ข้อมูลของ';
-$PMF_LANG['ad_msg_savedsuc_2'] = 'บันทึกไว้เรียร้อยแล้ว';
+$PMF_LANG['ad_msg_savedsuc_2'] = 'บันทึกไว้เรียบร้อยแล้ว';
 $PMF_LANG['ad_msg_mysqlerr'] = 'เนื่องจาก <strong>ระบบฐานข้อมูลมีปัญหา</strong>, ข้อมูลส่วนตัวไม่สามารถบันทึกได้';
 $PMF_LANG['ad_msg_noauth'] = 'คุณไม่ได้รับอนุญาตให้ใช้งาน';
 $PMF_LANG['ad_gen_page'] = 'หน้า';
@@ -585,7 +584,7 @@ $PMF_LANG['ad_export_gen_docbook'] = 'สร้างไฟล์ Docbook';
 $PMF_LANG['ad_news_data'] = 'สร้างข้อมูลประกาศข่าว';
 $PMF_LANG['ad_news_author_name'] = 'ชื่อผู้เขียน:';
 $PMF_LANG['ad_news_author_email'] = 'อีเมล์ผู้เขียน:';
-$PMF_LANG['ad_news_set_active'] = 'เปิดใช้งาน:';
+$PMF_LANG['ad_news_set_active'] = 'เปิดใช้งาน';
 $PMF_LANG['ad_news_allowComments'] = 'เปิดให้สามารถส่งคำแนะนำได้:';
 $PMF_LANG['ad_news_expiration_window'] = 'กำหนดระยะเวลาให้ยกเลิกประกาศข่าวเอง (ทางเลือกเพิ่มเติม)';
 $PMF_LANG['ad_news_from'] = 'จาก:';

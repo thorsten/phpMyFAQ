@@ -26,10 +26,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+?>
+        <header class="row">
+            <div class="col-lg-12">
+                <h2 class="page-header"><i class="fa fa-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
+            </div>
+        </header>
 
-if ($permission['reports']) {
 
-    printf('<header><h2><i class="icon-tasks"></i> %s</h2></header>', $PMF_LANG['ad_menu_reports']);
+        <div class="row">
+            <div class="col-lg-12">
+<?php
+if ($user->perm->checkRight($user->getUserId(), 'reports')) {
 
     $useCategory     = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
     $useSubcategory  = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
@@ -44,9 +52,9 @@ if ($permission['reports']) {
     $useUrl          = PMF_Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
     $useVisits       = PMF_Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
 ?>
-    <table class="table table-striped">
-        <thead>
-            <tr>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
 <?php
     ($useCategory)     ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_category']) : '';
     ($useSubcategory)  ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sub_category']) : '';
@@ -61,9 +69,9 @@ if ($permission['reports']) {
     ($useUrl)          ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_url']) : '';
     ($useVisits)       ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_visits']) : '';
 ?>
-            </tr>
-        </thead>
-        <tbody>
+                        </tr>
+                    </thead>
+                    <tbody>
 <?php
 
     $report = new PMF_Report($faqConfig);
@@ -122,28 +130,31 @@ if ($permission['reports']) {
         echo '</tr>';
     }
 ?>
-        </tbody>
-    </table>
-    <form action="?action=reportexport" method="post" accept-charset="utf-8">
-        <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory; ?>" /></td>
-        <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory; ?>" /></td>
-        <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation; ?>" /></td>
-        <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage; ?>" /></td>
-        <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId; ?>" /></td>
-        <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky; ?>" /></td>
-        <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle; ?>" /></td>
-        <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate; ?>" /></td>
-        <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner; ?>" /></td>
-        <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified; ?>">
-        <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl; ?>" /></td>
-        <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits; ?>" /></td>
-        <div class="form-actions">
-            <button class="btn btn-primary" type="submit">
-                <?php echo $PMF_LANG["ad_stat_report_make_csv"]; ?>
-            </button>
-        </div>
-    </form>
+                    </tbody>
+                </table>
+                <form action="?action=reportexport" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory; ?>"></td>
+                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory; ?>"></td>
+                    <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation; ?>"></td>
+                    <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage; ?>"></td>
+                    <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId; ?>"></td>
+                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky; ?>"></td>
+                    <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle; ?>"></td>
+                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate; ?>"></td>
+                    <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner; ?>"></td>
+                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified; ?>">
+                    <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl; ?>"></td>
+                    <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits; ?>"></td>
+                    <div class="form-group">
+                        <button class="btn btn-primary" type="submit">
+                            <?php echo $PMF_LANG["ad_stat_report_make_csv"]; ?>
+                        </button>
+                    </div>
+                </form>
 <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+?>
+            </div>
+        </div>

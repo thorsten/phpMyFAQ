@@ -81,33 +81,30 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     }
 
     /**
-     * Connects to a given database
+     * This function sends a query to the database.
      *
-     * @param string $database Database name
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return boolean
+     * @return  mixed $result
      */
-    public function selectDb($database)
-    {
-        return true;
-    }
-
-    /**
-     * Sends a query to the database.
-     *
-     * @param string $query SQL query
-     *
-     * @return mixed $result
-     */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+        }
+
         $result = sqlite_query($this->conn, $query);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
+
         return $result;
     }
 

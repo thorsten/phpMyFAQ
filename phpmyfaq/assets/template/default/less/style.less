@@ -22,26 +22,60 @@
 //
 // Global variables
 //
-@import "variables.less";
+@import "variables";
+
+//
+// Font Awesome
+//
+@import "../../../../../components/font-awesome/less/font-awesome";
 
 //
 // phpMyFAQ styles
 //
-
 @import url("//fonts.googleapis.com/css?family=Lato:400,700,900,400italic");
 
+//
+// Navigation
+//
+.dropdown-submenu {
+  position: relative;
+  > .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -6px;
+    margin-left:-1px;
+    border-radius: 0 6px 6px 6px;
+  }
+  &:hover > .dropdown-menu {
+    display:block;
+  }
+  > a:after {
+    display: block;
+    content: " ";
+    float: right;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+    border-width: 5px 0 5px 5px;
+    border-left-color: #cccccc;
+    margin-top: 5px;
+    margin-right: -10px;
+  }
+  &:hover > a:after {
+    border-left-color: #ffffff;
+  }
+  .pull-left {
+    float:none;
+  }
+  .pull-left > .dropdown-menu {
+    left: -100%;
+    margin-left: 10px;
+    border-radius: 6px 0 6px 6px;
+  }
+}
+
 #content {
-
-  //
-  // Base definitions
-  //
-  .breadcrumb {
-    #gradient > .vertical(#FAFAFA, #E9E9E9);
-  }
-
-  .jumbotron {
-    text-align: center;
-  }
 
   //
   // Header
@@ -220,6 +254,7 @@ footer {
   ul.footer-menu {
     list-style: none outside none;
     li {
+      color: @gray-light;
       float: left;
       list-style: none outside none;
       margin-right: 22px;

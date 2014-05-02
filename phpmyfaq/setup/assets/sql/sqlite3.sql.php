@@ -341,6 +341,7 @@ last_login TIMESTAMP(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since TIMESTAMP(14) NULL,
 remember_me VARCHAR(150) NULL,
+success INT(1) NULL DEFAULT 1,
 PRIMARY KEY(user_id)
 )";
 

@@ -50,8 +50,9 @@ $availableConfigModes = array(
 );
 
 /**
- * @param  $key
- * @param  $type
+ * @param mixed $key
+ * @param string $type
+ *
  * @return void
  */
 function renderInputForm($key, $type)
@@ -61,9 +62,11 @@ function renderInputForm($key, $type)
     switch ($type) {
 
         case 'area':
-            printf('<textarea name="edit[%s]" cols="60" rows="6" class="input-xxlarge">%s</textarea>',
-                    $key,
-                    str_replace('<', '&lt;', str_replace('>', '&gt;', $faqConfig->get($key))));
+            printf(
+                '<textarea name="edit[%s]" rows="4" class="form-control">%s</textarea>',
+                $key,
+                str_replace('<', '&lt;', str_replace('>', '&gt;', $faqConfig->get($key)))
+            );
             printf("</div>\n");
             break;
 
@@ -78,8 +81,7 @@ function renderInputForm($key, $type)
                 $value = str_replace('"', '&quot;', $faqConfig->get($key));
             }
             printf(
-                '<input class="%s" type="%s" name="edit[%s]" size="75" value="%s" />',
-                is_numeric($value) ? 'input-small' : 'input-xxlarge',
+                '<input class="form-control" type="%s" name="edit[%s]" value="%s" step="1" min="0">',
                 is_numeric($value) ? 'number' : 'text',
                 $key,
                 $value
@@ -88,7 +90,7 @@ function renderInputForm($key, $type)
             break;
 
         case 'select':
-            printf('<select name="edit[%s]" size="1" class="input-xlarge">', $key);
+            printf('<select name="edit[%s]" size="1" class="form-control">', $key);
             
             switch ($key) {
                 
@@ -118,10 +120,10 @@ function renderInputForm($key, $type)
                     
                 case 'records.sortby':
                     printf('<option value="DESC"%s>%s</option>',
-                        ('DESC' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('DESC' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['ad_conf_desc']);
                     printf('<option value="ASC"%s>%s</option>',
-                        ('ASC' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('ASC' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['ad_conf_asc']);
                     break;
                     
@@ -135,7 +137,7 @@ function renderInputForm($key, $type)
 
                     foreach ($templates as $template => $selected) {
                         printf ("<option%s>%s</option>",
-                            ($selected === true ? ' selected="selected"' : ''),
+                            ($selected === true ? ' selected' : ''),
                             $template
                         );
                     }
@@ -144,7 +146,7 @@ function renderInputForm($key, $type)
                 case "records.attachmentsStorageType":
                     foreach($PMF_LANG['att_storage_type'] as $i => $item) {
                         $selected = $faqConfig->get($key) == $i
-                                  ? ' selected="selected"'
+                                  ? ' selected'
                                   : '';
                         printf('<option value="%d"%s>%s</option>',
                                $i, $selected, $item);
@@ -153,31 +155,31 @@ function renderInputForm($key, $type)
                     
                 case "records.orderingPopularFaqs":
                     printf('<option value="visits"%s>%s</option>',
-                        ('visits' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('visits' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['records.orderingPopularFaqs.visits']);
                     printf('<option value="voting"%s>%s</option>',
-                        ('voting' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('voting' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['records.orderingPopularFaqs.voting']);
                     break;
 
                 case "search.relevance":
                     printf('<option value="thema,content,keywords"%s>%s</option>',
-                        ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.thema-content-keywords']);
                     printf('<option value="thema,keywords,content"%s>%s</option>',
-                        ('thema,keywords,content' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('thema,keywords,content' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.thema-keywords-content']);
                     printf('<option value="content,thema,keywords"%s>%s</option>',
-                        ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.content-thema-keywords']);
                     printf('<option value="content,keywords,thema"%s>%s</option>',
-                        ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.content-keywords-thema']);
                     printf('<option value="keywords,content,thema"%s>%s</option>',
-                        ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.keywords-content-thema']);
                     printf('<option value="keywords,thema,content"%s>%s</option>',
-                        ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected="selected"' : '',
+                        ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.keywords-thema-content']);
                     break;
             }
@@ -186,7 +188,10 @@ function renderInputForm($key, $type)
             break;
 
         case 'checkbox':
-            printf('<input type="checkbox" name="edit[%s]" value="true"', $key);
+            printf(
+                '<div class="checkbox"><input type="checkbox" name="edit[%s]" value="true"',
+                $key
+            );
             if ($faqConfig->get($key)) {
                 echo ' checked';
             }
@@ -199,12 +204,12 @@ function renderInputForm($key, $type)
             if ('security.ssoSupport' === $key && empty($_SERVER['REMOTE_USER'])) {
                 echo ' disabled';
             }
-            echo " /></div>\n";
+            echo ">\n</div></div>\n";
             break;
             
         case 'print':
             printf(
-                '<input type="text" readonly name="edit[%s]" class="input-mini uneditable-input" value="%s" /></div>',
+                '<input type="text" readonly name="edit[%s]" class="form-control" value="%s"></div>',
                 $key,
                 str_replace('"', '&quot;', $faqConfig->get($key)),
                 $faqConfig->get($key)
@@ -219,8 +224,8 @@ foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
 
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="control-group"><label class="control-label admin-config-label"></label>';
-            echo '<div class="controls admin-config-control">';
+            echo '<div class="form-group"><label class="control-label col-lg-3"></label>';
+            echo '<div class="col-lg-9">';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
 
@@ -230,7 +235,7 @@ foreach ($LANG_CONF as $key => $value) {
             }
 
             if (!isset($content)) {
-                echo '<a target="_blank" href="../services/twitter/redirect.php">';
+                echo '<br><a target="_blank" href="../services/twitter/redirect.php">';
                 echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
             } elseif (isset($content)) {
                 echo $content->screen_name . "<br />\n";
@@ -239,12 +244,11 @@ foreach ($LANG_CONF as $key => $value) {
                 echo "Status Count: " . $content->statuses_count . "<br />\n";
                 echo "Status: " . $content->status->text;
             }
-            echo '</div>';
-            echo '</div>';
+            echo '</div></div>';
         }
 ?>
-            <div class="control-group">
-                <label class="control-label admin-config-label">
+            <div class="form-group">
+                <label class="control-label col-lg-3">
 <?php
         switch ($key) {
 
@@ -266,7 +270,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
 ?>
                 </label>
-                <div class="controls admin-config-control">
+                <div class="col-lg-6">
                     <?php renderInputForm($key, $value[0]); ?>
                 </div>
 <?php

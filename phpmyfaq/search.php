@@ -165,7 +165,7 @@ try {
 }
 
 if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm && 
-    0 < $faqSearchResult->getNumberOfResults()) {
+    0 < $faqSearchResult->getNumberOfResults() && $faqConfig->get('search.searchForSolutionId')) {
 
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();
@@ -209,7 +209,7 @@ $options = array(
     'total'           => $faqSearchResult->getNumberOfResults(),
     'perPage'         => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName'   => 'seite',
-    'layoutTpl'       => '<div class="pagination text-center"><ul>{LAYOUT_CONTENT}</ul></div>'
+    'layoutTpl'       => '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>'
 );
 
 $faqPagination  = new PMF_Pagination($faqConfig, $options);

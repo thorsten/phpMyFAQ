@@ -63,7 +63,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
 
-    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
+    <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
     <script src="../assets/js/libs/modernizr.min.js"></script>
     <script src="../assets/js/libs/jquery.min.js"></script>
@@ -81,33 +81,36 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 </div>
 <![endif]-->
 
-<div class="navbar navbar-fixed-top">
-    <div class="navbar-inner">
-        <div class="container">
-            <nav class="nav-collapse">
-                <ul class="nav">
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                    <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
-                    <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                    <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="../">Back to your FAQ</a></li>
-                </ul>
-            </nav>
-        </div>
-    </div>
+<div class="navbar navbar-default navbar-static-top">
+    <nav class="container">
+        <ul class="nav navbar-nav">
+            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+            <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+            <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+            <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+            <li class="divider-vertical"></li>
+            <li><a href="../">Back to your FAQ</a></li>
+        </ul>
+    </nav>
 </div>
 
-<section id="content" class="phpmyfaq-setup">
+<section id="content">
     <div class="container">
-        <div class="row" style="padding-left: 20px;">
-            <div class="hero-unit hello-phpmyfaq" style="text-align: center; height: 55px;">
+        <div class="row">
+            <div class="jumbotron text-center">
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
+                <?php
+                $version = $faqConfig->get('main.currentVersion');
+                if (version_compare($version, '2.8.0-alpha2', '>=')) {
+                    if (! $faqConfig->get('main.maintenanceMode')) {
+                        echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is ' .
+                             'not in maintenance mode, you should enable the maintenance mode in your administration ' .
+                             'backend before running the update!</p>';
+                    }
+                }
+                ?>
             </div>
         </div>
-        <div class="row" style="padding-left: 20px;">
-            <div class="span1">&nbsp;</div>
-            <div class="span10">
 <?php
 
 $installer = new PMF_Installer();
@@ -115,33 +118,40 @@ $installer->checkPreUpgrade();
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) {
-
-    $version = $faqConfig->get('main.currentVersion');
 ?>
         <form action="update.php?step=2" method="post">
-            <input name="version" type="hidden" value="<?php echo $version; ?>"/>
-            <fieldset>
-                <legend>
-                    <strong>
-                        phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 1 of 3)
-                    </strong>
-                </legend>
-
-                <p class="alert alert-info">
+        <input name="version" type="hidden" value="<?php echo $version; ?>">
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="active">
+                        <a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="update.php?step=2">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step1">
+            <div class="col-lg-12">
+                <p class="alert alert-info text-center">
                     <strong>
                         Please create a full backup of your database, your templates, attachments and uploaded images
                         before running this update.
                     </strong>
                 </p>
 
-<?php
-    if (version_compare($version, '2.8.0-alpha2', '>=')) {
-        if (! $faqConfig->get('main.maintenanceMode')) {
-            echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is not in ' .
-            'maintenance mode, you should enable the maintenance mode in your administration backend.</p>';
-        }
-    }
-?>
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
                     <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
@@ -163,30 +173,31 @@ if ($step === 1) {
                 // We only support updates from 2.6+
                 if (version_compare($version, '2.6.0', '>')) {
                     printf(
-                        '<p class="alert alert-success">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                 } else {
                     printf(
-                        '<p class="alert alert-error">Your current phpMyFAQ version: %s</p>',
+                        '<p class="alert alert-danger text-center">Your current phpMyFAQ version: %s</p>',
                         $version
                     );
                     echo '<p>Please update to the latest phpMyFAQ 2.8 version first.</p>';
                 }
                 if ('hash' !== PMF_ENCRYPTION_TYPE) {
                     printf(
-                        '<p class="alert alert-info">Your passwords are currently encoded with a %s() method.</p>',
+                        '<p class="alert alert-info text-center">Your passwords are currently encoded with a %s() method.</p>',
                         PMF_ENCRYPTION_TYPE
                     );
                 }
                 ?>
 
                 <p style="text-align: center">
-                    <button class="btn btn-primary btn-large" type="submit">
+                    <button class="btn btn-primary btn-lg" type="submit">
                         Go to step 2 of 3
                     </button>
                 </p>
-            </fieldset>
+            </div>
+        </div>
         </form>
 <?php
     PMF_System::renderFooter();
@@ -201,7 +212,7 @@ if ($step == 2) {
     // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
         if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
@@ -222,29 +233,76 @@ if ($step == 2) {
     if ($checkDatabaseSetupFile) {
 ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php echo $version; ?>" />
-        <fieldset>
-            <legend><strong>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update (Step 2 of 3)</strong></legend>
-            <p>A backup of your database configuration file has been made.</p>
-            <p>The configuration will be updated after the next step.</p>
-            <p style="text-align: center;">
-                <button class="btn btn-primary btn-large" type="submit">
-                    Go to step 3 of 3
-                </button>
-            </p>
-        </fieldset>
+        <input type="hidden" name="version" value="<?php echo $version; ?>">
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="update.php?step=3">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                   </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step2">
+            <div class="col-lg-12">
+                <p>A backup of your database configuration file has been made.</p>
+                <p>The configuration will be updated after the next step.</p>
+                <p style="text-align: center;">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        Go to step 3 of 3
+                    </button>
+                </p>
+            </div>
+        </div>
         </form>
 <?php
         PMF_System::renderFooter();
     } else {
-        echo '<p class="alert alert-error"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
+        echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
         PMF_System::renderFooter();
     }
 }
 
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
+?>
 
+        <div class="row form-group">
+            <div class="col-lg-12">
+                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                            <p class="list-group-item-text">Update information</p>
+                        </a>
+                    </li>
+                    <li class="disabled"><a href="#">
+                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                            <p class="list-group-item-text">File backups</p>
+                        </a>
+                    </li>
+                    <li class="active"><a href="#">
+                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                            <p class="list-group-item-text">Database updates</p>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row setup-content" id="step2">
+            <div class="col-lg-12">
+<?php
     $images = [];
 
     //
@@ -596,7 +654,7 @@ if ($step == 3) {
 
     // Perform the queries for updating/migrating the database
     if (isset($query)) {
-        echo '<div class="center">';
+        echo '<div class="text-center">';
         $count = 0;
         foreach ($query as $key => $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
@@ -606,11 +664,11 @@ if ($step == 3) {
             }
             if (!$result) {
                 echo "</div>";
-                echo '<p class="alert alert-error"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
                       'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.' .
                       '</p>';
                 printf(
-                    '<p class="alert alert-error"><strong>DB error:</strong> %s</p>',
+                    '<p class="alert alert-danger"><strong>DB error:</strong> %s</p>',
                     $faqConfig->getDb()->error()
                 );
                 printf(
@@ -700,11 +758,52 @@ if ($step == 3) {
         $faqConfig->delete('cache.varnishPort');
         $faqConfig->delete('cache.varnishSecret');
         $faqConfig->delete('cache.varnishTimeout');
+
         $faqConfig->add('search.enableHighlighting', 'true');
         $faqConfig->add('main.enableRssFeeds', 'true');
         $faqConfig->add('records.allowCommentsForGuests', 'true');
         $faqConfig->add('records.allowQuestionsForGuests', 'true');
         $faqConfig->add('records.allowNewFaqsForGuests', 'true');
+        $faqConfig->add('records.hideEmptyCategories', 'false');
+        $faqConfig->add('search.searchForSolutionId', 'true');
+        $faqConfig->add('socialnetworks.disableAll', 'false');
+
+        if ('sqlite' === $DB['type']) {
+            $query[] = "BEGIN TRANSACTION";
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_temp (
+                                user_id INT(11) NOT NULL,
+                                login VARCHAR(25) NOT NULL,
+                                session_id VARCHAR(150) NULL,
+                                session_timestamp INT(11) NULL,
+                                ip VARCHAR(15) NULL,
+                                account_status VARCHAR(50) NULL,
+                                last_login TIMESTAMP(14) NULL,
+                                auth_source VARCHAR(100) NULL,
+                                member_since TIMESTAMP(14) NULL,
+                                PRIMARY KEY(user_id))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquser";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser";
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser (
+                                user_id INT(11) NOT NULL,
+                                login VARCHAR(25) NOT NULL,
+                                session_id VARCHAR(150) NULL,
+                                session_timestamp INT(11) NULL,
+                                ip VARCHAR(15) NULL,
+                                account_status VARCHAR(50) NULL,
+                                last_login TIMESTAMP(14) NULL,
+                                auth_source VARCHAR(100) NULL,
+                                member_since TIMESTAMP(14) NULL,
+                                remember_me VARCHAR(150) NULL,
+                                success INT(1) NULL DEFAULT 1,
+                                PRIMARY KEY(user_id))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser SELECT user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since, '' FROM " . PMF_Db::getTablePrefix() . "faquser_temp";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_temp";
+            $query[] = "COMMIT";
+        } elseif ('sqlite3' === $DB['type']) {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
+        } else {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD success INT(1) NULL DEFAULT 1";
+        }
     }
 
     // Always the last step: Update version number
@@ -733,7 +832,7 @@ if ($step == 3) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-error"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
@@ -758,13 +857,13 @@ if ($step == 3) {
     if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
     if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
     } else {
-        echo "<p class=\"alert alert-error\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
+        echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
     }
 
     PMF_System::renderFooter();

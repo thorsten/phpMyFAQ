@@ -9,7 +9,7 @@
   ],
   "dependencies": {
     "modernizr": "~2.7.1",
-    "bootstrap": "~3.0.3",
+    "bootstrap": "~3.1.0",
     "font-awesome": "~4.0.3",
     "sparkline": "~2.1.2",
     "tinymce": "~4.0.12",

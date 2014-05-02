@@ -136,6 +136,16 @@ abstract class PMF_Helper
     {
         $this->sessionId = $sid;
     }
+
+    /**
+     * Sets configuration
+     *
+     * @param PMF_Configuration $config
+     */
+    public function setConfiguration(PMF_Configuration $config)
+    {
+        $this->_config = $config;
+    }
     
     /**
      * Loads all translation strings

@@ -28,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
     <header>
-        <h2><i class="icon-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
+        <h2 class="page-header"><i class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
     </header>
 <?php
-if ($permission['editinstances']) {
+if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
     $instanceId = PMF_Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
@@ -71,7 +71,7 @@ if ($permission['editinstances']) {
             ?>
             </div>
         </div>
-        <div class="form-actions">
+        <div class="form-group">
             <button class="btn btn-primary" type="submit">
                 <?php echo $PMF_LANG["ad_instance_button"] ?>
             </button>

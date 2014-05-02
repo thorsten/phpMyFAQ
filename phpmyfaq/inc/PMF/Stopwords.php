@@ -109,15 +109,12 @@ class PMF_Stopwords
     public function add($word)
     {
         if (!$this->match($word)) {
-
-            $sql = "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')";
             $sql = sprintf(
-                $sql,
+                "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')",
                 $this->_config->getDb()->nextId($this->table_name, 'id'),
-                $this->_language->getLanguage(),
+                $this->_language,
                 $word
             );
-            
             $this->_config->getDb()->query($sql);
             
             return true;
@@ -129,8 +126,8 @@ class PMF_Stopwords
     /**
      * Update a word in the stop words dictionary
      *
-     * @param int $id
-     * @param strng $word
+     * @param int    $id
+     * @param string $word
      *
      * @return void
      */
@@ -141,7 +138,7 @@ class PMF_Stopwords
             $sql,
             $word,
             $id,
-            $this->_language->getLanguage()
+            $this->_language
         );
         
         $this->_config->getDb()->query($sql);
@@ -160,7 +157,7 @@ class PMF_Stopwords
         $sql = sprintf(
             "DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'",
             $id,
-            $this->_language->getLanguage()
+            $this->_language
         );
         
         $this->_config->getDb()->query($sql);
@@ -176,9 +173,12 @@ class PMF_Stopwords
      */
     public function match($word)
     {
-        $sql = "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'";
-        $sql = sprintf($sql, $word, $this->_language->getLanguage());
-        
+        $sql = sprintf(
+            "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
+            $word,
+            $this->_language
+        );
+
         $result = $this->_config->getDb()->query($sql);
         
         return $this->_config->getDb()->numRows($result) > 0;
@@ -241,8 +241,9 @@ class PMF_Stopwords
         return $retval;
     }
     /**
-     * This function checks the content against a dab word list
-     * if the banned word spam protection has been activated from the general PMF configuration.
+     * This function checks the content against a bad word list if the banned
+     * word spam protection has been activated from the general phpMyFAQ
+     * configuration.
      *
      * @param string $content
      *
@@ -251,18 +252,25 @@ class PMF_Stopwords
     public function checkBannedWord($content)
     {
         // Sanity checks
-        $content = trim($content);
+        $content = PMF_String::strtolower(trim($content));
         if (('' === $content) || (!$this->_config->get('spam.checkBannedWords'))) {
             return true;
         }
 
+        // Check if we check more than one word
+        $checkWords = explode(' ', $content);
+        if (1 === count($checkWords)) {
+            $checkWords = array($content);
+        }
+
         $bannedWords = $this->getBannedWords();
         // We just search a match of, at least, one banned word into $content
-        $content = PMF_String::strtolower($content);
         if (is_array($bannedWords)) {
             foreach ($bannedWords as $bannedWord) {
-                if (PMF_String::strpos($content, PMF_String::strtolower($bannedWord)) !== false) {
-                    return false;
+                foreach ($checkWords as $word) {
+                    if (PMF_String::strtolower($word) === PMF_String::strtolower($bannedWord)) {
+                        return false;
+                    }
                 }
             }
         }

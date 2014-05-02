@@ -1,17 +1,78 @@
-/*global module:false*/
+/**
+ * phpMyFAQ Gruntfile.js
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Development
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2013-2014 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2013-06-23
+ */
+
+/*global module:false, require:false */
+
 module.exports = function(grunt) {
+
+    'use strict';
+
+    // Load all tasks
+    require('load-grunt-tasks')(grunt);
 
     // Project configuration.
     grunt.initConfig({
         // Metadata.
         meta: {
-            version: '3.0'
+            version: '3.0.0-dev'
         },
-        banner: '/*! phpMyFAQ v3.0 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
-        bower: {
-            install: {
-                // just run 'grunt bower:install' and you'll see files from your Bower packages in lib directory
+        exec: {
+            tinymce_less: {
+                cwd: 'components/tinymce',
+                command: 'jake less',
+                stdout: true,
+                stderr: true
+            },
+            tinymce_bundle: {
+                cwd: 'components/tinymce',
+                command: 'jake bundle',
+                stdout: true,
+                stderr: true
+            }
+        },
+        copy: {
+            tinymce: {
+                files: [
+                    {
+                        expand: true,
+                        src: 'components/tinymce/js/tinymce/tinymce.full.min.js',
+                        flatten: true,
+                        dest: 'phpmyfaq/admin/assets/js/editor'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/plugins/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/js/editor/plugins/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/skins/',
+                        src: '**/*.!(less)',
+                        dest: 'phpmyfaq/admin/assets/js/editor/skins/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/tinymce/js/tinymce/themes/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/js/editor/themes/'
+                    }
+                ]
             }
         },
         concat: {
@@ -41,29 +102,12 @@ module.exports = function(grunt) {
             options: {
                 banner: '<%= banner %>'
             },
-            dist: {
-                src: '<%= concat.dist.dest %>',
-                dest: 'phpmyfaq/assets/js/phpmyfaq.min.js'
+            frontend: {
+                files: { 'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ] }
             }
         },
         jshint: {
-            options: {
-                curly: true,
-                eqeqeq: true,
-                immed: true,
-                latedef: true,
-                newcap: true,
-                noarg: true,
-                sub: true,
-                undef: true,
-                unused: true,
-                boss: true,
-                eqnull: true,
-                browser: true,
-                globals: {
-                    "jQuery": true
-                }
-            },
+            jshintrc: '.jshintrc',
             gruntfile: {
                 src: 'Gruntfile.js'
             },
@@ -75,10 +119,10 @@ module.exports = function(grunt) {
         less: {
             development: {
                 files: {
-                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/less/style.less",
-                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/less/style.rtl.less",
-                    "phpmyfaq/assets/template/default/css/style.css": "phpmyfaq/assets/template/default/less/style.less",
-                    "phpmyfaq/assets/template/default/css/style.rtl.css": "phpmyfaq/assets/template/default/less/style.rtl.less"
+                    'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
+                    //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
+                    'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
+                    //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
                 }
             }
         },
@@ -89,38 +133,36 @@ module.exports = function(grunt) {
                     keepSpecialComments: 0
                 },
                 files: {
-                    "phpmyfaq/admin/assets/css/style.css": "phpmyfaq/admin/assets/css/style.css",
-                    "phpmyfaq/admin/assets/css/style.rtl.css": "phpmyfaq/admin/assets/css/style.rtl.css",
-                    "phpmyfaq/assets/template/default/css/style.min.css": ["phpmyfaq/assets/template/default/css/style.css"],
-                    "phpmyfaq/assets/template/default/css/style.rtl.min.css": ["phpmyfaq/assets/template/default/css/style.rtl.css"]
+                    'phpmyfaq/admin/assets/css/style.min.css': 'phpmyfaq/admin/assets/css/style.css',
+                    //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/css/style.rtl.css',
+                    'phpmyfaq/assets/template/default/css/style.min.css': ['phpmyfaq/assets/template/default/css/style.css']
+                    //'phpmyfaq/assets/template/default/css/style.rtl.min.css': ['phpmyfaq/assets/template/default/css/style.rtl.css']
                 }
             }
         },
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
-                tasks: ['jshint:gruntfile']
+                tasks: ['jshint:gruntfile'],
+                options: {
+                    reload: true
+                }
             },
-            lib_test: {
-                files: '<%= jshint.lib_test.src %>',
-                tasks: ['jshint:lib_test', 'qunit']
+            css: {
+                files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/template/default/less/*.less'],
+                tasks: ['less', 'cssmin'],
+                options: {
+                    livereload: true,
+                }
             }
         }
     });
 
-    // These plugins provide necessary tasks.
-    grunt.loadNpmTasks('grunt-bower-task');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-jshint');
-    grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-contrib-csslint');
-
     // Default task.
     grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']);
 
+    // Watcher
+    grunt.event.on('watch', function(action, filepath, target) {
+        grunt.log.writeln(target + ': ' + filepath + ' has ' + action);
+    });
 };

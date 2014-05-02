@@ -12,6 +12,12 @@
             </article>
             <!-- /News -->
 
+            <script>
+                $(function(){
+                    $('abbr[rel="tooltip"]').tooltip();
+                });
+            </script>
+
             <ul id="tab" class="nav nav-tabs">
                 <li><a href="#authorInfo" data-toggle="tab">{msgAboutThisNews}</a></li>
             </ul>

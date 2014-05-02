@@ -1,7 +1,4 @@
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="{metaLanguage}" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="{metaLanguage}" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="{metaLanguage}" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
 <head>
@@ -11,6 +8,7 @@
     <base href="{baseHref}" />
 
     <meta name="description" content="{metaDescription}">
+    <meta name="keywords" content="{metaKeywords}">
     <meta name="author" content="{metaPublisher}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
@@ -22,19 +20,13 @@
     <meta property="og:description" content="{metaDescription}" />
     <meta property="og:image" content="" />
 
-    <link rel="stylesheet" href="assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
-    <link rel="shortcut icon" href="assets/template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="assets/template/{tplSetName}/apple-touch-icon.png">
+    <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
+    <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
+    <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
     <script src="assets/js/libs/modernizr.min.js"></script>
     <script src="assets/js/phpmyfaq.min.js"></script>
-
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
 </head>
 <body dir="{dir}">
 

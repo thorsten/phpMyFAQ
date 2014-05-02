@@ -49,9 +49,8 @@ if (!is_null($showCaptcha)) {
 
 $currentCategory = $cat;
 
-$recordId       = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$solutionId     = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
-$highlight      = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+$recordId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 
 // Get all data from the FAQ record
 if (0 == $solutionId) {
@@ -205,7 +204,7 @@ $relatedFaqs  = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 
 // Show link to edit the faq?
 $editThisEntry = '';
-if (isset($permission['editbt']) && $permission['editbt']) {
+if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
         '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
@@ -219,7 +218,8 @@ if (isset($permission['editbt']) && $permission['editbt']) {
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Does the user have the right to add a comment?
-if (($faq->faqRecord['active'] != 'yes') || ('n' == $faq->faqRecord['comment']) || $expired) {
+if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
+    ($faq->faqRecord['active'] === 'no') || ('n' == $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(
@@ -250,7 +250,7 @@ if (!empty($switchLanguage)) {
     );
 }
 
-if (isset($permission['addtranslation']) && $permission['addtranslation']) {
+if ($user->perm->checkRight($user->getUserId(), 'addtranslation')) {
     $tpl->parseBlock(
         'writeContent',
         'addTranslation',
@@ -298,6 +298,7 @@ $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 $tpl->parse(
     'writeContent',
     array(
+        'baseHref'                   => $faqSystem->getSystemUri($faqConfig),
         'writeRubrik'                => $categoryName,
         'solution_id'                => $faq->faqRecord['solution_id'],
         'solution_id_link'           => PMF_Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],

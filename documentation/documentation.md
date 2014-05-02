@@ -134,11 +134,12 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   SPL support
 *   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
-    *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.5.x)
-    *   [PostgreSQL](http://www.postgresql.org) 8.x (recommended: latest 8.x)
-    *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2005, 2008, 2012
+    *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.6.x)
+    *   [PostgreSQL](http://www.postgresql.org) 9.x (recommended: latest 9.x)
+    *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
     *   [SQLite](http://www.sqlite.org)
     *   [MariaDB](http://montyprogram.com/mariadb/) 5.x (experimental)
+    *   [Percona Server](http://www.percona.com) 5.x (experimental)
 *   correctly set: access permissions, owner, group
 
 You can only run phpMyFAQ successfully, when the PHP directives safe_mode, register_globals and magic_quotes_gpc is set to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central php.ini or the httpd.conf respectively.

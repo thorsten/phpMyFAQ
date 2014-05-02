@@ -38,7 +38,9 @@ $response = new JsonResponse;
 $responseWrapper = new ResponseWrapper($response);
 $responseWrapper->addCommonHeaders();
 
-if ($permission['adduser'] || $permission['edituser'] || $permission['deluser']) {
+if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
+    $user->perm->checkRight($user->getUserId(), 'edituser') ||
+    $user->perm->checkRight($user->getUserId(), 'deluser')) {
 
     $user = new PMF_User($faqConfig);
     
@@ -67,6 +69,12 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
         case 'get_user_rights':
             $user->getUserById($userId);
             $response->setData($user->perm->getUserRights($userId));
+            break;
+
+        case 'activate_user':
+            $user->getUserById($userId);
+            $user->setStatus('active');
+            echo json_encode($user->getStatus());
             break;
 
         case 'delete_user':

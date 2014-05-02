@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['editcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $templateVars = array(
         'PMF_LANG'        => $PMF_LANG,
         'categoryTree'    => '',
@@ -176,7 +176,7 @@ if ($permission['editcateg']) {
     }
 
     // Deletes an existing category
-    if ($permission['delcateg'] && $action == 'removecategory') {
+    if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
 
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
@@ -328,7 +328,7 @@ if ($permission['editcateg']) {
     $templateVars['categoryTree'] .= "</li>\n</ul>";
 
     $twig->loadTemplate('category/main.twig')
-        ->display($templateVars);
+         ->display($templateVars);
 
     unset($templateVars, $csrfToken, $open, $level, $category, $id, $cat, $lang, $lastCatId);
 } else {

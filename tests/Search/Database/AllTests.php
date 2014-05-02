@@ -17,8 +17,9 @@
  * @since     2010-01-03
  */
 
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
+// include PHPUnit
+require_once __DIR__ . '/../../../vendor/phpunit/phpunit/src/Framework/TestSuite.php';
+require_once __DIR__ . '/../../../vendor/phpunit/phpunit/src/TextUI/TestRunner.php';
 
 require_once 'PMF_Search_Database_MysqliTest.php';
 require_once 'PMF_Search_Database_PgsqlTest.php';

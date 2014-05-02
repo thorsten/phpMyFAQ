@@ -55,15 +55,14 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
      */
     public function search($searchTerm)
     {
-        if (is_numeric($searchTerm)) {
+        if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
             $enableRelevance = $this->_config->get('search.enableRelevance');
 
             $columns  =  $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-
-            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            $orderBy  = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
 
             $query = sprintf("
                 SELECT

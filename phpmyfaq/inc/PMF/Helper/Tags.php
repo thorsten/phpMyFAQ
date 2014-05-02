@@ -68,7 +68,7 @@ class PMF_Helper_Tags extends PMF_Helper
         $taggingIds = str_replace($tagId, '', $this->getTaggingIds());
         $taggingIds = str_replace(' ', '', $taggingIds);
         $taggingIds = str_replace(',,', ',', $taggingIds);
-        $taggingIds = trim($taggingIds, ',');
+        $taggingIds = trim(implode(',', $taggingIds), ',');
 
         return ($taggingIds != '') ?
             sprintf(
@@ -93,9 +93,10 @@ class PMF_Helper_Tags extends PMF_Helper
      */
     function renderRelatedTag($tagId, $tagName, $relevance)
     {
+
         return sprintf(
             '<a class="btn tag" href="?action=search&amp;tagging_id=%s">%s (%d)</a> ',
-            $this->getTaggingIds() . ',' . $tagId,
+            implode(',', $this->getTaggingIds()) . ',' . $tagId,
             $tagName,
             $relevance
         );

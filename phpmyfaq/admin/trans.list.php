@@ -47,6 +47,7 @@ $sortedLangList = array();
 foreach ($transDir as $file) {
     if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
         $lang = str_replace(array('language_', '.php'), '', $file);
+
         /**
          * English is our exemplary language which won't be changed
          */

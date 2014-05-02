@@ -28,9 +28,10 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'inc/Bootstrap.php';
 
-$action   = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$ajaxlang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-$code     = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$action       = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$ajaxlang     = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+$code         = PMF_Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$currentToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
 $Language     = new PMF_Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
@@ -55,7 +56,9 @@ PMF_String::init($languageCode);
 
 // Check captcha
 $captcha = new PMF_Captcha($faqConfig);
-$captcha->setSessionId($sids);
+$captcha->setSessionId(
+    PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
+);
 
 // Prepare response
 $response = new JsonResponse;
@@ -89,31 +92,14 @@ if (isset($message['error'])) {
     exit;
 }
 
-
-// get user rights
-$permission = [];
-if ($isLoggedIn) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
-
 // Save user generated content
 switch ($action) {
 
     // Comments
     case 'savecomment':
 
-        if (!$faqConfig->get('records.allowCommentsForGuests') && $permission['addcomment']) {
+        if (!$faqConfig->get('records.allowCommentsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addcomment')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -251,7 +237,8 @@ switch ($action) {
 
     case 'savefaq':
 
-        if (!$faqConfig->get('records.allowNewFaqsForGuests') && $permission['addfaq']) {
+        if (!$faqConfig->get('records.allowNewFaqsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addfaq')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -290,8 +277,8 @@ switch ($action) {
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question)) &&
-            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($answer)) &&
+            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
+            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
             PMF_Language::isASupportedLanguage($faqlanguage)))) {
 
@@ -425,7 +412,8 @@ switch ($action) {
 
     case 'savequestion':
 
-        if (!$faqConfig->get('records.allowQuestionsForGuests') && $permission['addquestion']) {
+        if (!$faqConfig->get('records.allowQuestionsForGuests') &&
+            $user->perm->checkRight($user->getUserId(), 'addquestion')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -766,6 +754,11 @@ switch ($action) {
 
     // Save user data from UCP
     case 'saveuserdata':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $currentToken) {
+            $message = array('error' => $PMF_LANG['ad_msg_noauth']);
+            break;
+        }
 
         $userId   = PMF_Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
         $name     = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);

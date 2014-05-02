@@ -363,7 +363,6 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             %s
-            GROUP BY fd.id
             %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -938,11 +937,16 @@ class PMF_Faq
             )
         );
 
-         foreach ($queries as $query) {
+        foreach ($queries as $query) {
             $this->_config->getDb()->query($query);
-         }
+        }
 
-         return true;
+        // Delete possible attachments
+        $attId      = PMF_Attachment_Factory::fetchByRecordId($this->_config, $recordId);
+        $attachment = PMF_Attachment_Factory::create($attId);
+        $attachment->delete();
+
+        return true;
     }
 
     /**
@@ -1597,13 +1601,15 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
-                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['url'][]    = $row['url'];
-                    $output['visits'][] = $this->plr->GetMsg('plmsgViews', $row['visits']);
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                    $output['preview'][] = $row['thema'];
+                    $output['url'][]     = $row['url'];
+                    $output['visits'][]  = $this->plr->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][]  = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['url'][]    = $row['url'];
-                    $output['voted'][]  = sprintf(
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                    $output['preview'][] = $row['thema'];
+                    $output['url'][]     = $row['url'];
+                    $output['voted'][]   = sprintf(
                         '%s %s 5 - %s',
                         round($row['avg'], 2),
                         $this->pmf_lang['msgVoteFrom'],
@@ -1631,9 +1637,10 @@ class PMF_Faq
         
         if (count ($result) > 0) {
             foreach ($result as $row) {
-                $output['url'][]   =  $row['url'];
-                $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['date'][]  = $date->format(PMF_Date::createIsoDate($row['datum']));
+                $output['url'][]     =  $row['url'];
+                $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
+                $output['preview'][] = $row['thema'];
+                $output['date'][]    = $date->format(PMF_Date::createIsoDate($row['datum']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -1876,52 +1883,50 @@ class PMF_Faq
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
+
+            GROUP BY
+                id
             ORDER BY
                 fv.visits DESC';
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->_config->getDb()->query($query, 0, $count);
         $topten = [];
         $data   = [];
 
-        $i = 1;
-        $oldId = 0;
-        while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
-            if ($oldId != $row->id) {
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
 
-                if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
-                        continue;
-                    }
+            if ($this->groupSupport) {
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    continue;
                 }
-
-                $data['visits']     = $row->visits;
-                $data['thema']      = $row->thema;
-                $data['date']       = $row->datum;
-                $data['last_visit'] = $row->last_visit;
-
-                $title = $row->thema;
-                $url   = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri(),
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang
-                );
-                $oLink = new PMF_Link($url, $this->_config);
-                $oLink->itemTitle = $row->thema;
-                $oLink->tooltip   = $title;
-                $data['url']      = $oLink->toString();
-
-                $topten[] = $data;
-                $i++;
+            } else {
+                if (!in_array($row->user_id, array(-1, $this->user))) {
+                    continue;
+                }
             }
-            $oldId = $row->id;
+
+            $data['visits']     = $row->visits;
+            $data['thema']      = $row->thema;
+            $data['date']       = $row->datum;
+            $data['last_visit'] = $row->last_visit;
+
+            $title = $row->thema;
+            $url   = sprintf(
+                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+            $oLink = new PMF_Link($url, $this->_config);
+            $oLink->itemTitle = $row->thema;
+            $oLink->tooltip   = $title;
+            $data['url']      = $oLink->toString();
+
+            $topten[] = $data;
         }
+
 
         return $topten;
     }
@@ -1982,51 +1987,47 @@ class PMF_Faq
         }
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
+            GROUP BY
+                id
             ORDER BY
                 fd.datum DESC';
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->_config->getDb()->query($query, 0, $count);
         $latest = [];
         $data = [];
 
-        $i = 0;
-        $oldId = 0;
-        while (($row = $this->_config->getDb()->fetchObject($result)) && $i < $count ) {
-            if ($oldId != $row->id) {
+        while (($row = $this->_config->getDb()->fetchObject($result))) {
 
-                if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                        continue;
-                    }
-                } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
-                        continue;
-                    }
+            if ($this->groupSupport) {
+                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    continue;
                 }
-
-                $data['datum']   = $row->datum;
-                $data['thema']   = $row->thema;
-                $data['content'] = $row->content;
-                $data['visits']  = $row->visits;
-
-                $title = $row->thema;
-                $url   = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri(),
-                    $sids,
-                    $row->category_id,
-                    $row->id,
-                    $row->lang
-                );
-                $oLink = new PMF_Link($url, $this->_config);
-                $oLink->itemTitle = $row->thema;
-                $oLink->tooltip   = $title;
-                $data['url']      = $oLink->toString();
-
-                $latest[] = $data;
-                $i++;
+            } else {
+                if (!in_array($row->user_id, array(-1, $this->user))) {
+                    continue;
+                }
             }
-            $oldId = $row->id;
+
+            $data['datum']   = $row->datum;
+            $data['thema']   = $row->thema;
+            $data['content'] = $row->content;
+            $data['visits']  = $row->visits;
+
+            $title = $row->thema;
+            $url   = sprintf(
+                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                PMF_Link::getSystemRelativeUri(),
+                $sids,
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+            $oLink = new PMF_Link($url, $this->_config);
+            $oLink->itemTitle = $row->thema;
+            $oLink->tooltip   = $title;
+            $data['url']      = $oLink->toString();
+
+            $latest[] = $data;
         }
 
         return $latest;
@@ -2720,6 +2721,8 @@ class PMF_Faq
                 fcr.category_id = '.$category.'
             AND
                 fd.lang = \''.$this->_config->getLanguage()->getLanguage().'\'
+            GROUP BY
+                fd.id
             ORDER BY
                 fd.id';
 
@@ -3001,8 +3004,9 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 $output[] = array(
-                    'title' => PMF_Utils::makeShorterText($row['thema'], 8),
-                    'url'   => $row['url']
+                    'title'   => PMF_Utils::makeShorterText($row['thema'], 8),
+                    'preview' => $row['thema'],
+                    'url'     => $row['url']
                 );
             }
         } else {
@@ -3012,7 +3016,8 @@ class PMF_Faq
             $html = '';
             foreach ($output as $entry) {
                 $html .= sprintf(
-                    '<li><a href="%s">%s</a></li>',
+                    '<li><a class="sticky-faqs" data-toggle="tooltip" data-placement="top" title="%s" href="%s">%s</a></li>',
+                    $entry['preview'],
                     $entry['url'],
                     $entry['title']
                 );
@@ -3069,9 +3074,9 @@ class PMF_Faq
                 );
             }
         } else {
-            if (-1 === $this->user) {
+            if (-1 !== $this->user) {
                 return sprintf(
-                    "AND fdu.user_id = %d",
+                    "AND ( fdu.user_id = %d OR fdu.user_id = -1 )",
                     $this->user
                 );
             } else {

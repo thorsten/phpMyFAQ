@@ -334,6 +334,7 @@ last_login VARCHAR(14) NULL,
 auth_source VARCHAR(100) NULL,
 member_since VARCHAR(14) NULL,
 remember_me VARCHAR(150) NULL,
+success INT(1) NULL DEFAULT 1,
 PRIMARY KEY (user_id),
 UNIQUE INDEX session(session_id),
 UNIQUE INDEX login(login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
@@ -343,7 +344,8 @@ $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id INT(11) NOT NULL,
 last_modified VARCHAR(14) NULL,
 display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+email VARCHAR(100) NULL,
+PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faquserlogin
 $query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (

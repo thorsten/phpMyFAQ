@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['addcateg']) {
+if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
     $templateVars = array(
@@ -52,13 +52,14 @@ if ($permission['addcateg']) {
         $templateVars['parentCategoryLanguage'] = $languageCodes[PMF_String::strtoupper($category->categoryName[$parentId]['lang'])];
     } elseif ($faqConfig->get('security.permLevel') != 'basic') {
         $templateVars['renderGroupPermissions'] = true;
-        $templateVars['groupOptions']           = $user->perm->getAllGroupsOptions();
+        $templateVars['groupOptions']           = $user->perm->getAllGroupsOptions([]);
     }
 
     $twig->loadTemplate('category/add.twig')
         ->display($templateVars);
 
     unset($templateVars, $parentId, $category, $userAllowed, $groupsAllowed);
+
 } else {
     require 'noperm.php';
 }

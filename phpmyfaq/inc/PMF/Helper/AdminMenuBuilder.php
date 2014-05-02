@@ -47,6 +47,13 @@ class AdminMenuBuilder
     private $twig;
 
     /**
+     * User object
+     *
+     * @var PMF_User
+     */
+    private $user = null;
+
+    /**
      * Array with permissions
      *
      * @var array
@@ -164,15 +171,25 @@ class AdminMenuBuilder
     }
     
     /**
-     * Setter for permission aray
+     * Setter for permission array
      *
-     * @param array $permission Array of permissions
+     * @param PMF_User $user User object
      *
      * @return void
      */
-    public function setPermission(Array $permission)
+    public function setUser(PMF_User $user)
     {
-        $this->permission = $permission;
+        // read all rights, set them FALSE
+        $allRights = $user->perm->getAllRightsData();
+        foreach ($allRights as $right) {
+            $this->permission[$right['name']] = false;
+        }
+        // check user rights, set them TRUE
+        $allUserRights = $user->perm->getAllUserRights($user->getUserId());
+        foreach ($allRights as $right) {
+            if (in_array($right['right_id'], $allUserRights))
+                $this->permission[$right['name']] = true;
+        }
     }
 
     /**

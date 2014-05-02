@@ -64,24 +64,6 @@ if ($user) {
     unset($user);
 }
 
-//
-// Get current user rights
-//
-$permission = [];
-if ($auth === true) {
-    // read all rights, set them FALSE
-    $allRights = $user->perm->getAllRightsData();
-    foreach ($allRights as $right) {
-        $permission[$right['name']] = false;
-    }
-    // check user rights, set them TRUE
-    $allUserRights = $user->perm->getAllUserRights($user->getUserId());
-    foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
-            $permission[$right['name']] = true;
-    }
-}
-
 if (is_null($currentAction) || !is_null($currentSave)) {
 ?>
 <!DOCTYPE html>
@@ -115,7 +97,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
 <?php
 }
-if (is_null($currentAction) && $auth && $permission['addattachment']) {
+if (is_null($currentAction) && $auth && $user->perm->checkRight($user->getUserId(), 'addattachment')) {
     $recordId   = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
@@ -144,11 +126,12 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     $auth = false;
 }
 
-if (!is_null($currentAction) && $auth && !$permission['addattachment']) {
+if (!is_null($currentAction) && $auth && !$user->perm->checkRight($user->getUserId(), 'addattachment')) {
     echo $PMF_LANG['err_NotAuth'];
 }
 
-if (!is_null($currentSave) && $currentSave == true && $auth && $permission['addattachment']) {
+if (!is_null($currentSave) && $currentSave == true && $auth &&
+    $user->perm->checkRight($user->getUserId(), 'addattachment')) {
     $recordId   = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 ?>
@@ -204,7 +187,8 @@ if (!is_null($currentSave) && $currentSave == true && $auth && $permission['adda
 
 
 }
-if (!is_null($currentSave) && $currentSave == true && $auth && !$permission['addattachment']) {
+if (!is_null($currentSave) && $currentSave == true && $auth &&
+    !$user->perm->checkRight($user->getUserId(), 'addattachment')) {
     echo $PMF_LANG["err_NotAuth"];
 }
 

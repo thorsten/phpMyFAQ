@@ -59,15 +59,18 @@
         "twitteroauth":            "master@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.0.*",
         "phpunit/dbunit": "1.3.*"
     },
     "config": {
         "bin-dir": "bin"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.*",
+        "phpunit/phpunit": "4.0.*",
         "phpunit/dbunit": "1.3.*"
+    },
+    "config": {
+        "bin-dir": "bin"
     },
     "minimum-stability": "stable",
     "scripts": {

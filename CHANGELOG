@@ -5,13 +5,11 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-dev - 2014-
+Version 3.0.0-dev - 2015-
 - added Symfony HTTP Foundation 2.4 (Alexander M. Turek, Thorsten)
 - added Twig 1.15 as new template engine (Alexander M. Turek, Thorsten)
-- added support for Bower (Thorsten)
-- dropped support for ext/mysql (Thorsten)
 
-Version 2.9.0-dev 2014-01-
+Version 2.9.0-dev 2014-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)
@@ -19,17 +17,39 @@ Version 2.9.0-dev 2014-01-
 - added permissions for guests (Thorsten)
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added frontend dependency management using Bower (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.3.7 (Thorsten)
+- added support for PDO_MYSQL (Thorsten)
+- added possibility to delete all logged search terms (Thorsten)
+- added experimental support for bcrypt (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
 - updated bundled jQuery to version 1.10.2 (Thorsten)
-- updated bundled Bootstrap to version 3.0.3 (Thorsten)
+- updated bundled Bootstrap to version 3.1.1 (Thorsten)
 - updated bundled Font Awesome to version 4.0.3 (Thorsten)
-- updated bundled Modernizr to version 2.7.1 (Thorsten)
-- updated bundled TinyMCE to version 4.0.12 (Thorsten)
+- updated bundled Modernizr to version 2.7.2 (Thorsten)
+- updated bundled TinyMCE to version 4.0.20 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.6 - 2014-
+Version 2.8.10 - 2014-05-
+-
+
+Version 2.8.9 - 2014-04-28
+- updated Thai translation
+- fixed some minor bugs (Thorsten)
+
+Version 2.8.8 - 2014-03-18
+- improved API security (Thorsten)
+- fixed search with Hebrew characters (Thorsten)
+- fixed PDF export with Czech and Slovak characters (Thorsten)
+- fixed a lot of bugs (Thorsten)
+
+Version 2.8.7 - 2014-02-05
+- fixed PHP 5.4 related issue introduced in 2.8.6 (Thorsten)
+
+Version 2.8.6 - 2014-02-04
+- fixed IE8/9 only XSS and CSRF vulnerabilities (JPCERT, Thorsten)
 - updated Hungarian translation
+- updated Spanish translation (Luis Carvalho)
 - updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.5 - 2013-12-31
 - fixed SSO logins with mod_auth_kerb (Stephane Lapie)

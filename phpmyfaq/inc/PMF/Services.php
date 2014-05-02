@@ -1,6 +1,6 @@
 <?php
 /**
- * Abstract class for various services, e.g. Twitter, Facebook, Digg, ...
+ * Abstract class for various services, e.g. Twitter, Facebook
  *
  * PHP Version 5.4
  *
@@ -82,32 +82,18 @@ class PMF_Services
      */
     public function getLink()
     {
-        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf(
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        return urlencode($url);
-    }
+        $link = new PMF_Link($url, $this->_config);
+        $link->itemTitle = $this->question;
 
-    /**
-     * Returns the current "Digg It!" URL
-     *
-     * @return string
-     */
-    public function getDiggLink()
-    {
-        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s&amp;title=%s',
-            $this->_config->get('main.referenceURL'),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage(),
-            $this->getQuestion()
-        );
-
-        return sprintf('http://digg.com/submit?phase=2&amp;url=%s', urlencode($url));
+        return urlencode($link->toString());
     }
 
     /**
@@ -117,14 +103,18 @@ class PMF_Services
      */
     public function getShareOnFacebookLink()
     {
-        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf(
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        return sprintf('https://www.facebook.com/sharer.php?u=%s', urlencode($url));
+        $link = new PMF_Link($url, $this->_config);
+        $link->itemTitle = $this->question;
+
+        return sprintf('https://www.facebook.com/sharer.php?u=%s', urlencode($link->toString()));
     }
 
     /**
@@ -134,16 +124,20 @@ class PMF_Services
      */
     public function getShareOnTwitterLink()
     {
-        $url = sprintf('%s?action=artikel&amp;cat=%s&amp;id=%d&amp;lang=%s',
+        $url = sprintf(
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
+        $link = new PMF_Link($url, $this->_config);
+        $link->itemTitle = $this->question;
+
         return sprintf(
-            'https://twitter.com/share?url=%s&amp;text=%s',
-            urlencode($url),
+            'https://twitter.com/share?url=%s&text=%s',
+            urlencode($link->toString()),
             $this->getQuestion() . urlencode(' | ' . $url)
         );
     }
@@ -155,7 +149,8 @@ class PMF_Services
      */
     public function getSuggestLink()
     {
-        return sprintf('%s?action=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+        return sprintf(
+            '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -170,7 +165,8 @@ class PMF_Services
      */
     public function getPdfLink()
     {
-        return sprintf('%spdf.php?cat=%d&amp;id=%d&amp;artlang=%s',
+        return sprintf(
+            '%spdf.php?cat=%d&id=%d&artlang=%s',
             PMF_Link::getSystemRelativeUri('index.php'),
             $this->getCategoryId(),
             $this->getFaqId(),

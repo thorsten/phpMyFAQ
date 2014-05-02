@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $response = new JsonResponse;
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-switch($ajax_action) {
+switch ($ajax_action) {
     
     case 'save_page_buffer':
         /**
@@ -98,13 +98,13 @@ switch($ajax_action) {
     
     case 'save_translated_lang':
         
-        if (!$permission["edittranslation"]) {
+        if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
             $response->setData($PMF_LANG['err_NotAuth']);
             break;
         }
         
-        $lang     = $_SESSION['trans']['rightVarsOnly']["PMF_LANG[metaLanguage]"];
-        $filename = PMF_ROOT_DIR . "/lang/language_$lang.php"; 
+        $lang     = strtolower($_SESSION['trans']['rightVarsOnly']["PMF_LANG[metaLanguage]"]);
+        $filename = PMF_ROOT_DIR . "/lang/language_" . $lang . ".php";
         
         if (!is_writable(PMF_ROOT_DIR . "/lang")) {
             $response->setData(0);
@@ -119,9 +119,7 @@ switch($ajax_action) {
         $newFileContents = '';
         $tmpLines        = [];
         
-        /**
-         * Read in the head of the file we're writing to
-         */
+        // Read in the head of the file we're writing to
         $fh = fopen($filename, 'r');
         do {
             $line = fgets($fh);
@@ -130,9 +128,7 @@ switch($ajax_action) {
         while ('*/' != substr(trim($line), -2));
         fclose($fh);
        
-        /**
-         * Construct lines with variable definitions
-         */
+        // Construct lines with variable definitions
         foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
             if (0 === strpos($key, 'PMF_LANG')) {
                 $val = "'$val'";
@@ -150,7 +146,7 @@ switch($ajax_action) {
     
     case 'remove_lang_file':
         
-        if (!$permission['deltranslation']) {
+        if (!$user->perm->checkRight($user->getUserId(), 'deltranslation')) {
             $response->setData($PMF_LANG['err_NotAuth']);
             break;
         }
@@ -177,7 +173,7 @@ switch($ajax_action) {
     
     case 'save_added_trans':
         
-        if (!$permission["addtranslation"]) {
+        if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
             $response->setData($PMF_LANG['err_NotAuth']);
             break;
         }        
@@ -214,7 +210,7 @@ switch($ajax_action) {
  *
  * @category  phpMyFAQ
  * @package   i18n
-%s * @copyright  2004-%d phpMyFAQ Team
+%s * @copyright  2001-%d phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since      %s

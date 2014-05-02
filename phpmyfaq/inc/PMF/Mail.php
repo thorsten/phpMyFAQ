@@ -442,7 +442,17 @@ class PMF_Mail
 
         // From
         foreach ($this->_from as $address => $name) {
-            $this->headers['From'] = (empty($name) ? '' : $name.' ').'<'.$address.'>';
+            $this->headers['From'] = (empty($name) ? '' : $name.' ') . '<' . $address . '>';
+        }
+
+        // CC
+        foreach ($this->_cc as $address => $name) {
+            $this->headers['CC'] = (empty($name) ? '' : $name.' ') . '<' . $address . '>';
+        }
+
+        // BCC
+        foreach ($this->_bcc as $address => $name) {
+            $this->headers['BCC'] = (empty($name) ? '' : $name.' ') . '<' . $address . '>';
         }
 
         // Message-Id
