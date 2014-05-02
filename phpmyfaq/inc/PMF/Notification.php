@@ -90,7 +90,7 @@ class PMF_Notification
         $this->mail->message = sprintf(
             $this->pmfStr['msgMessageQuestionAnswered'],
             $this->config->get('main.titleFAQ')
-        ) . $url;
+        ) . "\n\r" . $url;
         $this->mail->send();
     }
 }
