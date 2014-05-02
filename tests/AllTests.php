@@ -24,8 +24,8 @@ date_default_timezone_set('Europe/Berlin');
 error_reporting(E_ALL | E_STRICT);
 
 // include PHPUnit
-require_once 'PHPUnit/Framework/TestSuite.php';
-require_once 'PHPUnit/TextUI/TestRunner.php';
+require_once __DIR__ . '/../vendor/phpunit/phpunit/src/Framework/TestSuite.php';
+require_once __DIR__ . '/../vendor/phpunit/phpunit/src/TextUI/TestRunner.php';
 
 // include Testsuites
 require_once __DIR__ . '/Attachment/AllTests.php';

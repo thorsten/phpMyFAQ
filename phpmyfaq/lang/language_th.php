@@ -10,7 +10,6 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'th';
 $PMF_LANG['language'] = 'thai';
@@ -142,7 +141,7 @@ $PMF_LANG['ad_menu_startpage'] = 'หน้าหลัก';
 $PMF_LANG['ad_msg_identify'] = 'โปรดยืนยันตัวคุณ';
 $PMF_LANG['ad_msg_passmatch'] = 'รหัสผ่านทั้งสอง<strong>ต้องตรงกัน</strong>!';
 $PMF_LANG['ad_msg_savedsuc_1'] = 'ข้อมูลของ';
-$PMF_LANG['ad_msg_savedsuc_2'] = 'บันทึกไว้เรียร้อยแล้ว';
+$PMF_LANG['ad_msg_savedsuc_2'] = 'บันทึกไว้เรียบร้อยแล้ว';
 $PMF_LANG['ad_msg_mysqlerr'] = 'เนื่องจาก <strong>ระบบฐานข้อมูลมีปัญหา</strong>, ข้อมูลส่วนตัวไม่สามารถบันทึกได้';
 $PMF_LANG['ad_msg_noauth'] = 'คุณไม่ได้รับอนุญาตให้ใช้งาน';
 $PMF_LANG['ad_gen_page'] = 'หน้า';

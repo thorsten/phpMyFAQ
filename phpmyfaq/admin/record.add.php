@@ -163,7 +163,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 }
 
                 $url   = sprintf(
-                    '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?action=artikel&cat=%d&id=%d&artlang=%s',
                     $faqConfig->get('main.referenceURL'),
                     $categories['rubrik'][0],
                     $recordId,
@@ -191,10 +191,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                                $faqConfig->get('socialnetworks.twitterAccessTokenSecret'));
 
                 $link = PMF_Link::getSystemRelativeUri() .
-                        sprintf('?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        sprintf(
+                            '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                             $category,
                             $recordId,
-                            $recordLang);
+                            $recordLang
+                        );
                 $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
                 $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $question;

@@ -83,7 +83,7 @@ class PMF_Services
     public function getLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&amp;cat=%s&amp;id=%d&amp;artlang=%s',
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -104,7 +104,7 @@ class PMF_Services
     public function getShareOnFacebookLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&amp;cat=%s&amp;id=%d&amp;artlang=%s',
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -125,7 +125,7 @@ class PMF_Services
     public function getShareOnTwitterLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&amp;cat=%s&amp;id=%d&amp;artlang=%s',
+            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -136,7 +136,7 @@ class PMF_Services
         $link->itemTitle = $this->question;
 
         return sprintf(
-            'https://twitter.com/share?url=%s&amp;text=%s',
+            'https://twitter.com/share?url=%s&text=%s',
             urlencode($link->toString()),
             $this->getQuestion() . urlencode(' | ' . $url)
         );
@@ -150,7 +150,7 @@ class PMF_Services
     public function getSuggestLink()
     {
         return sprintf(
-            '%s?action=send2friend&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+            '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
             $this->_config->get('main.referenceURL'),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -166,7 +166,7 @@ class PMF_Services
     public function getPdfLink()
     {
         return sprintf(
-            '%spdf.php?cat=%d&amp;id=%d&amp;artlang=%s',
+            '%spdf.php?cat=%d&id=%d&artlang=%s',
             PMF_Link::getSystemRelativeUri('index.php'),
             $this->getCategoryId(),
             $this->getFaqId(),

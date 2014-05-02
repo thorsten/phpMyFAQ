@@ -24,7 +24,12 @@ Version 2.9.0-dev 2014-
 - updated bundled TinyMCE to version 4.0.20 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.9 - 2014-
+Version 2.8.10 - 2014-05-
+-
+
+Version 2.8.9 - 2014-04-28
+- updated Thai translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.8 - 2014-03-18
 - improved API security (Thorsten)

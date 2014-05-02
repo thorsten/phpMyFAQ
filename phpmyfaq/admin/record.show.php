@@ -280,8 +280,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     }
 
     if (count($faq->faqRecords) > 0) {
-        $old     = 0;
-        $all_ids = [];
+
+        $old    = 0;
+        $faqIds = [];
 
         $visits    = new PMF_Visits($faqConfig);
         $numVisits = [];
@@ -454,7 +455,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 <?php
             $old = $cid;
             
-            $all_ids[$cid][] = $record['id'];
+            $faqIds[$cid][] = $record['id'];
         }
 ?>
         </tbody>
@@ -478,7 +479,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         {
             var id_map = [];
 <?php 
-foreach ($all_ids as $categoryId => $recordIds) {
+foreach ($faqIds as $categoryId => $recordIds) {
+    if ('' === $categoryId) {
+        $categoryId = 0;
+    }
     echo "                id_map[" . $categoryId . "] = [" . implode(',', $recordIds) . "];\n";
 }
 ?>
