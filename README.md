@@ -37,8 +37,18 @@ unzip the package and open http://www.example.org/phpmyfaq/install/setup.php in 
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ npm install
+    $ grunt
 
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
+
+
+## Testing
+
+To run our unittest via PHPUnit v4, just execute this command on your CLI
+
+    $ bin/phpunit
+
+Please note that phpMyFAQ needs to be installed via Composer.
 
 
 ## Versioning
