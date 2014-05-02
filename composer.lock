@@ -14,7 +14,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-05-01 13:13:41"
+            "time": "2014-04-29 14:32:49"
         },
         {
             "name": "symfony/class-loader",
@@ -132,7 +132,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-04-24 16:30:18"
+            "time": "2014-04-29 20:58:11"
         },
         {
             "name": "twig/twig",
@@ -200,7 +200,7 @@
                 "reference": "master"
             },
             "type": "library",
-            "time": "2013-04-12 04:00:00"
+            "time": "2013-06-21 12:48:06"
         }
     ],
     "packages-dev": [
