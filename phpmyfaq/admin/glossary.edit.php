@@ -52,16 +52,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="definition">
-                            <?php echo $PMF_LANG['ad_glossary_definition']; ?>:
-                        </label>
-                        <div class="col-lg-4">
-                            <textarea  class="form-control" name="definition" id="definition" rows="3" required>
-<?php echo $glossaryItem['definition']; ?>
-                            </textarea>
-                        </div>
-                    </div>
+            <div class="control-group">
+                <label class="control-label" for="definition">
+                    <?php echo $PMF_LANG['ad_glossary_definition']; ?>:
+                </label>
+                <div class="controls">
+                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required><?php echo $glossaryItem['definition']; ?></textarea>
+                </div>
+            </div>
 
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
