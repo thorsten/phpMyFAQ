@@ -1,6 +1,6 @@
 <?php
 /**
- * Attachment handler class 
+ * Attachment handler class
  *
  * PHP Version 5.3
  *
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Factory
+ * PMF_Attachment_Factory
  *
  * @category  phpMyFAQ
  * @package   Attachment
@@ -40,14 +40,14 @@ class PMF_Attachment_Factory
      * @var string
      */
     private static $defaultKey = null;
-    
+
     /**
      * Storage type
      *
      * @var integer
      */
     private static $storageType = null;
-    
+
     /**
      * File encryption is enabled
      *
@@ -59,33 +59,35 @@ class PMF_Attachment_Factory
      * @var PMF_Configuration
      */
     private $config;
-    
+
     /**
      * Create an attachment exemplar
      *
-     * @param int    $id  ID
+     * @param int $id ID
      * @param string $key Key
+     *
+     * @throws PMF_Attachment_Exception
      *
      * @return PMF_Attachment_File|PMF_Attachment_DB
      */
     public static function create($id = null, $key = null)
-    {    
+    {
         $retval = null;
 
         switch (self::$storageType) {
             case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
                 $retval = new PMF_Attachment_File($id);
                 break;
-                
+
             case PMF_Attachment::STORAGE_TYPE_DB:
                 $retval = new PMF_Attachment_DB($id);
                 break;
-                
+
             default:
                 throw new PMF_Attachment_Exception('Unknown attachment storage type');
                 break;
         }
-        
+
         /**
          * If encryption isn't enabled, just ignoring all keys
          */
@@ -94,12 +96,12 @@ class PMF_Attachment_Factory
         } else {
             $key = null;
         }
-        
+
         $retval->setKey($key);
-        
+
         return $retval;
     }
-    
+
     /**
      * Fetch all record attachments
      *
@@ -111,20 +113,22 @@ class PMF_Attachment_Factory
     public static function fetchByRecordId(PMF_Configuration $config, $recordId)
     {
         $retval = array();
-        
-        $sql = sprintf("
-            SELECT
-                id
-            FROM 
-                %sfaqattachment
-            WHERE 
-                record_id = %d
-            AND
-                record_lang = '%s'",
+
+        $sql = sprintf(
+            "
+                        SELECT
+                            id
+                        FROM
+                            %sfaqattachment
+                        WHERE
+                            record_id = %d
+                        AND
+                            record_lang = '%s'",
             PMF_Db::getTablePrefix(),
             $recordId,
-            PMF_Language::$language);
-        
+            PMF_Language::$language
+        );
+
         $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
         if ($result) {
             foreach ($result as $item) {
@@ -132,15 +136,15 @@ class PMF_Attachment_Factory
             }
         }
         reset($retval);
-        
+
         return $retval;
     }
-    
+
     /**
      * Initalizing factory with global attachment settings
      *
-     * @param int     $storageType       Storage type   
-     * @param string  $defaultKey        Default key
+     * @param int $storageType Storage type
+     * @param string $defaultKey Default key
      * @param boolean $encryptionEnabled Enabled encryption?
      *
      * @return null
@@ -148,16 +152,15 @@ class PMF_Attachment_Factory
     public static function init($storageType, $defaultKey, $encryptionEnabled)
     {
         if (null === self::$storageType) {
-            self::$storageType = $storageType;    
+            self::$storageType = $storageType;
         }
-        
+
         if (null === self::$defaultKey) {
-            self::$defaultKey = $defaultKey;    
+            self::$defaultKey = $defaultKey;
         }
-        
+
         if (null === self::$encryptionEnabled) {
             self::$encryptionEnabled = $encryptionEnabled;
         }
     }
-
 }

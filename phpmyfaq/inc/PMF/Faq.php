@@ -937,11 +937,16 @@ class PMF_Faq
             )
         );
 
-         foreach ($queries as $query) {
+        foreach ($queries as $query) {
             $this->_config->getDb()->query($query);
-         }
+        }
 
-         return true;
+        // Delete possible attachments
+        $attId      = PMF_Attachment_Factory::fetchByRecordId($this->_config, $recordId);
+        $attachment = PMF_Attachment_Factory::create($attId);
+        $attachment->delete();
+
+        return true;
     }
 
     /**
