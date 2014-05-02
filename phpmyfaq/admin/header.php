@@ -59,7 +59,7 @@ if (isset($user) && $faqConfig->get('main.enableGravatarSupport')) {
 }
 
 $adminMenuBuilder = new AdminMenuBuilder($twig);
-$adminMenuBuilder->->setUser($user);
+$adminMenuBuilder->setUser($user);
 
 switch ($action) {
     case 'user':

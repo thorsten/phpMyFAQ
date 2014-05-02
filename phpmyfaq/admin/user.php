@@ -316,7 +316,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // show list of all users
-    if ($userAction == 'listallusers' && $permission$user->perm->checkRight($user->getUserId(), 'edituser')) {
+    if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $templateVars = array(
             'PMF_LANG'          => $PMF_LANG,
             'displayPagination' => false,

@@ -67,7 +67,8 @@ if (isset($auth) && in_array($action, $wysiwygActions) && $faqConfig->get('main.
 } else {
     $templateVars['wysiwygActive'] = false;
 
-$twig->loadTemplate('footer.twig')
-    ->display($templateVars);
+    $twig->loadTemplate('footer.twig')
+         ->display($templateVars);
 
-unset($templateVars, $wysiwygActions);
+    unset($templateVars, $wysiwygActions);
+}
