@@ -62,7 +62,7 @@ $query[] = "CREATE SEQUENCE ".$sqltblpre."faquser_user_id_seq START WITH 2";
 
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id SERIAL NOT NULL,
-login varchar(25) NOT NULL,
+login varchar(128) NOT NULL,
 session_id varchar(150) NULL,
 session_timestamp int4 NULL,
 ip varchar(15) NULL,
@@ -334,8 +334,8 @@ PRIMARY KEY (tagging_id, tagging_name)
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id SERIAL NOT NULL,
 last_modified varchar(14) NULL,
-display_name VARCHAR(50) NULL,
-email VARCHAR(100) NULL
+display_name VARCHAR(128) NULL,
+email VARCHAR(128) NULL
 )";
 
 //faquserlogin

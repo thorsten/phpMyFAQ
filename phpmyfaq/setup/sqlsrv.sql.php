@@ -334,7 +334,7 @@ PRIMARY KEY (tagging_id, tagging_name)
 //faquser
 $query[] = "CREATE TABLE ".$sqltblpre."faquser (
 user_id integer NOT NULL,
-login varchar(25) NOT NULL,
+login varchar(128) NOT NULL,
 session_id varchar(150) NULL,
 session_timestamp integer NULL,
 ip varchar(15) NULL,
@@ -350,8 +350,8 @@ PRIMARY KEY (user_id))";
 $query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
 user_id integer NOT NULL,
 last_modified varchar(14) NULL,
-display_name varchar(50) NULL,
-email varchar(100) NULL
+display_name varchar(128) NULL,
+email varchar(128) NULL
 )";
 
 //faquserlogin
