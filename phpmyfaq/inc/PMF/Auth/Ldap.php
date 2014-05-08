@@ -252,15 +252,46 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Does nothing. A function required to be a valid auth.
+     * Returns number of characters of name, 0 will be returned
      *
      * @param string $login        Loginname
      * @param array  $optionalData Optional data
-     * 
-     * @return integer
+     *
+     * @return string
      */
     public function checkLogin($login, Array $optionalData = null)
     {
-        return 1;
+        // Get active LDAP server for current user
+        if ($this->multipleServers) {
+            // Try all LDAP servers
+            foreach ($this->ldapServer as $key => $value) {
+
+                $this->ldap->connect(
+                    $this->ldapServer[$key]['ldap_server'],
+                    $this->ldapServer[$key]['ldap_port'],
+                    $this->ldapServer[$key]['ldap_base'],
+                    $this->ldapServer[$key]['ldap_user'],
+                    $this->ldapServer[$key]['ldap_password']
+                );
+                if ($this->ldap->error) {
+                    $this->errors[] = $this->ldap->error;
+                }
+
+                if (false !== $this->ldap->getDn($login)) {
+                    $this->activeServer = $key;
+                    break;
+                }
+            }
+        }
+
+        $this->ldap->connect(
+            $this->ldapServer[$this->activeServer]['ldap_server'],
+            $this->ldapServer[$this->activeServer]['ldap_port'],
+            $this->ldapServer[$this->activeServer]['ldap_base'],
+            $this->ldapServer[$this->activeServer]['ldap_user'],
+            $this->ldapServer[$this->activeServer]['ldap_password']
+        );
+
+        return strlen($this->ldap->getCompleteName($login));
     }
 }
