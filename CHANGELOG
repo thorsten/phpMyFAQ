@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.10 - 2014-05-
 - updated Brazilian Portuguese translation (Joao Tafarelo)
+- updated bundled TinyMCE to version 3.5.11 (Thorsten)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.9 - 2014-04-28
