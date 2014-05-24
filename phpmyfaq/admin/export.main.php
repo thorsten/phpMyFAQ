@@ -32,7 +32,7 @@ printf('<header><h2><i class="icon-book"></i> %s</h2></header>', $PMF_LANG['ad_m
 if ($permission['export'] && !PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
-        $category = new PMF_Category($faqConfig);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->buildTree();
