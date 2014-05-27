@@ -132,6 +132,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   JSON support
     *   Filter support
     *   SPL support
+    *   FileInfo support
 *   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
     *   [MySQL](http://www.mysql.com) 5.x with the MySQL extension (recommended: 5.5.x)
@@ -282,7 +283,7 @@ To set the default language in your browser you have to set a variable that gets
 
 * We recommend using a PHP accelerator or opcode cache like APC
 * Allocate at least 64MB of memory to each PHP process
-* Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL
+* Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo
 * Recommended configuration:
 
     	register_globals = off

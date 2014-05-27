@@ -70,7 +70,8 @@ class PMF_System
         'json',
         'xmlwriter',
         'filter',
-        'zip'
+        'zip',
+        'fileinfo'
     );
 
     /**

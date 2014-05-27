@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <style>
 body {
   font-family: Helvetica, arial, sans-serif;
@@ -472,6 +472,7 @@ pre {
 <li>JSON support</li>
 <li>Filter support</li>
 <li>SPL support</li>
+<li>FileInfo support</li>
 </ul>
 </li>
 <li><strong>Web server</strong> ( <a href="http://httpd.apache.org">Apache</a> 2.x or <a href="http://www.nginx.net/">nginx</a> 0.7+ or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 6.0+ or Zeus Webserver)</li>
@@ -644,7 +645,7 @@ Writing permission for your script is needed in this directory to be able to wri
 <ul>
 <li>We recommend using a PHP accelerator or opcode cache like APC</li>
 <li>Allocate at least 64MB of memory to each PHP process</li>
-<li>Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL</li>
+<li>Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo</li>
 <li><p>Recommended configuration:</p>
 
 <pre><code>  register_globals = off
@@ -838,6 +839,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li><strong>database.php</strong> and <strong>ldap.php</strong> (if you use LDAP) in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 
@@ -864,6 +866,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li><strong>database.php</strong> and <strong>ldap.php</strong> (if you use LDAP) in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 
@@ -888,6 +891,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li>all files in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>assets/template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 
