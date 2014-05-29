@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.10 - 2014-05-
+- dropped support for Internet Explorer 7 and 8 (Thorsten)
 - updated Brazilian Portuguese translation (Joao Tafarelo)
 - updated bundled TinyMCE to version 3.5.11 (Thorsten)
 - updated bundled TCPDF library to version 6.0.078 (Thorsten)
