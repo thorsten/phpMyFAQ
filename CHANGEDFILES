@@ -1,3 +1,25 @@
+CHANGED FILES FROM 2.8.9 -> 2.8.10
+
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/editor/*
+./admin/export.main.php
+./admin/record.add.php
+./assets/js/phpmyfaq.js
+./assets/js/phpmyfaq.min.js
+./assets/template/default/css/style.min.css
+./assets/template/default/css/style.rtl.min.css
+./inc/PMF/Attachment/Factory.php
+./inc/PMF/DB/Pgsql.php
+./inc/PMF/Export/Pdf/Wrapper.php
+./inc/PMF/Faq.php
+./inc/PMF/Notification.php
+./inc/PMF/System.php
+./inc/libs/tcpdf/*
+./lang/language_pt-br.php
+
+
+
 CHANGED FILES FROM 2.8.8 -> 2.8.9
 
 ./admin/dashboard.php
