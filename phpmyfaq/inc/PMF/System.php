@@ -43,7 +43,7 @@ class PMF_System
     /**
      * Patchlevel
      */
-    const VERSION_PATCHLEVEL = 10;
+    const VERSION_PATCHLEVEL = 11;
 
     /**
      * Pre-release version
@@ -157,7 +157,6 @@ class PMF_System
         $templates = array();
 
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
-
             if (! $item->isDot() && $item->isDir()) {
                 $templates[$item->getBasename()] = (PMF_Template::getTplSetName() == $item->getBasename() ? true : false);
             }

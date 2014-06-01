@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.10
+phpMyFAQ 2.8.11
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.11 - 2014-06-
+-
 
 Version 2.8.10 - 2014-05-30
 - dropped support for Internet Explorer 7 and 8 (Thorsten)
