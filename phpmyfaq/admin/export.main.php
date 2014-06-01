@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmptyTable('faqdata')) {
 
     if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
-        $category = new PMF_Category($faqConfig);
+        $category = new PMF_Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->buildTree();

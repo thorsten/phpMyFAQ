@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <style>
 body {
   font-family: Helvetica, arial, sans-serif;
@@ -321,7 +321,7 @@ pre {
 <li><a href="#2.8">Enabling support for SEO-friendly URLs</a></li>
 <li><a href="#2.9">Enabling LDAP support</a></li>
 <li><a href="#2.10">PDF export</a></li>
-<li><a href="#2.11">Mozilla Firefox, Google Chrome and IE8+ search plugins</a></li>
+<li><a href="#2.11">Mozilla Firefox, Google Chrome and IE9+ search plugins</a></li>
 <li><a href="#2.12">Static solution ID</a></li>
 <li><a href="#2.13">Spam protection</a></li>
 <li><a href="#2.14">Attachments</a></li>
@@ -472,6 +472,7 @@ pre {
 <li>JSON support</li>
 <li>Filter support</li>
 <li>SPL support</li>
+<li>FileInfo support</li>
 </ul>
 </li>
 <li><strong>Web server</strong> ( <a href="http://httpd.apache.org">Apache</a> 2.x or <a href="http://www.nginx.net/">nginx</a> 0.7+ or <a href="http://www.lighttpd.net">lighttpd</a> 1.0+ or <a href="http://www.microsoft.com/">IIS</a> 6.0+ or Zeus Webserver)</li>
@@ -499,7 +500,7 @@ pre {
 
 <p>In case you have PHP below 5.4.3 installed you cannot use phpMyFAQ.</p>
 
-<p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 7 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.</p>
+<p>phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 9 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.</p>
 
 <p>We recommend to use always the latest version of Firefox, Chrome, Safari, Opera and Internet Explorer.</p>
 
@@ -643,7 +644,7 @@ Writing permission for your script is needed in this directory to be able to wri
 <ul>
 <li>We recommend using a PHP accelerator or opcode cache like APC</li>
 <li>Allocate at least 64MB of memory to each PHP process</li>
-<li>Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL</li>
+<li>Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo</li>
 <li><p>Recommended configuration:</p>
 
 <pre><code>  register_globals = off
@@ -720,9 +721,9 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 
 <hr />
 
-<p><strong>2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE8+ search plugins</strong></p>
+<p><strong>2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE9+ search plugins</strong></p>
 
-<p>phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8+ based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.</p>
+<p>phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 9+ based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.</p>
 
 <p><a href="#top">back to top</a></p>
 
@@ -837,6 +838,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li><strong>database.php</strong> and <strong>ldap.php</strong> (if you use LDAP) in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 
@@ -863,6 +865,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li><strong>database.php</strong> and <strong>ldap.php</strong> (if you use LDAP) in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 
@@ -887,6 +890,7 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 <li>all files in the directory <strong>config/</strong></li>
 <li>all files in the directory <strong>assets/template/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 

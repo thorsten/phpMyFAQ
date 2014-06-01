@@ -15,7 +15,7 @@
     8.  [Enabling support for SEO-friendly URLs][13]
     9.  [Enabling LDAP support][14]
     10. [PDF export][15]
-    11. [Mozilla Firefox, Google Chrome and IE8+ search plugins][16]
+    11. [Mozilla Firefox, Google Chrome and IE9+ search plugins][16]
     12. [Static solution ID][17]
     13. [Spam protection][18]
     14. [Attachments][19]
@@ -132,6 +132,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   JSON support
     *   Filter support
     *   SPL support
+    *   FileInfo support
 *   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
 *   **Database server**
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.6.x)
@@ -152,7 +153,7 @@ Upload this file to your webspace and open it using your browser. The installati
 
 In case you have PHP below 5.4.3 installed you cannot use phpMyFAQ.
 
-phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 7 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
+phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 9 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
 
 We recommend to use always the latest version of Firefox, Chrome, Safari, Opera and Internet Explorer.
 
@@ -282,7 +283,7 @@ To set the default language in your browser you have to set a variable that gets
 
 * We recommend using a PHP accelerator or opcode cache like APC
 * Allocate at least 64MB of memory to each PHP process
-* Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL
+* Required extensions: GD, JSON, Session, MBString, Filter, XMLWriter, SPL, FileInfo
 * Recommended configuration:
 
     	register_globals = off
@@ -354,9 +355,9 @@ Main features of the PDF export:
 
 * * *
 
-**2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE8+ search plugins**
+**2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE9+ search plugins**
 
-phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 8+ based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.
+phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 9+ based on the OpenSearch specification. Every user in the frontend can install it. With an installed search plugin you can search through the phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome or Internet Explorer.
 
 [back to top][64]
 

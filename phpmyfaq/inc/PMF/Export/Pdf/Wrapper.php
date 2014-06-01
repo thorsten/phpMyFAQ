@@ -258,6 +258,8 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         'ko' => 'arialunicid0',
         'cs' => 'arialunicid0',
         'sk' => 'arialunicid0',
+        'el' => 'arialunicid0',
+        'he' => 'arialunicid0',
         'default' => 'helvetica'
     );
 

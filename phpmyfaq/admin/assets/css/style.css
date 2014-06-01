@@ -7240,3 +7240,6 @@ footer a {
 .login-panel {
   margin-top: 25%;
 }
+#answer {
+  height: 250px;
+}

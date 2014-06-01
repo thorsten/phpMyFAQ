@@ -38,9 +38,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_DB_Pgsql implements PMF_DB_Driver
 {
     /**
-     * The connection object
+     * The connection resource
      *
-     * @var object
+     * @var resource
      */
     private $conn = null;
 
@@ -247,7 +247,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      */
     public function error()
     {
-        return pg_last_error();
+        return pg_last_error($this->conn);
     }
 
     /**

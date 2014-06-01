@@ -24,8 +24,15 @@ Version 2.9.0-dev 2014-
 - updated bundled TinyMCE to version 4.0.20 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
-Version 2.8.10 - 2014-05-
+Version 2.8.11 - 2014-06-
 -
+
+Version 2.8.10 - 2014-05-30
+- dropped support for Internet Explorer 7 and 8 (Thorsten)
+- updated Brazilian Portuguese translation (Joao Tafarelo)
+- updated bundled TinyMCE to version 3.5.11 (Thorsten)
+- updated bundled TCPDF library to version 6.0.078 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.9 - 2014-04-28
 - updated Thai translation
