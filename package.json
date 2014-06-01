@@ -18,12 +18,12 @@
     "grunt-exec": "^0.4.5"
   },
   "scripts": {
-    "preinstall": "npm install bower less grunt-cli jake -g",
+    "preinstall": "npm install bower less grunt-cli -g",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/thorsten/phpMyFAA.git"
+    "url": "git://github.com/thorsten/phpMyFAQ.git"
   },
   "author": "Thorsten Rinne",
   "license": "MPL 2.0",

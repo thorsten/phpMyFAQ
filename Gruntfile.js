@@ -31,20 +31,6 @@ module.exports = function(grunt) {
         },
         banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
-        exec: {
-            tinymce_less: {
-                cwd: 'components/tinymce',
-                command: 'jake less',
-                stdout: true,
-                stderr: true
-            },
-            tinymce_bundle: {
-                cwd: 'components/tinymce',
-                command: 'jake bundle',
-                stdout: true,
-                stderr: true
-            }
-        },
         copy: {
             tinymce: {
                 files: [
@@ -159,7 +145,7 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['jshint', 'concat', 'uglify', 'less', 'cssmin']);
+    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin']);
 
     // Watcher
     grunt.event.on('watch', function(action, filepath, target) {

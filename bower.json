@@ -12,7 +12,7 @@
     "bootstrap": "~3.1.0",
     "font-awesome": "~4.0.3",
     "sparkline": "~2.1.2",
-    "tinymce": "~4.0.12",
+    "tinymce": "~4.0.28",
     "jquery": "1.10.2",
     "bootstrap-datepicker": "~1.2.0"
   },
