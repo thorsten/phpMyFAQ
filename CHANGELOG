@@ -21,7 +21,7 @@ Version 2.9.0-dev 2014-
 - updated bundled Bootstrap to version 3.1.1 (Thorsten)
 - updated bundled Font Awesome to version 4.0.3 (Thorsten)
 - updated bundled Modernizr to version 2.7.2 (Thorsten)
-- updated bundled TinyMCE to version 4.0.20 (Thorsten)
+- updated bundled TinyMCE to version 4.0.28 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 
 Version 2.8.11 - 2014-06-
