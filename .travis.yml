@@ -3,6 +3,9 @@ language: php
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source --dev
+  - npm install
+  - bower install
+  - grunt
 
 php:
   - 5.4

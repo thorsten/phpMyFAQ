@@ -122,7 +122,7 @@ class PMF_Filesystem
         }
 
         if (! is_writable(dirname($dest))) {
-            throw new PMF_Exception(sprintf('%s is not writeable.', $dest));
+            throw new PMF_Exception($dest . ' is not writeable.');
         }
 
         if (! copy($source, $dest)) {
@@ -151,10 +151,8 @@ class PMF_Filesystem
 
         $this->mkdir($dest . '/' . $directoryName, 0750, true);
 
-        while ($file = readdir($directoryHandle))
-        {
+        while ($file = readdir($directoryHandle)) {
             if ('.' != $file && '..' != $file) {
-
                 if (! is_dir($source . '/' . $file)) {
                     $this->copy(
                         $source . '/' . $file,
