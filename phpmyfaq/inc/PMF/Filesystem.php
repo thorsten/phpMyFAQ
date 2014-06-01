@@ -118,7 +118,7 @@ class PMF_Filesystem
     public function copy($source, $dest)
     {
         if (! is_readable($source)) {
-            throw new PMF_Exception('/config/constants.php is not readable.');
+            throw new PMF_Exception($source . ' is not readable.');
         }
 
         if (! is_writable(dirname($dest))) {
