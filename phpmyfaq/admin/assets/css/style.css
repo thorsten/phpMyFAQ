@@ -7222,6 +7222,10 @@ button.close {
   padding-left: 37px;
   color: #ffa500;
 }
+h4.category-header {
+  cursor: pointer;
+  color: #6bba70;
+}
 @media (min-width: 768px) {
   .navbar-static-side {
     background-color: #2c3e50;

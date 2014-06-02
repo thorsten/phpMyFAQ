@@ -12,7 +12,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2013 phpMyFAQ Team
+ * @copyright 2003-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-11-13
@@ -20,8 +20,7 @@
 
 /*global document: false, window: false, $: false */
 
-var toggleFieldset,
-    addAttachment,
+var addAttachment,
     addEngine,
     infoBox,
     selectSelectAll,
@@ -150,22 +149,6 @@ $(document).ready(function () {
             domId.show();
         } else {
             domId.hide();
-        }
-    };
-
-    /**
-     * Toggle fieldsets
-     *
-     * @param fieldset ID of the fieldset
-     *
-     * @return void
-     */
-    toggleFieldset = function toggleFieldset(fieldset) {
-        var div = $('#div_' + fieldset);
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
-        } else {
-            div.fadeOut('fast');
         }
     };
 
