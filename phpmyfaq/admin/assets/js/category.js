@@ -1,5 +1,5 @@
 /**
- * JavaScript functions for all FAQ record administration stuff
+ * JavaScript functions for all FAQ category administration stuff
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,11 +17,11 @@
 $(document).ready(function() {
     "use strict";
     $("h4.category-header").click(function() {
-        var div = $('#div_' + $(this).data('category-id'));
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
+        var div = $("#div_" + $(this).data("category-id"));
+        if (div.css("display") === "none") {
+            div.fadeIn("fast");
         } else {
-            div.fadeOut('fast');
+            div.fadeOut("fast");
         }
     });
 });
