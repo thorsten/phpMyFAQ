@@ -1700,8 +1700,7 @@ $(document).ready(function () {
 });
 /*global document: false, window: false, $: false */
 
-var toggleFieldset,
-    addAttachment,
+var addAttachment,
     addEngine,
     infoBox,
     selectSelectAll,
@@ -1836,22 +1835,6 @@ $(document).ready(function () {
             domId.show();
         } else {
             domId.hide();
-        }
-    };
-
-    /**
-     * Toggle fieldsets
-     *
-     * @param fieldset ID of the fieldset
-     *
-     * @return void
-     */
-    toggleFieldset = function toggleFieldset(fieldset) {
-        var div = $('#div_' + fieldset);
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
-        } else {
-            div.fadeOut('fast');
         }
     };
 

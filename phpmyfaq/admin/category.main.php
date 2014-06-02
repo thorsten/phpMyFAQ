@@ -291,7 +291,7 @@ if ($permission['editcateg']) {
         }
 
         if ($level > $open) {
-            printf('<div id="div_%d" style="display: none;">', $lastCatId);
+            printf('<div id="div_%d" style="display: none; filter: inherit;">', $lastCatId);
             print '<ul><li>';
         } else {
             print '<li>';
@@ -300,7 +300,7 @@ if ($permission['editcateg']) {
         if (count($category->getChildren($cat['id'])) != 0) {
             // Show name and icon for expand the sub-categories
             printf(
-                '<h4><a href="javascript:;" onclick="toggleFieldset(%d);">%s</a> </h4> ',
+                '<h4 class="category-header" data-category-id="%d">%s</h4> ',
                 $cat['id'],
                 $categoryName
             );
@@ -375,6 +375,8 @@ if ($permission['editcateg']) {
     print "</li>\n</ul>";
 
     printf('<p class="alert alert-info">%s</p>', $PMF_LANG['ad_categ_remark']);
+
+    echo '<script type="text/javascript" src="assets/js/category.js"></script>';
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
