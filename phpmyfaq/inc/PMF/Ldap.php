@@ -211,6 +211,11 @@ class PMF_Ldap
      */
     private function getLdapData ($username, $data)
     {
+        if (!is_resource($this->ds)) {
+            $this->error = 'The LDAP connection handler is not a valid resource.';
+            return '';
+        }
+
         if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
                 'The requested datafield "%s" does not exist in LDAP mapping configuration.',
@@ -268,6 +273,11 @@ class PMF_Ldap
      */
     private function getLdapDn($username)
     {
+        if (!is_resource($this->ds)) {
+            $this->error = 'The LDAP connection handler is not a valid resource.';
+            return '';
+        }
+
         $filter = sprintf('(%s=%s)',
             $this->_ldapConfig['ldap_mapping']['username'],
             $this->quote($username)
