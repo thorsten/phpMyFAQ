@@ -19,6 +19,8 @@ build/*
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
 phpmyfaq/config/database.bak.php
+phpmyfaq/config/ldap.php
+phpmyfaq/config/ldap.bak.php
 phpmyfaq/config/index.html
 phpmyfaq/data/*
 phpmyfaq/images/*
@@ -33,6 +35,7 @@ phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/inc/libs/Symfony
 
 # Composer related stuff
+bin/*
 vendor/*
 
 # node.js modules for development
