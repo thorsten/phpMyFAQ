@@ -16,6 +16,7 @@ Version 2.9.0-dev 2014-
 - added support for PDO_MYSQL (Thorsten)
 - added possibility to delete all logged search terms (Thorsten)
 - added experimental support for bcrypt (Thorsten)
+- added support for MySQL sockets
 - updated bundled Symfony ClassLoader to version 2.4.1 (Thorsten)
 - updated bundled jQuery to version 1.10.2 (Thorsten)
 - updated bundled Bootstrap to version 3.1.1 (Thorsten)

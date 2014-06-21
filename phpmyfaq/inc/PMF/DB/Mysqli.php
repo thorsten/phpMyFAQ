@@ -61,7 +61,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param string $host     Hostname
+     * @param string $host     Hostname or path to socket
      * @param string $user     Username
      * @param string $password Password
      * @param string $database Database name
@@ -72,7 +72,14 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function connect($host, $user, $password, $database = '')
     {
-        $this->conn = new mysqli($host, $user, $password);
+        if (substr($host, 0, 1) === '/') {
+            // Connect to MySQL via socket
+            $this->conn = new mysqli(null, $user, $password, null, null, $host);
+        } else {
+            // Connect to MySQL via network
+            $this->conn = new mysqli($host, $user, $password);
+        }
+
         if ($this->conn->connect_error) {
             PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
             die();
