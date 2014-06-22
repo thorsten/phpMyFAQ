@@ -430,7 +430,7 @@ class PMF_Faq
                     $row->sticky = 0;
                 }
 
-                $renderedItems[] = sprintf(
+                $renderedItems[$row->id] = sprintf(
                     '<li%s>%s<span id="viewsPerRecord"><br /><small>(%s)</small></span></li>',
                     ($row->sticky == 1) ? ' class="sticky-faqs"' : '',
                     $oLink->toHtmlAnchor(),
