@@ -112,6 +112,7 @@ class PMF_Ldap
                 ldap_error($this->ds)
             );
             $this->errno = ldap_errno($this->ds);
+
             return false;
         }
 
@@ -126,10 +127,11 @@ class PMF_Ldap
                         $value,
                         ldap_error($this->ds)
                     );
+
+                    return false;
                 }
             }
         }
-
 
         if (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
             $ldapBind = ldap_bind($this->ds); // Anonymous LDAP login
@@ -137,13 +139,14 @@ class PMF_Ldap
             $ldapBind = ldap_bind($this->ds, $ldapUser, $ldapPassword);
         }
 
-        if (! $ldapBind) {
+        if (false === $ldapBind) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to bind to LDAP server (Error: %s).',
                 ldap_error($this->ds)
             );
             $this->ds = false;
+
             return false;
         }
 
@@ -207,20 +210,22 @@ class PMF_Ldap
      * @param string $username Username
      * @param string $data     MapKey
      *
-     * @return string
+     * @return string|false
      */
     private function getLdapData ($username, $data)
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
-            return '';
+
+            return false;
         }
 
         if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
                 'The requested datafield "%s" does not exist in LDAP mapping configuration.',
                 $data);
-            return '';
+
+            return false;
         }
 
         $filter = sprintf(
@@ -240,23 +245,27 @@ class PMF_Ldap
         $fields = array($this->_ldapConfig['ldap_mapping'][$data]);
         $sr     = ldap_search($this->ds, $this->base, $filter, $fields);
 
-        if (!$sr) {
+        if (false === $sr) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
                 $username,
                 ldap_error($this->ds)
             );
+
+            return false;
         }
 
         $entryId = ldap_first_entry($this->ds, $sr);
 
-        if (!is_resource($entryId)) {
+        if (false === $entryId) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
                 ldap_error($this->ds)
             );
+
+            return false;
         }
 
         $values = ldap_get_values($this->ds, $entryId, $fields[0]);
@@ -275,7 +284,8 @@ class PMF_Ldap
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
-            return '';
+
+            return false;
         }
 
         $filter = sprintf('(%s=%s)',
@@ -284,23 +294,27 @@ class PMF_Ldap
         );
         $sr = ldap_search($this->ds, $this->base, $filter);
 
-        if (! $sr) {
+        if (false === $sr) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Unable to search for "%s" (Error: %s)',
                 $username,
                 ldap_error($this->ds)
             );
+
+            return false;
         }
 
         $entryId = ldap_first_entry($this->ds, $sr);
 
-        if (! $entryId) {
+        if (false === $entryId) {
             $this->errno = ldap_errno($this->ds);
             $this->error = sprintf(
                 'Cannot get the value(s). Error: %s',
                 ldap_error($this->ds)
             );
+
+            return false;
         }
 
         return ldap_get_dn($this->ds, $entryId);
