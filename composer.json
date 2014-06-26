@@ -1,5 +1,5 @@
 {
-    "name":        "thorsten/phpMyFAQ",
+    "name":        "eroux/phpMyFAQ",
     "description": "FAQ System",
     "keywords":    [ "phpMyFAQ", "FAQ" ],
     "homepage":    "http://www.phpmyfaq.de",
@@ -11,52 +11,14 @@
             "email": "thorsten@phpmyfaq.de"
         }
     ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name":    "phpseclib",
-                "version": "master",
-                "source": {
-                    "url":       "https://github.com/phpseclib/phpseclib.git",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name":    "tcpdf",
-                "version": "master",
-                "source": {
-                    "url":       "http://git.code.sf.net/p/tcpdf/code",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name":    "twitteroauth",
-                "version": "master",
-                "source": {
-                    "url":       "https://github.com/thorsten/twitteroauth.git",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
-        }
-    ],
     "require": {
         "php":                     ">=5.4.4",
         "symfony/class-loader":    ">=2.3",
         "symfony/http-foundation": ">=2.3",
         "twig/twig":               "*",
-        "phpseclib":               "master@dev",
-        "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev"
+        "phpseclib/phpseclib":     "0.3.*",
+        "tecnick.com/tcpdf":       "dev-master",
+        "kertz/twitteroauth":      "dev-master"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",
