@@ -1,5 +1,5 @@
 {
-    "name":        "thorsten/phpMyFAQ",
+    "name":        "eroux/phpMyFAQ",
     "description": "FAQ System",
     "keywords":    [ "phpMyFAQ", "FAQ" ],
     "homepage":    "http://www.phpmyfaq.de",
