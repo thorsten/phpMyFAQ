@@ -21,7 +21,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_ROOT_DIR . '/inc/lib/phpseclib/Crypt/AES.php';
+require PMF_ROOT_DIR . '/inc/libs/phpseclib/Crypt/AES.php';
 
 /**
  * PMF_Attachment_Abstract
