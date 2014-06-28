@@ -1,3 +1,29 @@
+CHANGED FILES FROM 2.8.10 -> 2.8.11
+
+./admin/assets/css/style.css
+./admin/assets/js/category.js
+./admin/assets/less/style.less
+./admin/category.main.php
+./admin/editor/plugins/ajaxfilemanager/inc/function.base.php
+./ajaxservice.php
+./assets/js/functions.js
+./assets/js/phpmyfaq.js
+./assets/js/phpmyfaq.min.js
+./assets/template/default/artikel.tpl
+./assets/template/default/contact.tpl
+./assets/template/default/css/style.rtl.css
+./assets/template/default/css/style.rtl.min.css
+./inc/PMF/Attachment/Filesystem/File/Encrypted.php
+./inc/PMF/Faq.php
+./inc/PMF/Ldap.php
+./inc/PMF/System.php
+./inc/blockedwords.txt
+./lang/language_de.php
+./lang/language_es.php
+./lang/language_ro.php
+
+
+
 CHANGED FILES FROM 2.8.9 -> 2.8.10
 
 ./admin/assets/css/style.css
