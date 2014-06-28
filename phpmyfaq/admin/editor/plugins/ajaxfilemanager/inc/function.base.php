@@ -53,7 +53,7 @@ if (!function_exists("stripos"))
  *
  * @param array $array
  */
-function displayArray($array, $comments="")
+function displayArray($array, $comments='')
 {
 	echo "<pre>";
 	echo $comments;
@@ -140,8 +140,8 @@ function relToAbs($value)
 	{
 		$output = '';
 		$wwwroot = removeTrailingSlash(backslashToSlash(getRootPath()));
-		$urlprefix = "";
-		$urlsuffix = "";
+		$urlprefix = '';
+		$urlsuffix = '';
 		$value = backslashToSlash(getRealPath($value));
 		$pos = strpos($value, $wwwroot);
 		if ($pos !== false && $pos == 0)
@@ -481,15 +481,12 @@ function myRealPath($path) {
 	 */
 	function getFileUrl($value)
 	{
-		$output = '';
 		$wwwroot = removeTrailingSlash(backslashToSlash(getRootPath()));
 
-	
-		$urlprefix = "";
-		$urlsuffix = "";
+		$urlprefix = '';
+		$urlsuffix = '';
 
 		$value = backslashToSlash(getRealPath($value));
-
 
 		$pos = stripos($value, $wwwroot);
 		if ($pos !== false )
@@ -500,7 +497,32 @@ function myRealPath($path) {
 			$output = $value;
 		}
 		$protocol = (isset($_SERVER["HTTPS"]) &&  $_SERVER["HTTPS"] == 'on' ? 'https' : 'http');
-		return $protocol . "://" .  addTrailingSlash(backslashToSlash($_SERVER['HTTP_HOST'])) . removeBeginingSlash(backslashToSlash($output));
+
+        // Pick up URL up to /admin and exclude /admin  . This is the phpMyFAQ directory
+        $pmfBase = strrev(
+            str_replace(
+                'nimda/',
+                '',
+                stristr(strrev(backslashToSlash($_SERVER['HTTP_REFERER'])), 'nimda/')
+            )
+        );
+        if ($pmfBase == $_SERVER['HTTP_HOST'])    {
+            // phpMyFAQ is not in a subdirectory of a domain
+            $pmfRest = str_replace($_SERVER['DOCUMENT_ROOT'], '', stristr($output, $_SERVER['DOCUMENT_ROOT']));
+        } else {
+            // phpMyFAQ is in a subdirectory of a domain
+            // extract subdirectory from URL for comparison with path
+            $pmfSame = strrchr($pmfBase, '/');
+            // extract the rest of URL including file name from file path
+            $pmfRest = str_replace(
+                $pmfSame,
+                '',
+                substr(backslashToSlash($output), strrpos(backslashToSlash($output), $pmfSame))
+            );
+        }
+
+        return $pmfBase . $pmfRest ;
+
 	}
 	
 /**
@@ -548,7 +570,7 @@ function transformFileSize($size) {
  * @return String.
  */
 function getRootPath() {
-		$output = "";
+		$output = '';
 
 		if (defined('CONFIG_WEBSITE_DOCUMENT_ROOT') && CONFIG_WEBSITE_DOCUMENT_ROOT)
 		{
@@ -559,11 +581,11 @@ function getRootPath() {
 		{
 
 			return $output;
-		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["SCRIPT_FILENAME"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", backslashToSlash($_SERVER["SCRIPT_FILENAME"]))) && is_dir($output))
+		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["SCRIPT_FILENAME"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), '', backslashToSlash($_SERVER["SCRIPT_FILENAME"]))) && is_dir($output))
 		{
 
 			return slashToBackslash($output);
-		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["PATH_TRANSLATED"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), "", str_replace("//", "/", backslashToSlash($_SERVER["PATH_TRANSLATED"])))) && is_dir($output))
+		}elseif(isset($_SERVER["SCRIPT_NAME"]) && isset($_SERVER["PATH_TRANSLATED"]) && ($output = str_replace(backslashToSlash($_SERVER["SCRIPT_NAME"]), '', str_replace("//", "/", backslashToSlash($_SERVER["PATH_TRANSLATED"])))) && is_dir($output))
 		{
 
 			return $output;
@@ -678,7 +700,7 @@ function getRootPath() {
   function getFileContent($path)
   {
   	return @file_get_contents($path);
-  	//return str_replace(array("\r", "\n", '"', "\t"), array("", "\\n", '\"', "\\t"), @file_get_contents($path));
+  	//return str_replace(array("\r", "\n", '"', "\t"), array('', "\\n", '\"', "\\t"), @file_get_contents($path));
   }
          /**
           * get the list of folder under a specified folder
@@ -1043,7 +1065,7 @@ function getRootPath() {
 			header("Cache-Control: private",false); // required for certain browsers 
 			header("Content-Type: " . $mimeContentType );
 			// change, added quotes to allow spaces in filenames, by Rajkumar Singh
-			header("Content-Disposition: attachment; filename=\"".(is_null($newFileName)?basename($path):$newFileName)."\";" );
+			header("Content-Disposition: attachment; filename=\''.(is_null($newFileName)?basename($path):$newFileName)."\";" );
 			header("Content-Transfer-Encoding: binary");
 			header("Content-Length: ".filesize($path));
 		
