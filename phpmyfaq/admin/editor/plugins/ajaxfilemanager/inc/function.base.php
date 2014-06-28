@@ -1065,7 +1065,7 @@ function getRootPath() {
 			header("Cache-Control: private",false); // required for certain browsers 
 			header("Content-Type: " . $mimeContentType );
 			// change, added quotes to allow spaces in filenames, by Rajkumar Singh
-			header("Content-Disposition: attachment; filename=\''.(is_null($newFileName)?basename($path):$newFileName)."\";" );
+			header("Content-Disposition: attachment; filename=\"".(is_null($newFileName)?basename($path):$newFileName)."\";" );
 			header("Content-Transfer-Encoding: binary");
 			header("Content-Length: ".filesize($path));
 		
