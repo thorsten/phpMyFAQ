@@ -1,0 +1,15 @@
+*~
+~*
+*.diff
+*.patch
+*.bak
+.DS_Store
+Thumbs.db
+.project
+.*proj
+.svn/
+*.swp
+dist/
+node_modules/
+_build/
+attached/*
