@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.11
+phpMyFAQ 2.8.12
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.12 - 2014-07
+- updated Hebrew translation
 
 Version 2.8.11 - 2014-06-28
 - updated German translation (Thorsten)
