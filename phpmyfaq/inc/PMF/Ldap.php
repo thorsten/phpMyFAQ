@@ -134,9 +134,9 @@ class PMF_Ldap
         }
 
         if (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
-            $ldapBind = ldap_bind($this->ds); // Anonymous LDAP login
+            $ldapBind = $this->bind(); // Anonymous LDAP login
         } else {
-            $ldapBind = ldap_bind($this->ds, $ldapUser, $ldapPassword);
+            $ldapBind = $this->bind($ldapUser, $ldapPassword);
         }
 
         if (false === $ldapBind) {
@@ -151,6 +151,28 @@ class PMF_Ldap
         }
 
         return true;
+    }
+
+    /**
+     * Binds to the LDAP directory with specified RDN and password
+     *
+     * @param string $rdn
+     * @param string $password
+     *
+     * @return bool
+     */
+    public function bind($rdn = '', $password = '')
+    {
+        if (!is_resource($this->ds)) {
+            $this->error = 'The LDAP connection handler is not a valid resource.';
+            return false;
+        }
+
+        if ('' === $rdn && '' === $password) {
+            return ldap_bind($this->ds);
+        } else {
+            return ldap_bind($this->ds, $rdn, $password);
+        }
     }
 
     /**

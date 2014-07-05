@@ -93,11 +93,11 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * Returns true on success, otherwise false.
      *
      * @param  string $login Login name
-     * @param  string $pass  Password
+     * @param  string $password  Password
      *
      * @return boolean
      */
-    public function add($login, $pass)
+    public function add($login, $password)
     {
         $user   = new PMF_User($this->_config);
         $result = $user->createUser($login, null);
@@ -131,11 +131,11 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * Does nothing. A function required to be a valid auth.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
+     * @param string $password  Password
      *
      * @return boolean
     */
-    public function changePassword($login, $pass)
+    public function changePassword($login, $password)
     {
         return true;
     }
@@ -163,14 +163,14 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * we are about to create user account.
      *
      * @param string $login        Loginname
-     * @param string $pass         Password
+     * @param string $password     Password
      * @param array  $optionalData Optional data
      *
      * @return boolean
      */
-    public function checkPassword($login, $pass, Array $optionalData = null)
+    public function checkPassword($login, $password, Array $optionalData = null)
     {
-        if ('' === trim($pass)) {
+        if ('' === trim($password)) {
             $this->errors[] = PMF_User::ERROR_USER_INCORRECT_PASSWORD;
             return false;
         }
@@ -203,14 +203,14 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
             $this->_ldapConfig['ldap_port'],
             $this->_ldapConfig['ldap_base'],
             $bindLogin,
-            $pass
+            $password
         );
-        
-        if ($this->ldap->error) {
+
+        if (! $this->ldap->bind($bindLogin, $password)) {
             $this->errors[] = $this->ldap->error;
             return false;
         } else {
-            $this->add($login, $pass);
+            $this->add($login, $password);
             return true;
         }
     }
