@@ -4,7 +4,7 @@
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "c38f529c22a59765b6cc9cb3b8e8894e",
+    "hash": "49e7890986759c5870963d3eba662954",
     "packages": [
         {
             "name": "jnaqsh/bootstrap",
@@ -92,6 +92,17 @@
             "time": "2013-04-24 16:30:18"
         },
         {
+            "name": "thorsten/twitteroauth",
+            "version": "master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/thorsten/twitteroauth.git",
+                "reference": "master"
+            },
+            "type": "library",
+            "time": "2014-07-13 09:50:45"
+        },
+        {
             "name": "twitter/bootstrap",
             "version": "v2.3.2",
             "source": {
@@ -117,17 +128,6 @@
                 "css"
             ],
             "time": "2013-05-17 17:26:09"
-        },
-        {
-            "name": "twitteroauth",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thorsten/twitteroauth.git",
-                "reference": "master"
-            },
-            "type": "library",
-            "time": "2013-05-10 04:41:52"
         }
     ],
     "packages-dev": [
@@ -825,7 +825,7 @@
     "stability-flags": {
         "phpseclib": 20,
         "tcpdf": 20,
-        "twitteroauth": 20,
+        "thorsten/twitteroauth": 20,
         "jnaqsh/bootstrap": 20
     },
     "platform": {

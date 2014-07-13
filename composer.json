@@ -39,7 +39,7 @@
         {
             "type": "package",
             "package": {
-                "name":    "twitteroauth",
+                "name":    "thorsten/twitteroauth",
                 "version": "master",
                 "source": {
                     "url":       "https://github.com/thorsten/twitteroauth.git",
@@ -66,7 +66,7 @@
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev",
+        "thorsten/twitteroauth":   "master@dev",
         "twitter/bootstrap":       "2.3.*",
         "jnaqsh/bootstrap":        "master@dev"
     },
