@@ -45,14 +45,30 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
      */
     public function add($login, $pass)
     {
-        $user   = new PMF_User($this->_config);
-        $result = $user->createUser($login, null);
+        if ($this->_config->get('security.ldapSupport')) {  
+            // LDAP + SSO enabled
+            $authLdap = new PMF_Auth_Ldap($this->_config);
+            $result   = $authLdap->add($login, $pass);
 
-        if ($result) {
-            $user->setStatus('active');
+            return $result;
+        } else {
+            // SSO enabled, LDAP disabled
+            $user   = new PMF_User($this->_config);
+            $result = $user->createUser($login, null);
+
+            if ($result) {
+                $user->setStatus('active');
+            }
+
+            // Update user information from SSO
+            $user->setUserData(
+                array(
+                    'display_name' => $login
+                )
+            );
+
+            return $result;
         }
-
-        return $result;
     }
 
     /**
