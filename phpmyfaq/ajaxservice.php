@@ -640,7 +640,7 @@ switch ($action) {
             }  else {
                 $faq->updateVoting($votingData);
             }
-            $faqRating   = new PMF_Rating($faqConfig);
+            $faqRating = new PMF_Rating($faqConfig);
             $message = array(
                 'success' => $PMF_LANG['msgVoteThanks'],
                 'rating'  => $faqRating->getVotingResult($recordId)

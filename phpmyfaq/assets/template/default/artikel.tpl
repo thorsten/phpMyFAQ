@@ -76,7 +76,7 @@
                 </div>
                 <div class="tab-pane hidden-print" id="votingForm">
                     <form action="#" method="post" class="form-inline" accept-charset="utf-8">
-                        <input type="hidden" name="artikel" value="{saveVotingID}" />
+                        <input type="hidden" name="artikel" value="{saveVotingID}">
                         <div id="votings"></div>
                         <div class="star-rating">
                             <span data-stars="5">☆</span>
@@ -108,21 +108,21 @@
             <a id="comment"></a>
             <div id="commentForm" class="hide">
                 <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
-                    <input type="hidden" name="id" id="id" value="{id}" />
-                    <input type="hidden" name="lang" id="lang" value="{lang}" />
-                    <input type="hidden" name="type" id="type" value="faq" />
+                    <input type="hidden" name="id" id="id" value="{id}">
+                    <input type="hidden" name="lang" id="lang" value="{lang}">
+                    <input type="hidden" name="type" id="type" value="faq">
 
                     <div class="control-group">
                         <label class="control-label" for="user">{msgNewContentName}</label>
                         <div class="controls">
-                            <input type="text" id="user" name="user" value="{defaultContentName}" required />
+                            <input type="text" id="user" name="user" value="{defaultContentName}" required>
                         </div>
                     </div>
 
                     <div class="control-group">
                         <label class="control-label" for="mail">{msgNewContentMail}</label>
                         <div class="controls">
-                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required />
+                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required>
                         </div>
                     </div>
 
@@ -152,7 +152,7 @@
                 $(function() {
                     $("div.star-rating > span").on("click", function(e) {
                         var numStars = $(e.target).data("stars");
-                        saveVoting('faq', {id}, numStars);
+                        saveVoting("faq", {id}, numStars, "{lang}");
                     });
                 });
 

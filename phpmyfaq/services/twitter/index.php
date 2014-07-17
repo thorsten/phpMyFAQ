@@ -48,5 +48,5 @@ $connection = new TwitterOAuth(
 $content = $connection->get('account/verify_credentials');
 
 if (isset($content->screen_name)) {
-    header('../admin/index.php');
+    header('Location: ../../admin/index.php');
 }

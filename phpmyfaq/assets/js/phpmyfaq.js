@@ -11503,12 +11503,13 @@ $(document).ready(function () {
      * @param type
      * @param id
      * @param value
+     * @param lang
      */
-    saveVoting = function saveVoting(type, id, value) {
+    saveVoting = function saveVoting(type, id, value, lang) {
         $.ajax({
             type:     'post',
             url:      'ajaxservice.php?action=savevoting',
-            data:     'type=' + type + '&id=' + id + '&vote=' + value,
+            data:     'type=' + type + '&id=' + id + '&vote=' + value + '&lang=' + lang,
             dataType: 'json',
             cache:    false,
             success:  function (json) {

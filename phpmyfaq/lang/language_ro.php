@@ -12,7 +12,6 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  */
-
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ro';
 $PMF_LANG['language'] = 'romanian';
@@ -23,10 +22,10 @@ $PMF_LANG['msgShowAllCategories'] = 'Toate categoriile';
 $PMF_LANG['msgSearch'] = 'Cauta';
 $PMF_LANG['msgAddContent'] = 'Adauga intrebare';
 $PMF_LANG['msgQuestion'] = 'Intreaba si tu';
-$PMF_LANG['msgOpenQuestions'] = 'Intrebari la care se asteapta raspuns';
+$PMF_LANG['msgOpenQuestions'] = 'Intrebari la care asteapta un raspuns';
 $PMF_LANG['msgHelp'] = 'Ajutor';
 $PMF_LANG['msgContact'] = 'Contact';
-$PMF_LANG['msgHome'] = 'Home';
+$PMF_LANG['msgHome'] = 'Acasa';
 $PMF_LANG['msgNews'] = ' Noutati';
 $PMF_LANG['msgUserOnline'] = ' Useri online';
 $PMF_LANG['msgXMLExport'] = 'XML-File';

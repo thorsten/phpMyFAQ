@@ -39,7 +39,7 @@
         {
             "type": "package",
             "package": {
-                "name":    "twitteroauth",
+                "name":    "thorsten/twitteroauth",
                 "version": "master",
                 "source": {
                     "url":       "https://github.com/thorsten/twitteroauth.git",
@@ -54,14 +54,7 @@
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "twitteroauth":            "master@dev"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "3.7.*",
-        "phpunit/dbunit": "1.3.*"
-    },
-    "config": {
-        "bin-dir": "bin"
+        "thorsten/twitteroauth":   "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",

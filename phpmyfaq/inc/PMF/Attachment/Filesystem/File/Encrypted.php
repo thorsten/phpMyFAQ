@@ -1,6 +1,6 @@
 <?php
 /**
- * Unencrypted file handler class
+ * Encrypted file handler class
  *
  * PHP Version 5.4
  *
@@ -21,8 +21,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require PMF_ROOT_DIR . '/inc/libs/phpseclib/Crypt/AES.php';
+
 /**
- * PMF_Atachment_Abstract
+ * PMF_Attachment_Abstract
  *
  * @category  phpMyFAQ
  * @package   Attachment
