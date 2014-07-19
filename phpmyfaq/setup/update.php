@@ -898,6 +898,7 @@ if ($step == 3) {
         $faqConfig->add('records.hideEmptyCategories', 'false');
         $faqConfig->add('search.searchForSolutionId', 'true');
         $faqConfig->add('socialnetworks.disableAll', 'false');
+        $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite' === $DB['type']) {
             $query[] = "BEGIN TRANSACTION";

@@ -305,6 +305,7 @@ class PMF_Installer
         'main.maintenanceMode'                    => 'false',
         'main.enableGravatarSupport'              => 'false',
         'main.enableRssFeeds'                     => 'true',
+        'main.enableGzipCompression'              => 'true',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',

@@ -1162,3 +1162,4 @@ $PMF_LANG["ad_searchterm_del"] = 'Alle gespeicherten Suchwörter löschen';
 $LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Leere Kategorien verbergen <br>(Standard: deaktiviert)");
 $LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Suche nach Solution ID <br>(Standard: aktiviert)");
 $LANG_CONF["socialnetworks.disableAll"] = array(0 => "checkbox", 1 => "Alle Social Networks deaktivieren <br>(Standard: deaktiviert)");
+$LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Aktiviere GZIP Kompression<br>(Standard: aktiviert)");
