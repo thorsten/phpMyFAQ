@@ -277,8 +277,10 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         <label class="col-lg-2 control-label" for="group_auto_join"><?php echo $PMF_LANG['ad_group_autoJoin']; ?></label>
                         <div class="col-lg-3">
                             <div class="checkbox">
-                            <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                                <?php echo ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?>>
+                                <label>
+                                    <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
+                                    <?php echo ((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : ''); ?>>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -699,9 +701,11 @@ getGroupList();
                                     <?php echo $PMF_LANG['ad_group_autoJoin'] ?>
                                 </label>
                                 <div class="col-lg-9">
-                                    <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
-                                           tabindex="3"<?php
-                                    echo ((isset($group_auto_join) && $group_auto_join) ? ' checked' : ''); ?>>
+                                    <label>
+                                        <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
+                                               tabindex="3"<?php
+                                        echo ((isset($group_auto_join) && $group_auto_join) ? ' checked' : ''); ?>>
+                                    </label>
                                 </div>
                             </div>
 
@@ -734,8 +738,8 @@ getGroupList();
                                 </span>
                             </li>
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                            <li class="list-group-item" id="group_rights_table">
-                                <label class="checkbox">
+                            <li class="list-group-item checkbox" id="group_rights_table">
+                                <label>
                                     <input id="group_right_<?php echo $right['right_id']; ?>" type="checkbox"
                                            name="group_rights[]" value="<?php echo $right['right_id']; ?>">
                                     <?php

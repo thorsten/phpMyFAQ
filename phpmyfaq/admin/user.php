@@ -527,8 +527,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                                     </a>
                                 </li>
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                                <li class="list-group-item">
-                                    <label class="checkbox">
+                                <li class="list-group-item checkbox">
+                                    <label>
                                     <input id="user_right_<?php echo $right['right_id']; ?>" type="checkbox"
                                            name="user_rights[]" value="<?php echo $right['right_id']; ?>"/>
                                 <?php

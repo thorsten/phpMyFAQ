@@ -75,9 +75,11 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
 ?>
                     <tr>
                         <td>
+                            <label>
                             <input id="questions[]"
                                    name="questions[]"
-                                   value="<?php echo $question['id']; ?>" type="checkbox" />
+                                   value="<?php echo $question['id']; ?>" type="checkbox">
+                            </label>
                         </td>
                         <td>
                             <?php echo $date->format(PMF_Date::createIsoDate($question['created'])); ?>
@@ -88,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
                         </td>
                         <td>
                             <strong><?php echo $category->categoryName[$question['category_id']]['name'] ?></strong>
-                            <br />
+                            <br>
                             <?php echo $question['question'] ?>
                         </td>
                         <td>

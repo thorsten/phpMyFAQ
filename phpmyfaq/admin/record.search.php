@@ -70,8 +70,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
                     <?php if ($linkVerifier->isReady() == true): ?>
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-4">
-                            <label class="checkbox">
+                        <div class="col-lg-offset-2 col-lg-4 checkbox">
+                            <label>
                                 <input type="checkbox" name="linkstate" value="linkbad" />
                                 <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
                             </label>

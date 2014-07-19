@@ -189,7 +189,7 @@ function renderInputForm($key, $type)
 
         case 'checkbox':
             printf(
-                '<div class="checkbox"><input type="checkbox" name="edit[%s]" value="true"',
+                '<div class="checkbox"><label><input type="checkbox" name="edit[%s]" value="true"',
                 $key
             );
             if ($faqConfig->get($key)) {
@@ -204,7 +204,7 @@ function renderInputForm($key, $type)
             if ('security.ssoSupport' === $key && empty($_SERVER['REMOTE_USER'])) {
                 echo ' disabled';
             }
-            echo ">\n</div></div>\n";
+            echo ">&nbsp;</label></div></div>";
             break;
             
         case 'print':

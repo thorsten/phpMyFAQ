@@ -75,30 +75,27 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
 ?>
                     <h4><?php echo $PMF_LANG['ad_export_type'] ?></h4>
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-8">
+                        <div class="col-lg-offset-2 col-lg-8 radio">
                             <p><?php echo $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
                                 <input type="radio" name="type" value="pdf" checked="checked" />
                                 <?php echo $PMF_LANG["ad_export_generate_pdf"] ?>
-                            </label>
-                            <label>
+                                <br>
                                 <input type="radio" name="type" value="xml" />
                                 <?php echo $PMF_LANG["ad_xml_gen"] ?>
-                            </label>
-                            <label>
+                                <br>
                                 <input type="radio" name="type" value="xhtml" />
                                 <?php echo $PMF_LANG['ad_export_gen_xhtml'] ?>
                             </label>
                         </div>
                     </div>
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="col-lg-offset-2 col-lg-4 radio">
                             <p><?php echo $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
                                 <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked" />
                                 <?php echo $PMF_LANG['ad_export_download'] ?>
-                            </label>
-                            <label>
+                                <br>
                                 <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>">
                                 <?php echo $PMF_LANG['ad_export_view'] ?>
                             </label>

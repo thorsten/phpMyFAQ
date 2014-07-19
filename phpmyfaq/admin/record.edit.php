@@ -506,18 +506,16 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel-body">
 
                         <div class="form-group">
-                            <div class="col-lg-12">
-                                <label class="radio">
+                            <div class="col-lg-12 radio">
+                                <label>
                                     <input type="radio" id="dateActualize" checked name="recordDateHandling"
                                            onchange="setRecordDate(this.id);" />
                                     <?php echo $PMF_LANG['msgUpdateFaqDate']; ?>
-                                </label>
-                                <label class="radio">
+                                    <br>
                                     <input type="radio" id="dateKeep" name="recordDateHandling"
                                            onchange="setRecordDate(this.id);" />
                                     <?php echo $PMF_LANG['msgKeepFaqDate']; ?>
-                                </label>
-                                <label class="radio">
+                                    <br>
                                     <input type="radio" id="dateCustomize" name="recordDateHandling"
                                            onchange="setRecordDate(this.id);" />
                                     <?php echo $PMF_LANG['msgEditFaqDat']; ?>
@@ -567,7 +565,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
-                            <div class="col-lg-offset-1 col-lg-10">
+                            <div class="col-lg-offset-1 col-lg-10 radio">
                                 <?php if($user->perm->checkRight($user->getUserId(), 'approverec')):
                                     if (isset($faqData['active']) && $faqData['active'] == 'yes') {
                                         $suf = ' checked';
@@ -580,20 +578,19 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         $sul = ' checked';
                                     }
                                     ?>
-                                    <label class="radio">
+                                    <label>
                                         <input type="radio" id="active" name="active"  value="yes"<?php if (isset($suf)) { echo $suf; } ?> />
                                         <?php echo $PMF_LANG['ad_gen_yes']; ?>
-                                    </label>
-                                    <label class="radio">
+                                        <br>
                                         <input type="radio" name="active"  value="no"<?php if (isset($sul)) { echo $sul; } ?> />
                                         <?php echo $PMF_LANG['ad_gen_no']; ?>
-                                    </label>
                                 <?php else: ?>
-                                    <label class="radio">
+                                        <br>
                                         <input type="radio" name="active"  value="no" checked />
                                         <?php echo $PMF_LANG['ad_gen_no']; ?>
-                                    </label>
+
                                 <?php endif; ?>
+                                    </label>
                             </div>
                         </div>
                     </div>
@@ -632,11 +629,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
-                                <label class="radio">
+                                <label>
                                     <input type="radio" id="allgroups" name="grouppermission" value="all" <?php echo ($allGroups ? 'checked' : ''); ?>/>
                                     <?php echo $PMF_LANG['ad_entry_all_groups']; ?>
                                 </label>
-                                <label class="radio">
+                                <label>
                                     <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked' : ''); ?>/>
                                     <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>
                                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
@@ -655,11 +652,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
-                                <label class="radio">
+                                <label>
                                     <input type="radio" id="allusers" name="userpermission" value="all" <?php echo ($allUsers ? 'checked' : ''); ?>/>
                                     <?php echo $PMF_LANG['ad_entry_all_users']; ?>
                                 </label>
-                                <label class="radio">
+                                <label>
                                     <input type="radio" id="restrictedusers" name="userpermission" value="restricted" <?php echo ($restrictedUsers ? 'checked' : ''); ?>/>
                                     <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
                                     <select name="restricted_users" size="1" class="form-control">
@@ -691,11 +688,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         }
                         ?>
                         <div class="controls">
-                            <label class="radio">
+                            <label>
                                 <input type="radio" name="revision" id="revision" value="yes"<?php echo isset($rev_yes) ? $rev_yes : ''; ?>/>
                                 <?php echo $PMF_LANG["ad_gen_yes"]; ?>
                             </label>
-                            <label class="radio">
+                            <label>
                                 <input type="radio" name="revision" value="no"<?php echo isset($rev_no) ? $rev_no : ''; ?>/>
                                 <?php echo $PMF_LANG["ad_gen_no"]; ?>
                             </label>

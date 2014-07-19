@@ -349,16 +349,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 #
             </th>
             <th style="width: 72px;">
+                <label>
                 <input type="checkbox" id="sticky_category_block_<?php echo $cid; ?>"
                        onclick="saveStatusForCategory(<?php echo $cid; ?>, 'sticky')" />
-                &nbsp;<?php echo $PMF_LANG['ad_record_sticky'] ?>
+                    <?php echo $PMF_LANG['ad_record_sticky'] ?>
+                </label>
             </th>
             <th style="width: 84px;">
                 <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
-                <input type="checkbox" id="active_category_block_<?php echo $cid; ?>"
+                <label>
+                    <input type="checkbox" id="active_category_block_<?php echo $cid; ?>"
                        onclick="saveStatusForCategory(<?php echo $cid; ?>, 'active')"
                        <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
-                &nbsp;<?php echo $PMF_LANG['ad_record_active'] ?>
+                    <?php echo $PMF_LANG['ad_record_active'] ?>
+                </label>
                 <?php } ?>
             </th>
             <th>
@@ -402,17 +406,21 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 </a>
             </td>
             <td style="width: 56px;">
-                <input type="checkbox" lang="<?php echo $record['lang'] ?>"
+                <label>
+                    <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                        onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
                        id="sticky_record_<?php echo $cid . '_' . $record['id'] ?>"
                     <?php echo ($record['sticky'] ? 'checked' :  '    ') ?>>
+                </label>
             </td>
             <td>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'approverec') && isset($numVisits[$record['id']])) { ?>
-                <input type="checkbox" lang="<?php echo $record['lang'] ?>"
+                <label>
+                    <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                        onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'active');"
                        id="active_record_<?php echo $cid . '_' . $record['id'] ?>"
                     <?php echo ('yes' == $record['active'] ? 'checked' : '    ') ?>>
+                </label>
                 <?php }  else { ?>
                 <span class="label label-important"><i class="fa fa-white fa fa-ban-circle"></i></span>
                 <?php } ?>

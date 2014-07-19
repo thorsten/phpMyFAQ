@@ -78,8 +78,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
                         <label class="col-lg-2 control-label" for="active">
                             <?php echo $PMF_LANG['ad_news_set_active']; ?>:
                         </label>
-                        <div class="col-lg-4">
-                            <label class="checkbox">
+                        <div class="col-lg-4 checkbox">
+                            <label>
                                 <input type="checkbox" name="active" id="active" value="y">
                                 <?php echo $PMF_LANG['ad_gen_yes']; ?>
                             </label>
@@ -88,8 +88,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
 
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments']; ?></label>
-                        <div class="col-lg-4">
-                            <label class="checkbox">
+                        <div class="col-lg-4 checkbox">
+                            <label>
                                 <input type="checkbox" name="comment" id="comment" value="y">
                                 <?php echo $PMF_LANG['ad_gen_yes']; ?>
                             </label>
@@ -112,16 +112,14 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
 
                     <div class="form-group">
                         <label class="col-lg-2 control-label" ><?php echo $PMF_LANG['ad_news_link_target']; ?></label>
-                        <div class="col-lg-4">
-                            <label class="radio">
+                        <div class="col-lg-4 radio">
+                            <label>
                                 <input type="radio" name="target" value="blank">
                                 <?php echo $PMF_LANG['ad_news_link_window'] ?>
-                            </label>
-                            <label class="radio">
+                                <br>
                                 <input type="radio" name="target" value="self">
                                 <?php echo $PMF_LANG['ad_news_link_faq'] ?>
-                            </label>
-                            <label class="radio">
+                                <br>
                                 <input type="radio" name="target" value="parent">
                                 <?php echo $PMF_LANG['ad_news_link_parent'] ?>
                             </label>
@@ -275,7 +273,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
                             <?php echo $PMF_LANG['ad_news_set_active']; ?>:
                         </label>
                         <div class="col-lg-4">
-                            <label class="checkbox">
+                            <label>
                                 <input type="checkbox" name="active" id="active" value="y"
                                     <?php if (isset($newsData['active']) && $newsData['active']) { echo " checked"; } ?>
                                 <?php echo $PMF_LANG['ad_gen_yes']; ?>
@@ -287,7 +285,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments']; ?></label>
                         <div class="col-lg-4">
-                            <label class="checkbox">
+                            <label>
                                 <input type="checkbox" name="comment" id="comment" value="y"<?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { echo " checked"; } ?>>
                                 <?php echo $PMF_LANG['ad_gen_yes']; ?>
                             </label>
@@ -311,17 +309,17 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="target"><?php echo $PMF_LANG['ad_news_link_target']; ?></label>
                         <div class="col-lg-4">
-                            <label class="radio">
+                            <label>
                                 <input type="radio" name="target" value="blank" <?php if ('blank' == $newsData['target']) { ?>
                                    checked="checked"<?php } ?>>
                                 <?php echo $PMF_LANG['ad_news_link_window'] ?>
                             </label>
-                            <label class="radio">
+                            <label>
                                 <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { ?>
                                    checked="checked"<?php } ?>>
                                 <?php echo $PMF_LANG['ad_news_link_faq'] ?>
                             </label>
-                            <label class="radio">
+                            <label>
                                 <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { ?>
                                    checked="checked"<?php } ?>>
                                 <?php echo $PMF_LANG['ad_news_link_parent'] ?>
