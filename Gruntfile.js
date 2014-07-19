@@ -68,7 +68,7 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'components/jquery/jquery.js',
+                    'components/jquery/dist/jquery.js',
                     'components/bootstrap/js/tooltip.js',
                     'components/bootstrap/js/transition.js',
                     'components/bootstrap/js/alert.js',
