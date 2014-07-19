@@ -41,8 +41,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             <table class="table table-striped">
                 <tbody>
                 <?php
-                $systemInformation = array(
+                $systemInformation = [
                     'phpMyFAQ Version'           => $faqSystem->getVersion(),
+                    'phpMyFAQ API Version'       => $faqSystem->getApiVersion(),
                     'Server Software'            => $_SERVER['SERVER_SOFTWARE'],
                     'Server Document root'       => $_SERVER['DOCUMENT_ROOT'],
                     'phpMyFAQ installation path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
@@ -53,7 +54,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'Database Server'            => PMF_Db::getType(),
                     'Database Server Version'    => $faqConfig->getDb()->serverVersion(),
                     'Database Client Version'    => $faqConfig->getDb()->clientVersion(),
-                );
+                ];
                 foreach ($systemInformation as $name => $info): ?>
                     <tr>
                         <td class="col-lg-2"><strong><?php echo $name ?></strong></td>
