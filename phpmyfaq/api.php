@@ -64,7 +64,7 @@ switch ($action) {
         break;
         
     case 'getApiVersion':
-        $result = array('apiVersion' => (int)$faqConfig->get('main.currentApiVersion'));
+        $result = array('apiVersion' => $faqConfig->get('main.currentApiVersion'));
         break;
 
     case 'getCount':

@@ -48,12 +48,12 @@ class PMF_System
     /**
      * Pre-release version
      */
-    const VERSION_PRERELEASE = 'dev';
+    const VERSION_PRERELEASE = 'alpha';
 
     /**
      * API version
      */
-    const VERSION_API = 2;
+    const VERSION_API = '1.0';
 
     /**
      * Minimum required PHP version
