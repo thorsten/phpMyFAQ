@@ -1011,7 +1011,7 @@ $PMF_LANG["search.relevance.keywords-thema-content"] = "Schlüsselwörter - Frag
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG["msgLoginUser"] = "Einloggen";
 $PMF_LANG["socialNetworksControlCenter"] = "Social Networks Konfiguration";
-$LANG_CONF["socialnetworks.enableTwitterSupport"] = array(0 => "checkbox", 1 => "Twitter support <br>(Standard: deaktiviert)");
+$LANG_CONF["socialnetworks.enableTwitterSupport"] = array(0 => "checkbox", 1 => "Twitter Support <br>(Standard: deaktiviert)");
 $LANG_CONF["socialnetworks.twitterConsumerKey"] = array(0 => "input", 1 => "Twitter Consumer Key");
 $LANG_CONF["socialnetworks.twitterConsumerSecret"] = array(0 => "input", 1 => "Twitter Consumer Secret");
 
