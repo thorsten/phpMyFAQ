@@ -716,6 +716,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
         'rightBox',
         'socialLinks',
         array(
+            'baseHref'               => $faqSystem->getSystemUri($faqConfig),
             'writeDiggMsgTag'        => 'Digg it!',
             'writeFacebookMsgTag'    => 'Share on Facebook',
             'writeTwitterMsgTag'     => 'Share on Twitter',
