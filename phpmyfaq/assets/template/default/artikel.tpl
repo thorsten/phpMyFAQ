@@ -180,5 +180,10 @@
 	    'cpp                    assets/js/syntaxhighlighter/scripts/shBrushCpp.js',
 	    'plain                  assets/js/syntaxhighlighter/scripts/shBrushPlain.js'                
             );
+            
+            //This is a temporary fix and can be removed once a proper solution is found.
+            //Removes unrendered glossary entries injected into source code.
+            $( 'pre' ).find( 'abbr' ).replaceWith( function (){ return $( this ).text(); } );
+            
             SyntaxHighlighter.all();
             </script>
