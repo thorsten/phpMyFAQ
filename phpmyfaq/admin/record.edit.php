@@ -497,8 +497,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div class="control-group">
                         <label class="control-label"><?php echo $PMF_LANG["ad_entry_category"]; ?></label>
                         <div class="controls">
-                            <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple="multiple"
-                                    class="input-medium">
+                            <select name="rubrik[]" id="phpmyfaq-categories" size="8" multiple class="input-large">
                                 <?php echo $categoryHelper->renderOptions($categories); ?>
                             </select>
                         </div>
