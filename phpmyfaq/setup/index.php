@@ -139,10 +139,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 } else {
     $installer->startInstall();
 
-    $tplSuccessVars = array(
-        'dataList' => $installer->renderDataList()
-    );
-    $twig->loadTemplate('success.twig')->display($tplSuccessVars);
+    $twig->loadTemplate('success.twig')->display([]);
 
     $installer->cleanUpFiles();
     PMF_System::renderFooter();
