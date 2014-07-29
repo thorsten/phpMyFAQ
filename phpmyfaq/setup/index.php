@@ -94,7 +94,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
     );
     ?>
 
-    <form class="form-horizontal" action="setup.php" method="post">
+    <form class="form-horizontal" action="index.php" method="post">
         <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                 <?php
