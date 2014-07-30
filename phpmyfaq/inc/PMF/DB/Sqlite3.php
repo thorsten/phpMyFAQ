@@ -120,13 +120,16 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * Fetch a result row as an object
      *
      * @param   mixed $result
-     * @return object
+     * @return object or NULL if there are no more results
      */
     public function fetchObject($result)
     {
+        $result->fetchedByPMF= true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
-        return (object)$return;
+        return $return
+            ? (object)$return
+            : NULL;
     }
 
     /**
@@ -138,13 +141,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        $ret = [];
-
-        while ($res = $result->fetchArray()) {
-            $ret[] = $res;
-        }
-
-        return $ret;
+        $result->fetchedByPMF= true;
+        return $result->fetchArray();
     }
 
     /**
@@ -156,13 +154,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchAssoc($result)
     {
-        $ret = [];
-
-        while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
-            $ret[] = $res;
-        }
-
-        return $ret;
+        $result->fetchedByPMF= true;
+        return $result->fetchArray(SQLITE3_ASSOC);
     }
 
     /**
@@ -180,8 +173,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
-
-        while ($row = $this->fetch_assoc($result)) {
+        
+        $result->fetchedByPMF= true;
+        while( $row=$result->fetchArray(SQLITE3_ASSOC) ) {
             $ret[] = (object)$row;
         }
 
@@ -189,14 +183,20 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Number of rows in a result
+     * Number of rows in a result.
      *
      * @param   SQLite3Result $result
      * @return  integer
      */
     public function numRows($result)
     {
-        return count($result->fetchArray());
+        !isset( $result->fetchedByPMF ) || !$result->fetchedByPMF || die( "Do not call numRows() after you've fetched one or more result records, because PMF_DB_Sqlite3::numRows() has to reset the resultset at its end." );
+        $numberOfRows= 0;
+        while( $result->fetchArray(SQLITE3_NUM) ) {
+            $numberOfRows++;
+        }
+        $result->reset();
+        return $numberOfRows;
     }
 
     /**
