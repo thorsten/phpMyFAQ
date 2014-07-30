@@ -76,7 +76,7 @@ interface PMF_DB_Driver
     public function fetchObject($result);
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an array.
      *
      * @param   mixed $result
      * @return  array

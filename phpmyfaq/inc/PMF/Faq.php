@@ -1885,7 +1885,7 @@ class PMF_Faq
                 ' . $this->queryPermission($this->groupSupport) . '
 
             GROUP BY
-                id
+                fd.id
             ORDER BY
                 fv.visits DESC';
 
@@ -1988,7 +1988,7 @@ class PMF_Faq
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
             GROUP BY
-                id
+                fd.id
             ORDER BY
                 fd.datum DESC';
 
