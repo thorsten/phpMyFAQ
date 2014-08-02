@@ -25,8 +25,8 @@
     <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
-    <script src="assets/js/libs/modernizr.min.js"></script>
-    <script src="assets/js/phpmyfaq.min.js"></script>
+    <script src="{baseHref}assets/js/modernizr.min.js"></script>
+    <script src="{baseHref}assets/js/phpmyfaq.min.js"></script>
 </head>
 <body dir="{dir}">
 

@@ -136,6 +136,19 @@ module.exports = function(grunt) {
                 }
             }
         },
+        modernizr: {
+            dist: {
+                devFile: 'components/modernizr/modernizr.js',
+                outputFile: 'phpmyfaq/assets/js/modernizr.min.js',
+                files: {
+                    src: [
+                        'phpmyfaq/assets/js/{,*/}*.js',
+                        'phpmyfaq/assets/template/default/css/{,*/}*.css'
+                    ]
+                },
+                uglify: true
+            }
+        },
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
@@ -155,10 +168,10 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin']);
+    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
 
     // Build task
-    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less', 'cssmin']);
+    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
 
     // Watcher
     grunt.event.on('watch', function(action, filepath, target) {
