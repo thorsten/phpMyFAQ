@@ -1,3 +1,27 @@
+CHANGED FILES FROM 2.8.11 -> 2.8.12
+
+./admin/record.add.php
+./admin/record.edit.php
+./assets/template/default/artikel.tpl
+./assets/template/default/catandtag.tpl
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/news/rss.php
+./feed/openquestions/rss.php
+./feed/topten/rss.php
+./inc/PMF/Auth/Ldap.php
+./inc/PMF/Auth/Sso.php
+./inc/PMF/Category.php
+./inc/PMF/Date.php
+./inc/PMF/Ldap.php
+./inc/PMF/System.php
+./inc/PMF/User/CurrentUser.php
+./lang/language_he.php
+./services/twitter/index.php
+./index.php
+
+
+
 CHANGED FILES FROM 2.8.10 -> 2.8.11
 
 ./admin/assets/css/style.css
