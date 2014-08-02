@@ -48,6 +48,9 @@ git checkout-index -f -a --prefix=$cwd/build/${PMF_PACKAGE_FOLDER}/
 
 # add dependecies
 composer install
+npm install
+bower install
+grunt build
 
 # Add missing directories
 mkdir -p $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt

@@ -59,6 +59,16 @@ module.exports = function(grunt) {
                         dest: 'phpmyfaq/admin/assets/js/editor/themes/'
                     }
                 ]
+            },
+            fontawesome: {
+                files: [
+                    {
+                        expand: true,
+                        src: 'components/font-awesome/fonts/',
+                        flatten: true,
+                        dest: 'phpmyfaq/assets/template/default/'
+                    }
+                ]
             }
         },
         concat: {
@@ -146,6 +156,9 @@ module.exports = function(grunt) {
 
     // Default task.
     grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin']);
+
+    // Build task
+    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less', 'cssmin']);
 
     // Watcher
     grunt.event.on('watch', function(action, filepath, target) {
