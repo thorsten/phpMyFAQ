@@ -92,35 +92,9 @@ class PMF_Date
      */
     public static function createRFC822Date($date, $pmfFormat = true)
     {
-        $rfc822TZ = date('O');
-        if ('+0000' == $rfc822TZ) {
-            $rfc822TZ = 'GMT';
-        }
-        
-        return self::createIsoDate($date, DATE_RFC822, $pmfFormat) . ' ' . $rfc822TZ;
+        return self::createIsoDate($date, DATE_RFC822, $pmfFormat);
     }
 
-    /**
-     * Converts the phpMyFAQ/Unix date format to the ISO 8601 format
-     *
-     * See the spec here: http://www.w3.org/TR/NOTE-datetime
-     *
-     * @param string  $date      Date string
-     * @param boolean $pmfFormat true if the passed date is in phpMyFAQ format, false if in
-     *                           Unix timestamp format
-     *
-     * @return  string  ISO 8601 date
-     */
-    public static function createISO8601Date($date, $pmfFormat = true)
-    {
-        $iso8601TZD = date('P');
-        if ('+00:00' == $iso8601TZD) {
-            $iso8601TZD = 'Z';
-        }
-        
-        return self::createIsoDate($date, DATE_ISO8601, $pmfFormat) . $iso8601TZD;
-    }
-    
     /**
      * Returns the timestamp of a tracking file
      *

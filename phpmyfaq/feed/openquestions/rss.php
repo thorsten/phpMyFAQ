@@ -62,10 +62,16 @@ $rss->setIndent(true);
 $rss->startDocument('1.0', 'utf-8');
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
+$rss->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgOpenQuestions']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->get('main.referenceURL'));
+$rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
+$rss->writeAttribute('rel', 'self');
+$rss->writeAttribute('type', 'application/rss+xml');
+$rss->writeAttribute('href', $faqConfig->get('main.referenceURL') . 'feed/openquestions/rss.php');
+$rss->endElement();
 
 if ($num > 0) {
     $counter = 0;
@@ -82,6 +88,8 @@ if ($num > 0) {
             $rss->endElement();
 
             $rss->writeElement('link', (isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER['SCRIPT_NAME'])."?action=open#openq_".$item['id']);
+            $rss->writeElement('guid', (isset($_SERVER['HTTPS']) ? 's' : '')."://".$_SERVER["HTTP_HOST"].str_replace("feed/openquestions/rss.php", "index.php", $_SERVER['SCRIPT_NAME'])."?action=open#openq_".$item['id']);
+
             $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['created'], true));
             $rss->endElement();
         }

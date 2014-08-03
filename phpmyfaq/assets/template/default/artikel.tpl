@@ -176,7 +176,14 @@
                 'xml xhtml xslt html    assets/js/syntaxhighlighter/scripts/shBrushXml.js',
                 'bash shell             assets/js/syntaxhighlighter/scripts/shBrushBash.js',
                 'php                    assets/js/syntaxhighlighter/scripts/shBrushPhp.js',
-                'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js'
+                'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js',
+	    'cpp                    assets/js/syntaxhighlighter/scripts/shBrushCpp.js',
+	    'plain                  assets/js/syntaxhighlighter/scripts/shBrushPlain.js'                
             );
+            
+            //This is a temporary fix and can be removed once a proper solution is found.
+            //Removes unrendered glossary entries injected into source code.
+            $( 'pre' ).find( 'abbr' ).replaceWith( function (){ return $( this ).text(); } );
+            
             SyntaxHighlighter.all();
             </script>
