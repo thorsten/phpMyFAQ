@@ -64,9 +64,15 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        src: 'components/font-awesome/fonts/',
-                        flatten: true,
-                        dest: 'phpmyfaq/assets/template/default/'
+                        cwd: 'components/font-awesome/fonts/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/fonts/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/font-awesome/fonts/',
+                        src: '**',
+                        dest: 'phpmyfaq/assets/template/default/fonts/'
                     }
                 ]
             }

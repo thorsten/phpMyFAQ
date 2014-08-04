@@ -18,10 +18,6 @@
     "grunt-modernizr": "^0.5.2",
     "load-grunt-tasks": "~0.1.0"
   },
-  "scripts": {
-    "preinstall": "npm install bower less grunt-cli -g",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/thorsten/phpMyFAQ.git"
