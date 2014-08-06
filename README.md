@@ -1,6 +1,6 @@
 # README
 
-[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
+[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.9)](http://travis-ci.org/thorsten/phpMyFAQ)
 
 ## What is phpMyFAQ?
 
@@ -19,8 +19,9 @@ to use installation script.
 ## Requirements
 
 phpMyFAQ is only supported on PHP 5.4.4 and up, you need a database as well. Supported
-databases are MySQL, PostgreSQL, Microsoft SQL Server, SQLite and MariaDB. Check our detailed
-requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more information.
+databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL Server, SQLite3 and MariaDB.
+Check our detailed requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php)
+for more information.
 
 
 ## Installation
@@ -28,14 +29,16 @@ requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more 
 ### Package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php),
-unzip the package and open http://www.example.org/phpmyfaq/setup/install.php in your browser.
+unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ### Git for developers
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
+    $ git checkout 2.9
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
+    $ npm install bower less grunt-cli -g
     $ npm install
     $ bower install
     $ grunt
@@ -116,7 +119,7 @@ Licensed under the terms of the New BSD License
 
 Licensed under the terms of the MIT and BSD licenses
 
-**[Bootstrap](http://twitter.github.com/bootstrap/)**
+**[Bootstrap](http://twbs.github.com/bootstrap/)**
 
 Licensed under the terms of the Apache License v2.0
 
