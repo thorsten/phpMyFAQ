@@ -159,4 +159,9 @@ interface PMF_DB_Driver
      * @access boolean
      */
     public function close();
+    
+    /** Return SQL expression that yeilds current datetime in the local time zone. The actual SQL value may be of SQL datetime type (or timestamp or similar) or it may be varchar/text (as is in SQLite) - so make sure the consumer code doesn't depend on the actual type.
+     * @return string String that you can pass to SQL as in: SELECT <result of PMF_Db_Driver_instance->now()>
+     */
+    public function now();
 }
