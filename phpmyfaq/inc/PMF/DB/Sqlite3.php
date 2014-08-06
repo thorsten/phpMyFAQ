@@ -314,6 +314,12 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     {
         return $this->conn->close();
     }
-    
-    public function now() { return "datetime('now', 'localtime')"; }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return "DATETIME('now', 'localtime')";
+    }
 }

@@ -337,6 +337,12 @@ class PMF_DB_Sqlsrv implements PMF_DB_Driver
     {
         sqlsrv_close($this->conn);
     }
-    
-    public function now() { return 'GETDATE()'; }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'GETDATE()';
+    }
 }

@@ -327,6 +327,12 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
             $this->conn->close();
         }
     }
-    
-    public function now() { return 'NOW()'; }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'NOW()';
+    }
 }

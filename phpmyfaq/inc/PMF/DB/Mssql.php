@@ -310,6 +310,12 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     {
         return mssql_close($this->conn);
     }
-    
-    public function now() { return 'GETDATE()'; }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'GETDATE()';
+    }
 }
