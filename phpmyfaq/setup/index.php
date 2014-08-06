@@ -169,7 +169,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="form-group">
                             <label class="col-sm-4 control-label" for="sql_server">Host:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="sql_server" id="sql_server" required class="form-control"
+                                <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="127.0.0.1">
                                 <p class="help-block">Please enter the host or path to the socket of your database server.</p>
                             </div>
@@ -191,7 +191,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="form-group">
                             <label class="col-sm-4 control-label" for="sql_db">Database:</label>
                             <div class="col-sm-8">
-                                <input type="text" name="sql_db" id="sql_db" required class="form-control">
+                                <input type="text" name="sql_db" id="sql_db" class="form-control">
                                 <p class="help-block">Please enter your database name.</p>
                             </div>
                         </div>
@@ -323,7 +323,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="permLevel">Permission level:</label>
                         <div class="col-sm-8">
-                                <select id="permLevel" name="permLevel" size="1" required class="form-control">
+                                <select id="permLevel" name="permLevel" size="1" class="form-control">
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                             </select>
@@ -335,35 +335,35 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="realname">Your name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="realname" id="realname" required class="form-control">
+                            <input type="text" name="realname" id="realname" class="form-control">
                             <p class="help-block">Please enter your real name.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="email">Your email address:</label>
                         <div class="col-sm-8">
-                            <input type="email" name="email" id="email" required class="form-control">
+                            <input type="email" name="email" id="email" class="form-control">
                             <p class="help-block">Please enter your email adress.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="loginname">Your login name:</label>
                         <div class="col-sm-8">
-                            <input type="text" name="loginname" id="loginname" required class="form-control">
+                            <input type="text" name="loginname" id="loginname" class="form-control">
                             <p class="help-block">Please enter your login name.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="password">Your password:</label>
                         <div class="col-sm-8">
-                            <input type="password" name="password" id="password" required class="form-control">
+                            <input type="password" name="password" id="password" class="form-control">
                             <p class="help-block">Please enter your password.</p>
                         </div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="password_retype">Retype password:</label>
                         <div class="col-sm-8">
-                            <input type="password" name="password_retyped" id="password_retype" required class="form-control">
+                            <input type="password" name="password_retyped" id="password_retype" class="form-control">
                             <p class="help-block">Please retype your password.</p>
                         </div>
                     </div>
