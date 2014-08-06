@@ -3,6 +3,7 @@ language: php
 before_script:
   - composer self-update
   - composer install --no-interaction --prefer-source --dev
+  - npm install bower less grunt-cli -g
   - npm install
   - bower install
   - grunt
