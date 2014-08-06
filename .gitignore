@@ -32,7 +32,9 @@ phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/inc/libs/Symfony
 
 # Third party frontend libraries
+phpmyfaq/admin/assets/css/
 phpmyfaq/admin/assets/fonts/*
+phpmyfaq/assets/template/default/css/*
 phpmyfaq/assets/template/default/fonts/*
 
 # Composer related stuff
