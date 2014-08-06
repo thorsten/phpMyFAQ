@@ -27,7 +27,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // Metadata.
         meta: {
-            version: '2.9.0-dev'
+            version: '2.9.0-alpha'
         },
         banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
@@ -57,6 +57,16 @@ module.exports = function(grunt) {
                         cwd: 'components/tinymce/js/tinymce/themes/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/js/editor/themes/'
+                    }
+                ]
+            },
+            fontawesome: {
+                files: [
+                    {
+                        expand: true,
+                        src: 'components/font-awesome/fonts/',
+                        flatten: true,
+                        dest: 'phpmyfaq/assets/template/default/'
                     }
                 ]
             }
@@ -126,6 +136,19 @@ module.exports = function(grunt) {
                 }
             }
         },
+        modernizr: {
+            dist: {
+                devFile: 'components/modernizr/modernizr.js',
+                outputFile: 'phpmyfaq/assets/js/modernizr.min.js',
+                files: {
+                    src: [
+                        'phpmyfaq/assets/js/{,*/}*.js',
+                        'phpmyfaq/assets/template/default/css/{,*/}*.css'
+                    ]
+                },
+                uglify: true
+            }
+        },
         watch: {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
@@ -145,7 +168,10 @@ module.exports = function(grunt) {
     });
 
     // Default task.
-    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin']);
+    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
+
+    // Build task
+    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
 
     // Watcher
     grunt.event.on('watch', function(action, filepath, target) {

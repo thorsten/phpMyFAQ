@@ -1,21 +1,22 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0",
+  "version": "2.9.0-alpha",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "devDependencies": {
     "grunt": "~0.4.1",
     "grunt-contrib-clean": "~0.4.1",
-    "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-csslint": "~0.1.2",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-jshint": "~0.6.0",
     "grunt-contrib-less": "~0.6.1",
     "grunt-contrib-uglify": "~0.2.2",
     "grunt-contrib-watch": "~0.4.4",
-    "load-grunt-tasks": "~0.1.0",
-    "grunt-exec": "^0.4.5"
+    "grunt-exec": "^0.4.5",
+    "grunt-modernizr": "^0.5.2",
+    "load-grunt-tasks": "~0.1.0"
   },
   "scripts": {
     "preinstall": "npm install bower less grunt-cli -g",

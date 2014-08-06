@@ -906,7 +906,7 @@ class PMF_Category
      * of associative arrays with the keys 'name', 'id', 'lang',
      * 'parent_id' and 'description'.
      *
-     * @param integer $article_id Record id
+     * @param integer $articleId Record id
      *
      * @return  array
      */
@@ -989,7 +989,7 @@ class PMF_Category
      */
     public function getCategoryUser($category_id)
     {
-        return $this->categoryName[$category_id]['user_id'];
+        return $this->categories[$category_id]['user_id'];
     }
 
     /**

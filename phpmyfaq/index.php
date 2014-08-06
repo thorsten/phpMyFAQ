@@ -696,6 +696,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
         'rightBox',
         'socialLinks',
         array(
+            'baseHref'               => $faqSystem->getSystemUri($faqConfig),
             'writePDFTag'            => $PMF_LANG['msgPDF'],
             'writePrintMsgTag'       => $PMF_LANG['msgPrintArticle'],
             'writeSend2FriendMsgTag' => $PMF_LANG['msgSend2Friend'],

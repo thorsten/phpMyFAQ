@@ -8,9 +8,9 @@
     "components"
   ],
   "dependencies": {
-    "modernizr": "~2.7.1",
+    "modernizr": "~2.8.3",
     "bootstrap": "~3.2.0",
-    "font-awesome": "~4.0.3",
+    "font-awesome": "~4.1.0",
     "sparkline": "~2.1.2",
     "tinymce": "~4.0.28",
     "jquery": "~1.11.1",

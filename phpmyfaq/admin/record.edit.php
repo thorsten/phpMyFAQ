@@ -551,7 +551,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
-                                <select name="rubrik[]" id="phpmyfaq-categories" size="10" multiple="multiple"
+                                <select name="rubrik[]" id="phpmyfaq-categories" size="10" multiple
                                         class="form-control">
                                     <?php echo $categoryHelper->renderOptions($categories); ?>
                                 </select>

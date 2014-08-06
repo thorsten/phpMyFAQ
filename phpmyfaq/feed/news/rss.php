@@ -65,10 +65,16 @@ $rss->setIndent(true);
 $rss->startDocument('1.0', 'utf-8');
 $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
+$rss->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgNews']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->get('main.referenceURL'));
+$rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
+$rss->writeAttribute('rel', 'self');
+$rss->writeAttribute('type', 'application/rss+xml');
+$rss->writeAttribute('href', $faqConfig->get('main.referenceURL') . 'feed/news/rss.php');
+$rss->endElement();
 
 if ($num > 0) {
     foreach ($rssData as $item) {
@@ -89,7 +95,8 @@ if ($num > 0) {
         $rss->writeCdata($item['content']);
         $rss->endElement();
 
-        $rss->writeElement('link', $faqConfig->get('main.referenceURL').$link);
+        $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
+        $rss->writeElement('guid', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }
