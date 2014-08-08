@@ -84,7 +84,6 @@ $loader->register();
     <script type="text/javascript">
         function selectDatabaseSetup(field) {
             switch (field.value) {
-            case 'sqlite':
             case 'sqlite3':
                 $('#dbsqlite').show().removeClass('hide');
                 $('#dbdatafull').hide();

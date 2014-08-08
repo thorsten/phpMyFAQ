@@ -20,7 +20,6 @@
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Abstract.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Interface.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Database.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Database/Sqlite.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Driver.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Exception.php';

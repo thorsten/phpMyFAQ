@@ -26,6 +26,7 @@ Version 2.9.0-alpha 2014-08-
 - updated bundled Modernizr to version 2.7.2 (Thorsten)
 - updated bundled TinyMCE to version 4.0.28 (Thorsten)
 - dropped support for ext/mysql (Thorsten)
+- dropped support for SQLite2 (Thorsten)
 
 Version 2.8.12 - 2014-08-02
 - updated Hebrew translation

@@ -91,7 +91,6 @@ class PMF_System
         'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
         'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x (PDO_MYSQL, experimental)'),
         'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
-        'sqlite'    => array(self::VERSION_MINIMUM_PHP, 'SQLite (deprecated)'),
         'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3'),
         'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
         'sqlsrv'    => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP')
@@ -327,7 +326,7 @@ class PMF_System
     }
 
     /**
-     * Returns true or false on sqlite or sqlite3
+     * Returns true or false on SQLite3
      *
      * @static
      * @param string $dbType
@@ -336,7 +335,7 @@ class PMF_System
      */
     public static function isSqlite($dbType)
     {
-        return ('sqlite' === $dbType || 'sqlite3' === $dbType) ? true : false;
+        return ('sqlite3' === $dbType) ? true : false;
     }
 
     /**

@@ -482,32 +482,6 @@ if ($step == 3) {
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_content question TEXT NOT NULL";
                 $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
                 break;
-            case 'sqlite':
-                $query[] = "BEGIN TRANSACTION";
-                $query[] = "CREATE TEMPORARY TABLE " . PMF_Db::getTablePrefix() . "faqquestions_temp (
-                                id int(11) NOT NULL,
-                                username varchar(100) NOT NULL,
-                                email varchar(100) NOT NULL,
-                                category_id int(11) NOT NULL,
-                                question text NOT NULL,
-                                created varchar(20) NOT NULL,
-                                is_visible char(1) default 'Y',
-                                PRIMARY KEY (id))";
-                $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqquestions_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faqquestions";
-                $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqquestions";
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions (
-                                id int(11) NOT NULL,
-                                username varchar(100) NOT NULL,
-                                email varchar(100) NOT NULL,
-                                category_id int(11) NOT NULL,
-                                question text NOT NULL,
-                                created varchar(20) NOT NULL,
-                                is_visible char(1) default 'Y',
-                                PRIMARY KEY (id))";
-                $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqquestions SELECT * FROM " . PMF_Db::getTablePrefix() . "faqquestions_temp";
-                $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqquestions_temp";
-                $query[] = "COMMIT";
-                break;
         }
 
         $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
@@ -632,33 +606,7 @@ if ($step == 3) {
 
         $faqConfig->add('security.forcePasswordUpdate', 'true');
 
-        if ('sqlite' === $DB['type']) {
-            $query[] = "BEGIN TRANSACTION";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions_temp (
-                                id int(11) NOT NULL,
-                                username varchar(100) NOT NULL,
-                                email varchar(100) NOT NULL,
-                                category_id int(11) NOT NULL,
-                                question text NOT NULL,
-                                created varchar(20) NOT NULL,
-                                is_visible char(1) default 'Y',
-                                PRIMARY KEY (id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqquestions_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faqquestions";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqquestions";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions (
-                                id int(11) NOT NULL,
-                                username varchar(100) NOT NULL,
-                                email varchar(100) NOT NULL,
-                                category_id int(11) NOT NULL,
-                                question text NOT NULL,
-                                created varchar(20) NOT NULL,
-                                is_visible char(1) default 'Y',
-                                answer_id INT NOT NULL DEFAULT 0,
-                                PRIMARY KEY (id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqquestions SELECT id, username, email, category_id, question, created, is_visible, 0 FROM " . PMF_Db::getTablePrefix() . "faqquestions_temp";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqquestions_temp";
-            $query[] = "COMMIT";
-        } elseif ('sqlite3' === $DB['type']) {
+        if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN answer_id INT NOT NULL DEFAULT 0";
         } else {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
@@ -703,7 +651,6 @@ if ($step == 3) {
                 break;
             case 'mssql':
             case 'sqlsrv':
-            case 'sqlite':
             case 'sqlite3':
                 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
                     id INT NOT NULL,
@@ -746,37 +693,7 @@ if ($step == 3) {
             (44, 'delinstances', 'Right to delete multi-site instances')";
         $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 44)";
 
-        if ('sqlite' === $DB['type']) {
-            $query[] = "BEGIN TRANSACTION";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_temp (
-                                user_id INT(11) NOT NULL,
-                                login VARCHAR(25) NOT NULL,
-                                session_id VARCHAR(150) NULL,
-                                session_timestamp INT(11) NULL,
-                                ip VARCHAR(15) NULL,
-                                account_status VARCHAR(50) NULL,
-                                last_login TIMESTAMP(14) NULL,
-                                auth_source VARCHAR(100) NULL,
-                                member_since TIMESTAMP(14) NULL,
-                                PRIMARY KEY(user_id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquser";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser (
-                                user_id INT(11) NOT NULL,
-                                login VARCHAR(25) NOT NULL,
-                                session_id VARCHAR(150) NULL,
-                                session_timestamp INT(11) NULL,
-                                ip VARCHAR(15) NULL,
-                                account_status VARCHAR(50) NULL,
-                                last_login TIMESTAMP(14) NULL,
-                                auth_source VARCHAR(100) NULL,
-                                member_since TIMESTAMP(14) NULL,
-                                remember_me VARCHAR(150) NULL,
-                                PRIMARY KEY(user_id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser SELECT user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since, '' FROM " . PMF_Db::getTablePrefix() . "faquser_temp";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_temp";
-            $query[] = "COMMIT";
-        } elseif ('sqlite3' === $DB['type']) {
+        if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN remember_me VARCHAR(150) NULL";
         } else {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD remember_me VARCHAR(150) NULL";
@@ -900,38 +817,7 @@ if ($step == 3) {
         $faqConfig->add('socialnetworks.disableAll', 'false');
         $faqConfig->add('main.enableGzipCompression', 'true');
 
-        if ('sqlite' === $DB['type']) {
-            $query[] = "BEGIN TRANSACTION";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_temp (
-                                user_id INT(11) NOT NULL,
-                                login VARCHAR(25) NOT NULL,
-                                session_id VARCHAR(150) NULL,
-                                session_timestamp INT(11) NULL,
-                                ip VARCHAR(15) NULL,
-                                account_status VARCHAR(50) NULL,
-                                last_login TIMESTAMP(14) NULL,
-                                auth_source VARCHAR(100) NULL,
-                                member_since TIMESTAMP(14) NULL,
-                                PRIMARY KEY(user_id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquser";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser";
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser (
-                                user_id INT(11) NOT NULL,
-                                login VARCHAR(25) NOT NULL,
-                                session_id VARCHAR(150) NULL,
-                                session_timestamp INT(11) NULL,
-                                ip VARCHAR(15) NULL,
-                                account_status VARCHAR(50) NULL,
-                                last_login TIMESTAMP(14) NULL,
-                                auth_source VARCHAR(100) NULL,
-                                member_since TIMESTAMP(14) NULL,
-                                remember_me VARCHAR(150) NULL,
-                                success INT(1) NULL DEFAULT 1,
-                                PRIMARY KEY(user_id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser SELECT user_id, login, session_id, session_timestamp, ip, account_status, last_login, auth_source, member_since, '' FROM " . PMF_Db::getTablePrefix() . "faquser_temp";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_temp";
-            $query[] = "COMMIT";
-        } elseif ('sqlite3' === $DB['type']) {
+        if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
         } else {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD success INT(1) NULL DEFAULT 1";
