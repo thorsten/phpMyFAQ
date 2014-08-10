@@ -43,53 +43,70 @@
 </div>
  <![endif]-->
 
-<header id="header">
-    <h1>
-        <a title="{header}" href="{faqHome}">{header}</a>
-    </h1>
-</header>
+<nav class="navbar navbar-default hidden-print" role="navigation">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
+        </div>
 
-<nav>
-    <ul>
-        <li>{registerUser}</li>
-        <li>{sendPassword}</li>
-    </ul>
+        <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
+            <ul class="nav navbar-nav navbar-right">
+                [notLoggedIn]
+                <li class="{activeLogin}">{msgLoginUser}</li>
+                [/notLoggedIn]
+            </ul>
+        </div>
+    </div>
 </nav>
 
-<a id="top"></a>
-
-<section id="content">
-    <div class="container-fluid">
-        <div class="row-fluid">
-        {writeContent}
+<section id="content" class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2" id="mainContent">
+            <section>
+            {writeContent}
+            </section>
         </div>
     </div>
 </section>
 
-<footer id="footer" class="container-fluid">
-    <div class="row-fluid">
-        <div class="span6">
-            <ul class="footer-menu">
-                <li>{showSitemap}</li>
-                <li>{msgContact}</li>
-                <li>{msgGlossary}</li>
-            </ul>
+<footer id="footer" class="hidden-print">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-offset-9 col-md-3">
+                <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                    {switchLanguages}
+                    <input type="hidden" name="action" value="" />
+                </form>
+            </div>
         </div>
-        <div class="span6">
-            <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-            {switchLanguages}
-                <input type="hidden" name="action" value="" />
-            </form>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="copyright pull-right">
+                    {copyright}
+                </p>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <p class="copyright pull-right">
-        {copyright}
-        </p>
-    </div>
-</footer>
 
-{debugMessages}
+    [debugMode]
+    <div class="container debug-mode">
+        <h3>DEBUG INFORMATION</h3>
+        <hr>
+        <h4>EXCEPTIONS</h4>
+        {debugExceptions}
+        <hr>
+        <h4>DATABASE QUERIES</h4>
+        {debugQueries}
+    </div>
+    [/debugMode]
+
+</footer>
 
 </body>
 </html>
