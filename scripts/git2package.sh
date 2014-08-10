@@ -46,6 +46,10 @@ fi
 cwd=`pwd`
 git checkout-index -f -a --prefix=$cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
+# Add missing directories
+mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}/
+mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
+
 cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
 # add dependecies
@@ -54,26 +58,22 @@ npm install
 bower install
 grunt build
 
-# Add missing directories
-mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
-
 # prepare packaging
-mkdir $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
-mv $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
-
 cd $cwd
+mv $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq $cwd/build/package/${PMF_PACKAGE_FOLDER}
 
 # build packages
-tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
-cd $cwd/build/${PMF_PACKAGE_FOLDER}
+tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/package/${PMF_PACKAGE_FOLDER}/phpmyfaq .
+cd $cwd/build/package/${PMF_PACKAGE_FOLDER}
 zip -r $cwd/${PMF_PACKAGE_FOLDER}.zip phpmyfaq
-
+cd $cwd
 
 # md5sum
 $MD5BIN "${PMF_PACKAGE_FOLDER}.tar.gz" > "${PMF_PACKAGE_FOLDER}.tar.gz.md5"
 $MD5BIN "${PMF_PACKAGE_FOLDER}.zip" > "${PMF_PACKAGE_FOLDER}.zip.md5"
 
 # clean up
-rm -rf $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq
+rm -rf $cwd/build/checkout/${PMF_PACKAGE_FOLDER}
+rm -rf $cwd/build/package/${PMF_PACKAGE_FOLDER}
 
 echo "done.\n";
