@@ -1,11 +1,11 @@
-phpMyFAQ 2.9.0-alpha
+phpMyFAQ 2.9.0-alpha2
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-alpha 2014-08-12
+Version 2.9.0-alpha2 2014-09
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)

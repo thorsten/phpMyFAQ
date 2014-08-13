@@ -1,5 +1,5 @@
 <parameters>
   <parameter name="Application Path" defaultValue="Default Web Site/faq" tags="iisapp">
-    <parameterEntry type="ProviderPath" scope="iisapp" match="phpMyFAQ-2.9.0-alpha" />
+    <parameterEntry type="ProviderPath" scope="iisapp" match="phpMyFAQ-2.9.0-alpha2" />
   </parameter>
 </parameters>
