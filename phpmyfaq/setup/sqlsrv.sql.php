@@ -106,6 +106,7 @@ parent_id INTEGER NOT NULL,
 name varchar(255) NOT NULL,
 description varchar(255) DEFAULT NULL,
 user_id integer NOT NULL,
+active INTEGER NULL DEFAULT 1,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations

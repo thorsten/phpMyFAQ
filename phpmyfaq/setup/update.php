@@ -824,6 +824,19 @@ if ($step == 3) {
         }
     }
 
+
+    //
+    // UPDATES FROM 2.9.0-alpha
+    //
+    if (version_compare($version, '2.9.0-alpha2', '<')) {
+
+        if ('sqlite3' === $DB['type']) {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
+        } else {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD active INT(1) NULL DEFAULT 1";
+        }
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

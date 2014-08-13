@@ -98,7 +98,8 @@ lang VARCHAR(5) NOT NULL,
 parent_id INT(11) NOT NULL,
 name VARCHAR(255) NOT NULL,
 description VARCHAR(255) DEFAULT NULL,
-user_id int(2) NOT NULL,
+user_id INT(2) NOT NULL,
+active INT(1) NULL DEFAULT 1,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
