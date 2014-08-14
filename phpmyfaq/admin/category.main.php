@@ -67,7 +67,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT)
+            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
         );
 
         $permissions = [];
@@ -130,7 +131,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'parent_id'   => $parentId,
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT));
+            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
+
+        );
 
         $permissions = [];
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
@@ -275,6 +279,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $categoryName = $cat['name'];
         } else {
             $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+        }
+
+        if (0 === $cat['active']) {
+            $categoryName = '<em style="color: gray">' . $categoryName . '</em>';
         }
 
         $level     = $cat['indent'];

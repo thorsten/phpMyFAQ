@@ -84,6 +84,16 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                     </div>
 
                     <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="active" value="1" checked>
+                                    <?php echo $PMF_LANG['ad_user_active'] ?>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-lg-2 control-label" for="user_id"><?php echo $PMF_LANG['ad_categ_owner'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="user_id" id="user_id" size="1" class="form-control">

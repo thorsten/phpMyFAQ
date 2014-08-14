@@ -35,15 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Helper_Category extends PMF_Helper 
 {
     /**
-     * Constructor
-     *
-     * @return PMF_Helper_Category
-     */
-    public function __construct()
-    {
-    }
-
-    /**
      * Renders the main navigation
      *
      * @param  integer $activeCategory Selected category
@@ -62,8 +53,12 @@ class PMF_Helper_Category extends PMF_Helper
         if ($numCategories > 0) {
             for ($y = 0 ;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
                 
-                list($hasChild, $name, $categoryId, $description) = $this->Category->getLineDisplay($y);
+                list($hasChild, $name, $categoryId, $description, $active) = $this->Category->getLineDisplay($y);
 
+                if (!$active) {
+                    continue;
+                }
+                
                 if ($activeCategory == $categoryId) {
                     $isActive = true;
                 } else {
@@ -165,7 +160,12 @@ class PMF_Helper_Category extends PMF_Helper
 
             for ($y = 0 ;$y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
 
-                list($hasChild, $categoryName, $parent, $description) = $this->Category->getLineDisplay($y);
+                list($hasChild, $categoryName, $parent, $description, $active) = $this->Category->getLineDisplay($y);
+
+                if (!$active) {
+                    continue;
+                }
+
                 $level     = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
                 $numChilds = $this->Category->treeTab[$y]['numChilds'];

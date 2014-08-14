@@ -34,7 +34,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 
-    $categories     = $category->getAllCategories();
+    $categoryData   = $category->getCategoryData($categoryId);
     $userPermission = $category->getPermissions('user', array($categoryId));
 
     if ($userPermission[0] == -1) {
@@ -54,7 +54,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'] . ' ' . $categories[$categoryId]['name'] . ' ' . $PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'] . ' ' . $categoryData->getName() . ' ' . $PMF_LANG['ad_categ_edit_2'];
 ?>
 
         <header class="row">
@@ -70,14 +70,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         </div>
         <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php echo $categoryId; ?>">
-            <input type="hidden" id="catlang" name="catlang" value="<?php echo $categories[$categoryId]['lang']; ?>">
-            <input type="hidden" name="parent_id" value="<?php echo $categories[$categoryId]['parent_id']; ?>">
+            <input type="hidden" id="catlang" name="catlang" value="<?php echo $categoryData->getLang() ?>">
+            <input type="hidden" name="parent_id" value="<?php echo $categoryData->getParentId() ?>">
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
 
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_titel']; ?>:</label>
                 <div class="col-lg-4">
-                    <input type="text" id="name" name="name" value="<?php echo $categories[$categoryId]['name']; ?>"
+                    <input type="text" id="name" name="name" value="<?php echo $categoryData->getName() ?>"
                         class="form-control">
                 </div>
             </div>
@@ -85,7 +85,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_desc']; ?>:</label>
                 <div class="col-lg-4">
-                    <textarea id="description" name="description" rows="3" class="form-control"><?php echo $categories[$categoryId]['description']; ?></textarea>
+                    <textarea id="description" name="description" rows="3" class="form-control"><?php echo $categoryData->getDescription() ?></textarea>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-lg-offset-2 col-lg-4">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="active" value="1"
+                                   <?php echo (1 === $categoryData->getActive() ? 'checked' : '') ?>>
+                            <?php echo $PMF_LANG['ad_user_active'] ?>
+                        </label>
+                    </div>
                 </div>
             </div>
 
@@ -93,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_owner']; ?>:</label>
                 <div class="col-lg-4">
                     <select name="user_id" size="1" class="form-control">
-                        <?php echo $user->getAllUserOptions($categories[$categoryId]['user_id']); ?>
+                        <?php echo $user->getAllUserOptions($categoryData->getUserId()); ?>
                     </select>
                 </div>
             </div>
@@ -103,10 +115,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             <div class="form-group">
                 <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_entry_grouppermission']; ?></label>
                 <div class="col-lg-4">
-                    <label class="radio">
+                    <div class="radio">
                         <input type="radio" name="grouppermission" value="all" <?php echo ($allGroups ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_all_groups']; ?>
-                    </label>
+                    </div>
                     <label class="radio">
                         <input type="radio" name="grouppermission" value="restricted" <?php echo ($restrictedGroups ? 'checked="checked"' : ''); ?>>
                         <?php echo $PMF_LANG['ad_entry_restricted_groups']; ?>

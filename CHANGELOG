@@ -18,6 +18,7 @@ Version 2.9.0-alpha2 2014-09
 - added experimental support for bcrypt (Thorsten)
 - added support for MySQL sockets
 - added possibility to enable/disable gzip compression (Thorsten)
+- added possibility for inactive, hidden categories (Thorsten)
 - added full support for SQLite3 (Peter Kehl)
 - updated bundled Symfony ClassLoader to version 2.5.2 (Thorsten)
 - updated bundled jQuery to version 1.11.1 (Thorsten)
