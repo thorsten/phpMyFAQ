@@ -253,7 +253,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             // functions for user administration
             case 'user':              require 'user.php'; break;
             case 'group':             require 'group.php'; break;
-            // functions for record administration
+            // functions for content administration
             case 'viewinactive':
             case 'viewactive':
             case 'view':              require 'record.show.php'; break;
@@ -267,6 +267,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             case "delatt":            require 'record.delatt.php'; break;
             case "question":          require 'record.questions.php'; break;
             case 'comments':          require 'record.comments.php'; break;
+            case 'tags':              require 'tags.main.php'; break;
             // news administraion
             case 'news':
             case 'addnews':

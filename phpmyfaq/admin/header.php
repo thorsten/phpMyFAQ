@@ -82,16 +82,17 @@ switch ($action) {
     case 'deleteglossary':
     case 'addglossary':
     case 'editglossary':
-    case 'news';
+    case 'news':
     case 'addnews':
     case 'editnews':
     case 'savenews':
-    case 'updatenews';
+    case 'updatenews':
     case 'delnews':
     case 'question':
     case 'takequestion':
     case 'comments':
     case 'attachments':
+    case 'tags':
         $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
@@ -102,6 +103,7 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('editbt', 'tags', 'ad_entry_tags', $action);
         $dashboardPage    = false;
         $contentPage      = true;
         break;
