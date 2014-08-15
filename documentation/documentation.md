@@ -20,6 +20,7 @@
     13. [Spam protection][18]
     14. [Attachments][19]
     15. [Twitter][20]
+    16. [Server side recommendations][21]
 3.  **[Upgrading][22]**
     1.  [Upgrading from phpMyFAQ 2.5.x][23]
     2.  [Upgrading from phpMyFAQ 2.6.x][24]
@@ -403,9 +404,24 @@ Please be aware:
 
 * * *
 
-**2.15. <a id="2.8"></a>Twitter support**
+**2.15. <a id="2.15"></a>Twitter support**
 
-phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ as a Twitter application on [twitter.com](https://dev.twitter.com/apps/new), all new FAQ additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".
+phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ
+as a Twitter application on [twitter.com](https://dev.twitter.com/apps/new), all new FAQ additions in the administration
+backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag
+"phpMyFAQ" will be converted to "#phpmyfaq".
+
+[back to top][64]
+
+* * *
+
+**2.16 <a id="2.16"></a>Server side recommendations**
+
+***MySQL / Percona Server / MariaDB***
+
+    interactive_timeout = 120
+    wait_timeout = 120
+    max_allowed_packet = 64M
 
 [back to top][64]
 
@@ -1137,7 +1153,7 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
-Date: 2013-04-21
+Date: 2014-08-15
 
 © 2001-2014 phpMyFAQ Team
 
@@ -1165,6 +1181,7 @@ This documentation is licensed under a [Creative Commons License](http://creativ
  [18]: #2.13
  [19]: #2.14
  [20]: #2.15
+ [21]: #2.16
  [22]: #3
  [23]: #3.1
  [24]: #3.2

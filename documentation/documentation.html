@@ -326,6 +326,7 @@ pre {
 <li><a href="#2.13">Spam protection</a></li>
 <li><a href="#2.14">Attachments</a></li>
 <li><a href="#2.15">Twitter</a></li>
+<li><a href="#2.16">Server side recommendations</a></li>
 </ol>
 </li>
 <li><strong><a href="#3">Upgrading</a></strong>
@@ -479,11 +480,12 @@ pre {
 <li><strong>Database server</strong>
 
 <ul>
-<li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.5.x)</li>
-<li><a href="http://www.postgresql.org">PostgreSQL</a> 8.x (recommended: latest 8.x)</li>
-<li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2005, 2008, 2012</li>
+<li><a href="http://www.mysql.com">MySQL</a> 5.x with the MySQLi extension (recommended: 5.6.x)</li>
+<li><a href="http://www.postgresql.org">PostgreSQL</a> 9.x (recommended: latest 9.x)</li>
+<li><a href="http://www.microsoft.com/sql/">Microsoft SQL Server</a> 2012 and later</li>
 <li><a href="http://www.sqlite.org">SQLite</a></li>
 <li><a href="http://montyprogram.com/mariadb/">MariaDB</a> 5.x (experimental)</li>
+<li><a href="http://www.percona.com">Percona Server</a> 5.x (experimental)</li>
 </ul>
 </li>
 <li>correctly set: access permissions, owner, group</li>
@@ -775,9 +777,25 @@ Please check, if <code>AllowOverride All</code>    is set correctly in your http
 
 <hr />
 
-<p><strong>2.15. <a id="2.8"></a>Twitter support</strong></p>
+<p><strong>2.15. <a id="2.15"></a>Twitter support</strong></p>
 
-<p>phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ as a Twitter application on <a href="https://dev.twitter.com/apps/new">twitter.com</a>, all new FAQ additions in the administration backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag "phpMyFAQ" will be converted to "#phpmyfaq".</p>
+<p>phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ
+as a Twitter application on <a href="https://dev.twitter.com/apps/new">twitter.com</a>, all new FAQ additions in the administration
+backend will also post the question of the FAQ, the URL of the FAQ and all tags as hashtags to Twitter, e.g. the tag
+"phpMyFAQ" will be converted to "#phpmyfaq".</p>
+
+<p><a href="#top">back to top</a></p>
+
+<hr />
+
+<p><strong>2.16 <a id="2.16"></a>Server side recommendations</strong></p>
+
+<p><strong><em>MySQL / Percona Server / MariaDB</em></strong></p>
+
+<pre><code>interactive_timeout = 120
+wait_timeout = 120
+max_allowed_packet = 64M
+</code></pre>
 
 <p><a href="#top">back to top</a></p>
 
@@ -1559,7 +1577,7 @@ This method returns the phpMyFAQ version number as string.</p>
 
 <p>Co-Authors: <a href="mailto:stephan">Stephan Hochhaus</a>, <a href="mailto:mgl-mail">Markus Gläser</a></p>
 
-<p>Date: 2013-04-21</p>
+<p>Date: 2014-08-15</p>
 
 <p>© 2001-2014 phpMyFAQ Team</p>
 
