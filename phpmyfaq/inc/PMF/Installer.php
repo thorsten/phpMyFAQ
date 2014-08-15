@@ -766,7 +766,7 @@ class PMF_Installer
                 $this->_system->cleanInstallation();
                 PMF_System::renderFooter(true);
             }
-            usleep(2500);
+            usleep(1000);
             $count++;
             if (!($count % 10)) {
                 echo '| ';
