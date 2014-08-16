@@ -267,7 +267,9 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             case "delatt":            require 'record.delatt.php'; break;
             case "question":          require 'record.questions.php'; break;
             case 'comments':          require 'record.comments.php'; break;
+            // functions for tags
             case 'tags':              require 'tags.main.php'; break;
+            case 'deletetag':         require 'tags.main.php'; break;
             // news administraion
             case 'news':
             case 'addnews':

@@ -1163,3 +1163,7 @@ $LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Leere K
 $LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Suche nach Solution ID <br>(Standard: aktiviert)");
 $LANG_CONF["socialnetworks.disableAll"] = array(0 => "checkbox", 1 => "Alle Social Networks deaktivieren <br>(Standard: deaktiviert)");
 $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Aktiviere GZIP Kompression<br>(Standard: aktiviert)");
+
+// added v2.9.0-alpha2 - 2014-08-16 by Thorsten
+$PMF_LANG["ad_tag_delete_success"] = "Der Tag wurde erfolgreich gelöscht.";
+$PMF_LANG["ad_tag_delete_error"] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";

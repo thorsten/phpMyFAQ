@@ -287,6 +287,51 @@ class PMF_Tags
     }
 
     /**
+     * Deletes a given tag
+     *
+     * @param integer $tagId
+     * @return bool
+     */
+    public function deleteTag($tagId)
+    {
+        if (!is_integer($tagId)) {
+            return false;
+        }
+
+        try {
+            $query = sprintf("
+                DELETE FROM
+                    %sfaqtags
+                WHERE
+                    tagging_id = %d",
+                PMF_Db::getTablePrefix(),
+                $tagId
+            );
+
+            $this->_config->getDb()->query($query);
+        } catch (PMF_Exception $e) {
+            // @todo Handle exception!
+        }
+
+        try {
+            $query = sprintf("
+                DELETE FROM
+                    %sfaqdata_tags
+                WHERE
+                    tagging_id = %d",
+                PMF_Db::getTablePrefix(),
+                $tagId
+            );
+
+            $this->_config->getDb()->query($query);
+        } catch (PMF_Exception $e) {
+            // @todo Handle exception!
+        }
+
+        return true;
+    }
+
+    /**
      * Returns the FAQ record IDs where all tags are included
      *
      * @param array $arrayOfTags Array of Tags

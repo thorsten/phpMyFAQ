@@ -41,6 +41,49 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
+    $tags = new PMF_Tags($faqConfig);
+
+    if ('deletetag' == $action) {
+        $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        if ($tags->deleteTag($id)) {
+            echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
+            echo $PMF_LANG['ad_tag_delete_success'] . '</p>';
+        } else {
+            echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
+            echo $PMF_LANG['ad_tag_delete_error'];
+            echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
+            echo $faqConfig->getDb()->error() . '</p>';
+        }
+    }
+
+    $tagData = $tags->getAllTags();
+
+    echo '<table class="table table-striped">';
+    echo '<tbody>';
+
+    foreach ($tagData as $key => $tag) {
+
+        echo '<tr>';
+        echo '<td>' . $tag . '</td>';
+        echo '<td>edit</td>';
+
+        printf(
+            '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d">',
+            $PMF_LANG['ad_user_del_3'],
+            '?action=deletetag&amp;id=',
+            $key
+        );
+        printf(
+            '<span title="%s"><i class="fa fa-trash-o"></i></span></a></td>',
+            $PMF_LANG['ad_entry_delete']
+        );
+
+        echo '<tr>';
+    }
+
+    echo '</tbody>';
+    echo '</table>';
+
 } else {
     echo $PMF_LANG["err_NotAuth"];
 }
