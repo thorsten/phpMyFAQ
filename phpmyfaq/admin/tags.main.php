@@ -37,6 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
     <div class="row">
         <div class="col-lg-12">
+            <form action="" method="post" class="tag-form">
 
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
@@ -64,8 +65,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     foreach ($tagData as $key => $tag) {
 
         echo '<tr>';
-        echo '<td>' . $tag . '</td>';
-        echo '<td>edit</td>';
+        echo '<td><span data-tag-id="' . $key . '">' . $tag . '</span></td>';
+        printf(
+            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i class="fa fa-edit"></i></a></td>',
+            $key,
+            $PMF_LANG['ad_user_edit']
+        );
 
         printf(
             '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d">',
@@ -88,5 +93,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     echo $PMF_LANG["err_NotAuth"];
 }
 ?>
+            </form>
+            <script type="text/javascript" src="assets/js/tags.js"></script>
         </div>
     </div>

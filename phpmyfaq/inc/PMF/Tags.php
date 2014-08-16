@@ -259,6 +259,29 @@ class PMF_Tags
     }
 
     /**
+     * Updates a tag
+     *
+     * @param PMF_Entity_Tags $entity
+     * @return bool
+     */
+    public function updateTag(PMF_Entity_Tags $entity)
+    {
+        $query    = sprintf("
+            UPDATE
+                %sfaqtags
+            SET
+                tagging_name = '%s'
+            WHERE
+                tagging_id = %d",
+            PMF_Db::getTablePrefix(),
+            $entity->getName(),
+            $entity->getId()
+        );
+
+        return $this->_config->getDb()->query($query);
+    }
+
+    /**
      * Deletes all tags from a given record id
      *
      * @param integer $recordId Record ID

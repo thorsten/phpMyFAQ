@@ -208,7 +208,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
                 case 'config_list': require 'ajax.config_list.php'; break;
                 case 'config':      require 'ajax.config.php'; break;
                 // Tags management
-                case 'tags_list':   require 'ajax.tags_list.php'; break;
+                case 'tags':        require 'ajax.tags.php'; break;
                 // Comments
                 case 'comment':     require 'ajax.comment.php'; break;
                 // Records
