@@ -26,7 +26,7 @@
 @gray-light:            #b4bcc2;
 @gray-lighter:          #ecf0f1;
 
-@brand-primary:         #2C3E50;
+@brand-primary:         #2B292E;
 @brand-success:         #6BBA70;
 @brand-info:            #3498DB;
 @brand-warning:         #F39C12;
@@ -34,8 +34,8 @@
 
 @body-bg:               #fff;
 @text-color:            @brand-primary;
-@link-color:            @brand-success;
-@link-hover-color:      @link-color;
+@link-color:            #28a9b2;
+@link-hover-color:      darken(@navbar-default-link-color, 10%);;
 
 //
 // Typography
@@ -218,8 +218,8 @@
 @navbar-default-bg:                @brand-primary;
 @navbar-default-border:            transparent;
 
-@navbar-default-link-color:                orange;
-@navbar-default-link-hover-color:          darkorange;
+@navbar-default-link-color:                @link-color;
+@navbar-default-link-hover-color:          @link-hover-color;
 @navbar-default-link-hover-bg:             transparent;
 @navbar-default-link-active-color:         #fff;
 @navbar-default-link-active-bg:            darken(@navbar-default-bg, 10%);
