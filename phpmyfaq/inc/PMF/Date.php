@@ -126,7 +126,8 @@ class PMF_Date
     /**
      * Returns date formatted according to user defined format
      *
-     * @param string $date
+     * @param string $unformattedDate
+     *
      * @return string
      */
     public function format($unformattedDate)

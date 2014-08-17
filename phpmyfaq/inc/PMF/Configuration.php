@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Configuration
+ * PMF_Configuration
  *
  * @category  phpMyFAQ
  * @package   Configuration
@@ -374,14 +374,14 @@ class PMF_Configuration
     {
         global $PMF_LANG;
 
-        $options = array('id', 'thema', 'visits', 'datum', 'author');
-        $output = '';
+        $options = ['id', 'thema', 'visits', 'datum', 'author'];
+        $output  = '';
 
         foreach ($options as $value) {
             printf('<option value="%s"%s>%s</option>',
                 $value,
-                ($value == $current) ? ' selected="selected"' : '',
-                $PMF_LANG['ad_conf_order_'.$value]);
+                ($value == $current) ? ' selected' : '',
+                $PMF_LANG['ad_conf_order_' . $value]);
         }
 
         return $output;
