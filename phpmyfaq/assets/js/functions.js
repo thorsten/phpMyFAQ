@@ -25,8 +25,6 @@ var addAttachment,
     infoBox,
     selectSelectAll,
     selectUnselectAll,
-    formCheckAll,
-    formUncheckAll,
     checkAll,
     closeWindow,
     addAttachmentLink,
@@ -106,34 +104,6 @@ $(document).ready(function () {
             i = 0;
         for (i = 0; i < selectOptions.length; i += 1) {
             selectOptions[i].selected = false;
-        }
-    };
-
-    /**
-     * checks all checkboxes in form with the given ID.
-     *
-     * @param   form_id
-     * @return  void
-     */
-    formCheckAll = function formCheckAll(form_id) {
-        var inputElements = $('#' + form_id + ' input'),
-            i;
-        for (i = 0; i < inputElements.length; i = 1 + 1) {
-            inputElements[i].checked = true;
-        }
-    };
-
-    /**
-     * unchecks all checkboxes in form with the given ID.
-     *
-     * @param   form_id
-     * @return  void
-     */
-    formUncheckAll = function formUncheckAll(form_id) {
-        var inputElements = $('#' + form_id + ' input'),
-            i;
-        for (i = 0; i < inputElements.length; i = 1 + 1) {
-            inputElements[i].checked = false;
         }
     };
 

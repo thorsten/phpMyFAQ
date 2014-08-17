@@ -445,6 +445,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         //<![CDATA[
                         var mappedIds,
                             userNames;
+                        /*
                         $('#user_list_autocomplete').typeahead({
                             source: function (query, process) {
                                 return $.get("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { q: query }, function (data) {
@@ -464,14 +465,15 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                                 getUserRights(userId);
                             }
                         });
+                        */
                         //]]>
                         </script>
                     </div>
                     <div class="panel-footer">
                         <input type="hidden" id="user_list_select" name="user_list_select" value="">
-                        <button class="btn btn-danger" type="submit">
-                            <?php echo $PMF_LANG['ad_gen_delete']; ?>
-                        </button>
+                            <button class="btn btn-danger" type="submit">
+                                <?php echo $PMF_LANG['ad_gen_delete']; ?>
+                            </button>
                     </div>
                     </form>
                 </div>
@@ -519,10 +521,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                             <ul class="list-group">
                                 <li class="list-group-item text-center">
-                                    <a class="btn btn-primary btn-sm" href="javascript:formCheckAll('rightsForm')">
+                                    <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                                         <?php echo $PMF_LANG['ad_user_checkall']; ?>
-                                    </a>
-                                    <a class="btn btn-primary btn-sm" href="javascript:formUncheckAll('rightsForm')">
+                                        /
                                         <?php echo $PMF_LANG['ad_user_uncheckall']; ?>
                                     </a>
                                 </li>
@@ -530,7 +531,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                                 <li class="list-group-item checkbox">
                                     <label>
                                     <input id="user_right_<?php echo $right['right_id']; ?>" type="checkbox"
-                                           name="user_rights[]" value="<?php echo $right['right_id']; ?>"/>
+                                           name="user_rights[]" value="<?php echo $right['right_id']; ?>"
+                                           class="permission">
                                 <?php
                                 if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
                                     echo $PMF_LANG['rightsLanguage'][$right['name']];

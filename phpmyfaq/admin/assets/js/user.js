@@ -38,3 +38,23 @@ function updateUser(userId) {
     getUserData(userId);
     getUserRights(userId);
 }
+
+
+$(document).ready(function() {
+    "use strict";
+
+    var button   = $('#checkAll');
+    var checkbox = $('.permission');
+
+    button.data('type', 'check');
+    button.click(function(event) {
+        event.preventDefault();
+        if (button.data('type') === 'check') {
+            checkbox.prop('checked', true);
+            button.data('type', 'uncheck');
+        } else {
+            checkbox.prop('checked', false);
+            button.data('type', 'check');
+        }
+    });
+});
