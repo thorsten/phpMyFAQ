@@ -2,7 +2,7 @@
 /**
  * Provides methods for password encryption using PHP 5.5+ password_hash()
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Enc_Bcrypt extends PMF_Enc
 {
     /**
-     * Encrypts the passwords and returns the result.
+     * Encrypts the passwords and returns the result
      *
      * @param  string $password String
      *
