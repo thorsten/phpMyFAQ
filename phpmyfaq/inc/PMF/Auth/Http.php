@@ -43,22 +43,27 @@ class PMF_Auth_Http extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param  string $login Loginname
      * @param  string $pass  Password
+     *
      * @return boolean
      */
     public function add($login, $pass)
     {
-        return true;
+        $user   = new PMF_User($this->_config);
+        $result = $user->createUser($login, null);
+
+        $user->setStatus('active');
+        $user->setUserData(['display_name' => $login]);
+
+        return $result;
     }
 
     /**
      * Changes the password for the account specified by login.
-     *
-     * Returns true on success, otherwise false.
-     *
-     * Error messages are added to the array errors.
+     * Returns true as it's not possible via HTTP Auth
      *
      * @param  string $login Loginname
      * @param  string $pass  Password
+     *
      * @return boolean
     */
     public function changePassword($login, $pass)
@@ -68,12 +73,10 @@ class PMF_Auth_Http extends PMF_Auth implements PMF_Auth_Driver
     
     /**
      * Deletes the user account specified by login.
-     *
-     * Returns true on success, otherwise false.
-     *
-     * Error messages are added to the array errors.
+     * Returns true as it's not possible via HTTP Auth
      *
      * @param  string $login Loginname
+     *
      * @return bool
      */
     public function delete($login)
@@ -94,6 +97,7 @@ class PMF_Auth_Http extends PMF_Auth implements PMF_Auth_Driver
      * @param  string $login        Loginname
      * @param  string $pass         Password
      * @param  array  $optionalData Optional data
+     *
      * @return boolean
      */
     public function checkPassword($login, $pass, Array $optionalData = null)
@@ -110,14 +114,15 @@ class PMF_Auth_Http extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Does nothing. A function required to be a valid auth.
+     * Returns 1 or 0 for true or false
      *
      * @param  string $login        Loginname
      * @param  array  $optionalData Optional data
+     *
      * @return integer
      */
     public function checkLogin($login, Array $optionalData = null)
     {
-        return isset($_SERVER['PHP_AUTH_USER']) ? true : false;
+        return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }
 }

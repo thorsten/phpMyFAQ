@@ -131,15 +131,15 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Returns true, if $_SERVER['REMOTE_USER'] is set.
+     * Returns 1, if $_SERVER['REMOTE_USER'] is set.
      *
      * @param string $login        Loginname
      * @param array  $optionalData Optional data
      *
-     * @return boolean
+     * @return integer
      */
     public function checkLogin($login, Array $optionalData = null)
     {
-        return isset($_SERVER['REMOTE_USER']) ? true : false;
+        return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
     }
 }
