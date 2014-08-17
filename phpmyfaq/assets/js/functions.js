@@ -25,7 +25,6 @@ var addAttachment,
     infoBox,
     selectSelectAll,
     selectUnselectAll,
-    checkAll,
     closeWindow,
     addAttachmentLink,
     showLongComment,
@@ -46,22 +45,6 @@ $(document).ready(function () {
             'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
         );
         popup.focus();
-    };
-
-    /**
-     * Checks all checkboxes
-     *
-     * @param checkBox
-     */
-    checkAll = function checkAll(checkBox) {
-        var v = checkBox.checked,
-            f = checkBox.form,
-            i = 0;
-        for (i = 0; i < f.elements.length; i += 1) {
-            if (f.elements[i].type === 'checkbox') {
-                f.elements[i].checked = v;
-            }
-        }
     };
 
     /**
