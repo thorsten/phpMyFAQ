@@ -20,7 +20,7 @@
  * @param userId User ID
  */
 function getUserRights(userId) {
-    $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=" + userId,
+    $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId,
         function(data) {
             $.each(data, function(i, val) {
                 $('#user_right_' + val).attr('checked', true);
