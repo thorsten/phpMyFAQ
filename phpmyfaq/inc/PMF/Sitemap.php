@@ -232,9 +232,9 @@ class PMF_Sitemap
 
         $writeMap = '';
 
-        switch($this->type) {
-            case 'db2':
+        switch(PMF_Db::getType()) {
             case 'sqlite':
+            case 'sqlite3':
                 $query = sprintf("
                     SELECT
                         fd.thema AS thema,
