@@ -61,16 +61,19 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * Connects to the database.
      *
-     * @param string $host     Hostname
+     * @param string $host     Hostname or path to socket
      * @param string $user     Username
      * @param string $password Password
      * @param string $database Database name
+     *
+     * @throws PMF_Exception
      *
      * @return  boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
         $this->conn = new mysqli($host, $user, $password);
+
         if ($this->conn->connect_error) {
             PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
             die();
@@ -82,39 +85,39 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         }
 
         if ('' !== $database) {
-            return $this->selectDb($database);
+            if (! $this->conn->select_db($database)) {
+                throw new PMF_Exception('Cannot connect to database ' . $database);
+            }
         }
 
         return true;
     }
 
     /**
-     * Connects to a given database
+     * This function sends a query to the database.
      *
-     * @param string $database Database name
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return boolean
-     */
-    public function selectDb($database)
-    {
-        return $this->conn->select_db($database);
-    }
-
-    /**
-     * Sends a query to the database.
-     *
-     * @param   string $query
      * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+        }
+
         $result = $this->conn->query($query);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
+
         return $result;
     }
 
@@ -167,6 +170,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     public function fetchAll($result)
     {
         $ret = array();
+
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
@@ -186,7 +190,11 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function numRows($result)
     {
-        return $result->num_rows;
+        try {
+            return $result->num_rows;
+        } catch (PMF_Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     /**
@@ -313,5 +321,13 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         if (is_resource($this->conn)) {
             $this->conn->close();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'NOW()';
     }
 }

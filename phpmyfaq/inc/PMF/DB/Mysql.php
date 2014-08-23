@@ -102,10 +102,13 @@ class PMF_DB_Mysql implements PMF_DB_Driver
     /**
      * This function sends a query to the database.
      *
-     * @param  string $query Query string
-     * @return mixed
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
@@ -285,6 +288,14 @@ class PMF_DB_Mysql implements PMF_DB_Driver
         }
 
         return $this->tableNames;
+    }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'NOW()';
     }
 
     /**

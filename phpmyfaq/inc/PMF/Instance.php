@@ -79,12 +79,14 @@ class PMF_Instance
         $this->setId($this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqinstances', 'id'));
 
         $insert = sprintf(
-            "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', NOW(), NOW())",
+            "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
             PMF_Db::getTablePrefix(),
             $this->getId(),
             $data['url'],
             $data['instance'],
-            $data['comment']
+            $data['comment'],
+            $this->config->getDb()->now(),
+            $this->config->getDb()->now()
         );
 
         if (! $this->config->getDb()->query($insert)) {

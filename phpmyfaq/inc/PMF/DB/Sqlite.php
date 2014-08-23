@@ -95,15 +95,22 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
     /**
      * Sends a query to the database.
      *
-     * @param string $query SQL query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return mixed $result
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+        }
+
         $result = sqlite_query($this->conn, $query);
         if (!$result) {
             $this->sqllog .= $this->error();
@@ -276,6 +283,14 @@ class PMF_DB_Sqlite implements PMF_DB_Driver
         }
 
         return $this->tableNames;
+    }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return "DATETIME('now', 'localtime')";
     }
 
     /**

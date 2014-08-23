@@ -78,33 +78,30 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Connects to a given database
+     * This function sends a query to the database.
      *
-     * @param string $database Database name
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return boolean
+     * @return  mixed $result
      */
-    public function selectDb($database)
-    {
-        return true;
-    }
-
-    /**
-     * Sends a query to the database.
-     *
-     * @param string $query SQL query
-     *
-     * @return mixed $result
-     */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+        }
+
         $result = $this->conn->query($query);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
+
         return $result;
     }
 
@@ -123,13 +120,16 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * Fetch a result row as an object
      *
      * @param   mixed $result
-     * @return object
+     * @return object or NULL if there are no more results
      */
     public function fetchObject($result)
     {
+        $result->fetchedByPMF= true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
-        return (object)$return;
+        return $return
+            ? (object)$return
+            : NULL;
     }
 
     /**
@@ -141,13 +141,8 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchArray($result)
     {
-        $ret = array();
-
-        while ($res = $result->fetchArray()) {
-            $ret[] = $res;
-        }
-
-        return $ret;
+        $result->fetchedByPMF= true;
+        return $result->fetchArray();
     }
 
     /**
@@ -159,19 +154,16 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function fetchAssoc($result)
     {
-        $ret = array();
-
-        while ($res = $result->fetchArray(SQLITE3_ASSOC)) {
-            $ret[] = $res;
-        }
-
-        return $ret;
+        $result->fetchedByPMF= true;
+        return $result->fetchArray(SQLITE3_ASSOC);
     }
 
     /**
      * Fetches a complete result as an object
      *
      * @param resource $result Resultset
+     *
+     * @throws Exception
      *
      * @return array of stdClass
      */
@@ -181,8 +173,9 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         if (false === $result) {
             throw new Exception('Error while fetching result: ' . $this->error());
         }
-
-        while ($row = $this->fetch_assoc($result)) {
+        
+        $result->fetchedByPMF= true;
+        while( $row=$result->fetchArray(SQLITE3_ASSOC) ) {
             $ret[] = (object)$row;
         }
 
@@ -190,14 +183,20 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Number of rows in a result
+     * Number of rows in a result.
      *
      * @param   SQLite3Result $result
      * @return  integer
      */
     public function numRows($result)
     {
-        return count($result->fetchArray());
+        !isset( $result->fetchedByPMF ) || !$result->fetchedByPMF || die( "Do not call numRows() after you've fetched one or more result records, because PMF_DB_Sqlite3::numRows() has to reset the resultset at its end." );
+        $numberOfRows= 0;
+        while( $result->fetchArray(SQLITE3_NUM) ) {
+            $numberOfRows++;
+        }
+        $result->reset();
+        return $numberOfRows;
     }
 
     /**
@@ -314,5 +313,13 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     public function close()
     {
         return $this->conn->close();
+    }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return "DATETIME('now', 'localtime')";
     }
 }

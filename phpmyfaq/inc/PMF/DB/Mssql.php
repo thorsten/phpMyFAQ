@@ -1,7 +1,7 @@
 <?php
 /**
- * The PMF_DB_Mssql class provides methods and functions for a Microsoft SQL
- * Server database.
+ * The PMF_DB_Mssql class provides methods and functions for Microsoft SQL
+ * Server 2012 or later
  *
  * PHP Version 5.3
  *
@@ -85,11 +85,13 @@ class PMF_DB_Mssql implements PMF_DB_Driver
 
         return true;
     }
-
     /**
      * Connects to a given database
      *
      * @param string $database Database name
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
      * @return boolean
      */
@@ -99,21 +101,30 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Sends a query to the database.
+     * This function sends a query to the database.
      *
-     * @param string $query Query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
      *
-     * @return resource
+     * @return  mixed $result
      */
-    public function query($query)
+    public function query($query, $offset = 0, $rowcount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
+        }
+
         $result = mssql_query($query, $this->conn);
+
         if (!$result) {
             $this->sqllog .= $this->error();
         }
+
         return $result;
     }
 
@@ -312,5 +323,13 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     public function close()
     {
         return mssql_close($this->conn);
+    }
+
+    /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'GETDATE()';
     }
 }

@@ -177,7 +177,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="control-group">
                             <label class="control-label" for="sql_server">Database hostname:</label>
                             <div class="controls">
-                                <input type="text" name="sql_server" id="sql_server" required />
+                                <input type="text" name="sql_server" id="sql_server">
                                 <p class="help-block">Please enter the host of your database server.</p>
                             </div>
                         </div>
@@ -198,7 +198,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                         <div class="control-group">
                             <label class="control-label" for="sql_db">Database name:</label>
                             <div class="controls">
-                                <input type="text" name="sql_db" id="sql_db" required />
+                                <input type="text" name="sql_db" id="sql_db">
                                 <p class="help-block">Please enter your database name.</p>
                             </div>
                         </div>
@@ -329,7 +329,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="control-group">
                         <label class="control-label" for="permLevel">Permission level:</label>
                         <div class="controls">
-                                <select id="permLevel" name="permLevel" size="1" required="required">
+                                <select id="permLevel" name="permLevel" size="1" required>
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                             </select>
@@ -341,35 +341,35 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                     <div class="control-group">
                         <label class="control-label" for="realname">Your name:</label>
                         <div class="controls">
-                            <input type="text" name="realname" id="realname" required="required" />
+                            <input type="text" name="realname" id="realname" required>
                             <p class="help-block">Please enter your real name.</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="email">Your email address:</label>
                         <div class="controls">
-                            <input type="email" name="email" id="email" required="required" />
+                            <input type="email" name="email" id="email" required>
                             <p class="help-block">Please enter your email adress.</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="loginname">Your login name:</label>
                         <div class="controls">
-                            <input type="text" name="loginname" id="loginname" required="required" />
+                            <input type="text" name="loginname" id="loginname" required>
                             <p class="help-block">Please enter your login name.</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="password">Your password:</label>
                         <div class="controls">
-                            <input type="password" name="password" id="password" required="required" />
+                            <input type="password" name="password" id="password" required>
                             <p class="help-block">Please enter your password.</p>
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="password_retype">Retype password:</label>
                         <div class="controls">
-                            <input type="password" name="password_retyped" id="password_retype" required="required" />
+                            <input type="password" name="password_retyped" id="password_retype" required>
                             <p class="help-block">Please retype your password.</p>
                         </div>
                     </div>

@@ -49,23 +49,15 @@ interface PMF_DB_Driver
     public function connect($host, $user, $password, $db = '');
 
     /**
-     * Connects to a given database
-     *
-     * @param string $database Database name
-     *
-     * @return boolean
-     */
-    public function selectDb($database);
-
-    /**
-     * Sends a query to the database.
-     *
      * This function sends a query to the database.
      *
-     * @param   string $query
+     * @param string  $query
+     * @param integer $offset
+     * @param integer $rowcount
+     *
      * @return  mixed $result
      */
-    public function query($query);
+    public function query($query, $offset = 0, $rowcount = 0);
 
     /**
      * Escapes a string for use in a query
@@ -84,7 +76,7 @@ interface PMF_DB_Driver
     public function fetchObject($result);
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an array.
      *
      * @param   mixed $result
      * @return  array
@@ -167,4 +159,14 @@ interface PMF_DB_Driver
      * @access boolean
      */
     public function close();
+    
+    /**
+     * Return SQL expression that yeilds current datetime in the local timezone.
+     * The actual SQL value may be of SQL datetime type (or timestamp or similar)
+     * or it may be varchar/text (as is in SQLite3) - so make sure the consumer
+     * code doesn't depend on the actual type.
+     *
+     * @return string String that you can pass to SQL as in: SELECT <result of PMF_Db_Driver_instance->now()>
+     */
+    public function now();
 }
