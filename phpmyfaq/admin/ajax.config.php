@@ -113,7 +113,7 @@ switch ($ajaxAction) {
     case 'delete_instance':
         if (null !== $instanceId) {
             $faqInstance = new PMF_Instance($faqConfig);
-            if ($faqInstance->removeInstance($instanceId)) {
+            if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {
                 $payload = array('error' => $instanceId);
