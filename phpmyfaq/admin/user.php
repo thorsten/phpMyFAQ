@@ -56,7 +56,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
-        if ($userId === 0 && !$csrfOkay) {
+        if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user       = new PMF_User($faqConfig);
@@ -157,7 +157,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <p class="alert alert-danger"><?php print $PMF_LANG["ad_user_del_3"].' '.$PMF_LANG["ad_user_del_1"].' '.$PMF_LANG["ad_user_del_2"]; ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
             <input type="hidden" name="user_id" value="<?php print $userId; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
             <p class="text-center">
                 <button class="btn btn-danger" type="submit">
                     <?php print $PMF_LANG["ad_gen_yes"]; ?>
@@ -174,16 +174,18 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
     // delete user
     if ($userAction == 'delete' && $permission['deluser']) {
+
         $message    = '';
         $user       = new PMF_User($faqConfig);
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay   = true;
         $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $userAction = $defaultUserAction;
+
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false; 
         }
-        $userAction = $defaultUserAction;
-        if ($userId == 0 && !$csrfOkay) {
+        if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             if (!$user->getUserById($userId)) {
@@ -215,6 +217,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
 
     // save new user
     if ($userAction == 'addsave' && $permission['adduser']) {
+
         $user                  = new PMF_User($faqConfig);
         $message               = '';
         $messages              = array();
@@ -226,6 +229,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
         $csrfOkay              = true;
         $csrfToken             = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false; 
         }
