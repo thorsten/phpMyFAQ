@@ -38,7 +38,7 @@ if ($permission['delquestion']) {
     $category->setGroups($currentAdminGroups);
     $date       = new PMF_Date($faqConfig);
     $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    
+
     $toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
     if ($toggle == 'toggle') {
         $is_visible = $faq->getVisibilityOfQuestion($questionId);
@@ -54,16 +54,17 @@ if ($permission['delquestion']) {
     if (count($openquestions) > 0) {
 ?>
     <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
-    <table class="table table-striped">
-    <thead>
-        <tr>
-            <th></th>
-            <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
-            <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
-            <th colspan="2"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
-        </tr>
-    </thead>
-    <tbody>
+        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th><?php print $PMF_LANG['ad_entry_author']; ?></th>
+                <th><?php print $PMF_LANG['ad_entry_theme']; ?></th>
+                <th colspan="2"><?php print $PMF_LANG['ad_entry_visibility']; ?>?</th>
+            </tr>
+        </thead>
+        <tbody>
 <?php
         foreach ($openquestions as $question) {
 ?>
@@ -108,42 +109,39 @@ if ($permission['delquestion']) {
 <?php
         }
 ?>
-    </tbody>
-    </table>
-    </form>
+        </tbody>
+        </table>
+        </form>
 
-    <p>
-        <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
-            <?php print $PMF_LANG["ad_entry_delete"]; ?>
-        </button>
-    </p>
+        <p>
+            <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
+                <?php print $PMF_LANG["ad_entry_delete"]; ?>
+            </button>
+        </p>
 
-    <script type="text/javascript">
-        /* <![CDATA[ */
-        $('#submitDeleteQuestions').click(function() { deleteQuestions(); return false; });
+        <script type="text/javascript">
+            $('#submitDeleteQuestions').click(function() { deleteQuestions(); return false; });
 
-        function deleteQuestions()
-        {
-            var questions = $('#questionSelection').serialize();
+            function deleteQuestions()
+            {
+                var questions = $('#questionSelection').serialize();
 
-            $('#returnMessage').empty();
-            $.ajax({
-                type: 'POST',
-                url:  'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
-                data: questions,
-                success: function(msg) {
-                    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
-                    $('tr td input:checked').parent().parent().fadeOut('slow');
-                    $('#saving_data_indicator').fadeOut('slow');
-                    $('#returnMessage').
-                            html('<p class="alert alert-success">' + msg + '</p>');
-                }
-            });
-            return false;
-        }
-
-        /* ]]> */
-    </script>
+                $('#returnMessage').empty();
+                $.ajax({
+                    type: 'POST',
+                    url:  'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
+                    data: questions,
+                    success: function(msg) {
+                        $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                        $('tr td input:checked').parent().parent().fadeOut('slow');
+                        $('#saving_data_indicator').fadeOut('slow');
+                        $('#returnMessage').
+                                html('<p class="alert alert-success">' + msg + '</p>');
+                    }
+                });
+                return false;
+            }
+        </script>
 <?php
     } else {
         print $PMF_LANG['msgNoQuestionsAvailable'];
