@@ -66,12 +66,18 @@ class PMF_Helper_Administration
         }
         
         if (isset($PMF_LANG[$caption])) {
-            $_caption = $PMF_LANG[$caption];
+            $renderedCaption = $PMF_LANG[$caption];
         } else {
-            $_caption = 'No string for ' . $caption;
+            $renderedCaption = 'No string for ' . $caption;
         }
         
-        $output = sprintf('<li%s><a href="?%s">%s</a></li>%s', $active, $action, $_caption, "\n");
+        $output = sprintf(
+            '<li%s><a href="?%s">%s</a></li>%s',
+            $active,
+            $action,
+            $renderedCaption,
+            "\n"
+        );
         
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
@@ -122,7 +128,7 @@ class PMF_Helper_Administration
     }
     
     /**
-     * Setter for permission aray
+     * Setter for permission array
      *
      * @param PMF_User $user
      *
