@@ -42,6 +42,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     public function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
+        $this->relevanceSupport = true;
     }
 
     /**

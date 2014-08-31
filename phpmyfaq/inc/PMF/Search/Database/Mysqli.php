@@ -42,6 +42,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     public function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
+        $this->relevanceSupport = true;
     }
 
     /**
@@ -95,6 +96,8 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             );
 
             $this->resultSet = $this->_config->getDb()->query($query);
+
+            var_dump($query);
 
             // Fallback for searches with less than three characters
             if (0 == $this->_config->getDb()->numRows($this->resultSet)) {

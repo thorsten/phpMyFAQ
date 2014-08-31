@@ -75,7 +75,14 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      * @var array
      */
     protected $conditions = [];
-    
+
+    /**
+     * Flag if database supports search relevance
+     *
+     * @var bool
+     */
+    protected $relevanceSupport = false;
+
     /**
      * Constructor
      *
