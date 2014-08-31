@@ -30,6 +30,9 @@ Version 2.9.0-alpha2 2014-09
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 
+Version 2.8.13 - 2014-
+- updated Chinese (Traditional) translation (Barlos Lee)
+
 Version 2.8.12 - 2014-08-02
 - updated Hebrew translation
 - updated to Twitter OAuth v1.1 (Thorsten)

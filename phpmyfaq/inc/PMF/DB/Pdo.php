@@ -264,6 +264,14 @@ abstract class PMF_DB_Pdo implements PMF_DB_Driver
     }
 
     /**
+     * @return string
+     */
+    public function now()
+    {
+        return 'NOW()';
+    }
+
+    /**
      * Closes the connection to the database.
      *
      * @return void

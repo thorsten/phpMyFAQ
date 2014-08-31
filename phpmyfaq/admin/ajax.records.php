@@ -28,6 +28,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfToken   = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    echo $PMF_LANG['err_NotAuth'];
+    exit(1);
+}
 
 // Expected is an array of the structure:
 // array( 0 => array((int)id, (string)langugage, (int) checked)),

@@ -59,7 +59,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
-        if ($userId === 0 && !$csrfOkay) {
+        if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user       = new PMF_User($faqConfig);
@@ -184,11 +184,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         $userId     = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay   = true;
         $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $userAction = $defaultUserAction;
+
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false; 
         }
         $userAction = $defaultUserAction;
-        if ($userId == 0 && !$csrfOkay) {
+        if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             if (!$user->getUserById($userId)) {
@@ -231,6 +233,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
         $csrfOkay              = true;
         $csrfToken             = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false; 
         }

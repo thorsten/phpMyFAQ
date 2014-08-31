@@ -232,7 +232,7 @@ class PMF_Sitemap
 
         $writeMap = '';
 
-        switch($this->type) {
+        switch(PMF_Db::getType()) {
             case 'sqlite3':
                 $query = sprintf("
                     SELECT

@@ -33,10 +33,14 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 } else {
     $csrfCheck = true;
 }
-
+?>
+    <header>
+        <h2 class="page-header">
+            <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
+        </h2>
+    </header>
+<?php
 if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
-
-    printf('<header><h2 class="page-header">%s</h2></header>', $PMF_LANG['ad_csv_rest']);
 
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
         
@@ -51,7 +55,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
         $versionFound    = PMF_String::substr($dat, 0, 9);
         $versionExpected = '-- pmf' . substr($faqConfig->get('main.currentVersion'), 0, 3);
 
-        if ($versionFound != $versionExpected) {
+        if ($versionFound !== $versionExpected) {
             printf('%s (Version check failure: "%s" found, "%s" expected)',
                 $PMF_LANG['ad_csv_no'],
                 $versionFound,
@@ -93,19 +97,24 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
                 $kg         = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
-                    printf('<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                    printf(
+                    '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
-                        "\n");
+                        "\n"
+                    );
                     $k++;
                 } else {
-                    printf('<!-- <div style="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
+                    printf(
+                        '<!-- <div style="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
                         PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
-                        "\n");
+                        "\n"
+                    );
                     $g++;
                 }
             }
-            printf('<p class="alert alert-success">%d %s %d %s</p>',
+            printf(
+                '<p class="alert alert-success">%d %s %d %s</p>',
                 $g,
                 $PMF_LANG['ad_csv_of'],
                 $num,
