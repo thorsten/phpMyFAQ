@@ -95,7 +95,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             );
 
             $this->resultSet = $this->_config->getDb()->query($query);
-            
+
             // Fallback for searches with less than three characters
             if (0 == $this->_config->getDb()->numRows($this->resultSet)) {
                 
@@ -133,7 +133,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         $resultColumns = '';
 
         foreach ($this->matchingColumns as $matchColumn) {
-            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS rel_%s",
+            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
                 $matchColumn,
                 $this->_config->getDb()->escape($searchterm),
                 substr(strstr($matchColumn, '.'), 1));
@@ -153,12 +153,16 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
      */
     public function getMatchingOrder()
     {
-        $list  = explode(",", $this->_config->get('search.relevance'));
+        $list  = explode(',', $this->_config->get('search.relevance'));
         $count = count($list);
         $order = '';
 
         foreach ($list as $field) {
-            $string = '(rel_' . $field . '*' . $count .')';
+            $string = sprintf(
+                '(relevance_%s * %d)',
+                $field,
+                $count
+            );
             if (empty($order)) {
                 $order .= $string;
             } else {
