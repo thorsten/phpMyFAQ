@@ -452,6 +452,8 @@ if (is_null($error)) {
     $loginMessage = '<p class="error">' . $error . '</p>';
 }
 
+$faqSeo = new PMF_Seo($faqConfig);
+
 $tplMainPage = array(
     'msgLoginUser'         => $PMF_LANG['msgLoginUser'],
     'title'                => $faqConfig->get('main.titleFAQ') . $title,
@@ -464,6 +466,7 @@ $tplMainPage = array(
     'metaPublisher'        => $faqConfig->get('main.metaPublisher'),
     'metaLanguage'         => $PMF_LANG['metaLanguage'],
     'metaCharset'          => 'utf-8', // backwards compability
+    'metaRobots'           => $faqSeo->getMetaRobots($action),
     'phpmyfaqversion'      => $faqConfig->get('main.currentVersion'),
     'stylesheet'           => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
     'currentPageUrl'       => $currentPageUrl,
