@@ -132,14 +132,15 @@ switch ($action) {
                 // @todo handle the exception
             }
 
-            $commentData = array(
+            $commentData = [
                 'record_id' => $id,
                 'type'      => $type,
                 'username'  => $username,
                 'usermail'  => $mail,
                 'comment'   => nl2br($comment),
                 'date'      => $_SERVER['REQUEST_TIME'],
-                'helped'    => '');
+                'helped'    => ''
+            ];
 
             if ($oComment->addComment($commentData)) {
                 $emailTo = $faqConfig->get('main.administrationMail');
