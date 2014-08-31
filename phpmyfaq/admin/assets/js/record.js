@@ -18,8 +18,28 @@
 
 $(document).ready(function() {
     'use strict';
+
     $('.showhideCategory').click(function(event) {
         event.preventDefault();
         $('#category_' + $(this).data('category-id')).toggle(1000);
     });
+
+    $('#submitDeleteQuestions').click(function() {
+        var questions = $('#questionSelection').serialize();
+        $('#returnMessage').empty();
+        $.ajax({
+            type: 'POST',
+            url:  'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
+            data: questions,
+            success: function(msg) {
+                $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                $('tr td input:checked').parent().parent().fadeOut('slow');
+                $('#saving_data_indicator').fadeOut('slow');
+                $('#returnMessage').
+                    html('<p class="alert alert-success">' + msg + '</p>');
+            }
+        });
+        return false;
+    });
+
 });
