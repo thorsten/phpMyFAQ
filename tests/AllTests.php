@@ -28,15 +28,14 @@ require_once __DIR__ . '/../vendor/phpunit/phpunit/src/Framework/TestSuite.php';
 require_once __DIR__ . '/../vendor/phpunit/phpunit/src/TextUI/TestRunner.php';
 
 // include Testsuites
-require_once __DIR__ . '/Attachment/AllTests.php';
-require_once __DIR__ . '/Category/AllTests.php';
-require_once __DIR__ . '/Configuration/AllTests.php';
-require_once __DIR__ . '/Faq/AllTests.php';
-require_once __DIR__ . '/Helper/AllTests.php';
-require_once __DIR__ . '/Instance/AllTests.php';
-require_once __DIR__ . '/Search/AllTests.php';
-//require_once __DIR__ . '/PMF_GlossaryTest.php';
-require_once __DIR__ . '/PMF_LinkTest.php';
+require_once __DIR__ . '/Attachment/PMF_Attachment_Filesystem_File_VanillaTest.php';
+require_once __DIR__ . '/Configuration/PMF_ConfigurationTest.php';
+require_once __DIR__ . '/Helper/PMF_Helper_AdministrationTest.php';
+require_once __DIR__ . '/Instance/PMF_Instance_ClientTest.php';
+require_once __DIR__ . '/Link/PMF_LinkTest.php';
+require_once __DIR__ . '/Search/PMF_Search_DatabaseTest.php';
+require_once __DIR__ . '/Search/PMF_Search_FactoryTest.php';
+require_once __DIR__ . '/Search/PMF_Search_ResultsetTest.php';
 
 /**
  * AllTests
@@ -54,16 +53,15 @@ class AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ AllTests');
-        
-        $suite->addTest(Attachment_AllTests::suite());
-        $suite->addTest(Category_AllTests::suite());
-        $suite->addTest(Configuration_AllTests::suite());
-        $suite->addTest(Faq_AllTests::suite());
-        $suite->addTest(Helper_AllTests::suite());
-        $suite->addTest(Instance_AllTests::suite());
-        $suite->addTest(Search_AllTests::suite());
-        //$suite->addTestSuite('PMF_GlossaryTest');
+
+        $suite->addTestSuite('PMF_Attachment_Filesystem_File_VanillaTest');
+        $suite->addTestSuite('PMF_ConfigurationTest');
+        $suite->addTestSuite('PMF_Helper_AdministrationTest');
+        $suite->addTestSuite('PMF_Instance_ClientTest');
         $suite->addTestSuite('PMF_LinkTest');
+        $suite->addTestSuite('PMF_Search_DatabaseTest');
+        $suite->addTestSuite('PMF_Search_FactoryTest');
+        $suite->addTestSuite('PMF_Search_ResultsetTest');
         
         return $suite;
     }
