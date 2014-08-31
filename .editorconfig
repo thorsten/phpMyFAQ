@@ -1,0 +1,17 @@
+; top-most EditorConfig file
+root = true
+
+; Unix-style newlines
+[*]
+end_of_line = LF
+insert_final_newline = true
+
+# PHP and JS files
+[{*.php,*.js}]
+indent_style = space
+indent_size = 4
+
+# JSON and LESS files
+[{package.json,.travis.yml,bower.json,*.less}]
+indent_style = space
+indent_size = 2
