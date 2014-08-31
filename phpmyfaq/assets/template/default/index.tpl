@@ -77,8 +77,9 @@
             </ul>
 
             <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{headerCategories}
-                        <b class="caret"></b></a>
+                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {headerCategories}
+                    </a>
                     <ul class="dropdown-menu">
                         <li>{allCategories}</li>
                         <li class="divider"></li>
@@ -97,7 +98,7 @@
                         <input type="text" class="form-control" name="search" id="searchfield"
                                autocomplete="off" autofocus placeholder="{searchBox} ...">
                     </div>
-                    <button type="submit" class="btn btn-default">{searchBox}</button>
+                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </div>
             </form>
         </div>
