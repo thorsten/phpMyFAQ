@@ -43,14 +43,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         $userAction      = 'listConfig';
         $oldConfigValues = $faqConfig->config;
 
-        /* XXX the cache concept is designed to be able to activate only one cache engine per time
-               so if there are more cache services implemented, respect it here*/
-        if (isset($editData['edit']['cache.varnishEnable']) && 'true' == $editData['edit']['cache.varnishEnable']) {
-            if (!extension_loaded('varnish')) {
-                throw new Exception('Varnish extension is not loaded');
-            }
-        }
-
         // Set the new values
         $forbiddenValues = array('{', '}', '$');
         $newConfigValues = [];
@@ -137,6 +129,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         </button>
                     </p>
                     <div id="configSpam" class="hide"></div>
+
+                    <p>
+                        <button class="btn btn-inverse toggleConfig"  data-toggle="Seo">
+                            <i class="fa fa-thumbs-down fa fa-white"></i>
+                            <?php echo $PMF_LANG['seoCenter']; ?>
+                        </button>
+                    </p>
+                    <div id="configSeo" class="hide"></div>
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="SocialNetworks">

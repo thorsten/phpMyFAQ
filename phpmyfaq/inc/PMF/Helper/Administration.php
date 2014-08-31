@@ -150,4 +150,30 @@ class PMF_Helper_Administration
             }
         }
     }
+
+    /**
+     * @param string $metaRobots
+     *
+     * @return string
+     */
+    public function renderMetaRobotsDropdown($metaRobots)
+    {
+        $html   = '';
+        $values = [
+            'index, follow',
+            'index, nofollow',
+            'noindex, follow',
+            'noindex, nofollow'
+        ];
+
+        foreach ($values as $value) {
+            $html .= sprintf(
+                '<option%s>%s</option>',
+                ($value === $metaRobots) ? ' selected' : '',
+                $value
+            );
+        }
+
+        return $html;
+    }
 }

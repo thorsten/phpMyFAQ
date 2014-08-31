@@ -46,7 +46,8 @@ $availableConfigModes = array(
         'records' => 1,
         'spam'    => 1,
         'search'  => 1,
-        'social'  => 1
+        'social'  => 1,
+        'seo'     => 1
 );
 
 /**
@@ -181,6 +182,15 @@ function renderInputForm($key, $type)
                     printf('<option value="keywords,thema,content"%s>%s</option>',
                         ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected' : '',
                         $PMF_LANG['search.relevance.keywords-thema-content']);
+                    break;
+
+                case 'seo.metaTagsHome':
+                case 'seo.metaTagsFaqs':
+                case 'seo.metaTagsCategories':
+                case 'seo.metaTagsPages':
+                case 'seo.metaTagsAdmin':
+                    $adminHelper = new PMF_Helper_Administration();
+                    echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
             }
             

@@ -830,6 +830,12 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.9.0-alpha2', '<')) {
 
+        $faqConfig->add('seo.metaTagsHome', 'index, follow');
+        $faqConfig->add('seo.metaTagsFaqs', 'index, follow');
+        $faqConfig->add('seo.metaTagsCategories', 'index, follow');
+        $faqConfig->add('seo.metaTagsPages', 'index, follow');
+        $faqConfig->add('seo.metaTagsAdmin', 'noindex, nofollow');
+
         if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
         } else {

@@ -1168,3 +1168,8 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Aktivier
 $PMF_LANG["ad_tag_delete_success"] = "Der Tag wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_tag_delete_error"] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
 $PMF_LANG["seoCenter"] = "Suchmaschinen Konfiguration";
+$LANG_CONF["seo.metaTagsHome"] = array(0 => "select", 1 => "Meta Tags Startseite");
+$LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
+$LANG_CONF["seo.metaTagsCategories"] = array(0 => "select", 1 => "Meta Tags Kategorien");
+$LANG_CONF["seo.metaTagsPages"] = array(0 => "select", 1 => "Meta Tags Statische Seiten");
+$LANG_CONF["seo.metaTagsAdmin"] = array(0 => "select", 1 => "Meta Tags Admin");

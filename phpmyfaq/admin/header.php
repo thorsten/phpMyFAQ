@@ -181,6 +181,7 @@ switch ($action) {
     <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2014 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
+    <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
