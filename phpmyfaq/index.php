@@ -472,6 +472,9 @@ $tplMainPage = array(
     'currentPageUrl'       => $currentPageUrl,
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
+    'writeSendAdress'      => '?' . $sids . 'action=search',
+    'searchBox'            => $PMF_LANG['msgSearch'],
+    'categoryId'           => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories'     => $PMF_LANG['msgFullCategories'],
     'msgCategory'          => $PMF_LANG['msgCategory'],
     'msgExportAllFaqs'     => $PMF_LANG['msgExportAllFaqs'],
@@ -483,6 +486,8 @@ $tplMainPage = array(
                               $faqConfig->get('main.currentVersion'),
     'registerUser'         => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
     'sendPassword'         => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
+    'msgFullName'          => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
+    'msgLoginName'         => $user->getUserData('display_name'),
     'loginHeader'          => $PMF_LANG['msgLoginUser'],
     'loginMessage'         => $loginMessage,
     'writeLoginPath'       => $faqSystem->getSystemUri($faqConfig) . '?' . PMF_Filter::getFilteredQueryString(),
@@ -610,8 +615,6 @@ if (isset($auth)) {
         'userloggedIn',
         array(
             'msgUserControl'         => $adminSection,
-            'msgFullName'            => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
-            'msgLoginName'           => $user->getUserData('display_name'),
             'msgUserControlDropDown' => '<a href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] . '</a>',
             'msgLogoutUser'          => '<a href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',
             'activeUserControl'      => ('ucp' == $action) ? 'active' : ''

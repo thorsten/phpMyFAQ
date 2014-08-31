@@ -36,7 +36,7 @@
 </head>
 <body dir="{dir}">
 
-<nav class="navbar navbar-default hidden-print" role="navigation">
+<div class="navbar navbar-default hidden-print" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
@@ -48,10 +48,37 @@
             <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
         </div>
 
-        <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
-            <ul class="nav navbar-nav">
+        <div class="navbar-collapse collapse" id="pmf-navbar-collapse">
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <span title="{msgFullName}"><b class="fa fa-bars"></b> {msgLoginName}</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>{showInstantResponse}</li>
+                        <li>{msgSearch}</li>
+                        <li>{msgAddContent}</li>
+                        <li>{msgQuestion}</li>
+                        <li>{msgOpenQuestions}</li>
+                        <li class="divider"></li>
+                        [notLoggedIn]
+                        <li>{msgRegisterUser}</li>
+                        <li>{msgLoginUser}</li>
+                        [/notLoggedIn]
+                        [userloggedIn]
+                        <li>{msgUserControlDropDown}</li>
+                        <li>{msgUserControl}</li>
+                        <li>{msgLogoutUser}</li>
+                        [/userloggedIn]
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
                 <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">{headerCategories}
-                    <b class="caret"></b></a>
+                        <b class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li>{allCategories}</li>
                         <li class="divider"></li>
@@ -60,53 +87,26 @@
                         [/categoryListSection]
                     </ul>
                 </li>
-                <li class="{activeQuickfind}">{showInstantResponse}</li>
-                <li class="{activeAddContent}">{msgAddContent}</li>
-                <li class="{activeAddQuestion}">{msgQuestion}</li>
-                <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
             </ul>
-            <ul class="nav navbar-nav navbar-right">
-                [notLoggedIn]
-                <li class="{activeRegister}">{msgRegisterUser}</li>
-                <li class="divider-vertical"></li>
-                <li class="{activeLogin}">{msgLoginUser}</li>
-                [/notLoggedIn]
-                [userloggedIn]
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span title="{msgFullName}">{msgLoginName}</span><b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>{msgUserControlDropDown}</li>
-                        <li>{msgUserControl}</li>
-                        <li>{msgLogoutUser}</li>
-                    </ul>
-                </li>
-                [/userloggedIn]
-            </ul>
+
+            <form class="navbar-form" role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
+                <div class="form-group">
+                    <div class="input-group">
+                        <input type="hidden" name="searchcategory" value="{categoryId}">
+                        <input type="hidden" name="action" value="search">
+                        <input type="text" class="form-control" name="search" id="searchfield"
+                               autocomplete="off" autofocus placeholder="{searchBox} ...">
+                    </div>
+                    <button type="submit" class="btn btn-default">{searchBox}</button>
+                </div>
+            </form>
         </div>
     </div>
-</nav>
+</div>
 
 <section id="content" class="container">
     <div class="row">
         <div class="col-md-8" id="mainContent">
-            [globalSearchBox]
-            <section class="well hidden-print" id="searchBox">
-                <form id="search" action="{writeSendAdress}" method="get" class="form-search" accept-charset="utf-8">
-                    <div class="input-append">
-                        <input type="hidden" name="searchcategory" value="{categoryId}" />
-                        <input type="hidden" name="action" value="search" />
-                        <input type="text" name="search" id="searchfield" placeholder="{searchBox} ..."
-                               class="form-control">
-                        <button class="btn btn-primary" type="submit" name="submit">
-                            {searchBox}
-                        </button>
-                    </div>
-                </form>
-                <small>{msgSearch}</small>
-            </section>
-            [/globalSearchBox]
             [globalSuggestBox]
             <section class="well hidden-print" id="searchBox">
                 <form id="instantform" action="?action=instantresponse" method="post" class="form-search" accept-charset="utf-8">
