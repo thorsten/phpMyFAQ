@@ -132,7 +132,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig"  data-toggle="Seo">
-                            <i class="fa fa-thumbs-down fa fa-white"></i>
+                            <i class="fa fa-search fa fa-white"></i>
                             <?php echo $PMF_LANG['seoCenter']; ?>
                         </button>
                     </p>
