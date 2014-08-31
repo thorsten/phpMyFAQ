@@ -1167,3 +1167,4 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Aktivier
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Der Tag wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_tag_delete_error"] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
+$PMF_LANG["seoCenter"] = "Suchmaschinen Konfiguration";

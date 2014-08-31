@@ -1137,14 +1137,6 @@ $PMF_LANG['msg_about_faq'] = 'Souhrn';
 $LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'Přístupné pouze přes SSL (výchozí: deaktivováno)');
 $PMF_LANG['msgTableOfContent'] = 'Obsah';
 
-// added v2.8.0-alpha - 2011-09-22 by Anatoliy
-$PMF_LANG['cacheControlCenter'] = 'Cache konfigurace';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Zapnout Varnish >=3.0 podporu<br><small>Budete potřebovat varnish PECL rozšíření</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
-
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'Hledat záznamy';
 

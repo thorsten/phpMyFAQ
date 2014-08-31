@@ -862,11 +862,6 @@ $PMF_LANG['ad_verification_button'] = 'Verificar a sua instalação do phpMyFAQ
 $PMF_LANG['ad_verification_notokay'] = 'O phpMyFAQ instalado possui algumas alterações em relação ao original:';
 $PMF_LANG['ad_verification_okay'] = 'Foi executada a verificação do phpMyFAQ instalado.';
 $PMF_LANG['cacheControlCenter'] = '<em>Cache</em> - configuração';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Ativar o Varnish (>=3.0)<br /><small>Requisito: <em>varnish PECL extension</em></small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish - <em>host</em>');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish - porta');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => '<em>Varnish secret</em>');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish <em>timeout</em>');
 $PMF_LANG['ad_menu_searchfaqs'] = 'Pesquisar artigos <small>(tipo FAQ)</small>';
 $LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Fechar a questão em aberto depois de responder?');
 $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Apagar a questão em aberto depois de responder?');

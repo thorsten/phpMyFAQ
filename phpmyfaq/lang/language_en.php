@@ -1123,14 +1123,6 @@ $PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installatio
 $PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes:";
 $PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";
 
-// added v2.8.0-alpha - 2011-09-22 by Anatoliy
-$PMF_LANG['cacheControlCenter'] = 'Cache configuration';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
-
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
 
@@ -1212,3 +1204,4 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Enable G
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
 $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occured.";
+$PMF_LANG["seoCenter"] = "Search engine configuration";

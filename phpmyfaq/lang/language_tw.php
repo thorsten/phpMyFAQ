@@ -1096,14 +1096,6 @@ $PMF_LANG["ad_verification_button"] = "點選來檢查您的 phpMyFAQ 安裝是�
 $PMF_LANG["ad_verification_notokay"] = "您的 phpMyFAQ 版本有語系檔異動: (Your version of phpMyFAQ has local changes:)";
 $PMF_LANG["ad_verification_okay"] = "您的 phpMyFAQ 版本已驗證完成。 (Your version of phpMyFAQ was successfully verified.)";
 
-// added v2.8.0-alpha - 2011-09-22 by Anatoliy 開發者
-$PMF_LANG['cacheControlCenter'] = "快取設定 Cache configuration";
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
-
 // added v2.8.0-alpha - 2011-09-29 by Thorsten 開發者
 $PMF_LANG['ad_menu_searchfaqs'] = "FAQs 的搜尋 (Search for FAQs)";
 
