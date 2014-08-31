@@ -1173,3 +1173,5 @@ $LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
 $LANG_CONF["seo.metaTagsCategories"] = array(0 => "select", 1 => "Meta Tags Kategorien");
 $LANG_CONF["seo.metaTagsPages"] = array(0 => "select", 1 => "Meta Tags Statische Seiten");
 $LANG_CONF["seo.metaTagsAdmin"] = array(0 => "select", 1 => "Meta Tags Admin");
+$PMF_LANG["msgMatchingQuestions"] = "Die folgenden Ergebnisse könnten Ihre Frage beantworten:";
+$PMF_LANG["msgFinishSubmission"] = "Wenn keine der Vorschläge übereinstimmt, können Sie nun die Frage absenden.";

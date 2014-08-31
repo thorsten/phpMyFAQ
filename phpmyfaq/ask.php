@@ -56,9 +56,11 @@ $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
 $tpl->parse(
     'writeContent',
-    array(
+    [
         'msgQuestion'          => $PMF_LANG['msgQuestion'],
         'msgNewQuestion'       => $PMF_LANG['msgNewQuestion'],
+        'msgMatchingQuestions' => $PMF_LANG['msgMatchingQuestions'],
+        'msgFinishSubmission'  => $PMF_LANG['msgFinishSubmission'],
         'lang'                 => $Language->getLanguage(),
         'msgNewContentName'    => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail'    => $PMF_LANG['msgNewContentMail'],
@@ -69,7 +71,7 @@ $tpl->parse(
         'msgAskYourQuestion'   => $PMF_LANG['msgAskYourQuestion'],
         'captchaFieldset'      => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit'  => $PMF_LANG['msgNewContentSubmit']
-    )
+    ]
 );
 
 $tpl->merge('writeContent', 'index');

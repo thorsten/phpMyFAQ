@@ -3,8 +3,15 @@
             <div id="questionForm">
                 <p>{msgNewQuestion}</p>
             </div>
+            <p class="hint-search-suggestion">
+                {msgMatchingQuestions}
+            </p>
             <div id="answerForm"></div>
             <div id="answers"></div>
+
+            <p class="hint-search-suggestion">
+                {msgFinishSubmission}
+            </p>
 
             <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />

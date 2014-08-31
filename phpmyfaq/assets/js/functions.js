@@ -290,6 +290,7 @@ $(document).ready(function () {
                     $('#loader').hide();
                 } else if (json.success === undefined) {
                     $('#qerror').empty();
+                    $('.hint-search-suggestion').show();
                     $('#questionForm').fadeOut('slow');
                     $('#answerForm').html(json.result);
                     $('#answerForm').fadeIn('slow');
