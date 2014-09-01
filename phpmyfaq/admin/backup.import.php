@@ -94,19 +94,20 @@ if ($permission['restore']) {
             $kg  = '';
             for ($i = 0; $i < $num; $i++) {
                 $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
-                $kg         = $faqConfig->getDb()->query($mquery[$i]);
+                $query      = $faqConfig->getDb()->escape($mquery[$i]);
+                $kg         = $faqConfig->getDb()->query($query);
                 if (!$kg) {
                     printf(
-                        '<div style="alert alert-error"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
-                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
+                        '<div class="alert alert-error"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                        PMF_String::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
                         "\n"
                     );
                     $k++;
                 } else {
                     printf(
-                        '<!-- <div style="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
-                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
+                        '<!-- <div class="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
+                        PMF_String::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
                         "\n"
                     );
                     $g++;
