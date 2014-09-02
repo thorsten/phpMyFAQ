@@ -117,7 +117,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
-                   class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i>
+                   class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash-o"></i>
                 </a>
                 <?php endif; ?>
             </td>
