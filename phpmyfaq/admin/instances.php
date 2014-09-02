@@ -117,6 +117,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
+                   data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>"
                    class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash-o"></i>
                 </a>
                 <?php endif; ?>
@@ -249,10 +250,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             event.preventDefault();
             var targetId = event.target.id.split('-');
             var id = targetId[2];
+            var csrf = this.getAttribute('data-csrf-token');
 
             if (confirm('Are you sure?')) {
                 $.get('index.php',
-                    { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id },
+                    { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
                     function(data) {
                         if (typeof(data.deleted) === 'undefined') {
                             $('.table').after(
