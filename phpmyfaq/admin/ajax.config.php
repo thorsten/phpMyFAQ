@@ -28,6 +28,7 @@ $instanceId    = PMF_Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDAT
 $stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
 $stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
 $stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
+$csrfToken     = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $http      = new PMF_Helper_Http();
 $stopwords = new PMF_Stopwords($faqConfig);
@@ -111,6 +112,12 @@ switch ($ajaxAction) {
         break;
 
     case 'delete_instance':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
         if (null !== $instanceId) {
             $faqInstance = new PMF_Instance($faqConfig);
             if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
