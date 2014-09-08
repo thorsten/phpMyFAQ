@@ -264,7 +264,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d",
+                user_id = %d AND account_status != 'blocked'",
              PMF_Db::getTablePrefix(),
              (int) $userId);
              
@@ -279,7 +279,7 @@ class PMF_User
         $this->status  = (string)$user['account_status'];
         
         // get encrypted password
-        // TODO: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
+        // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
         if ('db' === $this->getAuthSource('name')) {
             $select = sprintf("
                 SELECT
@@ -368,7 +368,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                remember_me = '%s'",
+                remember_me = '%s' AND account_status != 'blocked'",
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($cookie)
         );
