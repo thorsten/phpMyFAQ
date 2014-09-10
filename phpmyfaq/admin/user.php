@@ -302,7 +302,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <div id="user_create">
 
             <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" accept-charset="utf-8">
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
 
             <div class="control-group">
                 <label class="control-label" for="user_name"><?php print $PMF_LANG["ad_adus_name"]; ?></label>
@@ -461,7 +461,8 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 <fieldset>
                     <legend id="user_data_legend"><?php print $PMF_LANG["ad_user_profou"]; ?></legend>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8">
-                        <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                        <input id="update_user_id" type="hidden" name="user_id" value="0">
+                        <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
                         <p>
                             <label for="user_status_select" class="small">
                                 <?php print $PMF_LANG['ad_user_status']; ?>
@@ -626,8 +627,9 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a onclick="deleteUser(<?php print $user->getUserData('user_id') ?>); return false;"
-                       href="javascript:;" class="btn btn-danger">
+                    <a href="javascript:;" onclick="deleteUser(this); return false;" class="btn btn-danger"
+                       data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>"
+                       data-user-id="<?php echo $user->getUserData('user_id') ?>">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>
@@ -645,10 +647,13 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
  *
  * @param userId
  */
-function deleteUser(userId)
+function deleteUser(identifier)
 {
     if (confirm('<?php print $PMF_LANG['ad_user_del_3'] ?>')) {
-        $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
+        var csrf   = $(identifier).data('csrf-token');
+        var userId = $(identifier).data('user-id');
+
+        $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId + "&csrf=" + csrf,
         function(response) {
             $('#user_message').html(response);
             $('.row_user_id_' + userId).fadeOut('slow');

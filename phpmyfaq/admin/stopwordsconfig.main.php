@@ -210,17 +210,19 @@ if ($permission['editconfig']) {
         {
             var info =  parseStopWordInputElemId(elem_id);
 
-            if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
-                $.get("index.php",
-                      {action: "ajax",
-                       ajax: 'config',
-                       ajaxaction: "save_stop_word",
-                       stopword_id: info.id,
-                       stopword: $('#' + elem_id).val(),
-                       stopwords_lang: info.lang}
-                  );
+            if ($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
+                $.get("index.php", {
+                    action: "ajax",
+                    ajax: 'config',
+                    ajaxaction: "save_stop_word",
+                    stopword_id: info.id,
+                    stopword: $('#' + elem_id).val(),
+                    stopwords_lang: info.lang,
+                    csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                    }
+                );
             } else {
-                if(0 > info.id && '' == $('#' + elem_id).attr('value')) {
+                if (0 > info.id && '' == $('#' + elem_id).attr('value')) {
                     $('#' + elem_id).remove();
                     return;
                 }

@@ -43,7 +43,7 @@ if ($permission['delcateg']) {
         <form class="form-horizontal" action="?action=removecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="cat" value="<?php print $id; ?>" />
             <input type="hidden" name="lang" value="<?php print $LANGCODE; ?>" />
-            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>" />
+            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
 
             <div class="control-group">
                 <label class="control-label"><?php print $PMF_LANG['ad_categ_titel']; ?>:</label>

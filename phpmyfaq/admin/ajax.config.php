@@ -158,6 +158,12 @@ switch ($ajaxAction) {
         break;
 
     case 'save_stop_word':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
         if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
             if (null !== $stopwordId && -1 < $stopwordId) {

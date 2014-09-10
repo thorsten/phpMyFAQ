@@ -30,9 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($permission['editconfig']) {
     // actions defined by url: user_action=
     $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
     // Save the configuration
-    if ('saveConfig' === $userAction) {
+    if ('saveConfig' === $userAction && isset($_SESSION['phpmyfaq_csrf_token']) &&
+        $_SESSION['phpmyfaq_csrf_token'] === $csrfToken) {
 
         $checks = array(
             'filter' => FILTER_SANITIZE_STRING,
@@ -90,6 +92,7 @@ if ($permission['editconfig']) {
         <div id="user_message"><?php echo $message; ?></div>
         <form class="form-horizontal" id="config_list" name="config_list" accept-charset="utf-8"
               action="?action=config&amp;config_action=saveConfig" method="post">
+            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
 
             <p>
                 <button class="btn btn-inverse toggleConfig" data-toggle="Main">
