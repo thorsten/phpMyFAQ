@@ -27,32 +27,38 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-//
-// GET Parameters Syntax:
-//   export.file.php?
-//          type={pdf|xhtml|xml}
-//      [&dispos={inline|attachment}], default: attachment
-//       [&catid=NN[&downwards=1]], default: all, downwards
-//
+if ($permission['export']) {
 
-$categoryId        = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
-$downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
-$inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
-$type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
+    //
+    // GET Parameters Syntax:
+    //   export.file.php?
+    //          type={pdf|xhtml|xml}
+    //      [&dispos={inline|attachment}], default: attachment
+    //       [&catid=NN[&downwards=1]], default: all, downwards
+    //
 
-$faq      = new PMF_Faq($faqConfig);
-$category = new PMF_Category($faqConfig);
-$category->buildTree();
+    $categoryId        = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
+    $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
+    $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
+    $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
 
-$tags = new PMF_Tags($faqConfig);
+    $faq      = new PMF_Faq($faqConfig);
+    $category = new PMF_Category($faqConfig);
+    $category->buildTree();
 
-$export  = PMF_Export::create($faq, $category, $faqConfig, $type);
-$content = $export->generate($categoryId, $downwards);
+    $tags = new PMF_Tags($faqConfig);
 
-// Stream the file content
-$oHttpStreamer = new PMF_HttpStreamer($type, $content);
-if ('inline' == $inlineDisposition) {
-    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
+    $export  = PMF_Export::create($faq, $category, $faqConfig, $type);
+    $content = $export->generate($categoryId, $downwards);
+
+    // Stream the file content
+    $oHttpStreamer = new PMF_HttpStreamer($type, $content);
+    if ('inline' == $inlineDisposition) {
+        $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
+    } else {
+        $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    }
+
 } else {
-    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    echo $PMF_LANG['err_noArticles'];
 }

@@ -124,4 +124,6 @@ if ($permission['reports']) {
     $oHttpStreamer = new PMF_HttpStreamer('csv', $content);
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 
+} else {
+    echo $PMF_LANG['err_noArticles'];
 }
