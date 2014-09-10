@@ -119,6 +119,15 @@ switch ($action) {
             $mail = $faqConfig->get('main.administrationMail');
         }
 
+        // Check display name and e-mail address for not logged in users
+        if (false === $isLoggedIn) {
+            $user = new PMF_User($faqConfig);
+            if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mail)) {
+                echo json_encode(array('error' => $PMF_LANG['err_SaveComment']));
+                break;
+            }
+        }
+
         if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
             !empty($comment) && $stopwords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
 

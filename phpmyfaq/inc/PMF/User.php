@@ -398,6 +398,46 @@ class PMF_User
     }
 
     /**
+     * Checks if display name is already used. Returns true, if already in use
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function checkDisplayName($name)
+    {
+        if (!$this->userdata instanceof PMF_User_UserData) {
+            $this->userdata = new PMF_User_UserData($this->config);
+        }
+
+        if ($name === $this->userdata->fetch('display_name', $name)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if email address is already used. Returns true, if already in use
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function checkMailAddress($name)
+    {
+        if (!$this->userdata instanceof PMF_User_UserData) {
+            $this->userdata = new PMF_User_UserData($this->config);
+        }
+
+        if ($name === $this->userdata->fetch('email', $name)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * search users by login
      *
      * @param  string $search Login name
