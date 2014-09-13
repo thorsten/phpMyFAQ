@@ -42,7 +42,9 @@ if (PMF_Language::isASupportedLanguage($ajaxlang)) {
     require_once 'lang/language_en.php';
 }
 
-//Load plurals support for selected language
+//
+// Load plurals support for selected language
+//
 $plr = new PMF_Language_Plurals($PMF_LANG);
 
 //
@@ -50,18 +52,24 @@ $plr = new PMF_Language_Plurals($PMF_LANG);
 //
 PMF_String::init($languageCode);
 
+//
 // Check captcha
+//
 $captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId(
     PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
 );
 
+//
 // Send headers
+//
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
+//
 // Set session
+//
 $faqsession = new PMF_Session($faqConfig);
 $network    = new PMF_Network($faqConfig);
 $stopwords  = new PMF_Stopwords($faqConfig);
@@ -70,7 +78,9 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
 }
 
+//
 // Check, if user is logged in
+//
 $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 if ($user instanceof PMF_User_CurrentUser) {
     $isLoggedIn = true;
@@ -82,7 +92,14 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
     !$captcha->checkCaptchaCode($code) && !$isLoggedIn) {
     $message = array('error' => $PMF_LANG['msgCaptcha']);
 }
-    
+
+//
+// Check if logged in if FAQ is completely secured
+//
+if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly')) {
+    $message = array('error' => $PMF_LANG['ad_msg_noauth']);
+}
+
 if (isset($message['error'])) {
     print json_encode($message);
     exit();
