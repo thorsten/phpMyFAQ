@@ -70,8 +70,6 @@ PMF_Attachment_Factory::init(
     $faqConfig->get('records.enableAttachmentEncryption')
 );
 
-PMF_Cache::init($faqConfig);
-
 //
 // Get user action
 //
