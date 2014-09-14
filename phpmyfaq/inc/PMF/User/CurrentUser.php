@@ -137,8 +137,8 @@ class PMF_User_CurrentUser extends PMF_User
         // Additional code for LDAP: user\\domain
         if ($this->config->get('security.ldapSupport') && isset($this->_ldapConfig['ldap_use_domain_prefix']) &&
             $this->_ldapConfig['ldap_use_domain_prefix'] && '' !== $password) {
-            // if LDAP configuration is enabled, and ldap_use_domain_prefix is available and
-            // ldap_use_domain_prefix is set to true and LDAP data are provided (password is not empty)
+            // if LDAP configuration is enabled, and ldap_use_domain_prefix is available (in file constants_ldap.php)
+            // and ldap_use_domain_prefix is set to true and LDAP data are provided (password is not empty)
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
                     $optData['domain'] = substr($login, 0, $pos);
@@ -148,10 +148,9 @@ class PMF_User_CurrentUser extends PMF_User
             }
         }
 
-        // Additional code for SSO: user@domain
-        if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' !== $password) {
-            // if SSO configuration is enabled, REMOTE_USER is provided and
-            // we try to login using SSO (password is empty)
+        // Additional code for SSO
+        if ($this->config->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER']) && '' === $password) {
+            // if SSO configuration is enabled, REMOTE_USER is provided and we try to login using SSO (no password)
             if (($pos = strpos($login, '@')) !== false) {
                 if ($pos !== 0) {
                     $login = substr($login, 0, $pos);

@@ -309,7 +309,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
             <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" role="form"
                   accept-charset="utf-8">
-            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
+            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
 
             <div class="form-group">
                 <label class="col-lg-2 control-label" for="user_name"><?php echo $PMF_LANG["ad_adus_name"]; ?></label>
@@ -489,7 +489,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
                           class="form-horizontal">
                         <div class="panel-body">
-                            <input id="update_user_id" type="hidden" name="user_id" value="0" />
+                            <input id="update_user_id" type="hidden" name="user_id" value="0">
+                            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
                             <div class="form-group">
                                 <label for="user_status_select" class="col-lg-3 control-label">
                                     <?php echo $PMF_LANG['ad_user_status']; ?>
@@ -676,9 +677,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a onclick="deleteUser(<?php echo $user->getUserData('user_id') ?>); return false;"
-                       href="javascript:;" class="btn btn-danger">
-                        <?php echo $PMF_LANG['ad_user_delete'] ?>
+                    <a href="javascript:;" onclick="deleteUser(this); return false;" class="btn btn-danger"
+                       data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>"
+                       data-user-id="<?php echo $user->getUserData('user_id') ?>">
+                        <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif; ?>
                 </td>
@@ -690,23 +692,23 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </table>
 
         <script type="text/javascript">
-        /* <![CDATA[ */
-
         /**
          * Ajax call to delete user
          *
          * @param userId
          */
-        function deleteUser(userId) {
+        function deleteUser(identifier) {
             if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
-                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId,
-                function(response) {
-                    $('#user_message').html(response);
-                    $('.row_user_id_' + userId).fadeOut('slow');
-                });
+                var csrf   = $(identifier).data('csrf-token');
+                var userId = $(identifier).data('user-id');
+
+                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId + "&csrf=" + csrf,
+                    function(response) {
+                        $('#user_message').html(response);
+                        $('.row_user_id_' + userId).fadeOut('slow');
+                    });
             }
         }
-
 
         /**
          * Ajax call to delete user
@@ -725,7 +727,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             }
         }
 
-        /* ]]> */
         </script>
 <?php 
     }

@@ -265,7 +265,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d",
+                user_id = %d AND account_status != 'blocked'",
              PMF_Db::getTablePrefix(),
              (int) $userId);
              
@@ -280,7 +280,7 @@ class PMF_User
         $this->status  = (string)$user['account_status'];
         
         // get encrypted password
-        // TODO: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
+        // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
         if ('db' === $this->getAuthSource('name')) {
             $select = sprintf("
                 SELECT
@@ -369,7 +369,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                remember_me = '%s'",
+                remember_me = '%s' AND account_status != 'blocked'",
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($cookie)
         );
@@ -396,6 +396,46 @@ class PMF_User
         }
         $this->userdata->load($this->getUserId());
         return true;
+    }
+
+    /**
+     * Checks if display name is already used. Returns true, if already in use
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function checkDisplayName($name)
+    {
+        if (!$this->userdata instanceof PMF_User_UserData) {
+            $this->userdata = new PMF_User_UserData($this->config);
+        }
+
+        if ($name === $this->userdata->fetch('display_name', $name)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Checks if email address is already used. Returns true, if already in use
+     *
+     * @param string $name
+     *
+     * @return bool
+     */
+    public function checkMailAddress($name)
+    {
+        if (!$this->userdata instanceof PMF_User_UserData) {
+            $this->userdata = new PMF_User_UserData($this->config);
+        }
+
+        if ($name === $this->userdata->fetch('email', $name)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

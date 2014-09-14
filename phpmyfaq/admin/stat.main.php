@@ -44,6 +44,11 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $date       = new PMF_Date($faqConfig);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
+    $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $statdelete = null;
+    }
 
     if (!is_null($statdelete) && !is_null($month)) {
         // Search for related tracking data files and
@@ -76,7 +81,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                 <table class="table table-striped">
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_days"]; ?>:</td>
+                        <td><?php echo $PMF_LANG["ad_stat_days"]; ?>:</td>
                         <td>
 <?php
     $danz  = 0;
@@ -96,35 +101,35 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     }
     closedir($dir);
 
-    print $danz;
+    echo $danz;
 ?>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_vis"]; ?>:</td>
-                        <td><?php print $vanz = $session->getNumberOfSessions(); ?></td>
+                        <td><?php echo $PMF_LANG["ad_stat_vis"]; ?>:</td>
+                        <td><?php echo $vanz = $session->getNumberOfSessions(); ?></td>
                     </tr>
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_vpd"]; ?>:</td>
-                        <td><?php print (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></td>
+                        <td><?php echo $PMF_LANG["ad_stat_vpd"]; ?>:</td>
+                        <td><?php echo (($danz != 0) ? round(($vanz / $danz),2) : 0); ?></td>
                     </tr>
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_fien"]; ?>:</td>
+                        <td><?php echo $PMF_LANG["ad_stat_fien"]; ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $first))) {
         $fp = @fopen(PMF_ROOT_DIR."/data/tracking".date("dmY", $first), "r");
         list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ";");
         fclose($fp);
-        print $date->format(date('Y-m-d H:i', $qstamp));
+        echo $date->format(date('Y-m-d H:i', $qstamp));
     } else {
-        print $PMF_LANG["ad_sess_noentry"];
+        echo $PMF_LANG["ad_sess_noentry"];
     }
 ?>
                         </td>
                     </tr>
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_laen"]; ?>:</td>
+                        <td><?php echo $PMF_LANG["ad_stat_laen"]; ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR."/data/tracking".date("dmY", $last))) {
@@ -137,9 +142,9 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         if (empty($stamp)) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
-        print $date->format(date('Y-m-d H:i', $stamp)).'<br />';
+        echo $date->format(date('Y-m-d H:i', $stamp)).'<br />';
     } else {
-        print $PMF_LANG["ad_sess_noentry"].'<br />';
+        echo $PMF_LANG["ad_sess_noentry"].'<br />';
     }
 
     $dir = opendir(PMF_ROOT_DIR."/data");
@@ -155,22 +160,22 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php print $PMF_LANG["ad_stat_browse"]; ?>:</td>
+                        <td><?php echo $PMF_LANG["ad_stat_browse"]; ?>:</td>
                         <td class="col-lg-2"><select name="day" size="1">
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
         if (date("Y-m-d", $trackingDate) == strftime('%Y-%m-%d', $_SERVER['REQUEST_TIME'])) {
-            print ' selected="selected"';
+            echo ' selected="selected"';
         }
-        print '>';
-        print $date->format(date('Y-m-d H:i', $trackingDate));
-        print "</option>\n";
+        echo '>';
+        echo $date->format(date('Y-m-d H:i', $trackingDate));
+        echo "</option>\n";
     }
 ?>
                         </select>
                             <button class="btn btn-primary" type="submit" name="statbrowse">
-                                <?php print $PMF_LANG["ad_stat_ok"]; ?>
+                                <?php echo $PMF_LANG["ad_stat_ok"]; ?>
                             </button>
                         </td>
                     </tr>
@@ -179,10 +184,11 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                 <form action="?action=viewsessions" method="post" class="form-horizontal">
                 <fieldset>
-                    <legend><?php print $PMF_LANG['ad_stat_management']; ?></legend>
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
+                    <legend><?php echo $PMF_LANG['ad_stat_management']; ?></legend>
 
                     <div class="control-group">
-                        <label class="control-label" for="month"><?php print $PMF_LANG['ad_stat_choose']; ?>:</label>
+                        <label class="control-label" for="month"><?php echo $PMF_LANG['ad_stat_choose']; ?>:</label>
                         <div class="controls">
                             <select name="month" id="month" size="1">
 <?php
@@ -195,12 +201,12 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
             printf('<option value="%s"', date('mY', $trackingDate));
             // Select the oldest month
             if ($isFirstDate) {
-                print ' selected="selected"';
+                echo ' selected="selected"';
                 $isFirstDate = false;
             }
-            print '>';
-            print date('Y-m', $trackingDate);
-            print "</option>\n";
+            echo '>';
+            echo date('Y-m', $trackingDate);
+            echo "</option>\n";
             $oldValue = $trackingDate;
         }
     }
@@ -211,7 +217,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                     <div class="form-group">
                         <button class="btn btn-primary" type="submit" name="statdelete">
-                            <?php print $PMF_LANG['ad_stat_delete']; ?>
+                            <?php echo $PMF_LANG['ad_stat_delete']; ?>
                         </button>
                     </div>
                 </fieldset>

@@ -74,10 +74,10 @@ class PMF_User_UserData
      */
     public function get($field)
     {
-        $single_return = false;
+        $singleReturn = false;
         if (!is_array($field)) {
-            $single_return = true;
-            $fields        = $field;
+            $singleReturn = true;
+            $fields       = $field;
         } else {
             $fields = implode(', ', $field);
         }
@@ -99,10 +99,42 @@ class PMF_User_UserData
             return false;
         }
         $arr = $this->config->getDb()->fetchArray($res);
-        if ($single_return and $field != '*') {
+        if ($singleReturn and $field != '*') {
             return $arr[$field];
         }
         return $arr;
+    }
+
+    /**
+     * Returns the first result of the given data
+     *
+     * @param string $key
+     * @param string $value
+     *
+     * @return string
+     */
+    public function fetch($key, $value)
+    {
+        $select = sprintf("
+            SELECT
+                %s
+            FROM
+                %sfaquserdata
+            WHERE
+                %s = '%s'",
+            $key,
+            PMF_Db::getTablePrefix(),
+            $key,
+            $this->config->getDb()->escape($value)
+        );
+
+        $res = $this->config->getDb()->query($select);
+
+        if (0 === $this->config->getDb()->numRows($res)) {
+            return false;
+        } else {
+            return $this->config->getDb()->fetchObject($res)->$key;
+        }
     }
 
     /**

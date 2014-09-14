@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+$csrfToken  = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 // Send headers
 $http = new PMF_Helper_Http();
@@ -75,6 +76,12 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'delete_user':
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                exit(1);
+            }
+
             $user->getUserById($userId);
             if ($user->getStatus() == 'protected' || $userId == 1) {
                 $message = '<p class="error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
