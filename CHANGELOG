@@ -5,8 +5,14 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.13 - 2014-
+Version 2.8.13 - 2014-09-16
+- fixed multiple security vulnerabilities (Nikhil Srivastava, Thorsten)
+- backported full support for SQLite3 (Peter Kehl)
 - updated Chinese (Traditional) translation (Barlos Lee)
+- updated Farsi translation
+- updated Italian translation
+- updated Spanish translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.12 - 2014-08-02
 - updated Hebrew translation

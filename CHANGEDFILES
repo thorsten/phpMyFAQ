@@ -1,3 +1,47 @@
+CHANGED FILES FROM 2.8.12 -> 2.8.13
+
+./admin/ajax.config.php
+./admin/ajax.records.php
+./admin/ajax.user.php
+./admin/backup.import.php
+./admin/category.delete.php
+./admin/configuration.php
+./admin/export.file.php
+./admin/footer.php
+./admin/instances.php
+./admin/record.questions.php
+./admin/report.export.php
+./admin/session.keepalive.php
+./admin/stat.main.php
+./admin/stat.show.php
+./admin/stopwordsconfig.main.php
+./admin/user.php
+./inc/PMF/Auth/Sso.php
+./inc/PMF/Captcha.php
+./inc/PMF/DB/Driver.php
+./inc/PMF/DB/Mssql.php
+./inc/PMF/DB/Mysql.php
+./inc/PMF/DB/Mysqli.php
+./inc/PMF/DB/Pgsql.php
+./inc/PMF/DB/Sqlite.php
+./inc/PMF/DB/Sqlite3.php
+./inc/PMF/DB/Sqlsrv.php
+./inc/PMF/Instance.php
+./inc/PMF/Sitemap.php
+./inc/PMF/System.php
+./inc/PMF/User.php
+./inc/PMF/User/CurrentUser.php
+./inc/PMF/User/UserData.php
+./lang/language_es.php
+./lang/language_fa.php
+./lang/language_it.php
+./lang/language_tw.php
+./ajaxservice.php
+./attachment.php
+./index.php
+
+
+
 CHANGED FILES FROM 2.8.11 -> 2.8.12
 
 ./admin/record.add.php
