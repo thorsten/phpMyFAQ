@@ -1,9 +1,13 @@
-phpMyFAQ 2.8.13
+phpMyFAQ 2.8.14
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.14 - 2014-09-
+- fixed installation compatibility with MySQL 5.1 and MySQL 5.5 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.13 - 2014-09-16
 - fixed multiple security vulnerabilities (Nikhil Srivastava, Thorsten)
