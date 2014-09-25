@@ -473,7 +473,7 @@ $tplMainPage = array(
     'metaCharset'          => 'utf-8', // backwards compability
     'phpmyfaqversion'      => $faqConfig->get('main.currentVersion'),
     'stylesheet'           => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl'       => $currentPageUrl,
+    'currentPageUrl'       => preg_match( '/(\S+\/content\/\S+.html)\?\S*/', $currentPageUrl, $canonical ) === 1 ? $canonical[1] : $currentPageUrl,
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
     'headerCategories'     => $PMF_LANG['msgFullCategories'],
