@@ -181,6 +181,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
     $faqData['keywords'] = (isset($faqData['keywords']) ? PMF_String::htmlspecialchars($faqData['keywords']) : '');
     $faqData['author']   = (isset($faqData['author']) ? PMF_String::htmlspecialchars($faqData['author']) : $user->getUserData('display_name'));
     $faqData['email']    = (isset($faqData['email']) ? PMF_String::htmlspecialchars($faqData['email']) : $user->getUserData('email'));
+    $faqData['isoDate']  = (isset($faqData['date']) ? $faqData['date'] : date('Y-m-d H:i'));
     $faqData['date']     = (isset($faqData['date']) ? $date->format($faqData['date']) : $date->format(date('Y-m-d H:i')));
     $faqData['changed']  = (isset($faqData['changed']) ? $faqData['changed'] : '');
 
@@ -460,25 +461,25 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                         <label class="control-label" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
                         <div class="controls">
                             <label class="radio">
-                                <input type="radio" id="dateActualize" checked="checked" name="recordDateHandling"
-                                       onchange="setRecordDate(this.id);" />
+				<input type="radio" id="dateActualize" checked name="recordDateHandling"
+				       onchange="setRecordDate(this.id);">
                                 <?php echo $PMF_LANG['msgUpdateFaqDate']; ?>
                             </label>
                             <label class="radio">
                                 <input type="radio" id="dateKeep" name="recordDateHandling"
-                                       onchange="setRecordDate(this.id);" />
+				       onchange="setRecordDate(this.id);">
                                 <?php echo $PMF_LANG['msgKeepFaqDate']; ?>
                             </label>
                             <label class="radio">
                                 <input type="radio" id="dateCustomize" name="recordDateHandling"
-                                       onchange="setRecordDate(this.id);" />
+				       onchange="setRecordDate(this.id);">
                                 <?php echo $PMF_LANG['msgEditFaqDat']; ?>
                             </label>
                         </div>
                     </div>
                     <div id="recordDateInputContainer" class="control-group hide">
                         <div class="controls">
-                            <input type="text" name="date" id="date" maxlength="16" value="" class="input-small" />
+			    <input type="text" name="date" id="date" maxlength="16" value="" class="input-small">
                         </div>
                     </div>
                     <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
@@ -744,7 +745,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
             $('#date').val('');
         } else if ('dateKeep' === how) {
             showIDContainer(false);
-            $('#date').val('<?php echo $faqData['date']; ?>');
+	    $('#date').val('<?php echo $faqData['isoDate']; ?>');
         } else if ('dateCustomize' === how) {
             showIDContainer(true);
             $('#date').val('');
