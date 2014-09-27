@@ -254,7 +254,7 @@ class PMF_User
      * @param  integer $userId User ID
      * @return bool
      */
-    public function getUserById($userId)
+    public function getUserById($userId, $allowBlockedUsers = false)
     {
         $select = sprintf("
             SELECT
@@ -264,7 +264,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d AND account_status != 'blocked'",
+                user_id = %d" . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
              PMF_Db::getTablePrefix(),
              (int) $userId);
              
