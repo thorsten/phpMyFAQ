@@ -586,7 +586,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         <?php
             $counter = $displayedCounter = 0;
             foreach ($allUsers as $userId) {
-                $user->getUserById($userId);
+                $user->getUserById($userId, true);
 
                 if ($displayedCounter >= $perPage) {
                     continue;
