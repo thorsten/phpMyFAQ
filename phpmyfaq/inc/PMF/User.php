@@ -264,7 +264,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d" . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
+                user_id = %d " . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
              PMF_Db::getTablePrefix(),
              (int) $userId);
              
