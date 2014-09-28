@@ -29,7 +29,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary($faqConfig);
-$oLnk        = new PMF_Linkverifier($faqConfig);
 $faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($faqConfig);
@@ -100,47 +99,6 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
         $answer   = PMF_Utils::setHighlightedString($answer, $item);
     }
 }
-
-// Hack: Apply the new SEO schema to those HTML anchors to
-//       other faq records (Internal Links) added with WYSIWYG Editor:
-//         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
-// Search for href attribute links
-$oLnk->resetPool();
-$oLnk->parse_string($answer);
-$fixedContent = str_replace('href="#',
-    sprintf('href="index.php?action=artikel&amp;lang=%s&amp;cat=%d&amp;id=%d&amp;artlang=%s#',
-        $LANGCODE,
-        $currentCategory,
-        $recordId,
-        $LANGCODE),
-    $answer);
-$oLnk->resetPool();
-$oLnk->parse_string($fixedContent);
-
-// Search for href attributes only
-$linkArray = $oLnk->getUrlpool();
-if (isset($linkArray['href'])) {
-    foreach (array_unique($linkArray['href']) as $_url) {
-        $xpos = strpos($_url, 'index.php?action=artikel');
-        if (!($xpos === false)) {
-            // Get the Faq link title
-            $matches = [];
-            preg_match('/id=([\d]+)/ism', $_url, $matches);
-            $_id    = $matches[1];
-            $_title = $faq->getRecordTitle($_id, false);
-            $_link  = substr($_url, $xpos + 9);
-            if (strpos($_url, '&amp;') === false) {
-                $_link = str_replace('&', '&amp;', $_link);
-            }
-            $oLink            = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link, $faqConfig);
-            $oLink->itemTitle = $oLink->tooltip = $_title;
-            $newFaqPath       = $oLink->toString();
-            $fixedContent     = str_replace($_url, $newFaqPath, $fixedContent);
-        }
-    }
-}
-
-$answer = $fixedContent;
 
 // Check for the languages for a faq
 $arrLanguage    = $faqConfig->getLanguage()->languageAvailable($recordId);
