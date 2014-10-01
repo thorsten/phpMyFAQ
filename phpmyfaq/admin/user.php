@@ -628,7 +628,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <?php
             $counter = $displayedCounter = 0;
             foreach ($allUsers as $userId) {
-                $user->getUserById($userId);
+                $user->getUserById($userId, true);
 
                 if ($displayedCounter >= $perPage) {
                     continue;

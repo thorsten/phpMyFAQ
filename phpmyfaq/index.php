@@ -469,7 +469,7 @@ $tplMainPage = array(
     'metaRobots'           => $faqSeo->getMetaRobots($action),
     'phpmyfaqversion'      => $faqConfig->get('main.currentVersion'),
     'stylesheet'           => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl'       => $currentPageUrl,
+    'currentPageUrl'       => preg_match( '/(\S+\/content\/\S+.html)\?\S*/', $currentPageUrl, $canonical ) === 1 ? $canonical[1] : $currentPageUrl,
     'action'               => $action,
     'dir'                  => $PMF_LANG['dir'],
     'writeSendAdress'      => '?' . $sids . 'action=search',

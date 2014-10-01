@@ -4,11 +4,12 @@ var phpmyfaqDialog = {
     init : function() {
         $('#suggestbox').keyup(function() {
             var search = $('#suggestbox').val();
+            var csrf   = $('#csrf').val();
             if (search.length > 0) { 
                 $.ajax({ 
                     type:    "POST", 
                     url:     "../../../index.php?action=ajax&ajax=records&ajaxaction=search_records",
-                    data:    "search=" + search,
+                    data:    "search=" + search + "&csrf=" + csrf,
                     success: function(searchresults) 
                     { 
                         $("#suggestions").empty(); 

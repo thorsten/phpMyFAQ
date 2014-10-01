@@ -252,10 +252,12 @@ class PMF_User
      * Loads basic user information from the database selecting the user with
      * specified user-ID.
      *
-     * @param  integer $userId User ID
+     * @param  integer $userId            User ID
+     * @param  boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     *
      * @return bool
      */
-    public function getUserById($userId)
+    public function getUserById($userId, $allowBlockedUsers = false)
     {
         $select = sprintf("
             SELECT
@@ -265,7 +267,7 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d AND account_status != 'blocked'",
+                user_id = %d " . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
              PMF_Db::getTablePrefix(),
              (int) $userId);
              
@@ -760,7 +762,7 @@ class PMF_User
      * @param  string          $name Auth name
      * @return boolean
      */
-    public function addAuth($auth, $name)
+    public function addAuth(PMF_Auth $auth, $name)
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
@@ -775,7 +777,7 @@ class PMF_User
      * @param  PMF_Auth $auth Auth object
      * @return bool
      */
-    protected function checkAuth($auth)
+    protected function checkAuth(PMF_Auth $auth)
     {
         $methods = array('checkPassword');
         foreach ($methods as $method) {

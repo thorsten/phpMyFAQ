@@ -28,7 +28,7 @@
         init : function(ed, url) {
             ed.addCommand('mcePhpmyfaq', function() {
                 ed.windowManager.open({
-                    file   : url + '/dialog.html',
+                    file   : url + '/dialog.php',
                     width  : 480 + parseInt(ed.getLang('phpmyfaq.delta_width', 0)),
                     height : 320 + parseInt(ed.getLang('phpmyfaq.delta_height', 0)),
                     inline : 1
