@@ -1,3 +1,23 @@
+CHANGED FILES FROM 2.8.13 -> 2.8.14
+
+./admin/editor/plugins/phpmyfaq/dialog.html
+./admin/editor/plugins/phpmyfaq/dialog.php
+./admin/editor/plugins/phpmyfaq/editor_plugin.js
+./admin/editor/plugins/phpmyfaq/editor_plugin_src.js
+./admin/editor/plugins/phpmyfaq/js/dialog.js
+./admin/record.edit.php
+./admin/user.php
+./assets/js/jquery.min.map
+./assets/js/libs/jquery.min.map
+./assets/template/default/artikel.tpl
+./inc/PMF/System.php
+./inc/PMF/User.php
+./install/mysql.sql.php
+./install/mysqli.sql.php
+./index.php
+
+
+
 CHANGED FILES FROM 2.8.12 -> 2.8.13
 
 ./admin/ajax.config.php
