@@ -1,3 +1,11 @@
+CHANGED FILES FROM 2.8.14 -> 2.8.15
+
+./inc/PMF/System.php
+./inc/PMF/User.php
+./lang/language_fa.php
+
+
+
 CHANGED FILES FROM 2.8.13 -> 2.8.14
 
 ./admin/editor/plugins/phpmyfaq/dialog.html
