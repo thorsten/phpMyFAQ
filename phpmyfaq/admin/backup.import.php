@@ -94,8 +94,7 @@ if ($permission['restore']) {
             $kg  = '';
             for ($i = 0; $i < $num; $i++) {
                 $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
-                $query      = $faqConfig->getDb()->escape($mquery[$i]);
-                $kg         = $faqConfig->getDb()->query($query);
+                $kg         = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
                     printf(
                         '<div class="alert alert-error"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
