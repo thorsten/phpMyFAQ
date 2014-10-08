@@ -103,7 +103,7 @@ if ($permission['adminlog'] && 'adminlog' == $action) {
         }
         $displayedCounter++;
         
-        $user->getUserById($logging_value['usr']);
+        $user->getUserById($logging_value['usr'], true);
 ?>
         <tr>
             <td><?php echo $logging_id; ?></td>

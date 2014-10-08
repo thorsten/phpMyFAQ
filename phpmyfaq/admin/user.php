@@ -69,7 +69,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
             }
-            $idUser   = $user->getUserById($userId);
+            $idUser   = $user->getUserById($userId, true);
             $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $user->getLogin(),
@@ -94,7 +94,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             $userStatus                = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
 
             $user = new PMF_User($faqConfig);
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
             // set new password an send email if user is switched to active
@@ -142,7 +142,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             $message   .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
         } else {
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
                 $message   .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
@@ -188,7 +188,7 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
         if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
-            if (!$user->getUserById($userId)) {
+            if (!$user->getUserById($userId, true)) {
                 $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             }
             if (!$user->deleteUser()) {

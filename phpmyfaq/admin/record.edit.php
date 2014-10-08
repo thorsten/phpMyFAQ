@@ -435,7 +435,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                     <div id="editChangelogHistory" class="hide">
                         <?php
                         foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
-                            $user->getUserById($entry['user']);
+                            $user->getUserById($entry['user'], true);
                             ?>
                             <p style="font-size: 10px;">
                                 <label>

@@ -62,7 +62,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
     if ('get_all_users' == $ajaxAction) {
         $users = array();
         foreach ($userList as $single_user) {
-            $user->getUserById($single_user);
+            $user->getUserById($single_user, true);
             $users[] = array('user_id' => $user->getUserId(),
                              'login'   => $user->getLogin());
         }
@@ -74,7 +74,7 @@ if ($permission['adduser'] || $permission['edituser'] || $permission['deluser'])
         $memberList = $user->perm->getGroupMembers($groupId);
         $members    = array();
         foreach ($memberList as $single_member) {
-            $user->getUserById($single_member);
+            $user->getUserById($single_member, true);
             $members[] = array('user_id' => $user->getUserId(),
                                'login'   => $user->getLogin());
         }
