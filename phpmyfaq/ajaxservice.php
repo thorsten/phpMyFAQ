@@ -582,13 +582,28 @@ switch ($action) {
                 // set user status
                 $user->setStatus('blocked');
 
-                $text = sprintf(
-                    "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n" .
-                    "To activate this user do please use the administration interface at %s.",
-                    $realname,
-                    $loginname,
-                    $faqConfig->get('main.referenceURL')
-                );
+				if( !$faqConfig->get('spam.manualActivation') ){
+				
+					$isNowActive = $user->activateUser( $faqConfig );
+				}else{
+					$isNowActive = false;
+				}
+				
+				if( $isNowActive ){
+					$adminMessage = "This user has been automatically activated, you can still" .
+									" modify the users permissions or decline membership by visiting";
+				}else{
+					$adminMessage = "To activate this user please use";
+				}
+				
+				$text = sprintf(
+					"New user has been registrated:\n\nName: %s\nLogin name: %s\n\n" .
+					"%s the administration interface at %s.",
+					$realname,
+					$loginname,
+					$adminMessage,
+					$faqConfig->get('main.referenceURL')
+				);
 
                 $mail = new PMF_Mail($faqConfig);
                 $mail->setReplyTo($email, $realname);

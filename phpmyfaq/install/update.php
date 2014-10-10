@@ -828,6 +828,13 @@ if ($step == 3) {
     if (version_compare($version, '2.8.0-beta3', '<')) {
         $faqConfig->add('main.enableGravatarSupport', 'false');
     }
+	
+    //
+    // UPDATED FROM 2.8.15
+    //
+    if (version_compare($version, '2.8.15', '<')) {
+        $faqConfig->add('spam.manualActivation', 'true');
+    }	
 
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {

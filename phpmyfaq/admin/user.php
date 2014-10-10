@@ -97,28 +97,12 @@ if ($permission['edituser'] || $permission['deluser'] || $permission['adduser'])
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
+			
             // set new password an send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
-                $consonants  = array("b","c","d","f","g","h","j","k","l","m","n","p","r","s","t","v","w","x","y","z");
-                $vowels      = array("a","e","i","o","u");
-                $newPassword = '';
-                srand((double)microtime()*1000000);
-                for ($i = 1; $i <= 4; $i++) {
-                    $newPassword .= $consonants[rand(0,19)];
-                    $newPassword .= $vowels[rand(0,4)];
-                }
-                $user->changePassword($newPassword);
-
-                $mail = new PMF_Mail($faqConfig);
-                $mail->addTo($userData['email']);
-                $mail->subject = '[%sitename%] Login name / activation';
-                $mail->message = sprintf("\nName: %s\nLogin name: %s\nNew password: %s\n\n",
-                $userData['display_name'],
-                $user->getLogin(),
-                $newPassword);
-                $result = $mail->send();
-                unset($mail);
-            }
+			
+				if( !$user->activateUser( $faqConfig ) ) $userStatus == 'invalid_status';			
+			}
 
             if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
                 $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
