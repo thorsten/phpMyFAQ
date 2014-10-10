@@ -964,17 +964,6 @@ class PMF_User
     }
 
     /**
-     * returns a new password.
-     *
-     * @return string
-     */
-    private function createPassword()
-    {
-        srand((double)microtime() * 1000000);
-        return (string) uniqid(rand());
-    }
-
-    /**
      * Returns the data of the current user
      *
      * @param  string $field Field
