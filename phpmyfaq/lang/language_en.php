@@ -1192,3 +1192,6 @@ $PMF_LANG["msgAboutThisNews"] = "About this news";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Access denied.";
+
+// added v.2.8.15 - 2014-10-10 by Christopher Andrews ( Chris--A )
+$LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Manually activate new users (default: activated)');
