@@ -1192,3 +1192,10 @@ $PMF_LANG["msgAboutThisNews"] = "About this news";
 
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Access denied.";
+
+// added v.2.8.15 - 2014-10-10 by Christopher Andrews ( Chris--A )
+$PMF_LANG['mailControlCenter'] = 'Mail setup';
+$LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Use remote SMTP server (default: deactivated)');
+$LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address');
+$LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
+$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'input', 1 => 'Password');
