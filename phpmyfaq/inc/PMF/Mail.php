@@ -234,7 +234,7 @@ class PMF_Mail
     function __construct(PMF_Configuration $config)
     {
         // Set default value for public properties
-        $this->agent       = $config->get( 'mail.remoteSMTP' ) == 'true' ? 'SwiftSMTP' : 'built-in';
+        $this->agent       = $config->get( 'mail.remoteSMTP' ) ? 'SwiftSMTP' : 'built-in';
         $this->attachments = array();
         $this->boundary    = self::createBoundary();
         $this->headers     = array();
