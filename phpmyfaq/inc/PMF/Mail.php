@@ -234,7 +234,7 @@ class PMF_Mail
     function __construct(PMF_Configuration $config)
     {
         // Set default value for public properties
-        $this->agent       = 'built-in';
+        $this->agent       = $config->get( 'mail.remoteSMTP' ) == 'true' ? 'SwiftSMTP' : 'built-in';
         $this->attachments = array();
         $this->boundary    = self::createBoundary();
         $this->headers     = array();
@@ -781,7 +781,19 @@ class PMF_Mail
 
         // Send the email adopting to the given MUA
         $mua  = self::getMUA($this->agent);
+		
+		if( is_object( $mua ) && method_exists( $mua, 'setAuthConfig' ) ){
+			$mua->setAuthConfig( 
+				$this->_config->get( 'mail.remoteSMTPServer' ),
+				$this->_config->get( 'mail.remoteSMTPUsername' ),
+				$this->_config->get( 'mail.remoteSMTPPassword' )
+			);
+		}
+		
         switch ($this->agent) {
+			case 'SwiftSMTP': 
+                $sent = $mua->send($this->_to, $this->headers, $this->body);
+                break;
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
