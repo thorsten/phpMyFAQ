@@ -380,7 +380,7 @@ switch ($action) {
                 $catOwnerEmail = $oUser->getUserData('email');
 
                 // Avoid to send multiple emails to the same owner
-                if (!isset($send[$catOwnerEmail])) {
+                if (!empty($catOwnerEmail) && !isset($send[$catOwnerEmail])) {
                     $mail->addCc($catOwnerEmail);
                     $send[$catOwnerEmail] = 1;
                 }
@@ -509,7 +509,7 @@ switch ($action) {
                     $mail->setReplyTo($questionData['email'], $questionData['username']);
                     $mail->addTo($mainAdminEmail);
                     // Let the category owner get a copy of the message
-                    if ($userEmail && $mainAdminEmail != $userEmail) {
+                    if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
                         $mail->addCc($userEmail);
                     }
                     $mail->subject = '%sitename%';
@@ -541,7 +541,7 @@ switch ($action) {
                 $mail->setReplyTo($questionData['email'], $questionData['username']);
                 $mail->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
-                if ($userEmail && $mainAdminEmail != $userEmail) {
+                if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
                     $mail->addCc($userEmail);
                 }
                 $mail->subject = '%sitename%';
