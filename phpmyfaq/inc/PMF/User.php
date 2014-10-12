@@ -232,6 +232,114 @@ class PMF_User
     }
 
     /**
+     * returns a new password.
+     *
+     * @return string
+     */
+    public function createPassword( $minimumLength = 8, $allowUnderscore = true )
+    {
+		/*
+			To make passwords harder to get wrong, a few letters & numbers have been omitted.
+			This will ensure safety with browsers using fonts with confusable letters.
+			Removed: o,O,0,1,l,L
+		*/
+		$consonants  = array("b","c","d","f","g","h","j","k","m","n","p","r","s","t","v","w","x","y","z"); //removed "l"
+		$vowels      = array("a","e","i","u"); //removed "o"
+		$newPassword = '';
+		$skipped 	 = false;
+		
+		srand((double)microtime()*1000000);
+		
+		while( strlen( $newPassword ) < $minimumLength ){
+		
+			if( rand( 0, 1 ) )
+				$caseFunc = 'strtoupper';
+			else
+				$caseFunc = 'strtolower';
+			//$caseFunc = rand( 0, 1 ) ? strtolower : strtoupper;
+			
+			switch( rand( 0, $skipped ? 3 : ( $allowUnderscore ? 5 : 4 ) ) ){
+			
+				case 0:
+				case 1: 
+					$nextChar = $caseFunc( $consonants[ rand( 0, 19 ) ] ); 
+					break;
+				
+				case 2:
+				case 3: 
+					$nextChar =  $caseFunc( $vowels[rand(0,4)] ); 
+					break;
+
+				case 4: 
+					$nextChar =  rand( 2, 9 ); //No 0 to avoid confusion with O, same for 1 and l.
+					break;
+					
+				case 5: 
+					$newPassword .= '_';
+					continue 2;
+					break;
+			}
+			$skipped = false;
+			
+			//Ensure letters and numbers only occur once.
+			if( strPos( $newPassword, $nextChar ) === false )
+				$newPassword .= $nextChar;
+			else
+				$skipped = true;
+		}
+		return $newPassword;
+    }
+	
+    /**
+	 * Returns true on success.
+	 *
+	 * Sends mail to the current user.
+     * @return boolean
+     */	
+	 
+	 public function mailUser( $subject, $message )
+	 {
+		require_once "Mail.php";
+		$mail = new PMF_Mail($faqConfig);
+		$mail->addTo( $this->getUserData( 'email' ) );
+		$mail->subject = $subject;
+		$mail->message = $message;
+		$result = $mail->send();
+		unset($mail);
+		return $result;
+	 }
+	
+    /**
+     * Returns true on success.
+	 *
+	 * This will change a users status to active, and send an email with a new password.
+     *
+     * @return boolean
+     */
+
+	public function activateUser()
+	{
+		if( $this->getStatus() == 'blocked' ){
+		
+			//Generate and change user password.
+			$newPassword = $this->createPassword();
+			$this->changePassword( $newPassword );
+		
+			//Send activation email.
+			$subject = '[%sitename%] Login name / activation';
+			$message = sprintf("\nName: %s\nLogin name: %s\nNew password: %s\n\n",
+                $this->getUserData( 'display_name' ),
+                $this->getLogin(),
+                $newPassword);
+				
+			//Only set to active if the activation mail sent correctly.
+			if( this->mailUser( $subject, $message ) )
+				return $this->setStatus( 'active' );
+		}
+		return false;
+	}
+	
+    /**
      * Returns the User ID of the user.
      *
      * @return integer
@@ -853,17 +961,6 @@ class PMF_User
     public function getLogin()
     {
         return $this->login;
-    }
-
-    /**
-     * returns a new password.
-     *
-     * @return string
-     */
-    private function createPassword()
-    {
-        srand((double)microtime() * 1000000);
-        return (string) uniqid(rand());
     }
 
     /**
