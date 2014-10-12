@@ -56,7 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'get_user_data':
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
             $userdata           = [];
             $userdata           = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'get_user_rights':
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
             print json_encode($user->perm->getUserRights($userId));
             break;
 
@@ -82,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                 exit(1);
             }
 
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
                 $message = '<p class="error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
             } else {

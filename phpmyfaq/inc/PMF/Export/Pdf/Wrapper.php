@@ -256,11 +256,12 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         'tw' => 'arialunicid0',
         'ja' => 'arialunicid0',
         'ko' => 'arialunicid0',
-        'cs' => 'arialunicid0',
-        'sk' => 'arialunicid0',
+        'cs' => 'dejavusans',
+        'sk' => 'dejavusans',
         'el' => 'arialunicid0',
         'he' => 'arialunicid0',
-        'default' => 'helvetica'
+        'tr' => 'dejavusans',
+        'default' => 'dejavusans'
     );
 
     /**

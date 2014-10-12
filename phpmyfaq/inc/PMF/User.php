@@ -762,7 +762,7 @@ class PMF_User
      * @param  string          $name Auth name
      * @return boolean
      */
-    public function addAuth(PMF_Auth $auth, $name)
+    public function addAuth($auth, $name)
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
@@ -777,7 +777,7 @@ class PMF_User
      * @param  PMF_Auth $auth Auth object
      * @return bool
      */
-    protected function checkAuth(PMF_Auth $auth)
+    protected function checkAuth($auth)
     {
         $methods = array('checkPassword');
         foreach ($methods as $method) {

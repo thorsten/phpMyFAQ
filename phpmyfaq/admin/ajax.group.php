@@ -64,7 +64,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     if ('get_all_users' == $ajaxAction) {
         $users = [];
         foreach ($userList as $single_user) {
-            $user->getUserById($single_user);
+            $user->getUserById($single_user, true);
             $users[] = array('user_id' => $user->getUserId(),
                              'login'   => $user->getLogin());
         }
@@ -76,7 +76,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
         $memberList = $user->perm->getGroupMembers($groupId);
         $members    = [];
         foreach ($memberList as $single_member) {
-            $user->getUserById($single_member);
+            $user->getUserById($single_member, true);
             $members[] = array('user_id' => $user->getUserId(),
                                'login'   => $user->getLogin());
         }

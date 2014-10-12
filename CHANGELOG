@@ -31,6 +31,13 @@ Version 2.9.0-alpha2 2014-09
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 
+Version 2.8-16 - 2014-10-
+- fixed restore from backup
+
+Version 2.8.15 - 2014-10-02
+- fixed broken installation (Thorsten)
+- updated Farsi translation
+
 Version 2.8.14 - 2014-10-01
 - fixed installation compatibility with MySQL 5.1 and MySQL 5.5 (Thorsten)
 - fixed some minor bugs (Thorsten)

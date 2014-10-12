@@ -454,9 +454,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             </td>
             <td style="width: 16px;">
                 <a class="btn btn-danger" href="javascript:void(0);"
-                   onclick="javascript:deleteRecord(<?php echo $record['id']; ?>, '<?php echo $record['lang']; ?>'); return false;"
-                   title="<?php echo $PMF_LANG["ad_user_delete"]; ?>">
-                    <i class="fa fa-trash-o"></i>
+                   onclick="javascript:deleteRecord(<?php echo $record['id']; ?>, '<?php echo $record['lang']; ?>', '<?php echo $user->getCsrfTokenFromSession() ?>'); return false;"
+                   title="<?php print $PMF_LANG["ad_user_delete"]; ?>">
+                <i class="fa fa-trash-o"></i>
                 </a>
             </td>
         </tr>
@@ -561,17 +561,18 @@ foreach ($faqIds as $categoryId => $recordIds) {
          *
          * @param record_id   Record id
          * @param record_lang Record language
+         * @param csrf_token  CSRF Token
          *
          * @return void
          */
-        function deleteRecord(record_id, record_lang)
+        function deleteRecord(record_id, record_lang, csrf_token)
         {
             if (confirm('<?php echo addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
                 $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
                 $.ajax({
                     type:    "POST",
                     url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
-                    data:    "record_id=" + record_id + "&record_lang=" + record_lang,
+                    data:    "record_id=" + record_id + "&record_lang=" + record_lang + "&csrf=" + csrf_token,
                     success: function(msg) {
                         $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
                         $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_delsuc']; ?>');
