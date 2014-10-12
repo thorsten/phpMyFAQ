@@ -22,6 +22,7 @@ Version 2.9.0-alpha2 2014-09
 - added tag management frontend (Thorsten)
 - added full support for SQLite3 (Peter Kehl)
 - added control for meta robots handling (Thorsten)
+- added configuration for auto-activation of new users (Christopher Andrews)
 - updated bundled Symfony ClassLoader to version 2.5.2 (Thorsten)
 - updated bundled jQuery to version 1.11.1 (Thorsten)
 - updated bundled Bootstrap to version 3.2.0 (Thorsten)
