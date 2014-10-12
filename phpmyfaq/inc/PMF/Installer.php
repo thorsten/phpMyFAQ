@@ -354,6 +354,7 @@ class PMF_Installer
         'spam.checkBannedWords'                   => 'true',
         'spam.enableCaptchaCode'                  => null,
         'spam.enableSafeEmail'                    => 'true',
+        'spam.manualActivation'                   => 'true',
 
         'socialnetworks.enableTwitterSupport'     => 'false',
         'socialnetworks.twitterConsumerKey'       => '',

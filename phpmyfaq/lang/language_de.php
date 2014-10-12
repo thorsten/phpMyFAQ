@@ -1176,3 +1176,4 @@ $LANG_CONF["seo.metaTagsAdmin"] = array(0 => "select", 1 => "Meta Tags Admin");
 $PMF_LANG["msgMatchingQuestions"] = "Die folgenden Ergebnisse könnten Ihre Frage beantworten:";
 $PMF_LANG["msgFinishSubmission"] = "Wenn keine der Vorschläge übereinstimmt, können Sie nun die Frage absenden.";
 $LANG_CONF["main.enableLinkVerification"] = array(0 => "checkbox", 1 => "Aktiviere automatischen Linkcheck<br>(Standard: aktiviert)");
+$LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Aktiviere Nutzer manuell<br>(Standard: aktiviert)');
