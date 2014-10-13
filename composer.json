@@ -47,14 +47,27 @@
                     "reference": "master"
                 }
             }
-        }
+        },
+        {
+            "type": "package",
+            "package": {
+                "name":    "swiftmailer",
+                "version": "master",
+                "source": {
+                    "url":       "https://github.com/swiftmailer/swiftmailer.git",
+                    "type":      "git",
+                    "reference": "master"
+                }
+            }
+        }		
     ],
     "require": {
         "php":                     ">=5.4.4",
         "symfony/class-loader":    ">=2.1",
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
-        "thorsten/twitteroauth":   "master@dev"
+        "thorsten/twitteroauth":   "master@dev",
+		"swiftmailer":             "master@dev"
     },
     "require-dev": {
         "phpunit/phpunit": "4.0.*",

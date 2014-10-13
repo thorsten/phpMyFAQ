@@ -148,6 +148,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         </button>
                     </p>
                     <div id="configSocialNetworks" class="hide"></div>
+					
+                    <p>
+                        <button class="btn btn-inverse toggleConfig" data-toggle="Mail">
+                            <i class="icon-envelope icon-white"></i>
+                            <?php echo $PMF_LANG['mailControlCenter']; ?>
+                        </button>
+                    </p>
+                    <div id="configMail" class="hide"></div>
+
+			
                     <p>
                         <button class="btn btn-primary" type="submit">
                             <?php echo $PMF_LANG['ad_config_save']; ?>
