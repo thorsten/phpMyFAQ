@@ -114,11 +114,9 @@ switch ($action) {
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
         break;
-
-    default:
-        $result = 'I am completely operational, and all my circuits are functioning perfectly.';
-        break;
 }
+
+if( empty( $result ) ) $result = array( 'result' => false );
 
 // print result as JSON
 echo json_encode($result);
