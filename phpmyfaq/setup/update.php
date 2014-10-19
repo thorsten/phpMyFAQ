@@ -837,6 +837,10 @@ if ($step == 3) {
         $faqConfig->add('seo.metaTagsAdmin', 'noindex, nofollow');
         $faqConfig->add('main.enableLinkVerification', 'true');
         $faqConfig->add('spam.manualActivation', 'true');
+		$faqConfig->add('mail.remoteSMTP', 'false');
+		$faqConfig->add('mail.remoteSMTPServer', '');
+		$faqConfig->add('mail.remoteSMTPUsername', '');
+		$faqConfig->add('mail.remoteSMTPPassword', '');
 
         if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
