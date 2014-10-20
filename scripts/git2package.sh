@@ -49,6 +49,7 @@ git checkout-index -f -a --prefix=$cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 # Add missing directories
 mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}/
 mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
+mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/swiftmailer
 
 cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 

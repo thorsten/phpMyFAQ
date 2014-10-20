@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-alpha2 2014-09
+Version 2.9.0-alpha2 2014-10
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)
@@ -23,6 +23,7 @@ Version 2.9.0-alpha2 2014-09
 - added full support for SQLite3 (Peter Kehl)
 - added control for meta robots handling (Thorsten)
 - added configuration for auto-activation of new users (Christopher Andrews)
+- added support for SMTP (Christopher Andrews)
 - updated bundled Symfony ClassLoader to version 2.5.2 (Thorsten)
 - updated bundled jQuery to version 1.11.1 (Thorsten)
 - updated bundled Bootstrap to version 3.2.0 (Thorsten)
@@ -46,7 +47,6 @@ Version 2.8.14 - 2014-10-01
 Version 2.8.13 - 2014-09-16
 - fixed multiple security vulnerabilities (Nikhil Srivastava, Thorsten)
 - backported full support for SQLite3 (Peter Kehl)
->>>>>>> 2dfc692ced030e8cf2c919f40ba6007b852fc68e
 - updated Chinese (Traditional) translation (Barlos Lee)
 - updated Farsi translation
 - updated Italian translation
