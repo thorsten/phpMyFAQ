@@ -344,13 +344,13 @@ if ($permission['editbt'] || $permission['delbt']) {
             </th>
             <th style="width: 72px;">
                 <input type="checkbox" id="sticky_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky')" />
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>')" />
                 &nbsp;<?php echo $PMF_LANG['ad_record_sticky'] ?>
             </th>
             <th style="width: 84px;">
                 <?php if ($permission['approverec']) { ?>
                 <input type="checkbox" id="active_category_block_<?php print $cid; ?>"
-                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active')"
+                       onclick="saveStatusForCategory(<?php print $cid; ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>')"
                        <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
                 &nbsp;<?php echo $PMF_LANG['ad_record_active'] ?>
                 <?php } ?>
@@ -397,14 +397,14 @@ if ($permission['editbt'] || $permission['delbt']) {
             </td>
             <td style="width: 56px;">
                 <input type="checkbox" lang="<?php print $record['lang'] ?>"
-                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
+                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                        id="sticky_record_<?php print $cid . '_' . $record['id'] ?>"
                     <?php $record['sticky'] ? print 'checked="checked"' : print '    ' ?> />
             </td>
             <td>
                 <?php if ($permission['approverec'] && isset($numVisits[$record['id']])) { ?>
                 <input type="checkbox" lang="<?php print $record['lang'] ?>"
-                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                       onclick="saveStatus(<?php print $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                        id="active_record_<?php print $cid . '_' . $record['id'] ?>"
                     <?php 'yes' == $record['active'] ? print 'checked="checked"' : print '    ' ?> />
                 <?php }  else { ?>
@@ -466,10 +466,11 @@ if ($permission['editbt'] || $permission['delbt']) {
          *
          * @param id   id
          * @param type status type
+         * @param string csrf
          *
          * @return void
          */
-        function saveStatusForCategory(id, type)
+        function saveStatusForCategory(id, type, csrf)
         {
             var id_map = [];
 <?php 
@@ -485,22 +486,28 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 $('#' + type + '_record_' + id + '_' + id_map[id][i]).prop('checked', status);
             }
 
-            saveStatus(id, id_map[id], type);
+            saveStatus(id, id_map[id], type, csrf);
         }
 
         /**
          * Ajax call for saving the sticky record status
          *
-         * @param cid  category id
-         * @param ids  ids
-         * @param type status type
+         * @param cid    category id
+         * @param ids    ids
+         * @param type   status type
+         * @param string csrf
          *
          * @return void
          */
-        function saveStatus(cid, ids, type)
+        function saveStatus(cid, ids, type, csrf)
         {
             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
-            var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
+            var data = {
+                action: "ajax",
+                ajax: 'records',
+                ajaxaction: "save_" + type + "_records",
+                csrf: csrf
+            };
 
             for (var i = 0; i < ids.length; i++) {
                 var statusId = '#' + type + '_record_' + cid + '_' + ids[i];
