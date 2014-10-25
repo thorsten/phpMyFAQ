@@ -115,6 +115,7 @@ switch ($action) {
 
         $faq      = new PMF_Faq($faqConfig);
         $oComment = new PMF_Comment($faqConfig);
+        $category = new PMF_Category($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsid   = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
@@ -169,7 +170,7 @@ switch ($action) {
                     $faqUrl = sprintf(
                         '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $faqConfig->get('main.referenceURL'),
-                        0,
+                        $category->getCategoryIdFromArticle($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
