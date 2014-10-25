@@ -315,6 +315,7 @@ ip text NOT NULL,
 time int(11) NOT NULL,
 PRIMARY KEY (sid)
 )";
+$query[] = "CREATE INDEX ".$sqltblpre."index_time ON ".$sqltblpre."faqsessions (time)";
 
 //faqstopwords
 $query[] = "CREATE TABLE ".$sqltblpre."faqstopwords (
