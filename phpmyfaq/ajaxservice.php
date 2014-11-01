@@ -203,15 +203,12 @@ switch ($action) {
 
                 $send = array();
                 $mail = new PMF_Mail($faqConfig);
+                $mail->setFrom($faqConfig->get('main.administrationMail'), $faqConfig->get('main.titleFAQ'));
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
-                $send[$emailTo] = 1;
 
-                // Let the admin get a copy of the message
-                if (!isset($send[$faqConfig->get('main.administrationMail')])) {
-                    $mail->addCc($faqConfig->get('main.administrationMail'));
-                    $send[$faqConfig->get('main.administrationMail')] = 1;
-                }
+                $send[$emailTo] = 1;
+                $send[$faqConfig->get('main.administrationMail')] = 1;
 
                 // Let the category owner get a copy of the message
                 $category   = new PMF_Category($faqConfig, $current_groups);
