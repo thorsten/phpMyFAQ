@@ -168,6 +168,8 @@ class PMF_Language
             unset($_lang);
         } elseif (isset($_lang['get'])) {
             self::$language = $_lang['get'];
+        } elseif (isset($_lang['artget'])) {
+            self::$language = $_lang['artget'];
         } elseif (isset($_lang['session'])) {
             self::$language = $_lang['session'];
             $_lang = null;
