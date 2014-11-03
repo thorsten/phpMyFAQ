@@ -1,3 +1,34 @@
+CHANGED FILES FROM 2.8.15 -> 2.8.16
+
+./admin/ajax.group.php
+./admin/ajax.records.php
+./admin/ajax.user.php
+./admin/backup.import.php
+./admin/record.edit.php
+./admin/record.show.php
+./admin/stat.adminlog.php
+./admin/user.php
+./inc/libs/tcpdf/fonts/dejavusans.ctg.z
+./inc/libs/tcpdf/fonts/dejavusans.php
+./inc/libs/tcpdf/fonts/dejavusans.z
+./inc/libs/tcpdf/fonts/dejavusansb.ctg.z
+./inc/libs/tcpdf/fonts/dejavusansb.php
+./inc/libs/tcpdf/fonts/dejavusansb.z
+./inc/libs/tcpdf/fonts/dejavusansbi.ctg.z
+./inc/libs/tcpdf/fonts/dejavusansbi.php
+./inc/libs/tcpdf/fonts/dejavusansbi.z
+./inc/libs/tcpdf/fonts/helvetica.php
+./inc/libs/tcpdf/fonts/helveticab.php
+./inc/libs/tcpdf/fonts/helveticabi.php
+./inc/libs/tcpdf/fonts/helveticai.php
+./inc/PMF/Export/Pdf/Wrapper.php
+./inc/PMF/Language.php
+./inc/PMF/Mail.php
+./inc/PMF/System.php
+./ajaxservice.php
+
+
+
 CHANGED FILES FROM 2.8.14 -> 2.8.15
 
 ./inc/PMF/System.php
