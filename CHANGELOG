@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8-16 - 2014-10-
-- fixed restore from backup
+Version 2.8-16 - 2014-11-03
+- fixed restore from backup (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.15 - 2014-10-02
 - fixed broken installation (Thorsten)
