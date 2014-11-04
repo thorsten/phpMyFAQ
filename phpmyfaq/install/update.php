@@ -833,7 +833,7 @@ if ($step == 3) {
     // UPDATED FROM 2.8.15
     //
     if (version_compare($version, '2.8.16', '<')) {
-        $query[] = "CREATE INDEX index_time ON " . PMF_Db::getTablePrefix() . "faqsession (time)";
+        $query[] = "CREATE INDEX index_time ON " . PMF_Db::getTablePrefix() . "faqsessions (time)";
     }
 
     // Always the last step: Update version number
