@@ -1,3 +1,12 @@
+CHANGED FILES FROM 2.8.16 -> 2.8.17
+
+./inc/PMF/System.php
+./install/mssql.sql.php
+./install/sqlsrv.sql.php
+./install/update.php
+
+
+
 CHANGED FILES FROM 2.8.15 -> 2.8.16
 
 ./admin/ajax.group.php
