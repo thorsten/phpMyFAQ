@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.16
+phpMyFAQ 2.8.17
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.17 - 2014-11-05
+- fixed typo in update script (Thorsten)
 
 Version 2.8-16 - 2014-11-03
 - fixed restore from backup (Thorsten)
