@@ -69,28 +69,34 @@ class PMF_Relation
         $terms  = str_replace('-', ' ', $question) . $keywords;
         $search = PMF_Search_Factory::create(
             $this->_config,
-            array('database' => PMF_Db::getType())
+            ['database' => PMF_Db::getType()]
         );
 
-        $search->setTable(PMF_Db::getTablePrefix() . 'faqdata AS fd')
-               ->setResultColumns(array(
+        $search
+            ->setTable(PMF_Db::getTablePrefix() . 'faqdata AS fd')
+            ->setResultColumns(
+               [
                     'fd.id AS id',
                     'fd.lang AS lang',
                     'fcr.category_id AS category_id',
                     'fd.thema AS question',
-                    'fd.content AS answer'))
-               ->setJoinedTable(PMF_Db::getTablePrefix() . 'faqcategoryrelations AS fcr')
-               ->setJoinedColumns(array(
-                    'fd.id = fcr.record_id', 
-                    'fd.lang = fcr.record_lang'))
-               ->setConditions(
-                    array(
-                        'fd.active' => "'yes'",
-                        'fd.lang'   => "'" . $this->_config->getLanguage()->getLanguage() . "'"
-                    )
-               )
-               ->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords')
-        );
+                    'fd.content AS answer'
+               ]
+            )
+            ->setJoinedTable(PMF_Db::getTablePrefix() . 'faqcategoryrelations AS fcr')
+            ->setJoinedColumns(
+               [
+                'fd.id = fcr.record_id',
+                'fd.lang = fcr.record_lang'
+               ]
+            )
+            ->setConditions(
+                [
+                    'fd.active' => "'yes'",
+                    'fd.lang'   => "'" . $this->_config->getLanguage()->getLanguage() . "'"
+                ]
+            )
+            ->setMatchingColumns(['fd.keywords']);
 
         $result = $search->search($terms);
 
