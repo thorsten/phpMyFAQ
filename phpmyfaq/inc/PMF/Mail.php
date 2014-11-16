@@ -696,7 +696,7 @@ class PMF_Mail
                 $mua
             )
         );
-        $class = 'PMF_Mail_'.$impl;
+        $class = 'PMF_Mail_' . $impl;
 
         return new $class;
     }
@@ -781,19 +781,19 @@ class PMF_Mail
 
         // Send the email adopting to the given MUA
         $mua  = self::getMUA($this->agent);
-		
-        if( is_object( $mua ) && method_exists( $mua, 'setAuthConfig' ) ){
+
+        if (is_object($mua) && method_exists($mua, 'setAuthConfig') ){
             $mua->setAuthConfig( 
-                $this->_config->get( 'mail.remoteSMTPServer' ),
-                $this->_config->get( 'mail.remoteSMTPUsername' ),
-                $this->_config->get( 'mail.remoteSMTPPassword' )
+                $this->_config->get('mail.remoteSMTPServer'),
+                $this->_config->get('mail.remoteSMTPUsername'),
+                $this->_config->get('mail.remoteSMTPPassword')
             );
         }
-		
+
         switch ($this->agent) {
             case 'SwiftSMTP': 
                 $sent = $mua->send($this->_to, $this->headers, $this->body);
-                break		
+                break;
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
                 break;
