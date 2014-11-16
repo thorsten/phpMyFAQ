@@ -57,13 +57,13 @@ class PMF_Helper_Category extends PMF_Helper
         $open          = 0;
         $output        = '';
         $numCategories = $this->Category->height();
-        
+
         if ($numCategories > 0) {
             for ($y = 0 ;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
                 
-                list($symbol, $name, $categoryId, $description) = $this->Category->getLineDisplay($y);
+                list($name, $categoryId, $description) = $this->Category->getLineDisplay($y);
 
-                if ($activeCategory == $categoryId) {
+                if ($activeCategory === $categoryId) {
                     $isActive = true;
                 } else {
                     $isActive = false;
@@ -111,13 +111,13 @@ class PMF_Helper_Category extends PMF_Helper
                     );
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->Category->treeTab[$y]['parent_id'] == 0) 
+                        $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
                                 ? 
                                 $name 
                                 : 
                                 $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
                         $output .= $this->Category->addCategoryLink(
-                            $sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive
+                            $sids, $categoryId, $name, $description, false, $isActive
                         );
                     } else {
                         $output .= $this->Category->addCategoryLink(

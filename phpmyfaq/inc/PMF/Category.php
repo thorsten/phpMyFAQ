@@ -621,8 +621,8 @@ class PMF_Category
 
         for ($y = 0 ;$y < $this->height(); $y = $this->getNextLineTree($y)) {
 
-            list($symbol, $categoryName, $parent, $description) = $this->getLineDisplay($y);
-            $level = $this->treeTab[$y]['level'];
+            list($categoryName, $parent, $description) = $this->getLineDisplay($y);
+            $level     = $this->treeTab[$y]['level'];
             $leveldiff = $open - $level;
 
             if ($leveldiff > 1) {
@@ -697,18 +697,18 @@ class PMF_Category
     }
 
     /**
-     * Returns the three parts of a line to display: last part of tree,
-     * category name, and id of the root node
+     * Returns the three parts of a line to display: category name, the ID of
+     * the root node and the description
      *
      * @param  integer $y ID
      * @return array
      */
     public function getLineDisplay($y)
     {
-        $ret[0] = $this->symbols[$this->treeTab[$y]["symbol"]];
-        $ret[1] = $this->treeTab[$y]["name"];
-        $ret[2] = $this->treeTab[$y]["id"];
-        $ret[3] = $this->treeTab[$y]["description"];
+        $ret[0] = $this->treeTab[$y]['name'];
+        $ret[1] = $this->treeTab[$y]['id'];
+        $ret[2] = $this->treeTab[$y]['description'];
+
         return $ret;
     }
 
