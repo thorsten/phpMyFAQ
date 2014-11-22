@@ -1,9 +1,13 @@
-phpMyFAQ 2.8.17
+phpMyFAQ 2.8.18
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.18 - 2014-11-
+- added clickjacking prevention (Thorsten, Narendra Bhati)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.17 - 2014-11-05
 - fixed typo in update script (Thorsten)
