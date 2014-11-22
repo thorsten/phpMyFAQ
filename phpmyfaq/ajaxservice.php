@@ -96,7 +96,7 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
 //
 // Check if logged in if FAQ is completely secured
 //
-if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly')) {
+if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') && 'changepassword' !== $action) {
     $message = array('error' => $PMF_LANG['ad_msg_noauth']);
 }
 
