@@ -16,6 +16,9 @@
 # always follow the symlinks
 Options +FollowSymlinks -MultiViews -Indexes 
 
+# X-Frame-Options to prevent clickjacking
+Header always append X-Frame-Options SAMEORIGIN
+
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
 
