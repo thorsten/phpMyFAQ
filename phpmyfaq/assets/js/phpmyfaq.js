@@ -1698,7 +1698,7 @@ $(document).ready(function () {
         return act;
     }
 });
-/*global document: false, window: false, $: false */
+/*global document: false, window: false, $: false, self: false */
 
 var addAttachment,
     addEngine,
@@ -1712,6 +1712,12 @@ var addAttachment,
     addAttachmentLink,
     showLongComment,
     saveVoting;
+
+if (self === top) {
+    document.documentElement.style.display = 'block';
+} else {
+    top.location = self.location;
+}
 
 $(document).ready(function () {
     "use strict";

@@ -30,6 +30,8 @@
 
     <script src="assets/js/libs/modernizr.min.js"></script>
     <script src="assets/js/phpmyfaq.min.js"></script>
+
+    <style> html{display:none;} </style>
 </head>
 <body dir="{dir}">
 
