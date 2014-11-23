@@ -121,6 +121,8 @@ class PMF_Helper_Search extends PMF_Helper
     /**
      * Renders the result page for Instant Response
      *
+     * @deprecated
+     *
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
      *
      * @return string
@@ -179,7 +181,55 @@ class PMF_Helper_Search extends PMF_Helper
         
         return $html;
     }
-    
+
+    /**
+     * Renders the result page for Instant Response
+     *
+     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
+     *
+     * @return string
+     */
+    public function renderInstantResponseResultAsJson(PMF_Search_Resultset $resultSet)
+    {
+        $results      = [];
+        $maxResults   = $this->_config->get('records.numberOfRecordsPerPage');
+        $numOfResults = $resultSet->getNumberOfResults();
+
+        if (0 < $numOfResults) {
+
+            $i = 0;
+            foreach ($resultSet->getResultset() as $result) {
+
+                if ($i > $maxResults) {
+                    continue;
+                }
+
+                // Build the link to the faq record
+                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
+                    $this->sessionId,
+                    $result->category_id,
+                    $result->id,
+                    $result->lang,
+                    urlencode($this->searchterm)
+                );
+
+                $link = new PMF_Link($currentUrl, $this->_config);
+                $faq  = new stdClass();
+                $faq->categoryName = $this->Category->getPath($result->category_id);
+                $faq->faqQuestion  = PMF_Utils::chopString($result->question, 15);
+                $faq->faqLink      = $link->toUri();
+
+                $results[] = $faq;
+            }
+
+        } else {
+            $results[] = $this->translation['err_noArticles'];
+        }
+
+        return json_encode($results);
+    }
+
     /**
      * Renders the result page for Instant Response
      *
