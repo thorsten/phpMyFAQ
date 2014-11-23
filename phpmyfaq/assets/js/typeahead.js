@@ -42,7 +42,7 @@ $(window).load(function () {
     questions.initialize();
     // instantiate the typeahead UI
     $('.typeahead').typeahead(null, {
-        displayKey: 'value',
+        displayKey: 'question',
         source: questions.ttAdapter(),
         templates: {
             empty: [

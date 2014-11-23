@@ -96,7 +96,7 @@
                     <div class="input-group">
                         <input type="hidden" name="searchcategory" value="{categoryId}">
                         <input type="hidden" name="action" value="search">
-                        <input type="text" class="typeahead form-control" name="search" id="searchfield"
+                        <input type="text" class="form-control typeahead" name="search" id="searchfield"
                                autocomplete="off" autofocus placeholder="{searchBox} ...">
                     </div>
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
