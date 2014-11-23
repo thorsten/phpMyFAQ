@@ -859,17 +859,12 @@ $PMF_LANG['ad_conf_asc'] = 'बढ़ते क्रम में';
 $PMF_LANG['mainControlCenter'] = 'मुख्य सरंचना';
 $PMF_LANG['recordsControlCenter'] = 'FAQ की सरंचना';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'तुंरत जवाब पाएं';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. नीचे पहले %d लेख देखें.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "नया लेख सक्रिय करें (पूर्वनिर्धारित: असक्रिय)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "नए लेखों के लिए टिप्पणी करनें दें (पूर्वनिर्धारित: असक्रिय)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'इस वर्ग के लेख';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'सीधा लिखें और उत्तर पाएं ...';
 $PMF_LANG['msgTagSearch'] = 'टैग किये गए लेख';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ जानकारी';
 $PMF_LANG['ad_online_info'] = 'संस्करण जांचें';

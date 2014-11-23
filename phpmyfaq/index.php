@@ -512,36 +512,20 @@ $tpl->parseBlock(
 );
 
 if ('main' == $action || 'show' == $action) {
-    if ('main' == $action && $faqConfig->get('search.useAjaxSearchOnStartpage')) {
-        $tpl->parseBlock(
-            'index',
-            'globalSuggestBox',
-            array(
-                'ajaxlanguage'                  => $LANGCODE,
-                'msgDescriptionInstantResponse' => $PMF_LANG['msgDescriptionInstantResponse'],
-                'msgSearch'                     => sprintf(
-                    '<a class="help" href="%sindex.php?action=search">%s</a>',
-                    $faqSystem->getSystemUri($faqConfig),
-                    $PMF_LANG["msgAdvancedSearch"]
-                 )
+    $tpl->parseBlock(
+        'index',
+        'globalSearchBox',
+        array(
+            'writeSendAdress' => '?'.$sids.'action=search',
+            'searchBox'       => $PMF_LANG['msgSearch'],
+            'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
+            'msgSearch'       => sprintf(
+                '<a class="help" href="%sindex.php?action=search">%s</a>',
+                $faqSystem->getSystemUri($faqConfig),
+                $PMF_LANG["msgAdvancedSearch"]
             )
-        );
-    } else {
-        $tpl->parseBlock(
-            'index',
-            'globalSearchBox',
-            array(
-                'writeSendAdress' => '?'.$sids.'action=search',
-                'searchBox'       => $PMF_LANG['msgSearch'],
-                'categoryId'      => ($cat === 0) ? '%' : (int)$cat,
-                'msgSearch'       => sprintf(
-                    '<a class="help" href="%sindex.php?action=search">%s</a>',
-                    $faqSystem->getSystemUri($faqConfig),
-                    $PMF_LANG["msgAdvancedSearch"]
-                )
-            )
-        );
-    }
+        )
+    );
 }
 
 $stickyRecordsParams = $faq->getStickyRecords();

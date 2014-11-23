@@ -15,7 +15,8 @@
     "tinymce": "~4.1",
     "jquery": "~1.11.1",
     "bootstrap-datepicker": "~1.2.0",
-    "typeahead.js": "~0.10.5"
+    "typeahead.js": "~0.10.5",
+    "handlebars": "~2.0.0"
   },
   "resolutions": {
     "bootstrap": "~3.3.0"

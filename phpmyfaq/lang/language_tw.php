@@ -832,17 +832,12 @@ $PMF_LANG['ad_conf_asc'] = "由下往上升 ascending";
 $PMF_LANG['mainControlCenter'] = "主設定 Main configuration";
 $PMF_LANG['recordsControlCenter'] = "FAQ 記錄設定 FAQ records configuration";
 
-// added v2.0.0 - 2007-03-17 by Thorsten 開發者
-$PMF_LANG['msgInstantResponse'] = "即時反應 Instant Response";
-$PMF_LANG['msgInstantResponseMaxRecords'] = "。 從下方 %d 記錄先找尋。 (.Find below the first %d records.)";
-
 // added v2.0.0 - 2007-03-29 by Thorsten 開發者
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "啟用新紀錄 (預設: 關閉) <br>Activate new records (default: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "允許新記錄可被留下評論 (預設: 關閉) <br>Allow comments for new records (default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten 開發者
 $PMF_LANG['msgAllCatArticles'] = "此類別下的紀錄 Records in this category";
-$PMF_LANG['msgDescriptionInstantResponse'] = "只需輸入與尋找答案 Just type and find the answers ...";
 $PMF_LANG['msgTagSearch'] = "已註記的項目 Tagged entries";
 $PMF_LANG['ad_pmf_info'] = "phpMyFAQ 資訊 Information";
 $PMF_LANG['ad_online_info'] = "官方網站線上最新版本檢查 Online version check";
@@ -1013,7 +1008,6 @@ $PMF_LANG['msgUpdateFaqDate'] = "更新";
 $PMF_LANG['msgKeepFaqDate'] = "保留";
 $PMF_LANG['msgEditFaqDat'] = "編輯";
 $LANG_CONF['main.optionalMailAddress'] = array(0 => "checkbox", 1 => "郵件地址為命令的欄位 (預設: 關閉) Mail address as mandatory field (default: deactivated)");
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => "checkbox", 1 => "首頁的即時回應 (預設: 關閉) Instant Response on startpage (default: deactivated)");
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt 開發者
 $LANG_CONF['search.relevance'] = array(0 => "select", 1 => "Sort by relevance");

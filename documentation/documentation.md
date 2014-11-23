@@ -586,7 +586,9 @@ On the page with the advanced search you have more possibilities to find an entr
 
 **4.4. <a id="4.4"></a>Instant Response**
 
-The Instant Response is an Ajax-powered page with direct access to the whole FAQ database and the page will return the search results while you're typing into the input form. For performance reasons only the first 10 results will be displayed on the page.
+The Instant Response is directly built into the main search bar in the top of the FAQ with direct access to the whole
+FAQ database and the page will return results while you're typing into the input form. For performance reasons only the
+first 10 results will be suggested.
 
 [back to top][64]
 

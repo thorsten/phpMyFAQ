@@ -880,17 +880,12 @@ $PMF_LANG['ad_conf_asc'] = 'vzestupně';
 $PMF_LANG['mainControlCenter'] = 'Hlavní nastavení';
 $PMF_LANG['recordsControlCenter'] = 'Konfigurace záznamů';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Rychlé vyhledávání';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nalezeno prvních %d záznamů.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivovat nový záznam (výchozí: deaktivováno)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Povolit komentáře k novým záznamům (výchozí: nepovoleno)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Záznamů v této kategorii';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Začněte psát a zobrazí se vám odpovědi ...';
 $PMF_LANG['msgTagSearch'] = 'Označkovaných záznamů';
 $PMF_LANG['ad_pmf_info'] = 'Informace';
 $PMF_LANG['ad_online_info'] = 'Online ověření verze';
@@ -1061,7 +1056,6 @@ $PMF_LANG['msgUpdateFaqDate'] = 'vložit datum editace';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechat původní datum'; 
 $PMF_LANG['msgEditFaqDat'] = 'vložit vlastní datum';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Emailová adresa jako povinné pole (výchozí: deaktivováno)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Okamžitá odpověď na úvodní straně (výchozí: deaktivováno)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Řadit podle důležitosti');

@@ -852,17 +852,12 @@ $PMF_LANG['ad_conf_asc'] = 'uzlazno';
 $PMF_LANG['mainControlCenter'] = 'Glavna konfiguracija';
 $PMF_LANG['recordsControlCenter'] = 'FAQ konfiguracija unosa';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Odgovori mi';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nadi ispod %d unosa.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Ukljucite nove unose (iskljuceno)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Dozvolite komentare na nove unose (nedozvoljeno)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Unosi u ovoj kategoriji';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Samo kucajte da nadete odgovor ...';
 $PMF_LANG['msgTagSearch'] = 'Oznaceni unosi';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informacije';
 $PMF_LANG['ad_online_info'] = 'Provera Verzije';

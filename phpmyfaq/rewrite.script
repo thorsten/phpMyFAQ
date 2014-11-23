@@ -64,10 +64,6 @@ if matched then set URL = /index.php?action=contact
 match URL into $ with ^/glossary\.html$
 if matched then set URL = /index.php?action=glossary
 
-# the instant response page
-match URL into $ with ^/instantresponse\.html$
-if matched then set URL = /index.php?action=instantresponse
-
 # a page with a record (backward compatibility)
 match URL into $ with ^/([0-9]+)_([0-9]+)_([a-z\-]+)\.html$
 if matched then set URL = /index.php?action=artikel&cat=$1&id=$2&artlang=$3

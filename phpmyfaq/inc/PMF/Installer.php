@@ -333,7 +333,6 @@ class PMF_Installer
         'records.allowNewFaqsForGuests'           => 'true',
         'records.hideEmptyCategories'             => 'false',
 
-        'search.useAjaxSearchOnStartpage'         => 'false',
         'search.numberSearchTerms'                => '10',
         'search.relevance'                        => 'thema,content,keywords',
         'search.enableRelevance'                  => 'false',

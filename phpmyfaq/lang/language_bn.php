@@ -870,17 +870,12 @@ $PMF_LANG['ad_conf_asc'] = 'ascending';
 $PMF_LANG['mainControlCenter'] = 'Main Control Center';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'তাৎক্ষণিক অনুসন্ধান';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. নীচে প্রথম %dটি প্রশ্ন খুঁজুন।';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records (default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'এই বিভাগের প্রশ্ন';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'যেকোনো শব্দ টাইপ করে খুঁজুন ...';
 $PMF_LANG['msgTagSearch'] = 'ট্যাগ';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';

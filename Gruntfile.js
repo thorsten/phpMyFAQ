@@ -94,7 +94,10 @@ module.exports = function(grunt) {
                     'components/bootstrap/js/modal.js',
                     'components/bootstrap/js/popover.js',
                     'components/bootstrap/js/tab.js',
+                    'components/typeahead.js/dist/typeahead.bundle.js',
+                    'components/handlebars/handlebars.js',
                     'phpmyfaq/assets/js/autosave.js',
+                    'phpmyfaq/assets/js/typeahead.js',
                     'phpmyfaq/assets/js/functions.js'
                 ],
                 dest: 'phpmyfaq/assets/js/phpmyfaq.js'

@@ -200,39 +200,6 @@ $(document).ready(function () {
     };
 
     /**
-     * Auto-suggest function for instant response
-     *
-     * @return void
-     */
-    var autoSuggest = function autoSuggest() {
-        $('input#instantfield').keyup(function () {
-            var search   = $('#instantfield').val(),
-                language = $('#ajaxlanguage').val(),
-                category = $('#searchcategory').val();
-
-            if (search.length > 0) {
-                $.ajax({
-                    type:    'POST',
-                    url:     'ajaxresponse.php',
-                    data:    'search=' + search + '&ajaxlanguage=' + language + '&searchcategory=' + category,
-                    success: function (searchresults) {
-                        $('#instantresponse').empty();
-                        if (searchresults.length > 0) {
-                            $('#instantresponse').append(searchresults);
-                        }
-                    }
-                });
-            }
-        });
-
-        $('#instantform').submit(function () {
-            return false;
-        });
-    };
-
-    autoSuggest();
-
-    /**
      * Saves the voting by Ajax
      *
      * @param type

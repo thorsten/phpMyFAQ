@@ -862,17 +862,12 @@ $PMF_LANG['ad_conf_asc'] = 'küçükten büyüğe';
 $PMF_LANG['mainControlCenter'] = 'Ana ayarlar';
 $PMF_LANG['recordsControlCenter'] = 'SSS kayıt ayarları';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Anında Cevap';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Aşağıda ilk %d kayıt bulundu.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Yeni kayıtları aktifleştir (varsayılan: kapalı)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Yeni kayıtlar için yorumlara izin ver (varsayılan: yasak)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Bu kategorideki kayıtlar';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Cevap bulmak için sorunuzu yazın ...';
 $PMF_LANG['msgTagSearch'] = 'Etiketlenmiş girdiler';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Bilgisi';
 $PMF_LANG['ad_online_info'] = 'Online sürüm kontrolü';

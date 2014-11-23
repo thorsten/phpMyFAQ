@@ -184,7 +184,6 @@ $allowedVariables = [
     'contact'         => 1,
     'glossary'        => 1,
     'help'            => 1,
-    'instantresponse' => 1,
     'login'           => 1,
     'mailsend2friend' => 1,
     'news'            => 1,

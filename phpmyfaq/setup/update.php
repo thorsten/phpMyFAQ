@@ -847,6 +847,7 @@ if ($step == 3) {
         $faqConfig->add('mail.remoteSMTPServer', '');
         $faqConfig->add('mail.remoteSMTPUsername', '');
         $faqConfig->add('mail.remoteSMTPPassword', '');
+        $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";

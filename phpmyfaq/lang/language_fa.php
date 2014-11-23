@@ -547,7 +547,6 @@ $PMF_LANG['socialNetworksControlCenter'] = 'تنظيمات شبكه اجتماع
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => 'Sorting of the top FAQ\'s');
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'اجبار در ورود آدرس ايميل (پيش فرض غير فعال)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Activate relevance support? (default: disabled)');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');

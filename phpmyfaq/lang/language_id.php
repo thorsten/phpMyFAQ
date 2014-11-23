@@ -848,17 +848,12 @@ $PMF_LANG['ad_conf_asc'] = 'biasa';
 $PMF_LANG['mainControlCenter'] = 'Konfigurasi utama';
 $PMF_LANG['recordsControlCenter'] = 'Konfigurasi konten materi';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Pencarian Cepat';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Berikut ini adalah %d hasil pertama.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktifkan data baru (default: non-aktif)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Bolehkan komentar atas data baru (default: tidak-boleh)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Data dalam kategori ini';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Ketik yang ingin anda cari...';
 $PMF_LANG['msgTagSearch'] = 'Entri dengan tag';
 $PMF_LANG['ad_pmf_info'] = 'Informasi phpMyFAQ';
 $PMF_LANG['ad_online_info'] = 'Periksa versi secara online';

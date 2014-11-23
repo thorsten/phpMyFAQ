@@ -826,17 +826,12 @@ $PMF_LANG["ad_conf_asc"] = "aufsteigend";
 $PMF_LANG["mainControlCenter"] = "Allgemeine Konfiguration";
 $PMF_LANG["recordsControlCenter"] = "Konfiguration FAQs";
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG["msgInstantResponse"] = "Sofortantwort";
-$PMF_LANG["msgInstantResponseMaxRecords"] = ". Nachfolgend werden die ersten %d FAQs aufgelistet.";
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF["records.defaultActivation"] = array(0 => "checkbox", 1 => "Neue FAQs sofort sichtbar? <br>(Standard: unsichtbar)");
 $LANG_CONF["records.defaultAllowComments"] = array(0 => "checkbox", 1 => "Kommentare bei FAQs erlaubt? <br>(Standard: nicht erlaubt)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG["msgAllCatArticles"] = "FAQs in dieser Kategorie";
-$PMF_LANG["msgDescriptionInstantResponse"] = "Einfach lostippen und Antworten finden ...";
 $PMF_LANG["msgTagSearch"] = "FAQs mit gleichen Tags";
 $PMF_LANG["ad_pmf_info"] = "phpMyFAQ Information";
 $PMF_LANG["ad_online_info"] = "Online Versionsüberprüfung";
@@ -995,7 +990,6 @@ $PMF_LANG["msgUpdateFaqDate"] = "aktualisieren";
 $PMF_LANG["msgKeepFaqDate"] = "behalten";
 $PMF_LANG["msgEditFaqDat"] = "ändern";
 $LANG_CONF["main.optionalMailAddress"] = array(0 => "checkbox", 1 => "Angabe der E-Mailadresse als Pflichtfeld <br>(Standard: deaktiviert)");
-$LANG_CONF["search.useAjaxSearchOnStartpage"] = array(0 => "checkbox", 1 => "Sofortantwort auf der Startseite <br>(Standard: deaktiviert)");
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF["search.relevance"] = array(0 => "select", 1 => "Sortierung nach Relevanz");

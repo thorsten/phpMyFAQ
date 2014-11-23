@@ -24,7 +24,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'inc/Bootstrap.php';
 
-$searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+$searchString = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
 $categoryId   = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
@@ -81,6 +81,13 @@ $category->buildTree();
 $faq             = new PMF_Faq($faqConfig);
 $faqSearch       = new PMF_Search($faqConfig);
 $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+
+//
+// Send headers
+//
+$http = new PMF_Helper_Http();
+$http->setContentType('application/json');
+$http->addHeader();
 
 //
 // Handle the search requests

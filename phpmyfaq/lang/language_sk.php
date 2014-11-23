@@ -855,17 +855,12 @@ $PMF_LANG['ad_conf_asc'] = 'vzostupne';
 $PMF_LANG['mainControlCenter'] = 'Hlavné nastavenia';
 $PMF_LANG['recordsControlCenter'] = 'Nastavenia FAQ záznamov';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Okamžitá reakcia';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Hľadať pod prvým %d záznamom.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivovať nový záznam (prednastavené: deaktivované)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Povoliť komentáre pre nové záznamy (prednastavené: nepovoliť)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Záznamy v tejto kategórii';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Iba napísať a vyhľadať odpovede ...';
 $PMF_LANG['msgTagSearch'] = 'Označené položky';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informácie';
 $PMF_LANG['ad_online_info'] = 'Kontrola online verzie';
@@ -1036,4 +1031,3 @@ $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať'; 
 $PMF_LANG['msgEditFaqDat'] = 'upraviť';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Okamžité presmerovanie na úvodnú stránku (prednastavené: deaktivované)');

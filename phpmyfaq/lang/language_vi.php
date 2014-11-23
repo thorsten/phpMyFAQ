@@ -859,17 +859,12 @@ $PMF_LANG['ad_conf_asc'] = 'tăng dần';
 $PMF_LANG['mainControlCenter'] = 'Cấu hình chính';
 $PMF_LANG['recordsControlCenter'] = 'Cấu hình nội dung Câu hỏi thường gặp';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Trả lời nhanh';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Xem dưới đây %d nội dung đầu tiên.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Kích hoạt một nội dung mới (mặc định: không kích hoạt)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Cho phép bình luận nội dung mới (mặc định: không cho phép)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Nội dung trong mục này';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Chỉ cần đánh vào, bạn sẽ có câu trả lời ...';
 $PMF_LANG['msgTagSearch'] = 'Những nội dung được tag';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Kiểm tra phiên bản trực tuyến';

@@ -605,8 +605,6 @@ $PMF_LANG['ad_categ_select'] = "Select category language";
 $PMF_LANG['msgSitemap'] = "Карта сайту"; 
 
 // added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG["msgInstantResponse"] = "Instant Response"; 
-$PMF_LANG["msgInstantResponseMaxRecords"] = ". Find below the first %d records."; 
 $PMF_LANG["newsShowArchive"] = "Архів новин."; 
 $PMF_LANG["newsShowCurrent"] = "Поточні новини."; 
 
@@ -698,7 +696,6 @@ $PMF_LANG["msg_tags"] = "Теги";
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG["msgAllCatArticles"] = "Записів в цій категорії"; 
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Just type and find the answers ...';
 $PMF_LANG['msgTagSearch'] = 'Записей по тэгам';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';

@@ -1,8 +1,3 @@
-<!-- Instant Response -->
-        <div id="instantresponse">
-    
-        </div>
-
         [tagListSection]
         <div class="well pull-left" style="width:60%; margin-right: 10px;">
             <h3>{msgTags}</h3>

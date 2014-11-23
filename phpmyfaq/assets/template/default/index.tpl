@@ -59,7 +59,6 @@
                         <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
-                        <li>{showInstantResponse}</li>
                         <li>{msgSearch}</li>
                         <li>{msgAddContent}</li>
                         <li>{msgQuestion}</li>
@@ -97,7 +96,7 @@
                     <div class="input-group">
                         <input type="hidden" name="searchcategory" value="{categoryId}">
                         <input type="hidden" name="action" value="search">
-                        <input type="text" class="form-control" name="search" id="searchfield"
+                        <input type="text" class="typeahead form-control" name="search" id="searchfield"
                                autocomplete="off" autofocus placeholder="{searchBox} ...">
                     </div>
                     <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
@@ -110,16 +109,6 @@
 <section id="content" class="container">
     <div class="row">
         <div class="col-md-8" id="mainContent">
-            [globalSuggestBox]
-            <section class="well hidden-print" id="searchBox">
-                <form id="instantform" action="?action=instantresponse" method="post" class="form-search" accept-charset="utf-8">
-                    <input type="hidden" name="ajaxlanguage" id="ajaxlanguage" value="{ajaxlanguage}" />
-                    <input type="search" name="search" id="instantfield" class="form-control" value=""
-                           placeholder="{msgDescriptionInstantResponse}" />
-                </form>
-                <small>{msgSearch}</small>
-            </section>
-            [/globalSuggestBox]
 
             {writeContent}
 

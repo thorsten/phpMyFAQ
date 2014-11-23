@@ -857,17 +857,12 @@ $PMF_LANG['ad_conf_asc'] = 'didėjančiai';
 $PMF_LANG['mainControlCenter'] = 'Pagrindinė konfigūracija';
 $PMF_LANG['recordsControlCenter'] = 'DUK įrašų konfigūracija';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Greitas atsakymas';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Žemiau rasite pirmus %d įrašų.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktyvinti naujus įrašus (numatyta r.: neaktyvinti)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Leisti komentarus naujiems įrašams (numatyta r.: neleisti)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Įrašai šioje grupėje';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Tiesiog rašykite ir gaukite atsakymus...';
 $PMF_LANG['msgTagSearch'] = 'Įrašai su gairėmis';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ informacija';
 $PMF_LANG['ad_online_info'] = 'Tiesioginis versijos tikrinimas';
@@ -1045,4 +1040,3 @@ $PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
 $PMF_LANG['msgKeepFaqDate'] = 'palikti'; 
 $PMF_LANG['msgEditFaqDat'] = 'redaguoti';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Greitas atsakymas pradžios tinklalapyje (numatyta r.: išjungta)');

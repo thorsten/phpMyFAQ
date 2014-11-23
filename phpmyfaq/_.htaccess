@@ -138,10 +138,6 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagg
 # * http://[...]/tags/<ID>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
 
-# the instant response page
-RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
-
 # REST/JSON API
 # * http://[...]/api/<ACTION>/<LANGUAGE CODE>/<...>
 RewriteRule api/getVersion                        api.php?action=getVersion [L,QSA]

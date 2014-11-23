@@ -117,79 +117,15 @@ class PMF_Helper_Search extends PMF_Helper
             $this->translation['opensearch_plugin_install']
         );
     }
-    
+
     /**
-     * Renders the result page for Instant Response
-     *
-     * @deprecated
+     * Renders the results for Typehead
      *
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
      *
      * @return string
      */
     public function renderInstantResponseResult(PMF_Search_Resultset $resultSet)
-    {
-        $html         = '';
-        $confPerPage  = $this->_config->get('records.numberOfRecordsPerPage');
-        $numOfResults = $resultSet->getNumberOfResults();
-        
-        if (0 < $numOfResults) {
-            
-            $html .= sprintf("<p>%s", $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults));
-            $html .= sprintf($this->translation['msgInstantResponseMaxRecords'], $confPerPage);
-            $html .= "<ul class=\"phpmyfaq_ul\">\n";
-            
-            $i = 0;
-            foreach ($resultSet->getResultset() as $result) {
-                
-                if ($i > $confPerPage) {
-                    continue;
-                }
-                
-                $categoryName  = $this->Category->getPath($result->category_id);
-                $question      = PMF_Utils::chopString($result->question, 15);
-                $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
-                
-                // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
-                    PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
-                    $this->sessionId,
-                    $result->category_id,
-                    $result->id,
-                    $result->lang,
-                    urlencode($this->searchterm)
-                );
-
-                $oLink       = new PMF_Link($currentUrl, $this->_config);
-                $oLink->text = $oLink->itemTitle = $oLink->tooltip = $question;
-                
-                $html .= sprintf(
-                    "<li><strong>%s</strong>: %s<br /><div class=\"searchpreview\"><strong>%s</strong> %s...</div><br /></li>\n",
-                    $categoryName,
-                    $oLink->toHtmlAnchor(),
-                    $this->translation['msgSearchContent'],
-                    $answerPreview
-                );
-                $i++;
-            }
-            
-            $html .= "</ul>\n";
-            
-        } else {
-            $html = $this->translation['err_noArticles'];
-        }
-        
-        return $html;
-    }
-
-    /**
-     * Renders the result page for Instant Response
-     *
-     * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object
-     *
-     * @return string
-     */
-    public function renderInstantResponseResultAsJson(PMF_Search_Resultset $resultSet)
     {
         $results      = [];
         $maxResults   = $this->_config->get('records.numberOfRecordsPerPage');
@@ -205,7 +141,7 @@ class PMF_Helper_Search extends PMF_Helper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                $currentUrl = sprintf('%s?%saction=artikel&cat=%d&id=%d&artlang=%s&highlight=%s',
                     PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
                     $this->sessionId,
                     $result->category_id,
@@ -220,7 +156,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $faq->faqQuestion  = PMF_Utils::chopString($result->question, 15);
                 $faq->faqLink      = $link->toUri();
 
-                $results[] = $faq;
+                $results['results'][] = $faq;
             }
 
         } else {

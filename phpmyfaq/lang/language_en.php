@@ -859,17 +859,12 @@ $PMF_LANG['ad_conf_asc'] = 'ascending';
 $PMF_LANG['mainControlCenter'] = 'Main configuration';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
 
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Instant Response';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
-
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate new records<br>(default: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records<br>(default: disallowed)");
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Just type and find the answers ...';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
@@ -1040,7 +1035,6 @@ $PMF_LANG['msgUpdateFaqDate'] = 'update';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field<br>(default: deactivated)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage<br>(default: deactivated)');
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
