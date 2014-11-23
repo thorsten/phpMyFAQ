@@ -206,62 +206,80 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
     // save new user
     if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
-        $user                  = new PMF_User($faqConfig);
-        $message               = '';
-        $messages              = [];
-        $user_name             = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
-        $user_realname         = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
-        $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $user_email            = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
-        $user_password         = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $user_password_confirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
-        $csrfOkay              = true;
-        $csrfToken             = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $user                = new PMF_User($faqConfig);
+        $message             = '';
+        $messages            = [];
+        $userName            = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
+        $userRealName        = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
+        $userPassword        = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $userEmail           = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
+        $userPassword        = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $userPasswordConfirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
+        $csrfToken           = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $csrfOkay            = true;
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false; 
         }
 
-        if ($user_password != $user_password_confirm) {
-            $user_password         = '';
-            $user_password_confirm = '';
-            $messages[]            = $PMF_LANG['ad_user_error_passwordsDontMatch'];
+        if ($userPassword != $userPasswordConfirm) {
+            $userPassword        = '';
+            $userPasswordConfirm = '';
+            $messages[]          = $PMF_LANG['ad_user_error_passwordsDontMatch'];
         }
 
         // check login name
-        if (!$user->isValidLogin($user_name)) {
-            $user_name  = '';
+        if (!$user->isValidLogin($userName)) {
+            $userName  = '';
             $messages[] = $PMF_LANG['ad_user_error_loginInvalid'];
         }
-        if ($user->getUserByLogin($user_name)) {
-            $user_name  = '';
+        if ($user->getUserByLogin($userName)) {
+            $userName  = '';
             $messages[] = $PMF_LANG['ad_adus_exerr'];
         }
         // check realname
-        if ($user_realname == '') {
-            $user_realname = '';
+        if ($userRealName == '') {
+            $userRealName = '';
             $messages[]    = $PMF_LANG['ad_user_error_noRealName'];
         }
         // check e-mail
-        if (is_null($user_email)) {
-            $user_email = '';
+        if (is_null($userEmail)) {
+            $userEmail = '';
             $messages[] = $PMF_LANG['ad_user_error_noEmail'];
         }
 
         // ok, let's go
         if (count($messages) == 0 && $csrfOkay) {
             // create user account (login and password)
-            if (!$user->createUser($user_name, $user_password)) {
+            if (!$user->createUser($userName, $userPassword)) {
                 $messages[] = $user->error();
             } else {
                 // set user data (realname, email)
-                $user->userdata->set(array('display_name', 'email'), array($user_realname, $user_email));
+                $user->userdata->set(array('display_name', 'email'), array($userRealName, $userEmail));
                 // set user status
                 $user->setStatus($defaultUserStatus);
             }
         }
-        // no errors, show list
+
+        // no errors, send notification to user and show list
         if (count($messages) == 0) {
+
+            $text = sprintf(
+                "You have been registrated as a new user:\n\nName: %s\nLogin name: %s\n\nPassword: %\n\n" .
+                "Check it out here: %s.",
+                $userRealName,
+                $userName,
+                $user->createPassword(),
+                $faqConfig->get('main.referenceURL')
+            );
+
+            $mail = new PMF_Mail($faqConfig);
+            $mail->setFrom($faqConfig->get('main.administrationMail'));
+            $mail->addTo($userEmail, $userName);
+            $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
+            $mail->message = $text;
+            $result = $mail->send();
+
             $userAction = $defaultUserAction;
             $message    = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adus_suc']);
             // display error messages and show form again
@@ -299,7 +317,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <label class="col-lg-2 control-label" for="user_name"><?php echo $PMF_LANG["ad_adus_name"]; ?></label>
                 <div class="col-lg-3">
                     <input type="text" name="user_name" id="user_name" required tabindex="1" class="form-control"
-                           value="<?php echo (isset($user_name) ? $user_name : ''); ?>" />
+                           value="<?php echo (isset($userName) ? $userName : ''); ?>" />
                 </div>
             </div>
 
@@ -307,7 +325,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <label class="col-lg-2 control-label" for="user_realname"><?php echo $PMF_LANG["ad_user_realname"]; ?></label>
                 <div class="col-lg-3">
                 <input type="text" name="user_realname" id="user_realname" required tabindex="2" class="form-control"
-                   value="<?php echo (isset($user_realname) ? $user_realname : ''); ?>" />
+                   value="<?php echo (isset($userRealName) ? $userRealName : ''); ?>" />
                 </div>
             </div>
 
@@ -315,7 +333,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <label class="col-lg-2 control-label" for="user_email"><?php echo $PMF_LANG["ad_entry_email"]; ?></label>
                 <div class="col-lg-3">
                     <input type="email" name="user_email" id="user_email" required tabindex="3" class="form-control"
-                           value="<?php echo (isset($user_email) ? $user_email : ''); ?>" />
+                           value="<?php echo (isset($userEmail) ? $userEmail : ''); ?>" />
                 </div>
             </div>
 
@@ -323,7 +341,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <label class="col-lg-2 control-label" for="password"><?php echo $PMF_LANG["ad_adus_password"]; ?></label>
                 <div class="col-lg-3">
                     <input type="password" name="user_password" id="password" required tabindex="4" class="form-control"
-                           value="<?php echo (isset($user_password) ? $user_password : ''); ?>" />
+                           value="<?php echo (isset($userPassword) ? $userPassword : ''); ?>" />
                 </div>
             </div>
 
@@ -331,7 +349,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                  <label class="col-lg-2 control-label" for="password_confirm"><?php echo $PMF_LANG["ad_passwd_con"]; ?></label>
                  <div class="col-lg-3">
                     <input type="password" name="user_password_confirm" id="password_confirm" required class="form-control"
-                           tabindex="5" value="<?php echo (isset($user_password_confirm) ? $user_password_confirm : ''); ?>" />
+                           tabindex="5" value="<?php echo (isset($userPasswordConfirm) ? $userPasswordConfirm : ''); ?>" />
                  </div>
             </div>
 
