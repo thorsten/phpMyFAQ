@@ -59,7 +59,7 @@
                     "reference": "master"
                 }
             }
-        }		
+        }
     ],
     "require": {
         "php":                     ">=5.4.4",
@@ -67,10 +67,10 @@
         "phpseclib":               "master@dev",
         "tcpdf":                   "master@dev",
         "thorsten/twitteroauth":   "master@dev",
-		"swiftmailer":             "master@dev"
+        "swiftmailer":             "master@dev"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.0.*",
+        "phpunit/phpunit": "4.*",
         "phpunit/dbunit": "1.3.*"
     },
     "config": {
