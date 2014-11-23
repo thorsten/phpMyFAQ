@@ -351,7 +351,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             <th style="width: 72px;">
                 <label>
                 <input type="checkbox" id="sticky_category_block_<?php echo $cid; ?>"
-                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'sticky')" />
+                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>')" />
                     <?php echo $PMF_LANG['ad_record_sticky'] ?>
                 </label>
             </th>
@@ -359,7 +359,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                 <label>
                     <input type="checkbox" id="active_category_block_<?php echo $cid; ?>"
-                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'active')"
+                       onclick="saveStatusForCategory(<?php echo $cid; ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>')"
                        <?php echo ($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
                     <?php echo $PMF_LANG['ad_record_active'] ?>
                 </label>
@@ -408,7 +408,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             <td style="width: 56px;">
                 <label>
                     <input type="checkbox" lang="<?php echo $record['lang'] ?>"
-                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'sticky');"
+                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                        id="sticky_record_<?php echo $cid . '_' . $record['id'] ?>"
                     <?php echo ($record['sticky'] ? 'checked' :  '    ') ?>>
                 </label>
@@ -417,7 +417,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <?php if ($user->perm->checkRight($user->getUserId(), 'approverec') && isset($numVisits[$record['id']])) { ?>
                 <label>
                     <input type="checkbox" lang="<?php echo $record['lang'] ?>"
-                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'active');"
+                       onclick="saveStatus(<?php echo $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                        id="active_record_<?php echo $cid . '_' . $record['id'] ?>"
                     <?php echo ('yes' == $record['active'] ? 'checked' : '    ') ?>>
                 </label>
@@ -480,10 +480,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
          *
          * @param id   id
          * @param type status type
+         * @param string csrf
          *
          * @return void
          */
-        function saveStatusForCategory(id, type)
+        function saveStatusForCategory(id, type, csrf)
         {
             var id_map = [];
 <?php 
@@ -499,22 +500,28 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 $('#' + type + '_record_' + id + '_' + id_map[id][i]).prop('checked', status);
             }
 
-            saveStatus(id, id_map[id], type);
+            saveStatus(id, id_map[id], type, csrf);
         }
 
         /**
          * Ajax call for saving the sticky record status
          *
-         * @param cid  category id
-         * @param ids  ids
-         * @param type status type
+         * @param cid    category id
+         * @param ids    ids
+         * @param type   status type
+         * @param string csrf
          *
          * @return void
          */
-        function saveStatus(cid, ids, type)
+        function saveStatus(cid, ids, type, csrf)
         {
             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
-            var data = {action: "ajax", ajax: 'records', ajaxaction: "save_" + type + "_records"};
+            var data = {
+                action: "ajax",
+                ajax: 'records',
+                ajaxaction: "save_" + type + "_records",
+                csrf: csrf
+            };
 
             for (var i = 0; i < ids.length; i++) {
                 var statusId = '#' + type + '_record_' + cid + '_' + ids[i];

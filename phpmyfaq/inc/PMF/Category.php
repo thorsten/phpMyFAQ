@@ -690,8 +690,8 @@ class PMF_Category
     }
 
     /**
-     * Returns the three parts of a line to display: last part of tree,
-     * category name, and id of the root node
+     * Returns the three parts of a line to display: category name, the ID of
+     * the root node and the description
      *
      * @param  integer $y ID
      * @return array

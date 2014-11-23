@@ -308,7 +308,8 @@ sid int(11) NOT NULL,
 user_id int(11) NOT NULL,
 ip text NOT NULL,
 time int(11) NOT NULL,
-PRIMARY KEY (sid)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
+PRIMARY KEY (sid),
+KEY index_time (time)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqstopwords
 $query[] = "CREATE TABLE ".$sqltblpre."faqstopwords (

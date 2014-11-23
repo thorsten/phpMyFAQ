@@ -112,13 +112,13 @@ class PMF_Helper_Category extends PMF_Helper
                     );
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
-                        $name = ($this->Category->treeTab[$y]['parent_id'] == 0) 
+                        $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
                                 ? 
                                 $name 
                                 : 
                                 $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
                         $output .= $this->Category->addCategoryLink(
-                            $sids, $this->Category->treeTab[$y]['parent_id'], $name, $description, false, $isActive
+                            $sids, $categoryId, $name, $description, false, $isActive
                         );
                     } else {
                         $output .= $this->Category->addCategoryLink(

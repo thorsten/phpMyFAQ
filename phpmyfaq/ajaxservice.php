@@ -96,7 +96,7 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
 //
 // Check if logged in if FAQ is completely secured
 //
-if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly')) {
+if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') && 'changepassword' !== $action) {
     $message = array('error' => $PMF_LANG['ad_msg_noauth']);
 }
 
@@ -119,6 +119,7 @@ switch ($action) {
 
         $faq      = new PMF_Faq($faqConfig);
         $oComment = new PMF_Comment($faqConfig);
+        $category = new PMF_Category($faqConfig);
         $type     = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqid    = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsid   = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
@@ -179,7 +180,7 @@ switch ($action) {
                     $faqUrl = sprintf(
                         '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                         $faqConfig->get('main.referenceURL'),
-                        0,
+                        $category->getCategoryIdFromArticle($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
@@ -212,15 +213,12 @@ switch ($action) {
 
                 $send = [];
                 $mail = new PMF_Mail($faqConfig);
+                $mail->setFrom($faqConfig->get('main.administrationMail'), $faqConfig->get('main.titleFAQ'));
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
-                $send[$emailTo] = 1;
 
-                // Let the admin get a copy of the message
-                if (!isset($send[$faqConfig->get('main.administrationMail')])) {
-                    $mail->addCc($faqConfig->get('main.administrationMail'));
-                    $send[$faqConfig->get('main.administrationMail')] = 1;
-                }
+                $send[$emailTo] = 1;
+                $send[$faqConfig->get('main.administrationMail')] = 1;
 
                 // Let the category owner get a copy of the message
                 $category   = new PMF_Category($faqConfig, $current_groups);

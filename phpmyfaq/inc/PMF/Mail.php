@@ -278,7 +278,7 @@ class PMF_Mail
         // Sanity check
         if (!self::validateEmail($address)) {
             trigger_error(
-                "<strong>Mail Class</strong>: $address is not a valid e-mail address!",
+                "<strong>Mail Class</strong>: " . $address . " is not a valid e-mail address!",
                 E_USER_ERROR
             );
             return false;
@@ -287,7 +287,7 @@ class PMF_Mail
         // Don't allow duplicated addresses
         if (array_key_exists($address, $target)) {
             trigger_error(
-                "<strong>Mail Class</strong>: $address has been already added in '$targetAlias'!",
+                "<strong>Mail Class</strong>: " . $address . " has been already added in '$targetAlias'!",
                 E_USER_WARNING
             );
             return false;

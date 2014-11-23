@@ -33,6 +33,8 @@
     <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{baseHref}feed/latest/rss.php">
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{baseHref}feed/openquestions/rss.php">
     <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
+
+    <style> html{display:none;} </style>
 </head>
 <body dir="{dir}">
 
