@@ -9,14 +9,15 @@
   ],
   "dependencies": {
     "modernizr": "~2.8.3",
-    "bootstrap": "~3.2.0",
-    "font-awesome": "~4.1.0",
+    "bootstrap": "~3.3",
+    "font-awesome": "~4.2",
     "sparkline": "~2.1.2",
-    "tinymce": "~4.0.28",
+    "tinymce": "~4.1",
     "jquery": "~1.11.1",
-    "bootstrap-datepicker": "~1.2.0"
+    "bootstrap-datepicker": "~1.2.0",
+    "typeahead.js": "~0.10.5"
   },
   "resolutions": {
-    "bootstrap": "~3.2.0"
+    "bootstrap": "~3.3.0"
   }
 }
