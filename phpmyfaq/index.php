@@ -551,7 +551,6 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgGlossary'         => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
         "backToHome"          => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'index.html">'.$PMF_LANG["msgHome"].'</a>',
         "allCategories"       => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'showcat.html">'.$PMF_LANG["msgShowAllCategories"].'</a>',
-        'showInstantResponse' => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'instantresponse.html">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="' . $faqSystem->getSystemUri($faqConfig) . 'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => $faqSystem->getSystemUri($faqConfig) . 'opensearch.html');
 } else {
@@ -565,7 +564,6 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgGlossary'         => '<a href="index.php?'.$sids.'action=glossary">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
         "allCategories"       => '<a href="index.php?'.$sids.'action=show">'.$PMF_LANG["msgShowAllCategories"].'</a>',
         "backToHome"          => '<a href="index.php?'.$sids.'">'.$PMF_LANG["msgHome"].'</a>',
-        'showInstantResponse' => '<a href="index.php?'.$sids.'action=instantresponse">'.$PMF_LANG['msgInstantResponse'].'</a>',
         'showSitemap'         => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch'          => $faqSystem->getSystemUri($faqConfig) . 'opensearch.php');
 }
