@@ -269,7 +269,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      *
      * @var string
      */
-    private $currentFont = 'helvetica';
+    private $currentFont = 'dejavusans';
 
     /**
      * Constructor
