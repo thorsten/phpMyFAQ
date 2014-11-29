@@ -66,7 +66,7 @@ class PMF_Relation
      */
     public function getAllRelatedById($recordId, $question, $keywords)
     {
-        $terms  = str_replace('-', ' ', $question) . $keywords;
+        $terms  = str_replace('-', ' ', $question) . ' ' . $keywords;
         $search = PMF_Search_Factory::create(
             $this->_config,
             ['database' => PMF_Db::getType()]
@@ -96,7 +96,8 @@ class PMF_Relation
                     'fd.lang'   => "'" . $this->_config->getLanguage()->getLanguage() . "'"
                 ]
             )
-            ->setMatchingColumns(['fd.keywords']);
+            ->setMatchingColumns(['fd.keywords'])
+            ->disableRelevance();
 
         $result = $search->search($terms);
 

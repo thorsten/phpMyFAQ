@@ -331,4 +331,15 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
         
         return $where;
     }
+
+    /**
+     * Disables relevance support if we don't need it even if the database
+     * supports it
+     *
+     * @return void
+     */
+    public function disableRelevance()
+    {
+        $this->relevanceSupport = false;
+    }
 }

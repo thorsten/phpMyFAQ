@@ -59,12 +59,12 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = $this->_config->get('search.enableRelevance');
+            $relevance = $this->_config->get('search.enableRelevance');
 
-            $columns    =  $this->getResultColumns();
-            $columns   .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-            $orderBy    = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
-            $chars      = array(
+            $columns  =  $this->getResultColumns();
+            $columns .= ($this->relevanceSupport && $relevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
+            $orderBy  = ($this->relevanceSupport && $relevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            $chars    = [
                 "\xe2\x80\x98",
                 "\xe2\x80\x99",
                 "\xe2\x80\x9c",
@@ -72,8 +72,8 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 "\xe2\x80\x93",
                 "\xe2\x80\x94",
                 "\xe2\x80\xa6"
-            );
-            $replace    = array("'", "'", '"', '"', '-', '--', '...');
+            ];
+            $replace    = ["'", "'", '"', '"', '-', '--', '...'];
             $searchTerm = str_replace($chars, $replace, $searchTerm);
 
             $query = sprintf("
@@ -98,7 +98,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             $this->resultSet = $this->_config->getDb()->query($query);
 
             // Fallback for searches with less than three characters
-            if (0 == $this->_config->getDb()->numRows($this->resultSet)) {
+            if (false !== $this->resultSet && 0 === $this->_config->getDb()->numRows($this->resultSet)) {
                 
                 $query = sprintf("
                     SELECT
