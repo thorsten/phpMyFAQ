@@ -30,6 +30,9 @@ module.exports = function(grunt) {
             version: '2.9.0-alpha2'
         },
         banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
+        bumpup: {
+            files: ['package.json', 'bower.json', 'composer.json']
+        },
         // Task configuration.
         copy: {
             tinymce: {
