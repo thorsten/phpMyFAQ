@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.18 - 2014-11-
+Version 2.8.18 - 2014-11-30
 - added clickjacking prevention (Thorsten, Narendra Bhati)
 - fixed some minor bugs (Thorsten)
 

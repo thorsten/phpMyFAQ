@@ -1,3 +1,27 @@
+CHANGED FILES FROM 2.8.17 -> 2.8.18
+
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./assets/js/functions.js
+./assets/js/phpmyfaq.js
+./assets/js/phpmyfaq.min.js
+./assets/template/default/css/style.rtl.css
+./assets/template/default/css/style.rtl.min.css
+./assets/template/default/index.tpl
+./assets/template/default/indexLogin.tpl
+./assets/template/default/indexMaintenance.tpl
+./assets/template/default/indexNewUser.tpl
+./assets/template/default/indexPassword.tpl
+./inc/PMF/Category.php
+./inc/PMF/Export/Pdf/Wrapper.php
+./inc/PMF/Helper/Category.php
+./inc/PMF/System.php
+./_.htaccess
+./_nginx.conf
+./ajaxservice.php
+
+
+
 CHANGED FILES FROM 2.8.16 -> 2.8.17
 
 ./inc/PMF/System.php
