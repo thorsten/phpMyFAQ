@@ -34,7 +34,7 @@ Version 2.9.0-alpha2 2014-11-
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 
-Version 2.8.18 - 2014-11-
+Version 2.8.18 - 2014-11-30
 - added clickjacking prevention (Thorsten, Narendra Bhati)
 - fixed some minor bugs (Thorsten)
 
