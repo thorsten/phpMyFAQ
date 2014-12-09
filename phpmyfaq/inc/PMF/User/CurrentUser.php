@@ -31,8 +31,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /* user defined constants */
 define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
 define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
-define('PMF_SESSION_ID_EXPIRES', PMF_AUTH_TIMEOUT);
-define('PMF_SESSION_ID_REFRESH', PMF_AUTH_TIMEOUT_WARNING);
 
 /**
  * PMF_User_CurrentUser
@@ -50,26 +48,21 @@ class PMF_User_CurrentUser extends PMF_User
 {
     /**
      * true if CurrentUser is logged in, otherwise false.
-     * Call isLoggedIn() to check.
      *
      * @var bool
      */
     private $_loggedIn = false;
 
     /**
-     * Session timeout
-     *
      * Specifies the timeout for the session in minutes. If the session ID was
      * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
      *
      * @var integer
      */
-    private $_sessionTimeout = PMF_SESSION_ID_EXPIRES;
+    private $_sessionTimeout = PMF_AUTH_TIMEOUT;
 
     /**
-     * Session-ID timeout
-     *
      * Specifies the timeout for the session-ID in minutes. If the session ID
      * was not updated for the last $this->_sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
@@ -80,7 +73,7 @@ class PMF_User_CurrentUser extends PMF_User
     private $_sessionIdTimeout = 1;
 
     /**
-     * LDAP configuration
+     * LDAP configuration if available
      *
      * @var array
      */
@@ -427,14 +420,14 @@ class PMF_User_CurrentUser extends PMF_User
 
     /**
      * This static method returns a valid CurrentUser object if there is one
-     * in the session that is not timed out. If the the optional configuration
-     * ip_check is true, the current user must have the same ip which is stored
-     * in the user table. The session-ID is updated if necessary. The
-     * CurrentUser will be removed from the session, if it is timed out. If
-     * there is no valid CurrentUser in the session or the session is timed
-     * out, null will be returned. If the session data is correct, but there
-     * is no user found in the user table, false will be returned. On success,
-     * a valid CurrentUser object is returned.
+     * in the session that is not timed out. The session-ID is updated if
+     * necessary. The CurrentUser will be removed from the session, if it is
+     * timed out. If there is no valid CurrentUser in the session or the
+     * session is timed out, null will be returned. If the session data is
+     * correct, but there is no user found in the user table, false will be
+     * returned. On success, a valid CurrentUser object is returned.
+     *
+     * @static
      *
      * @param  PMF_Configuration $config
      *
@@ -490,6 +483,7 @@ class PMF_User_CurrentUser extends PMF_User
      * On success, a valid CurrentUser object is returned
      *
      * @static
+     *
      * @param PMF_Configuration $config
      *
      * @return null|PMF_User_CurrentUser
@@ -557,7 +551,7 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Saves remember me token
+     * Saves remember me token in the database
      *
      * @param string $rememberMe
      *
