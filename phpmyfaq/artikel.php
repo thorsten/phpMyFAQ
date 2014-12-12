@@ -149,7 +149,7 @@ if (count($arrLanguage) > 1) {
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
     $switchLanguage .= "<form accept-charset=\"utf-8\" action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-    $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
+    $switchLanguage .= "<select name=\"language\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
