@@ -180,7 +180,7 @@ class PMF_User_CurrentUser extends PMF_User
             $this->saveCrsfTokenToSession();
             // save remember me cookie if set
             if (true === $this->_rememberMe) {
-                $rememberMe = sha1($password);
+                $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
                 PMF_Session::setCookie(
                     PMF_Session::PMF_COOKIE_NAME_REMEMBERME,
@@ -504,8 +504,14 @@ class PMF_User_CurrentUser extends PMF_User
 
         // sessionId and cookie information needs to be updated
         if ($user->sessionIdIsTimedOut()) {
+            $rememberMe = sha1(session_id());
             $user->updateSessionId();
-            $user->setRememberMe(sha1(session_id()));
+            $user->setRememberMe($rememberMe);
+            PMF_Session::setCookie(
+                PMF_Session::PMF_COOKIE_NAME_REMEMBERME,
+                $rememberMe,
+                $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
+            );
         }
         // user is now logged in
         $user->_loggedIn = true;
