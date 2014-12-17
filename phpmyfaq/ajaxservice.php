@@ -350,15 +350,16 @@ switch ($action) {
             $visits = new PMF_Visits($faqConfig);
             $visits->add($recordId, $newData['lang']);
 
-            if ($autoActivate) {
-                // Add user permissions
-                $faq->addPermission('user', $recordId, array(-1));
-                $category->addPermission('user', $categories['rubrik'], array(-1));
-                // Add group permission
-                if ($faqConfig->get('security.permLevel') != 'basic') {
-                    $faq->addPermission('group', $recordId, array(-1));
-                    $category->addPermission('group', $categories['rubrik'], array(-1));
-                }
+            // Set permissions
+            $userPermissions = $category->getPermissions('user', $categories);
+            // Add user permissions
+            $faq->addPermission('user', $recordId, $userPermissions);
+            $category->addPermission('user', $categories, $userPermissions);
+            // Add group permission
+            if ($faqConfig->get('security.permLevel') !== 'basic') {
+                $groupPermissions = $category->getPermissions('group', $categories);
+                $faq->addPermission('group', $recordId, $groupPermissions);
+                $category->addPermission('group', $categories, $groupPermissions);
             }
 
             // Let the PMF Administrator and the Category Owner to be informed by email of this new entry
