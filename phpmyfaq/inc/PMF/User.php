@@ -1026,7 +1026,7 @@ class PMF_User
                     break;
                 case 2:
                 case 3:
-                    $nextChar = $caseFunc($vowels[rand(0,4)]);
+                    $nextChar = $caseFunc($vowels[rand(0, 3)]);
                     break;
                 case 4:
                     $nextChar = rand( 2, 9 ); // No 0 to avoid confusion with O, same for 1 and l.
