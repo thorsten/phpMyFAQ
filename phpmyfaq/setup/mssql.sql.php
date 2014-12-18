@@ -19,51 +19,51 @@
  */
 
 
-$uninst[] = "DROP TABLE ".$sqltblpre."faqadminlog";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqattachment_file";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcaptcha";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategories";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategoryrelations";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcategory_user";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqchanges";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqcomments";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqconfig";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_revisions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_tags";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqdata_user";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqglossary";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqgroup_right";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqinstances";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqinstances_config";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqnews";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqquestions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqright";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsearches";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqsessions";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqstopwords";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqtags";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserdata";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquserlogin";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_group";
-$uninst[] = "DROP TABLE ".$sqltblpre."faquser_right";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvisits";
-$uninst[] = "DROP TABLE ".$sqltblpre."faqvoting";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqadminlog";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqattachment";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcaptcha";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcategories";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcategoryrelations";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcategory_group";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcategory_user";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqchanges";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqcomments";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqconfig";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_revisions";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_group";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_tags";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_user";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqglossary";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqgroup";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqgroup_right";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqinstances";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqnews";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqquestions";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqright";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqsearches";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqsessions";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqstopwords";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqtags";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserdata";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserlogin";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_group";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquser_right";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqvisits";
+$uninst[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqvoting";
 
 
 //faqdata_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_user (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_user (
 record_id integer NOT NULL,
 user_id integer NOT NULL,
 PRIMARY KEY (record_id, user_id))";
 
 //faqadminlog
-$query[] = "CREATE TABLE ".$sqltblpre."faqadminlog (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqadminlog (
 id integer NOT NULL,
 time integer NOT NULL,
 usr integer NOT NULL,
@@ -92,7 +92,7 @@ contents TEXT NOT NULL,
 PRIMARY KEY (virtual_hash))";
 
 //faqcaptcha
-$query[] = "CREATE TABLE ".$sqltblpre."faqcaptcha (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcaptcha (
 id varchar(6) NOT NULL,
 useragent varchar(255) NOT NULL,
 language varchar(5) NOT NULL,
@@ -101,7 +101,7 @@ captcha_time integer NOT NULL,
 PRIMARY KEY (id))";
 
 //faqcategories
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategories (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcategories (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 parent_id SMALLINT NOT NULL,
@@ -112,30 +112,30 @@ active INTEGER NULL DEFAULT 1,
 PRIMARY KEY (id, lang))";
 
 //faqcategoryrelations
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategoryrelations (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcategoryrelations (
 category_id integer NOT NULL,
 category_lang varchar(5) NOT NULL,
 record_id integer NOT NULL,
 record_lang varchar(5) NOT NULL,
 PRIMARY KEY  (category_id, category_lang, record_id, record_lang)
 )";
-$query[] = "CREATE INDEX ".$sqltblpre."idx_records ON ".$sqltblpre."faqcategoryrelations
+$query[] = "CREATE INDEX " . PMF_Db::getTablePrefix() . "idx_records ON " . PMF_Db::getTablePrefix() . "faqcategoryrelations
 (record_id, record_lang)";
 
 //faqcategory_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_group (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcategory_group (
 category_id integer NOT NULL,
 group_id integer NOT NULL,
 PRIMARY KEY (category_id, group_id))";
 
 //faqcategory_user
-$query[] = "CREATE TABLE ".$sqltblpre."faqcategory_user (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcategory_user (
 category_id integer NOT NULL,
 user_id integer NOT NULL,
 PRIMARY KEY (category_id, user_id))";
 
 //faqchanges
-$query[] = "CREATE TABLE ".$sqltblpre."faqchanges (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqchanges (
 id integer NOT NULL,
 beitrag SMALLINT NOT NULL,
 lang varchar(5) NOT NULL,
@@ -146,7 +146,7 @@ what text DEFAULT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqcomments
-$query[] = "CREATE TABLE ".$sqltblpre."faqcomments (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqcomments (
 id_comment integer NOT NULL,
 id integer NOT NULL,
 type varchar(10) NOT NULL,
@@ -158,13 +158,13 @@ helped text DEFAULT NULL,
 PRIMARY KEY (id_comment))";
 
 //faqconfig
-$query[] = "CREATE TABLE ".$sqltblpre."faqconfig (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqconfig (
 config_name varchar(255) NOT NULL default '',
 config_value varchar(255) DEFAULT NULL,
 PRIMARY KEY (config_name))";
 
 //faqdata
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
@@ -185,7 +185,7 @@ date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang))";
 
 //faqdata_revisions
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_revisions (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_revisions (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 solution_id integer NOT NULL,
@@ -206,20 +206,20 @@ date_end varchar(14) NOT NULL DEFAULT '99991231235959',
 PRIMARY KEY (id, lang, solution_id, revision_id))";
 
 //faqdata_group
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_group (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_group (
 record_id integer NOT NULL,
 group_id integer NOT NULL,
 PRIMARY KEY (record_id, group_id))";
 
 //faqdata_tags
-$query[] = "CREATE TABLE ".$sqltblpre."faqdata_tags (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_tags (
 record_id INTEGER NOT NULL,
 tagging_id INTEGER NOT NULL,
 PRIMARY KEY (record_id, tagging_id)
 )";
 
 //faqglossary
-$query[] = "CREATE TABLE ".$sqltblpre."faqglossary (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqglossary (
 id integer NOT NULL ,
 lang varchar(5) NOT NULL ,
 item varchar(255) NOT NULL ,
@@ -227,17 +227,17 @@ definition text NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqgroup
-$query[] = "CREATE TABLE ".$sqltblpre."faqgroup (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqgroup (
 group_id integer NOT NULL,
 name varchar(25) NULL,
 description text NULL,
 auto_join integer NULL,
 PRIMARY KEY(group_id)
 )
-CREATE UNIQUE INDEX idxName ON ".$sqltblpre."faqgroup (name)";
+CREATE UNIQUE INDEX idxName ON " . PMF_Db::getTablePrefix() . "faqgroup (name)";
 
 //faqgroup_right
-$query[] = "CREATE TABLE ".$sqltblpre."faqgroup_right (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqgroup_right (
 group_id integer NOT NULL,
 right_id integer NOT NULL,
 PRIMARY KEY(group_id, right_id)
@@ -255,7 +255,7 @@ PRIMARY KEY (id)
 )";
 
 //faqinstances_config
-$query[] = "CREATE TABLE ".$sqltblpre."faqinstances_config (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
 instance_id INT NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
@@ -263,7 +263,7 @@ PRIMARY KEY (instance_id, config_name)
 )";
 
 //faqnews
-$query[] = "CREATE TABLE ".$sqltblpre."faqnews (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqnews (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 header varchar(255) NOT NULL,
@@ -281,7 +281,7 @@ target varchar(255) NOT NULL,
 PRIMARY KEY (id))";
 
 //faqquestions
-$query[] = "CREATE TABLE ".$sqltblpre."faqquestions (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions (
 id INTEGER NOT NULL,
 username varchar(100) NOT NULL,
 email varchar(100) NOT NULL,
@@ -293,7 +293,7 @@ answer_id INTEGER NOT NULL DEFAULT 0,
 PRIMARY KEY (id))";
 
 //faqright
-$query[] = "CREATE TABLE ".$sqltblpre."faqright (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqright (
 right_id integer NOT NULL,
 name varchar(50) NULL,
 description text NULL,
@@ -303,7 +303,7 @@ PRIMARY KEY (right_id)
 )";
 
 //faqsearches
-$query[] = "CREATE TABLE ".$sqltblpre."faqsearches (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqsearches (
 id INTEGER NOT NULL ,
 lang VARCHAR(5) NOT NULL ,
 searchterm VARCHAR(255) NOT NULL ,
@@ -312,31 +312,31 @@ PRIMARY KEY (id, lang)
 )";
 
 //faqsessions
-$query[] = "CREATE TABLE ".$sqltblpre."faqsessions (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqsessions (
 sid integer NOT NULL,
 user_id integer NOT NULL,
 ip varchar(64) NOT NULL,
 time integer NOT NULL,
 PRIMARY KEY (sid)
 )";
-$query[] = "CREATE INDEX index_time ON ".$sqltblpre."faqsessions (time)";
+$query[] = "CREATE INDEX index_time ON " . PMF_Db::getTablePrefix() . "faqsessions (time)";
 
 //faqstopwords
-$query[] = "CREATE TABLE ".$sqltblpre."faqstopwords (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqstopwords (
 id INTEGER NOT NULL,
 lang VARCHAR(5) NOT NULL,
 stopword VARCHAR(64) NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqtags
-$query[] = "CREATE TABLE ".$sqltblpre."faqtags (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqtags (
 tagging_id INTEGER NOT NULL,
 tagging_name VARCHAR(255) NOT NULL ,
 PRIMARY KEY (tagging_id, tagging_name)
 )";
 
 //faquser
-$query[] = "CREATE TABLE ".$sqltblpre."faquser (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser (
 user_id integer NOT NULL,
 login varchar(128) NOT NULL,
 session_id varchar(150) NULL,
@@ -351,7 +351,7 @@ success INT(1) NULL DEFAULT 1,
 PRIMARY KEY (user_id))";
 
 //faquserdata
-$query[] = "CREATE TABLE ".$sqltblpre."faquserdata (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserdata (
 user_id integer NOT NULL,
 last_modified varchar(14) NULL,
 display_name varchar(128) NULL,
@@ -359,28 +359,28 @@ email varchar(128) NULL
 )";
 
 //faquserlogin
-$query[] = "CREATE TABLE ".$sqltblpre."faquserlogin (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserlogin (
 login varchar(128) NOT NULL,
 pass varchar(80) NULL,
 PRIMARY KEY (login)
 )";
 
 //faquser_group
-$query[] = "CREATE TABLE ".$sqltblpre."faquser_group (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_group (
 user_id integer NOT NULL,
 group_id integer NOT NULL,
 PRIMARY KEY (user_id, group_id)
 )";
 
 //faquser_right
-$query[] = "CREATE TABLE ".$sqltblpre."faquser_right (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquser_right (
 user_id integer NOT NULL,
 right_id integer NOT NULL,
 PRIMARY KEY (user_id, right_id)
 )";
 
 //faqvisits
-$query[] = "CREATE TABLE ".$sqltblpre."faqvisits (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqvisits (
 id integer NOT NULL,
 lang varchar(5) NOT NULL,
 visits SMALLINT NOT NULL,
@@ -388,7 +388,7 @@ last_visit integer NOT NULL,
 PRIMARY KEY (id, lang))";
 
 //faqvoting
-$query[] = "CREATE TABLE ".$sqltblpre."faqvoting (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqvoting (
 id integer NOT NULL,
 artikel SMALLINT NOT NULL,
 vote SMALLINT NOT NULL,
