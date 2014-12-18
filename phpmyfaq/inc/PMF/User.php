@@ -1022,11 +1022,11 @@ class PMF_User
             switch (rand(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
                 case 0:
                 case 1:
-                    $nextChar = $caseFunc( $consonants[ rand( 0, 19 ) ] );
+                    $nextChar = $caseFunc($consonants[rand(0, 18)]);
                     break;
                 case 2:
                 case 3:
-                    $nextChar = $caseFunc( $vowels[rand(0,4)] );
+                    $nextChar = $caseFunc($vowels[rand(0,4)]);
                     break;
                 case 4:
                     $nextChar = rand( 2, 9 ); // No 0 to avoid confusion with O, same for 1 and l.
