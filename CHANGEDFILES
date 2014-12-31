@@ -1,3 +1,15 @@
+CHANGED FILES FROM 2.8.18 -> 2.8.19
+
+./admin/dashboard.php
+./admin/footer.php
+./admin/session.keepalive.php
+./inc/PMF/System.php
+./inc/PMF/User/CurrentUser.php
+./ajaxservice.php
+./artikel.php
+
+
+
 CHANGED FILES FROM 2.8.17 -> 2.8.18
 
 ./admin/assets/css/style.css
