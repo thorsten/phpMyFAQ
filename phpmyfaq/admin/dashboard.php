@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alexander M. Turek <me@derrabus.de>
- * @copyright 2005-2014 phpMyFAQ Team
+ * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
@@ -141,7 +141,7 @@ $faqSession   = new PMF_Session($faqConfig);
                     <?php
                     $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
                     if (!is_null($version) && $version == 'version') {
-                        $json   = file_get_contents('http://www.phpmyfaq.de/api/version');
+                        $json   = file_get_contents('http://api.phpmyfaq.de/versions');
                         $result = json_decode($json);
                         if ($result instanceof stdClass) {
                             $installed = $faqConfig->get('main.currentVersion');
@@ -172,7 +172,6 @@ $faqSession   = new PMF_Session($faqConfig);
             </div>
         </div>
 
-
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -195,7 +194,7 @@ $faqSession   = new PMF_Session($faqConfig);
                         $versionCheckError = true;
                         try {
                             $remoteHashes = file_get_contents(
-                                'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
+                                'http://api.phpmyfaq.de/verify/' . $faqConfig->get('main.currentVersion')
                             );
                             if (!is_array(json_decode($remoteHashes, true))) {
                                 $versionCheckError = true;

@@ -12,7 +12,7 @@
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @package   PMF_Pagination
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27

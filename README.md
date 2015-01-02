@@ -143,6 +143,4 @@ Licensed under the terms of the MIT License
 
 Licenced under the terms of the SIL Open Font License and MIT License
 
-
-
-Copyright (c) 2001-2014 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2015 Thorsten Rinne and the phpMyFAQ Team

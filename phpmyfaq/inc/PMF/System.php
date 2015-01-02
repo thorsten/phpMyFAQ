@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2014 phpMyFAQ Team
+ * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -23,7 +23,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2014 phpMyFAQ Team
+ * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -89,7 +89,6 @@ class PMF_System
      */
     private $_supportedDatabases = array(
         'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
-        'pdo_mysql' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x (PDO_MYSQL, experimental)'),
         'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
         'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3'),
         'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),

@@ -8,7 +8,7 @@
  * @author      Niran Shay <nirshay1@012.net.il>
  * @author      Roy Ronen <royroy15@gmail.com>
  * @since       2004-08-27
- * @copyright   (c) 2004-2014 phpMyFAQ Team
+ * @copyright   (c) 2004-2015 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

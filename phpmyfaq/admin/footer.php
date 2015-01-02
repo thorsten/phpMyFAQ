@@ -12,7 +12,7 @@
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2014 phpMyFAQ Team
+ * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
@@ -101,6 +101,7 @@ tinymce.init({
     convert_urls            : false,
     remove_linebreaks       : false, 
     use_native_selects      : true,
+    paste_remove_spans      : true,
     entity_encoding         : "raw",
     extended_valid_elements : "code",
 

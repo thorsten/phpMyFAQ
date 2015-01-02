@@ -15,7 +15,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Uwe Pries <uwe.pries@digartis.de>
- * @copyright 2006-2014 phpMyFAQ Team
+ * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-05-08
@@ -48,7 +48,7 @@ if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
 PMF_String::init($language);
 
 $user        = PMF_User_CurrentUser::getFromSession($faqConfig);
-$refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
+$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>
 <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js">
@@ -61,13 +61,13 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2014 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2015 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script type="text/javascript">
 
     function _PMFSessionTimeoutWarning() {
-        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_SESSION_ID_REFRESH); ?>')) {
+        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {
             location.href = location.href;
         }
     }
@@ -86,7 +86,7 @@ $refreshTime = (PMF_SESSION_ID_EXPIRES - PMF_SESSION_ID_REFRESH) * 60;
 
     window.onload = function() {
         var expire = new Date(2009, 0, 1);
-        expire.setSeconds(<?php echo PMF_SESSION_ID_EXPIRES; ?> * 60);
+        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT; ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
         window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime; ?> * 1000);

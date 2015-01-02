@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_TransTool
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF_TransTool
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12

@@ -12,7 +12,7 @@
  * @package   Frontend
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2014 phpMyFAQ Team
+ * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
@@ -111,7 +111,7 @@ if (count($arrLanguage) > 1) {
         $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
     }
     $switchLanguage .= "<form accept-charset=\"utf-8\" action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-    $switchLanguage .= "<select name=\"artlang\" size=\"1\">\n";
+    $switchLanguage .= "<select name=\"language\" size=\"1\">\n";
     $switchLanguage .= $check4Lang;
     $switchLanguage .= "</select>\n";
     $switchLanguage .= "&nbsp;\n";
