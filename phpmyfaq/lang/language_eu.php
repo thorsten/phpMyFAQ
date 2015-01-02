@@ -7,7 +7,7 @@
 * @author       Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
 * @author       Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
 * @since        2005-12-28
-* @copyright    (c) 2005-2014 phpMyFAQ Team
+* @copyright    (c) 2005-2015 phpMyFAQ Team
 *
 * 
 * 

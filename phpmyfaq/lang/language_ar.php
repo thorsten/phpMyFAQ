@@ -5,7 +5,7 @@
  * @category  phpMyFAQ
  * @package   Translation
  * @author    Ahmed Shalaby (ashalaby80@gmail.com)
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-23

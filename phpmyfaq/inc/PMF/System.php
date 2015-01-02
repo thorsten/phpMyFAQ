@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2014 phpMyFAQ Team
+ * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -23,7 +23,7 @@
  * @category  phpMyFAQ
  * @package   PMF_System
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2014 phpMyFAQ Team
+ * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
@@ -43,7 +43,7 @@ class PMF_System
     /**
      * Patchlevel
      */
-    const VERSION_PATCHLEVEL = 19;
+    const VERSION_PATCHLEVEL = 20;
 
     /**
      * Pre-release version

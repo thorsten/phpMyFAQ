@@ -5,9 +5,9 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // Metadata.
         meta: {
-            version: '2.8.19'
+            version: '2.8.20'
         },
-        banner: '/*! phpMyFAQ v2.8 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2014 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v2.8 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2015 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.
         bower: {
             install: {
