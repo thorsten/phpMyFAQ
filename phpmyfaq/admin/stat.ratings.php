@@ -38,9 +38,27 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?></h2>
+                <h2 class="page-header">
+                    <i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_rs"] ?>
+
+                    <div class="pull-right">
+                        <a class="btn btn-danger" href="?action=clear-statistics">
+                            <i class="fa fa-trash"></i> Clear all
+                        </a>
+                    </div>
+                </h2>
             </div>
         </header>
+
+<?php
+    if ('clear-statistics' === $action) {
+        if ($ratings->deleteAll()) {
+            echo '<p class="alert alert-success">Statistics successfully deleted.</p>';
+        } else {
+            echo '<p class="alert alert-danger">Statistics not deleted.</p>';
+        }
+    }
+?>
 
         <div class="row">
             <div class="col-lg-12">

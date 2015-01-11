@@ -307,6 +307,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             case "viewsessions":      require 'stat.main.php'; break;
             case "sessionbrowse":     require 'stat.browser.php'; break;
             case "viewsession":       require 'stat.show.php'; break;
+            case 'clear-statistics':
             case "statistics":        require 'stat.ratings.php'; break;
             case 'truncatesearchterms':
             case "searchstats":       require 'stat.search.php'; break;
