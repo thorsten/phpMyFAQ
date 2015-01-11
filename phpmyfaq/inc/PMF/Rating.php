@@ -181,7 +181,7 @@ class PMF_Rating
      *
      * @return  string
      */
-    function getVotingResult($id)
+    public function getVotingResult($id)
     {
         $query = sprintf('
             SELECT
@@ -203,5 +203,17 @@ class PMF_Rating
        } else {
             return '0 (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
        }
+    }
+
+    /**
+     * Deletes all votes
+     *
+     * @return boolean
+     */
+    public function deleteAll()
+    {
+        return $this->_config->getDb()->query(
+            sprintf('DELETE FROM %sfaqvoting', PMF_Db::getTablePrefix())
+        );
     }
 }
