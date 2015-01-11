@@ -95,7 +95,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Main">
-                            <i class="fa fa-home fa fa-white"></i>
+                            <i class="fa fa-home"></i>
                             <?php echo $PMF_LANG['mainControlCenter']; ?>
                         </button>
                     </p>
@@ -103,7 +103,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Records">
-                            <i class="fa fa-th-list fa fa-white"></i>
+                            <i class="fa fa-th-list"></i>
                             <?php echo $PMF_LANG['recordsControlCenter']; ?>
                         </button>
                     </p>
@@ -111,7 +111,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Search">
-                            <i class="fa fa-search fa fa-white"></i>
+                            <i class="fa fa-search"></i>
                             <?php echo $PMF_LANG['searchControlCenter']; ?>
                         </button>
                     </p>
@@ -119,7 +119,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Security">
-                            <i class="fa fa-warning-sign fa fa-white"></i>
+                            <i class="fa fa-warning"></i>
                             <?php echo $PMF_LANG['securityControlCenter']; ?>
                         </button>
                     </p>
@@ -127,7 +127,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig"  data-toggle="Spam">
-                            <i class="fa fa-thumbs-down fa fa-white"></i>
+                            <i class="fa fa-thumbs-down"></i>
                             <?php echo $PMF_LANG['spamControlCenter']; ?>
                         </button>
                     </p>
@@ -135,7 +135,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig"  data-toggle="Seo">
-                            <i class="fa fa-search fa fa-white"></i>
+                            <i class="fa fa-search"></i>
                             <?php echo $PMF_LANG['seoCenter']; ?>
                         </button>
                     </p>
@@ -143,21 +143,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="SocialNetworks">
-                            <i class="fa fa-retweet fa fa-white"></i>
+                            <i class="fa fa-retweet"></i>
                             <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
                         </button>
                     </p>
                     <div id="configSocialNetworks" class="hide"></div>
-					
+
                     <p>
                         <button class="btn btn-inverse toggleConfig" data-toggle="Mail">
-                            <i class="icon-envelope icon-white"></i>
+                            <i class="fa fa-inbox"></i>
                             <?php echo $PMF_LANG['mailControlCenter']; ?>
                         </button>
                     </p>
                     <div id="configMail" class="hide"></div>
 
-			
                     <p>
                         <button class="btn btn-primary" type="submit">
                             <?php echo $PMF_LANG['ad_config_save']; ?>
