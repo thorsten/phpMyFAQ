@@ -272,7 +272,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      */
     public function serverVersion()
     {
-        return $this->conn->get_server_info();
+        return $this->conn->server_info;
     }
 
     /**
