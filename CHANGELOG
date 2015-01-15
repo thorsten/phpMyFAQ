@@ -5,7 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.20 - 2015-01
+Version 2.8.20 - 2015-01-
+- added support for HHVM 3.4+
+- added support for PHP 7
 - updated Brazilian Portuguese translation
 - updated French translation (Olivier Binet)
 
