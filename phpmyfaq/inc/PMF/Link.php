@@ -347,7 +347,7 @@ class PMF_Link
         // Clean up
         $itemTitle = PMF_String::preg_replace('/-[\-]+/m', '-', $itemTitle);
 
-        return rawurlencode($itemTitle);
+        return $itemTitle;
     }
 
     /**
