@@ -52,5 +52,7 @@ $(window).load(function () {
             ].join('\n'),
             suggestion: Handlebars.compile('<strong>{{category}}</strong>: <a href="{{url}}">{{question}}</a>')
         }
+    }).on('typeahead:selected typeahead:autocompleted', function () {
+        $('#searchfield').submit();
     });
 });
