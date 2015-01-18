@@ -80,7 +80,7 @@
       color: @gray-lighter;
       border-bottom: 1px solid #e7e7e7;
       a {
-        color: @navbar-default-link-color;
+        color: @navbar-inverse-link-color;
       }
     }
   }
@@ -130,6 +130,9 @@
     a {
       padding-left: 37px;
       color: @navbar-default-link-color;
+      &:hover {
+        background-color: @navbar-default-brand-hover-bg;
+      }
     }
   }
 }
