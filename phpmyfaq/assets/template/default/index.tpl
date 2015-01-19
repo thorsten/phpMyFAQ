@@ -5,20 +5,20 @@
     <meta charset="utf-8">
 
     <title>{title}</title>
-    <base href="{baseHref}" />
+    <base href="{baseHref}">
 
     <meta name="description" content="{metaDescription}">
     <meta name="keywords" content="{metaKeywords}">
     <meta name="author" content="{metaPublisher}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
     <meta name="robots" content="{metaRobots}">
     <meta name="revisit-after" content="7 days">
 
     <!-- Share on Facebook -->
-    <meta property="og:title" content="{title}" />
-    <meta property="og:description" content="{metaDescription}" />
-    <meta property="og:image" content="" />
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="{metaDescription}">
+    <meta property="og:image" content="">
 
     <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
     <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
@@ -60,6 +60,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li>{msgSearch}</li>
+                        <li>{allCategories}</li>
                         <li>{msgAddContent}</li>
                         <li>{msgQuestion}</li>
                         <li>{msgOpenQuestions}</li>
@@ -73,20 +74,6 @@
                         <li>{msgUserControl}</li>
                         <li>{msgLogoutUser}</li>
                         [/userloggedIn]
-                    </ul>
-                </li>
-            </ul>
-
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        {headerCategories}
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>{allCategories}</li>
-                        <li class="divider"></li>
-                        [categoryListSection]
-                        {categoryDropDown}
-                        [/categoryListSection]
                     </ul>
                 </li>
             </ul>

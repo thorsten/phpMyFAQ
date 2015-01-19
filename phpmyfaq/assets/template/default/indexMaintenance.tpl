@@ -5,7 +5,7 @@
     <meta charset="utf-8">
 
     <title>{title}</title>
-    <base href="{baseHref}" />
+    <base href="{baseHref}">
 
     <meta name="description" content="{metaDescription}">
     <meta name="keywords" content="{metaKeywords}">
@@ -16,9 +16,9 @@
     <meta name="revisit-after" content="7 days">
 
     <!-- Share on Facebook -->
-    <meta property="og:title" content="{title}" />
-    <meta property="og:description" content="{metaDescription}" />
-    <meta property="og:image" content="" />
+    <meta property="og:title" content="{title}">
+    <meta property="og:description" content="{metaDescription}">
+    <meta property="og:image" content="">
 
     <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
     <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
