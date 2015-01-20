@@ -36,8 +36,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
                 <p class="copyright pull-right">
-                    Proudly powered by <strong>phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?></strong> |
-                    <a href="http://www.phpmyfaq.de/documentation.php" target="_blank">phpMyFAQ documentation</a> |
+                    Proudly powered by <strong>phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></strong> |
+                    <a href="http://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
                     Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
                     &copy; 2001-<?php echo date('Y') ?> <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
                 </p>
@@ -45,7 +45,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </div>
     <?php
         if (DEBUG) {
-            print '<div class="container">DEBUG INFORMATION:<br>'.$faqConfig->getDb()->log().'</div>';
+            printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
         }
     ?>
     </footer>
@@ -55,7 +55,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if (isset($auth)) {
 ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php print $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
                          ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
@@ -77,20 +77,20 @@ $().tooltip({placement: 'bottom'})
 tinymce.init({
     // General options
     mode     : "exact",
-    //language : "<?php print (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
-    elements : "<?php print ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
+    //language : "<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
+    elements : "<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
     width    : "500",
     height   : "480",
     theme    : "modern",
     plugins: [
-        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
+        "advlist autolink link image lists charmap echo preview hr anchor pagebreak spellchecker",
         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
         "save table contextmenu directionality emoticons template paste textcolor"
     ],
     theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
 
     // Theme options
-    theme_advanced_buttons1 : "<?php print $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontsizeselect",
+    theme_advanced_buttons1 : "<?php echo $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontsizeselect",
     theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,advhr,|,ltr,rtl,|,fullscreen",
     theme_advanced_toolbar_location : "top",
@@ -109,15 +109,15 @@ tinymce.init({
     save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../assets/template/<?php print PMF_Template::getTplSetName(); ?>/css/style.css",
+    content_css : "../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/css/style.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",
 
     // Replace values for the template plugin
     template_replace_values : {
-        username : "<?php print $user->userdata->get('display_name'); ?>",
-        user_id  : "<?php print $user->userdata->get('user_id'); ?>"
+        username : "<?php echo $user->userdata->get('display_name'); ?>",
+        user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
     }
 });
 
@@ -141,7 +141,7 @@ function phpMyFAQSave()
         data[field.name] = field.value;
     });
     $.post("index.php", data, null);
-    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
+    $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
     $('#temporarySaveButton').remove();
 }
 */
