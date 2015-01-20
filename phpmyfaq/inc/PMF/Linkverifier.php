@@ -746,7 +746,7 @@ class PMF_Linkverifier
 
         // If no URLs found
         if ($result == false) {
-            $output = sprintf('<h3>%s</h3><br>%s',
+            $output = sprintf('<h3>%s</h3><p class="alert alert-info">%s</p>',
                 $PMF_LANG['ad_linkcheck_checkResult'],
                 $PMF_LANG['ad_linkcheck_noLinksFound']);
             return ($cron ? '' : $output);
@@ -754,7 +754,7 @@ class PMF_Linkverifier
 
         $failreasons = $inforeasons = [];
         $output      = "    <h3>".$PMF_LANG['ad_linkcheck_checkResult']."</h3>\n";
-        $output     .= '    <table class="verifyArticleURL">'."\n";
+        $output     .= '    <table class="table">'."\n";
         foreach ($result as $type => $_value) {
             $output .= "        <tr><td><strong>".PMF_String::htmlspecialchars($type)."</strong></td></tr>\n";
             foreach ($_value as $value) {

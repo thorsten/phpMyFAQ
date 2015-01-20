@@ -162,7 +162,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         } else {
             printf(
                 '<p class="alert alert-danger">%s</p>',
-                print $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
+                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
             );
         }
         
@@ -199,14 +199,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
 ?>
     <script type="text/javascript">
-    $(document).ready(function(){
-        setTimeout(function() {
-            window.location = "index.php?action=editentry&id=<?php print $recordId; ?>&lang=<?php print $recordData['lang'] ?>";
-            }, 5000);
-        });
+        $(document).ready(function(){
+            setTimeout(function() {
+                window.location = "index.php?action=editentry&id=<?php echo $recordId; ?>&lang=<?php echo $recordData['lang'] ?>";
+                }, 5000);
+            });
     </script>
 <?php
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
