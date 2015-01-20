@@ -90,6 +90,15 @@ function renderInputForm($key, $type)
             echo "</div>\n";
             break;
 
+        case 'password':
+            printf(
+                '<input class="form-control" type="password" name="edit[%s]" value="%s">',
+                $key,
+                $faqConfig->get($key)
+            );
+            echo "</div>\n";
+            break;
+
         case 'select':
             printf('<select name="edit[%s]" size="1" class="form-control">', $key);
             

@@ -1214,4 +1214,4 @@ $PMF_LANG['mailControlCenter'] = 'Mail setup';
 $LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Use remote SMTP server (default: deactivated)');
 $LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address');
 $LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
-$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'input', 1 => 'Password');
+$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Password');
