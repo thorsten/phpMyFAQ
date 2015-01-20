@@ -90,7 +90,7 @@ class PMF_Linkverifier
      *
      * @var mixed
      */
-    protected $invalid_protocols = [];
+    protected $invalidProtocols = [];
 
     /* Last verify results (we might use it later)
      *
@@ -131,7 +131,7 @@ class PMF_Linkverifier
         $this->_config = $config;
         $this->user    = $user;
 
-        if (!@extension_loaded('openssl')) { // PHP 4.3.0+: fsockopen needs OpenSSL
+        if (!extension_loaded('openssl')) {
             $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
         }
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
@@ -163,7 +163,7 @@ class PMF_Linkverifier
      */
     public function isReady()
     {
-        if ($this->_config->get('main.referenceURL') == '') {
+        if ('' === $this->_config->get('main.referenceURL')) {
             return false;
         }
 
@@ -186,15 +186,15 @@ class PMF_Linkverifier
      * This function adds entry to the internal warnlists.
      * Use this if you want to mark certain URLs unsable (like internal links of a dev-site).
      *
-     * @param string $urlprefix
+     * @param string $urlPrefix
      * @param string $message
      *
      * @return boolean true, if successfully added, otherwise false
      */
-    protected function addWarnlist($urlprefix = "", $message = "")
+    protected function addWarnlist($urlPrefix = '', $message = '')
     {
-        if ($urlprefix != "") {
-            $this->warnlists[$urlprefix] = $message;
+        if ('' !== $urlPrefix) {
+            $this->warnlists[$urlPrefix] = $message;
             return true;
         } else {
             return false;
@@ -207,10 +207,10 @@ class PMF_Linkverifier
      *
      * @return boolean true, if successfully added, otherwise false
      */
-    protected function addIgnoreProtocol($protocol = "", $message = "")
+    protected function addIgnoreProtocol($protocol = '', $message = '')
     {
-        if ($protocol != "") {
-            $this->invalid_protocols[strtolower($protocol)] = $message;
+        if ('' !== $protocol) {
+            $this->invalidProtocols[strtolower($protocol)] = $message;
             return true;
         } else {
             return false;
@@ -220,54 +220,54 @@ class PMF_Linkverifier
     /**
      * This function converts relative uri into absolute uri using specific reference point.
      * For example,
-     *   $relativeuri = "test/foo.html"
-     *   $referenceuri = "http://example.com:8000/sample/index.php"
+     *   $relativeUri = "test/foo.html"
+     *   $referenceUri = "http://example.com:8000/sample/index.php"
      * will generate "http://example.com:8000/sample/test/foo.html"
      *
-     * @param string $relativeuri
-     * @param string $referenceuri
+     * @param string $relativeUri
+     * @param string $referenceUri
      *
      * @return string $result
      */
-    protected function makeAbsoluteURL($relativeuri = '', $referenceuri = '')
+    protected function makeAbsoluteURL($relativeUri = '', $referenceUri = '')
     {
         // If relativeuri is protocol we don't want to handle, don't process it.
-        foreach ($this->invalid_protocols as $_protocol => $_message) {
-            if (PMF_String::strpos($relativeuri, $_protocol) === 0) {
-                return $relativeuri;
+        foreach ($this->invalidProtocols as $_protocol => $_message) {
+            if (PMF_String::strpos($relativeUri, $_protocol) === 0) {
+                return $relativeUri;
             }
         }
 
         // If relativeuri is absolute URI, don't process it.
         foreach (array("http://", "https://") as $_protocol) {
-            if (PMF_String::strpos($relativeuri, $_protocol) === 0) {
-                return $relativeuri;
+            if (PMF_String::strpos($relativeUri, $_protocol) === 0) {
+                return $relativeUri;
             }
         }
 
         // Split reference uri into parts.
-        $pathparts = parse_url($referenceuri);
+        $pathParts = parse_url($referenceUri);
 
         // If port is specified in reference uri, prefix with ":"
-        if (isset($pathparts['port']) && $pathparts['port'] != "") {
-            $pathparts['port'] = ":".$pathparts['port'];
+        if (isset($pathParts['port']) && $pathParts['port'] != "") {
+            $pathParts['port'] = ":".$pathParts['port'];
         } else {
-            $pathparts['port'] = "";
+            $pathParts['port'] = '';
         }
 
         // If path is not specified in reference uri, set as blank
-        if (isset($pathparts['path'])) {
-            $pathparts['path'] = str_replace("\\","/",$pathparts['path']);
-            $pathparts['path'] = preg_replace("/^.*(\/)$/i","", $pathparts['path']);
+        if (isset($pathParts['path'])) {
+            $pathParts['path'] = str_replace("\\", "/", $pathParts['path']);
+            $pathParts['path'] = preg_replace("/^.*(\/)$/i", "", $pathParts['path']);
         } else {
-            $pathparts['path'] = "";
+            $pathParts['path'] = '';
         }
 
         // Recombine urls
-        if (PMF_String::substr($relativeuri,0,1) == "/") {
-            return $pathparts['scheme']."://".$pathparts['host'].$pathparts['port'].$relativeuri;
+        if ('/' === PMF_String::substr($relativeUri, 0, 1)) {
+            return $pathParts['scheme']."://".$pathParts['host'].$pathParts['port'].$relativeUri;
         } else {
-            return $pathparts['scheme']."://".$pathparts['host'].$pathparts['port'].$pathparts['path']."/".$relativeuri;
+            return $pathParts['scheme']."://".$pathParts['host'].$pathParts['port'].$pathParts['path']."/".$relativeUri;
         }
     }
 
@@ -278,7 +278,7 @@ class PMF_Linkverifier
      *
      * @return mixed  false if URL is not found, otherwise returns the number of URLs found.
      */
-    public function parse_string($string = "")
+    public function parseString($string = '')
     {
         $urlcount = 0;
         $types    = array('href', 'src', 'url');
@@ -467,7 +467,7 @@ class PMF_Linkverifier
                 return $this->openURL($url, $location, $redirectCount + 1);
                 break;
             case 400:   // Bad Request
-                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br />'.$httpStatusMsg, $code));
+                return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_ambiguous'].'<br>'.$httpStatusMsg, $code));
                 break;
             case 404:   // Not found
                 return array(false, $redirectCount, sprintf($PMF_LANG['ad_linkcheck_openurl_not_found'], $urlParts['host']));
@@ -491,11 +491,11 @@ class PMF_Linkverifier
     /**
      * Perform link validation to each URLs found
      *
-     * @param string $referenceuri
+     * @param string $referenceUri
      *
      * @return array
      */
-    public function VerifyURLs($referenceuri = '')
+    public function VerifyURLs($referenceUri = '')
     {
         $this->lastResult = [];
 
@@ -505,10 +505,10 @@ class PMF_Linkverifier
                     $_result              = [];
                     $_result['type']      = $_type;
                     $_result['rawurl']    = $_url;
-                    $_result['reference'] = $referenceuri;
+                    $_result['reference'] = $referenceUri;
                     
                     // Expand uri into absolute URL.
-                    $_absurl           = $this->makeAbsoluteURL($_url, $referenceuri);
+                    $_absurl           = $this->makeAbsoluteURL($_url, $referenceUri);
                     $_result['absurl'] = $_absurl;
 
                     list($_result['valid'], $_result['redirects'], $_result['reason']) = $this->openURL($_absurl);
@@ -688,25 +688,24 @@ class PMF_Linkverifier
      */
     public function getLinkStateString()
     {
-        $linkcount = 0;
-        $errorcount = 0;
+        $linkCount = $errorCount = 0;
 
         foreach ($this->lastResult as $_type => $_value) {
             foreach ($_value as $_url => $value) {
-                $linkcount++;
+                $linkCount++;
                 if ($value['valid'] == false) {
-                    $errorcount++;
+                    $errorCount++;
                 }
             }
         }
 
-        if ($linkcount == 0) {
-            return "nolinks";
+        if (0 === $linkCount) {
+            return 'nolinks';
         } else {
-            if ($errorcount == 0) {
-                return "linkok";
+            if (0 === $errorCount) {
+                return 'linkok';
             } else {
-                return "linkbad";
+                return 'linkbad';
             }
         }
     }
@@ -725,36 +724,36 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        if ($this->_config->get('main.referenceURL') == '') {
+        if ($this->_config->get('main.referenceURL') === '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
-            return ($cron ? '' : '<br /><br />'.$output);
+            return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
 
         if (trim('' == $this->_config->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
-            return ($cron ? '' : '<br /><br />'.$output);
+            return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
 
         if ($this->isReady() === false) {
             $output = $PMF_LANG['ad_linkcheck_noAllowUrlOpen'];
-            return ($cron ? '' : '<br /><br />'.$output);
+            return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
 
         // Parse contents and verify URLs
-        $this->parse_string($contents);
+        $this->parseString($contents);
         $result = $this->VerifyURLs($this->_config->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
         if ($result == false) {
-            $output = sprintf('<h2>%s</h2><br />%s',
+            $output = sprintf('<h3>%s</h3><br>%s',
                 $PMF_LANG['ad_linkcheck_checkResult'],
                 $PMF_LANG['ad_linkcheck_noLinksFound']);
             return ($cron ? '' : $output);
         }
 
         $failreasons = $inforeasons = [];
-        $output      = "    <h2>".$PMF_LANG['ad_linkcheck_checkResult']."</h2>\n";
+        $output      = "    <h3>".$PMF_LANG['ad_linkcheck_checkResult']."</h3>\n";
         $output     .= '    <table class="verifyArticleURL">'."\n";
         foreach ($result as $type => $_value) {
             $output .= "        <tr><td><strong>".PMF_String::htmlspecialchars($type)."</strong></td></tr>\n";
@@ -791,7 +790,7 @@ class PMF_Linkverifier
         $output .= "    </table>\n";
 
         if (count($failreasons) > 0) {
-            $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_failReason']."</strong>\n    <ul>\n";
+            $output .= "    <br>\n    <strong>".$PMF_LANG['ad_linkcheck_failReason']."</strong>\n    <ul>\n";
             foreach ($failreasons as $reason) {
                 $output .= "        <li>".$reason."</li>\n";
             }
@@ -799,7 +798,7 @@ class PMF_Linkverifier
         }
 
         if (count($inforeasons) > 0) {
-            $output .= "    <br />\n    <strong>".$PMF_LANG['ad_linkcheck_infoReason']."</strong>\n    <ul>\n";
+            $output .= "    <br>\n    <strong>".$PMF_LANG['ad_linkcheck_infoReason']."</strong>\n    <ul>\n";
             foreach ($inforeasons as $reason) {
                 $output .= "        <li>".$reason."</li>\n";
             }

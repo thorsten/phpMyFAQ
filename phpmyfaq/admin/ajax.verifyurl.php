@@ -71,7 +71,7 @@ if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
 
-$linkverifier->parse_string($faq->faqRecord['content']);
+$linkverifier->parseString($faq->faqRecord['content']);
 $linkverifier->VerifyURLs($faqConfig->get('main.referenceURL'));
 $linkverifier->markEntry($id, $lang);
 print $linkverifier->getLinkStateString();
