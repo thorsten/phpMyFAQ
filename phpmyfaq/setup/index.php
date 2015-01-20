@@ -19,13 +19,13 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2002-2014 phpMyFAQ Team
+ * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
  */
 
-define('COPYRIGHT', '&copy; 2001-2014 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2015 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR . '/inc');
 define('IS_VALID_PHPMYFAQ', null);
@@ -61,7 +61,6 @@ $loader->register();
 
 ?>
 <!doctype html>
-<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
@@ -76,7 +75,7 @@ $loader->register();
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
-    <script src="../assets/js/libs/modernizr.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
     <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
@@ -102,8 +101,8 @@ $loader->register();
     <div class="container">
         <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-                <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
+                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
                 <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
                 <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
             </ul>
@@ -117,7 +116,8 @@ $loader->register();
             <div class="jumbotron text-center">
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</h1>
                 <p>
-                    Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a>
+                    Did you already read the
+                    <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
                     carefully before starting the phpMyFAQ setup?
                 </p>
                 <h4 class="alert alert-danger text-center">

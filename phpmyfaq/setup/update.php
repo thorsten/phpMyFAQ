@@ -19,7 +19,7 @@
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2014 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2015 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -48,9 +48,6 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 ?>
 <!doctype html>
-<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
@@ -84,8 +81,8 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 <div class="navbar navbar-default navbar-static-top">
     <nav class="container">
         <ul class="nav navbar-nav">
-            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
-            <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
+            <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
             <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
             <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
             <li class="divider-vertical"></li>
@@ -156,7 +153,7 @@ if ($step === 1) {
                 <ul>
                     <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
                     <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
-                    <li>phpMyFAQ 2.7.x</li>
+                    <li>phpMyFAQ 2.7.x (out of support since end of 2013)</li>
                     <li>phpMyFAQ 2.8.x</li>
                 </ul>
 
