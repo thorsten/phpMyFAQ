@@ -40,7 +40,7 @@ class PMF_Db
      * @var PMF_Db_Driver
      */
     private static $instance = null;
-    
+
     /**
      * Database type
      *
@@ -62,7 +62,7 @@ class PMF_Db
     private function __construct()
     {
     }
-    
+
     /**
      * Database factory
      *
@@ -98,12 +98,12 @@ class PMF_Db
     public static function getInstance()
     {
         if (null == self::$instance) {
-            $className      = __CLASS__;
+            $className = __CLASS__;
             self::$instance = new $className();
         }
         return self::$instance;
     }
-   
+
     /**
      * __clone() Magic method to prevent cloning
      *
@@ -112,7 +112,7 @@ class PMF_Db
     private function __clone()
     {
     }
-    
+
     /**
      * Returns the database type
      *
@@ -122,7 +122,7 @@ class PMF_Db
     {
         return self::$dbType;
     }
-    
+
     /**
      * Check if a table is filled with data
      *
@@ -132,13 +132,16 @@ class PMF_Db
      */
     public static function checkOnEmptyTable($tableName)
     {
-        if (self::$instance->numRows(self::$instance->query('SELECT * FROM ' . PMF_Db::getTablePrefix() . $tableName)) < 1) {
+        if (self::$instance->numRows(
+                self::$instance->query('SELECT * FROM ' . PMF_Db::getTablePrefix() . $tableName)
+            ) < 1
+        ) {
             return true;
         } else {
             return false;
         }
     }
-    
+
     /**
      * Error page, if the database connection is not possible
      *
@@ -154,13 +157,13 @@ class PMF_Db
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
                 <style type="text/css">
-                @import url(assets/template/default/css/style.min.css);
+                @import url("assets/template/default/css/style.min.css");
                 </style>
             </head>
             <body>
                 <div class="container">
                 <p class="alert alert-danger">The connection to the database server could not be established.</p>
-                <p class="alert alert-danger">The error message of the database server:<br />' . $method . '</p>
+                <p class="alert alert-danger">The error message of the database server:<br>' . $method . '</p>
                 </div>
             </body>
             </html>';
