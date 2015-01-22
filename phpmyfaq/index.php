@@ -100,8 +100,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('security.ldapSupport') && function_exists('ldap_connect')) {
-        $authLdap = new PMF_Auth_Ldap($faqConfig);
-        $user->addAuth($authLdap, 'ldap');
+        try {
+            $authLdap = new PMF_Auth_Ldap($faqConfig);
+            $user->addAuth($authLdap, 'ldap');
+        } catch (PMF_Exception $e) {
+            $error = $e->getMessage() . '<br>';
+        }
     }
     if ($faqConfig->get('security.ssoSupport')) {
         $authSso = new PMF_Auth_Sso($faqConfig);
@@ -114,13 +118,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
                 $action = $faqaction; // SSO logins don't have $faqaction
             }
         } else {
-            $error           = $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
+            $error           = $error . $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
             $action          = 'password' === $action ? 'password' : 'login';
         }
     } else {
         // error
-        $error           = $PMF_LANG['ad_auth_fail'];
+        $error           = $error . $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
         $action          = 'password' === $action ? 'password' : 'login';
     }
