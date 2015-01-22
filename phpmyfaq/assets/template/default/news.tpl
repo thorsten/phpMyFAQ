@@ -32,7 +32,7 @@
 
             <!-- Comment Form -->
             <a name="comment"></a>
-            <div id="commentForm" style="display: none;">
+            <div id="commentForm" class="hide">
                 <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
                     <input type="hidden" name="newsid" value="{newsId}" />
                     <input type="hidden" name="lang" value="{newsLang}" />
@@ -77,11 +77,17 @@
             </div>
 
             <script type="text/javascript" >
-            $('form#formValues').on('submit', function (e) {
-                e.preventDefault();
-                saveFormValues('savecomment', 'comment');
-                return false;
-            });
+
+                $('.show-comment-form').on('click', function(event) {
+                    event.preventDefault();
+                    $('#commentForm').removeClass('hide');
+                });
+
+                $('form#formValues').on('submit', function (event) {
+                    event.preventDefault();
+                    saveFormValues('savecomment', 'comment');
+                    return false;
+                });
             </script>
 
         </section>

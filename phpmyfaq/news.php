@@ -46,7 +46,7 @@ if (is_null($newsId)) {
 }
 
 try {
-    $faqsession->userTracking('news_view', $categoryId);
+    $faqsession->userTracking('news_view', $newsId);
 } catch (PMF_Exception $e) {
     // @todo handle the exception
 }
@@ -97,9 +97,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
     (!$news['active']) || (!$news['allowComments']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
-    $commentMessage = sprintf(
-        '<a href="javascript:void(0);" onclick="javascript:$(\'#commentForm\').show();">%s</a>',
-        $PMF_LANG['newsWriteComment']);
+    $commentMessage = sprintf('<a href="#" class="show-comment-form">%s</a>', $PMF_LANG['newsWriteComment']);
 }
 
 // date of news entry

@@ -181,7 +181,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(
-        "%s<a href=\"javascript:void(0);\" onclick=\"javascript:$('#commentForm').show();\">%s</a>",
+        "%s<a href=\"#\" class=\"show-comment-form\">%s</a>",
         $PMF_LANG['msgYouCan'],
         $PMF_LANG['msgWriteComment']);
 }

@@ -149,6 +149,12 @@
             </div>
 
             <script>
+
+                $('.show-comment-form').on('click', function(event) {
+                    event.preventDefault();
+                    $('#commentForm').removeClass('hide');
+                });
+
                 $(function() {
                     $("div.star-rating > span").on("click", function(e) {
                         var numStars = $(e.target).data("stars");
@@ -177,8 +183,8 @@
                 'bash shell             assets/js/syntaxhighlighter/scripts/shBrushBash.js',
                 'php                    assets/js/syntaxhighlighter/scripts/shBrushPhp.js',
                 'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js',
-	    'cpp                    assets/js/syntaxhighlighter/scripts/shBrushCpp.js',
-	    'plain                  assets/js/syntaxhighlighter/scripts/shBrushPlain.js'                
+                'cpp                    assets/js/syntaxhighlighter/scripts/shBrushCpp.js',
+                'plain                  assets/js/syntaxhighlighter/scripts/shBrushPlain.js'
             );
             
             //This is a temporary fix and can be removed once a proper solution is found.
