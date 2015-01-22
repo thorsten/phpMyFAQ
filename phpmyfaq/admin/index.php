@@ -125,8 +125,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('security.ldapSupport') && function_exists('ldap_connect')) {
-        $authLdap = new PMF_Auth_Ldap($faqConfig);
-        $user->addAuth($authLdap, 'ldap');
+        try {
+            $authLdap = new PMF_Auth_Ldap($faqConfig);
+            $user->addAuth($authLdap, 'ldap');
+        } catch (PMF_Exception $e) {
+            $error = $e->getMessage() . '<br>';
+        }
     }
     if ($faqConfig->get('security.ssoSupport')) {
         $authSso = new PMF_Auth_Sso($faqConfig);
@@ -137,13 +141,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         if ($user->getStatus() != 'blocked') {
             $auth = true;
         } else {
-            $error = $PMF_LANG['ad_auth_fail'];
+            $error = $error . $PMF_LANG['ad_auth_fail'];
         }
     } else {
         // error
         $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nErrors: ' . implode(', ', $user->errors));
-        $error = $PMF_LANG['ad_auth_fail'];
+        $error = $error . $PMF_LANG['ad_auth_fail'];
     }
 } else {
     // Try to authenticate with cookie information

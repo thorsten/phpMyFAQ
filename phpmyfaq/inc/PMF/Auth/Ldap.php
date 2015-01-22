@@ -77,6 +77,8 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      *
      * @param  PMF_Configuration $config
      *
+     * @throws PMF_Exception
+     *
      * @return PMF_Auth_Ldap
      */
     public function __construct(PMF_Configuration $config)
@@ -84,10 +86,14 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         $this->_config         = $config;
         $this->_ldapConfig     = $this->_config->getLdapConfig();
         $this->ldapServer      = $this->_config->getLdapServer();
-        $this->multipleServers = $this->_ldapConfig['ldap_use_multiple_servers'];
+        $this->multipleServers = isset($this->_ldapConfig['ldap_use_multiple_servers']) ?: '' ;
         
         parent::__construct($this->_config);
-        
+
+        if (0 === count($this->ldapServer)) {
+            throw new PMF_Exception('An error ocurred while contacting LDAP: No configruation found.');
+        }
+
         $this->ldap = new PMF_Ldap($this->_config);
         $this->ldap->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
