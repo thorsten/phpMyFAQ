@@ -829,7 +829,7 @@ if ($step == 3) {
 
 
     //
-    // UPDATES FROM 2.9.0-alpha
+    // UPDATES FROM 2.9.0-alpha2
     //
     if (version_compare($version, '2.9.0-alpha2', '<')) {
 
@@ -844,6 +844,7 @@ if ($step == 3) {
         $faqConfig->add('mail.remoteSMTPServer', '');
         $faqConfig->add('mail.remoteSMTPUsername', '');
         $faqConfig->add('mail.remoteSMTPPassword', '');
+        $faqConfig->add('security.enableRegistration', 'true');
         $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {

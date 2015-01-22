@@ -349,6 +349,7 @@ class PMF_Installer
         'security.useSslForLogins'                => 'false',
         'security.useSslOnly'                     => 'false',
         'security.forcePasswordUpdate'            => 'false',
+        'security.enableRegistration'             => 'true',
 
         'spam.checkBannedWords'                   => 'true',
         'spam.enableCaptchaCode'                  => null,

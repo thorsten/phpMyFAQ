@@ -1171,3 +1171,4 @@ $PMF_LANG["msgMatchingQuestions"] = "Die folgenden Ergebnisse könnten Ihre Frag
 $PMF_LANG["msgFinishSubmission"] = "Wenn keine der Vorschläge übereinstimmt, können Sie nun die Frage absenden.";
 $LANG_CONF["main.enableLinkVerification"] = array(0 => "checkbox", 1 => "Aktiviere automatischen Linkcheck<br>(Standard: aktiviert)");
 $LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Aktiviere Nutzer manuell<br>(Standard: aktiviert)');
+$LANG_CONF['security.enableRegistration'] = array('checkbox', 'Erlaube Registrierung externer Besucher<br>(Standard: aktiviert)');

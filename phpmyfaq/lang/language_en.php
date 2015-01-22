@@ -1215,3 +1215,4 @@ $LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Use remote SMTP ser
 $LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address');
 $LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
 $LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Password');
+$LANG_CONF['security.enableRegistration'] = array('checkbox', 'Enable registration for visitors<br>(default: activated)');
