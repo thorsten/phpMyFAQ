@@ -9,11 +9,11 @@
   ],
   "dependencies": {
     "modernizr": "~2.8.3",
-    "bootstrap": "~3.3",
+    "bootstrap": "~3.3.2",
     "font-awesome": "~4.2",
     "sparkline": "~2.1.2",
     "tinymce": "~4.1",
-    "jquery": "~1.11.1",
+    "jquery": "~1.11.2",
     "bootstrap-datepicker": "~1.2.0",
     "typeahead.js": "~0.10.5",
     "handlebars": "~2.0.0"
