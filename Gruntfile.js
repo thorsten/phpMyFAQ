@@ -8,7 +8,7 @@
  * @category  phpMyFAQ
  * @package   Development
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013-2014 phpMyFAQ Team
+ * @copyright 2013-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-06-23
@@ -25,15 +25,20 @@ module.exports = function(grunt) {
 
     // Project configuration.
     grunt.initConfig({
+        //
         // Metadata.
+        //
         meta: {
             version: '2.9.0-alpha2'
         },
-        banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - 2015 Thorsten Rinne and phpMyFAQ Team */\n',
+        banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - <%= grunt.template.today("yyyy") %> Thorsten Rinne and phpMyFAQ Team */\n',
         bumpup: {
             files: ['package.json', 'bower.json', 'composer.json']
         },
+
+        //
         // Task configuration.
+        //
         copy: {
             tinymce: {
                 files: [
@@ -126,12 +131,22 @@ module.exports = function(grunt) {
         },
         less: {
             development: {
+                banner: '<%= banner %>',
                 files: {
                     'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
                     //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
                     'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
                     //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
                 }
+            },
+            production: {
+                files: {
+                    'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
+                    //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
+                    'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
+                    //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
+                },
+                compress: true
             }
         },
         cssmin: {
@@ -173,17 +188,17 @@ module.exports = function(grunt) {
                 files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/template/default/less/*.less'],
                 tasks: ['less', 'cssmin'],
                 options: {
-                    livereload: true,
+                    livereload: true
                 }
             }
         }
     });
 
     // Default task.
-    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
+    grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less:development', 'cssmin', 'modernizr']);
 
     // Build task
-    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less', 'cssmin', 'modernizr']);
+    grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less:production', 'cssmin', 'modernizr']);
 
     // Watcher
     grunt.event.on('watch', function(action, filepath, target) {
