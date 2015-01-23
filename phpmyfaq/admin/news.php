@@ -342,7 +342,7 @@ if ('addnews' == $action && $permission["addnews"]) {
 
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">
-                <?php echo $PMF_LANG['ad_news_edit']; ?>
+                <?php echo $PMF_LANG['ad_gen_save'] ?>
             </button>
             <a class="btn btn-info" href="?action=news">
                 <?php echo $PMF_LANG['ad_entry_back']; ?>
