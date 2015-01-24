@@ -166,7 +166,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
 
                     <div id="dbdatafull">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_server">Host:</label>
+                            <label class="col-sm-4 control-label" for="sql_server">Host/Socket:</label>
                             <div class="col-sm-8">
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="127.0.0.1">

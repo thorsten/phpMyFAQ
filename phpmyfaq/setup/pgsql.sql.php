@@ -241,7 +241,7 @@ PRIMARY KEY (group_id, right_id)
 )";
 
 //faqinstances
-$query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
 id int4 NOT NULL,
 url VARCHAR(255) NOT NULL,
 instance VARCHAR(255) NOT NULL,
@@ -380,7 +380,7 @@ ip varchar(15) NOT NULL default '',
 PRIMARY KEY (id))";
 
 //faqattachment
-$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
 id SERIAL NOT NULL,
 record_id int4 NOT NULL,
 record_lang varchar(5) NOT NULL,
@@ -394,7 +394,7 @@ mime_type varchar(255) NULL,
 PRIMARY KEY (id))";
 
 //faqattachment file
-$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
 virtual_hash char(32) NOT NULL,
 contents bytea,
 PRIMARY KEY (virtual_hash))";

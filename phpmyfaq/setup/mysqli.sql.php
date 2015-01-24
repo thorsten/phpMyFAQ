@@ -65,7 +65,7 @@ ip text NOT NULL,
 PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqattachment
-$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
 id int(11) NOT NULL,
 record_id int(11) NOT NULL,
 record_lang varchar(5) NOT NULL,
@@ -79,7 +79,7 @@ mime_type varchar(255) NULL,
 PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqattachment file
-$query[] = "CREATE TABLE " . $sqltblpre . "faqattachment_file (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
 virtual_hash char(32) NOT NULL,
 contents blob NOT NULL,
 PRIMARY KEY (virtual_hash)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
@@ -239,7 +239,7 @@ right_id INT(11) UNSIGNED NOT NULL,
 PRIMARY KEY (group_id, right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqinstances
-$query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
 id INT(11) NOT NULL,
 url VARCHAR(255) NOT NULL,
 instance VARCHAR(255) NOT NULL,
@@ -249,7 +249,7 @@ modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
 //faqinstances_config
-$query[] = "CREATE TABLE " . $sqltblpre . "faqinstances_config (
+$query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
 instance_id INT(11) NOT NULL,
 config_name VARCHAR(255) NOT NULL default '',
 config_value VARCHAR(255) DEFAULT NULL,
