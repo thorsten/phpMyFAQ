@@ -104,18 +104,18 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @param string  $query
      * @param integer $offset
-     * @param integer $rowcount
+     * @param integer $rowCount
      *
-     * @return  mixed $result
+     * @return mysqli_result $result
      */
-    public function query($query, $offset = 0, $rowcount = 0)
+    public function query($query, $offset = 0, $rowCount = 0)
     {
         if (DEBUG) {
             $this->sqllog .= PMF_Utils::debug($query);
         }
 
-        if (0 < $rowcount) {
-            $query .= sprintf(' LIMIT %d,%d', $offset, $rowcount);
+        if (0 < $rowCount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowCount);
         }
 
         $result = $this->conn->query($query);
@@ -231,9 +231,10 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * This function is a replacement for MySQL's auto-increment so that
      * we don't need it anymore.
      *
-     * @param   string      the name of the table
-     * @param   string      the name of the ID column
-     * @return  int
+     * @param string $table The name of the table
+     * @param string $id    The name of the ID column
+     *
+     * @return integer
      */
     public function nextId($table, $id)
     {
@@ -246,7 +247,13 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
            $table);
            
         $result  = $this->query($select);
-        $current = $result->fetch_row();
+
+        if ($result instanceof mysqli_result) {
+            $current = $result->fetch_row();
+        } else {
+            $current = [0];
+        }
+
         return $current[0] + 1;
     }
 
