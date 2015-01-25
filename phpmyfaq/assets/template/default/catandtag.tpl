@@ -4,13 +4,19 @@
                 {shareOnFacebook}
                 {shareOnTwitter}
                 <a href="{link_email}">
-                    <img src="assets/img/email.png" alt="{writeSend2FriendMsgTag}" title="{writeSend2FriendMsgTag}" width="32" height="32" >
+                    <i class="fa fa-envelope-square fa-4x"></i>
                 </a>
                 <a target="_blank" href="{link_pdf}" rel="nofollow">
-                    <img src="{baseHref}assets/img/pdf.png" alt="{writePDFTag}" title="{writePDFTag}" width="32" height="32" >
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-file-pdf-o fa-stack-1x fa-inverse"></i>
+                    </span>
                 </a>
                 <a href="javascript:window.print();" rel="nofollow">
-                    <img src="{baseHref}assets/img/print.png" alt="{writePrintMsgTag}" title="{writePrintMsgTag}" width="32" height="32" >
+                    <span class="fa-stack fa-2x">
+                        <i class="fa fa-square fa-stack-2x"></i>
+                        <i class="fa fa-print fa-stack-1x fa-inverse"></i>
+                    </span>
                 </a>
             </div>
             <div id="facebookLikeButton">

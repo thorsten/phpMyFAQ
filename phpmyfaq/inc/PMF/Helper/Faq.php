@@ -114,7 +114,7 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         return sprintf(
-            '<a href="%s" target="_blank"><img src="assets/img/facebook.png" alt="Share on Facebook" width="32" height="32"></a>',
+            '<a href="%s" target="_blank"><i class="fa fa-facebook-square fa-4x"></i></a>',
             $url
         );
     }
@@ -133,7 +133,7 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         return sprintf(
-            '<a href="%s" target="_blank"><img src="assets/img/twitter.png" alt="Share on Twitter" width="32" height="32"></a>',
+            '<a href="%s" target="_blank"><i class="fa fa-twitter-square fa-4x"></i></a>',
             $url
         );
     }
