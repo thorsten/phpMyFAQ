@@ -78,25 +78,28 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         <div class="col-lg-offset-2 col-lg-8 radio">
                             <p><?php echo $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
-                                <input type="radio" name="type" value="pdf" checked="checked" />
+                                <input type="radio" name="type" value="pdf" id="pdf" checked>
                                 <?php echo $PMF_LANG["ad_export_generate_pdf"] ?>
                                 <br>
-                                <input type="radio" name="type" value="xml" />
+                                <input type="radio" name="type" value="xml" id="xml">
                                 <?php echo $PMF_LANG["ad_xml_gen"] ?>
                                 <br>
-                                <input type="radio" name="type" value="xhtml" />
+                                <input type="radio" name="type" value="xhtml" id="xhtml">
                                 <?php echo $PMF_LANG['ad_export_gen_xhtml'] ?>
                             </label>
                         </div>
                     </div>
+
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4 radio">
                             <p><?php echo $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
-                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked="checked" />
+                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
+                                       id="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked>
                                 <?php echo $PMF_LANG['ad_export_download'] ?>
                                 <br>
-                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE; ?>">
+                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                                       id="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
                                 <?php echo $PMF_LANG['ad_export_view'] ?>
                             </label>
                         </div>
