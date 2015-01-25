@@ -122,7 +122,7 @@ class PMF_Sitemap
                 $this->user);
         }
 
-        $writeLetters = '<ul class="nav">';
+        $writeLetters = '<ul class="nav navbar-nav">';
 
         if ($this->_config->getDb() instanceof PMF_DB_Sqlite3) {
 
