@@ -765,7 +765,7 @@ class PMF_Category
 
         if ($hasChildren) {
             $oLink->text .= sprintf(
-                ' <img src="assets/img/more.gif" width="11" height="11" alt="%s" style="border: none; vertical-align: middle;" />',
+                '<i class="fa fa-caret-right"></i>',
                 $categoryName);
         }
 
