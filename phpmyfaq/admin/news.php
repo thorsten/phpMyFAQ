@@ -383,7 +383,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
                     <?php print($item['content']); ?><br>
                     <?php print($PMF_LANG['newsCommentDate'] . PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)); ?>
                     <a href="?action=delcomment&amp;artid=<?php print($newsId); ?>&amp;cmtid=<?php print($item['id']); ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);?>">
-                        <img src="images/delete.gif" alt="<?php echo $PMF_LANG["ad_entry_delete"] ?>" title="<?php echo $PMF_LANG["ad_entry_delete"] ?>" border="0" width="17" height="18" align="right">
+                        <i class="fa fa-trash-o"></i>
                     </a>
                 </div>
             </div>
