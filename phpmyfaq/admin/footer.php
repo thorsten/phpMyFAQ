@@ -83,7 +83,7 @@ tinymce.init({
     height   : "480",
     theme    : "modern",
     plugins: [
-        "advlist autolink link image lists charmap echo preview hr anchor pagebreak spellchecker",
+        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
         "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
         "save table contextmenu directionality emoticons template paste textcolor"
     ],
