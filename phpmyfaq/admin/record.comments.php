@@ -161,7 +161,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                 data: comments,
                 success: function(msg) {
                     if (msg == 1) {
-                        $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                        $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
                         $('#saving_data_indicator').fadeOut('slow');
                         $('#returnMessage').

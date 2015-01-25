@@ -515,7 +515,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
          */
         function saveStatus(cid, ids, type, csrf)
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> saving ...');
+            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
             var data = {
                 action: "ajax",
                 ajax: 'records',
@@ -575,7 +575,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
         function deleteRecord(record_id, record_lang, csrf_token)
         {
             if (confirm('<?php echo addslashes($PMF_LANG["ad_entry_del_1"] . " " . $PMF_LANG["ad_entry_del_3"]); ?>')) {
-                $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
                 $.ajax({
                     type:    "POST",
                     url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",

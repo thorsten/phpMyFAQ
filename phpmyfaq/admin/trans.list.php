@@ -161,7 +161,7 @@ $tt                 = new PMF_TransTool;
                 return;
             }
 
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
+            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
 
             $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
                   {translang: lang},
@@ -186,7 +186,7 @@ $tt                 = new PMF_TransTool;
          */
         function sendToTeam(lang)
         {
-             $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
+             $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
              var msg = '';;
 

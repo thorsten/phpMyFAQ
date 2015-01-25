@@ -78,7 +78,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 return;
             }
 
-            $('#stopwords_loading_indicator').html('<img src="images/indicator.gif" />');
+            $('#stopwords_loading_indicator').html('<i class="fa fa-spinner fa-spin"></i>');
 
             $.get("index.php",
                   {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},

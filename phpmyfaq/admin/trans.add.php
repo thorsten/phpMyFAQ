@@ -115,7 +115,7 @@ if (isset($_SESSION['trans'])) {
          */
         function save()
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
+            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
 
             var data = {}
             var form = document.getElementById('newTranslationForm')

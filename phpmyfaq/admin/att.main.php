@@ -97,7 +97,7 @@ $pagination = new PMF_Pagination(
         function deleteAttachment(att_id)
         {
             if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-                $('#saving_data_indicator').html('<img src="images/indicator.gif" /> deleting ...');
+                $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
                 $.ajax({
                     type:    "GET",
                     url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",

@@ -124,7 +124,7 @@ tinymce.init({
 /*
 function phpMyFAQSave()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
+    $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
     // Create an input field with the save button name
     var input = document.createElement("input");
     input.setAttribute('name', $('input:submit')[0].name);

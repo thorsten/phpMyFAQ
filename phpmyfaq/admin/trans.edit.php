@@ -252,7 +252,7 @@ $NPluralsErrorReported = false;
         {
             var result = false;
 
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php printf($PMF_LANG['msgTransToolRecordingPageBuffer'], $page); ?>');
+            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php printf($PMF_LANG['msgTransToolRecordingPageBuffer'], $page); ?>');
 
             $.ajax({url: 'index.php?action=ajax&ajax=trans&ajaxaction=save_page_buffer',
                    data: getFormData(),
@@ -281,7 +281,7 @@ $NPluralsErrorReported = false;
          */
         function save()
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
+            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
 
             if(savePageBuffer()) {
                 $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
