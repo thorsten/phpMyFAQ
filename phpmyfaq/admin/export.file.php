@@ -40,7 +40,7 @@ if ($permission['export']) {
     $categoryId        = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
     $downwards         = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
     $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
-    $type              = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'none');
+    $type              = PMF_Filter::filterInput(INPUT_POST, 'export-type', FILTER_SANITIZE_STRING, 'none');
 
     $faq      = new PMF_Faq($faqConfig);
     $category = new PMF_Category($faqConfig);

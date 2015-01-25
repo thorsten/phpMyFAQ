@@ -275,7 +275,7 @@ switch ($action) {
                 <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=user">
                         <i class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
-                        <span class="fa arrow"></span></a>
+                        <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo ($userPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
@@ -284,7 +284,7 @@ switch ($action) {
                 <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=content">
                         <i class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
-                        <span class="fa arrow"></span></a>
+                        <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo ($contentPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
@@ -293,7 +293,7 @@ switch ($action) {
                 <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=statistics">
                         <i class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
-                        <span class="fa arrow"></span></a>
+                        <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo ($statisticsPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
@@ -315,7 +315,7 @@ switch ($action) {
                 <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=config">
                         <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
-                        <span class="fa arrow"></span></a>
+                        <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo ($configurationPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
