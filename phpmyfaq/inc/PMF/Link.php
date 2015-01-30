@@ -347,7 +347,7 @@ class PMF_Link
         // Clean up
         $itemTitle = PMF_String::preg_replace('/-[\-]+/m', '-', $itemTitle);
 
-        return rawurlencode($itemTitle);
+        return $itemTitle;
     }
 
     /**
@@ -425,11 +425,22 @@ class PMF_Link
         if ($this->_config->get('security.useSslOnly')) {
             return 'https://';
         }
-        
-        $scheme = 'http' . (((!PMF_Link::isIISServer()) && isset($_SERVER['HTTPS'])) || 
-                           ((PMF_Link::isIISServer()) && ('on' == strtolower($_SERVER['HTTPS']))) ? 's' : '') . '://';
 
-        return $scheme;
+        if (PMF_Link::isIISServer()) {
+            // Apache, nginx, lighttpd
+            if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
+                return 'https://';
+            } else {
+                return 'http://';
+            }
+        } else {
+            // IIS Server
+            if ('on' === strtolower($_SERVER['HTTPS'])) {
+                return 'https://';
+            } else {
+                return 'http://';
+            }
+        }
     }
 
     /**

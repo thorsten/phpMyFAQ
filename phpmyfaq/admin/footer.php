@@ -103,13 +103,13 @@ tinymce.init({
     use_native_selects      : true,
     paste_remove_spans      : true,
     entity_encoding         : "raw",
-    extended_valid_elements : "code",
+    extended_valid_elements : "code,video[*]",
 
     // Save function
     save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
-    content_css : "../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/css/style.css",
+    content_css : "../assets/template/<?php print PMF_Template::getTplSetName(); ?>/css/style.min.css",
 
     // Drop lists for link/image/media/template dialogs
     template_external_list_url : "js/template_list.js",

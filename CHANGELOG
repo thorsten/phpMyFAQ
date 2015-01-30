@@ -7,6 +7,8 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.0-alpha2 20145-01-
 - changed PHP requirement to PHP 5.4.4 and later (Thorsten)
+- added support for HHVM 3.4.2+ (Thorsten)
+- added support for PHP 7.0 (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added configuration for enable/disable highlighting search terms (Thorsten)
 - added configuration for enable/disable RSS feeds (Thorsten)
