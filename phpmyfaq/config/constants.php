@@ -163,7 +163,8 @@ $botBlacklist = array(
     'bot',
     'spider',
     'Yahoo! Slurp',
-    'htdig'
+    'htdig',
+    'gsa-crawler'
 );
 
 /****************************************************************************
