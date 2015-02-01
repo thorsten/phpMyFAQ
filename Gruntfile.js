@@ -29,7 +29,7 @@ module.exports = function(grunt) {
         // Metadata.
         //
         meta: {
-            version: '2.9.0-alpha2'
+            version: '2.9.0-alpha3'
         },
         banner: '/*! phpMyFAQ v<%= meta.version %> - http://www.phpmyfaq.de - Copyright (c) 2001 - <%= grunt.template.today("yyyy") %> Thorsten Rinne and phpMyFAQ Team */\n',
         bumpup: {
