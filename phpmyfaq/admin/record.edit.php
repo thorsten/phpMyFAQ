@@ -763,7 +763,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         $('#tags').focus(function() { showHelp('tags'); });
 
         // Override FAQ permissions with Category permission to avoid confused users
-        $('#phpmyfaq-categories option:selected').each(function() {
+        $('#phpmyfaq-categories').click(function() {
             var categories = $('#phpmyfaq-categories option:selected').map(function() {
                 return $(this).val();
             }).get();

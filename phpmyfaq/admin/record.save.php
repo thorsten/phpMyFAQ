@@ -185,14 +185,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         // Add user permissions
         $faq->deletePermission('user', $recordId);
         $faq->addPermission('user', $recordId, $permissions['restricted_user']);
-        $category->deletePermission('user', $categories['rubrik']);
-        $category->addPermission('user', $categories['rubrik'], $permissions['restricted_user']);
         // Add group permission
         if ($faqConfig->get('security.permLevel') != 'basic') {
             $faq->deletePermission('group', $recordId);
             $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
-            $category->deletePermission('group', $categories['rubrik']);
-            $category->addPermission('group', $categories['rubrik'], $permissions['restricted_groups']);
         }
 
         // All the other translations        
