@@ -57,13 +57,21 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     public function search($searchTerm)
     {
         if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
-            parent::search($searchTerm);
-        } else {
-            $relevance = $this->_config->get('search.enableRelevance');
 
-            $columns  =  $this->getResultColumns();
-            $columns .= ($this->relevanceSupport && $relevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-            $orderBy  = ($this->relevanceSupport && $relevance) ? 'ORDER BY ' . $this->getMatchingOrder() . ' DESC' : '';
+            parent::search($searchTerm);
+
+        } else {
+
+            $relevance = $this->_config->get('search.enableRelevance');
+            $columns   = $this->getResultColumns();
+
+            if ($this->relevanceSupport && $relevance) {
+                $columns .= $this->getMatchingColumnsAsResult($searchTerm);
+                $orderBy  = 'ORDER BY ' . $this->getMatchingOrder() . ' DESC';
+            } else {
+                $orderBy = '';
+            }
+
             $chars    = [
                 "\xe2\x80\x98",
                 "\xe2\x80\x99",
@@ -123,20 +131,20 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     }
     
     /**
-     * Add the matching columns into the columns for the resultset
+     * Add the matching columns into the columns for the result set
      *
-     * @param string $searchterm
+     * @param string $searchTerm
      *
      * @return string
      */
-    public function getMatchingColumnsAsResult($searchterm)
+    public function getMatchingColumnsAsResult($searchTerm)
     {
         $resultColumns = '';
 
         foreach ($this->matchingColumns as $matchColumn) {
             $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
                 $matchColumn,
-                $this->_config->getDb()->escape($searchterm),
+                $this->_config->getDb()->escape($searchTerm),
                 substr(strstr($matchColumn, '.'), 1));
 
                 $resultColumns .= ', ' . $column;

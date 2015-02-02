@@ -1,6 +1,6 @@
 <?php
 /**
- * Implements resultsets for phpMyFAQ search classes
+ * Implements result sets for phpMyFAQ search classes
  *
  * PHP Version 5.4
  *
@@ -40,7 +40,7 @@ class PMF_Search_Resultset
     protected $_config = null;
 
     /**
-     * "Raw" search resultset without permission checks and with possible
+     * "Raw" search result set without permission checks and with possible
      * duplicates
      *
      * @var array
@@ -48,7 +48,7 @@ class PMF_Search_Resultset
     protected $rawResultset = [];
     
     /**
-     * "Reviewed" search resultset with checked permissions and without 
+     * "Reviewed" search result set with checked permissions and without
      * duplicates
      *
      * @var array
@@ -56,7 +56,7 @@ class PMF_Search_Resultset
     protected $reviewedResultset = [];
     
     /**
-     * Ordering of resultset
+     * Ordering of result set
      *
      * @var string
      */
@@ -102,14 +102,14 @@ class PMF_Search_Resultset
     /**
      * Check on user and group permissions and on duplicate FAQs
      *
-     * @param array $resultset Array with search results
+     * @param array $resultSet Array with search results
      *
      * @return void
      */
-    public function reviewResultset(Array $resultset)
+    public function reviewResultset(Array $resultSet)
     {
-        $this->setResultset($resultset);
-        
+        $this->setResultset($resultSet);
+
         $duplicateResults = [];
         $currentUserId    = $this->user->getUserId();
         if ('medium' === $this->_config->get('security.permLevel')) {
@@ -157,13 +157,13 @@ class PMF_Search_Resultset
     /**
      * Sets the "raw" search results
      *
-     * @param array $resultset Array with search results
+     * @param array $resultSet Array with search results
      *
      * @return void
      */
-    public function setResultset(Array $resultset)
+    public function setResultset(Array $resultSet)
     {
-        $this->rawResultset = $resultset;
+        $this->rawResultset = $resultSet;
     }
     
     /**
@@ -179,13 +179,13 @@ class PMF_Search_Resultset
     /**
      * Sets the number of search results
      *
-     * @param array $resultset Array with search results
+     * @param array $resultSet Array with search results
      *
      * @return void
      */
-    public function setNumberOfResults(Array $resultset)
+    public function setNumberOfResults(Array $resultSet)
     {
-        $this->numberOfResults = count($resultset);
+        $this->numberOfResults = count($resultSet);
     }
     
     /**
