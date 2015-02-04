@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Translation
  * @author    Pedro Lineu Orso <pedro.orso@gmail.com>
- * @copyright 2006-2015 phpMyFAQ Team
+ * @copyright 2006-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-04-05
@@ -821,26 +821,26 @@ $PMF_LANG['plmsgUserOnline']['0'] = '%d usuário online';
 $PMF_LANG['plmsgUserOnline']['1'] = '';
 $PMF_LANG['msgShowMore'] = 'mostrar mais';
 $PMF_LANG['msgQuestionAnswered'] = 'Questão respondida';
-$PMF_LANG['msgMessageQuestionAnswered'] = 'Sua pergunta " %s " foi respondida. Veja aqui:';
-$PMF_LANG['ad_stopwords_desc'] = 'Por favor, selecione um idioma para adicionar ou editar palavras irrelevantes.';
+$PMF_LANG['msgMessageQuestionAnswered'] = 'Sua questão %s foi respondida. Por favor, verifique-a aqui:';
+$PMF_LANG['ad_stopwords_desc'] = 'Por favor seleciona o idioma para adicionar ou editar palavras ignoradas';
 $PMF_LANG['ad_visits_per_day'] = 'Visitas por dia';
-$PMF_LANG['ad_instance_add'] = 'Add a new phpMyFAQ multi site instance';
-$PMF_LANG['ad_instance_error_notwritable'] = 'The folder /multisite isn\'t writable.';
-$PMF_LANG['ad_instance_url'] = 'Instance URL';
-$PMF_LANG['ad_instance_path'] = 'Instance path';
-$PMF_LANG['ad_instance_name'] = 'Instance name';
-$PMF_LANG['ad_instance_email'] = 'Your admin email';
-$PMF_LANG['ad_instance_admin'] = 'Admin login name';
-$PMF_LANG['ad_instance_password'] = 'Admin password';
-$PMF_LANG['ad_instance_hint'] = 'Caution: It will take some seconds to create a new phpMyFAQ instance!';
-$PMF_LANG['ad_instance_button'] = 'Save instance';
-$PMF_LANG['ad_instance_error_cannotdelete'] = 'Could not delete instance ';
-$PMF_LANG['ad_instance_config'] = 'Instance configuration';
+$PMF_LANG['ad_instance_add'] = 'Adicionar uma nova instância do phpMyFAQ multi site';
+$PMF_LANG['ad_instance_error_notwritable'] = 'A pasta /multisite não é gravável.';
+$PMF_LANG['ad_instance_url'] = 'Instância URL';
+$PMF_LANG['ad_instance_path'] = 'Caminho da instância';
+$PMF_LANG['ad_instance_name'] = 'Nome da instância';
+$PMF_LANG['ad_instance_email'] = 'Seu e-mail de Administrador';
+$PMF_LANG['ad_instance_admin'] = 'Login de Administrador';
+$PMF_LANG['ad_instance_password'] = 'Senha de Administrador';
+$PMF_LANG['ad_instance_hint'] = 'Atenção: Vai demorar alguns segundos para criar uma nova instância phpMyFAQ!';
+$PMF_LANG['ad_instance_button'] = 'Salvar instância';
+$PMF_LANG['ad_instance_error_cannotdelete'] = 'Não foi possível excluir a instância';
+$PMF_LANG['ad_instance_config'] = 'Configuraçaõ da instância';
 $PMF_LANG['msgAboutThisNews'] = 'Sobre essa notícia';
 $PMF_LANG['msgAccessDenied'] = 'Acesso negado.';
-$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Sort FAQs randomly (default: deactivated)');
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Enable bundled WYSIWYG editor in frontend (default: disabled)');
-$LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'Gravatar Support (default: disabled)');
+$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Ordenar FAQs randômicos (padrão: desativado)');
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Habilitar pacote do editir WYSIWYG no frontend (padrão: desabilitado)');
+$LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'Gravatar Suporte (padrão: desabilitado)');
 $PMF_LANG['ad_menu_attachments'] = 'Anexos do FAQ';
 $PMF_LANG['ad_menu_attachment_admin'] = 'Administração de anexos';
 $PMF_LANG['msgAttachmentsFilename'] = 'Nome do arquivo';
