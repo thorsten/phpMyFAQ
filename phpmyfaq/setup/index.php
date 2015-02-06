@@ -169,7 +169,7 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
                             <label class="col-sm-4 control-label" for="sql_server">Host/Socket:</label>
                             <div class="col-sm-8">
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
-                                    placeholder="127.0.0.1">
+                                    placeholder="e.g. 127.0.0.1">
                                 <p class="help-block">Please enter the host or path to the socket of your database server.</p>
                             </div>
                         </div>
