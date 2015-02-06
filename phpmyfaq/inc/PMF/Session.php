@@ -394,7 +394,7 @@ class PMF_Session
 
         $query = sprintf("
             SELECT
-                sid, time
+                time
             FROM
                 %sfaqsessions
             WHERE
@@ -413,11 +413,9 @@ class PMF_Session
 
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $stats[date('Y-m-d', $date)] = 0;
-            foreach ($visits as $visitDate) {
-                if (date('Y-m-d', $date) === date('Y-m-d', $visitDate)) {
-                    $stats[date('Y-m-d', $date)]++;
-                }
-            }
+        }
+        foreach ($visits as $visitDate) {
+            $stats[date('Y-m-d', $visitDate)]++;
         }
 
         return $stats;
