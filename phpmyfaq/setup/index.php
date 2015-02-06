@@ -381,8 +381,8 @@ if (!isset($_POST["sql_server"]) && !isset($_POST["sql_user"]) && !isset($_POST[
         <div class="row">
             <p class="alert alert-info text-center">
                 <i class="fa fa-info-circle fa-fw"></i>
-                Your password will be saved with a <strong><?php echo PMF_ENCRYPTION_TYPE; ?></strong>
-                encryption. You can change the encryption type for passwords in <em>config/constants.php</em>.
+                Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE; ?></strong>. You can
+                change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
         </div>
         </form>
