@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($permission['export']) {
+if ($user->perm->checkRight($user->getUserId(), 'export')) {
 
     //
     // GET Parameters Syntax:
