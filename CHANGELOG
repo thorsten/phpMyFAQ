@@ -37,6 +37,13 @@ Version 2.9.0-alpha3 - 2015-03-
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 
+Version 2.8.20 - 2015-02-07
+- added experimental support for HHVM 3.4.2+
+- added experimental support for PHP 7.0
+- updated Brazilian Portuguese translation
+- updated French translation (Olivier Binet)
+- fixed some minor bugs (Thorsten)
+
 Version 2.8.19 - 2014-12-31
 - fixed some minor bugs (Thorsten)
 
