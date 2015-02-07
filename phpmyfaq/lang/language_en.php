@@ -1129,7 +1129,7 @@ $PMF_LANG["msg2answerFAQ"] = "Answered";
 $PMF_LANG["headerUserControlPanel"] = 'User Control Panel';
 
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
-$PMF_LANG["rememberMe"] = 'Remember me';
+$PMF_LANG["rememberMe"] = 'Log me on automatically next time';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
 
 // added v2.8.0-alpha2 - 2012-07-07 by Anatoliy

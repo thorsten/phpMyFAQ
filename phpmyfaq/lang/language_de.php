@@ -1084,7 +1084,7 @@ $PMF_LANG["msg2answerFAQ"] = "Answered";
 $PMF_LANG['headerUserControlPanel'] = 'Persönlicher Bereich';
 
 // added v2.8.0-alpha2 - 2012-03-15 by Thorsten
-$PMF_LANG['rememberMe'] = 'Passwort merken';
+$PMF_LANG['rememberMe'] = 'Beim nächsten Mal automatisch einloggen';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-Sites";
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
