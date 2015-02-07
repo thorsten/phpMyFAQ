@@ -104,7 +104,7 @@ class PMF_Search
      * @param string  $searchTerm   Text/Number (solution id)
      * @param boolean $allLanguages true to search over all languages
      *
-     * @return  array
+     * @return array
      */
     public function search($searchTerm, $allLanguages = true)
     {
@@ -128,7 +128,7 @@ class PMF_Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
-            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
+            $selectedLanguage = [$fdTable . '.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'"];
             $condition        = array_merge($selectedLanguage, $condition);
         }
         
@@ -147,9 +147,9 @@ class PMF_Search
                ->setConditions($condition);
         
         if (is_numeric($searchTerm)) {
-            $search->setMatchingColumns(array($fdTable . '.solution_id'));
+            $search->setMatchingColumns([$fdTable . '.solution_id']);
         } else {
-            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
+            $search->setMatchingColumns([$fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords']);
         }
         
         $result = $search->search($searchTerm);

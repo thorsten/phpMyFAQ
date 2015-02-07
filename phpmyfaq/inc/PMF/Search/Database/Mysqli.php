@@ -50,9 +50,9 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
      *
      * @param string $searchTerm Search term
      *
-     * @return resource
-     *
      * @throws PMF_Search_Exception
+     *
+     * @return mysqli_result
      */
     public function search($searchTerm)
     {
@@ -142,12 +142,15 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         $resultColumns = '';
 
         foreach ($this->matchingColumns as $matchColumn) {
-            $column = sprintf("MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
+
+            $column = sprintf(
+                "MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
                 $matchColumn,
                 $this->_config->getDb()->escape($searchTerm),
-                substr(strstr($matchColumn, '.'), 1));
+                substr(strstr($matchColumn, '.'), 1)
+            );
 
-                $resultColumns .= ', ' . $column;
+            $resultColumns .= ', ' . $column;
         }
 
         return $resultColumns;
@@ -175,11 +178,11 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             if (empty($order)) {
                 $order .= $string;
             } else {
-                $order .= '+' . $string;
+                $order .= ' + ' . $string;
             }
             $count--;
         }
 
-        return $order;
+        return '(' . $order . ')';
     }
 }

@@ -111,11 +111,11 @@ class PMF_Search_Resultset
         $this->setResultset($resultSet);
 
         $duplicateResults = [];
-        $currentUserId    = $this->user->getUserId();
+
         if ('medium' === $this->_config->get('security.permLevel')) {
-            $currentGroupIds = $this->user->perm->getUserGroups($currentUserId);
+            $currentGroupIds = $this->user->perm->getUserGroups($this->user->getUserId());
         } else {
-            $currentGroupIds = array(-1);
+            $currentGroupIds = [-1];
         }
 
         foreach ($this->rawResultset as $result) {
@@ -145,7 +145,9 @@ class PMF_Search_Resultset
                 ++$duplicateResults[$result->id];
                 continue;
             }
-            
+
+            $result->score = $this->getScore($result);
+
             if ($permission) {
                 $this->reviewedResultset[] = $result;
             }
@@ -196,5 +198,28 @@ class PMF_Search_Resultset
     public function getNumberOfResults()
     {
         return $this->numberOfResults;
+    }
+
+    /**
+     * @param stdClass $object
+     * @return float
+     */
+    public function getScore(stdClass $object)
+    {
+        $score = 0;
+
+        if (isset($object->relevance_thema)) {
+            $score += $object->relevance_thema;
+        }
+
+        if (isset($object->relevance_content)) {
+            $score += $object->relevance_thema;
+        }
+
+        if (isset($object->relevance_keywords)) {
+            $score += $object->relevance_keywords;
+        }
+
+        return round($score / 3 * 100);
     }
 }
