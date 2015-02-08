@@ -28,9 +28,12 @@ phpmyfaq/.htaccess
 
 # Third party PHP libraries
 phpmyfaq/inc/libs/phpseclib
-phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/inc/libs/swiftmailer
 phpmyfaq/inc/libs/Symfony
+phpmyfaq/inc/libs/tcpdf/config
+phpmyfaq/inc/libs/tcpdf/include
+phpmyfaq/inc/libs/tcpdf/*.php
+phpmyfaq/inc/libs/twitteroauth
 
 # Third party frontend libraries
 phpmyfaq/admin/assets/css/*

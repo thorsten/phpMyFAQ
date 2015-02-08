@@ -23,6 +23,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+
+define ('K_TCPDF_EXTERNAL_CONFIG', true);
+
 define('K_PATH_URL', '');
 
 /**
@@ -283,6 +286,9 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         parent::__construct(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 
         $this->setFontSubsetting(false);
+
+        // set image scale factor
+        $this->setImageScale(PDF_IMAGE_SCALE_RATIO);
 
         // Check on RTL
         if ('rtl' == $PMF_LANG['dir']) {
