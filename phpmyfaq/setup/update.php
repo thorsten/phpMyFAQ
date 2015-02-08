@@ -854,6 +854,15 @@ if ($step == 3) {
         }
     }
 
+    //
+    // UPDATES FROM 2.9.0-alpha3
+    //
+    if (version_compare($version, '2.9.0-alpha3', '<')) {
+
+        $faqConfig->add('main.customPdfHeader', '');
+        $faqConfig->add('main.customPdfFooter', '');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

@@ -1216,3 +1216,7 @@ $LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address')
 $LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
 $LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Password');
 $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Enable registration for visitors<br>(default: activated)');
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = array('area', 'Custom PDF Header (HTML allowed)');
+$LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allowed)');

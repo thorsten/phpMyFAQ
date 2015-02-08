@@ -1172,3 +1172,14 @@ $PMF_LANG["msgFinishSubmission"] = "Wenn keine der Vorschläge übereinstimmt, k
 $LANG_CONF["main.enableLinkVerification"] = array(0 => "checkbox", 1 => "Aktiviere automatischen Linkcheck<br>(Standard: aktiviert)");
 $LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Aktiviere Nutzer manuell<br>(Standard: aktiviert)');
 $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Erlaube Registrierung externer Besucher<br>(Standard: aktiviert)');
+
+// added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )
+$PMF_LANG['mailControlCenter'] = 'E-Mail Konfiguration';
+$LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Verwendung eines externen SMTP Server<br>(Standard: deaktiviert)');
+$LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Serveradresse');
+$LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'Username');
+$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Passwort');
+
+// added v2.9.0-alpha3 - 2015-02-08 by Thorsten
+$LANG_CONF['main.customPdfHeader'] = array('area', 'Eigener PDF Header (HTML erlaubt)');
+$LANG_CONF['main.customPdfFooter'] = array('area', 'Eigener PDF Footer (HTML erlaubt)');

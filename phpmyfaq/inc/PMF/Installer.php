@@ -307,6 +307,8 @@ class PMF_Installer
         'main.enableRssFeeds'                     => 'true',
         'main.enableGzipCompression'              => 'true',
         'main.enableLinkVerification'             => 'true',
+        'main.customPdfHeader'                    => '',
+        'main.customPdfHFooter'                   => '',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',
