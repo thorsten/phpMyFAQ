@@ -37,7 +37,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         $_SESSION['phpmyfaq_csrf_token'] === $csrfToken) {
 
         $checks = array(
-            'filter' => FILTER_SANITIZE_STRING,
+            'filter' => FILTER_UNSAFE_RAW,
             'flags'  => FILTER_REQUIRE_ARRAY
         );
         $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
@@ -46,10 +46,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         $oldConfigValues = $faqConfig->config;
 
         // Set the new values
-        $forbiddenValues = array('{', '}', '$');
+        $forbiddenValues = ['{', '}', '$'];
         $newConfigValues = [];
+        $escapeValues    = ['main.contactInformations', 'main.customPdfHeader', 'main.customPdfFooter'];
+
         foreach ($editData['edit'] as $key => $value) {
+            // Remove forbidden characters
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
+            // Escape some values
+            if (isset($escapeValues[$key])) {
+                $newConfigValues[$key] = PMF_String::htmlspecialchars($value, ENT_HTML5);
+            }
             $keyArray              = array_values(explode('.', $key));
             $newConfigClass        = array_shift($keyArray);
         }

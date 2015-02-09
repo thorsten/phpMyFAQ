@@ -275,6 +275,16 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     private $currentFont = 'dejavusans';
 
     /**
+     * @var string
+     */
+    private $customHeader;
+
+    /**
+     * @var string
+     */
+    private $customFooter;
+
+    /**
      * Constructor
      *
      * @return PMF_Export_Pdf_Wrapper
@@ -340,7 +350,23 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     {
         $this->_config = $config;
     }
-    
+
+    /**
+     * Sets custom header
+     */
+    public function setCustomHeader()
+    {
+        $this->customHeader = html_entity_decode($this->_config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
+    }
+
+    /**
+     * Sets custom footer
+     */
+    public function setCustomFooter()
+    {
+        $this->customFooter = $this->_config->get('main.customPdfFooter');
+    }
+
     /**
      * The header of the PDF file
      *
@@ -348,18 +374,26 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
      */
     public function Header()
     {
+        // Set custom header and footer
+        $this->setCustomHeader();
+
         if (array_key_exists($this->category, $this->categories)) {
             $title = $this->categories[$this->category]['name'];
         } else {
             $title = '';
         }
-        
-        $title = html_entity_decode($title, ENT_QUOTES, 'utf-8');
-        
-        $this->SetTextColor(0,0,0);
+
+        $this->SetTextColor(0, 0, 0);
         $this->SetFont($this->currentFont, 'B', 18);
-        $this->MultiCell(0, 9, $title, 0, 'C', 0);        
-        $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
+
+        if (0 < PMF_String::strlen($this->customHeader)) {
+            $this->writeHTMLCell(0, 0, '', '', $this->customHeader);
+            $this->Ln();
+            $this->writeHTMLCell(0, 0, '', '', html_entity_decode($title, ENT_QUOTES, 'utf-8'), 0, 0, false, true, 'C');
+        } else {
+            $this->MultiCell(0, 10, html_entity_decode($title, ENT_QUOTES, 'utf-8'), 0, 'C', 0);
+            $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
+        }
     }
 
     /**
@@ -371,6 +405,9 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
     {
         global $PMF_LANG;
 
+        // Set custom footer
+        $this->setCustomFooter();
+
         $date = new PMF_Date($this->_config);
 
         $footer = sprintf(
@@ -380,7 +417,11 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
             $this->_config->get('main.administrationMail'),
             $date->format(date('Y-m-d H:i'))
         );
-        
+
+        if (0 < PMF_String::strlen($this->customFooter)) {
+            $this->writeHTMLCell(0, 0, '', '', $this->customFooter);
+        }
+
         $currentTextColor = $this->TextColor;
         $this->SetTextColor(0,0,0);
         $this->SetY(-25);
