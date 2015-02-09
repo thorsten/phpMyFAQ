@@ -1,9 +1,11 @@
-phpMyFAQ 2.8.20
+phpMyFAQ 2.8.21
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.21 - 2015-
 
 Version 2.8.20 - 2015-02-07
 - added experimental support for HHVM 3.4.2+
