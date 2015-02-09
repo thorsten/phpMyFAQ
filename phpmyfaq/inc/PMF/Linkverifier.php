@@ -42,7 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Linkverifier
 {
     /**
-     * Defines number of times linkverifier follows 302 response before failing.
+     * Defines number of times link verifier follows 302 response before failing.
      */
     const LINKVERIFIER_MAX_REDIRECT_COUNT = 10;
 
@@ -68,53 +68,52 @@ class PMF_Linkverifier
      */
     const LINKVERIFIER_AUTOMATIC_CALL_ON_EDIT_FAQ = false;
 
-    /* List of protocol and urls
+    /**
+     * List of protocol and urls
      *
-     * @var mixed
+     * @var array
      */
-    protected $urlpool = [];
+    private $urlpool = [];
 
-    /* List of prohibited prefixes and messages
+    /**
+     * List of prohibited prefixes and messages
      *
-     * @var mixed
+     * @var array
      */
-    protected $warnlists = [];
+    private $warnlists = [];
 
-    /* List of URLs not to probe
+    /**
+     * List of protocols we do not want to look at
      *
-     * @var mixed
+     * @var array
      */
-    protected $ignorelists = [];
+    private $invalidProtocols = [];
 
-    /* List of protocols we do not want to look at
+    /**
+     * Last verify results (we might use it later)
      *
-     * @var mixed
+     * @var array
      */
-    protected $invalidProtocols = [];
+    private $lastResult = [];
 
-    /* Last verify results (we might use it later)
+    /**
+     * List of hosts that are slow to resolve.
      *
-     * @var mixed
+     * @var array
      */
-    protected $lastResult = [];
-
-    /* List of hosts that are slow to resolve.
-     *
-     * @var mixed
-     */
-    protected $slow_hosts = [];
+    private $slowHosts = [];
 
     /**
      * User
      *
      * @var integer
      */
-    protected $user = null;
+    private $user = null;
 
     /**
      * @var PMF_Configuration
      */
-    private $_config = null;
+    private $config = null;
 
     /**
      * Constructor
@@ -128,12 +127,13 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        $this->_config = $config;
-        $this->user    = $user;
+        $this->config = $config;
+        $this->user   = $user;
 
         if (!extension_loaded('openssl')) {
-            $this->addIgnoreProtocol("https:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "https"));
+            $this->addIgnoreProtocol('https:', sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], 'https'));
         }
+
         $this->addIgnoreProtocol("ftp:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "ftp"));
         $this->addIgnoreProtocol("gopher:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "gopher"));
         $this->addIgnoreProtocol("mailto:", sprintf($PMF_LANG['ad_linkcheck_protocol_unsupported'], "mailto"));
@@ -157,20 +157,18 @@ class PMF_Linkverifier
     }
 
     /**
-     * Returns whether linkverifier is ready to verify URLs.
+     * Returns whether link verifier is ready to verify URLs.
      *
      * @return boolean true if ready to verify URLs, otherwise false
      */
     public function isReady()
     {
-        if ('' === $this->_config->get('main.referenceURL')) {
+        if ('' === $this->config->get('main.referenceURL')) {
             return false;
         }
 
         return true;
     }
-
-
 
     /**
      * Resets url pool for next batch of processing.
@@ -183,8 +181,8 @@ class PMF_Linkverifier
     }
 
     /**
-     * This function adds entry to the internal warnlists.
-     * Use this if you want to mark certain URLs unsable (like internal links of a dev-site).
+     * This function adds entry to the internal warn lists.
+     * Use this if you want to mark certain URLs unusable (like internal links of a dev-site).
      *
      * @param string $urlPrefix
      * @param string $message
@@ -379,7 +377,7 @@ class PMF_Linkverifier
         }
 
         // Check whether we tried the host before
-        if (isset($this->slow_hosts[$urlParts['host']])) {
+        if (isset($this->slowHosts[$urlParts['host']])) {
             return array(
                 false,
                 $redirectCount,
@@ -393,7 +391,7 @@ class PMF_Linkverifier
         // Check whether the hostname exists
         if (gethostbynamel($urlParts['host']) === false) {
             // mark this host too slow to verify
-            $this->slow_hosts[$urlParts['host']] = true;
+            $this->slowHosts[$urlParts['host']] = true;
             return array(
                 false,
                 $redirectCount,
@@ -414,7 +412,7 @@ class PMF_Linkverifier
         $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, self::LINKVERIFIER_CONNECT_TIMEOUT);
         if (!$fp) {
             // mark this host too slow to verify
-            $this->slow_hosts[$urlParts['host']] = true;
+            $this->slowHosts[$urlParts['host']] = true;
             return array(
                 false,
                 $redirectCount,
@@ -554,7 +552,7 @@ class PMF_Linkverifier
             $id,
             $artlang);
         
-        if ($this->_config->getDb()->query($query)) {
+        if ($this->config->getDb()->query($query)) {
             return true;
         } else {
             return false;
@@ -568,8 +566,8 @@ class PMF_Linkverifier
      */
     public function getURLValidateInterval()
     {
-        if ($this->_config->get('main.urlValidateInterval') != '') {
-            $requestTime = $_SERVER['REQUEST_TIME'] - $this->_config->get('main.urlValidateInterval');
+        if ($this->config->get('main.urlValidateInterval') != '') {
+            $requestTime = $_SERVER['REQUEST_TIME'] - $this->config->get('main.urlValidateInterval');
         } else {
             $requestTime = $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
         }
@@ -600,10 +598,10 @@ class PMF_Linkverifier
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
             $id,
-            $this->_config->getDb()->escape($artlang));
+            $this->config->getDb()->escape($artlang));
             
-        if ($result = $this->_config->getDb()->query($query)) {
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+        if ($result = $this->config->getDb()->query($query)) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $_linkState = $row->links_state;
                 if (trim($_linkState) == "") {
                     $_linkState = true;
@@ -724,12 +722,12 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        if ($this->_config->get('main.referenceURL') === '') {
+        if ($this->config->get('main.referenceURL') === '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
 
-        if (trim('' == $this->_config->get('main.referenceURL'))) {
+        if (trim('' == $this->config->get('main.referenceURL'))) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
@@ -741,7 +739,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parseString($contents);
-        $result = $this->VerifyURLs($this->_config->get('main.referenceURL'));
+        $result = $this->VerifyURLs($this->config->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
