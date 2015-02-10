@@ -102,7 +102,7 @@ tinyMCE.init({
     use_native_selects      : true,
     paste_remove_spans      : true,
     entity_encoding         : "raw",
-    extended_valid_elements : "code,video[*]",
+    extended_valid_elements : "code,video[*],audio[*],source[*]",
 
     // Ajax-based file manager
     file_browser_callback : "ajaxfilemanager",
