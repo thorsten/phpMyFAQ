@@ -217,8 +217,8 @@ class PMF_Linkverifier
 
     /**
      * This function converts relative uri into absolute uri using specific reference point.
-     * For example,
-     *   $relativeUri = "test/foo.html"
+     * For example:
+     *   $relativeUri  = "test/foo.html"
      *   $referenceUri = "http://example.com:8000/sample/index.php"
      * will generate "http://example.com:8000/sample/test/foo.html"
      *
@@ -229,16 +229,16 @@ class PMF_Linkverifier
      */
     protected function makeAbsoluteURL($relativeUri = '', $referenceUri = '')
     {
-        // If relativeuri is protocol we don't want to handle, don't process it.
-        foreach ($this->invalidProtocols as $_protocol => $_message) {
-            if (PMF_String::strpos($relativeUri, $_protocol) === 0) {
+        // If relative URI is protocol we don't want to handle, don't process it.
+        foreach ($this->invalidProtocols as $protocol => $message) {
+            if (PMF_String::strpos($relativeUri, $protocol) === 0) {
                 return $relativeUri;
             }
         }
 
-        // If relativeuri is absolute URI, don't process it.
-        foreach (array("http://", "https://") as $_protocol) {
-            if (PMF_String::strpos($relativeUri, $_protocol) === 0) {
+        // If relative URI is absolute URI, don't process it.
+        foreach (['http://', 'https://'] as $protocol) {
+            if (PMF_String::strpos($relativeUri, $protocol) === 0) {
                 return $relativeUri;
             }
         }
@@ -247,8 +247,8 @@ class PMF_Linkverifier
         $pathParts = parse_url($referenceUri);
 
         // If port is specified in reference uri, prefix with ":"
-        if (isset($pathParts['port']) && $pathParts['port'] != "") {
-            $pathParts['port'] = ":".$pathParts['port'];
+        if (isset($pathParts['port']) && $pathParts['port'] !== '') {
+            $pathParts['port'] = ':' . $pathParts['port'];
         } else {
             $pathParts['port'] = '';
         }
@@ -262,24 +262,31 @@ class PMF_Linkverifier
         }
 
         // Recombine urls
-        if ('/' === PMF_String::substr($relativeUri, 0, 1)) {
-            return $pathParts['scheme']."://".$pathParts['host'].$pathParts['port'].$relativeUri;
-        } else {
-            return $pathParts['scheme']."://".$pathParts['host'].$pathParts['port'].$pathParts['path']."/".$relativeUri;
+        if ('/' !== PMF_String::substr($relativeUri, 0, 1)) {
+            $relativeUri = $pathParts['path'] . '/' . $relativeUri;
         }
+
+        return sprintf(
+            '%s://%s%s%s',
+            $pathParts['scheme'],
+            $pathParts['host'],
+            $pathParts['port'],
+            $relativeUri
+        );
     }
 
     /**
-     * This function parses HTML and extracts urls
+     * This function parses HTML and extracts URLs and returns the number of
+     * URLs found.
      *
      * @param string $string String
      *
-     * @return mixed  false if URL is not found, otherwise returns the number of URLs found.
+     * @return integer
      */
     public function parseString($string = '')
     {
-        $urlcount = 0;
-        $types    = array('href', 'src', 'url');
+        $urlCount = 0;
+        $types    = ['href', 'src', 'url'];
         $matches  = [];
 
         // Clean $this->urlpool
@@ -289,11 +296,11 @@ class PMF_Linkverifier
             $sz = sizeof($matches[2]);
             for ($i = 0;$i < $sz; $i++) {
                 $this->urlpool[$type][] = $matches[2][$i];
-                $urlcount++;
+                $urlCount++;
             }
         }
 
-        return ($urlcount == 0) ? false : $urlcount;
+        return $urlCount;
     }
 
     /**
