@@ -33,10 +33,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <i class="fa fa-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=addcategory">
-                            <i class="fa fa-plus fa-fw"></i> <?php print $PMF_LANG['ad_kateg_add']; ?>
+                            <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
                         </a>
                         <a class="btn btn-info" href="?action=showcategory">
-                            <i class="fa fa-th fa-fw"></i> <?php print $PMF_LANG['ad_categ_show'];?>
+                            <i class="fa fa-th fa-fw"></i> <?php echo $PMF_LANG['ad_categ_show'];?>
                         </a>
                     </div>
                 </h2>
@@ -266,7 +266,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     $category->buildTree();
 
     $open = $lastCatId = $openDiv = 0;
-    print '<ul>';
+    echo '<ul>';
     foreach ($category->catTree as $id => $cat) {
 
         $indent = '';
@@ -281,7 +281,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
         }
 
-        if (0 === $cat['active']) {
+        if (isset($cat['active']) && 0 === $cat['active']) {
             $categoryName = '<em style="color: gray">' . $categoryName . '</em>';
         }
 
@@ -290,26 +290,26 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         if ($leveldiff > 1) {
 
-            print '</li>';
+            echo '</li>';
             for ($i = $leveldiff; $i > 1; $i--) {
-                print '</ul></div></li>';
+                echo '</ul></div></li>';
             }
         }
 
         if ($level < $open) {
             if (($level - $open) == -1) {
-                print '</li>';
+                echo '</li>';
             }
-            print '</ul></li>';
+            echo '</ul></li>';
         } elseif ($level == $open) {
-            print '</li>';
+            echo '</li>';
         }
 
         if ($level > $open) {
             printf('<div id="div_%d" style="display: none; filter: inherit;">', $lastCatId);
-            print '<ul><li>';
+            echo '<ul><li>';
         } else {
-            print '<li>';
+            echo '<li>';
         }
 
         if (count($category->getChildren($cat['id'])) != 0) {
@@ -384,7 +384,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     }
 
     if ($open > 0) {
-        print str_repeat("</li>\n\t</ul>\n\t", $open);
+        echo str_repeat("</li>\n\t</ul>\n\t", $open);
     }
 ?>
                     </li>
@@ -397,5 +397,5 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
 <?php
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
