@@ -426,7 +426,7 @@ class PMF_Link
             return 'https://';
         }
 
-        if (PMF_Link::isIISServer()) {
+        if (!PMF_Link::isIISServer()) {
             // Apache, nginx, lighttpd
             if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
                 return 'https://';
