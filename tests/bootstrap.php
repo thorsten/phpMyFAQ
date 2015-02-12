@@ -28,6 +28,7 @@ error_reporting(E_ALL | E_STRICT);
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/config');
 define('PMF_TEST_DIR', __DIR__);
+define('DEBUG', false);
 
 require PMF_CONFIG_DIR . '/database.php';
 require PMF_CONFIG_DIR . '/constants.php';

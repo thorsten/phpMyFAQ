@@ -29,6 +29,7 @@ require_once __DIR__ . '/Configuration/PMF_ConfigurationTest.php';
 require_once __DIR__ . '/Helper/PMF_Helper_AdministrationTest.php';
 require_once __DIR__ . '/Instance/PMF_Instance_ClientTest.php';
 require_once __DIR__ . '/Link/PMF_LinkTest.php';
+require_once __DIR__ . '/Linkverifier/PMF_LinkverifierTest.php';
 require_once __DIR__ . '/Search/PMF_Search_DatabaseTest.php';
 require_once __DIR__ . '/Search/PMF_Search_FactoryTest.php';
 require_once __DIR__ . '/Search/PMF_Search_ResultsetTest.php';
@@ -55,6 +56,7 @@ class AllTests
         $suite->addTestSuite('PMF_Helper_AdministrationTest');
         $suite->addTestSuite('PMF_Instance_ClientTest');
         $suite->addTestSuite('PMF_LinkTest');
+        $suite->addTestSuite('PMF_LinkverifierTest');
         $suite->addTestSuite('PMF_Search_DatabaseTest');
         $suite->addTestSuite('PMF_Search_FactoryTest');
         $suite->addTestSuite('PMF_Search_ResultsetTest');

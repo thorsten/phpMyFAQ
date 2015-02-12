@@ -163,7 +163,7 @@ class PMF_Linkverifier
      */
     public function isReady()
     {
-        if ('' === $this->config->get('main.referenceURL')) {
+        if (is_null($this->config->get('main.referenceURL')) || '' !== $this->config->get('main.referenceURL')) {
             return false;
         }
 
@@ -286,7 +286,7 @@ class PMF_Linkverifier
     public function parseString($string = '')
     {
         $urlCount = 0;
-        $types    = ['href', 'src', 'url'];
+        $types    = ['href', 'src'];
         $matches  = [];
 
         // Clean $this->urlpool
