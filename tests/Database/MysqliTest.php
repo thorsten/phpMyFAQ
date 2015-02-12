@@ -17,8 +17,6 @@
  * @since     2010-01-03
  */
 
-require_once 'AbstractTest.php';
-
 /**
  * Database_MysqlTest
  *

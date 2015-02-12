@@ -17,10 +17,6 @@
  * @since     2010-01-03
  */
 
-// include PHPUnit
-require_once __DIR__ . '/../../vendor/phpunit/dbunit/PHPUnit/Extensions/Database/TestCase.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Db.php';
-
 /**
  * Database_AbstractTest
  *

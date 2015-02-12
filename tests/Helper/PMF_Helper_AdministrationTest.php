@@ -23,8 +23,6 @@
  * @since     2014-08-31
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Helper/Administration.php';
-
 /**
  * PMF_Helper_AdministrationTest
  *

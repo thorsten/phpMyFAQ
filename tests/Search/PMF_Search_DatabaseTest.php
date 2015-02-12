@@ -17,18 +17,6 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Interface.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Database.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Driver.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Exception.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Configuration.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Mbstring.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/UTF8ToLatinConvertable.php';
-
 /**
  * Category test case
  *

@@ -23,10 +23,6 @@ define('IS_VALID_PHPMYFAQ', null);
 date_default_timezone_set('Europe/Berlin');
 error_reporting(E_ALL | E_STRICT);
 
-// include PHPUnit
-require_once __DIR__ . '/../vendor/phpunit/phpunit/src/Framework/TestSuite.php';
-require_once __DIR__ . '/../vendor/phpunit/phpunit/src/TextUI/TestRunner.php';
-
 // include Testsuites
 require_once __DIR__ . '/Attachment/PMF_Attachment_Filesystem_File_VanillaTest.php';
 require_once __DIR__ . '/Configuration/PMF_ConfigurationTest.php';

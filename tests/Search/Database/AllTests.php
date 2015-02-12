@@ -17,13 +17,6 @@
  * @since     2010-01-03
  */
 
-// include PHPUnit
-require_once __DIR__ . '/../../../vendor/phpunit/phpunit/src/Framework/TestSuite.php';
-require_once __DIR__ . '/../../../vendor/phpunit/phpunit/src/TextUI/TestRunner.php';
-
-require_once 'PMF_Search_Database_MysqliTest.php';
-require_once 'PMF_Search_Database_PgsqlTest.php';
-
 /**
  * AllTests
  *
@@ -40,10 +33,7 @@ class PMF_Search_Database_AllTests
     public static function suite()
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ Search Database');
-        
-        //$suite->addTestSuite('PMF_Search_Database_MysqlTest');
-        //$suite->addTestSuite('PMF_Search_Database_PgsqlTest');
-        
+
         return $suite;
     }
 }

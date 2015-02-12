@@ -18,9 +18,6 @@
  */
 
 require_once dirname(dirname(__DIR__)) . '/phpmyfaq/config/constants_ldap.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Configuration.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Driver.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/DB/Sqlite3.php';
 
 /**
  * Configuration_AllTests

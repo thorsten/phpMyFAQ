@@ -17,14 +17,6 @@
  * @since     2010-06-06
  */
 
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Configuration.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/Search/Database/Pgsql.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Driver.php';
-require_once dirname(dirname(dirname(__DIR__))) . '/phpmyfaq/inc/PMF/DB/Pgsql.php';
-
-require_once dirname(dirname(__DIR__)) . '/Database/PostgressTest.php';
-
 /**
  * Search test case
  *

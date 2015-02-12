@@ -17,13 +17,6 @@
  * @since     2010-07-06
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Database/Sqlite3.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Search/Factory.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Language.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Abstract.php';
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/String/Mbstring.php';
-
 /**
  * Category test case
  *
