@@ -318,56 +318,64 @@ class PMF_Linkverifier
         global $PMF_LANG;
 
         // If prequisites fail
-        if ($this->isReady() == false) {
-            return array(false, $redirectCount, $PMF_LANG['ad_linkcheck_openurl_notready']);
+        if (false === $this->isReady()) {
+            return [false, $redirectCount, $PMF_LANG['ad_linkcheck_openurl_notready']];
         }
 
         // Recursing too much ?
         if (($redirectCount >= self::LINKVERIFIER_MAX_REDIRECT_COUNT) || ($url == $redirect)) {
-            return array(
+            return [
                 false,
                 $redirectCount,
                 sprintf(
                     $PMF_LANG['ad_linkcheck_openurl_maxredirect'],
                     self::LINKVERIFIER_MAX_REDIRECT_COUNT
                 )
-            );
+            ];
         }
 
         // If destination is blank, fail.
-        if (trim($url) == "") {
-            return array(false, $redirectCount, $PMF_LANG['ad_linkcheck_openurl_urlisblank']);
+        if ('' === trim($url)) {
+            return [false, $redirectCount, $PMF_LANG['ad_linkcheck_openurl_urlisblank']];
         }
 
-        if ($redirect != "") {
+        if ('' !== $redirect) {
             $url = $this->makeAbsoluteURL($redirect, $url);
         }
 
         // parse URL
+        $defaultParts = [
+            'scheme'   => 'http',
+            'host'     => $_SERVER['HTTP_HOST'],
+            'user'     => '',
+            'pass'     => '',
+            'path'     => '/',
+            'query'    => '',
+            'fragment' => ''
+        ];
         $urlParts = @parse_url($url);
-        foreach(array(
-                    'scheme' => 'http',
-                    'host' => $_SERVER['HTTP_HOST'],
-                    'user' => '',
-                    'pass' => '',
-                    'path' => '/',
-                    'query' => '',
-                    'fragment' => '') as $_key => $_value) {
-            if (!(isset($urlParts[$_key]))) {
-                $urlParts[$_key] = $_value;
+        foreach ($defaultParts as $key => $value) {
+            if (!(isset($urlParts[$key]))) {
+                $urlParts[$key] = $value;
             }
         }
 
         if (!(isset($urlParts['port']))) {
             switch ($urlParts['scheme']) {
-                case 'https': $urlParts['port'] = '443'; break;
-                case 'http': $urlParts['port'] = '80'; break;
-                default: $urlParts['port'] = '80'; break;
+                case 'https':
+                    $urlParts['port'] = 443;
+                    break;
+                case 'http':
+                    $urlParts['port'] = 80;
+                    break;
+                default:
+                    $urlParts['port'] = 80;
+                    break;
             }
         }
 
         // Hack: fix any unsafe space chars in any component of the path to avoid HTTP 400 status during HEAD crawling
-        if ($urlParts['path'] != '') {
+        if ('' !== $urlParts['path']) {
             $urlSubParts = explode('/', $urlParts['path']);
             for ($i = 0; $i < count($urlSubParts); $i++) {
                 $urlSubParts[$i] = str_replace(' ', '%20', $urlSubParts[$i]);
@@ -375,59 +383,61 @@ class PMF_Linkverifier
             $urlParts['path'] = implode('/', $urlSubParts);
         }
 
-        if ($urlParts['query'] != "") {
-            $urlParts['query'] = "?".$urlParts['query'];
+        if ('' !== $urlParts['query']) {
+            $urlParts['query'] = '?' . $urlParts['query'];
         }
 
-        if ($urlParts['fragment'] != "") {
-            $urlParts['fragment'] = "#".$urlParts['fragment'];
+        if ('' !== $urlParts['fragment']) {
+            $urlParts['fragment'] = '#' . $urlParts['fragment'];
         }
 
         // Check whether we tried the host before
         if (isset($this->slowHosts[$urlParts['host']])) {
-            return array(
+            return [
                 false,
                 $redirectCount,
                 sprintf(
                     $PMF_LANG['ad_linkcheck_openurl_tooslow'],
                     PMF_String::htmlspecialchars($urlParts['host'])
                 )
-            );
+            ];
         }
 
         // Check whether the hostname exists
         if (gethostbynamel($urlParts['host']) === false) {
             // mark this host too slow to verify
             $this->slowHosts[$urlParts['host']] = true;
-            return array(
+            return [
                 false,
                 $redirectCount,
                 sprintf(
                     $PMF_LANG['ad_linkcheck_openurl_nodns'],
                     PMF_String::htmlspecialchars($urlParts['host'])
                 )
-            );
+            ];
         }
 
-        $_response = "";
+        $_response = '';
+
         // open socket for remote server with timeout (default: 5secs)
-        // PHP 4.3.0+: when compiled w/ OpenSSL support, fsockopen can connect to the remote host using SSL
         $_host = $urlParts['host'];
         if (@extension_loaded('openssl') && ('https' == $urlParts['scheme'])) {
-            $_host = 'ssl://'.$_host;
+            $_host = 'ssl://' . $_host;
         }
+
         $fp = @fsockopen($_host, $urlParts['port'], $errno, $errstr, self::LINKVERIFIER_CONNECT_TIMEOUT);
-        if (!$fp) {
+
+            if (!$fp) {
             // mark this host too slow to verify
             $this->slowHosts[$urlParts['host']] = true;
-            return array(
+            return [
                 false,
                 $redirectCount,
                 sprintf(
                     $PMF_LANG['ad_linkcheck_openurl_tooslow'],
                     PMF_String::htmlspecialchars($urlParts['host'])
                 )
-            );
+            ];
         }
 
         // wait for data with timeout (default: 10secs)
@@ -437,15 +447,16 @@ class PMF_Linkverifier
         // Be polite: let our probe declares itself
         fputs($fp, "User-Agent: phpMyFAQ Link Checker\r\n");
         fputs($fp, "\r\n");
-        while (!feof($fp)) { $_response .= fread($fp, 4096); }
+        while (!feof($fp)) {
+            $_response .= fread($fp, 4096);
+        }
         fclose($fp);
 
         // parse response
-        $code = 0;
-        $allowVerbs = 'n/a';
-        $httpStatusMsg = '';
-        $location = $url;
-        $response = explode("\r\n", $_response);
+        $code          = 0;
+        $allowVerbs    = 'n/a';
+        $location      = $url;
+        $response      = explode("\r\n", $_response);
         $httpStatusMsg = strip_tags($response[count($response) - 1]);
 
         foreach ($response as $_response) {
@@ -490,7 +501,7 @@ class PMF_Linkverifier
                 break;
         }
 
-        return array(false, $redirectCount, '');
+        return [false, $redirectCount, ''];
     }
 
     /**
@@ -500,7 +511,7 @@ class PMF_Linkverifier
      *
      * @return array
      */
-    public function VerifyURLs($referenceUri = '')
+    public function verifyURLs($referenceUri = '')
     {
         $this->lastResult = [];
 
@@ -746,7 +757,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parseString($contents);
-        $result = $this->VerifyURLs($this->config->get('main.referenceURL'));
+        $result = $this->verifyURLs($this->config->get('main.referenceURL'));
         $this->markEntry($id, $artlang);
 
         // If no URLs found
