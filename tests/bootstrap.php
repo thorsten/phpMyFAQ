@@ -31,6 +31,7 @@ define('PMF_TEST_DIR', __DIR__);
 define('DEBUG', false);
 
 require PMF_CONFIG_DIR . '/constants.php';
+require PMF_CONFIG_DIR . '/constants_ldap.php';
 
 /**
  * The include directory

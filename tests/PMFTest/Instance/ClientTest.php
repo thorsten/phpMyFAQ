@@ -28,7 +28,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
-class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
+class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
 {
     private $dbHandle;
     private $PMF_Filesystem;
@@ -50,7 +50,7 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->dbHandle = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
         $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Filesystem = new PMF_Filesystem(dirname(dirname(__DIR__)) . '/phpmyfaq');
+        $this->PMF_Filesystem = new PMF_Filesystem(PMF_ROOT_DIR);
 
         $this->PMF_Instance = new PMF_Instance($this->PMF_Configuration);
         $this->PMF_Instance_Client = new PMF_Instance_Client($this->PMF_Configuration);
@@ -64,12 +64,12 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
     protected function tearDown ()
     {
         $this->PMF_Instance_Client = null;
-        @unlink(__DIR__ . '/constants.test.php');
-        @unlink(__DIR__ . '/constants_ldap.test.php');
+        @unlink(PMF_TEST_DIR . '/constants.test.php');
+        @unlink(PMF_TEST_DIR . '/constants_ldap.test.php');
         
-        if (is_dir(__DIR__ . '/assets/template/default/')) {
+        if (is_dir(PMF_TEST_DIR . '/assets/template/default/')) {
             $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator(__DIR__ . '/assets/template/default/'),
+                new RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/template/default/'),
                 RecursiveIteratorIterator::SELF_FIRST
             );
             foreach ($files as $file) {
@@ -82,24 +82,24 @@ class PMF_Instance_ClientTest extends PHPUnit_Framework_TestCase
 
     public function testCopyConstantsFile()
     {
-        $return = $this->PMF_Instance_Client->copyConstantsFile(__DIR__ . '/constants.test.php');
+        $return = $this->PMF_Instance_Client->copyConstantsFile(PMF_TEST_DIR . '/constants.test.php');
 
         $this->assertTrue($return);
-        $this->assertFileExists(__DIR__ . '/constants.test.php');
+        $this->assertFileExists(PMF_TEST_DIR . '/constants.test.php');
     }
 
     public function testCopyLdapConstantsFile()
     {
-        $return = $this->PMF_Instance_Client->copyLdapConstantsFile(__DIR__ . '/constants_ldap.test.php');
+        $return = $this->PMF_Instance_Client->copyLdapConstantsFile(PMF_TEST_DIR . '/constants_ldap.test.php');
 
         $this->assertTrue($return);
-        $this->assertFileExists(__DIR__ . '/constants_ldap.test.php');
+        $this->assertFileExists(PMF_TEST_DIR . '/constants_ldap.test.php');
     }
 
     public function testCopyTemplateFolder()
     {
-        $this->PMF_Instance_Client->copyTemplateFolder(__DIR__);
+        $this->PMF_Instance_Client->copyTemplateFolder(PMF_TEST_DIR);
 
-        $this->assertFileExists(__DIR__ . '/assets/template/default/index.tpl');
+        $this->assertFileExists(PMF_TEST_DIR . '/assets/template/default/index.tpl');
     }
 }

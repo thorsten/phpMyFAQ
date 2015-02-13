@@ -30,7 +30,7 @@ require_once dirname(dirname(__DIR__)) . '/phpmyfaq/config/constants_ldap.php';
  * @link      http://www.phpmyfaq.de
  * @since     2013-12-30
  */
-class PMF_ConfigurationTest extends PHPUnit_Framework_TestCase
+class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
 {
     private $pmfConfig;
     private $dbHandle;

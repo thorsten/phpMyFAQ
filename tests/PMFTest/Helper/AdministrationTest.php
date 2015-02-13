@@ -34,7 +34,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
  */
-class PMF_Helper_AdministrationTest extends PHPUnit_Framework_TestCase
+class PMFTest_Helper_AdministrationTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var PMF_Helper_Administration

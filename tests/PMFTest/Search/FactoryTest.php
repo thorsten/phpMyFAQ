@@ -28,7 +28,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
-class PMF_Search_FactoryTest extends PHPUnit_Framework_TestCase
+class PMFTest_Search_FactoryTest extends PHPUnit_Framework_TestCase
 {
     private $PMF_Configuration;
 

@@ -36,7 +36,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
  */
-class PMF_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestCase
+class PMFTest_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var PMF_Attachment_Filesystem_File
@@ -50,30 +50,30 @@ class PMF_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestC
     {
         parent::setUp();
 
-        if (!file_exists(dirname(__DIR__) . '/fixtures/path-to-delete/')) {
-            mkdir(dirname(__DIR__) . '/fixtures/path-to-delete/');
+        if (!file_exists(PMF_TEST_DIR . '/fixtures/path-to-delete/')) {
+            mkdir(PMF_TEST_DIR . '/fixtures/path-to-delete/');
         }
-        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz');
+        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
 
         $this->PMF_Attachment_Filesystem_File_Vanilla = new PMF_Attachment_Filesystem_File_Vanilla(
-            dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz'
+            PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz'
         );
     }
 
     public function testDelete()
     {
-        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar.baz');
+        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
 
         $this->assertTrue($this->PMF_Attachment_Filesystem_File_Vanilla->delete());
     }
 
     public function testDeleteDir()
     {
-        copy(dirname(__DIR__) . '/fixtures/path/foo.bar', dirname(__DIR__) . '/fixtures/path-to-delete/foo.bar');
+        copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar');
 
         $this->assertTrue(
             $this->PMF_Attachment_Filesystem_File_Vanilla->deleteDir(
-                dirname(__DIR__) . '/fixtures/path-to-delete/'
+                PMF_TEST_DIR . '/fixtures/path-to-delete/'
             )
         );
     }

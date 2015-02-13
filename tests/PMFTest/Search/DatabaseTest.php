@@ -28,7 +28,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-26
  */
-class PMF_Search_DatabaseTest extends PHPUnit_Framework_TestCase
+class PMFTest_Search_DatabaseTest extends PHPUnit_Framework_TestCase
 {
     private $PMF_Search_Database;
 

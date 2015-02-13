@@ -20,20 +20,6 @@
 // Define the named constant used as a check by any included PHP file
 define('IS_VALID_PHPMYFAQ', null);
 
-date_default_timezone_set('Europe/Berlin');
-error_reporting(E_ALL | E_STRICT);
-
-// include Testsuites
-require_once __DIR__ . '/Attachment/PMF_Attachment_Filesystem_File_VanillaTest.php';
-require_once __DIR__ . '/Configuration/PMF_ConfigurationTest.php';
-require_once __DIR__ . '/Helper/PMF_Helper_AdministrationTest.php';
-require_once __DIR__ . '/Instance/PMF_Instance_ClientTest.php';
-require_once __DIR__ . '/Link/PMF_LinkTest.php';
-require_once __DIR__ . '/Linkverifier/PMF_LinkverifierTest.php';
-require_once __DIR__ . '/Search/PMF_Search_DatabaseTest.php';
-require_once __DIR__ . '/Search/PMF_Search_FactoryTest.php';
-require_once __DIR__ . '/Search/PMF_Search_ResultsetTest.php';
-
 /**
  * AllTests
  *
@@ -51,15 +37,15 @@ class AllTests
     {
         $suite = new PHPUnit_Framework_TestSuite('phpMyFAQ AllTests');
 
-        $suite->addTestSuite('PMF_Attachment_Filesystem_File_VanillaTest');
-        $suite->addTestSuite('PMF_ConfigurationTest');
-        $suite->addTestSuite('PMF_Helper_AdministrationTest');
-        $suite->addTestSuite('PMF_Instance_ClientTest');
-        $suite->addTestSuite('PMF_LinkTest');
-        $suite->addTestSuite('PMF_LinkverifierTest');
-        $suite->addTestSuite('PMF_Search_DatabaseTest');
-        $suite->addTestSuite('PMF_Search_FactoryTest');
-        $suite->addTestSuite('PMF_Search_ResultsetTest');
+        $suite->addTestSuite('PMFTest_Attachment_Filesystem_File_VanillaTest');
+        $suite->addTestSuite('PMFTest_ConfigurationTest');
+        $suite->addTestSuite('PMFTest_Helper_AdministrationTest');
+        $suite->addTestSuite('PMFTest_Instance_ClientTest');
+        $suite->addTestSuite('PMFTest_LinkTest');
+        $suite->addTestSuite('PMFTest_LinkverifierTest');
+        $suite->addTestSuite('PMFTest_Search_DatabaseTest');
+        $suite->addTestSuite('PMFTest_Search_FactoryTest');
+        $suite->addTestSuite('PMFTest_Search_ResultsetTest');
         
         return $suite;
     }

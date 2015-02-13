@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Link
+ * Test case for PMF_Search_Resultset
  *
  * PHP Version 5.4
  *
@@ -11,28 +11,30 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2012-03-29
+ * @since     2010-07-24
  */
 
 /**
- * PMF_LinkTest
+ * Category test case
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2012-03-29
+ * @since     2010-07-24
  */
-class PMF_LinkTest extends PHPUnit_Framework_TestCase
+class PMFTest_Search_ResultsetTest extends PHPUnit_Framework_TestCase
 {
-    private $dbHandle;
-    private $PMF_Link;
+    private $PMF_Search_Resultset;
+
     private $PMF_Configuration;
+
+    private $dbHandle;
 
     /**
      * Prepares the environment before running a test.
@@ -40,29 +42,32 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
     protected function setUp ()
     {
         parent::setUp();
-
+        
         PMF_String::init('en');
 
-        $_SERVER['HTTP_HOST'] = 'faq.example.org';
-
-        $this->dbHandle = new PMF_DB_Sqlite3();
+        $this->dbHandle          = new PMF_DB_Sqlite3();
         $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
-        $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->PMF_Configuration);
-    }
 
+        $userMock = $this->getMockBuilder('PMF_User')->disableOriginalConstructor()->getMock();
+        $faqMock  = $this->getMockBuilder('PMF_Faq')->disableOriginalConstructor()->getMock();
+        
+        $this->PMF_Search_Resultset = new PMF_Search_Resultset($userMock, $faqMock, $this->PMF_Configuration);
+    }
+    
     /**
      * Cleans up the environment after running a test.
      */
     protected function tearDown ()
     {
-        $this->PMF_Link = null;
+        $this->PMF_Search_Resultset = null;
         parent::tearDown();
     }
 
-    public function testGetSystemScheme()
+    public function testSetAndGetNumberOfResults()
     {
-        $this->assertEquals('https://', $this->PMF_Link->getSystemScheme());
+        $this->PMF_Search_Resultset->setNumberOfResults(array(1,2));
+        $this->assertEquals($this->PMF_Search_Resultset->getNumberOfResults(), 2);
+        $this->PMF_Search_Resultset->setNumberOfResults(array());
+        $this->assertEquals($this->PMF_Search_Resultset->getNumberOfResults(), 0);
     }
-
 }

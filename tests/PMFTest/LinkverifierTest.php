@@ -28,7 +28,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
-class PMF_LinkverifierTest extends PHPUnit_Framework_TestCase
+class PMFTest_LinkverifierTest extends PHPUnit_Framework_TestCase
 {
     /** @var PMF_DB_Sqlite3  */
     private $dbHandle;
