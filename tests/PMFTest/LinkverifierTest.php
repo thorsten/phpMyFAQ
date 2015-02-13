@@ -68,11 +68,30 @@ class PMFTest_LinkverifierTest extends PHPUnit_Framework_TestCase
         parent::tearDown();
     }
 
+    /**
+     * Tests isReady()
+     */
     public function testIsReady()
     {
         $this->assertFalse($this->linkVerifier->isReady());
     }
 
+    /**
+     * Tests addIgnoreProtocol()
+     */
+    public function testAddIgnoreProtocol()
+    {
+        $class  = new ReflectionClass('PMF_Linkverifier');
+        $method = $class->getMethod('addIgnoreProtocol');
+        $method->setAccessible(true);
+
+        $this->assertFalse($method->invokeArgs($this->linkVerifier, ['']));
+        $this->assertTrue($method->invokeArgs($this->linkVerifier, ['ftp:']));
+    }
+
+    /**
+     * Tests parseString()
+     */
     public function testParseString()
     {
         $html = '<a href="http://www.example.org">Test</a>';

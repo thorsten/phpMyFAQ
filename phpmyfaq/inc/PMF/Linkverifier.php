@@ -76,13 +76,6 @@ class PMF_Linkverifier
     private $urlpool = [];
 
     /**
-     * List of prohibited prefixes and messages
-     *
-     * @var array
-     */
-    private $warnlists = [];
-
-    /**
      * List of protocols we do not want to look at
      *
      * @var array
@@ -181,25 +174,7 @@ class PMF_Linkverifier
     }
 
     /**
-     * This function adds entry to the internal warn lists.
-     * Use this if you want to mark certain URLs unusable (like internal links of a dev-site).
-     *
-     * @param string $urlPrefix
-     * @param string $message
-     *
-     * @return boolean true, if successfully added, otherwise false
-     */
-    protected function addWarnlist($urlPrefix = '', $message = '')
-    {
-        if ('' !== $urlPrefix) {
-            $this->warnlists[$urlPrefix] = $message;
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    /**
+     * Adds protocols we want to ignore to an array, executed in constructor
      * @param string $protocol
      * @param string $message
      *
