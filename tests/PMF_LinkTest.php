@@ -37,9 +37,14 @@ require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Link.php';
  */
 class PMF_LinkTest extends PHPUnit_Framework_TestCase
 {
+    /** @var PMF_DB_Sqlite3 */
     private $dbHandle;
-    private $PMF_Link;
-    private $PMF_Configuration;
+
+    /** @var PMF_Link */
+    private $link;
+
+    /** @var PMF_Configuration */
+    private $config;
 
     /**
      * Prepares the environment before running a test.
@@ -53,9 +58,8 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
         $this->dbHandle = new PMF_DB_Sqlite3();
-        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
-        $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->PMF_Configuration);
+        $this->config   = new PMF_Configuration($this->dbHandle);
+        $this->config->config['security.useSslOnly'] = 'true';
     }
 
     /**
@@ -63,13 +67,123 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {
-        $this->PMF_Link = null;
+        $this->link = null;
         parent::tearDown();
     }
 
-    public function testGetSystemScheme()
+    /**
+     * Tests isHomeIndex()
+     */
+    public function testisHomeIndex()
     {
-        $this->assertEquals('https://', $this->PMF_Link->getSystemScheme());
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('isHomeIndex');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertFalse($method->invokeArgs($this->link, []));
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/index.php', $this->config);
+        $this->assertTrue($method->invokeArgs($this->link, []));
     }
 
+    /**
+     * Tests isInternalReference()
+     */
+    public function testisInternalReference()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('isInternalReference');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertFalse($method->invokeArgs($this->link, []));
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->config);
+        $this->assertFalse($method->invokeArgs($this->link, []));
+
+        $this->link = new PMF_Link('#foobar', $this->config);
+        $this->assertTrue($method->invokeArgs($this->link, []));
+    }
+
+    /**
+     * Tests isSystemLink()
+     */
+    public function testIsSystemLink()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('isSystemLink');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertTrue($method->invokeArgs($this->link, []));
+    }
+
+    /**
+     * tests hasScheme()
+     */
+    public function testHasScheme()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('hasScheme');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertTrue($method->invokeArgs($this->link, []));
+
+        $this->link = new PMF_Link('faq.example.org/my-test-faq/', $this->config);
+        $this->assertFalse($method->invokeArgs($this->link, []));
+    }
+
+    /**
+     * Tests getSEOItemTitle()
+     */
+    public function testGetSEOItemTitle()
+    {
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+
+        $this->assertEquals(
+            'hd-ready', $this->link->getSEOItemTitle('HD Ready')
+        );
+        $this->assertEquals(
+            'hd-ready', $this->link->getSEOItemTitle('HD Ready                     ')
+        );
+        $this->assertEquals(
+            'hd_ready', $this->link->getSEOItemTitle('HD-Ready')
+        );
+        $this->assertEquals(
+            'hd-ready', $this->link->getSEOItemTitle("HD\r\nReady")
+        );
+        $this->assertEquals(
+            'hd-ready', $this->link->getSEOItemTitle('{HD + Ready}')
+        );
+        $this->assertEquals(
+            'hd-raedy', $this->link->getSEOItemTitle('HD Rädy')
+        );
+    }
+
+    /**
+     * Tests getHttpGetParameters()
+     */
+    public function testGetHttpGetParameters()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('getHttpGetParameters');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
+        $this->assertEquals(['foo' => 'bar'], $method->invokeArgs($this->link, []));
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction', $this->config);
+        $this->assertEquals(['foo' => 'bar', 'action' => 'noaction'], $method->invokeArgs($this->link, []));
+    }
+
+    /**
+     * Tests getSystemScheme()
+     */
+    public function testGetSystemScheme()
+    {
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertEquals('https://', $this->link->getSystemScheme());
+    }
 }
