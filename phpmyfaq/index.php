@@ -589,11 +589,7 @@ if (isset($auth)) {
             $PMF_LANG['adminSection']
         );
     } else {
-        $adminSection = sprintf(
-            '<a href="%s">%s</a>',
-            $faqSystem->getSystemUri($faqConfig) . 'index.php?action=ucp',
-            $PMF_LANG['headerUserControlPanel']
-        );
+        $adminSection = '';
     }
 
     $tpl->parseBlock(
