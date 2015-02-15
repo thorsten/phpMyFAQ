@@ -81,10 +81,10 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, []));
+        $this->assertFalse($method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/index.php', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, []));
+        $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -97,13 +97,13 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, []));
+        $this->assertFalse($method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, []));
+        $this->assertFalse($method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('#foobar', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, []));
+        $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -116,7 +116,7 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, []));
+        $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -129,10 +129,10 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
-        $this->assertTrue($method->invokeArgs($this->link, []));
+        $this->assertTrue($method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('faq.example.org/my-test-faq/', $this->config);
-        $this->assertFalse($method->invokeArgs($this->link, []));
+        $this->assertFalse($method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -172,10 +172,10 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
-        $this->assertEquals(['foo' => 'bar'], $method->invokeArgs($this->link, []));
+        $this->assertEquals(['foo' => 'bar'], $method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction', $this->config);
-        $this->assertEquals(['foo' => 'bar', 'action' => 'noaction'], $method->invokeArgs($this->link, []));
+        $this->assertEquals(['foo' => 'bar', 'action' => 'noaction'], $method->invokeArgs($this->link, array()));
     }
 
     /**
