@@ -361,8 +361,13 @@ class PMF_Link
         $parameters = [];
 
         if (!empty($query)) {
+            // Check fragment
             if (isset($query['fragment']) ) {
                 $parameters[self::PMF_LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
+            }
+            // Check if query string contains &amp;
+            if (!strpos($query['main'], '&amp;')) {
+                $query['main'] = str_replace('&', '&amp;', $query['main']);
             }
             $params = explode(self::PMF_LINK_AMPERSAND, $query['main']);
             foreach ($params as $param) {

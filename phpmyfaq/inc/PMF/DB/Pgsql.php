@@ -283,30 +283,51 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Returns an array with all table names
      *
-     * @param string $prefix Table prefix
+     * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
+     *
+     * @param  string $prefix Table prefix
      *
      * @return array
      */
     public function getTableNames($prefix = '')
     {
-        // First, declare those tables that are referenced by others
-        $this->tableNames[] = $prefix.'faquser';
-
-        $query = sprintf(
-            "SELECT relname FROM pg_stat_user_tables WHERE relname LIKE '%sfaq%%' ORDER BY relname",
-            $prefix
+        return $this->tableNames[] = array(
+            $prefix . 'faqadminlog',
+            $prefix . 'faqattachment',
+            $prefix . 'faqattachment_file',
+            $prefix . 'faqcaptcha',
+            $prefix . 'faqcategories',
+            $prefix . 'faqcategory_group',
+            $prefix . 'faqcategory_user',
+            $prefix . 'faqcategoryrelations',
+            $prefix . 'faqchanges',
+            $prefix . 'faqcomments',
+            $prefix . 'faqconfig',
+            $prefix . 'faqdata',
+            $prefix . 'faqdata_group',
+            $prefix . 'faqdata_revisions',
+            $prefix . 'faqdata_tags',
+            $prefix . 'faqdata_user',
+            $prefix . 'faqglossary',
+            $prefix . 'faqgroup',
+            $prefix . 'faqgroup_right',
+            $prefix . 'faqinstances',
+            $prefix . 'faqinstances_config',
+            $prefix . 'faqnews',
+            $prefix . 'faqquestions',
+            $prefix . 'faqright',
+            $prefix . 'faqsearches',
+            $prefix . 'faqsessions',
+            $prefix . 'faqstopwords',
+            $prefix . 'faqtags',
+            $prefix . 'faquser',
+            $prefix . 'faquser_group',
+            $prefix . 'faquser_right',
+            $prefix . 'faquserdata',
+            $prefix . 'faquserlogin',
+            $prefix . 'faqvisits',
+            $prefix . 'faqvoting'
         );
-
-        $result = $this->query($query);
-        while ($row = $this->fetchObject($result)) {
-            foreach ($row as $tableName) {
-                if (!in_array($tableName, $this->tableNames)) {
-                    $this->tableNames[] = $tableName;
-                }
-            }
-        }
-
-        return $this->tableNames;
     }
 
     /**

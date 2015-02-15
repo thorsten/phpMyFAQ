@@ -40,6 +40,13 @@ class PMF_Instance_Database
     private $config;
 
     /**
+     * Database type
+     *
+     * @var string
+     */
+    private $dbType = null;
+
+    /**
      * DROP TABLE statements
      * 
      * @var array
