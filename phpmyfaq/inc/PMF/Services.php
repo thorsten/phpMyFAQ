@@ -160,7 +160,7 @@ class PMF_Services
         return sprintf(
             'https://twitter.com/share?url=%s&text=%s',
             urlencode($link->toString()),
-            $this->getQuestion() . urlencode(' | ' . $url)
+            $this->getQuestion() . urlencode(' | ' . $link->toString())
         );
     }
 
