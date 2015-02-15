@@ -361,8 +361,13 @@ class PMF_Link
         $parameters = array();
 
         if (!empty($query)) {
+            // Check fragment
             if (isset($query['fragment']) ) {
                 $parameters[self::PMF_LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
+            }
+            // Check if query string contains &amp;
+            if (!strpos($query['main'], '&amp;')) {
+                $query['main'] = str_replace('&', '&amp;', $query['main']);
             }
             $params = explode(self::PMF_LINK_AMPERSAND, $query['main']);
             foreach ($params as $param) {
@@ -426,7 +431,7 @@ class PMF_Link
             return 'https://';
         }
 
-        if (PMF_Link::isIISServer()) {
+        if (!PMF_Link::isIISServer()) {
             // Apache, nginx, lighttpd
             if (isset($_SERVER['HTTPS']) && 'on' === strtolower($_SERVER['HTTPS'])) {
                 return 'https://';

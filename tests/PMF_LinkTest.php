@@ -24,6 +24,8 @@ require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Exception.php';
 require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Configuration.php';
 require_once dirname(__DIR__) . '/phpmyfaq/inc/PMF/Link.php';
 
+define('DEBUG', false);
+
 /**
  * PMF_LinkTest
  *
@@ -176,6 +178,9 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction', $this->config);
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar&action=noaction', $this->config);
+        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
     }
 
     /**
@@ -195,11 +200,129 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
     }
 
     /**
+     * Tests getDefaultScheme()
+     */
+    public function testGetDefaultScheme()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('getDefaultScheme');
+        $method->setAccessible(true);
+
+        $this->config->config['security.useSslOnly'] = 'false';
+        $this->link = new PMF_Link('http://faq.example.org/my-test-faq/', $this->config);
+        $this->assertEquals('http://', $method->invokeArgs($this->link, array()));
+
+        $this->config->config['security.useSslOnly'] = 'true';
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->assertEquals('https://', $method->invokeArgs($this->link, array()));
+    }
+
+    /**
      * Tests getSystemScheme()
      */
     public function testGetSystemScheme()
     {
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertEquals('https://', $this->link->getSystemScheme());
+    }
+
+    /**
+     * Tests getSystemRelativeUri()
+     */
+    public function testGetSystemRelativeUri()
+    {
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+
+        $_SERVER['SCRIPT_NAME'] = '/my-test-faq/inc/Link.php';
+        $this->assertEquals('/my-test-faq', $this->link->getSystemRelativeUri());
+
+        $_SERVER['SCRIPT_NAME'] = '/my-test-faq/index.php';
+        $this->assertEquals('/my-test-faq', $this->link->getSystemRelativeUri('/index.php'));
+    }
+
+    /**
+     * Tests getSystemUri()
+     */
+    public function testGetSystemUri()
+    {
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+
+        $_SERVER['SCRIPT_NAME'] = '/my-test-faq/index.php';
+        $_SERVER['HTTP_HOST']   = 'faq.example.org';
+        $this->assertEquals('https://faq.example.org/my-test-faq/index.php', $this->link->getSystemUri());
+        $this->assertEquals('https://faq.example.org/my-test-faq/', $this->link->getSystemUri('index.php'));
+    }
+
+    /**
+     * Tests toHtmlAnchor()
+     */
+    public function testToHtmlAnchor()
+    {
+        $this->config->config['main.enableRewriteRules'] = true;
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link->class = 'pmf-foo';
+        $this->assertEquals(
+            '<a class="pmf-foo" href="https://faq.example.org/my-test-faq/">https://faq.example.org/my-test-faq/</a>',
+            $this->link->toHtmlAnchor()
+        );
+
+        $this->link->id = 'pmf-id';
+        $this->assertEquals(
+            '<a class="pmf-foo" id="pmf-id" href="https://faq.example.org/my-test-faq/">https://faq.example.org/my-test-faq/</a>',
+            $this->link->toHtmlAnchor()
+        );
+
+        $this->link->text = 'Foo FAQ';
+        $this->assertEquals(
+            '<a class="pmf-foo" id="pmf-id" href="https://faq.example.org/my-test-faq/">Foo FAQ</a>',
+            $this->link->toHtmlAnchor()
+        );
+    }
+
+    /**
+     * Tests appendSids()
+     */
+    public function testAppendSids()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('appendSids');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('http://faq.example.org/my-test-faq/', $this->config);
+        $actual     = $method->invokeArgs($this->link,array('http://faq.example.org/my-test-faq/', 'foo'));
+        $expected   = 'http://faq.example.org/my-test-faq/?SIDS=foo';
+
+        $this->assertEquals($expected,  $actual);
+    }
+
+    /**
+     * Tests toString()
+     */
+    public function testToString()
+    {
+        $this->config->config['main.enableRewriteRules'] = true;
+
+        $this->link = new PMF_Link('http://faq.example.org/my-test-faq/', $this->config);
+        $this->assertEquals(
+            'http://faq.example.org/my-test-faq/',
+            $this->link->toString()
+        );
+
+        $this->link = new PMF_Link('http://faq.example.org/my-test-faq/index.php?action=add', $this->config);
+        $this->assertEquals(
+            'http://faq.example.org/my-test-faq/addcontent.html',
+            $this->link->toString()
+        );
+
+        $this->link = new PMF_Link(
+            'http://faq.example.org/my-test-faq/index.php?action=artikel&cat=1&id=36&artlang=de',
+            $this->config
+        );
+        $this->link->itemTitle = 'HD Ready';
+        $this->assertEquals(
+            'http://faq.example.org/my-test-faq/content/1/36/de/hd-ready.html',
+            $this->link->toString()
+        );
     }
 }
