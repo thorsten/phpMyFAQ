@@ -172,10 +172,26 @@ class PMF_LinkTest extends PHPUnit_Framework_TestCase
         $method->setAccessible(true);
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
-        $this->assertEquals(['foo' => 'bar'], $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
 
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction', $this->config);
-        $this->assertEquals(['foo' => 'bar', 'action' => 'noaction'], $method->invokeArgs($this->link, array()));
+        $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
+    }
+
+    /**
+     * Tests getQuery()
+     */
+    public function testgetQuery()
+    {
+        $class  = new ReflectionClass('PMF_Link');
+        $method = $class->getMethod('getQuery');
+        $method->setAccessible(true);
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
+        $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, array()));
+
+        $this->link = new PMF_Link('https://faq.example.org/my-test-faq/?foo=bar#baz', $this->config);
+        $this->assertEquals(array('main' => 'foo=bar', 'fragment' => 'baz'), $method->invokeArgs($this->link, array()));
     }
 
     /**
