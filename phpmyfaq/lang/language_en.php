@@ -1220,3 +1220,4 @@ $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Enable registrati
 // added v2.9.0-alpha3 - 2015-02-08 by Thorsten
 $LANG_CONF['main.customPdfHeader'] = array('area', 'Custom PDF Header (HTML allowed)');
 $LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allowed)');
+$LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests<br>(default: disabled)');

@@ -1149,9 +1149,9 @@ $PMF_LANG["msgRelatedTags"] = 'Suchwort hinzufügen';
 $PMF_LANG["msgPopularTags"] = 'Beliebte Suchwörter';
 $LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Gesuchte Wörter hervorheben");
 $LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds <br>(Standard: aktiviert)");
-$LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Kommentare vom Gästen <br>(Standard: aktiviert)");
-$LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Fragen vom Gästen <br>(Standard: aktiviert)");
-$LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Erlaube neue FAQs vom Gästen <br>(Standard: aktiviert)");
+$LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Kommentare von Gästen <br>(Standard: aktiviert)");
+$LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Erlaube Fragen von Gästen <br>(Standard: aktiviert)");
+$LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Erlaube neue FAQs von Gästen <br>(Standard: aktiviert)");
 $PMF_LANG["ad_searchterm_del"] = 'Alle gespeicherten Suchwörter löschen';
 $LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Leere Kategorien verbergen <br>(Standard: deaktiviert)");
 $LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Suche nach Solution ID <br>(Standard: aktiviert)");
@@ -1183,3 +1183,4 @@ $LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Passwort');
 // added v2.9.0-alpha3 - 2015-02-08 by Thorsten
 $LANG_CONF['main.customPdfHeader'] = array('area', 'Eigener PDF Header (HTML erlaubt)');
 $LANG_CONF['main.customPdfFooter'] = array('area', 'Eigener PDF Footer (HTML erlaubt)');
+$LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Erlaube Downloads von Gästen<br>(Standard: deaktiviert)');

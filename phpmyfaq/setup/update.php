@@ -861,6 +861,7 @@ if ($step == 3) {
 
         $faqConfig->add('main.customPdfHeader', '');
         $faqConfig->add('main.customPdfFooter', '');
+        $faqConfig->add('records.allowDownloadsForGuests', 'false');
     }
 
     // Always the last step: Update version number

@@ -21,6 +21,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - added possibility to enable/disable gzip compression (Thorsten)
 - added possibility for inactive, hidden categories (Thorsten)
 - added possibility to disable registraton (Thorsten)
+- added possibility to allow anonymous downloads (Thorsten)
 - added tag management frontend (Thorsten)
 - added full support for SQLite3 (Peter Kehl)
 - added control for meta robots handling (Thorsten)
