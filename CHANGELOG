@@ -5,7 +5,12 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.21 - 2015-
+Version 2.8.21 - 2015-02-
+- improved usability in admin backend (Thorsten)
+- improved HTML5 support in editor (Thorsten)
+- improved code coverage (Thorsten)
+- updated Brazilian Portuguese translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.20 - 2015-02-07
 - added experimental support for HHVM 3.4.2+
