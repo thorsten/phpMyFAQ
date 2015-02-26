@@ -112,10 +112,12 @@ class PMF_Search_Database_Mysql extends PMF_Search_Database
                     $this->getJoinedTable(),
                     $this->getJoinedColumns(),
                     $this->getMatchClause($searchTerm),
-                    $this->getConditions());
+                    $this->getConditions()
+                );
+
+                $this->resultSet = $this->_config->getDb()->query($query);
             }
 
-            $this->resultSet = $this->_config->getDb()->query($query);
         }
         
         return $this->resultSet;
