@@ -75,7 +75,7 @@ abstract class PMF_String_Abstract
                . '[\xe1-\xec][\x80-\xbf]{2}|'
                . '\xed[\x80-\x9f][\x80-\xbf]|'
                . '[\xee-\xef][\x80-\xbf]{2}|'
-               . 'f0[\x90-\xbf][\x80-\xbf]{2}|'
+               . '\xf0[\x90-\xbf][\x80-\xbf]{2}|'
                . '[\xf1-\xf3][\x80-\xbf]{3}|'
                . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
 
