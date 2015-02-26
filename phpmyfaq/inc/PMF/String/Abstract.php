@@ -69,17 +69,20 @@ abstract class PMF_String_Abstract
      */
     public static function isUTF8($str)
     {
-        $regex = '/^([\x00-\x7f]|'
-               . '[\xc2-\xdf][\x80-\xbf]|'
-               . '\xe0[\xa0-\xbf][\x80-\xbf]|'
-               . '[\xe1-\xec][\x80-\xbf]{2}|'
-               . '\xed[\x80-\x9f][\x80-\xbf]|'
-               . '[\xee-\xef][\x80-\xbf]{2}|'
-               . '\xf0[\x90-\xbf][\x80-\xbf]{2}|'
-               . '[\xf1-\xf3][\x80-\xbf]{3}|'
-               . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
-
-        return preg_match($regex, $str) === 1;
+        if (function_exists('mb_detect_encoding')) {
+            return mb_detect_encoding($str, 'UTF-8', true);
+        } else {
+            $regex = '/^([\x00-\x7f]|'
+                   . '[\xc2-\xdf][\x80-\xbf]|'
+                   . '\xe0[\xa0-\xbf][\x80-\xbf]|'
+                   . '[\xe1-\xec][\x80-\xbf]{2}|'
+                   . '\xed[\x80-\x9f][\x80-\xbf]|'
+                   . '[\xee-\xef][\x80-\xbf]{2}|'
+                   . '\xf0[\x90-\xbf][\x80-\xbf]{2}|'
+                   . '[\xf1-\xf3][\x80-\xbf]{3}|'
+                   . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
+            return preg_match($regex, $str) === 1;
+        }
     }
         
     
