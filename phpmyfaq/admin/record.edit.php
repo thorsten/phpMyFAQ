@@ -216,9 +216,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     } else {
         printf('<i class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
     }
+
     // Revisions
     if ($user->perm->checkRight($user->getUserId(), "changebtrevs")) {
-
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) {
             ?>
@@ -247,8 +247,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         }
 
         if (isset($selectedRevisionId) &&
-                isset($faqData['revision_id']) &&
-                $selectedRevisionId != $faqData['revision_id']) {
+            isset($faqData['revision_id']) &&
+            $selectedRevisionId != $faqData['revision_id']) {
 
             $faq->language = $faqData['lang'];
             $faq->getRecord($faqData['id'], $selectedRevisionId, true);
@@ -499,6 +499,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             </div>
 
             <!-- sidebar -->
+<<<<<<< HEAD
             <div class="col-lg-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -539,6 +540,52 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             <button class="btn btn-info" type="reset">
                                 <?php echo $PMF_LANG["ad_gen_reset"]; ?>
                             </button>
+=======
+            <div class="well span3">
+                <!-- form actions -->
+                <fieldset>
+                    <?php if (0 !== $faqData['id'] && 'copyentry' !== $action) {
+                        $url = sprintf(
+                            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+                            $faqConfig->get('main.referenceURL'),
+                            $categories[0]['category_id'],
+                            $faqData['id'],
+                            $faqData['lang']
+                        );
+
+                        $link = new PMF_Link($url, $faqConfig);
+                        $link->itemTitle = $faqData['title'];
+                    ?>
+                    <div class="control-group text-center">
+                        <a class="btn btn-info" href="<?php echo $link->toString() ?>">
+                            <?php echo $PMF_LANG['msgSeeFAQinFrontend'] ?>
+                        </a>
+                    </div>
+                    <?php } ?>
+                    <div class="control-group">
+                        <label class="control-label" for="dateActualize"><?php echo $PMF_LANG["ad_entry_date"]; ?></label>
+                        <div class="controls">
+                            <label class="radio">
+                                <input type="radio" id="dateActualize" checked name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);">
+                                <?php echo $PMF_LANG['msgUpdateFaqDate']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" id="dateKeep" name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);">
+                                <?php echo $PMF_LANG['msgKeepFaqDate']; ?>
+                            </label>
+                            <label class="radio">
+                                <input type="radio" id="dateCustomize" name="recordDateHandling"
+                                       onchange="setRecordDate(this.id);">
+                                <?php echo $PMF_LANG['msgEditFaqDat']; ?>
+                            </label>
+                        </div>
+                    </div>
+                    <div id="recordDateInputContainer" class="control-group hide">
+                        <div class="controls">
+                            <input type="text" name="date" id="date" maxlength="16" value="" class="input-small">
+>>>>>>> e2d376fb6cdc319d96a9e8308fad4ce0c9da84f8
                         </div>
                         <?php endif; ?>
                     </div>

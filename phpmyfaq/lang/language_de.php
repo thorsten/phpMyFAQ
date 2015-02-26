@@ -1144,6 +1144,9 @@ $PMF_LANG["msgAboutThisNews"] = "Über diese Nachricht";
 // added v.2.8.1 - 2013-06-23 by Thorsten
 $PMF_LANG["msgAccessDenied"] = "Zugriff verweigert.";
 
+// added v.2.8.21 - 2015-02-17 by Thorsten
+$PMF_LANG['msgSeeFAQinFrontend'] = 'Zur FAQ im Frontend';
+
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
 $PMF_LANG["msgRelatedTags"] = 'Suchwort hinzufügen';
 $PMF_LANG["msgPopularTags"] = 'Beliebte Suchwörter';

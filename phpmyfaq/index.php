@@ -279,12 +279,12 @@ $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
     $title           = ' - ' . $faq->getRecordTitle($id);
     $keywords        = ',' . $faq->getRecordKeywords($id);
-    $metaDescription = $faq->getRecordPreview($id);
+    $metaDescription = str_replace('"', '', $faq->getRecordPreview($id));
 } else {
     $id              = '';
     $title           = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords        = '';
-    $metaDescription = $faqConfig->get('main.metaDescription');
+    $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
 }
 
 //
