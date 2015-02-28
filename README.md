@@ -1,11 +1,11 @@
-# README
+# phpMyFAQ 2.8
 
 [![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
 
 ## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
-various databases to store all data, PHP 5.3.3 (or higher) is needed in order to
+various databases to store all data, PHP 5.3.3 + or HHVM 3.4.2+ is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, flexible multi-user support
 with user and group based permissions on categories and records, a wiki-like
