@@ -1,4 +1,4 @@
-# README
+# phpMyFAQ 2.9
 
 [![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.9)](http://travis-ci.org/thorsten/phpMyFAQ)
 
