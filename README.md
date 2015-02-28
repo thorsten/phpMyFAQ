@@ -1,6 +1,8 @@
-# README
+# phpMyFAQ 3.0.0-dev
 
-[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
+[![Build Status 3.0.0-dev](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=master)](http://travis-ci.org/thorsten/phpMyFAQ)
+[![Build Status 2.9.x](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.9)](http://travis-ci.org/thorsten/phpMyFAQ)
+[![Build Status 2.8.x](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.8)](http://travis-ci.org/thorsten/phpMyFAQ)
 
 ## What is phpMyFAQ?
 
@@ -45,7 +47,7 @@ Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
-To run our unittest via PHPUnit v4, just execute this command on your CLI
+To run our unittest via PHPUnit v4.x, just execute this command on your CLI
 
     $ bin/phpunit
 
