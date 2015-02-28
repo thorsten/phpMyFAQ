@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.21 - 2015-02-
+Version 2.8.21 - 2015-02-28
 - added experimental rewrite rules for IIS7 and IIS8 (Thorsten)
 - improved usability in admin backend (Thorsten)
 - improved HTML5 support in editor (Thorsten)
