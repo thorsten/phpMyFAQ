@@ -60,16 +60,20 @@ $result = [];
 switch ($action) {
 
     case 'getVersion':
-        $result = array('version' => $faqConfig->get('main.currentVersion'));
+        $result = ['version' => $faqConfig->get('main.currentVersion')];
         break;
         
     case 'getApiVersion':
-        $result = array('apiVersion' => $faqConfig->get('main.currentApiVersion'));
+        $result = ['apiVersion' => $faqConfig->get('main.currentApiVersion')];
         break;
 
     case 'getCount':
         $faq    = new PMF_Faq($faqConfig);
-        $result = array('faqCount' => $faq->getNumberOfRecords($language));
+        $result = ['faqCount' => $faq->getNumberOfRecords($language)];
+        break;
+
+    case 'getDefaultLanguage':
+        $result = ['defaultLanguage' => $faqConfig->getLanguage()->getLanguage()];
         break;
 
     case 'search':
