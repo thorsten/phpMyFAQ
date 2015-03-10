@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.22 - 2015-03-
--
+- updated Brazilian Portuguese translation
 
 Version 2.8.21 - 2015-02-28
 - added experimental rewrite rules for IIS7 and IIS8 (Thorsten)
