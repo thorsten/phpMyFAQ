@@ -19,11 +19,11 @@
  */
 
 // Datamapping - in this example for an ADS
-$PMF_LDAP['ldap_mapping'] = array (
+$PMF_LDAP['ldap_mapping'] = [
     'name'     => 'cn',
     'username' => 'samAccountName',
     'mail'     => 'mail'
-);
+];
 
 // In a multi-domain environment, users may enter a prefix as domain, e.g. "DOMAIN\username"
 // If possible, you should use the Microsoft Global Catalog as LDAP-Server, which comes
@@ -32,14 +32,14 @@ $PMF_LDAP['ldap_use_domain_prefix'] = true;
 
 // LDAP-options to set
 // refer to the documentation of ldap_set_option() for information on available options
-$PMF_LDAP["ldap_options"] = array (
+$PMF_LDAP["ldap_options"] = [
     'LDAP_OPT_PROTOCOL_VERSION' => 3,
     'LDAP_OPT_REFERRALS'        => 0
-);
+];
 
 // Option for adding a check on LDAP groups
 // Default: false
-$PMF_LDAP['ldap_use_memberOf'] = false;
+$PMF_LDAP['ldap_use_memberOf']        = false;
 $PMF_LDAP['ldap_mapping']['memberOf'] = '';
 
 // Option for binding to LDAP directory using SASL
@@ -53,3 +53,8 @@ $PMF_LDAP['ldap_use_multiple_servers'] = false;
 // Option to use anonymous LDAP connection (without username and password)
 // Default: false
 $PMF_LDAP['ldap_use_anonymous_login'] = false;
+
+// Option to use dynamic user binding
+// Default: false
+$PMF_LDAP['ldap_use_dynamic_login'] = false;
+$PMF_LDAP['ldap_dynamic_login_attribute'] = 'uid';
