@@ -118,6 +118,17 @@ switch ($action) {
         $faq->getRecord($recordId);
         $result = $faq->faqRecord;
         break;
+
+    case 'getAttachmentsFromFaq':
+        $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
+        $result      = [];
+        foreach ($attachments as $attachment) {
+            $result[] = [
+                'filename' => $attachment->getFilename(),
+                'url'      => $faqConfig->get('main.referenceURL') . $attachment->buildUrl()
+            ];
+        }
+        break;
 }
 
 if( empty( $result ) ) $result = array( 'result' => false );

@@ -1007,13 +1007,17 @@ phpMyFAQ is developed using PHP and JavaScript.
 
 * * *
 
-**8.2. <a id="8.2"></a>rest/json API**
+### **8.2. <a id="8.2"></a>rest/json API**
 
-Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with other clients like the iPhone. phpMyFAQ includes a rest/json interface and offers an API for various services like fetching the phpMyFAQ version and the phpMyFAQ API version. Currently we implemented an interface for the search, the possibility to fetch all categories, all FAQ entries for a selected category and a FAQ entry.
+Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with other 
+clients like the iPhone. phpMyFAQ includes a rest/json interface and offers an API for various services like fetching 
+the phpMyFAQ version and the phpMyFAQ API version. Currently we implemented an interface for the search, the possibility 
+to fetch all categories, all FAQ entries for a selected category and a FAQ entry.
 
 You can call the resources with the following URIs:
 
 *   **getVersion()**
+
     This method returns the phpMyFAQ version number as string.
 
     *   http://www.example.org/phpmyfaq/api.php?action=getVersion (standard)
@@ -1021,108 +1025,131 @@ You can call the resources with the following URIs:
 
     The result will be a string value like this:
 
-    `
-        {"version":"2.8.0"}
-        `
+    <pre><code class="json">{"version":"2.9.0"}</code></pre>
+    
 *   **getApiVersion()**
+
     *   http://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)
     *   http://www.example.org/phpmyfaq/api/getApiVersion (rewrite rules enabled)
 
-    Returns the version of the API as an integer value. The version number is incremental and will be incremented every time the API changes.
+    Returns the version of the API as a string value. The version number is incremental and will be incremented every 
+    time the API changes.
 
-    `
-        {"apiVersion":1}
-        `
+    <pre><code class="json">{"apiVersion": "1.1"}</code></pre>
+    
+*   **getCount()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getCount (standard)
+    *   http://www.example.org/phpmyfaq/api/getCount (rewrite rules enabled)
+
+    Returns the number of FAQs as integer value.
+
+    <pre><code class="json">{"faqCount":42}</code></pre>
+    
+*   **getDefaultLanguage()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getDefaultLanguage (standard)
+    *   http://www.example.org/phpmyfaq/api/getDefaultLanguage (rewrite rules enabled)
+
+    Returns the default language as language code.
+
+    <pre><code class="json">{"defaultLanguage":"de"}</code></pre>
+    
 *   **search()**
+
     *   http://www.example.org/phpmyfaq/api.php?action=search&lang=en&q=phpMyFAQ (standard)
     *   http://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)
 
-    You have two variables, *lang* for the language and *q* for the search term. You'll get an JSON object as result with the follwing structure:
+    You have two variables, *lang* for the language and *q* for the search term. You'll get an JSON object as result 
+    with the following structure:
 
-    `
-    [
+    <pre><code class="json">[
         {
-        "id":"1",
-        "lang":"en",
-        "category_id":"15",
-        "question":"Why are you using phpMyFAQ?",
-        "answer":"Because it's cool!",
-        "link":"http://faq.phpmyfaq.de/index.php?action=artikel&cat=15&id=1&artlang=en"
+            "id":"1",
+            "lang":"en",
+            "category_id":"15",
+            "question":"Why are you using phpMyFAQ?",
+            "answer":"Because it's cool!",
+            "link":"http://faq.phpmyfaq.de/index.php?action=artikel&cat=15&id=1&artlang=en"
         },
         {
-        "id":"13",
-        "lang":"en",
-        "category_id":"5",
-        "question":"Why do you like phpMyFAQ?",
-        "answer":"Because it's cool!",
-        "link":"http://faq.phpmyfaq.de/index.php?action=artikel&cat=5&id=13&artlang=en"
+            "id":"13",
+            "lang":"en",
+            "category_id":"5",
+            "question":"Why do you like phpMyFAQ?",
+            "answer":"Because it's cool!",
+            "link":"http://faq.phpmyfaq.de/index.php?action=artikel&cat=5&id=13&artlang=en"
         }
-    ]
-        `
+    ]</code></pre>
+    
 *   **getCategories()**
+
     *   http://www.example.org/phpmyfaq/api.php?action=getCategories (standard)
     *   http://www.example.org/phpmyfaq/api/getCategories (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
-    `
-    [
+    <pre><code class="json">[
         {
-        "id":"1",
-        "lang":"en",
-        "parent_id":"0",
-        "name":"phpMyFAQ 2.6",
-        "description":"Everything about phpMyFAQ 2.6",
-        "user_id":"1",
-        "level":0
+            "id":"1",
+            "lang":"en",
+            "parent_id":"0",
+            "name":"phpMyFAQ 2.6",
+            "description":"Everything about phpMyFAQ 2.6",
+            "user_id":"1",
+            "level":0
         },
         {
-        "id":"2",
-        "lang":"en",
-        "parent_id":"0",
-        "name":"phpMyFAQ 2.8",
-        "description":"Everything about phpMyFAQ 2.8",
-        "user_id":"1",
-        "level":0}
-    ]
-        `
+            "id":"2",
+            "lang":"en",
+            "parent_id":"0",
+            "name":"phpMyFAQ 2.8",
+            "description":"Everything about phpMyFAQ 2.8",
+            "user_id":"1",
+            "level":0
+        }
+    ]</code></pre>
+    
 *   **getFaqs()**
+
     *   http://www.example.org/phpmyfaq/api.php?action=getFaqs&lang=en&categoryId=1 (standard)
     *   http://www.example.org/phpmyfaq/api/getFaqs/en/1 (rewrite rules enabled)
 
-    You have two variables, *lang* for the language and *categoryId* for the category id. You'll get an JSON object as result with the follwing structure:
+    You have two variables, *lang* for the language and *categoryId* for the category id. You'll get an JSON object as 
+    result with the follwing structure:
 
-    `
-    [
+    <pre><code class="json">[
         {
-        "record_id":"1",
-        "record_lang":"en",
-        "category_id":"1",
-        "record_title":"Is there life after death?",
-        "record_preview":"Maybe!",
-        "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
-        "record_date":"20091010175452",
-        "visits":"3"
+            "record_id":"1",
+            "record_lang":"en",
+            "category_id":"1",
+            "record_title":"Is there life after death?",
+            "record_preview":"Maybe!",
+            "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
+            "record_date":"20091010175452",
+            "visits":"3"
         },
-        {"record_id":"2",
-        "record_lang":"en",
-        "category_id":"1",
-        "record_title":"How can I survive without phpMyFAQ?",
-        "record_preview":"It\'s easy!",
-        "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
-        "record_date":"20091014181500",
-        "visits":"10"
+        {
+            "record_id":"2",
+            "record_lang":"en",
+            "category_id":"1",
+            "record_title":"How can I survive without phpMyFAQ?",
+            "record_preview":"It\'s easy!",
+            "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
+            "record_date":"20091014181500",
+            "visits":"10"
         }
-    ]
-        `
+    ]</code></pre>
+    
 *   **getFaq()**
+
     *   http://www.example.org/phpmyfaq/api.php?action=getFaq&lang=en&recordId=1 (standard)
     *   http://www.example.org/phpmyfaq/api/getFaq/en/1 (rewrite rules enabled)
 
-    You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as result with the follwing structure:
+    You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
+    result with the follwing structure:
 
-    `
-        {
+    <pre><code class="json">{
         "id":"1",
         "lang":"en",
         "solution_id":"1000",
@@ -1140,8 +1167,27 @@ You can call the resources with the following URIs:
         "dateEnd":"99991231235959",
         "linkState":"",
         "linkCheckDate":"0"
+    }</code></pre>
+    
+*   **getAttachmentsFromFaq()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getAttachmentsFromFaq&lang=en&recordId=1 (standard)
+    *   http://www.example.org/phpmyfaq/api/getAttachmentsFromFaq/en/1 (rewrite rules enabled)
+
+    You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
+    result with the follwing structure:
+
+    <pre><code class="json">[
+        {
+            "filename":"test.pdf",
+            "url":"http://faq.phpmyfaq.de/index.php?action=attachment&amp;id=1"
+        },
+        {
+            "filename":"phpmyfaq.pdf",
+            "url":"http://faq.phpmyfaq.de/index.php?action=attachment&amp;id=2"
         }
-        `
+    ]</code></pre>
+
 
 [back to top][64]
 
@@ -1157,7 +1203,7 @@ Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
 Date: 2014-08-15
 
-© 2001-2014 phpMyFAQ Team
+© 2001-2015 phpMyFAQ Team
 
 This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 
