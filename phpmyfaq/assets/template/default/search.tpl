@@ -24,7 +24,7 @@
 
                     <div class="form-group">
                         <div class="input-append">
-                            <input id="searchfield" type="search" name="search" value="{searchString}" autofocus
+                            <input id="searchfield" type="search" name="search" value="{searchString}"
                                    class="input-xlarge search-query">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 {msgSearch}
