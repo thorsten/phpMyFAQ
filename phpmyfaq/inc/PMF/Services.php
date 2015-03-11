@@ -175,6 +175,22 @@ class PMF_Services
     }
 
     /**
+     * Returns the "Show FAQ as PDF" URL
+     *
+     * @return string
+     */
+    public function getPdfApiLink()
+    {
+        return sprintf(
+            '%spdf.php?cat=%d&id=%d&artlang=%s',
+            PMF_Link::getSystemRelativeUri('api.php'),
+            $this->getCategoryId(),
+            $this->getFaqId(),
+            $this->getLanguage()
+        );
+    }
+
+    /**
      * @param integer $categoryId
      *
      * @return void

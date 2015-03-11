@@ -148,4 +148,5 @@ RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$               api.php?action=searc
 RewriteRule api/getCategories                               api.php?action=getCategories [L,QSA]
 RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)                 api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
 RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)                  api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]
+RewriteRule api/getFaqAsPdf/([a-z\-]+)/([0-9]+)/([0-9]+)    api.php?action=getFaqAsPdf&lang=$1&categoryId=$2&recordId=$3 [L,QSA]
 RewriteRule api/getAttachmentsFromFaq/([a-z\-]+)/([0-9]+)   api.php?action=getAttachmentsFromFaq&lang=$1&recordId=$2 [L,QSA]

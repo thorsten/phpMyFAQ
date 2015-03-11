@@ -119,6 +119,15 @@ switch ($action) {
         $result = $faq->faqRecord;
         break;
 
+    case 'getFaqAsPdf':
+        $service = new PMF_Services($faqConfig);
+        $service->setFaqId($recordId);
+        $service->setLanguage($language);
+        $service->setCategoryId($categoryId);
+
+        $result = ['pdfUrl' => $service->getPdfApiLink()];
+        break;
+
     case 'getAttachmentsFromFaq':
         $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
         $result      = [];
@@ -129,6 +138,7 @@ switch ($action) {
             ];
         }
         break;
+
 }
 
 if( empty( $result ) ) $result = array( 'result' => false );

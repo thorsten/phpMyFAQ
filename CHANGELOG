@@ -30,6 +30,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - added support for SMTP (Christopher Andrews)
 - added bundled Typeahead.js (Thorsten)
 - added support for custom headers and footers in PDF exports (Thorsten)
+- extended REST/JSON API (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.3 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
 - updated bundled Bootstrap to version 3.3.2 (Thorsten)
@@ -40,7 +41,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 
-Version 2.8.21 - 2015-02-
+Version 2.8.21 - 2015-02-28
 - added experimental rewrite rules for IIS7 and IIS8 (Thorsten)
 - improved usability in admin backend (Thorsten)
 - improved HTML5 support in editor (Thorsten)
