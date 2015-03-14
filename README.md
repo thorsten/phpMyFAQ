@@ -34,6 +34,7 @@ unzip the package and open http://www.example.org/phpmyfaq/install/setup.php in 
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
+    $ git checkout 2.8
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ npm install
