@@ -133,9 +133,15 @@ class PMF_Ldap
             }
         }
 
-        if (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
-            $ldapBind = $this->bind(); // Anonymous LDAP login
+        if (isset($this->_ldapConfig['ldap_use_dynamic_login']) && $this->_ldapConfig['ldap_use_dynamic_login']) {
+            // Check for dynamic user binding
+            $ldapRdn  = $this->_ldapConfig['ldap_dynamic_login_attribute'] . '=' . $ldapUser . ',' . $ldapBase;
+            $ldapBind = $this->bind($ldapRdn, $ldapPassword);
+        } elseif (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
+            // Check for anonymous binding
+            $ldapBind = $this->bind();
         } else {
+            // Check for user binding without RDN
             $ldapBind = $this->bind($ldapUser, $ldapPassword);
         }
 

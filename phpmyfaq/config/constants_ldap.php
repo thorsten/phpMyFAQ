@@ -53,3 +53,8 @@ $PMF_LDAP['ldap_use_multiple_servers'] = false;
 // Option to use anonymous LDAP connection (without username and password)
 // Default: false
 $PMF_LDAP['ldap_use_anonymous_login'] = false;
+
+// Option to use dynamic user binding
+// Default: false
+$PMF_LDAP['ldap_use_dynamic_login'] = false;
+$PMF_LDAP['ldap_dynamic_login_attribute'] = 'uid';
