@@ -37,7 +37,7 @@ class PMF_Glossary
     /**
      * @var PMF_Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Item
@@ -62,7 +62,7 @@ class PMF_Glossary
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -80,14 +80,15 @@ class PMF_Glossary
             FROM
                 %sfaqglossary
             WHERE
-                lang = '%s'",
+                lang = '%s'
+            ORDER BY item ASC",
             PMF_Db::getTablePrefix(),
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
             
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
         
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $items[] = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
@@ -159,12 +160,14 @@ class PMF_Glossary
     /**
      * Callback function for filtering HTML from URLs and images
      *
-     * @param  array $matches Matchings
+     * @param  array $matches Matches
      *
      * @return string
      */
     public function setTooltip(Array $matches)
     {
+        $prefix = $postfix = '';
+        
         if (count($matches) > 9) {
             // if the word is at the end of the string
             $prefix  = $matches[9];
@@ -215,12 +218,12 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             PMF_Db::getTablePrefix(),
             (int)$id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
             
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
            
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $item = array(
                 'id'         => $row->id,
                 'item'       => stripslashes($row->item),
@@ -240,8 +243,8 @@ class PMF_Glossary
      */
     public function addGlossaryItem($item, $definition)
     {
-        $this->item       = $this->_config->getDb()->escape($item);
-        $this->definition = $this->_config->getDb()->escape($definition);
+        $this->item       = $this->config->getDb()->escape($item);
+        $this->definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf("
             INSERT INTO
@@ -250,13 +253,13 @@ class PMF_Glossary
                 VALUES
             (%d, '%s', '%s', '%s')",
             PMF_Db::getTablePrefix(),
-            $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqglossary', 'id'),
-            $this->_config->getLanguage()->getLanguage(),
+            $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqglossary', 'id'),
+            $this->config->getLanguage()->getLanguage(),
             PMF_String::htmlspecialchars($this->item),
             PMF_String::htmlspecialchars($this->definition)
         );
 
-        if ($this->_config->getDb()->query($query)) {
+        if ($this->config->getDb()->query($query)) {
             return true;
         }
         return false;
@@ -273,8 +276,8 @@ class PMF_Glossary
      */
     public function updateGlossaryItem($id, $item, $definition)
     {
-        $this->item       = $this->_config->getDb()->escape($item);
-        $this->definition = $this->_config->getDb()->escape($definition);
+        $this->item       = $this->config->getDb()->escape($item);
+        $this->definition = $this->config->getDb()->escape($definition);
 
         $query = sprintf("
             UPDATE
@@ -288,10 +291,10 @@ class PMF_Glossary
             PMF_String::htmlspecialchars($this->item),
             PMF_String::htmlspecialchars($this->definition),
             (int)$id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        if ($this->_config->getDb()->query($query)) {
+        if ($this->config->getDb()->query($query)) {
             return true;
         }
         return false;
@@ -313,10 +316,10 @@ class PMF_Glossary
                 id = %d AND lang = '%s'",
             PMF_Db::getTablePrefix(),
             (int)$id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        if ($this->_config->getDb()->query($query)) {
+        if ($this->config->getDb()->query($query)) {
             return true;
         }
         return false;
