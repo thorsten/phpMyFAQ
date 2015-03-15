@@ -217,7 +217,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         {
             var info =  parseStopWordInputElemId(elem_id);
 
-            if ($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
+            if ($('#' + elem_id).attr('old_value') !== $('#' + elem_id).val()) {
                 $.get("index.php", {
                     action: "ajax",
                     ajax: 'config',
@@ -229,7 +229,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     }
                 );
             } else {
-                if (0 > info.id && '' == $('#' + elem_id).attr('value')) {
+                if (0 > info.id && '' == $('#' + elem_id).val()) {
                     $('#' + elem_id).remove();
                     return;
                 }
@@ -246,7 +246,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          */
         function saveOldValue(elem_id)
         {
-            $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
+            $('#' + elem_id).attr('old_value', $('#' + elem_id).val());
         }
 
 
@@ -263,16 +263,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
             $('#' + elem_id).fadeOut('slow');
 
-            $.get("index.php",
-                    {action: "ajax",
-                     ajax: 'config',
-                     ajaxaction: "delete_stop_word",
-                     stopword_id: info.id,
-                     stopwords_lang: info.lang},
-                    function (){
-                         loadStopWordsByLang(info.lang)
-                    }
-                );
+            $.get("index.php", {
+                    action: "ajax",
+                    ajax: 'config',
+                    ajaxaction: "delete_stop_word",
+                    stopword_id: info.id,
+                    stopwords_lang: info.lang,
+                    csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                },
+                function () {
+                    loadStopWordsByLang(info.lang)
+                }
+            );
         }
 
         /**
@@ -285,17 +287,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             var word = prompt('<?php echo $PMF_LANG["ad_config_stopword_input"]?>', '');
             var lang = $('#stopwords_lang_selector').val();
 
-            if(!!word) {
-               $.get("index.php",
-               {action: "ajax",
-                ajax: 'config',
-                ajaxaction: "save_stop_word",
-                stopword: word,
-                stopwords_lang: lang},
-                function (){
+            if (!!word) {
+                $.get("index.php", {
+                        action: "ajax",
+                        ajax: 'config',
+                        ajaxaction: "save_stop_word",
+                        stopword: word,
+                        stopwords_lang: lang,
+                        csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                },
+                function () {
                     loadStopWordsByLang(lang)
-               }
-               );
+                }
+                );
             }
         }
         /* ]]> */

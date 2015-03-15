@@ -133,7 +133,6 @@ class PMF_Ldap
             }
         }
 
-
         if (isset($this->_ldapConfig['ldap_use_dynamic_login']) && $this->_ldapConfig['ldap_use_dynamic_login']) {
             // Check for dynamic user binding
             $ldapRdn  = $this->_ldapConfig['ldap_dynamic_login_attribute'] . '=' . $ldapUser . ',' . $ldapBase;
