@@ -210,7 +210,7 @@ if ($permission['editconfig']) {
         {
             var info =  parseStopWordInputElemId(elem_id);
 
-            if ($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
+            if ($('#' + elem_id).attr('old_value') !== $('#' + elem_id).val()) {
                 $.get("index.php", {
                     action: "ajax",
                     ajax: 'config',
@@ -222,7 +222,7 @@ if ($permission['editconfig']) {
                     }
                 );
             } else {
-                if (0 > info.id && '' == $('#' + elem_id).attr('value')) {
+                if (0 > info.id && '' == $('#' + elem_id).val()) {
                     $('#' + elem_id).remove();
                     return;
                 }
@@ -239,7 +239,7 @@ if ($permission['editconfig']) {
          */
         function saveOldValue(elem_id)
         {
-            $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
+            $('#' + elem_id).attr('old_value', $('#' + elem_id).val());
         }
 
 
