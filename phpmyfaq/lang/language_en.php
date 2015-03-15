@@ -1194,4 +1194,4 @@ $PMF_LANG["msgAboutThisNews"] = "About this news";
 $PMF_LANG["msgAccessDenied"] = "Access denied.";
 
 // added v.2.8.21 - 2015-02-17 by Thorsten
-$PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ im Frontend';
+$PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
