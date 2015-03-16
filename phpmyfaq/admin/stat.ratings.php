@@ -43,7 +43,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                     <div class="pull-right">
                         <a class="btn btn-danger" href="?action=clear-statistics">
-                            <i class="fa fa-trash"></i> Clear all
+                            <i class="fa fa-trash"></i> <?php echo $PM_LANG['ad_delete_all_votings'] ?>
                         </a>
                     </div>
                 </h2>

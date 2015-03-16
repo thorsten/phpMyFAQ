@@ -1225,3 +1225,4 @@ $LANG_CONF['main.customPdfHeader'] = array('area', 'Custom PDF Header (HTML allo
 $LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allowed)');
 $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests<br>(default: disabled)');
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Attention! If you enter a password, you overwrite the password of the user.";
+$PM_LANG["ad_delete_all_votings"] = "Clear all votings";
