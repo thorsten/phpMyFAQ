@@ -37,7 +37,7 @@ class PMF_Visits
     /**
      * @var PMF_Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor
@@ -48,13 +48,13 @@ class PMF_Visits
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
        
     /**
      * Counting the views of a FAQ record
      *
-     * @param integer $id      FAQ record ID
+     * @param integer $id FAQ record ID
      *
      * @return void
      */
@@ -72,12 +72,12 @@ class PMF_Visits
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
             $id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        $result = $this->_config->getDb()->query($query);
-        if ($this->_config->getDb()->numRows($result)) {
-            $row     = $this->_config->getDb()->fetchObject($result);
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result)) {
+            $row     = $this->config->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }
         if ($nVisits == 0) {
@@ -106,11 +106,11 @@ class PMF_Visits
                 (%d, '%s', %d, %d)",
             PMF_Db::getTablePrefix(),
             $id,
-            $this->_config->getLanguage()->getLanguage(),
+            $this->config->getLanguage()->getLanguage(),
             1,
             $_SERVER['REQUEST_TIME']
         );
-        $this->_config->getDb()->query($query);
+        $this->config->getDb()->query($query);
 
         return true;
     }
@@ -118,7 +118,7 @@ class PMF_Visits
     /**
      * Updates an entry in the table faqvisits
      *
-     * @param  integer $id id
+     * @param  integer $id FAQ record ID
      * @return boolean
      */
     private function update($id)
@@ -138,9 +138,9 @@ class PMF_Visits
             PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
-        $this->_config->getDb()->query($query);
+        $this->config->getDb()->query($query);
 
         return true;
     }
@@ -163,17 +163,33 @@ class PMF_Visits
                 visits DESC",
             PMF_Db::getTablePrefix()
             );
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
-            $data[] = array(
+        while ($row = $this->config->getDb()->fetchObject($result)) {
+            $data[] = [
                 'id'         => $row->id,
                 'lang'       => $row->lang,
                 'visits'     => $row->visits,
                 'last_visit' => $row->last_visit
-            );
+            ];
         }
 
         return $data;
+    }
+
+    /**
+     * Resets all visits to current date and one visit per FAQ
+     *
+     * @return mixed
+     */
+    public function resetAll()
+    {
+        return $this->config->getDb()->query(
+            sprintf(
+                'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
+                PMF_Db::getTablePrefix(),
+                $_SERVER['REQUEST_TIME']
+            )
+        );
     }
 }
