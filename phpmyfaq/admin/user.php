@@ -419,6 +419,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                             '<input type="email" name="email" value="' + data.email + '" class="form-control" required>' +
                         '</div>' +
                     '</div>' +
+                    '<div class="form-group">' +
+                        '<div class="col-lg-9 col-lg-offset-3">' +
+                            '<a class="btn btn-danger pmf-admin-override-password" data-toggle="modal" ' +
+                            '   href="#pmf-modal-user-password-override">Override user\'s password</a>' +
+                        '</div>' +
+                    '</div>' +
                     '<input type="hidden" name="last_modified" value="' + data.last_modified + '">'
                 );
             });
@@ -564,8 +570,51 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 <?php
         if (isset($_GET['user_id'])) {
             $userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
-            echo '<script type="text/javascript">updateUser('.$userId.');</script>';
+            echo '<script type="text/javascript">updateUser(' . $userId . ');</script>';
         }
+?>
+
+        <div class="modal fade" id="pmf-modal-user-password-override">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <a class="close" data-dismiss="modal">×</a>
+                        <h3><?php echo $PMF_LANG['ad_menu_passwd'] ?></h3>
+                    </div>
+                    <div class="modal-body">
+                        <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
+                            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                            <input type="hidden" name="user_id" value="<?php echo $userId ?>">
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" for="npass">
+                                    <?php echo $PMF_LANG["ad_passwd_new"]; ?>
+                                </label>
+                                <div class="col-lg-9">
+                                    <input type="password" name="npass" id="npass" class="form-control" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-lg-3 control-label" for="bpass">
+                                    <?php echo $PMF_LANG["ad_passwd_con"]; ?>
+                                </label>
+                                <div class="col-lg-9">
+                                    <input type="password" name="bpass" id="bpass" class="form-control" required>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-primary pmf-user-password-override-action">
+                            Override password
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+<?php
     }
 
     // show list of all users

@@ -1187,3 +1187,4 @@ $LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Passwort');
 $LANG_CONF['main.customPdfHeader'] = array('area', 'Eigener PDF Header (HTML erlaubt)');
 $LANG_CONF['main.customPdfFooter'] = array('area', 'Eigener PDF Footer (HTML erlaubt)');
 $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Erlaube Downloads von Gästen<br>(Standard: deaktiviert)');
+$PMF_LANG["ad_msgNoteAboutPasswords"] = "Achtung! Beim Ausfüllen der Passwortfelder überschreiben Sie die Passwörter des Benutzers.";

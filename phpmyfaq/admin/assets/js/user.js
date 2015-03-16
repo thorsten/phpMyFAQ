@@ -57,4 +57,29 @@ $(document).ready(function() {
             button.data('type', 'check');
         }
     });
+
+    var buttonOverridePassword = $('.pmf-user-password-override-action');
+
+    buttonOverridePassword.click(function(event) {
+        event.preventDefault();
+
+        // Check if passwords are equal
+
+        // Fetch data
+        $.ajax({
+            url:      'index.php?action=ajax&ajax=user&ajaxaction=overwrite_password',
+            type:     'POST',
+            data:     $('#pmf-modal-user-password-override form').serialize(),
+            dataType: 'json',
+            beforeSend: function() {
+                $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+            },
+            success: function(message) {
+                $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
+                $('#pmf-modal-user-password-override').modal('hide');
+                $('#saving_data_indicator').fadeOut();
+            }
+        });
+        return false;
+    });
 });

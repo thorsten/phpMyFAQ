@@ -643,7 +643,7 @@ class PMF_User
         if ($pass == '') {
             $pass = $this->createPassword();
         }
-        
+
         $success = false;
         foreach ($this->authContainer as $auth) {
             if ($auth->setReadOnly()) {

@@ -61,12 +61,12 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             $userdata           = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
             $userdata['login']  = $user->getLogin();
-            print json_encode($userdata);
+            echo json_encode($userdata);
             break;
 
         case 'get_user_rights':
             $user->getUserById($userId, true);
-            print json_encode($user->perm->getUserRights($userId));
+            echo json_encode($user->perm->getUserRights($userId));
             break;
 
         case 'activate_user':
@@ -101,9 +101,37 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                     $message = '<p class="success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
                 }
             }
-            print json_encode($message);
+            echo json_encode($message);
             break;
 
+        case 'overwrite_password':
+
+            $userId          = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+            $csrfToken       = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+            $newPassword     = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+            $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                exit(1);
+            }
+
+            $user->getUserById($userId, true);
+            $auth       = new PMF_Auth($faqConfig);
+            $authSource = $auth->selectAuth($user->getAuthSource('name'));
+            $authSource->selectEncType($user->getAuthData('encType'));
+
+
+            if ($newPassword === $retypedPassword) {
+                if (!$user->changePassword($newPassword)) {
+                    echo json_encode(['error' =>$PMF_LANG["ad_passwd_fail"]]);
+                }
+                echo json_encode(['success' => $PMF_LANG["ad_passwdsuc"]]);
+            } else {
+                echo json_encode(['error' =>$PMF_LANG["ad_passwd_fail"]]);
+            }
+
+            break;
     }
     
 }
