@@ -848,7 +848,7 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Ко�
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Заблокировать эти IP-Адреса");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Активировать mod_rewrite? (по умолчанию отключено)");
 $LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Активировать LDAP? (по умолчанию отключено)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Базовый URL для проверки ссылок (например http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Базовый URL для проверки ссылок (например http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Интервал между AJAX-проверками ссылок (в секундах)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Запретить отображение неактивных вопросов?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Уровень доступа");

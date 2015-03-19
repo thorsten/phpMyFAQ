@@ -820,7 +820,7 @@ $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Sortera inlägg (efte
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortera inlägg (nyaste eller äldst först)');
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivera nya inlägg (standardval: ej aktiverat)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Tillåt kommentarer till nya inlägg (standardval: ej aktiverat)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Grundadress för länkkontroll (t ex: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Grundadress för länkkontroll (t ex: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervall mellan länkkontroll via AJAX (i sekunder)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Låt nya frågor vara dolda?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Åtkomstnivå");

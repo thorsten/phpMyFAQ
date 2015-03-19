@@ -466,7 +466,7 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "מס�
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "חסום את IP זה");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "הפעל mod_rewrite? (ברירת מחדל: לא פעיל)");
 $LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "הפעל LDAP? (ברירת מחדל: לא פעיל)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL בסיסי לאימות קישורים (דוגמה: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL בסיסי לאימות קישורים (דוגמה: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "מרווח בין אימות קישורים (בשניות)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "לא להציג באתר שאלות חדשות ?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "רמת הרשאות");

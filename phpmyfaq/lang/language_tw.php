@@ -544,7 +544,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "新�
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "禁止訪問 IPs 位置 Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "啟用 URL 覆寫支援? (預設: 關閉) <br> Enable URL rewrite support? (default: disabled)");
 $LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "啟用 LDAP 支援? (預設: 關閉) <br> Enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL 網址確認 (舉例: http://www.example.org/faq) <br>URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL 網址確認 (舉例: http://www.example.org/faq/) <br>URL for link verification (e.g.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX 連結確認時間(以秒計時) <br>Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "新問題不可被顯示? Disable visibility of new questions?");
 $LANG_CONF["security.permLevel"] = array(0 => "select", 1 => "權限等級 Permission level");

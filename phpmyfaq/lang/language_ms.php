@@ -466,7 +466,7 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Bilan
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Senarai hitamkan IP ini");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktifkan sokongan mod_rewrite? (lalai: dilumpuhkan)");
 $LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Anda mahu membenarkan sokongan terhadap LDAP? (lalai: dilumpuhkan)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "UL asas untuk pengesahan link (cth.: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "UL asas untuk pengesahan link (cth.: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Selang diantara pengesahan link AJX (dalam saat)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Soalan baru tidak diperlihatkan?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Tahap keizinan");

@@ -500,7 +500,7 @@ $PMF_LANG['msgDescriptionInstantResponse'] = 'Wpisz poszukiwane słowo...';
 $LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Ścieżka dla zapisu załączników.<br /><small>Ścieżka względna, czyli folder po obcięciu web root.</small>");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Użyj wbudowanego edytora WYSIWYG (domyślnie włączony)");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Poziom uprawnień");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL bazowy dla weryfikacji linku (e.g.: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL bazowy dla weryfikacji linku (e.g.: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Interwał weryfikacji linku dla AJAX-a (w sekundach)");
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktywuj nowe rekordy (domyślnie nieaktywne)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Zezwól na komentarze do nowych rekordów (domyślnie zabronione)");

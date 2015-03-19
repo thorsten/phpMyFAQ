@@ -916,7 +916,7 @@ $PMF_LANG['msgNewTranslationKeywords'] = 'Kulcsszavak:';
 $PMF_LANG['msgNewTranslationSubmit'] = 'Küldd el a javaslatod';
 $PMF_LANG['msgTranslate'] = 'Bejegyzés fordítása';
 $PMF_LANG['msgTranslateSubmit'] = 'Fordítás elkezdése...';
-$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL for link verification (e.g.: http://www.example.org/faq)');
+$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL for link verification (e.g.: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Interval between AJAX link verification (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Új kérdések láthatóságának kikapcsolása');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Hozzáférési szint');
