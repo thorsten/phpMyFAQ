@@ -109,6 +109,7 @@ parent_id int4 NOT NULL,
 name varchar(255) NOT NULL,
 description varchar(255) DEFAULT NULL,
 user_id int4 NOT NULL,
+group_id int4 NOT NULL DEFAULT -1,
 active INT4 NULL DEFAULT 1,
 PRIMARY KEY (id, lang))";
 

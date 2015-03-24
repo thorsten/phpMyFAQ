@@ -108,6 +108,7 @@ parent_id SMALLINT NOT NULL,
 name varchar(255) NOT NULL,
 description varchar(255) DEFAULT NULL,
 user_id integer NOT NULL,
+group_id integer NOT NULL DEFAULT -1,
 active INTEGER NULL DEFAULT 1,
 PRIMARY KEY (id, lang))";
 

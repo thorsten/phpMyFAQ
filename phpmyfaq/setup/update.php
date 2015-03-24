@@ -865,8 +865,10 @@ if ($step == 3) {
 
         if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN group_id INT NULL DEFAULT -1";
         } else {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD lang VARCHAR(5) NOT NULL";
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD group_id INT NULL DEFAULT -1";
         }
         $query[] = "UPDATE faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
     }
