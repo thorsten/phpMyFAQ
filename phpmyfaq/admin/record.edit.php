@@ -653,6 +653,23 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 </label>
                             </div>
                         </div>
+                        <?php if ($queryString != 'insertentry'): ?>
+                        <div class="form-group">
+                            <label class="control-label" for="revision">
+                                <?php echo $PMF_LANG['ad_entry_new_revision']; ?>
+                            </label>
+                            <div class="controls">
+                                <label>
+                                    <input type="radio" name="revision" id="revision" value="yes">
+                                    <?php echo $PMF_LANG["ad_gen_yes"]; ?>
+                                </label>
+                                <label>
+                                    <input type="radio" name="revision" value="no" checked>
+                                    <?php echo $PMF_LANG["ad_gen_no"]; ?>
+                                </label>
+                            </div>
+                        </div>
+                        <?php endif; ?>
                     </div>
                     <div class="panel-heading">
                         <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
@@ -667,39 +684,6 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <?php endif; ?>
                     </div>
                 </div>
-
-
-
-
-                <fieldset>
-                    <?php if ($queryString != 'insertentry'): ?>
-                    <div class="form-group">
-                        <label class="control-label" for="revision">
-                            <?php echo $PMF_LANG['ad_entry_new_revision']; ?>
-                        </label>
-                        <?php
-                        if ($queryString != 'insertentry') {
-                            $rev_yes = ' checked';
-                            $rev_no  = null;
-                        }
-                        if (isset($faqData['active']) && $faqData['active'] == 'no') {
-                            $rev_no  = ' checked';
-                            $rev_yes = null;
-                        }
-                        ?>
-                        <div class="controls">
-                            <label>
-                                <input type="radio" name="revision" id="revision" value="yes"<?php echo isset($rev_yes) ? $rev_yes : ''; ?>/>
-                                <?php echo $PMF_LANG["ad_gen_yes"]; ?>
-                            </label>
-                            <label>
-                                <input type="radio" name="revision" value="no"<?php echo isset($rev_no) ? $rev_no : ''; ?>/>
-                                <?php echo $PMF_LANG["ad_gen_no"]; ?>
-                            </label>
-                        </div>
-                    </div>
-                    <?php endif; ?>
-                </fieldset>
 
             </div>
             </form>
