@@ -276,6 +276,7 @@ PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 //faqquestions
 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions (
 id int(11) unsigned NOT NULL,
+lang varchar(5) NOT NULL,
 username varchar(100) NOT NULL,
 email varchar(100) NOT NULL,
 category_id int(11) NOT NULL,

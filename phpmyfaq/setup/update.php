@@ -862,6 +862,13 @@ if ($step == 3) {
         $faqConfig->add('main.customPdfHeader', '');
         $faqConfig->add('main.customPdfFooter', '');
         $faqConfig->add('records.allowDownloadsForGuests', 'false');
+
+        if ('sqlite3' === $DB['type']) {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
+        } else {
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD lang VARCHAR(5) NOT NULL";
+        }
+        $query[] = "UPDATE faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
     }
 
     // Always the last step: Update version number

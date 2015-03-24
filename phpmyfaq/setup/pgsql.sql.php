@@ -280,6 +280,7 @@ PRIMARY KEY (id))";
 //faqquestions
 $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqquestions (
 id SERIAL NOT NULL,
+lang varchar(5) NOT NULL,
 username varchar(100) NOT NULL,
 email varchar(100) NOT NULL,
 category_id int4 NOT NULL,

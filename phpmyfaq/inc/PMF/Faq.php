@@ -1650,7 +1650,7 @@ class PMF_Faq
     }
 
     /**
-     * Deletes a question for the table faquestion
+     * Deletes a question for the table faqquestions
      *
      * @param integer $questionId
      *
@@ -1658,13 +1658,16 @@ class PMF_Faq
      */
     function deleteQuestion($questionId)
     {
-        $delete = sprintf('
+        $delete = sprintf("
             DELETE FROM
                 %sfaqquestions
             WHERE
-                id = %d',
+                id = %d
+            AND
+                lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $questionId
+            $questionId,
+            $this->_config->getLanguage()->getLanguage()
         );
 
         $this->_config->getDb()->query($delete);
@@ -1672,25 +1675,26 @@ class PMF_Faq
     }
 
     /**
-     * Returns the visibilty of a question
+     * Returns the visibility of a question
      *
-     * @param   integer $question_id
+     * @param   integer $questionId
      * @return  string
-     * @access  public
-     * @since   2006-11-04
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-     function getVisibilityOfQuestion($question_id)
+     function getVisibilityOfQuestion($questionId)
      {
-        $query = sprintf('
+        $query = sprintf("
             SELECT
                 is_visible
             FROM
                 %sfaqquestions
             WHERE
-                id = %d',
+                id = %d
+            AND
+                lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $question_id);
+            $questionId,
+            $this->_config->getLanguage()->getLanguage()
+        );
 
         $result = $this->_config->getDb()->query($query);
         if ($this->_config->getDb()->numRows($result) > 0) {
@@ -1703,14 +1707,11 @@ class PMF_Faq
     /**
      * Sets the visibilty of a question
      *
-     * @param   integer $question_id
+     * @param   integer $questionId
      * @param   string  $is_visible
      * @return  boolean
-     * @access  public
-     * @since   2006-11-04
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function setVisibilityOfQuestion($question_id, $is_visible)
+    function setVisibilityOfQuestion($questionId, $isVisible)
     {
         $query = sprintf("
             UPDATE
@@ -1718,10 +1719,14 @@ class PMF_Faq
             SET
                 is_visible = '%s'
             WHERE
-                id = %d",
+                id = %d
+            AND
+                lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $is_visible,
-            $question_id);
+            $isVisible,
+            $questionId,
+            $this->_config->getLanguage()->getLanguage()
+        );
         
         $this->_config->getDb()->query($query);
         return true;
@@ -2132,9 +2137,10 @@ class PMF_Faq
             INSERT INTO
                 %sfaqquestions
             VALUES
-                (%d, '%s', '%s', %d, '%s', '%s', '%s', %d)",
+                (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             PMF_Db::getTablePrefix(),
             $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqquestions', 'id'),
+            $this->_config->getLanguage()->getLanguage(),
             $this->_config->getDb()->escape($questionData['username']),
             $this->_config->getDb()->escape($questionData['email']),
             $questionData['category_id'],
@@ -2152,43 +2158,50 @@ class PMF_Faq
     /**
      * Returns a new question
      *
-     * @param    integer    $question_id
+     * @param    integer    $questionId
      * @return   array
      * @access   public
      * @since    2006-11-11
      * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    function getQuestion($id_question)
+    function getQuestion($questionId)
     {
-        $question = array(
+        $question = [
             'id'            => 0,
+            'lang'          => '',
             'username'      => '',
             'email'         => '',
             'category_id'   => '',
             'question'      => '',
             'created'       => '',
-            'is_visible'    => '');
+            'is_visible'    => ''
+        ];
 
-        if (!is_int($id_question)) {
+        if (!is_int($questionId)) {
             return $question;
         }
 
         $question = [];
 
-        $query = sprintf('
+        $query = sprintf("
             SELECT
-                 id, username, email, category_id, question, created, is_visible
+                 id, lang, username, email, category_id, question, created, is_visible
             FROM
                 %sfaqquestions
             WHERE
-                id = %d',
+                id = %d
+            AND
+                lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $id_question);
+            $questionId,
+            $this->_config->getLanguage()->getLanguage()
+        );
 
         if ($result = $this->_config->getDb()->query($query)) {
             if ($row = $this->_config->getDb()->fetchObject($result)) {
                 $question = array(
                     'id'            => $row->id,
+                    'lang'          => $row->lang,
                     'username'      => $row->username,
                     'email'         => $row->email,
                     'category_id'   => $row->category_id,
@@ -2213,19 +2226,24 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                id, username, email, category_id, question, created, answer_id, is_visible
+                id, lang, username, email, category_id, question, created, answer_id, is_visible
             FROM
                 %sfaqquestions
-            %s
+            WHERE
+                lang = '%s'
+                %s
             ORDER BY 
                 created ASC",
             PMF_Db::getTablePrefix(),
-            ($all == false ? "WHERE is_visible = 'Y'" : ''));
+            $this->_config->getLanguage()->getLanguage(),
+            ($all == false ? " AND is_visible = 'Y'" : '')
+        );
 
         if ($result = $this->_config->getDb()->query($query)) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $questions[] = array(
                     'id'          => $row->id,
+                    'lang'        => $row->lang,
                     'username'    => $row->username,
                     'email'       => $row->email,
                     'category_id' => $row->category_id,
@@ -2777,8 +2795,11 @@ class PMF_Faq
             FROM
                 %sfaqquestions
             WHERE
+                lang = '%s'
+            AND
                 is_visible != 'Y'",
-            PMF_Db::getTablePrefix()
+            PMF_Db::getTablePrefix(),
+            $this->_config->getLanguage()->getLanguage()
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -2801,10 +2822,13 @@ class PMF_Faq
             FROM
                 %sfaqquestions
             WHERE
+                lang = '%s'
+            AND
                 is_visible = 'Y'
             ORDER BY
                 created ASC",
-            PMF_Db::getTablePrefix()
+            PMF_Db::getTablePrefix(),
+            $this->_config->getLanguage()->getLanguage()
         );
 
         $result = $this->_config->getDb()->query($query);
