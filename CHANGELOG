@@ -32,6 +32,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - added bundled Typeahead.js (Thorsten)
 - added support for custom headers and footers in PDF exports (Thorsten)
 - added support for language specific open questions (Thorsten)
+- added moderator groups to categories (Thorsten)
 - extended REST/JSON API (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.3 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)

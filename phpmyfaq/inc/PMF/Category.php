@@ -962,15 +962,27 @@ class PMF_Category
     }
 
     /**
-     * Returns the admin user of the selected category
+     * Returns the admin user of the given category
      *
-     * @param   integer $category_id Category id
-     * @return  integer
-     * @todo    Return the name, not the ID
+     * @param integer $categoryId
+     *
+     * @return integer
      */
-    public function getCategoryUser($category_id)
+    public function getCategoryUser($categoryId)
     {
-        return $this->categories[$category_id]['user_id'];
+        return $this->categories[$categoryId]['user_id'];
+    }
+
+    /**
+     * Returns the moderator group ID of the given category
+     *
+     * @param integer $categoryId
+     *
+     * @return integer
+     */
+    public function getModeratorGroupId($categoryId)
+    {
+        return $this->categories[$categoryId]['group_id'];
     }
 
     /**

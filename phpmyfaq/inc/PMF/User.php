@@ -858,7 +858,7 @@ class PMF_User
      * Returns the data of the current user
      *
      * @param  string $field Field
-     * @return array
+     * @return array|string|integer
      */
     public function getUserData($field = '*')
     {

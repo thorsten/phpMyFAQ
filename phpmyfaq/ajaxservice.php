@@ -398,7 +398,8 @@ switch ($action) {
 
             foreach ($categories as $_category) {
 
-                $userId = $category->getCategoryUser($_category);
+                $userId  = $category->getCategoryUser($_category);
+                $groupId = $category->getModeratorGroupId($_category);
 
                 // @todo Move this code to Category.php
                 $oUser = new PMF_User($faqConfig);
@@ -409,6 +410,21 @@ switch ($action) {
                 if (!empty($catOwnerEmail) && !isset($send[$catOwnerEmail])) {
                     $mail->addCc($catOwnerEmail);
                     $send[$catOwnerEmail] = 1;
+                }
+
+                if ($groupId > 0) {
+                    $moderators = $oUser->perm->getGroupMembers($groupId);
+                    foreach ($moderators as $moderator) {
+
+                        $oUser->getUserById($moderator);
+                        $moderatorEmail = $oUser->getUserData('email');
+
+                        // Avoid to send multiple emails to the same moderator
+                        if (!empty($moderatorEmail) && !isset($send[$moderatorEmail])) {
+                            $mail->addCc($moderatorEmail);
+                            $send[$moderatorEmail] = 1;
+                        }
+                    }
                 }
             }
 
