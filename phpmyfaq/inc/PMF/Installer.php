@@ -310,6 +310,7 @@ class PMF_Installer
         'main.enableLinkVerification'             => 'true',
         'main.customPdfHeader'                    => '',
         'main.customPdfHFooter'                   => '',
+        'main.enableSmartAnswering'               => 'true',
 
         'records.numberOfRecordsPerPage'          => '10',
         'records.numberOfShownNewsEntries'        => '3',

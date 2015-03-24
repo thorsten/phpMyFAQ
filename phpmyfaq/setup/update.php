@@ -863,6 +863,7 @@ if ($step == 3) {
         $faqConfig->add('main.customPdfFooter', '');
         $faqConfig->add('records.allowDownloadsForGuests', 'false');
         $faqConfig->add('main.enableMarkdownEditor', 'false');
+        $faqConfig->add('main.enableSmartAnswering', 'true');
 
         if ('sqlite3' === $DB['type']) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
