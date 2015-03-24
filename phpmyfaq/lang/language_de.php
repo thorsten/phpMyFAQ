@@ -1189,3 +1189,4 @@ $LANG_CONF['main.customPdfFooter'] = array('area', 'Eigener PDF Footer (HTML erl
 $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Erlaube Downloads von Gästen<br>(Standard: deaktiviert)');
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Achtung! Beim Ausfüllen der Passwortfelder überschreiben Sie die Passwörter des Benutzers.";
 $PM_LANG["ad_delete_all_votings"] = "Alle Bewertungen löschen";
+$PMF_LANG["ad_categ_moderator"] = "Moderatoren";

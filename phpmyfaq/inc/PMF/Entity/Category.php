@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF\Entity
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014 phpMyFAQ Team
+ * @copyright 2014-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-14
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   PMF\Entity
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014 phpMyFAQ Team
+ * @copyright 2014-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-14
@@ -60,9 +60,14 @@ class PMF_Entity_Category
     private $description;
 
     /**
-     * @var string
+     * @var integer
      */
     private $userId;
+
+    /**
+     * @var integer
+     */
+    private $groupId = -1;
 
     /**
      * @var boolean
@@ -107,6 +112,26 @@ class PMF_Entity_Category
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @return int
+     */
+    public function getGroupId()
+    {
+        return $this->groupId;
+    }
+
+    /**
+     * @param int $groupId
+     *
+     * @return PMF_Entity_Category
+     */
+    public function setGroupId($groupId)
+    {
+        $this->groupId = $groupId;
+
+        return $this;
     }
 
     /**

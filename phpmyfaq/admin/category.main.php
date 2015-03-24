@@ -68,6 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id'    => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
         );
 
@@ -132,6 +133,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id'    => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
 
         );

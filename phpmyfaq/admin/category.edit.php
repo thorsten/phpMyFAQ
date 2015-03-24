@@ -109,6 +109,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </select>
                 </div>
             </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
+                <div class="col-lg-4">
+                    <select name="group_id" id="group_id" size="1" class="form-control">
+                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()]) ?>
+                    </select>
+                </div>
+            </div>
 <?php
     if ($faqConfig->get('security.permLevel') != 'basic') {
 ?>

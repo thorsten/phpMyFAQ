@@ -203,6 +203,7 @@ class PMF_Category
                 fc.name AS name,
                 fc.description AS description,
                 fc.user_id AS user_id,
+                fc.group_id AS group_id,
                 fc.active AS active
             FROM
                 %sfaqcategories fc
@@ -251,7 +252,7 @@ class PMF_Category
         $_query = '';
         $query  = sprintf('
             SELECT
-                id, lang, parent_id, name, description, user_id, active
+                id, lang, parent_id, name, description, user_id, group_id, active
             FROM
                 %sfaqcategories
             WHERE ',
@@ -286,7 +287,7 @@ class PMF_Category
     {
         $query = sprintf("
             SELECT
-                id, lang, parent_id, name, description, user_id, active
+                id, lang, parent_id, name, description, user_id, group_id, active
             FROM
                 %sfaqcategories",
             PMF_Db::getTablePrefix());
@@ -310,8 +311,7 @@ class PMF_Category
     public function buildTree($id_parent = 0, $indent = 0)
     {
         $tt = [];
-        $x = 0;
-        $loop = 0;
+        $x = $loop = 0;
 
         foreach ($this->categories as $n) {
             if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
@@ -992,16 +992,18 @@ class PMF_Category
         $query = sprintf("
             INSERT INTO
                 %sfaqcategories
-            (id, lang, parent_id, name, description, user_id)
+            (id, lang, parent_id, name, description, user_id, group_id, active)
                 VALUES
-            (%d, '%s', %d, '%s', '%s', %d)",
+            (%d, '%s', %d, '%s', '%s', %d, %d, %d)",
             PMF_Db::getTablePrefix(),
             $id,
             $categoryData['lang'],
             $parentId,
             $categoryData['name'],
             $categoryData['description'],
-            $categoryData['user_id']
+            $categoryData['user_id'],
+            $categoryData['group_id'],
+            $categoryData['active']
         );
         $this->_config->getDb()->query($query);
 
@@ -1011,15 +1013,11 @@ class PMF_Category
     /**
      * Updates an existent category entry
      *
-     * @param  array   $category_data Array of category data
+     * @param  array   $categoryData Array of category data
      * @return boolean
      */
-    public function updateCategory(Array $category_data)
+    public function updateCategory(Array $categoryData)
     {
-        if (!is_array($category_data)) {
-            return false;
-        }
-
         $query = sprintf("
             UPDATE
                 %sfaqcategories
@@ -1027,18 +1025,21 @@ class PMF_Category
                 name = '%s',
                 description = '%s',
                 user_id = %d,
+                group_id = %d,
                 active = %d
             WHERE
                 id = %d
             AND
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
-            $category_data['name'],
-            $category_data['description'],
-            $category_data['user_id'],
-            $category_data['active'],
-            $category_data['id'],
-            $category_data['lang']);
+            $categoryData['name'],
+            $categoryData['description'],
+            $categoryData['user_id'],
+            $categoryData['group_id'],
+            $categoryData['active'],
+            $categoryData['id'],
+            $categoryData['lang']
+        );
         $this->_config->getDb()->query($query);
 
         return true;
@@ -1071,6 +1072,7 @@ class PMF_Category
                 ->setName($row->name)
                 ->setDescription($row->description)
                 ->setUserId($row->user_id)
+                ->setGroupId($row->group_id)
                 ->setActive($row->active);
         }
 
@@ -1078,7 +1080,7 @@ class PMF_Category
     }
 
     /**
-     * Move the categories ownership, if any.
+     * Move the categories ownership for users
      *
      * @param  integer $from Old user id
      * @param  integer $to   New user id
@@ -1100,14 +1102,14 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             $to,
             $from
-            );
+        );
         $this->_config->getDb()->query($query);
 
         return true;
     }
 
     /**
-     * Checks wether a language is already defined for a category id
+     * Checks if a language is already defined for a category id
      *
      * @param  integer $category_id   Category id
      * @param  string  $category_lang Category language
@@ -1319,7 +1321,7 @@ class PMF_Category
     }
 
     /**
-     * Create all languagess which can be used for translation as <option>
+     * Create all languages which can be used for translation as <option>
      *
      * @param  integer $category_id   Category id
      * @param  string  $selected_lang Selected language
