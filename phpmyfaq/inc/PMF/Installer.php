@@ -299,6 +299,7 @@ class PMF_Installer
         'main.urlValidateInterval'                => '86400',
         'main.enableWysiwygEditor'                => 'true',
         'main.enableWysiwygEditorFrontend'        => 'false',
+        'main.enableMarkdownEditor'               => 'false',
         'main.templateSet'                        => 'default',
         'main.optionalMailAddress'                => 'false',
         'main.dateFormat'                         => 'Y-m-d H:i',
