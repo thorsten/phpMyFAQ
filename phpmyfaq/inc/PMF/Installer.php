@@ -337,6 +337,7 @@ class PMF_Installer
         'records.allowNewFaqsForGuests'           => 'true',
         'records.hideEmptyCategories'             => 'false',
         'records.allowDownloadsForGuests'         => 'false',
+        'records.numberMaxStoredRevisions'        => '10',
 
         'search.numberSearchTerms'                => '10',
         'search.relevance'                        => 'thema,content,keywords',
