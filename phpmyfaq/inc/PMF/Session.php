@@ -272,6 +272,18 @@ class PMF_Session
     }
 
     /**
+     * Deletes all entries in the table
+     *
+     * @return mixed
+     */
+    public function deleteAllSessions()
+    {
+        $query = sprintf("DELETE FROM %sfaqsessions", PMF_Db::getTablePrefix());
+
+        return $this->_config->getDb()->query($query);
+    }
+
+    /**
      * Checks the Session ID
      *
      * @param integer $sessionId Session ID

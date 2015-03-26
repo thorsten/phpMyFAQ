@@ -1227,3 +1227,5 @@ $LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloa
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Attention! If you enter a password, you overwrite the password of the user.";
 $PM_LANG["ad_delete_all_votings"] = "Clear all votings";
 $PMF_LANG["ad_categ_moderator"] = "Moderators";
+$PMF_LANG['ad_clear_all_visits'] = "Clear all visits";
+$PMF_LANG['ad_reset_visits_success'] = 'The visits were resetted successfully.';

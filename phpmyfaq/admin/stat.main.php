@@ -27,10 +27,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-        <header>
+        <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_stat_sess'] ?>
+                    <div class="pull-right">
+                        <a class="btn btn-danger" href="?action=clear-visits">
+                            <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_clear_all_visits'] ?>
+                        </a>
+                    </div>
                 </h2>
             </div>
         </header>
@@ -42,6 +47,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     
     $session    = new PMF_Session($faqConfig);
     $date       = new PMF_Date($faqConfig);
+    $visits     = new PMF_Visits($faqConfig);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month      = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
     $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
@@ -50,10 +56,9 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         $statdelete = null;
     }
 
+    // Delete sessions and session files
     if (!is_null($statdelete) && !is_null($month)) {
-        // Search for related tracking data files and
-        // delete them including the sid records in the faqsessions table
-        $dir   = opendir(PMF_ROOT_DIR."/data");
+        $dir   = opendir(PMF_ROOT_DIR . '/data');
         $first = 9999999999999999999999999;
         $last  = 0;
         while($trackingFile = readdir($dir)) {
@@ -75,6 +80,26 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         $session->deleteSessions($first, $last);
 
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
+    }
+
+    // Reset all visits and sessions
+    if ('clear-visits' === $action) {
+
+        // Clear visits
+        $visits->resetAll();
+
+        // Delete logifles
+        $files = glob(PMF_ROOT_DIR . '/data/*');
+        foreach ($files as $file) {
+            if (is_file($file)) {
+                unlink($file);
+            }
+        }
+
+        // Delete sessions
+        $session->deleteAllSessions();
+
+        printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_reset_visits_success']);
     }
 ?>
                 <form action="?action=sessionbrowse" method="post" accept-charset="utf-8">

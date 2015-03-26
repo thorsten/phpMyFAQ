@@ -308,7 +308,8 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             // functions for session administration
             case 'adminlog':
             case 'deleteadminlog':    require 'stat.adminlog.php'; break;
-            case "viewsessions":      require 'stat.main.php'; break;
+            case 'viewsessions':
+            case 'clear-visits':      require 'stat.main.php'; break;
             case "sessionbrowse":     require 'stat.browser.php'; break;
             case "viewsession":       require 'stat.show.php'; break;
             case 'clear-statistics':
