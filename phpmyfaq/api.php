@@ -139,9 +139,29 @@ switch ($action) {
         }
         break;
 
+    case 'getPopular':
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $result = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
+        break;
+
+    case 'getLatest':
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $result = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
+        break;
+
+    case 'getNews':
+        $news = new PMF_News($faqConfig);
+        $result = $news->getLatestData(false, true, true);
+        break;
 }
 
-if( empty( $result ) ) $result = array( 'result' => false );
+if (empty($result)) {
+    $result = ['result' => false];
+}
 
 // print result as JSON
 echo json_encode($result);

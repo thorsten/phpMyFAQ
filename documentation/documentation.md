@@ -134,7 +134,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   Filter support
     *   SPL support
     *   FileInfo support
-*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+ or Zeus Webserver)
+*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+)
 *   **Database server**
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.6.x)
     *   [PostgreSQL](http://www.postgresql.org) 9.x (recommended: latest 9.x)
@@ -301,24 +301,27 @@ To set the default language in your browser you have to set a variable that gets
 
 *Apache Web server*
 
-If you want to enable the search engine optimization you have to rename the file \_.htaccess to .htaccess in the root directory where your FAQ is located. Then you have to activate the mod\_rewrite support in the admin backend in the configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ on root directory "/" you should set in `RewriteBase /`
-Please check, if `AllowOverride All`	is set correctly in your httpd.conf file so that the .htaccess rules work.
+If you want to enable the search engine optimization you have to rename the file \_.htaccess to .htaccess in the root 
+directory where your FAQ is located. Then you have to activate the mod\_rewrite support in the admin backend in the 
+configuration page. You also have to edit the path information for the "RewriteBase". If you installed phpMyFAQ on root 
+directory "/" you should set in `RewriteBase /` Please check, if `AllowOverride All` is set correctly in your httpd.conf 
+file so that the .htaccess rules work.
 
 *IIS Web server*
 
-If you want to enable the search engine optimization you have to rename the file _httpd.ini to httpd.ini in the root directory where your FAQ is located. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
+If you want to enable the search engine optimization you have to rename the file _httpd.ini to httpd.ini in the root 
+directory where your FAQ is located. Then you have to activate the URL rewrite support in the admin backend in the 
+configuration page.
 
 *nginx Web server*
 
-If you want to enable the search engine optimization you have to copy the rewrite rules in the file _nginx.conf to your nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
+If you want to enable the search engine optimization you have to copy the rewrite rules in the file _nginx.conf to your 
+nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
 
 *lighttpd Web server*
 
-If you want to enable the search engine optimization you have to copy the rewrite rules in the file _lighttpd.conf to your lighttpd.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
-
-*Zeus Web server*
-
-If you want to enable the search engine optimization you have to use the rewrite rules in the file rewrite.script. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
+If you want to enable the search engine optimization you have to copy the rewrite rules in the file _lighttpd.conf to 
+your lighttpd.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
 
 [back to top][64]
 
@@ -1188,7 +1191,84 @@ You can call the resources with the following URIs:
         }
     ]</code></pre>
 
+*   **getPopular()**
 
+    *   http://www.example.org/phpmyfaq/api.php?action=getPopular (standard)
+    *   http://www.example.org/phpmyfaq/api/getPopular (rewrite rules enabled)
+
+    The result will be a JSON object like the following:
+
+    <pre><code class="json">[
+        {
+            "visits": "10",
+            "question": "How can I survive without phpMyFAQ?",
+            "date": "20091014181500",
+            "last_visit": "1426523991",
+            "url": "/phpMyFAQ-2.9/phpmyfaq/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+        
+        },
+        {
+            "visits": "3",
+            "question": "Is there life after death?",
+            "date": "20091010175452",
+            "last_visit": "1423399890",
+            "url": "\phpmyfaq/phpmyfaq/index.php?action=artikel&cat=1&id=1&artlang=en"
+        
+        }
+    ]</code></pre>
+    
+*   **getLatest()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getLatest (standard)
+    *   http://www.example.org/phpmyfaq/api/getLatest (rewrite rules enabled)
+
+    The result will be a JSON object like the following:
+
+    <pre><code class="json">[
+        {
+            "date": "20091014181500",
+            "question": "How can I survive without phpMyFAQ?",
+            "answer": "A good question!",
+            "visits": "10",
+            "url": "/phpMyFAQ-2.9/phpmyfaq/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+        
+        },
+        {
+            "date": "20091010175452",
+            "question": "Is there life after death?",
+            "answer": "Maybe!",
+            "visits": "3",
+            "url": "\phpmyfaq/phpmyfaq/index.php?action=artikel&cat=1&id=1&artlang=en"
+        }
+    ]</code></pre>
+    
+*   **getNews()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getNews (standard)
+    *   http://www.example.org/phpmyfaq/api/getNews (rewrite rules enabled)
+
+    The result will be a JSON object like the following:
+
+    <pre><code class="json">[
+        {
+            "id": "1",
+            "lang": "de",
+            "date": "20091010175452",
+            "header": "Hallo, World!",
+            "content": "<p>Hello, phpMyFAQ!</p>",
+            "authorName": "Thorsten",
+            "authorEmail": "thorsten@phpmyfaq.de",
+            "dateStart": "0",
+            "dateEnd": "99991231235959",
+            "active": true,
+            "allowComments": true,
+            "link": "",
+            "linkTitle": "",
+            "target": ""
+        }
+    ]</code></pre>
+    
+    
 [back to top][64]
 
 * * *

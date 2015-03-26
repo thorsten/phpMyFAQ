@@ -1581,7 +1581,7 @@ class PMF_Faq
     }
 
     /**
-     * This function generates a list with the mosted voted or most visited records
+     * This function generates a list with the most voted or most visited records
      *
      * @param  string $type Type definition visits/voted
      * @access public
@@ -1601,13 +1601,13 @@ class PMF_Faq
         if (count($result) > 0) {
             foreach ($result as $row) {
                 if ('visits' == $type) {
-                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['preview'][] = $row['thema'];
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['question'], 8);
+                    $output['preview'][] = $row['question'];
                     $output['url'][]     = $row['url'];
                     $output['visits'][]  = $this->plr->GetMsg('plmsgViews', $row['visits']);
                 } else {
-                    $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
-                    $output['preview'][] = $row['thema'];
+                    $output['title'][]   = PMF_Utils::makeShorterText($row['question'], 8);
+                    $output['preview'][] = $row['question'];
                     $output['url'][]     = $row['url'];
                     $output['voted'][]   = sprintf(
                         '%s %s 5 - %s',
@@ -1638,9 +1638,9 @@ class PMF_Faq
         if (count ($result) > 0) {
             foreach ($result as $row) {
                 $output['url'][]     =  $row['url'];
-                $output['title'][]   = PMF_Utils::makeShorterText($row['thema'], 8);
-                $output['preview'][] = $row['thema'];
-                $output['date'][]    = $date->format(PMF_Date::createIsoDate($row['datum']));
+                $output['title'][]   = PMF_Utils::makeShorterText($row['question'], 8);
+                $output['preview'][] = $row['question'];
+                $output['date'][]    = $date->format(PMF_Date::createIsoDate($row['date']));
             }
         } else {
             $output['error'] = $this->pmf_lang["err_noArticles"];
@@ -1800,10 +1800,10 @@ class PMF_Faq
         $oldId = 0;
         while (($row = $this->_config->getDb()->fetchObject($result)) && $i <= $count) {
             if ($oldId != $row->id) {
-                $data['avg'] = $row->avg;
-                $data['thema'] = $row->thema;
-                $data['date'] = $row->datum;
-                $data['user'] = $row->user;
+                $data['avg']      = $row->avg;
+                $data['question'] = $row->thema;
+                $data['date']     = $row->datum;
+                $data['user']     = $row->user;
 
                 $title = $row->thema;
                 $url   = sprintf(
@@ -1911,7 +1911,7 @@ class PMF_Faq
             }
 
             $data['visits']     = $row->visits;
-            $data['thema']      = $row->thema;
+            $data['question']   = $row->thema;
             $data['date']       = $row->datum;
             $data['last_visit'] = $row->last_visit;
 
@@ -2013,10 +2013,10 @@ class PMF_Faq
                 }
             }
 
-            $data['datum']   = $row->datum;
-            $data['thema']   = $row->thema;
-            $data['content'] = $row->content;
-            $data['visits']  = $row->visits;
+            $data['date']     = $row->datum;
+            $data['question'] = $row->thema;
+            $data['answer']   = $row->content;
+            $data['visits']   = $row->visits;
 
             $title = $row->thema;
             $url   = sprintf(
