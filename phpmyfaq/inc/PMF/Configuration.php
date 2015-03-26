@@ -188,6 +188,16 @@ class PMF_Configuration
     }
 
     /**
+     * Returns the default language
+     *
+     * @return string
+     */
+    public function getDefaultLanguage()
+    {
+        return str_replace(['language_', '.php'], '', $this->config['main.language']);
+    }
+
+    /**
      * Sets the PMF_Ldap object
      *
      * @param PMF_Ldap $ldap
