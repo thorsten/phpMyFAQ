@@ -527,11 +527,12 @@ $ php composer.phar install
 <strong>Important:</strong>
 Writing permission for your script is needed in this directory to be able to write the file <strong>config/database.php</strong> during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your web server isn't configured as needed.</p>
 
-<p>It might help to set chmod 777 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 777 for the following files and directories even after the successful installation:</p>
+<p>It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 775 for the following files and directories even after the successful installation:</p>
 
 <ul>
-<li>the directory <strong>config/</strong></li>
 <li>the directory <strong>attachments/</strong></li>
+<li>the directory <strong>config/</strong></li>
+<li>the directory <strong>data/</strong></li>
 <li>the directory <strong>images/</strong></li>
 </ul>
 

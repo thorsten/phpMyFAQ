@@ -93,7 +93,7 @@ class PMF_Instance_Setup
             if (false === is_writable($this->_rootDir . $dir)) {
                 $failedDirs[] = $dir;
             } elseif (false === is_dir($this->_rootDir . $dir)) {
-                if (false === mkdir($this->_rootDir . $dir, 0755)) {
+                if (false === mkdir($this->_rootDir . $dir, 0775)) {
                     $failedDirs[] = $dir;
                 }
             } else {
