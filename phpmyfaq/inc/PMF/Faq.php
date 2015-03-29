@@ -257,8 +257,8 @@ class PMF_Faq
                 }
 
                 $url   = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    PMF_Link::getSystemRelativeUri(),
+                    '%sindex.php?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $this->_config->get('main.referenceURL'),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -1917,8 +1917,8 @@ class PMF_Faq
 
             $title = $row->thema;
             $url   = sprintf(
-                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                PMF_Link::getSystemRelativeUri(),
+                '%sindex.php?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $this->_config->get('main.referenceURL'),
                 $sids,
                 $row->category_id,
                 $row->id,
@@ -2020,8 +2020,8 @@ class PMF_Faq
 
             $title = $row->thema;
             $url   = sprintf(
-                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                PMF_Link::getSystemRelativeUri(),
+                '%sindex.php?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                $this->_config->get('main.referenceURL'),
                 $sids,
                 $row->category_id,
                 $row->id,
