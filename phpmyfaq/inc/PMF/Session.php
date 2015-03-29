@@ -44,7 +44,7 @@ class PMF_Session
     /**
      * @var PMF_Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor
@@ -55,7 +55,7 @@ class PMF_Session
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
     
     /**
@@ -64,13 +64,15 @@ class PMF_Session
      * @param  string  $action Action string
      * @param  integer $id     Current ID
      *
+     * @throws PMF_Exception
+     *
      * @return void
      */
     public function userTracking($action, $id = 0)
     {
         global $sid, $user, $botBlacklist;
 
-        if ($this->_config->get('main.enableUserTracking')) {
+        if ($this->config->get('main.enableUserTracking')) {
 
             $bots   = 0;
             $banned = false;
@@ -91,14 +93,12 @@ class PMF_Session
                 }
             }
 
-            $network = new PMF_Network($this->_config);
+            $network = new PMF_Network($this->config);
 
             // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-            $remoteAddr = $_SERVER['REMOTE_ADDR'];
-            $localAddresses = array(
-                '127.0.0.1',
-                '::1',
-            );
+            $remoteAddr     = $_SERVER['REMOTE_ADDR'];
+            $localAddresses = ['127.0.0.1', '::1',];
+
             if (in_array($remoteAddr, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
@@ -111,7 +111,7 @@ class PMF_Session
 
             if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
-                    $sid = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqsessions', 'sid');
+                    $sid = $this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sid);
@@ -129,7 +129,7 @@ class PMF_Session
                         $remoteAddr,
                         $_SERVER['REQUEST_TIME']
                     );
-                    $this->_config->getDb()->query($query);
+                    $this->config->getDb()->query($query);
                 }
 
                 $data = $sid.';' . 
@@ -172,11 +172,11 @@ class PMF_Session
             PMF_Db::getTablePrefix(),
             $sid);
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
         if ($result) {
-        	$res       = $this->_config->getDb()->fetchObject($result);
-        	$timestamp = $res->time;
+            $res       = $this->config->getDb()->fetchObject($result);
+            $timestamp = $res->time;
         }
 
         return $timestamp;
@@ -210,8 +210,8 @@ class PMF_Session
             $lastHour
         );
 
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $sessions[$row->sid] = array(
                 'ip'   => $row->ip,
                 'time' => $row->time
@@ -237,9 +237,9 @@ class PMF_Session
                 %sfaqsessions",
             PMF_Db::getTablePrefix());
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
         if ($result) {
-            $num = $this->_config->getDb()->numRows($result);
+            $num = $this->config->getDb()->numRows($result);
         }
 
         return $num;
@@ -266,7 +266,7 @@ class PMF_Session
             $first,
             $last);
 
-        $this->_config->getDb()->query($query);
+        $this->config->getDb()->query($query);
 
         return true;
     }
@@ -280,7 +280,7 @@ class PMF_Session
     {
         $query = sprintf("DELETE FROM %sfaqsessions", PMF_Db::getTablePrefix());
 
-        return $this->_config->getDb()->query($query);
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -311,9 +311,9 @@ class PMF_Session
             $ip,
             $_SERVER['REQUEST_TIME'] - 86400
         );
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        if ($this->_config->getDb()->numRows($result) == 0) {
+        if ($this->config->getDb()->numRows($result) == 0) {
             $this->userTracking('old_session', $sessionId);
         } else {
             // Update global session id
@@ -334,12 +334,12 @@ class PMF_Session
                 $sessionId,
                 $ip
             );
-            $this->_config->getDb()->query($query);
+            $this->config->getDb()->query($query);
         }
     }
     /**
      * Returns the number of anonymous users and registered ones.
-     * These are the numbers of unique users who have perfomed
+     * These are the numbers of unique users who have performed
      * some activities within the last five minutes
      *
      * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
@@ -351,10 +351,10 @@ class PMF_Session
     {
         $users = array(0, 0);
         
-        if ($this->_config->get('main.enableUserTracking')) {
+        if ($this->config->get('main.enableUserTracking')) {
             $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
             // Count all sids within the time window
-            // TODO: add a new field in faqsessions in order to find out only sids of anonymous users
+            // @todo Add a new field in faqsessions in order to find out only sids of anonymous users
             $query = sprintf("
                 SELECT
                     count(sid) AS anonymous_users
@@ -368,10 +368,10 @@ class PMF_Session
                 $timeNow
             );
 
-            $result = $this->_config->getDb()->query($query);
+            $result = $this->config->getDb()->query($query);
             
             if (isset($result)) {
-                $row      = $this->_config->getDb()->fetchObject($result);
+                $row      = $this->config->getDb()->fetchObject($result);
                 $users[0] = $row->anonymous_users;
             }
             
@@ -385,10 +385,10 @@ class PMF_Session
                     session_timestamp > %d",
                 PMF_Db::getTablePrefix(),
                 $timeNow);
-            $result = $this->_config->getDb()->query($query);
+            $result = $this->config->getDb()->query($query);
             
             if (isset($result)) {
-                $row      = $this->_config->getDb()->fetchObject($result);
+                $row      = $this->config->getDb()->fetchObject($result);
                 $users[1] = $row->registered_users;
             }
         }
@@ -422,9 +422,9 @@ class PMF_Session
             $startDate,
             $endDate
         );
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $visits[] = $row->time;
         }
 
