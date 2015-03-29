@@ -803,7 +803,7 @@ class PMF_Installer
         }
 
         $configuration->update(array('main.referenceURL' => $link->getSystemUri('/setup/index.php')));
-        $configuration->add('security.salt', md5($configuration->get('main.referenceURL')));
+        $configuration->add('security.salt', md5($configuration->getDefaultUrl()));
 
         // add admin account and rights
         $admin = new PMF_User($configuration);

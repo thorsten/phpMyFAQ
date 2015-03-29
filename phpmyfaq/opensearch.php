@@ -22,8 +22,8 @@ define('IS_VALID_PHPMYFAQ', null);
 require __DIR__ . '/inc/Bootstrap.php';
 require PMF_LANGUAGE_DIR . '/' . $faqConfig->get('main.language');
 
-$baseUrl   = $faqConfig->get('main.referenceURL');
-$searchUrl = $baseUrl . '/index.php?action=search';
+$baseUrl   = $faqConfig->getDefaultUrl();
+$searchUrl = $baseUrl . 'index.php?action=search';
 
 $xml = new XMLWriter();
 $xml->openMemory();

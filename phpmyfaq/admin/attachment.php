@@ -76,7 +76,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <meta charset="utf-8">
 
     <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <base href="<?php echo $faqConfig->get('main.referenceURL'); ?>/admin/" />
+    <base href="<?php echo $faqConfig->getDefaultUrl(); ?>admin/" />
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">

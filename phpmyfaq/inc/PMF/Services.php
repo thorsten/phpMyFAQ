@@ -84,7 +84,7 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->get('main.referenceURL'),
+            $this->_config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -105,7 +105,7 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->get('main.referenceURL'),
+            $this->_config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -126,7 +126,7 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->get('main.referenceURL'),
+            $this->_config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -151,7 +151,7 @@ class PMF_Services
     {
         return sprintf(
             '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
-            $this->_config->get('main.referenceURL'),
+            $this->_config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()

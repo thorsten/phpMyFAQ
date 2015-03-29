@@ -198,6 +198,22 @@ class PMF_Configuration
     }
 
     /**
+     * Returns the default URL of the phpMyFAQ installation
+     *
+     * @return string
+     */
+    public function getDefaultUrl()
+    {
+        $defaultUrl = $this->get('main.referenceURL');
+
+        if (substr($defaultUrl, -1) !== '/') {
+            return $defaultUrl . '/';
+        } else {
+            return $defaultUrl;
+        }
+    }
+
+    /**
      * Sets the PMF_Ldap object
      *
      * @param PMF_Ldap $ldap

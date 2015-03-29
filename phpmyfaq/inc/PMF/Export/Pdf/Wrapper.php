@@ -433,7 +433,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
         if ($this->enableBookmarks == false) {
             $this->SetY(-15);
             $this->SetFont($this->currentFont, '', 8);
-            $baseUrl = '/index.php';
+            $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=artikel&amp;';
                 if (array_key_exists($this->category, $this->categories)) {
@@ -444,7 +444,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
                 $baseUrl .= '&amp;id='.$this->faq['id'];
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
-            $url    = $this->_config->get('main.referenceURL') . $baseUrl;
+            $url    = $this->_config->getDefaultUrl() . $baseUrl;
             $urlObj = new PMF_Link($url, $this->_config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());

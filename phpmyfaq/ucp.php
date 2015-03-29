@@ -65,6 +65,6 @@ if ($user instanceof PMF_User) {
     $tpl->merge('writeContent', 'index');
 } else {
     // Redirect to login
-    header('Location: ' . $faqConfig->get('main.referenceURL') . '/');
+    header('Location: ' . $faqConfig->getDefaultUrl());
     exit();
 }

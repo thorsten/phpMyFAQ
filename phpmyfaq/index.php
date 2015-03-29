@@ -155,7 +155,7 @@ if ('logout' === $action && isset($auth)) {
     if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
         header('Location: ' . $ssoLogout);
     } else {
-        header('Location: ' . $faqConfig->get('main.referenceURL'));
+        header('Location: ' . $faqConfig->getDefaultUrl());
     }
 }
 
@@ -572,7 +572,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'opensearch'          => $faqSystem->getSystemUri($faqConfig) . 'opensearch.php');
 }
 
-$tplNavigation['faqHome']             = $faqConfig->get('main.referenceURL');
+$tplNavigation['faqHome']             = $faqConfig->getDefaultUrl();
 $tplNavigation['activeQuickfind']     = ('instantresponse' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent']    = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion']   = ('ask' == $action) ? 'active' : '';

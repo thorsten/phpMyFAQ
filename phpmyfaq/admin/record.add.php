@@ -164,7 +164,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
                 $url   = sprintf(
                     '%s?action=artikel&cat=%d&id=%d&artlang=%s',
-                    $faqConfig->get('main.referenceURL'),
+                    $faqConfig->getDefaultUrl(),
                     $categories['rubrik'][0],
                     $recordId,
                     $recordLang
@@ -201,7 +201,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                             $recordId,
                             $recordLang
                         );
-                $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
+                $link             = $faqConfig->getDefaultUrl() . str_replace('admin/', '', $link);
                 $oLink            = new PMF_Link($link, $faqConfig);
                 $oLink->itemTitle = $question;
                 $link             = $oLink->toString();

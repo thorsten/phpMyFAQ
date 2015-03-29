@@ -250,7 +250,7 @@ foreach ($LANG_CONF as $key => $value) {
 
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
                 echo "<br />\n";
-                echo "Your Callback URL is: " .$faqConfig->get('main.referenceURL') . "/services/twitter/callback.php";
+                echo "Your Callback URL is: " .$faqConfig->getDefaultUrl() . "services/twitter/callback.php";
             }
 
             if (!isset($content)) {

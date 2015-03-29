@@ -103,7 +103,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         if ($useUrl) {
             $text[$i][] = $report->convertEncoding(
                 sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $faqConfig->get('main.referenceURL'),
+                    $faqConfig->getDefaultUrl(),
                     $data['category_id'],
                     $data['faq_id'],
                     $data['faq_language']

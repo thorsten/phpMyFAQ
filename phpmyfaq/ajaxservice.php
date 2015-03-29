@@ -179,7 +179,7 @@ switch ($action) {
                     }
                     $faqUrl = sprintf(
                         '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                        $faqConfig->get('main.referenceURL'),
+                        $faqConfig->getDefaultUrl(),
                         $category->getCategoryIdFromArticle($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
@@ -196,7 +196,7 @@ switch ($action) {
                         $emailTo = $news['authorEmail'];
                     }
                     $link = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                        $faqConfig->get('main.referenceURL'),
+                        $faqConfig->getDefaultUrl(),
                         $news['id'],
                         $news['lang']
                     );
@@ -434,7 +434,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck']) . "\n\n" .
                 $faqConfig->get('main.titleFAQ') . ": " .
-                $faqConfig->get('main.referenceURL') . '/admin/';
+                $faqConfig->getDefaultUrl() . 'admin/';
             $result = $mail->send();
             unset($mail);
 
@@ -516,8 +516,8 @@ switch ($action) {
 
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
-                            '%s/index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $faqConfig->get('main.referenceURL'),
+                            '%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                            $faqConfig->getDefaultUrl(),
                             $result->category_id,
                             $result->id,
                             $result->lang
@@ -542,7 +542,7 @@ switch ($action) {
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
                                 wordwrap($question, 72) . "\n\n" .
-                                $faqConfig->get('main.referenceURL') . '/admin/';
+                                $faqConfig->getDefaultUrl() . 'admin/';
 
                     $userId = $cat->getCategoryUser($questionData['category_id']);
                     $oUser  = new PMF_User($faqConfig);
@@ -574,7 +574,7 @@ switch ($action) {
                                 ", mailto:".$questionData['email'] . "\n" . $PMF_LANG["msgCategory"] .
                                 ": " . $categories[$questionData['category_id']]["name"] . "\n\n" .
                                 wordwrap($question, 72) . "\n\n" .
-                                $faqConfig->get('main.referenceURL') . '/admin/';
+                                $faqConfig->getDefaultUrl() . 'admin/';
 
                 $userId = $cat->getCategoryUser($questionData['category_id']);
                 $oUser  = new PMF_User($faqConfig);
@@ -647,7 +647,7 @@ switch ($action) {
                     $realname,
                     $loginname,
                     $adminMessage,
-                    $faqConfig->get('main.referenceURL')
+                    $faqConfig->getDefaultUrl()
                 );
 
                 $mail = new PMF_Mail($faqConfig);

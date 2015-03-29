@@ -36,7 +36,7 @@ $connection = new TwitterOAuth(
 );
 
 $requestToken = $connection->getRequestToken(
-    $faqConfig->get('main.referenceURL') . '/services/twitter/callback.php'
+    $faqConfig->getDefaultUrl() . 'services/twitter/callback.php'
 );
 
 $_SESSION['oauth_token']        = $requestToken['oauth_token'];

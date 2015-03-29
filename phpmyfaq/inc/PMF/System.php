@@ -219,7 +219,7 @@ class PMF_System
      */
     public function getSystemUri(PMF_Configuration $faqConfig)
     {
-        $mainUrl = $faqConfig->get('main.referenceURL');
+        $mainUrl = $faqConfig->getDefaultUrl();
 
         if (isset($_ENV['REQUEST_SCHEME']) && 'https' === $_ENV['REQUEST_SCHEME']) {
             if (false === strpos($mainUrl, 'https')) {

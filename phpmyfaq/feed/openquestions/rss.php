@@ -66,11 +66,11 @@ $rss->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgOpenQuestions']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
+$rss->writeElement('link', $faqConfig->getDefaultUrl());
 $rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
-$rss->writeAttribute('href', $faqConfig->get('main.referenceURL') . 'feed/openquestions/rss.php');
+$rss->writeAttribute('href', $faqConfig->getDefaultUrl() . 'feed/openquestions/rss.php');
 $rss->endElement();
 
 if ($num > 0) {

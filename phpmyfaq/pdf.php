@@ -112,7 +112,7 @@ if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
 } else {
 
     if (is_null($currentCategory) || is_null($id)) {
-        $http->redirect($faqConfig->get('main.referenceURL'));
+        $http->redirect($faqConfig->getDefaultUrl());
         exit();
     }
 

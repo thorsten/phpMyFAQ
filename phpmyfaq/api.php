@@ -84,7 +84,7 @@ switch ($action) {
 
         $searchString  = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
-        $url           = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
+        $url           = $faqConfig->getDefaultUrl() . 'index.php?action=artikel&cat=%d&id=%d&artlang=%s';
 
         $faqSearchResult->reviewResultset($searchResults);
 
@@ -134,7 +134,7 @@ switch ($action) {
         foreach ($attachments as $attachment) {
             $result[] = [
                 'filename' => $attachment->getFilename(),
-                'url'      => $faqConfig->get('main.referenceURL') . $attachment->buildUrl()
+                'url'      => $faqConfig->getDefaultUrl() . $attachment->buildUrl()
             ];
         }
         break;

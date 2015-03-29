@@ -270,7 +270,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $userRealName,
                 $userName,
                 $user->createPassword(),
-                $faqConfig->get('main.referenceURL')
+                $faqConfig->getDefaultUrl()
             );
 
             $mail = new PMF_Mail($faqConfig);

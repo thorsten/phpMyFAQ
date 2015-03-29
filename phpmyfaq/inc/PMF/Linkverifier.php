@@ -156,7 +156,7 @@ class PMF_Linkverifier
      */
     public function isReady()
     {
-        if (is_null($this->config->get('main.referenceURL')) || '' !== $this->config->get('main.referenceURL')) {
+        if (is_null($this->config->getDefaultUrl()) || '' !== $this->config->getDefaultUrl()) {
             return false;
         }
 
@@ -715,12 +715,12 @@ class PMF_Linkverifier
     {
         global $PMF_LANG;
 
-        if ($this->config->get('main.referenceURL') === '') {
+        if ($this->config->getDefaultUrl() === '') {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
 
-        if (trim('' == $this->config->get('main.referenceURL'))) {
+        if (trim('' == $this->config->getDefaultUrl())) {
             $output = $PMF_LANG['ad_linkcheck_noReferenceURL'];
             return ($cron ? '' : sprintf('<p class="alert alert-warning">%s</p>', $output));
         }
@@ -732,7 +732,7 @@ class PMF_Linkverifier
 
         // Parse contents and verify URLs
         $this->parseString($contents);
-        $result = $this->verifyURLs($this->config->get('main.referenceURL'));
+        $result = $this->verifyURLs($this->config->getDefaultUrl());
         $this->markEntry($id, $artlang);
 
         // If no URLs found

@@ -756,7 +756,7 @@ if ($step == 3) {
         $faqConfig->add('records.autosaveActive', 'false');
         $faqConfig->add('records.autosaveSecs', '180');
         $faqConfig->add('main.maintenanceMode', 'false');
-        $faqConfig->add('security.salt', md5($faqConfig->get('main.referenceURL')));
+        $faqConfig->add('security.salt', md5($faqConfig->getDefaultUrl()));
     }
 
     //

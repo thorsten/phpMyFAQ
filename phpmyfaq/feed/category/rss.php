@@ -109,11 +109,11 @@ $rss->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ');
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
-$rss->writeElement('link', $faqConfig->get('main.referenceURL'));
+$rss->writeElement('link', $faqConfig->getDefaultUrl());
 $rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
-$rss->writeAttribute('href', $faqConfig->get('main.referenceURL') . 'feed/category/rss.php');
+$rss->writeAttribute('href', $faqConfig->getDefaultUrl() . 'feed/category/rss.php');
 $rss->endElement();
 
 if (is_array($records)) {
@@ -138,8 +138,8 @@ if (is_array($records)) {
         $rss->writeCdata($item['record_preview']);
         $rss->endElement();
 
-        $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
-        $rss->writeElement('guid', $faqConfig->get('main.referenceURL') . $link);
+        $rss->writeElement('link', $faqConfig->getDefaultUrl() . $link);
+        $rss->writeElement('guid', $faqConfig->getDefaultUrl() . $link);
 
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
 

@@ -108,7 +108,7 @@ $sitemap =
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(
-    $faqConfig->get('main.referenceURL'),
+    $faqConfig->getDefaultUrl(),
     PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
     PMF_SITEMAP_GOOGLE_PRIORITY_MAX
@@ -131,7 +131,7 @@ foreach ($items as $item) {
         }
     }
     $sitemap .= buildSitemapNode(
-        $faqConfig->get('main.referenceURL').$link,
+        $faqConfig->getDefaultUrl().$link,
         PMF_Date::createIsoDate($item['date'], DATE_W3C),
         // @todo: manage changefreq node with the info provided by faqchanges,
         // if this will not add a big load to the server (+1 query/faq)
