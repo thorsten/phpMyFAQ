@@ -119,19 +119,19 @@ if ($num > 0) {
         // Get the url
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
-            if (isset($item['thema'])) {
+            if (isset($item['question'])) {
                 $oLink            = new PMF_Link($link, $faqConfig);
-                $oLink->itemTitle = html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8');
+                $oLink->itemTitle = html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8');
                 $link             = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }
         }
         // Get the content
-        $content = $item['content'];
+        $content = $item['answer'];
         // Fix the content internal image references
         $content = str_replace("<img src=\"/", "<img src=\"".$faqConfig->get('main.referenceURL')."/", $content);
 
         $rss->startElement('item');
-        $rss->writeElement('title', html_entity_decode($item['thema'], ENT_COMPAT, 'UTF-8'));
+        $rss->writeElement('title', html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8'));
 
         $rss->startElement('description');
         $rss->writeCdata($content);
@@ -139,7 +139,7 @@ if ($num > 0) {
 
         $rss->writeElement('link', $faqConfig->get('main.referenceURL') . $link);
         $rss->writeElement('guid', $faqConfig->get('main.referenceURL') . $link);
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['datum'], true));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }
 }
