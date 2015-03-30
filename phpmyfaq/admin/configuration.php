@@ -50,6 +50,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         $newConfigValues = [];
         $escapeValues    = ['main.contactInformations', 'main.customPdfHeader', 'main.customPdfFooter'];
 
+        // Special checks
+        if (isset($editData['edit']['main.enableMarkdownEditor'])) {
+            $editData['edit']['main.enableWysiwygEditor'] = false; // Disable WYSIWG editor if Markdown is enabled
+        }
+
         foreach ($editData['edit'] as $key => $value) {
             // Remove forbidden characters
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
