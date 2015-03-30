@@ -403,8 +403,7 @@ class PMF_Session
      */
     public function getLast30DaysVisits()
     {
-        $stats  = [];
-        $visits = [];
+        $stats = $visits = [];
 
         $startDate = strtotime('-1 month');
         $endDate   = $_SERVER['REQUEST_TIME'];
@@ -431,8 +430,9 @@ class PMF_Session
         for ($date = $startDate; $date <= $endDate; $date += 86400) {
             $stats[date('Y-m-d', $date)] = 0;
         }
+
         foreach ($visits as $visitDate) {
-            $stats[date('Y-m-d', $visitDate)]++;
+            isset($stats[date('Y-m-d', $visitDate)]) ? $stats[date('Y-m-d', $visitDate)]++ : 0;
         }
 
         return $stats;
