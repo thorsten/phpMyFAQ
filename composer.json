@@ -59,7 +59,9 @@
         "phpseclib": "master@dev",
         "tcpdf": "master@dev",
         "thorsten/twitteroauth": "master@dev",
-        "swiftmailer/swiftmailer": "@stable"
+        "swiftmailer/swiftmailer": "@stable",
+        "erusev/parsedown": "~1.5.2",
+        "erusev/parsedown-extra": "~0.7.0"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",

@@ -27,6 +27,7 @@ phpmyfaq/attachments/*
 phpmyfaq/.htaccess
 
 # Third party PHP libraries
+phpmyfaq/inc/libs/parsedown
 phpmyfaq/inc/libs/phpseclib
 phpmyfaq/inc/libs/swiftmailer
 phpmyfaq/inc/libs/Symfony
