@@ -101,7 +101,7 @@ switch ($action) {
         $category = new PMF_Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
-        $result   = $category->categories;
+        $result = $category->categories;
         break;
         
     case 'getFaqs':

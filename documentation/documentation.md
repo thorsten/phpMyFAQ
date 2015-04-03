@@ -1087,8 +1087,8 @@ You can call the resources with the following URIs:
     
 *   **getCategories()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getCategories (standard)
-    *   http://www.example.org/phpmyfaq/api/getCategories (rewrite rules enabled)
+    *   http://www.example.org/phpmyfaq/api.php?action=getCategories&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getCategories/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1193,8 +1193,8 @@ You can call the resources with the following URIs:
 
 *   **getPopular()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getPopular (standard)
-    *   http://www.example.org/phpmyfaq/api/getPopular (rewrite rules enabled)
+    *   http://www.example.org/phpmyfaq/api.php?action=getPopular&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getPopular/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1219,8 +1219,8 @@ You can call the resources with the following URIs:
     
 *   **getLatest()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getLatest (standard)
-    *   http://www.example.org/phpmyfaq/api/getLatest (rewrite rules enabled)
+    *   http://www.example.org/phpmyfaq/api.php?action=getLatest&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getLatest/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1244,8 +1244,8 @@ You can call the resources with the following URIs:
     
 *   **getNews()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getNews (standard)
-    *   http://www.example.org/phpmyfaq/api/getNews (rewrite rules enabled)
+    *   http://www.example.org/phpmyfaq/api.php?action=getNews&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getNews/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 

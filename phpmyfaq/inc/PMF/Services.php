@@ -61,7 +61,7 @@ class PMF_Services
     /**
      * @var PMF_Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor
@@ -72,7 +72,7 @@ class PMF_Services
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -84,13 +84,13 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->getDefaultUrl(),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        $link = new PMF_Link($url, $this->_config);
+        $link = new PMF_Link($url, $this->config);
         $link->itemTitle = $this->question;
 
         return urlencode($link->toString());
@@ -105,13 +105,13 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->getDefaultUrl(),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        $link = new PMF_Link($url, $this->_config);
+        $link = new PMF_Link($url, $this->config);
         $link->itemTitle = $this->question;
 
         return sprintf('https://www.facebook.com/sharer.php?u=%s', urlencode($link->toString()));
@@ -126,13 +126,13 @@ class PMF_Services
     {
         $url = sprintf(
             '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-            $this->_config->getDefaultUrl(),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
         );
 
-        $link = new PMF_Link($url, $this->_config);
+        $link = new PMF_Link($url, $this->config);
         $link->itemTitle = $this->question;
 
         return sprintf(
@@ -151,7 +151,7 @@ class PMF_Services
     {
         return sprintf(
             '%s?action=send2friend&cat=%d&id=%d&artlang=%s',
-            $this->_config->getDefaultUrl(),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
@@ -183,7 +183,7 @@ class PMF_Services
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',
-            PMF_Link::getSystemRelativeUri('api.php'),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()
