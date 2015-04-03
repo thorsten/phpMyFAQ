@@ -168,7 +168,7 @@ switch ($action) {
                         $emailTo = $faq->faqRecord['email'];
                     }
                     $faqUrl = sprintf(
-                        '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                        '%s?action=artikel&cat=%d&id=%d&artlang=%s',
                         $faqConfig->get('main.referenceURL'),
                         $category->getCategoryIdFromArticle($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
@@ -185,7 +185,7 @@ switch ($action) {
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
                     }
-                    $link = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                    $link = sprintf('%s?action=news&newsid=%d&newslang=%s',
                         $faqConfig->get('main.referenceURL'),
                         $news['id'],
                         $news['lang']
