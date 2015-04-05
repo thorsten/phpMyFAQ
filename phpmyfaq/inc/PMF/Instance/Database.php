@@ -37,7 +37,7 @@ class PMF_Instance_Database
     /**
      * @var PMF_Configuration
      */
-    private $config;
+    protected $config;
 
     /**
      * Database type
