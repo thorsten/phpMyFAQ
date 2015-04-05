@@ -42,4 +42,28 @@ $(document).ready(function() {
         return false;
     });
 
+    $(function() {
+        // set the textarea to its previous height
+        var answerHeight = localStorage.getItem('textarea.answer.height');
+
+        if (answerHeight !== 'undefined') {
+            $('#answer').height(answerHeight);
+        }
+
+        // when reszied, store the textarea's height
+        $('#answer').on('mouseup', function() {
+            localStorage.setItem('textarea.answer.height', $(this).height());
+        });
+
+        // on clicking the Preview tab, refresh the preview
+        $('.markdown-tabs').find('a').on('click', function() {
+            if ($(this).attr('data-markdown-tab') === 'preview') {
+                $('.markdown-preview')
+                    .height($('#answer').height());
+                $.post('index.php?action=ajax&ajax=markdown', { text: $('#answer').val() }, function(result) {
+                    $('.markdown-preview').html(result);
+                });
+            }
+        });
+    });
 });

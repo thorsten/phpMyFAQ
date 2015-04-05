@@ -285,13 +285,38 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     echo $faqData['title'] ?></textarea>
                             </div>
                         </div>
-                    </div>
-                    <!-- Answer -->
-                    <div class="control-group">
-                        <div class="controls">
-                            <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                            <textarea id="answer" name="answer" class="span11"><?php echo $faqData['content'] ?></textarea>
+
+                        <!-- Answer -->
+                        <?php if ($faqConfig->get('main.enableWysiwygEditor')): ?>
+                        <div class="form-group">
+                            <div class="col-lg-12">
+                                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                                <textarea id="answer" name="answer" class="form-control" rows="7"
+                                          placeholder="<?php echo $PMF_LANG["ad_entry_content"] ?>"><?php echo $faqData['content'] ?></textarea>
+                            </div>
                         </div>
+                        <?php endif; ?>
+                        <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
+                        <ul class="nav nav-tabs markdown-tabs">
+                            <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
+                            <li><a data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a></li>
+                        </ul>
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="text">
+                                <div class="form-group">
+                                    <div class="col-lg-12">
+                                        <textarea id="answer" name="answer" class="form-control" rows="7"
+                                                  placeholder="<?php echo $PMF_LANG["ad_entry_content"] ?>"><?php echo $faqData['content'] ?></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane" id="preview">
+                                <article class="markdown-preview">
+                                </article>
+                            </div>
+                        </div>
+                        <?php endif; ?>
+
 
                         <!-- Language -->
                         <div class="form-group">
@@ -689,6 +714,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             </form>
         </div>
 
+    <script src="assets/js/record.js"></script>
     <script type="text/javascript">
     /* <![CDATA[ */
 

@@ -220,6 +220,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
                 case 'recordSave':  require 'record.save.php'; break;
                 case 'recordAdd':   require 'record.add.php'; break;
                 case 'autosave':    require 'ajax.autosave.php'; break;
+                case 'markdown':    require 'ajax.markdown.php'; break;
                 // Search
                 case 'search':      require 'ajax.search.php'; break;
                 // Users

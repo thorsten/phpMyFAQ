@@ -27,12 +27,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
+
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary($faqConfig);
 $faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($faqConfig);
 $faqComment  = new PMF_Comment($faqConfig);
+$parsedown   = new ParsedownExtra();
 
 if (is_null($user)) {
     $user = new PMF_User_CurrentUser($faqConfig);
@@ -70,7 +74,12 @@ $faqVisits->logViews($recordId);
 
 // Add Glossary entries for answers only
 $question = $faq->getRecordTitle($recordId);
-$answer   = $oGlossary->insertItemsIntoContent($faq->faqRecord['content']);
+if ($faqConfig->get('main.enableMarkdownEditor')) {
+    $answer = $parsedown->text($faq->faqRecord['content']);
+} else {
+    $answer = $faq->faqRecord['content'];
+}
+$answer = $oGlossary->insertItemsIntoContent($answer);
 
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
