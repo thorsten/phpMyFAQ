@@ -35,16 +35,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class PMF_Instance_Database
 {
     /**
-     * @var PMF_Configuration
+     * Instance
+     *
+     * @var PMF_Instance_Database_Driver
      */
-    protected $config;
+    private static $instance = null;
 
     /**
      * Database type
      *
      * @var string
      */
-    private $dbType = null;
+    private static $dbType = null;
 
     /**
      * DROP TABLE statements
@@ -90,13 +92,65 @@ class PMF_Instance_Database
     ];
 
     /**
+     * @var PMF_Configuration
+     */
+    protected $config;
+
+    /**
      * Constructor
      *
      * @param PMF_Configuration $config
      */
-    public function __construct(PMF_Configuration $config)
+    private function __construct(PMF_Configuration $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * Database factory
+     *
+     * @param PMF_Configuration $config phpMyFAQ configuration container
+     * @param string            $type   Database management system type
+     *
+     * @throws PMF_Exception
+     *
+     * @return PMF_Instance_Database_Driver
+     */
+    public static function factory(PMF_Configuration $config, $type)
+    {
+        self::$dbType = $type;
+
+        $class = 'PMF_Instance_Database_' . ucfirst($type);
+
+        if (class_exists($class)) {
+            self::$instance = new $class($config);
+            return self::$instance;
+        } else {
+            throw new PMF_Exception('Invalid Database Type: ' . $type);
+        }
+    }
+
+    /**
+     * Returns the single instance
+     *
+     * @return PMF_Instance_Database_Driver
+     */
+    public static function getInstance()
+    {
+        if (null === self::$instance) {
+            $className = __CLASS__;
+            self::$instance = new $className();
+        }
+        return self::$instance;
+    }
+
+    /**
+     * __clone() Magic method to prevent cloning
+     *
+     * @return void
+     */
+    private function __clone()
+    {
     }
 
     /**
