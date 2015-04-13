@@ -21,6 +21,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
+
 /**
  * Helper
  *
@@ -253,7 +256,7 @@ class PMF_Helper_Search extends PMF_Helper
             $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
 
             $counter = $displayedCounter = 0;
-
+            $parsedown   = new ParsedownExtra();
             foreach ($resultSet->getResultset() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
@@ -269,7 +272,13 @@ class PMF_Helper_Search extends PMF_Helper
 
                 $categoryInfo  = $this->Category->getCategoriesFromArticle($result->id);
                 $question      = PMF_Utils::chopString($result->question, 15);
-                $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+
+                if ($this->_config->get('main.enableMarkdownEditor')) {
+                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 25);
+                } else {
+                    $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+                }
+
                 $searchterm    = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
                     '',
