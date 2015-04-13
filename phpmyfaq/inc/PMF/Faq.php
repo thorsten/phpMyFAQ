@@ -24,6 +24,8 @@
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 /**
  * SQL constants definitions
@@ -248,6 +250,7 @@ class PMF_Faq
         $num    = $this->_config->getDb()->numRows($result);
 
         if ($num > 0) {
+            $parsedown   = new ParsedownExtra();
             while (($row = $this->_config->getDb()->fetchObject($result))) {
 
                 if (empty($row->visits)) {
@@ -267,12 +270,17 @@ class PMF_Faq
                 $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;;
 
+                if ($this->_config->get('main.enableMarkdownEditor')) {
+                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 25);
+                } else {
+                    $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+                }
                 $faqdata[] = array(
                     'record_id'      => $row->id,
                     'record_lang'    => $row->lang,
                     'category_id'    => $row->category_id,
                     'record_title'   => $row->thema,
-                    'record_preview' => PMF_Utils::chopString(strip_tags($row->record_content), 25),
+                    'record_preview' => $answerPreview,
                     'record_link'    => $oLink->toString(),
                     'record_date'    => $row->record_date,
                     'visits'         => $visits
