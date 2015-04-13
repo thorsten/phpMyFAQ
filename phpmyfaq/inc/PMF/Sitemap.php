@@ -315,6 +315,7 @@ class PMF_Sitemap
 
         $result = $this->_config->getDb()->query($query);
         $oldId = 0;
+        $parsedown   = new ParsedownExtra();
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
