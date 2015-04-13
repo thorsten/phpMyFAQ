@@ -271,9 +271,9 @@ class PMF_Faq
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;;
 
                 if ($this->_config->get('main.enableMarkdownEditor')) {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 25);
+                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($row->record_content)), 25);
                 } else {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
+                    $answerPreview = PMF_Utils::chopString(strip_tags($row->record_content), 25);
                 }
                 $faqdata[] = array(
                     'record_id'      => $row->id,
