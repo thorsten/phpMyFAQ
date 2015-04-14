@@ -23,6 +23,8 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require 'inc/Bootstrap.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 $action       = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $ajaxlang     = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
@@ -514,6 +516,7 @@ switch ($action) {
 
                     $response .= '<ul>';
 
+                    $parsedown   = new ParsedownExtra();
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
@@ -525,9 +528,14 @@ switch ($action) {
                         $oLink       = new PMF_Link($url, $faqConfig);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
+                        if ($faqConfig->get('main.enableMarkdownEditor')) {
+                            $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 10);
+                        } else {
+                            $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 10);
+                        }
                         $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
                             $oLink->toHtmlAnchor(),
-                            PMF_Utils::chopString(strip_tags($result->answer), 10)
+                            $answerPreview
                         );
                     }
                     $response .= '</ul>';

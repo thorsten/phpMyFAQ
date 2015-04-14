@@ -21,6 +21,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
+
 /**
  * PMF_Sitemap 
  *
@@ -312,6 +315,7 @@ class PMF_Sitemap
 
         $result = $this->_config->getDb()->query($query);
         $oldId = 0;
+        $parsedown   = new ParsedownExtra();
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
@@ -330,7 +334,12 @@ class PMF_Sitemap
                 $oLink->tooltip   = $title;
 
                 $writeMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
-                $writeMap .= PMF_Utils::chopString(strip_tags($row->snap), 25). " ...</li>\n";
+
+                if ($this->_config->get('main.enableMarkdownEditor')) {
+                    $writeMap .= PMF_Utils::chopString(strip_tags($parsedown->text($row->snap)), 25). " ...</li>\n";
+                } else {
+                    $writeMap .= PMF_Utils::chopString(strip_tags($row->snap), 25). " ...</li>\n";
+                }
             }
             $oldId = $row->id;
         }

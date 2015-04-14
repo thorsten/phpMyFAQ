@@ -21,6 +21,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
+
 /**
  * PMF_Export_Pdf
  *
@@ -47,6 +51,12 @@ class PMF_Export_Pdf extends PMF_Export
     private $tags = null;
     
     /**
+     * @var ParsedownExtra
+     */
+    private $parsedown = null;
+
+    
+    /**
      * Constructor
      *
      * @param PMF_Faq           $faq      Faq object
@@ -70,7 +80,8 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->SetMargins(PDF_MARGIN_LEFT, PDF_MARGIN_TOP, PDF_MARGIN_RIGHT);
         $this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
         $this->pdf->SetFooterMargin(PDF_MARGIN_FOOTER);
-        
+
+        $this->parsedown   = new ParsedownExtra();
     }
     
     /**
@@ -141,7 +152,13 @@ class PMF_Export_Pdf extends PMF_Export
                     $this->pdf->Ln(10);
 
                     $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
-                    $this->pdf->WriteHTML(trim($faq['content']));
+
+                    if ($this->_config->get('main.enableMarkdownEditor')) {
+                        $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
+                    } else {
+                        $this->pdf->WriteHTML(trim($faq['content']));
+                    }
+
                     $this->pdf->Ln(10);
 
                     if (! empty($faq['keywords'])) {
@@ -206,8 +223,14 @@ class PMF_Export_Pdf extends PMF_Export
         $this->pdf->WriteHTML('<h1 align="center">' . $faqData['title'] . '</h1>', true);
         $this->pdf->Ln();
         $this->pdf->Ln();
-        $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);
-        $this->pdf->Ln();
+
+        if ($this->_config->get('main.enableMarkdownEditor')) {
+            $this->pdf->WriteHTML(str_replace('../', '', $this->parsedown->text($faqData['content'])), true);
+        } else {
+            $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);
+        }
+
+        $this->pdf->Ln(10);
         $this->pdf->Ln();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
         $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'] . ': #' . $faqData['solution_id']);
