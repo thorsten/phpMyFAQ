@@ -1,6 +1,6 @@
 <?php
 /**
- * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL
+ * The phpMyFAQ instances database class with CREATE TABLE statements for SQLite3
  *
  * PHP Version 5.4
  *
@@ -14,7 +14,7 @@
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2015-04-06
+ * @since     2015-04-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance_Database_Sqlsrv
+ * PMF_Instance_Database_Sqlite3
  *
  * @category  phpMyFAQ
  * @package   PMF_Instance_Database
@@ -30,9 +30,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2015-04-06
+ * @since     2015-04-16
  */
-class PMF_Instance_Database_Sqlsrv extends PMF_Instance_Database implements PMF_Instance_Database_Driver
+class PMF_Instance_Database_Sqlite3 extends PMF_Instance_Database implements PMF_Instance_Database_Driver
 {
     /** @var array */
     private $createTableStatements = [
