@@ -204,12 +204,14 @@ switch ($action) {
 
     <nav class="navbar navbar-default navbar-static-top navbar-admin">
         <div class="navbar-header">
+            <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="fa fa-bar"></span>
                 <span class="fa fa-bar"></span>
                 <span class="fa fa-bar"></span>
             </button>
+            <?php endif; ?>
             <a class="navbar-brand" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
                 phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?>
             </a>
