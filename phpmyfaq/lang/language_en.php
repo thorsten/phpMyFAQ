@@ -120,7 +120,7 @@ $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
-$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate the keywords with commas only.";
+$PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate the keywords with commas only.";
 $PMF_LANG["msgNewContentName"] = "Your name:";
 $PMF_LANG["msgNewContentMail"] = "Email";
 $PMF_LANG["msgNewContentCategory"] = "Category:";
@@ -366,7 +366,7 @@ $PMF_LANG["ad_sess_s_before"] = "before";
 $PMF_LANG["ad_sess_s_search"] = "Search";
 $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
-$PMF_LANG["ad_sess_referer"] = "Referer:";
+$PMF_LANG["ad_sess_referer"] = "Referrer:";
 $PMF_LANG["ad_sess_browser"] = "Browser:";
 $PMF_LANG["ad_sess_ai_rubrik"] = "Category:";
 $PMF_LANG["ad_sess_ai_artikel"] = "Record:";
@@ -411,7 +411,7 @@ $PMF_LANG["ad_att_delfail"] = "An error occurred while deleting the attachment."
 $PMF_LANG["ad_entry_add"] = "Add new FAQ";
 
 // Added v0.85 - 08.06.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the commandline SQL client. A backup should be performed at least once a month.";
+$PMF_LANG["ad_csv_make"] = "A backup is a complete image of the database content. The format of the backup is a SQL transaction file, which can be imported using tools like phpMyAdmin or the command line SQL client. A backup should be performed at least once a month.";
 $PMF_LANG["ad_csv_link"] = "Download the backup";
 $PMF_LANG["ad_csv_head"] = "Create a backup";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
@@ -562,7 +562,7 @@ $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address 
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send to friend page");
 $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
+$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibility of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
 $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
@@ -600,7 +600,7 @@ $PMF_LANG['ad_categ_select'] = 'Select category language';
 $PMF_LANG['msgSitemap'] = 'Sitemap';
 
 // added v1.5.2 - 2005-09-23 by Lars
-$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and can not be displayed.';
+$PMF_LANG['err_inactiveArticle'] = 'This entry is in revision and cannot be displayed.';
 $PMF_LANG['msgArticleCategories'] = 'Categories for this entry';
 
 // added v1.6.0 - 2006-02-02 by Thorsten
@@ -637,7 +637,7 @@ $PMF_LANG['ad_glossary_item'] = 'Title';
 $PMF_LANG['ad_glossary_definition'] = 'Definition';
 $PMF_LANG['ad_glossary_save'] = 'Save glossary';
 $PMF_LANG['ad_glossary_save_success'] = 'Glossary entry successfully saved!';
-$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not saved because an error occurred.';
+$PMF_LANG['ad_glossary_save_error'] = 'The glossary entry could not be saved because an error occurred.';
 $PMF_LANG['ad_glossary_update_success'] = 'Glossary entry successfully updated!';
 $PMF_LANG['ad_glossary_update_error'] = 'The glossary entry could not updated because an error occurred.';
 $PMF_LANG['ad_glossary_delete'] = 'Delete entry';
@@ -745,9 +745,9 @@ $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
 $PMF_LANG["ad_categ_owner"] = 'Category owner';
 $PMF_LANG['adminSection'] = 'Administration';
-$PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
-$PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
-$PMF_LANG['err_inactiveNews'] = 'This news is in revision and can not be displayed';
+$PMF_LANG['err_expiredArticle'] = 'This entry is expired and cannot be displayed';
+$PMF_LANG['err_expiredNews'] = 'This news is expired and cannot be displayed';
+$PMF_LANG['err_inactiveNews'] = 'This news is in revision and cannot be displayed';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'search in all languages';
 $PMF_LANG['ad_entry_tags'] = 'Tags';
 $PMF_LANG['msg_tags'] = 'Tags';
@@ -819,7 +819,7 @@ $PMF_LANG['ad_quick_group'] = 'Add new group';
 
 // added v2.0.0 - 2006-12-30 by Matteo
 $PMF_LANG['msgNewTranslationHeader'] = 'Translation proposal';
-$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate the keywords with commas only.';
+$PMF_LANG['msgNewTranslationAddon'] = 'Your proposal will not be published right away, but will be released by the administrator upon receipt. Required fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate the keywords with commas only.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Source pane';
 $PMF_LANG['msgNewTranslationPane'] = 'Translation pane';
 $PMF_LANG['msgNewTranslationName'] = "Your Name:";
@@ -882,7 +882,7 @@ $PMF_LANG['errorRegistration'] = 'This field is required!';
 $PMF_LANG['submitRegister'] = 'Create';
 $PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right captcha code!';
-$PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
+$PMF_LANG['msgRegError'] = 'Following errors occurred. Please correct them:';
 $PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail with your login data!';
 $PMF_LANG['msgRegThankYou'] = 'Thank you for your registration!';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
@@ -1069,7 +1069,7 @@ $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 =>
 $PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";
 $PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
 $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
-$PMF_LANG['msgAttachmentsFilesize'] = 'Filensize';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Filesize';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
 $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
@@ -1094,7 +1094,7 @@ $PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
 
 // added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
 $PMF_LANG['msgRegistration'] = 'Registration';
-$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your login name and a valid email address!';
 $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
@@ -1174,7 +1174,7 @@ $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwo
 $PMF_LANG["ad_visits_per_day"] = "Visits per day";
 
 // added v2.8.0-RC2 - 2013-02-17 by Thorsten
-$PMF_LANG["ad_instance_add"] = "Add a new phpMyFAQ multi site instance";
+$PMF_LANG["ad_instance_add"] = "Add a new phpMyFAQ multi-site instance";
 $PMF_LANG["ad_instance_error_notwritable"] = "The folder /multisite isn\'t writable.";
 $PMF_LANG["ad_instance_url"] = "Instance URL";
 $PMF_LANG["ad_instance_path"] = "Instance path";
