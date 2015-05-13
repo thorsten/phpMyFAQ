@@ -1001,7 +1001,7 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this key once you have enabled attachment encryption above!!</font></small>');
 //$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
