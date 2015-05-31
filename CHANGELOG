@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.23 - 2015-04-
--
+Version 2.8.23 - 2015-06-
+- updated bundled Symfony ClassLoader to version 2.6.9 (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.22 - 2015-03-31
 - updated Czech translation
