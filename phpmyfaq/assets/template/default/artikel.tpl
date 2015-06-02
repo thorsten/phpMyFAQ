@@ -176,7 +176,12 @@
                 'xml xhtml xslt html    assets/js/syntaxhighlighter/scripts/shBrushXml.js',
                 'bash shell             assets/js/syntaxhighlighter/scripts/shBrushBash.js',
                 'php                    assets/js/syntaxhighlighter/scripts/shBrushPhp.js',
-                'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js'
+                'sql                    assets/js/syntaxhighlighter/scripts/shBrushSql.js',
+                'java                   assets/js/syntaxhighlighter/scripts/shBrushJava.js',     
+                'ruby                   assets/js/syntaxhighlighter/scripts/shBrushRuby.js', 
+                'css                    assets/js/syntaxhighlighter/scripts/shBrushCss.js',     
+                'perl                   assets/js/syntaxhighlighter/scripts/shBrushPerl.js',
+                'python                   assets/js/syntaxhighlighter/scripts/shBrushPython.js'          
             );
             SyntaxHighlighter.all();
             </script>
