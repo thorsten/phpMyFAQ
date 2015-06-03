@@ -6401,6 +6401,9 @@ body {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#ffe9e9e9', GradientType=0);
 }
+#content code {
+  white-space: normal !important;
+}
 #content header div {
   position: relative;
 }
