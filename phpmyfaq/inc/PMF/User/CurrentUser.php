@@ -504,11 +504,12 @@ class PMF_User_CurrentUser extends PMF_User
 
         // sessionId needs to be updated
         $user->updateSessionId(true);
-
         // user is now logged in
         $user->_loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
+        // add CSRF token to session
+        $user->saveCrsfTokenToSession();
 
         return $user;
     }
@@ -587,7 +588,7 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @return void
      */
-    protected function saveCrsfTokenToSession()
+    public function saveCrsfTokenToSession()
     {
         if (!isset($_SESSION['phpmyfaq_csrf_token'])) {
             $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
