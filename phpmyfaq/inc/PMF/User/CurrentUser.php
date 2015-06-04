@@ -347,7 +347,7 @@ class PMF_User_CurrentUser extends PMF_User
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
-                    
+
         $res = $this->config->getDb()->query($update);
         if (!$res) {
             $this->errors[] = $this->config->getDb()->error();
@@ -475,8 +475,8 @@ class PMF_User_CurrentUser extends PMF_User
 
     /**
      * This static method returns a valid CurrentUser object if there is one
-     * in the cookie that is not timed out. The session-ID is updated if
-     * necessary. The CurrentUser will be removed from the session, if it is
+     * in the cookie that is not timed out. The session-ID is updated then.
+     * The CurrentUser will be removed from the session, if it is
      * timed out. If there is no valid CurrentUser in the cookie or the
      * cookie is timed out, null will be returned. If the cookie is correct,
      * but there is no user found in the user table, false will be returned.
@@ -502,17 +502,9 @@ class PMF_User_CurrentUser extends PMF_User
             return null;
         }
 
-        // sessionId and cookie information needs to be updated
-        if ($user->sessionIdIsTimedOut()) {
-            $rememberMe = sha1(session_id());
-            $user->updateSessionId();
-            $user->setRememberMe($rememberMe);
-            PMF_Session::setCookie(
-                PMF_Session::PMF_COOKIE_NAME_REMEMBERME,
-                $rememberMe,
-                $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
-            );
-        }
+        // sessionId needs to be updated
+        $user->updateSessionId(true);
+
         // user is now logged in
         $user->_loggedIn = true;
         // save current user to session and return the instance
