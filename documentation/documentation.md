@@ -179,15 +179,19 @@ You can modify the layout of phpMyFAQ using templates. A description of how this
 **Important:**
 Writing permission for your script is needed in this directory to be able to write the file **config/database.php** during installation. This is the case if you're running PHP as CGI or as mod_php with disabled safe-mode. The installation script will stop when your web server isn't configured as needed.
 
-It might help to set chmod 777 to the whole phpMyFAQ directory to avoid problems during the installation. If you're running a very restrictive mod_php installation you should keep the chmod 777 for the following files and directories even after the successful installation:
+It might help to set chmod 775 to the whole phpMyFAQ directory to avoid problems during the installation. If you're 
+running a very restrictive mod_php installation you should keep the chmod 775 for the following files and directories 
+even after the successful installation:
 
-*   the directory **config/**
 *   the directory **attachments/**
+*   the directory **config/**
+*   the directory **data/**
 *   the directory **images/**
 
 All other directories shouldn't be world-writable for your own security.
 
-The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all tables in the database.
+The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all tables 
+in the database.
 
 [back to top][64]
 

@@ -49,13 +49,16 @@ if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
     require_once "lang/language_en.php";
 }
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
-if ($user) {
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
+if ($user instanceof PMF_User_CurrentUser) {
     $auth = true;
 } else {
     $user = null;

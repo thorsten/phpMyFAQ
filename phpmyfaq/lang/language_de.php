@@ -542,9 +542,9 @@ $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Soll die IP zur Ü
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Anzahl der FAQs pro Seite");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Anzahl der angezeigten News");
 $LANG_CONF["security.bannedIPs"] = array(0 => "area", 1 => "Gesperrte IPs (Bitte mit Leerzeichen trennen)");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren?<br>(Standard: deaktiviert)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren?<br>(Standard: deaktiviert)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Basis-Adresse für die Linküberprüfung (Adresse der Startseite)");
+$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite Support aktivieren? (Voreinstellung: deaktiviert)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP Support aktivieren? (Voreinstellung: deaktiviert)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL der FAQ (zB http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Zeitintervall zwischen den Ajax-Linküberprüfungen (in Sekunden)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Deaktivieren der Sichtbarkeit von neuen Fragen?");
 $LANG_CONF["security.permLevel"] = array(0 => "select", 1 => "Berechtigungsebene");

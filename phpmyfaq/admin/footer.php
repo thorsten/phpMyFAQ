@@ -72,9 +72,9 @@ if (isset($auth)) {
 <!-- tinyMCE -->
 <script>
 /*<![CDATA[*/ //<!--
-$().tooltip({placement: 'bottom'})
+$().tooltip({placement: 'bottom'});
 
-tinymce.init({
+tinyMCE.init({
     // General options
     mode     : "exact",
     //language : "<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",

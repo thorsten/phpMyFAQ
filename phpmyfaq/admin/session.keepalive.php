@@ -43,11 +43,14 @@ if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 PMF_String::init($language);
 
-$user        = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>

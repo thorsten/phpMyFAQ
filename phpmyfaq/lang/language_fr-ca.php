@@ -538,7 +538,7 @@ $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Nombr
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => "Bannir ces adresses IP");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite? (défault : désactivé)");
 $LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Voulez-vous activer le support de LDAP? (défault : désactivé)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL pour vérification des liens (e.g. : http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL pour vérification des liens (e.g. : http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervalle entre la vérification des liens AJAX (en secondes)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Désactiver la visibilité de nouvelles questions ?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "niveau d'autorisation");

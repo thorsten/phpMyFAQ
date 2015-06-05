@@ -60,7 +60,10 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    if (! $user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
 }
 
 //

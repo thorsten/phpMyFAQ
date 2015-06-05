@@ -522,7 +522,7 @@ class PMF_Installer
                 echo "<li>$dir</li>\n";
             }
             printf(
-                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 755 (or ' .
+                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
                     'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );

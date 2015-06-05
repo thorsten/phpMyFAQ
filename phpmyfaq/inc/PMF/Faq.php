@@ -3099,7 +3099,7 @@ class PMF_Faq
                     implode(', ', $this->groups));
             } else {
                 return sprintf(
-                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id IN (-1, %d) OR fdg.group_id IN (%s)) )",
+                    "AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )",
                     implode(', ', $this->groups),
                     $this->user,
                     implode(', ', $this->groups)

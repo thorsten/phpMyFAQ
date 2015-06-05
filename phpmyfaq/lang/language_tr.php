@@ -574,7 +574,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite desteğini etkinleştir? (varsayılan: kapalı)");
 $LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX link kontrolü zaman aralığı (saniye olarak)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Yeni soruların görünürlüğünü kapat?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");

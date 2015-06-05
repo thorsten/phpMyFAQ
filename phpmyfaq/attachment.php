@@ -35,7 +35,10 @@ if (headers_sent()) {
 $attachmentErrors = [];
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 if (!$user instanceof PMF_User_CurrentUser) {
     $user = new PMF_User_CurrentUser($faqConfig); // user not logged in -> empty user object
 }

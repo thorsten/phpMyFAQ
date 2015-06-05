@@ -902,7 +902,7 @@ $PMF_LANG['rightsLanguage']['backup'] = 'luo turvakopio';
 $PMF_LANG['rightsLanguage']['restore'] = 'palauta turvakopio';
 $PMF_LANG['rightsLanguage']['delquestion'] = 'poista avoimia kysymyksiä';
 $PMF_LANG['rightsLanguage']['changebtrevs'] = 'muokkaa versioita';
-$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Linkkivarmennnuksen URL (esim.: http://www.example.org/faq)');
+$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Linkkivarmennnuksen URL (esim.: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'AJAX -linkkivarmennuksen aikaväli (sekuntia)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Estä uusien kysymysten näkyvyys?');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Käyttöoikeustasot');

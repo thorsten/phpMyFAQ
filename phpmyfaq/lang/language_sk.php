@@ -567,7 +567,7 @@ $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Poče
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
 $LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval medzi AJAX overením (v sekundách)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Vypnúť viditeľnosť nových otázok?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Úroveň povolenia");

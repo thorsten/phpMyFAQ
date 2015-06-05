@@ -352,27 +352,31 @@ class PMF_Session
         $users = array(0, 0);
         
         if ($this->config->get('main.enableUserTracking')) {
-            $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
-            // Count all sids within the time window
-            // @todo Add a new field in faqsessions in order to find out only sids of anonymous users
-            $query = sprintf("
-                SELECT
-                    count(sid) AS anonymous_users
-                FROM
-                    %sfaqsessions
-                WHERE
-                    user_id = -1
-                AND 
-                    time > %d",
-                PMF_Db::getTablePrefix(),
-                $timeNow
-            );
 
-            $result = $this->config->getDb()->query($query);
-            
-            if (isset($result)) {
-                $row      = $this->config->getDb()->fetchObject($result);
-                $users[0] = $row->anonymous_users;
+            $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
+
+            if (! $this->config->get('security.enableLoginOnly')) {
+                // Count all sids within the time window for public installations
+                // @todo add a new field in faqsessions in order to find out only sids of anonymous users
+                $query = sprintf("
+                    SELECT
+                        count(sid) AS anonymous_users
+                    FROM
+                        %sfaqsessions
+                    WHERE
+                        user_id = -1
+                    AND
+                        time > %d",
+                    PMF_Db::getTablePrefix(),
+                    $timeNow
+                );
+
+                $result = $this->config->getDb()->query($query);
+
+                if (isset($result)) {
+                    $row      = $this->config->getDb()->fetchObject($result);
+                    $users[0] = $row->anonymous_users;
+                }
             }
             
             // Count all faquser records within the time window
@@ -384,7 +388,9 @@ class PMF_Session
                 WHERE
                     session_timestamp > %d",
                 PMF_Db::getTablePrefix(),
-                $timeNow);
+                $timeNow
+            );
+
             $result = $this->config->getDb()->query($query);
             
             if (isset($result)) {
