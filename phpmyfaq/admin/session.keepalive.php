@@ -43,7 +43,7 @@ if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 PMF_String::init($language);
 

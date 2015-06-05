@@ -81,7 +81,10 @@ if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
 //
 // Check, if user is logged in
 //
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 if ($user instanceof PMF_User_CurrentUser) {
     $isLoggedIn = true;
 } else {

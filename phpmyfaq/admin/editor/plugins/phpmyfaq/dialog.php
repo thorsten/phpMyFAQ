@@ -20,7 +20,10 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 
 ?>
 

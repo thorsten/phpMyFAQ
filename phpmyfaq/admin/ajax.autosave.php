@@ -31,7 +31,10 @@ $do = PMF_Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 if ('insertentry' == $do && ($permission['editbt']|| $permission['addbt']) ||
     'saveentry' == $do && $permission['editbt']) {
 
-    $user     = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    if (! $user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
 
     $dateStart     = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd       = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);

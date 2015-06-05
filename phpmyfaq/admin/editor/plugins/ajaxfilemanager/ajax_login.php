@@ -8,7 +8,10 @@
      */
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . "inc" . DIRECTORY_SEPARATOR . "config.php");
 
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 
 if ($user instanceof PMF_User_CurrentUser) {
 

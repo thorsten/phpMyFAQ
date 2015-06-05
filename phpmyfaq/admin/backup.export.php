@@ -32,8 +32,10 @@ require PMF_ROOT_DIR . '/inc/Bootstrap.php';
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromSession($faqConfig);
-
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (! $user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
 if ($user) {
     $auth = true;
 } else {
