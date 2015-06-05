@@ -120,6 +120,9 @@ $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
 $loader->register();
 
+require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
+
 //
 // Set the error handler to our pmf_error_handler() function
 //

@@ -23,8 +23,6 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require 'inc/Bootstrap.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 $action       = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $ajaxlang     = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);

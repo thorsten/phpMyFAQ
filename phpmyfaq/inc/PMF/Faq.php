@@ -24,8 +24,6 @@
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
-require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 /**
  * SQL constants definitions

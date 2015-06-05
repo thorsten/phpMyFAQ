@@ -27,9 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
-
 $answer = PMF_Filter::filterInput(INPUT_POST, 'text', FILTER_SANITIZE_STRING);
 
 $parsedown = new ParsedownExtra();

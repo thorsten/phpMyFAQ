@@ -27,9 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
-
 $captcha     = new PMF_Captcha($faqConfig);
 $oGlossary   = new PMF_Glossary($faqConfig);
 $faqTagging  = new PMF_Tags($faqConfig);
