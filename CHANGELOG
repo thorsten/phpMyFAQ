@@ -36,7 +36,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - added support for language specific open questions (Thorsten)
 - added moderator groups to categories (Thorsten)
 - extended REST/JSON API (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.7.0 (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.6.9 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
 - updated bundled Bootstrap to version 3.3.2 (Thorsten)
 - updated bundled Font Awesome to version 4.3.0 (Thorsten)
