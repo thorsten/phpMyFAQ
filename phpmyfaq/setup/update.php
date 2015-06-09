@@ -873,7 +873,7 @@ if ($step == 3) {
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD lang VARCHAR(5) NOT NULL";
             $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD group_id INT NULL DEFAULT -1";
         }
-        $query[] = "UPDATE faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
+        $query[] = "UPDATE " . PMF_Db::getTablePrefix() . "faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
     }
 
     // Always the last step: Update version number
