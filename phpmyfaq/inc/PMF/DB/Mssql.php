@@ -287,7 +287,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function getTableNames($prefix = '')
     {
-        return $this->tableNames[] = array(
+        return $this->tableNames = [
             $prefix . 'faqadminlog',
             $prefix . 'faqattachment',
             $prefix . 'faqattachment_file',
@@ -323,7 +323,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
             $prefix . 'faquserlogin',
             $prefix . 'faqvisits',
             $prefix . 'faqvoting'
-        );
+        ];
     }
 
     /**

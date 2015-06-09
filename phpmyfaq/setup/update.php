@@ -887,7 +887,7 @@ if ($step == 3) {
             // Get all table names
             $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
             foreach ($faqConfig->getDb()->tableNames as $tableName) {
-                $query[] = 'OPTIMIZE TABLE '.$tableName;
+                $query[] = 'OPTIMIZE TABLE '. $tableName;
             }
             break;
         case 'pgsql':
