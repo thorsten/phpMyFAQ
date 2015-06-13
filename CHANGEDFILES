@@ -1,3 +1,32 @@
+CHANGED FILES FROM 2.8.22 -> 2.8.23
+
+./admin/ajax.autosave.php
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/attachment.php
+./admin/backup.export.php
+./admin/editor/plugins/ajaxfilemanager/ajax_login.php
+./admin/editor/plugins/phpmyfaq/dialog.php
+./admin/footer.php
+./admin/session.keepalive.php
+./assets/js/phpmyfaq.js
+./assets/js/phpmyfaq.min.js
+./assets/template/default/artikel.tpl
+./assets/template/default/css/style.css
+./assets/template/default/css/style.min.css
+./assets/template/default/css/style.rtl.css
+./assets/template/default/css/style.rtl.min.css
+./assets/template/default/less/style.less
+./feed/category/rss.php
+./feed/latest/rss.php
+./feed/topten/rss.php
+./inc/PMF/System.php
+./inc/PMF/User/CurrentUser.php
+./ajaxresponse.php
+./ajaxservice.php
+./attachment.php
+./pdf.php
+
 CHANGED FILES FROM 2.8.21 -> 2.8.22
 
 ./admin/stopwordsconfig.main.php
