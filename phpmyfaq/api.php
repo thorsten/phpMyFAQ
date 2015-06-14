@@ -24,12 +24,16 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'inc/Bootstrap.php';
 
+//
 // Send headers
+//
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
+//
 // Set user permissions
+//
 $currentUser   = -1;
 $currentGroups = array(-1);
 
@@ -38,11 +42,15 @@ $language   = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING,
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId   = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 
+//
 // Get language (default: english)
+//
 $Language = new PMF_Language($faqConfig);
 $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
+//
 // Set language
+//
 if (PMF_Language::isASupportedLanguage($language)) {
     require PMF_LANGUAGE_DIR . '/language_' . $language . '.php';
 } else {
@@ -53,10 +61,22 @@ $faqConfig->setLanguage($Language);
 $plr = new PMF_Language_Plurals($PMF_LANG);
 PMF_String::init($language);
 
+//
 // Set empty result
+//
 $result = array();
 
+//
+// Check if FAQ should be secured
+//
+if ($faqConfig->get('security.enableLoginOnly')) {
+    echo json_encode(array('You are not allowed to view this content.'));
+    $http->sendStatus(403);
+}
+
+//
 // Handle actions
+//
 switch ($action) {
     case 'getVersion':
         $result = array('version' => $faqConfig->get('main.currentVersion'));
