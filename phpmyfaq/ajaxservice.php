@@ -378,7 +378,7 @@ switch ($action) {
 
             // Activate visits
             $visits = new PMF_Visits($faqConfig);
-            $visits->add($recordId, $newData['lang']);
+            $visits->logViews($recordId, $newData['lang']);
 
             // Set permissions
             $userPermissions = $category->getPermissions('user', $categories);

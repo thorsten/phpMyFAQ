@@ -268,6 +268,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $this->Category->setLanguage($result->lang);
 
                 $categoryInfo  = $this->Category->getCategoriesFromArticle($result->id);
+                $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question      = PMF_Utils::chopString($result->question, 15);
 
                 if ($this->_config->get('main.enableMarkdownEditor')) {

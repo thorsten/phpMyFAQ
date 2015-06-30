@@ -140,7 +140,7 @@ class PMF_Category
         $this->setLanguage($this->_config->getLanguage()->getLanguage());
 
         $this->lineTab = $this->getOrderedCategories($withperm);
-        for ($i = 0; $i < count($this->lineTab); $i++) {
+	    foreach(array_keys($this->lineTab) as $i) {
             $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
         }
     }
@@ -231,7 +231,7 @@ class PMF_Category
         if ($result) {
             while ($row = $this->_config->getDb()->fetchArray($result)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[] =& $this->categoryName[$row['id']];
+                $this->categories[$row['id']] =& $this->categoryName[$row['id']];
                 $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
             }
         }
@@ -313,9 +313,9 @@ class PMF_Category
         $tt = [];
         $x = $loop = 0;
 
-        foreach ($this->categories as $n) {
+        foreach ($this->categories as $category_id => $n) {
             if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
-                $tt[$x++] = $loop;
+                $tt[$x++] = $category_id;
             }
             $loop++;
         }
@@ -873,7 +873,7 @@ class PMF_Category
 
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
-            $categories[] = array(
+            $categories[$row->category_id] = array(
                 'category_id'   => $row->category_id,
                 'category_lang' => $row->category_lang);
         }
@@ -922,7 +922,7 @@ class PMF_Category
         $this->categories = [];
         if ($num > 0) {
             while ($row = $this->_config->getDb()->fetchArray($result)) {
-                $this->categories[] = $row;
+                $this->categories[intval($row['id'])] = $row;
             }
         }
         return $this->categories;
@@ -1380,7 +1380,7 @@ class PMF_Category
         while ($row = $this->_config->getDb()->fetchArray($result)) {
             if (!array_key_exists($row['id'],$this->categoryName)) {
                $this->categoryName[$row['id']] = $row;
-               $this->categories[] =& $this->categoryName[$row['id']];
+               $this->categories[$row['id']] =& $this->categoryName[$row['id']];
                $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
             }
         }

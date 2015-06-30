@@ -72,7 +72,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
         $faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         if (!is_null($faqData['id'])) {
-            $queryString = 'saveentry&amp;id=' . $faqData['id'];
+            $queryString = 'saveentry&id=' . $faqData['id'];
         } else {
             $queryString = 'insertentry';
         }

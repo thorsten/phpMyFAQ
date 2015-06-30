@@ -132,7 +132,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             // Create the visit entry
 
             $visits = new PMF_Visits($faqConfig);
-            $visits->add($recordId);
+            $visits->logViews($recordId);
 
             // Insert the new category relations
             $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);

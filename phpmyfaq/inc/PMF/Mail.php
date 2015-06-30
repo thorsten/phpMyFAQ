@@ -518,7 +518,7 @@ class PMF_Mail
     private function _setEmailTo(&$target, $targetAlias, $address, $name = null)
     {
         // Check for the permitted number of items into the $target array
-        if (count($target) > 0) {
+        if (count($target) > 2) {
             $keys = array_keys($target);
             trigger_error(
                 "<strong>Mail Class</strong>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
