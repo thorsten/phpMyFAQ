@@ -71,7 +71,7 @@ last_login varchar(14) NULL,
 auth_source varchar(100) NULL,
 member_since varchar(14) NULL,
 remember_me VARCHAR(150) NULL,
-success INT(1) NULL DEFAULT 1,
+success INTEGER NULL DEFAULT 1,
 PRIMARY KEY (user_id))";
 
 //faqgroup
@@ -241,7 +241,7 @@ PRIMARY KEY (group_id, right_id)
 
 //faqinstances
 $query[] = "CREATE TABLE " . $sqltblpre . "faqinstances (
-id int4 NOT NULL,
+id SERIAL NOT NULL,
 url VARCHAR(255) NOT NULL,
 instance VARCHAR(255) NOT NULL,
 comment TEXT NULL,
