@@ -95,7 +95,7 @@ class PMF_Tags
                 1=1
                 %s
                 %s
-            GROUP BY tagging_name
+            GROUP BY tagging_name,t.tagging_id
             ORDER BY tagging_name ASC",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),

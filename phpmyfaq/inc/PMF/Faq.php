@@ -1896,7 +1896,7 @@ class PMF_Faq
                 ' . $this->queryPermission($this->groupSupport) . '
 
             GROUP BY
-                fd.id
+                fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
             ORDER BY
                 fv.visits DESC';
 
@@ -1999,7 +1999,7 @@ class PMF_Faq
         $query .= '
                 ' . $this->queryPermission($this->groupSupport) . '
             GROUP BY
-                fd.id
+                fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
             ORDER BY
                 fd.datum DESC';
 
@@ -2746,7 +2746,7 @@ class PMF_Faq
             AND
                 fd.lang = \''.$this->_config->getLanguage()->getLanguage().'\'
             GROUP BY
-                fd.id
+                fd.id,fd.lang,fcr.category_id,fv.visits
             ORDER BY
                 fd.id';
 
@@ -3069,14 +3069,14 @@ class PMF_Faq
     public function updateQuestionAnswer($openQuestionId, $faqId, $categoryId)
     {
         $query = sprintf(
-            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d, WHERE id= %d',
+            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d WHERE id= %d',
             PMF_Db::getTablePrefix(),
             $faqId,
             $categoryId,
             $openQuestionId
         );
 
-        return $this->_config->getDb()->query($query);
+	    return $this->_config->getDb()->query($query);
     }
 
     /**

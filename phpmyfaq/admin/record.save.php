@@ -147,7 +147,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
         // Create the visit entry
         $visits = new PMF_Visits($faqConfig);
-        $visits->add($recordId);
+        $visits->logViews($recordId);
 
         // save or update the FAQ record
         if ($faq->isAlreadyTranslated($recordId, $recordLang)) {

@@ -241,7 +241,7 @@ class PMF_Search
             FROM
                 %s
             GROUP BY
-                searchterm %s
+                searchterm %s,faqsearches.id
             ORDER BY
                 number
             DESC",

@@ -78,7 +78,7 @@ class PMF_Attachment_Collection
             ON
                 fa.record_id = fd.id
             GROUP BY
-                fa.id",
+                fa.id,fd.thema",
             PMF_Db::getTablePrefix() . 'faqattachment',
             PMF_Db::getTablePrefix() . 'faqdata'
         );

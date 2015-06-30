@@ -102,7 +102,7 @@ if ('insertentry' === $do &&
             $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
             $visits = new PMF_Visits($faqConfig);
-            $visits->add($record_id);
+            $visits->logViews($record_id);
 
             if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
                 $faq->updateRecord($recordData);
