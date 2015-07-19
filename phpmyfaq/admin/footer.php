@@ -91,7 +91,7 @@ tinyMCE.init({
 
     // Theme options
     theme_advanced_buttons1 : "<?php echo $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontsizeselect",
-    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,syntaxhl,|,forecolor,backcolor",
+    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,|,forecolor,backcolor",
     theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,advhr,|,ltr,rtl,|,fullscreen",
     theme_advanced_toolbar_location : "top",
     theme_advanced_toolbar_align : "left",
@@ -149,34 +149,6 @@ function phpMyFAQSave()
 // --> /*]]>*/
 </script>
 <!-- /tinyMCE -->
-
-<!-- SyntaxHighlighter -->
-<script src="../assets/js/syntaxhighlighter/scripts/shCore.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushBash.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushCpp.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushCSharp.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushCss.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushDelphi.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushDiff.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushGroovy.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushJava.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushJScript.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushPhp.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushPerl.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushPlain.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushPython.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushRuby.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushScala.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushSql.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushVb.js"></script>
-<script src="../assets/js/syntaxhighlighter/scripts/shBrushXml.js"></script>
-<link type="text/css" rel="stylesheet" href="../assets/js/syntaxhighlighter/styles/shCore.css"/>
-<link type="text/css" rel="stylesheet" href="../assets/js/syntaxhighlighter/styles/shThemeDefault.css"/>
-<script type="text/javascript">
-    SyntaxHighlighter.config.clipboardSwf = '../js/syntaxhighlighter/scripts/clipboard.swf';
-    SyntaxHighlighter.all();
-</script>
-<!-- /SyntaxHighlighter -->
 <?php
         }
     }

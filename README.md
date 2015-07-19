@@ -95,14 +95,6 @@ Mozilla Public License 2.0, see LICENSE for more information.
 
 Licensed under the terms of the GNU Lesser General Public License
 
-**[SyntaxHighlighter](http://alexgorbatchev.com/wiki/SyntaxHighlighter)**
-
-Licensed under the terms of the GNU Lesser General Public License
-
-**[SyntaxHL Plugin](http://github.com/RichGuk/syntaxhl)**
-
-Licensed under the terms of the GNU Lesser General Public License
-
 **[jQuery](http://jquery.com)**
 
 Licensed under the terms of the MIT License
