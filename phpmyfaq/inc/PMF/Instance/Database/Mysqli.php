@@ -86,7 +86,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             category_lang VARCHAR(5) NOT NULL,
             record_id INT(11) NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
-            PRIMARY KEY (category_id, category_lang, record_id, record_lang)),
+            PRIMARY KEY (category_id, category_lang, record_id, record_lang),
             KEY idx_records (record_id, record_lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
@@ -192,8 +192,8 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             name VARCHAR(25) NULL,
             description text NULL,
             auto_join INT(11) NULL,
-            PRIMARY KEY(group_id)),
-            KEY idx_name (name) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+            PRIMARY KEY(group_id),
+            KEY idx_name (name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqgroup_right' => 'CREATE TABLE %sfaqgroup_right (
             group_id INT(11) NOT NULL,
@@ -355,6 +355,8 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
 
             if (!$result) {
+                echo sprintf($stmt, $prefix);
+                echo $this->config->getDb()->error();
                 return false;
             }
         }

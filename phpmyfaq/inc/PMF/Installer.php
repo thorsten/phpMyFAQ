@@ -758,7 +758,10 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        require PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+        $databaseInstaller = PMF_Instance_Database::factory($configuration, $dbSetup['dbType']);
+        $databaseInstaller->createTables($dbSetup['dbPrefix']);
+
+        // @todo move that to PMF/Instance/Database as well
         require PMF_ROOT_DIR . '/setup/stopwords.sql.php';  // INSERTs for stopwords
 
         $this->_system->setDatabase($db);
