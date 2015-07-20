@@ -19,7 +19,7 @@ mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf/config
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf/include
 
-cp $cwd/vendor/tcpdf/*.php $cwd/phpmyfaq/inc/libs/tcpdf
+cp $cwd/vendor/tecnick.com/tcpdf/*.php $cwd/phpmyfaq/inc/libs/tcpdf
 
-cp -r $cwd/vendor/tcpdf/config/*.php $cwd/phpmyfaq/inc/libs/tcpdf/config
-cp -r $cwd/vendor/tcpdf/include/*.php $cwd/phpmyfaq/inc/libs/tcpdf/include
+cp -r $cwd/vendor/tecnick.com/tcpdf/config/*.php $cwd/phpmyfaq/inc/libs/tcpdf/config
+cp -r $cwd/vendor/tecnick.com/tcpdf/include/*.php $cwd/phpmyfaq/inc/libs/tcpdf/include
