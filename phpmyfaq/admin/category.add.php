@@ -101,6 +101,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </select>
                         </div>
                     </div>
+                    <?php if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                         <div class="col-lg-4">
@@ -109,6 +110,10 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </select>
                         </div>
                     </div>
+                    <?php } else { ?>
+                    <input type="hidden" name="group_id" value="-1">
+                    <?php } ?>
+
 <?php
     if ($parentId === 0) {
         if ($faqConfig->get('security.permLevel') !== 'basic') {
