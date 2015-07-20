@@ -21,6 +21,7 @@
     14. [Attachments][19]
     15. [Twitter][20]
     16. [Server side recommendations][21]
+    17. [Syntax Highlighting][65]
 3.  **[Upgrading][22]**
     1.  [Upgrading from phpMyFAQ 2.5.x][23]
     2.  [Upgrading from phpMyFAQ 2.6.x][24]
@@ -434,6 +435,25 @@ backend will also post the question of the FAQ, the URL of the FAQ and all tags 
 
 * * *
 
+**2.17 <a id="2.17"></a>Syntax Highlighting**
+
+The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside 
+of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn’t work for 
+you, you can specify the language in the class attribute:
+
+    <pre><code class="html">...</code></pre>
+
+The list of supported language classes is available in the class reference. Classes can also be prefixed with either 
+language- or lang-.
+
+To disable highlighting altogether use the nohighlight class:
+
+    <pre><code class="nohighlight">...</code></pre>
+
+[back to top][64]
+
+* * *
+
 **3. <a id="3"></a>Upgrading**
 
 Upgrading to phpMyFAQ 2.8.x is possible from the following versions:
@@ -443,7 +463,8 @@ Upgrading to phpMyFAQ 2.8.x is possible from the following versions:
 *   phpMyFAQ 2.7.x
 *   phpMyFAQ 2.8.x
 
-If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating an old FAQ from the 1.x or 2.0.x series, please send us an [e-mail][68].
+If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating 
+an old FAQ from the 1.x or 2.0.x series, please send us an [e-mail][68].
 
 [back to top][64]
 
@@ -451,7 +472,8 @@ If you're running an older version of phpMyFAQ we recommend a new and fresh inst
 
 **3.1. <a id="3.1"></a>Upgrading from phpMyFAQ 2.5.x**
 
-Upgrading from 2.5.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.5.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
+all files **except**:
 
 *   the file **data.php** in the directory **inc/**
 *   all files in the **template/** directory
@@ -463,11 +485,14 @@ Open the following URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding.
+Note: We changed the character set for all languages and templates to UTF-8. If you notice problems with e.g. German 
+umlauts you have to convert your templates to UTF-8 encoding.
 
-You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
+folder **assets/template/default/**.
 
 Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
 
@@ -477,7 +502,8 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 **3.2. <a id="3.2"></a>Upgrading from phpMyFAQ 2.6.x**
 
-Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
+all files **except**:
 
 *   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
@@ -489,9 +515,11 @@ Open the following URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
+folder **assets/template/default/**.
 
 Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
 
@@ -501,7 +529,8 @@ Please copy the template file **assets/template/default/indexLogin.tpl** into yo
 
 **3.3. <a id="3.3"></a>Upgrading from phpMyFAQ 2.7.x**
 
-Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete all files **except**:
+Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
+all files **except**:
 
 *   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
 *   all files in the directory **template/**
@@ -513,9 +542,11 @@ Open the following URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
 
-You have to move your template files to the directory **assets/template/**. The default layout is be stored in the folder **assets/template/default/**.
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
+folder **assets/template/default/**.
 
 [back to top][64]
 
@@ -523,7 +554,8 @@ You have to move your template files to the directory **assets/template/**. The 
 
 **3.4. <a id="3.4"></a>Upgrading phpMyFAQ 2.8.x**
 
-Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy all new files from the phpMyFAQ package **except**:
+Updating an existing phpMyFAQ 2.8.x installation is fairly simple. Via FTP copy all new files from the phpMyFAQ package 
+**except**:
 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
@@ -535,7 +567,8 @@ Open the following URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be updated.
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated.
 
 You can find the changed files between the 2.8.x versions in the file *CHANGEDFILES*.
 
@@ -545,13 +578,22 @@ You can find the changed files between the 2.8.x versions in the file *CHANGEDFI
 
 **3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.8.x**
 
-Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now. We moved the login from a dropdown form to an own page with the login form. We also added a glossary page which you might know from the administration backend from older versions.
+Your current 2.5.x, 2.6.x and 2.7.x templates are **barely** compatible with phpMyFAQ 2.8 because we changed the 
+complete CSS framework to Bootstrap. We're also using a lot of Ajax based technologies and CSS3 in the frontend now. We 
+moved the login from a dropdown form to an own page with the login form. We also added a glossary page which you might 
+know from the administration backend from older versions.
 
-We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS compiler with node.js or a tool like [CodeKit](http://incident57.com/codekit/).
+We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that 
+the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS 
+compiler with node.js or a tool like [CodeKit](http://incident57.com/codekit/).
 
-If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
+If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit 
+our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
+and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
 
-Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with \r\n.
+Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you 
+have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with 
+\r\n.
 
 [back to top][64]
 
@@ -1357,6 +1399,7 @@ This documentation is licensed under a [Creative Commons License](http://creativ
  [62]: #8.2
  [63]: #9
  [64]: #top
+ [65]: #2.17
  [88]: mailto:thorsten AT phpmyfaq DOT de
  [89]: mailto:stephan AT yauh DOT de
  [90]: mailto:mgl-mail AT t-online DOT de
