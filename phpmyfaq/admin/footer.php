@@ -99,13 +99,15 @@ tinyMCE.init({
     theme_advanced_resizing : true,
     relative_urls           : false,
     convert_urls            : false,
-    remove_linebreaks       : false, 
+    remove_linebreaks       : false,
     use_native_selects      : true,
     paste_remove_spans      : true,
     entity_encoding         : "raw",
-    extended_valid_elements : "code,video[*],audio[*],source[*]",
-
-    // Save function
+    extended_valid_elements : "code[class],video[*],audio[*],source[*]",
+    removeformat : [
+        { selector : '*', attributes : ['style'], split : false, expand : false, deep : true }
+    ],
+        // Save function
     save_onsavecallback : "phpMyFAQSave",
 
     // Example content CSS (should be your site CSS)
