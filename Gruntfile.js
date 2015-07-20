@@ -83,6 +83,22 @@ module.exports = function(grunt) {
                         dest: 'phpmyfaq/assets/template/default/fonts/'
                     }
                 ]
+            },
+            highlightjs: {
+                files: [
+                    {
+                        expand: true,
+                        src: 'components/highlightjs/highlight.pack.js',
+                        flatten: true,
+                        dest: 'phpmyfaq/assets/js/libs'
+                    },
+                    {
+                        expand: true,
+                        src: 'components/highlightjs/styles/default.css',
+                        flatten: true,
+                        dest: 'phpmyfaq/assets/js/libs'
+                    }
+                ]
             }
         },
         concat: {

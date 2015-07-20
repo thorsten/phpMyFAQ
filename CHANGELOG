@@ -44,6 +44,7 @@ Version 2.9.0-alpha3 - 2015-03-
 - updated bundled TinyMCE to version 4.1.7 (Thorsten)
 - updated bundled SwiftMailer to version 5.4.0 (Christopher Andrews, Thorsten)
 - updated bundled Parsedown to version 1.5.3 (Jerry van Kooten, Thorsten)
+- updated bundled HighlightJS to version 8.6.0 (Thorsten)
 - removed bundled SyntaxHighlighter (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)

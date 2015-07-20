@@ -148,6 +148,8 @@
                 {writeComments}
             </div>
 
+            <script src="assets/js/libs/highlight.pack.js"></script>
+            <link rel="stylesheet" href="assets/js/libs/default.css">
             <script>
 
                 $('.show-comment-form').on('click', function(event) {
@@ -166,6 +168,15 @@
                     e.preventDefault();
                     saveFormValues('savecomment', 'comment');
                     return false;
+                });
+
+                $(document).ready(function() {
+                    hljs.configure({
+                       useBR: true
+                    });
+                    $('pre code').each(function(i, block) {
+                        hljs.highlightBlock(block);
+                    });
                 });
 
             </script>

@@ -16,7 +16,8 @@
     "jquery": "~1.11.2",
     "bootstrap-datepicker": "~1.2.0",
     "typeahead.js": "~0.10.5",
-    "handlebars": "~2.0.0"
+    "handlebars": "~2.0.0",
+    "highlightjs": "~8.6.0"
   },
   "resolutions": {
     "bootstrap": "~3.3.0"

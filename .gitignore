@@ -39,6 +39,7 @@ phpmyfaq/inc/libs/twitteroauth
 # Third party frontend libraries
 phpmyfaq/admin/assets/css/*
 phpmyfaq/admin/assets/fonts/*
+phpmyfaq/assets/js/libs
 phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js
 phpmyfaq/assets/js/phpmyfaq.min.js
