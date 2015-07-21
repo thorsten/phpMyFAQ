@@ -593,7 +593,7 @@ class PMF_Installer
         $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
-            if (! file_exists(PMF_ROOT_DIR . '/setup/' . $dbSetup['dbType'] . '.sql.php')) {
+            if (! file_exists(PMF_INCLUDE_DIR . '/PMF/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
                 printf(
                     '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
