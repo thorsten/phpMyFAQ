@@ -186,13 +186,13 @@ switch ($action) {
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
-    <script src="../assets/js/phpmyfaq.min.js"></script>
-    <script src="assets/js/sidebar.js"></script>
-    <script src="assets/js/editor/tinymce.full.min.js?<?php echo time(); ?>"></script>
+    <script src="../assets/js/phpmyfaq.min.js" async></script>
+    <script src="assets/js/sidebar.js" async></script>
+    <script src="assets/js/editor/tinymce.full.min.js?<?php echo time(); ?>" async></script>
 
 <?php if ($edAutosave): ?>
     <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
-    <script src="../assets/js/autosave.js"></script>
+    <script src="../assets/js/autosave.js" async></script>
 <?php endif; ?>
 
     <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
