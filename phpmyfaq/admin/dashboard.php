@@ -67,8 +67,8 @@ $faqSession   = new PMF_Session($faqConfig);
                         $('.visits').sparkline(
                             visits, {
                                 type: 'bar',
-                                barColor: '#fbc372',
-                                barWidth: window.innerWidth / 60,
+                                barColor: '#7797b2',
+                                barWidth: window.innerWidth / 66,
                                 height: 268,
                                 tooltipSuffix: ' <?php echo $PMF_LANG["ad_visits_per_day"] ?>'
                             });
