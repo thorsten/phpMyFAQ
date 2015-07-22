@@ -493,7 +493,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
