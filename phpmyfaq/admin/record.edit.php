@@ -493,10 +493,12 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </div>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="changed"><?php echo $PMF_LANG["ad_entry_changed"]; ?></label>
-                        <div class="controls">
-                            <textarea name="changed" id="changed" class="span8"><?php echo $faqData['changed'] ?></textarea>
+                    
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
+                                <?php echo $PMF_LANG['ad_entry_changelog']; ?>
+                            </a>
                         </div>
 
                         <div id="collapseViewChangelog" class="panel-collapse collapse">
