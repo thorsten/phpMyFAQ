@@ -61,15 +61,17 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
 
     $loggingData = $logging->getAll();
 ?>
-    <header>
-        <h2 class="page-header">
-            <i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_menu_adminlog"]; ?>
-            <div class="pull-right">
-                <a class="btn btn-danger" href="?action=deleteadminlog">
-                    <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
-                </a>
-            </div>
-        </h2>
+    <header class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">
+                <i class="fa fa-tasks"></i> <?php echo $PMF_LANG["ad_menu_adminlog"]; ?>
+                <div class="pull-right">
+                    <a class="btn btn-danger" href="?action=deleteadminlog">
+                        <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+                    </a>
+                </div>
+            </h2>
+        </div>
     </header>
 
     <table class="table table-striped">
