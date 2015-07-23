@@ -229,13 +229,14 @@ class PMF_Search
             FROM
                 %s
             GROUP BY
-                searchterm %s
+                id, searchterm %s
             ORDER BY
                 number
             DESC",
             $byLang, 
             $this->_table, 
-            $byLang);
+            $byLang
+        );
         
         $result = $this->_config->getDb()->query($query);
         
