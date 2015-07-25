@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.24 - 2015-07-
 - updated Farsi translation (aysabzevar)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.23 - 2015-06-13
 - updated bundled Symfony ClassLoader to version 2.6.9 (Thorsten)
