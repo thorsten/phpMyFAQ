@@ -5,7 +5,7 @@ module.exports = function(grunt) {
     grunt.initConfig({
         // Metadata.
         meta: {
-            version: '2.8.24'
+            version: '2.8.25'
         },
         banner: '/*! phpMyFAQ v2.8 - http://www.phpmyfaq.de - Copyright (c) 2001 - 2015 Thorsten Rinne and phpMyFAQ Team */\n',
         // Task configuration.

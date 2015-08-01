@@ -1,9 +1,13 @@
-phpMyFAQ 2.8.24
+phpMyFAQ 2.8.25
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.25 - 2015-08-
+- added American English translation (Stewart Day)
+-
 
 Version 2.8.24 - 2015-07-27
 - updated Farsi translation (aysabzevar)
