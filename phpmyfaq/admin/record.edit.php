@@ -675,7 +675,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     <input type="radio" id="restrictedusers" name="userpermission" value="restricted" <?php echo ($restrictedUsers ? 'checked' : ''); ?>/>
                                     <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
                                     <select name="restricted_users" size="1" class="form-control">
-                                        <?php echo $user->getAllUserOptions($userPermission[0]); ?>
+                                        <?php echo $user->getAllUserOptions($userPermission[0], false); ?>
                                     </select>
                                 </label>
                             </div>
