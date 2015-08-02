@@ -267,9 +267,10 @@ class PMF_User
                 %sfaquser
             WHERE
                 user_id = %d " . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
-             PMF_Db::getTablePrefix(),
-             (int) $userId);
-             
+            PMF_Db::getTablePrefix(),
+            (int) $userId
+        );
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->config->getDb()->error();
@@ -899,20 +900,27 @@ class PMF_User
      * Returns an array with the user-IDs of all users found in
      * the database. By default, the Anonymous User will not be returned.
      *
-     * @param  boolean $withoutAnonymous Without anonymous?
+     * @param boolean $withoutAnonymous  Without anonymous?
+     * @param boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     *
      * @return array
      */
-    public function getAllUsers($withoutAnonymous = true)
+    public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true)
     {
         $select = sprintf("
             SELECT
                 user_id
             FROM
                 %sfaquser
+            WHERE
+                1 = 1
             %s
-            ORDER BY user_id ASC",
+            %s
+            ORDER BY
+                user_id ASC",
             PMF_Db::getTablePrefix(),
-            ($withoutAnonymous ? 'WHERE user_id <> -1' : '')
+            ($withoutAnonymous ? 'AND user_id <> -1' : ''),
+            ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
         );
 
         $res = $this->config->getDb()->query($select);
@@ -967,20 +975,22 @@ class PMF_User
      * Get all users in <option> tags
      *
      * @param integer $id Selected user ID
+     * @param boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return string
      */
-    public function getAllUserOptions($id = 1)
+    public function getAllUserOptions($id = 1, $allowBlockedUsers = false)
     {
         $options  = '';
-        $allUsers = $this->getAllUsers();
+        $allUsers = $this->getAllUsers(true, $allowBlockedUsers);
+
         foreach ($allUsers as $userId) {
-            if (-1 != $userId) {
+            if (-1 !== $userId) {
                 $this->getUserById($userId);
                 $options .= sprintf(
                     '<option value="%d"%s>%s (%s)</option>',
                     $userId,
-                    (($userId == $id) ? ' selected="selected"' : ''),
+                    (($userId === $id) ? ' selected' : ''),
                     $this->getUserData('display_name'),
                     $this->getLogin()
                 );

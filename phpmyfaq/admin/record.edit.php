@@ -643,7 +643,7 @@ if (($permission['editbt']|| $permission['addbt']) && !PMF_Db::checkOnEmptyTable
                                 <input type="radio" id="restrictedusers" name="userpermission" value="restricted" <?php echo ($restrictedUsers ? 'checked="checked"' : ''); ?>/>
                                 <?php echo $PMF_LANG['ad_entry_restricted_users']; ?>
                                 <select name="restricted_users" size="1" class="input-medium selected-groups">
-                                    <?php echo $user->getAllUserOptions($userPermission[0]); ?>
+                                    <?php echo $user->getAllUserOptions($userPermission[0], false); ?>
                                 </select>
                             </label>
                         </div>
