@@ -80,7 +80,7 @@ class PMF_Tags
 
         $query = sprintf("
             SELECT
-                t.tagging_id AS tagging_id, t.tagging_name AS tagging_name
+                MIN(t.tagging_id) AS tagging_id, t.tagging_name AS tagging_name
             FROM
                 %sfaqtags t
             LEFT JOIN
@@ -95,8 +95,10 @@ class PMF_Tags
                 1=1
                 %s
                 %s
-            GROUP BY tagging_name,t.tagging_id
-            ORDER BY tagging_name ASC",
+            GROUP BY
+                tagging_name
+            ORDER BY
+                tagging_name ASC",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),

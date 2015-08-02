@@ -46,7 +46,7 @@ if ($action == 'logout') {
     );
 }
 
-if (isset($_SERVER['HTTPS']) || !$faqConfig->get('security.useSslForLogins')) {
+if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
                         <?php echo $message ?>
