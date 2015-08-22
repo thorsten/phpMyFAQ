@@ -697,18 +697,9 @@ $PMF_LANG['ad_conf_desc'] = '降順';
 $PMF_LANG['ad_conf_asc'] = '昇順';
 $PMF_LANG['mainControlCenter'] = 'メイン設定';
 $PMF_LANG['recordsControlCenter'] = 'FAQ レコード設定';
-<<<<<<< HEAD
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "新規レコードを有効にする (初期値: 無効)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "新規レコードへのコメントを許可する (初期値: 許可しない)");
 $PMF_LANG['msgAllCatArticles'] = 'このカテゴリー内のレコード';
-=======
-$PMF_LANG['msgInstantResponse'] = '即時応答機能';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. 下の %d 件を見つけました。';
-$LANG_CONF['records.defaultActivation'] = array(0 => 'checkbox', 1 => '新規レコードを有効にする (初期値: 無効)');
-$LANG_CONF['records.defaultAllowComments'] = array(0 => 'checkbox', 1 => '新規レコードへのコメントを許可する (初期値: 許可しない)');
-$PMF_LANG['msgAllCatArticles'] = 'このカテゴリー内のレコード';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'キーワードを入力してください ...';
->>>>>>> accf7a255c0df72f46e80f98eb734d189a4da3b3
 $PMF_LANG['msgTagSearch'] = 'タグ付けされたエントリー';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ 情報';
 $PMF_LANG['ad_online_info'] = 'オンラインのバージョン確認';
