@@ -50,16 +50,17 @@ Version 2.9.0-alpha3 - 2015-08-
 - dropped support for SQLite2 (Thorsten)
 - dropped support for Zeus Webserver (Thorsten)
 
-Version 2.8.25 - 2015-08-
+Version 2.8.25 - 2015-08    -
 - added American English translation (Stewart Day)
--
+- updated Japanese translation
+- updated Brazilian Portuguese translation
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.24 - 2015-07-27
 - updated Farsi translation (aysabzevar)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.23 - 2015-06-13
->>>>>>> 2fc58f3a72c2ca2c66bf7079ba3d12fb5a437286
 - updated bundled Symfony ClassLoader to version 2.6.9 (Thorsten)
 - fixed "remember me" issues (Thorsten)
 - fixed some minor bugs (Thorsten)
