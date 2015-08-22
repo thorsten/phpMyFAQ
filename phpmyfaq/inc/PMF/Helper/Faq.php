@@ -99,4 +99,42 @@ class PMF_Helper_Faq extends PMF_Helper
             urlencode($url)
         );
     }
+
+    /**
+     * Renders a select box with all translations of a FAQ
+     * @param PMF_Faq $faq
+     * @param integer $categoryId
+     * @return string
+     */
+    public function renderChangeLanguageSelector(PMF_Faq $faq, $categoryId)
+    {
+        global $languageCodes;
+
+        $html   = '';
+        $faqUrl = sprintf(
+            '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
+            $categoryId,
+            $faq->faqRecord['id']
+        );
+
+        $oLink              = new PMF_Link(PMF_Link::getSystemRelativeUri() . $faqUrl, $this->_config);
+        $oLink->itemTitle   = $faq->faqRecord['title'];
+        $availableLanguages = $this->_config->getLanguage()->languageAvailable($faq->faqRecord['id']);
+
+        if (count($availableLanguages) > 1) {
+
+            $html  = '<form method="post">';
+            $html .= '<select name="language" onchange="top.location.href = this.options[this.selectedIndex].value;">';
+
+            foreach ($availableLanguages as $language) {
+                $html .= sprintf('<option value="%s"', sprintf($oLink->toString(), $language));
+                $html .= ($faq->faqRecord['lang'] === $language ? ' selected' : '');
+                $html .= sprintf('>%s</option>', $languageCodes[strtoupper($language)]);
+            }
+
+            $html .= '</select></form>';
+        }
+
+        return $html;
+    }
 }

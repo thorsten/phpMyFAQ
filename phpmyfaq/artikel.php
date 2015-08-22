@@ -34,6 +34,7 @@ $faqTagging  = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating   = new PMF_Rating($faqConfig);
 $faqComment  = new PMF_Comment($faqConfig);
+$faqHelper   = new PMF_Helper_Faq($faqConfig);
 
 if (is_null($user)) {
     $user = new PMF_User_CurrentUser($faqConfig);
@@ -71,18 +72,6 @@ $answer   = $oGlossary->insertItemsIntoContent($faq->faqRecord['content']);
 
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
-
-$changeLanguagePath = PMF_Link::getSystemRelativeUri() .
-    sprintf(
-        '?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-        $sids,
-        $currentCategory,
-        $recordId,
-        $LANGCODE
-    );
-$oLink              = new PMF_Link($changeLanguagePath, $faqConfig);
-$oLink->itemTitle   = $faq->getRecordTitle($recordId, false);
-$changeLanguagePath = $oLink->toString();
 
 $highlight = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
 if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight != ">" && PMF_String::strlen($highlight) > 3) {
@@ -137,25 +126,6 @@ if (isset($linkArray['href'])) {
 }
 
 $answer = $fixedContent;
-
-// Check for the languages for a faq
-$arrLanguage    = $faqConfig->getLanguage()->languageAvailable($recordId);
-$switchLanguage = '';
-$check4Lang     = '';
-if (count($arrLanguage) > 1) {
-    foreach ($arrLanguage as $language) {
-        $check4Lang .= "<option value=\"".$language."\"";
-        $check4Lang .= ($lang == $language ? ' selected="selected"' : '');
-        $check4Lang .= ">".$languageCodes[strtoupper($language)]."</option>\n";
-    }
-    $switchLanguage .= "<form accept-charset=\"utf-8\" action=\"".$changeLanguagePath."\" method=\"post\" style=\"display: inline;\">\n";
-    $switchLanguage .= "<select name=\"language\" size=\"1\">\n";
-    $switchLanguage .= $check4Lang;
-    $switchLanguage .= "</select>\n";
-    $switchLanguage .= "&nbsp;\n";
-    $switchLanguage .= "<input class=\"submit\" type=\"submit\" name=\"submit\" value=\"".$PMF_LANG["msgLangaugeSubmit"]."\" />\n";
-    $switchLanguage .= "</form>\n";
-}
 
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
@@ -235,7 +205,9 @@ $translationUrl = sprintf(
     $lang
 );
 
-if (!empty($switchLanguage)) {
+$availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
+
+if (!empty($availableLanguages)) {
     $tpl->parseBlock(
         'writeContent',
         'switchLanguage',
@@ -304,7 +276,7 @@ $tpl->parse(
         'writeAuthor'                => '<dt>' . $PMF_LANG['msgAuthor'] . ':</dt><dd>' . $faq->faqRecord['author'] . '</dd>',
         'editThisEntry'              => $editThisEntry,
         'translationUrl'             => $translationUrl,
-        'languageSelection'          => PMF_Language::selectLanguages($LANGCODE, false, $arrLanguage, 'translation'),
+        'languageSelection'          => PMF_Language::selectLanguages($LANGCODE, false, $availableLanguages, 'translation'),
         'msgTranslateSubmit'         => $PMF_LANG['msgTranslateSubmit'],
         'saveVotingPATH'             => sprintf(
             str_replace(
@@ -319,7 +291,7 @@ $tpl->parse(
         'msgAverageVote'             => $PMF_LANG['msgAverageVote'],
         'renderVotingStars'          => '',
         'printVotings'               => $faqRating->getVotingResult($recordId),
-        'switchLanguage'             => $switchLanguage,
+        'switchLanguage'             => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
         'msgVoteUseability'          => $PMF_LANG['msgVoteUseability'],
         'msgVoteBad'                 => $PMF_LANG['msgVoteBad'],
         'msgVoteGood'                => $PMF_LANG['msgVoteGood'],
