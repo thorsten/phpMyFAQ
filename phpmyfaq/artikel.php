@@ -100,8 +100,9 @@ if (!is_null($highlight) && $highlight != "/" && $highlight != "<" && $highlight
 //       other faq records (Internal Links) added with WYSIWYG Editor:
 //         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
 // Search for href attribute links
+$oLnk = new PMF_Linkverifier($faqConfig);
 $oLnk->resetPool();
-$oLnk->parse_string($answer);
+$oLnk->parseString($answer);
 $fixedContent = str_replace('href="#',
     sprintf('href="index.php?action=artikel&amp;lang=%s&amp;cat=%d&amp;id=%d&amp;artlang=%s#',
         $LANGCODE,
@@ -110,7 +111,7 @@ $fixedContent = str_replace('href="#',
         $LANGCODE),
     $answer);
 $oLnk->resetPool();
-$oLnk->parse_string($fixedContent);
+$oLnk->parseString($fixedContent);
 
 // Search for href attributes only
 $linkArray = $oLnk->getUrlpool();
@@ -218,7 +219,7 @@ $translationUrl = sprintf(
 
 $availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
-if (!empty($availableLanguages)) {
+if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     $tpl->parseBlock(
         'writeContent',
         'switchLanguage',
