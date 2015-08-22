@@ -27,8 +27,8 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
     set_time_limit(0);
 }
 
-if (version_compare(PHP_VERSION, '5.4.4') < 0) {
-    die("Sorry, but you need PHP 5.4.4 or later!"); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.5.0') < 0) {
+    die("Sorry, but you need PHP 5.5.0 or later!"); // Die hard because of "use"
 }
 
 require PMF_ROOT_DIR . '/inc/Bootstrap.php';

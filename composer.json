@@ -54,7 +54,7 @@
         }
     ],
     "require": {
-        "php": ">=5.4.4",
+        "php": ">=5.5.0",
         "symfony/class-loader": "2.6.*",
         "phpseclib": "master@dev",
         "thorsten/twitteroauth": "master@dev",

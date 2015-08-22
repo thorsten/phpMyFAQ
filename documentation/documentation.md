@@ -70,7 +70,13 @@
 
 **1. <a id="1"></a>Introduction**
 
-phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP 5.4.4 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management-System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic site map, related articles, tagging, RSS feeds, built-in spam protection systems, LDAP support, Twitter and Facebook support and an easy to use installation script.
+phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, 
+PHP 5.5 (or higher) is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management 
+System with a WYSIWYG editor and an Image Manager, flexible multi-user support with user and group based permissions on 
+categories and records, a wiki-like revision feature, a news system, user-tracking, language modules, enhanced automatic 
+content negotiation, templates, extensive XML-support, PDF-support, a backup-system, a dynamic site map, related articles, 
+tagging, RSS feeds, built-in spam protection systems, LDAP support, Twitter and Facebook support and an easy to use 
+installation script.
 
 This documentation should help you with installing, administrating and using phpMyFAQ.
 
@@ -124,7 +130,7 @@ If you're interested, just take a look at our [support page](http://www.phpmyfaq
 phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the following requirements:
 
 *   **[PHP](http://www.php.net)**
-    *   from version 5.4.4 (recommended: latest PHP 5.x)
+    *   from version 5.5.0 (recommended: latest PHP 5.x)
     *   register_globals = off
     *   magic_quotes_gpc = off
     *   safe_mode = off (recommended)
