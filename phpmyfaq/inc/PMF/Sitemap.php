@@ -21,9 +21,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_INCLUDE_DIR . '/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR . '/libs/parsedown/ParsedownExtra.php';
-
 /**
  * PMF_Sitemap 
  *
@@ -190,13 +187,14 @@ class PMF_Sitemap
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $letters = PMF_String::strtoupper($row->letters);
-            if (PMF_String::preg_match("/^[一-龠]+|[ぁ-ん]+|[ァ-ヴー]+|[a-zA-Z0-9]+|[ａ-ｚＡ-Ｚ０-９]/i", $letters)) {
+            if (PMF_String::preg_match("/^\w+/iu", $letters)) {
                 $url = sprintf(
                     '%s?%saction=sitemap&amp;letter=%s&amp;lang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $letters,
-                    $this->_config->getLanguage()->getLanguage());
+                    $this->_config->getLanguage()->getLanguage()
+                );
                 $oLink         = new PMF_Link($url, $this->_config);
                 $oLink->text   = (string)$letters;
                 $writeLetters .= '<li>' . $oLink->toHtmlAnchor().'</li>';
