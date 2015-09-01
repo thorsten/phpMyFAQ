@@ -235,7 +235,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             '%s 1.%d: %s - %s',
                                             $PMF_LANG['ad_entry_revision'],
                                             $revisionData['revision_id'],
-                                            PMF_Date::createIsoDate($revisionData['datum']),
+                                            PMF_Date::createIsoDate($revisionData['updated']),
                                             $revisionData['author']
                                         ); ?>
                                     </option>

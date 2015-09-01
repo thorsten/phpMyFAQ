@@ -876,6 +876,83 @@ if ($step == 3) {
         $query[] = "UPDATE " . PMF_Db::getTablePrefix() . "faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
     }
 
+    //
+    // UPDATES FROM 2.9.0-beta
+    //
+    if (version_compare($version, '2.9.0-beta', '<')) {
+
+        switch($DB['type']) {
+            case 'pgsql':
+                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata RENAME COLUMN datum TO updated";
+                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revisions RENAME COLUMN datum TO updated";
+                break;
+            case 'mssql':
+            case 'sqlsrv':
+                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqdata.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqdata_revision.datum', 'updated', 'COLUMN'";
+            break;
+            case 'mysqli':
+                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata CHANGE datum updated VARCHAR(15) NOT NULL";
+                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision CHANGE datum updated VARCHAR(15) NOT NULL";
+                break;
+        }
+        if ('sqlite3' === $DB['type']) {
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_temp (
+                id INTEGER NOT NULL,
+                lang VARCHAR(5) NOT NULL,
+                solution_id INTEGER NOT NULL,
+                revision_id INTEGER NOT NULL DEFAULT 0,
+                active char(3) NOT NULL,
+                sticky INTEGER NOT NULL,
+                keywords text DEFAULT NULL,
+                thema text NOT NULL,
+                content text DEFAULT NULL,
+                author VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                comment char(1) default 'y',
+                updated VARCHAR(15) NOT NULL,
+                links_state VARCHAR(7) DEFAULT NULL,
+                links_check_date INTEGER DEFAULT 0 NOT NULL,
+                date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
+                date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
+                PRIMARY KEY (id, lang))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqdata_temp
+                SELECT
+                    id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
+                    comment, datum, links_state, links_check_date, date_start, date_end
+                FROM " . PMF_Db::getTablePrefix() . "faqdata";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata";
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_temp RENAME TO " . PMF_Db::getTablePrefix() . "faqdata";
+
+            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision_temp (
+                id INTEGER NOT NULL,
+                lang VARCHAR(5) NOT NULL,
+                solution_id INTEGER NOT NULL,
+                revision_id INTEGER NOT NULL DEFAULT 0,
+                active char(3) NOT NULL,
+                sticky INTEGER NOT NULL,
+                keywords text DEFAULT NULL,
+                thema text NOT NULL,
+                content text DEFAULT NULL,
+                author VARCHAR(255) NOT NULL,
+                email VARCHAR(255) NOT NULL,
+                comment char(1) default 'y',
+                updated VARCHAR(15) NOT NULL,
+                links_state VARCHAR(7) DEFAULT NULL,
+                links_check_date INTEGER DEFAULT 0 NOT NULL,
+                date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
+                date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
+                PRIMARY KEY (id, lang, solution_id, revision_id))";
+            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqdata_revision_temp
+                SELECT
+                    id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
+                    comment, datum, links_state, links_check_date, date_start, date_end
+                FROM " . PMF_Db::getTablePrefix() . "faqdata_revision";
+            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision";
+            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision_temp RENAME TO " . PMF_Db::getTablePrefix() . "faqdata_revision";
+        }
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

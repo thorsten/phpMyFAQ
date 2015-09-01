@@ -400,7 +400,7 @@ class PMF_Configuration
     {
         global $PMF_LANG;
 
-        $options = ['id', 'thema', 'visits', 'datum', 'author'];
+        $options = ['id', 'thema', 'visits', 'updated', 'author'];
         $output  = '';
 
         foreach ($options as $value) {

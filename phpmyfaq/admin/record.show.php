@@ -219,7 +219,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     $fdTable . '.active AS active',
                     $fdTable . '.thema AS thema',
                     $fdTable . '.content AS content',
-                    $fdTable . '.datum AS date'))
+                    $fdTable . '.updated AS updated'))
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(array(
                     $fdTable . '.id = ' . $fcrTable . '.record_id',
@@ -257,7 +257,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 'sticky'      => $row->sticky,
                 'title'       => $row->thema,
                 'content'     => $row->content,
-                'date'        => PMF_Date::createIsoDate($row->date)
+                'date'        => PMF_Date::createIsoDate($row->updated)
             );
 
             if (!isset($numActiveByCat[$row->category_id])) {

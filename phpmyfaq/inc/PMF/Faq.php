@@ -192,7 +192,7 @@ class PMF_Faq
                 fd.lang AS lang,
                 fd.thema AS thema,
                 fd.content AS record_content,
-                fd.datum AS record_date,
+                fd.updated AS record_date,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
@@ -681,7 +681,7 @@ class PMF_Faq
         $query = sprintf(
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
-                 thema, content, author, email, comment, datum, links_state, 
+                 thema, content, author, email, comment, updated, links_state,
                  links_check_date, date_start, date_end
             FROM
                 %s%s fd
@@ -740,7 +740,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => PMF_Date::createIsoDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->updated),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
@@ -835,7 +835,7 @@ class PMF_Faq
                 author = '%s',
                 email = '%s',
                 comment = '%s',
-                datum = '%s',
+                updated = '%s',
                 links_state = '%s',
                 links_check_date = %d,
                 date_start = '%s',
@@ -1159,7 +1159,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => PMF_Date::createIsoDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->updated),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
@@ -1291,7 +1291,7 @@ class PMF_Faq
                 $orderBy = sprintf("
             ORDER BY
                 fcr.category_id,
-                fd.datum %s",
+                fd.updated %s",
                     $sortOrder);
                 break;
 
@@ -1315,7 +1315,7 @@ class PMF_Faq
                 fd.author AS author,
                 fd.email AS email,
                 fd.comment AS comment,
-                fd.datum AS datum,
+                fd.updated AS updated,
                 fd.links_state AS links_state,
                 fd.links_check_date AS links_check_date,
                 fd.date_start AS date_start,
@@ -1365,7 +1365,7 @@ class PMF_Faq
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
-                'date'          => PMF_Date::createIsoDate($row->datum),
+                'date'          => PMF_Date::createIsoDate($row->updated),
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end
             );
@@ -1421,7 +1421,7 @@ class PMF_Faq
 
         $query = sprintf("
             SELECT
-                revision_id, datum, author
+                revision_id, updated, author
             FROM
                 %sfaqdata_revisions
             WHERE
@@ -1440,7 +1440,7 @@ class PMF_Faq
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $revision_data[] = array(
                     'revision_id' => $row->revision_id,
-                    'datum'       => $row->datum,
+                    'datum'       => $row->updated,
                     'author'      => $row->author);
             }
         }
@@ -1756,7 +1756,7 @@ class PMF_Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS thema,
-                fd.datum AS datum,
+                fd.updated AS updated,
                 fcr.category_id AS category_id,
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
@@ -1808,7 +1808,7 @@ class PMF_Faq
             if ($oldId != $row->id) {
                 $data['avg']      = $row->avg;
                 $data['question'] = $row->thema;
-                $data['date']     = $row->datum;
+                $data['date']     = $row->updated;
                 $data['user']     = $row->user;
 
                 $title = $row->thema;
@@ -1852,7 +1852,7 @@ class PMF_Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS thema,
-                fd.datum AS datum,
+                fd.updated AS updated,
                 fcr.category_id AS category_id,
                 fv.visits AS visits,
                 fv.last_visit AS last_visit,
@@ -1918,7 +1918,7 @@ class PMF_Faq
 
             $data['visits']     = $row->visits;
             $data['question']   = $row->thema;
-            $data['date']       = $row->datum;
+            $data['date']       = $row->updated;
             $data['last_visit'] = $row->last_visit;
 
             $title = $row->thema;
@@ -1963,7 +1963,7 @@ class PMF_Faq
                 fcr.category_id AS category_id,
                 fd.thema AS thema,
                 fd.content AS content,
-                fd.datum AS datum,
+                fd.updated AS updated,
                 fv.visits AS visits,
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
@@ -2019,7 +2019,7 @@ class PMF_Faq
                 }
             }
 
-            $data['date']     = $row->datum;
+            $data['date']     = $row->updated;
             $data['question'] = $row->thema;
             $data['answer']   = $row->content;
             $data['visits']   = $row->visits;
@@ -2415,7 +2415,7 @@ class PMF_Faq
                 $faq['author_name']    = $row->author;
                 $faq['author_email']   = $row->email;
                 $faq['comment_enable'] = $row->comment;
-                $faq['lastmodified']   = $row->datum;
+                $faq['lastmodified']   = $row->updated;
                 $faq['hits']           = $row->visits;
                 $faq['hits_last']      = $row->last_visit;
                 $faqs[$i] = $faq;
@@ -2487,7 +2487,7 @@ class PMF_Faq
                 fd.author AS author,
                 fd.email AS email,
                 fd.comment AS comment,
-                fd.datum AS datum,
+                fd.updated AS updated,
                 fv.visits AS visits,
                 fv.last_visit AS last_visit
             FROM
@@ -2532,7 +2532,7 @@ class PMF_Faq
             if ($needAndOp) {
                 $query .= " AND";
             }
-            $query .= " fd.datum LIKE '".$date."'";
+            $query .= " fd.updated LIKE '" . $date . "'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && PMF_Utils::isLanguage($lang)) {
@@ -2575,7 +2575,7 @@ class PMF_Faq
                 $query .= "\nORDER BY fcr.category_id, fd.id";
                 break;
             case FAQ_QUERY_TYPE_RSS_LATEST:
-                $query .= "\nORDER BY fd.datum DESC";
+                $query .= "\nORDER BY fd.updated DESC";
                 break;
             default:
                 // Normal ordering

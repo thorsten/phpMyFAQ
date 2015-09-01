@@ -71,7 +71,7 @@ class PMF_Report
                 fd.sticky AS sticky,
                 fd.thema AS question,
                 fd.author AS original_author,
-                fd.datum AS creation_date,
+                fd.updated AS updated,
                 fv.visits AS visits,
                 u.display_name AS last_author
             FROM
@@ -125,7 +125,7 @@ class PMF_Report
                     'faq_sticky'       => $row->sticky,
                     'faq_question'     => $row->question,
                     'faq_org_author'   => $row->original_author,
-                    'faq_creation'     => PMF_Date::createIsoDate($row->creation_date),
+                    'faq_updated'      => PMF_Date::createIsoDate($row->updated),
                     'faq_visits'       => $row->visits,
                     'faq_last_author'  => $row->last_author
                 );
