@@ -892,13 +892,13 @@ if ($step == 3) {
             case 'mssql':
             case 'sqlsrv':
                 $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revision.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revisions.datum', 'updated', 'COLUMN'";
                 $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
                 $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
             break;
             case 'mysqli':
                 $query[] = "ALTER TABLE " . $prefix . "faqdata CHANGE datum updated VARCHAR(15) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revision CHANGE datum updated VARCHAR(15) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL";
                 $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
                 $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
                 break;
@@ -954,9 +954,9 @@ if ($step == 3) {
                 SELECT
                     id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
                     comment, datum, links_state, links_check_date, date_start, date_end
-                FROM " . $prefix . "faqdata_revision";
-            $query[] = "DROP TABLE " . $prefix . "faqdata_revision";
-            $query[] = "ALTER TABLE " . $prefix . "faqdata_revision_temp RENAME TO " . $prefix . "faqdata_revision";
+                FROM " . $prefix . "faqdata_revisions";
+            $query[] = "DROP TABLE " . $prefix . "faqdata_revisions";
+            $query[] = "ALTER TABLE " . $prefix . "faqdata_revision_temp RENAME TO " . $prefix . "faqdata_revisions";
             $query[] = "ALTER TABLE " . $prefix . "faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
             $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
         }
