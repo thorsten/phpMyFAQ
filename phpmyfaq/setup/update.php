@@ -319,20 +319,21 @@ if ($step == 3) {
             <div class="col-lg-12">
 <?php
     $images = [];
+    $prefix = PMF_Db::getTablePrefix();
 
     //
     // UPDATES FROM 2.5.1
     //
     if (version_compare($version, '2.5.1', '<')) {
         // Truncate table and re-import all stopwords with the new Lithuanian ones
-        $query[] = "DELETE FROM ". PMF_Db::getTablePrefix() . "faqstopwords";
+        $query[] = "DELETE FROM ". $prefix . "faqstopwords";
         require 'stopwords.sql.php';
     }
 
     //
     // UPDATES FROM 2.5.2
     if (version_compare($version, '2.5.3', '<')) {
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'spam.enableCaptchaCode'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'spam.enableCaptchaCode'
             WHERE config_name = 'spam.enableCatpchaCode'";
     }
 
@@ -370,7 +371,7 @@ if ($step == 3) {
         $faqConfig->add('records.defaultAttachmentEncKey', '');
         switch($DB['type']) {
             case 'pgsql':
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
+                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
                     id SERIAL NOT NULL,
                     record_id int4 NOT NULL,
                     record_lang varchar(5) NOT NULL,
@@ -383,13 +384,13 @@ if ($step == 3) {
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
 
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
+                $query[] = "CREATE TABLE " . $prefix . "faqattachment_file (
                     virtual_hash char(32) NOT NULL,
                     contents bytea,
                     PRIMARY KEY (virtual_hash))";
                 break;
             case 'mysqli':
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
+                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
                     id int(11) NOT NULL,
                     record_id int(11) NOT NULL,
                     record_lang varchar(5) NOT NULL,
@@ -402,7 +403,7 @@ if ($step == 3) {
                     mime_type varchar(255) NULL,
                     PRIMARY KEY (id))";
 
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment_file (
+                $query[] = "CREATE TABLE " . $prefix . "faqattachment_file (
                     virtual_hash char(32) NOT NULL,
                     contents blob NOT NULL,
                     PRIMARY KEY (virtual_hash))";
@@ -411,7 +412,7 @@ if ($step == 3) {
                 /**
                  * Just try standard SQL and hope for the best
                  */
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqattachment (
+                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
                     id int NOT NULL,
                     record_id int NOT NULL,
                     record_lang varchar(5) NOT NULL,
@@ -458,59 +459,59 @@ if ($step == 3) {
         // Migrate faqquestion table to new structure
         switch($DB['type']) {
             case 'pgsql':
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_username TO username";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_usermail TO email";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_rubrik TO category_id";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_content TO question";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions RENAME COLUMN ask_date TO created";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_username TO username";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_usermail TO email";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_rubrik TO category_id";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_content TO question";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_date TO created";
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_username', 'username', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_usermail', 'email', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_content', 'question', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqquestions.ask_date', 'created', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_username', 'username', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_usermail', 'email', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_content', 'question', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_date', 'created', 'COLUMN'";
                 break;
             case 'mysqli':
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_rubrik category_id INT(11) NOT NULL";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_content question TEXT NOT NULL";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_rubrik category_id INT(11) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_content question TEXT NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
                 break;
         }
 
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (34, 'addattachment', 'Right to add attachments', 1, 1)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (35, 'editattachment', 'Right to edit attachments', 1, 1)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (36, 'delattachment', 'Right to delete attachments', 1, 1)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (37, 'dlattachment', 'Right to download attachments', 1, 1)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 34)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 35)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 36)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 37)";
+        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 34)";
+        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 35)";
+        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 36)";
+        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 37)";
     }
 
     //
     // UPDATES FROM 2.7.0-alpha2
     //
     if (version_compare($version, '2.7.0-alpha2', '<')) {
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (38, 'reports', 'Right to generate reports', 1, 1)";
-        $query[] = "INSERT INTO ". PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 38)";
+        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 38)";
     }
 
     //
     // UPDATES FROM 2.7.0-beta
     //
     if (version_compare($version, '2.7.0-beta', '<')) {
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'search.numberSearchTerms'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'search.numberSearchTerms'
             WHERE config_name = 'main.numberSearchTerms'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
             WHERE config_name = 'main.useAjaxSearchOnStartpage'";
     }
 
@@ -528,39 +529,39 @@ if ($step == 3) {
     // UPDATES FROM 2.7.0-RC
     //
     if (version_compare($version, '2.7.0-RC', '<')) {
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.numberOfRecordsPerPage'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.numberOfRecordsPerPage'
             WHERE config_name = 'main.numberOfRecordsPerPage'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.numberOfShownNewsEntries'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.numberOfShownNewsEntries'
             WHERE config_name = 'main.numberOfShownNewsEntries'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.orderingPopularFaqs'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.orderingPopularFaqs'
             WHERE config_name = 'main.orderingPopularFaqs'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.disableAttachments'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.disableAttachments'
             WHERE config_name = 'main.disableAttachments'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.maxAttachmentSize'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.maxAttachmentSize'
             WHERE config_name = 'main.maxAttachmentSize'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.attachmentsPath'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.attachmentsPath'
             WHERE config_name = 'main.attachmentsPath'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.attachmentsStorageType'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.attachmentsStorageType'
             WHERE config_name = 'main.attachmentsStorageType'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.enableAttachmentEncryption'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.enableAttachmentEncryption'
             WHERE config_name = 'main.enableAttachmentEncryption'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'records.defaultAttachmentEncKey'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.defaultAttachmentEncKey'
             WHERE config_name = 'main.defaultAttachmentEncKey'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.permLevel'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.permLevel'
             WHERE config_name = 'main.permLevel'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.ipCheck'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ipCheck'
             WHERE config_name = 'main.ipCheck'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.enableLoginOnly'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.enableLoginOnly'
             WHERE config_name = 'main.enableLoginOnly'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.ldapSupport'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ldapSupport'
             WHERE config_name = 'main.ldapSupport'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.bannedIPs'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.bannedIPs'
             WHERE config_name = 'main.bannedIPs'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.ssoSupport'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ssoSupport'
             WHERE config_name = 'main.ssoSupport'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.ssoLogoutRedirect'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ssoLogoutRedirect'
             WHERE config_name = 'main.ssoLogoutRedirect'";
-        $query[] = "UPDATE ". PMF_Db::getTablePrefix() . "faqconfig SET config_name = 'security.useSslForLogins'
+        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.useSslForLogins'
             WHERE config_name = 'main.useSslForLogins'";
     }
 
@@ -575,9 +576,9 @@ if ($step == 3) {
     // UPDATES FROM 2.7.3
     //
     if (version_compare($version, '2.7.3', '<')) {
-        $query[] = "DELETE FROM ".PMF_Db::getTablePrefix()."faqright WHERE right_id = 18 AND right_id = 19";
-        $query[] = "DELETE FROM ".PMF_Db::getTablePrefix()."faquser_right WHERE right_id = 18 AND right_id = 19";
-        $query[] = "DELETE FROM ".PMF_Db::getTablePrefix()."faqgroup_right WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".$prefix."faqright WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".$prefix."faquser_right WHERE right_id = 18 AND right_id = 19";
+        $query[] = "DELETE FROM ".$prefix."faqgroup_right WHERE right_id = 18 AND right_id = 19";
     }
 
     //
@@ -585,15 +586,15 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.8.0-alpha', '<')) {
 
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 39)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 39)";
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (40, 'addquestion', 'Right to add questions in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 40)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 40)";
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 41)";
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 41)";
 
         $faqConfig->add('cache.varnishEnable', 'false');
         $faqConfig->add('cache.varnishHost', '127.0.0.1');
@@ -604,26 +605,26 @@ if ($step == 3) {
         $faqConfig->add('security.forcePasswordUpdate', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN answer_id INT NOT NULL DEFAULT 0";
+            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD COLUMN answer_id INT NOT NULL DEFAULT 0";
         } else {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
+            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
         }
 
         $faqConfig->add('records.enableCloseQuestion', 'false');
         $faqConfig->add('records.enableDeleteQuestion', 'false');
 
-        $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp (
+        $query[] = "CREATE TABLE " . $prefix . "faquserlogin_temp (
             login varchar(128) NOT NULL,
             pass varchar(80) NOT NULL,
             PRIMARY KEY (login))";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquserlogin_temp SELECT * FROM " . PMF_Db::getTablePrefix() . "faquserlogin";
-        $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserlogin";
-        $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faquserlogin (
+        $query[] = "INSERT INTO " . $prefix . "faquserlogin_temp SELECT * FROM " . $prefix . "faquserlogin";
+        $query[] = "DROP TABLE " . $prefix . "faquserlogin";
+        $query[] = "CREATE TABLE " . $prefix . "faquserlogin (
             login varchar(128) NOT NULL,
             pass varchar(80) NOT NULL,
             PRIMARY KEY (login))";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquserlogin SELECT * FROM " . PMF_Db::getTablePrefix() . "faquserlogin_temp";
-        $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faquserlogin_temp";
+        $query[] = "INSERT INTO " . $prefix . "faquserlogin SELECT * FROM " . $prefix . "faquserlogin_temp";
+        $query[] = "DROP TABLE " . $prefix . "faquserlogin_temp";
     }
 
     //
@@ -632,7 +633,7 @@ if ($step == 3) {
     if (version_compare($version, '2.8.0-alpha2', '<')) {
         switch($DB['type']) {
             case 'pgsql':
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
                     id int4 NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
@@ -640,7 +641,7 @@ if ($step == 3) {
                     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     modified TIMESTAMP NOT NULL,
                     PRIMARY KEY (id))";
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
                     instance_id int4 NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
@@ -649,7 +650,7 @@ if ($step == 3) {
             case 'mssql':
             case 'sqlsrv':
             case 'sqlite3':
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
                     id INT NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
@@ -657,14 +658,14 @@ if ($step == 3) {
                     created DATETIME NOT NULL,
                     modified DATETIME NOT NULL,
                     PRIMARY KEY (id))";
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
                     instance_id INT NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
                 break;
             case 'mysqli':
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
                     id INT(11) NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
@@ -672,7 +673,7 @@ if ($step == 3) {
                     created TIMESTAMP DEFAULT 0,
                     modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-                $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqinstances_config (
+                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
                     instance_id INT(11) NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
@@ -680,20 +681,20 @@ if ($step == 3) {
                 break;
         }
 
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
             (42, 'editinstances', 'Right to edit multi-site instances')";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 42)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 42)";
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
             (43, 'addinstances', 'Right to add multi-site instances')";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 43)";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description) VALUES
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 43)";
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
             (44, 'delinstances', 'Right to delete multi-site instances')";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 44)";
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 44)";
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN remember_me VARCHAR(150) NULL";
+            $query[] = "ALTER TABLE " . $prefix . "faquser ADD COLUMN remember_me VARCHAR(150) NULL";
         } else {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD remember_me VARCHAR(150) NULL";
+            $query[] = "ALTER TABLE " . $prefix . "faquser ADD remember_me VARCHAR(150) NULL";
         }
     }
 
@@ -764,10 +765,10 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.8.0-alpha3', '<')) {
 
-        $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqlinkverifyrules";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqright (right_id, name, description) VALUES
+        $query[] = "DROP TABLE " . $prefix . "faqlinkverifyrules";
+        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
             (45, 'export', 'Right to export the complete FAQ')";
-        $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faquser_right (user_id, right_id) VALUES (1, 45)";
+        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 45)";
 
     }
 
@@ -798,7 +799,7 @@ if ($step == 3) {
     // UPDATED FROM 2.8.15
     //
     if (version_compare($version, '2.8.16', '<')) {
-        $query[] = "CREATE INDEX index_time ON " . PMF_Db::getTablePrefix() . "faqsessions (time)";
+        $query[] = "CREATE INDEX index_time ON " . $prefix . "faqsessions (time)";
     }
     //
     // UPDATES FROM 2.9.0-alpha
@@ -821,9 +822,9 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
+            $query[] = "ALTER TABLE " . $prefix . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
         } else {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faquser ADD success INT(1) NULL DEFAULT 1";
+            $query[] = "ALTER TABLE " . $prefix . "faquser ADD success INT(1) NULL DEFAULT 1";
         }
     }
 
@@ -848,9 +849,9 @@ if ($step == 3) {
         $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
+            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
         } else {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD active INT(1) NULL DEFAULT 1";
+            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD active INT(1) NULL DEFAULT 1";
         }
     }
 
@@ -867,13 +868,13 @@ if ($step == 3) {
         $faqConfig->add('records.numberMaxStoredRevisions', '10');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD COLUMN group_id INT NULL DEFAULT -1";
+            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
+            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD COLUMN group_id INT NULL DEFAULT -1";
         } else {
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqquestions ADD lang VARCHAR(5) NOT NULL";
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqcategories ADD group_id INT NULL DEFAULT -1";
+            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD lang VARCHAR(5) NOT NULL";
+            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD group_id INT NULL DEFAULT -1";
         }
-        $query[] = "UPDATE " . PMF_Db::getTablePrefix() . "faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
+        $query[] = "UPDATE " . $prefix . "faqquestions SET lang = '" . $faqConfig->getLanguage()->getLanguage() . "'";
     }
 
     //
@@ -883,21 +884,27 @@ if ($step == 3) {
 
         switch($DB['type']) {
             case 'pgsql':
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata RENAME COLUMN datum TO updated";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revisions RENAME COLUMN datum TO updated";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata RENAME COLUMN datum TO updated";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions RENAME COLUMN datum TO updated";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . PMF_Db::getTablePrefix() . "faqdata_revision.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revision.datum', 'updated', 'COLUMN'";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
             break;
             case 'mysqli':
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata CHANGE datum updated VARCHAR(15) NOT NULL";
-                $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision CHANGE datum updated VARCHAR(15) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata CHANGE datum updated VARCHAR(15) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revision CHANGE datum updated VARCHAR(15) NOT NULL";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
                 break;
         }
         if ('sqlite3' === $DB['type']) {
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_temp (
+            $query[] = "CREATE TABLE " . $prefix . "faqdata_temp (
                 id INTEGER NOT NULL,
                 lang VARCHAR(5) NOT NULL,
                 solution_id INTEGER NOT NULL,
@@ -916,15 +923,15 @@ if ($step == 3) {
                 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
                 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
                 PRIMARY KEY (id, lang))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqdata_temp
+            $query[] = "INSERT INTO " . $prefix . "faqdata_temp
                 SELECT
                     id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
                     comment, datum, links_state, links_check_date, date_start, date_end
-                FROM " . PMF_Db::getTablePrefix() . "faqdata";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata";
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_temp RENAME TO " . PMF_Db::getTablePrefix() . "faqdata";
+                FROM " . $prefix . "faqdata";
+            $query[] = "DROP TABLE " . $prefix . "faqdata";
+            $query[] = "ALTER TABLE " . $prefix . "faqdata_temp RENAME TO " . $prefix . "faqdata";
 
-            $query[] = "CREATE TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision_temp (
+            $query[] = "CREATE TABLE " . $prefix . "faqdata_revision_temp (
                 id INTEGER NOT NULL,
                 lang VARCHAR(5) NOT NULL,
                 solution_id INTEGER NOT NULL,
@@ -943,13 +950,15 @@ if ($step == 3) {
                 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
                 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
                 PRIMARY KEY (id, lang, solution_id, revision_id))";
-            $query[] = "INSERT INTO " . PMF_Db::getTablePrefix() . "faqdata_revision_temp
+            $query[] = "INSERT INTO " . $prefix . "faqdata_revision_temp
                 SELECT
                     id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
                     comment, datum, links_state, links_check_date, date_start, date_end
-                FROM " . PMF_Db::getTablePrefix() . "faqdata_revision";
-            $query[] = "DROP TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision";
-            $query[] = "ALTER TABLE " . PMF_Db::getTablePrefix() . "faqdata_revision_temp RENAME TO " . PMF_Db::getTablePrefix() . "faqdata_revision";
+                FROM " . $prefix . "faqdata_revision";
+            $query[] = "DROP TABLE " . $prefix . "faqdata_revision";
+            $query[] = "ALTER TABLE " . $prefix . "faqdata_revision_temp RENAME TO " . $prefix . "faqdata_revision";
+            $query[] = "ALTER TABLE " . $prefix . "faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+            $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
         }
     }
 
@@ -962,7 +971,7 @@ if ($step == 3) {
     switch ($DB['type']) {
         case 'mysqli':
             // Get all table names
-            $faqConfig->getDb()->getTableNames(PMF_Db::getTablePrefix());
+            $faqConfig->getDb()->getTableNames($prefix);
             foreach ($faqConfig->getDb()->tableNames as $tableName) {
                 $query[] = 'OPTIMIZE TABLE '. $tableName;
             }
