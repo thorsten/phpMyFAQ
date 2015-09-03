@@ -48,7 +48,7 @@ Version 2.9.0-beta - 2015-09
 - removed bundled SyntaxHighlighter (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
-- dropped support for Zeus Webserver (Thorsten)
+- dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 
 Version 2.8.25 - 2015-08-
 - added American English translation (Stewart Day)

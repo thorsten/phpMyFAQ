@@ -141,7 +141,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   Filter support
     *   SPL support
     *   FileInfo support
-*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [lighttpd](http://www.lighttpd.net) 1.0+ or [IIS](http://www.microsoft.com/) 6.0+)
+*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [IIS](http://www.microsoft.com/) 7.0+)
 *   **Database server**
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.6.x)
     *   [PostgreSQL](http://www.postgresql.org) 9.x (recommended: latest 9.x)
@@ -164,10 +164,6 @@ In case you have PHP below 5.4.3 installed you cannot use phpMyFAQ.
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 9 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
 
 We recommend to use always the latest version of Firefox, Chrome, Safari, Opera and Internet Explorer.
-
-If you're using *lighttpd* you have to set the following configuration:
-
-`cgi.fix_pathinfo 1`
 
 [back to top][64]
 
@@ -328,11 +324,6 @@ configuration page.
 
 If you want to enable the search engine optimization you have to copy the rewrite rules in the file _nginx.conf to your 
 nginx.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
-
-*lighttpd Web server*
-
-If you want to enable the search engine optimization you have to copy the rewrite rules in the file _lighttpd.conf to 
-your lighttpd.conf. Then you have to activate the URL rewrite support in the admin backend in the configuration page.
 
 [back to top][64]
 
