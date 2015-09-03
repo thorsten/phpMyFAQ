@@ -1,11 +1,11 @@
-phpMyFAQ 2.9.0-alpha3
+phpMyFAQ 2.9.0-beta
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-alpha3 - 2015-08-29
+Version 2.9.0-beta - 2015-09
 - changed PHP requirement to PHP 5.5.0 and later (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
 - added support for PHP 7.0 (Thorsten)

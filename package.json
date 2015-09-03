@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0-alpha3",
+  "version": "2.9.0-beta",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "devDependencies": {
@@ -33,5 +33,6 @@
   },
   "keywords": [
     "phpMyFAQ"
-  ]
+  ],
+  "homepage": "http://www.phpmyfaq.de/"
 }
