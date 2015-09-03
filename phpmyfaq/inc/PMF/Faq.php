@@ -1411,13 +1411,13 @@ class PMF_Faq
     /**
      * Gets all revisions from a given record ID
      *
-     * @param  integer $record_id   Record id
-     * @param  string  $record_lang Record language
+     * @param  integer $recordId   Record id
+     * @param  string  $recordLang Record language
      * @return array
      */
-    public function getRevisionIds($record_id, $record_lang)
+    public function getRevisionIds($recordId, $recordLang)
     {
-        $revision_data = [];
+        $revisionData = [];
 
         $query = sprintf("
             SELECT
@@ -1431,21 +1431,23 @@ class PMF_Faq
             ORDER BY
                 revision_id",
             PMF_Db::getTablePrefix(),
-            $record_id,
-            $record_lang);
+            $recordId,
+            $recordLang
+        );
 
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $revision_data[] = array(
+                $revisionData[] = [
                     'revision_id' => $row->revision_id,
-                    'datum'       => $row->updated,
-                    'author'      => $row->author);
+                    'updated'     => $row->updated,
+                    'author'      => $row->author
+                ];
             }
         }
 
-        return $revision_data;
+        return $revisionData;
     }
 
     /**
@@ -2001,7 +2003,7 @@ class PMF_Faq
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
             ORDER BY
-                fd.datum DESC';
+                fd.updated DESC';
 
         $result = $this->_config->getDb()->query($query, 0, $count);
         $latest = [];
