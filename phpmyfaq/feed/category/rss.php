@@ -144,7 +144,7 @@ if (is_array($records)) {
         $rss->writeElement('link', $faqConfig->getDefaultUrl() . $link);
         $rss->writeElement('guid', $faqConfig->getDefaultUrl() . $link);
 
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_date'], true));
+        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_updated'], true));
 
         $rss->endElement();
     }

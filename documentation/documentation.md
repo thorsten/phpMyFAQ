@@ -1181,8 +1181,9 @@ You can call the resources with the following URIs:
             "record_title":"Is there life after death?",
             "record_preview":"Maybe!",
             "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
-            "record_date":"20091010175452",
-            "visits":"3"
+            "record_updated":"20091010175452",
+            "visits":"3",
+            "record_created":"2008-09-03T21:30:17+02:00"
         },
         {
             "record_id":"2",
@@ -1191,8 +1192,9 @@ You can call the resources with the following URIs:
             "record_title":"How can I survive without phpMyFAQ?",
             "record_preview":"It\'s easy!",
             "record_link":"\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
-            "record_date":"20091014181500",
-            "visits":"10"
+            "record_updated":"20091014181500",
+            "visits":"10",
+            "record_created":"2008-09-03T21:30:17+02:00"
         }
     ]</code></pre>
     
@@ -1221,7 +1223,8 @@ You can call the resources with the following URIs:
         "dateStart":"00000000000000",
         "dateEnd":"99991231235959",
         "linkState":"",
-        "linkCheckDate":"0"
+        "linkCheckDate":"0",
+        "created":"2015-09-03T21:30:17+02:00"
     }</code></pre>
     
 *   **getAttachmentsFromFaq()**

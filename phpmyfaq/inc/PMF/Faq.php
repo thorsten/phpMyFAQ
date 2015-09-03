@@ -192,9 +192,10 @@ class PMF_Faq
                 fd.lang AS lang,
                 fd.thema AS thema,
                 fd.content AS record_content,
-                fd.updated AS record_date,
+                fd.updated AS updated,
                 fcr.category_id AS category_id,
                 fv.visits AS visits
+                fd.created AS created
             FROM
                 %sfaqdata AS fd
             LEFT JOIN
@@ -242,7 +243,8 @@ class PMF_Faq
             $this->queryPermission($this->groupSupport),
             $current_table,
             $this->_config->getDb()->escape($orderby),
-            $this->_config->getDb()->escape($sortby));
+            $this->_config->getDb()->escape($sortby)
+        );
 
         $result = $this->_config->getDb()->query($query);
         $num    = $this->_config->getDb()->numRows($result);
@@ -280,8 +282,9 @@ class PMF_Faq
                     'record_title'   => $row->thema,
                     'record_preview' => $answerPreview,
                     'record_link'    => $oLink->toString(),
-                    'record_date'    => $row->record_date,
-                    'visits'         => $visits
+                    'record_updated' => $row->updated,
+                    'visits'         => $visits,
+                    'record_created' => $row->created
                 );
             }
         } else {
@@ -682,7 +685,7 @@ class PMF_Faq
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
                  thema, content, author, email, comment, updated, links_state,
-                 links_check_date, date_start, date_end
+                 links_check_date, date_start, date_end, created
             FROM
                 %s%s fd
             LEFT JOIN
@@ -744,7 +747,8 @@ class PMF_Faq
                 'dateStart'     => $row->date_start,
                 'dateEnd'       => $row->date_end,
                 'linkState'     => $row->links_state,
-                'linkCheckDate' => $row->links_check_date
+                'linkCheckDate' => $row->links_check_date,
+                'created'       => $row->created
             );
         } else {
             $this->faqRecord = array(
@@ -764,7 +768,8 @@ class PMF_Faq
                 'dateStart'     => '',
                 'dateEnd'       => '',
                 'linkState'     => '',
-                'linkCheckDate' => ''
+                'linkCheckDate' => '',
+                'created'       => date('c'),
             );
         }
     }
