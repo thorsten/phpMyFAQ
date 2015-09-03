@@ -1227,6 +1227,56 @@ You can call the resources with the following URIs:
         "created":"2015-09-03T21:30:17+02:00"
     }</code></pre>
     
+*   **getAllFaqs()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getAllFaqs&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getAllFaqs/de (rewrite rules enabled)
+
+    You have the variable *lang* for the language. You'll get an JSON object as result with the follwing structure:
+
+    <pre><code class="json">[
+        {
+            "id":"1",
+            "lang":"en",
+            "solution_id":"1000",
+            "revision_id":"0",
+            "active":"yes",
+            "sticky":"0",
+            "keywords":"",
+            "title":"Is there life after death?",
+            "content":"Maybe!",
+            "author":"Thorsten Rinne",
+            "email":"thorsten@phpmyfaq.de",
+            "comment":"y",
+            "date":"2009-10-10 17:54:00",
+            "dateStart":"00000000000000",
+            "dateEnd":"99991231235959",
+            "linkState":"",
+            "linkCheckDate":"0",
+            "created":"2008-09-03T21:30:17+02:00"
+        },
+        {
+            "id":"1",
+            "lang":"en",
+            "solution_id":"1001",
+            "revision_id":"0",
+            "active":"yes",
+            "sticky":"0",
+            "keywords":"",
+            "title":"Is there really life after death?",
+            "content":"Maybe not!",
+            "author":"Thorsten Rinne",
+            "email":"thorsten@phpmyfaq.de",
+            "comment":"y",
+            "date":"2009-10-10 17:54:00",
+            "dateStart":"00000000000000",
+            "dateEnd":"99991231235959",
+            "linkState":"",
+            "linkCheckDate":"0",
+            "created":"2008-09-03T21:30:17+02:00"
+        }
+    ]</code></pre>
+    
 *   **getAttachmentsFromFaq()**
 
     *   http://www.example.org/phpmyfaq/api.php?action=getAttachmentsFromFaq&lang=en&recordId=1 (standard)

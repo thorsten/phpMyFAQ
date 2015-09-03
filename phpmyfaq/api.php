@@ -138,6 +138,14 @@ switch ($action) {
         $result = $faq->faqRecord;
         break;
 
+    case 'getAllFaqs':
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
+        $result = $faq->faqRecords;
+        break;
+
     case 'getFaqAsPdf':
         $service = new PMF_Services($faqConfig);
         $service->setFaqId($recordId);

@@ -1325,7 +1325,8 @@ class PMF_Faq
                 fd.links_check_date AS links_check_date,
                 fd.date_start AS date_start,
                 fd.date_end AS date_end,
-                fd.sticky AS sticky
+                fd.sticky AS sticky,
+                fd.created AS created
             FROM
                 %sfaqdata fd
             LEFT JOIN
@@ -1356,24 +1357,25 @@ class PMF_Faq
                 $content = $this->pmf_lang['err_expiredArticle'];
             }
 
-            $this->faqRecords[] = array(
-                'id'            => $row->id,
-                'category_id'   => $row->category_id,
-                'lang'          => $row->lang,
-                'solution_id'   => $row->solution_id,
-                'revision_id'   => $row->revision_id,
-                'active'        => $row->active,
-                'sticky'        => $row->sticky,
-                'keywords'      => $row->keywords,
-                'title'         => $row->thema,
-                'content'       => $content,
-                'author'        => $row->author,
-                'email'         => $row->email,
-                'comment'       => $row->comment,
-                'date'          => PMF_Date::createIsoDate($row->updated),
-                'dateStart'     => $row->date_start,
-                'dateEnd'       => $row->date_end
-            );
+            $this->faqRecords[] = [
+                'id'          => $row->id,
+                'category_id' => $row->category_id,
+                'lang'        => $row->lang,
+                'solution_id' => $row->solution_id,
+                'revision_id' => $row->revision_id,
+                'active'      => $row->active,
+                'sticky'      => $row->sticky,
+                'keywords'    => $row->keywords,
+                'title'       => $row->thema,
+                'content'     => $content,
+                'author'      => $row->author,
+                'email'       => $row->email,
+                'comment'     => $row->comment,
+                'updated'     => PMF_Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
+                'dateStart'   => $row->date_start,
+                'dateEnd'     => $row->date_end,
+                'created'     => $row->created
+            ];
         }
     }
 
