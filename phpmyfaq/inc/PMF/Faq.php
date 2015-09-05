@@ -681,38 +681,7 @@ class PMF_Faq
     {
         global $PMF_LANG;
 
-        $query = sprintf(
-            "SELECT
-                 id, lang, solution_id, revision_id, active, sticky, keywords,
-                 thema, content, author, email, comment, updated, links_state,
-                 links_check_date, date_start, date_end, created
-            FROM
-                %s%s fd
-            LEFT JOIN
-                %sfaqdata_group fdg
-            ON
-                fd.id = fdg.record_id
-            LEFT JOIN
-                %sfaqdata_user fdu
-            ON
-                fd.id = fdu.record_id
-            WHERE
-                fd.id = %d
-            %s
-            AND
-                fd.lang = '%s'
-                %s",
-            PMF_Db::getTablePrefix(),
-            isset($revisionId) ? 'faqdata_revisions': 'faqdata',
-            PMF_Db::getTablePrefix(),
-            PMF_Db::getTablePrefix(),
-            $id,
-            isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
-            $this->_config->getLanguage()->getLanguage(),
-            ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
-        );
-
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->getRecordResult($id, $revisionId, $isAdmin);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
 
@@ -772,6 +741,51 @@ class PMF_Faq
                 'created'       => date('c'),
             );
         }
+    }
+
+    /**
+     * Executes a query to retrieve a single FAQ
+     *
+     * @param integer $id
+     * @param integer $revisionId
+     * @param boolean $isAdmin
+     *
+     * @return mixed
+     */
+    public function getRecordResult($id, $revisionId = null, $isAdmin = false)
+    {
+        $query = sprintf(
+            "SELECT
+                 id, lang, solution_id, revision_id, active, sticky, keywords,
+                 thema, content, author, email, comment, updated, links_state,
+                 links_check_date, date_start, date_end, created
+            FROM
+                %s%s fd
+            LEFT JOIN
+                %sfaqdata_group fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id = %d
+            %s
+            AND
+                fd.lang = '%s'
+                %s",
+            PMF_Db::getTablePrefix(),
+            isset($revisionId) ? 'faqdata_revisions': 'faqdata',
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            $id,
+            isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
+            $this->_config->getLanguage()->getLanguage(),
+            ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
+        );
+
+        return $this->_config->getDb()->query($query);
     }
 
     /**
