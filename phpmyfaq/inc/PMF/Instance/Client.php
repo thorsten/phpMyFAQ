@@ -98,19 +98,9 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function createClientTables($prefix)
     {
-        $tableNames = $this->config->getDb()->getTableNames(PMF_Db::getTablePrefix());
-
         // First, create the client tables
-        foreach ($tableNames as $tableName) {
-            $this->config->getDb()->query(
-                sprintf(
-                    'CREATE TABLE %s%s SELECT * FROM %s WHERE 1 = 2',
-                    $prefix,
-                    str_replace(PMF_Db::getTablePrefix(), '', $tableName),
-                    $tableName
-                )
-            );
-        }
+        $instanceDatabase = PMF_Instance_Database::factory($this->config, PMF_Db::getType());
+        $instanceDatabase->createTables($prefix);
 
         // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
         $this->config->getDb()->query(
