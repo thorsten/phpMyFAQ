@@ -753,7 +753,7 @@ class PMF_Installer
         $db = PMF_Db::factory($dbSetup['dbType']);
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
         if (!$db) {
-            echo "<p class=\"alert alert-danger\"><strong>DB Error:</strong> ".$db->error()."</p>\n";
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->_system->cleanInstallation();
             PMF_System::renderFooter(true);
         }
@@ -761,8 +761,8 @@ class PMF_Installer
         $databaseInstaller = PMF_Instance_Database::factory($configuration, $dbSetup['dbType']);
         $databaseInstaller->createTables($dbSetup['dbPrefix']);
 
-        // @todo move that to PMF/Instance/Database as well
-        require PMF_ROOT_DIR . '/setup/stopwords.sql.php';  // INSERTs for stopwords
+        $stopwords = new PMF_Instance_Database_Stopwords($configuration);
+        $stopwords->executeInsertQueries($dbSetup['dbPrefix']);
 
         $this->_system->setDatabase($db);
 
