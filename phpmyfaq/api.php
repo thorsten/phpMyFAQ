@@ -184,6 +184,11 @@ switch ($action) {
         $news = new PMF_News($faqConfig);
         $result = $news->getLatestData(false, true, true);
         break;
+
+    case 'getPopularSearches':
+        $search = new PMF_Search($faqConfig);
+        $result = $search->getMostPopularSearches(7, true);
+        break;
 }
 
 if (empty($result)) {

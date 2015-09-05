@@ -1364,6 +1364,27 @@ You can call the resources with the following URIs:
         }
     ]</code></pre>
     
+*   **getPopularSearches()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getPopularSearches&lang=en (standard)
+    *   http://www.example.org/phpmyfaq/api/getPopularSearches/en (rewrite rules enabled)
+
+    The result will be a JSON object like the following:
+
+    <pre><code class="json">[
+        {
+            "id": "10",
+            "searchterm": "test",
+            "number": "127",
+            "lang": "en"
+        },
+        {
+            "id": "94",
+            "searchterm": "PHP",
+            "number": "27",
+            "lang": "en"
+        }
+    ]</code></pre>
     
 [back to top][64]
 

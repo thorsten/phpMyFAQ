@@ -154,3 +154,4 @@ RewriteRule api/getAttachmentsFromFaq/([a-z\-]+)/([0-9]+)   api.php?action=getAt
 RewriteRule api/getPopular/([a-z\-]+)                       api.php?action=getPopular&lang=$1 [L,QSA]
 RewriteRule api/getLatest/([a-z\-]+)                        api.php?action=getLatest&lang=$1 [L,QSA]
 RewriteRule api/getNews/([a-z\-]+)                          api.php?action=getNews&lang=$1 [L,QSA]
+RewriteRule api/getPopularSearches/([a-z\-]+)               api.php?action=getPopularSearches&lang=$1 [L,QSA]

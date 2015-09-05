@@ -237,11 +237,11 @@ class PMF_Search
         $byLang = $withLang ? ', lang' : '';
         $query  = sprintf("
             SELECT 
-                MIN(id), searchterm, COUNT(searchterm) AS number %s
+                MIN(id) as id, searchterm, COUNT(searchterm) AS number %s
             FROM
                 %s
             GROUP BY
-                searchterm %s,faqsearches.id
+                searchterm %s
             ORDER BY
                 number
             DESC",
