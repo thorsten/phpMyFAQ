@@ -325,13 +325,13 @@ if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
 //
 // Found a category ID?
 //
-$cat         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-$cat_from_id = -1;
+$cat            = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+$categoryFromId = -1;
 if (is_numeric($id) && $id > 0) {
-    $cat_from_id = $category->getCategoryIdFromArticle($id);
+    $categoryFromId = $category->getCategoryIdFromArticle($id);
 }
-if ($cat_from_id != -1 && $cat == 0) {
-    $cat = $cat_from_id;
+if ($categoryFromId != -1 && $cat == 0) {
+    $cat = $categoryFromId;
 }
 $category->transform(0);
 $category->collapseAll();
@@ -339,7 +339,8 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
-    $title = ' - '.$category->categoryName[$cat]['name'];
+    $title           = ' - ' . $category->categoryName[$cat]['name'];
+    $metaDescription = $category->categoryName[$cat]['description'];
 }
 
 //
