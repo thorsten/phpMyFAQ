@@ -671,35 +671,42 @@ class PMF_Faq
     /**
      * Returns an array with all data from a FAQ record
      *
-     * @param integer $id         Record id
-     * @param integer $revisionId Revision id
-     * @param boolean $isAdmin    Must be true if it is called by an admin/author context
+     * @param integer $faqId         FAQ ID
+     * @param integer $faqRevisionId Revision ID
+     * @param boolean $isAdmin       Must be true if it is called by an admin/author context
      * 
      * @return void
      */
-    public function getRecord($id, $revisionId = null, $isAdmin = false)
+    public function getRecord($faqId, $faqRevisionId = null, $isAdmin = false)
     {
         global $PMF_LANG;
 
-        $result = $this->getRecordResult($id, $revisionId, $isAdmin);
+        $currentLanguage = $this->_config->getLanguage()->getLanguage();
+        $defaultLanguage = $this->_config->getDefaultLanguage();
+
+        $result = $this->getRecordResult($faqId, $currentLanguage, $faqRevisionId, $isAdmin);
+
+        if (0 === $this->_config->getDb()->numRows($result)) {
+            $result = $this->getRecordResult($faqId, $defaultLanguage, $faqRevisionId, $isAdmin);
+        }
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
 
             $question = nl2br($row->thema);
-            $content  = $row->content;
-            $active   = ('yes' == $row->active);
+            $answer   = $row->content;
+            $active   = ('yes' === $row->active);
             $expired  = (date('YmdHis') > $row->date_end);
 
             if (!$isAdmin) {
                 if (!$active) {
-                    $content = $this->pmf_lang['err_inactiveArticle'];
+                    $answer = $this->pmf_lang['err_inactiveArticle'];
                 }
                 if ($expired) {
-                    $content = $this->pmf_lang['err_expiredArticle'];
+                    $answer = $this->pmf_lang['err_expiredArticle'];
                 }
             }
 
-            $this->faqRecord = array(
+            $this->faqRecord = [
                 'id'            => $row->id,
                 'lang'          => $row->lang,
                 'solution_id'   => $row->solution_id,
@@ -708,7 +715,7 @@ class PMF_Faq
                 'sticky'        => $row->sticky,
                 'keywords'      => $row->keywords,
                 'title'         => $question,
-                'content'       => $content,
+                'content'       => $answer,
                 'author'        => $row->author,
                 'email'         => $row->email,
                 'comment'       => $row->comment,
@@ -718,13 +725,14 @@ class PMF_Faq
                 'linkState'     => $row->links_state,
                 'linkCheckDate' => $row->links_check_date,
                 'created'       => $row->created
-            );
+            ];
         } else {
-            $this->faqRecord = array(
-                'id'            => $id,
-                'lang'          => $this->_config->getLanguage()->getLanguage(),
+
+            $this->faqRecord = [
+                'id'            => $faqId,
+                'lang'          => $currentLanguage,
                 'solution_id'   => 42,
-                'revision_id'   => 0,
+                'revision_id'   => $faqRevisionId,
                 'active'        => 'no',
                 'sticky'        => 0,
                 'keywords'      => '',
@@ -739,20 +747,21 @@ class PMF_Faq
                 'linkState'     => '',
                 'linkCheckDate' => '',
                 'created'       => date('c'),
-            );
+            ];
         }
     }
 
     /**
      * Executes a query to retrieve a single FAQ
      *
-     * @param integer $id
-     * @param integer $revisionId
+     * @param integer $faqId
+     * @param string  $faqLanguage
+     * @param integer $faqRevisionId
      * @param boolean $isAdmin
      *
      * @return mixed
      */
-    public function getRecordResult($id, $revisionId = null, $isAdmin = false)
+    public function getRecordResult($faqId, $faqLanguage, $faqRevisionId = null, $isAdmin = false)
     {
         $query = sprintf(
             "SELECT
@@ -776,12 +785,12 @@ class PMF_Faq
                 fd.lang = '%s'
                 %s",
             PMF_Db::getTablePrefix(),
-            isset($revisionId) ? 'faqdata_revisions': 'faqdata',
+            isset($faqRevisionId) ? 'faqdata_revisions': 'faqdata',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            $id,
-            isset($revisionId) ? 'AND revision_id = '.$revisionId : '',
-            $this->_config->getLanguage()->getLanguage(),
+            $faqId,
+            isset($faqRevisionId) ? 'AND revision_id = ' . $faqRevisionId : '',
+            $faqLanguage,
             ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
 
