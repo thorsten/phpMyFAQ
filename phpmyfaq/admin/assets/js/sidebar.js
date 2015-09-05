@@ -17,7 +17,7 @@
 
 /** global $: false */
 
-$(function() {
+(function() {
     $(window).bind('load resize', function() {
         'use strict';
         if ($(this).width() < 768) {
@@ -25,5 +25,5 @@ $(function() {
         } else {
             $('div.sidebar-collapse').removeClass('collapse');
         }
-    })
-})
+    });
+});

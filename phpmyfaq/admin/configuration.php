@@ -183,7 +183,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         </div>
 
         <script type="text/javascript">
-            toggleConfig = function (e) {
+            var toggleConfig = function (e) {
                 e.preventDefault();
                 var configContainer = $("#config" + $(this).data('toggle'));
 
@@ -199,7 +199,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 } else {
                     configContainer.fadeOut("slow").attr("class", "hide").empty();
                 }
-            }
+            };
+
             $('button.toggleConfig').on('click', toggleConfig);
         </script>
 <?php
