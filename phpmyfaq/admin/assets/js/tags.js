@@ -14,7 +14,8 @@
  * @since     2014-08-16
  */
 
-$(document).ready(function() {
+(function() {
+    'use strict';
 
     $(".btn-edit").on("click", function() {
         var id   = $(this).data("btn-id");

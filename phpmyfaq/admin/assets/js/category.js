@@ -14,14 +14,16 @@
  * @since     2014-06-02
  */
 
-$(document).ready(function() {
-    "use strict";
-    $("h4.category-header").click(function() {
-        var div = $("#div_" + $(this).data("category-id"));
-        if (div.css("display") === "none") {
-            div.fadeIn("fast");
+/*global $:false */
+
+(function() {
+    'use strict';
+    $('h4.category-header').click(function() {
+        var div = $('#div_' + $(this).data('category-id'));
+        if (div.css('display') === 'none') {
+            div.fadeIn('fast');
         } else {
-            div.fadeOut("fast");
+            div.fadeOut('fast');
         }
     });
 });

@@ -16,7 +16,7 @@
 
 /*global $:false */
 
-$(document).ready(function() {
+(function() {
     'use strict';
 
     $('.showhideCategory').click(function(event) {

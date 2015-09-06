@@ -15,7 +15,7 @@
  * @since     2014-03-22
  */
 
-/** global $: false */
+/*global $:false */
 
 (function() {
     $(window).bind('load resize', function() {
