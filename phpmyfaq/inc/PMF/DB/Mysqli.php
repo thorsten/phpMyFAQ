@@ -186,19 +186,20 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         
         return $ret;
     }
-    
+
     /**
      * Number of rows in a result
      *
-     * @param   mixed $result
-     * @return  integer
+     * @param mixed $result
+     *
+     * @return integer
      */
     public function numRows($result)
     {
-        try {
+        if ($result instanceof mysqli_result) {
             return $result->num_rows;
-        } catch (PMF_Exception $e) {
-            return $e->getMessage();
+        } else {
+            return 0;
         }
     }
 
