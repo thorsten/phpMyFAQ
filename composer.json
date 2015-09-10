@@ -8,7 +8,7 @@
     "homepage": "http://www.phpmyfaq.de",
     "license": "MPL 2.0",
     "type": "application",
-    "version": "2.9.0-beta",
+    "version": "2.9.0-alpha4",
     "authors": [
         {
             "name": "Thorsten Rinne",

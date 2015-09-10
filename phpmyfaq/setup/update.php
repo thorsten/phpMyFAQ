@@ -878,9 +878,9 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 2.9.0-beta
+    // UPDATES FROM 2.9.0-alpha4
     //
-    if (version_compare($version, '2.9.0-beta', '<')) {
+    if (version_compare($version, '2.9.0-alpha4', '<')) {
 
         switch($DB['type']) {
             case 'pgsql':
