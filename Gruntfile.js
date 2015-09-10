@@ -42,7 +42,7 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        src: 'components/tinymce/js/tinymce/tinymce.full.min.js',
+                        src: 'components/tinymce/tinymce.min.js',
                         flatten: true,
                         dest: 'phpmyfaq/admin/assets/js/editor'
                     },
