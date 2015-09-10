@@ -143,7 +143,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             links_check_date INT(11) DEFAULT 0 NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
-            PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+            PRIMARY KEY (id, lang)) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
             id INT(11) NOT NULL,
