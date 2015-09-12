@@ -17,16 +17,20 @@
 
 /*global $:false */
 
-(function () {
+if (window.jQuery) {
 
-    'use strict';
+    (function () {
 
-    $(window).bind('load resize', function() {
         'use strict';
-        if ($(this).width() < 768) {
-            $('div.sidebar-collapse').addClass('collapse');
-        } else {
-            $('div.sidebar-collapse').removeClass('collapse');
-        }
-    });
-});
+
+        $(window).bind('load resize', function () {
+            'use strict';
+            if ($(this).width() < 768) {
+                $('div.sidebar-collapse').addClass('collapse');
+            } else {
+                $('div.sidebar-collapse').removeClass('collapse');
+            }
+        });
+    })();
+
+}

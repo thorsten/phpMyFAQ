@@ -69,7 +69,6 @@ if (isset($auth)) {
             }
 
 ?>
-<!-- tinyMCE -->
 <script>
 /*<![CDATA[*/ //<!--
 $().tooltip({placement: 'bottom'});

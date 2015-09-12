@@ -186,6 +186,7 @@ switch ($action) {
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
+    <script src="../assets/js/modernizr.min.js" async></script>
     <script src="../assets/js/phpmyfaq.min.js" async></script>
     <script src="assets/js/sidebar.js" async></script>
     <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>" async></script>

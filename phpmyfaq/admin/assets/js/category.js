@@ -16,17 +16,21 @@
 
 /*global $:false */
 
-(function () {
+if (window.jQuery) {
 
-    'use strict';
+    (function () {
 
-    $('h4.category-header').click(function() {
-        var div = $('#div_' + $(this).data('category-id'));
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
-        } else {
-            div.fadeOut('fast');
-        }
-    });
+        'use strict';
 
-})();
+        $('h4.category-header').click(function () {
+            var div = $('#div_' + $(this).data('category-id'));
+            if (div.css('display') === 'none') {
+                div.fadeIn('fast');
+            } else {
+                div.fadeOut('fast');
+            }
+        });
+
+    })();
+
+}
