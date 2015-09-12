@@ -389,8 +389,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             </div>
         </header>
 
-        <script type="text/javascript" src="assets/js/user.js"></script>
-        <script type="text/javascript">
+        <script src="assets/js/user.js"></script>
+        <script>
         /* <![CDATA[ */
 
         /**
@@ -452,8 +452,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                                        data-provide="typeahead" class="form-control">
                             </div>
                         </div>
-                        <script type="text/javascript">
-                        //<![CDATA[
+                        <script>
                         var mappedIds,
                             userNames;
                         /*
@@ -477,7 +476,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                             }
                         });
                         */
-                        //]]>
                         </script>
                     </div>
                     <div class="panel-footer">
@@ -742,7 +740,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </tbody>
         </table>
 
-        <script type="text/javascript">
+        <script>
         /**
          * Ajax call to delete user
          *

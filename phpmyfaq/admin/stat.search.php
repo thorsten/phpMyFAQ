@@ -139,8 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 ?>
                 </tbody>
                 </table>
-                <script type="text/javascript">
-                /* <![CDATA[ */
+                <script>
                 /**
                  * Ajax call to delete search term
                  *
@@ -163,7 +162,6 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         });
                     }
                 }
-                /* ]]> */
                 </script>
 <?php
 } else {

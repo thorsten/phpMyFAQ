@@ -717,8 +717,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         </div>
 
     <script src="assets/js/record.js"></script>
-    <script type="text/javascript">
-    /* <![CDATA[ */
+    <script>
 
     function extractor(query) {
         var result = /([^,]+)$/.exec(query);

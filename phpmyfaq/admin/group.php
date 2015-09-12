@@ -318,8 +318,7 @@ if ($groupAction == 'list') {
             </div>
         </header>
     
-        <script type="text/javascript">
-        /* <![CDATA[ */
+        <script>
 
 var groupList;
 
@@ -567,7 +566,7 @@ function removeGroupMembers()
 }
 
 getGroupList();
-        /* ]]> */
+
         </script>
 
         <div id="user_message"><?php echo $message; ?></div>

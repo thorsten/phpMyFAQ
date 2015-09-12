@@ -14,7 +14,10 @@
  * @since     2014-08-16
  */
 
-(function() {
+/*global $:false */
+
+(function () {
+
     'use strict';
 
     $(".btn-edit").on("click", function() {
@@ -54,4 +57,4 @@
 
         return false;
     });
-});
+})();

@@ -67,7 +67,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta name="copyright" content="(c) 2001-2015 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php if (isset($user) && ($refreshTime > 0)) { ?>
-    <script type="text/javascript">
+    <script>
 
     function _PMFSessionTimeoutWarning() {
         if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {

@@ -8,7 +8,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014 phpMyFAQ Team
+ * @copyright 2014-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2014-06-02
@@ -16,8 +16,10 @@
 
 /*global $:false */
 
-(function() {
+(function () {
+
     'use strict';
+
     $('h4.category-header').click(function() {
         var div = $('#div_' + $(this).data('category-id'));
         if (div.css('display') === 'none') {
@@ -26,4 +28,5 @@
             div.fadeOut('fast');
         }
     });
-});
+
+})();

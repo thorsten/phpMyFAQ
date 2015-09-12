@@ -17,7 +17,10 @@
 
 /*global $:false */
 
-(function() {
+(function () {
+
+    'use strict';
+
     $(window).bind('load resize', function() {
         'use strict';
         if ($(this).width() < 768) {

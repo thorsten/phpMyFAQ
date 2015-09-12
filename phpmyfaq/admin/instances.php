@@ -201,76 +201,80 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         </div>
     </div>
 
-    <script type="text/javascript">
-        // Add instance
-        $('.pmf-instance-add').click(function(event) {
-            event.preventDefault();
-            var url      = $('#url').val();
-            var instance = $('#instance').val();
-            var comment  = $('#comment').val();
-            var email    = $('#email').val();
-            var admin    = $('#admin').val();
-            var password = $('#password').val();
+    <script>
+        (function() {
 
-            $.get('index.php',
-                { action: 'ajax', ajax: 'config', ajaxaction: 'add_instance',
-                  url: url, instance: instance, comment: comment, email: email, admin: admin, password: password
-                },
-                function(data) {
-                    if (typeof(data.added) === 'undefined') {
-                        $('.table').after(
-                            '<div class="alert alert-danger">Could not add instance</div>'
-                        );
-                    } else {
-                        $('.modal').modal('hide');
-                        $('.table tbody').append(
-                            '<tr id="row-instance-' + data.added + '">' +
-                            '<td>' + data.added + '</td>' +
-                            '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
-                            '<td>' + instance + '</td>' +
-                            '<td>' + comment + '</td>' +
-                            '<td>' +
-                            '<a href="?action=editinstance&instance_id=' + data.added +
-                            '" class="btn btn-info"><i class="fa fa-pencil"></i></a>' +
-                            '</td>' +
-                            '<td>' +
-                            '<a href="javascript:;" id="delete-instance-' + data.added +
-                            '" class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i></a>' +
-                            '</td>' +
-                            '</tr>'
-                        );
-                    }
-                },
-                'json'
-            );
+            // Add instance
+            $('.pmf-instance-add').click(function(event) {
+                event.preventDefault();
+                var url      = $('#url').val();
+                var instance = $('#instance').val();
+                var comment  = $('#comment').val();
+                var email    = $('#email').val();
+                var admin    = $('#admin').val();
+                var password = $('#password').val();
 
-        });
-
-        // Delete instance
-        $('.pmf-instance-delete').click(function(event) {
-            event.preventDefault();
-            var targetId = event.target.id.split('-');
-            var id = targetId[2];
-            var csrf = this.getAttribute('data-csrf-token');
-
-            if (confirm('Are you sure?')) {
                 $.get('index.php',
-                    { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
+                    { action: 'ajax', ajax: 'config', ajaxaction: 'add_instance',
+                        url: url, instance: instance, comment: comment, email: email, admin: admin, password: password
+                    },
                     function(data) {
-                        if (typeof(data.deleted) === 'undefined') {
+                        if (typeof(data.added) === 'undefined') {
                             $('.table').after(
-                                '<div class="alert alert-danger">' +
-                                '<?php echo $PMF_LANG["ad_instance_error_cannotdelete"] ?> ' + data.error +
-                                '</div>'
+                                '<div class="alert alert-danger">Could not add instance</div>'
                             );
                         } else {
-                            $('#row-instance-' + id).fadeOut('slow');
+                            $('.modal').modal('hide');
+                            $('.table tbody').append(
+                                '<tr id="row-instance-' + data.added + '">' +
+                                '<td>' + data.added + '</td>' +
+                                '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
+                                '<td>' + instance + '</td>' +
+                                '<td>' + comment + '</td>' +
+                                '<td>' +
+                                '<a href="?action=editinstance&instance_id=' + data.added +
+                                '" class="btn btn-info"><i class="fa fa-pencil"></i></a>' +
+                                '</td>' +
+                                '<td>' +
+                                '<a href="javascript:;" id="delete-instance-' + data.added +
+                                '" class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i></a>' +
+                                '</td>' +
+                                '</tr>'
+                            );
                         }
                     },
                     'json'
                 );
-            }
-        });
+
+            });
+
+            // Delete instance
+            $('.pmf-instance-delete').click(function(event) {
+                event.preventDefault();
+                var targetId = event.target.id.split('-');
+                var id = targetId[2];
+                var csrf = this.getAttribute('data-csrf-token');
+
+                if (confirm('Are you sure?')) {
+                    $.get('index.php',
+                        { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
+                        function(data) {
+                            if (typeof(data.deleted) === 'undefined') {
+                                $('.table').after(
+                                    '<div class="alert alert-danger">' +
+                                    '<?php echo $PMF_LANG["ad_instance_error_cannotdelete"] ?> ' + data.error +
+                                    '</div>'
+                                );
+                            } else {
+                                $('#row-instance-' + id).fadeOut('slow');
+                            }
+                        },
+                        'json'
+                    );
+                }
+            });
+
+        })();
     </script>
 
     </div>

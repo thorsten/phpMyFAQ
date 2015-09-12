@@ -55,8 +55,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
             <div id="stopwords_content"></div>
 
-            <script type="text/javascript">
-            /* <![CDATA[ */
+            <script>
 
         /**
          * column count in the stop words table
@@ -302,7 +301,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 );
             }
         }
-        /* ]]> */
         </script>
         </div>
     </div>

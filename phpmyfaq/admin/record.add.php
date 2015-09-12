@@ -219,12 +219,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
 ?>
-    <script type="text/javascript">
-    $(document).ready(function(){
-        setTimeout(function() {
-            window.location = "index.php?action=editentry&id=<?php print $recordId; ?>&lang=<?php print $recordData['lang'] ?>";
+    <script>
+        (function() {
+            setTimeout(function() {
+                window.location = "index.php?action=editentry&id=<?php print $recordId; ?>&lang=<?php print $recordData['lang'] ?>";
             }, 5000);
-        });
+        })();
     </script>
 
 <?php

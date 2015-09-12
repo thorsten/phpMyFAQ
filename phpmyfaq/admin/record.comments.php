@@ -145,10 +145,11 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
 ?>
         </form>
 
-        <script type="text/javascript">
-        /* <![CDATA[ */
-        $('#submitFaqComments').click(function() { deleteComments('faq'); return false; });
-        $('#submitNewsComments').click(function() { deleteComments('news'); return false; });
+        <script>
+        (function() {
+            $('#submitFaqComments').click(function() { deleteComments('faq'); return false; });
+            $('#submitNewsComments').click(function() { deleteComments('news'); return false; });
+        })();
 
         function deleteComments(type)
         {
@@ -175,7 +176,6 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
             return false;
         }
 
-        /* ]]> */
         </script>
 <?php 
 } else {

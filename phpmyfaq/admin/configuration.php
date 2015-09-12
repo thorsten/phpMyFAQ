@@ -183,25 +183,27 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         </div>
 
         <script type="text/javascript">
-            var toggleConfig = function (e) {
-                e.preventDefault();
-                var configContainer = $("#config" + $(this).data('toggle'));
+            (function () {
+                var toggleConfig = function (e) {
+                    e.preventDefault();
+                    var configContainer = $("#config" + $(this).data('toggle'));
 
-                if ("hide" === configContainer.attr("class")) {
-                    $.get("index.php", {
-                        action: "ajax",
-                        ajax: "config_list",
-                        conf: $(this).data('toggle').toLowerCase()
-                    }, function (data) {
-                        configContainer.empty().append(data);
-                    });
-                    configContainer.fadeIn("slow").removeAttr("class");
-                } else {
-                    configContainer.fadeOut("slow").attr("class", "hide").empty();
-                }
-            };
+                    if ("hide" === configContainer.attr("class")) {
+                        $.get("index.php", {
+                            action: "ajax",
+                            ajax: "config_list",
+                            conf: $(this).data('toggle').toLowerCase()
+                        }, function (data) {
+                            configContainer.empty().append(data);
+                        });
+                        configContainer.fadeIn("slow").removeAttr("class");
+                    } else {
+                        configContainer.fadeOut("slow").attr("class", "hide").empty();
+                    }
+                };
 
-            $('button.toggleConfig').on('click', toggleConfig);
+                $('button.toggleConfig').on('click', toggleConfig);
+            })();
         </script>
 <?php
     }

@@ -14,6 +14,8 @@
  * @since     2010-05-02
  */
 
+/*global $:false */
+
 /**
  * Fetches the user rights as JSON object and checks the checkboxes
  *

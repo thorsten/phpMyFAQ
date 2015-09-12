@@ -523,14 +523,11 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews
     </div>
     
     <script type="text/javascript">
-    /* <![CDATA[ */
     if (!Modernizr.inputtypes.date) {
-        $(function()
-        {
+        $(function() {
             $('.date-pick').datePicker();
         });
     }
-    /* ]]> */
     </script>
 <?php
     } else {

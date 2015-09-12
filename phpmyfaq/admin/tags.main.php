@@ -94,6 +94,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 }
 ?>
             </form>
-            <script type="text/javascript" src="assets/js/tags.js"></script>
+            <script src="assets/js/tags.js"></script>
         </div>
     </div>

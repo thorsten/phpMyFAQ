@@ -53,25 +53,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
     if ($linkverifier->isReady()) {
 ?>
-    <script type="text/javascript">
-        <!--
-        function getImageElement(id, lang)
-        {
+    <script>
+        function getImageElement(id, lang) {
             return $('#imgurl_' + lang + '_' + id);
         }
 
-        function getSpanElement(id, lang)
-        {
+        function getSpanElement(id, lang) {
             return $('#spanurl_' + lang + '_' + id);
         }
 
-        function getDivElement(id, lang)
-        {
+        function getDivElement(id, lang) {
             return $('#divurl_' + lang + '_' + id);
         }
 
-        function onDemandVerifyURL(id, lang, target)
-        {
+        function onDemandVerifyURL(id, lang, target) {
             var target = getSpanElement(id, lang);
             var widthPx  = 780;
             var heigthPx = 450;
@@ -83,8 +78,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             verifyEntryURL(id, lang);
         }
 
-        function verifyEntryURL(id, lang)
-        {
+        function verifyEntryURL(id, lang) {
             //var target = getImageElement(id, lang);
             var target = getSpanElement(id, lang);
 
@@ -471,10 +465,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         </div>
         </form>
 
-        <script type="text/javascript" src="assets/js/record.js"></script>
-        <script type="text/javascript">
-        /* <![CDATA[ */
-
+        <script src="assets/js/record.js"></script>
+        <script>
         /**
          * Saves the sticky record status for the whole category
          *
@@ -587,8 +579,6 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 });
             }
         }
-
-        /* ]]> */
         </script>
 <?php
     } else {

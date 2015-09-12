@@ -16,7 +16,8 @@
 
 /*global $:false */
 
-(function() {
+(function () {
+
     'use strict';
 
     $('#fileUpload').change(function () {
@@ -34,4 +35,4 @@
             $('#filesize').html( iSize  + 'kB');
         }
     });
-});
+})();

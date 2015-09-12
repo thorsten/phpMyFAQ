@@ -17,6 +17,7 @@
 /*global $:false */
 
 (function() {
+
     'use strict';
 
     $('.showhideCategory').click(function(event) {
@@ -66,4 +67,4 @@
             }
         });
     });
-});
+})();

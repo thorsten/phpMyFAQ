@@ -395,7 +395,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 <p class="alert alert-info"><?php echo $PMF_LANG['ad_categ_remark'] ?></p>
             </div>
         </div>
-    <script type="text/javascript" src="assets/js/category.js"></script>
+    <script src="assets/js/category.js"></script>
 
 <?php
 } else {
