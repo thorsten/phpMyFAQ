@@ -435,7 +435,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
 ?></td>
             <td style="width: 48px;">
-                <?php echo $date->format($record['date']); ?>
+                <?php echo $date->format($record['updated']); ?>
             </td>
             <td style="width: 96px;">
                 <?php echo $linkverifier->getEntryStateHTML($record['id'], $record['lang']); ?>

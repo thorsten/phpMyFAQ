@@ -18,26 +18,28 @@
 
 if (window.jQuery) {
 
-    (function () {
+    $(document).ready(function () {
 
         'use strict';
 
-        $('.showhideCategory').click(function (event) {
+        $('.showhideCategory').on('click', function (event) {
             event.preventDefault();
             $('#category_' + $(this).data('category-id')).toggle(1000);
         });
 
-        $('#submitDeleteQuestions').click(function () {
-            var questions = $('#questionSelection').serialize();
+        $('#submitDeleteQuestions').on('click', function () {
+            var questions = $('#questionSelection').serialize(),
+                indicator = $('#saving_data_indicator');
+
             $('#returnMessage').empty();
             $.ajax({
                 type: 'POST',
                 url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
                 data: questions,
                 success: function (msg) {
-                    $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
+                    indicator.html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
                     $('tr td input:checked').parent().parent().fadeOut('slow');
-                    $('#saving_data_indicator').fadeOut('slow');
+                    indicator.fadeOut('slow');
                     $('#returnMessage').
                         html('<p class="alert alert-success">' + msg + '</p>');
                 }
@@ -47,14 +49,15 @@ if (window.jQuery) {
 
         $(function () {
             // set the textarea to its previous height
-            var answerHeight = localStorage.getItem('textarea.answer.height');
+            var answerHeight = localStorage.getItem('textarea.answer.height'),
+                answer = $('#answer');
 
             if (answerHeight !== 'undefined') {
-                $('#answer').height(answerHeight);
+                answer.height(answerHeight);
             }
 
             // when reszied, store the textarea's height
-            $('#answer').on('mouseup', function () {
+            answer.on('mouseup', function () {
                 localStorage.setItem('textarea.answer.height', $(this).height());
             });
 
@@ -62,12 +65,13 @@ if (window.jQuery) {
             $('.markdown-tabs').find('a').on('click', function () {
                 if ($(this).attr('data-markdown-tab') === 'preview') {
                     $('.markdown-preview')
-                        .height($('#answer').height());
-                    $.post('index.php?action=ajax&ajax=markdown', {text: $('#answer').val()}, function (result) {
+                        .height(answer.height());
+                    $.post('index.php?action=ajax&ajax=markdown', { text: answer.val() }, function (result) {
                         $('.markdown-preview').html(result);
                     });
                 }
             });
         });
-    })();
+    });
+
 }
