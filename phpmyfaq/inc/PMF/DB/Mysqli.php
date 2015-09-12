@@ -3,7 +3,7 @@
  * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.x and
  * MariaDB 5.x databases
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

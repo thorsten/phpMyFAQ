@@ -3,7 +3,7 @@
  * List avaliable interface translations and actions
  * depending on user right
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
