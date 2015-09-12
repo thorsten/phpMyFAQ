@@ -856,8 +856,8 @@ $PMF_LANG['ad_conf_order_datum'] = 'Date';
 $PMF_LANG['ad_conf_order_author'] = 'Author';
 $PMF_LANG['ad_conf_desc'] = 'descending';
 $PMF_LANG['ad_conf_asc'] = 'ascending';
-$PMF_LANG['mainControlCenter'] = 'Main configuration';
-$PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
+$PMF_LANG['mainControlCenter'] = 'Main';
+$PMF_LANG['recordsControlCenter'] = 'FAQs';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate new records<br>(default: deactivated)");
@@ -1049,7 +1049,7 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - An
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Login';
-$PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
+$PMF_LANG['socialNetworksControlCenter'] = 'Social networks';
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support<br>(default: deactivated)');
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
@@ -1101,7 +1101,7 @@ $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format<br>(defaul
 $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ<br>(default: deactivated)');
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
-$PMF_LANG['securityControlCenter'] = 'Security configuration';
+$PMF_LANG['securityControlCenter'] = 'Security';
 $PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
 $PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 
@@ -1201,7 +1201,7 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Enable G
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
 $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occured.";
-$PMF_LANG["seoCenter"] = "Search engine configuration";
+$PMF_LANG["seoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = array(0 => "select", 1 => "Meta Tags start page");
 $LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
 $LANG_CONF["seo.metaTagsCategories"] = array(0 => "select", 1 => "Meta Tags category pages");

@@ -22,22 +22,35 @@ if (window.jQuery) {
 
         'use strict';
 
-        $('button.toggleConfig').on('click', function (e) {
-            e.preventDefault();
-            var configContainer = $('#config' + $(this).data('toggle'));
+        var tabLoaded = false;
 
-            if ('hide' === configContainer.attr('class')) {
-                $.get('index.php', {
-                    action: 'ajax',
-                    ajax: 'config_list',
-                    conf: $(this).data('toggle').toLowerCase()
-                }, function (data) {
-                    configContainer.empty().append(data);
-                });
-                configContainer.fadeIn('slow').removeAttr('class');
-            } else {
-                configContainer.fadeOut('slow').attr('class', 'hide').empty();
-            }
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+            e.preventDefault();
+
+            var target = $(e.target).attr('href');
+
+            $.get('index.php', {
+                action: 'ajax',
+                ajax: 'config_list',
+                conf: target.substr(1)
+            }, function (data) {
+                $(target).empty().append(data);
+            });
+
+            tabLoaded = true;
         });
+
+        if (!tabLoaded) {
+
+            $.get('index.php', {
+                action: 'ajax',
+                ajax: 'config_list',
+                conf: 'main'
+            }, function (data) {
+                $('#main').empty().append(data);
+            });
+        }
+
     })();
 }

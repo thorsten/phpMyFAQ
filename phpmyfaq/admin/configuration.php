@@ -29,19 +29,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-    $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $userAction   = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    $csrfToken    = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $currentToken = $user->getCsrfTokenFromSession();
 
     // Save the configuration
-    if ('saveConfig' === $userAction && isset($_SESSION['phpmyfaq_csrf_token']) &&
-        $_SESSION['phpmyfaq_csrf_token'] === $csrfToken) {
+    if ('saveConfig' === $userAction && $currentToken === $csrfToken) {
 
         $checks = array(
             'filter' => FILTER_UNSAFE_RAW,
             'flags'  => FILTER_REQUIRE_ARRAY
         );
         $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
-        $message         = '';
         $userAction      = 'listConfig';
         $oldConfigValues = $faqConfig->config;
 
@@ -84,107 +83,98 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             $faqConfig->update($newConfigValues);
         }
     }
-    // Lists the current configuration
-    if ('listConfig' === $userAction) {
-        $message    = '';
-        $userAction = 'listConfig';
 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
-                </h2>
+        <form class="form-horizontal" id="config_list" name="config_list" method="post"
+              action="?action=config&amp;config_action=saveConfig">
+            <input type="hidden" name="csrf" value="<?php echo $currentToken ?>">
+
+            <header class="row">
+                <div class="col-lg-12">
+                    <h2 class="page-header">
+                        <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
+                        <div class="pull-right">
+                            <button class="btn btn-success" type="submit">
+                                <?php echo $PMF_LANG['ad_config_save']; ?>
+                            </button>
+                            <button class="btn btn-warning" type="reset">
+                                <?php echo $PMF_LANG['ad_config_reset']; ?>
+                            </button>
+                        </div>
+                    </h2>
+                </div>
+            </header>
+
+            <div class="row">
+                <div class="col-lg-12">
+
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-home"></i>
+                                <?php echo $PMF_LANG['mainControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-th-list"></i>
+                                <?php echo $PMF_LANG['recordsControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-search"></i>
+                                <?php echo $PMF_LANG['searchControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-warning"></i>
+                                <?php echo $PMF_LANG['securityControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-thumbs-down"></i>
+                                <?php echo $PMF_LANG['spamControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-search"></i>
+                                <?php echo $PMF_LANG['seoCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-retweet"></i>
+                                <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i class="fa fa-inbox"></i>
+                                <?php echo $PMF_LANG['mailControlCenter']; ?>
+                            </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" style="margin-top: 20px;">
+                        <div role="tabpanel" class="tab-pane active" id="main"></div>
+                        <div role="tabpanel" class="tab-pane" id="records"></div>
+                        <div role="tabpanel" class="tab-pane" id="search"></div>
+                        <div role="tabpanel" class="tab-pane" id="security"></div>
+                        <div role="tabpanel" class="tab-pane" id="spam"></div>
+                        <div role="tabpanel" class="tab-pane" id="seo"></div>
+                        <div role="tabpanel" class="tab-pane" id="social"></div>
+                        <div role="tabpanel" class="tab-pane" id="mail"></div>
+                    </div>
+                </div>
             </div>
-        </header>
 
-        <div class="row">
-            <div class="col-lg-12">
-
-                <div id="user_message"><?php echo $message; ?></div>
-                <form class="form-horizontal" id="config_list" name="config_list" accept-charset="utf-8"
-                      action="?action=config&amp;config_action=saveConfig" method="post">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="Main">
-                            <i class="fa fa-home"></i>
-                            <?php echo $PMF_LANG['mainControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configMain" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="Records">
-                            <i class="fa fa-th-list"></i>
-                            <?php echo $PMF_LANG['recordsControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configRecords" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="Search">
-                            <i class="fa fa-search"></i>
-                            <?php echo $PMF_LANG['searchControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configSearch" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="Security">
-                            <i class="fa fa-warning"></i>
-                            <?php echo $PMF_LANG['securityControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configSecurity" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig"  data-toggle="Spam">
-                            <i class="fa fa-thumbs-down"></i>
-                            <?php echo $PMF_LANG['spamControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configSpam" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig"  data-toggle="Seo">
-                            <i class="fa fa-search"></i>
-                            <?php echo $PMF_LANG['seoCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configSeo" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="SocialNetworks">
-                            <i class="fa fa-retweet"></i>
-                            <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configSocialNetworks" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-inverse toggleConfig" data-toggle="Mail">
-                            <i class="fa fa-inbox"></i>
-                            <?php echo $PMF_LANG['mailControlCenter']; ?>
-                        </button>
-                    </p>
-                    <div id="configMail" class="hide"></div>
-
-                    <p>
-                        <button class="btn btn-primary" type="submit">
-                            <?php echo $PMF_LANG['ad_config_save']; ?>
-                        </button>
-                        <button class="btn btn-warning" type="reset">
-                            <?php echo $PMF_LANG['ad_config_reset']; ?>
-                        </button>
-                    </p>
-                </form>
-
-            </div>
-        </div>
+        </form>
 
         <script src="assets/js/configuration.js"></script>
 <?php
-    }
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

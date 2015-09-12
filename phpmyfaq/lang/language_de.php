@@ -590,7 +590,7 @@ $PMF_LANG["ad_you_should_update"] = "Ihre phpMyFAQ Installation ist veraltet. Si
 $PMF_LANG["msgAdvancedSearch"] = "Erweiterte Suche";
 
 // added v1.6.1 - 2006-04-25 by Matteo and Thorsten
-$PMF_LANG["spamControlCenter"] = "Spamschutz-Konfiguration";
+$PMF_LANG["spamControlCenter"] = "Spamschutz";
 $LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Sichere E-Mailadresse anzeigen?<br>(Standard: aktiviert)");
 $LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Bad-Word-Liste aktivieren?<br>(Standard: aktiviert)");
 $LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Captcha-Grafiken anzeigen?<br>(Standard: aktiviert)");
@@ -823,8 +823,8 @@ $PMF_LANG["ad_conf_order_datum"] = "Datum";
 $PMF_LANG["ad_conf_order_author"] = "Verfasser";
 $PMF_LANG["ad_conf_desc"] = "absteigend";
 $PMF_LANG["ad_conf_asc"] = "aufsteigend";
-$PMF_LANG["mainControlCenter"] = "Allgemeine Konfiguration";
-$PMF_LANG["recordsControlCenter"] = "Konfiguration FAQs";
+$PMF_LANG["mainControlCenter"] = "Allgemein";
+$PMF_LANG["recordsControlCenter"] = "FAQs";
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF["records.defaultActivation"] = array(0 => "checkbox", 1 => "Neue FAQs sofort sichtbar? <br>(Standard: unsichtbar)");
@@ -994,7 +994,7 @@ $LANG_CONF["main.optionalMailAddress"] = array(0 => "checkbox", 1 => "Angabe der
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
 $LANG_CONF["search.relevance"] = array(0 => "select", 1 => "Sortierung nach Relevanz");
 $LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Support für Relevanz? <br>(Standard: deaktiviert)");
-$PMF_LANG["searchControlCenter"] = "Suchkonfiguration";
+$PMF_LANG["searchControlCenter"] = "Suche";
 $PMF_LANG["search.relevance.thema-content-keywords"] = "Frage - Antwort - Schlüsselwörter";
 $PMF_LANG["search.relevance.thema-keywords-content"] = "Frage - Schlüsselwörter - Antwort";
 $PMF_LANG["search.relevance.content-thema-keywords"] = "Antwort - Frage - Schlüsselwörter";
@@ -1004,7 +1004,7 @@ $PMF_LANG["search.relevance.keywords-thema-content"] = "Schlüsselwörter - Frag
 
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG["msgLoginUser"] = "Einloggen";
-$PMF_LANG["socialNetworksControlCenter"] = "Social Networks Konfiguration";
+$PMF_LANG["socialNetworksControlCenter"] = "Social Networks";
 $LANG_CONF["socialnetworks.enableTwitterSupport"] = array(0 => "checkbox", 1 => "Twitter Support <br>(Standard: deaktiviert)");
 $LANG_CONF["socialnetworks.twitterConsumerKey"] = array(0 => "input", 1 => "Twitter Consumer Key");
 $LANG_CONF["socialnetworks.twitterConsumerSecret"] = array(0 => "input", 1 => "Twitter Consumer Secret");
@@ -1056,7 +1056,7 @@ $LANG_CONF["main.dateFormat"] = array(0 => "input", 1 => "Datumsformat <br>(Stan
 $LANG_CONF["security.enableLoginOnly"] = array(0 => "checkbox", 1 => "Komplett geschützte FAQ <br>(Standard: deaktiviert)");
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
-$PMF_LANG["securityControlCenter"] = "Sicherheitskonfiguration";
+$PMF_LANG["securityControlCenter"] = "Sicherheit";
 $PMF_LANG["ad_search_delsuc"] = "Der Suchbegriff wurde erfolgreich gelöscht";
 $PMF_LANG["ad_search_delfail"] = "Der Suchbegriff konnte nicht gelöscht werden.";
 
@@ -1164,7 +1164,7 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Aktivier
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "Der Tag wurde erfolgreich gelöscht.";
 $PMF_LANG["ad_tag_delete_error"] = "Der Tag wurde nicht gelöscht, weil ein Fehler aufgetreten ist.";
-$PMF_LANG["seoCenter"] = "Suchmaschinen Konfiguration";
+$PMF_LANG["seoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = array(0 => "select", 1 => "Meta Tags Startseite");
 $LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
 $LANG_CONF["seo.metaTagsCategories"] = array(0 => "select", 1 => "Meta Tags Kategorien");
@@ -1177,7 +1177,7 @@ $LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Aktiviere Nut
 $LANG_CONF['security.enableRegistration'] = array('checkbox', 'Erlaube Registrierung externer Besucher<br>(Standard: aktiviert)');
 
 // added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )
-$PMF_LANG['mailControlCenter'] = 'E-Mail Konfiguration';
+$PMF_LANG['mailControlCenter'] = 'E-Mail';
 $LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Verwendung eines externen SMTP Server<br>(Standard: deaktiviert)');
 $LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Serveradresse');
 $LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'Username');
