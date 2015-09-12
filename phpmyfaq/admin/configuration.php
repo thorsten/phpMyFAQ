@@ -159,14 +159,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     </ul>
 
                     <div class="tab-content" style="margin-top: 20px;">
-                        <div role="tabpanel" class="tab-pane active" id="main"></div>
-                        <div role="tabpanel" class="tab-pane" id="records"></div>
-                        <div role="tabpanel" class="tab-pane" id="search"></div>
-                        <div role="tabpanel" class="tab-pane" id="security"></div>
-                        <div role="tabpanel" class="tab-pane" id="spam"></div>
-                        <div role="tabpanel" class="tab-pane" id="seo"></div>
-                        <div role="tabpanel" class="tab-pane" id="social"></div>
-                        <div role="tabpanel" class="tab-pane" id="mail"></div>
+                        <div role="tabpanel" class="tab-pane fade in active" id="main"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="records"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="search"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="security"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="spam"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="seo"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="social"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="mail"></div>
                     </div>
                 </div>
             </div>
