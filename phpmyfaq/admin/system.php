@@ -1,8 +1,8 @@
 <?php
 /**
- * phpMyFAQ system informations
+ * phpMyFAQ system information
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -45,8 +45,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'phpMyFAQ Version'           => $faqSystem->getVersion(),
                     'phpMyFAQ API Version'       => $faqSystem->getApiVersion(),
                     'Server Software'            => $_SERVER['SERVER_SOFTWARE'],
-                    'Server Document root'       => $_SERVER['DOCUMENT_ROOT'],
-                    'phpMyFAQ installation path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
+                    'Server Document Root'       => $_SERVER['DOCUMENT_ROOT'],
+                    'phpMyFAQ Installation Path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
                     'PHP Version'                => PHP_VERSION,
                     'Webserver Interface'        => strtoupper(PHP_SAPI),
                     'PHP Extensions'             => implode(', ', get_loaded_extensions()),
