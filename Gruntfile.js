@@ -139,6 +139,7 @@ module.exports = function(grunt) {
                 src: 'Gruntfile.js'
             },
             beforeconcat: [
+                'phpmyfaq/admin/assets/js/*.js',
                 'phpmyfaq/assets/js/autosave.js',
                 'phpmyfaq/assets/js/functions.js'
             ]
