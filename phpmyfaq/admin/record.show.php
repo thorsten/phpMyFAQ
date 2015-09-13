@@ -469,9 +469,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         /**
          * Saves the sticky record status for the whole category
          *
-         * @param id   id
-         * @param type status type
-         * @param string csrf
+         * @param id
+         * @param type
+         * @param csrf
          *
          * @return void
          */
@@ -506,13 +506,15 @@ foreach ($faqIds as $categoryId => $recordIds) {
          */
         function saveStatus(cid, ids, type, csrf)
         {
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
-            var data = {
-                action: "ajax",
-                ajax: 'records',
-                ajaxaction: "save_" + type + "_records",
-                csrf: csrf
-            };
+            var indicator = $('#saving_data_indicator'),
+                data = {
+                    action: 'ajax',
+                    ajax: 'records',
+                    ajaxaction: 'save_' + type + '_records',
+                    csrf: csrf
+                };
+
+            indicator.html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
 
             for (var i = 0; i < ids.length; i++) {
                 var statusId = '#' + type + '_record_' + cid + '_' + ids[i];
@@ -551,7 +553,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
             }
 
             $.get("index.php", data, null);
-            $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
+            indicator.html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
         }
 
         /**
@@ -571,7 +573,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
                     type:    "POST",
                     url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
                     data:    "record_id=" + record_id + "&record_lang=" + record_lang + "&csrf=" + csrf_token,
-                    success: function(msg) {
+                    success: function() {
                         $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
                         $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_delsuc']; ?>');
                     }
