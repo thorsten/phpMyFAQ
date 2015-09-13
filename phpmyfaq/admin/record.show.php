@@ -79,11 +79,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
 
         function verifyEntryURL(id, lang) {
-            //var target = getImageElement(id, lang);
             var target = getSpanElement(id, lang);
 
             // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
-            getImageElement(id, lang).onload = "";
+            getImageElement(id, lang).onload = '';
 
             //target.src = "images/url-checking.png";
             getDivElement(id, lang).className = "url-checking";
@@ -144,13 +143,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     if (!is_null($linkState)) {
         $cond[PMF_Db::getTablePrefix() . 'faqdata.links_state'] = 'linkbad';
-        $linkState                             = ' checked="checked" ';
-        $internalSearch                       .= '&amp;linkstate=linkbad';
+        $linkState       = ' checked="checked" ';
+        $internalSearch .= '&amp;linkstate=linkbad';
     }
     if (!is_null($searchCat)) {
         $internalSearch .= "&amp;searchcat=" . $searchCat;
         $cond[PMF_Db::getTablePrefix() . 'faqcategoryrelations.category_id'] = array_merge(
-            array($searchCat),
+            [$searchCat],
             $category->getChildNodes($searchCat)
         );
     }
