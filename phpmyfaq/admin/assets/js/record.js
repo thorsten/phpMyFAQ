@@ -22,11 +22,6 @@ if (window.jQuery) {
 
         'use strict';
 
-        $('.showhideCategory').on('click', function (event) {
-            event.preventDefault();
-            $('#category_' + $(this).data('category-id')).toggle(1000);
-        });
-
         $('#submitDeleteQuestions').on('click', function () {
             var questions = $('#questionSelection').serialize(),
                 indicator = $('#saving_data_indicator');
