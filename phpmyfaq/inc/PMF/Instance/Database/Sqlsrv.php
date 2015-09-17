@@ -144,6 +144,7 @@ class PMF_Instance_Database_Sqlsrv extends PMF_Instance_Database implements PMF_
             links_check_date INTEGER DEFAULT 0 NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+            created DATETIME DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang))',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
@@ -164,6 +165,7 @@ class PMF_Instance_Database_Sqlsrv extends PMF_Instance_Database implements PMF_
             links_check_date INTEGER DEFAULT 0 NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
+            created DATETIME DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang, solution_id, revision_id))',
 
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (
