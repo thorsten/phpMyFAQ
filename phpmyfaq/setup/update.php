@@ -173,8 +173,9 @@ if ($step === 1) {
                 // We only support updates from 2.5+
                 if (version_compare($version, '2.5.0', '>')) {
                     printf(
-                        '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s</p>',
-                        $version
+                        '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
+                        $version,
+                        '<i class="fa fa-check"></i>'
                     );
                 } else {
                     printf(
@@ -960,6 +961,13 @@ if ($step == 3) {
             $query[] = "ALTER TABLE " . $prefix . "faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
             $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
         }
+    }
+
+    //
+    // UPDATES FROM 2.9.0-alpha4
+    //
+    if (version_compare($version, '2.9.0-beta', '<')) {
+
     }
 
     // Always the last step: Update version number
