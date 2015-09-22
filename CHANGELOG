@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-alpha4 - 2015-09-
+Version 2.9.0-alpha4 - 2015-09-22
 - changed PHP requirement to PHP 5.5.0 and later (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
 - added support for PHP 7.0 (Thorsten)
@@ -50,7 +50,7 @@ Version 2.9.0-alpha4 - 2015-09-
 - dropped support for SQLite2 (Thorsten)
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 
-Version 2.8.25 - 2015-08-
+Version 2.8.25 - 2015-09-
 - added American English translation (Stewart Day)
 - updated Japanese translation
 - updated Brazilian Portuguese translation
