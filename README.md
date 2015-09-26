@@ -1,6 +1,7 @@
 # phpMyFAQ 2.9
 
 [![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.9)](http://travis-ci.org/thorsten/phpMyFAQ)
+[![Slack](https://phpmyfaq.herokuapp.com/badge.svg)](https://phpmyfaq.herokuapp.com)
 
 ## What is phpMyFAQ?
 
