@@ -71,6 +71,10 @@ RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 RewriteCond %{REQUEST_URI}          /glossary\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=glossary [L,QSA]
 
+# the overview page
+RewriteCond %{REQUEST_URI}          /overview\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=overview [L,QSA]
+
 # a page with a record (backward compatibility)
 # * http://[...]/1_1_en.html
 RewriteCond %{REQUEST_URI}              ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]

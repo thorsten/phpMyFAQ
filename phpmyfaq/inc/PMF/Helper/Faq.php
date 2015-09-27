@@ -175,4 +175,49 @@ class PMF_Helper_Faq extends PMF_Helper
 
         return $html;
     }
+
+    /**
+     * Creates an overview with all categories with their FAQs
+     *
+     * @param PMF_Category $category
+     * @param PMF_Faq      $faq
+     * @param string       $language
+     *
+     * @return array
+     */
+    public function createOverview(PMF_Category $category, PMF_Faq $faq, $language = '')
+    {
+        global $PMF_LANG;
+
+        $output = '';
+
+        // Initialize categories
+        $category->transform(0);
+
+        // Get all FAQs
+        $faqData = $faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, 0, true, $language);
+
+        if (count($faqData)) {
+            $lastCategory = 0;
+            foreach ($faqData as $data) {
+
+                if ($data['category_id'] !== $lastCategory) {
+                    $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
+                }
+
+                $output .= sprintf('<h4>%s</h4>', strip_tags($data['topic']));
+                $output .= sprintf('<article>%s</article>', $data['content']);
+                $output .= sprintf('<p>%s: %s<br>%s',
+                    $PMF_LANG['msgAuthor'],
+                    $data['author_name'],
+                    $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::createIsoDate($data['lastmodified'])
+                );
+                $output .= '<hr>';
+
+                $lastCategory = $data['category_id'];
+            }
+        }
+
+        return $output;
+    }
 }

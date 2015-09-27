@@ -61,6 +61,7 @@
                     <ul class="dropdown-menu">
                         <li>{msgSearch}</li>
                         <li>{allCategories}</li>
+                        <li>{faqOverview}</li>
                         <li>{msgAddContent}</li>
                         <li>{msgQuestion}</li>
                         <li>{msgOpenQuestions}</li>

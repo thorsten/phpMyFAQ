@@ -1193,3 +1193,6 @@ $PMF_LANG["ad_categ_moderator"] = "Moderatoren";
 $PMF_LANG['ad_clear_all_visits'] = "Alle Besuche zurücksetzen";
 $PMF_LANG['ad_reset_visits_success'] = 'Die Besuche wurden erfolgreich zurückgesetzt';
 $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Aktivierung des Markdown Editors<br>(Standard: deaktiviert)');
+
+// added v2.9.0-beta - 2015-09-27 by Thorsten
+$PMF_LANG['faqOverview'] = 'FAQ Übersicht';
