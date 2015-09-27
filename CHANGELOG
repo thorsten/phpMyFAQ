@@ -35,6 +35,7 @@ Version 2.9.0-beta - 2015-10
 - added support for custom headers and footers in PDF exports (Thorsten)
 - added support for language specific open questions (Thorsten)
 - added moderator groups to categories (Thorsten)
+- added FAQ overview page (Thorsten)
 - extended REST/JSON API (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.10 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
