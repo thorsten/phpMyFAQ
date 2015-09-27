@@ -191,9 +191,5 @@ switch ($action) {
         break;
 }
 
-if (empty($result)) {
-    $result = ['result' => false];
-}
-
 // print result as JSON
 echo json_encode($result);
