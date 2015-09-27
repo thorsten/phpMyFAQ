@@ -180,9 +180,9 @@ class PMF_Faq
         $faqdata = [];
 
         if ($orderby == 'visits') {
-            $current_table = 'fv';
+            $currentTable = 'fv';
         } else {
-            $current_table = 'fd';
+            $currentTable = 'fd';
         }
 
         $now   = date('YmdHis');
@@ -241,7 +241,7 @@ class PMF_Faq
             $category_id,
             $this->_config->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
-            $current_table,
+            $currentTable,
             $this->_config->getDb()->escape($orderby),
             $this->_config->getDb()->escape($sortby)
         );
