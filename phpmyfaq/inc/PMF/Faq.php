@@ -194,7 +194,7 @@ class PMF_Faq
                 fd.content AS record_content,
                 fd.updated AS updated,
                 fcr.category_id AS category_id,
-                fv.visits AS visits
+                fv.visits AS visits,
                 fd.created AS created
             FROM
                 %sfaqdata AS fd
