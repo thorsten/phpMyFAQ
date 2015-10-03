@@ -2,18 +2,22 @@
 /**
  * The Italian language file.
  *
- * @package    phpMyFAQ
- * @subpackage i18n
- * @author     Stefano Bramato <stefano@pubblideaweb.it>
- * @auhtor     Rudy <webmaster@queenarena.com>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2004-06-24
- * @version    SVN: $Id$
- * @copyright  (c) 2004-2015 phpMyFAQ Team
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Stefano Bramato <stefano@pubblideaweb.it>
+ * @auhtor    Rudy <webmaster@queenarena.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Amedeo Fragai <amedeo.fragai@scasrl.it>
+ * @copyright 2004-2015 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
  */
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'it';
@@ -771,3 +775,153 @@ $PMF_LANG['ad_sess_noentry'] = 'No entry';
 $PMF_LANG['plmsgUserOnline']['0'] = '%d user online';
 $PMF_LANG['plmsgUserOnline']['1'] = '';
 $LANG_CONF['records.attachmentsPath'] = array(0 => 'input', 1 => 'Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>');
+$PMF_LANG['securityControlCenter'] = 'Security configuration';
+$PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
+$PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
+$PMF_LANG['msg_about_faq'] = 'About this FAQ';
+$PMF_LANG['msgTableOfContent'] = 'Table of Content';
+$PMF_LANG['msgExportAllFaqs'] = 'Stampa tutto come PDF';
+$PMF_LANG['ad_online_verification'] = 'Online verification check';
+$PMF_LANG['ad_verification_button'] = 'Click to verify your phpMyFAQ installation';
+$PMF_LANG['ad_verification_notokay'] = 'Your version of phpMyFAQ has local changes:';
+$PMF_LANG['ad_verification_okay'] = 'Your version of phpMyFAQ was successfully verified.';
+$PMF_LANG['cacheControlCenter'] = 'Configurazione della cache';
+$PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
+$PMF_LANG['msg2answerFAQ'] = 'Answered';
+$PMF_LANG['headerUserControlPanel'] = 'Pannello di controllo dell\'utente';
+$PMF_LANG['rememberMe'] = 'Ricordami';
+$PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sites';
+$PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
+$PMF_LANG['msgMode'] = 'Modus';
+$PMF_LANG['msgMaintenanceMode'] = 'FAQ is in maintenance';
+$PMF_LANG['msgOnlineMode'] = 'FAQ is online';
+$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');
+$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
+$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
+$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
+$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
+$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
+$LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Close open question after answer?');
+$LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Delete open question after answer?');
+$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ autosaving');
+$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving in seconds, default 180');
+$LANG_CONF['main.maintenanceMode'] = array(0 => 'checkbox', 1 => 'Set FAQ in maintenance mode');
+$PMF_LANG['msgShowMore'] = 'show more';
+$PMF_LANG['msgQuestionAnswered'] = 'Question answered';
+$PMF_LANG['msgMessageQuestionAnswered'] = 'Your question at %s was answered. Please check it here:';
+$PMF_LANG['ad_stopwords_desc'] = 'Please select a language to add or edit stopwords.';
+$PMF_LANG['ad_visits_per_day'] = 'Visits per day';
+$PMF_LANG['ad_instance_add'] = 'Add a new phpMyFAQ multi site instance';
+$PMF_LANG['ad_instance_error_notwritable'] = 'The folder /multisite isn\'t writable.';
+$PMF_LANG['ad_instance_url'] = 'Instance URL';
+$PMF_LANG['ad_instance_path'] = 'Instance path';
+$PMF_LANG['ad_instance_name'] = 'Instance name';
+$PMF_LANG['ad_instance_email'] = 'Your admin email';
+$PMF_LANG['ad_instance_admin'] = 'Admin login name';
+$PMF_LANG['ad_instance_password'] = 'Admin password';
+$PMF_LANG['ad_instance_hint'] = 'Caution: It will take some seconds to create a new phpMyFAQ instance!';
+$PMF_LANG['ad_instance_button'] = 'Save instance';
+$PMF_LANG['ad_instance_error_cannotdelete'] = 'Could not delete instance ';
+$PMF_LANG['ad_instance_config'] = 'Instance configuration';
+$PMF_LANG['msgAboutThisNews'] = 'About this news';
+$PMF_LANG['msgAccessDenied'] = 'Access denied.';
+$PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
+$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Sort FAQs randomly (default: deactivated)');
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Enable bundled WYSIWYG editor in frontend (default: disabled)');
+$LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'Gravatar Support (default: disabled)');
+$PMF_LANG['msgTransToolRemove'] = 'Remove';
+$PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
+$PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
+$PMF_LANG['msgTransToolLanguagePluralNotSet'] = 'Plural form support for language %s is disabled (nplurals not set)';
+$PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'There is %d FAQ online';
+$PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'Ci sono %d FAQs online';
+$PMF_LANG['plmsgViews']['0'] = '%d view';
+$PMF_LANG['plmsgViews']['1'] = '%d views';
+$PMF_LANG['plmsgGuestOnline']['0'] = '%d Ospite';
+$PMF_LANG['plmsgGuestOnline']['1'] = '%d Ospiti';
+$PMF_LANG['plmsgRegisteredOnline']['0'] = ' and %d Registrati';
+$PMF_LANG['plmsgRegisteredOnline']['1'] = ' and %d Registrati';
+$PMF_LANG['plmsgSearchAmount']['0'] = '%d search result';
+$PMF_LANG['plmsgSearchAmount']['1'] = '%d search results';
+$PMF_LANG['plmsgPagesTotal']['0'] = ' %d Pagina';
+$PMF_LANG['plmsgPagesTotal']['1'] = ' %d Pagine';
+$PMF_LANG['plmsgVotes']['0'] = '%d Voto';
+$PMF_LANG['plmsgVotes']['1'] = '%d Voti';
+$PMF_LANG['plmsgEntries']['0'] = '%d FAQ';
+$PMF_LANG['plmsgEntries']['1'] = '%d FAQs';
+$PMF_LANG['rightsLanguage']['addtranslation'] = 'aggiungi traduzione';
+$PMF_LANG['rightsLanguage']['edittranslation'] = 'modifica traduzione';
+$PMF_LANG['rightsLanguage']['deltranslation'] = 'elimina traduzione';
+$PMF_LANG['rightsLanguage']['approverec'] = 'approve records';
+$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
+$PMF_LANG['msgSecureSwitch'] = 'Switch to secure mode to login!';
+$LANG_CONF['main.templateSet'] = array(0 => 'select', 1 => 'Template set to be used');
+$LANG_CONF['records.enableAttachmentEncryption'] = array(0 => 'checkbox', 1 => 'Enable attachment encryption <br><small>Ignored when attachments is disabled</small>');
+$LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => 'input', 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => 'Only allow logins over SSL connection? (default: disabled)');
+$PMF_LANG['ad_menu_attachments'] = 'FAQ Attachments';
+$PMF_LANG['ad_menu_attachment_admin'] = 'Attachment administration';
+$PMF_LANG['msgAttachmentsFilename'] = 'Nome del file';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Grandezza del file';
+$PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
+$PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
+$PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
+$PMF_LANG['ad_menu_reports'] = 'Reports';
+$PMF_LANG['ad_stat_report_fields'] = 'Fields';
+$PMF_LANG['ad_stat_report_category'] = 'Category';
+$PMF_LANG['ad_stat_report_sub_category'] = 'Subcategory';
+$PMF_LANG['ad_stat_report_translations'] = 'Traduzioni';
+$PMF_LANG['ad_stat_report_language'] = 'Lingue';
+$PMF_LANG['ad_stat_report_id'] = 'FAQ ID';
+$PMF_LANG['ad_stat_report_sticky'] = 'Sticky FAQ';
+$PMF_LANG['ad_stat_report_title'] = 'Question';
+$PMF_LANG['ad_stat_report_creation_date'] = 'Data';
+$PMF_LANG['ad_stat_report_owner'] = 'Autore originale';
+$PMF_LANG['ad_stat_report_last_modified_person'] = 'Ultimo autore';
+$PMF_LANG['ad_stat_report_url'] = 'URL';
+$PMF_LANG['ad_stat_report_visits'] = 'Visite';
+$PMF_LANG['ad_stat_report_make_report'] = 'Generate Report';
+$PMF_LANG['ad_stat_report_make_csv'] = 'Export to CSV';
+$PMF_LANG['msgRegistration'] = 'Registrazione';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
+$PMF_LANG['ad_entry_changelog_history'] = 'Changelog history';
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
+$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
+$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
+$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
+$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i)');
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Please note that no files will we written until you click save button';
+$PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
+$PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
+$PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
+$PMF_LANG['ad_record_active'] = 'Attivo';
+$PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
+$PMF_LANG['list_all_users'] = 'List all users';
+$PMF_LANG['records.orderingPopularFaqs.visits'] = 'list most visited entries';
+$PMF_LANG['records.orderingPopularFaqs.voting'] = 'list most voted entries';
+$PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
+$PMF_LANG['msgUpdateFaqDate'] = 'aggiorna';
+$PMF_LANG['msgKeepFaqDate'] = 'tieni';
+$PMF_LANG['msgEditFaqDat'] = 'modifica';
+$PMF_LANG['searchControlCenter'] = 'Cerca';
+$PMF_LANG['search.relevance.thema-content-keywords'] = 'Question - Answer - Keywords';
+$PMF_LANG['search.relevance.thema-keywords-content'] = 'Question - Keywords - Answer';
+$PMF_LANG['search.relevance.content-thema-keywords'] = 'Answer - Question - Keywords';
+$PMF_LANG['search.relevance.content-keywords-thema'] = 'Answer - Keywords - Question';
+$PMF_LANG['search.relevance.keywords-content-thema'] = 'Keywords - Answer - Question';
+$PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - Answer';
+$PMF_LANG['msgLoginUser'] = 'Login';
+$PMF_LANG['socialNetworksControlCenter'] = 'Social networks configuration';
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => 'Sorting of the top FAQ\'s');
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
+$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
+$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
+$LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Activate relevance support? (default: disabled)');
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
