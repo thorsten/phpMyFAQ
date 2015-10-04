@@ -70,86 +70,99 @@ if (isset($auth)) {
 
 ?>
 <script>
-/*<![CDATA[*/ //<!--
-$().tooltip({placement: 'bottom'});
 
-tinyMCE.init({
-    // General options
-    mode     : "exact",
-    //language : "<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'); ?>",
-    elements : "<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>",
-    width    : "500",
-    height   : "480",
-    theme    : "modern",
-    plugins: [
-        "advlist autolink link image lists charmap print preview hr anchor pagebreak spellchecker",
-        "searchreplace wordcount visualblocks visualchars code fullscreen insertdatetime media nonbreaking",
-        "save table contextmenu directionality emoticons template paste textcolor"
-    ],
-    theme_advanced_blockformats : "p,div,h1,h2,h3,h4,h5,h6,blockquote,dt,dd,code,samp",
+    $().tooltip({placement: 'bottom'});
 
-    // Theme options
-    theme_advanced_buttons1 : "<?php echo $tinyMceSave ?>bold,italic,underline,strikethrough,|,justifyleft,justifycenter,justifyright,justifyfull,|,styleselect,formatselect,fontsizeselect",
-    theme_advanced_buttons2 : "cut,copy,paste,pastetext,pasteword,|,search,replace,|,phpmyfaq,|,bullist,numlist,|,outdent,indent,blockquote,|,undo,redo,|,link,unlink,anchor,image,cleanup,code,|,forecolor,backcolor",
-    theme_advanced_buttons3 : "tablecontrols,|,hr,removeformat,visualaid,|,sub,sup,|,charmap,emotions,iespell,advhr,|,ltr,rtl,|,fullscreen",
-    theme_advanced_toolbar_location : "top",
-    theme_advanced_toolbar_align : "left",
-    theme_advanced_statusbar_location : "bottom",
-    theme_advanced_resizing : true,
-    relative_urls           : false,
-    convert_urls            : false,
-    remove_linebreaks       : false,
-    use_native_selects      : true,
-    paste_remove_spans      : true,
-    entity_encoding         : "raw",
-    extended_valid_elements : "code[class],video[*],audio[*],source[*]",
-    removeformat : [
-        { selector : '*', attributes : ['style'], split : false, expand : false, deep : true }
-    ],
+    tinyMCE.init({
+        // General options
+        mode     : 'exact',
+        language : '<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+        elements : '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
+        theme    : 'modern',
+        plugins: [
+            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+            'searchreplace wordcount visualblocks visualchars code fullscreen',
+            'insertdatetime media nonbreaking save table contextmenu directionality',
+            'emoticons template paste textcolor autosave'
+        ],
+        relative_urls: false,
+        convert_urls: false,
+        remove_linebreaks: false,
+        use_native_selects: true,
+        paste_remove_spans: true,
+        entity_encoding: 'raw',
+
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
+        toolbar2: "print preview media | forecolor backcolor emoticons",
+        image_advtab: true,
+
+        // Formatting
+        style_formats: [
+            { title: 'Headers', items: [
+                { title: 'h1', block: 'h1' },
+                { title: 'h2', block: 'h2' },
+                { title: 'h3', block: 'h3' },
+                { title: 'h4', block: 'h4' },
+                { title: 'h5', block: 'h5' },
+                { title: 'h6', block: 'h6' }
+            ]},
+
+            { title: 'Blocks', items: [
+                { title: 'p', block: 'p' },
+                { title: 'div', block: 'div' },
+                { title: 'pre', block: 'pre' }
+            ]},
+
+            { title: 'Containers', items: [
+                { title: 'blockquote', block: 'blockquote', wrapper: true },
+                { title: 'figure', block: 'figure', wrapper: true }
+            ]}
+        ],
+        visualblocks_default_state: true,
+        end_container_on_empty_block: true,
+        extended_valid_elements : "code[class],video[*],audio[*],source[*]",
+        removeformat : [
+            { selector : '*', attributes : ['style'], split : false, expand : false, deep : true }
+        ],
+        importcss_append: true,
+
         // Save function
-    save_onsavecallback : "phpMyFAQSave",
+        save_onsavecallback : "phpMyFAQSave",
 
-    // Example content CSS (should be your site CSS)
-    content_css : "../assets/template/<?php print PMF_Template::getTplSetName(); ?>/css/style.min.css",
+        // phpMyFAQ CSS
+        content_css : '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
 
-    // Drop lists for link/image/media/template dialogs
-    template_external_list_url : "js/template_list.js",
-
-    // Replace values for the template plugin
-    template_replace_values : {
-        username : "<?php echo $user->userdata->get('display_name'); ?>",
-        user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
-    }
-});
-
-/*
-function phpMyFAQSave()
-{
-    $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
-    // Create an input field with the save button name
-    var input = document.createElement("input");
-    input.setAttribute('name', $('input:submit')[0].name);
-    input.setAttribute('id', 'temporarySaveButton');
-    $('#answer')[0].parentNode.appendChild(input);
-    // Submit the form by an ajax request
-    <?php if (isset($faqData['id']) && $faqData['id'] == 0): ?>
-    var data = {action: "ajax", ajax: 'recordAdd'};
-    <?php else: ?>
-    var data = {action: "ajax", ajax: 'recordSave'};
-    <?php endif; ?>
-    var id = $('#answer')[0].parentNode.parentNode.id;
-    $.each($('#' + id).serialize[], function(i, field) {
-        data[field.name] = field.value;
+        // Replace values for the template plugin
+        template_replace_values : {
+            username : "<?php echo $user->userdata->get('display_name'); ?>",
+            user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
+        }
     });
-    $.post("index.php", data, null);
-    $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
-    $('#temporarySaveButton').remove();
-}
-*/
 
-// --> /*]]>*/
+
+    function phpMyFAQSave () {
+        $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+        // Create an input field with the save button name
+        var input = document.createElement("input");
+        input.setAttribute('name', $('input:submit')[0].name);
+        input.setAttribute('id', 'temporarySaveButton');
+        $('#answer')[0].parentNode.appendChild(input);
+        // Submit the form by an ajax request
+        <?php if (isset($faqData['id']) && $faqData['id'] == 0): ?>
+        var data = {action: "ajax", ajax: 'recordAdd'};
+        <?php else: ?>
+        var data = {action: "ajax", ajax: 'recordSave'};
+        <?php endif; ?>
+        var id = $('#answer')[0].parentNode.parentNode.id;
+        $.each($('#' + id).serialize[], function(i, field) {
+            data[field.name] = field.value;
+        });
+        $.post("index.php", data, null);
+        $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
+        $('#temporarySaveButton').remove();
+    }
+
 </script>
-<!-- /tinyMCE -->
 <?php
         }
     }
