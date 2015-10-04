@@ -139,7 +139,7 @@ if (isset($auth)) {
         }
     });
 
-
+    /*
     function phpMyFAQSave () {
         $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
         // Create an input field with the save button name
@@ -161,6 +161,7 @@ if (isset($auth)) {
         $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
         $('#temporarySaveButton').remove();
     }
+    */
 
 </script>
 <?php
