@@ -108,11 +108,11 @@ class PMF_Search
      */
     public function search($searchterm, $allLanguages = true)
     {
-        $fdTable   = PMF_Db::getTablePrefix() . 'faqdata';
+        $fdTable   = PMF_Db::getTablePrefix() . 'faqdata AS fd';
         $fcrTable  = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
-        $condition = array($fdTable . '.active' => "'yes'");
+        $condition = array('fd.active' => "'yes'");
         $search    = PMF_Search_Factory::create($this->_config, array('database' => PMF_Db::getType()));
-        
+
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof PMF_Category) {
                 $children = $this->getCategory()->getChildNodes($this->getCategoryId());
@@ -128,32 +128,33 @@ class PMF_Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchterm))) {
-            $selectedLanguage = array($fdTable . '.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
+            $selectedLanguage = array('fd.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
-        
+
         $search->setTable($fdTable)
-               ->setResultColumns(array(
-                    $fdTable . '.id AS id',
-                    $fdTable . '.lang AS lang',
-                    $fdTable . '.solution_id AS solution_id',
-                    $fcrTable . '.category_id AS category_id',
-                    $fdTable . '.thema AS question',
-                    $fdTable . '.content AS answer'))
-               ->setJoinedTable($fcrTable)
-               ->setJoinedColumns(array(
-                    $fdTable . '.id = ' . $fcrTable . '.record_id',
-                    $fdTable . '.lang = ' . $fcrTable . '.record_lang'))
-               ->setConditions($condition);
-        
+            ->setResultColumns(array(
+                'fd.id AS id',
+                'fd.lang AS lang',
+                'fd.solution_id AS solution_id',
+                $fcrTable . '.category_id AS category_id',
+                'fd.thema AS question',
+                'fd.content AS answer'))
+            ->setJoinedTable($fcrTable)
+            ->setJoinedColumns(array(
+                'fd.id = ' . $fcrTable . '.record_id',
+                'fd.lang = ' . $fcrTable . '.record_lang'
+            ))
+            ->setConditions($condition);
+
         if (is_numeric($searchterm)) {
-            $search->setMatchingColumns(array($fdTable . '.solution_id'));
+            $search->setMatchingColumns(array('fd.solution_id'));
         } else {
-            $search->setMatchingColumns(array($fdTable . '.thema', $fdTable . '.content', $fdTable . '.keywords'));
+            $search->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
         }
-        
+
         $result = $search->search($searchterm);
-        
+
         if (!$this->_config->getDb()->numRows($result)) {
             return array();
         } else {
