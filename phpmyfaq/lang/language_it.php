@@ -2,19 +2,24 @@
 /**
  * The Italian language file.
  *
- * @package    phpMyFAQ
- * @subpackage i18n
- * @author     Stefano Bramato <stefano@pubblideaweb.it>
- * @auhtor     Rudy <webmaster@queenarena.com>
- * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @since      2004-06-24
- * @version    SVN: $Id$
- * @copyright  (c) 2004-2015 phpMyFAQ Team
+ * PHP Version 5.3
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @package   Translation
+ * @author    Stefano Bramato <stefano@pubblideaweb.it>
+ * @auhtor    Rudy <webmaster@queenarena.com>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Amedeo Fragai <amedeo.fragai@scasrl.it>
+ * @copyright 2004-2015 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'it';
 $PMF_LANG['language'] = 'Italian';
