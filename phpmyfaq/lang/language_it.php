@@ -2,22 +2,18 @@
 /**
  * The Italian language file.
  *
- * PHP Version 5.3
+ * @package    phpMyFAQ
+ * @subpackage i18n
+ * @author     Stefano Bramato <stefano@pubblideaweb.it>
+ * @auhtor     Rudy <webmaster@queenarena.com>
+ * @author     Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @since      2004-06-24
+ * @version    SVN: $Id$
+ * @copyright  (c) 2004-2015 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- *
- * @category  phpMyFAQ
- * @package   Translation
- * @author    Stefano Bramato <stefano@pubblideaweb.it>
- * @auhtor    Rudy <webmaster@queenarena.com>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Amedeo Fragai <amedeo.fragai@scasrl.it>
- * @copyright 2004-2015 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
- * @since     2004-06-24
  */
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'it';
@@ -616,14 +612,14 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configurazione';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 $PMF_LANG['ad_categ_owner'] = 'Responsabile della categoria';
 $PMF_LANG['adminSection'] = 'Amministrazione';
-$PMF_LANG['err_expiredArticle'] = 'Questa FAQ &egrave; in scaduta e non pu&ograve; essere visualizzata.';
-$PMF_LANG['err_expiredNews'] = 'Questa notizia &egrave; in scaduta e non pu&ograve; essere visualizzata.';
-$PMF_LANG['err_inactiveNews'] = 'Questa notizia &egrave; in revisione e non pu&ograve; essere visualizzata.';
+$PMF_LANG['err_expiredArticle'] = 'Questa FAQ è in scaduta e non può essere visualizzata.';
+$PMF_LANG['err_expiredNews'] = 'Questa notizia è in scaduta e non può essere visualizzata.';
+$PMF_LANG['err_inactiveNews'] = 'Questa notizia è in revisione e non può essere visualizzata.';
 $PMF_LANG['msgSearchOnAllLanguages'] = 'Cerca in tutte le lingue:';
 $PMF_LANG['ad_entry_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
 $PMF_LANG['msg_tags'] = '<a href="http://en.wikipedia.org/wiki/Tags" title="Vai alla definizione in inglese di Wikipedia" target="_blank">Tags</a>';
 $PMF_LANG['msg_related_articles'] = 'FAQ correlate';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Numero di FAQ correlate");
+$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => 'input', 1 => 'Numero di FAQ correlate');
 $PMF_LANG['ad_linkcheck_feedback_url-batch1'] = 'In corso...';
 $PMF_LANG['ad_linkcheck_feedback_url-batch2'] = 'In corso...';
 $PMF_LANG['ad_linkcheck_feedback_url-batch3'] = 'In corso...';
@@ -636,7 +632,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noajax'] = 'No AJAX';
 $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] = 'Nessun Link';
 $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'JS disabilitato';
 $PMF_LANG['ad_categ_trans_1'] = 'Traduci la categoria ';
-$PMF_LANG['ad_categ_trans_2'] = '';
+$PMF_LANG['ad_categ_trans_2'] = 'Categoria';
 $PMF_LANG['ad_categ_translatecateg'] = 'Traduci questa categoria';
 $PMF_LANG['ad_categ_translate'] = 'Traduci';
 $PMF_LANG['ad_categ_transalready'] = 'Già tradotta in: ';
@@ -651,7 +647,7 @@ $PMF_LANG['ad_entry_all_users'] = 'Accesso per tutti gli utenti';
 $PMF_LANG['ad_entry_restricted_users'] = 'Accesso ristretto a';
 $PMF_LANG['ad_entry_all_groups'] = 'Accesso per tutti i gruppi';
 $PMF_LANG['ad_entry_restricted_groups'] = 'Accesso ristretto a';
-$PMF_LANG['ad_session_expiration'] = 'La sessione scadr&agrave; entro';
+$PMF_LANG['ad_session_expiration'] = 'La sessione scadrà entro';
 $PMF_LANG['ad_user_active'] = 'attivo';
 $PMF_LANG['ad_user_blocked'] = 'bloccato';
 $PMF_LANG['ad_user_protected'] = 'protetto';
@@ -660,9 +656,9 @@ $PMF_LANG['ad_categ_paste2'] = 'Incolla dopo';
 $PMF_LANG['ad_categ_remark_move'] = 'Lo scambio di due categorie è possibile solo con elementi dello stesso livello.';
 $PMF_LANG['ad_categ_remark_overview'] = 'Viene mostrato l\'ordine corretto delle categorie se sono state definite tutte le categorie per la lingua corrente (vedi prima colonna).';
 $PMF_LANG['msgUsersOnline'] = '%d Ospiti e %d Registrati';
-$PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati pi&ugrave; vecchi di 30 giorni';
+$PMF_LANG['ad_adminlog_del_older_30d'] = 'Cancella immediatamente i dati più vecchi di 30 giorni';
 $PMF_LANG['ad_adminlog_delete_success'] = 'I dati sono stati cancellati.';
-$PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si &egrave; verificato un errore.';
+$PMF_LANG['ad_adminlog_delete_failure'] = 'I dati non sono stati cancellati: si è verificato un errore.';
 $PMF_LANG['opensearch_plugin_install'] = 'Aggiungi il plugin di ricerca';
 $PMF_LANG['ad_quicklinks'] = 'Links veloci';
 $PMF_LANG['ad_quick_category'] = 'Aggiungi una nuova categoria';
@@ -670,12 +666,12 @@ $PMF_LANG['ad_quick_record'] = 'Aggiungi una nuova FAQ';
 $PMF_LANG['ad_quick_user'] = 'Aggiungi un nuovo utente';
 $PMF_LANG['ad_quick_group'] = 'Aggiungi un nuovo gruppo';
 $PMF_LANG['msgNewTranslationHeader'] = 'Proposta per una traduzione';
-$PMF_LANG['msgNewTranslationAddon'] = 'La tua proposta non sar&agrave; pubblicata immediatamente ma sar&agrave; pubblicata dall\'amministratore dopo la sua validazione.<br />I campi richiesti sono il <strong>tuo Nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, la <strong>traduzione del titolo</strong> e la <strong>traduzione del testo</strong> della faq.<br />Ricordati di separare le parole chiave con lo spazio.';
+$PMF_LANG['msgNewTranslationAddon'] = 'La tua proposta non sarà pubblicata immediatamente ma sarà pubblicata dall\'amministratore dopo la sua validazione.<br />I campi richiesti sono il <strong>tuo Nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, la <strong>traduzione del titolo</strong> e la <strong>traduzione del testo</strong> della faq.<br />Ricordati di separare le parole chiave con lo spazio.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Faq originale';
 $PMF_LANG['msgNewTranslationPane'] = 'La tua traduzione';
-$PMF_LANG['msgNewTranslationName'] = 'Your Name:';
-$PMF_LANG['msgNewTranslationMail'] = 'Your email address:';
-$PMF_LANG['msgNewTranslationKeywords'] = 'Keywords:';
+$PMF_LANG['msgNewTranslationName'] = 'Il tuo nome:';
+$PMF_LANG['msgNewTranslationMail'] = 'Il tuo indirizzo email:';
+$PMF_LANG['msgNewTranslationKeywords'] = 'Parole chiave:';
 $PMF_LANG['msgNewTranslationSubmit'] = 'Invia la tua proposta';
 $PMF_LANG['msgTranslate'] = 'Proponi una traduzione per';
 $PMF_LANG['msgTranslateSubmit'] = 'Inizia a tradurre...';
@@ -764,7 +760,7 @@ $PMF_LANG['msgTransToolAddAuthor'] = 'Aggiungi autore';
 $PMF_LANG['msgTransToolCreateTranslation'] = 'Crea traduzione';
 $PMF_LANG['msgTransToolTransCreated'] = 'Nuova traduzione creata con successo';
 $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Impossibile creare nuova traduzione';
-$PMF_LANG['msgAdding3Dots'] = 'adding ...';
+$PMF_LANG['msgAdding3Dots'] = 'aggiunta in corso ...';
 $PMF_LANG['msgTransToolSendToTeam'] = 'Invia al team phpMyFAQ';
 $PMF_LANG['msgSending3Dots'] = 'invio in corso ...';
 $PMF_LANG['msgTransToolFileSent'] = 'File della lingua inviato con successo al team phpMyFAQ. Grazie mille per aver condiviso.';
@@ -772,8 +768,8 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending th
 $PMF_LANG['msgTransToolPercent'] = 'Percentuale';
 $PMF_LANG['msgAttachmentNotFound'] = 'The file you\'re trying to download was not found on this server';
 $PMF_LANG['ad_sess_noentry'] = 'No entry';
-$PMF_LANG['plmsgUserOnline']['0'] = '%d user online';
-$PMF_LANG['plmsgUserOnline']['1'] = '';
+$PMF_LANG['plmsgUserOnline']['0'] = '%d Utente online';
+$PMF_LANG['plmsgUserOnline']['1'] = '%d Utenti online';
 $LANG_CONF['records.attachmentsPath'] = array(0 => 'input', 1 => 'Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>');
 $PMF_LANG['securityControlCenter'] = 'Security configuration';
 $PMF_LANG['ad_search_delsuc'] = 'The search term was successfully deleted.';
@@ -830,20 +826,20 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
 $LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Sort FAQs randomly (default: deactivated)');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Enable bundled WYSIWYG editor in frontend (default: disabled)');
 $LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'Gravatar Support (default: disabled)');
-$PMF_LANG['msgTransToolRemove'] = 'Remove';
+$PMF_LANG['msgTransToolRemove'] = 'Rimuovi';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
 $PMF_LANG['msgTransToolLanguagePluralNotSet'] = 'Plural form support for language %s is disabled (nplurals not set)';
-$PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'There is %d FAQ online';
+$PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'C\'è %d FAQ online';
 $PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'Ci sono %d FAQs online';
 $PMF_LANG['plmsgViews']['0'] = '%d view';
 $PMF_LANG['plmsgViews']['1'] = '%d views';
 $PMF_LANG['plmsgGuestOnline']['0'] = '%d Ospite';
 $PMF_LANG['plmsgGuestOnline']['1'] = '%d Ospiti';
-$PMF_LANG['plmsgRegisteredOnline']['0'] = ' and %d Registrati';
-$PMF_LANG['plmsgRegisteredOnline']['1'] = ' and %d Registrati';
-$PMF_LANG['plmsgSearchAmount']['0'] = '%d search result';
-$PMF_LANG['plmsgSearchAmount']['1'] = '%d search results';
+$PMF_LANG['plmsgRegisteredOnline']['0'] = ' e %d Registrato';
+$PMF_LANG['plmsgRegisteredOnline']['1'] = ' e %d Registrati';
+$PMF_LANG['plmsgSearchAmount']['0'] = '%d risultato della ricerca';
+$PMF_LANG['plmsgSearchAmount']['1'] = '%d risultati della ricerca';
 $PMF_LANG['plmsgPagesTotal']['0'] = ' %d Pagina';
 $PMF_LANG['plmsgPagesTotal']['1'] = ' %d Pagine';
 $PMF_LANG['plmsgVotes']['0'] = '%d Voto';
@@ -854,7 +850,7 @@ $PMF_LANG['rightsLanguage']['addtranslation'] = 'aggiungi traduzione';
 $PMF_LANG['rightsLanguage']['edittranslation'] = 'modifica traduzione';
 $PMF_LANG['rightsLanguage']['deltranslation'] = 'elimina traduzione';
 $PMF_LANG['rightsLanguage']['approverec'] = 'approve records';
-$PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
+$PMF_LANG['ad_menu_upgrade'] = 'Aggiorna';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
 $PMF_LANG['msgSecureSwitch'] = 'Switch to secure mode to login!';
 $LANG_CONF['main.templateSet'] = array(0 => 'select', 1 => 'Template set to be used');
