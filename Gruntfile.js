@@ -131,6 +131,13 @@ module.exports = function(grunt) {
             },
             frontend: {
                 files: { 'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ] }
+            },
+            phpmyfaq_tinymce_plugin: {
+                files: {
+                    'phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js':
+                        [ 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js' ]
+
+                }
             }
         },
         jshint: {
@@ -195,6 +202,13 @@ module.exports = function(grunt) {
             gruntfile: {
                 files: '<%= jshint.gruntfile.src %>',
                 tasks: ['jshint:gruntfile'],
+                options: {
+                    reload: true
+                }
+            },
+            js: {
+                files: ['phpmyfaq/admin/assets/js/**/*.js', 'phpmyfaq/assets/js/*.js'],
+                tasks: ['jshint', 'uglify'],
                 options: {
                     reload: true
                 }

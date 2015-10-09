@@ -263,14 +263,13 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
         <div class="row">
 
-            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post" accept-charset="utf-8"
-                class="form-horizontal">
-            <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id']; ?>" />
-            <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id']; ?>" />
-            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>" />
-            <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?php echo $questionId; ?>" />
-            <input type="hidden" name="notifyUser" id="notifyUser" value="<?php echo $notifyUser ?>" />
-            <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?php echo $notifyEmail ?>" />
+            <form id="faqEditor" action="?action=<?php echo $queryString; ?>" method="post" class="form-horizontal">
+            <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id'] ?>">
+            <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id'] ?>">
+            <input type="hidden" name="csrf" id="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+            <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?php echo $questionId ?>">
+            <input type="hidden" name="notifyUser" id="notifyUser" value="<?php echo $notifyUser ?>">
+            <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?php echo $notifyEmail ?>">
 
             <!-- main editor window -->
             <div class="col-lg-8">

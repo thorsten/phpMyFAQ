@@ -40,6 +40,7 @@ phpmyfaq/inc/libs/twitteroauth
 phpmyfaq/admin/assets/css/*
 phpmyfaq/admin/assets/fonts/*
 phpmyfaq/admin/assets/js/editor/tinymce.min.js
+phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/
 phpmyfaq/assets/js/libs
 phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js

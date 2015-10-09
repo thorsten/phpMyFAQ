@@ -188,15 +188,10 @@ class PMF_Helper_Search extends PMF_Helper
                 }
                 
                 // Build the link to the faq record
-                $currentUrl = sprintf(
-                    'index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $result->category_id,
-                    $result->id,
-                    $result->lang
-                );
+                $currentUrl = sprintf('index.php?solution_id=%d', $result->solution_id);
                 
                 $html .= sprintf(
-                    '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br />',
+                    '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br>',
                     $result->id,
                     $result->id,
                     $currentUrl, 

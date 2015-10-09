@@ -69,6 +69,7 @@ if (isset($auth)) {
             }
 
 ?>
+<script src="assets/js/phpmyfaq.tinymce.plugin.js"></script>
 <script>
 
     $().tooltip({placement: 'bottom'});
@@ -83,7 +84,7 @@ if (isset($auth)) {
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
             'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor autosave'
+            'emoticons template paste textcolor autosave phpmyfaq'
         ],
         relative_urls: false,
         convert_urls: false,
@@ -93,7 +94,7 @@ if (isset($auth)) {
         entity_encoding: 'raw',
 
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor emoticons",
+        toolbar2: "print preview media | forecolor backcolor emoticons | phpmyfaq",
         image_advtab: true,
 
         // Formatting
@@ -136,7 +137,10 @@ if (isset($auth)) {
         template_replace_values : {
             username : "<?php echo $user->userdata->get('display_name'); ?>",
             user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
-        }
+        },
+
+        // Custom params
+        csrf: $('#csrf').val()
     });
 
     /*
