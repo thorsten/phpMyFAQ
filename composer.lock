@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "5006e822324993dde8361072073cad85",
+    "hash": "31f4185d315c35aad6ba4d4ea6835f33",
     "packages": [
         {
             "name": "erusev/parsedown",
@@ -99,6 +99,50 @@
             },
             "type": "library",
             "time": "2013-05-01 13:13:41"
+        },
+        {
+            "name": "samayo/bulletproof",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samayo/bulletproof.git",
+                "reference": "533c16a6794131efdee1d8f1e6b811c06a3e7194"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/samayo/bulletproof/zipball/533c16a6794131efdee1d8f1e6b811c06a3e7194",
+                "reference": "533c16a6794131efdee1d8f1e6b811c06a3e7194",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "3.7.*"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/bulletproof.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "samayo"
+                }
+            ],
+            "description": "A simple and secure PHP image uploader",
+            "homepage": "http://github.com/samayo/bulletproof",
+            "keywords": [
+                "image",
+                "security",
+                "upload"
+            ],
+            "time": "2015-08-04 13:32:10"
         },
         {
             "name": "swiftmailer/swiftmailer",
