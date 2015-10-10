@@ -55,21 +55,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if (isset($auth)) {
 ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE; ?>" style="border: none;" width="0" height="0"></iframe>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE; ?>" width="0" height="0"></iframe>
 <?php
-    if (isset($auth) && (('takequestion' == $action) || ('editentry'    == $action) || ('editpreview'  == $action) ||
-                         ('addnews'      == $action) || ('editnews'     == $action) || ('copyentry'  == $action))) {
+    if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview'  == $action) ||
+                         ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
     
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
-
-            if (('addnews' == $action || 'editnews' == $action)) {
-                $tinyMceSave = '';
-            } else {
-                $tinyMceSave = 'save,|,';
-            }
-
 ?>
-<script src="assets/js/phpmyfaq.tinymce.plugin.js"></script>
 <script>
 
     $().tooltip({placement: 'bottom'});
@@ -138,6 +130,8 @@ if (isset($auth)) {
             username : "<?php echo $user->userdata->get('display_name'); ?>",
             user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
         },
+
+        // Image Upload
 
         // Custom params
         csrf: $('#csrf').val()
