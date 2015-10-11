@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Provides methods for password encryption using PHP 5.5+ password_hash()
+ * Provides methods for password encryption using PHP 5.5+ password_hash().
  *
  * PHP Version 5.5
  *
@@ -9,35 +10,36 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Enc
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-03-29
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Enc_Bcrypt
+ * PMF_Enc_Bcrypt.
  *
  * @category  phpMyFAQ
- * @package   Enc
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-03-29
  */
 class PMF_Enc_Bcrypt extends PMF_Enc
 {
     /**
-     * Encrypts the passwords and returns the result
+     * Encrypts the passwords and returns the result.
      *
-     * @param  string $password String
+     * @param string $password String
      *
      * @return string
      */

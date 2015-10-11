@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The medium permission class provides group rights.
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Perm_Medium
+ * PMF_Perm_Medium.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
@@ -40,13 +42,13 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * @var array
      */
     public $defaultGroupData = array(
-        'name'        => 'DEFAULT_GROUP',
+        'name' => 'DEFAULT_GROUP',
         'description' => 'Short group description.',
-        'auto_join'   => false
+        'auto_join' => false,
     );
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -61,8 +63,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns true if the group specified by $groupId owns the
      * right given by $rightId, otherwise false.
      *
-     * @param integer $groupId Group ID
-     * @param integer $rightId Right ID
+     * @param int $groupId Group ID
+     * @param int $rightId Right ID
      * 
      * @return bool
      */
@@ -72,9 +74,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($rightId <= 0 || $groupId <= 0 || !is_numeric($rightId) || !is_numeric($groupId)) {
             return false;
         }
-        
+
         // check right
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -85,18 +87,19 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fr.right_id = %d AND
                 fr.right_id = fgr.right_id AND
                 fg.group_id = fgr.group_id AND
-                fg.group_id = %d",
+                fg.group_id = %d',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $rightId,
             $groupId
         );
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
+
         return false;
     }
 
@@ -104,7 +107,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an array that contains the right-IDs of all
      * group-rights the group $groupId owns.
      *
-     * @param integer $groupId Group ID
+     * @param int $groupId Group ID
      * 
      * @return array
      */
@@ -114,7 +117,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             return false;
         }
         // check right
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -124,18 +127,19 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 fg.group_id = %d AND
                 fg.group_id = fgr.group_id AND
-                fr.right_id = fgr.right_id",
+                fr.right_id = fgr.right_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $groupId
         );
-        
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
+
         return $result;
     }
 
@@ -146,10 +150,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * The parameter $right may be a right-ID (recommended for
      * performance) or a right-name.
      *
-     * @param integer $userId Group ID
-     * @param mixed   $right  Rights
+     * @param int   $userId Group ID
+     * @param mixed $right  Rights
      *
-     * @return boolean
+     * @return bool
      */
     public function checkRight($userId, $right)
     {
@@ -157,11 +161,12 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!is_numeric($right) && is_string($right)) {
             $right = $this->getRightId($right);
         }
-        
+
         // check user right and group right
         if ($this->checkUserGroupRight($userId, $right) || $this->checkUserRight($userId, $right)) {
             return true;
         }
+
         return false;
     }
 
@@ -169,10 +174,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Grants the group given by $groupId the right specified by
      * $rightId.
      *
-     * @param integer $groupId Group ID
-     * @param integer $rightId Right ID
+     * @param int $groupId Group ID
+     * @param int $rightId Right ID
      * 
-     * @return boolean
+     * @return bool
      */
     public function grantGroupRight($groupId, $rightId)
     {
@@ -180,29 +185,30 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($rightId <= 0 || $groupId <= 0 || !is_numeric($rightId) || !is_numeric($groupId)) {
             return false;
         }
-        
+
         // is right for users?
         $right_data = $this->getRightData($rightId);
         if (!$right_data['for_groups']) {
             return false;
         }
-        
+
         // grant right
-        $insert = sprintf("
+        $insert = sprintf('
             INSERT INTO
                 %sfaqgroup_right
             (group_id, right_id)
                 VALUES
-            (%d, %d)",
+            (%d, %d)',
             PMF_Db::getTablePrefix(),
             $groupId,
             $rightId
         );
-            
+
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -210,9 +216,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Refuses the group given by $groupId the right specified by
      * $rightId.
      *
-     * @param  integer $groupId Group ID
-     * @param  integer $rightId Right ID
-     * @return boolean
+     * @param int $groupId Group ID
+     * @param int $rightId Right ID
+     *
+     * @return bool
      */
     public function refuseGroupRight($groupId, $rightId)
     {
@@ -220,23 +227,24 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($rightId <= 0 || $groupId <= 0 || !is_numeric($rightId) || !is_numeric($groupId)) {
             return false;
         }
-        
+
         // grant right
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaqgroup_right
             WHERE
                 group_id = %d AND
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId,
             $rightId
         );
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -255,10 +263,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($this->getGroupId($groupData['name']) > 0) {
             return 0;
         }
-        
-        $nextId    = $this->config->getDb()->nextId(PMF_Db::getTablePrefix()."faqgroup", "group_id");
+
+        $nextId = $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqgroup', 'group_id');
         $groupData = $this->checkGroupData($groupData);
-        $insert     = sprintf("
+        $insert = sprintf("
             INSERT INTO
                 %sfaqgroup
             (group_id, name, description, auto_join)
@@ -268,52 +276,54 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $nextId,
             $groupData['name'],
             $groupData['description'],
-            (int)$groupData['auto_join']
+            (int) $groupData['auto_join']
         );
 
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return 0;
         }
+
         return $nextId;
     }
 
     /**
      * Changes the group data of the given group.
      *
-     * @param integer $groupId   Group ID
-     * @param array   $groupData Array of group data
+     * @param int   $groupId   Group ID
+     * @param array $groupData Array of group data
      *
-     * @return boolean
+     * @return bool
      */
     public function changeGroup($groupId, Array $groupData)
     {
         $checked_data = $this->checkGroupData($groupData);
-        $set          = '';
-        $comma        = '';
-        
+        $set = '';
+        $comma = '';
+
         foreach ($groupData as $key => $val) {
             $set  .= $comma.$key." = '".$this->config->getDb()->escape($checked_data[$key])."'";
             $comma = ",\n                ";
         }
-        
-        $update = sprintf("
+
+        $update = sprintf('
             UPDATE
                 %sfaqgroup
             SET
                 %s
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $set,
             $groupId
         );
-                
+
         $res = $this->config->getDb()->query($update);
-        
+
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -321,9 +331,9 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes the group given by $groupId from the database.
      * Returns true on success, otherwise false.
      *
-     * @param integer $groupId Group ID
+     * @param int $groupId Group ID
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteGroup($groupId)
     {
@@ -331,11 +341,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaqgroup
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId
         );
@@ -344,12 +354,12 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!$res) {
             return false;
         }
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_group
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId
         );
@@ -358,12 +368,12 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!$res) {
             return false;
         }
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaqgroup_right
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId
         );
@@ -372,7 +382,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!$res) {
             return false;
         }
-        
+
         return true;
     }
 
@@ -380,18 +390,18 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns true if the user given by $userId is a member of
      * the group specified by $groupId, otherwise false.
      *
-     * @param integer $userId  User ID
-     * @param integer $groupId Group ID
+     * @param int $userId  User ID
+     * @param int $groupId Group ID
      *
-     * @return boolean
+     * @return bool
      */
     public function isGroupMember($userId, $groupId)
     {
         if ($userId <= 0 || $groupId <= 0 || !is_numeric($userId) || !is_numeric($groupId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 fu.user_id AS user_id
             FROM
@@ -402,18 +412,19 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fu.user_id  = %d AND
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id AND
-                fg.group_id = %d",
+                fg.group_id = %d',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $userId,
             $groupId
         );
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
+
         return false;
     }
 
@@ -421,7 +432,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an array that contains the user-IDs of all members
      * of the group $groupId.
      *
-     * @param integer $groupId Group ID
+     * @param int $groupId Group ID
      *
      * @return array
      */
@@ -430,8 +441,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 fu.user_id AS user_id
             FROM
@@ -441,18 +452,19 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 fg.group_id = %d AND
                 fg.group_id = fug.group_id AND
-                fu.user_id  = fug.user_id",
+                fu.user_id  = fug.user_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $groupId
         );
-        
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['user_id'];
         }
+
         return $result;
     }
 
@@ -460,37 +472,38 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Adds a new member $userId to the group $groupId.
      * Returns true on success, otherwise false.
      *
-     * @param integer $userId  User ID
-     * @param integer $groupId Group ID
+     * @param int $userId  User ID
+     * @param int $groupId Group ID
      *
-     * @return boolean
+     * @return bool
      */
-    function addToGroup($userId, $groupId)
+    public function addToGroup($userId, $groupId)
     {
         if ($userId <= 0 || $groupId <= 0 || !is_numeric($userId) || !is_numeric($groupId)) {
             return false;
         }
-        
+
         if (!$this->getGroupData($groupId)) {
             return false;
         }
-        
+
         // add user to group
-        $insert = sprintf("
+        $insert = sprintf('
             INSERT INTO
                 %sfaquser_group
             (user_id, group_id)
                VALUES
-            (%d, %d)",
+            (%d, %d)',
             PMF_Db::getTablePrefix(),
             $userId,
             $groupId
         );
-            
+
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -498,31 +511,32 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes a user $userId from the group $groupId.
      * Returns true on success, otherwise false.
      *
-     * @param integer $userId  User ID
-     * @param integer $groupId Group ID
+     * @param int $userId  User ID
+     * @param int $groupId Group ID
      *
-     * @return boolean
+     * @return bool
      */
     public function removeFromGroup($userId, $groupId)
     {
         if ($userId <= 0 || $groupId <= 0 || !is_numeric($userId) || !is_numeric($groupId)) {
             return false;
         }
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_group
             WHERE
                 user_id  = %d AND
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $userId,
             $groupId);
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -546,12 +560,13 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($name)
         );
-            
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             return 0;
         }
         $row = $this->config->getDb()->fetchArray($res);
+
         return $row['group_id'];
     }
 
@@ -559,7 +574,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an associative array with the group-data of the group
      * $groupId.
      *
-     * @param integer $groupId Group ID
+     * @param int $groupId Group ID
      *
      * @return array
      */
@@ -568,8 +583,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 group_id,
                 name,
@@ -578,15 +593,16 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             FROM
                 %sfaqgroup
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId
         );
-            
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             return [];
         }
+
         return $this->config->getDb()->fetchArray($res);
     }
 
@@ -594,7 +610,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an array that contains the IDs of all groups in which
      * the user $userId is a member.
      *
-     * @param  integer $userId User ID
+     * @param int $userId User ID
      *
      * @return array
      */
@@ -603,8 +619,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($userId <= 0 || !is_numeric($userId)) {
             return array(-1);
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 fg.group_id AS group_id
             FROM
@@ -614,18 +630,19 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             WHERE
                 fu.user_id  = %d AND
                 fu.user_id  = fug.user_id AND
-                fg.group_id = fug.group_id",
+                fg.group_id = fug.group_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $userId
         );
-        
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = array(-1);
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
+
         return $result;
     }
 
@@ -637,15 +654,15 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      */
     public function getAllGroups()
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 group_id
             FROM
-                %sfaqgroup",
+                %sfaqgroup',
             PMF_Db::getTablePrefix()
         );
-            
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
@@ -655,7 +672,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     }
 
     /**
-     * Get all groups in <option> tags
+     * Get all groups in <option> tags.
      *
      * @param array $groups Selected groups
      *
@@ -663,7 +680,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      */
     public function getAllGroupsOptions(Array $groups)
     {
-        $options   = '';
+        $options = '';
         $allGroups = $this->getAllGroups();
 
         foreach ($allGroups as $groupId) {
@@ -680,14 +697,15 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     }
 
     /**
-     * checkUserGroupRight
+     * checkUserGroupRight.
      *
      * Returns true if the user $userId owns the right $rightId
      * because of a group-membership, otherwise false.
      *
-     * @param  integer $userId  User ID
-     * @param  integer $rightId Right ID
-     * @return boolean
+     * @param int $userId  User ID
+     * @param int $rightId Right ID
+     *
+     * @return bool
      */
     public function checkUserGroupRight($userId, $rightId)
     {
@@ -695,8 +713,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($rightId <= 0 || $userId <= 0 || !is_numeric($rightId) || !is_numeric($userId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -711,7 +729,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fg.group_id = fgr.group_id AND
                 fg.group_id = fug.group_id AND
                 fu.user_id  = fug.user_id AND
-                fu.user_id  = %d",
+                fu.user_id  = %d',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -720,11 +738,12 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $rightId,
             $userId
         );
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
+
         return false;
     }
 
@@ -734,7 +753,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * by the default values in $this->defaultGroupData.
      * Returns the corrected $groupData associative array.
      *
-     * @param  array $groupData Array of group data
+     * @param array $groupData Array of group data
+     *
      * @return array
      */
     public function checkGroupData(Array $groupData)
@@ -748,7 +768,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!isset($groupData['auto_join'])) {
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
-        $groupData['auto_join'] = (int)$groupData['auto_join'];
+        $groupData['auto_join'] = (int) $groupData['auto_join'];
 
         return $groupData;
     }
@@ -758,7 +778,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * the user $userId owns. User-rights and the rights the user
      * owns because of a group-membership are taken into account.
      *
-     * @param  integer $userId User ID
+     * @param int $userId User ID
+     *
      * @return array
      */
     public function getAllUserRights($userId)
@@ -766,7 +787,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($userId <= 0 || !is_numeric($userId)) {
             return false;
         }
-        $userRights  = $this->getUserRights($userId);
+        $userRights = $this->getUserRights($userId);
         $groupRights = $this->getUserGroupRights($userId);
 
         return array_unique(array_merge($userRights, $groupRights));
@@ -780,30 +801,31 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * then has to be called every time a new user registers.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $userId User ID
-     * @return boolean
+     * @param int $userId User ID
+     *
+     * @return bool
      */
     public function autoJoin($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 group_id
             FROM
                 %sfaqgroup
             WHERE
-                auto_join = 1",
+                auto_join = 1',
             PMF_Db::getTablePrefix()
         );
-            
+
         $res = $this->config->getDb()->query($select);
         if (!$res) {
             return false;
         }
-        
+
         $auto_join = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $auto_join[] = $row['group_id'];
@@ -813,6 +835,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         foreach ($auto_join as $groupId) {
             $this->addToGroup($userId, $groupId);
         }
+
         return true;
     }
 
@@ -820,37 +843,40 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes the user $userId from all groups.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $userId User ID
-     * @return boolean
+     * @param int $userId User ID
+     *
+     * @return bool
      */
     public function removeFromAllGroups($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
             return false;
         }
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_group
             WHERE
-                user_id  = %d",
+                user_id  = %d',
             PMF_Db::getTablePrefix(),
             $userId);
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
     /**
-     * getUserGroupRights
+     * getUserGroupRights.
      *
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a group-membership.
      *
-     * @param  integer $userId User ID
+     * @param int $userId User ID
+     *
      * @return array
      */
     public function getUserGroupRights($userId)
@@ -858,8 +884,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($userId <= 0 || !is_numeric($userId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -873,19 +899,20 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id AND
                 fg.group_id = fgr.group_id AND
-                fr.right_id = fgr.right_id",
+                fr.right_id = fgr.right_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $userId);
-        
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
+
         return $result;
     }
 
@@ -893,34 +920,37 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Refuses all group rights.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $groupId Group ID
-     * @return boolean
+     * @param int $groupId Group ID
+     *
+     * @return bool
      */
     public function refuseAllGroupRights($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaqgroup_right
             WHERE
-                group_id  = %d",
+                group_id  = %d',
             PMF_Db::getTablePrefix(),
             $groupId);
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
     /**
      * Returns the name of the group $groupId.
      *
-     * @param  integer $groupId Group ID
+     * @param int $groupId Group ID
+     *
      * @return string
      */
     public function getGroupName($groupId)
@@ -928,23 +958,24 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($groupId <= 0 || !is_numeric($groupId)) {
             return false;
         }
-        
-        $select = sprintf("
+
+        $select = sprintf('
             SELECT
                 name
             FROM
                 %sfaqgroup
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId
         );
-            
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             return [];
         }
         $row = $this->config->getDb()->fetchArray($res);
+
         return $row['name'];
     }
 
@@ -952,7 +983,8 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes all users from the group $groupId.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $groupId Group ID
+     * @param int $groupId Group ID
+     *
      * @return bool
      */
     public function removeAllUsersFromGroup($groupId)
@@ -960,20 +992,21 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if ($groupId <= 0 or !is_numeric($groupId)) {
             return false;
         }
-        
+
         // remove all user from group
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_group
             WHERE
-                group_id = %d",
+                group_id = %d',
             PMF_Db::getTablePrefix(),
             $groupId);
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 }

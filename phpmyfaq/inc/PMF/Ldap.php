@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The PMF_Ldap class provides methods and functions for a LDAP database
+ * The PMF_Ldap class provides methods and functions for a LDAP database.
  *
  * PHP Version 5.5
  *
@@ -9,32 +10,33 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Ldap
+ *
  * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Ldap
+ * PMF_Ldap.
  *
  * @category  phpMyFAQ
- * @package   PMF_Ldap
+ *
  * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16
  */
@@ -46,35 +48,35 @@ class PMF_Ldap
     private $_ldapConfig = [];
 
     /**
-     * The connection handle
+     * The connection handle.
      *
      * @return resource
      */
     private $ds = false;
 
     /**
-     * The LDAP base
+     * The LDAP base.
      *
      * @var string
      */
     private $base = null;
 
     /**
-     * Errorlog
+     * Errorlog.
      *
      * @var string
      */
     public $error = null;
 
     /**
-     * LDAP error number
+     * LDAP error number.
      *
-     * @var integer
+     * @var int
      */
     public $errno = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -86,15 +88,15 @@ class PMF_Ldap
     }
 
     /**
-     * Connects to given LDAP server with given credentials
+     * Connects to given LDAP server with given credentials.
      *
-     * @param string  $ldapServer
-     * @param integer $ldapPort
-     * @param string  $ldapBase
-     * @param string  $ldapUser
-     * @param string  $ldapPassword
+     * @param string $ldapServer
+     * @param int    $ldapPort
+     * @param string $ldapBase
+     * @param string $ldapUser
+     * @param string $ldapPassword
      *
-     * @return boolean
+     * @return bool
      */
     public function connect($ldapServer, $ldapPort, $ldapBase, $ldapUser = '', $ldapPassword = '')
     {
@@ -104,9 +106,9 @@ class PMF_Ldap
         }
 
         $this->base = $ldapBase;
-        $this->ds   = ldap_connect($ldapServer, $ldapPort);
+        $this->ds = ldap_connect($ldapServer, $ldapPort);
 
-        if (! $this->ds) {
+        if (!$this->ds) {
             $this->error = sprintf(
                 'Unable to connect to LDAP server (Error: %s)',
                 ldap_error($this->ds)
@@ -119,7 +121,7 @@ class PMF_Ldap
         // optionally set Bind version
         if (isset($this->_ldapConfig['ldap_options'])) {
             foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
-                if (! ldap_set_option($this->ds, $key, $value)) {
+                if (!ldap_set_option($this->ds, $key, $value)) {
                     $this->errno = ldap_errno($this->ds);
                     $this->error = sprintf(
                         'Unable to set LDAP option "%s" to "%s" (Error: %s).',
@@ -135,7 +137,7 @@ class PMF_Ldap
 
         if (isset($this->_ldapConfig['ldap_use_dynamic_login']) && $this->_ldapConfig['ldap_use_dynamic_login']) {
             // Check for dynamic user binding
-            $ldapRdn  = $this->_ldapConfig['ldap_dynamic_login_attribute'] . '=' . $ldapUser . ',' . $ldapBase;
+            $ldapRdn = $this->_ldapConfig['ldap_dynamic_login_attribute'].'='.$ldapUser.','.$ldapBase;
             $ldapBind = $this->bind($ldapRdn, $ldapPassword);
         } elseif (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
             // Check for anonymous binding
@@ -160,7 +162,7 @@ class PMF_Ldap
     }
 
     /**
-     * Binds to the LDAP directory with specified RDN and password
+     * Binds to the LDAP directory with specified RDN and password.
      *
      * @param string $rdn
      * @param string $password
@@ -171,6 +173,7 @@ class PMF_Ldap
     {
         if (!is_resource($this->ds)) {
             $this->error = 'The LDAP connection handler is not a valid resource.';
+
             return false;
         }
 
@@ -182,7 +185,7 @@ class PMF_Ldap
     }
 
     /**
-     * Returns the user's email address from LDAP
+     * Returns the user's email address from LDAP.
      *
      * @param string $username Username
      *
@@ -194,7 +197,7 @@ class PMF_Ldap
     }
 
     /**
-     * Returns the user's DN
+     * Returns the user's DN.
      *
      * @param string $username Username
      *
@@ -206,7 +209,7 @@ class PMF_Ldap
     }
 
     /**
-     * Returns the user's full name from LDAP
+     * Returns the user's full name from LDAP.
      *
      * @param string $username Username
      *
@@ -218,7 +221,7 @@ class PMF_Ldap
     }
 
     /**
-     * Returns the LDAP error message of the last LDAP command
+     * Returns the LDAP error message of the last LDAP command.
      *
      * @param resource $ds LDAP resource
      *
@@ -229,11 +232,12 @@ class PMF_Ldap
         if ($ds === null) {
             $ds = $this->ds;
         }
+
         return ldap_error($ds);
     }
 
     /**
-     * Returns specific data from LDAP
+     * Returns specific data from LDAP.
      *
      * @param string $username Username
      * @param string $data     MapKey
@@ -271,7 +275,7 @@ class PMF_Ldap
         }
 
         $fields = array($this->_ldapConfig['ldap_mapping'][$data]);
-        $sr     = ldap_search($this->ds, $this->base, $filter, $fields);
+        $sr = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (false === $sr) {
             $this->errno = ldap_errno($this->ds);
@@ -302,7 +306,7 @@ class PMF_Ldap
     }
 
     /**
-     * Returns the DN from LDAP
+     * Returns the DN from LDAP.
      *
      * @param string $username Username
      *
@@ -349,7 +353,7 @@ class PMF_Ldap
     }
 
     /**
-     * Quotes LDAP strings in accordance with the RFC 2254
+     * Quotes LDAP strings in accordance with the RFC 2254.
      *
      * @param string $string
      *
@@ -358,8 +362,8 @@ class PMF_Ldap
     public function quote($string)
     {
         return str_replace(
-            array( '\\', ' ', '*', '(', ')' ),
-            array( '\\5c', '\\20', '\\2a', '\\28', '\\29' ),
+            array('\\', ' ', '*', '(', ')'),
+            array('\\5c', '\\20', '\\2a', '\\28', '\\29'),
             $string
         );
     }

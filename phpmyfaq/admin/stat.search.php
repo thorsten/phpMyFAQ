@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend for search log statistics
+ * Frontend for search log statistics.
  *
  * PHP Version 5.5
  *
@@ -9,21 +9,21 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 ?>
@@ -44,30 +44,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
-
     $perpage = 15;
-    $pages   = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page    = PMF_Filter::filterInput(INPUT_GET, 'page' , FILTER_VALIDATE_INT, 1);
-    
-    $search        = new PMF_Search($faqConfig);
+    $pages = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+
+    $search = new PMF_Search($faqConfig);
 
     if ('truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_searchterm_del_suc"]);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_searchterm_del_suc']);
         } else {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_searchterm_del_err"]);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_searchterm_del_err']);
         }
     }
 
     $searchesCount = $search->getSearchesCount();
-    $searchesList  = $search->getMostPopularSearches($searchesCount + 1, true);
+    $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
         $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
     }
-    
+
     $start = ($page - 1) * $perpage;
-    $ende  = $start + $perpage;
+    $ende = $start + $perpage;
 
     $baseUrl = sprintf(
         '%s?action=searchstats&amp;page=%d',
@@ -77,13 +76,13 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     // Pagination options
     $options = array(
-        'baseUrl'         => $baseUrl,
-        'total'           => count($searchesList),
-        'perPage'         => $perpage,
-        'pageParamName'   => 'page'
+        'baseUrl' => $baseUrl,
+        'total' => count($searchesList),
+        'perPage' => $perpage,
+        'pageParamName' => 'page',
     );
     $pagination = new PMF_Pagination($faqConfig, $options);
-?>
+    ?>
                 <div id="ajaxresponse"></div>
                 <table class="table table-striped">
                 <thead>
@@ -97,46 +96,51 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 </thead>
                 <tfoot>
                     <tr>
-                        <td colspan="6"><?php echo $pagination->render(); ?></td>
+                        <td colspan="6"><?php echo $pagination->render();
+    ?></td>
                     </tr>
                 </tfoot>
                 <tbody>
 <?php 
 
     $counter = $displayedCounter = 0;
-    $self    = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
+    $self = substr(__FILE__, strlen($_SERVER['DOCUMENT_ROOT']));
 
-    foreach($searchesList as $searchItem) {
-
+    foreach ($searchesList as $searchItem) {
         if ($displayedCounter >= $perpage) {
-            $displayedCounter++;
+            ++$displayedCounter;
             continue;
         }
 
-        $counter++;
+        ++$counter;
         if ($counter <= $start) {
             continue;
         }
-        $displayedCounter++;
-        
-        $num = round(($searchItem['number']*100 / $searchesCount), 2);
-?>
+        ++$displayedCounter;
+
+        $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
+        ?>
                     <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
-                        <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);  ?></td>
+                        <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);
+        ?></td>
                         <td><?php echo $searchItem['number'] ?></td>
                         <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
-                        <td><meter max="100" value="<?php echo $num; ?>"></td>
-                        <td><?php echo $num; ?>%</td>
+                        <td><meter max="100" value="<?php echo $num;
+        ?>"></td>
+                        <td><?php echo $num;
+        ?>%</td>
                         <td>
-                            <a class="btn btn-danger" href="javascript:;" title="<?php echo $PMF_LANG["ad_news_delete"]; ?>"
+                            <a class="btn btn-danger" href="javascript:;" title="<?php echo $PMF_LANG['ad_news_delete'];
+        ?>"
                                onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
                                 <i class="fa fa-trash-o"></i>
                             </a>
                         </td>
                     </tr>
 <?php
+
     }
-?>
+    ?>
                 </tbody>
                 </table>
                 <script>
@@ -164,6 +168,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 }
                 </script>
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

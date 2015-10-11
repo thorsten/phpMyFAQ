@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Pagination handler class
+ * Pagination handler class.
  *
  * PHP Version 5.5
  *
@@ -9,148 +10,149 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Pagination
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Pagination
+ * PMF_Pagination.
  *
  * @category  phpMyFAQ
- * @package   PMF_Pagination
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-27
  */
 class PMF_Pagination
 {
     /**
-     * Template vars
+     * Template vars.
      */
-    const TPL_VAR_LINK_URL       = '{LINK_URL}';
-    const TPL_VAR_LINK_TEXT      = '{LINK_TEXT}';
+    const TPL_VAR_LINK_URL = '{LINK_URL}';
+    const TPL_VAR_LINK_TEXT = '{LINK_TEXT}';
     const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
 
     /**
-     * Base url used for links
+     * Base url used for links.
      *
      * @var string
      */
     protected $baseUrl = '';
-    
+
     /**
-     * Total items count
+     * Total items count.
      *
-     * @var integer
+     * @var int
      */
     protected $total = 0;
-    
+
     /**
-     * Items per page count
+     * Items per page count.
      *
-     * @var integer
+     * @var int
      */
     protected $perPage = 0;
-    
+
     /**
-     * Number of adjacent links
+     * Number of adjacent links.
      *
-     * @var integer
+     * @var int
      */
     protected $adjacents = 4;
-    
+
     /**
      * Default link template. 
-     * Possible variables are {LINK}, {TITLE}, {TEXT}
+     * Possible variables are {LINK}, {TITLE}, {TEXT}.
      *
      * @var string
      */
     protected $linkTpl = '<li><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
-     * Current page link template
+     * Current page link template.
      *
      * @var string
      */
     protected $currentPageLinkTpl = '<li class="active"><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
-    
+
     /**
-     * Next page link template
+     * Next page link template.
      *
      * @var string
      */
     protected $nextPageLinkTpl = '<li><a href="{LINK_URL}">&rarr;</a></li>';
-    
+
     /**
-     * Previous page link template
+     * Previous page link template.
      *
      * @var string
      */
     protected $prevPageLinkTpl = '<li><a href="{LINK_URL}">&larr;</a></li>';
-    
+
     /**
-     * First page link template
+     * First page link template.
      *
      * @var string
      */
     protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&#8676;</a></li>';
-    
+
     /**
-     * Last page link template
+     * Last page link template.
      *
      * @var string
      */
     protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&#8677;</a></li>';
-    
+
     /**
-     * Layout template
+     * Layout template.
      *
      * @var string
      */
     protected $layoutTpl = '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>';
 
     /**
-     * Current page index
+     * Current page index.
      *
-     * @var integer
+     * @var int
      */
     protected $currentPage = 0;
-    
+
     /**
-     * Param name to associate the page numbers to
+     * Param name to associate the page numbers to.
      *
      * @var string
      */
     protected $pageParamName = 'page';
 
     /**
-     * SEO name
+     * SEO name.
      *
      * @var string
      */
     protected $seoName = '';
 
     /**
-     * Use rewritten URLs without GET variables
+     * Use rewritten URLs without GET variables.
      *
-     * @var boolean
+     * @var bool
      */
     protected $useRewrite = false;
 
     /**
-     * Rewritten URL format for page param
+     * Rewritten URL format for page param.
      *
      * @var string
      */
@@ -162,7 +164,7 @@ class PMF_Pagination
     private $_config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * We read in the current page from the baseUrl, so if it contains
      * no pageParamName, first page is asumed
@@ -192,7 +194,7 @@ class PMF_Pagination
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];
         }
-       
+
         if (isset($options['total'])) {
             $this->total = $options['total'];
         }
@@ -200,41 +202,41 @@ class PMF_Pagination
         if (isset($options['perPage'])) {
             $this->perPage = $options['perPage'];
         }
-       
+
         if (isset($options['linkTpl'])) {
             $this->linkTpl = $options['linkTpl'];
         }
-       
+
         if (isset($options['currentPageLinkTpl'])) {
             $this->currentPageLinkTpl = $options['currentPageLinkTpl'];
         }
-       
+
         if (isset($options['nextPageLinkTpl'])) {
             $this->nextPageLinkTpl = $options['nextPageLinkTpl'];
         }
-       
+
         if (isset($options['prevPageLinkTpl'])) {
             $this->prevPageLinkTpl = $options['prevPageLinkTpl'];
         }
-       
+
         if (isset($options['firstPageLinkTpl'])) {
-           $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
+            $this->firstPageLinkTpl = $options['firstPageLinkTpl'];
         }
-        
+
         if (isset($options['lastPageLinkTpl'])) {
-           $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
+            $this->lastPageLinkTpl = $options['lastPageLinkTpl'];
         }
-        
+
         if (isset($options['layoutTpl'])) {
-           $this->layoutTpl = $options['layoutTpl'];
+            $this->layoutTpl = $options['layoutTpl'];
         }
-        
+
         if (isset($options['pageParamName'])) {
-           $this->pageParamName = $options['pageParamName'];
+            $this->pageParamName = $options['pageParamName'];
         }
 
         if (isset($options['seoName'])) {
-           $this->seoName = $options['seoName'];
+            $this->seoName = $options['seoName'];
         }
 
         if (isset($options['useRewrite']) && isset($options['rewriteUrl'])) {
@@ -245,53 +247,52 @@ class PMF_Pagination
         // Let this call to be last cuz it  needs some options to be set before
         $this->currentPage = $this->getCurrentPageFromUrl($this->baseUrl);
     }
-    
+
     /**
-     * Returns the current page URL
+     * Returns the current page URL.
      *
      * @param string $url URL
      *
-     * @return integer
+     * @return int
      */
     protected function getCurrentPageFromUrl($url)
     {
         $page = 1;
-        
+
         if (!empty($url)) {
             $match = [];
-            if (PMF_String::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
+            if (PMF_String::preg_match('$&(amp;|)'.$this->pageParamName.'=(\d+)$', $url, $match)) {
                 $page = isset($match[2]) ? $match[2] : $page;
             }
         }
 
         return $page;
     }
-    
+
     /**
-     * Render full pagination string
+     * Render full pagination string.
      *
      * @return string
      */
     public function render()
     {
-        $content   = [];
-        $pages     = ceil($this->total / $this->perPage);
+        $content = [];
+        $pages = ceil($this->total / $this->perPage);
         $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
-        
-        for ($page = 1; $page <= $pages; $page++) {
-            
+
+        for ($page = 1; $page <= $pages; ++$page) {
             if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
-                $page      = $this->currentPage - $adjacents - 1;
+                $page = $this->currentPage - $adjacents - 1;
                 continue;
             }
-            
+
             if ($page > $this->currentPage + $adjacents && $page <= $pages - $this->adjacents) {
                 $content[] = '<li class="disabled"><a>&hellip;</a></li>';
-                $page      = $pages - $this->adjacents;
+                $page = $pages - $this->adjacents;
                 continue;
             }
-            
+
             $link = $this->renderUrl($this->baseUrl, $page);
 
             if ($page == $this->currentPage) {
@@ -299,10 +300,10 @@ class PMF_Pagination
             } else {
                 $template = $this->linkTpl;
             }
-            
+
             $content[] = $this->renderLink($template, $link, $page);
         }
-        
+
         if (1 < $this->currentPage) {
             array_unshift(
                 $content,
@@ -321,7 +322,7 @@ class PMF_Pagination
                 )
             );
         }
-        
+
         if ($page - 1 > $this->currentPage) {
             array_push(
                 $content,
@@ -340,36 +341,32 @@ class PMF_Pagination
                 )
             );
         }
-        
+
         return $this->renderLayout(implode('&nbsp;&nbsp;', $content));
     }
-    
+
     /**
-     * Render url for a given page
+     * Render url for a given page.
      *
-     * @param string  $url  url
-     * @param integer $page page number
+     * @param string $url  url
+     * @param int    $page page number
      *
      * @return string
      */
     protected function renderUrl($url, $page)
     {
         if ($this->useRewrite) {
-
             $url = sprintf($this->rewriteUrl, $page);
-
         } else {
-
-            $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'), '', $url);
-            $url        = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
-
+            $cleanedUrl = PMF_String::preg_replace(array('$&(amp;|)'.$this->pageParamName.'=(\d+)$'), '', $url);
+            $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
         }
 
         return $url;
     }
-    
+
     /**
-     * Render a link
+     * Render a link.
      *
      * @param string $tpl      link template
      * @param string $url      url value for template container
@@ -379,14 +376,14 @@ class PMF_Pagination
      */
     protected function renderLink($tpl, $url, $linkText)
     {
-        $search  = array(self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT);
+        $search = array(self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT);
         $replace = array($url, $linkText);
 
         return str_replace($search, $replace, $tpl);
     }
-    
+
     /**
-     * Render the whole pagination layout
+     * Render the whole pagination layout.
      *
      * @param string $content layout contents
      *

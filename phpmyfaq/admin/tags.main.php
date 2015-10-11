@@ -1,6 +1,6 @@
 <?php
 /**
- * Frontend for Backup and Restore
+ * Frontend for Backup and Restore.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -41,19 +41,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
-
     $tags = new PMF_Tags($faqConfig);
 
     if ('deletetag' == $action) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($tags->deleteTag($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
-            echo $PMF_LANG['ad_tag_delete_success'] . '</p>';
+            echo $PMF_LANG['ad_tag_delete_success'].'</p>';
         } else {
             echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_tag_delete_error'];
-            echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            echo $faqConfig->getDb()->error() . '</p>';
+            echo '<br />'.$PMF_LANG['ad_adus_dberr'].'<br />';
+            echo $faqConfig->getDb()->error().'</p>';
         }
     }
 
@@ -63,9 +62,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     echo '<tbody>';
 
     foreach ($tagData as $key => $tag) {
-
         echo '<tr>';
-        echo '<td><span data-tag-id="' . $key . '">' . $tag . '</span></td>';
+        echo '<td><span data-tag-id="'.$key.'">'.$tag.'</span></td>';
         printf(
             '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i class="fa fa-edit"></i></a></td>',
             $key,
@@ -88,9 +86,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     echo '</tbody>';
     echo '</table>';
-
 } else {
-    echo $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG['err_NotAuth'];
 }
 ?>
             </form>

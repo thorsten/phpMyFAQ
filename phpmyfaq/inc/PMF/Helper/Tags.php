@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Helper class for phpMyFAQ tags
+ * Helper class for phpMyFAQ tags.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-12-26
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Helper_Tags
+ * PMF_Helper_Tags.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-12-26
  */
@@ -40,7 +42,7 @@ class PMF_Helper_Tags extends PMF_Helper
     private $taggingIds;
 
     /**
-     * Renders the tag list
+     * Renders the tag list.
      *
      * @param array $tags
      *
@@ -52,15 +54,16 @@ class PMF_Helper_Tags extends PMF_Helper
         foreach ($tags as $tagId => $tagName) {
             $tagList .= $this->renderSearchTag($tagId, $tagName, $tags);
         }
+
         return $tagList;
     }
 
-
     /**
-     * Renders a search tag
+     * Renders a search tag.
      *
      * @param $tagId
      * @param $tagName
+     *
      * @return string
      */
     public function renderSearchTag($tagId, $tagName)
@@ -84,19 +87,19 @@ class PMF_Helper_Tags extends PMF_Helper
     }
 
     /**
-     * Renders the related tag
+     * Renders the related tag.
      *
      * @param $tagId
      * @param $tagName
      * @param $relevance
+     *
      * @return string
      */
-    function renderRelatedTag($tagId, $tagName, $relevance)
+    public function renderRelatedTag($tagId, $tagName, $relevance)
     {
-
         return sprintf(
             '<a class="btn tag" href="?action=search&amp;tagging_id=%s">%s (%d)</a> ',
-            implode(',', $this->getTaggingIds()) . ',' . $tagId,
+            implode(',', $this->getTaggingIds()).','.$tagId,
             $tagName,
             $relevance
         );
@@ -117,5 +120,4 @@ class PMF_Helper_Tags extends PMF_Helper
     {
         return $this->taggingIds;
     }
-
 }

@@ -1,7 +1,8 @@
 <?php
+
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements
- * for the stop words
+ * for the stop words.
  *
  * PHP Version 5.5
  *
@@ -10,26 +11,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-09-05
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance_Database_Stopwords
+ * PMF_Instance_Database_Stopwords.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-09-05
  */
@@ -3334,7 +3336,7 @@ class PMF_Instance_Database_Stopwords
         "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (3292, 'lt', 'vienas')",
         "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (3293, 'lt', 'vis')",
         "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (3294, 'lt', 'visi')",
-        "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (3295, 'lt', 'viskas')"
+        "INSERT INTO %sfaqstopwords (id, lang, stopword) VALUES (3295, 'lt', 'viskas')",
     ];
 
     /**
@@ -3343,7 +3345,7 @@ class PMF_Instance_Database_Stopwords
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      */
@@ -3353,24 +3355,25 @@ class PMF_Instance_Database_Stopwords
     }
 
     /**
-     * Executes all INSERT INTO statements
+     * Executes all INSERT INTO statements.
      *
      * @param string $prefix
      *
-     * @return boolean
+     * @return bool
      */
     public function executeInsertQueries($prefix = '')
     {
         foreach ($this->insertQueries as $stmt) {
-
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
 
             if (!$result) {
                 echo sprintf($stmt, $prefix);
                 echo $this->config->getDb()->error();
+
                 return false;
             }
         }
+
         return true;
     }
 }

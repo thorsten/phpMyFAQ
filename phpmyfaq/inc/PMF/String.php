@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main string wrapper class. 
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   String
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * String
+ * String.
  *
  * The class uses mbstring extension if available. It's strongly recommended
  * to use and extend this class instead of using direct string functions. Doing so
@@ -31,63 +32,60 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * single byte string functions.
  *
  * @category  phpMyFAQ
- * @package   String
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
 class PMF_String
 {
     /**
-     * Instance
+     * Instance.
      *
      * @var PMF_String
      */
     private static $instance;
-    
+
     /**
-     * Constructor
+     * Constructor.
      */
-    private final function __construct()
+    final private function __construct()
     {
     }
-    
+
     /** 
-     * Init
+     * Init.
      *
      * @param string $language Language
-     *
-     * @return void
-     */ 
+     */
     public static function init($language = 'en')
     {
         if (!self::$instance) {
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
                 self::$instance = PMF_String_Mbstring::getInstance($language);
-            } elseif(self::isLangUTF8ToLatinConvertable($language)) {
+            } elseif (self::isLangUTF8ToLatinConvertable($language)) {
                 self::$instance = PMF_String_UTF8ToLatinConvertable::getInstance($language);
             } else {
                 self::$instance = PMF_String_Basic::getInstance($language);
             }
         }
     }
-    
-    
+
     /**
-     * Get current encoding
+     * Get current encoding.
      *
      * @return string
      */
     public static function getEncoding()
     {
         return self::$instance->getEncoding();
-    }    
-    
-    
+    }
+
     /**
-     * Get string character count
+     * Get string character count.
      *
      * @param string $str String
      *
@@ -97,40 +95,37 @@ class PMF_String
     {
         return self::$instance->strlen($str);
     }
-    
 
     /**
-     * Get a part of string
+     * Get a part of string.
      *
-     * @param string  $string String
-     * @param integer $start  Start
-     * @param integer $length Length
+     * @param string $string String
+     * @param int    $start  Start
+     * @param int    $length Length
      *
      * @return string
      */
     public static function substr($string, $start, $length = 0)
     {
         return self::$instance->substr($string, $start, $length);
-    }    
-    
-    
+    }
+
     /**
-     * Get position of the first occurence of a string
+     * Get position of the first occurence of a string.
      *
-     * @param string  $haystack Haystack
-     * @param string  $needle   Needle
-     * @param integer $offset   Offset
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param int    $offset   Offset
      *
      * @return int
      */
     public static function strpos($haystack, $needle, $offset = 0)
     {
         return self::$instance->strpos($haystack, $needle, $offset);
-    }    
-    
-    
+    }
+
     /**
-     * Make a string lower case
+     * Make a string lower case.
      *
      * @param string $str String
      *
@@ -139,11 +134,10 @@ class PMF_String
     public static function strtolower($str)
     {
         return self::$instance->strtolower($str);
-    }    
-    
-    
+    }
+
     /**
-     * Make a string upper case
+     * Make a string upper case.
      *
      * @param string $str String
      *
@@ -154,13 +148,12 @@ class PMF_String
         return self::$instance->strtoupper($str);
     }
 
-    
     /**
-     * Get occurence of a string within another
+     * Get occurence of a string within another.
      *
-     * @param string  $haystack Haystack
-     * @param string  $needle   Needle
-     * @param boolean $part     Part
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param bool   $part     Part
      *
      * @return string|false
      */
@@ -169,41 +162,36 @@ class PMF_String
         return self::$instance->strstr($haystack, $needle, $part);
     }
 
-    
     /**
-     * Set current encoding
+     * Set current encoding.
      *
      * @param string $encoding
-     *
-     * @return void
      */
     public static function setEncoding($encoding)
     {
         self::$instance->setEncoding($encoding);
     }
-    
-    
+
     /**
-     * Check if a language could be converted to iso-8859-1
+     * Check if a language could be converted to iso-8859-1.
      *
      * @param string $language
      *
-     * @return boolean
+     * @return bool
      */
     public static function isLangUTF8ToLatinConvertable($language)
     {
         $iso_languages = array('af', 'sq', 'br', 'ca', 'da', 'en', 'fo', 'gl', 'de', 'is', 'it',
                                'ku', 'la', 'lb', 'nb', 'oc', 'pt', 'es', 'sw', 'sv', 'wa', 'eu',
                                // NOTE this languages are not fully supported by latin1 
-                               'nl', 'fr', 'et', 'fi', 'cy'
+                               'nl', 'fr', 'et', 'fi', 'cy',
         );
-        
+
         return in_array($language, $iso_languages);
     }
-    
-    
+
     /**
-     * Get last occurence of a string within another
+     * Get last occurence of a string within another.
      *
      * @param string $haystack
      * @param string $needle
@@ -214,10 +202,9 @@ class PMF_String
     {
         return self::$instance->strrchr($haystack, $needle);
     }
-    
-    
+
     /**
-     * Count substring occurences
+     * Count substring occurences.
      *
      * @param string $haystack
      * @param string $needle
@@ -228,14 +215,13 @@ class PMF_String
     {
         return self::$instance->substr_count($haystack, $needle);
     }
-    
-    
+
     /**
-     * Find position of last occurrence of a char in a string
+     * Find position of last occurrence of a char in a string.
      *
      * @param string $haystack
      * @param string $needle
-     * @param int $offset
+     * @param int    $offset
      *
      * @return int
      */
@@ -243,16 +229,15 @@ class PMF_String
     {
         return self::$instance->strrpos($haystack, $needle, $offset);
     }
-    
-    
+
     /**
-     * Match a regexp
+     * Match a regexp.
      *
      * @param string $pattern
      * @param string $subject
-     * @param array &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param array  &$matches
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -260,16 +245,15 @@ class PMF_String
     {
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
-    
-    
+
     /**
-     * Match a regexp globally
+     * Match a regexp globally.
      *
      * @param string $pattern
      * @param string $subject
-     * @param array &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param array  &$matches
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -277,15 +261,14 @@ class PMF_String
     {
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
-    
-    
+
     /**
-     * Split string by a regexp
+     * Split string by a regexp.
      *
      * @param string $pattern
      * @param string $subject
-     * @param int $limit
-     * @param int $flags
+     * @param int    $limit
+     * @param int    $flags
      *
      * @return array
      */
@@ -293,60 +276,58 @@ class PMF_String
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
-    
-    
+
     /**
-     * Search and replace by a regexp using a callback
+     * Search and replace by a regexp using a callback.
      *
      * @param string|array $pattern
-     * @param function $callback
+     * @param function     $callback
      * @param string|array $subject
-     * @param int $limit
-     * @param int &$count
+     * @param int          $limit
+     * @param int          &$count
      *
      * @return array|string
      */
-    public static function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
+    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
     {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
-    
-    
+
     /**
-     * Search and replace by a regexp
+     * Search and replace by a regexp.
      *
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int $limit
-     * @param int &$count
+     * @param int          $limit
+     * @param int          &$count
      *
      * @return array|string|null
      */
-    public static function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
+    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }
-    
+
     /**
-     * Check if the string is a unicode string
+     * Check if the string is a unicode string.
      *
      * @param string $str String
      *
-     * @return boolean
+     * @return bool
      */
     public static function isUTF8($str)
     {
         return PMF_String_Basic::isUTF8($str);
     }
-    
+
     /**
-     * Convert special chars to html entities
+     * Convert special chars to html entities.
      *
-     * @param string  $string       The input string.
-     * @param integer $quoteStyle   Quote style
-     * @param string  $charset      Character set, UTF-8 by default
-     * @param boolean $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string       The input string.
+     * @param int    $quoteStyle   Quote style
+     * @param string $charset      Character set, UTF-8 by default
+     * @param bool   $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */
@@ -359,14 +340,14 @@ class PMF_String
             $doubleEncode
         );
     }
-    
+
     /**
-     * Convert all applicable characters to HTML entities
+     * Convert all applicable characters to HTML entities.
      *
-     * @param string  $string       The input string.
-     * @param integer $quoteStyle   Quote style
-     * @param string  $charset      Character set, UTF-8 by default
-     * @param boolean $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string       The input string.
+     * @param int    $quoteStyle   Quote style
+     * @param string $charset      Character set, UTF-8 by default
+     * @param bool   $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */

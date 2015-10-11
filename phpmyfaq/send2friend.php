@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The send2friend page
+ * The send2friend page.
  *
  * PHP Version 5.5
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -40,8 +41,8 @@ try {
     // @todo handle the exception
 }
 
-$cat     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$cat = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
 
 $send2friendLink = sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
@@ -52,25 +53,25 @@ $send2friendLink = sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
-$tpl->parse (
+$tpl->parse(
     'writeContent',
     array(
-        'lang'               => $artlang,
-        'msgSend2Friend'     => $PMF_LANG['msgSend2Friend'],
-        'msgS2FReferrer'     => 'link',
-        'msgS2FName'         => $PMF_LANG['msgS2FName'],
-        'msgS2FEMail'        => $PMF_LANG['msgS2FEMail'],
+        'lang' => $artlang,
+        'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
+        'msgS2FReferrer' => 'link',
+        'msgS2FName' => $PMF_LANG['msgS2FName'],
+        'msgS2FEMail' => $PMF_LANG['msgS2FEMail'],
         'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgS2FFriends'      => $PMF_LANG['msgS2FFriends'],
-        'msgS2FEMails'       => $PMF_LANG['msgS2FEMails'],
-        'msgS2FText'         => $PMF_LANG['msgS2FText'],
-        'send2friend_text'   => $faqConfig->get('main.send2friendText'),
-        'msgS2FText2'        => $PMF_LANG['msgS2FText2'],
-        'send2friendLink'    => $send2friendLink,
-        'msgS2FMessage'      => $PMF_LANG['msgS2FMessage'],
-        'captchaFieldset'    => $captchaHelper->renderCaptcha($captcha, 'send2friend', $PMF_LANG['msgCaptcha'], $auth),
-        'msgS2FButton'       => $PMF_LANG['msgS2FButton']
+        'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
+        'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
+        'msgS2FText' => $PMF_LANG['msgS2FText'],
+        'send2friend_text' => $faqConfig->get('main.send2friendText'),
+        'msgS2FText2' => $PMF_LANG['msgS2FText2'],
+        'send2friendLink' => $send2friendLink,
+        'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'send2friend', $PMF_LANG['msgCaptcha'], $auth),
+        'msgS2FButton' => $PMF_LANG['msgS2FButton'],
     )
 );
 

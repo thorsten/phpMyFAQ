@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Category entity class
+ * Category entity class.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF\Entity
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-14
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Class PMF_Entity_Category
+ * Class PMF_Entity_Category.
  *
  * @category  phpMyFAQ
- * @package   PMF\Entity
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-14
  */
 class PMF_Entity_Category
 {
     /**
-     * @var integer
+     * @var int
      */
     private $id;
 
@@ -45,7 +47,7 @@ class PMF_Entity_Category
     private $lang;
 
     /**
-     * @var integer
+     * @var int
      */
     private $parentId;
 
@@ -60,22 +62,22 @@ class PMF_Entity_Category
     private $description;
 
     /**
-     * @var integer
+     * @var int
      */
     private $userId;
 
     /**
-     * @var integer
+     * @var int
      */
     private $groupId = -1;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $active;
 
     /**
-     * @param boolean $active
+     * @param bool $active
      *
      * @return PMF_Entity_Category
      */
@@ -87,7 +89,7 @@ class PMF_Entity_Category
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     public function getActive()
     {

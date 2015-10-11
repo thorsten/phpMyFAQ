@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This is the page there a user can login.
  *
@@ -9,27 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-02-12
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if (is_null($error)) {
-    $loginMessage = '<p>' . $PMF_LANG['ad_auth_insert'] . '</p>';
+    $loginMessage = '<p>'.$PMF_LANG['ad_auth_insert'].'</p>';
 } else {
-    $loginMessage = '<p class="alert alert-danger">' . $error . '</p>';
+    $loginMessage = '<p class="alert alert-danger">'.$error.'</p>';
 }
 
 try {
@@ -41,16 +42,16 @@ try {
 $tpl->parse(
     'writeContent',
     array(
-        'registerUser'   => '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>',
-        'sendPassword'   => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
-        'loginHeader'    => $PMF_LANG['msgLoginUser'],
-        'loginMessage'   => $loginMessage,
+        'registerUser' => '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>',
+        'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',
+        'loginHeader' => $PMF_LANG['msgLoginUser'],
+        'loginMessage' => $loginMessage,
         'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),
         'faqloginaction' => $action,
-        'login'          => $PMF_LANG['ad_auth_ok'],
-        'username'       => $PMF_LANG['ad_auth_user'],
-        'password'       => $PMF_LANG['ad_auth_passwd'],
-        'rememberMe'     => $PMF_LANG['rememberMe']
+        'login' => $PMF_LANG['ad_auth_ok'],
+        'username' => $PMF_LANG['ad_auth_user'],
+        'password' => $PMF_LANG['ad_auth_passwd'],
+        'rememberMe' => $PMF_LANG['rememberMe'],
     )
 );
 

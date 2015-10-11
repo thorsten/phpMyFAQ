@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Manages user authentication.
  *
@@ -21,35 +22,36 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Auth
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Auth
+ * Auth.
  *
  * @category  phpMyFAQ
- * @package   Auth
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
 class PMF_Auth
 {
     /**
-     * Error constants
+     * Error constants.
      *
      * @var const
      */
@@ -70,21 +72,21 @@ class PMF_Auth
     public $errors = [];
 
     /**
-     * Short description of attribute read_only
+     * Short description of attribute read_only.
      *
-     * @var boolean
+     * @var bool
      */
     private $readOnly = false;
 
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $_config = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -94,7 +96,7 @@ class PMF_Auth
     {
         $this->_config = $config;
     }
-    
+
     /**
      * instantiates a new encryption object, stores it in a private container
      * returns it.
@@ -110,7 +112,7 @@ class PMF_Auth
     public function selectEncType($enctype)
     {
         $this->encContainer = PMF_Enc::selectEnc($enctype, $this->_config);
-        
+
         return $this->encContainer;
     }
 
@@ -125,16 +127,16 @@ class PMF_Auth
     public function error()
     {
         $message = '';
-        
+
         if (!is_array($this->errors)) {
             $this->errors = array((string) $this->errors);
         }
         foreach ($this->errors as $error) {
             $message .= $error."\n";
         }
-        
+
         $message .= $this->encContainer->error();
-        
+
         return $message;
     }
 
@@ -156,15 +158,17 @@ class PMF_Auth
     {
         // verify selected database
         $method = ucfirst(strtolower($method));
-        
+
         if (!isset($method)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
+
             return $this;
         }
 
-        $authClass = 'PMF_Auth_' . $method;
+        $authClass = 'PMF_Auth_'.$method;
         if (!class_exists($authClass)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
+
             return $this;
         }
 
@@ -172,26 +176,26 @@ class PMF_Auth
     }
 
     /**
-     * Short description of method read_only
+     * Short description of method read_only.
      *
-     * @param boolean $readOnly boolean flag
+     * @param bool $readOnly boolean flag
      *
-     * @return boolean
+     * @return bool
      */
     public function setReadOnly($readOnly = null)
     {
         if ($readOnly === null) {
             return $this->readOnly;
         }
-        
-        $oldreadOnly    = $this->readOnly;
-        $this->readOnly = (bool)$readOnly;
-        
+
+        $oldreadOnly = $this->readOnly;
+        $this->readOnly = (bool) $readOnly;
+
         return $oldreadOnly;
     }
 
     /**
-     * Short description of method encrypt
+     * Short description of method encrypt.
      *
      * @param string $str string
      *
@@ -210,7 +214,7 @@ class PMF_Auth
      * @param string $encryptedPassword Encrypted password
      * @param string $clearPassword     Clear Password
      *
-     * @return boolean
+     * @return bool
      */
     public function checkEncryptedPassword($encryptedPassword, $clearPassword)
     {

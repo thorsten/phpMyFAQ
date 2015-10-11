@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Helper class for Administration backend
+ * Helper class for Administration backend.
  *
  * PHP Version 5.5
  *
@@ -9,31 +10,33 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-19
  */
 
 /**
- * PMF_Helper_Administration
+ * PMF_Helper_Administration.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-19
  */
 class PMF_Helper_Administration
 {
     /**
-     * Array with permissions
+     * Array with permissions.
      *
      * @var array
      */
@@ -41,13 +44,13 @@ class PMF_Helper_Administration
 
     /**
      * Adds a menu entry according to user permissions.
-     * ',' stands for 'or', '*' stands for 'and'
+     * ',' stands for 'or', '*' stands for 'and'.
      *
-     * @param string  $restrictions Restrictions
-     * @param string  $action       Action parameter
-     * @param string  $caption      Caption
-     * @param string  $active       Active
-     * @param boolean $checkPerm    Check permission (default: true)
+     * @param string $restrictions Restrictions
+     * @param string $action       Action parameter
+     * @param string $caption      Caption
+     * @param string $active       Active
+     * @param bool   $checkPerm    Check permission (default: true)
      *
      * @return string
      */
@@ -60,17 +63,17 @@ class PMF_Helper_Administration
         } else {
             $active = '';
         }
-        
+
         if ($action != '') {
-            $action = "action=" . $action;
+            $action = 'action='.$action;
         }
-        
+
         if (isset($PMF_LANG[$caption])) {
             $renderedCaption = $PMF_LANG[$caption];
         } else {
-            $renderedCaption = 'No string for ' . $caption;
+            $renderedCaption = 'No string for '.$caption;
         }
-        
+
         $output = sprintf(
             '<li%s><a href="?%s">%s</a></li>%s',
             $active,
@@ -78,33 +81,34 @@ class PMF_Helper_Administration
             $renderedCaption,
             "\n"
         );
-        
+
         if ($checkPerm) {
             return $this->evaluatePermission($restrictions) ? $output : '';
         } else {
             return $output;
         }
     }
-    
+
     /**
-     * Parse and check a permission string
+     * Parse and check a permission string.
      *
      * Permissions are glued with each other as follows
      * - '+' stands for 'or'
      * - '*' stands for 'and'
      *
      * No braces will be parsed, only simple expressions
+     *
      * @example right1*right2+right3+right4*right5
      *
      * @param string $restrictions
      *
-     * @return boolean
+     * @return bool
      */
     private function evaluatePermission($restrictions)
     {
-        if (false !== strpos ($restrictions, '+')) {
+        if (false !== strpos($restrictions, '+')) {
             $retval = false;
-            foreach (explode('+',$restrictions) as $_restriction) {
+            foreach (explode('+', $restrictions) as $_restriction) {
                 $retval = $retval || $this->evaluatePermission($_restriction);
                 if ($retval) {
                     break;
@@ -119,20 +123,18 @@ class PMF_Helper_Administration
                 }
             }
         } else {
-            $retval = strlen($restrictions) > 0 && 
-                isset($this->permission[$restrictions]) && 
+            $retval = strlen($restrictions) > 0 &&
+                isset($this->permission[$restrictions]) &&
                 $this->permission [$restrictions];
         }
-        
+
         return $retval;
     }
-    
+
     /**
-     * Setter for permission array
+     * Setter for permission array.
      *
      * @param PMF_User $user
-     *
-     * @return void
      */
     public function setUser(PMF_User $user)
     {
@@ -145,8 +147,9 @@ class PMF_Helper_Administration
         $allUserRights = $user->perm->getAllUserRights($user->getUserId());
         if (false !== $allUserRights) {
             foreach ($allRights as $right) {
-                if (in_array($right['right_id'], $allUserRights))
+                if (in_array($right['right_id'], $allUserRights)) {
                     $this->permission[$right['name']] = true;
+                }
             }
         }
     }
@@ -158,12 +161,12 @@ class PMF_Helper_Administration
      */
     public function renderMetaRobotsDropdown($metaRobots)
     {
-        $html   = '';
+        $html = '';
         $values = [
             'index, follow',
             'index, nofollow',
             'noindex, follow',
-            'noindex, nofollow'
+            'noindex, nofollow',
         ];
 
         foreach ($values as $value) {

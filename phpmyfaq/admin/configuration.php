@@ -1,6 +1,6 @@
 <?php
 /**
- * The main configuration frontend
+ * The main configuration frontend.
  *
  * PHP Version 5.5
  *
@@ -9,45 +9,44 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction   = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-    $csrfToken    = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
     $currentToken = $user->getCsrfTokenFromSession();
 
     // Save the configuration
     if ('saveConfig' === $userAction && $currentToken === $csrfToken) {
-
         $checks = array(
             'filter' => FILTER_UNSAFE_RAW,
-            'flags'  => FILTER_REQUIRE_ARRAY
+            'flags' => FILTER_REQUIRE_ARRAY,
         );
-        $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
-        $userAction      = 'listConfig';
+        $editData = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+        $userAction = 'listConfig';
         $oldConfigValues = $faqConfig->config;
 
         // Set the new values
         $forbiddenValues = ['{', '}', '$'];
         $newConfigValues = [];
-        $escapeValues    = ['main.contactInformations', 'main.customPdfHeader', 'main.customPdfFooter'];
+        $escapeValues = ['main.contactInformations', 'main.customPdfHeader', 'main.customPdfFooter'];
 
         // Special checks
         if (isset($editData['edit']['main.enableMarkdownEditor'])) {
@@ -61,12 +60,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             if (isset($escapeValues[$key])) {
                 $newConfigValues[$key] = PMF_String::htmlspecialchars($value, ENT_HTML5);
             }
-            $keyArray              = array_values(explode('.', $key));
-            $newConfigClass        = array_shift($keyArray);
+            $keyArray = array_values(explode('.', $key));
+            $newConfigClass = array_shift($keyArray);
         }
 
         foreach ($oldConfigValues as $key => $value) {
-            $keyArray       = array_values(explode('.', $key));
+            $keyArray = array_values(explode('.', $key));
             $oldConfigClass = array_shift($keyArray);
             if (isset($newConfigValues[$key])) {
                 continue;
@@ -79,11 +78,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             }
         }
 
-        if (! is_null($editData)) {
+        if (!is_null($editData)) {
             $faqConfig->update($newConfigValues);
         }
     }
-?>
+    ?>
         <form class="form-horizontal" id="config_list" name="config_list" method="post"
               action="?action=config&amp;config_action=saveConfig">
             <input type="hidden" name="csrf" value="<?php echo $currentToken ?>">
@@ -94,10 +93,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
                         <div class="pull-right">
                             <button class="btn btn-success" type="submit">
-                                <?php echo $PMF_LANG['ad_config_save']; ?>
+                                <?php echo $PMF_LANG['ad_config_save'];
+    ?>
                             </button>
                             <button class="btn btn-warning" type="reset">
-                                <?php echo $PMF_LANG['ad_config_reset']; ?>
+                                <?php echo $PMF_LANG['ad_config_reset'];
+    ?>
                             </button>
                         </div>
                     </h2>
@@ -111,49 +112,57 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         <li role="presentation" class="active">
                             <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-home"></i>
-                                <?php echo $PMF_LANG['mainControlCenter']; ?>
+                                <?php echo $PMF_LANG['mainControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-th-list"></i>
-                                <?php echo $PMF_LANG['recordsControlCenter']; ?>
+                                <?php echo $PMF_LANG['recordsControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-search"></i>
-                                <?php echo $PMF_LANG['searchControlCenter']; ?>
+                                <?php echo $PMF_LANG['searchControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-warning"></i>
-                                <?php echo $PMF_LANG['securityControlCenter']; ?>
+                                <?php echo $PMF_LANG['securityControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-thumbs-down"></i>
-                                <?php echo $PMF_LANG['spamControlCenter']; ?>
+                                <?php echo $PMF_LANG['spamControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-search"></i>
-                                <?php echo $PMF_LANG['seoCenter']; ?>
+                                <?php echo $PMF_LANG['seoCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-retweet"></i>
-                                <?php echo $PMF_LANG['socialNetworksControlCenter']; ?>
+                                <?php echo $PMF_LANG['socialNetworksControlCenter'];
+    ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="toggleConfig">
                                 <i class="fa fa-inbox"></i>
-                                <?php echo $PMF_LANG['mailControlCenter']; ?>
+                                <?php echo $PMF_LANG['mailControlCenter'];
+    ?>
                             </a>
                         </li>
                     </ul>
@@ -175,6 +184,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
         <script src="assets/js/configuration.js"></script>
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

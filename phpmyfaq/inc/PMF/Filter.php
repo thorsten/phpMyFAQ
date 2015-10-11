@@ -1,6 +1,7 @@
 <?php
+
 /**
- * ext/filter wrapper class
+ * ext/filter wrapper class.
  *
  * PHP Version 5.5
  *
@@ -9,95 +10,98 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Filter
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-28
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Filter
+ * PMF_Filter.
  *
  * @category  phpMyFAQ
- * @package   PMF_Filter
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-01-28
  */
 class PMF_Filter
 {
     /**
-     * Static wrapper method for filter_input()
+     * Static wrapper method for filter_input().
      *
-     * @param  integer $type         Filter type
-     * @param  string  $variableName Variable name
-     * @param  integer $filter       Filter
-     * @param  mixed   $default      Default value
+     * @param int    $type         Filter type
+     * @param string $variableName Variable name
+     * @param int    $filter       Filter
+     * @param mixed  $default      Default value
      *
      * @return mixed
      */
-    public static function filterInput ($type, $variableName, $filter, $default = null)
+    public static function filterInput($type, $variableName, $filter, $default = null)
     {
         $return = filter_input($type, $variableName, $filter);
+
         return (is_null($return) || $return === false) ? $default : $return;
     }
-    
+
     /**
-     * Static wrapper method for filter_input_[]
+     * Static wrapper method for filter_input_[].
      *
-     * @param  integer $type       Filter type
-     * @param  array   $definition Definition
+     * @param int   $type       Filter type
+     * @param array $definition Definition
      *
      * @return mixed
      */
-    public static function filterInputArray ($type, Array $definition)
+    public static function filterInputArray($type, Array $definition)
     {
         return filter_input_array($type, $definition);
     }
-    
+
     /**
-     * Static wrapper method for filter_var()
+     * Static wrapper method for filter_var().
      *
-     * @param  mixed   $variable Variable
-     * @param  integer $filter   Filter
-     * @param  mixed   $default  Default value
+     * @param mixed $variable Variable
+     * @param int   $filter   Filter
+     * @param mixed $default  Default value
      *
      * @return mixed
      */
-    public static function filterVar ($variable, $filter, $default = null)
+    public static function filterVar($variable, $filter, $default = null)
     {
         $return = filter_var($variable, $filter);
+
         return ($return === false) ? $default : $return;
     }
-    
+
     /**
-     * Filters a query string
+     * Filters a query string.
      *
      * @return string
      */
     public static function getFilteredQueryString()
     {
-        $urlData      = [];
+        $urlData = [];
         $cleanUrlData = [];
 
-        if (! isset($_SERVER['QUERY_STRING'])) {
+        if (!isset($_SERVER['QUERY_STRING'])) {
             return '';
         }
 
         parse_str($_SERVER['QUERY_STRING'], $urlData);
-        
+
         foreach ($urlData as $key => $urlPart) {
             $cleanUrlData[strip_tags($key)] = strip_tags($urlPart);
         }
-        
+
         return http_build_query($cleanUrlData);
     }
 }

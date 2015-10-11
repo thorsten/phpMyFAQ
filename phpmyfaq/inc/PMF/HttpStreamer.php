@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Simple HTTP Streamer
+ * Simple HTTP Streamer.
  *
  * PHP Version 5.5
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_HttpStreamer
+ *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_HttpStreamer Class
+ * PMF_HttpStreamer Class.
  *
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
@@ -34,100 +35,99 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * - Generic file: application/octet-stream
  *
  * @category  phpMyFAQ
- * @package   PMF_HttpStreamer
+ *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
 class PMF_HttpStreamer
 {
     /**
-     * HTTP content disposition attachment constant
+     * HTTP content disposition attachment constant.
      *
      * @var string
      */
     const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
-    
+
     /**
-     * HTTP content disposition inline constant
+     * HTTP content disposition inline constant.
      *
      * @var string
      */
     const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
-    
+
     /**
-     * Disposition attachment constant
+     * Disposition attachment constant.
      *
      * @var string
      */
     const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
-    
+
     /**
-     * Disposition inline constant
+     * Disposition inline constant.
      *
      * @var string
      */
     const EXPORT_DISPOSITION_INLINE = 'inline';
-    
+
     /**
-     * Enable buffer
+     * Enable buffer.
      *
-     * @var boolean
+     * @var bool
      */
     const EXPORT_BUFFER_ENABLE = true;
-    
+
     /**
-     * PMF export data type
+     * PMF export data type.
      *
      * @var string
      */
     private $type;
 
     /**
-     * HTTP Content Disposition
+     * HTTP Content Disposition.
      *
      * @var string
      */
     private $disposition;
 
     /**
-     * HTTP streaming data
+     * HTTP streaming data.
      *
      * @var string
      */
     private $content;
 
     /**
-     * HTTP streaming data length
+     * HTTP streaming data length.
      *
-     * @var integer
+     * @var int
      */
     private $size;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param string $type    Type
      * @param string $content Content
      *
      * @return PMF_HttpStreamer
      */
-    function __construct($type, $content)
+    public function __construct($type, $content)
     {
-        $this->type        = $type;
+        $this->type = $type;
         $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
-        $this->content     = $content;
-        $this->size        = strlen($this->content);
+        $this->content = $content;
+        $this->size = strlen($this->content);
     }
 
     /**
-     * Sends data
+     * Sends data.
      *
-     * @param  string $disposition Disposition
-     *
-     * @return void
+     * @param string $disposition Disposition
      */
     public function send($disposition)
     {
@@ -137,11 +137,11 @@ class PMF_HttpStreamer
 
         // Sanity checks
         if (headers_sent()) {
-            die("<b>PMF_HttpStreamer Class</b> error: unable to send my headers: someone already sent other headers!");
+            die('<b>PMF_HttpStreamer Class</b> error: unable to send my headers: someone already sent other headers!');
         }
         if (self::EXPORT_BUFFER_ENABLE) {
             if (ob_get_contents()) {
-                die("<b>PMF_HttpStreamer Class</b> error: unable to send my data: someone already sent other data!");
+                die('<b>PMF_HttpStreamer Class</b> error: unable to send my data: someone already sent other data!');
             }
         }
 
@@ -160,9 +160,7 @@ class PMF_HttpStreamer
     }
 
     /**
-     * Sends HTTP Headers
-     *
-     * @return void
+     * Sends HTTP Headers.
      */
     private function _setHttpHeaders()
     {
@@ -171,69 +169,67 @@ class PMF_HttpStreamer
         // Evaluate data upon export type request
         switch ($this->type) {
             case 'pdf':
-                $filename    = "phpmyfaq.pdf";
-                $description = "phpMyFaq PDF export file";
-                $mimeType    = "application/pdf";
+                $filename = 'phpmyfaq.pdf';
+                $description = 'phpMyFaq PDF export file';
+                $mimeType = 'application/pdf';
                 break;
             case 'xhtml':
-                $filename    = "phpmyfaq.xhtml";
-                $description = "phpMyFaq XHTML export file";
-                $mimeType    = "text/html";
+                $filename = 'phpmyfaq.xhtml';
+                $description = 'phpMyFaq XHTML export file';
+                $mimeType = 'text/html';
                 // Why not: text/html or text/xml?
                 // See e.g.: http://www.hixie.ch/advocacy/xhtml
                 // Unfortunaltelly IE doesn't handle it correctly :(
                 // so currenctly we must use text/html as default.
                 // See e.g.: http://keystonewebsites.com/articles/mime_type.php
-                if (isset($_SERVER["HTTP_ACCEPT"]) && !(strpos($_SERVER["HTTP_ACCEPT"], "application/xhtml+xml") === false)) {
-                    $mimeType = "application/xhtml+xml";
+                if (isset($_SERVER['HTTP_ACCEPT']) && !(strpos($_SERVER['HTTP_ACCEPT'], 'application/xhtml+xml') === false)) {
+                    $mimeType = 'application/xhtml+xml';
                 }
                 break;
             case 'xml':
-                $filename    = "phpmyfaq.xml";
-                $description = "phpMyFaq XML export file";
-                $mimeType    = "text/xml";
+                $filename = 'phpmyfaq.xml';
+                $description = 'phpMyFaq XML export file';
+                $mimeType = 'text/xml';
                 break;
             case 'csv':
-                $filename    = "phpmyfaq.csv";
-                $description = "phpMyFaq CSV export file";
-                $mimeType    = "text/csv";
+                $filename = 'phpmyfaq.csv';
+                $description = 'phpMyFaq CSV export file';
+                $mimeType = 'text/csv';
                 break;
             // In this case no default statement is required:
             // the one above is just for clean coding style
             default:
-                $filename    = "phpmyfaq.pmf";
-                $description = "Generic file";
-                $mimeType    = "application/octet-stream";
+                $filename = 'phpmyfaq.pmf';
+                $description = 'Generic file';
+                $mimeType = 'application/octet-stream';
                 break;
         }
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
-        header("Expires: 0");
-        header("Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
-        header("Pragma: no-cache");
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Expires: 0');
+        header('Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+        header('Pragma: no-cache');
 
         // 2. Set the correct values for file streaming
-        header("Content-Type: ".$mimeType);
-        if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) && 
-             isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
-            header("Content-Type: application/force-download");
+        header('Content-Type: '.$mimeType);
+        if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) &&
+             isset($_SERVER['HTTP_USER_AGENT']) && !(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false)) {
+            header('Content-Type: application/force-download');
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header("Content-Disposition: " . $this->disposition."; filename=\"" . PMF_Export::getExportTimestamp() . "_" . $filename."\"");
+        header('Content-Disposition: '.$this->disposition.'; filename="'.PMF_Export::getExportTimestamp().'_'.$filename.'"');
         if (!empty($description)) {
-            header("Content-Description: " . $description);
+            header('Content-Description: '.$description);
         }
-        header("Content-Transfer-Encoding: binary");
-        header("Accept-Ranges: none");
-        header("Content-Length: " . $this->size);
+        header('Content-Transfer-Encoding: binary');
+        header('Accept-Ranges: none');
+        header('Content-Length: '.$this->size);
     }
 
     /**
-     * Streams the content
-     *
-     * @return void
+     * Streams the content.
      */
     private function _streamContent()
     {

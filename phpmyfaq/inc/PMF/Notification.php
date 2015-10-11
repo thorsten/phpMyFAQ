@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The notification class for phpMyFAQ
+ * The notification class for phpMyFAQ.
  *
  * PHP Version 5.5
  *
@@ -9,30 +10,30 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Notification
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Notification
+ * PMF_Notification.
  *
  * @category  phpMyFAQ
- * @package   Notification
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-30
  */
-
 class PMF_Notification
 {
     /**
@@ -41,21 +42,21 @@ class PMF_Notification
     private $config;
 
     /**
-     * Mail object
+     * Mail object.
      *
      * @var PMF_Mail
      */
     private $mail;
 
     /**
-     * Language strings
+     * Language strings.
      *
      * @var string
      */
     private $pmfStr;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      *
@@ -67,7 +68,7 @@ class PMF_Notification
 
         $this->config = $config;
         $this->pmfStr = $PMF_LANG;
-        $this->mail   = new PMF_Mail($this->config);
+        $this->mail = new PMF_Mail($this->config);
         $this->mail->setReplyTo(
             $this->config->get('main.administrationMail'),
             $this->config->get('main.titleFAQ')
@@ -75,22 +76,20 @@ class PMF_Notification
     }
 
     /**
-     * Sends a notification to user who added a question
+     * Sends a notification to user who added a question.
      *
      * @param string $email    Email address of the user
      * @param string $userName Name of the user
      * @param string $url      URL of answered FAQ
-     *
-     * @return void
      */
     public function sendOpenQuestionAnswered($email, $userName, $url)
     {
         $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->get('main.titleFAQ') . ' - ' . $this->pmfStr['msgQuestionAnswered'];
+        $this->mail->subject = $this->config->get('main.titleFAQ').' - '.$this->pmfStr['msgQuestionAnswered'];
         $this->mail->message = sprintf(
             $this->pmfStr['msgMessageQuestionAnswered'],
             $this->config->get('main.titleFAQ')
-        ) . "\n\r" . $url;
+        )."\n\r".$url;
         $this->mail->send();
     }
 }

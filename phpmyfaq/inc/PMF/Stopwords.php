@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main Stopwords class
+ * The main Stopwords class.
  *
  * PHP Version 5.5
  *
@@ -9,28 +10,29 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Stopwords
+ *
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Stopwords
+ * PMF_Stopwords.
  *
  * @category  phpMyFAQ
- * @package   PMF_Stopwords
+ *
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
@@ -47,14 +49,14 @@ class PMF_Stopwords
     private $_language;
 
     /**
-     * Table name
+     * Table name.
      *
      * @var string
      */
     private $table_name;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -62,10 +64,10 @@ class PMF_Stopwords
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config    = $config;
-        $this->table_name = PMF_Db::getTablePrefix() . "faqstopwords";
+        $this->_config = $config;
+        $this->table_name = PMF_Db::getTablePrefix().'faqstopwords';
     }
-    
+
     /**
      * @return PMF_Language
      */
@@ -73,7 +75,7 @@ class PMF_Stopwords
     {
         return $this->_language;
     }
-    
+
     /**
      * @return string
      */
@@ -81,7 +83,7 @@ class PMF_Stopwords
     {
         return $this->table_name;
     }
-    
+
     /**
      * @param PMF_Language $language
      */
@@ -89,7 +91,7 @@ class PMF_Stopwords
     {
         $this->_language = $language;
     }
-    
+
     /**
      * @param string $table_name
      */
@@ -102,9 +104,9 @@ class PMF_Stopwords
      * Add a word to the stop words dictionary.
      * If the given word already exists, false is returned. 
      *
-     * @param string $word
-     *  
-     * @return boolean 
+     * @param  string $word
+     *                       
+     * @return bool
      */
     public function add($word)
     {
@@ -116,20 +118,18 @@ class PMF_Stopwords
                 $word
             );
             $this->_config->getDb()->query($sql);
-            
+
             return true;
         }
-        
+
         return false;
     }
-    
+
     /**
-     * Update a word in the stop words dictionary
+     * Update a word in the stop words dictionary.
      *
      * @param int    $id
      * @param string $word
-     *
-     * @return void
      */
     public function update($id, $word)
     {
@@ -140,17 +140,14 @@ class PMF_Stopwords
             $id,
             $this->_language
         );
-        
+
         $this->_config->getDb()->query($sql);
     }
-    
-    
+
     /**
-     * Remove a word from the stop word dictionary
+     * Remove a word from the stop word dictionary.
      *
-     * @param integer $id
-     *
-     * @return void
+     * @param int $id
      */
     public function remove($id)
     {
@@ -159,17 +156,16 @@ class PMF_Stopwords
             $id,
             $this->_language
         );
-        
+
         $this->_config->getDb()->query($sql);
     }
-    
-    
+
     /**
-     * Match a word against the stop words dictionary
+     * Match a word against the stop words dictionary.
      *
      * @param string $word
      *
-     * @return boolean
+     * @return bool
      */
     public function match($word)
     {
@@ -180,45 +176,43 @@ class PMF_Stopwords
         );
 
         $result = $this->_config->getDb()->query($sql);
-        
+
         return $this->_config->getDb()->numRows($result) > 0;
     }
-    
-    
+
     /**
-     * Retrieve all the stop words by a certain language
+     * Retrieve all the stop words by a certain language.
      *
-     * @param string  $lang      Language to retrieve stop words by
-     * @param boolean $wordsOnly
+     * @param string $lang      Language to retrieve stop words by
+     * @param bool   $wordsOnly
      *
      * @return array
      */
     public function getByLang($lang = null, $wordsOnly = false)
     {
         $lang = is_null($lang) ? $this->_config->getLanguage()->getLanguage() : $lang;
-        $sql  = sprintf(
+        $sql = sprintf(
             "SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'",
             $lang
         );
-        
+
         $result = $this->_config->getDb()->query($sql);
-        
+
         $retval = [];
-        
+
         if ($wordsOnly) {
-            while(($row = $this->_config->getDb()->fetchObject($result)) == true) {
-                $retval[] = $row->stopword; 
+            while (($row = $this->_config->getDb()->fetchObject($result)) == true) {
+                $retval[] = $row->stopword;
             }
         } else {
             return $this->_config->getDb()->fetchAll($result);
         }
-        
+
         return $retval;
     }
-    
-    
+
     /**
-     * Filter some text cutting out all non words and stop words
+     * Filter some text cutting out all non words and stop words.
      *
      * @param string $input text to filter
      *
@@ -226,18 +220,18 @@ class PMF_Stopwords
      */
     public function clean($input)
     {
-        $words      = explode(' ', $input);
-        $stop_words = $this->getByLang(null, true); 
-        $retval     = [];
-        
+        $words = explode(' ', $input);
+        $stop_words = $this->getByLang(null, true);
+        $retval = [];
+
         foreach ($words as $word) {
             $word = PMF_String::strtolower($word);
-            if (!is_numeric($word) && 1 < PMF_String::strlen($word) && 
+            if (!is_numeric($word) && 1 < PMF_String::strlen($word) &&
                !in_array($word, $stop_words) && !in_array($word, $retval)) {
                 $retval[] = $word;
             }
         }
-        
+
         return $retval;
     }
     /**
@@ -286,8 +280,8 @@ class PMF_Stopwords
     private function getBannedWords()
     {
         $bannedTrimmedWords = [];
-        $bannedWordsFile    = PMF_INCLUDE_DIR . '/blockedwords.txt';
-        $bannedWords        = [];
+        $bannedWordsFile = PMF_INCLUDE_DIR.'/blockedwords.txt';
+        $bannedWords = [];
 
         // Read the dictionary
         if (file_exists($bannedWordsFile) && is_readable($bannedWordsFile)) {
@@ -301,5 +295,4 @@ class PMF_Stopwords
 
         return $bannedTrimmedWords;
     }
-
 }

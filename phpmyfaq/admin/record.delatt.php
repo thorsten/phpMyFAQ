@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Deletes an attachment
+ * Deletes an attachment.
  *
  * PHP Version 5.5
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -32,13 +33,12 @@ printf(
 );
 
 if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
-
-    $recordId   = PMF_Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
+    $recordId = PMF_Filter::filterInput(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-    $id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    
+    $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
     $att = PMF_Attachment_Factory::create($id);
-    
+
     if ($att && $att->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);
     } else {
@@ -49,4 +49,3 @@ if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
-

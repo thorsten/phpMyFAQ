@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Factory class for phpMyFAQ search classes
+ * Factory class for phpMyFAQ search classes.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Factory
+ * PMF_Search_Factory.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
 class PMF_Search_Factory
 {
     /**
-     * Factory for generating search instances
+     * Factory for generating search instances.
      *
      * @param PMF_Configuration $config
      * @param array             $searchHandler Array with informations about search
@@ -49,7 +51,7 @@ class PMF_Search_Factory
         $searchClass = sprintf('PMF_Search_%s_%s',
             ucfirst(key($searchHandler)),
             ucfirst(current($searchHandler)));
-        
+
         return new $searchClass($config);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The large permission class is not yet implemented in phpMyFAQ.
  *
@@ -9,14 +10,14 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -25,14 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * The large permission class is not yet implemented in phpMyFAQ.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
 class PMF_Perm_Large extends PMF_Perm_Medium
 {
-
 }

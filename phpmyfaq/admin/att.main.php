@@ -1,6 +1,6 @@
 <?php
 /**
- * Ajax interface for attachments
+ * Ajax interface for attachments.
  *
  * PHP Version 5.5
  *
@@ -9,37 +9,37 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 $page = 1 > $page ? 1 : $page;
 
-$fa           = new PMF_Attachment_Collection($faqConfig);
+$fa = new PMF_Attachment_Collection($faqConfig);
 $itemsPerPage = 32;
-$allCrumbs    = $fa->getBreadcrumbs();
+$allCrumbs = $fa->getBreadcrumbs();
 
-$crumbs   = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
+$crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new PMF_Pagination(
     $faqConfig,
     array(
-        'baseUrl' => PMF_Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
-        'total'   => count($allCrumbs),
+        'baseUrl' => PMF_Link::getSystemRelativeUri().'?'.str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+        'total' => count($allCrumbs),
         'perPage' => $itemsPerPage,
     )
 );

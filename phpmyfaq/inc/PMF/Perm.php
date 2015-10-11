@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This class manages user permissions and group memberships.
  *
@@ -34,47 +35,49 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Perm
+ * Perm.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
 class PMF_Perm
 {
     /**
-     * Configuration object
+     * Configuration object.
      *
      * @var PMF_Configuration
      */
     protected $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
+     * @param PMF_Configuration $config
      */
     public function __construct(PMF_Configuration $config)
     {
         $this->config = $config;
     }
-    
+
     /**
      * selectPerm() returns an instance of a subclass of Perm. $permLevel
      * which subclass is returned.
@@ -87,25 +90,26 @@ class PMF_Perm
     public static function selectPerm($permLevel, PMF_Configuration $config)
     {
         if (isset($permLevel)) {
-            $permclass = 'PMF_Perm_' . ucfirst(strtolower($permLevel));
+            $permclass = 'PMF_Perm_'.ucfirst(strtolower($permLevel));
             if (class_exists($permclass)) {
                 return new $permclass($config);
             }
         }
 
-        return new PMF_Perm($config);
+        return new self($config);
     }
-    
+
     /**
-     * Renders a select box for permission types
+     * Renders a select box for permission types.
      *
-     * @param  string $current Selected option
+     * @param string $current Selected option
+     *
      * @return string
      */
     public static function permOptions($current)
     {
         $options = array('basic', 'medium');
-        $output  = '';
+        $output = '';
 
         foreach ($options as $value) {
             $output .= sprintf('<option value="%s"%s>%s</option>',

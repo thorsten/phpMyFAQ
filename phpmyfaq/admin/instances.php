@@ -1,6 +1,6 @@
 <?php
 /**
- * The main multi-site instances frontend
+ * The main multi-site instances frontend.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-16
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -32,10 +32,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <h2 class="page-header">
                 <i class="fa fa-wrench fa-fw"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
-                          is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
+                          is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')): ?>
                     <div class="pull-right">
                         <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG["ad_instance_add"] ?>
+                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_instance_add'] ?>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -47,28 +47,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
-
-    $instance   = new PMF_Instance($faqConfig);
+    $instance = new PMF_Instance($faqConfig);
     $instanceId = PMF_Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
     // Check, if /multisite is writeable
-    if (! is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
+    if (!is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')) {
         printf(
             '<p class="alert alert-danger">%s</p>',
-            $PMF_LANG["ad_instance_error_notwritable"]
+            $PMF_LANG['ad_instance_error_notwritable']
         );
     }
 
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
-
-        $system         = new PMF_System();
+        $system = new PMF_System();
         $clientInstance = new PMF_Instance_Client($faqConfig);
 
         // Collect data for database
         $data = [];
         $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
-        $data['comment']  = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $data['comment'] = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 
         if ($clientInstance->updateInstance($instanceId, $data)) {
             printf(
@@ -85,26 +83,26 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             );
         }
     }
-?>
+    ?>
     <table class="table">
         <thead>
         <tr>
             <th>#</th>
-            <th><?php echo $PMF_LANG["ad_instance_url"] ?></th>
-            <th><?php echo $PMF_LANG["ad_instance_path"] ?></th>
-            <th colspan="3"><?php echo $PMF_LANG["ad_instance_name"] ?></th>
+            <th><?php echo $PMF_LANG['ad_instance_url'] ?></th>
+            <th><?php echo $PMF_LANG['ad_instance_path'] ?></th>
+            <th colspan="3"><?php echo $PMF_LANG['ad_instance_name'] ?></th>
         </tr>
         </thead>
         <tbody>
         <?php
         foreach ($instance->getAllInstances() as $site):
             $currentInstance = new PMF_Instance($faqConfig);
-            $currentInstance->getInstanceById($site->id);
-            $currentInstance->setId($site->id);
-        ?>
+    $currentInstance->getInstanceById($site->id);
+    $currentInstance->setId($site->id);
+    ?>
         <tr id="row-instance-<?php print $site->id ?>">
             <td><?php print $site->id ?></td>
-            <td><a href="<?php print $site->url . $site->instance ?>"><?php print $site->url ?></a></td>
+            <td><a href="<?php print $site->url.$site->instance ?>"><?php print $site->url ?></a></td>
             <td><?php print $site->instance ?></td>
             <td><?php print $site->comment ?></td>
             <td>
@@ -112,7 +110,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
                     <i class="fa fa-pencil"></i>
                 </a>
-                <?php endif; ?>
+                <?php endif;
+    ?>
             </td>
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
@@ -121,10 +120,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                    data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <i class="fa fa-trash"></i>
                 </a>
-                <?php endif; ?>
+                <?php endif;
+    ?>
             </td>
         </tr>
-        <?php endforeach; ?>
+        <?php endforeach;
+    ?>
         </tbody>
     </table>
 
@@ -133,13 +134,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <div class="modal-content">
                 <div class="modal-header">
                     <a class="close" data-dismiss="modal">×</a>
-                    <h3><?php echo $PMF_LANG["ad_instance_add"] ?></h3>
+                    <h3><?php echo $PMF_LANG['ad_instance_add'] ?></h3>
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
                         <div class="form-group">
                             <label class="control-label col-lg-4">
-                                <?php echo $PMF_LANG["ad_instance_url"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_url'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <div class="input-group">
@@ -151,7 +152,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                         </div>
                         <div class="form-group">
                             <label class="control-label col-lg-4">
-                                <?php echo $PMF_LANG["ad_instance_path"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_path'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="instance" id="instance" required>
@@ -159,7 +160,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                         </div>
                         <div class="form-group">
                             <label class="control-label col-lg-4">
-                                <?php echo $PMF_LANG["ad_instance_name"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_name'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="comment" id="comment" required>
@@ -167,7 +168,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                         </div>
                         <div class="form-group">
                             <label class="control-label col-lg-4" for="email">
-                                <?php echo $PMF_LANG["ad_instance_email"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_email'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="email" name="email" id="email" required>
@@ -175,7 +176,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                         </div>
                         <div class="form-group">
                             <label class="control-label col-lg-4">
-                                <?php echo $PMF_LANG["ad_instance_admin"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_admin'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="admin" id="admin" required>
@@ -183,7 +184,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                         </div>
                         <div class="form-group">
                             <label class="control-label col-lg-4" for="password">
-                                <?php echo $PMF_LANG["ad_instance_password"] ?>:
+                                <?php echo $PMF_LANG['ad_instance_password'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="password" name="password" id="password" required>
@@ -192,9 +193,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <p><?php echo $PMF_LANG["ad_instance_hint"] ?></p>
+                    <p><?php echo $PMF_LANG['ad_instance_hint'] ?></p>
                     <button class="btn btn-primary pmf-instance-add">
-                        <?php echo $PMF_LANG["ad_instance_button"] ?>
+                        <?php echo $PMF_LANG['ad_instance_button'] ?>
                     </button>
                 </div>
             </div>
@@ -262,7 +263,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             if (typeof(data.deleted) === 'undefined') {
                                 $('.table').after(
                                     '<div class="alert alert-danger">' +
-                                    '<?php echo $PMF_LANG["ad_instance_error_cannotdelete"] ?> ' + data.error +
+                                    '<?php echo $PMF_LANG['ad_instance_error_cannotdelete'] ?> ' + data.error +
                                     '</div>'
                                 );
                             } else {
@@ -280,6 +281,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     </div>
     </div>
 <?php
+
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

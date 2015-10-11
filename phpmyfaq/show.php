@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Frontend for categories or list of records
+ * Frontend for categories or list of records.
  *
  * PHP Version 5.5
  *
@@ -9,38 +10,37 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$currentCategory     = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$subCategoryContent  = '';
+$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$subCategoryContent = '';
 
 if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
-
     try {
         $faqsession->userTracking('show_category', $currentCategory);
     } catch (PMF_Exception $e) {
         // @todo handle the exception
     }
 
-    $catParent      = $category->categoryName[$currentCategory]['parent_id'];
-    $catName        = $category->categoryName[$currentCategory]['name'];
+    $catParent = $category->categoryName[$currentCategory]['parent_id'];
+    $catName = $category->categoryName[$currentCategory]['name'];
     $catDescription = $category->categoryName[$currentCategory]['description'];
-    $records        = $faq->showAllRecords(
+    $records = $faq->showAllRecords(
         $currentCategory,
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')
@@ -60,7 +60,7 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
                 'writeContent',
                 'subCategories',
                 array(
-                    'categorySubsHeader' => $categoryFaqsHeader
+                    'categorySubsHeader' => $categoryFaqsHeader,
                 )
             );
         }
@@ -74,26 +74,24 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             $sids,
             $catParent
         );
-        $oLink            = new PMF_Link($url, $faqConfig);
+        $oLink = new PMF_Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$catParent]['name'];
-        $oLink->text      = $PMF_LANG['msgCategoryUp'];
-        $up               = $oLink->toHtmlAnchor();
+        $oLink->text = $PMF_LANG['msgCategoryUp'];
+        $up = $oLink->toHtmlAnchor();
     }
 
     $tpl->parse(
         'writeContent',
         array(
-            'categoryHeader'      => $PMF_LANG['msgEntriesIn'] . $catName,
+            'categoryHeader' => $PMF_LANG['msgEntriesIn'].$catName,
             'categoryDescription' => $catDescription,
-            'categoryFaqsHeader'  => $PMF_LANG['msgEntries'],
-            'categoryContent'     => $records,
-            'subCategoryContent'  => $subCategoryContent,
-            'categoryLevelUp'     => $up
+            'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
+            'categoryContent' => $records,
+            'subCategoryContent' => $subCategoryContent,
+            'categoryLevelUp' => $up,
         )
     );
-
 } else {
-
     try {
         $faqsession->userTracking('show_all_categories', 0);
     } catch (PMF_Exception $e) {
@@ -103,12 +101,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
     $tpl->parse(
         'writeContent',
         array(
-            'categoryHeader'      => $PMF_LANG['msgFullCategories'],
+            'categoryHeader' => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
-            'categoryFaqsHeader'  => '',
-            'categoryContent'     => $category->viewTree(),
-            'subCategoryContent'  => $subCategoryContent,
-            'categoryLevelUp'     => ''
+            'categoryFaqsHeader' => '',
+            'categoryContent' => $category->viewTree(),
+            'subCategoryContent' => $subCategoryContent,
+            'categoryLevelUp' => '',
         )
     );
 }

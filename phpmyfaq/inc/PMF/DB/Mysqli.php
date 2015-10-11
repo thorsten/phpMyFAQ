@@ -1,7 +1,8 @@
 <?php
+
 /**
  * The PMF_DB_Mysqli class provides methods and functions for MySQL 5.x and
- * MariaDB 5.x databases
+ * MariaDB 5.x databases.
  *
  * PHP Version 5.5
  *
@@ -10,49 +11,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2005-02-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_DB_Mysqli
+ * PMF_DB_Mysqli.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2005-02-21
  */
 class PMF_DB_Mysqli implements PMF_DB_Driver
 {
     /**
-     * The connection object
+     * The connection object.
      *
      * @var mysqli
      */
     private $conn = false;
 
     /**
-     * The query log string
+     * The query log string.
      *
      * @var string
      */
     private $sqllog = '';
 
     /**
-     * Tables
+     * Tables.
      *
      * @var array
      */
@@ -68,7 +68,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @throws PMF_Exception
      *
-     * @return  boolean true, if connected, otherwise false
+     * @return bool true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -81,18 +81,18 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         }
 
         if ($this->conn->connect_error) {
-            PMF_Db::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
+            PMF_Db::errorPage($this->conn->connect_errno.': '.$this->conn->connect_error);
             die();
         }
-        
+
         // change character set to UTF-8
         if (!$this->conn->set_charset('utf8')) {
             PMF_Db::errorPage($this->error());
         }
 
         if ('' !== $database) {
-            if (! $this->conn->select_db($database)) {
-                throw new PMF_Exception('Cannot connect to database ' . $database);
+            if (!$this->conn->select_db($database)) {
+                throw new PMF_Exception('Cannot connect to database '.$database);
             }
         }
 
@@ -102,9 +102,9 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * This function sends a query to the database.
      *
-     * @param string  $query
-     * @param integer $offset
-     * @param integer $rowCount
+     * @param string $query
+     * @param int    $offset
+     * @param int    $rowCount
      *
      * @return mysqli_result $result
      */
@@ -128,23 +128,25 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    */
+     * Escapes a string for use in a query.
+     *
+     * @param   string
+     *
+     * @return string
+     */
     public function escape($string)
     {
         return $this->conn->real_escape_string($string);
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
      * This function fetches a result row as an object.
      *
-     * @param   mixed $result
-     * @return  mixed
+     * @param mixed $result
+     *
+     * @return mixed
      */
     public function fetchObject($result)
     {
@@ -152,12 +154,13 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
      * This function fetches a result as an associative array.
      *
-     * @param   mixed $result
-     * @return  array
+     * @param mixed $result
+     *
+     * @return array
      */
     public function fetchArray($result)
     {
@@ -165,9 +168,9 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Fetches a complete result as an object
+     * Fetches a complete result as an object.
      *
-     * @param  resource      $result Resultset
+     * @param resource $result Resultset
      *
      * @throws Exception
      *
@@ -177,22 +180,22 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: ' . $this->error());
+            throw new Exception('Error while fetching result: '.$this->error());
         }
-        
+
         while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
-        
+
         return $ret;
     }
 
     /**
-     * Number of rows in a result
+     * Number of rows in a result.
      *
      * @param mixed $result
      *
-     * @return integer
+     * @return int
      */
     public function numRows($result)
     {
@@ -204,7 +207,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Logs the queries
+     * Logs the queries.
      *
      * @return string
      */
@@ -213,18 +216,19 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         return $this->sqllog;
     }
 
-     /**
-      * This function returns the table status.
-      *
-      * @return array
-      */
+    /**
+     * This function returns the table status.
+     *
+     * @return array
+     */
     public function getTableStatus()
     {
         $arr = [];
-        $result = $this->query("SHOW TABLE STATUS");
+        $result = $this->query('SHOW TABLE STATUS');
         while ($row = $this->fetchArray($result)) {
-            $arr[$row["Name"]] = $row["Rows"];
+            $arr[$row['Name']] = $row['Rows'];
         }
+
         return $arr;
     }
 
@@ -235,19 +239,19 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * @param string $table The name of the table
      * @param string $id    The name of the ID column
      *
-     * @return integer
+     * @return int
      */
     public function nextId($table, $id)
     {
-        $select = sprintf("
+        $select = sprintf('
            SELECT
                MAX(%s) AS current_id
            FROM
-               %s",
+               %s',
            $id,
            $table);
-           
-        $result  = $this->query($select);
+
+        $result = $this->query($select);
 
         if ($result instanceof mysqli_result) {
             $current = $result->fetch_row();
@@ -258,11 +262,11 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
         return $current[0] + 1;
     }
 
-     /**
-      * Returns the error string.
-      *
-      * @return string
-      */
+    /**
+     * Returns the error string.
+     *
+     * @return string
+     */
     public function error()
     {
         return $this->conn->error;
@@ -289,59 +293,57 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Returns an array with all table names
+     * Returns an array with all table names.
      *
      * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
      *
-     * @param  string $prefix Table prefix
+     * @param string $prefix Table prefix
      *
      * @return array
      */
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix . 'faqadminlog',
-            $prefix . 'faqattachment',
-            $prefix . 'faqattachment_file',
-            $prefix . 'faqcaptcha',
-            $prefix . 'faqcategories',
-            $prefix . 'faqcategory_group',
-            $prefix . 'faqcategory_user',
-            $prefix . 'faqcategoryrelations',
-            $prefix . 'faqchanges',
-            $prefix . 'faqcomments',
-            $prefix . 'faqconfig',
-            $prefix . 'faqdata',
-            $prefix . 'faqdata_group',
-            $prefix . 'faqdata_revisions',
-            $prefix . 'faqdata_tags',
-            $prefix . 'faqdata_user',
-            $prefix . 'faqglossary',
-            $prefix . 'faqgroup',
-            $prefix . 'faqgroup_right',
-            $prefix . 'faqinstances',
-            $prefix . 'faqinstances_config',
-            $prefix . 'faqnews',
-            $prefix . 'faqquestions',
-            $prefix . 'faqright',
-            $prefix . 'faqsearches',
-            $prefix . 'faqsessions',
-            $prefix . 'faqstopwords',
-            $prefix . 'faqtags',
-            $prefix . 'faquser',
-            $prefix . 'faquser_group',
-            $prefix . 'faquser_right',
-            $prefix . 'faquserdata',
-            $prefix . 'faquserlogin',
-            $prefix . 'faqvisits',
-            $prefix . 'faqvoting'
+            $prefix.'faqadminlog',
+            $prefix.'faqattachment',
+            $prefix.'faqattachment_file',
+            $prefix.'faqcaptcha',
+            $prefix.'faqcategories',
+            $prefix.'faqcategory_group',
+            $prefix.'faqcategory_user',
+            $prefix.'faqcategoryrelations',
+            $prefix.'faqchanges',
+            $prefix.'faqcomments',
+            $prefix.'faqconfig',
+            $prefix.'faqdata',
+            $prefix.'faqdata_group',
+            $prefix.'faqdata_revisions',
+            $prefix.'faqdata_tags',
+            $prefix.'faqdata_user',
+            $prefix.'faqglossary',
+            $prefix.'faqgroup',
+            $prefix.'faqgroup_right',
+            $prefix.'faqinstances',
+            $prefix.'faqinstances_config',
+            $prefix.'faqnews',
+            $prefix.'faqquestions',
+            $prefix.'faqright',
+            $prefix.'faqsearches',
+            $prefix.'faqsessions',
+            $prefix.'faqstopwords',
+            $prefix.'faqtags',
+            $prefix.'faquser',
+            $prefix.'faquser_group',
+            $prefix.'faquser_right',
+            $prefix.'faquserdata',
+            $prefix.'faquserlogin',
+            $prefix.'faqvisits',
+            $prefix.'faqvoting',
         ];
     }
 
     /**
      * Closes the connection to the database.
-     *
-     * @return void
      */
     public function close()
     {
@@ -351,9 +353,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     }
 
     /**
-     * Destructor
-     *
-     * @return void
+     * Destructor.
      */
     public function __destruct()
     {

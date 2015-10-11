@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Attachment collection class 
+ * Attachment collection class.
  *
  * PHP Version 5.5
  *
@@ -9,40 +10,41 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
-                 
+
 /**
- * PMF_Atachment_Collection
+ * PMF_Atachment_Collection.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
  */
 class PMF_Attachment_Collection
 {
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -54,7 +56,7 @@ class PMF_Attachment_Collection
     }
 
     /**
-     * Get an array with minimalistic attachment meta data
+     * Get an array with minimalistic attachment meta data.
      *
      * @return array
      */
@@ -62,7 +64,7 @@ class PMF_Attachment_Collection
     {
         $retval = [];
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 fa.id AS ID,
                 fa.record_id AS record_id,
@@ -78,17 +80,17 @@ class PMF_Attachment_Collection
             ON
                 fa.record_id = fd.id
             GROUP BY
-                fa.id,fd.thema",
-            PMF_Db::getTablePrefix() . 'faqattachment',
-            PMF_Db::getTablePrefix() . 'faqdata'
+                fa.id,fd.thema',
+            PMF_Db::getTablePrefix().'faqattachment',
+            PMF_Db::getTablePrefix().'faqdata'
         );
 
         $result = $this->config->getDb()->query($query);
-        
+
         if ($result) {
             $retval = $this->config->getDb()->fetchAll($result);
         }
-        
+
         return $retval;
     }
 }

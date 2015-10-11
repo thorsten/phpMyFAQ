@@ -1,6 +1,6 @@
 <?php
 /**
- * Main update script
+ * Main update script.
  *
  * PHP Version 5.5
  *
@@ -9,16 +9,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Setup
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
-
 define('COPYRIGHT', '&copy; 2001-2015 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
@@ -28,23 +28,23 @@ if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
 }
 
 if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-    die("Sorry, but you need PHP 5.5.0 or later!"); // Die hard because of "use"
+    die('Sorry, but you need PHP 5.5.0 or later!'); // Die hard because of "use"
 }
 
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/inc/Bootstrap.php';
 
-$step    = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$step = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
-$query   = [];
+$query = [];
 
 if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    require PMF_ROOT_DIR . '/inc/data.php'; // before 2.6.0-alpha
+    require PMF_ROOT_DIR.'/inc/data.php'; // before 2.6.0-alpha
 } else {
-    if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-        header("Location: setup.php");
+    if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+        header('Location: setup.php');
         exit();
     }
-    require PMF_ROOT_DIR . '/config/database.php'; // after 2.6.0-alpha
+    require PMF_ROOT_DIR.'/config/database.php'; // after 2.6.0-alpha
 }
 ?>
 <!doctype html>
@@ -99,9 +99,9 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
                 <?php
                 $version = $faqConfig->get('main.currentVersion');
                 if (version_compare($version, '2.8.0-alpha2', '>=')) {
-                    if (! $faqConfig->get('main.maintenanceMode')) {
-                        echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is ' .
-                             'not in maintenance mode, you should enable the maintenance mode in your administration ' .
+                    if (!$faqConfig->get('main.maintenanceMode')) {
+                        echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is '.
+                             'not in maintenance mode, you should enable the maintenance mode in your administration '.
                              'backend before running the update!</p>';
                     }
                 }
@@ -115,9 +115,10 @@ $installer->checkPreUpgrade();
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) {
-?>
+    ?>
         <form action="update.php?step=2" method="post">
-        <input name="version" type="hidden" value="<?php echo $version; ?>">
+        <input name="version" type="hidden" value="<?php echo $version;
+    ?>">
         <div class="row form-group">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
@@ -166,7 +167,7 @@ if ($step === 1) {
                 <?php
                 // 2.5 versions only
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
-                    echo '<p class="alert alert-danger text-center"><strong>Please change the directory ../template ' .
+                    echo '<p class="alert alert-danger text-center"><strong>Please change the directory ../template '.
                          'and its contents writable (777 on Linux/UNIX).</strong></p>';
                 }
 
@@ -184,13 +185,13 @@ if ($step === 1) {
                     );
                     echo '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
-                if ('hash' !== PMF_ENCRYPTION_TYPE) {
-                    printf(
+    if ('hash' !== PMF_ENCRYPTION_TYPE) {
+        printf(
                         '<p class="alert alert-info text-center">Your passwords are currently encoded with a %s() method.</p>',
                         PMF_ENCRYPTION_TYPE
                     );
-                }
-                ?>
+    }
+    ?>
 
                 <p style="text-align: center">
                     <button class="btn btn-primary btn-lg" type="submit">
@@ -206,15 +207,14 @@ if ($step === 1) {
 
 /**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {
-
     $checkDatabaseSetupFile = $checkLdapSetupFile = false;
 
     // The backup an existing config/database.php
     // 2.6+ updates
-    if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-        if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
-                  "could not be written. Please correct this!</p>";
+    if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+        if (!copy(PMF_ROOT_DIR.'/config/database.php', PMF_ROOT_DIR.'/config/database.bak.php')) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php '.
+                  'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
         }
@@ -222,9 +222,10 @@ if ($step == 2) {
 
     // is everything is okay?
     if ($checkDatabaseSetupFile) {
-?>
+        ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php echo $version; ?>">
+        <input type="hidden" name="version" value="<?php echo $version;
+        ?>">
         <div class="row form-group">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
@@ -268,7 +269,7 @@ if ($step == 2) {
 
 /**************************** STEP 3 OF 3 ***************************/
 if ($step == 3) {
-?>
+    ?>
 
         <div class="row form-group">
             <div class="col-lg-12">
@@ -320,61 +321,61 @@ if ($step == 3) {
         $faqConfig->add('socialnetworks.enableFacebookSupport', 'false');
 
         // Migrate faqquestion table to new structure
-        switch($DB['type']) {
+        switch ($DB['type']) {
             case 'pgsql':
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_username TO username";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_usermail TO email";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_rubrik TO category_id";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_content TO question";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions RENAME COLUMN ask_date TO created";
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions RENAME COLUMN ask_username TO username';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions RENAME COLUMN ask_usermail TO email';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions RENAME COLUMN ask_rubrik TO category_id';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions RENAME COLUMN ask_content TO question';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions RENAME COLUMN ask_date TO created';
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_username', 'username', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_usermail', 'email', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_content', 'question', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqquestions.ask_date', 'created', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqquestions.ask_username', 'username', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqquestions.ask_usermail', 'email', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqquestions.ask_rubrik', 'category_id', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqquestions.ask_content', 'question', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqquestions.ask_date', 'created', 'COLUMN'";
                 break;
             case 'mysqli':
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_rubrik category_id INT(11) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_content question TEXT NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL";
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE ask_username username VARCHAR(100) NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE ask_usermail email VARCHAR(100) NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE ask_rubrik category_id INT(11) NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE ask_content question TEXT NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE ask_date created VARCHAR(20) NOT NULL';
                 break;
         }
 
-        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (34, 'addattachment', 'Right to add attachments', 1, 1)";
-        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (35, 'editattachment', 'Right to edit attachments', 1, 1)";
-        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (36, 'delattachment', 'Right to delete attachments', 1, 1)";
-        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (37, 'dlattachment', 'Right to download attachments', 1, 1)";
-        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 34)";
-        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 35)";
-        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 36)";
-        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 37)";
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 34)';
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 35)';
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 36)';
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 37)';
     }
 
     //
     // UPDATES FROM 2.7.0-alpha2
     //
     if (version_compare($version, '2.7.0-alpha2', '<')) {
-        $query[] = "INSERT INTO ". $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (38, 'reports', 'Right to generate reports', 1, 1)";
-        $query[] = "INSERT INTO ". $prefix . "faquser_right (user_id, right_id) VALUES (1, 38)";
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 38)';
     }
 
     //
     // UPDATES FROM 2.7.0-beta
     //
     if (version_compare($version, '2.7.0-beta', '<')) {
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'search.numberSearchTerms'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'search.numberSearchTerms'
             WHERE config_name = 'main.numberSearchTerms'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'search.useAjaxSearchOnStartpage'
             WHERE config_name = 'main.useAjaxSearchOnStartpage'";
     }
 
@@ -392,39 +393,39 @@ if ($step == 3) {
     // UPDATES FROM 2.7.0-RC
     //
     if (version_compare($version, '2.7.0-RC', '<')) {
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.numberOfRecordsPerPage'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.numberOfRecordsPerPage'
             WHERE config_name = 'main.numberOfRecordsPerPage'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.numberOfShownNewsEntries'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.numberOfShownNewsEntries'
             WHERE config_name = 'main.numberOfShownNewsEntries'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.orderingPopularFaqs'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.orderingPopularFaqs'
             WHERE config_name = 'main.orderingPopularFaqs'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.disableAttachments'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.disableAttachments'
             WHERE config_name = 'main.disableAttachments'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.maxAttachmentSize'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.maxAttachmentSize'
             WHERE config_name = 'main.maxAttachmentSize'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.attachmentsPath'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.attachmentsPath'
             WHERE config_name = 'main.attachmentsPath'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.attachmentsStorageType'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.attachmentsStorageType'
             WHERE config_name = 'main.attachmentsStorageType'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.enableAttachmentEncryption'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.enableAttachmentEncryption'
             WHERE config_name = 'main.enableAttachmentEncryption'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'records.defaultAttachmentEncKey'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'records.defaultAttachmentEncKey'
             WHERE config_name = 'main.defaultAttachmentEncKey'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.permLevel'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.permLevel'
             WHERE config_name = 'main.permLevel'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ipCheck'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.ipCheck'
             WHERE config_name = 'main.ipCheck'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.enableLoginOnly'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.enableLoginOnly'
             WHERE config_name = 'main.enableLoginOnly'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ldapSupport'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.ldapSupport'
             WHERE config_name = 'main.ldapSupport'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.bannedIPs'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.bannedIPs'
             WHERE config_name = 'main.bannedIPs'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ssoSupport'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.ssoSupport'
             WHERE config_name = 'main.ssoSupport'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.ssoLogoutRedirect'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.ssoLogoutRedirect'
             WHERE config_name = 'main.ssoLogoutRedirect'";
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'security.useSslForLogins'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.useSslForLogins'
             WHERE config_name = 'main.useSslForLogins'";
     }
 
@@ -439,25 +440,24 @@ if ($step == 3) {
     // UPDATES FROM 2.7.3
     //
     if (version_compare($version, '2.7.3', '<')) {
-        $query[] = "DELETE FROM ".$prefix."faqright WHERE right_id = 18 AND right_id = 19";
-        $query[] = "DELETE FROM ".$prefix."faquser_right WHERE right_id = 18 AND right_id = 19";
-        $query[] = "DELETE FROM ".$prefix."faqgroup_right WHERE right_id = 18 AND right_id = 19";
+        $query[] = 'DELETE FROM '.$prefix.'faqright WHERE right_id = 18 AND right_id = 19';
+        $query[] = 'DELETE FROM '.$prefix.'faquser_right WHERE right_id = 18 AND right_id = 19';
+        $query[] = 'DELETE FROM '.$prefix.'faqgroup_right WHERE right_id = 18 AND right_id = 19';
     }
 
     //
     // UPDATES FROM 2.8.0-alpha
     //
     if (version_compare($version, '2.8.0-alpha', '<')) {
-
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (39, 'addfaq', 'Right to add FAQs in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 39)";
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 39)';
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (40, 'addquestion', 'Right to add questions in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 40)";
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description, for_users, for_groups) VALUES
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 40)';
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (41, 'addcomment', 'Right to add comments in frontend', 1, 1)";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 41)";
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 41)';
 
         $faqConfig->add('cache.varnishEnable', 'false');
         $faqConfig->add('cache.varnishHost', '127.0.0.1');
@@ -468,43 +468,43 @@ if ($step == 3) {
         $faqConfig->add('security.forcePasswordUpdate', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD COLUMN answer_id INT NOT NULL DEFAULT 0";
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN answer_id INT NOT NULL DEFAULT 0';
         } else {
-            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD answer_id INT NOT NULL DEFAULT 0";
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD answer_id INT NOT NULL DEFAULT 0';
         }
 
         $faqConfig->add('records.enableCloseQuestion', 'false');
         $faqConfig->add('records.enableDeleteQuestion', 'false');
 
-        $query[] = "CREATE TABLE " . $prefix . "faquserlogin_temp (
+        $query[] = 'CREATE TABLE '.$prefix.'faquserlogin_temp (
             login varchar(128) NOT NULL,
             pass varchar(80) NOT NULL,
-            PRIMARY KEY (login))";
-        $query[] = "INSERT INTO " . $prefix . "faquserlogin_temp SELECT * FROM " . $prefix . "faquserlogin";
-        $query[] = "DROP TABLE " . $prefix . "faquserlogin";
-        $query[] = "CREATE TABLE " . $prefix . "faquserlogin (
+            PRIMARY KEY (login))';
+        $query[] = 'INSERT INTO '.$prefix.'faquserlogin_temp SELECT * FROM '.$prefix.'faquserlogin';
+        $query[] = 'DROP TABLE '.$prefix.'faquserlogin';
+        $query[] = 'CREATE TABLE '.$prefix.'faquserlogin (
             login varchar(128) NOT NULL,
             pass varchar(80) NOT NULL,
-            PRIMARY KEY (login))";
-        $query[] = "INSERT INTO " . $prefix . "faquserlogin SELECT * FROM " . $prefix . "faquserlogin_temp";
-        $query[] = "DROP TABLE " . $prefix . "faquserlogin_temp";
+            PRIMARY KEY (login))';
+        $query[] = 'INSERT INTO '.$prefix.'faquserlogin SELECT * FROM '.$prefix.'faquserlogin_temp';
+        $query[] = 'DROP TABLE '.$prefix.'faquserlogin_temp';
     }
 
     //
     // UPDATES FROM 2.8.0-alpha2
     //
     if (version_compare($version, '2.8.0-alpha2', '<')) {
-        switch($DB['type']) {
+        switch ($DB['type']) {
             case 'pgsql':
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
+                $query[] = 'CREATE TABLE '.$prefix.'faqinstances (
                     id int4 NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
                     comment TEXT NULL,
                     created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
                     modified TIMESTAMP NOT NULL,
-                    PRIMARY KEY (id))";
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
+                    PRIMARY KEY (id))';
+                $query[] = 'CREATE TABLE '.$prefix."faqinstances_config (
                     instance_id int4 NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
@@ -513,30 +513,30 @@ if ($step == 3) {
             case 'mssql':
             case 'sqlsrv':
             case 'sqlite3':
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
+                $query[] = 'CREATE TABLE '.$prefix.'faqinstances (
                     id INT NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
                     comment TEXT NULL,
                     created DATETIME NOT NULL,
                     modified DATETIME NOT NULL,
-                    PRIMARY KEY (id))";
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
+                    PRIMARY KEY (id))';
+                $query[] = 'CREATE TABLE '.$prefix."faqinstances_config (
                     instance_id INT NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
                     PRIMARY KEY (instance_id, config_name))";
                 break;
             case 'mysqli':
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances (
+                $query[] = 'CREATE TABLE '.$prefix.'faqinstances (
                     id INT(11) NOT NULL,
                     url VARCHAR(255) NOT NULL,
                     instance VARCHAR(255) NOT NULL,
                     comment TEXT NULL,
                     created TIMESTAMP DEFAULT 0,
                     modified TIMESTAMP ON UPDATE CURRENT_TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-                    PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-                $query[] = "CREATE TABLE " . $prefix . "faqinstances_config (
+                    PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci';
+                $query[] = 'CREATE TABLE '.$prefix."faqinstances_config (
                     instance_id INT(11) NOT NULL,
                     config_name VARCHAR(255) NOT NULL default '',
                     config_value VARCHAR(255) DEFAULT NULL,
@@ -544,20 +544,20 @@ if ($step == 3) {
                 break;
         }
 
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description) VALUES
             (42, 'editinstances', 'Right to edit multi-site instances')";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 42)";
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 42)';
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description) VALUES
             (43, 'addinstances', 'Right to add multi-site instances')";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 43)";
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 43)';
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description) VALUES
             (44, 'delinstances', 'Right to delete multi-site instances')";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 44)";
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 44)';
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . $prefix . "faquser ADD COLUMN remember_me VARCHAR(150) NULL";
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN remember_me VARCHAR(150) NULL';
         } else {
-            $query[] = "ALTER TABLE " . $prefix . "faquser ADD remember_me VARCHAR(150) NULL";
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD remember_me VARCHAR(150) NULL';
         }
     }
 
@@ -572,9 +572,9 @@ if ($step == 3) {
                 echo '<br />';
             }
             if (!$result) {
-                echo "</div>";
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ ' .
-                      'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.' .
+                echo '</div>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ '.
+                      'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.'.
                       '</p>';
                 printf(
                     '<p class="alert alert-danger"><strong>DB error:</strong> %s</p>',
@@ -587,12 +587,12 @@ if ($step == 3) {
                 PMF_System::renderFooter();
             }
             usleep(10000);
-            $count++;
+            ++$count;
             if (!($count % 10)) {
                 ob_flush();
             }
         }
-        echo "</div>";
+        echo '</div>';
     }
 
     // Clear the array with the queries
@@ -603,13 +603,12 @@ if ($step == 3) {
     // 2nd UPDATES FROM 2.8.0-alpha2
     //
     if (version_compare($version, '2.8.0-alpha2', '<')) {
-
         $link = new PMF_Link(null, $faqConfig);
 
         $instanceData = array(
-            'url'      => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
+            'url' => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
             'instance' => $link->getSystemRelativeUri('setup/update.php'),
-            'comment'  => $faqConfig->get('main.titleFAQ')
+            'comment' => $faqConfig->get('main.titleFAQ'),
         );
         $faqInstance = new PMF_Instance($faqConfig);
         $faqInstance->addInstance($instanceData);
@@ -627,12 +626,10 @@ if ($step == 3) {
     // UPDATES FROM 2.8.0-alpha3
     //
     if (version_compare($version, '2.8.0-alpha3', '<')) {
-
-        $query[] = "DROP TABLE " . $prefix . "faqlinkverifyrules";
-        $query[] = "INSERT INTO " . $prefix . "faqright (right_id, name, description) VALUES
+        $query[] = 'DROP TABLE '.$prefix.'faqlinkverifyrules';
+        $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description) VALUES
             (45, 'export', 'Right to export the complete FAQ')";
-        $query[] = "INSERT INTO " . $prefix . "faquser_right (user_id, right_id) VALUES (1, 45)";
-
+        $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 45)';
     }
 
     //
@@ -662,7 +659,7 @@ if ($step == 3) {
     // UPDATED FROM 2.8.15
     //
     if (version_compare($version, '2.8.16', '<')) {
-        $query[] = "CREATE INDEX index_time ON " . $prefix . "faqsessions (time)";
+        $query[] = 'CREATE INDEX index_time ON '.$prefix.'faqsessions (time)';
     }
     //
     // UPDATES FROM 2.9.0-alpha
@@ -685,18 +682,16 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . $prefix . "faquser ADD COLUMN success INT(1) NULL DEFAULT 1";
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
         } else {
-            $query[] = "ALTER TABLE " . $prefix . "faquser ADD success INT(1) NULL DEFAULT 1";
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INT(1) NULL DEFAULT 1';
         }
     }
-
 
     //
     // UPDATES FROM 2.9.0-alpha2
     //
     if (version_compare($version, '2.9.0-alpha2', '<')) {
-
         $faqConfig->add('seo.metaTagsHome', 'index, follow');
         $faqConfig->add('seo.metaTagsFaqs', 'index, follow');
         $faqConfig->add('seo.metaTagsCategories', 'index, follow');
@@ -712,9 +707,9 @@ if ($step == 3) {
         $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1";
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
         } else {
-            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD active INT(1) NULL DEFAULT 1";
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD active INT(1) NULL DEFAULT 1';
         }
     }
 
@@ -722,7 +717,6 @@ if ($step == 3) {
     // UPDATES FROM 2.9.0-alpha3
     //
     if (version_compare($version, '2.9.0-alpha3', '<')) {
-
         $faqConfig->add('main.customPdfHeader', '');
         $faqConfig->add('main.customPdfFooter', '');
         $faqConfig->add('records.allowDownloadsForGuests', 'false');
@@ -731,43 +725,42 @@ if ($step == 3) {
         $faqConfig->add('records.numberMaxStoredRevisions', '10');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL";
-            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD COLUMN group_id INT NULL DEFAULT -1";
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
         } else {
-            $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD lang VARCHAR(5) NOT NULL";
-            $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD group_id INT NULL DEFAULT -1";
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD lang VARCHAR(5) NOT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD group_id INT NULL DEFAULT -1';
         }
-        $query[] = "UPDATE " . $prefix . "faqquestions SET lang = '" . $faqConfig->getDefaultLanguage() . "'";
+        $query[] = 'UPDATE '.$prefix."faqquestions SET lang = '".$faqConfig->getDefaultLanguage()."'";
     }
 
     //
     // UPDATES FROM 2.9.0-alpha4
     //
     if (version_compare($version, '2.9.0-alpha4', '<')) {
-
-        switch($DB['type']) {
+        switch ($DB['type']) {
             case 'pgsql':
-                $query[] = "ALTER TABLE " . $prefix . "faqdata RENAME COLUMN datum TO updated";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions RENAME COLUMN datum TO updated";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revisions.datum', 'updated', 'COLUMN'";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqdata.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqdata_revisions.datum', 'updated', 'COLUMN'";
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
             break;
             case 'mysqli':
-                $query[] = "ALTER TABLE " . $prefix . "faqdata CHANGE datum updated VARCHAR(15) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
-                $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata CHANGE datum updated VARCHAR(15) NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
                 break;
         }
         if ('sqlite3' === $DB['type']) {
-            $query[] = "CREATE TABLE " . $prefix . "faqdata_temp (
+            $query[] = 'CREATE TABLE '.$prefix."faqdata_temp (
                 id INTEGER NOT NULL,
                 lang VARCHAR(5) NOT NULL,
                 solution_id INTEGER NOT NULL,
@@ -786,15 +779,15 @@ if ($step == 3) {
                 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
                 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
                 PRIMARY KEY (id, lang))";
-            $query[] = "INSERT INTO " . $prefix . "faqdata_temp
+            $query[] = 'INSERT INTO '.$prefix.'faqdata_temp
                 SELECT
                     id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
                     comment, datum, links_state, links_check_date, date_start, date_end
-                FROM " . $prefix . "faqdata";
-            $query[] = "DROP TABLE " . $prefix . "faqdata";
-            $query[] = "ALTER TABLE " . $prefix . "faqdata_temp RENAME TO " . $prefix . "faqdata";
+                FROM '.$prefix.'faqdata';
+            $query[] = 'DROP TABLE '.$prefix.'faqdata';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata_temp RENAME TO '.$prefix.'faqdata';
 
-            $query[] = "CREATE TABLE " . $prefix . "faqdata_revision_temp (
+            $query[] = 'CREATE TABLE '.$prefix."faqdata_revision_temp (
                 id INTEGER NOT NULL,
                 lang VARCHAR(5) NOT NULL,
                 solution_id INTEGER NOT NULL,
@@ -813,15 +806,15 @@ if ($step == 3) {
                 date_start VARCHAR(14) NOT NULL DEFAULT '00000000000000',
                 date_end VARCHAR(14) NOT NULL DEFAULT '99991231235959',
                 PRIMARY KEY (id, lang, solution_id, revision_id))";
-            $query[] = "INSERT INTO " . $prefix . "faqdata_revision_temp
+            $query[] = 'INSERT INTO '.$prefix.'faqdata_revision_temp
                 SELECT
                     id, lang, solution_id, revision_id, active, sticky, keywords, thema, content, author, email,
                     comment, datum, links_state, links_check_date, date_start, date_end
-                FROM " . $prefix . "faqdata_revisions";
-            $query[] = "DROP TABLE " . $prefix . "faqdata_revisions";
-            $query[] = "ALTER TABLE " . $prefix . "faqdata_revision_temp RENAME TO " . $prefix . "faqdata_revisions";
-            $query[] = "ALTER TABLE " . $prefix . "faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
-            $query[] = "ALTER TABLE " . $prefix . "faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP";
+                FROM '.$prefix.'faqdata_revisions';
+            $query[] = 'DROP TABLE '.$prefix.'faqdata_revisions';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata_revision_temp RENAME TO '.$prefix.'faqdata_revisions';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD COLUMN created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
         }
     }
 
@@ -829,7 +822,6 @@ if ($step == 3) {
     // UPDATES FROM 2.9.0-alpha4
     //
     if (version_compare($version, '2.9.0-beta', '<')) {
-
     }
 
     // Always the last step: Update version number
@@ -843,11 +835,11 @@ if ($step == 3) {
             // Get all table names
             $faqConfig->getDb()->getTableNames($prefix);
             foreach ($faqConfig->getDb()->tableNames as $tableName) {
-                $query[] = 'OPTIMIZE TABLE '. $tableName;
+                $query[] = 'OPTIMIZE TABLE '.$tableName;
             }
             break;
         case 'pgsql':
-            $query[] = "VACUUM ANALYZE;";
+            $query[] = 'VACUUM ANALYZE;';
             break;
     }
 
@@ -858,7 +850,7 @@ if ($step == 3) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s">.</span>', $executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again ' .
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again '.
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
@@ -866,7 +858,7 @@ if ($step == 3) {
             }
             usleep(10000);
         }
-        echo "</div>";
+        echo '</div>';
     }
 
     echo "</p>\n";
@@ -880,13 +872,13 @@ if ($step == 3) {
         }
     }
     // Remove 'setup.php' file
-    if (is_writeable(__DIR__ . '/setup.php') && @unlink(__DIR__ . '/setup.php')) {
+    if (is_writeable(__DIR__.'/setup.php') && @unlink(__DIR__.'/setup.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
     }
     // Remove 'update.php' file
-    if (is_writeable(__DIR__ . '/update.php') && @unlink(__DIR__ . '/update.php')) {
+    if (is_writeable(__DIR__.'/update.php') && @unlink(__DIR__.'/update.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
     } else {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";

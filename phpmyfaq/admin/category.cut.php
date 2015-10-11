@@ -1,6 +1,6 @@
 <?php
 /**
- * Cuts out a category
+ * Cuts out a category.
  *
  * PHP Version 5.5
  *
@@ -9,34 +9,33 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-25
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), "editcateg")) {
-
+if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
-    
-    $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+
+    $id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
-    $header    = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $category->categoryName[$id]['name']);
-?>
+    $header = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $category->categoryName[$id]['name']);
+    ?>
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header"><i class="fa fa-list"></i> <?php echo $header ?></h2>
@@ -46,17 +45,20 @@ if ($user->perm->checkRight($user->getUserId(), "editcateg")) {
         <div class="row">
             <div class="col-lg-12">
                 <form class="form-horizontal" action="?action=pastecategory" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="cat" value="<?php echo $id; ?>">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession(); ?>">
+                    <input type="hidden" name="cat" value="<?php echo $id;
+    ?>">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
+    ?>">
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG["ad_categ_paste2"]; ?></label>
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_paste2'];
+    ?></label>
                         <div class="col-lg-4">
                             <select name="after" size="1" class="form-control">
 <?php
 
     foreach ($category->catTree as $cat) {
         $indent = '';
-        for ($j = 0; $j < $cat['indent']; $j++) {
+        for ($j = 0; $j < $cat['indent']; ++$j) {
             $indent .= '...';
         }
         if ($id != $cat['id']) {
@@ -68,14 +70,15 @@ if ($user->perm->checkRight($user->getUserId(), "editcateg")) {
         printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
     }
 
-?>
+    ?>
                             </select>
                         </div>
                     </div>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php echo $PMF_LANG["ad_categ_updatecateg"]; ?>
+                                <?php echo $PMF_LANG['ad_categ_updatecateg'];
+    ?>
                             </button>
                         </div>
                     </div>
@@ -83,6 +86,7 @@ if ($user->perm->checkRight($user->getUserId(), "editcateg")) {
             </div>
         </div>
 <?php
+
 } else {
-    echo $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG['err_NotAuth'];
 }

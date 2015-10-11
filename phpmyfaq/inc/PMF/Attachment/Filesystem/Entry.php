@@ -1,6 +1,7 @@
 <?php
+
 /**
- * File handler class
+ * File handler class.
  *
  * PHP Version 5.5
  *
@@ -9,51 +10,52 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Atachment_Abstract.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 abstract class PMF_Attachment_Filesystem_Entry
 {
     /**
-     * Path to the entry in the filesystem
+     * Path to the entry in the filesystem.
      *
      * @var string
      */
     protected $path;
-    
+
     /**
-     * This opened handle
+     * This opened handle.
      *
      * @var resource
      */
     protected $handle;
-    
+
     /**
-     * Move file to another location
+     * Move file to another location.
      *
      * @param object|string $entry an entry to move to
      *
-     * @return boolean
+     * @return bool
      */
     public function moveTo($entry)
     {
@@ -61,33 +63,33 @@ abstract class PMF_Attachment_Filesystem_Entry
     }
 
     /**
-     * Copy file to another location
+     * Copy file to another location.
      *
      * @param object|string $entry an entry to copy to
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function copyTo($entry);
-    
+
     /**
-     * Delete this file
+     * Delete this file.
      *
-     * @return boolean
+     * @return bool
      */
     abstract public function delete();
-    
+
     /**
-     * Either file is encrypted
+     * Either file is encrypted.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEncrypted()
     {
         return false;
     }
-    
+
     /**
-     * Return current filepath
+     * Return current filepath.
      *
      * @return string
      */
@@ -95,9 +97,9 @@ abstract class PMF_Attachment_Filesystem_Entry
     {
         return $this->path;
     }
-    
+
     /**
-     * Magic to use in string context
+     * Magic to use in string context.
      *
      * @return string
      */

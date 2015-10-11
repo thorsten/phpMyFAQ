@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Interface for phpMyFAQ search classes
+ * Interface for phpMyFAQ search classes.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Interface
+ * PMF_Search_Interface.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
 interface PMF_Search_Interface
 {
     /**
-     * Prepares the search and executes it
+     * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
      *

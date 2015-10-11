@@ -1,6 +1,6 @@
 <?php
 /**
- * Footer of the admin area
+ * Footer of the admin area.
  *
  * PHP Version 5.5
  *
@@ -9,21 +9,21 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -54,14 +54,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 <?php
 if (isset($auth)) {
-?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE; ?>" width="0" height="0"></iframe>
+    ?>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE;
+    ?>" width="0" height="0"></iframe>
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview'  == $action) ||
                          ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
-    
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
-?>
+            ?>
 <script>
 
     $().tooltip({placement: 'bottom'});
@@ -69,7 +69,7 @@ if (isset($auth)) {
     tinyMCE.init({
         // General options
         mode     : 'exact',
-        language : '<?php echo (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+        language : '<?php echo(PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
         elements : '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
         theme    : 'modern',
         plugins: [
@@ -123,12 +123,15 @@ if (isset($auth)) {
         save_onsavecallback : "phpMyFAQSave",
 
         // phpMyFAQ CSS
-        content_css : '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
+        content_css : '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time();
+            ?>',
 
         // Replace values for the template plugin
         template_replace_values : {
-            username : "<?php echo $user->userdata->get('display_name'); ?>",
-            user_id  : "<?php echo $user->userdata->get('user_id'); ?>"
+            username : "<?php echo $user->userdata->get('display_name');
+            ?>",
+            user_id  : "<?php echo $user->userdata->get('user_id');
+            ?>"
         },
 
         // Image Upload
@@ -150,19 +153,22 @@ if (isset($auth)) {
         var data = {action: "ajax", ajax: 'recordAdd'};
         <?php else: ?>
         var data = {action: "ajax", ajax: 'recordSave'};
-        <?php endif; ?>
+        <?php endif;
+            ?>
         var id = $('#answer')[0].parentNode.parentNode.id;
         $.each($('#' + id).serialize[], function(i, field) {
             data[field.name] = field.value;
         });
         $.post("index.php", data, null);
-        $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc']; ?>');
+        $('#saving_data_indicator').html('<?php echo $PMF_LANG['ad_entry_savedsuc'];
+            ?>');
         $('#temporarySaveButton').remove();
     }
     */
 
 </script>
 <?php
+
         }
     }
 }

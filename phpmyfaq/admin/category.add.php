@@ -10,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -38,25 +38,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
-
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
-?>
+    ?>
                 <form class="form-horizontal" action="?action=savecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" id="lang" name="lang" value="<?php echo $LANGCODE ?>">
                     <input type="hidden" name="parent_id" value="<?php echo $parentId ?>">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 <?php
     if ($parentId > 0) {
-        $userAllowed   = $category->getPermissions('user', array($parentId));
+        $userAllowed = $category->getPermissions('user', array($parentId));
         $groupsAllowed = $category->getPermissions('group', array($parentId));
-?>
+        ?>
             <input type="hidden" name="restricted_users" value="<?php echo $userAllowed[0] ?>">
             <?php foreach ($groupsAllowed as $group): ?>
             <input type="hidden" name="restricted_groups[]" value="<?php echo $group ?>">
-            <?php endforeach; ?>
+            <?php endforeach;
+        ?>
 <?php
         printf(
             '<div class="form-group"><label class="col-lg-2 control-label">%s:</label>',
@@ -68,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
             $languageCodes[PMF_String::strtoupper($category->categoryName[$parentId]['lang'])]
         );
     }
-?>
+    ?>
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="name"><?php echo $PMF_LANG['ad_categ_titel'] ?>:</label>
                         <div class="col-lg-4">
@@ -101,7 +101,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </select>
                         </div>
                     </div>
-                    <?php if ($faqConfig->get('security.permLevel') !== 'basic') { ?>
+                    <?php if ($faqConfig->get('security.permLevel') !== 'basic') {
+    ?>
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                         <div class="col-lg-4">
@@ -110,14 +111,18 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </select>
                         </div>
                     </div>
-                    <?php } else { ?>
+                    <?php 
+} else {
+    ?>
                     <input type="hidden" name="group_id" value="-1">
-                    <?php } ?>
+                    <?php 
+}
+    ?>
 
 <?php
     if ($parentId === 0) {
         if ($faqConfig->get('security.permLevel') !== 'basic') {
-?>
+            ?>
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_entry_grouppermission'] ?></label>
                         <div class="col-lg-4">
@@ -136,12 +141,14 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                     </div>
 
 <?php
+
         } else {
-?>
+            ?>
                     <input type="hidden" name="grouppermission" value="all">
 <?php
+
         }
-?>
+        ?>
                     <div class="form-group">
                         <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_entry_userpermission'] ?></label>
                         <div class="col-lg-4">
@@ -160,8 +167,9 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                     </div>
 
 <?php
+
     }
-?>
+    ?>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
@@ -173,6 +181,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
             </div>
         </div>
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

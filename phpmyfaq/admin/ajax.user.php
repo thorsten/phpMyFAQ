@@ -1,6 +1,7 @@
 <?php
+
 /**
- * AJAX: handling of Ajax user calls
+ * AJAX: handling of Ajax user calls.
  *
  * PHP Version 5.5
  *
@@ -9,27 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-04
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$userId     = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+$userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
 $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
-$csrfToken  = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 // Send headers
 $http = new PMF_Helper_Http();
@@ -39,9 +40,8 @@ $http->addHeader();
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
     $user->perm->checkRight($user->getUserId(), 'deluser')) {
-
     $user = new PMF_User($faqConfig);
-    
+
     switch ($ajaxAction) {
 
         case 'get_user_list':
@@ -49,7 +49,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             foreach ($user->searchUsers($usersearch) as $singleUser) {
                 $users[] = array(
                     'user_id' => $singleUser['user_id'],
-                    'name'    => $singleUser['login']
+                    'name' => $singleUser['login'],
                 );
             }
             echo json_encode($users);
@@ -57,10 +57,10 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
         case 'get_user_data':
             $user->getUserById($userId, true);
-            $userdata           = [];
-            $userdata           = $user->userdata->get('*');
+            $userdata = [];
+            $userdata = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
-            $userdata['login']  = $user->getLogin();
+            $userdata['login'] = $user->getLogin();
             echo json_encode($userdata);
             break;
 
@@ -84,7 +84,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
             $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message = '<p class="error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
+                $message = '<p class="error">'.$PMF_LANG['ad_user_error_protectedAccount'].'</p>';
             } else {
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
@@ -97,8 +97,8 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                         $permissions = PMF_Perm::selectPerm('medium', $faqConfig);
                         $permissions->removeFromAllGroups($userId);
                     }
-    
-                    $message = '<p class="success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
+
+                    $message = '<p class="success">'.$PMF_LANG['ad_user_deleted'].'</p>';
                 }
             }
             echo json_encode($message);
@@ -106,9 +106,9 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
         case 'overwrite_password':
 
-            $userId          = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken       = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-            $newPassword     = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+            $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+            $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+            $newPassword = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
             $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -117,21 +117,19 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             }
 
             $user->getUserById($userId, true);
-            $auth       = new PMF_Auth($faqConfig);
+            $auth = new PMF_Auth($faqConfig);
             $authSource = $auth->selectAuth($user->getAuthSource('name'));
             $authSource->selectEncType($user->getAuthData('encType'));
 
-
             if ($newPassword === $retypedPassword) {
                 if (!$user->changePassword($newPassword)) {
-                    echo json_encode(['error' =>$PMF_LANG["ad_passwd_fail"]]);
+                    echo json_encode(['error' => $PMF_LANG['ad_passwd_fail']]);
                 }
-                echo json_encode(['success' => $PMF_LANG["ad_passwdsuc"]]);
+                echo json_encode(['success' => $PMF_LANG['ad_passwdsuc']]);
             } else {
-                echo json_encode(['error' =>$PMF_LANG["ad_passwd_fail"]]);
+                echo json_encode(['error' => $PMF_LANG['ad_passwd_fail']]);
             }
 
             break;
     }
-    
 }

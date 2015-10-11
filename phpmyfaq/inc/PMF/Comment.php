@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main Comment class
+ * The main Comment class.
  *
  * PHP Version 5.5
  *
@@ -9,44 +10,45 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Comment
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Comment
+ * PMF_Comment.
  *
  * @category  phpMyFAQ
- * @package   PMF_Comment
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
  */
 class PMF_Comment
 {
     /**
-     * FAQ type
+     * FAQ type.
      *
      * @const string
      */
-    const COMMENT_TYPE_FAQ  = 'faq';
+    const COMMENT_TYPE_FAQ = 'faq';
 
     /**
-     * News type
+     * News type.
      *
      * @const string
      */
-    const COMMENT_TYPE_NEWS ='news';
+    const COMMENT_TYPE_NEWS = 'news';
 
     /**
      * @var PMF_Configuration
@@ -54,14 +56,14 @@ class PMF_Comment
     private $config;
 
     /**
-     * Language strings
+     * Language strings.
      *
      * @var string
      */
     private $pmfStr;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -80,35 +82,36 @@ class PMF_Comment
     //
 
     /**
-     * Returns a user comment
+     * Returns a user comment.
      *
-     * @param  integer $id comment id
+     * @param int $id comment id
+     *
      * @return string
      */
     public function getCommentDataById($id)
     {
         $item = [];
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 id_comment, id, type, usr, email, comment, datum
             FROM
                 %sfaqcomments
             WHERE
-                id_comment = %d",
+                id_comment = %d',
             PMF_Db::getTablePrefix(),
             $id);
 
         $result = $this->config->getDb()->query($query);
         if (($this->config->getDb()->numRows($result) > 0) && ($row = $this->config->getDb()->fetchObject($result))) {
             $item = array(
-                'id'       => $row->id_comment,
+                'id' => $row->id_comment,
                 'recordId' => $row->id,
-                'type'     => $row->type,
-                'content'  => $row->comment,
-                'date'     => $row->datum,
-                'user'     => $row->usr,
-                'email'    => $row->email
+                'type' => $row->type,
+                'content' => $row->comment,
+                'date' => $row->datum,
+                'user' => $row->usr,
+                'email' => $row->email,
             );
         }
 
@@ -116,10 +119,10 @@ class PMF_Comment
     }
 
     /**
-     * Returns all user comments from a record by type
+     * Returns all user comments from a record by type.
      *
-     * @param integer $id   record id
-     * @param integer $type record type: {faq|news}
+     * @param int $id   record id
+     * @param int $type record type: {faq|news}
      *
      * @return array
      */
@@ -144,11 +147,11 @@ class PMF_Comment
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $comments[] = array(
-                    'id'      => $row->id_comment,
+                    'id' => $row->id_comment,
                     'content' => $row->comment,
-                    'date'    => $row->datum,
-                    'user'    => $row->usr,
-                    'email'   => $row->email
+                    'date' => $row->datum,
+                    'user' => $row->usr,
+                    'email' => $row->email,
                 );
             }
         }
@@ -157,20 +160,20 @@ class PMF_Comment
     }
 
     /**
-     * Returns all user comments (HTML formatted) from a record by type
+     * Returns all user comments (HTML formatted) from a record by type.
      *
      * @todo Move this code to a helper class
      *
-     * @param integer $id   Comment ID
-     * @param integer $type Comment type: {faq|news}
+     * @param int $id   Comment ID
+     * @param int $type Comment type: {faq|news}
      *
      * @return string
      */
     public function getComments($id, $type)
     {
         $comments = $this->getCommentsData($id, $type);
-        $date     = new PMF_Date($this->config);
-        $mail     = new PMF_Mail($this->config);
+        $date = new PMF_Date($this->config);
+        $mail = new PMF_Mail($this->config);
 
         $output = '';
         foreach ($comments as $item) {
@@ -182,7 +185,7 @@ class PMF_Comment
                 $mail->safeEmail($item['email']),
                 $item['user'],
                 $this->showShortComment($id, $item['content']),
-                $this->pmfStr['newsCommentDate'] .
+                $this->pmfStr['newsCommentDate'].
                     $date->format(
                         PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)
                     )
@@ -193,12 +196,13 @@ class PMF_Comment
     }
 
     /**
-     * Adds a comment
+     * Adds a comment.
      *
-     * @param  array $commentData Array with comment dara
-     * @return boolean
+     * @param array $commentData Array with comment dara
+     *
+     * @return bool
      */
-    function addComment(Array $commentData)
+    public function addComment(Array $commentData)
     {
         $query = sprintf("
             INSERT INTO
@@ -216,7 +220,7 @@ class PMF_Comment
             $commentData['helped']
         );
 
-    if (!$this->config->getDb()->query($query)) {
+        if (!$this->config->getDb()->query($query)) {
             return false;
         }
 
@@ -224,11 +228,12 @@ class PMF_Comment
     }
 
     /**
-     * Deletes a comment
+     * Deletes a comment.
      *
-     * @param  integer $recordId  Record id
-     * @param  integer $commentId Comment id
-     * @return boolean
+     * @param int $recordId  Record id
+     * @param int $commentId Comment id
+     *
+     * @return bool
      */
     public function deleteComment($recordId, $commentId)
     {
@@ -236,13 +241,13 @@ class PMF_Comment
             return false;
         }
 
-        $query = sprintf("
+        $query = sprintf('
             DELETE FROM
                 %sfaqcomments
             WHERE
                 id = %d
             AND
-                id_comment = %d",
+                id_comment = %d',
             PMF_Db::getTablePrefix(),
             $recordId,
             $commentId
@@ -256,9 +261,10 @@ class PMF_Comment
     }
 
     /**
-     * Returns the number of comments of each FAQ record as an array
+     * Returns the number of comments of each FAQ record as an array.
      *
-     * @param  string $type Type of comment: faq or news
+     * @param string $type Type of comment: faq or news
+     *
      * @return array
      */
     public function getNumberOfComments($type = self::COMMENT_TYPE_FAQ)
@@ -290,9 +296,10 @@ class PMF_Comment
     }
 
     /**
-     * Returns all comments with their categories
+     * Returns all comments with their categories.
      *
-     * @param  string $type Type of comment: faq or news
+     * @param string $type Type of comment: faq or news
+     *
      * @return array
      */
     public function getAllComments($type = self::COMMENT_TYPE_FAQ)
@@ -315,24 +322,24 @@ class PMF_Comment
                 type = '%s'",
             ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
             PMF_Db::getTablePrefix(),
-            ($type == self::COMMENT_TYPE_FAQ) ? "LEFT JOIN
-                ".PMF_Db::getTablePrefix()."faqcategoryrelations fcg
+            ($type == self::COMMENT_TYPE_FAQ) ? 'LEFT JOIN
+                '.PMF_Db::getTablePrefix()."faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
             $type
         );
-            
+
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $comments[] = array(
-                    'comment_id'  => $row->comment_id,
-                    'record_id'   => $row->record_id,
+                    'comment_id' => $row->comment_id,
+                    'record_id' => $row->record_id,
                     'category_id' => (isset($row->category_id) ? $row->category_id : null),
-                    'content'     => $row->comment,
-                    'date'        => $row->comment_date,
-                    'username'    => $row->username,
-                    'email'       => $row->email
+                    'content' => $row->comment,
+                    'date' => $row->comment_date,
+                    'username' => $row->username,
+                    'email' => $row->email,
                 );
             }
         }
@@ -341,33 +348,33 @@ class PMF_Comment
     }
 
     /**
-     * Adds some fancy HTML if a comment is too long
+     * Adds some fancy HTML if a comment is too long.
      *
-     * @param integer $id
-     * @param string  $comment
+     * @param int    $id
+     * @param string $comment
      *
      * @return string
      */
     public function showShortComment($id, $comment)
     {
-        $words    = explode(' ', nl2br($comment));
+        $words = explode(' ', nl2br($comment));
         $numWords = 0;
 
         $comment = '';
         foreach ($words as $word) {
-            $comment .= $word . ' ';
+            $comment .= $word.' ';
             if (15 === $numWords) {
-            $comment .= '<span class="comment-dots-' . $id . '">... </span>' .
-                        '<a onclick="showLongComment(' . $id . ')" class="comment-show-more-' . $id .
-                        ' pointer">' . $this->pmfStr['msgShowMore'] . '</a>' .
-                        '<span class="comment-more-' . $id . ' hide">';
+                $comment .= '<span class="comment-dots-'.$id.'">... </span>'.
+                        '<a onclick="showLongComment('.$id.')" class="comment-show-more-'.$id.
+                        ' pointer">'.$this->pmfStr['msgShowMore'].'</a>'.
+                        '<span class="comment-more-'.$id.' hide">';
             }
-            $numWords++;
+            ++$numWords;
         }
 
         // Convert URLs to HTML anchors
 
 
-        return PMF_Utils::parseUrl($comment) . '</span>';
+        return PMF_Utils::parseUrl($comment).'</span>';
     }
 }

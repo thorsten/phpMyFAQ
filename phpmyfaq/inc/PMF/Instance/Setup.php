@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The phpMyFAQ instances setup class
+ * The phpMyFAQ instances setup class.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-04
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance
+ * PMF_Instance.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-04
  */
@@ -40,7 +42,7 @@ class PMF_Instance_Setup
     private $_rootDir;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @return PMF_Instance_Setup
      */
@@ -50,7 +52,7 @@ class PMF_Instance_Setup
     }
 
     /**
-     * Sets the root directory of the phpMyFAQ instance
+     * Sets the root directory of the phpMyFAQ instance.
      *
      * @param string $rootDir
      */
@@ -60,11 +62,9 @@ class PMF_Instance_Setup
     }
 
     /**
-     * Creates the anonymous default user
+     * Creates the anonymous default user.
      *
      * @param PMF_Configuration $faqConfig
-     *
-     * @return void
      */
     public function createAnonymousUser(PMF_Configuration $faqConfig)
     {
@@ -73,13 +73,13 @@ class PMF_Instance_Setup
         $anonymous->setStatus('protected');
         $anonymousData = array(
             'display_name' => 'Anonymous User',
-            'email'        => null
+            'email' => null,
         );
         $anonymous->setUserData($anonymousData);
     }
 
     /**
-     * Checks basic folders and creates them if necessary
+     * Checks basic folders and creates them if necessary.
      *
      * @param array $dirs
      *
@@ -90,16 +90,16 @@ class PMF_Instance_Setup
         $failedDirs = [];
 
         foreach ($dirs as $dir) {
-            if (false === is_writable($this->_rootDir . $dir)) {
+            if (false === is_writable($this->_rootDir.$dir)) {
                 $failedDirs[] = $dir;
-            } elseif (false === is_dir($this->_rootDir . $dir)) {
-                if (false === mkdir($this->_rootDir . $dir, 0775)) {
+            } elseif (false === is_dir($this->_rootDir.$dir)) {
+                if (false === mkdir($this->_rootDir.$dir, 0775)) {
                     $failedDirs[] = $dir;
                 }
             } else {
                 copy(
-                    $this->_rootDir . '/setup/index.html',
-                    $this->_rootDir . $dir . '/index.html'
+                    $this->_rootDir.'/setup/index.html',
+                    $this->_rootDir.$dir.'/index.html'
                 );
             }
         }
@@ -108,24 +108,24 @@ class PMF_Instance_Setup
     }
 
     /**
-     * Creates the file /config/database.php
+     * Creates the file /config/database.php.
      *
      * @param array  $data   Array with database credentials
      * @param string $folder Folder
      *
-     * @return integer
+     * @return int
      */
     public function createDatabaseFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir . $folder . '/database.php',
-            "<?php\n" .
-            "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
-            "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
-            "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
-            "\$DB['db'] = '" . $data['dbDatabaseName'] . "';\n" .
-            "\$DB['prefix'] = '" . $data['dbPrefix'] . "';\n" .
-            "\$DB['type'] = '" . $data['dbType'] . "';",
+            $this->_rootDir.$folder.'/database.php',
+            "<?php\n".
+            "\$DB['server'] = '".$data['dbServer']."';\n".
+            "\$DB['user'] = '".$data['dbUser']."';\n".
+            "\$DB['password'] = '".$data['dbPassword']."';\n".
+            "\$DB['db'] = '".$data['dbDatabaseName']."';\n".
+            "\$DB['prefix'] = '".$data['dbPrefix']."';\n".
+            "\$DB['type'] = '".$data['dbType']."';",
             LOCK_EX
         );
 
@@ -133,23 +133,23 @@ class PMF_Instance_Setup
     }
 
     /**
-     * Creates the file /config/ldap.php
+     * Creates the file /config/ldap.php.
      *
      * @param array  $data   Array with LDAP credentials
      * @param string $folder Folder
      *
-     * @return integer
+     * @return int
      */
     public function createLdapFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir . $folder . '/config/ldap.php',
-            "<?php\n" .
-            "\$PMF_LDAP['ldap_server'] = '" . $data['ldapServer'] . "';\n" .
-            "\$PMF_LDAP['ldap_port'] = '" . $data['ldapPort'] . "';\n" .
-            "\$PMF_LDAP['ldap_user'] = '" . $data['ldapUser'] . "';\n" .
-            "\$PMF_LDAP['ldap_password'] = '" . $data['ldapPassword'] . "';\n" .
-            "\$PMF_LDAP['ldap_base'] = '" . $data['ldapBase'] . "';",
+            $this->_rootDir.$folder.'/config/ldap.php',
+            "<?php\n".
+            "\$PMF_LDAP['ldap_server'] = '".$data['ldapServer']."';\n".
+            "\$PMF_LDAP['ldap_port'] = '".$data['ldapPort']."';\n".
+            "\$PMF_LDAP['ldap_user'] = '".$data['ldapUser']."';\n".
+            "\$PMF_LDAP['ldap_password'] = '".$data['ldapPassword']."';\n".
+            "\$PMF_LDAP['ldap_base'] = '".$data['ldapBase']."';",
             LOCK_EX
         );
 
@@ -157,7 +157,7 @@ class PMF_Instance_Setup
     }
 
     /**
-     * Creates a new folder
+     * Creates a new folder.
      *
      * @param string $name Name of the new folder
      * @param string $path Path to the new folder

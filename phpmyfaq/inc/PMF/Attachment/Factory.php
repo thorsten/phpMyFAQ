@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Attachment handler class
+ * Attachment handler class.
  *
  * PHP Version 5.5
  *
@@ -9,49 +10,56 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
+ *
  * @since     2009-08-21
+ *
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
+ *
  * @copyright 2009-2015 phpMyFAQ Team
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Attachment_Factory
+ * PMF_Attachment_Factory.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
+ *
  * @since     2009-08-21
+ *
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
+ *
  * @copyright 2009-2015 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
 {
     /**
-     * Default encryption key
+     * Default encryption key.
      *
      * @var string
      */
     private static $defaultKey = null;
 
     /**
-     * Storage type
+     * Storage type.
      *
-     * @var integer
+     * @var int
      */
     private static $storageType = null;
 
     /**
-     * File encryption is enabled
+     * File encryption is enabled.
      *
-     * @var boolean
+     * @var bool
      */
     private static $encryptionEnabled = null;
 
@@ -61,9 +69,9 @@ class PMF_Attachment_Factory
     private $config;
 
     /**
-     * Create an attachment exemplar
+     * Create an attachment exemplar.
      *
-     * @param int $id ID
+     * @param int    $id  ID
      * @param string $key Key
      *
      * @throws PMF_Attachment_Exception
@@ -88,7 +96,7 @@ class PMF_Attachment_Factory
                 break;
         }
 
-        /**
+        /*
          * If encryption isn't enabled, just ignoring all keys
          */
         if (self::$encryptionEnabled) {
@@ -103,10 +111,10 @@ class PMF_Attachment_Factory
     }
 
     /**
-     * Fetch all record attachments
+     * Fetch all record attachments.
      *
      * @param PMF_Configuration $config
-     * @param integer $recordId ID of the record
+     * @param int               $recordId ID of the record
      *
      * @return array
      */
@@ -141,13 +149,11 @@ class PMF_Attachment_Factory
     }
 
     /**
-     * Initalizing factory with global attachment settings
+     * Initalizing factory with global attachment settings.
      *
-     * @param int $storageType Storage type
-     * @param string $defaultKey Default key
-     * @param boolean $encryptionEnabled Enabled encryption?
-     *
-     * @return null
+     * @param int    $storageType       Storage type
+     * @param string $defaultKey        Default key
+     * @param bool   $encryptionEnabled Enabled encryption?
      */
     public static function init($storageType, $defaultKey, $encryptionEnabled)
     {

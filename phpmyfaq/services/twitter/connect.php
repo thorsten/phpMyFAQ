@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Clears PHP sessions and redirects to the connect page.
  *
@@ -9,11 +10,12 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-18
  */
@@ -27,11 +29,10 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/inc/Bootstrap.php';
 
 if ($faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
     $faqConfig->get('socialnetworks.twitterConsumerSecret') === '') {
-    
     print 'Get a consumer key and secret from <a href="https://twitter.com/apps">twitter.com</a>.';
     exit;
 }

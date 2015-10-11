@@ -1,6 +1,6 @@
 <?php
 /**
- * The start page with some information about the FAQ
+ * The start page with some information about the FAQ.
  *
  * PHP Version 5.5
  *
@@ -9,27 +9,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $faqTableInfo = $faqConfig->getDb()->getTableStatus();
-$faqSystem    = new PMF_System();
-$faqSession   = new PMF_Session($faqConfig);
+$faqSystem = new PMF_System();
+$faqSession = new PMF_Session($faqConfig);
 ?>
     <header class="row">
         <div class="col-lg-12">
@@ -53,12 +53,12 @@ $faqSession   = new PMF_Session($faqConfig);
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG["ad_stat_report_visits"] ?>
+                    <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
                 </div>
                 <div class="panel-body">
                 <?php
                 $session = new PMF_Session($faqConfig);
-                $visits  = $session->getLast30DaysVisits();
+                $visits = $session->getLast30DaysVisits();
                 ?>
                 <script type="text/javascript" src="assets/js/plugins/jquery.sparkline.min.js"></script>
                 <script type="text/javascript">
@@ -70,7 +70,7 @@ $faqSession   = new PMF_Session($faqConfig);
                                 barColor: '#7797b2',
                                 barWidth: window.innerWidth / 66,
                                 height: 268,
-                                tooltipSuffix: ' <?php echo $PMF_LANG["ad_visits_per_day"] ?>'
+                                tooltipSuffix: ' <?php echo $PMF_LANG['ad_visits_per_day'] ?>'
                             });
                     });
                 </script>
@@ -93,33 +93,33 @@ $faqSession   = new PMF_Session($faqConfig);
                             </span>
                         </a>
                         <a href="?action=view" class="list-group-item">
-                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG["ad_start_articles"]; ?>
+                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
                             <span class="pull-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"]; ?></em>
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
-                            <i class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG["ad_start_comments"]; ?>
+                            <i class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
                             <span class="pull-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"]; ?></em>
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="#" class="list-group-item">
-                            <i class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG["msgOpenQuestions"]; ?>
+                            <i class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="pull-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"]; ?></em>
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="#" class="list-group-item">
-                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG["msgNews"]; ?>
+                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="pull-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"]; ?></em>
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
                             <i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="pull-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1; ?></em>
+                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                     </div>
@@ -141,7 +141,7 @@ $faqSession   = new PMF_Session($faqConfig);
                     <?php
                     $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
                     if (!is_null($version) && $version == 'version') {
-                        $json   = file_get_contents('http://api.phpmyfaq.de/versions');
+                        $json = file_get_contents('http://api.phpmyfaq.de/versions');
                         $result = json_decode($json);
                         if ($result instanceof stdClass) {
                             $installed = $faqConfig->get('main.currentVersion');
@@ -154,7 +154,7 @@ $faqSession   = new PMF_Session($faqConfig);
                             );
                             // Installed phpMyFAQ version is outdated
                             if (-1 == version_compare($installed, $available)) {
-                                print '<br />' . $PMF_LANG['ad_you_should_update'];
+                                print '<br />'.$PMF_LANG['ad_you_should_update'];
                             }
                         }
                     } else {
@@ -162,10 +162,12 @@ $faqSession   = new PMF_Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG["ad_xmlrpc_button"]; ?>
+                                <i class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG['ad_xmlrpc_button'];
+                        ?>
                             </button>
                         </form>
                     <?php
+
                     }
                     ?>
                 </div>
@@ -181,20 +183,18 @@ $faqSession   = new PMF_Session($faqConfig);
                     <?php
                     $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
                     if (!is_null($getJson) && 'verify' === $getJson) {
-
                         set_error_handler(
-                            function ($severity, $message, $file, $line)
-                            {
+                            function ($severity, $message, $file, $line) {
                                 throw new ErrorException($message, $severity, $severity, $file, $line);
                             }
                         );
 
-                        $faqSystem         = new PMF_System();
-                        $localHashes       = $faqSystem->createHashes();
+                        $faqSystem = new PMF_System();
+                        $localHashes = $faqSystem->createHashes();
                         $versionCheckError = true;
                         try {
                             $remoteHashes = file_get_contents(
-                                'http://api.phpmyfaq.de/verify/' . $faqConfig->get('main.currentVersion')
+                                'http://api.phpmyfaq.de/verify/'.$faqConfig->get('main.currentVersion')
                             );
                             if (!is_array(json_decode($remoteHashes, true))) {
                                 $versionCheckError = true;
@@ -210,14 +210,13 @@ $faqSession   = new PMF_Session($faqConfig);
                         if ($versionCheckError) {
                             echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
                         } else {
-
                             $diff = array_diff(
                                 json_decode($localHashes, true),
                                 json_decode($remoteHashes, true)
                             );
 
                             if (1 < count($diff)) {
-                                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG["ad_verification_notokay"]);
+                                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_verification_notokay']);
                                 print '<ul>';
                                 foreach ($diff as $file => $hash) {
                                     if ('created' === $file) {
@@ -231,19 +230,19 @@ $faqSession   = new PMF_Session($faqConfig);
                                 }
                                 print '</ul>';
                             } else {
-                                printf('<p class="alert alert-success">%s</p>', $PMF_LANG["ad_verification_okay"]);
+                                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
                             }
                         }
-
                     } else {
                         ?>
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG["ad_verification_button"] ?>
+                                <i class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG['ad_verification_button'] ?>
                             </button>
                         </form>
                     <?php
+
                     }
                     ?>
                     <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>

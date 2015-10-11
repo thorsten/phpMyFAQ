@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
@@ -9,15 +10,15 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Utils
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -34,16 +35,17 @@ define('HTTP_PARAMS_GET_DOWNWARDS', 'downwards');
 define('HTTP_PARAMS_GET_TYPE', 'type');
 
 /**
- * PMF_Utils class
+ * PMF_Utils class.
  *
  * This class has only static methods
  *
  * @category  phpMyFAQ
- * @package   PMF_Utils
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-01
  */
@@ -65,15 +67,15 @@ class PMF_Utils
 
         // Create the HTTP options for the HTTP stream context, see below
         // Set phpMyFAQ agent related data
-        $agent = 'phpMyFAQ/' . PMF_System::getVersion() . ' on PHP/' . PHP_VERSION;
-        $opts  = array(
+        $agent = 'phpMyFAQ/'.PMF_System::getVersion().' on PHP/'.PHP_VERSION;
+        $opts = array(
             'header' => 'User-Agent: '.$agent."\r\n",
-            'method' => 'GET'
+            'method' => 'GET',
         );
         // HTTP 1.1 Virtual Host
         $urlParts = @parse_url($url);
         if (isset($urlParts['host'])) {
-            $opts['header'] = $opts['header'] . 'Host: ' . $urlParts['host'] . "\r\n";
+            $opts['header'] = $opts['header'].'Host: '.$urlParts['host']."\r\n";
         }
         // Socket timeout
         $opts['timeout'] = 5;
@@ -81,7 +83,7 @@ class PMF_Utils
         // Create the HTTP stream context
         $ctx = stream_context_create(
             array(
-                'http' => $opts
+                'http' => $opts,
             )
         );
 
@@ -89,7 +91,7 @@ class PMF_Utils
     }
 
     /**
-     * Returns date from out of time
+     * Returns date from out of time.
      *
      * @return string
      */
@@ -98,31 +100,32 @@ class PMF_Utils
         // Unix: 13 Dec 1901 20:45:54 -> 19 Jan 2038 03:14:07, signed 32 bit
         // Windows: 1 Jan 1970 -> 19 Jan 2038.
         // So we will use: 1 Jan 2038 -> 2038-01-01, 00:00:01
-        return PMF_Utils::getPMFDate(mktime(0, 0 , 1, 1, 1, 2038));
+        return self::getPMFDate(mktime(0, 0, 1, 1, 1, 2038));
     }
 
     /**
-     * Returns a phpMyFAQ date
+     * Returns a phpMyFAQ date.
      *
-     * @param integer $unixTime Unix timestamp
+     * @param int $unixTime Unix timestamp
      *
      * @return string
      */
-    public static function getPMFDate($unixTime = NULL)
+    public static function getPMFDate($unixTime = null)
     {
         if (!isset($unixTime)) {
             // localtime
             $unixTime = $_SERVER['REQUEST_TIME'];
         }
+
         return date('YmdHis', $unixTime);
     }
 
     /**
-     * Check if a given string could be a language
+     * Check if a given string could be a language.
      *
      * @param string $lang Language
      *
-     * @return boolean
+     * @return bool
      */
     public static function isLanguage($lang)
     {
@@ -130,11 +133,11 @@ class PMF_Utils
     }
 
     /**
-     * Checks if a date is a phpMyFAQ valid date
+     * Checks if a date is a phpMyFAQ valid date.
      *
-     * @param integer $date Date
+     * @param int $date Date
      *
-     * @return integer
+     * @return int
      */
     public static function isLikeOnPMFDate($date)
     {
@@ -146,17 +149,17 @@ class PMF_Utils
         }
         // Suppress last occurence of '%'
         if (substr($testdate, -1, 1) == '%') {
-            $testdate = substr($testdate, 0, strlen($testdate)-1);
+            $testdate = substr($testdate, 0, strlen($testdate) - 1);
         }
         // PMF date consists of numbers only: YYYYMMDDhhmmss
         return is_int($testdate);
     }
 
     /**
-     * Shortens a string for a given number of words
+     * Shortens a string for a given number of words.
      *
-     * @param string  $str  String
-     * @param integer $char Characters
+     * @param string $str  String
+     * @param int    $char Characters
      *
      * @return string
      *
@@ -165,13 +168,13 @@ class PMF_Utils
      */
     public static function makeShorterText($str, $char)
     {
-        $str      = PMF_String::preg_replace('/\s+/u', ' ', $str);
-        $arrStr   = explode(' ', $str);
+        $str = PMF_String::preg_replace('/\s+/u', ' ', $str);
+        $arrStr = explode(' ', $str);
         $shortStr = '';
-        $num      = count($arrStr);
+        $num = count($arrStr);
 
         if ($num > $char) {
-            for ($j = 0; $j <= $char; $j++) {
+            for ($j = 0; $j <= $char; ++$j) {
                 $shortStr .= $arrStr[$j].' ';
             }
             $shortStr .= '...';
@@ -185,16 +188,16 @@ class PMF_Utils
     /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
-     * @param string            $text Text contains PMF markers
+     * @param string            $text   Text contains PMF markers
      * @param PMF_Configuration $config
      *
-     * @return  string
+     * @return string
      */
     public static function resolveMarkers($text, PMF_Configuration $config)
     {
         // Available markers: key and resolving value
         $markers = array(
-            '%sitename%' => $config->get('main.titleFAQ')
+            '%sitename%' => $config->get('main.titleFAQ'),
         );
 
         // Resolve any known pattern
@@ -206,7 +209,7 @@ class PMF_Utils
     }
 
     /**
-     * Shuffles an associative array without losing key associations
+     * Shuffles an associative array without losing key associations.
      *
      * @param array $data Array of data
      *
@@ -220,7 +223,7 @@ class PMF_Utils
             if (count($data) > 1) {
                 $randomized_keys = array_rand($data, count($data));
 
-                foreach($randomized_keys as $current_key) {
+                foreach ($randomized_keys as $current_key) {
                     $shuffled_data[$current_key] = $data[$current_key];
                 }
             } else {
@@ -230,31 +233,32 @@ class PMF_Utils
 
         return $shuffled_data;
     }
-    
+
     /**
-     * This method chops a string
+     * This method chops a string.
      *
-     * @param string  $string String to chop
-     * @param integer $words  Number of words
+     * @param string $string String to chop
+     * @param int    $words  Number of words
      *
      * @return string
      */
-    public static function chopString ($string, $words)
+    public static function chopString($string, $words)
     {
-        $str    = '';
+        $str = '';
         $pieces = explode(' ', $string);
-        $num    = count($pieces);
+        $num = count($pieces);
         if ($words > $num) {
             $words = $num;
         }
-        for ($i = 0; $i < $words; $i ++) {
-            $str .= $pieces[$i] . ' ';
+        for ($i = 0; $i < $words; ++$i) {
+            $str .= $pieces[$i].' ';
         }
+
         return $str;
     }
-    
+
     /**
-     * Adds a highlighted word to a string
+     * Adds a highlighted word to a string.
      *
      * @param string $string    String
      * @param string $highlight Given word for highlighting
@@ -280,19 +284,19 @@ class PMF_Utils
             'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset',
             'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
             'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
-            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
+            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute',
         );
-        
+
         return PMF_String::preg_replace_callback(
-            '/(' . $highlight . '="[^"]*")|' .
-            '((' . implode('|', $attributes) . ')="[^"]*' . $highlight . '[^"]*")|' .
-            '(' . $highlight . ')/mis',
+            '/('.$highlight.'="[^"]*")|'.
+            '(('.implode('|', $attributes).')="[^"]*'.$highlight.'[^"]*")|'.
+            '('.$highlight.')/mis',
             array('PMF_Utils', 'highlightNoLinks'),
             $string);
     }
-    
+
     /**
-     * Callback function for filtering HTML from URLs and images
+     * Callback function for filtering HTML from URLs and images.
      *
      * @param array $matches Array of matches from regex pattern
      *
@@ -300,20 +304,20 @@ class PMF_Utils
      */
     public static function highlightNoLinks(Array $matches)
     {
-        $prefix  = isset($matches[3]) ? $matches[3] : '';
-        $item    = isset($matches[4]) ? $matches[4] : '';
+        $prefix = isset($matches[3]) ? $matches[3] : '';
+        $item = isset($matches[4]) ? $matches[4] : '';
         $postfix = isset($matches[5]) ? $matches[5] : '';
 
         if (!empty($item)) {
-            return '<mark>' . $prefix . $item . $postfix . '</mark>';
+            return '<mark>'.$prefix.$item.$postfix.'</mark>';
         }
-        
+
         // Fallback: the original matched string
         return $matches[0];
     }
 
     /**
-     * debug_backtrace() wrapper function
+     * debug_backtrace() wrapper function.
      *
      * @param $string
      *
@@ -323,22 +327,23 @@ class PMF_Utils
     {
         // sometimes Zend Optimizer causes segfaults with debug_backtrace()
         if (extension_loaded('Zend Optimizer')) {
-            $ret = "<pre>" . $string . "</pre><br>\n";
+            $ret = '<pre>'.$string."</pre><br>\n";
         } else {
             $debug = debug_backtrace();
-            $ret   = '';
+            $ret = '';
             if (isset($debug[2]['class'])) {
-                $ret  = $debug[2]['file'] . ":<br>";
+                $ret = $debug[2]['file'].':<br>';
                 $ret .= $debug[2]['class'].$debug[1]['type'];
-                $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
-                $ret .= ": <pre>" . $string . "</pre><br>\n";
+                $ret .= $debug[2]['function'].'() in line '.$debug[2]['line'];
+                $ret .= ': <pre>'.$string."</pre><br>\n";
             }
         }
+
         return $ret;
     }
 
     /**
-     * Parses a given string and convert all the URLs into links
+     * Parses a given string and convert all the URLs into links.
      *
      * @param string $string
      *

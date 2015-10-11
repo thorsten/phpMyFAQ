@@ -1,7 +1,8 @@
 <?php
+
 /**
  * The PMF_DB_Mssql class provides methods and functions for Microsoft SQL
- * Server 2012 or later
+ * Server 2012 or later.
  *
  * PHP Version 5.5
  *
@@ -10,65 +11,66 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Daniel Hoechst <dhoechst@petzl.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2005-01-11
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_DB_Mssql
+ * PMF_DB_Mssql.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Daniel Hoechst <dhoechst@petzl.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2005-01-11
  */
-class PMF_DB_Mssql implements PMF_DB_Driver 
+class PMF_DB_Mssql implements PMF_DB_Driver
 {
     /**
-     * The connection object
+     * The connection object.
      *
-     * @var   mixed
+     * @var mixed
+     *
      * @see   connect(), query(), close()
      */
     private $conn = false;
 
     /**
-     * The query log string
+     * The query log string.
      *
-     * @var   string
+     * @var string
+     *
      * @see   query()
      */
-    private $sqllog = "";
+    private $sqllog = '';
 
     /**
-     * Tables
+     * Tables.
      *
-     * @var     array
+     * @var array
      */
     public $tableNames = [];
 
     /**
      * Connects to the database.
      *
-     * @param   string $host
-     * @param   string $user
-     * @param   string $password
-     * @param   string $database
+     * @param string $host
+     * @param string $user
+     * @param string $password
+     * @param string $database
      *
-     * @return  boolean TRUE, if connected, otherwise FALSE
+     * @return bool TRUE, if connected, otherwise FALSE
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -88,11 +90,11 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     /**
      * This function sends a query to the database.
      *
-     * @param string  $query
-     * @param integer $offset
-     * @param integer $rowcount
+     * @param string $query
+     * @param int    $offset
+     * @param int    $rowcount
      *
-     * @return  mixed $result
+     * @return mixed $result
      */
     public function query($query, $offset = 0, $rowcount = 0)
     {
@@ -114,21 +116,23 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    */
+     * Escapes a string for use in a query.
+     *
+     * @param   string
+     *
+     * @return string
+     */
     public function escape($string)
     {
         return str_replace("'", "''", $string);
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
-     * @param   mixed $result
-     * @return  object
+     * @param mixed $result
+     *
+     * @return object
      */
     public function fetchObject($result)
     {
@@ -136,10 +140,11 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
-     * @param   mixed $result
-     * @return  array
+     * @param mixed $result
+     *
+     * @return array
      */
     public function fetchArray($result)
     {
@@ -147,7 +152,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Fetches a complete result as an object
+     * Fetches a complete result as an object.
      *
      * @param resource $result Resultset
      *
@@ -159,22 +164,22 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: ' . $this->error());
+            throw new Exception('Error while fetching result: '.$this->error());
         }
-        
+
         while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
-        
+
         return $ret;
     }
-    
 
     /**
-     * Number of rows in a result
+     * Number of rows in a result.
      *
-     * @param   mixed $result
-     * @return  integer
+     * @param mixed $result
+     *
+     * @return int
      */
     public function numRows($result)
     {
@@ -182,7 +187,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Logs the queries
+     * Logs the queries.
      *
      * @return string
      */
@@ -223,16 +228,18 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Returns the next ID of a table
+     * Returns the next ID of a table.
      *
      * @param   string      the name of the table
      * @param   string      the name of the ID column
-     * @return  int
+     *
+     * @return int
      */
     public function nextId($table, $id)
     {
         $result = $this->query('SELECT max('.$id.') as current_id FROM '.$table);
         $currentID = mssql_result($result, 0, 'current_id');
+
         return ($currentID + 1);
     }
 
@@ -257,7 +264,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function clientVersion()
     {
-         return '';
+        return '';
     }
 
     /**
@@ -267,7 +274,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      */
     public function serverVersion()
     {
-        $result  = $this->query('SELECT @@version AS SERVER_VERSION');
+        $result = $this->query('SELECT @@version AS SERVER_VERSION');
         $version = mssql_result($result, 0, 'SERVER_VERSION');
         if (isset($version)) {
             return $version;
@@ -277,59 +284,59 @@ class PMF_DB_Mssql implements PMF_DB_Driver
     }
 
     /**
-     * Returns an array with all table names
+     * Returns an array with all table names.
      *
      * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
      *
-     * @param  string $prefix Table prefix
+     * @param string $prefix Table prefix
      *
      * @return array
      */
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix . 'faqadminlog',
-            $prefix . 'faqattachment',
-            $prefix . 'faqattachment_file',
-            $prefix . 'faqcaptcha',
-            $prefix . 'faqcategories',
-            $prefix . 'faqcategory_group',
-            $prefix . 'faqcategory_user',
-            $prefix . 'faqcategoryrelations',
-            $prefix . 'faqchanges',
-            $prefix . 'faqcomments',
-            $prefix . 'faqconfig',
-            $prefix . 'faqdata',
-            $prefix . 'faqdata_group',
-            $prefix . 'faqdata_revisions',
-            $prefix . 'faqdata_tags',
-            $prefix . 'faqdata_user',
-            $prefix . 'faqglossary',
-            $prefix . 'faqgroup',
-            $prefix . 'faqgroup_right',
-            $prefix . 'faqinstances',
-            $prefix . 'faqinstances_config',
-            $prefix . 'faqnews',
-            $prefix . 'faqquestions',
-            $prefix . 'faqright',
-            $prefix . 'faqsearches',
-            $prefix . 'faqsessions',
-            $prefix . 'faqstopwords',
-            $prefix . 'faqtags',
-            $prefix . 'faquser',
-            $prefix . 'faquser_group',
-            $prefix . 'faquser_right',
-            $prefix . 'faquserdata',
-            $prefix . 'faquserlogin',
-            $prefix . 'faqvisits',
-            $prefix . 'faqvoting'
+            $prefix.'faqadminlog',
+            $prefix.'faqattachment',
+            $prefix.'faqattachment_file',
+            $prefix.'faqcaptcha',
+            $prefix.'faqcategories',
+            $prefix.'faqcategory_group',
+            $prefix.'faqcategory_user',
+            $prefix.'faqcategoryrelations',
+            $prefix.'faqchanges',
+            $prefix.'faqcomments',
+            $prefix.'faqconfig',
+            $prefix.'faqdata',
+            $prefix.'faqdata_group',
+            $prefix.'faqdata_revisions',
+            $prefix.'faqdata_tags',
+            $prefix.'faqdata_user',
+            $prefix.'faqglossary',
+            $prefix.'faqgroup',
+            $prefix.'faqgroup_right',
+            $prefix.'faqinstances',
+            $prefix.'faqinstances_config',
+            $prefix.'faqnews',
+            $prefix.'faqquestions',
+            $prefix.'faqright',
+            $prefix.'faqsearches',
+            $prefix.'faqsessions',
+            $prefix.'faqstopwords',
+            $prefix.'faqtags',
+            $prefix.'faquser',
+            $prefix.'faquser_group',
+            $prefix.'faquser_right',
+            $prefix.'faquserdata',
+            $prefix.'faquserlogin',
+            $prefix.'faqvisits',
+            $prefix.'faqvoting',
         ];
     }
 
     /**
      * Closes the connection to the database.
      *
-     * @return boolean
+     * @return bool
      */
     public function close()
     {

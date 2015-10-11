@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Attachment migration handler
+ * Attachment migration handler.
  *
  * PHP Version 5.5
  *
@@ -9,63 +10,64 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Atachment_Abstract.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
  */
 class PMF_Attachment_Migration
 {
     /**
-     * Migrate 2.0.x, 2.5.x to 2.6+ files without encryption
+     * Migrate 2.0.x, 2.5.x to 2.6+ files without encryption.
      */
     const MIGRATION_TYPE1 = 1;
-    
+
     /**
-     * Migrate 2.0.x, 2.5.x to 2.6+ files encrypting with default key
+     * Migrate 2.0.x, 2.5.x to 2.6+ files encrypting with default key.
      */
     const MIGRATION_TYPE2 = 2;
-        
+
     /**
      * Migrate encrypted to unencrypted.
      * NOTE this will migrate only files encrypted
-     * with default key
+     * with default key.
      */
     const MIGRATION_TYPE3 = 3;
 
     /**
      * Migrate files encrypted with default key
-     * to unencrypted files
+     * to unencrypted files.
      */
     const MIGRATION_TYPE4 = 4;
-    
+
     /**
-     * Errors
+     * Errors.
      *
      * @var array
      */
     protected $error = [];
-    
+
     /**
-     * Warnings
+     * Warnings.
      *
      * @var array
      */
@@ -77,7 +79,7 @@ class PMF_Attachment_Migration
     private $_config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -90,90 +92,87 @@ class PMF_Attachment_Migration
 
     /**
      * @param $dir
+     *
      * @return array
      */
     protected function getOldFileList($dir)
     {
         $list = [];
-        
-        $faq  = new PMF_Faq($this->_config);
+
+        $faq = new PMF_Faq($this->_config);
         $faq->getAllRecords();
         $records = $faq->faqRecords;
-        
+
         reset($records);
-        while(list(,$record) = each($records)) {
-            
+        while (list(, $record) = each($records)) {
             $recordDir = "$dir/$record[id]";
-            if(file_exists($recordDir) && is_dir($recordDir)) {
-                
+            if (file_exists($recordDir) && is_dir($recordDir)) {
                 $list[$record['id']]['files'] = [];
-                foreach(new DirectoryIterator($recordDir) as $entry) {
-                    if(!$entry->isDot() && $entry->isFile()) {
+                foreach (new DirectoryIterator($recordDir) as $entry) {
+                    if (!$entry->isDot() && $entry->isFile()) {
                         $list[$record['id']]['files'][] = "$recordDir/{$entry->getFilename()}";
                     }
                 }
-                
+
                 $list[$record['id']]['lang'] = $record['lang'];
             }
         }
-        
+
         return $list;
     }
-    
+
     /**
-     * Quite simple migration from versions <2.6 
-     *
-     * @return null
+     * Quite simple migration from versions <2.6.
      */
     protected function migrateFromOldFormatToFs()
     {
         $list = $this->getOldFileList(PMF_ATTACHMENTS_DIR);
-    
-        foreach($list as $recordId => $item) {
+
+        foreach ($list as $recordId => $item) {
             $recordLang = $item['lang'];
-            foreach($item['files'] as $file) {
+            foreach ($item['files'] as $file) {
                 $att = PMF_Attachment_Factory::create();
                 $att->setRecordId($recordId);
                 $att->setRecordLang($recordLang);
-                
-                if(!$att->save($file)) {
+
+                if (!$att->save($file)) {
                     $this->error[] = "File $file couldn't be migrated";
                 }
             }
-            
-            $recordDir = PMF_ATTACHMENTS_DIR . "/$recordId";
-            if(!@rmdir(PMF_ATTACHMENTS_DIR . "/$file")) {
+
+            $recordDir = PMF_ATTACHMENTS_DIR."/$recordId";
+            if (!@rmdir(PMF_ATTACHMENTS_DIR."/$file")) {
                 $this->warning[] = "Couldn't remove dir $recordDir after migration";
             }
         }
     }
-    
+
     /**
-     * Migrate
+     * Migrate.
      *
-     * @param integer $migrationType how to migrate
-     * @param array   $options       migration options
+     * @param int   $migrationType how to migrate
+     * @param array $options       migration options
      *
-     * @return boolean
+     * @return bool
      */
     public function doMigrate($migrationType, $options)
     {
-        switch($migrationType) {
-            case PMF_Attachment_Migration::MIGRATION_TYPE1:
-                
+        switch ($migrationType) {
+            case self::MIGRATION_TYPE1:
+
                 PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
                                              '',
                                              false);
                 $this->migrateFromOldFormatToFs();
                 // FIXME should attachment settings update be triggered here?
-                
+
                 break;
-              
-            case PMF_Attachment_Migration::MIGRATION_TYPE2:
-                /**
+
+            case self::MIGRATION_TYPE2:
+                /*
                  * Awaiting new default key here
                  */
-                if(isset($options['defaultKey']) && !empty($options['defaultKey'])) {
+                if (isset($options['defaultKey']) && !empty($options['defaultKey'])) {
                     PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
                                                  $options['defaultKey'],
                                                  true);
@@ -182,28 +181,28 @@ class PMF_Attachment_Migration
                     $this->error[] = 'Default key required to be set for this option';
                 }
                 break;
-                
-            case PMF_Attachment_Migration::MIGRATION_TYPE3:
+
+            case self::MIGRATION_TYPE3:
                 // TODO implement this
                 $this->error[] = 'not implemented';
                 break;
-                
-            case PMF_Attachment_Migration::MIGRATION_TYPE4:
+
+            case self::MIGRATION_TYPE4:
                 //TODO implenemt this
                 $this->error[] = 'not implemented';
                 break;
-                
+
             default:
                 $this->error[] = 'Nothing to do';
                 break;
-                
+
         }
-        
+
         return empty($this->error);
     }
-    
+
     /**
-     * Get migration errors
+     * Get migration errors.
      *
      * @return array
      */
@@ -211,9 +210,9 @@ class PMF_Attachment_Migration
     {
         return $this->error;
     }
-    
+
     /**
-     * Get migration warnings
+     * Get migration warnings.
      *
      * @return array
      */

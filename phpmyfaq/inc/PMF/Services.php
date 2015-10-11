@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Abstract class for various services, e.g. Twitter, Facebook
+ * Abstract class for various services, e.g. Twitter, Facebook.
  *
  * PHP Version 5.5
  *
@@ -9,52 +10,54 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-05
  */
 
 /**
- * Services
+ * Services.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-05
  */
 class PMF_Services
 {
     /**
-     * FAQ ID
+     * FAQ ID.
      *
-     * @var integer
+     * @var int
      */
     protected $faqId;
 
     /**
-     * Category ID
+     * Category ID.
      *
-     * @var integer
+     * @var int
      */
     protected $categoryId;
 
     /**
-     * Language
+     * Language.
      *
      * @var string
      */
     protected $language;
 
     /**
-     * Question of the FAQ
+     * Question of the FAQ.
      *
-     * @var string 
+     * @var string
      */
     protected $question;
 
@@ -64,7 +67,7 @@ class PMF_Services
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -76,7 +79,7 @@ class PMF_Services
     }
 
     /**
-     * Returns the current URL
+     * Returns the current URL.
      *
      * @return string
      */
@@ -97,7 +100,7 @@ class PMF_Services
     }
 
     /**
-     * Returns the current "share on Facebook" URL
+     * Returns the current "share on Facebook" URL.
      *
      * @return string
      */
@@ -118,7 +121,7 @@ class PMF_Services
     }
 
     /**
-     * Returns the current "share on Twitter" URL
+     * Returns the current "share on Twitter" URL.
      *
      * @return string
      */
@@ -138,12 +141,12 @@ class PMF_Services
         return sprintf(
             'https://twitter.com/share?url=%s&text=%s',
             urlencode($link->toString()),
-            $this->getQuestion() . urlencode(' | ' . $link->toString())
+            $this->getQuestion().urlencode(' | '.$link->toString())
         );
     }
 
     /**
-     * Returns the "Send 2 Friends" URL
+     * Returns the "Send 2 Friends" URL.
      *
      * @return string
      */
@@ -159,7 +162,7 @@ class PMF_Services
     }
 
     /**
-     * Returns the "Show FAQ as PDF" URL
+     * Returns the "Show FAQ as PDF" URL.
      *
      * @return string
      */
@@ -175,7 +178,7 @@ class PMF_Services
     }
 
     /**
-     * Returns the "Show FAQ as PDF" URL
+     * Returns the "Show FAQ as PDF" URL.
      *
      * @return string
      */
@@ -191,9 +194,7 @@ class PMF_Services
     }
 
     /**
-     * @param integer $categoryId
-     *
-     * @return void
+     * @param int $categoryId
      */
     public function setCategoryId($categoryId)
     {
@@ -201,7 +202,7 @@ class PMF_Services
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getCategoryId()
     {
@@ -209,9 +210,7 @@ class PMF_Services
     }
 
     /**
-     * @param integer $faqId
-     *
-     * @return void
+     * @param int $faqId
      */
     public function setFaqId($faqId)
     {
@@ -219,7 +218,7 @@ class PMF_Services
     }
 
     /**
-     * @return integer
+     * @return int
      */
     public function getFaqId()
     {
@@ -228,8 +227,6 @@ class PMF_Services
 
     /**
      * @param string $language
-     *
-     * @return void
      */
     public function setLanguage($language)
     {
@@ -246,8 +243,6 @@ class PMF_Services
 
     /**
      * @param string $question
-     *
-     * @return void
      */
     public function setQuestion($question)
     {

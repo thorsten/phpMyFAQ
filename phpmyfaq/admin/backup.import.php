@@ -1,6 +1,6 @@
 <?php
 /**
- * The import function to import the phpMyFAQ backups
+ * The import function to import the phpMyFAQ backups.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -41,19 +41,17 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
     </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
-
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
-        
-        $ok  = 1;
+        $ok = 1;
         $finfo = new finfo(FILEINFO_MIME_ENCODING);
         if ('utf-8' == $finfo->file($_FILES['userfile']['tmp_name'])) {
             print 'This file is not UTF_8 encoded.';
             $ok = 0;
         }
-        $handle          = fopen($_FILES['userfile']['tmp_name'], 'r');
-        $dat             = fgets($handle, 65536);
-        $versionFound    = PMF_String::substr($dat, 0, 9);
-        $versionExpected = '-- pmf' . substr($faqConfig->get('main.currentVersion'), 0, 3);
+        $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $dat = fgets($handle, 65536);
+        $versionFound = PMF_String::substr($dat, 0, 9);
+        $versionExpected = '-- pmf'.substr($faqConfig->get('main.currentVersion'), 0, 3);
 
         if ($versionFound !== $versionExpected) {
             printf('%s (Version check failure: "%s" found, "%s" expected)',
@@ -67,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $dat = trim(PMF_String::substr($dat, 11));
             $tbl = explode(' ', $dat);
             $num = count($tbl);
-            for ($h = 0; $h < $num; $h++) {
+            for ($h = 0; $h < $num; ++$h) {
                 $mquery[] = 'DELETE FROM '.$tbl[$h];
             }
             $ok = 1;
@@ -77,13 +75,13 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $table_prefix = '';
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);
             while ($dat = fgets($handle, 65536)) {
-                $dat                       = trim($dat);
-                $backup_prefix_pattern     = "-- pmftableprefix:";
+                $dat = trim($dat);
+                $backup_prefix_pattern = '-- pmftableprefix:';
                 $backup_prefix_pattern_len = PMF_String::strlen($backup_prefix_pattern);
                 if (PMF_String::substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
                     $table_prefix = trim(PMF_String::substr($dat, $backup_prefix_pattern_len));
                 }
-                if ( (PMF_String::substr($dat, 0, 2) != '--') && ($dat != '') ) {
+                if ((PMF_String::substr($dat, 0, 2) != '--') && ($dat != '')) {
                     $mquery[] = trim(PMF_String::substr($dat, 0, -1));
                 }
             }
@@ -92,10 +90,10 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $g = 0;
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_process']);
             $num = count($mquery);
-            $kg  = '';
-            for ($i = 0; $i < $num; $i++) {
+            $kg = '';
+            for ($i = 0; $i < $num; ++$i) {
                 $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
-                $kg         = $faqConfig->getDb()->query($mquery[$i]);
+                $kg = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
                     printf(
                     '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
@@ -103,14 +101,14 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                         $faqConfig->getDb()->error(),
                         "\n"
                     );
-                    $k++;
+                    ++$k;
                 } else {
                     printf(
                         '<!-- <div class="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
                         PMF_String::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
                         "\n"
                     );
-                    $g++;
+                    ++$g;
                 }
             }
             printf(

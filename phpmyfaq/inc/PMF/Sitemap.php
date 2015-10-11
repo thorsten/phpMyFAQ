@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main Sitemap class
+ * The main Sitemap class.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Sitemap
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Sitemap 
+ * PMF_Sitemap.
  *
  * @category  phpMyFAQ
- * @package   PMF_Sitemap
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
@@ -40,35 +42,35 @@ class PMF_Sitemap
     private $_config;
 
     /**
-     * Database type
+     * Database type.
      *
      * @var string
      */
     private $type = '';
 
     /**
-     * Users
+     * Users.
      *
-     * @var integer
+     * @var int
      */
     private $user = -1;
 
     /**
-     * Groups
+     * Groups.
      *
      * @var array
      */
     private $groups = [];
 
     /**
-     * Flag for Group support
+     * Flag for Group support.
      *
-     * @var boolean
+     * @var bool
      */
     private $groupSupport = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -84,7 +86,7 @@ class PMF_Sitemap
     }
 
     /**
-     * @param integer $userId
+     * @param int $userId
      */
     public function setUser($userId = -1)
     {
@@ -100,10 +102,12 @@ class PMF_Sitemap
     }
 
     /**
-     * Returns all available first letters
+     * Returns all available first letters.
      *
      * @return array
+     *
      * @since  2007-03-30
+     *
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getAllFirstLetters()
@@ -111,21 +115,20 @@ class PMF_Sitemap
         global $sids;
 
         if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
+            $permPart = sprintf('( fdg.group_id IN (%s)
             OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
                 implode(', ', $this->groups));
         } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )',
                 $this->user);
         }
 
         $writeLetters = '<ul class="nav navbar-nav">';
 
         if ($this->_config->getDb() instanceof PMF_DB_Sqlite3) {
-
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
@@ -154,7 +157,6 @@ class PMF_Sitemap
                 $permPart
             );
         } else {
-
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTRING(fd.thema, 1, 1)) AS letters
@@ -195,9 +197,9 @@ class PMF_Sitemap
                     $letters,
                     $this->_config->getLanguage()->getLanguage()
                 );
-                $oLink         = new PMF_Link($url, $this->_config);
-                $oLink->text   = (string)$letters;
-                $writeLetters .= '<li>' . $oLink->toHtmlAnchor().'</li>';
+                $oLink = new PMF_Link($url, $this->_config);
+                $oLink->text = (string) $letters;
+                $writeLetters .= '<li>'.$oLink->toHtmlAnchor().'</li>';
             }
         }
         $writeLetters .= '</ul>';
@@ -206,11 +208,14 @@ class PMF_Sitemap
     }
 
     /**
-     * Returns all records from the current first letter
+     * Returns all records from the current first letter.
      *
-     * @param  string $letter Letter
+     * @param string $letter Letter
+     *
      * @return array
+     *
      * @since  2007-03-30
+     *
      * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getRecordsFromLetter($letter = 'A')
@@ -218,14 +223,14 @@ class PMF_Sitemap
         global $sids, $PMF_LANG;
 
         if ($this->groupSupport) {
-            $permPart = sprintf("( fdg.group_id IN (%s)
+            $permPart = sprintf('( fdg.group_id IN (%s)
             OR
-                (fdu.user_id = %d AND fdg.group_id IN (%s)))",
+                (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
                 implode(', ', $this->groups));
         } else {
-            $permPart = sprintf("( fdu.user_id = %d OR fdu.user_id = -1 )",
+            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )',
                 $this->user);
         }
 
@@ -233,7 +238,7 @@ class PMF_Sitemap
 
         $writeMap = '';
 
-        switch(PMF_Db::getType()) {
+        switch (PMF_Db::getType()) {
             case 'sqlite3':
                 $query = sprintf("
                     SELECT
@@ -313,11 +318,11 @@ class PMF_Sitemap
 
         $result = $this->_config->getDb()->query($query);
         $oldId = 0;
-        $parsedown   = new ParsedownExtra();
+        $parsedown = new ParsedownExtra();
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
-                $url   = sprintf(
+                $url = sprintf(
                     '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
@@ -326,23 +331,23 @@ class PMF_Sitemap
                     $row->lang
                 );
 
-                $oLink            = new PMF_Link($url, $this->_config);
+                $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
-                $oLink->text      = $title;
-                $oLink->tooltip   = $title;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
 
                 $writeMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
 
                 if ($this->_config->get('main.enableMarkdownEditor')) {
-                    $writeMap .= PMF_Utils::chopString(strip_tags($parsedown->text($row->snap)), 25). " ...</li>\n";
+                    $writeMap .= PMF_Utils::chopString(strip_tags($parsedown->text($row->snap)), 25)." ...</li>\n";
                 } else {
-                    $writeMap .= PMF_Utils::chopString(strip_tags($row->snap), 25). " ...</li>\n";
+                    $writeMap .= PMF_Utils::chopString(strip_tags($row->snap), 25)." ...</li>\n";
                 }
             }
             $oldId = $row->id;
         }
 
-        $writeMap = empty($writeMap) ? '' : '<ul>' . $writeMap . '</ul>';
+        $writeMap = empty($writeMap) ? '' : '<ul>'.$writeMap.'</ul>';
 
         return $writeMap;
     }

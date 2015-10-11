@@ -1,6 +1,6 @@
 <?php
 /**
- * Header of the admin area
+ * Header of the admin area.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administraion
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -30,15 +30,15 @@ $httpHeader = new PMF_Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$secLevelEntries   = '';
-$dashboardPage     = true;
-$contentPage       = false;
-$userPage          = false;
-$statisticsPage    = false;
-$exportsPage       = false;
-$backupPage        = false;
+$secLevelEntries = '';
+$dashboardPage = true;
+$contentPage = false;
+$userPage = false;
+$statisticsPage = false;
+$exportsPage = false;
+$backupPage = false;
 $configurationPage = false;
-$edAutosave        = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
+$edAutosave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new PMF_Helper_Administration();
 $adminHelper->setUser($user);
@@ -54,8 +54,8 @@ switch ($action) {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
         $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
-        $dashboardPage    = false;
-        $userPage         = true;
+        $dashboardPage = false;
+        $userPage = true;
         break;
     case 'content':
     case 'category':
@@ -93,7 +93,7 @@ switch ($action) {
     case 'comments':
     case 'attachments':
     case 'tags':
-        $secLevelHeader   = $PMF_LANG['admin_mainmenu_content'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
@@ -104,8 +104,8 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt', 'tags', 'ad_entry_tags', $action);
-        $dashboardPage    = false;
-        $contentPage      = true;
+        $dashboardPage = false;
+        $contentPage = true;
         break;
     case 'statistics':
     case 'viewsessions':
@@ -115,26 +115,26 @@ switch ($action) {
     case 'searchstats':
     case 'reports':
     case 'reportview':
-        $secLevelHeader   = $PMF_LANG['admin_mainmenu_statistics'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_statistics'];
         $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
-        $dashboardPage    = false;
-        $statisticsPage   = true;
+        $dashboardPage = false;
+        $statisticsPage = true;
         break;
     case 'export':
-        $secLevelHeader   = $PMF_LANG['admin_mainmenu_exports'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_exports'];
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'export', 'ad_menu_export', $action);
-        $dashboardPage    = false;
-        $exportsPage      = true;
+        $dashboardPage = false;
+        $exportsPage = true;
         break;
     case 'backup':
-        $secLevelHeader   = $PMF_LANG['admin_mainmenu_backup'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_backup'];
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
-        $dashboardPage    = false;
-        $backupPage       = true;
+        $dashboardPage = false;
+        $backupPage = true;
         break;
     case 'config':
     case 'stopwordsconfig':
@@ -144,23 +144,23 @@ switch ($action) {
     case 'upgrade':
     case 'instances':
     case 'system':
-        $secLevelHeader    = $PMF_LANG['admin_mainmenu_configuration'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_configuration'];
         $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
         $secLevelEntries  .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $secLevelEntries  .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
         $secLevelEntries  .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
         $secLevelEntries  .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
-        $dashboardPage     = false;
+        $dashboardPage = false;
         $configurationPage = true;
         break;
     default:
-        $secLevelHeader   = $PMF_LANG['admin_mainmenu_home'];
+        $secLevelHeader = $PMF_LANG['admin_mainmenu_home'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
         $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
         $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
-        $dashboardPage    = true;
+        $dashboardPage = true;
         break;
 }
 ?>
@@ -199,7 +199,7 @@ switch ($action) {
     <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
     <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body dir="<?php echo $PMF_LANG["dir"]; ?>">
+<body dir="<?php echo $PMF_LANG['dir']; ?>">
 
 <div id="wrapper">
 
@@ -223,7 +223,7 @@ switch ($action) {
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     <b class="fa fa-user"></b>
-                    <span title="<?php echo $PMF_LANG['ad_user_loggedin'] . $user->getLogin(); ?>">
+                    <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
                         <?php echo $user->getUserData('display_name'); ?>
                     </span>
                     <b class="fa fa-caret-down"></b>
@@ -243,7 +243,7 @@ switch ($action) {
                 </ul>
             </li>
             <li>
-                <form action="index.php<?php echo (isset($action) ? '?action=' . $action : ''); ?>" method="post"
+                <form action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post"
                       class="navbar-form navbar-right" role="form" accept-charset="utf-8">
                     <?php echo PMF_Language::selectLanguages($LANGCODE, true); ?>
                 </form>
@@ -270,44 +270,44 @@ switch ($action) {
                         ?>
                     </div>
                 </li>
-                <li<?php echo ($dashboardPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($dashboardPage ? ' class="active"' : ''); ?>>
                     <a href="index.php">
                         <i class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
                     </a>
                 </li>
-                <li<?php echo ($userPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($userPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=user">
                         <i class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="nav nav-second-level collapse <?php echo ($userPage ? 'in' : '') ?>">
+                    <ul class="nav nav-second-level collapse <?php echo($userPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
                     </ul>
                 </li>
-                <li<?php echo ($contentPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($contentPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=content">
                         <i class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="nav nav-second-level collapse <?php echo ($contentPage ? 'in' : '') ?>">
+                    <ul class="nav nav-second-level collapse <?php echo($contentPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
                     </ul>
                 </li>
-                <li<?php echo ($statisticsPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($statisticsPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=statistics">
                         <i class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="nav nav-second-level collapse <?php echo ($statisticsPage ? 'in' : '') ?>">
+                    <ul class="nav nav-second-level collapse <?php echo($statisticsPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
                     </ul>
                 </li>
-                <li<?php echo ($exportsPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($exportsPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=export">
                         <i class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
                     </a>
                 </li>
-                <li<?php echo ($backupPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($backupPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=backup">
                         <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                     </a>
@@ -315,12 +315,12 @@ switch ($action) {
                         <?php echo $secLevelEntries; ?>
                     </ul>
                 </li>
-                <li<?php echo ($configurationPage ? ' class="active"' : ''); ?>>
+                <li<?php echo($configurationPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=config">
                         <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
                         <span class="fa arrow"></span>
                     </a>
-                    <ul class="nav nav-second-level collapse <?php echo ($configurationPage ? 'in' : '') ?>">
+                    <ul class="nav nav-second-level collapse <?php echo($configurationPage ? 'in' : '') ?>">
                         <?php echo $secLevelEntries; ?>
                     </ul>
                 </li>

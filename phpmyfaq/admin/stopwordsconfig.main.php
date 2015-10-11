@@ -1,6 +1,6 @@
 <?php
 /**
- * The main stop words configuration frontend
+ * The main stop words configuration frontend.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -35,7 +35,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     $sortedLanguageCodes = $languageCodes;
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
-?>
+    ?>
     <div class="row">
         <div class="col-lg-12">
 
@@ -46,9 +46,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)"
                         id="stopwords_lang_selector">
                 <option value="none">---</option>
-    <?php foreach($sortedLanguageCodes as $key => $value) { ?>
-        <option value="<?php echo strtolower($key); ?>"><?php echo $value; ?></option>
-    <?php } ?>
+    <?php foreach ($sortedLanguageCodes as $key => $value) {
+    ?>
+        <option value="<?php echo strtolower($key);
+    ?>"><?php echo $value;
+    ?></option>
+    <?php 
+}
+    ?>
                 </select>
                 <span id="stopwords_loading_indicator"></span>
             </p>
@@ -224,7 +229,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     stopword_id: info.id,
                     stopword: $('#' + elem_id).val(),
                     stopwords_lang: info.lang,
-                    csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
                     }
                 );
             } else {
@@ -268,7 +274,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     ajaxaction: "delete_stop_word",
                     stopword_id: info.id,
                     stopwords_lang: info.lang,
-                    csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
                 },
                 function () {
                     loadStopWordsByLang(info.lang)
@@ -283,7 +290,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          */
         function addStopWordInputElem()
         {
-            var word = prompt('<?php echo $PMF_LANG["ad_config_stopword_input"]?>', '');
+            var word = prompt('<?php echo $PMF_LANG['ad_config_stopword_input']?>', '');
             var lang = $('#stopwords_lang_selector').val();
 
             if (!!word) {
@@ -293,7 +300,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         ajaxaction: "save_stop_word",
                         stopword: word,
                         stopwords_lang: lang,
-                        csrf: '<?php echo $user->getCsrfTokenFromSession(); ?>'
+                        csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
                 },
                 function () {
                     loadStopWordsByLang(lang)
@@ -305,6 +313,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         </div>
     </div>
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

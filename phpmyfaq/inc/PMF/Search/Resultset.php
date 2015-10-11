@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Implements result sets for phpMyFAQ search classes
+ * Implements result sets for phpMyFAQ search classes.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Resultset
+ * PMF_Search_Resultset.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
@@ -41,50 +43,50 @@ class PMF_Search_Resultset
 
     /**
      * "Raw" search result set without permission checks and with possible
-     * duplicates
+     * duplicates.
      *
      * @var array
      */
     protected $rawResultset = [];
-    
+
     /**
      * "Reviewed" search result set with checked permissions and without
-     * duplicates
+     * duplicates.
      *
      * @var array
      */
     protected $reviewedResultset = [];
-    
+
     /**
-     * Ordering of result set
+     * Ordering of result set.
      *
      * @var string
      */
     protected $ordering;
-    
+
     /**
-     * Number of search results
+     * Number of search results.
      *
-     * @var integer
+     * @var int
      */
     protected $numberOfResults = 0;
-    
+
     /**
-     * User object
+     * User object.
      *
      * @var PMF_User
      */
     protected $user = null;
-    
+
     /**
-     * Faq object
+     * Faq object.
      *
      * @var PMF_Faq
      */
     protected $faq = null;
-    
+
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_User          $user   User object
      * @param PMF_Faq           $faq    Faq object
@@ -94,17 +96,15 @@ class PMF_Search_Resultset
      */
     public function __construct(PMF_User $user, PMF_Faq $faq, PMF_Configuration $config)
     {
-        $this->user    = $user;
-        $this->faq     = $faq;
+        $this->user = $user;
+        $this->faq = $faq;
         $this->_config = $config;
     }
-    
+
     /**
-     * Check on user and group permissions and on duplicate FAQs
+     * Check on user and group permissions and on duplicate FAQs.
      *
      * @param array $resultSet Array with search results
-     *
-     * @return void
      */
     public function reviewResultset(Array $resultSet)
     {
@@ -119,7 +119,6 @@ class PMF_Search_Resultset
         }
 
         foreach ($this->rawResultset as $result) {
-            
             $permission = false;
             // check permissions for groups
             if ('medium' === $this->_config->get('security.permLevel')) {
@@ -137,7 +136,7 @@ class PMF_Search_Resultset
                     $permission = false;
                 }
             }
-            
+
             // check on duplicates
             if (!isset($duplicateResults[$result->id])) {
                 $duplicateResults[$result->id] = 1;
@@ -152,24 +151,22 @@ class PMF_Search_Resultset
                 $this->reviewedResultset[] = $result;
             }
         }
-        
+
         $this->setNumberOfResults($this->reviewedResultset);
     }
-    
+
     /**
-     * Sets the "raw" search results
+     * Sets the "raw" search results.
      *
      * @param array $resultSet Array with search results
-     *
-     * @return void
      */
     public function setResultset(Array $resultSet)
     {
         $this->rawResultset = $resultSet;
     }
-    
+
     /**
-     * Returns the "reviewd" search results
+     * Returns the "reviewd" search results.
      *
      * @return array $resultset Array with search results
      */
@@ -177,23 +174,21 @@ class PMF_Search_Resultset
     {
         return $this->reviewedResultset;
     }
-    
+
     /**
-     * Sets the number of search results
+     * Sets the number of search results.
      *
      * @param array $resultSet Array with search results
-     *
-     * @return void
      */
     public function setNumberOfResults(Array $resultSet)
     {
         $this->numberOfResults = count($resultSet);
     }
-    
+
     /**
-     * Returns the number search results
+     * Returns the number search results.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberOfResults()
     {
@@ -202,6 +197,7 @@ class PMF_Search_Resultset
 
     /**
      * @param stdClass $object
+     *
      * @return float
      */
     public function getScore(stdClass $object)

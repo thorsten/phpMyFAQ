@@ -1,6 +1,6 @@
 <?php
 /**
- * Linkverifier Helper class for phpMyFAQ
+ * Linkverifier Helper class for phpMyFAQ.
  *
  * PHP Version 5.5
  *
@@ -9,40 +9,41 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Helper_Linkverifier
+ * PMF_Helper_Linkverifier.
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
 class PMF_Helper_Linkverifier extends PMF_Helper
 {
-
     /**
-     * Prints JavaScript needed for AJAX verification on record add/save/clicked on listing
+     * Prints JavaScript needed for AJAX verification on record add/save/clicked on listing.
      *
-     * @param   integer $id
-     * @param   string  $lang
+     * @param int    $id
+     * @param string $lang
      */
-    public static function linkOndemandJavascript($id, $lang) {
-    ?>
+    public static function linkOndemandJavascript($id, $lang)
+    {
+        ?>
     <script type="text/javascript">
         <!--
         function ajaxOnDemandVerify(id, lang)
@@ -79,9 +80,12 @@ class PMF_Helper_Linkverifier extends PMF_Helper
     </div>
     <script type="text/javascript">
         <!--
-        ajaxOnDemandVerify(<?php print $id; ?>, '<?php print $lang; ?>');
+        ajaxOnDemandVerify(<?php print $id;
+        ?>, '<?php print $lang;
+        ?>');
         //-->
     </script>
     <?php
+
     }
 }

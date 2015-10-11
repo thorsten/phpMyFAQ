@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The plurals class provides support for plural forms in PMF translations.
  *
@@ -9,70 +10,70 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Language
+ *
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Language_Plurals
+ * PMF_Language_Plurals.
  *
  * @category  phpMyFAQ
- * @package   Language
+ *
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
  */
 class PMF_Language_Plurals
 {
     /**
-     * The currently loaded PMF translations
+     * The currently loaded PMF translations.
      *
      * @var array
      */
     private $PMF_TRANSL = [];
 
     /**
-     * The number of plural forms for current language $lang
+     * The number of plural forms for current language $lang.
      *
-     * @var integer
+     * @var int
      */
     private $nPlurals;
 
     /**
-     * The language code of current language
+     * The language code of current language.
      *
      * @var string
      */
     private $lang;
 
     /**
-     * True when there is no support for plural forms in current language $lang
+     * True when there is no support for plural forms in current language $lang.
      *
-     * @var boolean
+     * @var bool
      */
     private $useDefaultPluralForm;
 
     /**
-    * Constructor
-    *
-    * @param  array $translation PMF translation array for current language
-    * @return void
-    */
+     * Constructor.
+     *
+     * @param array $translation PMF translation array for current language
+     */
     public function __construct($translation)
     {
         $this->PMF_TRANSL = $translation;
-        $this->nPlurals   = (int)$this->PMF_TRANSL['nplurals'];
-        $this->lang       = $this->PMF_TRANSL['metaLanguage'];
+        $this->nPlurals = (int) $this->PMF_TRANSL['nplurals'];
+        $this->lang = $this->PMF_TRANSL['metaLanguage'];
 
         if ($this->plural($this->lang, 0) != -1) {
             $this->useDefaultPluralForm = false;
@@ -86,11 +87,11 @@ class PMF_Language_Plurals
 
     /**
      * Determines the correct plural form for integer $n
-     * Returned integer is from interval [0, $nPlurals)
+     * Returned integer is from interval [0, $nPlurals).
      *
-     * @param  integer $n The number used to determine the plural form
-     * @return integer
-     * @access private
+     * @param int $n The number used to determine the plural form
+     *
+     * @return int
      */
     private function _getPlural($n)
     {
@@ -100,9 +101,9 @@ class PMF_Language_Plurals
         }
 
         $plural = $this->plural($this->lang, $n);
-        if ($plural > $this->nPlurals-1) {
+        if ($plural > $this->nPlurals - 1) {
             // incorrectly defined plural function or wrong $nPlurals
-            return $this->nPlurals-1;
+            return $this->nPlurals - 1;
         } else {
             return $plural;
         }
@@ -110,10 +111,11 @@ class PMF_Language_Plurals
 
     /**
      * Helper function that returns the translation template in the correct plural form
-     * If translation is missing, message in English plural form is returned
+     * If translation is missing, message in English plural form is returned.
      *
-     * @param  string  $msgID Message identificator
-     * @param  integer $n     The number used to determine the plural form
+     * @param string $msgID Message identificator
+     * @param int    $n     The number used to determine the plural form
+     *
      * @return string
      */
     public function getMsgTemplate($msgID, $n)
@@ -132,8 +134,9 @@ class PMF_Language_Plurals
      * Returns a translated string in the correct plural form,
      * produced according to the formatting of the message.
      *
-     * @param  string  $msgID Message identificator
-     * @param  integer $n     The number used to determine the plural form
+     * @param string $msgID Message identificator
+     * @param int    $n     The number used to determine the plural form
+     *
      * @return string
      */
     public function getMsg($msgID, $n)
@@ -142,11 +145,13 @@ class PMF_Language_Plurals
     }
 
     /**
-     * Returns the plural form for language $lang or -1 if language $lang is not supported
+     * Returns the plural form for language $lang or -1 if language $lang is not supported.
      *
-     * @param  string  $lang The language code
-     * @param  integer $n    The number used to determine the plural form
-     * @return integer
+     * @param string $lang The language code
+     * @param int    $n    The number used to determine the plural form
+     *
+     * @return int
+     *
      * @link   http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
      */
     private function plural($lang, $n)
@@ -155,7 +160,7 @@ class PMF_Language_Plurals
             // Note: expressions in .po files are not strict C expressions, so extra braces might be
             // needed for that expression to work here (for example see 'lt')
             case 'ar':
-                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n%100 >= 3 && $n%100 <= 10) ? 3 : (($n%100 >= 11 && $n%100 <= 99) || ($n%100 == 1) || ($n%100 == 2) ? 4 : 5))));
+                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 : (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5))));
             case 'bn':
                 return 0;
             case 'cy':
@@ -195,27 +200,27 @@ class PMF_Language_Plurals
             case 'ko':
                 return 0;
             case 'lt':
-                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'lv':
-                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n != 0 ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2);
             case 'nb':
                 return $n != 1;
             case 'nl':
                 return $n != 1;
             case 'pl':
-                return ($n == 1) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+                return ($n == 1) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'pt':
                 return $n != 1;
             case 'pt-br':
                 return $n > 1;
             case 'ro':
-                return ($n == 1) ? 0 : (($n == 0 || ($n%100 > 0 && $n%100 < 20)) ? 1 : 2);
+                return ($n == 1) ? 0 : (($n == 0 || ($n % 100 > 0 && $n % 100 < 20)) ? 1 : 2);
             case 'ru':
-                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'sl':
-                return ($n%100 == 1) ? 0 : ($n%100 == 2 ? 1 : ($n%100 == 3 || n%100 == 4 ? 2 : 3));
+                return ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || n % 100 == 4 ? 2 : 3));
             case 'sr':
-                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'sv':
                 return $n != 1;
             case 'th':
@@ -225,7 +230,7 @@ class PMF_Language_Plurals
             case 'tw':
                 return 0;
             case 'uk':
-                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'vi':
                 return 0;
             case 'zh':
@@ -235,5 +240,4 @@ class PMF_Language_Plurals
                 return -1;
         }
     }
-
 }

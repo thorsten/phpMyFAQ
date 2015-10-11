@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Provides methods for password encryption
+ * Provides methods for password encryption.
  *
  * PHP Version 5.5
  *
@@ -9,35 +10,36 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Enc
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Enc
+ * Enc.
  *
  * @category  phpMyFAQ
- * @package   Enc
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
- */ 
+ */
 class PMF_Enc
 {
     /**
-     * Error constant
+     * Error constant.
      *
      * @const
      */
@@ -51,14 +53,14 @@ class PMF_Enc
     public $errors = [];
 
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $_config = null;
 
     /**
-     * Salt
+     * Salt.
      *
      * @var string
      */
@@ -77,7 +79,7 @@ class PMF_Enc
     }
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -108,18 +110,20 @@ class PMF_Enc
      */
     public static function selectEnc($encType, PMF_Configuration $config)
     {
-        $enc     = new PMF_Enc($config);
+        $enc = new self($config);
         $encType = ucfirst(strtolower($encType));
 
-        if (! isset($encType)) {
+        if (!isset($encType)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+
             return $enc;
         }
 
-        $encClass = 'PMF_Enc_' . $encType;
+        $encClass = 'PMF_Enc_'.$encType;
 
         if (!class_exists($encClass)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
+
             return $enc;
         }
 
@@ -141,11 +145,12 @@ class PMF_Enc
         foreach ($this->errors as $error) {
             $message .= $error."\n";
         }
+
         return $message;
     }
 
     /**
-     * Setter for salt
+     * Setter for salt.
      *
      * @param string $login
      *
@@ -153,7 +158,7 @@ class PMF_Enc
      */
     public function setSalt($login)
     {
-        $this->salt = $this->_config->get('security.salt') . $login;
+        $this->salt = $this->_config->get('security.salt').$login;
 
         return $this;
     }

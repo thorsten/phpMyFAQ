@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Some basic functions and PMF_Init class.
  *
@@ -12,7 +13,7 @@
  * All Rights Reserved.
  *
  * @category  phpMyFAQ
- * @package   PMF_Init
+ *
  * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Stefan Esser <sesser@php.net>
@@ -20,23 +21,23 @@
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Init
+ * PMF_Init.
  *
  * This class provides methods to clean the request environment from global
  * variables, unescaped slashes and XSS in the request string. It also detects
  * and sets the current language.
  *
  * @category  phpMyFAQ
- * @package   PMF_Init
+ *
  * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Stefan Esser <sesser@php.net>
@@ -44,21 +45,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
 class PMF_Init
 {
     /**
-     * cleanRequest
+     * cleanRequest.
      *
      * Cleans the request environment from:
      * - global variables,
      * - unescaped slashes,
      * - xss in the request string,
      * - uncorrect filenames when file are uploaded.
-     *
-     * @return  void
      */
     public static function cleanRequest()
     {
@@ -91,7 +91,7 @@ class PMF_Init
     }
 
     /**
-     * Clean up a filename: if anything goes wrong, an empty string will be returned
+     * Clean up a filename: if anything goes wrong, an empty string will be returned.
      *
      * @param string $filename Filename
      *
@@ -132,7 +132,7 @@ class PMF_Init
         // 1. Besides \/ on Windows: :*?"<>|
         if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
             $reservedChars = array(':', '*', '?', '"', '<', '>', "'", '|');
-            $filename      = str_replace($reservedChars, '_', $filename);
+            $filename = str_replace($reservedChars, '_', $filename);
         }
 
         return $filename;
@@ -140,42 +140,40 @@ class PMF_Init
 
    /**
     * Clean the filename of any uploaded file by the user and force an error
-    * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong
-    *
-    * @return void
+    * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong.
     */
    private static function _cleanFilenames()
    {
-        reset($_FILES);
-        while (list($key, $value) = each($_FILES)) {
-            if (is_array($_FILES[$key]['name'])) {
-                reset($_FILES[$key]['name']);
+       reset($_FILES);
+       while (list($key, $value) = each($_FILES)) {
+           if (is_array($_FILES[$key]['name'])) {
+               reset($_FILES[$key]['name']);
                 // We have a multiple upload with the same name for <input />
                 while (list($idx, $value2) = each($_FILES[$key]['name'])) {
                     $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
-                        $_FILES[$key]['type'][$idx]     = '';
+                        $_FILES[$key]['type'][$idx] = '';
                         $_FILES[$key]['tmp_name'][$idx] = '';
-                        $_FILES[$key]['size'][$idx]     = 0;
-                        $_FILES[$key]['error'][$idx]    = UPLOAD_ERR_NO_FILE;
+                        $_FILES[$key]['size'][$idx] = 0;
+                        $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
                     }
                 }
-                reset($_FILES[$key]['name']);
-            } else {
-                $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
-                if ('' == $_FILES[$key]['name']) {
-                    $_FILES[$key]['type']     = '';
-                    $_FILES[$key]['tmp_name'] = '';
-                    $_FILES[$key]['size']     = 0;
-                    $_FILES[$key]['error']   = UPLOAD_ERR_NO_FILE;
-                }
-            }
-        }
-        reset($_FILES);
-    }
+               reset($_FILES[$key]['name']);
+           } else {
+               $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
+               if ('' == $_FILES[$key]['name']) {
+                   $_FILES[$key]['type'] = '';
+                   $_FILES[$key]['tmp_name'] = '';
+                   $_FILES[$key]['size'] = 0;
+                   $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
+               }
+           }
+       }
+       reset($_FILES);
+   }
 
     /**
-     * Cleans a html string from some xss issues
+     * Cleans a html string from some xss issues.
      *
      * @param string $string String
      *
@@ -184,49 +182,49 @@ class PMF_Init
     private static function _basicXSSClean($string)
     {
         if (strpos($string, '\0') !== false) {
-            return null;
+            return;
         }
 
         if (ini_get('magic_quotes_gpc')) {
             $string = stripslashes($string);
         }
 
-        $string = str_replace(array("&amp;", "&lt;", "&gt;"), array("&amp;amp;", "&amp;lt;", "&amp;gt;"), $string);
-        
+        $string = str_replace(array('&amp;', '&lt;', '&gt;'), array('&amp;amp;', '&amp;lt;', '&amp;gt;'), $string);
+
         // fix &entitiy\n;
-        $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#', "$1;", $string);
-        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#i', "$1$2;", $string);
+        $string = preg_replace('#(&\#*\w+)[\x00-\x20]+;#', '$1;', $string);
+        $string = preg_replace('#(&\#x*)([0-9A-F]+);*#i', '$1$2;', $string);
         $string = html_entity_decode($string, ENT_COMPAT, 'utf-8');
-        
+
         // remove any attribute starting with "on" or xmlns
-        $string = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iU', "$1>", $string);
-        
+        $string = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iU', '$1>', $string);
+
         // remove javascript: and vbscript: protocol
         $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU', '$1=$2nojavascript...', $string);
         $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU', '$1=$2novbscript...', $string);
         $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#U', '$1=$2nomozbinding...', $string);
         $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*data[\x00-\x20]*:#U', '$1=$2nodata...', $string);
-        
+
         //<span style="width: expression(alert('Ping!'));"></span> 
         // only works in ie...
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU', "$1>", $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU', "$1>", $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU', "$1>", $string);
-        
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU', '$1>', $string);
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU', '$1>', $string);
+        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU', '$1>', $string);
+
         //remove namespaced elements (we do not need them...)
-        $string = preg_replace('#</*\w+:\w[^>]*>#i', "", $string);
-        
+        $string = preg_replace('#</*\w+:\w[^>]*>#i', '', $string);
+
         //remove really unwanted tags
         do {
             $oldstring = $string;
-            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', "", $string);
+            $string = preg_replace('#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i', '', $string);
         } while ($oldstring != $string);
-        
+
         return $string;
     }
 
     /**
-     * Removes xss from an array
+     * Removes xss from an array.
      *
      * @param array $data Array of data
      *
@@ -245,12 +243,13 @@ class PMF_Init
         foreach ($data as $key => $val) {
             $key = self::_basicXSSClean($key);
             if (is_array($val)) {
-                $recursionCounter++;
+                ++$recursionCounter;
                 $cleanData[$key] = self::_removeXSSGPC($val);
             } else {
                 $cleanData[$key] = self::_basicXSSClean($val);
             }
         }
+
         return $cleanData;
     }
 }

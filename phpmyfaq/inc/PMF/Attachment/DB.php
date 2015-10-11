@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Attachment handler class for files stored in database
+ * Attachment handler class for files stored in database.
  *
  * PHP Version 5.5
  *
@@ -9,65 +10,65 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Atachment_Abstract.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
 {
-    
     /**
-     * Constructor
+     * Constructor.
      *
      * @param int $id attachment id
      */
-    public function __construct ($id = null)
+    public function __construct($id = null)
     {
         // TODO implement this
         throw new PMF_Attachment_Exception('The database attachment storage type is not yet implemented');
     }
-    
+
     /**
-     * Delete attachment
+     * Delete attachment.
      *
-     * @return boolean
+     * @return bool
      */
-    function delete()
+    public function delete()
     {
         // TODO implement this
     }
-    
+
     /**
-     * Save current attachment to the appropriate storage
+     * Save current attachment to the appropriate storage.
      *
-     * @return boolean
+     * @return bool
      */
     public function save()
     {
         // TODO implement this
     }
-    
+
     /**
-     * Retrieve file contents into a variable
+     * Retrieve file contents into a variable.
      *
      * @return string
      */
@@ -75,11 +76,9 @@ class PMF_Attachment_DB extends PMF_Attachment_Abstract implements PMF_Attachmen
     {
         // TODO implement this
     }
-    
+
     /**
-     * Output current file to stdout
-     *
-     * @return null
+     * Output current file to stdout.
      */
     public function rawOut()
     {

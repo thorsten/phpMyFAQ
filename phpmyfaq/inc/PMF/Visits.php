@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Handles all the stuff for visits
+ * Handles all the stuff for visits.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Visits
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-08
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Visits
+ * PMF_Visits.
  *
  * @category  phpMyFAQ
- * @package   PMF_Visits
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-08
  */
@@ -40,7 +42,7 @@ class PMF_Visits
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -50,18 +52,16 @@ class PMF_Visits
     {
         $this->config = $config;
     }
-       
+
     /**
-     * Counting the views of a FAQ record
+     * Counting the views of a FAQ record.
      *
-     * @param integer $id FAQ record ID
-     *
-     * @return void
+     * @param int $id FAQ record ID
      */
     public function logViews($id)
     {
         $nVisits = 0;
-        $query   = sprintf("
+        $query = sprintf("
             SELECT
                 visits
             FROM
@@ -77,7 +77,7 @@ class PMF_Visits
 
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result)) {
-            $row     = $this->config->getDb()->fetchObject($result);
+            $row = $this->config->getDb()->fetchObject($result);
             $nVisits = $row->visits;
         }
         if ($nVisits == 0) {
@@ -88,10 +88,11 @@ class PMF_Visits
     }
 
     /**
-     * Adds a new entry in the table faqvisits
+     * Adds a new entry in the table faqvisits.
      *
-     * @param  integer $id Record ID
-     * @return boolean
+     * @param int $id Record ID
+     *
+     * @return bool
      */
     public function add($id)
     {
@@ -116,10 +117,11 @@ class PMF_Visits
     }
 
     /**
-     * Updates an entry in the table faqvisits
+     * Updates an entry in the table faqvisits.
      *
-     * @param  integer $id FAQ record ID
-     * @return boolean
+     * @param int $id FAQ record ID
+     *
+     * @return bool
      */
     private function update($id)
     {
@@ -146,7 +148,7 @@ class PMF_Visits
     }
 
     /**
-     * Get all the entries from the table faqvisits
+     * Get all the entries from the table faqvisits.
      *
      * @return array
      */
@@ -154,23 +156,23 @@ class PMF_Visits
     {
         $data = [];
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 *
              FROM
                 %sfaqvisits
              ORDER BY
-                visits DESC",
+                visits DESC',
             PMF_Db::getTablePrefix()
             );
         $result = $this->config->getDb()->query($query);
 
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $data[] = [
-                'id'         => $row->id,
-                'lang'       => $row->lang,
-                'visits'     => $row->visits,
-                'last_visit' => $row->last_visit
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'visits' => $row->visits,
+                'last_visit' => $row->last_visit,
             ];
         }
 
@@ -178,7 +180,7 @@ class PMF_Visits
     }
 
     /**
-     * Resets all visits to current date and one visit per FAQ
+     * Resets all visits to current date and one visit per FAQ.
      *
      * @return mixed
      */

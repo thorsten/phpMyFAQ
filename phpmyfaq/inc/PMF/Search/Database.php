@@ -1,6 +1,7 @@
 <?php
+
 /**
- * phpMyFAQ database based search classes
+ * phpMyFAQ database based search classes.
  *
  * PHP Version 5.5
  *
@@ -9,82 +10,83 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Database
+ * PMF_Search_Database.
  *
  * @category  phpMyFAQ
- * @package   Search
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
 class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Interface
 {
     /**
-     * Searching database table
+     * Searching database table.
      *
      * @var string
      */
     protected $table = '';
-    
+
     /**
-     * Joined searching database table
+     * Joined searching database table.
      *
      * @var string
      */
     protected $joinedTable = '';
-    
+
     /**
-     * Columns for the resultset
+     * Columns for the resultset.
      *
      * @var array
      */
     protected $resultColumns = [];
-    
+
     /**
-     * Columns for the joined table
+     * Columns for the joined table.
      *
      * @var array
      */
     protected $joinedColumns = [];
-    
+
     /**
-     * Matching columns for the search
+     * Matching columns for the search.
      *
      * @var array
      */
     protected $matchingColumns = [];
-    
+
     /**
-     * Conditions columns with their values
+     * Conditions columns with their values.
      *
      * @var array
      */
     protected $conditions = [];
 
     /**
-     * Flag if database supports search relevance
+     * Flag if database supports search relevance.
      *
      * @var bool
      */
     protected $relevanceSupport = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      */
@@ -92,9 +94,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     {
         parent::__construct($config);
     }
-    
+
     /**
-     * Prepares the search and executes it
+     * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
      *
@@ -104,13 +106,13 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function search($searchTerm)
     {
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 %s
             FROM 
                 %s %s %s
             WHERE
-                %s = %d",
+                %s = %d',
             $this->getResultColumns(),
             $this->getTable(),
             $this->getJoinedTable(),
@@ -123,7 +125,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     }
 
     /**
-     * Sets search table
+     * Sets search table.
      *
      * @param string $table Table where search should be performed
      *
@@ -132,12 +134,12 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setTable($table)
     {
         $this->table = $table;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the search table
+     * Returns the search table.
      *
      * @return string
      */
@@ -145,9 +147,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     {
         return $this->table;
     }
-    
+
     /**
-     * Sets joined search table
+     * Sets joined search table.
      *
      * @param string $joinedTable Joined table where search should be performed
      *
@@ -156,12 +158,12 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setJoinedTable($joinedTable = '')
     {
         $this->joinedTable = $joinedTable;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the joined table
+     * Returns the joined table.
      *
      * @return string
      */
@@ -170,12 +172,12 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
         if (empty($this->joinedTable)) {
             return '';
         } else {
-            return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
+            return ' LEFT JOIN '.$this->joinedTable.' ON ';
         }
     }
-    
+
     /**
-     * Sets the part of the SQL query with the columns for the result set
+     * Sets the part of the SQL query with the columns for the result set.
      *
      * @param array $columns Array of columns
      *
@@ -184,32 +186,32 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setResultColumns(Array $columns)
     {
         $this->resultColumns = $columns;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the part of the SQL query with the columns for the result set
+     * Returns the part of the SQL query with the columns for the result set.
      *
      * @return string
      */
     public function getResultColumns()
     {
         $resultColumns = '';
-        
+
         foreach ($this->resultColumns as $column) {
             if (empty($resultColumns)) {
                 $resultColumns = $column;
             } else {
-                $resultColumns .= ', ' . $column;
+                $resultColumns .= ', '.$column;
             }
         }
-        
+
         return $resultColumns;
     }
-    
+
     /**
-     * Sets the part of the SQL query with the columns for the join
+     * Sets the part of the SQL query with the columns for the join.
      *
      * @param array $joinedColumns Array of columns
      *
@@ -218,28 +220,28 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setJoinedColumns(Array $joinedColumns)
     {
         $this->joinedColumns = $joinedColumns;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the part of the SQL query with the columns for the join
+     * Returns the part of the SQL query with the columns for the join.
      *
      * @return string
      */
     public function getJoinedColumns()
     {
         $joinedColumns = '';
-        
+
         foreach ($this->joinedColumns as $column) {
-            $joinedColumns .= $column . ' AND ';
+            $joinedColumns .= $column.' AND ';
         }
-        
+
         return PMF_String::substr($joinedColumns, 0, -4);
     }
-    
+
     /**
-     * Sets the part of the SQL query with the matching columns
+     * Sets the part of the SQL query with the matching columns.
      *
      * @param array $matchingColumns Array of columns
      *
@@ -248,12 +250,12 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setMatchingColumns(Array $matchingColumns)
     {
         $this->matchingColumns = $matchingColumns;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the part of the SQL query with the matching columns
+     * Returns the part of the SQL query with the matching columns.
      *
      * @return string
      */
@@ -261,9 +263,9 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     {
         return implode(', ', $this->matchingColumns);
     }
-    
+
     /**
-     * Sets the part of the SQL query with the conditions
+     * Sets the part of the SQL query with the conditions.
      *
      * @param array $conditions Array of columns
      *
@@ -272,34 +274,34 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
     public function setConditions(Array $conditions)
     {
         $this->conditions = $conditions;
-        
+
         return $this;
     }
-    
+
     /**
-     * Returns the part of the SQL query with the conditions
+     * Returns the part of the SQL query with the conditions.
      *
      * @return string
      */
     public function getConditions()
     {
         $conditions = '';
-        
+
         if (count($this->conditions)) {
             foreach ($this->conditions as $column => $value) {
                 if (is_array($value)) {
-                    $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
+                    $conditions .= ' AND '.$column.' IN ('.implode(', ', $value).')';
                 } else {
-                    $conditions .= ' AND ' . $column . ' = ' . $value;
+                    $conditions .= ' AND '.$column.' = '.$value;
                 }
             }
         }
-        
+
         return $conditions;
     }
-    
+
     /**
-     * Creates the part for the WHERE clause
+     * Creates the part for the WHERE clause.
      *
      * @param string $searchTerm Search term
      *
@@ -307,36 +309,34 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      */
     public function getMatchClause($searchTerm = '')
     {
-        $keys     = PMF_String::preg_split("/\s+/", $searchTerm);
-        $numKeys  = count($keys);
+        $keys = PMF_String::preg_split("/\s+/", $searchTerm);
+        $numKeys = count($keys);
         $numMatch = count($this->matchingColumns);
-        $where    = '';
-        
-        for ($i = 0; $i < $numKeys; $i++) {
-            if (strlen($where) != 0 ) {
-                $where = $where . " OR";
+        $where = '';
+
+        for ($i = 0; $i < $numKeys; ++$i) {
+            if (strlen($where) != 0) {
+                $where = $where.' OR';
             }
-            $where = $where . " (";
-            for ($j = 0; $j < $numMatch; $j++) {
+            $where = $where.' (';
+            for ($j = 0; $j < $numMatch; ++$j) {
                 if ($j != 0) {
-                    $where = $where." OR ";
+                    $where = $where.' OR ';
                 }
-                $where = sprintf("%s%s LIKE '%%%s%%'", 
-                    $where, 
-                    $this->matchingColumns[$j], 
+                $where = sprintf("%s%s LIKE '%%%s%%'",
+                    $where,
+                    $this->matchingColumns[$j],
                     $this->_config->getDb()->escape($keys[$i]));
             }
-            $where .= ")";
+            $where .= ')';
         }
-        
+
         return $where;
     }
 
     /**
      * Disables relevance support if we don't need it even if the database
-     * supports it
-     *
-     * @return void
+     * supports it.
      */
     public function disableRelevance()
     {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The basic permission class provides user rights.
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Perm_Basic
+ * PMF_Perm_Basic.
  *
  * @category  phpMyFAQ 
- * @package   Perm
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
@@ -37,22 +39,21 @@ class PMF_Perm_Basic extends PMF_Perm
     // --- ATTRIBUTES ---
 
     /**
-     * default_right_data
+     * default_right_data.
      *
      * default right data stored when a new right is created.
      *
-     * @access public
      * @var array
      */
     public $default_right_data = array(
-        'name'          => 'DEFAULT_RIGHT',
-        'description'   => 'Short description.',
-        'for_users'     => true,
-        'for_groups'    => true
+        'name' => 'DEFAULT_RIGHT',
+        'description' => 'Short description.',
+        'for_users' => true,
+        'for_groups' => true,
     );
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -69,8 +70,9 @@ class PMF_Perm_Basic extends PMF_Perm
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @param  integer $user_id  User ID
-     * @param  integer $right_id Right ID
+     * @param int $user_id  User ID
+     * @param int $right_id Right ID
+     *
      * @return bool
      */
     public function checkUserRight($user_id, $right_id)
@@ -79,9 +81,9 @@ class PMF_Perm_Basic extends PMF_Perm
         if ($right_id <= 0) {
             return false;
         }
-        
+
         // check right
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -92,19 +94,19 @@ class PMF_Perm_Basic extends PMF_Perm
                 fr.right_id = %d AND
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
-                fu.user_id  = fur.user_id",
+                fu.user_id  = fur.user_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $right_id,
             $user_id);
-            
+
         $res = $this->config->getDb()->query($select);
         // return result
         if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
-        
+
         return false;
     }
 
@@ -113,13 +115,14 @@ class PMF_Perm_Basic extends PMF_Perm
      * specified by user_id owns. Group rights are not taken into
      * account.
      *
-     * @param  integer $user_id User ID
+     * @param int $user_id User ID
+     *
      * @return array
      */
     public function getUserRights($user_id)
     {
         // get user rights
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -129,17 +132,18 @@ class PMF_Perm_Basic extends PMF_Perm
             WHERE
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
-                fu.user_id  = fur.user_id",
+                fu.user_id  = fur.user_id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $user_id);
-            
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
         }
+
         return $result;
     }
 
@@ -147,33 +151,35 @@ class PMF_Perm_Basic extends PMF_Perm
      * Gives the user a new user-right.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $user_id  User ID
-     * @param  integer $right_id Right ID
-     * @return boolean
+     * @param int $user_id  User ID
+     * @param int $right_id Right ID
+     *
+     * @return bool
      */
     public function grantUserRight($user_id, $right_id)
     {
         // is right for users?
         $right_data = $this->getRightData($right_id);
-        
+
         if (!$right_data['for_users']) {
             return false;
         }
-        
-        $insert = sprintf("
+
+        $insert = sprintf('
             INSERT INTO
                 %sfaquser_right
             (user_id, right_id)
                 VALUES
-            (%d, %d)",
+            (%d, %d)',
             PMF_Db::getTablePrefix(),
             $user_id,
             $right_id);
-        
+
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -181,26 +187,28 @@ class PMF_Perm_Basic extends PMF_Perm
      * Refuses the user a user-right.
      * Returns true on succes, otherwise false.
      *
-     * @param  integer $user_id  User ID
-     * @param  integer $right_id Right ID
-     * @return boolean
+     * @param int $user_id  User ID
+     * @param int $right_id Right ID
+     *
+     * @return bool
      */
     public function refuseUserRight($user_id, $right_id)
     {
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_right
             WHERE
                 user_id  = %d AND
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $user_id,
             $right_id);
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 
@@ -210,8 +218,9 @@ class PMF_Perm_Basic extends PMF_Perm
      * right-ID or a right-name. Another difference is, that also
      * group-rights are taken into account.
      *
-     * @param  integer $user_id User ID
-     * @param  mixed   $right   Right ID or right name
+     * @param int   $user_id User ID
+     * @param mixed $right   Right ID or right name
+     *
      * @return bool
      */
     public function checkRight($user_id, $right)
@@ -219,7 +228,7 @@ class PMF_Perm_Basic extends PMF_Perm
         if (!is_numeric($right) and is_string($right)) {
             $right = $this->getRightId($right);
         }
-        
+
         return $this->checkUserRight($user_id, $right);
     }
 
@@ -228,15 +237,16 @@ class PMF_Perm_Basic extends PMF_Perm
      * database for the specified right. The keys of the returned
      * array are the fieldnames.
      *
-     * @access public
      * @author Lars Tiedemann, <php@larstiedemann.de>
+     *
      * @param int
+     *
      * @return array
      */
     public function getRightData($right_id)
     {
         // get right data
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 right_id,
                 name,
@@ -246,19 +256,20 @@ class PMF_Perm_Basic extends PMF_Perm
             FROM
                 %sfaqright
             WHERE
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $right_id);
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             return false;
         }
-        
+
         // process right data
-        $right_data               = $this->config->getDb()->fetchArray($res);
-        $right_data['for_users']  = (bool)$right_data['for_users'];
-        $right_data['for_groups'] = (bool)$right_data['for_groups'];
+        $right_data = $this->config->getDb()->fetchArray($res);
+        $right_data['for_users'] = (bool) $right_data['for_users'];
+        $right_data['for_groups'] = (bool) $right_data['for_groups'];
+
         return $right_data;
     }
 
@@ -266,7 +277,8 @@ class PMF_Perm_Basic extends PMF_Perm
      * Returns an array that contains the IDs of all user-rights
      * the user owns.
      *
-     * @param  integer $user_id User ID
+     * @param int $user_id User ID
+     *
      * @return array
      */
     public function getAllUserRights($user_id)
@@ -278,8 +290,9 @@ class PMF_Perm_Basic extends PMF_Perm
      * Dummy function; this function is only relevant when the
      * permission mode is set to Medium.
      *
-     * @param  integer $user_id User ID
-     * @return boolean
+     * @param int $user_id User ID
+     *
+     * @return bool
      */
     public function autoJoin($user_id)
     {
@@ -300,10 +313,10 @@ class PMF_Perm_Basic extends PMF_Perm
         if ($this->getRightId($right_data['name']) > 0) {
             return 0;
         }
-        
-        $nextId    = $this->config->getDb()->nextId(PMF_Db::getTablePrefix()."faqright", "right_id");
+
+        $nextId = $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqright', 'right_id');
         $rightData = $this->checkRightData($right_data);
-        
+
         $insert = sprintf("
             INSERT INTO
                 %sfaqright
@@ -314,50 +327,51 @@ class PMF_Perm_Basic extends PMF_Perm
             $nextId,
             $rightData['name'],
             $rightData['description'],
-            isset($rightData['for_users']) ? (int)$rightData['for_users'] : 1,
-            isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1
+            isset($rightData['for_users']) ? (int) $rightData['for_users'] : 1,
+            isset($rightData['for_groups']) ? (int) $rightData['for_groups'] : 1
         );
 
-        if (! $this->config->getDb()->query($insert)) {
+        if (!$this->config->getDb()->query($insert)) {
             return 0;
         }
-        
+
         return $nextId;
     }
 
     /**
      * Changes the right data. Returns true on success, otherwise false.
      *
-     * @param  integer $right_id   Right ID
-     * @param  array   $right_data Array of rights
-     * @return boolean
+     * @param int   $right_id   Right ID
+     * @param array $right_data Array of rights
+     *
+     * @return bool
      */
     public function changeRight($right_id, Array $right_data)
     {
         $checked_data = $this->checkRightData($right_data);
-        $set          = '';
-        $comma        = '';
+        $set = '';
+        $comma = '';
         foreach ($right_data as $key => $val) {
             $set .= $comma.$key." = '".$checked_data[$key]."'";
             $comma = ",\n                ";
         }
-        
-        $update = sprintf("
+
+        $update = sprintf('
             UPDATE
                 %sfaqright
             SET
                 %s
             WHERE
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $set,
             $right_id);
-            
+
         $res = $this->config->getDb()->query($update);
         if (!$res) {
             return false;
         }
-            
+
         return true;
     }
 
@@ -365,65 +379,67 @@ class PMF_Perm_Basic extends PMF_Perm
      * Deletes the right from the database.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $right_id Right ID
-     * @return boolean
+     * @param int $right_id Right ID
+     *
+     * @return bool
      */
     public function deleteRight($right_id)
     {
         // delete right
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaqright
             WHERE
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $right_id);
-        
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
-        
+
         // delete user-right links
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_right
             WHERE
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $right_id);
-        
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
-        
+
         // delete group-right links
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaqgroup_right
             WHERE
-                right_id = %d",
+                right_id = %d',
             PMF_Db::getTablePrefix(),
             $right_id);
-        
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
-        
+
         return true;
     }
 
     /**
      * Returns the right-ID of the right with the name $name.
      *
-     * @param  string $name Name
+     * @param string $name Name
+     *
      * @return int
      */
     public function getRightId($name)
@@ -438,12 +454,13 @@ class PMF_Perm_Basic extends PMF_Perm
                 name = '%s'",
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($name));
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
             return 0;
         }
         $row = $this->config->getDb()->fetchArray($res);
+
         return $row['right_id'];
     }
 
@@ -455,14 +472,14 @@ class PMF_Perm_Basic extends PMF_Perm
      */
     public function getAllRights()
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 right_id
             FROM
-                %sfaqright",
+                %sfaqright',
             PMF_Db::getTablePrefix());
-            
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['right_id'];
@@ -478,12 +495,13 @@ class PMF_Perm_Basic extends PMF_Perm
      * $order, the order of the array may be specified. Default is
      * $order = 'right_id ASC'.
      *
-     * @param  string $order Ordering
+     * @param string $order Ordering
+     *
      * @return array
      */
     public function getAllRightsData($order = 'ASC')
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 right_id,
                 name,
@@ -493,17 +511,17 @@ class PMF_Perm_Basic extends PMF_Perm
             FROM
                 %sfaqright
             ORDER BY
-                right_id %s",
+                right_id %s',
             PMF_Db::getTablePrefix(),
             $order);
-            
-        $res    = $this->config->getDb()->query($select);
+
+        $res = $this->config->getDb()->query($select);
         $result = [];
-        $i      = 0;
-        
+        $i = 0;
+
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[$i] = $row;
-            $i++;
+            ++$i;
         }
 
         return $result;
@@ -515,7 +533,8 @@ class PMF_Perm_Basic extends PMF_Perm
      * by the default values in $this->default_right_data.
      * Returns the corrected $right_data associative array.
      *
-     * @param  array $right_data Array of rights
+     * @param array $right_data Array of rights
+     *
      * @return array
      */
     public function checkRightData(Array $right_data)
@@ -532,10 +551,10 @@ class PMF_Perm_Basic extends PMF_Perm
         if (!isset($right_data['for_groups'])) {
             $right_data['for_groups'] = $this->default_right_data['for_groups'];
         }
-        
-        $right_data['for_users']  = (int)$right_data['for_users'];
-        $right_data['for_groups'] = (int)$right_data['for_groups'];
-        
+
+        $right_data['for_users'] = (int) $right_data['for_users'];
+        $right_data['for_groups'] = (int) $right_data['for_groups'];
+
         return $right_data;
     }
 
@@ -543,23 +562,25 @@ class PMF_Perm_Basic extends PMF_Perm
      * Refuses all user rights.
      * Returns true on success, otherwise false.
      *
-     * @param  integer $user_id User ID
-     * @return boolean
+     * @param int $user_id User ID
+     *
+     * @return bool
      */
     public function refuseAllUserRights($user_id)
     {
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser_right
             WHERE
-                user_id  = %d",
+                user_id  = %d',
             PMF_Db::getTablePrefix(),
             $user_id);
-        
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
+
         return true;
     }
 }

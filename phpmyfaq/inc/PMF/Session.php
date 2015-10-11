@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main User session class
+ * The main User session class.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Session
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Session
+ * PMF_Session.
  *
  * @category  phpMyFAQ
- * @package   PMF_Session
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-31
  */
 class PMF_Session
 {
     /**
-     * Constants
+     * Constants.
      */
     const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
     const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
@@ -47,7 +49,7 @@ class PMF_Session
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      *
@@ -57,29 +59,26 @@ class PMF_Session
     {
         $this->config = $config;
     }
-    
+
     /**
-     * Tracks the user and log what he did
+     * Tracks the user and log what he did.
      *
-     * @param  string  $action Action string
-     * @param  integer $id     Current ID
+     * @param string $action Action string
+     * @param int    $id     Current ID
      *
      * @throws PMF_Exception
-     *
-     * @return void
      */
     public function userTracking($action, $id = 0)
     {
         global $sid, $user, $botBlacklist;
 
         if ($this->config->get('main.enableUserTracking')) {
-
-            $bots   = 0;
+            $bots = 0;
             $banned = false;
-            $agent  = $_SERVER['HTTP_USER_AGENT'];
-            $sid    = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc   = PMF_Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            
+            $agent = $_SERVER['HTTP_USER_AGENT'];
+            $sid = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sidc = PMF_Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+
             if (!is_null($sidc)) {
                 $sid = $sidc;
             }
@@ -88,16 +87,16 @@ class PMF_Session
             }
 
             foreach ($botBlacklist as $bot) {
-                if ((bool)PMF_String::strstr($agent, $bot)) {
-                    $bots++;
+                if ((bool) PMF_String::strstr($agent, $bot)) {
+                    ++$bots;
                 }
             }
 
             $network = new PMF_Network($this->config);
 
             // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-            $remoteAddr     = $_SERVER['REMOTE_ADDR'];
-            $localAddresses = ['127.0.0.1', '::1',];
+            $remoteAddr = $_SERVER['REMOTE_ADDR'];
+            $localAddresses = ['127.0.0.1', '::1'];
 
             if (in_array($remoteAddr, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
                 $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
@@ -111,7 +110,7 @@ class PMF_Session
 
             if (0 == $bots && false == $banned) {
                 if (!isset($sid)) {
-                    $sid = $this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqsessions', 'sid');
+                    $sid = $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($sidc) && (!$sidc != $sid)) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sid);
@@ -132,50 +131,50 @@ class PMF_Session
                     $this->config->getDb()->query($query);
                 }
 
-                $data = $sid.';' . 
-                        str_replace(';', ',', $action) . ';' . 
-                        $id . ';' . 
-                        $remoteAddr . ';' .
-                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
-                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' . 
-                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' . 
-                        $_SERVER['REQUEST_TIME'] . ";\n";
-                $file = './data/tracking' . date('dmY');
+                $data = $sid.';'.
+                        str_replace(';', ',', $action).';'.
+                        $id.';'.
+                        $remoteAddr.';'.
+                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '').';'.
+                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '').';'.
+                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])).';'.
+                        $_SERVER['REQUEST_TIME'].";\n";
+                $file = './data/tracking'.date('dmY');
 
                 if (is_writeable($file)) {
                     file_put_contents($file, $data, FILE_APPEND);
                 } else {
-                    throw new PMF_Exception('Cannot write to ' . $file);
+                    throw new PMF_Exception('Cannot write to '.$file);
                 }
             }
         }
     }
 
     /**
-     * Returns the timestamp of a session
+     * Returns the timestamp of a session.
      *
-     * @param  integer $sid Session ID
+     * @param int $sid Session ID
      *
-     * @return integer
+     * @return int
      */
     public function getTimeFromSessionId($sid)
     {
         $timestamp = 0;
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 time
             FROM
                 %sfaqsessions
             WHERE
-                sid = %d",
+                sid = %d',
             PMF_Db::getTablePrefix(),
             $sid);
 
         $result = $this->config->getDb()->query($query);
 
         if ($result) {
-            $res       = $this->config->getDb()->fetchObject($result);
+            $res = $this->config->getDb()->fetchObject($result);
             $timestamp = $res->time;
         }
 
@@ -183,10 +182,10 @@ class PMF_Session
     }
 
     /**
-     * Returns all session from a date
+     * Returns all session from a date.
      *
-     * @param integer $firstHour First hour
-     * @param integer $lastHour  Last hour
+     * @param int $firstHour First hour
+     * @param int $lastHour  Last hour
      *
      * @return array
      */
@@ -194,7 +193,7 @@ class PMF_Session
     {
         $sessions = [];
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 sid, ip, time
             FROM
@@ -204,7 +203,7 @@ class PMF_Session
             AND
                 time < %d
             ORDER BY
-                time",
+                time',
             PMF_Db::getTablePrefix(),
             $firstHour,
             $lastHour
@@ -213,8 +212,8 @@ class PMF_Session
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $sessions[$row->sid] = array(
-                'ip'   => $row->ip,
-                'time' => $row->time
+                'ip' => $row->ip,
+                'time' => $row->time,
             );
         }
 
@@ -222,19 +221,19 @@ class PMF_Session
     }
 
     /**
-     * Returns the number of sessions
+     * Returns the number of sessions.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberOfSessions()
     {
         $num = 0;
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 sid
             FROM
-                %sfaqsessions",
+                %sfaqsessions',
             PMF_Db::getTablePrefix());
 
         $result = $this->config->getDb()->query($query);
@@ -246,22 +245,22 @@ class PMF_Session
     }
 
     /**
-     * Deletes the sessions for a given timespan
+     * Deletes the sessions for a given timespan.
      *
-     * @param  integer $first Frist session ID
-     * @param  integer $last  Last session ID
+     * @param int $first Frist session ID
+     * @param int $last  Last session ID
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteSessions($first, $last)
     {
-        $query = sprintf("
+        $query = sprintf('
             DELETE FROM
                 %sfaqsessions
             WHERE
                 time >= %d
             AND
-                time <= %d",
+                time <= %d',
             PMF_Db::getTablePrefix(),
             $first,
             $last);
@@ -272,24 +271,22 @@ class PMF_Session
     }
 
     /**
-     * Deletes all entries in the table
+     * Deletes all entries in the table.
      *
      * @return mixed
      */
     public function deleteAllSessions()
     {
-        $query = sprintf("DELETE FROM %sfaqsessions", PMF_Db::getTablePrefix());
+        $query = sprintf('DELETE FROM %sfaqsessions', PMF_Db::getTablePrefix());
 
         return $this->config->getDb()->query($query);
     }
 
     /**
-     * Checks the Session ID
+     * Checks the Session ID.
      *
-     * @param integer $sessionId Session ID
-     * @param string  $ip  IP
-     *
-     * @return void
+     * @param int    $sessionId Session ID
+     * @param string $ip        IP
      */
     public function checkSessionId($sessionId, $ip)
     {
@@ -340,25 +337,24 @@ class PMF_Session
     /**
      * Returns the number of anonymous users and registered ones.
      * These are the numbers of unique users who have performed
-     * some activities within the last five minutes
+     * some activities within the last five minutes.
      *
-     * @param  integer $activityTimeWindow Optionally set the time window size in sec. 
-     *                                     Default: 300sec, 5 minutes
+     * @param int $activityTimeWindow Optionally set the time window size in sec. 
+     *                                Default: 300sec, 5 minutes
      *
      * @return array
      */
     public function getUsersOnline($activityTimeWindow = 300)
     {
         $users = array(0, 0);
-        
-        if ($this->config->get('main.enableUserTracking')) {
 
+        if ($this->config->get('main.enableUserTracking')) {
             $timeNow = ($_SERVER['REQUEST_TIME'] - $activityTimeWindow);
 
-            if (! $this->config->get('security.enableLoginOnly')) {
+            if (!$this->config->get('security.enableLoginOnly')) {
                 // Count all sids within the time window for public installations
                 // @todo add a new field in faqsessions in order to find out only sids of anonymous users
-                $query = sprintf("
+                $query = sprintf('
                     SELECT
                         count(sid) AS anonymous_users
                     FROM
@@ -366,7 +362,7 @@ class PMF_Session
                     WHERE
                         user_id = -1
                     AND
-                        time > %d",
+                        time > %d',
                     PMF_Db::getTablePrefix(),
                     $timeNow
                 );
@@ -374,36 +370,36 @@ class PMF_Session
                 $result = $this->config->getDb()->query($query);
 
                 if (isset($result)) {
-                    $row      = $this->config->getDb()->fetchObject($result);
+                    $row = $this->config->getDb()->fetchObject($result);
                     $users[0] = $row->anonymous_users;
                 }
             }
-            
+
             // Count all faquser records within the time window
-            $query = sprintf("
+            $query = sprintf('
                 SELECT
                     count(session_id) AS registered_users
                 FROM
                     %sfaquser
                 WHERE
-                    session_timestamp > %d",
+                    session_timestamp > %d',
                 PMF_Db::getTablePrefix(),
                 $timeNow
             );
 
             $result = $this->config->getDb()->query($query);
-            
+
             if (isset($result)) {
-                $row      = $this->config->getDb()->fetchObject($result);
+                $row = $this->config->getDb()->fetchObject($result);
                 $users[1] = $row->registered_users;
             }
         }
-        
+
         return $users;
     }
 
     /**
-     * Calculates the number of visits per day the last 30 days
+     * Calculates the number of visits per day the last 30 days.
      *
      * @returns array
      */
@@ -412,9 +408,9 @@ class PMF_Session
         $stats = $visits = [];
 
         $startDate = strtotime('-1 month');
-        $endDate   = $_SERVER['REQUEST_TIME'];
+        $endDate = $_SERVER['REQUEST_TIME'];
 
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 time
             FROM
@@ -422,7 +418,7 @@ class PMF_Session
             WHERE
                 time > %d
             AND
-                time < %d;",
+                time < %d;',
             PMF_Db::getTablePrefix(),
             $startDate,
             $endDate
@@ -448,17 +444,17 @@ class PMF_Session
      * Store the Session ID into a persistent cookie expiring
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
-     * @param string  $name      Cookie name
-     * @param string  $sessionId Session ID
-     * @param integer $timeout   Cookie timeout
+     * @param string $name      Cookie name
+     * @param string $sessionId Session ID
+     * @param int    $timeout   Cookie timeout
      *
-     * @return boolean
+     * @return bool
      */
     public static function setCookie($name, $sessionId = '', $timeout = PMF_SESSION_EXPIRED_TIME)
     {
         return setcookie(
             $name,
-            $sessionId, 
+            $sessionId,
             $_SERVER['REQUEST_TIME'] + $timeout,
             dirname($_SERVER['SCRIPT_NAME'])
         );

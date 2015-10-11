@@ -1,7 +1,8 @@
 <?php
+
 /**
  * Shows the page with the news record and - when available - the user
- * comments
+ * comments.
  *
  * PHP Version 5.5
  *
@@ -10,21 +11,21 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -37,11 +38,11 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$oNews  = new PMF_News($faqConfig);
+$oNews = new PMF_News($faqConfig);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -52,7 +53,7 @@ try {
 }
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
+$newsMainHeader = $faqConfig->get('main.titleFAQ').$PMF_LANG['msgNews'];
 if ($faqConfig->get('main.enableRssFeeds')) {
     $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
 } else {
@@ -63,13 +64,13 @@ if ($faqConfig->get('main.enableRssFeeds')) {
 $news = $oNews->getNewsEntry($newsId);
 
 $newsContent = $news['content'];
-$newsHeader  = $news['header'];
+$newsHeader = $news['header'];
 
 // Add Glossary entries
-$oGlossary   = new PMF_Glossary($faqConfig);
+$oGlossary = new PMF_Glossary($faqConfig);
 $newsContent = $oGlossary->insertItemsIntoContent($newsContent);
-$newsHeader  = $oGlossary->insertItemsIntoContent($newsHeader);
- 
+$newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
+
 // Add information link if existing
 if (strlen($news['link']) > 0) {
     $newsContent .= sprintf('</p><p>%s<a href="%s" target="%s">%s</a>',
@@ -116,27 +117,27 @@ $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 $tpl->parse(
     'writeContent',
     array(
-        'writeNewsHeader'     => $newsMainHeader,
-        'writeNewsRSS'        => $newsFeed,
-        'writeHeader'         => $newsHeader,
-        'writeContent'        => $newsContent,
-        'writeDateMsg'        => $newsDate,
-        'msgAboutThisNews'    => $PMF_LANG['msgAboutThisNews'],
-        'writeAuthor'         => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
-        'editThisEntry'       => $editThisEntry,
-        'writeCommentMsg'     => $commentMessage,
-        'msgWriteComment'     => $PMF_LANG['newsWriteComment'],
-        'newsId'              => $newsId,
-        'newsLang'            => $news['lang'],
-        'msgCommentHeader'    => $PMF_LANG['msgCommentHeader'],
-        'msgNewContentName'   => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail'   => $PMF_LANG['msgNewContentMail'],
-        'defaultContentMail'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName'  => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgYourComment'      => $PMF_LANG['msgYourComment'],
+        'writeNewsHeader' => $newsMainHeader,
+        'writeNewsRSS' => $newsFeed,
+        'writeHeader' => $newsHeader,
+        'writeContent' => $newsContent,
+        'writeDateMsg' => $newsDate,
+        'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
+        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'].': '.$news['authorName'] : '',
+        'editThisEntry' => $editThisEntry,
+        'writeCommentMsg' => $commentMessage,
+        'msgWriteComment' => $PMF_LANG['newsWriteComment'],
+        'newsId' => $newsId,
+        'newsLang' => $news['lang'],
+        'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
+        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset'     => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'writeComments'       => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS)
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
+        'writeComments' => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS),
     )
 );
 

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Clears PHP sessions and redirects to the connect page.
  *
@@ -9,11 +10,12 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-18
  */
@@ -27,8 +29,8 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/inc/libs/twitteroauth/twitteroauth.php';
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),
@@ -36,16 +38,16 @@ $connection = new TwitterOAuth(
 );
 
 $requestToken = $connection->getRequestToken(
-    $faqConfig->getDefaultUrl() . 'services/twitter/callback.php'
+    $faqConfig->getDefaultUrl().'services/twitter/callback.php'
 );
 
-$_SESSION['oauth_token']        = $requestToken['oauth_token'];
+$_SESSION['oauth_token'] = $requestToken['oauth_token'];
 $_SESSION['oauth_token_secret'] = $requestToken['oauth_token_secret'];
 
 switch ($connection->http_code) {
     case 200:
         $url = $connection->getAuthorizeURL($requestToken['oauth_token']);
-        header('Location: ' . $url);
+        header('Location: '.$url);
         break;
     default:
         print 'Could not connect to Twitter. Refresh the page or try again later.';

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
@@ -10,47 +11,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Configuration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Configuration
+ * PMF_Configuration.
  *
  * @category  phpMyFAQ
- * @package   Configuration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
 class PMF_Configuration
 {
     /**
-     * Tablename
+     * Tablename.
      *
      * @var string
      */
     protected $_tableName = 'faqconfig';
 
     /**
-     * Configuration array
+     * Configuration array.
      *
      * @var array
      */
     public $config = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_DB_Driver $database
      *
@@ -62,22 +64,20 @@ class PMF_Configuration
     }
 
     /**
-     * Fetches all configuration items into an array
-     *
-     * @return void
+     * Fetches all configuration items into an array.
      */
     public function getAll()
     {
         $config = [];
-        $query  = sprintf("
+        $query = sprintf('
             SELECT
                 config_name, config_value
             FROM
-                %s%s",
+                %s%s',
             PMF_Db::getTablePrefix(),
             $this->_tableName
         );
-            
+
         $result = $this->getDb()->query($query);
         try {
             $config = $this->getDb()->fetchAll($result);
@@ -88,13 +88,12 @@ class PMF_Configuration
         foreach ($config as $items) {
             $this->config[$items->config_name] = $items->config_value;
         }
-        
     }
 
     /**
-     * Returns a configuration item
+     * Returns a configuration item.
      *
-     * @param  string $item Configuration item
+     * @param string $item Configuration item
      *
      * @return mixed
      */
@@ -118,15 +117,13 @@ class PMF_Configuration
             }
         }
 
-        return null;
+        return;
     }
 
     /**
-     * Sets the PMF_DB_Driver object
+     * Sets the PMF_DB_Driver object.
      *
      * @param PMF_DB_Driver $database
-     *
-     * @return void
      */
     public function setDb(PMF_DB_Driver $database)
     {
@@ -134,7 +131,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the PMF_DB_Driver object
+     * Returns the PMF_DB_Driver object.
      *
      * @return PMF_DB_Driver
      */
@@ -144,11 +141,9 @@ class PMF_Configuration
     }
 
     /**
-     * Sets the PMF_Instance object
+     * Sets the PMF_Instance object.
      *
      * @param PMF_Instance $instance
-     *
-     * @return void
      */
     public function setInstance(PMF_Instance $instance)
     {
@@ -156,7 +151,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the PMF_Instance object
+     * Returns the PMF_Instance object.
      *
      * @return PMF_Instance
      */
@@ -166,11 +161,9 @@ class PMF_Configuration
     }
 
     /**
-     * Sets the Language object
+     * Sets the Language object.
      *
      * @param PMF_Language $language
-     *
-     * @return void
      */
     public function setLanguage(PMF_Language $language)
     {
@@ -178,7 +171,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the Language object
+     * Returns the Language object.
      *
      * @return PMF_Language
      */
@@ -188,7 +181,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the default language
+     * Returns the default language.
      *
      * @return string
      */
@@ -198,7 +191,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the default URL of the phpMyFAQ installation
+     * Returns the default URL of the phpMyFAQ installation.
      *
      * @return string
      */
@@ -207,18 +200,16 @@ class PMF_Configuration
         $defaultUrl = $this->get('main.referenceURL');
 
         if (substr($defaultUrl, -1) !== '/') {
-            return $defaultUrl . '/';
+            return $defaultUrl.'/';
         } else {
             return $defaultUrl;
         }
     }
 
     /**
-     * Sets the PMF_Ldap object
+     * Sets the PMF_Ldap object.
      *
      * @param PMF_Ldap $ldap
-     *
-     * @return void
      */
     public function setLdap(PMF_Ldap $ldap)
     {
@@ -226,7 +217,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the PMF_Ldap object
+     * Returns the PMF_Ldap object.
      *
      * @return PMF_Ldap
      */
@@ -236,21 +227,19 @@ class PMF_Configuration
     }
 
     /**
-     * Sets the LDAP configuration
+     * Sets the LDAP configuration.
      *
      * @param Array $ldapConfig
-     *
-     * @return void
      */
     public function setLdapConfig(Array $ldapConfig)
     {
         // Always add main LDAP server
         $this->config['core.ldapServer'][0] = [
-            'ldap_server'   => $ldapConfig['ldap_server'],
-            'ldap_port'     => $ldapConfig['ldap_port'],
-            'ldap_user'     => $ldapConfig['ldap_user'],
+            'ldap_server' => $ldapConfig['ldap_server'],
+            'ldap_port' => $ldapConfig['ldap_port'],
+            'ldap_user' => $ldapConfig['ldap_user'],
             'ldap_password' => $ldapConfig['ldap_password'],
-            'ldap_base'     => $ldapConfig['ldap_base']
+            'ldap_base' => $ldapConfig['ldap_base'],
         ];
 
         // Add multiple LDAP servers if enabled
@@ -259,7 +248,7 @@ class PMF_Configuration
             while ($key >= 1) {
                 if (isset($ldapConfig[$key])) {
                     $this->config['core.ldapServer'][$key] = $ldapConfig[$key];
-                    $key++;
+                    ++$key;
                 } else {
                     break;
                 }
@@ -269,17 +258,17 @@ class PMF_Configuration
         // Set LDAP configuration
         $this->config['core.ldapConfig'] = [
             'ldap_use_multiple_servers' => $ldapConfig['ldap_use_multiple_servers'],
-            'ldap_mapping'              => $ldapConfig['ldap_mapping'],
-            'ldap_use_domain_prefix'    => $ldapConfig['ldap_use_domain_prefix'],
-            'ldap_options'              => $ldapConfig['ldap_options'],
-            'ldap_use_memberOf'         => $ldapConfig['ldap_use_memberOf'],
-            'ldap_use_sasl'             => $ldapConfig['ldap_use_sasl'],
-            'ldap_use_anonymous_login'  => $ldapConfig['ldap_use_anonymous_login']
+            'ldap_mapping' => $ldapConfig['ldap_mapping'],
+            'ldap_use_domain_prefix' => $ldapConfig['ldap_use_domain_prefix'],
+            'ldap_options' => $ldapConfig['ldap_options'],
+            'ldap_use_memberOf' => $ldapConfig['ldap_use_memberOf'],
+            'ldap_use_sasl' => $ldapConfig['ldap_use_sasl'],
+            'ldap_use_anonymous_login' => $ldapConfig['ldap_use_anonymous_login'],
         ];
     }
 
     /**
-     * Returns the LDAP configuration
+     * Returns the LDAP configuration.
      *
      * @return array
      */
@@ -289,7 +278,7 @@ class PMF_Configuration
     }
 
     /**
-     * Returns the LDAP server(s)
+     * Returns the LDAP server(s).
      *
      * @return array
      */
@@ -299,12 +288,12 @@ class PMF_Configuration
     }
 
     /**
-     * Adds a configuration item for the database
+     * Adds a configuration item for the database.
      *
      * @param string $name
      * @param mixed  $value
      *
-     * @return boolean
+     * @return bool
      */
     public function add($name, $value)
     {
@@ -323,11 +312,11 @@ class PMF_Configuration
     }
 
     /**
-     * Deletes a configuration item for the database
+     * Deletes a configuration item for the database.
      *
      * @param string $name
      *
-     * @return boolean
+     * @return bool
      */
     public function delete($name)
     {
@@ -345,9 +334,9 @@ class PMF_Configuration
     }
 
     /**
-     * Updates all configuration items
+     * Updates all configuration items.
      *
-     * @param  array $newConfigs Array with new configuration values
+     * @param array $newConfigs Array with new configuration values
      *
      * @return bool
      */
@@ -358,7 +347,7 @@ class PMF_Configuration
             'core.instance',  // PMF_Instance
             'core.language',  // Language
             'core.ldap',      // PMF_Ldap
-            'core.ldapConfig' // $PMF_LDAP
+            'core.ldapConfig', // $PMF_LDAP
         );
         if (is_array($newConfigs)) {
             foreach ($newConfigs as $name => $value) {
@@ -377,20 +366,22 @@ class PMF_Configuration
                         $this->getDb()->escape(trim($value)),
                         $name
                     );
-                        
+
                     $this->getDb()->query($update);
                     if (isset($this->config[$name])) {
                         unset($this->config[$name]);
                     }
                 }
             }
+
             return true;
         }
+
         return false;
     }
 
     /**
-     * Returns all sorting possibilities for FAQ records
+     * Returns all sorting possibilities for FAQ records.
      *
      * @param string $current
      *
@@ -401,13 +392,13 @@ class PMF_Configuration
         global $PMF_LANG;
 
         $options = ['id', 'thema', 'visits', 'updated', 'author'];
-        $output  = '';
+        $output = '';
 
         foreach ($options as $value) {
             printf('<option value="%s"%s>%s</option>',
                 $value,
                 ($value == $current) ? ' selected' : '',
-                $PMF_LANG['ad_conf_order_' . $value]);
+                $PMF_LANG['ad_conf_order_'.$value]);
         }
 
         return $output;

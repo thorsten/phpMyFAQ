@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The phpMyFAQ instances basic database class
+ * The phpMyFAQ instances basic database class.
  *
  * PHP Version 5.5
  *
@@ -9,47 +10,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-02-14
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance_Database
+ * PMF_Instance_Database.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-02-14
  */
 class PMF_Instance_Database
 {
     /**
-     * Instance
+     * Instance.
      *
      * @var PMF_Instance_Database_Driver
      */
     private static $instance = null;
 
     /**
-     * Database type
+     * Database type.
      *
      * @var string
      */
     private static $dbType = null;
 
     /**
-     * DROP TABLE statements
+     * DROP TABLE statements.
      * 
      * @var array
      */
@@ -97,7 +99,7 @@ class PMF_Instance_Database
     protected $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      */
@@ -107,7 +109,7 @@ class PMF_Instance_Database
     }
 
     /**
-     * Database factory
+     * Database factory.
      *
      * @param PMF_Configuration $config phpMyFAQ configuration container
      * @param string            $type   Database management system type
@@ -120,18 +122,19 @@ class PMF_Instance_Database
     {
         self::$dbType = $type;
 
-        $class = 'PMF_Instance_Database_' . ucfirst($type);
+        $class = 'PMF_Instance_Database_'.ucfirst($type);
 
         if (class_exists($class)) {
             self::$instance = new $class($config);
+
             return self::$instance;
         } else {
-            throw new PMF_Exception('Invalid Database Type: ' . $type);
+            throw new PMF_Exception('Invalid Database Type: '.$type);
         }
     }
 
     /**
-     * Returns the single instance
+     * Returns the single instance.
      *
      * @return PMF_Instance_Database_Driver
      */
@@ -141,35 +144,34 @@ class PMF_Instance_Database
             $className = __CLASS__;
             self::$instance = new $className();
         }
+
         return self::$instance;
     }
 
     /**
-     * __clone() Magic method to prevent cloning
-     *
-     * @return void
+     * __clone() Magic method to prevent cloning.
      */
     private function __clone()
     {
     }
 
     /**
-     * Executes all DROP TABLE statements
+     * Executes all DROP TABLE statements.
      *
      * @param string $prefix
      *
-     * @return boolean
+     * @return bool
      */
     public function dropTables($prefix = '')
     {
         foreach ($this->dropTableStmts as $stmt) {
-
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
 
             if (!$result) {
                 return false;
             }
         }
+
         return true;
     }
 }

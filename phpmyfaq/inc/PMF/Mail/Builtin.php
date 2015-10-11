@@ -1,4 +1,5 @@
 <?php
+
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -9,45 +10,46 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Mail
+ *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Mail_Builtin
+ * PMF_Mail_Builtin.
  *
  * @category  phpMyFAQ
- * @package   Mail
+ *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
-  */ 
+ */
 class PMF_Mail_Builtin implements PMF_Mail_IMUA
 {
     /**
      * Send the message using an e-mail through the PHP built-in mail() function.
      *
-     * @param  string $recipients Recipients of the e-mail as a comma-separated list
-     *                            of RFC 2822 compliant items
-     * @param  array  $headers    Headers of the e-mail
-     * @param  string $body       Body of the e-mail
+     * @param string $recipients Recipients of the e-mail as a comma-separated list
+     *                           of RFC 2822 compliant items
+     * @param array  $headers    Headers of the e-mail
+     * @param string $body       Body of the e-mail
      *
-     * @return bool   True if successful, false otherwise.     
+     * @return bool True if successful, false otherwise.     
      */
     public function send($recipients, Array $headers, $body)
     {
         // Get the subject of the e-mail, RFC 2047 compliant
-        $subject            = $headers['Subject'];
+        $subject = $headers['Subject'];
         $headers['Subject'] = null;
         unset($headers['Subject']);
 
@@ -64,14 +66,14 @@ class PMF_Mail_Builtin implements PMF_Mail_IMUA
         // Prepare the headers for the e-mail
         $mailHeaders = '';
         foreach ($headers as $key => $value) {
-            $mailHeaders .= $key . ': ' . $value . PHP_EOL;
+            $mailHeaders .= $key.': '.$value.PHP_EOL;
         }
 
         // Send the e-mail
         if (empty($sender)) {
             return mail($recipients, $subject, $body, $mailHeaders);
         } else {
-            return mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
+            return mail($recipients, $subject, $body, $mailHeaders, '-f'.$sender);
         }
     }
 }

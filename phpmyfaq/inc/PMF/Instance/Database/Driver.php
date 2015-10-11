@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The phpMyFAQ instances database interface
+ * The phpMyFAQ instances database interface.
  *
  * PHP Version 5.5
  *
@@ -9,37 +10,38 @@
  * obtain one at http://mozilla.org/MPL/2.0/
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance_Database_Driver
+ * PMF_Instance_Database_Driver.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-06
  */
 interface PMF_Instance_Database_Driver
 {
     /**
-     * Executes all CREATE TABLE and CREATE INDEX statements
+     * Executes all CREATE TABLE and CREATE INDEX statements.
      *
      * @param string $prefix
      *
-     * @return boolean
+     * @return bool
      */
     public function createTables($prefix = '');
 }

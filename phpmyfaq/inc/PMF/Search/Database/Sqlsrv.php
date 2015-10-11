@@ -1,6 +1,7 @@
 <?php
+
 /**
- * phpMyFAQ SQL Server Driver for PHP based search classes
+ * phpMyFAQ SQL Server Driver for PHP based search classes.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Database_Sqlsrv
+ * PMF_Search_Database_Sqlsrv.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
 class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      */
@@ -45,7 +47,7 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
     }
 
     /**
-     * Prepares the search and executes it
+     * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
      *
@@ -58,24 +60,24 @@ class PMF_Search_Database_Sqlsrv extends PMF_Search_Database
         if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $query = sprintf("
+            $query = sprintf('
                 SELECT
                     %s
                 FROM 
                     %s %s %s
                 WHERE
                     %s
-                    %s",
+                    %s',
                 $this->getResultColumns(),
                 $this->getTable(),
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
                 $this->getConditions());
-            
+
             $this->resultSet = $this->_config->getDb()->query($query);
         }
-        
+
         return $this->resultSet;
     }
 }

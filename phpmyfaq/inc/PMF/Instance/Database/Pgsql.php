@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The phpMyFAQ instances database class with CREATE TABLE statements for PostgreSQL
+ * The phpMyFAQ instances database class with CREATE TABLE statements for PostgreSQL.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-16
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance_Database_Pgsql
+ * PMF_Instance_Database_Pgsql.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-16
  */
@@ -330,11 +332,11 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             usr INT4 NOT NULL,
             datum VARCHAR(20) DEFAULT \'\',
             ip VARCHAR(15) DEFAULT \'\',
-            PRIMARY KEY (id))'
+            PRIMARY KEY (id))',
     ];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      */
@@ -344,22 +346,22 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
     }
 
     /**
-     * Executes all CREATE TABLE and CREATE INDEX statements
+     * Executes all CREATE TABLE and CREATE INDEX statements.
      *
      * @param string $prefix
      *
-     * @return boolean
+     * @return bool
      */
     public function createTables($prefix = '')
     {
         foreach ($this->createTableStatements as $stmt) {
-
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
 
             if (!$result) {
                 return false;
             }
         }
+
         return true;
     }
 }

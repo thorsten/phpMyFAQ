@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main phpMyFAQ instances class for instance masters
+ * The main phpMyFAQ instances class for instance masters.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,33 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-31
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance
+ * PMF_Instance.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-31
  */
 class PMF_Instance_Master extends PMF_Instance
 {
     /**
-     *
      * @param PMF_Instance $instance
      */
     public function createMaster(PMF_Instance $instance)

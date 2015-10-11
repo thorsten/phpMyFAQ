@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The reporting class for simple report generation
+ * The reporting class for simple report generation.
  *
  * PHP Version 5.5
  *
@@ -9,28 +10,29 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Report
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2011-02-04
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Report
+ * PMF_Report.
  *
  * @category  phpMyFAQ
- * @package   PMF_Report
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2011-02-04
  */
@@ -42,7 +44,7 @@ class PMF_Report
     private $_config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      *
@@ -54,14 +56,15 @@ class PMF_Report
     }
 
     /**
-     * Generates a huge array for the report 
+     * Generates a huge array for the report.
+     *
      * @return array
      */
     public function getReportingData()
     {
         $report = [];
-        
-        $query = sprintf("
+
+        $query = sprintf('
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -98,7 +101,7 @@ class PMF_Report
                 (c.id = fcr.category_id AND c.lang = fcr.record_lang)
             ORDER BY
                 fd.id
-            ASC",
+            ASC',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -111,33 +114,32 @@ class PMF_Report
 
         $lastId = 0;
         while ($row = $this->_config->getDb()->fetchObject($result)) {
-
             if ($row->id == $lastId) {
                 $report[$row->id]['faq_translations'] += 1;
             } else {
                 $report[$row->id] = array(
-                    'faq_id'           => $row->id,
-                    'faq_language'     => $row->lang,
-                    'category_id'      => $row->category_id,
-                    'category_parent'  => $row->parent_id,
-                    'category_name'    => $row->category_name,
+                    'faq_id' => $row->id,
+                    'faq_language' => $row->lang,
+                    'category_id' => $row->category_id,
+                    'category_parent' => $row->parent_id,
+                    'category_name' => $row->category_name,
                     'faq_translations' => 0,
-                    'faq_sticky'       => $row->sticky,
-                    'faq_question'     => $row->question,
-                    'faq_org_author'   => $row->original_author,
-                    'faq_updated'      => PMF_Date::createIsoDate($row->updated),
-                    'faq_visits'       => $row->visits,
-                    'faq_last_author'  => $row->last_author
+                    'faq_sticky' => $row->sticky,
+                    'faq_question' => $row->question,
+                    'faq_org_author' => $row->original_author,
+                    'faq_updated' => PMF_Date::createIsoDate($row->updated),
+                    'faq_visits' => $row->visits,
+                    'faq_last_author' => $row->last_author,
                 );
             }
             $lastId = $row->id;
         }
-        
+
         return $report;
     }
 
     /**
-     * Convert string to the correct encoding
+     * Convert string to the correct encoding.
      *
      * @param string $outputString String to encode.
      *

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * phpMyFAQ PostgreSQL search classes
+ * phpMyFAQ PostgreSQL search classes.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Database_Pgsql
+ * PMF_Search_Database_Pgsql.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
 class PMF_Search_Database_Pgsql extends PMF_Search_Database
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      */
@@ -46,7 +48,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     }
 
     /**
-     * Prepares the search and executes it
+     * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
      *
@@ -61,9 +63,9 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
         } else {
             $enableRelevance = $this->_config->get('search.enableRelevance');
 
-            $columns  =  $this->getResultColumns();
+            $columns = $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult($searchTerm) : '';
-            $orderBy  = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
+            $orderBy = ($enableRelevance) ? 'ORDER BY '.$this->getMatchingOrder() : '';
 
             $query = sprintf("
                 SELECT
@@ -79,7 +81,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 ($enableRelevance)
-                    ? ", plainto_tsquery('" . $this->_config->getDb()->escape($searchTerm) . "') query "
+                    ? ", plainto_tsquery('".$this->_config->getDb()->escape($searchTerm)."') query "
                     : '',
                 $this->getMatchingColumns(),
                 $this->_config->getDb()->escape($searchTerm),
@@ -93,7 +95,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     }
 
     /**
-     * Returns the part of the SQL query with the matching columns
+     * Returns the part of the SQL query with the matching columns.
      *
      * @return string
      */
@@ -107,14 +109,14 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
             foreach ($this->matchingColumns as $matchColumn) {
                 $match = sprintf("to_tsvector(coalesce(%s,''))", $matchColumn);
                 if (empty($matchColumns)) {
-                    $matchColumns .= '(' . $match;
+                    $matchColumns .= '('.$match;
                 } else {
-                    $matchColumns .= ' || ' . $match;
+                    $matchColumns .= ' || '.$match;
                 }
             }
 
             // Add the ILIKE since the FULLTEXT looks for the exact phrase only
-            $matchColumns .= ') @@ query) OR (' . implode(" || ' ' || ", $this->matchingColumns);
+            $matchColumns .= ') @@ query) OR ('.implode(" || ' ' || ", $this->matchingColumns);
         } else {
             $matchColumns = implode(" || ' ' || ", $this->matchingColumns);
         }
@@ -123,19 +125,19 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     }
 
     /**
-     * Add the matching columns into the columns for the resultset
+     * Add the matching columns into the columns for the resultset.
      *
      * @return PMF_Search_Database
      */
     public function getMatchingColumnsAsResult()
     {
         $resultColumns = '';
-        $config        = $this->_config->get('search.relevance');
-        $list          = explode(',', $config);
+        $config = $this->_config->get('search.relevance');
+        $list = explode(',', $config);
 
         // Set weight
         $weights = array('A', 'B', 'C', 'D');
-        $weight  = [];
+        $weight = [];
         foreach ($list as $columnName) {
             $weight[$columnName] = array_shift($weights);
         }
@@ -151,7 +153,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
                     $columnName
                 );
 
-                $resultColumns .= ', ' . $column;
+                $resultColumns .= ', '.$column;
             }
         }
 
@@ -159,7 +161,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     }
 
     /**
-     * Returns the part of the SQL query with the order by
+     * Returns the part of the SQL query with the order by.
      *
      * The order is calculate by weight depend on the search.relevance order
      *
@@ -167,7 +169,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
      */
     public function getMatchingOrder()
     {
-        $list  = explode(",", $this->_config->get('search.relevance'));
+        $list = explode(',', $this->_config->get('search.relevance'));
         $order = '';
 
         foreach ($list as $field) {
@@ -178,7 +180,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
             if (empty($order)) {
                 $order .= $string;
             } else {
-                $order .= ', ' . $string;
+                $order .= ', '.$string;
             }
         }
 

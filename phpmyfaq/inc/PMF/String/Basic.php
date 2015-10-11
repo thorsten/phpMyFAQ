@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The string wrapper class using single byte string functions 
+ * The string wrapper class using single byte string functions.
  *
  * PHP Version 5.5.0
  *
@@ -9,60 +10,57 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   String
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_String_Basic 
+ * PMF_String_Basic.
  *
  * @category  phpMyFAQ
- * @package   String
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
 class PMF_String_Basic extends PMF_String_Abstract
 {
     /**
-     * Instance
+     * Instance.
      *
      * @var PMF_String_Basic
      */
     private static $instance;
 
-    
     /**
-     * Default encoding
+     * Default encoding.
      *
      * @var string
      */
     const DEFAULT_ENCODING = 'iso-8859-1';
-    
-    
+
     /**
-     *
-     * Constructor
+     * Constructor.
      *
      * @return PMF_String_Basic
      */
-    private final function __construct()
+    final private function __construct()
     {
     }
- 
-    
+
     /**
-     * Create and return an instance
+     * Create and return an instance.
      *
      * @param string $encoding
      * @param string $language
@@ -72,17 +70,16 @@ class PMF_String_Basic extends PMF_String_Abstract
     public static function getInstance($encoding = null, $language = 'en')
     {
         if (!self::$instance) {
-            self::$instance = new self;
+            self::$instance = new self();
             self::$instance->encoding = self::DEFAULT_ENCODING;
             self::$instance->language = PMF_Language::isASupportedLanguage($language) ? $language : self::DEFAULT_LANGUAGE;
         }
-       
+
         return self::$instance;
     }
-    
-    
+
     /**
-     * Get string character count
+     * Get string character count.
      *
      * @param string $str String
      *
@@ -92,10 +89,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strlen($str);
     }
-    
-    
+
     /**
-     * Get a part of string
+     * Get a part of string.
      *
      * @param string $str    String
      * @param int    $start  Start
@@ -106,17 +102,16 @@ class PMF_String_Basic extends PMF_String_Abstract
     public function substr($str, $start, $length = null)
     {
         $length = null == $length ? strlen($str) : $length;
-        
+
         return substr($str, $start, $length);
     }
 
-    
     /**
-     * Get position of the first occurence of a string
+     * Get position of the first occurence of a string.
      *
-     * @param string  $haystack Haystack
-     * @param string  $needle   Needle
-     * @param integer $offset   Offset
+     * @param string $haystack Haystack
+     * @param string $needle   Needle
+     * @param int    $offset   Offset
      *
      * @return int
      */
@@ -124,9 +119,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strpos($haystack, $needle, $offset);
     }
-    
+
     /**
-     * Make a string lower case
+     * Make a string lower case.
      *
      * @param string $str String
      *
@@ -136,9 +131,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strtolower($str);
     }
-    
+
     /**
-     * Make a string upper case
+     * Make a string upper case.
      *
      * @param string $str String
      *
@@ -148,13 +143,13 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strtoupper($str);
     }
-    
+
     /**
-     * Get occurence of a string within another
+     * Get occurence of a string within another.
      *
      * @param string $haystack Haystack
      * @param string $needle   Needle
-     * @param boolean $part    Part
+     * @param bool   $part     Part
      *
      * @return string|false
      */
@@ -162,9 +157,9 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return strstr($haystack, $needle, (boolean) $part);
     }
-    
+
     /**
-     * Get last occurence of a string within another
+     * Get last occurence of a string within another.
      *
      * @param string $haystack
      * @param string $needle
@@ -177,7 +172,7 @@ class PMF_String_Basic extends PMF_String_Abstract
     }
 
     /**
-     * Count substring occurences
+     * Count substring occurences.
      *
      * @param string $haystack
      * @param string $needle
@@ -188,14 +183,13 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return substr_count($haystack, $needle);
     }
-    
-    
+
     /**
-     * Find position of last occurrence of a char in a string
+     * Find position of last occurrence of a char in a string.
      *
      * @param string $haystack
      * @param string $needle
-     * @param int $offset
+     * @param int    $offset
      *
      * @return int
      */
@@ -205,13 +199,13 @@ class PMF_String_Basic extends PMF_String_Abstract
     }
 
     /**
-     * Match a regexp
+     * Match a regexp.
      *
      * @param string $pattern
      * @param string $subject
-     * @param array &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param array  &$matches
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -219,15 +213,15 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return preg_match($pattern, $subject, $matches, $flags, $offset);
     }
-    
+
     /**
-     * Match a regexp globally
+     * Match a regexp globally.
      *
      * @param string $pattern
      * @param string $subject
-     * @param array &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param array  &$matches
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -235,14 +229,14 @@ class PMF_String_Basic extends PMF_String_Abstract
     {
         return preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
-    
+
     /**
-     * Split string by a regexp
+     * Split string by a regexp.
      *
      * @param string $pattern
      * @param string $subject
-     * @param int $limit
-     * @param int $flags
+     * @param int    $limit
+     * @param int    $flags
      *
      * @return array
      */
@@ -252,33 +246,33 @@ class PMF_String_Basic extends PMF_String_Abstract
     }
 
     /**
-     * Search and replace by a regexp using a callback
+     * Search and replace by a regexp using a callback.
      *
      * @param string|array $pattern
-     * @param function $callback
+     * @param function     $callback
      * @param string|array $subject
-     * @param int $limit
-     * @param int &$count
+     * @param int          $limit
+     * @param int          &$count
      *
      * @return array|string
      */
-    public function preg_replace_callback($pattern, $callback, $subject, $limit= -1, &$count = 0)
+    public function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
     {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
 
     /**
-     * Search and replace by a regexp
+     * Search and replace by a regexp.
      *
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int $limit
-     * @param int &$count
+     * @param int          $limit
+     * @param int          &$count
      *
      * @return array|string|null
      */
-    public function preg_replace($pattern, $replacement, $subject, $limit= -1, &$count = 0)
+    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
     {
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

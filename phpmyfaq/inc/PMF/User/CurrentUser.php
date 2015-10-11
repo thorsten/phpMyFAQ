@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Manages authentication process using PHP sessions.
  *
@@ -15,15 +16,15 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   User
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -33,14 +34,15 @@ define('PMF_SESSION_CURRENT_USER', 'PMF_CURRENT_USER');
 define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
 
 /**
- * PMF_User_CurrentUser
+ * PMF_User_CurrentUser.
  *
  * @category  phpMyFAQ
- * @package   User
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-28
  */
@@ -58,7 +60,7 @@ class PMF_User_CurrentUser extends PMF_User
      * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
      *
-     * @var integer
+     * @var int
      */
     private $_sessionTimeout = PMF_AUTH_TIMEOUT;
 
@@ -73,36 +75,36 @@ class PMF_User_CurrentUser extends PMF_User
     private $_sessionIdTimeout = 1;
 
     /**
-     * LDAP configuration if available
+     * LDAP configuration if available.
      *
      * @var array
      */
     private $_ldapConfig = [];
 
     /**
-     * Remember me activated or deactivated
+     * Remember me activated or deactivated.
      *
-     * @var boolean
+     * @var bool
      */
     private $_rememberMe = false;
 
     /**
      * Login successful or auth failure:
      * 1 -> success
-     * 0 -> failure
+     * 0 -> failure.
      *
      * @var int
      */
     private $loginState = 1;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
      * @return PMF_User_CurrentUser
      */
-    function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
 
@@ -155,32 +157,32 @@ class PMF_User_CurrentUser extends PMF_User
                 }
             }
         }
-        
+
         // authenticate user by login and password
-        $loginError    = 0;
+        $loginError = 0;
         $passwordError = 0;
-        $count         = 0;
-        
+        $count = 0;
+
         foreach ($this->authContainer as $name => $auth) {
-            $count++;
+            ++$count;
 
             // $auth is an invalid Auth object, so continue
             if (!$this->checkAuth($auth)) {
-                $count--;
+                --$count;
                 continue;
             }
             // $login does not exist, so continue
             if (!$auth->checkLogin($login, $optData)) {
-                $loginError++;
+                ++$loginError;
                 continue;
             }
             // $login exists, but $pass is incorrect, so stop!
             if (!$auth->checkPassword($login, $password, $optData)) {
-                $passwordError++;
+                ++$passwordError;
                 // Don't stop, as other auth method could work:
                 continue;
             }
-            
+
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
             $this->_loggedIn = true;
@@ -197,7 +199,7 @@ class PMF_User_CurrentUser extends PMF_User
                     $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
                 );
             }
-            
+
             // remember the auth container for administration
             $update = sprintf("
                 UPDATE
@@ -213,16 +215,18 @@ class PMF_User_CurrentUser extends PMF_User
             $res = $this->config->getDb()->query($update);
             if (!$res) {
                 $this->setSuccess(false);
+
                 return false;
                 break;
             }
 
             // Login successfull
             $this->setSuccess(true);
+
             return true;
             break;
         }
-        
+
         // raise errors and return false
         if ($loginError == $count) {
             $this->setSuccess(false);
@@ -232,13 +236,14 @@ class PMF_User_CurrentUser extends PMF_User
             $this->setSuccess(false);
             $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
         }
+
         return false;
     }
 
     /**
      * Returns true if CurrentUser is logged in, otherwise false.
      *
-     * @return boolean
+     * @return bool
      */
     public function isLoggedIn()
     {
@@ -251,26 +256,28 @@ class PMF_User_CurrentUser extends PMF_User
      * parameters for session timeouts: $this->_sessionTimeout
      * and $this->_sessionIdTimeout.
      *
-     * @return boolean
+     * @return bool
      */
     public function sessionIsTimedOut()
     {
         if ($this->_sessionTimeout <= $this->sessionAge()) {
             return true;
         }
+
         return false;
     }
 
     /**
      * Returns false if the session-ID is not timed out.
      *
-     * @return boolean
+     * @return bool
      */
     public function sessionIdIsTimedOut()
     {
         if ($this->_sessionIdTimeout <= $this->sessionAge()) {
             return true;
         }
+
         return false;
     }
 
@@ -284,6 +291,7 @@ class PMF_User_CurrentUser extends PMF_User
         if (!isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
             return 0;
         }
+
         return ($_SERVER['REQUEST_TIME'] - $_SESSION[PMF_SESSION_ID_TIMESTAMP]) / 60;
     }
 
@@ -296,7 +304,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function getSessionInfo()
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 session_id,
                 session_timestamp,
@@ -305,15 +313,16 @@ class PMF_User_CurrentUser extends PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d",
+                user_id = %d',
            PMF_Db::getTablePrefix(),
            $this->getUserId()
         );
-           
+
         $res = $this->config->getDb()->query($select);
         if (!$res or $this->config->getDb()->numRows($res) != 1) {
             return [];
         }
+
         return $this->config->getDb()->fetchArray($res);
     }
 
@@ -324,8 +333,9 @@ class PMF_User_CurrentUser extends PMF_User
      * Optionally it should update the 'last login' time.
      * Returns true on success, otherwise false.
      *
-     * @param  boolean $updateLastlogin Update the last login time?
-     * @return boolean
+     * @param bool $updateLastlogin Update the last login time?
+     *
+     * @return bool
      */
     public function updateSessionId($updateLastlogin = false)
     {
@@ -333,10 +343,10 @@ class PMF_User_CurrentUser extends PMF_User
         $oldSessionId = session_id();
         if (session_regenerate_id(true)) {
             $sessionPath = session_save_path();
-            if (strpos ($sessionPath, ';') !== false) {
-                $sessionPath = substr ($sessionPath, strpos ($sessionPath, ';') + 1);
+            if (strpos($sessionPath, ';') !== false) {
+                $sessionPath = substr($sessionPath, strpos($sessionPath, ';') + 1);
             }
-            $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
+            $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
             if (@file_exists($sessionFilename)) {
                 @unlink($sessionFilename);
             }
@@ -365,6 +375,7 @@ class PMF_User_CurrentUser extends PMF_User
         $res = $this->config->getDb()->query($update);
         if (!$res) {
             $this->errors[] = $this->config->getDb()->error();
+
             return false;
         }
 
@@ -374,8 +385,6 @@ class PMF_User_CurrentUser extends PMF_User
     /**
      * Saves the CurrentUser into the session. This method
      * may be called after a successful login.
-     *
-     * @return void
      */
     public function saveToSession()
     {
@@ -386,15 +395,15 @@ class PMF_User_CurrentUser extends PMF_User
      * Deletes the CurrentUser from the session. The user
      * will be logged out. Return true on success, otherwise false.
      *
-     * @param boolean $deleteCookie
+     * @param bool $deleteCookie
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteFromSession($deleteCookie = false)
     {
         // delete CSRF Token
         $this->deleteCsrfTokenFromSession();
-        
+
         // delete CurrentUser object from session
         $_SESSION[PMF_SESSION_CURRENT_USER] = null;
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
@@ -403,23 +412,24 @@ class PMF_User_CurrentUser extends PMF_User
         $this->_loggedIn = false;
 
         // delete session-ID
-        $update = sprintf("
+        $update = sprintf('
             UPDATE
                 %sfaquser
             SET
                 session_id = NULL
                 %s
             WHERE
-                user_id = %d",
+                user_id = %d',
                 PMF_Db::getTablePrefix(),
                 $deleteCookie ? ', remember_me = NULL' : '',
                 $this->getUserId()
         );
-                
+
         $res = $this->config->getDb()->query($update);
 
         if (!$res) {
             $this->errors[] = $this->config->getDb()->error();
+
             return false;
         }
 
@@ -428,7 +438,7 @@ class PMF_User_CurrentUser extends PMF_User
         }
 
         session_destroy();
-        
+
         return true;
     }
 
@@ -443,7 +453,7 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @static
      *
-     * @param  PMF_Configuration $config
+     * @param PMF_Configuration $config
      *
      * @return null|PMF_User_CurrentUser
      */
@@ -451,22 +461,23 @@ class PMF_User_CurrentUser extends PMF_User
     {
         // there is no valid user object in session
         if (!isset($_SESSION[PMF_SESSION_CURRENT_USER]) || !isset($_SESSION[PMF_SESSION_ID_TIMESTAMP])) {
-            return null;
+            return;
         }
 
         // create a new CurrentUser object
-        $user = new PMF_User_CurrentUser($config);
+        $user = new self($config);
         $user->getUserById($_SESSION[PMF_SESSION_CURRENT_USER]);
 
         // user object is timed out
         if ($user->sessionIsTimedOut()) {
             $user->deleteFromSession();
             $user->errors[] = 'Session timed out.';
-            return null;
+
+            return;
         }
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
-        $session_id   = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
+        $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
         if ($session_id == '' || $session_id != session_id()) {
             return false;
         }
@@ -483,7 +494,7 @@ class PMF_User_CurrentUser extends PMF_User
         $user->_loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
-        
+
         return $user;
     }
 
@@ -494,7 +505,7 @@ class PMF_User_CurrentUser extends PMF_User
      * timed out. If there is no valid CurrentUser in the cookie or the
      * cookie is timed out, null will be returned. If the cookie is correct,
      * but there is no user found in the user table, false will be returned.
-     * On success, a valid CurrentUser object is returned
+     * On success, a valid CurrentUser object is returned.
      *
      * @static
      *
@@ -504,16 +515,16 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public static function getFromCookie(PMF_Configuration $config)
     {
-        if (! isset($_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME])) {
-            return null;
+        if (!isset($_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME])) {
+            return;
         }
 
         // create a new CurrentUser object
-        $user = new PMF_User_CurrentUser($config);
+        $user = new self($config);
         $user->getUserByCookie($_COOKIE[PMF_Session::PMF_COOKIE_NAME_REMEMBERME]);
 
         if (-1 === $user->getUserId()) {
-            return null;
+            return;
         }
 
         // sessionId needs to be updated
@@ -532,8 +543,7 @@ class PMF_User_CurrentUser extends PMF_User
      * Sets the number of minutes when the current user stored in
      * the session gets invalid.
      *
-     * @param  float $timeout Timeout
-     * @return void
+     * @param float $timeout Timeout
      */
     public function setSessionTimeout($timeout)
     {
@@ -545,8 +555,7 @@ class PMF_User_CurrentUser extends PMF_User
      * updated. By setting the session-ID timeout to zero, the
      * session-ID will be updated on each click.
      *
-     * @param  float $timeout Timeout
-     * @return void
+     * @param float $timeout Timeout
      */
     public function setSessionIdTimeout($timeout)
     {
@@ -554,9 +563,7 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Enables the remember me decision
-     *
-     * @return void
+     * Enables the remember me decision.
      */
     public function enableRememberMe()
     {
@@ -564,11 +571,11 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Saves remember me token in the database
+     * Saves remember me token in the database.
      *
      * @param string $rememberMe
      *
-     * @return boolean
+     * @return bool
      */
     protected function setRememberMe($rememberMe)
     {
@@ -588,23 +595,23 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Sets login succuess/failure
+     * Sets login succuess/failure.
      *
-     * @param boolean $success
+     * @param bool $success
      *
-     * @return boolean
+     * @return bool
      */
     protected function setSuccess($success)
     {
         $this->loginState = (int) $success;
 
-        $update = sprintf("
+        $update = sprintf('
             UPDATE
                 %sfaquser
             SET
                 success = %d
             WHERE
-                user_id = %d",
+                user_id = %d',
             PMF_Db::getTablePrefix(),
             $this->loginState,
             $this->getUserId()
@@ -614,7 +621,7 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Returns the CSRF token from session
+     * Returns the CSRF token from session.
      *
      * @return string
      */
@@ -622,11 +629,9 @@ class PMF_User_CurrentUser extends PMF_User
     {
         return $_SESSION['phpmyfaq_csrf_token'];
     }
-    
+
     /**
-     * Save CSRF token to session
-     *
-     * @return void
+     * Save CSRF token to session.
      */
     public function saveCrsfTokenToSession()
     {
@@ -634,11 +639,9 @@ class PMF_User_CurrentUser extends PMF_User
             $_SESSION['phpmyfaq_csrf_token'] = $this->createCsrfToken();
         }
     }
-    
+
     /**
-     * Deletes CSRF token from session
-     *
-     * @return void
+     * Deletes CSRF token from session.
      */
     protected function deleteCsrfTokenFromSession()
     {
@@ -646,12 +649,12 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Creates a CSRF token
+     * Creates a CSRF token.
      *
      * @return string
      */
     private function createCsrfToken()
     {
-        return sha1(microtime() . $this->getLogin());
+        return sha1(microtime().$this->getLogin());
     }
 }

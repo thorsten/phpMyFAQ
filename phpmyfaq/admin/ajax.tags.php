@@ -1,6 +1,7 @@
 <?php
+
 /**
- * AJAX: Search for tags
+ * AJAX: Search for tags.
  *
  * PHP Version 5.5
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Ajax
+ *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -40,9 +41,9 @@ switch ($ajaxAction) {
     case 'list':
         $autoCompleteValue = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 
-        if (! is_null($autoCompleteValue)) {
+        if (!is_null($autoCompleteValue)) {
             if (strpos($autoCompleteValue, ',')) {
-                $arrayOfValues     = explode(',', $autoCompleteValue);
+                $arrayOfValues = explode(',', $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
             $tags = $oTag->getAllTags(strtolower($autoCompleteValue), PMF_TAGS_CLOUD_RESULT_SET_SIZE, true);
@@ -54,7 +55,7 @@ switch ($ajaxAction) {
             $i = 0;
             $tagNames = [];
             foreach ($tags as $tagName) {
-                $i++;
+                ++$i;
                 if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $tagNames[] = $tagName;
                 }
@@ -66,7 +67,7 @@ switch ($ajaxAction) {
 
     case 'update':
 
-        $id  = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $tag = PMF_Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
 
         $entity = new PMF_Entity_Tags();
@@ -80,5 +81,3 @@ switch ($ajaxAction) {
         }
         break;
 }
-
-

@@ -2,7 +2,7 @@
 /**
  * A dummy page used within an IFRAME for warning the user about his next
  * session expiration and to give him the contextual possibility for
- * refreshing the session by clicking <OK>
+ * refreshing the session by clicking <OK>.
  *
  * PHP Version 5.5
  *
@@ -11,16 +11,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-05-08
  */
-
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
@@ -31,15 +31,15 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require PMF_ROOT_DIR . '/lang/language_en.php';
+require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/lang/language_en.php';
 
 //
 // Get language (default: english)
 //
 $language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
-    require PMF_ROOT_DIR . '/lang/language_' . $language . '.php';
+    require PMF_ROOT_DIR.'/lang/language_'.$language.'.php';
 }
 
 //
@@ -48,7 +48,7 @@ if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
 PMF_String::init($language);
 
 $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (! $user instanceof PMF_User_CurrentUser) {
+if (!$user instanceof PMF_User_CurrentUser) {
     $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 }
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
@@ -66,11 +66,13 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2015 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
-<?php if (isset($user) && ($refreshTime > 0)) { ?>
+<?php if (isset($user) && ($refreshTime > 0)) {
+    ?>
     <script>
 
     function _PMFSessionTimeoutWarning() {
-        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {
+        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING);
+    ?>')) {
             location.href = location.href;
         }
     }
@@ -89,10 +91,12 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 
     window.onload = function() {
         var expire = new Date(2009, 0, 1);
-        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT; ?> * 60);
+        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT;
+    ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
-        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime; ?> * 1000);
+        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime;
+    ?> * 1000);
         window.setInterval(
             function() {
                 _PMFSessionTimeoutClock(topRef, expire);
@@ -101,7 +105,8 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
         );
     }
     </script>
-<?php } ?>
+<?php 
+} ?>
 </head>
 <body>
 

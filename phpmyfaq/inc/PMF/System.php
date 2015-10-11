@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Class for checking system requirements
+ * Class for checking system requirements.
  *
  * PHP Version 5.5
  *
@@ -9,59 +10,61 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_System
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
  */
 
 /**
- * PMF_System
+ * PMF_System.
  *
  * @category  phpMyFAQ
- * @package   PMF_System
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
  */
 class PMF_System
 {
     /**
-     * Major version
+     * Major version.
      */
     const VERSION_MAJOR = 2;
 
     /**
-     * Minor version
+     * Minor version.
      */
     const VERSION_MINOR = 9;
 
     /**
-     * Patchlevel
+     * Patchlevel.
      */
     const VERSION_PATCHLEVEL = 0;
 
     /**
-     * Pre-release version
+     * Pre-release version.
      */
     const VERSION_PRERELEASE = 'beta';
 
     /**
-     * API version
+     * API version.
      */
     const VERSION_API = '1.1';
 
     /**
-     * Minimum required PHP version
+     * Minimum required PHP version.
      */
     const VERSION_MINIMUM_PHP = '5.5.0';
 
     /**
-     * Array of required PHP extensions
+     * Array of required PHP extensions.
      *
      * @var array
      */
@@ -71,39 +74,38 @@ class PMF_System
         'xmlwriter',
         'filter',
         'zip',
-        'fileinfo'
+        'fileinfo',
     );
 
     /**
-     * Array of missing PHP extensions
+     * Array of missing PHP extensions.
      *
      * @var array
      */
     private $_missingExtensions = [];
 
-
     /**
      * Supported databases for phpMyFAQ.
      *
-     * @var  array
+     * @var array
      */
     private $_supportedDatabases = array(
-        'mysqli'    => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
-        'pgsql'     => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
-        'sqlite3'   => array(self::VERSION_MINIMUM_PHP, 'SQLite 3'),
-        'mssql'     => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
-        'sqlsrv'    => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP')
+        'mysqli' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
+        'pgsql' => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
+        'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3'),
+        'mssql' => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
+        'sqlsrv' => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP'),
     );
 
     /**
-     * Database handle
+     * Database handle.
      *
      * @var PMF_DB_Driver
      */
     private $_database = null;
 
     /**
-     * Sets the database handler
+     * Sets the database handler.
      *
      * @param PMF_DB_Driver $database
      *
@@ -118,7 +120,7 @@ class PMF_System
 
     /**
      * Returns the current version of phpMyFAQ for installation and
-     * version in the database
+     * version in the database.
      *
      * Releases will be numbered with the follow format:
      * <major>.<minor>.<patch>[-<prerelease>]
@@ -146,7 +148,7 @@ class PMF_System
     }
 
     /**
-     * Returns all available templates as array
+     * Returns all available templates as array.
      *
      * @return array
      */
@@ -154,9 +156,9 @@ class PMF_System
     {
         $templates = [];
 
-        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/template') as $item) {
+        foreach (new DirectoryIterator(PMF_ROOT_DIR.'/assets/template') as $item) {
             $basename = $item->getBasename();
-            if (! $item->isDot() && $item->isDir()) {
+            if (!$item->isDot() && $item->isDir()) {
                 $templates[$basename] = (PMF_Template::getTplSetName() === $basename ? true : false);
             }
         }
@@ -166,9 +168,9 @@ class PMF_System
 
     /**
      * Returns the current API version of phpMyFAQ for installation and
-     * version in the database
+     * version in the database.
      *
-     * @return integer
+     * @return int
      */
     public static function getApiVersion()
     {
@@ -176,7 +178,7 @@ class PMF_System
     }
 
     /**
-     * Returns the supported databases
+     * Returns the supported databases.
      *
      * @return array
      */
@@ -189,6 +191,7 @@ class PMF_System
      * Returns the locally supported databases.
      *
      * @param bool $html
+     *
      * @return array
      */
     public function getSupportedSafeDatabases($html = false)
@@ -207,11 +210,12 @@ class PMF_System
                 }
             }
         }
+
         return $retVal;
     }
 
     /**
-     * Checks if the system URI is running with http or https
+     * Checks if the system URI is running with http or https.
      *
      * @param PMF_Configuration $faqConfig
      *
@@ -238,7 +242,7 @@ class PMF_System
      * Checks for installed database extensions, if the first supported
      * extension is enabled, return true.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkDatabase()
     {
@@ -252,9 +256,9 @@ class PMF_System
     }
 
     /**
-     * Checks for required PHP extensions
+     * Checks for required PHP extensions.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkRequiredExtensions()
     {
@@ -272,42 +276,44 @@ class PMF_System
     }
 
     /**
-     * Checks if register_globals are activated
+     * Checks if register_globals are activated.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkRegisterGlobals()
     {
         if (ini_get('register_globals')) {
             return false;
         }
+
         return true;
     }
 
     /**
-     * Checks if magic_quotes_gpc are activated
+     * Checks if magic_quotes_gpc are activated.
      *
-     * @return boolean
+     * @return bool
      */
     public function checkMagicQuotesGpc()
     {
         if (ini_get('magic_quotes_gpc')) {
             return false;
         }
+
         return true;
     }
 
     /**
-     * Checks for an installed phpMyFAQ version
+     * Checks for an installed phpMyFAQ version.
      *
      * inc/data.php        -> phpMyFAQ 2.0 and 2.5
      * config/database.php -> phpMyFAQ 2.6 and later
      *
-     * @return boolean
+     * @return bool
      */
     public function checkphpMyFAQInstallation()
     {
-        if (is_file(PMF_ROOT_DIR . '/inc/data.php') || is_file(PMF_ROOT_DIR . '/config/database.php')) {
+        if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR.'/config/database.php')) {
             return false;
         } else {
             return true;
@@ -315,7 +321,7 @@ class PMF_System
     }
 
     /**
-     * Returns all missing extensions
+     * Returns all missing extensions.
      *
      * @return array
      */
@@ -325,9 +331,10 @@ class PMF_System
     }
 
     /**
-     * Returns true or false on SQLite3
+     * Returns true or false on SQLite3.
      *
      * @static
+     *
      * @param string $dbType
      *
      * @return bool
@@ -338,38 +345,37 @@ class PMF_System
     }
 
     /**
-     * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes
+     * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes.
+     *
      * @return string
      */
     public function createHashes()
     {
         $created = new DateTime();
 
-        $path  = PMF_ROOT_DIR;
+        $path = PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
             new RecursiveDirectoryIterator($path),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $hashes    = array(
-            'created' => $created->format('Y-m-d H:i:sP')
+        $hashes = array(
+            'created' => $created->format('Y-m-d H:i:sP'),
         );
         $blacklist = array(
-            '/config/constants.php'      => false,
+            '/config/constants.php' => false,
             '/config/constants_ldap.php' => false,
-            '/config/database.php'       => false,
-            '/config/ldap.php'           => false
+            '/config/database.php' => false,
+            '/config/ldap.php' => false,
         );
         $current = '';
 
         try {
-
             foreach ($files as $file) {
-
-            if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
-                ! preg_match('#/tests/#', $file->getPath())
+                if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
+                !preg_match('#/tests/#', $file->getPath())
             ) {
-                $current = str_replace($path, '', $file->getPathname());
+                    $current = str_replace($path, '', $file->getPathname());
 
                     if (isset($blacklist[$current])) {
                         continue;
@@ -377,9 +383,8 @@ class PMF_System
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
             }
-
         } catch (UnexpectedValueException $e) {
-            $hashes[$current . ' failed'] = $e->getMessage();
+            $hashes[$current.' failed'] = $e->getMessage();
         }
 
         return json_encode($hashes);
@@ -402,28 +407,24 @@ class PMF_System
     }
 
     /**
-     * Removes the database.php and the ldap.php if an installation failed
-     *
-     * @return void
+     * Removes the database.php and the ldap.php if an installation failed.
      */
     public function cleanInstallation()
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-            @unlink(PMF_ROOT_DIR . '/config/database.php');
+        if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+            @unlink(PMF_ROOT_DIR.'/config/database.php');
         }
         // Remove './config/ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
-            @unlink(PMF_ROOT_DIR . '/config/ldap.php');
+        if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
+            @unlink(PMF_ROOT_DIR.'/config/ldap.php');
         }
     }
 
     /**
-     * Print out the HTML5 Footer
+     * Print out the HTML5 Footer.
      *
      * @param bool $onePageBack
-     *
-     * @return void
      */
     public static function renderFooter($onePageBack = false)
     {
@@ -439,5 +440,4 @@ class PMF_System
         );
         exit(-1);
     }
-
 }

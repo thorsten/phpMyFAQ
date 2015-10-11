@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Service class for Gravatar support
+ * Service class for Gravatar support.
  *
  * PHP Version 5.5
  *
@@ -9,40 +10,41 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-01-14
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Services_Gravatar
+ * PMF_Services_Gravatar.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-01-14
  */
 class PMF_Services_Gravatar extends PMF_Services
 {
     /**
-     * http://gravatar.com/
+     * http://gravatar.com/.
      * 
      * @var string
      */
     private $httpBaseUrl = 'http://gravatar.com/';
 
     /**
-     * https://secure.gravatar.com/
+     * https://secure.gravatar.com/.
      * 
      * @var string
      */
@@ -55,22 +57,22 @@ class PMF_Services_Gravatar extends PMF_Services
      * @param string $email  Email address
      * @param array  $params Allows multiple keys with values to give more control
      *
-     * @return  string
+     * @return string
      */
     public function getImage($email, $params = [])
     {
-        $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
+        $imageUrl = $this->getUrl().'avatar/'.$this->getHash($email);
 
         $opts = [];
 
         if (isset($params['default'])) {
-            $opts[] = 'default='. $params['default'];
+            $opts[] = 'default='.$params['default'];
         }
         if (isset($params['size'])) {
-            $opts[] = 'size='. $params['size'];
+            $opts[] = 'size='.$params['size'];
         }
         if (isset($params['rating'])) {
-            $opts[] = 'rating='. $params['rating'];
+            $opts[] = 'rating='.$params['rating'];
         }
         if (isset($params['force_default']) && $params['force_default'] === true) {
             $opts[] = 'forcedefault=y';
@@ -79,7 +81,7 @@ class PMF_Services_Gravatar extends PMF_Services
             $params['class'] = '';
         }
 
-        $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode($opts, '&') : false);
+        $gravatar = $imageUrl.(sizeof($opts) > 0 ? '?'.implode($opts, '&') : false);
 
         return sprintf(
             '<img src="%s" class="%s" alt="Gravatar">',
@@ -103,6 +105,7 @@ class PMF_Services_Gravatar extends PMF_Services
      * Returns a MD5 hash of an email address.
      *
      * @param string $email Email address
+     *
      * @return string
      */
     public static function getHash($email)

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Helper class for phpMyFAQ FAQs
+ * Helper class for phpMyFAQ FAQs.
  *
  * PHP Version 5.5
  *
@@ -9,55 +10,55 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Helper_Faq
+ * PMF_Helper_Faq.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
  */
 class PMF_Helper_Faq extends PMF_Helper
 {
     /**
-     * SSL enabled
+     * SSL enabled.
      *
-     * @var boolean
+     * @var bool
      */
     private $ssl = false;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
      * @return PMF_Helper_Faq
      */
-    public  function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
     }
 
     /**
-     * Sets SSL mode
+     * Sets SSL mode.
      *
-     * @param boolean $ssl
-     * @return void
+     * @param bool $ssl
      */
     public function setSsl($ssl)
     {
@@ -65,9 +66,9 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Returns current SSL mode
+     * Returns current SSL mode.
      *
-     * @return boolean
+     * @return bool
      */
     public function getSsl()
     {
@@ -75,7 +76,7 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Renders a Facebook Like button
+     * Renders a Facebook Like button.
      *
      * @param string $url
      *
@@ -101,7 +102,7 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Renders a Share on Facebook link
+     * Renders a Share on Facebook link.
      *
      * @param string $url
      *
@@ -120,7 +121,7 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Renders a Share on Twitter link
+     * Renders a Share on Twitter link.
      *
      * @param string $url
      *
@@ -139,29 +140,30 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Renders a select box with all translations of a FAQ
+     * Renders a select box with all translations of a FAQ.
+     *
      * @param PMF_Faq $faq
-     * @param integer $categoryId
+     * @param int     $categoryId
+     *
      * @return string
      */
     public function renderChangeLanguageSelector(PMF_Faq $faq, $categoryId)
     {
         global $languageCodes;
 
-        $html   = '';
+        $html = '';
         $faqUrl = sprintf(
             '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
             $categoryId,
             $faq->faqRecord['id']
         );
 
-        $oLink              = new PMF_Link(PMF_Link::getSystemRelativeUri() . $faqUrl, $this->_config);
-        $oLink->itemTitle   = $faq->faqRecord['title'];
+        $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$faqUrl, $this->_config);
+        $oLink->itemTitle = $faq->faqRecord['title'];
         $availableLanguages = $this->_config->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
         if (count($availableLanguages) > 1) {
-
-            $html  = '<form method="post">';
+            $html = '<form method="post">';
             $html .= '<select name="language" onchange="top.location.href = this.options[this.selectedIndex].value;">';
 
             foreach ($availableLanguages as $language) {
@@ -177,7 +179,7 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
-     * Creates an overview with all categories with their FAQs
+     * Creates an overview with all categories with their FAQs.
      *
      * @param PMF_Category $category
      * @param PMF_Faq      $faq
@@ -200,7 +202,6 @@ class PMF_Helper_Faq extends PMF_Helper
         if (count($faqData)) {
             $lastCategory = 0;
             foreach ($faqData as $data) {
-
                 if ($data['category_id'] !== $lastCategory) {
                     $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
                 }
@@ -210,7 +211,7 @@ class PMF_Helper_Faq extends PMF_Helper
                 $output .= sprintf('<p>%s: %s<br>%s',
                     $PMF_LANG['msgAuthor'],
                     $data['author_name'],
-                    $PMF_LANG['msgLastUpdateArticle'] . PMF_Date::createIsoDate($data['lastmodified'])
+                    $PMF_LANG['msgLastUpdateArticle'].PMF_Date::createIsoDate($data['lastmodified'])
                 );
                 $output .= '<hr>';
 

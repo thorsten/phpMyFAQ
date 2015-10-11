@@ -1,6 +1,6 @@
 <?php
 /**
- * List all categories in the admin section
+ * List all categories in the admin section.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -58,40 +58,39 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Save a new category
     if ($action == 'savecategory') {
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parentId     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryData = array(
-            'lang'        => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
-            'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'lang' => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
-            'group_id'    => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
-            'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
+            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
+            'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
         );
 
         $permissions = [];
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_user' => array(
-                    -1
-                )
+                    -1,
+                ),
             );
         } else {
             $permissions += array(
                 'restricted_user' => array(
-                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT)
-                )
+                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                ),
             );
         }
 
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_groups' => array(
-                    -1
-                )
+                    -1,
+                ),
             );
         } else {
             $permissions += PMF_Filter::filterInputArray(
@@ -99,8 +98,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 array(
                     'restricted_groups' => array(
                         'filter' => FILTER_VALIDATE_INT,
-                        'flags'  => FILTER_REQUIRE_ARRAY
-                    )
+                        'flags' => FILTER_REQUIRE_ARRAY,
+                    ),
                 )
             );
         }
@@ -121,20 +120,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Updates an existing category
     if ($action == 'updatecategory') {
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parentId     = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryData = array(
-            'id'          => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang'        => PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING),
-            'parent_id'   => $parentId,
-            'name'        => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'id' => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+            'lang' => PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING),
+            'parent_id' => $parentId,
+            'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id'     => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
-            'group_id'    => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
-            'active'      => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT)
+            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
+            'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
 
         );
 
@@ -142,22 +140,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_user' => array(
-                    -1
-                )
+                    -1,
+                ),
             );
         } else {
             $permissions += array(
                 'restricted_user' => array(
-                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT)
-                )
+                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                ),
             );
         }
 
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_groups' => array(
-                    -1
-                )
+                    -1,
+                ),
             );
         } else {
             $permissions += PMF_Filter::filterInputArray(
@@ -165,8 +163,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 array(
                     'restricted_groups' => array(
                         'filter' => FILTER_VALIDATE_INT,
-                        'flags'  => FILTER_REQUIRE_ARRAY
-                    )
+                        'flags' => FILTER_REQUIRE_ARRAY,
+                    ),
                 )
             );
         }
@@ -197,13 +195,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Deletes an existing category
     if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $id         = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $lang       = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $deleteall  = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        $id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $deleteall = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
         $delete_all = strtolower($deleteall) == 'yes' ? true : false;
 
         if ($category->deleteCategory($id, $lang, $delete_all) &&
@@ -217,7 +214,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Moves a category
     if ($action == 'changecategory') {
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
@@ -237,12 +233,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Pastes a category
     if ($action == 'pastecategory') {
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $parentId   = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
+        $parentId = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($categoryId, $parentId)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
@@ -270,9 +265,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     $open = $lastCatId = $openDiv = 0;
     echo '<ul>';
     foreach ($category->catTree as $id => $cat) {
-
         $indent = '';
-        for ($i = 0; $i < $cat['indent']; $i++) {
+        for ($i = 0; $i < $cat['indent']; ++$i) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
 
@@ -280,20 +274,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ($cat['lang'] == $lang) {
             $categoryName = $cat['name'];
         } else {
-            $categoryName = $cat['name'] . ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+            $categoryName = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
         }
 
         if (isset($cat['active']) && 0 === $cat['active']) {
-            $categoryName = '<em style="color: gray">' . $categoryName . '</em>';
+            $categoryName = '<em style="color: gray">'.$categoryName.'</em>';
         }
 
-        $level     = $cat['indent'];
+        $level = $cat['indent'];
         $leveldiff = $open - $level;
 
         if ($leveldiff > 1) {
-
             echo '</li>';
-            for ($i = $leveldiff; $i > 1; $i--) {
+            for ($i = $leveldiff; $i > 1; --$i) {
                 echo '</ul></div></li>';
             }
         }
@@ -323,11 +316,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             );
         } else {
             // Show just the name
-            printf("<h4>%s</h4> ", $categoryName);
+            printf('<h4>%s</h4> ', $categoryName);
         }
 
-        if ($cat["lang"] == $lang) {
-           // add sub category (if current language)
+        if ($cat['lang'] == $lang) {
+            // add sub category (if current language)
            printf('
             <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-plus fa-fw"></span></a> ',
                $cat['id'],
@@ -351,7 +344,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         );
 
         // delete (sub) category (if current language)
-        if (count($category->getChildren($cat['id'])) == 0 && $cat["lang"] == $lang) {
+        if (count($category->getChildren($cat['id'])) == 0 && $cat['lang'] == $lang) {
             printf(
                 '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><span title="%s" class="fa fa-trash-o fa-fw"></a> ',
                 $cat['id'],
@@ -362,33 +355,33 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><span class="fa fa-trash-o fa-fw"></a> ';
         }
 
-        if ($cat["lang"] == $lang) {
-           // cut category (if current language)
+        if ($cat['lang'] == $lang) {
+            // cut category (if current language)
            printf(
                '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="fa fa-cut fa-fw"></a> ',
                $cat['id'],
                $PMF_LANG['ad_categ_cut']
            );
 
-           if ($category->numParent($cat['parent_id']) > 1) {
-              // move category (if current language) AND more than 1 category at the same level)
+            if ($category->numParent($cat['parent_id']) > 1) {
+                // move category (if current language) AND more than 1 category at the same level)
               printf(
                   '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="fa fa-sort fa-fw"></a> ',
                   $cat['id'],
                   $cat['parent_id'],
                   $PMF_LANG['ad_categ_move']
               );
-           }
+            }
         }
 
-        $open      = $level;
+        $open = $level;
         $lastCatId = $cat['id'];
     }
 
     if ($open > 0) {
         echo str_repeat("</li>\n\t</ul>\n\t", $open);
     }
-?>
+    ?>
                     </li>
                 </ul>
 
@@ -398,6 +391,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     <script src="assets/js/category.js"></script>
 
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

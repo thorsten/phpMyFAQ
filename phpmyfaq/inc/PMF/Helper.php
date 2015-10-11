@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Main helper class for phpMyFAQ
+ * Main helper class for phpMyFAQ.
  *
  * PHP Version 5.5
  *
@@ -9,68 +10,69 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Helper
+ * Helper.
  *
  * @category  phpMyFAQ
- * @package   Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
 abstract class PMF_Helper
 {
     /**
-     * Category class
+     * Category class.
      *
      * @var PMF_Category
      */
     protected $Category = null;
-    
+
     /**
-     * Tagging class
+     * Tagging class.
      *
      * @var PMF_Tags
      */
     protected $Tags = null;
-    
+
     /**
-     * Template class
+     * Template class.
      *
      * @var PMF_Template
      */
     protected $Template = null;
-    
+
     /**
-     * Plurals class
+     * Plurals class.
      *
      * @var PMF_Language_Plurals
      */
     protected $plurals = null;
-    
+
     /**
-     * phpMyFAQ's session ID
+     * phpMyFAQ's session ID.
      *
      * @var onteger
      */
     protected $sessionId = null;
-    
+
     /**
-     * Array with all translations
+     * Array with all translations.
      *
      * @var array
      */
@@ -82,31 +84,27 @@ abstract class PMF_Helper
     protected $_config;
 
     /**
-     * Category Setter
+     * Category Setter.
      *
      * @param PMF_Category $Category Category object
-     *
-     * @return void
      */
     public function setCategory(PMF_Category $Category)
     {
         $this->Category = $Category;
     }
-    
+
     /**
-     * Tagging Setter
+     * Tagging Setter.
      *
      * @param PMF_Tags $Tags PMF_Tags object
-     *
-     * @return void
      */
     public function setTags(PMF_Tags $Tags)
     {
         $this->Tags = $Tags;
     }
-    
+
     /**
-     * Template Setter
+     * Template Setter.
      *
      * @param PMF_Template $Template PMF_Template object
      *
@@ -116,9 +114,9 @@ abstract class PMF_Helper
     {
         $this->Template = $Template;
     }
-    
+
     /**
-     * Plurals setter
+     * Plurals setter.
      *
      * @param PMF_Language_Plurals $plurals PMF_Language_Plurals object
      */
@@ -126,11 +124,11 @@ abstract class PMF_Helper
     {
         $this->plurals = $plurals;
     }
-    
+
     /**
-     * Session ID setter
+     * Session ID setter.
      *
-     * @param integer $sid Session id
+     * @param int $sid Session id
      */
     public function setSessionId($sid)
     {
@@ -138,7 +136,7 @@ abstract class PMF_Helper
     }
 
     /**
-     * Sets configuration
+     * Sets configuration.
      *
      * @param PMF_Configuration $config
      */
@@ -146,16 +144,14 @@ abstract class PMF_Helper
     {
         $this->_config = $config;
     }
-    
+
     /**
-     * Loads all translation strings
-     *
-     * @return void
+     * Loads all translation strings.
      */
     public function getTranslations()
     {
         global $PMF_LANG;
-        
+
         $this->translation = $PMF_LANG;
     }
 }

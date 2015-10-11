@@ -1,6 +1,7 @@
 <?php
+
 /**
- * phpMyFAQ MySQL (ext/mysqli) search classes
+ * phpMyFAQ MySQL (ext/mysqli) search classes.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Database_Mysqli
+ * PMF_Search_Database_Mysqli.
  *
  * @category  phpMyFAQ
- * @package   PMF_Search_Database
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-06-06
  */
 class PMF_Search_Database_Mysqli extends PMF_Search_Database
 {
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      */
@@ -46,7 +48,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     }
 
     /**
-     * Prepares the search and executes it
+     * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
      *
@@ -57,31 +59,28 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
     public function search($searchTerm)
     {
         if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
-
             parent::search($searchTerm);
-
         } else {
-
             $relevance = $this->_config->get('search.enableRelevance');
-            $columns   = $this->getResultColumns();
+            $columns = $this->getResultColumns();
 
             if ($this->relevanceSupport && $relevance) {
                 $columns .= $this->getMatchingColumnsAsResult($searchTerm);
-                $orderBy  = 'ORDER BY ' . $this->getMatchingOrder() . ' DESC';
+                $orderBy = 'ORDER BY '.$this->getMatchingOrder().' DESC';
             } else {
                 $orderBy = '';
             }
 
-            $chars    = [
+            $chars = [
                 "\xe2\x80\x98",
                 "\xe2\x80\x99",
                 "\xe2\x80\x9c",
                 "\xe2\x80\x9d",
                 "\xe2\x80\x93",
                 "\xe2\x80\x94",
-                "\xe2\x80\xa6"
+                "\xe2\x80\xa6",
             ];
-            $replace    = ["'", "'", '"', '"', '-', '--', '...'];
+            $replace = ["'", "'", '"', '"', '-', '--', '...'];
             $searchTerm = str_replace($chars, $replace, $searchTerm);
 
             $query = sprintf("
@@ -107,15 +106,14 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
 
             // Fallback for searches with less than three characters
             if (false !== $this->resultSet && 0 === $this->_config->getDb()->numRows($this->resultSet)) {
-                
-                $query = sprintf("
+                $query = sprintf('
                     SELECT
                         %s
                     FROM 
                         %s %s %s
                     WHERE
                         %s
-                        %s",
+                        %s',
                     $this->getResultColumns(),
                     $this->getTable(),
                     $this->getJoinedTable(),
@@ -126,14 +124,13 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
 
                 $this->resultSet = $this->_config->getDb()->query($query);
             }
-            
         }
-        
+
         return $this->resultSet;
     }
-    
+
     /**
-     * Add the matching columns into the columns for the result set
+     * Add the matching columns into the columns for the result set.
      *
      * @param string $searchTerm
      *
@@ -144,7 +141,6 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
         $resultColumns = '';
 
         foreach ($this->matchingColumns as $matchColumn) {
-
             $column = sprintf(
                 "MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
                 $matchColumn,
@@ -152,14 +148,14 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
                 substr(strstr($matchColumn, '.'), 1)
             );
 
-            $resultColumns .= ', ' . $column;
+            $resultColumns .= ', '.$column;
         }
 
         return $resultColumns;
     }
-    
+
     /**
-     * Returns the part of the SQL query with the order by
+     * Returns the part of the SQL query with the order by.
      *
      * The order is calculate by weight depend on the search.relevance order
      *
@@ -167,7 +163,7 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
      */
     public function getMatchingOrder()
     {
-        $list  = explode(',', $this->_config->get('search.relevance'));
+        $list = explode(',', $this->_config->get('search.relevance'));
         $count = count($list);
         $order = '';
 
@@ -180,11 +176,11 @@ class PMF_Search_Database_Mysqli extends PMF_Search_Database
             if (empty($order)) {
                 $order .= $string;
             } else {
-                $order .= ' + ' . $string;
+                $order .= ' + '.$string;
             }
-            $count--;
+            --$count;
         }
 
-        return '(' . $order . ')';
+        return '('.$order.')';
     }
 }

@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main Logging class
+ * The main Logging class.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Logging
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-08-15
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Logging
+ * PMF_Logging.
  *
  * @category  phpMyFAQ
- * @package   PMF_Logging
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-08-15
  */
@@ -40,7 +42,7 @@ class PMF_Logging
     private $_config = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -52,9 +54,9 @@ class PMF_Logging
     }
 
     /**
-     * Returns the number of entries
+     * Returns the number of entries.
      *
-     * @return integer
+     * @return int
      */
     public function getNumberOfEntries()
     {
@@ -72,7 +74,7 @@ class PMF_Logging
     }
 
     /**
-     * Returns all data from the adminlog
+     * Returns all data from the adminlog.
      *
      * @return array
      */
@@ -92,28 +94,27 @@ class PMF_Logging
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $data[$row->id] = array(
-               'time'  => $row->time,
-               'usr'   => $row->usr,
-               'text'  => $row->text,
-               'ip'    => $row->ip
+               'time' => $row->time,
+               'usr' => $row->usr,
+               'text' => $row->text,
+               'ip' => $row->ip,
             );
         }
 
         return $data;
     }
-    
+
     /**
-     * Adds a new adminlog entry
+     * Adds a new adminlog entry.
      *
      * @param PMF_User $user    User object
      * @param string   $logText Logged string
      *
-     * @return boolean
+     * @return bool
      */
     public function logAdmin(PMF_User $user, $logText = '')
     {
         if ($this->_config->get('main.enableAdminLog')) {
-            
             $query = sprintf("
                 INSERT INTO
                     %sfaqadminlog
@@ -127,25 +128,25 @@ class PMF_Logging
                     $this->_config->getDb()->escape(nl2br($logText)),
                     $_SERVER['REMOTE_ADDR']
             );
-            
+
             return $this->_config->getDb()->query($query);
         } else {
             return false;
         }
     }
-    
+
     /**
-     * Deletes logging data older than 30 days
+     * Deletes logging data older than 30 days.
      *
-     * @return boolean
+     * @return bool
      */
     public function delete()
     {
         $query = sprintf(
-            "DELETE FROM
+            'DELETE FROM
                 %sfaqadminlog
             WHERE
-                time < %d",
+                time < %d',
             PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - 30 * 86400
         );
@@ -153,7 +154,7 @@ class PMF_Logging
         if ($this->_config->getDb()->query($query)) {
             return true;
         }
+
         return false;
     }
 }
-

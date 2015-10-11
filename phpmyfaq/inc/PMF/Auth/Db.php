@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Manages user authentication with databases.
  *
@@ -9,44 +10,45 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Auth
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Auth_Db
+ * PMF_Auth_Db.
  *
  * @category  phpMyFAQ 
- * @package   Auth
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
 class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
 {
     /**
-     * Database connection
+     * Database connection.
      *
      * @var PMF_DB_Driver
      */
     private $db = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
-     * @param  PMF_Configuration $config
+     * @param PMF_Configuration $config
      *
      * @return PMF_Auth_Db
      */
@@ -64,15 +66,16 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * @param string $login Loginname
      * @param string $pass  Password
      *
-     * @return boolean
+     * @return bool
      */
     public function add($login, $pass)
     {
         if ($this->checkLogin($login) > 0) {
-            $this->errors[] = PMF_User::ERROR_USER_ADD . PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->errors[] = PMF_User::ERROR_USER_ADD.PMF_User::ERROR_USER_LOGIN_NOT_UNIQUE;
+
             return false;
         }
-        
+
         $add = sprintf("
             INSERT INTO
                 %sfaquserlogin
@@ -82,19 +85,21 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             PMF_Db::getTablePrefix(),
             $this->db->escape($login),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)));
-            
-        $add   = $this->db->query($add);
+
+        $add = $this->db->query($add);
         $error = $this->db->error();
-        
+
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User::ERROR_USER_ADD . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_ADD.'error(): '.$error;
+
             return false;
         }
         if (!$add) {
             $this->errors[] = PMF_User::ERROR_USER_ADD;
+
             return false;
         }
-        
+
         return true;
     }
 
@@ -105,10 +110,11 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      *
      * Error messages are added to the array errors.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
-     * @return boolean
-    */
+     * @param string $login Loginname
+     * @param string $pass  Password
+     *
+     * @return bool
+     */
     public function changePassword($login, $pass)
     {
         $change = sprintf("
@@ -124,16 +130,19 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
         );
 
         $change = $this->db->query($change);
-        $error  = $this->db->error();
-        
+        $error = $this->db->error();
+
         if (strlen($error) > 0) {
-            $this->errors[] =  PMF_User::ERROR_USER_CHANGE . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_CHANGE.'error(): '.$error;
+
             return false;
         }
         if (!$change) {
-            $this->errors[] =  PMF_User::ERROR_USER_CHANGE;
+            $this->errors[] = PMF_User::ERROR_USER_CHANGE;
+
             return false;
         }
+
         return true;
     }
 
@@ -144,7 +153,8 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      *
      * Error messages are added to the array errors.
      *
-     * @param  string $login Loginname
+     * @param string $login Loginname
+     *
      * @return bool
      */
     public function delete($login)
@@ -156,18 +166,21 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
                 login = '%s'",
             PMF_Db::getTablePrefix(),
             $this->db->escape($login));
-            
+
         $delete = $this->db->query($delete);
-        $error  = $this->db->error();
-        
+        $error = $this->db->error();
+
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User::ERROR_USER_DELETE . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_DELETE.'error(): '.$error;
+
             return false;
         }
         if (!$delete) {
             $this->errors[] = PMF_User::ERROR_USER_DELETE;
+
             return false;
         }
+
         return true;
     }
 
@@ -178,11 +191,11 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param  string $login        Loginname
-     * @param  string $password     Password
-     * @param  array  $optionalData Optional data
+     * @param string $login        Loginname
+     * @param string $password     Password
+     * @param array  $optionalData Optional data
      *
-     * @return boolean
+     * @return bool
      */
     public function checkPassword($login, $password, Array $optionalData = null)
     {
@@ -196,18 +209,20 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             PMF_Db::getTablePrefix(),
             $this->db->escape($login)
         );
-            
+
         $check = $this->db->query($check);
         $error = $this->db->error();
-        
+
         if (strlen($error) > 0) {
-            $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
+            $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND.'error(): '.$error;
+
             return false;
         }
 
         $numRows = $this->db->numRows($check);
         if ($numRows < 1) {
             $this->errors[] = PMF_User::ERROR_USER_NOT_FOUND;
+
             return false;
         }
 
@@ -238,12 +253,12 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
     }
 
     /**
-     * Checks the number of entries of given login name
+     * Checks the number of entries of given login name.
      *
-     * @param  string $login        Loginname
-     * @param  array  $optionalData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
      *
-     * @return integer
+     * @return int
      */
     public function checkLogin($login, Array $optionalData = null)
     {
@@ -257,12 +272,13 @@ class PMF_Auth_Db extends PMF_Auth implements PMF_Auth_Driver
             PMF_Db::getTablePrefix(),
             $this->db->escape($login)
         );
-            
+
         $check = $this->db->query($check);
         $error = $this->db->error();
-        
+
         if (strlen($error) > 0) {
             $this->errors[] = $error;
+
             return 0;
         }
 

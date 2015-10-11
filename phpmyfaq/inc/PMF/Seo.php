@@ -1,6 +1,7 @@
 <?php
+
 /**
- * All SEO relevant stuff
+ * All SEO relevant stuff.
  *
  * PHP Version 5.5
  *
@@ -9,28 +10,29 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Report
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-31
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Report
+ * PMF_Report.
  *
  * @category  phpMyFAQ
- * @package   PMF_Report
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2014 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-31
  */
@@ -42,7 +44,7 @@ class PMF_Seo
     private $config;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration
      *
@@ -55,6 +57,7 @@ class PMF_Seo
 
     /**
      * @param string $action
+     *
      * @return mixed
      */
     public function getMetaRobots($action)

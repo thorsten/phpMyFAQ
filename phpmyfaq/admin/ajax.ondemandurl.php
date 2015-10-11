@@ -1,6 +1,6 @@
 <?php
 /**
- * AJAX: onDemandURL
+ * AJAX: onDemandURL.
  *
  * Usage:
  *   index.php?action=ajax&ajax=onDemandURL&id=<id>&artlang=<lang>[&lookup=1]
@@ -17,21 +17,21 @@
  * with permission from NetJapan, Inc. IT Administration Group.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 NetJapan, Inc.
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -44,13 +44,13 @@ if ($linkverifier->isReady() == false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    echo "disabled";
+    echo 'disabled';
     exit();
 }
 
-$id      = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-$lookup  = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
+$lookup = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
@@ -80,11 +80,11 @@ if (count(ob_list_handlers()) > 0) {
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
 </head>
-<body dir="<?php echo $PMF_LANG["dir"]; ?>">
+<body dir="<?php echo $PMF_LANG['dir']; ?>">
 <?php
 
 if (!(isset($id) && isset($artlang))) {
-?>
+    ?>
     Error: Entry ID and Language needs to be specified.
 </body>
 </html>
@@ -96,8 +96,10 @@ $faq->faqRecord = null;
 $faq->getRecord($id, null, true);
 
 if (!isset($faq->faqRecord['content'])) {
-?>
-    Error: No entry for #<?php echo $id; ?>(<?php echo $artlang; ?>) available.
+    ?>
+    Error: No entry for #<?php echo $id;
+    ?>(<?php echo $artlang;
+    ?>) available.
 </body>
 </html>
 <?php

@@ -1,6 +1,6 @@
 <?php
 /**
- * The main glossary index file
+ * The main glossary index file.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 ?>
@@ -45,35 +45,34 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     $user->perm->checkRight($user->getUserId(), 'editglossary') ||
     $user->perm->checkRight($user->getUserId(), 'delglossary')) {
-
     $glossary = new PMF_Glossary($faqConfig);
 
     if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary')) {
-        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->addGlossaryItem($item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
-            echo $PMF_LANG['ad_glossary_save_success'] . '</p>';
+            echo $PMF_LANG['ad_glossary_save_success'].'</p>';
         } else {
             echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_save_error'];
-            echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            echo $faqConfig->getDb()->error() . '</p>';
+            echo '<br />'.$PMF_LANG['ad_adus_dberr'].'<br />';
+            echo $faqConfig->getDb()->error().'</p>';
         }
     }
 
     if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary')) {
-        $id         = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $item       = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->updateGlossaryItem($id, $item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
-            echo $PMF_LANG['ad_glossary_update_success'] . '</p>';
+            echo $PMF_LANG['ad_glossary_update_success'].'</p>';
         } else {
             echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_update_error'];
-            echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            echo $faqConfig->getDb()->error() . '</p>';
+            echo '<br />'.$PMF_LANG['ad_adus_dberr'].'<br />';
+            echo $faqConfig->getDb()->error().'</p>';
         }
     }
 
@@ -81,12 +80,12 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
-            echo $PMF_LANG['ad_glossary_delete_success'] . '</p>';
+            echo $PMF_LANG['ad_glossary_delete_success'].'</p>';
         } else {
             echo '<p class="alert alert-danger"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_delete_error'];
-            echo '<br />'.$PMF_LANG["ad_adus_dberr"].'<br />';
-            echo $faqConfig->getDb()->error() . '</p>';
+            echo '<br />'.$PMF_LANG['ad_adus_dberr'].'<br />';
+            echo $faqConfig->getDb()->error().'</p>';
         }
     }
 
@@ -95,7 +94,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     echo '<table class="table table-striped">';
     printf(
         '<thead><tr><th>%s</th><th>%s</th><th style="width: 16px">&nbsp;</th></tr></thead>',
-        $PMF_LANG['ad_glossary_item'], 
+        $PMF_LANG['ad_glossary_item'],
         $PMF_LANG['ad_glossary_definition']
     );
 
@@ -103,8 +102,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         echo '<tr>';
         printf(
             '<td><a href="%s%d">%s</a></td>',
-            '?action=editglossary&amp;id=', 
-            $items['id'], 
+            '?action=editglossary&amp;id=',
+            $items['id'],
             $items['item']
         );
         printf(
@@ -114,7 +113,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         printf(
             '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d">',
             $PMF_LANG['ad_user_del_3'],
-            '?action=deleteglossary&amp;id=', 
+            '?action=deleteglossary&amp;id=',
             $items['id']
         );
         printf(
@@ -124,9 +123,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         echo '</tr>';
     }
     echo '</table>';
-
 } else {
-    echo $PMF_LANG["err_NotAuth"];
+    echo $PMF_LANG['err_NotAuth'];
 }
 ?>
             </div>

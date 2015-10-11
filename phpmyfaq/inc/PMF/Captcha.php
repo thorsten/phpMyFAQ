@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The phpMyFAQ Captcha class
+ * The phpMyFAQ Captcha class.
  *
  * PHP Version 5.5
  *
@@ -9,30 +10,31 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Captcha
+ *
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Captcha
+ * PMF_Captcha.
  *
  * @category  phpMyFAQ
- * @package   PMF_Captcha
+ *
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
  */
@@ -44,28 +46,28 @@ class PMF_Captcha
     private $_config = null;
 
     /**
-     * The phpMyFAQ session id
+     * The phpMyFAQ session id.
      *
      * @var string
      */
     private $sids;
 
     /**
-     * Array of fonts
+     * Array of fonts.
      *
      * @var array
      */
     private $fonts = [];
 
     /**
-     * The captcha code
+     * The captcha code.
      *
      * @var string
      */
     private $code = '';
 
     /**
-     * Array of characters
+     * Array of characters.
      *
      * @var array
      */
@@ -73,67 +75,67 @@ class PMF_Captcha
         '1', '2', '3', '4', '5', '6', '7', '8', '9',
         'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I',
         'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R',
-        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+        'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z',
     );
 
     /**
-     * Length of the captcha code
+     * Length of the captcha code.
      *
-     * @var integer
+     * @var int
      */
     public $caplength = 6;
 
     /**
-     * Width of the image
+     * Width of the image.
      *
-     * @var integer
+     * @var int
      */
     private $width = 165;
 
     /**
-     * Height of the image
+     * Height of the image.
      *
-     * @var integer
+     * @var int
      */
     private $height = 40;
 
     /**
-     * JPEG quality in percents
+     * JPEG quality in percents.
      *
-     * @var integer
+     * @var int
      */
     private $quality = 60;
 
     /**
-     * Random background color RGB components
+     * Random background color RGB components.
      *
      * @var array
      */
     private $_backgroundColor;
 
     /**
-     * Generated image
+     * Generated image.
      *
      * @var resource
      */
     private $img;
 
     /**
-     * The user agent string
+     * The user agent string.
      *
      * @var string
      */
     private $userAgent;
 
     /**
-     * Timestamp
+     * Timestamp.
      *
-     * @var integer
+     * @var int
      */
     private $timestamp;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -141,46 +143,43 @@ class PMF_Captcha
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config   = $config;
+        $this->_config = $config;
         $this->userAgent = $_SERVER['HTTP_USER_AGENT'];
-        $this->ip        = $_SERVER['REMOTE_ADDR'];
-        $this->fonts     = $this->getFonts();
+        $this->ip = $_SERVER['REMOTE_ADDR'];
+        $this->fonts = $this->getFonts();
         $this->timestamp = $_SERVER['REQUEST_TIME'];
     }
 
     //
     // public functions
     //
-    
+
     /**
-     * Setter for session id
+     * Setter for session id.
      *
-     * @param integer $sid session id
-     *
-     * @return void
+     * @param int $sid session id
      */
     public function setSessionId($sid)
     {
         $this->sids = $sid;
     }
-    
+
     /**
-     * Setter for the captcha code length
+     * Setter for the captcha code length.
      *
-     * @param integer $length Length of captch code
-     *
-     * @return void
+     * @param int $length Length of captch code
      */
     public function setCodeLength($length = 6)
     {
         $this->caplength = $length;
     }
-    
+
     /**
-     * Gives the HTML output code for the Captcha
+     * Gives the HTML output code for the Captcha.
      *
-     * @param   string $action The action parameter
-     * @return  string
+     * @param string $action The action parameter
+     *
+     * @return string
      */
     public function printCaptcha($action)
     {
@@ -195,13 +194,12 @@ class PMF_Captcha
             'Chuck Norris has counted to infinity. Twice.',
             'click to refresh'
         );
+
         return $output;
     }
 
     /**
-     * Draw the Captcha
-     *
-     * @return  void
+     * Draw the Captcha.
      */
     public function showCaptchaImg()
     {
@@ -211,7 +209,7 @@ class PMF_Captcha
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
-            imagejpeg($this->img, null, (int)$this->quality);
+            imagejpeg($this->img, null, (int) $this->quality);
         } elseif (function_exists('imagegif')) {
             header('Content-Type: image/gif');
             imagegif($this->img);
@@ -220,13 +218,13 @@ class PMF_Captcha
     }
 
     /**
-     * Gets the Captcha from the DB
+     * Gets the Captcha from the DB.
      *
-     * @return  string
+     * @return string
      */
     public function getCaptchaCode()
     {
-        $query  = sprintf('SELECT id FROM %sfaqcaptcha', PMF_Db::getTablePrefix());
+        $query = sprintf('SELECT id FROM %sfaqcaptcha', PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->fetchArray($result)) {
             $this->code = $row['id'];
@@ -236,10 +234,11 @@ class PMF_Captcha
     }
 
     /**
-     * Validate the Captcha
+     * Validate the Captcha.
      *
-     * @param  string $captchaCode Captcha code
-     * @return boolean
+     * @param string $captchaCode Captcha code
+     *
+     * @return bool
      */
     public function validateCaptchaCode($captchaCode)
     {
@@ -251,11 +250,11 @@ class PMF_Captcha
         $captchaCode = PMF_String::strtoupper($captchaCode);
         // Help the user: treat "0" (ASCII 48) like "O" (ASCII 79)
         //                if "0" is not in the realm of captcha code letters
-        if (!in_array("0", $this->letters)) {
-            $captchaCode = str_replace("0", "O", $captchaCode);
+        if (!in_array('0', $this->letters)) {
+            $captchaCode = str_replace('0', 'O', $captchaCode);
         }
         // Sanity check
-        for ($i = 0; $i < PMF_String::strlen( $captchaCode ); $i++) {
+        for ($i = 0; $i < PMF_String::strlen($captchaCode); ++$i) {
             if (!in_array($captchaCode[$i], $this->letters)) {
                 return false;
             }
@@ -276,18 +275,20 @@ class PMF_Captcha
             if ($num > 0) {
                 $this->code = $captchaCode;
                 $this->removeCaptcha($captchaCode);
+
                 return true;
             }
         }
 
         return false;
     }
-    
+
     /**
      * This function checks the provided captcha code
      * if the captcha code spam protection has been activated from the general PMF configuration.
      *
-     * @param  string $code Captcha Code
+     * @param string $code Captcha Code
+     *
      * @return bool
      */
     public function checkCaptchaCode($code)
@@ -298,26 +299,25 @@ class PMF_Captcha
             return true;
         }
     }
-    
 
     //
     // private functions
     //
 
     /**
-     * Draw random lines
+     * Draw random lines.
      *
      * @return resource
      */
     private function drawlines()
     {
-        $color1   = rand(150, 185);
-        $color2   = rand(185, 225);
+        $color1 = rand(150, 185);
+        $color2 = rand(185, 225);
         $nextline = 4;
-        $w1       = 0;
-        $w2       = 0;
+        $w1 = 0;
+        $w2 = 0;
 
-        for ($x = 0; $x < $this->width; $x += (int)$nextline) {
+        for ($x = 0; $x < $this->width; $x += (int) $nextline) {
             if ($x < $this->width) {
                 imageline($this->img, $x + $w1, 0, $x + $w2, $this->height - 1, rand($color1, $color2));
             }
@@ -329,8 +329,7 @@ class PMF_Captcha
                 if ($nextline < 1) {
                     $nextline = 2;
                 }
-            }
-            else {
+            } else {
                 $nextline += rand(1, 7);
             }
             $w1 += rand(-4, 4);
@@ -341,26 +340,26 @@ class PMF_Captcha
     }
 
     /**
-     * Draw the Text
+     * Draw the Text.
      *
      * @return resource
      */
     private function drawText()
     {
         $len = PMF_String::strlen($this->code);
-        $w1  = 15;
-        $w2  = $this->width / ($len + 1);
+        $w1 = 15;
+        $w2 = $this->width / ($len + 1);
 
-        for ($p = 0; $p < $len; $p++) {
+        for ($p = 0; $p < $len; ++$p) {
             $letter = $this->code[$p];
             if (count($this->fonts) > 0) {
                 $font = $this->fonts[rand(0, count($this->fonts) - 1)];
             }
             $size = rand(20, $this->height / 2.2);
             $rotation = rand(-23, 23);
-            $y   = rand($size + 3, $this->height-5);
+            $y = rand($size + 3, $this->height - 5);
             // $w1 += rand(- $this->width / 90, $this->width / 40 );
-            $x   = $w1 + $w2*$p;
+            $x = $w1 + $w2 * $p;
             $c1 = []; // fore char color
             $c2 = []; // back char color
             do {
@@ -387,14 +386,14 @@ class PMF_Captcha
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
                 imagettftext($this->img, $size, $rotation, $x + 2, $y,     $c2, $font, $letter);
                 imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $c2, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x,     $y-2,   $c1, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x,     $y - 2,   $c1, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
                 $x = 20;
                 $y = 12;
                 $s = 30;
-                imagestring($this->img, $size, $x + 1 + ($s * $p), $y+1, $letter, $c3);
+                imagestring($this->img, $size, $x + 1 + ($s * $p), $y + 1, $letter, $c3);
                 imagestring($this->img, $size, $x + ($s * $p),     $y,   $letter, $c1);
             }
         }
@@ -403,34 +402,35 @@ class PMF_Captcha
     }
 
     /**
-     * Create the background
+     * Create the background.
      *
      * @return resource
      */
     private function createBackground()
     {
-        $this->img                   = imagecreate($this->width, $this->height);
+        $this->img = imagecreate($this->width, $this->height);
         $this->_backgroundColor['r'] = rand(220, 255);
         $this->_backgroundColor['g'] = rand(220, 255);
         $this->_backgroundColor['b'] = rand(220, 255);
-        
+
         $colorallocate = imagecolorallocate(
             $this->img,
             $this->_backgroundColor['r'],
             $this->_backgroundColor['g'],
             $this->_backgroundColor['b']
         );
-                                            
+
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorallocate);
 
         return $this->img;
     }
 
     /**
-     * Generate a Captcha Code
+     * Generate a Captcha Code.
      *
-     * @param   integer $caplength Length of captch code
-     * @return  string
+     * @param int $caplength Length of captch code
+     *
+     * @return string
      */
     private function generateCaptchaCode($caplength)
     {
@@ -454,8 +454,8 @@ class PMF_Captcha
         $this->garbageCollector();
 
         // Create the captcha code
-        for ($i = 1; $i <= $caplength; $i++) {
-            $j = floor(rand(0,34));
+        for ($i = 1; $i <= $caplength; ++$i) {
+            $j = floor(rand(0, 34));
             $this->code .= $this->letters[$j];
         }
         if (!$this->saveCaptcha()) {
@@ -466,10 +466,10 @@ class PMF_Captcha
     }
 
     /**
-    * Save the Captcha
-    *
-    * @return   boolean
-    */
+     * Save the Captcha.
+     *
+     * @return bool
+     */
     private function saveCaptcha()
     {
         $select = sprintf("
@@ -482,9 +482,9 @@ class PMF_Captcha
            PMF_Db::getTablePrefix(),
            $this->code
         );
-        
+
         $result = $this->_config->getDb()->query($select);
-        
+
         if ($result) {
             $num = $this->_config->getDb()->numRows($result);
             if ($num > 0) {
@@ -495,16 +495,17 @@ class PMF_Captcha
                         %sfaqcaptcha 
                     (id, useragent, language, ip, captcha_time) 
                         VALUES 
-                    ('%s', '%s', '%s', '%s', %d)", 
+                    ('%s', '%s', '%s', '%s', %d)",
                     PMF_Db::getTablePrefix(),
-                    $this->code, 
-                    $this->userAgent, 
+                    $this->code,
+                    $this->userAgent,
                     $this->_config->getLanguage()->getLanguage(),
-                    $this->ip, 
+                    $this->ip,
                     $this->timestamp
                 );
-                    
+
                 $this->_config->getDb()->query($insert);
+
                 return true;
             }
         }
@@ -513,10 +514,9 @@ class PMF_Captcha
     }
 
     /**
-     * Remove the Captcha
+     * Remove the Captcha.
      *
-     * @param  string $captchaCode Captch code
-     * @return void
+     * @param string $captchaCode Captch code
      */
     private function removeCaptcha($captchaCode = null)
     {
@@ -535,21 +535,20 @@ class PMF_Captcha
      * and deleted upon a successful matching, so, on average, a record
      * in this table is probably related to a spam attack.
      *
-     * @param  int $time The time (sec) to define a captcha code old and ready 
-     *                   to be deleted (default: 1 week)
-     * @return void
+     * @param int $time The time (sec) to define a captcha code old and ready 
+     *                  to be deleted (default: 1 week)
      */
     private function garbageCollector($time = 604800)
     {
-        $delete = sprintf("
+        $delete = sprintf('
             DELETE FROM 
                 %sfaqcaptcha 
             WHERE 
-                captcha_time < %d", 
+                captcha_time < %d',
             PMF_Db::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - $time
         );
-            
+
         $this->_config->getDb()->query($delete);
 
         $delete = sprintf("
@@ -567,12 +566,12 @@ class PMF_Captcha
     }
 
     /**
-     * Get Fonts
+     * Get Fonts.
      *
      * @return array
      */
     private function getFonts()
     {
-        return glob(PMF_INCLUDE_DIR . '/fonts/*.ttf');
+        return glob(PMF_INCLUDE_DIR.'/fonts/*.ttf');
     }
 }

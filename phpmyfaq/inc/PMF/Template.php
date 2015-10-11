@@ -1,7 +1,8 @@
 <?php
+
 /**
  * The PMF_Template class provides methods and functions for the
- * template parser
+ * template parser.
  *
  * PHP Version 5.5
  *
@@ -10,70 +11,71 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Template
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-22
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Template
+ * PMF_Template.
  *
  * @category  phpMyFAQ
- * @package   PMF_Template
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-22
  */
 class PMF_Template
 {
     /**
-     * The template array
+     * The template array.
      *
      * @var array
      */
     public $templates = [];
 
     /**
-     * The output array
+     * The output array.
      *
      * @var array
      */
     private $outputs = [];
 
     /**
-     * The blocks array
+     * The blocks array.
      *
      * @var array
      */
     private $blocks = [];
 
     /**
-     * array containing the touched blocks
+     * array containing the touched blocks.
      *
      * @var array
      */
     private $blocksTouched = [];
 
     /**
-     * Name of active template set
+     * Name of active template set.
      *
      * @var string
      */
     private static $tplSetName;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * Combine all template files into the main templates array
      *
@@ -85,40 +87,36 @@ class PMF_Template
     public function __construct(Array $myTemplate, $tplSetName = 'default')
     {
         self::$tplSetName = $tplSetName;
-        
+
         foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->_include(
-                'assets/template/' . $tplSetName . '/' . $filename,
+                'assets/template/'.$tplSetName.'/'.$filename,
                 $templateName
             );
         }
     }
 
     /**
-     * This function merges two templates
+     * This function merges two templates.
      *
      * @param string $from Name of the template to include
      * @param string $into Name of the new template
-     *
-     * @return void
      */
     public function merge($from, $into)
     {
-        $this->outputs[$into] = str_replace('{' . $from . '}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$into] = str_replace('{'.$from.'}', $this->outputs[$from], $this->outputs[$into]);
         $this->outputs[$from] = null;
     }
 
     /**
-     * Parses the template
+     * Parses the template.
      *
      * @param string $templateName    Name of the template
      * @param array  $templateContent Content of the template
-     *
-     * @return void
      */
     public function parse($templateName, Array $templateContent)
     {
-        $tmp       = $this->templates[$templateName];
+        $tmp = $this->templates[$templateName];
         $rawBlocks = $this->_readBlocks($tmp);
 
         // process blocked content
@@ -126,12 +124,12 @@ class PMF_Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = str_replace('[' . $key . ']', '', $tmp);
-                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
+                    $tmp = str_replace('['.$key.']', '', $tmp);
+                    $tmp = str_replace('[/'.$key.']', '', $tmp);
                 } elseif ($key != 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = str_replace('[' . $key . ']', '', $tmp);
-                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
+                    $tmp = str_replace('['.$key.']', '', $tmp);
+                    $tmp = str_replace('[/'.$key.']', '', $tmp);
                 }
             }
         }
@@ -149,7 +147,7 @@ class PMF_Template
 
         // add magic variables for each template
         $tmp = str_replace('{tplSetName}', self::$tplSetName, $tmp);
-        
+
         if (isset($this->outputs[$templateName])) {
             $this->outputs[$templateName] .= $tmp;
         } else {
@@ -168,37 +166,34 @@ class PMF_Template
         foreach ($this->outputs as $val) {
             $output .= str_replace("\n\n", "\n", $val);
         }
+
         return $output;
     }
 
     /**
-     * This function adds two parsed templates
+     * This function adds two parsed templates.
      *
      * @param string $from Name of the template to add
      * @param string $into Name of the new template
-     *
-     * @return void
      */
     public function add($from, $into)
     {
         $this->outputs[$into] .= $this->outputs[$from];
-        $this->outputs[$from]  = null;
+        $this->outputs[$from] = null;
     }
 
     /**
-     * This function processes the block
+     * This function processes the block.
      *
      * @param string $templateName Name of the template
      * @param string $blockName    Block name
      * @param array  $blockContent Content of the block
-     *
-     * @return void
      */
     public function parseBlock($templateName, $blockName, Array $blockContent)
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];
-    
+
             // security check
             $blockContent = $this->_checkContent($blockContent);
             foreach ($blockContent as $var => $val) {
@@ -210,7 +205,7 @@ class PMF_Template
                     $block = str_replace('{'.$var.'}', $val, $block);
                 }
             }
-    
+
             $this->blocksTouched[] = $blockName;
             $block = str_replace('&acute;', '`', $block);
             $this->blocks[$templateName][$blockName] = $block;
@@ -218,19 +213,17 @@ class PMF_Template
     }
 
     /**
-     * Set the template set name to use
+     * Set the template set name to use.
      *
      * @param $tplSetName
-     *
-     * @return void
      */
     public static function setTplSetName($tplSetName)
     {
         self::$tplSetName = $tplSetName;
     }
-    
+
     /**
-     * Get name of the actual template set
+     * Get name of the actual template set.
      *
      * @return string
      */
@@ -238,7 +231,7 @@ class PMF_Template
     {
         return self::$tplSetName;
     }
-    
+
     //
     // Protected and private methods
     //
@@ -246,16 +239,17 @@ class PMF_Template
     /**
      * This function reads a template file.
      *
-     * @param string $filename     Filename
-     * @param string $tplName Name of the template
+     * @param string $filename Filename
+     * @param string $tplName  Name of the template
      *
      * @return string
      */
     protected function _include($filename, $tplName)
     {
         if (file_exists($filename)) {
-            $tplContent             = file_get_contents($filename);
+            $tplContent = file_get_contents($filename);
             $this->blocks[$tplName] = $this->_readBlocks($tplContent);
+
             return $tplContent;
         } else {
             return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
@@ -263,18 +257,18 @@ class PMF_Template
     }
 
     /**
-     * This function multiplies blocks
+     * This function multiplies blocks.
      *
-     * @param  string $block        Blockname
-     * @param  array  $blockContent Content of block
+     * @param string $block        Blockname
+     * @param array  $blockContent Content of block
      *
      * @return string implode('', $tmpBlock)
      */
     private function _multiplyBlock($block, $blockContent)
     {
         $multiplyTimes = 0;
-        $replace       = [];
-        $tmpBlock      = [];
+        $replace = [];
+        $tmpBlock = [];
 
         //create the replacement array
         foreach ($blockContent as $var => $val) {
@@ -289,16 +283,16 @@ class PMF_Template
                 } else {
                     die('Wrong parameter length!');
                 }
-            } else{
+            } else {
                 //multiply strings to $multiplyTimes
-                for ($i=0; $i<$multiplyTimes; $i++){
+                for ($i = 0; $i < $multiplyTimes; ++$i) {
                     $replace[$var][] = $val;
                 }
             }
         }
 
         //do the replacement
-        for ($i = 0; $i < $multiplyTimes; $i++) {
+        for ($i = 0; $i < $multiplyTimes; ++$i) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
                 $tmpBlock[$i] = str_replace('{'.$var.'}', $val[$i], $tmpBlock[$i]);
@@ -306,40 +300,39 @@ class PMF_Template
         }
 
         return implode('', $tmpBlock);
-
     }
 
     /**
-     * This function reads the block
+     * This function reads the block.
      *
-     * @param  string $tpl Block to read
+     * @param string $tpl Block to read
      *
      * @return array
      */
     private function _readBlocks($tpl)
     {
         $tmpBlocks = [];
-        
+
         // read all blocks into $tmpBlocks
         PMF_String::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
-        
+
         $unblocked = $tpl;
         if (isset($tmpBlocks)) {
             $blockCount = count($tmpBlocks[0]);
-            for ($i = 0 ; $i < $blockCount; $i++) {
+            for ($i = 0; $i < $blockCount; ++$i) {
                 $name = '';
                 //find block name
                 PMF_String::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
                 $name = PMF_String::preg_replace('/[\[\[\/\]]/', '', $name);
                 //remove block tags from block
-                $res = str_replace('[' . $name[0] . ']','',$tmpBlocks[0][$i]);
-                $res = str_replace('[/' . $name[0] . ']','',$res);
+                $res = str_replace('['.$name[0].']', '', $tmpBlocks[0][$i]);
+                $res = str_replace('[/'.$name[0].']', '', $res);
                 $tplBlocks[$name[0]] = $res;
 
                 //unblocked content
                 $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
-                $unblocked = str_replace('[' . $name[0] . ']','',$unblocked);
-                $unblocked = str_replace('[/' . $name[0] . ']','',$unblocked);
+                $unblocked = str_replace('['.$name[0].']', '', $unblocked);
+                $unblocked = str_replace('[/'.$name[0].']', '', $unblocked);
             }
 
             $hits = [];
@@ -354,7 +347,7 @@ class PMF_Template
     }
 
     /**
-     * This function checks the content
+     * This function checks the content.
      *
      * @param string $content Content to check
      *
@@ -363,10 +356,10 @@ class PMF_Template
     private function _checkContent($content)
     {
         // Security measure: avoid the injection of php/shell-code
-        $search      = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
-        $phppattern1 = "&lt;?php";
-        $phppattern2 = "&lt;?";
-        $replace     = array($phppattern1, '', $phppattern2, '', '' );
+        $search = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
+        $phppattern1 = '&lt;?php';
+        $phppattern2 = '&lt;?';
+        $replace = array($phppattern1, '', $phppattern2, '', '');
 
         // Hack: Backtick Fix
         $content = str_replace('`', '&acute;', $content);

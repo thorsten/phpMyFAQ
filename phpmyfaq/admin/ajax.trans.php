@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Handle ajax requests for the interface translation tool
+ * Handle ajax requests for the interface translation tool.
  *
  * PHP Version 5.5
  *
@@ -9,41 +10,40 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Alexander Melnik <old@km.ua>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 switch ($ajax_action) {
-    
+
     case 'save_page_buffer':
-        /**
+        /*
          * Build language variable definitions
          * @todo Change input handling using PMF_Filter
          */
-        foreach ((array)@$_POST['PMF_LANG'] as $key => $val) {
-        
+        foreach ((array) @$_POST['PMF_LANG'] as $key => $val) {
             if (is_string($val)) {
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
-                $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"]  = $val;
+                $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"] = $val;
             } elseif (is_array($val)) {
-                /**
+                /*
                  * Here we deal with a two dimensional array
                  */
                 foreach ($val as $key2 => $val2) {
@@ -53,18 +53,17 @@ switch ($ajax_action) {
                 }
             }
         }
-        
-        foreach ((array)@$_POST['LANG_CONF'] as $key => $val) {
+
+        foreach ((array) @$_POST['LANG_CONF'] as $key => $val) {
             // if string like array(blah-blah-blah), extract the contents inside the brackets
-            if (preg_match('/^\s*array\s*\(\s*(\d+.+)\s*\).*$/',$val,$matches1)) {
+            if (preg_match('/^\s*array\s*\(\s*(\d+.+)\s*\).*$/', $val, $matches1)) {
                 // split the resulting string of delimiters such as "number =>"
                 $valArr = preg_split(
                     '/\s*(\d+)\s*\=\>\s*/',
                     $matches1[1],
                     null,
-                    PREG_SPLIT_DELIM_CAPTURE|PREG_SPLIT_NO_EMPTY
+                    PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
                 );
-                // in an array $valArr contents like  "number substring", "substring", "number substring", "substring", ...
                 $numVal = count($valArr);
                 if ($numVal > 1) {
                     $newValArr = [];
@@ -81,120 +80,119 @@ switch ($ajax_action) {
                             }
                         }
                     }
-                    $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = 'array('.implode(", ",$newValArr).')';
+                    $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = 'array('.implode(', ', $newValArr).')';
                 }
             } else {  // compatibility for old behavior
                 $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
                 $val = str_replace("'", "\\'", $val);
-                $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"]  = $val;
+                $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
             }
         }
-        
+
         echo 1;
     break;
-    
+
     case 'save_translated_lang':
-        
+
         if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
             echo $PMF_LANG['err_NotAuth'];
             exit;
         }
-        
-        $lang     = strtolower($_SESSION['trans']['rightVarsOnly']["PMF_LANG[metaLanguage]"]);
-        $filename = PMF_ROOT_DIR . "/lang/language_" . $lang . ".php";
-        
-        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
-            echo 0;
-            exit;
-        }     
-        
-        if (!copy($filename, PMF_ROOT_DIR . "/lang/language_" . $lang . ".bak.php")) {
+
+        $lang = strtolower($_SESSION['trans']['rightVarsOnly']['PMF_LANG[metaLanguage]']);
+        $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
+
+        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
             echo 0;
             exit;
         }
-        
+
+        if (!copy($filename, PMF_ROOT_DIR.'/lang/language_'.$lang.'.bak.php')) {
+            echo 0;
+            exit;
+        }
+
         $newFileContents = '';
-        $tmpLines        = [];
-        
+        $tmpLines = [];
+
         // Read in the head of the file we're writing to
         $fh = fopen($filename, 'r');
         do {
             $line = fgets($fh);
             array_push($tmpLines, rtrim($line));
-        }
-        while ('*/' != substr(trim($line), -2));
+        } while ('*/' != substr(trim($line), -2));
         fclose($fh);
-       
+
         // Construct lines with variable definitions
         foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
             if (0 === strpos($key, 'PMF_LANG')) {
                 $val = "'$val'";
             }
-            array_push($tmpLines, '$' . str_replace(array('[', ']'), array("['", "']"), $key) . " = $val;");
+            array_push($tmpLines, '$'.str_replace(array('[', ']'), array("['", "']"), $key)." = $val;");
         }
-        
+
         $newFileContents .= implode("\n", $tmpLines);
-        
+
         unset($_SESSION['trans']);
-        
+
         $retval = file_put_contents($filename, $newFileContents);
         echo intval($retval);
     break;
-    
+
     case 'remove_lang_file':
-        
+
         if (!$user->perm->checkRight($user->getUserId(), 'deltranslation')) {
             echo $PMF_LANG['err_NotAuth'];
             exit;
         }
-         
+
         $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
-        
-        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
-            echo 0;
-            exit;
-        }     
-        
-        if (!copy(PMF_ROOT_DIR . "/lang/language_$lang.php", PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+
+        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
             echo 0;
             exit;
         }
-        
-        if (!unlink(PMF_ROOT_DIR . "/lang/language_$lang.php")) {
+
+        if (!copy(PMF_ROOT_DIR."/lang/language_$lang.php", PMF_ROOT_DIR."/lang/language_$lang.bak.php")) {
             echo 0;
             exit;
         }
-        
+
+        if (!unlink(PMF_ROOT_DIR."/lang/language_$lang.php")) {
+            echo 0;
+            exit;
+        }
+
         echo 1;
     break;
-    
+
     case 'save_added_trans':
-        
+
         if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
             echo $PMF_LANG['err_NotAuth'];
             exit;
-        }        
-        
-        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
+        }
+
+        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
             echo 0;
             exit;
         }
-        
-        $langCode    = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
-        $langName    = @$languageCodes[$langCode];
-        $langCharset = "UTF-8";
-        $langDir     = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
-        $langNPlurals= strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
-        $langDesc    = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
-        $author      = (array) @$_POST['author'];
-        
-        if(empty($langCode) || empty($langName) || empty($langCharset) ||
+
+        $langCode = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
+        $langName = @$languageCodes[$langCode];
+        $langCharset = 'UTF-8';
+        $langDir = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+        $langNPlurals = strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
+        $langDesc = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
+        $author = (array) @$_POST['author'];
+
+        if (empty($langCode) || empty($langName) || empty($langCharset) ||
            empty($langDir) || empty($langDesc) || empty($author)) {
             echo 0;
             exit;
         }
-        
-        $fileTpl     = <<<FILE
+
+        $fileTpl = <<<FILE
 <?php
 /**
  * %s
@@ -224,37 +222,36 @@ FILE;
         foreach ($author as $authorData) {
             $authorTpl .= " * @author    $authorData\n";
         }
-        
+
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
                                      $langCharset, strtolower($langCode), $langName, $langDir, $langNPlurals);
 
-        $retval = @file_put_contents(PMF_ROOT_DIR . '/lang/language_' . strtolower($langCode) . '.php', $fileTpl);
+        $retval = @file_put_contents(PMF_ROOT_DIR.'/lang/language_'.strtolower($langCode).'.php', $fileTpl);
         echo intval($retval);
     break;
-    
-    
+
     case 'send_translated_file':
-        
-        $lang     = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
-        $filename = PMF_ROOT_DIR . "/lang/language_" . $lang . ".php";
-        
+
+        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+        $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
+
         if (!file_exists($filename)) {
             echo 0;
             exit;
         }
 
         $letterTpl = '';
-        
-        $mail          = new PMF_Mail($faqConfig);
+
+        $mail = new PMF_Mail($faqConfig);
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
             $user->userdata->get('email'),
             $faqConfig->get('main.currentVersion'),
             $_SERVER['HTTP_HOST']);
-            
+
         $mail->addTo('thorsten@phpmyfaq.de');
         $mail->addAttachment($filename, null, 'text/plain');
-        
+
         echo (int) $mail->send();
     break;
 }

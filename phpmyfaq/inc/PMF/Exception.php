@@ -1,6 +1,7 @@
 <?php
+
 /**
- * phpMyFAQ main exception class
+ * phpMyFAQ main exception class.
  *
  * PHP Version 5.5
  *
@@ -9,33 +10,34 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Exception
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-12-28
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Exception
+ * PMF_Exception.
  *
  * @category  phpMyFAQ
- * @package   PMF_Exception
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-12-28
  */
 class PMF_Exception extends Exception
 {
     /**
-     * Converts PMF_Exception to a string
+     * Converts PMF_Exception to a string.
      *
      * @return string
      */
@@ -49,7 +51,7 @@ class PMF_Exception extends Exception
             $this->getLine(),
             $this->getTraceAsString()
         );
-        
+
         return $exception;
     }
 }

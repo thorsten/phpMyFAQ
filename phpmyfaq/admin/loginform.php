@@ -1,6 +1,6 @@
 <?php
 /**
- * The login form
+ * The login form.
  *
  * PHP Version 5.5
  *
@@ -9,15 +9,15 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
  */
-
 ?>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
@@ -85,6 +85,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 </div>
                             </fieldset>
 <?php
+
 } else {
     printf(
         '<p><a href="https://%s%s">%s</a></p>',

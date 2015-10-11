@@ -1,6 +1,6 @@
 <?php
 /**
- * Shows the admin search frontend for FAQs
+ * Shows the admin search frontend for FAQs.
  *
  * PHP Version 5.5
  *
@@ -9,20 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2011-09-29
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 ?>
@@ -39,8 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
-
-    $searchcat  = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchcat = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
     $searchterm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     $category = new PMF_Category($faqConfig, [], false);
@@ -53,17 +52,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     $categoryHelper->setCategory($category);
 
     $category->buildTree();
-    
+
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
-?>
+    ?>
 
                 <form action="?action=view" method="post" class="form-horizontal" accept-charset="utf-8">
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php print $PMF_LANG["msgSearchWord"]; ?>:</label>
+                        <label class="col-lg-2 control-label"><?php print $PMF_LANG['msgSearchWord'];
+    ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
-                                   value="<?php print $searchterm; ?>" />
+                                   value="<?php print $searchterm;
+    ?>" />
 
                         </div>
                     </div>
@@ -73,18 +74,23 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                         <div class="col-lg-offset-2 col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="linkstate" value="linkbad" />
-                                <?php print $PMF_LANG['ad_linkcheck_searchbadonly']; ?>
+                                <?php print $PMF_LANG['ad_linkcheck_searchbadonly'];
+    ?>
                             </label>
                         </div>
                     </div>
-                    <?php endif; ?>
+                    <?php endif;
+    ?>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php print $PMF_LANG["msgCategory"]; ?>:</label>
+                        <label class="col-lg-2 control-label"><?php print $PMF_LANG['msgCategory'];
+    ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
-                                <option value="0"><?php print $PMF_LANG["msgShowAllCategories"]; ?></option>
-                                <?php print $categoryHelper->renderOptions($searchcat); ?>
+                                <option value="0"><?php print $PMF_LANG['msgShowAllCategories'];
+    ?></option>
+                                <?php print $categoryHelper->renderOptions($searchcat);
+    ?>
                             </select>
                         </div>
                     </div>
@@ -92,13 +98,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php print $PMF_LANG["msgSearch"]; ?>
+                                <?php print $PMF_LANG['msgSearch'];
+    ?>
                             </button>
                         </div>
                     </div>
                 </form>
 
 <?php
+
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

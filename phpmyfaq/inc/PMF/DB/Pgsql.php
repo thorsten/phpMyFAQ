@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The PMF_DB_Pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -10,49 +11,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2003-02-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_DB_Pgsql
+ * PMF_DB_Pgsql.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
- * @package   2003-02-24
  */
 class PMF_DB_Pgsql implements PMF_DB_Driver
 {
     /**
-     * The connection resource
+     * The connection resource.
      *
      * @var resource
      */
     private $conn = null;
 
     /**
-     * The query log string
+     * The query log string.
      *
      * @var string
      */
     public $sqllog = '';
 
     /**
-     * Tables
+     * Tables.
      *
      * @var array
      */
@@ -66,9 +66,9 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param string $password Password
      * @param string $database Database name
      *
-     * @return boolean true, if connected, otherwise false
+     * @return bool true, if connected, otherwise false
      */
-    public function connect ($host, $user, $password, $database = '')
+    public function connect($host, $user, $password, $database = '')
     {
         $connectionString = sprintf(
             'host=%s port=5432 dbname=%s user=%s password=%s',
@@ -85,7 +85,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
             die();
         }
 
-        $this->query("SET standard_conforming_strings=on");
+        $this->query('SET standard_conforming_strings=on');
 
         return true;
     }
@@ -93,11 +93,11 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * This function sends a query to the database.
      *
-     * @param string  $query
-     * @param integer $offset
-     * @param integer $rowcount
+     * @param string $query
+     * @param int    $offset
+     * @param int    $rowcount
      *
-     * @return  mixed $result
+     * @return mixed $result
      */
     public function query($query, $offset = 0, $rowcount = 0)
     {
@@ -119,44 +119,45 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-    * Escapes a string for use in a query
-    *
-    * @param   string
-    * @return  string
-    */
+     * Escapes a string for use in a query.
+     *
+     * @param   string
+     *
+     * @return string
+     */
     public function escape($string)
     {
         return pg_escape_string($this->conn, $string);
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
-     * @param   mixed $result
-     * @return  mixed
+     * @param mixed $result
+     *
+     * @return mixed
      */
     public function fetchObject($result)
     {
         return pg_fetch_object($result);
     }
 
-
-
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
-     * @param   mixed $result
-     * @return  array
+     * @param mixed $result
+     *
+     * @return array
      */
     public function fetchArray($result)
     {
-        return pg_fetch_array($result, NULL, PGSQL_ASSOC);
+        return pg_fetch_array($result, null, PGSQL_ASSOC);
     }
 
     /**
-     * Fetches a complete result as an object
+     * Fetches a complete result as an object.
      *
-     * @param  resource     $result Resultset
+     * @param resource $result Resultset
      *
      * @throws Exception
      *
@@ -166,21 +167,22 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: ' . $this->error());
+            throw new Exception('Error while fetching result: '.$this->error());
         }
-        
+
         while ($row = $this->fetchObject($result)) {
             $ret[] = $row;
         }
-        
+
         return $ret;
     }
-    
+
     /**
-     * Number of rows in a result
+     * Number of rows in a result.
      *
-     * @param   mixed $result
-     * @return  integer
+     * @param mixed $result
+     *
+     * @return int
      */
     public function numRows($result)
     {
@@ -188,9 +190,9 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Logs the queries
+     * Logs the queries.
      *
-     * @return  integer
+     * @return int
      */
     public function log()
     {
@@ -198,14 +200,16 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Returns just one row
+     * Returns just one row.
      *
      * @param  string
+     *
      * @return string
      */
     private function getOne($query)
     {
         $row = pg_fetch_row($this->query($query));
+
         return $row[0];
     }
 
@@ -216,27 +220,30 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      */
     public function getTableStatus()
     {
-        $select = "SELECT relname FROM pg_stat_user_tables ORDER BY relname;";
+        $select = 'SELECT relname FROM pg_stat_user_tables ORDER BY relname;';
         $arr = [];
         $result = $this->query($select);
         while ($row = $this->fetchArray($result)) {
-            $count = $this->getOne("SELECT count(1) FROM ".$row["relname"].";");
-            $arr[$row["relname"]] = $count;
+            $count = $this->getOne('SELECT count(1) FROM '.$row['relname'].';');
+            $arr[$row['relname']] = $count;
         }
+
         return $arr;
     }
 
     /**
-     * Returns the next ID of a table
+     * Returns the next ID of a table.
      *
      * @param string $table the name of the table
      * @param string $id    the name of the ID column
-     * @return  int
+     *
+     * @return int
      */
     public function nextId($table, $id)
     {
-        $result = $this->query("SELECT nextval('".$table."_".$id."_seq') as current_id;");
+        $result = $this->query("SELECT nextval('".$table.'_'.$id."_seq') as current_id;");
         $currentID = pg_result($result, 0, 'current_id');
+
         return ($currentID);
     }
 
@@ -281,59 +288,59 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     }
 
     /**
-     * Returns an array with all table names
+     * Returns an array with all table names.
      *
      * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
      *
-     * @param  string $prefix Table prefix
+     * @param string $prefix Table prefix
      *
      * @return array
      */
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix . 'faqadminlog',
-            $prefix . 'faqattachment',
-            $prefix . 'faqattachment_file',
-            $prefix . 'faqcaptcha',
-            $prefix . 'faqcategories',
-            $prefix . 'faqcategory_group',
-            $prefix . 'faqcategory_user',
-            $prefix . 'faqcategoryrelations',
-            $prefix . 'faqchanges',
-            $prefix . 'faqcomments',
-            $prefix . 'faqconfig',
-            $prefix . 'faqdata',
-            $prefix . 'faqdata_group',
-            $prefix . 'faqdata_revisions',
-            $prefix . 'faqdata_tags',
-            $prefix . 'faqdata_user',
-            $prefix . 'faqglossary',
-            $prefix . 'faqgroup',
-            $prefix . 'faqgroup_right',
-            $prefix . 'faqinstances',
-            $prefix . 'faqinstances_config',
-            $prefix . 'faqnews',
-            $prefix . 'faqquestions',
-            $prefix . 'faqright',
-            $prefix . 'faqsearches',
-            $prefix . 'faqsessions',
-            $prefix . 'faqstopwords',
-            $prefix . 'faqtags',
-            $prefix . 'faquser',
-            $prefix . 'faquser_group',
-            $prefix . 'faquser_right',
-            $prefix . 'faquserdata',
-            $prefix . 'faquserlogin',
-            $prefix . 'faqvisits',
-            $prefix . 'faqvoting'
+            $prefix.'faqadminlog',
+            $prefix.'faqattachment',
+            $prefix.'faqattachment_file',
+            $prefix.'faqcaptcha',
+            $prefix.'faqcategories',
+            $prefix.'faqcategory_group',
+            $prefix.'faqcategory_user',
+            $prefix.'faqcategoryrelations',
+            $prefix.'faqchanges',
+            $prefix.'faqcomments',
+            $prefix.'faqconfig',
+            $prefix.'faqdata',
+            $prefix.'faqdata_group',
+            $prefix.'faqdata_revisions',
+            $prefix.'faqdata_tags',
+            $prefix.'faqdata_user',
+            $prefix.'faqglossary',
+            $prefix.'faqgroup',
+            $prefix.'faqgroup_right',
+            $prefix.'faqinstances',
+            $prefix.'faqinstances_config',
+            $prefix.'faqnews',
+            $prefix.'faqquestions',
+            $prefix.'faqright',
+            $prefix.'faqsearches',
+            $prefix.'faqsessions',
+            $prefix.'faqstopwords',
+            $prefix.'faqtags',
+            $prefix.'faquser',
+            $prefix.'faquser_group',
+            $prefix.'faquser_right',
+            $prefix.'faquserdata',
+            $prefix.'faquserlogin',
+            $prefix.'faqvisits',
+            $prefix.'faqvoting',
         ];
     }
 
     /**
      * Closes the connection to the database.
      *
-     * @return boolean
+     * @return bool
      */
     public function close()
     {

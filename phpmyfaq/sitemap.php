@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Sitemap frontend
+ * Sitemap frontend.
  *
  * PHP Version 5.5
  *
@@ -9,21 +10,21 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -44,12 +45,12 @@ $sitemap = new PMF_Sitemap($faqConfig);
 $sitemap->setUser($current_user);
 $sitemap->setGroups($current_groups);
 
-$tpl->parse (
+$tpl->parse(
     'writeContent',
     array(
-        'writeLetters'       => $sitemap->getAllFirstLetters(),
-        'writeMap'           => $sitemap->getRecordsFromLetter($currentLetter),
-        'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter
+        'writeLetters' => $sitemap->getAllFirstLetters(),
+        'writeMap' => $sitemap->getRecordsFromLetter($currentLetter),
+        'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
     )
 );
 

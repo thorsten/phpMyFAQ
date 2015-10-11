@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Interface to create new attachment types
+ * Interface to create new attachment types.
  *
  * PHP Version 5.5
  *
@@ -9,61 +10,60 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Atachment_Abstract
+ * PMF_Atachment_Abstract.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 interface PMF_Attachment_Interface
-{    
+{
     /**
-     * Save current attachment to the appropriate storage
+     * Save current attachment to the appropriate storage.
      *
      * @param string $filepath full path to the attachment file
      *
-     * @return boolean
+     * @return bool
      */
-    function save($filepath);
-    
+    public function save($filepath);
+
     /**
-     * Delete attachment
+     * Delete attachment.
      *
-     * @return boolean
+     * @return bool
      */
-    function delete();
-    
+    public function delete();
+
     /**
-     * Retrieve file contents into a variable
+     * Retrieve file contents into a variable.
      *
      * @return string
      */
-    function get();
-    
+    public function get();
+
     /**
-     * Output current file to stdout
+     * Output current file to stdout.
      *
-     * @param boolean $headers     if headers must be sent
-     * @param string  $disposition diposition type (ignored if $headers false)
-     *
-     * @return null
+     * @param bool   $headers     if headers must be sent
+     * @param string $disposition diposition type (ignored if $headers false)
      */
-    function rawOut($headers = true, $disposition = 'attachment');
+    public function rawOut($headers = true, $disposition = 'attachment');
 }

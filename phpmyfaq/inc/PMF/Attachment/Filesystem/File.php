@@ -1,6 +1,7 @@
 <?php
+
 /**
- * File handler class
+ * File handler class.
  *
  * PHP Version 5.5
  *
@@ -9,47 +10,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Attachment_Filesystem_File
+ * PMF_Attachment_Filesystem_File.
  * 
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_Entry
 {
     /**
-     * Enums
+     * Enums.
      */
-    const MODE_READ   = 'rb';
+    const MODE_READ = 'rb';
     const MODE_APPEND = 'ab';
-    const MODE_WRITE  = 'wb';
-    
+    const MODE_WRITE = 'wb';
+
     /**
-     * Filemode
+     * Filemode.
      *
      * @var string
      */
     protected $mode;
-    
+
     /**
-     * Constructor 
+     * Constructor.
      *
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
@@ -62,18 +64,16 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     {
         $this->path = $filepath;
         $this->mode = $mode;
-        
+
         $this->handle = @fopen($this->path, $this->mode);
-        
+
         if (!is_resource($this->handle)) {
-            throw new PMF_Attachment_Filesystem_File_Exception('Could not open file: ' . $this->path);
+            throw new PMF_Attachment_Filesystem_File_Exception('Could not open file: '.$this->path);
         }
     }
-    
+
     /**
-     * Destructor
-     *
-     * @return null
+     * Destructor.
      */
     public function __destruct()
     {
@@ -81,44 +81,44 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
             fclose($this->handle);
         }
     }
-    
+
     /**
-     * Either EOF was reached
+     * Either EOF was reached.
      *
-     * @return boolean
+     * @return bool
      */
     public function eof()
     {
         return feof($this->handle);
     }
-    
+
     /**
-     * Get next file chunk
+     * Get next file chunk.
      *
      * @return string
      */
     abstract public function getChunk();
-    
+
     /**
      * Put chunk into file.
      *
      * @param string $chunk chunk to write
      *
-     * @return integer bytes written or false
+     * @return int bytes written or false
      */
     abstract public function putChunk($chunk);
-    
+
     /**
-     * Deletes the file
+     * Deletes the file.
      *
      * @see inc/PMF_Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#delete()
      *
-     * @return boolean
+     * @return bool
      */
     public function delete()
     {
         $retval = true;
-        
+
         if ($this->handle) {
             fclose($this->handle);
         }
@@ -126,12 +126,12 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
             $retval = $this->deleteDir(dirname($this->path));
         }
-        
+
         return $retval;
     }
-    
+
     /**
-     * Return current file mode
+     * Return current file mode.
      *
      * @return string
      */
@@ -139,34 +139,34 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     {
         return $this->mode;
     }
-    
+
     /**
-     * Reopen file in given mode
+     * Reopen file in given mode.
      *
      * @param string $mode file mode
      *
-     * @return boolean
+     * @return bool
      */
     public function setMode($mode)
     {
         $retval = false;
-        
-        if(in_array($mode, array(self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND))) {
+
+        if (in_array($mode, array(self::MODE_WRITE, self::MODE_READ, self::MODE_APPEND))) {
             fclose($this->handle);
             $this->handle = fopen($this->path, $mode);
-        
+
             $retval = is_resource($this->handle);
         }
-        
+
         return $retval;
     }
-    
+
     /**
-     * Simple copy file
+     * Simple copy file.
      *
      * @param string $target filepath
      *
-     * @return boolean
+     * @return bool
      */
     public function copyToSimple($target)
     {
@@ -175,14 +175,14 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
         } else {
             $retval = copy($this->path, $target);
         }
-        
+
         return $retval;
     }
-    
+
     /**
-     * Selfcheck
+     * Selfcheck.
      *
-     * @return boolean
+     * @return bool
      */
     public function isOk()
     {
@@ -190,13 +190,13 @@ abstract class PMF_Attachment_Filesystem_File extends PMF_Attachment_Filesystem_
     }
 
     /**
-     * Recursive deletion of path and file
+     * Recursive deletion of path and file.
      *
      * @param string $path
      *
      * @throws PMF_Attachment_Filesystem_File_Exception
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteDir($path)
     {

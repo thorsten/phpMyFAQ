@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Encrypted file handler class
+ * Encrypted file handler class.
  *
  * PHP Version 5.5
  *
@@ -9,42 +10,43 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_ROOT_DIR . '/inc/libs/phpseclib/Crypt/AES.php';
+require PMF_ROOT_DIR.'/inc/libs/phpseclib/Crypt/AES.php';
 
 /**
- * PMF_Attachment_Abstract
+ * PMF_Attachment_Abstract.
  *
  * @category  phpMyFAQ
- * @package   Attachment
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem_File
 {
     /**
-     * Chunk delimiter
+     * Chunk delimiter.
      *
      * @var string
      */
-    const chunkDelimiter = "ฒૐᥤ";
-    
+    const chunkDelimiter = 'ฒૐᥤ';
+
     /**
-     * AES instance
+     * AES instance.
      *
      * @var object
      */
@@ -61,10 +63,10 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
     {
         $this->aes = new Crypt_AES();
         $this->aes->setKey($key);
-        
+
         parent::__construct($filepath, $mode);
     }
-    
+
     /**
      * Chunk here is an encrypted piece of file
      * until delimiter.
@@ -74,38 +76,39 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
     public function getChunk()
     {
         $readEnd = false;
-        $chunk   = '';
+        $chunk = '';
         $chunkDelimLen = strlen(self::chunkDelimiter);
-        
-        while(!$readEnd && !$this->eof()) {
+
+        while (!$readEnd && !$this->eof()) {
             $chunk .= fread($this->handle, 1);
             $readEnd = self::chunkDelimiter == substr($chunk, -$chunkDelimLen);
         }
-        
+
         $chunk = substr($chunk, 0, -$chunkDelimLen);
+
         return empty($chunk) ? '' : $this->aes->decrypt($chunk);
     }
-    
+
     /**
-     * Either file is encrypted
+     * Either file is encrypted.
      *
-     * @return boolean
+     * @return bool
      */
     public function isEncrypted()
     {
         return true;
     }
-    
+
     /**
      * @see PMF_Attachment_Filesystem_File#putChunk()
      */
     public function putChunk($chunk)
     {
-        $content = $this->aes->encrypt($chunk) . self::chunkDelimiter;
-        
+        $content = $this->aes->encrypt($chunk).self::chunkDelimiter;
+
         return fwrite($this->handle, $content);
     }
-    
+
     /**
      * @see inc/Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#copyTo($entry)
      */
@@ -113,18 +116,18 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
     {
         $retval = false;
 
-        if(is_string($target)) {
+        if (is_string($target)) {
             $target = new PMF_Attachment_Filesystem_File_Vanilla($target, self::MODE_WRITE);
         } else {
             $target->setMode(self::MODE_WRITE);
         }
-        
-        if($target->isOk()) {
-            while(!$this->eof()) {
+
+        if ($target->isOk()) {
+            while (!$this->eof()) {
                 $target->putChunk($this->getChunk());
             }
-            
-            $retval = true;        
+
+            $retval = true;
         }
 
         return $retval;

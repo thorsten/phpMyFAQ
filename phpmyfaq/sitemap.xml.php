@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The dynamic Google Sitemap builder.
  *
@@ -18,14 +19,14 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   SEO
+ *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
  */
-
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
@@ -39,7 +40,6 @@ define('PMF_SITEMAP_GOOGLE_MAX_FILE_LENGTH', 10485760); // 10MB
 define('PMF_SITEMAP_GOOGLE_PRIORITY_MIN', '0.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_MAX', '1.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT', '0.5');
-
 
 define('PMF_SITEMAP_GOOGLE_GET_GZIP', 'gz');
 define('PMF_SITEMAP_GOOGLE_GET_INDEX', 'idx');
@@ -93,10 +93,10 @@ $oFaq = new PMF_Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
-$visitMin  = 0;
+$visitMin = 0;
 if (count($items) > 0) {
     $visitsMax = $items[0]['visits'];
-    $visitMin  = $items[count($items)-1]['visits'];
+    $visitMin = $items[count($items) - 1]['visits'];
 }
 
 // Sitemap header
@@ -113,12 +113,12 @@ $sitemap .= buildSitemapNode(
     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
     PMF_SITEMAP_GOOGLE_PRIORITY_MAX
 );
-           
+
 // nth entry: each faq
 foreach ($items as $item) {
     $priority = PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT;
     if (($visitsMax - $visitMin) > 0) {
-        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
+        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin) / ($visitsMax - $visitMin))));
     }
     // a. We use plain PMF urls w/o any SEO schema
     $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);

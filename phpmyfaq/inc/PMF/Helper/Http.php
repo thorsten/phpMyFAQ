@@ -1,6 +1,7 @@
 <?php
+
 /**
- * HTTP Helper class for phpMyFAQ
+ * HTTP Helper class for phpMyFAQ.
  *
  * PHP Version 5.5.0
  *
@@ -9,46 +10,45 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Helper_Http
+ * PMF_Helper_Http.
  *
  * @category  phpMyFAQ
- * @package   PMF_Helper
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
  */
 class PMF_Helper_Http extends PMF_Helper
 {
     /**
-     * Content type
+     * Content type.
      *
      * @var string
      */
     private $contentType = '';
 
     /**
-     * Setter for content type
+     * Setter for content type.
      *
      * @param string $contentType Content type
-     *
-     * @return void
      */
     public function setContentType($contentType)
     {
@@ -56,27 +56,23 @@ class PMF_Helper_Http extends PMF_Helper
     }
 
     /**
-     * Returns the Header
-     *
-     * @return void
+     * Returns the Header.
      */
     public function addHeader()
     {
         header('Expires: Thu, 07 Apr 1977 14:47:00 GMT');
-        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
+        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
         header('Cache-Control: no-store, no-cache, must-revalidate');
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
-        header('Content-type: ' . $this->contentType);
+        header('Content-type: '.$this->contentType);
     }
 
     /**
-     * Returns a HTTP status header
+     * Returns a HTTP status header.
      *
-     * @param integer $code HTTP status code
-     *
-     * @return void
+     * @param int $code HTTP status code
      */
     public function sendStatus($code)
     {
@@ -101,18 +97,16 @@ class PMF_Helper_Http extends PMF_Helper
 
     /**
      * @param string $url URL to redirect
-     *
-     * @return void
      */
     public function redirect($url)
     {
-        header('Location: ' . $url);
+        header('Location: '.$url);
     }
 
     /**
      * Sends any kind of data with optional HTTP headers as JSON.
      *
-     * @param mixed $payload What to send
+     * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
      *
      * @return string
@@ -125,9 +119,9 @@ class PMF_Helper_Http extends PMF_Helper
     /**
      * Sends any kind of data with optional HTTP headers as text or JSON.
      *
-     * @param mixed $payload What to send
+     * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
-     * @param bool $isJson Send as JSON?
+     * @param bool         $isJson  Send as JSON?
      *
      * @return string
      */
@@ -136,7 +130,7 @@ class PMF_Helper_Http extends PMF_Helper
         $validHeaders = [];
         if (is_string($headers) && strlen($headers) > 0) {
             $validHeaders[] = $headers;
-        } elseif(is_array($headers)) {
+        } elseif (is_array($headers)) {
             foreach ($headers as $header) {
                 if (strlen($header) > 0) {
                     $validHeaders[] = $header;

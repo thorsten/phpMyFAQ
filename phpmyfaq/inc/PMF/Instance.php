@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main phpMyFAQ instances class
+ * The main phpMyFAQ instances class.
  *
  * PHP Version 5.5
  *
@@ -9,54 +10,55 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-02-20
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance
+ * PMF_Instance.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-02-20
  */
 class PMF_Instance
 {
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $config = null;
 
     /**
-     * Instance ID
+     * Instance ID.
      *
-     * @var integer
+     * @var int
      */
     protected $id;
 
     /**
-     * Instance configuration
+     * Instance configuration.
      *
      * @var array
      */
     protected $instanceConfig = [];
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -68,15 +70,15 @@ class PMF_Instance
     }
 
     /**
-     * Adds a new instance
+     * Adds a new instance.
      *
      * @param array $data
      *
-     * @return integer $id
+     * @return int $id
      */
     public function addInstance(Array $data)
     {
-        $this->setId($this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqinstances', 'id'));
+        $this->setId($this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
@@ -89,7 +91,7 @@ class PMF_Instance
             $this->config->getDb()->now()
         );
 
-        if (! $this->config->getDb()->query($insert)) {
+        if (!$this->config->getDb()->query($insert)) {
             return 0;
         }
 
@@ -97,17 +99,17 @@ class PMF_Instance
     }
 
     /**
-     * Sets the instance ID
+     * Sets the instance ID.
      *
      * @param int $id
      */
     public function setId($id)
     {
-        $this->id = (int)$id;
+        $this->id = (int) $id;
     }
 
     /**
-     * Returns the current instance id
+     * Returns the current instance id.
      *
      * @return int
      */
@@ -117,14 +119,14 @@ class PMF_Instance
     }
 
     /**
-     * Returns all instances
+     * Returns all instances.
      *
      * @return array
      */
     public function getAllInstances()
     {
         $select = sprintf(
-            "SELECT * FROM %sfaqinstances ORDER BY id",
+            'SELECT * FROM %sfaqinstances ORDER BY id',
             PMF_Db::getTablePrefix()
         );
 
@@ -134,18 +136,18 @@ class PMF_Instance
     }
 
     /**
-     * Returns the instance
+     * Returns the instance.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return array
      */
     public function getInstanceById($id)
     {
         $select = sprintf(
-            "SELECT * FROM %sfaqinstances WHERE id = %d",
+            'SELECT * FROM %sfaqinstances WHERE id = %d',
             PMF_Db::getTablePrefix(),
-            (int)$id
+            (int) $id
         );
 
         $result = $this->config->getDb()->query($select);
@@ -154,7 +156,7 @@ class PMF_Instance
     }
 
     /**
-     * Returns the instance
+     * Returns the instance.
      *
      * @param string $url
      *
@@ -174,21 +176,21 @@ class PMF_Instance
     }
 
     /**
-     * Returns the configuration of the given instance ID
+     * Returns the configuration of the given instance ID.
      *
-     * @param integer $id
+     * @param int $id
      *
      * @return array
      */
     public function getInstanceConfig($id)
     {
-        $query = sprintf("
+        $query = sprintf('
             SELECT
                 config_name, config_value
             FROM
                 %sfaqinstances_config
             WHERE
-                instance_id = %d",
+                instance_id = %d',
             PMF_Db::getTablePrefix(),
             $id
         );
@@ -204,12 +206,12 @@ class PMF_Instance
     }
 
     /**
-     * Updates the instance data
+     * Updates the instance data.
      *
-     * @param integer $id
-     * @param array   $data
+     * @param int   $id
+     * @param array $data
      *
-     * @return boolean
+     * @return bool
      */
     public function updateInstance($id, Array $data)
     {
@@ -218,38 +220,37 @@ class PMF_Instance
             PMF_Db::getTablePrefix(),
             $data['instance'],
             $data['comment'],
-            (int)$id
+            (int) $id
         );
 
         return $this->config->getDb()->query($update);
     }
 
-
     /**
-     * Deletes an instance
+     * Deletes an instance.
      *
-     * @param integer $id
+     * @param int $id
      *
-     * @return boolean
+     * @return bool
      */
     public function removeInstance($id)
     {
         $deletes = array(
             sprintf(
-                "DELETE FROM %sfaqinstances WHERE id = %d",
+                'DELETE FROM %sfaqinstances WHERE id = %d',
                 PMF_Db::getTablePrefix(),
-                (int)$id
+                (int) $id
             ),
             sprintf(
-                "DELETE FROM %sfaqinstances_config WHERE instance_id = %d",
+                'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
                 PMF_Db::getTablePrefix(),
-                (int)$id
+                (int) $id
             ),
         );
 
         foreach ($deletes as $delete) {
             $success = $this->config->getDb()->query($delete);
-            if (! $success) {
+            if (!$success) {
                 return false;
             }
         }
@@ -258,12 +259,12 @@ class PMF_Instance
     }
 
     /**
-     * Adds a configuration item for the database
+     * Adds a configuration item for the database.
      *
      * @param string $name
      * @param mixed  $value
      *
-     * @return boolean
+     * @return bool
      */
     public function addConfig($name, $value)
     {
@@ -282,7 +283,7 @@ class PMF_Instance
     }
 
     /**
-     * Returns the configuration value
+     * Returns the configuration value.
      *
      * @param string $name
      *
@@ -290,7 +291,7 @@ class PMF_Instance
      */
     public function getConfig($name)
     {
-        if (! isset($this->instanceConfig[$name])) {
+        if (!isset($this->instanceConfig[$name])) {
             $this->getInstanceConfig($this->getId());
         }
 

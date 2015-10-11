@@ -1,6 +1,7 @@
 <?php
+
 /**
- * XML, XHTML and PDF export - Classes and Functions
+ * XML, XHTML and PDF export - Classes and Functions.
  *
  * PHP Version 5.5
  *
@@ -9,23 +10,23 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Export
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2015 phpMyFAQ Team
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once PMF_CONFIG_DIR . '/constants.php';
+require_once PMF_CONFIG_DIR.'/constants.php';
 
 /**
- * Export Class
+ * Export Class.
  *
  * This class manages the export formats supported by phpMyFAQ:
  * - PDF
@@ -33,39 +34,40 @@ require_once PMF_CONFIG_DIR . '/constants.php';
  * - XML
  *
  * @category  phpMyFAQ
- * @package   Export
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2015 phpMyFAQ Team
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
 class PMF_Export
 {
     /**
-     * Faq object
+     * Faq object.
      *
      * @var PMF_Faq
      */
     protected $faq = null;
 
     /**
-     * Category object
+     * Category object.
      *
      * @var PMF_Category
      */
     protected $category = null;
 
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $_config = null;
 
     /**
-     * Factory
+     * Factory.
      *
      * @param PMF_Faq           $faq      Faq object
      * @param PMF_Category      $category Category object
@@ -94,12 +96,12 @@ class PMF_Export
     }
 
     /**
-     * Returns the timestamp of the export
+     * Returns the timestamp of the export.
      *
      * @return string
      */
     public static function getExportTimeStamp()
     {
-        return date("Y-m-d-H-i-s", $_SERVER['REQUEST_TIME']);
+        return date('Y-m-d-H-i-s', $_SERVER['REQUEST_TIME']);
     }
 }

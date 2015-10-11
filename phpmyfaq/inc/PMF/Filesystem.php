@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Class for filesystem operations
+ * Class for filesystem operations.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Filesystem
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-02
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Filesystem
+ * PMF_Filesystem.
  *
  * @category  phpMyFAQ
- * @package   PMF_Filesystem
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-02
  */
@@ -50,7 +52,7 @@ class PMF_Filesystem
     private $folders = [];
 
     /**
-     * Constructor, sets the root path of the master phpMyFAQ installation
+     * Constructor, sets the root path of the master phpMyFAQ installation.
      *
      * @param string $rootPath
      *
@@ -106,26 +108,26 @@ class PMF_Filesystem
     }
 
     /**
-     * Copies the source file to the destination
+     * Copies the source file to the destination.
      *
      * @param string $source
      * @param string $dest
      *
      * @throws PMF_Exception
      *
-     * @return boolean
+     * @return bool
      */
     public function copy($source, $dest)
     {
-        if (! is_readable($source)) {
-            throw new PMF_Exception($source . ' is not readable.');
+        if (!is_readable($source)) {
+            throw new PMF_Exception($source.' is not readable.');
         }
 
-        if (! is_writable(dirname($dest))) {
-            throw new PMF_Exception($dest . ' is not writeable.');
+        if (!is_writable(dirname($dest))) {
+            throw new PMF_Exception($dest.' is not writeable.');
         }
 
-        if (! copy($source, $dest)) {
+        if (!copy($source, $dest)) {
             $error = error_get_last();
             throw new PMF_Exception($error['message']);
         }
@@ -134,12 +136,12 @@ class PMF_Filesystem
     }
 
     /**
-     * Copies recursively the source to the destination
+     * Copies recursively the source to the destination.
      *
      * @param string $source
      * @param string $dest
      *
-     * @return boolean
+     * @return bool
      */
     public function recursiveCopy($source, $dest)
     {
@@ -149,17 +151,17 @@ class PMF_Filesystem
 
         $directoryName = substr($source, strrpos($source, '/') + 1);
 
-        $this->mkdir($dest . '/' . $directoryName, 0750, true);
+        $this->mkdir($dest.'/'.$directoryName, 0750, true);
 
         while ($file = readdir($directoryHandle)) {
             if ('.' != $file && '..' != $file) {
-                if (! is_dir($source . '/' . $file)) {
+                if (!is_dir($source.'/'.$file)) {
                     $this->copy(
-                        $source . '/' . $file,
-                        $dest . '/' . $directoryName . '/' . $file
+                        $source.'/'.$file,
+                        $dest.'/'.$directoryName.'/'.$file
                     );
-                }  else {
-                    $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
+                } else {
+                    $this->recursiveCopy($source.'/'.$file, $dest.'/'.$directoryName);
                 }
             }
         }
@@ -170,14 +172,14 @@ class PMF_Filesystem
     }
 
     /**
-     * Makes directory
+     * Makes directory.
      *
-     * @param string  $pathname  The directory path
-     * @param integer $mode      The mode is 0777 by default
-     * @param bool    $recursive Allows the creation of nested directories
-     *                           specified in the pathname.
+     * @param string $pathname  The directory path
+     * @param int    $mode      The mode is 0777 by default
+     * @param bool   $recursive Allows the creation of nested directories
+     *                          specified in the pathname.
      *
-     * @return boolean
+     * @return bool
      */
     public function mkdir($pathname, $mode = 0777, $recursive = false)
     {
@@ -187,5 +189,4 @@ class PMF_Filesystem
 
         return mkdir($pathname, $mode, $recursive);
     }
-
 }

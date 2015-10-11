@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Helper class for database drivers
+ * Helper class for database drivers.
  *
  * PHP Version 5.5
  *
@@ -9,28 +10,29 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_DB_Helper
+ * PMF_DB_Helper.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
  */
@@ -42,7 +44,7 @@ class PMF_DB_Helper
     private $_config = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -50,16 +52,16 @@ class PMF_DB_Helper
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config   = $config;
+        $this->_config = $config;
     }
 
     /**
-     * This function builds the the queries for the backup
+     * This function builds the the queries for the backup.
      *
      * @param string $query
      * @param string $table
      *
-     * @return   array
+     * @return array
      */
     public function buildInsertQueries($query, $table)
     {
@@ -85,7 +87,7 @@ class PMF_DB_Helper
                     }
                 }
             }
-            $ret[] = "INSERT INTO " . $table . " (" . implode(",", $p1) . ") VALUES (" . implode(",", $p2) . ");";
+            $ret[] = 'INSERT INTO '.$table.' ('.implode(',', $p1).') VALUES ('.implode(',', $p2).');';
         }
 
         return $ret;
@@ -102,15 +104,14 @@ class PMF_DB_Helper
      * @param string $oldValue
      * @param string $newValue
      *
-     * @return  string
-     *
+     * @return string
      */
     public static function alignTablePrefix($query, $oldValue, $newValue)
     {
         // Align DELETE FROM <prefix.tablename>
-        $query = self::alignTablePrefixByPattern($query, "DELETE FROM", $oldValue, $newValue);
+        $query = self::alignTablePrefixByPattern($query, 'DELETE FROM', $oldValue, $newValue);
         // Align INSERT INTO <prefix.tablename>
-        $query = self::alignTablePrefixByPattern($query, "INSERT INTO", $oldValue, $newValue);
+        $query = self::alignTablePrefixByPattern($query, 'INSERT INTO', $oldValue, $newValue);
 
         return $query;
     }
@@ -127,19 +128,19 @@ class PMF_DB_Helper
      * @param string $oldValue
      * @param string $newValue
      * 
-     * @return  string
+     * @return string
      */
     private static function alignTablePrefixByPattern($query, $startPattern, $oldValue, $newValue)
     {
-        $return  = $query;
+        $return = $query;
         $matches = [];
 
-        PMF_String::preg_match_all("/^" . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
+        PMF_String::preg_match_all('/^'.$startPattern."\s+(\w+)(\s+|$)/i", $query, $matches);
 
         if (isset($matches[1][0])) {
             $oldTableFullName = $matches[1][0];
-            $newTableFullName = $newValue . PMF_String::substr($oldTableFullName, PMF_String::strlen($oldValue));
-            $return           = str_replace($oldTableFullName, $newTableFullName, $query);
+            $newTableFullName = $newValue.PMF_String::substr($oldTableFullName, PMF_String::strlen($oldValue));
+            $return = str_replace($oldTableFullName, $newTableFullName, $query);
         }
 
         return $return;

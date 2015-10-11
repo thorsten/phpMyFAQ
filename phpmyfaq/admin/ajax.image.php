@@ -1,6 +1,7 @@
 <?php
+
 /**
- * AJAX: handles an image upload from TinyMCE
+ * AJAX: handles an image upload from TinyMCE.
  *
  * PHP Version 5.5
  *
@@ -9,36 +10,35 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-10
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-require_once  PMF_INCLUDE_DIR . '/libs/bulletproof/bulletproof.php';
+require_once PMF_INCLUDE_DIR.'/libs/bulletproof/bulletproof.php';
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$upload     = PMF_Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
+$upload = PMF_Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
 
 switch ($ajaxAction) {
 
     case 'upload':
         $image = new Bulletproof\Image($_FILES);
-        $image->setLocation(PMF_ROOT_DIR . '/images');
+        $image->setLocation(PMF_ROOT_DIR.'/images');
 
         if ($image['ikea']) {
-
             $upload = $image->upload();
 
             try {
@@ -54,8 +54,7 @@ switch ($ajaxAction) {
                 } else {
                     throw new \Exception($image['error']);
                 }
-
-            } catch(\Exception $e) {
+            } catch (\Exception $e) {
                 echo $e->getMessage();
             }
         }

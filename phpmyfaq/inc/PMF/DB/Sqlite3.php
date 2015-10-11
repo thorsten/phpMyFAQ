@@ -1,7 +1,8 @@
 <?php
+
 /**
  * The PMF_DB_Sqlite3 class provides methods and functions for a SQLite v3
- * database
+ * database.
  *
  * PHP Version 5.5
  *
@@ -10,50 +11,52 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-02
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_DB_Sqlite3
+ * PMF_DB_Sqlite3.
  *
  * @category  phpMyFAQ
- * @package   DB
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-02
  */
 class PMF_DB_Sqlite3 implements PMF_DB_Driver
 {
     /**
-     * The connection object
+     * The connection object.
      *
-     * @var   SQLite3
+     * @var SQLite3
      */
     private $conn = false;
 
     /**
-     * The query log string
+     * The query log string.
      *
-     * @var   string
+     * @var string
+     *
      * @see   query()
      */
     private $sqllog = '';
 
     /**
-     * Tables
+     * Tables.
      *
-     * @var     array
+     * @var array
      */
     public $tableNames = [];
 
@@ -65,7 +68,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param string
      * @param string
      *
-     * @return  boolean
+     * @return bool
      */
     public function connect($host, $user, $passwd, $db = '')
     {
@@ -74,17 +77,18 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
             PMF_Db::errorPage($this->conn->lastErrorMsg());
             die();
         }
+
         return true;
     }
 
     /**
      * This function sends a query to the database.
      *
-     * @param string  $query
-     * @param integer $offset
-     * @param integer $rowcount
+     * @param string $query
+     * @param int    $offset
+     * @param int    $rowcount
      *
-     * @return  mixed $result
+     * @return mixed $result
      */
     public function query($query, $offset = 0, $rowcount = 0)
     {
@@ -106,10 +110,11 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Escapes a string for use in a query
+     * Escapes a string for use in a query.
      *
      * @param   string
-     * @return  string
+     *
+     * @return string
      */
     public function escape($string)
     {
@@ -117,49 +122,52 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Fetch a result row as an object
+     * Fetch a result row as an object.
      *
-     * @param   mixed $result
+     * @param mixed $result
+     *
      * @return object or NULL if there are no more results
      */
     public function fetchObject($result)
     {
-        $result->fetchedByPMF= true;
+        $result->fetchedByPMF = true;
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
         return $return
-            ? (object)$return
-            : NULL;
+            ? (object) $return
+            : null;
     }
 
     /**
-     * Fetch a result row as an array
+     * Fetch a result row as an array.
      *
-     * @param   SQLite3Result $result
+     * @param SQLite3Result $result
      *
-     * @return  array
+     * @return array
      */
     public function fetchArray($result)
     {
-        $result->fetchedByPMF= true;
+        $result->fetchedByPMF = true;
+
         return $result->fetchArray();
     }
 
     /**
-     * Fetch a result row as an associate array
+     * Fetch a result row as an associate array.
      *
-     * @param   SQLite3Result $result
+     * @param SQLite3Result $result
      *
-     * @return  array
+     * @return array
      */
     public function fetchAssoc($result)
     {
-        $result->fetchedByPMF= true;
+        $result->fetchedByPMF = true;
+
         return $result->fetchArray(SQLITE3_ASSOC);
     }
 
     /**
-     * Fetches a complete result as an object
+     * Fetches a complete result as an object.
      *
      * @param resource $result Resultset
      *
@@ -171,12 +179,12 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: ' . $this->error());
+            throw new Exception('Error while fetching result: '.$this->error());
         }
-        
-        $result->fetchedByPMF= true;
-        while( $row=$result->fetchArray(SQLITE3_ASSOC) ) {
-            $ret[] = (object)$row;
+
+        $result->fetchedByPMF = true;
+        while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
+            $ret[] = (object) $row;
         }
 
         return $ret;
@@ -185,24 +193,26 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Number of rows in a result.
      *
-     * @param   SQLite3Result $result
-     * @return  integer
+     * @param SQLite3Result $result
+     *
+     * @return int
      */
     public function numRows($result)
     {
-        !isset( $result->fetchedByPMF ) || !$result->fetchedByPMF || die( "Do not call numRows() after you've fetched one or more result records, because PMF_DB_Sqlite3::numRows() has to reset the resultset at its end." );
-        $numberOfRows= 0;
-        while( $result->fetchArray(SQLITE3_NUM) ) {
-            $numberOfRows++;
+        !isset($result->fetchedByPMF) || !$result->fetchedByPMF || die("Do not call numRows() after you've fetched one or more result records, because PMF_DB_Sqlite3::numRows() has to reset the resultset at its end.");
+        $numberOfRows = 0;
+        while ($result->fetchArray(SQLITE3_NUM)) {
+            ++$numberOfRows;
         }
         $result->reset();
+
         return $numberOfRows;
     }
 
     /**
-     * Logs the queries
+     * Logs the queries.
      *
-     * @return  integer
+     * @return int
      */
     public function log()
     {
@@ -228,71 +238,73 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     }
 
     /**
-     * Returns an array with all table names
+     * Returns an array with all table names.
      *
      * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
      *
-     * @param  string $prefix Table prefix
+     * @param string $prefix Table prefix
      *
      * @return array
      */
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix . 'faqadminlog',
-            $prefix . 'faqattachment',
-            $prefix . 'faqattachment_file',
-            $prefix . 'faqcaptcha',
-            $prefix . 'faqcategories',
-            $prefix . 'faqcategory_group',
-            $prefix . 'faqcategory_user',
-            $prefix . 'faqcategoryrelations',
-            $prefix . 'faqchanges',
-            $prefix . 'faqcomments',
-            $prefix . 'faqconfig',
-            $prefix . 'faqdata',
-            $prefix . 'faqdata_group',
-            $prefix . 'faqdata_revisions',
-            $prefix . 'faqdata_tags',
-            $prefix . 'faqdata_user',
-            $prefix . 'faqglossary',
-            $prefix . 'faqgroup',
-            $prefix . 'faqgroup_right',
-            $prefix . 'faqinstances',
-            $prefix . 'faqinstances_config',
-            $prefix . 'faqnews',
-            $prefix . 'faqquestions',
-            $prefix . 'faqright',
-            $prefix . 'faqsearches',
-            $prefix . 'faqsessions',
-            $prefix . 'faqstopwords',
-            $prefix . 'faqtags',
-            $prefix . 'faquser',
-            $prefix . 'faquser_group',
-            $prefix . 'faquser_right',
-            $prefix . 'faquserdata',
-            $prefix . 'faquserlogin',
-            $prefix . 'faqvisits',
-            $prefix . 'faqvoting'
+            $prefix.'faqadminlog',
+            $prefix.'faqattachment',
+            $prefix.'faqattachment_file',
+            $prefix.'faqcaptcha',
+            $prefix.'faqcategories',
+            $prefix.'faqcategory_group',
+            $prefix.'faqcategory_user',
+            $prefix.'faqcategoryrelations',
+            $prefix.'faqchanges',
+            $prefix.'faqcomments',
+            $prefix.'faqconfig',
+            $prefix.'faqdata',
+            $prefix.'faqdata_group',
+            $prefix.'faqdata_revisions',
+            $prefix.'faqdata_tags',
+            $prefix.'faqdata_user',
+            $prefix.'faqglossary',
+            $prefix.'faqgroup',
+            $prefix.'faqgroup_right',
+            $prefix.'faqinstances',
+            $prefix.'faqinstances_config',
+            $prefix.'faqnews',
+            $prefix.'faqquestions',
+            $prefix.'faqright',
+            $prefix.'faqsearches',
+            $prefix.'faqsessions',
+            $prefix.'faqstopwords',
+            $prefix.'faqtags',
+            $prefix.'faquser',
+            $prefix.'faquser_group',
+            $prefix.'faquser_right',
+            $prefix.'faquserdata',
+            $prefix.'faquserlogin',
+            $prefix.'faqvisits',
+            $prefix.'faqvoting',
         ];
     }
 
     /**
-     * Returns the next ID of a table
+     * Returns the next ID of a table.
      *
      * @param   string      the name of the table
      * @param   string      the name of the ID column
-     * @return  int
+     *
+     * @return int
      */
     public function nextId($table, $id)
     {
-        $result = (int)$this->conn->querySingle(
+        $result = (int) $this->conn->querySingle(
             sprintf(
                 'SELECT max(%s) AS current_id FROM %s',
                 $id,
                 $table
             )
         );
+
         return ($result + 1);
     }
 
@@ -306,6 +318,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         if (0 === $this->conn->lastErrorCode()) {
             return '';
         }
+
         return $this->conn->lastErrorMsg();
     }
 
@@ -334,7 +347,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Closes the connection to the database.
      *
-     * @return boolean
+     * @return bool
      */
     public function close()
     {

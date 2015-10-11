@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Creates a new user object.
  *
@@ -13,16 +14,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   User
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -32,15 +33,16 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
 }
 
 /**
- * User
+ * User.
  *
  * @category  phpMyFAQ
- * @package   User
+ *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
@@ -77,31 +79,31 @@ class PMF_User
     // --- ATTRIBUTES ---
 
     /**
-     * Permission container
+     * Permission container.
      *
      * @var PMF_Perm_Basic|PMF_Perm_Medium
      */
     public $perm = null;
 
     /**
-     * User-data storage container
+     * User-data storage container.
      *
      * @var PMF_User_UserData
      */
     public $userdata = null;
 
     /**
-     * Default Authentication properties
+     * Default Authentication properties.
      *
      * @var array
      */
     private $authData = array(
         'authSource' => array(
             'name' => 'db',
-            'type' => 'local'
+            'type' => 'local',
         ),
-        'encType'    => PMF_ENCRYPTION_TYPE,
-        'readOnly'   => false
+        'encType' => PMF_ENCRYPTION_TYPE,
+        'readOnly' => false,
     );
 
     /**
@@ -112,21 +114,21 @@ class PMF_User
     public $errors = [];
 
     /**
-     * authentication container
+     * authentication container.
      *
      * @var array
      */
     protected $authContainer = [];
-    
+
     /**
-     * login string
+     * login string.
      *
      * @var string
      */
     private $login = '';
 
     /**
-     * minimum length of login string (default: 2)
+     * minimum length of login string (default: 2).
      *
      * @var int
      */
@@ -134,46 +136,46 @@ class PMF_User
 
     /**
      * regular expression to find invalid login strings
-     * (default: /^[a-z0-9][\w\.\-@]+/i )
+     * (default: /^[a-z0-9][\w\.\-@]+/i ).
      *
      * @var string
      */
     private $validUsername = '/^[a-z0-9][\w\.\-@]+/i';
-    
+
     /**
-     * user ID
+     * user ID.
      *
-     * @var integer
+     * @var int
      */
     private $userId = -1;
-    
+
     /**
-     * Status of user
+     * Status of user.
      *
      * @var string
      */
     private $status = '';
 
     /**
-     * array of allowed values for status
+     * array of allowed values for status.
      *
      * @var array
      */
     private $allowedStatus = array(
-        'active'    => self::STATUS_USER_ACTIVE,
-        'blocked'   => self::STATUS_USER_BLOCKED,
-        'protected' => self::STATUS_USER_PROTECTED
+        'active' => self::STATUS_USER_ACTIVE,
+        'blocked' => self::STATUS_USER_BLOCKED,
+        'protected' => self::STATUS_USER_PROTECTED,
     );
 
     /**
-     * Configuration
+     * Configuration.
      *
      * @var PMF_Configuration
      */
     protected $config = null;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -216,32 +218,35 @@ class PMF_User
     /**
      * adds a permission object to the user.
      *
-     * @param  PMF_Perm $perm Permission object
-     * @return boolean
+     * @param PMF_Perm $perm Permission object
+     *
+     * @return bool
      */
     public function addPerm(PMF_Perm $perm)
     {
         if ($this->checkPerm($perm)) {
             $this->perm = $perm;
+
             return true;
         }
         $this->perm = null;
+
         return false;
     }
 
     /**
      * Returns the User ID of the user.
      *
-     * @return integer
+     * @return int
      */
     public function getUserId()
     {
         if (isset($this->userId) && is_int($this->userId)) {
-            return (int)$this->userId;
+            return (int) $this->userId;
         }
-        $this->userId   = -1;
+        $this->userId = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
-        
+
         return -1;
     }
 
@@ -249,14 +254,14 @@ class PMF_User
      * Loads basic user information from the database selecting the user with
      * specified user-ID.
      *
-     * @param  integer $userId            User ID
-     * @param  boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     * @param int  $userId            User ID
+     * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return bool
      */
     public function getUserById($userId, $allowBlockedUsers = false)
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 user_id,
                 login,
@@ -264,21 +269,22 @@ class PMF_User
             FROM
                 %sfaquser
             WHERE
-                user_id = %d " . ( $allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
+                user_id = %d '.($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
             PMF_Db::getTablePrefix(),
             (int) $userId
         );
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            $this->errors[] = self::ERROR_USER_NO_USERID . 'error(): ' . $this->config->getDb()->error();
+            $this->errors[] = self::ERROR_USER_NO_USERID.'error(): '.$this->config->getDb()->error();
+
             return false;
         }
-        $user          = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int)    $user['user_id'];
-        $this->login   = (string)$user['login'];
-        $this->status  = (string)$user['account_status'];
-        
+        $user = $this->config->getDb()->fetchArray($res);
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
+
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
         if ('db' === $this->getAuthSource('name')) {
@@ -292,10 +298,11 @@ class PMF_User
                 PMF_Db::getTablePrefix(),
                 $this->login
             );
-                
+
             $res = $this->config->getDb()->query($select);
             if ($this->config->getDb()->numRows($res) != 1) {
-                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA . 'error(): ' . $this->config->getDb()->error();
+                $this->errors[] = self::ERROR_USER_NO_USERLOGINDATA.'error(): '.$this->config->getDb()->error();
+
                 return false;
             }
         }
@@ -304,6 +311,7 @@ class PMF_User
             $this->userdata = new PMF_User_UserData($this->config);
         }
         $this->userdata->load($this->getUserId());
+
         return true;
     }
 
@@ -311,8 +319,9 @@ class PMF_User
      * loads basic user information from the database selecting the user with
      * specified login.
      *
-     * @param  string $login       Login name
-     * @param  bool   $raiseError Raise error?
+     * @param string $login      Login name
+     * @param bool   $raiseError Raise error?
+     *
      * @return bool
      */
     public function getUserByLogin($login, $raiseError = true)
@@ -329,25 +338,26 @@ class PMF_User
             PMF_Db::getTablePrefix(),
             $this->config->getDb()->escape($login)
         );
-        
+
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) !== 1) {
             if ($raiseError) {
-
                 $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
             }
+
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId  = (int)    $user['user_id'];
-        $this->login   = (string) $user['login'];
-        $this->status  = (string) $user['account_status'];
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData($this->config);
         }
         $this->userdata->load($this->getUserId());
+
         return true;
     }
 
@@ -357,7 +367,7 @@ class PMF_User
      *
      * @param string $cookie
      *
-     * @return boolean
+     * @return bool
      */
     public function getUserByCookie($cookie)
     {
@@ -377,6 +387,7 @@ class PMF_User
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) !== 1) {
             $this->errors[] = self::ERROR_USER_INCORRECT_LOGIN;
+
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
@@ -386,20 +397,21 @@ class PMF_User
             return false;
         }
 
-        $this->userId = (int)     $user['user_id'];
-        $this->login   = (string) $user['login'];
-        $this->status  = (string) $user['account_status'];
+        $this->userId = (int) $user['user_id'];
+        $this->login = (string) $user['login'];
+        $this->status = (string) $user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData($this->config);
         }
         $this->userdata->load($this->getUserId());
+
         return true;
     }
 
     /**
-     * Checks if display name is already used. Returns true, if already in use
+     * Checks if display name is already used. Returns true, if already in use.
      *
      * @param string $name
      *
@@ -419,7 +431,7 @@ class PMF_User
     }
 
     /**
-     * Checks if email address is already used. Returns true, if already in use
+     * Checks if email address is already used. Returns true, if already in use.
      *
      * @param string $name
      *
@@ -439,9 +451,10 @@ class PMF_User
     }
 
     /**
-     * search users by login
+     * search users by login.
      *
-     * @param  string $search Login name
+     * @param string $search Login name
+     *
      * @return array
      */
     public function searchUsers($search)
@@ -475,9 +488,10 @@ class PMF_User
     /**
      * creates a new user and stores basic data in the database.
      *
-     * @param  string  $login  Login name
-     * @param  string  $pass   Password
-     * @param  integer $userId User ID
+     * @param string $login  Login name
+     * @param string $pass   Password
+     * @param int    $userId User ID
+     *
      * @return mixed
      */
     public function createUser($login, $pass = '', $userId = 0)
@@ -487,27 +501,29 @@ class PMF_User
                 return false;
             }
         }
-        
+
         // is $login valid?
-        $login = (string)$login;
+        $login = (string) $login;
         if (!$this->isValidLogin($login)) {
             $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
+
             return false;
         }
-        
+
         // does $login already exist?
         if ($this->getUserByLogin($login, false)) {
             $this->errors[] = self::ERROR_USER_LOGIN_NOT_UNIQUE;
+
             return false;
         }
-        
+
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faquser', 'user_id');
+            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
-        
+
         // create user entry
         $insert = sprintf("
             INSERT INTO
@@ -529,9 +545,10 @@ class PMF_User
         $data = $this->userdata->add($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USERDATA;
+
             return false;
         }
-        
+
         // create authentication entry
         if ($pass == '') {
             $pass = $this->createPassword();
@@ -543,7 +560,7 @@ class PMF_User
                 continue;
             }
             if (!$auth->add($login, $pass)) {
-                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER . 'in Auth ' . $name;
+                $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in Auth '.$name;
             } else {
                 $success = true;
             }
@@ -553,75 +570,82 @@ class PMF_User
         }
 
         $this->perm->autoJoin($this->userId);
+
         return $this->getUserByLogin($login, false);
     }
 
     /**
      * deletes the user from the database.
      *
-     * @return boolean
+     * @return bool
      */
     public function deleteUser()
     {
         if (!isset($this->userId) || $this->userId == 0) {
             $this->errors[] = self::ERROR_USER_NO_USERID;
+
             return false;
         }
-        
+
         if (!isset($this->login) || strlen($this->login) == 0) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
+
             return false;
         }
-        
+
         if (isset($this->allowedStatus[$this->status]) && $this->allowedStatus[$this->status] == self::STATUS_USER_PROTECTED) {
-            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER.self::STATUS_USER_PROTECTED;
+
             return false;
         }
-        
+
         $this->perm->refuseAllUserRights($this->userId);
-        
-        $delete = sprintf("
+
+        $delete = sprintf('
             DELETE FROM
                 %sfaquser
             WHERE
-                user_id = %d",
+                user_id = %d',
             PMF_Db::getTablePrefix(),
             $this->userId
         );
-            
+
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
-            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . 'error(): ' . $this->config->getDb()->error();
+            $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER.'error(): '.$this->config->getDb()->error();
+
             return false;
         }
-        
+
         if (!$this->userdata instanceof PMF_User_UserData) {
             $this->userdata = new PMF_User_UserData($this->config);
         }
         $data = $this->userdata->delete($this->getUserId());
         if (!$data) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USERDATA;
+
             return false;
         }
-        
-        $readOnly  = 0;
+
+        $readOnly = 0;
         $authCount = 0;
-        $delete     = [];
+        $delete = [];
         foreach ($this->authContainer as $auth) {
-            $authCount++;
+            ++$authCount;
             if ($auth->setReadOnly()) {
-                $readOnly++;
+                ++$readOnly;
                 continue;
             }
             $delete[] = $auth->delete($this->login);
         }
-        
+
         if ($readOnly == $authCount) {
             $this->errors[] = self::ERROR_USER_NO_AUTH_WRITABLE;
         }
         if (!in_array(true, $delete)) {
             return false;
         }
+
         return true;
     }
 
@@ -629,8 +653,9 @@ class PMF_User
      * changes the user's password. If $pass is omitted, a new
      * password is generated using the createPassword() method.
      *
-     * @param  string $pass Password
-     * @return boolean
+     * @param string $pass Password
+     *
+     * @return bool
      */
     public function changePassword($pass = '')
     {
@@ -639,7 +664,7 @@ class PMF_User
                 return false;
             }
         }
-        
+
         $login = $this->getLogin();
         if ($pass == '') {
             $pass = $this->createPassword();
@@ -652,11 +677,11 @@ class PMF_User
             }
             if (!$auth->changePassword($login, $pass)) {
                 continue;
-            }
-            else {
+            } else {
                 $success = true;
             }
         }
+
         return $success;
     }
 
@@ -670,14 +695,16 @@ class PMF_User
         if (isset($this->status) && strlen($this->status) > 0) {
             return $this->status;
         }
+
         return false;
     }
 
     /**
      * sets the user's status and updates the database entry.
      *
-     * @param  string $status Status
-     * @return boolean
+     * @param string $status Status
+     *
+     * @return bool
      */
     public function setStatus($status)
     {
@@ -685,12 +712,13 @@ class PMF_User
         $status = strtolower($status);
         if (!in_array($status, array_keys($this->allowedStatus))) {
             $this->errors[] = self::ERROR_USER_INVALID_STATUS;
+
             return false;
         }
-        
+
         // update status
         $this->status = $status;
-        $update       = sprintf("
+        $update = sprintf("
             UPDATE
                 %sfaquser
             SET
@@ -701,12 +729,13 @@ class PMF_User
             $this->config->getDb()->escape($status),
             $this->userId
         );
-        
+
         $res = $this->config->getDb()->query($update);
-        
+
         if ($res) {
             return true;
         }
+
         return false;
     }
 
@@ -724,10 +753,11 @@ class PMF_User
     {
         $message = '';
         foreach ($this->errors as $error) {
-            $message .= $error . "<br>\n";
+            $message .= $error."<br>\n";
         }
         $this->errors = [];
-        return $message . '<br>' . implode('<br>', debug_backtrace());
+
+        return $message.'<br>'.implode('<br>', debug_backtrace());
     }
 
     /**
@@ -739,8 +769,9 @@ class PMF_User
      * $this->login_invalidRegExp is a regular expression.
      * If login matches this false is returned.
      *
-     * @param  string $login Login name
-     * @return boolean
+     * @param string $login Login name
+     *
+     * @return bool
      */
     public function isValidLogin($login)
     {
@@ -748,31 +779,37 @@ class PMF_User
 
         if (strlen($login) < $this->loginMinLength || !preg_match($this->validUsername, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
+
             return false;
         }
+
         return true;
     }
 
     /**
      * adds a new authentication object to the user object.
      *
-     * @param  PMF_Auth_Driver $auth PMF_Auth_Driver object
-     * @param  string          $name Auth name
-     * @return boolean
+     * @param PMF_Auth_Driver $auth PMF_Auth_Driver object
+     * @param string          $name Auth name
+     *
+     * @return bool
      */
     public function addAuth($auth, $name)
     {
         if ($this->checkAuth($auth)) {
             $this->authContainer[$name] = $auth;
+
             return true;
         }
+
         return false;
     }
 
     /**
      * returns true if auth is a valid authentication object.
      *
-     * @param  PMF_Auth $auth Auth object
+     * @param PMF_Auth $auth Auth object
+     *
      * @return bool
      */
     protected function checkAuth($auth)
@@ -781,15 +818,18 @@ class PMF_User
         foreach ($methods as $method) {
             if (!method_exists($auth, strtolower($method))) {
                 $this->errors[] = self::ERROR_USER_NO_AUTH;
+
                 return false;
                 break;
             }
         }
+
         return true;
     }
 
     /**
-     * Returns the data aof the auth container
+     * Returns the data aof the auth container.
+     *
      * @return array
      */
     public function getAuthContainer()
@@ -798,7 +838,7 @@ class PMF_User
     }
 
     /**
-     * Returns a specific entry from the auth data source array
+     * Returns a specific entry from the auth data source array.
      *
      * @param string $key
      *
@@ -809,12 +849,12 @@ class PMF_User
         if (isset($this->authData['authSource'][$key])) {
             return $this->authData['authSource'][$key];
         } else {
-            return null;
+            return;
         }
     }
 
     /**
-     * Returns a specific entry from the auth data array
+     * Returns a specific entry from the auth data array.
      *
      * @param string $key
      *
@@ -825,14 +865,14 @@ class PMF_User
         if (isset($this->authData[$key])) {
             return $this->authData[$key];
         } else {
-            return null;
+            return;
         }
     }
 
     /**
      * returns true if perm is a valid permission object.
      *
-     * @param  PMF_Perm $perm Perm object
+     * @param PMF_Perm $perm Perm object
      *
      * @return bool
      */
@@ -842,6 +882,7 @@ class PMF_User
             return true;
         }
         $this->errors[] = self::ERROR_USER_NO_PERM;
+
         return false;
     }
 
@@ -856,23 +897,26 @@ class PMF_User
     }
 
     /**
-     * Returns the data of the current user
+     * Returns the data of the current user.
      *
-     * @param  string $field Field
-     * @return array|string|integer
+     * @param string $field Field
+     *
+     * @return array|string|int
      */
     public function getUserData($field = '*')
     {
         if (!($this->userdata instanceof PMF_User_UserData)) {
             $this->userdata = new PMF_User_UserData($this->config);
         }
+
         return $this->userdata->get($field);
     }
 
     /**
-     * Adds user data
+     * Adds user data.
      *
-     * @param  array $data Array with user data
+     * @param array $data Array with user data
+     *
      * @return bool
      */
     public function setUserData(Array $data)
@@ -881,6 +925,7 @@ class PMF_User
             $this->userdata = new PMF_User_UserData($this->config);
         }
         $this->userdata->load($this->getUserId());
+
         return $this->userdata->set(array_keys($data), array_values($data));
     }
 
@@ -888,14 +933,14 @@ class PMF_User
      * Returns an array with the user-IDs of all users found in
      * the database. By default, the Anonymous User will not be returned.
      *
-     * @param boolean $withoutAnonymous  Without anonymous?
-     * @param boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     * @param bool $withoutAnonymous  Without anonymous?
+     * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return array
      */
     public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true)
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 user_id
             FROM
@@ -905,7 +950,7 @@ class PMF_User
             %s
             %s
             ORDER BY
-                user_id ASC",
+                user_id ASC',
             PMF_Db::getTablePrefix(),
             ($withoutAnonymous ? 'AND user_id <> -1' : ''),
             ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
@@ -930,19 +975,20 @@ class PMF_User
      * user ID as key, the values are login name, account status, authentication
      * source and the user creation date.
      *
-     * @param  boolean $withoutAnonymous Without anonymous?
+     * @param bool $withoutAnonymous Without anonymous?
+     *
      * @return array
      */
     public function getAllUserData($withoutAnonymous = true)
     {
-        $select = sprintf("
+        $select = sprintf('
             SELECT
                 user_id, login, account_status, auth_source, member_since
             FROM
                 %sfaquser
             %s
             ORDER BY
-               login ASC",
+               login ASC',
             PMF_Db::getTablePrefix(),
             ($withoutAnonymous ? 'WHERE user_id <> -1' : ''));
 
@@ -958,18 +1004,18 @@ class PMF_User
 
         return $result;
     }
-    
+
     /**
-     * Get all users in <option> tags
+     * Get all users in <option> tags.
      *
-     * @param integer $id Selected user ID
-     * @param boolean $allowBlockedUsers Allow blocked users as well, e.g. in admin
+     * @param int  $id                Selected user ID
+     * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return string
      */
     public function getAllUserOptions($id = 1, $allowBlockedUsers = false)
     {
-        $options  = '';
+        $options = '';
         $allUsers = $this->getAllUsers(true, $allowBlockedUsers);
 
         foreach ($allUsers as $userId) {
@@ -984,15 +1030,14 @@ class PMF_User
                 );
             }
         }
+
         return $options;
     }
 
     /**
-     * sets the minimum login string length
+     * sets the minimum login string length.
      *
-     * @param  integer $loginMinLength Minimum length of login name
-     *
-     * @return void
+     * @param int $loginMinLength Minimum length of login name
      */
     public function setLoginMinLength($loginMinLength)
     {
@@ -1004,25 +1049,24 @@ class PMF_User
     /**
      * Returns a new password.
      *
-     * @param int $minimumLength
+     * @param int  $minimumLength
      * @param bool $allowUnderscore
      *
      * @return string
      */
-    public function createPassword($minimumLength = 8, $allowUnderscore = true )
+    public function createPassword($minimumLength = 8, $allowUnderscore = true)
     {
         // To make passwords harder to get wrong, a few letters & numbers have been omitted.
         // This will ensure safety with browsers using fonts with confusable letters.
         // Removed: o,O,0,1,l,L
-        $consonants  = ["b","c","d","f","g","h","j","k","m","n","p","r","s","t","v","w","x","y","z"];
-        $vowels      = ["a","e","i","u"];
+        $consonants = ['b','c','d','f','g','h','j','k','m','n','p','r','s','t','v','w','x','y','z'];
+        $vowels = ['a','e','i','u'];
         $newPassword = '';
-        $skipped     = false;
+        $skipped = false;
 
-        srand((double)microtime()*1000000);
+        srand((double) microtime() * 1000000);
 
-        while (strlen( $newPassword ) < $minimumLength) {
-
+        while (strlen($newPassword) < $minimumLength) {
             if (rand(0, 1)) {
                 $caseFunc = 'strtoupper';
             } else {
@@ -1039,7 +1083,7 @@ class PMF_User
                     $nextChar = $caseFunc($vowels[rand(0, 3)]);
                     break;
                 case 4:
-                    $nextChar = rand( 2, 9 ); // No 0 to avoid confusion with O, same for 1 and l.
+                    $nextChar = rand(2, 9); // No 0 to avoid confusion with O, same for 1 and l.
                     break;
                 case 5:
                     $newPassword .= '_';
@@ -1061,9 +1105,9 @@ class PMF_User
     }
 
     /**
-     * Sends mail to the current user
+     * Sends mail to the current user.
      *
-     * @return boolean
+     * @return bool
      */
     public function mailUser($subject, $message)
     {
@@ -1082,7 +1126,7 @@ class PMF_User
      *
      * This will change a users status to active, and send an email with a new password.
      *
-     * @return boolean
+     * @return bool
      */
     public function activateUser()
     {

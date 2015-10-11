@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The main phpMyFAQ instances class for instance clients
+ * The main phpMyFAQ instances class for instance clients.
  *
  * PHP Version 5.5
  *
@@ -9,26 +10,27 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-31
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Instance
+ * PMF_Instance.
  *
  * @category  phpMyFAQ
- * @package   PMF_Instance
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-31
  */
@@ -40,14 +42,14 @@ class PMF_Instance_Client extends PMF_Instance
     private $fileSystem;
 
     /**
-     * URL of the client
+     * URL of the client.
      *
      * @var string
      */
     private $clientUrl;
 
     /**
-     * Constructor
+     * Constructor.
      *
      * @param PMF_Configuration $config
      *
@@ -59,7 +61,6 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     *
      * @param PMF_Instance $instance
      */
     public function createClient(PMF_Instance $instance)
@@ -68,7 +69,7 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     * Adds a new folder named by the given hostname in /path/to/faq/multisite/
+     * Adds a new folder named by the given hostname in /path/to/faq/multisite/.
      *
      * @param string $hostname Hostname of the client instance
      *
@@ -76,21 +77,21 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function createClientFolder($hostname)
     {
-        $clientDir = PMF_ROOT_DIR . '/multisite/';
+        $clientDir = PMF_ROOT_DIR.'/multisite/';
 
         if (!$this->fileSystem instanceof PMF_Filesystem) {
             $this->fileSystem = new PMF_Filesystem();
         }
 
-        if (! is_writeable($clientDir)) {
+        if (!is_writeable($clientDir)) {
             return false;
         }
 
-        return $this->fileSystem->mkdir($clientDir . $hostname);
+        return $this->fileSystem->mkdir($clientDir.$hostname);
     }
 
     /**
-     * Creates all tables with the given table prefix from the master tables
+     * Creates all tables with the given table prefix from the master tables.
      *
      * @param string $prefix SQL table prefix
      *
@@ -134,11 +135,9 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     * Sets the PMF_Filesystem
+     * Sets the PMF_Filesystem.
      *
      * @param PMF_Filesystem $fileSystem
-     *
-     * @return void
      */
     public function setFileSystem(PMF_Filesystem $fileSystem)
     {
@@ -146,7 +145,7 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     * Copies the config/constants.php file to a new client instance
+     * Copies the config/constants.php file to a new client instance.
      *
      * @param string $dest Destination file
      *
@@ -155,13 +154,13 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyConstantsFile($dest)
     {
         return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath() . '/config/constants.php',
+            $this->fileSystem->getRootPath().'/config/constants.php',
             $dest
         );
     }
 
     /**
-     * Copies the config/constants_ldap.php file to a new client instance
+     * Copies the config/constants_ldap.php file to a new client instance.
      *
      * @param string $dest Destination file
      *
@@ -170,14 +169,14 @@ class PMF_Instance_Client extends PMF_Instance
     public function copyLdapConstantsFile($dest)
     {
         return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath() . '/config/constants_ldap.php',
+            $this->fileSystem->getRootPath().'/config/constants_ldap.php',
             $dest
         );
     }
 
     /**
      * Copies a defined template folder to a new client instance, by default
-     * the default template located at ./assets/template/default/ will be copied
+     * the default template located at ./assets/template/default/ will be copied.
      *
      * @param string $dest        Destination folder
      * @param string $templateDir Template folder
@@ -186,14 +185,14 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
-        $sourceTpl = $this->fileSystem->getRootPath() . '/assets/template/' . $templateDir;
-        $destTpl   = $dest . '/assets/template/';
+        $sourceTpl = $this->fileSystem->getRootPath().'/assets/template/'.$templateDir;
+        $destTpl = $dest.'/assets/template/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }
 
     /**
-     * Sets client URL
+     * Sets client URL.
      *
      * @param string $clientUrl
      */
@@ -203,7 +202,7 @@ class PMF_Instance_Client extends PMF_Instance
     }
 
     /**
-     * Returns client URL
+     * Returns client URL.
      *
      * @return string
      */

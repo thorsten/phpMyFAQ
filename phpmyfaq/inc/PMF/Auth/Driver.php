@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Interface for managing user authentication
+ * Interface for managing user authentication.
  *
  * PHP Version 5.5
  *
@@ -9,28 +10,29 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- * @package   Auth
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Auth_Driver
+ * PMF_Auth_Driver.
  *
  * @category  phpMyFAQ 
- * @package   Auth
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -41,9 +43,10 @@ interface PMF_Auth_Driver
      *
      * Returns true on success, otherwise false.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
-     * @return boolean
+     * @param string $login Loginname
+     * @param string $pass  Password
+     *
+     * @return bool
      */
     public function add($login, $pass);
 
@@ -54,12 +57,13 @@ interface PMF_Auth_Driver
      *
      * Error messages are added to the array errors.
      *
-     * @param  string $login Loginname
-     * @param  string $pass  Password
-     * @return boolean
-    */
+     * @param string $login Loginname
+     * @param string $pass  Password
+     *
+     * @return bool
+     */
     public function changePassword($login, $pass);
-    
+
     /**
      * Deletes the user account specified by login.
      *
@@ -67,11 +71,12 @@ interface PMF_Auth_Driver
      *
      * Error messages are added to the array errors.
      *
-     * @param  string $login Loginname
+     * @param string $login Loginname
+     *
      * @return bool
      */
     public function delete($login);
-    
+
     /**
      * Checks the password for the given user account.
      *
@@ -82,19 +87,21 @@ interface PMF_Auth_Driver
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param  string $login        Loginname
-     * @param  string $pass         Password
-     * @param  array  $optionalData Optional data
-     * @return boolean
+     * @param string $login        Loginname
+     * @param string $pass         Password
+     * @param array  $optionalData Optional data
+     *
+     * @return bool
      */
     public function checkPassword($login, $pass, Array $optionalData = []);
 
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param  string $login        Loginname
-     * @param  array  $optionalData Optional data
-     * @return integer
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
+     *
+     * @return int
      */
     public function checkLogin($login, Array $optionalData = []);
 }

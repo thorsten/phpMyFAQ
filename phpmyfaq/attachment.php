@@ -1,6 +1,7 @@
 <?php
+
 /**
- * Handle attachment downloads
+ * Handle attachment downloads.
  *
  * PHP Version 5.5
  *
@@ -9,20 +10,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-06-23
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -36,17 +37,17 @@ $attachmentErrors = [];
 
 // authenticate with session information
 $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (! $user instanceof PMF_User_CurrentUser) {
+if (!$user instanceof PMF_User_CurrentUser) {
     $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 }
 if (!$user instanceof PMF_User_CurrentUser) {
     $user = new PMF_User_CurrentUser($faqConfig); // user not logged in -> empty user object
 }
 
-$id         = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $attachment = PMF_Attachment_Factory::create($id);
 
-$userPermission  = $faq->getPermission('user', $attachment->getRecordId());
+$userPermission = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
@@ -78,13 +79,13 @@ if (isset($auth)) {
     // check user rights, set them TRUE
     $allUserRights = $user->perm->getAllUserRights($user->getUserId());
     foreach ($allRights as $right) {
-        if (in_array($right['right_id'], $allUserRights))
+        if (in_array($right['right_id'], $allUserRights)) {
             $permission[$right['name']] = true;
+        }
     }
 }
 
 if (true === $faqConfig->get('records.allowDownloadsForGuests')) {
-
 }
 
 if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
@@ -93,7 +94,7 @@ if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
         $attachment->rawOut();
         exit(0);
     } catch (Exception $e) {
-        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
+        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'].' ('.$e->getMessage().')';
     }
 } else {
     $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
