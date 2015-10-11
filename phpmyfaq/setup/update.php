@@ -875,7 +875,7 @@ if ($step == 3) {
             $query[] = "ALTER TABLE " . $prefix . "faqquestions ADD lang VARCHAR(5) NOT NULL";
             $query[] = "ALTER TABLE " . $prefix . "faqcategories ADD group_id INT NULL DEFAULT -1";
         }
-        $query[] = "UPDATE " . $prefix . "faqquestions SET lang = '" . $faqConfig->getLanguage()->getDefaultLanguage() . "'";
+        $query[] = "UPDATE " . $prefix . "faqquestions SET lang = '" . $faqConfig->getDefaultLanguage() . "'";
     }
 
     //
