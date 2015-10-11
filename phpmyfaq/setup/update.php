@@ -151,7 +151,6 @@ if ($step === 1) {
 
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
-                    <li>phpMyFAQ 2.5.x (out of support since mid of 2010)</li>
                     <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
                     <li>phpMyFAQ 2.7.x (out of support since end of 2013)</li>
                     <li>phpMyFAQ 2.8.x</li>
@@ -162,6 +161,7 @@ if ($step === 1) {
                     <li>phpMyFAQ 0.x</li>
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
+                    <li>phpMyFAQ 2.5.x</li>
                 </ul>
                 <?php
                 // 2.5 versions only
@@ -170,8 +170,8 @@ if ($step === 1) {
                          'and its contents writable (777 on Linux/UNIX).</strong></p>';
                 }
 
-                // We only support updates from 2.5+
-                if (version_compare($version, '2.5.0', '>')) {
+                // We only support updates from 2.6+
+                if (version_compare($version, '2.6.0', '>')) {
                     printf(
                         '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
                         $version,
@@ -209,19 +209,6 @@ if ($step == 2) {
 
     $checkDatabaseSetupFile = $checkLdapSetupFile = false;
 
-    // First backup old inc/data.php, then backup new config/bak.database.php and copy inc/data.php
-    // to config/database.php
-    // This is needed for 2.5 updates only
-    if (file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
-        if (!copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.bak.php') ||
-            !copy(PMF_ROOT_DIR . '/inc/data.php', PMF_ROOT_DIR . '/config/database.php')) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
-                  "could not be written. Please correct this!</p>";
-        } else {
-            $checkDatabaseSetupFile = true;
-        }
-    }
-
     // The backup an existing config/database.php
     // 2.6+ updates
     if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
@@ -230,18 +217,6 @@ if ($step == 2) {
                   "could not be written. Please correct this!</p>";
         } else {
             $checkDatabaseSetupFile = true;
-        }
-    }
-
-    // Now backup and move LDAP setup if available
-    // This is needed for 2.5+ updates with a LDAP configuration file
-    if (file_exists(PMF_ROOT_DIR . '/inc/dataldap.php')) {
-        if (!copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php') ||
-            !copy(PMF_ROOT_DIR . '/inc/dataldap.php', PMF_ROOT_DIR . '/config/ldap.php')) {
-            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
-                  "could not be written. Please correct this!</p>";
-        } else {
-            $checkLdapSetupFile = true;
         }
     }
 
@@ -321,119 +296,6 @@ if ($step == 3) {
 <?php
     $images = [];
     $prefix = PMF_Db::getTablePrefix();
-
-    //
-    // UPDATES FROM 2.5.1
-    //
-    if (version_compare($version, '2.5.1', '<')) {
-        // Truncate table and re-import all stopwords with the new Lithuanian ones
-        $query[] = "DELETE FROM ". $prefix . "faqstopwords";
-        require 'stopwords.sql.php';
-    }
-
-    //
-    // UPDATES FROM 2.5.2
-    if (version_compare($version, '2.5.3', '<')) {
-        $query[] = "UPDATE ". $prefix . "faqconfig SET config_name = 'spam.enableCaptchaCode'
-            WHERE config_name = 'spam.enableCatpchaCode'";
-    }
-
-    //
-    // UPDATES FROM 2.6.0-alpha
-    //
-    if (version_compare($version, '2.6.0-alpha', '<')) {
-
-        require '../lang/' . $faqConfig->get('main.language');
-
-        if (isset($PMF_LANG['metaCharset']) && strtolower($PMF_LANG['metaCharset']) != 'utf-8') {
-            // UTF-8 Migration
-            switch($DB['type']) {
-            case 'mysqli':
-                include 'mysqli.utf8migration.php';
-                break;
-
-            default:
-                echo '<p class="hint">Please read <a target="_blank" href="../docs/documentation.en.html">' .
-                      'documenation</a> about migration to UTF-8.</p>';
-                break;
-            }
-        }
-
-        $faqConfig->add('main.enableUpdate', 'false');
-        $faqConfig->add('security.useSslForLogins', 'false');
-        $faqConfig->add('main.currentApiVersion', PMF_System::getApiVersion());
-        $faqConfig->add('main.templateSet', 'default');
-        $faqConfig->add('main.numberSearchTerms', '10');
-        $faqConfig->add('records.orderingPopularFaqs', 'visits');
-
-        // Attachments stuff
-        $faqConfig->add('records.attachmentsStorageType', '0');
-        $faqConfig->add('records.enableAttachmentEncryption', 'false');
-        $faqConfig->add('records.defaultAttachmentEncKey', '');
-        switch($DB['type']) {
-            case 'pgsql':
-                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
-                    id SERIAL NOT NULL,
-                    record_id int4 NOT NULL,
-                    record_lang varchar(5) NOT NULL,
-                    real_hash char(32) NOT NULL,
-                    virtual_hash char(32) NOT NULL,
-                    password_hash char(40) NULL,
-                    filename varchar(255) NOT NULL,
-                    filesize int NOT NULL,
-                    encrypted int NOT NULL DEFAULT 0,
-                    mime_type varchar(255) NULL,
-                    PRIMARY KEY (id))";
-
-                $query[] = "CREATE TABLE " . $prefix . "faqattachment_file (
-                    virtual_hash char(32) NOT NULL,
-                    contents bytea,
-                    PRIMARY KEY (virtual_hash))";
-                break;
-            case 'mysqli':
-                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
-                    id int(11) NOT NULL,
-                    record_id int(11) NOT NULL,
-                    record_lang varchar(5) NOT NULL,
-                    real_hash char(32) NOT NULL,
-                    virtual_hash char(32) NOT NULL,
-                    password_hash char(40) NULL,
-                    filename varchar(255) NOT NULL,
-                    filesize int NOT NULL,
-                    encrypted tinyint NOT NULL DEFAULT 0,
-                    mime_type varchar(255) NULL,
-                    PRIMARY KEY (id))";
-
-                $query[] = "CREATE TABLE " . $prefix . "faqattachment_file (
-                    virtual_hash char(32) NOT NULL,
-                    contents blob NOT NULL,
-                    PRIMARY KEY (virtual_hash))";
-                break;
-            default:
-                /**
-                 * Just try standard SQL and hope for the best
-                 */
-                $query[] = "CREATE TABLE " . $prefix . "faqattachment (
-                    id int NOT NULL,
-                    record_id int NOT NULL,
-                    record_lang varchar(5) NOT NULL,
-                    hash char(33) NOT NULL,
-                    filename varchar(255) NOT NULL,
-                    file_contents blob,
-                    encrypted int,
-                    PRIMARY KEY (id))";
-                break;
-        }
-
-    }
-
-    //
-    // UPDATES FROM 2.6.0-RC
-    //
-    if (version_compare($version, '2.6.0-RC', '<')) {
-        $faqConfig->add('main.optionalMailAddress', 'false');
-        $faqConfig->add('main.useAjaxSearchOnStartpage', 'false');
-    }
 
     //
     // UPDATES FROM 2.6.99
