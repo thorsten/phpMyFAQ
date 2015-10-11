@@ -1,7 +1,8 @@
 # phpMyFAQ 2.9
 
-[![Build Status](https://secure.travis-ci.org/thorsten/phpMyFAQ.png?branch=2.9)](http://travis-ci.org/thorsten/phpMyFAQ)
-[![Slack](https://phpmyfaq.herokuapp.com/badge.svg)](https://phpmyfaq.herokuapp.com)
+[![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/2.9.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
+[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D5.5-%23777BB4.svg?style=flat-square)](https://php.net/)
+[![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com)
 
 ## What is phpMyFAQ?
 
