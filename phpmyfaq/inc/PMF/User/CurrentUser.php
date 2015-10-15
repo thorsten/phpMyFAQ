@@ -217,14 +217,12 @@ class PMF_User_CurrentUser extends PMF_User
                 $this->setSuccess(false);
 
                 return false;
-                break;
             }
 
             // Login successfull
             $this->setSuccess(true);
 
             return true;
-            break;
         }
 
         // raise errors and return false
