@@ -432,7 +432,8 @@ class PMF_Category
      */
     private function getLineCategory($id)
     {
-        for ($i = 0; $i < count($this->treeTab); ++$i) {
+        $num = count($this->treeTab);
+        for ($i = 0; $i < $num; ++$i) {
             if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
                 return $i;
             }
@@ -519,7 +520,13 @@ class PMF_Category
         $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
     }
 
-    // try to expand from the parent_id to the node $id
+    /**
+     * Try to expand from the parent_id to the node $id
+     *
+     * @param int $id
+     *
+     * @return void
+     */
     public function expandTo($id)
     {
         $this->collapseAll();
@@ -527,7 +534,6 @@ class PMF_Category
         $ascendants[] = $id;
         $numAscendants = count($ascendants);
         for ($i = 0; $i < $numAscendants; ++$i) {
-            $numChilds = 0;
             if (isset($this->treeTab[$this->getLineCategory($ascendants[$i])]['numChilds'])) {
                 $numChilds = $this->treeTab[$this->getLineCategory($ascendants[$i])]['numChilds'];
                 if ($numChilds > 0) {
@@ -540,7 +546,9 @@ class PMF_Category
     }
 
     /**
-     * expand the entire tree.
+     * Expand the entire tree
+     *
+     * @return void
      */
     public function expandAll()
     {
