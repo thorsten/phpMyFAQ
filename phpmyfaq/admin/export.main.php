@@ -56,7 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         <div class="col-lg-4">
                             <select name="catid" id="catid" size="1" class="form-control">
                                 <option value="0"><?php echo $PMF_LANG['msgShowAllCategories'] ?></option>
-                                <?php echo $categoryHelper->renderOptions();
+                                <?php echo $categoryHelper->renderOptions(0);
         ?>
                             </select>
                         </div>

@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
  */
@@ -23,14 +21,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Language_Plurals.
+ * PMF_Language_Plurals
  *
  * @category  phpMyFAQ
- *
  * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
  */

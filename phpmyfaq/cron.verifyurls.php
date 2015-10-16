@@ -61,7 +61,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     }
 
     //Load plurals support for selected language
-    $plr = new PMF_Language_Plurals(LANGCODE);
+    $plr = new PMF_Language_Plurals($PMF_LANG);
 
     //
     // Initalizing static string wrapper

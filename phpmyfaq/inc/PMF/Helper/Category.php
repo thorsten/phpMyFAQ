@@ -272,7 +272,7 @@ class PMF_Helper_Category extends PMF_Helper
      *
      * @return string
      */
-    public function renderOptions($categoryId = 0)
+    public function renderOptions($categoryId)
     {
         $categories = '';
 
