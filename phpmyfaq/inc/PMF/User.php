@@ -216,7 +216,7 @@ class PMF_User
     }
 
     /**
-     * adds a permission object to the user.
+     * Adds a permission object to the user
      *
      * @param PMF_Perm $perm Permission object
      *
@@ -224,14 +224,7 @@ class PMF_User
      */
     public function addPerm(PMF_Perm $perm)
     {
-        if ($this->checkPerm($perm)) {
-            $this->perm = $perm;
-
-            return true;
-        }
-        $this->perm = null;
-
-        return false;
+        $this->perm = $perm;
     }
 
     /**
@@ -867,23 +860,6 @@ class PMF_User
         } else {
             return;
         }
-    }
-
-    /**
-     * returns true if perm is a valid permission object.
-     *
-     * @param PMF_Perm $perm Perm object
-     *
-     * @return bool
-     */
-    private function checkPerm($perm)
-    {
-        if ($perm instanceof PMF_Perm) {
-            return true;
-        }
-        $this->errors[] = self::ERROR_USER_NO_PERM;
-
-        return false;
     }
 
     /**
