@@ -104,9 +104,9 @@ class PMF_Mail
     public $eol = "\r\n";
 
     /**
-     * Headers of the e-mail.
+     * Array of headers of the e-mail
      *
-     * @var string
+     * @var array
      */
     public $headers;
 

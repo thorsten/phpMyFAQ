@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.0-beta - 2015-10
-- changed PHP requirement to PHP 5.5.0 and later (Thorsten)
+- changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
 - added support for PHP 7.0 (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
@@ -37,6 +37,7 @@ Version 2.9.0-beta - 2015-10
 - added moderator groups to categories (Thorsten)
 - added FAQ overview page (Thorsten)
 - extended REST/JSON API (Thorsten)
+- code base PSR-1 and PSR-2 compatible (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.10 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
 - updated bundled Bootstrap to version 3.3.5 (Thorsten)
