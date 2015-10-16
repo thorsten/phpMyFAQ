@@ -164,7 +164,8 @@ class PMF_User_UserData
             return false;
         }
         // update data
-        for ($i = 0; $i < count($field); ++$i) {
+        $num = count($field);
+        for ($i = 0; $i < $num; ++$i) {
             $this->data[$field[$i]] = $value[$i];
         }
 

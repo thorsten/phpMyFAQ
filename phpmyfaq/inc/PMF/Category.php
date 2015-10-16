@@ -501,7 +501,8 @@ class PMF_Category
      */
     public function collapseAll()
     {
-        for ($i = 0; $i < count($this->treeTab); ++$i) {
+        $numTreeTab = count($this->treeTab);
+        for ($i = 0; $i < $numTreeTab; ++$i) {
             if ($this->treeTab[$i]['symbol'] == 'minus') {
                 $this->treeTab[$i]['symbol'] = 'plus';
             }
@@ -524,7 +525,8 @@ class PMF_Category
         $this->collapseAll();
         $ascendants = $this->getNodes($id);
         $ascendants[] = $id;
-        for ($i = 0; $i < count($ascendants); ++$i) {
+        $numAscendants = count($ascendants);
+        for ($i = 0; $i < $numAscendants; ++$i) {
             $numChilds = 0;
             if (isset($this->treeTab[$this->getLineCategory($ascendants[$i])]['numChilds'])) {
                 $numChilds = $this->treeTab[$this->getLineCategory($ascendants[$i])]['numChilds'];
@@ -542,7 +544,8 @@ class PMF_Category
      */
     public function expandAll()
     {
-        for ($i = 0; $i < count($this->treeTab); ++$i) {
+        $numTreeTab = count($this->treeTab);
+        for ($i = 0; $i < $numTreeTab; ++$i) {
             if ($this->treeTab[$i]['symbol'] == 'plus') {
                 $this->treeTab[$i]['symbol'] = 'minus';
             }

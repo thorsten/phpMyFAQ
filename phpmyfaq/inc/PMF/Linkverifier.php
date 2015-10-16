@@ -353,7 +353,8 @@ class PMF_Linkverifier
         // Hack: fix any unsafe space chars in any component of the path to avoid HTTP 400 status during HEAD crawling
         if ('' !== $urlParts['path']) {
             $urlSubParts = explode('/', $urlParts['path']);
-            for ($i = 0; $i < count($urlSubParts); ++$i) {
+            $num = count($urlSubParts);
+            for ($i = 0; $i < $num; ++$i) {
                 $urlSubParts[$i] = str_replace(' ', '%20', $urlSubParts[$i]);
             }
             $urlParts['path'] = implode('/', $urlSubParts);
