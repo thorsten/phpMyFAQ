@@ -130,8 +130,6 @@ class PMF_Category
      * @param PMF_Configuration $config   Configuration object
      * @param array             $groups   Array with group IDs
      * @param bool              $withperm With or without permission check
-     *
-     * @return PMF_Category
      */
     public function __construct(PMF_Configuration $config, $groups = [], $withperm = true)
     {
@@ -245,11 +243,11 @@ class PMF_Category
      * Gets the main categories and write them in an array.
      *
      * @param string $categories Array of parent category ids
-     * @param bool   $parent_id  Only top level categories?
+     * @param bool   $parentId  Only top level categories?
      *
      * @return array
      */
-    public function getCategories($categories, $parent_id = true)
+    public function getCategories($categories, $parentId = true)
     {
         $_query = '';
         $query = sprintf('
@@ -260,13 +258,13 @@ class PMF_Category
             WHERE ',
             PMF_Db::getTablePrefix());
 
-        if (true == $parent_id) {
+        if (true === $parentId) {
             $query .= 'parent_id = 0';
         }
         foreach (explode(',', $categories) as $cats) {
             $_query .= ' OR parent_id = '.$cats;
         }
-        if (false == $parent_id && 0 < PMF_String::strlen($_query)) {
+        if (false === $parentId && 0 < PMF_String::strlen($_query)) {
             $query .= PMF_String::substr($_query, 4);
         }
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
@@ -371,33 +369,34 @@ class PMF_Category
      */
     public function transform($id)
     {
-        $thisParent_id = 0;
+        $parentId = $level = 0;
         $tree = [];
         $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
         $num = count($tabs);
+        $symbol = 'minus';
+        $name = $description = '';
+        $active = true;
 
         if ($id > 0) {
-            $thisLevel = $this->categoryName[$id]['level'];
-            $thisParent_id = $this->categoryName[$id]['parent_id'];
-            $thisName = $this->categoryName[$id]['name'];
-            $thisdescription = $this->categoryName[$id]['description'];
             $active = $this->categoryName[$id]['active'];
+            $description = $this->categoryName[$id]['description'];
+            $level = $this->categoryName[$id]['level'];
+            $name = $this->categoryName[$id]['name'];
+            $parentId = $this->categoryName[$id]['parent_id'];
         }
 
-        if ($num > 0) {
-            $symbol = 'minus';
-        } else {
-            $temp = isset($this->children[$thisParent_id]) ? array_keys($this->children[$thisParent_id]) : [];
+        if ($num < 0) {
+            $temp = isset($this->children[$parentId]) ? array_keys($this->children[$parentId]) : [];
             if (isset($temp[count($temp) - 1])) {
                 $symbol = ($id == $temp[count($temp) - 1]) ? 'angle' : 'medium';
             }
         }
 
         $ascendants = $this->getNodes($id);
-        $num_ascendants = count($ascendants);
+        $numAscendants = count($ascendants);
 
         if ($id > 0) {
-            for ($i = 0; $i < $num_ascendants; ++$i) {
+            for ($i = 0; $i < $numAscendants; ++$i) {
                 $brothers = $this->getBrothers($ascendants[$i]);
                 $tree[$i] = ($ascendants[$i] == $brothers[count($brothers) - 1]) ? 'space' : 'vertical';
             }
@@ -407,13 +406,13 @@ class PMF_Category
             $this->treeTab[] = array(
                 'id' => $id,
                 'symbol' => $symbol,
-                'name' => $thisName,
+                'name' => $name,
                 'numChilds' => count($tabs),
-                'level' => $thisLevel,
-                'parent_id' => $thisParent_id,
+                'level' => $level,
+                'parent_id' => $parentId,
                 'childs' => $tabs,
                 'tree' => $tree,
-                'description' => $thisdescription,
+                'description' => $description,
                 'active' => $active,
             );
         }
