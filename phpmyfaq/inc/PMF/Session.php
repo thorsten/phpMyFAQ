@@ -108,7 +108,7 @@ class PMF_Session
                 $banned = true;
             }
 
-            if (0 == $bots && false == $banned) {
+            if (0 === $bots && false === $banned) {
                 if (!isset($sid)) {
                     $sid = $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid

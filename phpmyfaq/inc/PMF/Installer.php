@@ -735,7 +735,7 @@ class PMF_Installer
         }
 
         // check LDAP if available
-        if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
+        if (extension_loaded('ldap') && !is_null($ldapEnabled) && count($ldapSetup)) {
             if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
                 $this->_system->cleanInstallation();
