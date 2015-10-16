@@ -1531,10 +1531,10 @@ class PMF_Category
     {
         $permissions = [];
         if (!($mode == 'user' || $mode == 'group')) {
-            return false;
+            return $permissions;
         }
         if (!is_array($categories)) {
-            return false;
+            return $permissions;
         }
 
         $query = sprintf('
