@@ -191,7 +191,7 @@ abstract class PMF_Attachment_Abstract
     /**
      * Set record language.
      *
-     * @param lang $lang record language
+     * @param string $lang record language
      */
     public function setRecordLang($lang)
     {
@@ -291,21 +291,20 @@ abstract class PMF_Attachment_Abstract
                 password_hash, filename, filesize, encrypted, mime_type)
                     VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', '%s', %d, %d, '%s')",
-                    $faqattTableName,
-                    $this->id,
-                    $this->recordId,
-                    $this->recordLang,
-                    $this->realHash,
-                    $this->virtualHash,
-                    $this->passwordHash,
-                    $this->filename,
-                    $this->filesize,
-                    $this->encrypted ? 1 : 0,
-                    $this->mimeType);
+                $faqattTableName,
+                $this->id,
+                $this->recordId,
+                $this->recordLang,
+                $this->realHash,
+                $this->virtualHash,
+                $this->passwordHash,
+                $this->filename,
+                $this->filesize,
+                $this->encrypted ? 1 : 0,
+                $this->mimeType
+            );
 
-            $result = $this->db->query($sql);
-        } else {
-            // do update here
+            $this->db->query($sql);
         }
 
         return $this->id;
@@ -316,15 +315,17 @@ abstract class PMF_Attachment_Abstract
      */
     protected function postUpdateMeta()
     {
-        $sql = sprintf("UPDATE
-                            %sfaqattachment
-                        SET virtual_hash = '%s',
-                            mime_type = '%s'
-                        WHERE id = %d",
-                        PMF_Db::getTablePrefix(),
-                        $this->virtualHash,
-                        $this->readMimeType(),
-                        $this->id);
+        $sql = sprintf("
+            UPDATE
+                %sfaqattachment
+            SET virtual_hash = '%s',
+                mime_type = '%s'
+            WHERE id = %d",
+            PMF_Db::getTablePrefix(),
+            $this->virtualHash,
+            $this->readMimeType(),
+            $this->id
+        );
 
         $this->db->query($sql);
     }
@@ -391,6 +392,8 @@ abstract class PMF_Attachment_Abstract
      */
     protected function linkedRecords()
     {
+        $assoc = [];
+
         $sql = sprintf(
             "SELECT COUNT(1) AS count FROM  %sfaqattachment WHERE virtual_hash = '%s'",
             PMF_Db::getTablePrefix(),
