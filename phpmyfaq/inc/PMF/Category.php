@@ -1530,7 +1530,7 @@ class PMF_Category
     public function getPermissions($mode, Array $categories)
     {
         $permissions = [];
-        if (!($mode == 'user' || $mode == 'group')) {
+        if (!($mode === 'user' || $mode === 'group')) {
             return $permissions;
         }
         if (!is_array($categories)) {

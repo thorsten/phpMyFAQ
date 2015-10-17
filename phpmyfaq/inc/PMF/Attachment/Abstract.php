@@ -131,8 +131,6 @@ abstract class PMF_Attachment_Abstract
      * Constructor.
      *
      * @param int $id attachment id
-     *
-     * @return PMF_Attachment_Abstract
      */
     public function __construct($id = null)
     {
@@ -153,7 +151,7 @@ abstract class PMF_Attachment_Abstract
      */
     public function buildUrl($forHTML = true)
     {
-        $amp = true == $forHTML ? '&amp;' : '&';
+        $amp = true === $forHTML ? '&amp;' : '&';
 
         return "index.php?action=attachment{$amp}id={$this->id}";
     }

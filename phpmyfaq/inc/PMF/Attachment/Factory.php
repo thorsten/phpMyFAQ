@@ -10,15 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
- *
  * @since     2009-08-21
- *
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
- *
  * @copyright 2009-2015 phpMyFAQ Team
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,15 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Attachment_Factory.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
- *
  * @since     2009-08-21
- *
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
- *
  * @copyright 2009-2015 phpMyFAQ Team
  */
 class PMF_Attachment_Factory
@@ -64,11 +54,6 @@ class PMF_Attachment_Factory
     private static $encryptionEnabled = null;
 
     /**
-     * @var PMF_Configuration
-     */
-    private $config;
-
-    /**
      * Create an attachment exemplar.
      *
      * @param int    $id  ID
@@ -76,7 +61,7 @@ class PMF_Attachment_Factory
      *
      * @throws PMF_Attachment_Exception
      *
-     * @return PMF_Attachment_File|PMF_Attachment_DB
+     * @return PMF_Attachment_File
      */
     public static function create($id = null, $key = null)
     {
@@ -85,10 +70,6 @@ class PMF_Attachment_Factory
         switch (self::$storageType) {
             case PMF_Attachment::STORAGE_TYPE_FILESYSTEM:
                 $retval = new PMF_Attachment_File($id);
-                break;
-
-            case PMF_Attachment::STORAGE_TYPE_DB:
-                $retval = new PMF_Attachment_DB($id);
                 break;
 
             default:

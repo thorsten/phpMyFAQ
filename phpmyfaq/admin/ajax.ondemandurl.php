@@ -17,12 +17,10 @@
  * with permission from NetJapan, Inc. IT Administration Group.
  *
  * @category  phpMyFAQ
- *
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2015 NetJapan, Inc.
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
@@ -39,8 +37,8 @@ $httpHeader = new PMF_Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
-if ($linkverifier->isReady() == false) {
+$linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
@@ -111,7 +109,7 @@ if (!is_null($lookup)) {
         ob_clean();
     }
 
-    echo $linkverifier->verifyArticleURL($faq->faqRecord['content'], $id, $artlang);
+    echo $linkVerifier->verifyArticleURL($faq->faqRecord['content'], $id, $artlang);
     exit();
 }
 

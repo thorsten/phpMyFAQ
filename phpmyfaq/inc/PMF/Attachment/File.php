@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -23,21 +21,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Abstract.
+ * PMF_Attachment_Abstract.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-08-21
  */
 class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachment_Interface
 {
     /**
-     * Build filepath under which the attachment.
+     * Build file path under which the attachment.
      *
      * file is accessible in filesystem
      *
@@ -77,7 +73,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
     }
 
     /**
-     * Check weither the filestorage is ok.
+     * Check wether the file storage is ok.
      *
      * @return bool
      */

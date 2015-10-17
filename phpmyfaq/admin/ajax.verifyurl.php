@@ -40,8 +40,8 @@ $httpHeader = new PMF_Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
-if ($linkverifier->isReady() == false) {
+$linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
@@ -53,7 +53,6 @@ $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
-    //header("X-DenyReason: id/lang bad");
     header('HTTP/1.0 401 Unauthorized');
     header('Status: 401 Unauthorized');
     exit();
@@ -72,8 +71,8 @@ if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
 
-$linkverifier->parseString($faq->faqRecord['content']);
-$linkverifier->verifyURLs($faqConfig->getDefaultUrl());
-$linkverifier->markEntry($id, $lang);
-print $linkverifier->getLinkStateString();
+$linkVerifier->parseString($faq->faqRecord['content']);
+$linkVerifier->verifyURLs($faqConfig->getDefaultUrl());
+$linkVerifier->markEntry($id, $lang);
+print $linkVerifier->getLinkStateString();
 exit();

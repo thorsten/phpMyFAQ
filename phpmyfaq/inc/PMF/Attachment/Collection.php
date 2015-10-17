@@ -23,14 +23,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Collection.
+ * PMF_Attachment_Collection.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
  */
@@ -47,8 +45,6 @@ class PMF_Attachment_Collection
      * Constructor.
      *
      * @param PMF_Configuration $config
-     *
-     * @return PMF_Attachment_Collection
      */
     public function __construct(PMF_Configuration $config)
     {

@@ -69,7 +69,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                         </div>
                     </div>
 
-                    <?php if ($linkVerifier->isReady() == true): ?>
+                    <?php if ($linkVerifier->isReady() === true): ?>
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4 checkbox">
                             <label>

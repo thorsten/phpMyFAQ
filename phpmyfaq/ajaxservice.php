@@ -337,8 +337,8 @@ switch ($action) {
 
             $autoActivate = $faqConfig->get('records.defaultActivation');
 
-            $newData = array(
-                'lang' => ($isTranslation == true ? $newLanguage : $languageCode),
+            $newData = [
+                'lang' => ($isTranslation === true ? $newLanguage : $languageCode),
                 'thema' => $question,
                 'active' => ($autoActivate ? FAQ_SQL_ACTIVE_YES : FAQ_SQL_ACTIVE_NO),
                 'sticky' => 0,
@@ -351,7 +351,8 @@ switch ($action) {
                 'dateStart' => '00000000000000',
                 'dateEnd' => '99991231235959',
                 'linkState' => '',
-                'linkDateCheck' => 0, );
+                'linkDateCheck' => 0
+            ];
 
             if ($isNew) {
                 $categories = $categories['rubrik'];
