@@ -41,14 +41,14 @@ if (!empty($_SESSION['access_token'])) {
 }
 
 $configMode = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
-$availableConfigModes = array(
+$availableConfigModes = [
         'main' => 1,
         'records' => 1,
         'spam' => 1,
         'search' => 1,
         'social' => 1,
         'seo' => 1,
-);
+];
 
 /**
  * @param mixed  $key
@@ -236,6 +236,8 @@ function renderInputForm($key, $type)
 }
 
 header('Content-type: text/html; charset=utf-8');
+
+PMF_Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {

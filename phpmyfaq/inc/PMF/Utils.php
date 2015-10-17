@@ -364,4 +364,17 @@ class PMF_Utils
 
         return $string;
     }
+
+    /**
+     * Moves given key of an array to the top
+     *
+     * @param array  $array
+     * @param string $key
+     */
+    public static function moveToTop(&$array, $key)
+    {
+        $temp = [$key => $array[$key]];
+        unset($array[$key]);
+        $array = $temp + $array;
+    }
 }
