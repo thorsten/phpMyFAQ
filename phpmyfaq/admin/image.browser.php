@@ -43,7 +43,6 @@ if ($user) {
     $user = null;
     unset($user);
 }
-
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
 
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR.'/images/'));
@@ -62,7 +61,7 @@ foreach ($files as $file) {
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
     $(document).on('click', 'div.file', function() {
-        var itemUrl = $(this).data('src')
+        var itemUrl = $(this).data('src'),
             args = top.tinymce.activeEditor.windowManager.getParams(),
             win = (args.window),
             input = (args.input);

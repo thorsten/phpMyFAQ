@@ -20,8 +20,6 @@ tinymce.PluginManager.add('imageupload', function(editor, url) {
 
     function pmfImageUpload() {
 
-        alert(url);
-
         editor.windowManager.open({
             title: 'Upload an image',
             file : url + '/../../../../../image.upload.php',

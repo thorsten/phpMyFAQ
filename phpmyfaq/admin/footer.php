@@ -111,6 +111,7 @@ if (isset($auth)) {
                 { title: 'figure', block: 'figure', wrapper: true }
             ]}
         ],
+
         visualblocks_default_state: true,
         end_container_on_empty_block: true,
         extended_valid_elements : "code[class],video[*],audio[*],source[*]",
@@ -120,18 +121,15 @@ if (isset($auth)) {
         importcss_append: true,
 
         // Save function
-        save_onsavecallback : "phpMyFAQSave",
+        save_onsavecallback: "phpMyFAQSave",
 
         // phpMyFAQ CSS
-        content_css : '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time();
-            ?>',
+        content_css: '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
 
         // Replace values for the template plugin
         template_replace_values : {
-            username : "<?php echo $user->userdata->get('display_name');
-            ?>",
-            user_id  : "<?php echo $user->userdata->get('user_id');
-            ?>"
+            username: '<?php echo $user->userdata->get('display_name') ?>',
+            user_id: '<?php echo $user->userdata->get('user_id') ?>'
         },
 
         // File browser
@@ -141,8 +139,8 @@ if (isset($auth)) {
             tinymce.activeEditor.windowManager.open({
                 title: 'Select an image',
                 url: fileBrowser,
-                width: 650,
-                height: 550
+                width: 640,
+                height: 480
             }, {
                 window: win,
                 input: fieldName
