@@ -76,7 +76,7 @@ if (isset($auth)) {
             'advlist autolink lists link image charmap print preview hr anchor pagebreak',
             'searchreplace wordcount visualblocks visualchars code fullscreen',
             'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor autosave phpmyfaq'
+            'emoticons template paste textcolor autosave phpmyfaq imageupload'
         ],
         relative_urls: false,
         convert_urls: false,
@@ -85,8 +85,8 @@ if (isset($auth)) {
         paste_remove_spans: true,
         entity_encoding: 'raw',
 
-        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image",
-        toolbar2: "print preview media | forecolor backcolor emoticons | phpmyfaq",
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+        toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
         image_advtab: true,
 
         // Formatting
@@ -134,7 +134,23 @@ if (isset($auth)) {
             ?>"
         },
 
-        // Image Upload
+        // File browser
+        file_browser_callback: function(fieldName, url, type, win){
+            var fileBrowser = 'image.browser.php';
+            fileBrowser += (fileBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
+            tinymce.activeEditor.windowManager.open({
+                title: 'Select an image',
+                url: fileBrowser,
+                width: 650,
+                height: 550
+            }, {
+                window: win,
+                input: fieldName
+            });
+            return false;
+        },
+
+        // Image upload
 
         // Custom params
         csrf: $('#csrf').val()

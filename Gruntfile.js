@@ -135,8 +135,9 @@ module.exports = function(grunt) {
             phpmyfaq_tinymce_plugin: {
                 files: {
                     'phpmyfaq/admin/assets/js/editor/plugins/phpmyfaq/plugin.min.js':
-                        [ 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js' ]
-
+                        [ 'phpmyfaq/admin/assets/js/phpmyfaq.tinymce.plugin.js' ],
+                    'phpmyfaq/admin/assets/js/editor/plugins/imageupload/plugin.min.js':
+                        [ 'phpmyfaq/admin/assets/js/imageupload.tinymce.plugin.js' ]
                 }
             }
         },
@@ -187,14 +188,7 @@ module.exports = function(grunt) {
         },
         modernizr: {
             dist: {
-                devFile: 'components/modernizr/modernizr.js',
-                outputFile: 'phpmyfaq/assets/js/modernizr.min.js',
-                files: {
-                    src: [
-                        'phpmyfaq/assets/js/{,*/}*.js',
-                        'phpmyfaq/assets/template/default/css/{,*/}*.css'
-                    ]
-                },
+                dest: 'phpmyfaq/assets/js/modernizr.min.js',
                 uglify: true
             }
         },

@@ -1,0 +1,31 @@
+<?php
+/**
+ * Image upload backend for TinyMCE v4
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2015 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2015-10-18
+ */
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    $protocol = 'http';
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
+        $protocol = 'https';
+    }
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    exit();
+}
+?>
+<form method="post" enctype="multipart/form-data">
+    <input type="hidden" name="MAX_FILE_SIZE" value="1000000"/>
+    <input type="file" name="upload"/>
+    <input type="submit" value="upload"/>
+</form>
