@@ -23,6 +23,13 @@
     <script src="{baseHref}assets/js/modernizr.min.js" async></script>
     <script src="{baseHref}assets/js/phpmyfaq.min.js" async></script>
 
+    <script>
+        if (self === top) {
+            document.documentElement.style.display = 'block';
+        } else {
+            top.location = self.location;
+        }
+    </script>
     <style> html{display:none;} </style>
 </head>
 <body dir="{dir}">
