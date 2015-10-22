@@ -201,6 +201,17 @@ footer {
 label.mce-label {
   max-width: none;
 }
-.mce-file div.file {
+.mce-file {
   cursor: pointer;
+  line-height: 36px;
+  &:hover {
+    background: darker(20%);
+    text-decoration: underline;
+  }
+}
+.mce-file-preview {
+  border: 1px solid @gray-dark;
+  margin-right: 16px;
+  max-height: 32px;
+  max-width: 32px;
 }

@@ -43,15 +43,21 @@ if ($user) {
     $user = null;
     unset($user);
 }
+?>
+<style>
+    @import url('assets/css/style.min.css');
+    body { padding: 10px; }
+</style>
+<?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
-
 $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR.'/images/'));
 foreach ($files as $file) {
     if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
         continue;
     }
     printf(
-        '<div class="file" data-src="%s">%s</div>',
+        '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
+        $faqConfig->getDefaultUrl().'images/'.$file->getFilename(),
         $faqConfig->getDefaultUrl().'images/'.$file->getFilename(),
         $file->getFilename()
     );
@@ -60,7 +66,7 @@ foreach ($files as $file) {
 <script src="../assets/js/phpmyfaq.min.js"></script>
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
-    $(document).on('click', 'div.file', function() {
+    $(document).on('click', 'div.mce-file', function() {
         var itemUrl = $(this).data('src'),
             args = top.tinymce.activeEditor.windowManager.getParams(),
             win = (args.window),
