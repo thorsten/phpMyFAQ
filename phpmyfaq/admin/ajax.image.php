@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
- * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-10
  */
@@ -29,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $upload = PMF_Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
-$uploadedFile = $_FILES['upload'];
+$uploadedFile = isset($_FILES['upload']) ? $_FILES['upload'] : '';
 
 switch ($ajaxAction) {
 
@@ -42,6 +40,8 @@ switch ($ajaxAction) {
         if (is_uploaded_file($uploadedFile['tmp_name']) &&
             $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')) {
 
+            list($width, $height) = getimagesize($uploadedFile['tmp_name']);
+
             if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir.$uploadFile)) {
                 $isUploaded = true;
             } else {
@@ -50,20 +50,24 @@ switch ($ajaxAction) {
 
             ?>
             <script>
-                window.parent.window.pmfImageUpload.uploadFinish({
+                window.parent.window.pmfImageUpload.uploadFinished({
                     filename: '<?php echo $faqConfig->getDefaultUrl().'images/'.$uploadFile ?>',
                     result: '<?php echo $isUploaded ? 'file_uploaded' : 'error' ?>',
-                    resultCode: '<?php echo $isUploaded ? 'success' : 'failed' ?>'
+                    resultCode: '<?php echo $isUploaded ? 'success' : 'failed' ?>',
+                    height: <?php echo $height ?>,
+                    width: <?php echo $width ?>
                 });
             </script>
             <?php
         } else {
             ?>
             <script>
-                window.parent.window.pmfImageUpload.uploadFinish({
-                    filename: '<?php echo $faqConfig->getDefaultUrl().'images/'.$uploadFile ?>',
+                window.parent.window.pmfImageUpload.uploadFinished({
+                    filename: '',
                     result: 'Image too big',
-                    resultCode: 'failed'
+                    resultCode: 'failed',
+                    height: 0,
+                    width: 0
                 });
             </script>
             <?php

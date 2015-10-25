@@ -17,30 +17,26 @@
 /*global tinymce:false, $:false */
 
 tinymce.PluginManager.add('imageupload', function(editor, url) {
+    'use strict';
 
-    function pmfImageUpload() {
-
+    function pmfImageUpload () {
         editor.windowManager.open({
             title: 'Upload an image',
             file : url + '/../../../../../image.upload.php',
-            width : 350,
-            height: 135,
-            buttons: [{
-                classes:'widget btn primary first abs-layout-item',
-                disabled : true,
-                onclick: 'close'
-            },
+            width : 320,
+            height: 120,
+            buttons: [
                 {
                     text: 'Close',
                     onclick: 'close'
-                }]
+                }
+            ]
         });
     }
 
     editor.addButton('imageupload', {
         tooltip: 'Upload an image',
         icon : 'image',
-        text: 'Upload',
         onclick: pmfImageUpload
     });
 
