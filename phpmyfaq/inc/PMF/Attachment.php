@@ -23,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment.
+ * PMF_Attachment.
  *
  * @category  phpMyFAQ
  *

@@ -27,36 +27,47 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require_once PMF_INCLUDE_DIR.'/libs/bulletproof/bulletproof.php';
-
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $upload = PMF_Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
+$uploadedFile = $_FILES['upload'];
 
 switch ($ajaxAction) {
 
     case 'upload':
-        $image = new Bulletproof\Image($_FILES);
-        $image->setLocation(PMF_ROOT_DIR.'/images');
 
-        if ($image['ikea']) {
-            $upload = $image->upload();
+        $uploadDir = PMF_ROOT_DIR.'/images/';
+        $uploadFile = basename($_FILES['upload']['name']);
+        $isUploaded = false;
 
-            try {
-                if ($image->getMime() !== 'png' || $image->getMime() !== 'jpg' || $image->getMime() !== 'gif') {
-                    throw new \Exception(' Image should be a PNG, JPG or GIF type ');
-                }
+        if (is_uploaded_file($uploadedFile['tmp_name']) &&
+            $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')) {
 
-                if ($image->getSize() < 1000) {
-                    throw new \Exception(' Image size too small ');
-                }
-                if ($image->upload()) {
-                    // handle success
-                } else {
-                    throw new \Exception($image['error']);
-                }
-            } catch (\Exception $e) {
-                echo $e->getMessage();
+            if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir.$uploadFile)) {
+                $isUploaded = true;
+            } else {
+                $isUploaded = false;
             }
+
+            ?>
+            <script>
+                window.parent.window.pmfImageUpload.uploadFinish({
+                    filename: '<?php echo $faqConfig->getDefaultUrl().'images/'.$uploadFile ?>',
+                    result: '<?php echo $isUploaded ? 'file_uploaded' : 'error' ?>',
+                    resultCode: '<?php echo $isUploaded ? 'success' : 'failed' ?>'
+                });
+            </script>
+            <?php
+        } else {
+            ?>
+            <script>
+                window.parent.window.pmfImageUpload.uploadFinish({
+                    filename: '<?php echo $faqConfig->getDefaultUrl().'images/'.$uploadFile ?>',
+                    result: 'Image too big',
+                    resultCode: 'failed'
+                });
+            </script>
+            <?php
         }
         break;
 }
+?>

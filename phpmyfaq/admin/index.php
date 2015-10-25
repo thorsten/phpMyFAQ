@@ -228,7 +228,9 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
                 // Groups
                 case 'group':       require 'ajax.group.php'; break;
                 // Interface translation
-                case 'trans':      require 'ajax.trans.php'; break;
+                case 'trans':       require 'ajax.trans.php'; break;
+                // Image upload
+                case 'image':       require 'ajax.image.php'; break;
             }
             exit();
         }

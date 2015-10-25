@@ -148,8 +148,6 @@ if (isset($auth)) {
             return false;
         },
 
-        // Image upload
-
         // Custom params
         csrf: $('#csrf').val()
     });
