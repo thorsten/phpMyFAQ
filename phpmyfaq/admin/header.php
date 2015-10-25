@@ -222,7 +222,14 @@ switch ($action) {
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <b class="fa fa-user"></b>
+                    <?php
+                    if ($faqConfig->get('main.enableGravatarSupport')) {
+                        $avatar = new PMF_Services_Gravatar($faqConfig);
+                        echo $avatar->getImage($user->getUserData('email'), ['size' => 24]);
+                    } else {
+                        echo '<b class="fa fa-user"></b>';
+                    }
+                    ?>
                     <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
                         <?php echo $user->getUserData('display_name'); ?>
                     </span>
@@ -252,24 +259,10 @@ switch ($action) {
         <?php endif; ?>
     </nav>
 
-
-
     <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
     <nav class="navbar-default navbar-static-side" role="navigation">
         <div class="sidebar-collapse">
             <ul class="nav" id="side-menu">
-                <li class="sidebar-userinfo">
-                    <div class="userpanel">
-                        <small><?php echo $PMF_LANG['ad_user_loggedin'] ?></small><br>
-                        <?php
-                        if ($faqConfig->get('main.enableGravatarSupport')) {
-                            $avatar = new PMF_Services_Gravatar($faqConfig);
-                            echo $avatar->getImage($user->getUserData('email'), array('size' => 45));
-                        }
-                        echo $user->getUserData('display_name');
-                        ?>
-                    </div>
-                </li>
                 <li<?php echo($dashboardPage ? ' class="active"' : ''); ?>>
                     <a href="index.php">
                         <i class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
