@@ -50,17 +50,22 @@ if ($user) {
 </style>
 <?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
-$files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR.'/images/'));
-foreach ($files as $file) {
-    if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
-        continue;
+
+if (!is_dir(PMF_ROOT_DIR.'/images')) {
+    echo '<p class="alert alert-danger">'.sprintf($PMF_LANG['ad_dir_missing'], '/images').'</p>';
+} else {
+    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+    foreach ($files as $file) {
+        if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
+            continue;
+        }
+        printf(
+            '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
+            $faqConfig->getDefaultUrl() . 'images/' . $file->getFilename(),
+            $faqConfig->getDefaultUrl() . 'images/' . $file->getFilename(),
+            $file->getFilename()
+        );
     }
-    printf(
-        '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
-        $faqConfig->getDefaultUrl().'images/'.$file->getFilename(),
-        $faqConfig->getDefaultUrl().'images/'.$file->getFilename(),
-        $file->getFilename()
-    );
 }
 ?>
 <script src="../assets/js/phpmyfaq.min.js"></script>

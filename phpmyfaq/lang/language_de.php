@@ -1196,3 +1196,4 @@ $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Aktivierung des Mar
 
 // added v2.9.0-beta - 2015-09-27 by Thorsten
 $PMF_LANG['faqOverview'] = 'FAQ Übersicht';
+$PMF_LANG['ad_dir_missing'] = 'Der Ordner %s fehlt.';
