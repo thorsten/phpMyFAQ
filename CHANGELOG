@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.25 - 2015-10-
+Version 2.8.25 - 2015-11-
 - added American English translation (Stewart Day)
+- updated bundled Symfony ClassLoader to version 2.6.11 (Thorsten)
 - updated Japanese translation
 - updated Brazilian Portuguese translation
 - updated Italian translation (Amedeo Fragai)
