@@ -160,17 +160,15 @@ abstract class PMF_Attachment_Abstract
      * Set encryption key.
      *
      * @param string $key     encryption key
-     * @param string $default if the key is default system wide
+     * @param bool   $default if the key is default system wide
      */
     public function setKey($key, $default = true)
     {
         $this->key = $key;
         $this->encrypted = null !== $key;
 
-        /*
-         * Not default means the key was set explicitly
-         * for this attachment, so lets hash it
-         */
+        // Not default means the key was set explicitly
+        // for this attachment, so lets hash it
         if ($this->encrypted && !$default) {
             $this->passwordHash = sha1($key);
         }

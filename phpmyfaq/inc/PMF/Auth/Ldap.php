@@ -89,7 +89,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         $this->_config = $config;
         $this->_ldapConfig = $this->_config->getLdapConfig();
         $this->ldapServer = $this->_config->getLdapServer();
-        $this->multipleServers = isset($this->_ldapConfig['ldap_use_multiple_servers']) ?: '';
+        $this->multipleServers = isset($this->_ldapConfig['ldap_use_multiple_servers']) ?: false;
 
         parent::__construct($this->_config);
 
@@ -215,7 +215,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = $key;
+                    $this->activeServer = (int) $key;
                     break;
                 }
             }
@@ -288,7 +288,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = $key;
+                    $this->activeServer = (int) $key;
                     break;
                 }
             }
