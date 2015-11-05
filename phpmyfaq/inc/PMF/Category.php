@@ -219,7 +219,7 @@ class PMF_Category
             GROUP BY
                 fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
             ORDER BY
-                fc.id',
+                fc.parent_id, fc.id',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
