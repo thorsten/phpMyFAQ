@@ -1234,3 +1234,4 @@ $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Mark
 // added v2.9.0-beta - 2015-09-27 by Thorsten
 $PMF_LANG['faqOverview'] = 'FAQ Overview';
 $PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
+$LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answering for user questions<br>(default: activated)');

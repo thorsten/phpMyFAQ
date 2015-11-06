@@ -26,6 +26,7 @@ Version 2.9.0-beta - 2015-10
 - added possibility to allow anonymous downloads (Thorsten)
 - added possibility to override user passwords by admin (Thorsten)
 - added possibility to reset votings and visits (Thorsten)
+- added possibility to disable smart answering (Thorsten)
 - added tag management frontend (Thorsten)
 - added full support for SQLite3 (Peter Kehl)
 - added control for meta robots handling (Thorsten)

@@ -468,6 +468,11 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
+        // If smart answering is disabled, save question immidiatly
+        if (false === $faqConfig->get('main.enableSmartAnswering')) {
+            $save = 1;
+        }
+
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && $stopwords->checkBannedWord(PMF_String::htmlspecialchars($question))) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
@@ -484,7 +489,7 @@ switch ($action) {
                 'is_visible' => $visibility,
             );
 
-            if (1 != $save) {
+            if (1 !== $save) {
                 $cleanQuestion = $stopwords->clean($question);
 
                 $user = new PMF_User_CurrentUser($faqConfig);
