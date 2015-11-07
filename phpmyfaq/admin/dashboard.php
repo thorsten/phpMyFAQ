@@ -122,6 +122,12 @@ $faqSession = new PMF_Session($faqConfig);
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
+                        <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957" class="list-group-item">
+                            <i class="fa fa-apple fa-fw"></i> Available on the App Store
+                            <span class="pull-right text-muted small">
+                                <i class="fa fa-heart"></i>
+                            </span>
+                        </a>
                     </div>
                 </div>
             </div>

@@ -38,7 +38,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <p class="copyright pull-right">
                     Proudly powered by <strong>phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></strong> |
                     <a href="http://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
-                    Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
+                    Follow us on <a href="http://twitter.com/phpMyFAQ"><i class="fa fa-twitter"></i></a> |
+                    <i class="fa fa-apple"></i> Available on the
+                    <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957">App Store</a> |
                     &copy; 2001-<?php echo date('Y') ?> <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
                 </p>
             </div>
