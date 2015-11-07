@@ -9,14 +9,14 @@
   ],
   "dependencies": {
     "bootstrap": "~3.3.5",
-    "font-awesome": "~4.3",
+    "font-awesome": "~4.4",
     "sparkline": "~2.1.2",
     "tinymce": "~4.2",
     "jquery": "~1.11.2",
     "bootstrap-datepicker": "~1.2.0",
     "typeahead.js": "~0.10.5",
     "handlebars": "~2.0.0",
-    "highlightjs": "~8.6.0"
+    "highlightjs": "8.*"
   },
   "resolutions": {
     "bootstrap": "~3.3.0"
