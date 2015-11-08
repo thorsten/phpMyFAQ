@@ -5,63 +5,65 @@
                 <input type="hidden" name="lang" id="lang" value="{lang}">
                 <input type="hidden" value="{openQuestionID}" id="openQuestionID" name="openQuestionID">
                 
-                <div class="control-group">
-                    <label class="control-label" for="name">{msgNewContentName}</label>
-                    <div class="controls">
-                        <input type="text" name="name" id="name" value="{defaultContentName}" required>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="name">{msgNewContentName}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" id="name" value="{defaultContentName}" required>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="email">{msgNewContentMail}:</label>
-                    <div class="controls">
-                        <input type="email" name="email" id="email" value="{defaultContentMail}" required>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="email">{msgNewContentMail}</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" name="email" id="email" value="{defaultContentMail}" required>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="rubrik">{msgNewContentCategory}</label>
-                    <div class="controls">
-                        <select name="rubrik[]" id="rubrik" multiple="multiple" size="5" required>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="rubrik">{msgNewContentCategory}</label>
+                    <div class="col-sm-9">
+                        <select name="rubrik[]" class="form-control" id="rubrik" multiple="multiple" size="5" required>
                         {printCategoryOptions}
                         </select>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="question">{msgNewContentTheme}</label>
-                    <div class="controls">
-                        <textarea cols="37" rows="3" name="question" id="question" required="required" {readonly}>{printQuestion}</textarea>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="question">{msgNewContentTheme}</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" cols="37" rows="3" name="question" id="question" required {readonly}>{printQuestion}</textarea>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="answer">{msgNewContentArticle}</label>
-                    <div class="controls">
-                        <textarea cols="37" rows="10" name="answer" id="answer" required="required"></textarea>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="answer">{msgNewContentArticle}</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" cols="37" rows="10" name="answer" id="answer" required></textarea>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="keywords">{msgNewContentKeywords}</label>
-                    <div class="controls">
-                        <input type="text" name="keywords" id="keywords">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="keywords">{msgNewContentKeywords}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="keywords" id="keywords">
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="contentlink">{msgNewContentLink}</label>
-                    <div class="controls">
-                        <input type="url" name="contentlink" id="contentlink" placeholder="http://">
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="contentlink">{msgNewContentLink}</label>
+                    <div class="col-sm-9">
+                        <input type="url" class="form-control" name="contentlink" id="contentlink" placeholder="http://">
                     </div>
                 </div>
 
                 {captchaFieldset}
 
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit" id="submitfaq">
-                        {msgNewContentSubmit}
-                    </button>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button class="btn btn-primary" type="submit" id="submitfaq">
+                            {msgNewContentSubmit}
+                        </button>
+                    </div>
                 </div>
             </form>
 
