@@ -13,36 +13,36 @@
                 {msgFinishSubmission}
             </p>
 
-            <form class="form-horizontal" id="formValues" action="#" method="post" accept-charset="utf-8">
+            <form class="form-horizontal" id="formValues" action="#" method="post">
                 <input type="hidden" name="lang" id="lang" value="{lang}" />
 
-                <div class="control-group">
-                    <label class="control-label" for="name">{msgNewContentName}</label>
-                    <div class="controls">
-                        <input type="text" name="name" id="name" value="{defaultContentName}" required="required" />
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="name">{msgNewContentName}</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" name="name" id="name" value="{defaultContentName}" required>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="email">{msgNewContentMail}</label>
-                    <div class="controls">
-                        <input type="email" name="email" id="email" value="{defaultContentMail}" required="required" />
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="email">{msgNewContentMail}</label>
+                    <div class="col-sm-9">
+                        <input type="email" class="form-control" name="email" id="email" value="{defaultContentMail}" required>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="category">{msgAskCategory}</label>
-                    <div class="controls">
-                        <select name="category" id="category" required="required" />
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="category">{msgAskCategory}</label>
+                    <div class="col-sm-9">
+                        <select name="category" class="form-control" id="category" required>
                         {printCategoryOptions}
                         </select>
                     </div>
                 </div>
 
-                <div class="control-group">
-                    <label class="control-label" for="question">{msgAskYourQuestion}</label>
-                    <div class="controls">
-                        <textarea cols="45" rows="5" name="question" id="question" required="required" /></textarea>
+                <div class="form-group">
+                    <label class="col-sm-3 control-label" for="question">{msgAskYourQuestion}</label>
+                    <div class="col-sm-9">
+                        <textarea class="form-control" cols="45" rows="5" name="question" id="question" required></textarea>
                     </div>
                 </div>
 
@@ -51,10 +51,12 @@
                 <div id="loader"></div>
                 <div id="qerror"></div>
 
-                <div class="form-actions">
-                    <button class="btn btn-primary" type="submit" id="submitquestion">
-                        {msgNewContentSubmit}
-                    </button>
+                <div class="form-group">
+                    <div class="col-sm-offset-3 col-sm-9">
+                        <button class="btn btn-primary" type="submit" id="submitquestion">
+                            {msgNewContentSubmit}
+                        </button>
+                    </div>
                 </div>
 
             </form>
