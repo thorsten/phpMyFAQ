@@ -81,9 +81,14 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     switch ($action) {
         case 'backup_content' :
             $header = sprintf(
-                'Content-Disposition: attachment; filename="%s-data.%s.sql',
-                $tablePrefix,
-                date('Y-m-d-H-i-s')
+                'Content-Disposition: attachment; filename=%s',
+                urlencode(
+                    sprintf(
+                        '%s-data.%s.sql',
+                        $tablePrefix,
+                        date('Y-m-d-H-i-s')
+                    )
+                )
             );
             header($header);
             foreach (explode(' ', $tableNames) as $table) {
@@ -93,9 +98,14 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             break;
         case 'backup_logs' :
             $header = sprintf(
-                'Content-Disposition: attachment; filename="%s-logs.%s.sql',
-                $tablePrefix,
-                date('Y-m-d-H-i-s')
+                'Content-Disposition: attachment; filename=%s',
+                urlencode(
+                    sprintf(
+                        '%s-logs.%s.sql',
+                        $tablePrefix,
+                        date('Y-m-d-H-i-s')
+                    )
+                )
             );
             header($header);
             foreach (explode(' ', $tableNames) as $table) {
