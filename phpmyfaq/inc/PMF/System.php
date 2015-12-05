@@ -387,7 +387,6 @@ class PMF_System
 
     /**
      * Drops all given tables
-     *
      * @param array $queries
      */
     public function dropTables(Array $queries)
@@ -428,7 +427,7 @@ class PMF_System
             );
         }
         printf(
-            '</div></section><footer><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
+            '</div></section><footer class="footer"><div class="container"><p class="pull-right">%s</p><div></footer></body></html>',
             COPYRIGHT
         );
         exit(-1);

@@ -80,14 +80,25 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 
 <div class="navbar navbar-default navbar-static-top">
     <nav class="container">
-        <ul class="nav navbar-nav">
-            <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
-            <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
-            <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-            <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-            <li class="divider-vertical"></li>
-            <li><a href="../">Back to your FAQ</a></li>
-        </ul>
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                    data-target="#phpmyfaq-navbar-collapse" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
+                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
+                <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+                <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+                <li class="divider-vertical"></li>
+                <li><a href="../">Back to your FAQ</a></li>
+            </ul>
+        </div>
     </nav>
 </div>
 
