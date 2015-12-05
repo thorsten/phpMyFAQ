@@ -134,7 +134,7 @@ if (is_null($currentAction) && $auth && $user->perm->checkRight($user->getUserId
                     <?php echo $PMF_LANG['ad_att_butt'];
     ?>
                 </button>
-                (<?php echo $PMF_LANG['msgAttachmentsFilesize'] ?>: <output id="filesize"></output>)
+                <?php echo $PMF_LANG['msgAttachmentsFilesize'] ?>: <output id="filesize"></output>
             </fieldset>
         </form>
 <?php
