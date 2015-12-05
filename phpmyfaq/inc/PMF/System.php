@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
  */
@@ -23,11 +21,9 @@
  * PMF_System.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-01-13
  */
@@ -51,7 +47,7 @@ class PMF_System
     /**
      * Pre-release version.
      */
-    const VERSION_PRERELEASE = 'beta';
+    const VERSION_PRERELEASE = 'beta2';
 
     /**
      * API version.
@@ -68,41 +64,41 @@ class PMF_System
      *
      * @var array
      */
-    private $_requiredExtensions = array(
+    private $requiredExtensions = [
         'gd',
         'json',
         'xmlwriter',
         'filter',
         'zip',
         'fileinfo',
-    );
+    ];
 
     /**
      * Array of missing PHP extensions.
      *
      * @var array
      */
-    private $_missingExtensions = [];
+    private $missingExtensions = [];
 
     /**
      * Supported databases for phpMyFAQ.
      *
      * @var array
      */
-    private $_supportedDatabases = array(
-        'mysqli' => array(self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x'),
-        'pgsql' => array(self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'),
-        'sqlite3' => array(self::VERSION_MINIMUM_PHP, 'SQLite 3'),
-        'mssql' => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)'),
-        'sqlsrv' => array(self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP'),
-    );
+    private $supportedDatabases = [
+        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x' ],
+        'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x' ],
+        'sqlite3' => [ self::VERSION_MINIMUM_PHP, 'SQLite 3' ],
+        'mssql' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)' ],
+        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP'],
+    ];
 
     /**
      * Database handle.
      *
      * @var PMF_DB_Driver
      */
-    private $_database = null;
+    private $database = null;
 
     /**
      * Sets the database handler.
@@ -113,7 +109,7 @@ class PMF_System
      */
     public function setDatabase(PMF_DB_Driver $database)
     {
-        $this->_database = $database;
+        $this->database = $database;
 
         return $this;
     }
@@ -184,7 +180,7 @@ class PMF_System
      */
     public function getSupportedDatabases()
     {
-        return $this->_supportedDatabases;
+        return $this->supportedDatabases;
     }
 
     /**
@@ -199,10 +195,6 @@ class PMF_System
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
             if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
-                // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
-                if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
-                    continue;
-                }
                 if ($html) {
                     $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
                 } else {
@@ -246,7 +238,7 @@ class PMF_System
      */
     public function checkDatabase()
     {
-        foreach ($this->_supportedDatabases as $extension => $database) {
+        foreach ($this->supportedDatabases as $extension => $database) {
             if (extension_loaded($extension)) {
                 return true;
             }
@@ -262,13 +254,13 @@ class PMF_System
      */
     public function checkRequiredExtensions()
     {
-        foreach ($this->_requiredExtensions as $extension) {
+        foreach ($this->requiredExtensions as $extension) {
             if (!extension_loaded($extension)) {
-                $this->_missingExtensions[] = $extension;
+                $this->missingExtensions[] = $extension;
             }
         }
 
-        if (count($this->_missingExtensions) > 0) {
+        if (count($this->missingExtensions) > 0) {
             return false;
         }
 
@@ -327,7 +319,7 @@ class PMF_System
      */
     public function getMissingExtensions()
     {
-        return $this->_missingExtensions;
+        return $this->missingExtensions;
     }
 
     /**
@@ -353,9 +345,8 @@ class PMF_System
     {
         $created = new DateTime();
 
-        $path = PMF_ROOT_DIR;
         $files = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($path),
+            new RecursiveDirectoryIterator(PMF_ROOT_DIR),
             RecursiveIteratorIterator::SELF_FIRST
         );
 
@@ -375,7 +366,7 @@ class PMF_System
                 if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
                 !preg_match('#/tests/#', $file->getPath())
             ) {
-                    $current = str_replace($path, '', $file->getPathname());
+                    $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
 
                     if (isset($blacklist[$current])) {
                         continue;
@@ -395,13 +386,15 @@ class PMF_System
     //
 
     /**
+     * Drops all given tables
+     * 
      * @param array $queries
      */
     public function dropTables(Array $queries)
     {
-        if ($this->_database instanceof PMF_DB_Driver) {
+        if ($this->database instanceof PMF_DB_Driver) {
             foreach ($queries as $query) {
-                $this->_database->query($query);
+                $this->database->query($query);
             }
         }
     }
