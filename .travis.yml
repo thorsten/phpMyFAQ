@@ -15,4 +15,4 @@ php:
   - nightly
   - hhvm
 
-script: bin/phpunit --configuration phpunit.xml --coverage-text
+script: phpunit --configuration phpunit.xml --coverage-text
