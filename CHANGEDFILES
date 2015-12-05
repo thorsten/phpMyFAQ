@@ -1,3 +1,27 @@
+CHANGED FILES FROM 2.8.24 -> 2.8.25
+
+./admin/assets/css/style.css
+./admin/assets/css/style.rtl.css
+./admin/assets/less/style.less
+./admin/assets/less/style.rtl.less
+./admin/editor/plugins/syntaxhl/dialog.htm
+./admin/record.edit.php
+./assets/template/default/css/style.rtl.css
+./assets/template/default/css/style.rtl.min.css
+./config/constants.php
+./inc/PMF/Helper/Faq.php
+./inc/PMF/Search.php
+./inc/PMF/System.php
+./inc/PMF/User.php
+./lang/language_en-us.php
+./lang/language_it.php
+./lang/language_ja.php
+./lang/language_nl.php
+./lang/language_pt-br.php
+./artikel.php
+
+
+
 CHANGED FILES FROM 2.8.23 -> 2.8.24
 
 ./admin/loginform.php
