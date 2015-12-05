@@ -54,10 +54,13 @@ Version 2.9.0-beta - 2015-12-05
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 
 Version 2.8.25 - 2015-12-05
+- ready for PHP 7 (Thorsten)
 - added American English translation (Stewart Day)
+- updated bundled Symfony ClassLoader to version 2.6.11 (Thorsten)
 - updated Japanese translation
 - updated Brazilian Portuguese translation
 - updated Italian translation (Amedeo Fragai)
+- updated Dutch translation
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.24 - 2015-07-27
