@@ -856,7 +856,7 @@ $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 =>
 $PMF_LANG['ad_menu_attachments'] = 'Attachments';
 $PMF_LANG['ad_menu_attachment_admin'] = 'Attachment administration';
 $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
-$PMF_LANG['msgAttachmentsFilesize'] = 'Filensize';
+$PMF_LANG['msgAttachmentsFilesize'] = 'Filesize';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
 $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
