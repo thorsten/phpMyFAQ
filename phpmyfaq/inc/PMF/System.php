@@ -387,7 +387,7 @@ class PMF_System
 
     /**
      * Drops all given tables
-     * 
+     *
      * @param array $queries
      */
     public function dropTables(Array $queries)
