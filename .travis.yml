@@ -11,7 +11,8 @@ before_script:
 php:
   - 5.5
   - 5.6
-  - hhvm
+  - 7.0
   - nightly
+  - hhvm
 
 script: bin/phpunit --configuration phpunit.xml --coverage-text
