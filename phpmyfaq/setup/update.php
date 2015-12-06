@@ -9,17 +9,15 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
-define('COPYRIGHT', '&copy; 2001-2015 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2015 <a target="_blank" href="http://www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -48,8 +46,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 ?>
 <!doctype html>
-<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -62,21 +59,12 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
-    <script src="../assets/js/libs/modernizr.min.js"></script>
-    <script src="../assets/js/libs/jquery.min.js"></script>
+    <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/phpmyfaq.min.js"></script>
 
     <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/default/apple-touch-icon.png">
-
 </head>
 <body>
-
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Do you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
-<![endif]-->
 
 <div class="navbar navbar-default navbar-static-top">
     <nav class="container">
@@ -109,13 +97,6 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
                 <?php
                 $version = $faqConfig->get('main.currentVersion');
-                if (version_compare($version, '2.8.0-alpha2', '>=')) {
-                    if (!$faqConfig->get('main.maintenanceMode')) {
-                        echo '<p class="alert alert-warning"><strong>Warning!</strong> Your phpMyFAQ installation is '.
-                             'not in maintenance mode, you should enable the maintenance mode in your administration '.
-                             'backend before running the update!</p>';
-                    }
-                }
                 ?>
             </div>
         </div>
@@ -156,8 +137,8 @@ if ($step === 1) {
             <div class="col-lg-12">
                 <p class="alert alert-info text-center">
                     <strong>
-                        Please create a full backup of your database, your templates, attachments and uploaded images
-                        before running this update.
+                        <i class="fa fa-info-circle"></i> Please create a full backup of your database, your templates,
+                        attachments and uploaded images before running this update.
                     </strong>
                 </p>
 
@@ -308,6 +289,14 @@ if ($step == 3) {
 <?php
     $images = [];
     $prefix = PMF_Db::getTablePrefix();
+    $faqConfig->getAll();
+
+    //
+    // Enable maintenance mode
+    //
+    if ($faqConfig->set('main.maintenanceMode', 'true')) {
+        echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> Activating maintenance mode ...</p>";
+    }
 
     //
     // UPDATES FROM 2.6.99
@@ -859,7 +848,7 @@ if ($step == 3) {
         echo '<div class="center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
-            printf('<span title="%s">.</span>', $executeQuery);
+            printf('<span title="%s"><i class="fa fa-circle"></i></span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again '.
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
@@ -870,6 +859,13 @@ if ($step == 3) {
             usleep(10000);
         }
         echo '</div>';
+    }
+
+    //
+    // Disable maintenance mode
+    //
+    if ($faqConfig->set('main.maintenanceMode', 'false')) {
+        echo "<p class='alert alert-info'><i class='fa fa-info-circle'></i> Deactivating maintenance mode ...</p>";
     }
 
     echo "</p>\n";

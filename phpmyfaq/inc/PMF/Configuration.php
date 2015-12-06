@@ -121,6 +121,26 @@ class PMF_Configuration
     }
 
     /**
+     * Sets one single configuration item.
+     *
+     * @param string $key
+     * @param mixed  $value
+     *
+     * @return bool
+     */
+    public function set($key, $value)
+    {
+        $query = sprintf("UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
+            PMF_Db::getTablePrefix(),
+            $this->_tableName,
+            $this->getDb()->escape(trim($value)),
+            $this->getDb()->escape(trim($key))
+        );
+
+        return $this->getDb()->query($query);
+    }
+
+    /**
      * Sets the PMF_DB_Driver object.
      *
      * @param PMF_DB_Driver $database
