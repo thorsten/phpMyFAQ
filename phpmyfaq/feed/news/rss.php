@@ -42,16 +42,47 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
     $LANGCODE = 'en';
 }
 
+if ($faqConfig->get('security.enableLoginOnly')) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+        header('HTTP/1.0 401 Unauthorized');
+        exit;
+    } else {
+        $user = new PMF_User_CurrentUser($faqConfig);
+        if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+            if ($user->getStatus() != 'blocked') {
+                $auth = true;
+            } else {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    }
+} else {
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    if (! $user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
+}
+
+if (!$user instanceof PMF_User_CurrentUser) {
+    header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+    header('HTTP/1.0 401 Unauthorized');
+    echo '<h1>401 Unauthorized</h1>';
+    exit;
+}
+
 //
 // Initalizing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
-$oNews          = new PMF_News($faqConfig);
+$news           = new PMF_News($faqConfig);
 $showArchive    = false;
 $active         = true;
 $forceConfLimit = true;
-$rssData        = $oNews->getLatestData($showArchive, $active, $forceConfLimit);
+$rssData        = $news->getLatestData($showArchive, $active, $forceConfLimit);
 $num            = count($rssData);
 
 $rss = new XMLWriter();
