@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.25
+phpMyFAQ 2.8.26
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.26 - 2016-
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.25 - 2015-12-05
 - ready for PHP 7 (Thorsten)
