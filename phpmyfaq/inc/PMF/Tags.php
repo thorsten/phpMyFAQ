@@ -508,21 +508,11 @@ class PMF_Tags
             }
         }
 
-        $CSSRelevanceLevels = 5;
-        $CSSRelevanceMinLevel = 1;
-        $CSSRelevanceMaxLevel = $CSSRelevanceLevels - $CSSRelevanceMinLevel;
-        $CSSRelevanceLevel = 3;
-
-        $html = '<div id="tagcloud-content">';
+        $html = '';
         $i = 0;
         foreach ($tags as $tag) {
             ++$i;
-            if ($max - $min > 0) {
-                $CSSRelevanceLevel =
-                    (int) ($CSSRelevanceMinLevel + $CSSRelevanceMaxLevel * ($tag['count'] - $min) / ($max - $min));
-            }
-            $class = 'relevance'.$CSSRelevanceLevel;
-            $html .= '<span class="'.$class.'">';
+            $html .= '<li>';
             $title = PMF_String::htmlspecialchars($tag['name'].' ('.$tag['count'].')', ENT_QUOTES, 'utf-8');
             $url = sprintf(
                 '%s?action=search&amp;tagging_id=%d',
@@ -533,10 +523,9 @@ class PMF_Tags
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
-            $html            .= $oLink->toHtmlAnchor();
-            $html            .= (count($tags) == $i ? '' : ' ').'</span>';
+            $html .= $oLink->toHtmlAnchor();
+            $html .= (count($tags) == $i ? '' : ' ').'</li>';
         }
-        $html .= '</div>';
 
         return $html;
     }
