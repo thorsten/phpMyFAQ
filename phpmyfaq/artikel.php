@@ -183,7 +183,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
-        '<a href="%sadmin/index.php?action=editentry&amp;id=%d&amp;lang=%s">%s</a>',
+        '<i class="fa fa-edit"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,
@@ -274,6 +274,8 @@ if ('' !== $relatedFaqs) {
 $date = new PMF_Date($faqConfig);
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
+$numComments = $faqComment->getNumberOfComments();
+
 $tpl->parse(
     'writeContent',
     array(
@@ -283,9 +285,13 @@ $tpl->parse(
         'solution_id_link' => PMF_Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
         'writeThema' => $question,
         'writeContent' => $answer,
-        'writeDateMsg' => '<dt>'.$PMF_LANG['msgLastUpdateArticle'].'</dt><dd>'.$date->format($faq->faqRecord['date']).'</dd>',
-        'writeRevision' => '<dt>'.$PMF_LANG['ad_entry_revision'].':</dt><dd>1.'.$faq->faqRecord['revision_id'].'</dd>',
-        'writeAuthor' => '<dt>'.$PMF_LANG['msgAuthor'].':</dt><dd>'.$faq->faqRecord['author'].'</dd>',
+        'writeDateMsg' => $date->format($faq->faqRecord['date']),
+        'writeAuthor' => $faq->faqRecord['author'],
+        'numberOfComments' => sprintf(
+            '%d %s',
+            isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
+            $PMF_LANG['ad_start_comments']
+        ),
         'editThisEntry' => $editThisEntry,
         'translationUrl' => $translationUrl,
         'languageSelection' => PMF_Language::selectLanguages($LANGCODE, false, $availableLanguages, 'translation'),

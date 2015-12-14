@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
  */
@@ -26,11 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Helper_Faq.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-11-12
  */
@@ -114,9 +110,15 @@ class PMF_Helper_Faq extends PMF_Helper
             return '';
         }
 
+        $icon = '<span class="fa-stack fa-lg">
+                        <i class="fa fa-square-o fa-stack-2x"></i>
+                        <i class="fa fa-facebook fa-stack-1x"></i>
+                    </span>';
+
         return sprintf(
-            '<a href="%s" target="_blank"><i class="fa fa-facebook-square fa-4x"></i></a>',
-            $url
+            '<a href="%s" target="_blank">%s</a>',
+            $url,
+            $icon
         );
     }
 
@@ -133,9 +135,15 @@ class PMF_Helper_Faq extends PMF_Helper
             return '';
         }
 
+        $icon = '<span class="fa-stack fa-lg">
+                        <i class="fa fa-square-o fa-stack-2x"></i>
+                        <i class="fa fa-twitter fa-stack-1x"></i>
+                    </span>';
+
         return sprintf(
-            '<a href="%s" target="_blank"><i class="fa fa-twitter-square fa-4x"></i></a>',
-            $url
+            '<a href="%s" target="_blank">%s</a>',
+            $url,
+            $icon
         );
     }
 

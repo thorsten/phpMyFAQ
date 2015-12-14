@@ -1,52 +1,78 @@
+            <!--
             <div id="breadcrumbs" class="hidden-print">
                 {writeRubrik}
             </div>
+            -->
 
-            <header>
-                <div class="pull-right hidden-print" id="solution_id">
-                    <a class="label label-info" href="{solution_id_link}">
-                        ID #{solution_id}
-                    </a>
+            <article class="pmf-faq">
+                <header>
+                    <div class="pull-right hidden-print" id="solution_id">
+                        <a class="label label-info" href="{solution_id_link}">
+                            ID #{solution_id}
+                        </a>
+                    </div>
+                    <h1>{writeThema}</h1>
+                    <div class="pmf-faq-meta clearfix">
+                        <div class="pmf-faq-author">
+                            <i class="fa fa-user"></i>
+                            <span class="data">{writeAuthor}</span>
+                        </div>
+                        <div class="pmf-faq-date">
+                            <i class="fa fa-calendar"></i>
+                            <span class="data">{writeDateMsg}</span>
+                        </div>
+                        <div class="pmf-faq-comments">
+                            <i class="fa fa-comments"></i>
+                            <span class="data"><a href="#comments">{numberOfComments}</a></span>
+                        </div>
+                        <div class="pmf-faq-edit">
+                            {editThisEntry}
+                        </div>
+                    </div>
+                </header>
+                <div class="pmf-faq-body">
+
+                    {writeContent}
+
+                    [tagsAvailable]
+                    {renderTags}
+                    [/tagsAvailable]
+                    [relatedFaqs]
+                    <aside id="faqAccordion" class="accordion related-faqs hidden-print">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
+                                    {renderRelatedArticlesHeader}
+                                </a>
+                            </div>
+                            <div id="collapseRelatedFaqs" class="accordion-body collapse">
+                                <div class="accordion-inner">{renderRelatedArticles}</div>
+                            </div>
+                        </div>
+                    </aside>
+                    [/relatedFaqs]
+                    [relatedCategories]
+                    <aside id="faqAccordion" class="accordion related-categories hidden-print">
+                        <div class="accordion-group">
+                            <div class="accordion-heading">
+                                <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion" data-toggle="collapse">
+                                    {renderRelatedCategoriesHeader}
+                                </a>
+                            </div>
+                            <div id="collapseRelatedCategories" class="accordion-body collapse">
+                                <div class="accordion-inner">{renderRelatedCategories}</div>
+                            </div>
+                        </div>
+                    </aside>
+                    [/relatedCategories]
+
                 </div>
-                <h2>{writeThema}</h2>
-            </header>
 
-            <hr>
 
-            <article class="answer">
-                {writeContent}
-                [tagsAvailable]
-                {renderTags}
-                [/tagsAvailable]
-                [relatedFaqs]
-                <aside id="faqAccordion" class="accordion related-faqs hidden-print">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
-                                {renderRelatedArticlesHeader}
-                            </a>
-                        </div>
-                        <div id="collapseRelatedFaqs" class="accordion-body collapse">
-                            <div class="accordion-inner">{renderRelatedArticles}</div>
-                        </div>
-                    </div>
-                </aside>
-                [/relatedFaqs]
-                [relatedCategories]
-                <aside id="faqAccordion" class="accordion related-categories hidden-print">
-                    <div class="accordion-group">
-                        <div class="accordion-heading">
-                            <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion" data-toggle="collapse">
-                                {renderRelatedCategoriesHeader}
-                            </a>
-                        </div>
-                        <div id="collapseRelatedCategories" class="accordion-body collapse">
-                            <div class="accordion-inner">{renderRelatedCategories}</div>
-                        </div>
-                    </div>
-                </aside>
-                [/relatedCategories]
             </article>
+
+
+
 
             <script>
                 $(function(){
@@ -55,26 +81,17 @@
             </script>
 
             <ul id="tab" class="nav nav-tabs hidden-print">
-                <li class="active"><a href="#authorInfo" data-toggle="tab">{msg_about_faq}</a></li>
-                <li><a href="#votingForm" data-toggle="tab">{msgVoteUseability}</a></li>
+                <li class="active"><a href="#votingForm" data-toggle="tab">{msgVoteUseability}</a></li>
                 [switchLanguage]
                 <li><a href="#switchAvailableLanguage" data-toggle="tab">{msgChangeLanguage}</a></li>
                 [/switchLanguage]
                 [addTranslation]
                 <li><a href="#addTranslation" data-toggle="tab">{msgTranslate}</a></li>
                 [/addTranslation]
-                <li>{editThisEntry}</li>
             </ul>
 
             <div class="tab-content faq-information">
-                <div class="tab-pane active" id="authorInfo">
-                    <dl class="dl-horizontal">
-                    {writeDateMsg}
-                    {writeAuthor}
-                    {writeRevision}
-                    </dl>
-                </div>
-                <div class="tab-pane hidden-print" id="votingForm">
+                <div class="tab-pane active hidden-print" id="votingForm">
                     <form action="#" method="post" class="form-inline" accept-charset="utf-8">
                         <input type="hidden" name="artikel" value="{saveVotingID}">
                         <div id="votings"></div>
@@ -105,48 +122,49 @@
 
             <p class="hidden-print">{writeCommentMsg}</p>
 
-            <a id="comment"></a>
-            <div id="commentForm" class="hide">
+            <aside class="pmf-create-comment hide" id="pmf-create-comment">
+
+                <hr>
+
+                <div id="loader"></div>
+
+                <h2><i class="fa fa-heart"></i> {msgCommentHeader}</h2>
+
                 <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
                     <input type="hidden" name="id" id="id" value="{id}">
                     <input type="hidden" name="lang" id="lang" value="{lang}">
                     <input type="hidden" name="type" id="type" value="faq">
 
-                    <div class="control-group">
-                        <label class="control-label" for="user">{msgNewContentName}</label>
-                        <div class="controls">
-                            <input type="text" id="user" name="user" value="{defaultContentName}" required>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <input type="text" name="user" id="user" class="form-control input-lg" required
+                                   placeholder="{defaultContentName}" value="{defaultContentName}">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="email" name="mail" id="mail" class="form-control input-lg" required
+                                   placeholder="{msgNewContentMail}"  value="{defaultContentMail}">
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="mail">{msgNewContentMail}</label>
-                        <div class="controls">
-                            <input type="email" id="mail" name="mail" value="{defaultContentMail}" required>
-                        </div>
-                    </div>
+                    <textarea rows="10" name="comment_text" id="comment_text" class="form-control input-lg"
+                              placeholder="{msgYourComment}"></textarea>
 
-                    <div class="control-group">
-                        <label class="control-label" for="comment_text">{msgYourComment}</label>
-                        <div class="controls">
-                            <textarea id="comment_text" name="comment_text" required></textarea>
-                        </div>
-                    </div>
 
                     {captchaFieldset}
 
-                    <div class="form-actions">
+
+                    <div class="pmf-buttons clearfix">
                         <button class="btn btn-primary" id="submitcomment" type="submit">
                             {msgNewContentSubmit}
                         </button>
                     </div>
                 </form>
-            </div>
+            </aside>
 
-            <div id="loader"></div>
-            <div id="comments">
+            <aside class="pmf-comments" id="comments">
+                <hr>
                 {writeComments}
-            </div>
+            </aside>
 
             <script src="assets/js/libs/highlight.pack.js"></script>
             <link rel="stylesheet" href="assets/js/libs/default.css">
@@ -154,7 +172,7 @@
 
                 $('.show-comment-form').on('click', function(event) {
                     event.preventDefault();
-                    $('#commentForm').removeClass('hide');
+                    $('#pmf-create-comment').removeClass('hide');
                 });
 
                 $(function() {

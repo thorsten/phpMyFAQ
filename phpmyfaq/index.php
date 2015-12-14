@@ -572,7 +572,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 }
 
 $tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();
-$tplNavigation['activeQuickfind'] = ('instantresponse' == $action) ? 'active' : '';
+$tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';
 $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
@@ -727,7 +727,7 @@ $tpl->merge('rightBox', 'index');
 //
 // Include requested PHP file
 //
-require_once $includePhp;
+require $includePhp;
 
 //
 // Send headers and print template

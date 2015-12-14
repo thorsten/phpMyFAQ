@@ -177,19 +177,26 @@ class PMF_Comment
 
         $output = '';
         foreach ($comments as $item) {
-            $output .= '<p class="comment">';
-            $output .= '<img class="commment-bubbles" src="assets/img/bubbles.gif" />';
+
+            $output .= '<article class="pmf-comment">';
+            $output .= '    <header class="clearfix">';
+            $output .= '        <div class="pmf-commment-meta">';
             $output .= sprintf(
-                '<strong>%s<a href="mailto:%s">%s</a>:</strong><br />%s<br /><small>%s</small></p>',
-                $this->pmfStr['msgCommentBy'],
+                '            <h3><a href="mailto:%s">%s</a></h3>',
                 $mail->safeEmail($item['email']),
-                $item['user'],
-                $this->showShortComment($id, $item['content']),
-                $this->pmfStr['newsCommentDate'].
-                    $date->format(
-                        PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false)
-                    )
+                $item['user']
+                );
+            $output .= sprintf(
+                '            <span class="pmf-comment-date">%s</span>',
+                $date->format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
+                );
+            $output .= '        </div>';
+            $output .= '    </header>';
+            $output .= sprintf(
+                '    <div class="pmf-comment-body">%s</div>',
+                $this->showShortComment($id, $item['content'])
             );
+            $output .= '</article>';
         }
 
         return $output;

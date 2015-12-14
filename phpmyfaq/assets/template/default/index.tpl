@@ -45,110 +45,136 @@
 </head>
 <body dir="{dir}">
 
-<div class="navbar navbar-default hidden-print" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
-        </div>
+<header>
+    <div class="pmf-wrapper pmf-masthead">
+        <div class="container">
+            <span class="pmf-masthead-header">
+                <a title="{header}" href="{faqHome}">{header}</a>
+            </span>
 
-        <div class="navbar-collapse collapse" id="pmf-navbar-collapse">
+            <div id="mobile-nav-toggle" class="pull-right">
+                <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
 
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span title="{msgFullName}"><b class="fa fa-bars"></b> {msgLoginName}</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        <li>{msgSearch}</li>
-                        <li>{allCategories}</li>
-                        <li>{faqOverview}</li>
-                        <li>{msgAddContent}</li>
-                        <li>{msgQuestion}</li>
-                        <li>{msgOpenQuestions}</li>
-                        <li class="divider"></li>
-                        [notLoggedIn]
-                        <li>{msgRegisterUser}</li>
-                        <li>{msgLoginUser}</li>
-                        [/notLoggedIn]
-                        [userloggedIn]
-                        <li>{msgUserControlDropDown}</li>
-                        <li>{msgUserControl}</li>
-                        <li>{msgLogoutUser}</li>
-                        [/userloggedIn]
+            <nav class="pull-right pmf-nav">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav nav-pills navbar-nav">
+                        <li class="[activeSearch]">{msgSearch}</li>
+                        <li class="{activeAllCategories}">{allCategories}</li>
+                        <li class="{activeAddContent}">{msgAddContent}</li>
+                        <li class="{activeAddQuestion}">{msgQuestion}</li>
+                        <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                {msgLoginUser}
+                                <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                [notLoggedIn]
+                                <li>{msgRegisterUser}</li>
+                                <li>{msgLoginUser}</li>
+                                [/notLoggedIn]
+                                [userloggedIn]
+                                <li>{msgUserControlDropDown}</li>
+                                <li>{msgUserControl}</li>
+                                <li>{msgLogoutUser}</li>
+                                [/userloggedIn]
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-            </ul>
-
-            <form class="navbar-form" role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
-                <div class="form-group">
-                    <div class="input-group">
-                        <input type="hidden" name="searchcategory" value="{categoryId}">
-                        <input type="hidden" name="action" value="search">
-                        <input type="text" class="form-control typeahead" name="search" id="searchfield"
-                               autocomplete="off" autofocus placeholder="{searchBox} ...">
-                    </div>
-                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
                 </div>
-            </form>
+            </nav>
+
+        </div>
+    </div>
+
+    <div class="pmf-wrapper pmf-subheader">
+        <div class="container">
+            <div class="pmf-breadcrumb">
+                {breadcrumb}
+            </div>
+
+            <div class="pmf-searchbox">
+                <form role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
+                    <input type="hidden" name="searchcategory" value="{categoryId}">
+                    <input type="hidden" name="action" value="search">
+                    <button class="searchbutton" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
+                    <input type="text" class="searchfield typeahead" name="search" id="searchbox"
+                           autocomplete="off" placeholder="{searchBox} ...">
+                </form>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+
+<div class="pmf-wrapper pmf-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 pmf-maincontent">
+                <div class="row">
+
+                    {writeContent}
+
+                </div>
+            </div>
+            <aside class="col-md-4 pmf-aside">
+
+                {rightBox}
+
+                [stickyFaqs]
+                <div class="pmf-aside-widget">
+                    <header>
+                        <h3>{stickyRecordsHeader}</h3>
+                    </header>
+                    <div class="pmf-aside-widget-body">
+                        <ul class="pmf-list">
+                            {stickyRecordsList}
+                        </ul>
+                    </div>
+                </div>
+                [/stickyFaqs]
+
+            </aside>
         </div>
     </div>
 </div>
 
-<section id="content" class="container">
-    <div class="row">
-        <div class="col-md-8" id="mainContent">
 
-            {writeContent}
 
-        </div>
-        <div class="col-md-4 hidden-print" id="rightContent">
-
-            {rightBox}
-
-            [stickyFaqs]
-            <section class="well">
-                <header>
-                    <h3>{stickyRecordsHeader}</h3>
-                </header>
-                <ul>
-                    {stickyRecordsList}
-                </ul>
-            </section>
-            [/stickyFaqs]
+<footer>
+    <div class="pmf-wrapper pmf-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-9">
+                    <ul class="footer-menu">
+                        <li>{userOnline}</li>
+                        <li>{faqOverview}</li>
+                        <li>{showSitemap}</li>
+                        <li>{msgContact}</li>
+                        <li>{msgGlossary}</li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                        {switchLanguages}
+                        <input type="hidden" name="action" value="" />
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
-</section>
 
-<footer id="footer" class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-9">
-                <ul class="footer-menu">
-                    <li>{userOnline}</li>
-                    <li>{showSitemap}</li>
-                    <li>{msgContact}</li>
-                    <li>{msgGlossary}</li>
-                </ul>
-            </div>
-            <div class="col-md-3">
-                <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                    {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="copyright pull-right">
-                    {copyright}
-                </p>
+    <div class="pmf-wrapper copyright">
+        <div class="container">
+            <div class="pull-right">
+                {copyright}
             </div>
         </div>
     </div>
