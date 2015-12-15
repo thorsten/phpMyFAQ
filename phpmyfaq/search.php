@@ -277,4 +277,10 @@ $tpl->parse(
     )
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch'])
+    ]
+);

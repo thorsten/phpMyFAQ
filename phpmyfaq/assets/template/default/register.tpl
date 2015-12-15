@@ -1,8 +1,4 @@
 <section>
-            <header>
-                <h2>{msgRegistration}</h2>
-            </header>
-
             <p>{msgRegistrationCredentials} {msgRegistrationNote}</p>
 
             <div id="registrations"></div>

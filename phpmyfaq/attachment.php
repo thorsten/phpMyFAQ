@@ -103,4 +103,3 @@ if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
 // If we're here, there was an error with file download
 $tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
 $tpl->parse('writeContent', []);
-$tpl->merge('writeContent', 'index');

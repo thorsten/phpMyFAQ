@@ -38,9 +38,14 @@ $faqHelper = new PMF_Helper_Faq($faqConfig);
 $tpl->parse(
     'writeContent',
     [
-        'headerOverview' => $PMF_LANG['faqOverview'],
         'overview' => $faqHelper->createOverview($category, $faq, $LANGCODE),
     ]
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => $PMF_LANG['faqOverview']
+    ]
+);

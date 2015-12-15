@@ -1,16 +1,11 @@
-        <!-- begin news -->
-        <section>
-            <header>
-                <h2>{writeNewsHeader}{writeNewsRSS}</h2>
-            </header>
-            <!-- News -->
+<section>
+
             <article>
                 <header>
                     <h3>{writeHeader}</h3>
                 </header>
                 {writeContent}
             </article>
-            <!-- /News -->
 
             <script>
                 $(function(){
@@ -76,7 +71,7 @@
                 {writeComments}
             </div>
 
-            <script type="text/javascript" >
+            <script>
 
                 $('.show-comment-form').on('click', function(event) {
                     event.preventDefault();
@@ -90,4 +85,4 @@
                 });
             </script>
 
-        </section>
+</section>

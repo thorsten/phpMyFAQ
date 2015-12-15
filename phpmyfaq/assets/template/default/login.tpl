@@ -1,8 +1,4 @@
-        <section>
-
-            <header>
-                <h2>{loginHeader}</h2>
-            </header>
+<section>
 
             [useSslForLogins]
             <p>

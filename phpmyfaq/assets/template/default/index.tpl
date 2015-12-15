@@ -94,7 +94,9 @@
     <div class="pmf-wrapper pmf-subheader">
         <div class="container">
             <div class="pmf-breadcrumb">
-                {breadcrumb}
+                [breadcrumb]
+                {breadcrumbHeadline}
+                [/breadcrumb]
             </div>
 
             <div class="pmf-searchbox">

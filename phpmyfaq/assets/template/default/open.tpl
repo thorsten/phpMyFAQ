@@ -1,7 +1,6 @@
 <section>
             <header>
                 <h2>
-                    {msgOpenQuestions}
                     <a href="feed/openquestions/rss.php" target="_blank">
                         <i class="fa fa-rss"></i>
                     </a>

@@ -62,7 +62,14 @@ if ($user instanceof PMF_User) {
         )
     );
 
-    $tpl->merge('writeContent', 'index');
+    $tpl->parseBlock(
+        'index',
+        'breadcrumb',
+        [
+            'breadcrumbHeadline' => $PMF_LANG['headerUserControlPanel']
+        ]
+    );
+
 } else {
     // Redirect to login
     header('Location: '.$faqConfig->getDefaultUrl());

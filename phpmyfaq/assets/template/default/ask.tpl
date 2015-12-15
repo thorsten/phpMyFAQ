@@ -1,4 +1,4 @@
-<h2>{msgQuestion}</h2>
+<section>
 
             <div id="questionForm">
                 <p>{msgNewQuestion}</p>
@@ -60,12 +60,13 @@
                 </div>
 
             </form>
+        </section>
 
-            <script type="text/javascript" >
+        <script>
             $(function() {
                 $('#submitquestion').click(function() {
                     checkQuestion();
                 });
                 $('form#formValues').submit(function() { return false; });
             });
-            </script>
+        </script>

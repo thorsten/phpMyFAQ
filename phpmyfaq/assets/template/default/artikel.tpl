@@ -1,9 +1,4 @@
-            <!--
-            <div id="breadcrumbs" class="hidden-print">
-                {writeRubrik}
-            </div>
-            -->
-
+<section>
             <article class="pmf-faq">
                 <header>
                     <div class="pull-right hidden-print" id="solution_id">
@@ -166,35 +161,37 @@
                 {writeComments}
             </aside>
 
-            <script src="assets/js/libs/highlight.pack.js"></script>
-            <link rel="stylesheet" href="assets/js/libs/default.css">
-            <script>
+        </section>
 
-                $('.show-comment-form').on('click', function(event) {
-                    event.preventDefault();
-                    $('#pmf-create-comment').removeClass('hide');
+        <script src="assets/js/libs/highlight.pack.js"></script>
+        <link rel="stylesheet" href="assets/js/libs/default.css">
+        <script>
+
+            $('.show-comment-form').on('click', function(event) {
+                event.preventDefault();
+                $('#pmf-create-comment').removeClass('hide');
+            });
+
+            $(function() {
+                $("div.star-rating > span").on("click", function(e) {
+                    var numStars = $(e.target).data("stars");
+                    saveVoting("faq", {id}, numStars, "{lang}");
                 });
+            });
 
-                $(function() {
-                    $("div.star-rating > span").on("click", function(e) {
-                        var numStars = $(e.target).data("stars");
-                        saveVoting("faq", {id}, numStars, "{lang}");
-                    });
+            $('form#formValues').on('submit', function (e) {
+                e.preventDefault();
+                saveFormValues('savecomment', 'comment');
+                return false;
+            });
+
+            $(document).ready(function() {
+                hljs.configure({
+                   useBR: true
                 });
-
-                $('form#formValues').on('submit', function (e) {
-                    e.preventDefault();
-                    saveFormValues('savecomment', 'comment');
-                    return false;
+                $('pre code').each(function(i, block) {
+                    hljs.highlightBlock(block);
                 });
+            });
 
-                $(document).ready(function() {
-                    hljs.configure({
-                       useBR: true
-                    });
-                    $('pre code').each(function(i, block) {
-                        hljs.highlightBlock(block);
-                    });
-                });
-
-            </script>
+        </script>

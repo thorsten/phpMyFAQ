@@ -1,5 +1,4 @@
-<h2>{msgNewTranslationHeader}</h2>
-
+<section>
             <p>{msgNewTranslationAddon}</p>
 
             <header>
@@ -60,33 +59,35 @@
             <div id="loader"></div>
             <div id="faqs"></div>
 
-            <script type="text/javascript" >
-            $(function() {
-                $('#submitfaq').click(function() {
-                    saveFormValues('savefaq', 'faq');
-                });
-                $('form#formValues').submit(function() { return false; });
-            });
-            </script>
+        </section>
 
-            [enableWysiwygEditor]
-            <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
-            <script type="text/javascript">
-                tinyMCE.init({
-                    mode : "exact",
-                    language : "en",
-                    elements : "translated_answer",
-                    theme : "advanced",
-                    plugins : "fullscreen",
-                    theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,|,fullscreen",
-                    theme_advanced_buttons2 : "",
-                    theme_advanced_buttons3 : "",
-                    theme_advanced_toolbar_location : "top",
-                    theme_advanced_toolbar_align : "left",
-                    theme_advanced_statusbar_location : "bottom",
-                    use_native_selects : true,
-                    entity_encoding : "raw",
-                    extended_valid_elements : "code"
-                });
-            </script>
-            [/enableWysiwygEditor]
+        <script>
+        $(function() {
+            $('#submitfaq').click(function() {
+                saveFormValues('savefaq', 'faq');
+            });
+            $('form#formValues').submit(function() { return false; });
+        });
+        </script>
+
+        [enableWysiwygEditor]
+        <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
+        <script>
+            tinyMCE.init({
+                mode : "exact",
+                language : "en",
+                elements : "translated_answer",
+                theme : "advanced",
+                plugins : "fullscreen",
+                theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,|,fullscreen",
+                theme_advanced_buttons2 : "",
+                theme_advanced_buttons3 : "",
+                theme_advanced_toolbar_location : "top",
+                theme_advanced_toolbar_align : "left",
+                theme_advanced_statusbar_location : "bottom",
+                use_native_selects : true,
+                entity_encoding : "raw",
+                extended_valid_elements : "code"
+            });
+        </script>
+        [/enableWysiwygEditor]

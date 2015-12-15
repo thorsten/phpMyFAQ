@@ -1,8 +1,4 @@
 <section>
-            <header>
-                <h2>{categoryHeader}</h2>
-            </header>
-
             <ul class="nav nav-tabs">
                 <li><a href="#faqs" data-toggle="tab">{categoryFaqsHeader}</a></li>
                 [subCategories]

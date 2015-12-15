@@ -718,16 +718,18 @@ if (DEBUG) {
 }
 
 //
+// Include requested PHP file
+//
+require $includePhp;
+
+//
 // Get main template, set main variables
 //
 $tpl->parse('index', array_merge($tplMainPage, $tplNavigation));
 
 $tpl->merge('rightBox', 'index');
 
-//
-// Include requested PHP file
-//
-require $includePhp;
+$tpl->merge('writeContent', 'index');
 
 //
 // Send headers and print template

@@ -54,4 +54,10 @@ $tpl->parse(
     )
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter
+    ]
+);

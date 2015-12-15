@@ -1,10 +1,7 @@
 <section>
-            <header>
-                <h2>{msgAdvancedSearch}</h2>
-                [searchTagsSection]
-                    {searchTags}
-                [/searchTagsSection]
-            </header>
+            [searchTagsSection]
+                {searchTags}
+            [/searchTagsSection]
 
             [tagListSection]
             <h3>{msgTags}</h3>

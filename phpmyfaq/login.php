@@ -55,4 +55,10 @@ $tpl->parse(
     )
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => $PMF_LANG['msgLoginUser']
+    ]
+);

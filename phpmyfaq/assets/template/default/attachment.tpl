@@ -1,3 +1,7 @@
 [attachmentErrors]
-<p>{item}</p>
+<section>
+            <p>
+                {item}
+            </p>
+        </section>
 [/attachmentErrors]

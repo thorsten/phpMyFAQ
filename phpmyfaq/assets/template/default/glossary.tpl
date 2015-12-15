@@ -1,17 +1,13 @@
-        <section>
+<section>
 
-            <header>
-                <h2>{msgGlossary}</h2>
-            </header>
-
-            <section>
+            <article>
                 [glossaryItems]
                 <dl>
                     <dd><strong>{item}</strong></dd>
                     <dd>{desc}</dd>
                 </dl>
                 [/glossaryItems]
-            </section>
+            </article>
 
             <div class="pagination pagination-centered">
                 <div>

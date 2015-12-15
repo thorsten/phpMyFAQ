@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
  */
@@ -44,4 +42,10 @@ $tpl->parse(
     )
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions']
+    ]
+);

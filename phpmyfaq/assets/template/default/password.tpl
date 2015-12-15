@@ -1,8 +1,4 @@
-        <section>
-
-            <header>
-                <h2>{headerChangePassword}</h2>
-            </header>
+<section>
 
             <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
 

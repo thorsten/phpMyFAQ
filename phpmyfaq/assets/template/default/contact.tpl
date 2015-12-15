@@ -1,4 +1,4 @@
-<h2>{msgContact}</h2>
+<section>
             <p>{msgContactOwnText}</p>
             <p><strong>{msgContactEMail}</strong></p>
 
@@ -40,14 +40,6 @@
                 </div>
             </form>
 
-            <script>
-                $(function() {
-                    $('#submitcontact').click(function() {
-                        saveFormValues('sendcontact', 'contact');
-                    });
-                    $('form#formValues').submit(function() { return false; });
-                });
-            </script>
             
             <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->
             <div id="copyright">
@@ -62,3 +54,15 @@
                 </small>
             </div>
             <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->
+
+
+        </section>
+
+        <script>
+            $(function() {
+                $('#submitcontact').click(function() {
+                    saveFormValues('sendcontact', 'contact');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+        </script>

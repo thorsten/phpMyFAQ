@@ -6,9 +6,7 @@
         [/tagListSection]
 
         <section>
-            <header>
-                <h2>{writeNewsHeader} {writeNewsRSS}</h2>
-            </header>
+            {writeNewsRSS}
             <article>
                 {writeNews}
             </article>

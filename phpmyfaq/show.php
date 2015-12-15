@@ -91,6 +91,15 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             'categoryLevelUp' => $up,
         )
     );
+
+    $tpl->parseBlock(
+        'index',
+        'breadcrumb',
+        [
+            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'].$catName
+        ]
+    );
+
 } else {
     try {
         $faqsession->userTracking('show_all_categories', 0);
@@ -109,6 +118,12 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
             'categoryLevelUp' => '',
         )
     );
-}
 
-$tpl->merge('writeContent', 'index');
+    $tpl->parseBlock(
+        'index',
+        'breadcrumb',
+        [
+            'breadcrumbHeadline' => $PMF_LANG['msgFullCategories']
+        ]
+    );
+}
