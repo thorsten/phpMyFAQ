@@ -486,45 +486,9 @@ hr {
 }
 
 //
-// Lists
-//
-.pmf-list {
-
-  li {
-    line-height: 23px;
-    margin-bottom: 14px;
-
-    a {
-      &:hover, &:focus {
-        color:@link-secondary;
-      }
-    }
-  }
-
-  .pmf-footer & {
-    margin-top: -6px;
-    padding-left: 23px;
-    li {
-      margin-bottom: 5px;
-
-      a {
-        color: @pmf-footer-text;
-        padding-bottom: 5px;
-      }
-
-      &:before {
-        left: -21px;
-        border-color: transparent transparent transparent @pmf-footer-text;
-      }
-    }
-  }
-}
-
-//
 // Main contents
 //
 .pmf-maincontent, .pmf-aside {
-  position:relative;
   &:before {
     border-left: 1px solid @vertical-separator;
     height: 100%;
@@ -543,8 +507,8 @@ hr {
   padding-bottom: 20px;
 
   &:before {
-    right:-16px;
-    @media @small {display: none;}
+    right: -16px;
+    @media @small { display: none; }
   }
 }
 
@@ -591,6 +555,41 @@ hr {
     color: @widget-link;
     &:hover {
       text-decoration: underline;
+    }
+  }
+}
+
+//
+// Lists
+//
+.pmf-list {
+
+  li {
+    line-height: 23px;
+    margin-bottom: 14px;
+
+    a {
+      &:hover, &:focus {
+        color:@link-secondary;
+      }
+    }
+  }
+
+  .pmf-footer & {
+    margin-top: -6px;
+    padding-left: 23px;
+    li {
+      margin-bottom: 5px;
+
+      a {
+        color: @pmf-footer-text;
+        padding-bottom: 5px;
+      }
+
+      &:before {
+        left: -21px;
+        border-color: transparent transparent transparent @pmf-footer-text;
+      }
     }
   }
 }
