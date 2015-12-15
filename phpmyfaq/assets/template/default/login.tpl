@@ -8,42 +8,53 @@
 
             {loginMessage}
 
-            <form class="form-horizontal" action="{writeLoginPath}" method="post" role="form">
-                <input type="hidden" name="faqloginaction" value="{faqloginaction}">
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2">
+                    <div class="login-panel panel panel-default">
+                        <div class="panel-heading">
+                            <header>
+                                <h3 class="panel-title text-center">phpMyFAQ Login</h3>
+                            </header>
+                        </div>
+                        <div class="panel-body">
+                            <form action="{writeLoginPath}" method="post" role="form">
+                                <fieldset>
 
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="faqusername">{username}</label>
-                    <div class="col-sm-9">
-                        <input type="text" name="faqusername" id="faqusername" class="form-control" required autofocus>
-                    </div>
-                </div>
+                                    <div class="form-group">
+                                        <input type="text" name="faqusername" id="faqusername"  class="form-control"
+                                               placeholder="{username}" required>
+                                    </div>
 
-                <div class="form-group">
-                    <label class="col-sm-3 control-label" for="faqpassword">{password}</label>
-                    <div class="col-sm-9">
-                        <input type="password" name="faqpassword" id="faqpassword" class="form-control" required>
-                        <p class="help-block">{sendPassword}</p>
-                    </div>
-                </div>
+                                    <div class="form-group">
+                                        <input type="password" name="faqpassword" id="faqpassword" class="form-control"
+                                               placeholder="{password}" required>
+                                    </div>
 
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                                {rememberMe}
-                            </label>
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" id="faqrememberme" name="faqrememberme"
+                                                   value="rememberMe">
+                                            {rememberMe}
+                                        </label>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                            {loginHeader}
+                                        </button>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <p class="pull-right">
+                                            {sendPassword}
+                                            <br>
+                                            {registerUser}
+                                        </p>
+                                    </div>
+                                </fieldset>
+                            </form>
                         </div>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button class="btn btn-primary" type="submit">
-                            {loginHeader}
-                        </button>
-                    </div>
-                </div>
-            </form>
-
+            </div>
         </section>

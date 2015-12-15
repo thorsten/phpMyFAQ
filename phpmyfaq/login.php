@@ -27,9 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if (is_null($error)) {
-    $loginMessage = '<p>'.$PMF_LANG['ad_auth_insert'].'</p>';
-} else {
+$loginMessage = '';
+if (!is_null($error)) {
     $loginMessage = '<p class="alert alert-danger">'.$error.'</p>';
 }
 
