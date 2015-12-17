@@ -447,9 +447,7 @@ $keywords = implode(',', $keywordsArray);
 $faqLink = new PMF_Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
 $currentPageUrl = $faqLink->getCurrentUrl();
 
-if (is_null($error)) {
-    $loginMessage = '<p>'.$PMF_LANG['ad_auth_insert'].'</p>';
-} else {
+if (!is_null($error)) {
     $loginMessage = '<p class="error">'.$error.'</p>';
 }
 

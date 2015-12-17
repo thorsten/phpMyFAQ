@@ -70,6 +70,6 @@ $tpl->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $writeNewsHeader
+        'breadcrumbHeadline' => $auth ? $writeNewsHeader : $PMF_LANG['msgLoginUser']
     ]
 );

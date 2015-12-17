@@ -48,9 +48,10 @@
 <header>
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
-            <span class="pmf-masthead-header">
-                <a title="{header}" href="{faqHome}">{header}</a>
-            </span>
+            <a id="logo" title="{header}" href="{faqHome}">
+                <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
+            </a>
+
 
             <div id="mobile-nav-toggle" class="pull-right">
                 <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
@@ -61,7 +62,7 @@
             <nav class="pull-right pmf-nav">
                 <div class="collapse navbar-collapse">
                     <ul class="nav nav-pills navbar-nav">
-                        <li class="[activeSearch]">{msgSearch}</li>
+                        <li class="{activeSearch}">{msgSearch}</li>
                         <li class="{activeAllCategories}">{allCategories}</li>
                         <li class="{activeAddContent}">{msgAddContent}</li>
                         <li class="{activeAddQuestion}">{msgQuestion}</li>

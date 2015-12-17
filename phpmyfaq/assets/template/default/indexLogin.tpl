@@ -52,86 +52,117 @@
 </div>
  <![endif]-->
 
-<nav class="navbar navbar-default hidden-print" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
-        </div>
 
-        <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                [notLoggedIn]
-                <li class="{activeRegister}">{msgRegisterUser}</li>
-                [/notLoggedIn]
-            </ul>
+<header>
+    <div class="pmf-wrapper pmf-masthead">
+        <div class="container">
+            <a id="logo" title="{header}" href="{faqHome}">
+                <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
+            </a>
         </div>
     </div>
-</nav>
 
-<section id="content" class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2" id="mainContent">
-            <section>
-                <header>
-                    <h2>{loginHeader}</h2>
-                </header>
-
-                {loginMessage}
-
-                <form class="form-horizontal" action="{writeLoginPath}" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="faqloginaction" value="{faqloginaction}"/>
-
-
-                    <div class="form-group">
-                        <input type="text" name="faqusername" id="faqusername"  class="form-control"
-                               placeholder="{username}" required>
-                    </div>
-
-                    <div class="form-group">
-                        <input type="password" name="faqpassword" id="faqpassword" class="form-control"
-                               placeholder="{password}" required>
-                    </div>
-
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                            {sendPassword}
-                        </label>
-                    </div>
-
-                    <div class="form-group">
-                        <button class="btn btn-lg btn-success btn-block" type="submit">
-                            {loginHeader}
-                        </button>
-                    </div>
-
-                </form>
-
-            </section>
-        </div>
+    <div class="pmf-wrapper pmf-subheader">
+        <div class="container">
+            <div class="pmf-breadcrumb">
+                [breadcrumb]
+                {breadcrumbHeadline}
+                [/breadcrumb]
+            </div>
     </div>
-</section>
-<footer id="footer" class="hidden-print">
+</header>
+
+<div class="pmf-wrapper pmf-main">
     <div class="container">
         <div class="row">
-            <div class="col-md-offset-9 col-md-3">
-                <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                    {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
+            <div class="col-md-8 col-md-offset-2 pmf-maincontent">
+                <div class="row">
+                    <section>
+
+                        [useSslForLogins]
+                        <p>
+                            <a href="{secureloginurl}">{securelogintext}</a>
+                        </p>
+                        [/useSslForLogins]
+
+                        {loginMessage}
+
+                        <div class="row">
+                            <div class="col-md-8 col-md-offset-2">
+                                <div class="login-panel panel panel-default">
+                                    <div class="panel-heading">
+                                        <header>
+                                            <h3 class="panel-title text-center">phpMyFAQ Login</h3>
+                                        </header>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form action="{writeLoginPath}" method="post" role="form">
+                                            <fieldset>
+
+                                                <div class="form-group">
+                                                    <input type="text" name="faqusername" id="faqusername"
+                                                           class="form-control input-lg" placeholder="{username}"
+                                                           required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input type="password" name="faqpassword" id="faqpassword"
+                                                           class="form-control input-lg" placeholder="{password}"
+                                                           required>
+                                                </div>
+
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" id="faqrememberme" name="faqrememberme"
+                                                               value="rememberMe">
+                                                        {rememberMe}
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button class="btn btn-lg btn-primary btn-block" type="submit">
+                                                        {loginHeader}
+                                                    </button>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <p class="pull-right">
+                                                        {sendPassword}
+                                                        <br>
+                                                        {registerUser}
+                                                    </p>
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
             </div>
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="copyright pull-right">
-                    {copyright}
-                </p>
+    </div>
+</div>
+
+<footer>
+    <div class="pmf-wrapper pmf-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-9">
+                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                        {switchLanguages}
+                        <input type="hidden" name="action" value="" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pmf-wrapper copyright">
+        <div class="container">
+            <div class="pull-right">
+                {copyright}
             </div>
         </div>
     </div>

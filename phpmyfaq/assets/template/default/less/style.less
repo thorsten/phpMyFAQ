@@ -102,12 +102,14 @@ hr {
 .pmf-masthead {
   padding-top: 44px;
   padding-bottom: 44px;
+
   a {
     color: @pmf-masthead-link;
   }
-  .pmf-masthead-header {
-    display: inline-block;
-    padding-top: 15px;
+
+  #logo {
+    float: left;
+    display: block;
   }
 }
 
@@ -183,7 +185,7 @@ hr {
       margin-left: 10px;
       > a {
         color: @navigation-link;
-        padding: 11px 16px;
+        padding: 11px 10px;
         line-height: 14px;
 
         &:hover, &:focus {
