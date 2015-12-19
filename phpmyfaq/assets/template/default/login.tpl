@@ -21,7 +21,7 @@
                                 <fieldset>
 
                                     <div class="form-group">
-                                        <input type="text" name="faqusername" id="faqusername"  class="form-control"
+                                        <input type="text" name="faqusername" id="faqusername" class="form-control"
                                                placeholder="{username}" required>
                                     </div>
 
@@ -57,4 +57,6 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
+    </div>
+</section>

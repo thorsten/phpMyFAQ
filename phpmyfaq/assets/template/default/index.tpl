@@ -52,7 +52,6 @@
                 <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
             </a>
 
-
             <div id="mobile-nav-toggle" class="pull-right">
                 <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
                     <i class="fa fa-bars"></i>

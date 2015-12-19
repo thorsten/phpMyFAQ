@@ -45,84 +45,106 @@
 </head>
 <body dir="{dir}">
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Did you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
-<![endif]-->
-
-<nav class="navbar navbar-default hidden-print" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
+<header>
+    <div class="pmf-wrapper pmf-masthead">
+        <div class="container">
+            <a id="logo" title="{header}" href="{faqHome}">
+                <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
+            </a>
         </div>
     </div>
-</nav>
 
-<section id="content" class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2" id="mainContent">
-            <section>
-                <header>
-                    <h2>{headerChangePassword}</h2>
-                </header>
-
-                <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
-
-                    <div class="control-group">
-                        <label class="control-label">{msgUsername}</label>
-                        <div class="controls">
-                            <input type="text" name="username" required="required" autofocus="autofocus" />
-                        </div>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="control-label">{msgEmail}</label>
-                        <div class="controls">
-                            <input type="email" name="email" required="required" />
-                        </div>
-                    </div>
-
-                    <div class="form-actions">
-                        <button class="btn btn-primary" type="submit" id="changepassword">
-                            {msgSubmit}
-                        </button>
-                    </div>
-                </form>
-
-                <div id="loader"></div>
-                <div id="changepasswords"></div>
-
-                <script type="text/javascript" >
-                    $(function() {
-                        $('#changepassword').click(function() {
-                            saveFormValues('changepassword', 'changepassword');
-                        });
-                        $('form#formValues').submit(function() { return false; });
-                    });
-                </script>
-
-            </section>
-        </div>
-    </div>
-</section>
-
-<footer id="footer" class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-9 col-md-3">
-                <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                    {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
+    <div class="pmf-wrapper pmf-subheader">
+        <div class="container">
+            <div class="pmf-breadcrumb">
+                [breadcrumb]
+                {breadcrumbHeadline}
+                [/breadcrumb]
             </div>
         </div>
+    </div>
+</header>
+
+<div class="pmf-wrapper pmf-main">
+    <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <p class="copyright pull-right">
-                    {copyright}
-                </p>
+                <div class="row">
+                    <section>
+
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="login-panel panel panel-default">
+                                    <div class="panel-heading">
+                                        <header>
+                                            <h3 class="panel-title text-center">phpMyFAQ Password</h3>
+                                        </header>
+                                    </div>
+                                    <div class="panel-body">
+                                        <form id="formValues" action="#" method="post">
+
+                                            <fieldset>
+                                                <div class="form-group">
+                                                    <input type="text" name="username" class="form-control input-lg"
+                                                           placeholder="{msgUsername}" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <input type="email" name="email" class="form-control input-lg"
+                                                           placeholder="{msgEmail}" required>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <button class="btn btn-lg btn-primary btn-block" type="submit"
+                                                            id="changepassword">
+                                                        {msgSubmit}
+                                                    </button>
+                                                </div>
+                                            </fieldset>
+
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="loader"></div>
+                        <div id="changepasswords"></div>
+
+                        <script type="text/javascript" >
+                            $(function() {
+                                $('#changepassword').click(function() {
+                                    saveFormValues('changepassword', 'changepassword');
+                                });
+                                $('form#formValues').submit(function() { return false; });
+                            });
+                        </script>
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="pmf-wrapper pmf-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-9">
+                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                        {switchLanguages}
+                        <input type="hidden" name="action" value="" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pmf-wrapper copyright">
+        <div class="container">
+            <div class="pull-right">
+                {copyright}
             </div>
         </div>
     </div>

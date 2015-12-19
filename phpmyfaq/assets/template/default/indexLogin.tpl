@@ -45,14 +45,6 @@
 </head>
 <body dir="{dir}">
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Did you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
- <![endif]-->
-
-
 <header>
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
@@ -75,7 +67,7 @@
 <div class="pmf-wrapper pmf-main">
     <div class="container">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2 pmf-maincontent">
+            <div class="col-md-12">
                 <div class="row">
                     <section>
 
@@ -88,7 +80,7 @@
                         {loginMessage}
 
                         <div class="row">
-                            <div class="col-md-8 col-md-offset-2">
+                            <div class="col-md-6 col-md-offset-3">
                                 <div class="login-panel panel panel-default">
                                     <div class="panel-heading">
                                         <header>

@@ -45,60 +45,75 @@
 </head>
 <body dir="{dir}">
 
-<!--[if lt IE 8 ]>
-<div class="internet-explorer-error">
-    Did you know that your Internet Explorer is out of date?<br/>
-    Please use Internet Explorer 8+, Mozilla Firefox 4+, Google Chrome, Apple Safari 5+ or Opera 11+
-</div>
- <![endif]-->
+<header>
+    <div class="pmf-wrapper pmf-masthead">
+        <div class="container">
+            <a id="logo" title="{header}" href="{faqHome}">
+                <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
+            </a>
 
-<nav class="navbar navbar-default hidden-print" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
-        </div>
+            <div id="mobile-nav-toggle" class="pull-right">
+                <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
 
-        <div class="collapse navbar-collapse" id="pmf-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                [notLoggedIn]
-                <li class="{activeLogin}">{msgLoginUser}</li>
-                [/notLoggedIn]
-            </ul>
+            <nav class="pull-right pmf-nav">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav nav-pills navbar-nav">
+                        <li>{msgLoginUser}</li>
+                    </ul>
+                </div>
+            </nav>
+
         </div>
     </div>
-</nav>
 
-<section id="content" class="container">
-    <div class="row">
-        <div class="col-md-8 col-md-offset-2" id="mainContent">
-            <section>
-            {writeContent}
-            </section>
-        </div>
-    </div>
-</section>
-
-<footer id="footer" class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-offset-9 col-md-3">
-                <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                    {switchLanguages}
-                    <input type="hidden" name="action" value="" />
-                </form>
+    <div class="pmf-wrapper pmf-subheader">
+        <div class="container">
+            <div class="pmf-breadcrumb">
+                [breadcrumb]
+                {breadcrumbHeadline}
+                [/breadcrumb]
             </div>
         </div>
+    </div>
+</header>
+
+<div class="pmf-wrapper pmf-main">
+    <div class="container">
         <div class="row">
-            <div class="col-md-12">
-                <p class="copyright pull-right">
-                    {copyright}
-                </p>
+            <div class="col-md-6 col-md-offset-3">
+                <div class="row">
+                    <section>
+
+                        {writeContent}
+
+                    </section>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <div class="pmf-wrapper pmf-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-9">
+                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                        {switchLanguages}
+                        <input type="hidden" name="action" value="" />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="pmf-wrapper copyright">
+        <div class="container">
+            <div class="pull-right">
+                {copyright}
             </div>
         </div>
     </div>

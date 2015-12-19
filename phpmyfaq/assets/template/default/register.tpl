@@ -9,21 +9,21 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="realname">{realname}</label>
                     <div class="col-sm-9">
-                        <input type="text" name="realname" id="realname" required class="form-control">
+                        <input type="text" name="realname" id="realname" required class="form-control input-lg">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="name">{loginname}</label>
                     <div class="col-sm-9">
-                        <input type="text" name="name" id="name" required class="form-control">
+                        <input type="text" name="name" id="name" required class="form-control input-lg">
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="email">{email}</label>
                     <div class="col-sm-9">
-                        <input type="email" name="email" id="email" required class="form-control">
+                        <input type="email" name="email" id="email" required class="form-control input-lg">
                     </div>
                 </div>
 

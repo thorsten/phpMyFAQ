@@ -34,60 +34,86 @@
 </head>
 <body dir="{dir}">
 
-<div class="navbar navbar-default hidden-print" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#pmf-navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" title="{header}" href="{faqHome}">{header}</a>
-        </div>
+<header>
+    <div class="pmf-wrapper pmf-masthead">
+        <div class="container">
+            <a id="logo" title="{header}" href="{faqHome}">
+                <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
+            </a>
 
-        <div class="navbar-collapse collapse" id="pmf-navbar-collapse">
-            <ul class="nav navbar-nav navbar-right">
-                <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <span title="{msgFullName}"><b class="fa fa-bars"></b> {msgLoginName}</span>
-                        <b class="caret"></b>
-                    </a>
-                    <ul class="dropdown-menu">
-                        [notLoggedIn]
+            <div id="mobile-nav-toggle" class="pull-right">
+                <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
+                    <i class="fa fa-bars"></i>
+                </a>
+            </div>
+
+            <nav class="pull-right pmf-nav">
+                <div class="collapse navbar-collapse">
+                    <ul class="nav nav-pills navbar-nav">
                         <li>{msgLoginUser}</li>
-                        [/notLoggedIn]
-                        [userloggedIn]
-                        <li>{msgUserControl}</li>
-                        <li>{msgLogoutUser}</li>
-                        [/userloggedIn]
                     </ul>
-                </li>
-            </ul>
+                </div>
+            </nav>
+
+        </div>
+    </div>
+
+    <div class="pmf-wrapper pmf-subheader">
+        <div class="container">
+            <div class="pmf-breadcrumb">
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="pmf-wrapper pmf-main">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="jumbotron text-center">
+                        <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<section id="content">
-    <div class="container">
-        <div class="row">
-            <div class="jumbotron text-center">
-                <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
+<footer>
+    <div class="pmf-wrapper pmf-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 col-md-offset-9">
+                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
+                        {switchLanguages}
+                        <input type="hidden" name="action" value="" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
-</section>
 
-<footer id="footer" class="hidden-print">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <p class="copyright pull-right">
-                    {copyright}
-                </p>
+    <div class="pmf-wrapper copyright">
+        <div class="container">
+            <div class="pull-right">
+                {copyright}
             </div>
         </div>
     </div>
+
+    [debugMode]
+    <div class="container debug-mode">
+        <h3>DEBUG INFORMATION</h3>
+        <hr>
+        <h4>EXCEPTIONS</h4>
+        {debugExceptions}
+        <hr>
+        <h4>DATABASE QUERIES</h4>
+        {debugQueries}
+    </div>
+    [/debugMode]
+
 </footer>
 
 </body>

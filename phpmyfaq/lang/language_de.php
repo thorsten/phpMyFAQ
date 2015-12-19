@@ -514,7 +514,7 @@ $PMF_LANG["msgAttachedFiles"] = "angehängte Dateien:";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "Aktion";
-$PMF_LANG["ad_entry_email"] = "E-Mail:";
+$PMF_LANG["ad_entry_email"] = "E-Mail";
 $PMF_LANG["ad_entry_allowComments"] = "Kommentare zulassen";
 $PMF_LANG["msgWriteNoComment"] = "Kommentieren nicht möglich";
 $PMF_LANG["ad_user_realname"] = "Dein Name:";
