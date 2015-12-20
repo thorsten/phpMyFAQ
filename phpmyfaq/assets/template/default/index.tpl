@@ -159,8 +159,8 @@
                         <li>{userOnline}</li>
                         <li>{faqOverview}</li>
                         <li>{showSitemap}</li>
-                        <li>{msgContact}</li>
                         <li>{msgGlossary}</li>
+                        <li>{msgContact}</li>
                     </ul>
                 </div>
                 <div class="col-md-3">

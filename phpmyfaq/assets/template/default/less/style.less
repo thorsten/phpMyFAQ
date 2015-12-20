@@ -139,13 +139,13 @@ hr {
     background-color: @pmf-footer-background;
     color: @pmf-footer-text;
     font-size: 14px;
-    padding: 30px 0 30px;
+    padding: 40px 0 40px;
 
     a {
       color:@pmf-footer-link;
-    }
-    h1, h2, h3, h4, h5 {
-      color:@pmf-footer-heading;
+      &:hover {
+        text-decoration: underline;
+      }
     }
 
     ul.footer-menu {
@@ -582,6 +582,7 @@ hr {
   .pmf-footer & {
     margin-top: -6px;
     padding-left: 23px;
+
     li {
       margin-bottom: 5px;
 
@@ -592,7 +593,6 @@ hr {
 
       &:before {
         left: -21px;
-        border-color: transparent transparent transparent @pmf-footer-text;
       }
     }
   }
