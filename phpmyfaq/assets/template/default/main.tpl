@@ -1,7 +1,9 @@
         [tagListSection]
-        <div class="well">
+        <div class="well clearfix">
             <h3>{msgTags}</h3>
-            {tagList}
+            <ul class="pmf-tags">
+                {tagList}
+            </ul>
         </div>
         [/tagListSection]
 

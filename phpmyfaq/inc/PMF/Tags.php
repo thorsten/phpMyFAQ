@@ -669,18 +669,18 @@ class PMF_Tags
     }
 
     /**
-     * @param $limit
+     * @param integer $limit
      *
      * @return string
      */
-    public function renderPopularTags($limit)
+    public function renderPopularTags($limit = 0)
     {
         $html = '';
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
-            $direction = $this->is_english($tagName[0]) ? 'ltr' : 'rtl';
+            $direction = $this->isEnglish($tagName[0]) ? 'ltr' : 'rtl';
             $html      .= sprintf(
-                '<a class="btn tag" style="direction:%s;" href="?action=search&amp;tagging_id=%d">%s (%d)</a>',
+                '<li><a style="direction:%s;" href="?action=search&tagging_id=%d">%s <span class="badge">%d</span></a></li>',
                 $direction,
                 $tagId,
                 $tagName,
@@ -696,7 +696,7 @@ class PMF_Tags
      *
      * @return bool
      */
-    public function is_english($chr)
+    public function isEnglish($chr)
     {
         if (($chr >= 'A') && ($chr <= 'Z')) {
             return true;
