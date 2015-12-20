@@ -1,5 +1,5 @@
         [tagListSection]
-        <div class="well pull-left" style="width:60%; margin-right: 10px;">
+        <div class="well">
             <h3>{msgTags}</h3>
             {tagList}
         </div>
