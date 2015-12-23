@@ -1,0 +1,8 @@
+<?php
+
+$ES['server'] = '';
+$ES['port'] = 9200;
+$ES['index'] = '';
+$ES['type'] = '';
+$ES['id'] = '';
+$ES['body'] = [];

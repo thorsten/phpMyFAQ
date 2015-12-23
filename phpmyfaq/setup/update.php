@@ -199,21 +199,48 @@ if ($step === 1) {
 
 /**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {
-    $checkDatabaseSetupFile = $checkLdapSetupFile = false;
+    $checkDatabaseSetupFile = $checkLdapSetupFile = $checkElasticsearchSetupFile = false;
+    $updateMessages = [];
 
-    // The backup an existing config/database.php
-    // 2.6+ updates
+    // Backup of config/database.php
     if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/database.php', PMF_ROOT_DIR.'/config/database.bak.php')) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php '.
                   'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
+            $updateMessages[] = 'A backup of your database configuration file has been made.';
         }
     }
 
+    // Backup of config/ldap.php if exists
+    if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
+        if (!copy(PMF_ROOT_DIR.'/config/ldap.php', PMF_ROOT_DIR.'/config/ldap.bak.php')) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php '.
+                'could not be written. Please correct this!</p>';
+        } else {
+            $checkLdapSetupFile = true;
+            $updateMessages[] = 'A backup of your LDAP configuration file has been made.';
+        }
+    } else {
+        $checkLdapSetupFile = true;
+    }
+
+    // Backup of config/elasticsearch.php if exists
+    if (file_exists(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
+        if (!copy(PMF_ROOT_DIR.'/config/elasticsearch.php', PMF_ROOT_DIR.'/config/elasticsearch.bak.php')) {
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
+                '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
+        } else {
+            $checkElasticsearchSetupFile = true;
+            $updateMessages[] = 'A backup of your Elasticsearch configuration file has been made.';
+        }
+    } else {
+        $checkElasticsearchSetupFile = true;
+    }
+
     // is everything is okay?
-    if ($checkDatabaseSetupFile) {
+    if ($checkDatabaseSetupFile && $checkLdapSetupFile && $checkElasticsearchSetupFile) {
         ?>
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php echo $version;
@@ -241,8 +268,10 @@ if ($step == 2) {
         </div>
         <div class="row setup-content" id="step2">
             <div class="col-lg-12">
-                <p>A backup of your database configuration file has been made.</p>
-                <p>The configuration will be updated after the next step.</p>
+                <?php foreach ($updateMessages as $updateMessage) {
+                    printf('<p><i class="fa fa-check-circle"></i> %s</p>', $updateMessage);
+                } ?>
+                <p>Your phpMyFAQ configuration will be updated after the next step.</p>
                 <p style="text-align: center;">
                     <button class="btn btn-primary btn-lg" type="submit">
                         Go to step 3 of 3
