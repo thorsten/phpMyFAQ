@@ -449,6 +449,8 @@ $currentPageUrl = $faqLink->getCurrentUrl();
 
 if (!is_null($error)) {
     $loginMessage = '<p class="error">'.$error.'</p>';
+} else {
+    $loginMessage = '';
 }
 
 $faqSeo = new PMF_Seo($faqConfig);
