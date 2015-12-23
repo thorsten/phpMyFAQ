@@ -40,7 +40,7 @@ Version 2.9.0-beta2 - 2016-
 - added FAQ overview page (Thorsten)
 - extended REST/JSON API (Thorsten)
 - code base PSR-1 and PSR-2 compatible (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.6.10 (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.6.12 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
 - updated bundled Bootstrap to version 3.3.5 (Thorsten)
 - updated bundled Font Awesome to version 4.4.0 (Thorsten)

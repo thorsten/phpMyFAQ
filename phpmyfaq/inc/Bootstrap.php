@@ -18,13 +18,17 @@
  */
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Symfony\Component\ClassLoader\Psr4ClassLoader;
+use Elasticsearch\ClientBuilder;
+use Psr\Log\NullLogger;
+use GuzzleHttp\Ring\Client\CurlHandler;
 
 //
 // Debug mode:
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -169,6 +173,21 @@ if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap
     $faqConfig->setLdapConfig($PMF_LDAP);
 } else {
     $ldap = null;
+}
+
+//
+// Connect to Elasticsearch if enabled
+//
+if ($faqConfig->get('search.enableElasticsearch')) {
+
+    $psr4Loader = new Psr4ClassLoader();
+    $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
+    $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
+    $psr4Loader->addPrefix('Monolog', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
+    $psr4Loader->addPrefix('Psr', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
+    $psr4Loader->register();
+
+    $esClient = ClientBuilder::create()->build();
 }
 
 //
