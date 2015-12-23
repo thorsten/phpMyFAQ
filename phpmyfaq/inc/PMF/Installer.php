@@ -346,6 +346,7 @@ class PMF_Installer
         'search.enableRelevance' => 'false',
         'search.enableHighlighting' => 'true',
         'search.searchForSolutionId' => 'true',
+        'search.enableElasticsearch' => 'false',
 
         'security.permLevel' => 'basic',
         'security.ipCheck' => 'false',

@@ -1198,3 +1198,6 @@ $LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Aktivierung des Mar
 $PMF_LANG['faqOverview'] = 'FAQ Übersicht';
 $PMF_LANG['ad_dir_missing'] = 'Der Ordner %s fehlt.';
 $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Aktivierung von Smart Answering bei Benutzerfragen<br>(Standard: aktiviert)');
+
+// added v2.9.0-beta2 - 2015-12-23 by Thorsten
+$LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Aktiviere Elasticsearch Unterstützung<br>(Standard: deaktiviert)');

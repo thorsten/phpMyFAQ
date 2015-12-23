@@ -819,9 +819,10 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 2.9.0-alpha4
+    // UPDATES FROM 2.9.0-beta
     //
-    if (version_compare($version, '2.9.0-beta', '<')) {
+    if (version_compare($version, '2.9.0-beta2', '<')) {
+        $faqConfig->add('search.enableElasticsearch', 'false');
     }
 
     // Always the last step: Update version number
