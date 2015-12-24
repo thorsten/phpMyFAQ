@@ -54,7 +54,7 @@ class PMF_Filter
     }
 
     /**
-     * Static wrapper method for filter_input_[].
+     * Static wrapper method for filter_input_array.
      *
      * @param int   $type       Filter type
      * @param array $definition Definition

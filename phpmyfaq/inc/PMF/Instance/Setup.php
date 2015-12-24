@@ -157,6 +157,28 @@ class PMF_Instance_Setup
     }
 
     /**
+     * Creates the file /config/elasticsearch.php
+     *
+     * @param array  $data   Array with LDAP credentials
+     * @param string $folder Folder
+     *
+     * @return int
+     */
+    public function createElasticsearchFile(Array $data, $folder = '/config')
+    {
+        $ret = file_put_contents(
+            $this->_rootDir.$folder.'/config/elasticsearch.php',
+            "<?php\n".
+            "\$ES['hosts'] = ['".implode("'], ['", $data['hosts'])."'];\n".
+            "\$ES['index'] = '".$data['index']."';\n".
+            "\$ES['type'] = 'faqs';",
+            LOCK_EX
+        );
+
+        return $ret;
+    }
+
+    /**
      * Creates a new folder.
      *
      * @param string $name Name of the new folder

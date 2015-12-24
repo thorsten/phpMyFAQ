@@ -1,5 +1,10 @@
 <?php
 
+use Symfony\Component\ClassLoader\Psr4ClassLoader;
+use Elasticsearch\ClientBuilder;
+use Psr\Log\NullLogger;
+use GuzzleHttp\Ring\Client\CurlHandler;
+
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
@@ -10,11 +15,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2015 phpMyFAQ Team
+ * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27
  */
@@ -26,11 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Installer.
  *
  * @category  phpMyFAQ
- *
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2015 phpMyFAQ Team
+ * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27
  */
@@ -645,7 +646,9 @@ class PMF_Installer
 
         $configuration = new PMF_Configuration($db);
 
-        // check LDAP if available
+        //
+        // Check LDAP if enabled
+        //
         $ldapEnabled = PMF_Filter::filterInput(INPUT_POST, 'ldap_enabled', FILTER_SANITIZE_STRING);
         if (extension_loaded('ldap') && !is_null($ldapEnabled)) {
             $ldapSetup = [];
@@ -685,6 +688,52 @@ class PMF_Installer
             );
             if (!$ldap) {
                 echo '<p class="alert alert-danger"><strong>LDAP Error:</strong> '.$ldap->error()."</p>\n";
+                PMF_System::renderFooter(true);
+            }
+        }
+
+
+        //
+        // Check Elasticsearch if enabled
+        //
+        $esEnabled = PMF_Filter::filterInput(INPUT_POST, 'elasticsearch_enabled', FILTER_SANITIZE_STRING);
+        if (!is_null($esEnabled)) {
+            $esSetup = [];
+            $esHostFilter = [
+                'elasticsearch_server' => [
+                    'filter' => FILTER_SANITIZE_STRING,
+                    'flags' => FILTER_REQUIRE_ARRAY
+                ]
+            ];
+
+            // ES hosts
+            $esHosts = PMF_Filter::filterInputArray(INPUT_POST, $esHostFilter);
+
+
+            $esSetup['hosts'] = $esHosts['elasticsearch_server'];
+
+            // ES Index name
+            $esSetup['index'] = PMF_Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_STRING);
+            if (is_null($esSetup['index'])) {
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a Elasticsearch index name.</p>\n";
+                PMF_System::renderFooter(true);
+            }
+
+            $psr4Loader = new Psr4ClassLoader();
+            $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
+            $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
+            $psr4Loader->addPrefix('Monolog', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
+            $psr4Loader->addPrefix('Psr', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
+            $psr4Loader->register();
+
+            // check LDAP connection
+            $esHosts = array_values($esHosts['elasticsearch_server']);
+            $client = ClientBuilder::create()
+                ->setHosts($esHosts)
+                ->build();
+
+            if (!$client) {
+                echo '<p class="alert alert-danger"><strong>Elasticsearch Error:</strong> No connection.</p>';
                 PMF_System::renderFooter(true);
             }
         }
@@ -735,10 +784,19 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        // check LDAP if available
+        // check LDAP is enabled
         if (extension_loaded('ldap') && !is_null($ldapEnabled) && count($ldapSetup)) {
             if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
+                $this->_system->cleanInstallation();
+                PMF_System::renderFooter(true);
+            }
+        }
+
+        // check if Elasticsearch is enabled
+        if (!is_null($esEnabled) && count($esSetup)) {
+            if (!$instanceSetup->createElasticsearchFile($esSetup, '')) {
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/elasticsearch.php.</p>';
                 $this->_system->cleanInstallation();
                 PMF_System::renderFooter(true);
             }

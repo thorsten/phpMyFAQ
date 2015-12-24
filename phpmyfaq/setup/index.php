@@ -77,23 +77,10 @@ $loader->register();
 
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
+    <script src="../assets/js/setup.js"></script>
 
     <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
 
-    <script type="text/javascript">
-        function selectDatabaseSetup(field) {
-            switch (field.value) {
-            case 'sqlite3':
-                $('#dbsqlite').show().removeClass('hide');
-                $('#dbdatafull').hide();
-                break;
-            default:
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
-                break;
-            }
-        }
-    </script>
 </head>
 <body>
 
@@ -129,11 +116,6 @@ $loader->register();
                     <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
                     carefully before starting the phpMyFAQ setup?
                 </p>
-                <h4 class="alert alert-danger text-center">
-                    <i class="fa fa-info-circle fa-fw"></i>
-                    phpMyFAQ <?php echo PMF_System::getVersion(); ?> is an early development version, please don't use
-                    it in production!
-                </h4>
             </div>
         </div>
 
@@ -158,13 +140,13 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <form class="form-horizontal" action="index.php" method="post">
         <div class="row">
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>Database setup</legend>
                     <div class="form-group">
                         <label class="col-sm-4 control-label" for="sql_type">Server:</label>
                         <div class="col-sm-8">
-                            <select name="sql_type" id="sql_type" size="1" onchange="selectDatabaseSetup(this);" class="form-control">
+                            <select name="sql_type" id="sql_type" size="1" class="form-control">
 <?php
     echo implode('', $system->getSupportedSafeDatabases(true));
     ?>
@@ -234,7 +216,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
 <?php if (extension_loaded('ldap')): ?>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>LDAP setup</legend>
                     <div class="form-group">
@@ -292,12 +274,9 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                 </fieldset>
             </div>
-        </div>
-        <div class="row">
 <?php endif;
     ?>
-
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
                     <div class="form-group">
@@ -379,6 +358,48 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
                 </fieldset>
             </div>
+
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+                <fieldset>
+                    <legend>Elasticsearch setup</legend>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="elasticsearch_enabled">&nbsp;</label>
+                        <div class="col-sm-8">
+                            <label class="checkbox-inline">
+                                <input id="elasticsearch_enabled" type="checkbox" name="elasticsearch_enabled"
+                                value="yes">
+                                Enable Elasticsearch support?
+                            </label>
+                            <p class="help-block">You can enable Elasticsearch later if you like.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="elasticsearch_server">Host:</label>
+                        <div class="col-sm-8">
+                            <div class="input-group">
+                                <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
+                                       class="form-control" placeholder="127.0.0.1:9200">
+                                <span class="input-group-addon">
+                                    <a title="Add more Elasticsearch hosts" style="cursor: pointer;" data-action="add">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </a>
+                                </span>
+                            </div>
+                            <p class="help-block">
+                                Please enter the host (domain or IP) with port number of your Elasticsearch server.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="elasticsearch_index">Index name:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
+                            <p class="help-block">Please enter your Elasticsearch index name.</p>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
         </div>
 
         <div class="row" style="padding-left: 20px; text-align: center;">
