@@ -181,12 +181,14 @@ if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap
 if ($faqConfig->get('search.enableElasticsearch')) {
 
     require PMF_CONFIG_DIR.'/elasticsearch.php';
-
+    require PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
+    
     $psr4Loader = new Psr4ClassLoader();
     $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
     $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
     $psr4Loader->addPrefix('Monolog', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
     $psr4Loader->addPrefix('Psr', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
+    $psr4Loader->addPrefix('React\\Promise\\', PMF_INCLUDE_DIR.'/libs/react/promise/src');
     $psr4Loader->register();
 
     $esClient = ClientBuilder::create()

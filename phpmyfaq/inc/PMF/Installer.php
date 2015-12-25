@@ -708,31 +708,37 @@ class PMF_Installer
 
             // ES hosts
             $esHosts = PMF_Filter::filterInputArray(INPUT_POST, $esHostFilter);
-
+            if (is_null($esHosts)) {
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add at least one Elasticsearch host.</p>\n";
+                PMF_System::renderFooter(true);
+            }
 
             $esSetup['hosts'] = $esHosts['elasticsearch_server'];
 
             // ES Index name
             $esSetup['index'] = PMF_Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_STRING);
             if (is_null($esSetup['index'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a Elasticsearch index name.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add an Elasticsearch index name.</p>\n";
                 PMF_System::renderFooter(true);
             }
+
+            require_once PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
 
             $psr4Loader = new Psr4ClassLoader();
             $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
             $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
             $psr4Loader->addPrefix('Monolog', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
             $psr4Loader->addPrefix('Psr', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
+            $psr4Loader->addPrefix('React\\Promise\\', PMF_INCLUDE_DIR.'/libs/react/promise/src');
             $psr4Loader->register();
 
             // check LDAP connection
             $esHosts = array_values($esHosts['elasticsearch_server']);
-            $client = ClientBuilder::create()
+            $esClient = ClientBuilder::create()
                 ->setHosts($esHosts)
                 ->build();
 
-            if (!$client) {
+            if (!$esClient) {
                 echo '<p class="alert alert-danger"><strong>Elasticsearch Error:</strong> No connection.</p>';
                 PMF_System::renderFooter(true);
             }
@@ -899,6 +905,28 @@ class PMF_Installer
 
         $faqInstanceMaster = new PMF_Instance_Master($configuration);
         $faqInstanceMaster->createMaster($faqInstance);
+
+        // connect to Elasticsearch if enabled
+        if (!is_null($esEnabled) && count($esSetup) && is_file(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
+            require PMF_ROOT_DIR.'/config/elasticsearch.php';
+
+            $esClient = ClientBuilder::create()
+                ->setHosts($ES['hosts'])
+                ->build();
+
+            $params = [
+                'index' => $ES['index'],
+                'body' => [
+                    'settings' => [
+                        'number_of_shards' => 2,
+                        'number_of_replicas' => 1
+                    ]
+                ]
+            ];
+
+            $response = $esClient->indices()->create($params);
+
+        }
 
         echo '</p>';
     }
