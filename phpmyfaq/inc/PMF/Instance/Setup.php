@@ -169,9 +169,9 @@ class PMF_Instance_Setup
         $ret = file_put_contents(
             $this->_rootDir.$folder.'/config/elasticsearch.php',
             "<?php\n".
-            "\$ES['hosts'] = ['".implode("'], ['", $data['hosts'])."'];\n".
-            "\$ES['index'] = '".$data['index']."';\n".
-            "\$ES['type'] = 'faqs';",
+            "\$PMF_ES['hosts'] = ['".implode("'], ['", $data['hosts'])."'];\n".
+            "\$PMF_ES['index'] = '".$data['index']."';\n".
+            "\$PMF_ES['type'] = 'faqs';",
             LOCK_EX
         );
 

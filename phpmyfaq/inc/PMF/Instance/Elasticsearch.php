@@ -1,5 +1,7 @@
 <?php
 
+use Elasticsearch\Client;
+
 /**
  * The phpMyFAQ instances basic Elasticsearch class.
  *
@@ -21,7 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance_Database.
+ * PMF_Instance_Elasticsearch.
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -32,19 +34,62 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMF_Instance_Elasticsearch
 {
-    /**
-     * @var PMF_Configuration
-     */
+    /** @var PMF_Configuration */
     protected $config;
+
+    /** @var Client */
+    protected $client;
 
     /**
      * Constructor.
      *
      * @param PMF_Configuration $config
      */
-    public function __construct(PMF_Configuration $config)
+    public function __construct(PMF_Configuration $config, Client $client)
     {
         $this->config = $config;
+        $this->client = $client;
     }
 
+    /**
+     * Creates the Elasticsearch index.
+     *
+     */
+    public function createIndex()
+    {
+        $response = $this->client->indices()->create($this->getParams());
+
+
+    }
+
+    /**
+     * Deletes the Elasticsearch index.
+     *
+     */
+    public function dropIndex()
+    {
+        $config = $this->config->getElasticsearchConfig();
+
+        $response = $this->client->indices()->delete(['index' => $config['index']]);
+    }
+
+    /**
+     * Returns the basic phpMyFAQ index structure as raw array.
+     *
+     * @return array
+     */
+    private function getParams()
+    {
+        $config = $this->config->getElasticsearchConfig();
+
+        return [
+            'index' => $config['index'],
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => 2,
+                    'number_of_replicas' => 1
+                ]
+            ]
+        ];
+    }
 }

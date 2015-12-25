@@ -552,7 +552,7 @@ class PMF_Installer
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
             echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. '.
                 'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter '.
-                ' support.</p>';
+                ' support or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. '.
@@ -907,25 +907,17 @@ class PMF_Installer
         $faqInstanceMaster->createMaster($faqInstance);
 
         // connect to Elasticsearch if enabled
-        if (!is_null($esEnabled) && count($esSetup) && is_file(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
+        if (!is_null($esEnabled) && is_file(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
             require PMF_ROOT_DIR.'/config/elasticsearch.php';
 
+            $configuration->setElasticsearchConfig($PMF_ES);
+
             $esClient = ClientBuilder::create()
-                ->setHosts($ES['hosts'])
+                ->setHosts($PMF_ES['hosts'])
                 ->build();
 
-            $params = [
-                'index' => $ES['index'],
-                'body' => [
-                    'settings' => [
-                        'number_of_shards' => 2,
-                        'number_of_replicas' => 1
-                    ]
-                ]
-            ];
-
-            $response = $esClient->indices()->create($params);
-
+            $faqInstanceElasticsearch = new PMF_Instance_Elasticsearch($configuration, $esClient);
+            $faqInstanceElasticsearch->createIndex();
         }
 
         echo '</p>';

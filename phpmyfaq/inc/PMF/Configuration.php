@@ -11,11 +11,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
@@ -27,26 +25,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Configuration.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-01-04
  */
 class PMF_Configuration
 {
     /**
-     * Tablename.
-     *
      * @var string
      */
     protected $_tableName = 'faqconfig';
 
     /**
-     * Configuration array.
-     *
      * @var array
      */
     public $config = [];
@@ -308,6 +300,46 @@ class PMF_Configuration
     }
 
     /**
+     * Sets the Elasticsearch client instance.
+     *
+     * @param Elasticsearch\Client $esClient
+     */
+    public function setElasticsearch(Elasticsearch\Client $esClient)
+    {
+        $this->config['core.elasticsearch'] = $esClient;
+    }
+
+    /**
+     * Returns the Elasticsearch client instance.
+     *
+     * @return Elasticsearch\Client
+     */
+    public function getElasticsearch()
+    {
+        return $this->config['core.elasticsearch'];
+    }
+
+    /**
+     * Sets the Elasticsearch configuration.
+     *
+     * @param array $data
+     */
+    public function setElasticsearchConfig(Array $data)
+    {
+        $this->config['core.elasticsearchConfig'] = $data;
+    }
+
+    /**
+     * Returns the Elasticsearch configuration.
+     *
+     * @return array
+     */
+    public function getElasticsearchConfig()
+    {
+        return isset($this->config['core.elasticsearchConfig']) ? $this->config['core.elasticsearchConfig'] : [];
+    }
+
+    /**
      * Adds a configuration item for the database.
      *
      * @param string $name
@@ -362,13 +394,16 @@ class PMF_Configuration
      */
     public function update(Array $newConfigs)
     {
-        $runtimeConfigs = array(
-            'core.database',  // PMF_DB_Driver
-            'core.instance',  // PMF_Instance
-            'core.language',  // Language
-            'core.ldap',      // PMF_Ldap
-            'core.ldapConfig', // $PMF_LDAP
-        );
+        $runtimeConfigs = [
+            'core.database',           // PMF_DB_Driver
+            'core.instance',           // PMF_Instance
+            'core.language',           // Language
+            'core.ldap',               // PMF_Ldap
+            'core.ldapConfig',         // $PMF_LDAP
+            'core.elasticsearch',      // Elasticsearch\Client
+            'core.elasticsearchConfig' // $PMF_ES
+        ];
+
         if (is_array($newConfigs)) {
             foreach ($newConfigs as $name => $value) {
                 if ($name != 'main.phpMyFAQToken' &&

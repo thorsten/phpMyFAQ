@@ -20,8 +20,6 @@
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Elasticsearch\ClientBuilder;
-use Psr\Log\NullLogger;
-use GuzzleHttp\Ring\Client\CurlHandler;
 
 //
 // Debug mode:
@@ -182,7 +180,7 @@ if ($faqConfig->get('search.enableElasticsearch')) {
 
     require PMF_CONFIG_DIR.'/elasticsearch.php';
     require PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
-    
+
     $psr4Loader = new Psr4ClassLoader();
     $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
     $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
@@ -192,8 +190,11 @@ if ($faqConfig->get('search.enableElasticsearch')) {
     $psr4Loader->register();
 
     $esClient = ClientBuilder::create()
-        ->setHosts($ES['hosts'])
+        ->setHosts($PMF_ES['hosts'])
         ->build();
+
+    $faqConfig->setElasticsearch($esClient);
+    $faqConfig->setElasticsearchConfig($PMF_ES);
 }
 
 //
