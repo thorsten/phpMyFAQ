@@ -1,4 +1,6 @@
 <?php
+
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 /**
  * phpMyFAQ system information.
  *
@@ -29,6 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     $faqSystem = new PMF_System();
+
+    try {
+        $esConfig = $faqConfig->getElasticsearchConfig();
+        $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
+    } catch (NoNodesAvailableException $e) {
+        $esInformation = $e->getMessage();
+    }
+
     ?>
     <header class="row">
         <div class="col-lg-12">
@@ -54,6 +64,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'Database Server' => PMF_Db::getType(),
                     'Database Server Version' => $faqConfig->getDb()->serverVersion(),
                     'Database Client Version' => $faqConfig->getDb()->clientVersion(),
+                    'Elasticsearch' => $esInformation
                 ];
     foreach ($systemInformation as $name => $info): ?>
                     <tr>
