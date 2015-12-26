@@ -916,7 +916,9 @@ class PMF_Installer
                 ->setHosts($PMF_ES['hosts'])
                 ->build();
 
-            $faqInstanceElasticsearch = new PMF_Instance_Elasticsearch($configuration, $esClient);
+            $configuration->setElasticsearch($esClient);
+
+            $faqInstanceElasticsearch = new PMF_Instance_Elasticsearch($configuration);
             $faqInstanceElasticsearch->createIndex();
         }
 

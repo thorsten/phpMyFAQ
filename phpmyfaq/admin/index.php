@@ -191,46 +191,47 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$_ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
-if (is_null($_ajax)) {
-    $_ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+$ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+if (is_null($ajax)) {
+    $ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
 }
 
 // if performing AJAX operation, needs to branch before header.php
 if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0) {
-    if (isset($action) && isset($_ajax)) {
-        if ($action == 'ajax') {
-            switch ($_ajax) {
+    if (isset($action) && isset($ajax)) {
+        if ('ajax' === $action) {
+            switch ($ajax) {
                 // Attachments
-                case 'att':         require 'ajax.attachment.php'; break;
+                case 'att':           require 'ajax.attachment.php'; break;
                 // Link verification
-                case 'verifyURL':   require 'ajax.verifyurl.php'; break;
-                case 'onDemandURL': require 'ajax.ondemandurl.php'; break;
+                case 'verifyURL':     require 'ajax.verifyurl.php'; break;
+                case 'onDemandURL':   require 'ajax.ondemandurl.php'; break;
                 // Categories
-                case 'categories':  require 'ajax.category.php'; break;
+                case 'categories':    require 'ajax.category.php'; break;
                 // Configuration management
-                case 'config_list': require 'ajax.config_list.php'; break;
-                case 'config':      require 'ajax.config.php'; break;
+                case 'config_list':   require 'ajax.config_list.php'; break;
+                case 'config':        require 'ajax.config.php'; break;
+                case 'elasticsearch': require 'ajax.elasticsearch.php'; break;
                 // Tags management
-                case 'tags':        require 'ajax.tags.php'; break;
+                case 'tags':          require 'ajax.tags.php'; break;
                 // Comments
-                case 'comment':     require 'ajax.comment.php'; break;
+                case 'comment':       require 'ajax.comment.php'; break;
                 // Records
-                case 'records':     require 'ajax.records.php'; break;
-                case 'recordSave':  require 'record.save.php'; break;
-                case 'recordAdd':   require 'record.add.php'; break;
-                case 'autosave':    require 'ajax.autosave.php'; break;
-                case 'markdown':    require 'ajax.markdown.php'; break;
+                case 'records':       require 'ajax.records.php'; break;
+                case 'recordSave':    require 'record.save.php'; break;
+                case 'recordAdd':     require 'record.add.php'; break;
+                case 'autosave':      require 'ajax.autosave.php'; break;
+                case 'markdown':      require 'ajax.markdown.php'; break;
                 // Search
-                case 'search':      require 'ajax.search.php'; break;
+                case 'search':        require 'ajax.search.php'; break;
                 // Users
-                case 'user':        require 'ajax.user.php'; break;
+                case 'user':          require 'ajax.user.php'; break;
                 // Groups
-                case 'group':       require 'ajax.group.php'; break;
+                case 'group':         require 'ajax.group.php'; break;
                 // Interface translation
-                case 'trans':       require 'ajax.trans.php'; break;
+                case 'trans':         require 'ajax.trans.php'; break;
                 // Image upload
-                case 'image':       require 'ajax.image.php'; break;
+                case 'image':         require 'ajax.image.php'; break;
             }
             exit();
         }

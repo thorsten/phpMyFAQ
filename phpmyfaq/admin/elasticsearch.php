@@ -27,9 +27,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
+if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get('search.enableElasticsearch')) {
 
     $esSearch = new PMF_Search_Elasticsearch($faqConfig);
+    $esInstance = new PMF_Instance_Elasticsearch($faqConfig);
 
     try {
         $esConfig = $faqConfig->getElasticsearchConfig();
@@ -50,12 +51,30 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     <div class="row">
         <div class="col-lg-12">
 
-            <pre><?php var_dump($esSearch->getMapping()); ?></pre>
-            
+            <button class="btn btn-default pmf-elasticsearch" data-action="create">
+                Create Index
+            </button>
+
+            <button class="btn btn-default pmf-elasticsearch" data-action="import">
+                Full import
+            </button>
+
+            <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
+                Drop Index
+            </button>
+
+            <div class="result">
+
+            </div>
+
+            <pre><?php var_dump($esInstance->getMapping()); ?></pre>
+
         </div>
     </div>
-    <?php
 
+    <script src="assets/js/search.js"></script>
+
+    <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

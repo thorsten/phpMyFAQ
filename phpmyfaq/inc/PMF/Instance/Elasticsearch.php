@@ -41,36 +41,167 @@ class PMF_Instance_Elasticsearch
     protected $client;
 
     /**
+     * Elasticsearch mapping
+     *
+     * @var array
+     */
+    private $mappings = [
+        'faqs' => [
+            '_source' => [
+                'enabled' => true
+            ],
+            'properties' => [
+                'id' => [
+                    'type' => 'integer'
+                ],
+                'question' => [
+                    'type' => 'string',
+                    'analyzer' => 'standard'
+                ],
+                'answer' => [
+                    'type' => 'string',
+                    'analyzer' => 'standard'
+                ],
+                'keywords' => [
+                    'type' => 'string',
+                    'analyzer' => 'standard'
+                ],
+                'categories' => [
+                    'type' => 'string',
+                    'analyzer' => 'standard'
+                ]
+            ]
+        ]
+    ];
+    /**
      * Constructor.
      *
      * @param PMF_Configuration $config
      */
-    public function __construct(PMF_Configuration $config, Client $client)
+    public function __construct(PMF_Configuration $config)
     {
-        $this->config = $config;
-        $this->client = $client;
+        $this->client = $config->getElasticsearch();
+        $this->config = $config->getElasticsearchConfig();
     }
 
     /**
      * Creates the Elasticsearch index.
      *
+     * @return array
      */
     public function createIndex()
     {
-        $response = $this->client->indices()->create($this->getParams());
-
-
+        $this->client->indices()->create($this->getParams());
+        return $this->putMapping();;
     }
 
     /**
      * Deletes the Elasticsearch index.
      *
+     * @return array
      */
     public function dropIndex()
     {
-        $config = $this->config->getElasticsearchConfig();
+        return $this->client->indices()->delete(['index' => $this->config['index']]);
+    }
 
-        $response = $this->client->indices()->delete(['index' => $config['index']]);
+    /**
+     * Puts phpMyFAQ Elasticsearch mapping into index.
+     *
+     * @return bool
+     */
+    public function putMapping()
+    {
+        $response = $this->getMapping();
+
+        if (0 === count($response[$this->config['index']]['mappings'])) {
+
+            $params = [
+                'index' => $this->config['index'],
+                'type' => $this->config['type'],
+                'body' => $this->mappings
+            ];
+
+            $response = $this->client->indices()->putMapping($params);
+
+            if (isset($response['acknowledged']) && true === $response['acknowledged']) {
+                return true;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the current mapping.
+     *
+     * @return array
+     */
+    public function getMapping()
+    {
+        return $this->client->indices()->getMapping();
+    }
+
+    public function index(Array $faq)
+    {
+
+    }
+
+    /**
+     * Bulk indexing of all FAQs
+     *
+     * @param array $faqs
+     *
+     * @return array
+     */
+    public function bulkIndex(Array $faqs)
+    {
+        $params = ['body' => []];
+        $responses = [];
+        $i = 1;
+
+        foreach ($faqs as $faq) {
+            $params['body'][] = [
+                'index' => [
+                    '_index' => $this->config['index'],
+                    '_type' => $this->config['type'],
+                    '_id' => $i
+                ]
+            ];
+
+            $params['body'][] = [
+                'id' => $faq['id'],
+                'question' => $faq['title'],
+                'answer' => $faq['content'],
+                'keywords' => $faq['keywords'],
+                'categories' => $faq['category_id']
+            ];
+
+            if ($i % 1000 == 0) {
+                $responses = $this->client->bulk($params);
+                $params = ['body' => []];
+                unset($responses);
+            }
+
+            $i++;
+        }
+
+        // Send the last batch if it exists
+        if (!empty($params['body'])) {
+            $responses = $this->client->bulk($params);
+        }
+
+        return $responses;
+    }
+
+    public function update(Array $faq)
+    {
+
+    }
+
+    public function delete($faqId)
+    {
+
     }
 
     /**
@@ -80,14 +211,12 @@ class PMF_Instance_Elasticsearch
      */
     private function getParams()
     {
-        $config = $this->config->getElasticsearchConfig();
-
         return [
-            'index' => $config['index'],
+            'index' => $this->config['index'],
             'body' => [
                 'settings' => [
                     'number_of_shards' => 2,
-                    'number_of_replicas' => 1
+                    'number_of_replicas' => 0
                 ]
             ]
         ];
