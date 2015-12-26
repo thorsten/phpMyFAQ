@@ -17,7 +17,7 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
  * @copyright 2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2015-12-25
+ * @since     2015-12-26
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
