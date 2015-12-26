@@ -1,6 +1,7 @@
 <?php
 
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+
 /**
  * phpMyFAQ system information.
  *
@@ -11,12 +12,10 @@ use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2013-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2013-01-02
  */

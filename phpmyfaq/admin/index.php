@@ -322,13 +322,14 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
             // Reports
             case 'reports':           require 'report.main.php'; break;
             case 'reportview':        require 'report.view.php'; break;
-            // fConfig administration
+            // Config administration
             case 'config':            require 'configuration.php'; break;
             case 'system':            require 'system.php'; break;
             case 'updateinstance':
             case 'instances':         require 'instances.php'; break;
             case 'editinstance':      require 'instances.edit.php'; break;
             case 'stopwordsconfig':   require 'stopwordsconfig.main.php'; break;
+            case 'elasticsearch':     require 'elasticsearch.php'; break;
             // functions for backup administration
             case 'backup':            require 'backup.main.php'; break;
             case 'restore':           require 'backup.import.php'; break;

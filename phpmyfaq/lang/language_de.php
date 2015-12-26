@@ -1201,3 +1201,4 @@ $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Aktivierung von Sma
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Aktiviere Elasticsearch Unterstützung<br>(Standard: deaktiviert)');
+$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch';
