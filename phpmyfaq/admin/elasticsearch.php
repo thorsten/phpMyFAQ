@@ -44,31 +44,38 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
         <div class="col-lg-12">
             <h2 class="page-header">
                 <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
+                <div class="pull-right">
+                    <button class="btn btn-default pmf-elasticsearch" data-action="create">
+                        <i class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
+                    </button>
+
+                    <button class="btn btn-default pmf-elasticsearch" data-action="import">
+                        <i class="fa fa-plus-square"></i> <?php echo $PMF_LANG['ad_es_bulk_index'] ?>
+                    </button>
+
+                    <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
+                        <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_es_drop_index'] ?>
+                    </button>
+                </div>
             </h2>
+
         </div>
     </header>
 
     <div class="row">
         <div class="col-lg-12">
-
-            <button class="btn btn-default pmf-elasticsearch" data-action="create">
-                Create Index
-            </button>
-
-            <button class="btn btn-default pmf-elasticsearch" data-action="import">
-                Full import
-            </button>
-
-            <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
-                Drop Index
-            </button>
-
             <div class="result">
 
             </div>
+            <h3>
+                <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
+            </h3>
 
-            <pre><?php var_dump($esInstance->getMapping()); ?></pre>
-
+            <pre>
+            <?php
+            var_dump($faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']));
+            ?>
+            </pre>
         </div>
     </div>
 

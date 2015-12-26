@@ -1201,4 +1201,9 @@ $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Aktivierung von Sma
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Aktiviere Elasticsearch Unterstützung<br>(Standard: deaktiviert)');
-$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch';
+$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch Konfiguration';
+$PMF_LANG['ad_es_create_index'] = 'Erstelle Suchindex';
+$PMF_LANG['ad_es_drop_index'] = 'Lösche Suchindex';
+$PMF_LANG['ad_es_bulk_index'] = 'Komplett-Import';
+$PMF_LANG['ad_es_create_index_success'] = 'Der Elasticsearch Suchindex erfolgreich erstellt.';
+$PMF_LANG['ad_es_drop_index_success'] = 'Der Elasticsearch Suchindex erfolgreich gelöscht.';

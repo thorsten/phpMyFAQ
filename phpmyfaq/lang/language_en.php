@@ -1238,4 +1238,9 @@ $LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answer
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
 $LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support<br>(default: deactivated)');
-$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch';
+$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch configuration';
+$PMF_LANG['ad_es_create_index'] = 'Create Index';
+$PMF_LANG['ad_es_drop_index'] = 'Drop Index';
+$PMF_LANG['ad_es_bulk_index'] = 'Full import';
+$PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
+$PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';

@@ -39,7 +39,7 @@ switch ($ajaxAction) {
 
         try {
             if ($esInstance->createIndex()) {
-                $result = ['success' => 'Index successfully created.'];
+                $result = ['success' => $PMF_LANG['ad_es_create_index_success']];
             }
         } catch (BadRequest400Exception $e) {
             $result = ['error' => $e->getMessage()];
@@ -51,7 +51,7 @@ switch ($ajaxAction) {
 
         try {
             if ($esInstance->dropIndex()) {
-                $result = ['success' => 'Index successfully dropped.'];
+                $result = ['success' => $PMF_LANG['ad_es_drop_index_success']];
             }
         } catch (Missing404Exception $e) {
             $result = ['error' => $e->getMessage()];

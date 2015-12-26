@@ -144,6 +144,7 @@ switch ($action) {
     case 'upgrade':
     case 'instances':
     case 'system':
+    case 'elasticsearch':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_configuration'];
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
@@ -166,7 +167,6 @@ switch ($action) {
 }
 ?>
 <!DOCTYPE html>
-<!--[if IE 8 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie8"> <![endif]-->
 <!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
 <!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
@@ -180,7 +180,7 @@ switch ($action) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2015 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
     <meta name="MSSmartTagsPreventParsing" content="true">
