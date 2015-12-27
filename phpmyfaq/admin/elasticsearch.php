@@ -34,7 +34,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
 
     try {
         $esConfig = $faqConfig->getElasticsearchConfig();
-        $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
+        $esInformation = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
     } catch (NoNodesAvailableException $e) {
         $esInformation = $e->getMessage();
     }
@@ -71,11 +71,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
                 <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
             </h3>
 
-            <pre>
-            <?php
-            var_dump($faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']));
-            ?>
-            </pre>
+            <?php if (is_array($esInformation)) { ?>
+            <dl class="dl-horizontal">
+
+                <dt>Documents</dt>
+                <dd><?php echo $esInformation['indices']['phpmyfaq']['total']['docs']['count'] ?></dd>
+
+                <dt>Storage size</dt>
+                <dd><?php echo $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
+
+            </dl>
+            <?php } else { ?>
+            <p>
+                <?php echo $esInformation ?>
+            </p>
+            <?php } ?>
+
         </div>
     </div>
 
