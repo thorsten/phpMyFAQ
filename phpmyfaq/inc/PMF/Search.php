@@ -10,13 +10,11 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
  */
@@ -28,13 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Search.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2008-01-26
  */
@@ -99,8 +95,9 @@ class PMF_Search
         return $this->categoryId;
     }
 
+
     /**
-     * The main search function for the full text search.
+     * The search function to handle the different search engines.
      *
      * @param string $searchTerm   Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
@@ -108,6 +105,23 @@ class PMF_Search
      * @return array
      */
     public function search($searchTerm, $allLanguages = true)
+    {
+        if ($this->_config->get('search.enableElasticsearch')) {
+            return $this->searchElasticsearch($searchTerm, $allLanguages);
+        } else {
+            return $this->searchDatabase($searchTerm, $allLanguages);
+        }
+    }
+
+    /**
+     * The search function for the database powered full text search.
+     *
+     * @param string $searchTerm   Text/Number (solution id)
+     * @param bool   $allLanguages true to search over all languages
+     *
+     * @return array
+     */
+    public function searchDatabase($searchTerm, $allLanguages = true)
     {
         $fdTable = PMF_Db::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = PMF_Db::getTablePrefix() . 'faqcategoryrelations';
@@ -161,6 +175,23 @@ class PMF_Search
         } else {
             return $this->_config->getDb()->fetchAll($result);
         }
+    }
+
+    /**
+     * The search function for the Elasticsearch powered full text search.
+     *
+     * @param string $searchTerm   Text/Number (solution id)
+     * @param bool   $allLanguages true to search over all languages
+     *
+     * @return array
+     */
+    public function searchElasticsearch($searchTerm, $allLanguages = true)
+    {
+        $esSearch = new PMF_Search_Elasticsearch($this->_config);
+
+        $result = $esSearch->search($searchTerm);
+
+        return $result;
     }
 
     /**

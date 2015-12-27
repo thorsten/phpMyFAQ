@@ -171,10 +171,11 @@ class PMF_Instance_Elasticsearch
 
             $params['body'][] = [
                 'id' => $faq['id'],
+                'lang' => $faq['lang'],
                 'question' => $faq['title'],
                 'answer' => $faq['content'],
                 'keywords' => $faq['keywords'],
-                'categories' => $faq['category_id']
+                'category_id' => $faq['category_id']
             ];
 
             if ($i % 1000 == 0) {

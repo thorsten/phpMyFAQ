@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
@@ -26,11 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Search_Factory.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
+ * @copyright 2010-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-06
  */
@@ -40,7 +36,7 @@ class PMF_Search_Factory
      * Factory for generating search instances.
      *
      * @param PMF_Configuration $config
-     * @param array             $searchHandler Array with informations about search
+     * @param array             $searchHandler Array with information about search
      *                                         handlers, e.g.
      *                                         array('database' => 'mysqli')
      *

@@ -145,7 +145,9 @@ class PMF_Search_Resultset
                 continue;
             }
 
-            $result->score = $this->getScore($result);
+            if (!isset($result->score)) {
+                $result->score = $this->getScore($result);
+            }
 
             if ($permission) {
                 $this->reviewedResultset[] = $result;
@@ -166,9 +168,9 @@ class PMF_Search_Resultset
     }
 
     /**
-     * Returns the "reviewd" search results.
+     * Returns the "reviewed" search results.
      *
-     * @return array $resultset Array with search results
+     * @return array
      */
     public function getResultset()
     {
@@ -178,7 +180,7 @@ class PMF_Search_Resultset
     /**
      * Sets the number of search results.
      *
-     * @param array $resultSet Array with search results
+     * @param array
      */
     public function setNumberOfResults(Array $resultSet)
     {

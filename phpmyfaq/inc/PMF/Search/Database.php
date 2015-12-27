@@ -100,8 +100,6 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
      *
      * @param string $searchTerm Search term
      *
-     * @return resource
-     *
      * @throws PMF_Search_Exception
      */
     public function search($searchTerm)
