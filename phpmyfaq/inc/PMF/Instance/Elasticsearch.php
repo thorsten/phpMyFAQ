@@ -215,8 +215,8 @@ class PMF_Instance_Elasticsearch
             'index' => $this->config['index'],
             'body' => [
                 'settings' => [
-                    'number_of_shards' => 2,
-                    'number_of_replicas' => 0
+                    'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
+                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS
                 ]
             ]
         ];

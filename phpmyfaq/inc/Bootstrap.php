@@ -179,6 +179,7 @@ if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap
 if ($faqConfig->get('search.enableElasticsearch')) {
 
     require PMF_CONFIG_DIR.'/elasticsearch.php';
+    require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
     require PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
 
     $psr4Loader = new Psr4ClassLoader();
