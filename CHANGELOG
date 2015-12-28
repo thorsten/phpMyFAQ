@@ -9,6 +9,7 @@ Version 2.9.0-beta2 - 2016-
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
+- added support for Elasticsearch (Thorsten)
 - added new mobile first, touch-friendly default layout (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added support for Markdown (Jerry van Kooten, Thorsten)

@@ -9,22 +9,23 @@
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
 various databases to store all data, PHP 5.5.0+ or HHVM 3.4.2+ is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
-System with a WYSIWYG editor and an Image Manager, flexible multi-user support
-with user and group based permissions on categories and records, a wiki-like
-revision feature, a news system, user-tracking, 40+ supported languages, enhanced
-automatic content negotiation, HTML5/CSS3 based templates, PDF-support, a
-backup-system, a dynamic sitemap, related FAQs, tagging, RSS feeds, built-in spam
-protection systems, OpenLDAP and Microsoft Active Directory support, and an easy
-to use installation script.
+System with a WYSIWYG editor and an Image Manager, real time search support with
+Elasticsearch, flexible multi-user support with user and group based permissions 
+on categories and records, a wiki-like revision feature, a news system, 
+user-tracking, 40+ supported languages, enhanced automatic content negotiation, 
+HTML5/CSS3 based responsive templates, PDF-support, a backup-system, a dynamic 
+sitemap, related FAQs, tagging, RSS feeds, built-in spam protection systems, 
+OpenLDAP and Microsoft Active Directory support, and an easy to use installation 
+script.
 
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 5.5.0 and up, you need a database as well. Supported
-databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL Server, SQLite3 and MariaDB.
-Check our detailed requirements on [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php)
-for more information.
-
+phpMyFAQ is only supported on PHP 5.5.0 and up, you need a database as well. 
+Supported databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL 
+Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search 
+engine, you need Elasticsearch 2.x as well. Check our detailed requirements on 
+[phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more information.
 
 ## Installation
 
@@ -140,5 +141,14 @@ Licenced under the terms of the SIL Open Font License and MIT License
 **[highlight.js](https://highlightjs.org/)**
 
 Licensed under the terms of the BSD License
+
+**[Monolog](http://github.com/Seldaek/monolog)**
+
+Licensed under the terms of the MIT License
+
+**[PHP Client for Elasticsearch](http://elastic.co)**
+
+Licensed under the terms of the Apache License v2.0
+
 
 Copyright (c) 2001-2015 Thorsten Rinne and the phpMyFAQ Team
