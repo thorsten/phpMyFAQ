@@ -189,6 +189,16 @@ class PMF_Search
     {
         $esSearch = new PMF_Search_Elasticsearch($this->_config);
 
+        if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
+            if ($this->getCategory() instanceof PMF_Category) {
+                $children = $this->getCategory()->getChildNodes($this->getCategoryId());
+                $esSearch->setCategoryIds(array_merge([$this->getCategoryId()], $children));
+            }
+        } else {
+            $allCategories = $this->getCategory()->getAllCategoryIds();
+            $esSearch->setCategoryIds($allCategories);
+        }
+
         if (!$allLanguages) {
             $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
         }

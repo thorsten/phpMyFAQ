@@ -43,6 +43,9 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     /** @var string */
     private $language = '';
 
+    /** @var array */
+    private $categoryIds = [];
+
     /**
      * Constructor.
      *
@@ -67,49 +70,46 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
      */
     public function search($searchTerm)
     {
-        if ('' === $this->getLanguage()) {
-            $searchParams = [
-                'index' => $this->esConfig['index'],
-                'type' => $this->esConfig['type'],
-                'size' => 1000,
-                'body' => [
-                    'query' => [
-                        'bool' => [
-                            'should' => [
-                                [ 'match' => [ 'question' => $searchTerm ] ],
-                                [ 'match' => [ 'answer' => $searchTerm ] ],
-                                [ 'match' => [ 'keywords' => $searchTerm ] ]
-                            ]
-                        ]
-
-                    ]
+        if ('' !== $this->getLanguage()) {
+            $languageFilter = [
+                'term' => [
+                    'lang' => $this->getLanguage()
                 ]
             ];
         } else {
-            $searchParams = [
-                'index' => $this->esConfig['index'],
-                'type' => $this->esConfig['type'],
-                'size' => 1000,
-                'body' => [
-                    'query' => [
-                        'filtered' => [
-                            'filter' => [
-                                'term' => [ 'lang' => $this->getLanguage() ]
-                            ],
-                            'query' => [
-                                'bool' => [
-                                    'should' => [
-                                        [ 'match' => [ 'question' => $searchTerm ] ],
-                                        [ 'match' => [ 'answer' => $searchTerm ] ],
-                                        [ 'match' => [ 'keywords' => $searchTerm ] ]
-                                    ]
+            $languageFilter = '';
+        }
+
+        $searchParams = [
+            'index' => $this->esConfig['index'],
+            'type' => $this->esConfig['type'],
+            'size' => 1000,
+            'body' => [
+                'query' => [
+                    'filtered' => [
+                        'filter' => [
+                            'bool' => [
+                                'must' => [
+                                    [
+                                        'terms' => [ 'category_id' => $this->getCategoryIds() ]
+                                    ],
+                                    $languageFilter
+                                ]
+                            ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'question' => $searchTerm ] ],
+                                    [ 'match' => [ 'answer' => $searchTerm ] ],
+                                    [ 'match' => [ 'keywords' => $searchTerm ] ]
                                 ]
                             ]
                         ]
                     ]
                 ]
-            ];
-        }
+            ]
+        ];
 
         $result = $this->client->search($searchParams);
 
@@ -136,6 +136,28 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     }
 
     /**
+     * Returns the current category ID
+     *
+     * @return array
+     */
+    public function getCategoryIds()
+    {
+        return $this->categoryIds;
+    }
+
+    /**
+     * Sets the current category ID
+     *
+     * @param array $categoryIds
+     */
+    public function setCategoryIds(Array $categoryIds)
+    {
+        $this->categoryIds = $categoryIds;
+    }
+
+    /**
+     * Returns the current language, empty string if all languages
+     *
      * @return string
      */
     public function getLanguage()
@@ -144,6 +166,8 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     }
 
     /**
+     * Sets the current language
+     *
      * @param string $language
      */
     public function setLanguage($language)

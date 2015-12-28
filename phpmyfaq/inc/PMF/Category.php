@@ -304,6 +304,36 @@ class PMF_Category
     }
 
     /**
+     * Gets all category IDs
+     *
+     * @return array
+     */
+    public function getAllCategoryIds()
+    {
+        $categories = [];
+
+        $query = sprintf('
+            SELECT
+                id
+            FROM
+                %sfaqcategories',
+            PMF_Db::getTablePrefix()
+        );
+
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $query .= sprintf(" WHERE lang = '%s'", $this->language);
+        }
+
+        $result = $this->_config->getDb()->query($query);
+
+        while ($row = $this->_config->getDb()->fetchArray($result)) {
+            $categories[] = (int) $row['id'];
+        }
+
+        return $categories;
+    }
+
+    /**
      * Builds the category tree.
      *
      * @param int $id_parent Parent id
