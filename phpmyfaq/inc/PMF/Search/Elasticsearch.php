@@ -40,6 +40,9 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     /** @var array */
     private $esConfig = [];
 
+    /** @var string */
+    private $language = '';
+
     /**
      * Constructor.
      *
@@ -64,25 +67,51 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
      */
     public function search($searchTerm)
     {
-        $params = [
-            'index' => $this->esConfig['index'],
-            'type' => $this->esConfig['type'],
-            'size' => 1000,
-            'body' => [
-                'query' => [
-                    'bool' => [
-                        'should' => [
-                            [ 'match' => [ 'question' => $searchTerm ] ],
-                            [ 'match' => [ 'answer' => $searchTerm ] ],
-                            [ 'match' => [ 'keswords' => $searchTerm ] ]
+        if ('' === $this->getLanguage()) {
+            $searchParams = [
+                'index' => $this->esConfig['index'],
+                'type' => $this->esConfig['type'],
+                'size' => 1000,
+                'body' => [
+                    'query' => [
+                        'bool' => [
+                            'should' => [
+                                [ 'match' => [ 'question' => $searchTerm ] ],
+                                [ 'match' => [ 'answer' => $searchTerm ] ],
+                                [ 'match' => [ 'keywords' => $searchTerm ] ]
+                            ]
+                        ]
+
+                    ]
+                ]
+            ];
+        } else {
+            $searchParams = [
+                'index' => $this->esConfig['index'],
+                'type' => $this->esConfig['type'],
+                'size' => 1000,
+                'body' => [
+                    'query' => [
+                        'filtered' => [
+                            'filter' => [
+                                'term' => [ 'lang' => $this->getLanguage() ]
+                            ],
+                            'query' => [
+                                'bool' => [
+                                    'should' => [
+                                        [ 'match' => [ 'question' => $searchTerm ] ],
+                                        [ 'match' => [ 'answer' => $searchTerm ] ],
+                                        [ 'match' => [ 'keywords' => $searchTerm ] ]
+                                    ]
+                                ]
+                            ]
                         ]
                     ]
-
                 ]
-            ]
-        ];
+            ];
+        }
 
-        $result = $this->client->search($params);
+        $result = $this->client->search($searchParams);
 
         if (0 !== $result['hits']['total']) {
 
@@ -104,5 +133,21 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
         }
 
         return $this->resultSet;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 }

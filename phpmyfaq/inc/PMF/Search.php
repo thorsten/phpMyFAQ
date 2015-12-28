@@ -189,6 +189,10 @@ class PMF_Search
     {
         $esSearch = new PMF_Search_Elasticsearch($this->_config);
 
+        if (!$allLanguages) {
+            $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
+        }
+
         $result = $esSearch->search($searchTerm);
 
         return $result;
