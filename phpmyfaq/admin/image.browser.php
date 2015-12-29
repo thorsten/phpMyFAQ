@@ -48,6 +48,18 @@ if ($user) {
     @import url('assets/css/style.min.css');
     body { padding: 10px; }
 </style>
+
+<form action="" class="form-inline" method="post">
+    <div class="input-group">
+        <label class="sr-only" for="filter">
+            <?php echo $PMF_LANG['ad_image_name_search'] ?>
+        </label>
+        <input type="text" class="form-control" id="filter" value=""
+               placeholder="<?php echo $PMF_LANG['ad_image_name_search'] ?>">
+        <span class="input-group-addon"><i class="fa fa-search"></i></span>
+    </div>
+</form>
+
 <?php
 $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
 
@@ -71,7 +83,18 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
 <script src="../assets/js/phpmyfaq.min.js"></script>
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
-    $(document).on('click', 'div.mce-file', function() {
+    $('#filter').on('keyup', function () {
+        var filter = $(this).val(), count = 0;
+        $('div.mce-file').each(function(){
+            if ($(this).text().search(new RegExp(filter, 'i')) < 0) {
+                $(this).fadeOut();
+            } else {
+                $(this).show();
+            }
+        });
+    });
+
+    $(document).on('click', 'div.mce-file', function () {
         var itemUrl = $(this).data('src'),
             args = top.tinymce.activeEditor.windowManager.getParams(),
             win = (args.window),

@@ -1208,3 +1208,4 @@ $PMF_LANG['ad_es_bulk_index'] = 'Komplett-Import';
 $PMF_LANG['ad_es_create_index_success'] = 'Der Elasticsearch Suchindex erfolgreich erstellt.';
 $PMF_LANG['ad_es_drop_index_success'] = 'Der Elasticsearch Suchindex erfolgreich gelöscht.';
 $PMF_LANG['ad_export_generate_json'] = 'Als JSON-Datei exportieren';
+$PMF_LANG['ad_image_name_search'] = 'Suche nach Bildnamen';
