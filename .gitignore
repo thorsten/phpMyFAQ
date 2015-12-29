@@ -4,7 +4,7 @@
 .settings*
 .buildpath
 
-# PhpStorm folder
+# PhpStorm/IntelliJ folder
 .idea*
 
 # Mac OS X crap
@@ -15,11 +15,11 @@ build/*
 
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
-phpmyfaq/config/database.bak.php
+phpmyfaq/config/database.php.bak
 phpmyfaq/config/ldap.php
-phpmyfaq/config/ldap.bak.php
+phpmyfaq/config/ldap.php.bak
 phpmyfaq/config/elasticsearch.php
-phpmyfaq/config/elasticsearch.bak.php
+phpmyfaq/config/elasticsearch.php.bak
 phpmyfaq/config/index.html
 phpmyfaq/data/*
 phpmyfaq/images/*
@@ -43,7 +43,7 @@ phpmyfaq/inc/libs/tcpdf/include
 phpmyfaq/inc/libs/tcpdf/*.php
 phpmyfaq/inc/libs/twitteroauth
 
-# Third party frontend libraries
+# Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css/*
 phpmyfaq/admin/assets/fonts/*
 phpmyfaq/admin/assets/js/editor/tinymce.min.js
