@@ -65,3 +65,6 @@ components/*
 
 # node.js modules for development
 node_modules/*
+
+# Backup folder
+backup/*
