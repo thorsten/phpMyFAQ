@@ -39,6 +39,7 @@ Version 2.9.0-beta2 - 2016-
 - added support for language specific open questions (Thorsten)
 - added moderator groups to categories (Thorsten)
 - added FAQ overview page (Thorsten)
+- added JSON export (Thorsten)
 - extended REST/JSON API (Thorsten)
 - code base PSR-1 and PSR-2 compatible (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.12 (Thorsten)

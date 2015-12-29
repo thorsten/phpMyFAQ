@@ -81,6 +81,9 @@ class PMF_Export
     public static function create(PMF_Faq $faq, PMF_Category $category, PMF_Configuration $config, $mode = 'pdf')
     {
         switch ($mode) {
+            case 'json':
+                return new PMF_Export_Json($faq, $category, $config);
+                break;
             case 'pdf':
                 return new PMF_Export_Pdf($faq, $category, $config);
                 break;

@@ -545,7 +545,7 @@ $PMF_LANG["ad_entry_email"] = "Email";
 $PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
 $PMF_LANG["msgWriteNoComment"] = "You cannot comment on this entry";
 $PMF_LANG["ad_user_realname"] = "Real name:";
-$PMF_LANG["ad_export_generate_pdf"] = "create PDF file";
+$PMF_LANG["ad_export_generate_pdf"] = "Create PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
@@ -712,7 +712,7 @@ $PMF_LANG['ad_export_type_choose'] = 'Supported formats:';
 $PMF_LANG['ad_export_download_view'] = 'Download or view inline?';
 $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
-$PMF_LANG['ad_export_gen_xhtml'] = 'create XHTML file';
+$PMF_LANG['ad_export_gen_xhtml'] = 'Create XHTML file';
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'FAQ News';
@@ -1244,3 +1244,4 @@ $PMF_LANG['ad_es_drop_index'] = 'Drop Index';
 $PMF_LANG['ad_es_bulk_index'] = 'Full import';
 $PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
 $PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';
+$PMF_LANG['ad_export_generate_json'] = 'Create JSON file';

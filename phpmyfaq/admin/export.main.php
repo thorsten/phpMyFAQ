@@ -80,7 +80,12 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         <div class="col-lg-offset-2 col-lg-8 radio">
                             <p><?php echo $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
-                                <input type="radio" name="export-type" value="pdf" id="pdf" checked>
+                                <input type="radio" name="export-type" value="json" id="json" checked>
+                                <?php echo $PMF_LANG['ad_export_generate_json'] ?>
+                            </label>
+                            <br>
+                            <label>
+                                <input type="radio" name="export-type" value="pdf" id="pdf">
                                 <?php echo $PMF_LANG['ad_export_generate_pdf'] ?>
                             </label>
                             <br>
