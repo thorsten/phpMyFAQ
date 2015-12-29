@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-beta2 - 2016-
+Version 2.9.0-beta2 - 2016-01
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
@@ -24,10 +24,10 @@ Version 2.9.0-beta2 - 2016-
 - added support for MySQL sockets
 - added possibility to enable/disable gzip compression (Thorsten)
 - added possibility for inactive, hidden categories (Thorsten)
-- added possibility to disable registraton (Thorsten)
+- added possibility to disable registration (Thorsten)
 - added possibility to allow anonymous downloads (Thorsten)
 - added possibility to override user passwords by admin (Thorsten)
-- added possibility to reset votings and visits (Thorsten)
+- added possibility to reset voting and visits (Thorsten)
 - added possibility to disable smart answering (Thorsten)
 - added tag management frontend (Thorsten)
 - added full support for SQLite3 (Peter Kehl)
@@ -41,6 +41,7 @@ Version 2.9.0-beta2 - 2016-
 - added FAQ overview page (Thorsten)
 - added JSON export (Thorsten)
 - extended REST/JSON API (Thorsten)
+- added simple bash based backup script (Thorsten)
 - code base PSR-1 and PSR-2 compatible (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.6.12 (Thorsten)
 - updated bundled jQuery to version 1.11.2 (Thorsten)
@@ -55,6 +56,7 @@ Version 2.9.0-beta2 - 2016-
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
+- fixed a lot of minor bugs (Thorsten)
 
 Version 2.8.25 - 2015-12-05
 - ready for PHP 7 (Thorsten)
