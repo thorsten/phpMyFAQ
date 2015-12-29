@@ -10,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
@@ -18,7 +17,6 @@
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
  */
@@ -29,8 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /*
  * SQL constants definitions
  */
-define('FAQ_SQL_YES',        'y');
-define('FAQ_SQL_NO',         'n');
 define('FAQ_SQL_ACTIVE_YES', 'yes');
 define('FAQ_SQL_ACTIVE_NO',  'no');
 
@@ -54,10 +50,9 @@ define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
 define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
- * Faq - 3K LOC of funny things for phpMyFAQ.
+ * The main FAQ class - 3K LOC of funny things for phpMyFAQ.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
@@ -65,7 +60,6 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-20
  */
@@ -799,17 +793,17 @@ class PMF_Faq
     /**
      * Adds a new record.
      *
-     * @param array $data       Array of FAQ data
-     * @param bool  $new_record New record?
+     * @param array $data      Array of FAQ data
+     * @param bool  $newRecord Do not create a new ID if false
      *
      * @return int
      */
-    public function addRecord(Array $data, $new_record = true)
+    public function addRecord(Array $data, $newRecord = true)
     {
-        if ($new_record) {
-            $record_id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqdata', 'id');
+        if ($newRecord) {
+            $recordId = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqdata', 'id');
         } else {
-            $record_id = $data['id'];
+            $recordId = $data['id'];
         }
 
         // Add new entry
@@ -817,9 +811,9 @@ class PMF_Faq
             "INSERT INTO
                 %sfaqdata
             VALUES
-                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s')",
+                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s')",
             PMF_Db::getTablePrefix(),
-            $record_id,
+            $recordId,
             $data['lang'],
             $this->getSolutionId(),
             0,
@@ -835,11 +829,13 @@ class PMF_Faq
             $data['linkState'],
             $data['linkDateCheck'],
             $data['dateStart'],
-            $data['dateEnd']);
+            $data['dateEnd'],
+            date('Y-m-d H:i:s')
+        );
 
         $this->_config->getDb()->query($query);
 
-        return $record_id;
+        return $recordId;
     }
 
     /**
@@ -907,6 +903,8 @@ class PMF_Faq
      */
     public function deleteRecord($recordId, $recordLang)
     {
+        $solutionId = $this->getSolutionIdFromId($recordId, $recordLang);
+
         $queries = array(
             sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
@@ -982,6 +980,12 @@ class PMF_Faq
         $attId = PMF_Attachment_Factory::fetchByRecordId($this->_config, $recordId);
         $attachment = PMF_Attachment_Factory::create($attId);
         $attachment->delete();
+
+        // Delete possible Elasticsearch documents
+        if ($this->_config->get('search.enableElasticsearch')) {
+            $esInstance = new PMF_Instance_Elasticsearch($this->_config);
+            $esInstance->delete($solutionId);
+        }
 
         return true;
     }
@@ -1204,11 +1208,11 @@ class PMF_Faq
     /**
      * Gets the record ID from a given solution ID.
      *
-     * @param int $solution_id Solution ID
+     * @param int $solutionId Solution ID
      *
      * @return array
      */
-    public function getIdFromSolutionId($solution_id)
+    public function getIdFromSolutionId($solutionId)
     {
         $query = sprintf('
             SELECT
@@ -1218,17 +1222,53 @@ class PMF_Faq
             WHERE
                 solution_id = %d',
             PMF_Db::getTablePrefix(),
-            $solution_id);
+            $solutionId
+        );
 
         $result = $this->_config->getDb()->query($query);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
-            return array('id' => $row->id,
-                         'lang' => $row->lang,
-                         'content' => $row->content, );
+            return [
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'content' => $row->content
+            ];
         }
 
-        return;
+        return [];
+    }
+
+    /**
+     * Returns the solution ID from a given ID and language
+     *
+     * @param integer $faqId
+     * @param string $faqLang
+     *
+     * @return int
+     */
+    public function getSolutionIdFromId($faqId, $faqLang)
+    {
+        $query = sprintf("
+            SELECT
+                solution_id
+            FROM
+                %sfaqdata
+            WHERE
+                id = %d
+                AND
+                lang = '%s'",
+            PMF_Db::getTablePrefix(),
+            (int) $faqId,
+            $this->_config->getDb()->escape($faqLang)
+        );
+
+        $result = $this->_config->getDb()->query($query);
+
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
+            return $row->solution_id;
+        }
+
+        return $this->getSolutionId();
     }
 
     /**
@@ -1238,28 +1278,29 @@ class PMF_Faq
      */
     public function getSolutionId()
     {
-        $latest_id = 0;
-        $next_solution_id = 0;
+        $latestId = 0;
 
         $query = sprintf('
             SELECT
                 MAX(solution_id) AS solution_id
             FROM
                 %sfaqdata',
-            PMF_Db::getTablePrefix());
+            PMF_Db::getTablePrefix()
+        );
+
         $result = $this->_config->getDb()->query($query);
 
         if ($result && $row = $this->_config->getDb()->fetchObject($result)) {
-            $latest_id = $row->solution_id;
+            $latestId = $row->solution_id;
         }
 
-        if ($latest_id < PMF_SOLUTION_ID_START_VALUE) {
-            $next_solution_id = PMF_SOLUTION_ID_START_VALUE;
+        if ($latestId < PMF_SOLUTION_ID_START_VALUE) {
+            $nextSolutionId = PMF_SOLUTION_ID_START_VALUE;
         } else {
-            $next_solution_id = $latest_id + PMF_SOLUTION_ID_INCREMENT_VALUE;
+            $nextSolutionId = $latestId + PMF_SOLUTION_ID_INCREMENT_VALUE;
         }
 
-        return $next_solution_id;
+        return $nextSolutionId;
     }
 
     /**

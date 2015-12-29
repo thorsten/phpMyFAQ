@@ -9,11 +9,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
@@ -25,11 +23,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Helper_Linkverifier.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2015 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
@@ -45,7 +41,6 @@ class PMF_Helper_Linkverifier extends PMF_Helper
     {
         ?>
     <script type="text/javascript">
-        <!--
         function ajaxOnDemandVerify(id, lang)
         {
             var target = $('#onDemandVerifyResult');
@@ -71,21 +66,9 @@ class PMF_Helper_Linkverifier extends PMF_Helper
             }
         }
 
+        ajaxOnDemandVerify(<?php echo $id ?>, '<?php echo $lang ?>');
 
-        //-->
-    </script>
-
-    <div id="onDemandVerifyResult">
-        <noscript>LinkVerifier feature disabled (Reason: Javascript not enabled)</noscript>
-    </div>
-    <script type="text/javascript">
-        <!--
-        ajaxOnDemandVerify(<?php print $id;
-        ?>, '<?php print $lang;
-        ?>');
-        //-->
     </script>
     <?php
-
     }
 }

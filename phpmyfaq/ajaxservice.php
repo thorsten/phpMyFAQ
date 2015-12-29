@@ -346,7 +346,7 @@ switch ($action) {
                 'keywords' => $keywords,
                 'author' => $name,
                 'email' => $email,
-                'comment' => FAQ_SQL_YES,
+                'comment' => 'y',
                 'date' => date('YmdHis'),
                 'dateStart' => '00000000000000',
                 'dateEnd' => '99991231235959',

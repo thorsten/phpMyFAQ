@@ -142,9 +142,30 @@ class PMF_Instance_Elasticsearch
         return $this->client->indices()->getMapping();
     }
 
+    /**
+     * Indexing of a FAQ
+     *
+     * @param array $faq
+     *
+     * @return array
+     */
     public function index(Array $faq)
     {
+        $params = [
+            'index' => $this->config['index'],
+            'type' => $this->config['type'],
+            'id' => $faq['solution_id'],
+            'body' => [
+                'id' => $faq['id'],
+                'lang' => $faq['lang'],
+                'question' => $faq['question'],
+                'answer' => $faq['answer'],
+                'keywords' => $faq['keywords'],
+                'category_id' => $faq['category_id']
+            ]
+        ];
 
+        return $this->client->index($params);
     }
 
     /**
@@ -165,7 +186,7 @@ class PMF_Instance_Elasticsearch
                 'index' => [
                     '_index' => $this->config['index'],
                     '_type' => $this->config['type'],
-                    '_id' => $i
+                    '_id' => $faq['solution_id'],
                 ]
             ];
 
@@ -195,14 +216,48 @@ class PMF_Instance_Elasticsearch
         return $responses;
     }
 
+    /**
+     * Updates a FAQ document
+     *
+     * @param array $faq
+     * @return array
+     */
     public function update(Array $faq)
     {
+        $params = [
+            'index' => $this->config['index'],
+            'type' => $this->config['type'],
+            'id' => $faq['solution_id'],
+            'body' => [
+                'doc' => [
+                    'id' => $faq['id'],
+                    'lang' => $faq['lang'],
+                    'question' => $faq['question'],
+                    'answer' => $faq['answer'],
+                    'keywords' => $faq['keywords'],
+                    'category_id' => $faq['category_id']
+                ]
+            ]
+        ];
 
+        return $this->client->update($params);
     }
 
-    public function delete($faqId)
+    /**
+     * Deletes a FAQ document
+     *
+     * @param integer $solutionId
+     * @return array
+     */
+    public function delete($solutionId)
     {
+        $params = [
+            'index' => $this->config['index'],
+            'type' => $this->config['type'],
+            'id' => $solutionId
+        ];
 
+        return $this->client->delete($params);
     }
 
     /**

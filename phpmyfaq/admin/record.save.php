@@ -195,6 +195,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
         }
 
+        // If Elasticsearch is enabled, index new FAQ document
+        if ($faqConfig->get('search.enableElasticsearch')) {
+            $esInstance = new PMF_Instance_Elasticsearch($faqConfig);
+            $esInstance->update(
+                [
+                    'id' => $recordId,
+                    'lang' => $recordLang,
+                    'solution_id' => $solutionId,
+                    'question' => $recordData['thema'],
+                    'answer' => $recordData['content'],
+                    'keywords' => $keywords,
+                    'category_id' => $categories['rubrik'][0]
+                ]
+            );
+        }
+
         // All the other translations        
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
         ?>

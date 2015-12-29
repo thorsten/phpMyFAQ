@@ -130,6 +130,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         // Add new record and get that ID
         $recordId = $faq->addRecord($recordData);
 
+
         if ($recordId) {
             // Create ChangeLog entry
             $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
@@ -154,11 +155,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 $category->addPermission('group', $categories['rubrik'], $permissions['restricted_groups']);
             }
 
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
-
             // Open question answered
             $openQuestionId = PMF_Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
-            if (null !== $openQuestionId) {
+            if (0 !== $openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
@@ -185,6 +184,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             // Call Link Verification
             PMF_Helper_Linkverifier::linkOndemandJavascript($recordId, $recordData['lang']);
 
+            // If Elasticsearch is enabled, index new FAQ document
+            if ($faqConfig->get('search.enableElasticsearch')) {
+                $esInstance = new PMF_Instance_Elasticsearch($faqConfig);
+                $esInstance->index(
+                    [
+                        'id' => $recordId,
+                        'lang' => $recordLang,
+                        'solution_id' => $solutionId,
+                        'question' => $recordData['thema'],
+                        'answer' => $recordData['content'],
+                        'keywords' => $keywords,
+                        'category_id' => $categories['rubrik'][0]
+                    ]
+                );
+            }
+
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
                 require '../inc/libs/twitteroauth/twitteroauth.php';
@@ -199,7 +214,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 $link = PMF_Link::getSystemRelativeUri().
                         sprintf(
                             '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $category,
+                            $categories['rubrik'][0],
                             $recordId,
                             $recordLang
                         );
@@ -214,16 +229,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 }
             }
 
-            // All the other translations
-            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
+
             ?>
     <script>
-        (function() {
-            setTimeout(function() {
-                window.location = "index.php?action=editentry&id=<?php print $recordId;
-            ?>&lang=<?php print $recordData['lang'] ?>";
-            }, 5000);
-        })();
+//        (function() {
+//            setTimeout(function() {
+//                window.location = "index.php?action=editentry&id=<?php //print $recordId;
+//            ?>//&lang=<?php //print $recordData['lang'] ?>//";
+//            }, 5000);
+//        })();
     </script>
 
 <?php
