@@ -259,7 +259,7 @@ $pmfExeptions = [];
  * @param mixed  $context  It optionally contains an array of every variable
  *                         that existed in the scope the error was triggered in.
  *
- * @return bool
+ * @return boolean|null
  */
 function pmf_error_handler($level, $message, $filename, $line, $context)
 {
