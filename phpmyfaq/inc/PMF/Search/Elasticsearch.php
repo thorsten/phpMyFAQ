@@ -136,6 +136,21 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     }
 
     /**
+     * Prepares the autocomplete search and executes it.
+     *
+     * @param string $searchTerm Search term for autocompletion
+     *
+     * @throws PMF_Search_Exception
+     *
+     * @return array
+     */
+    public function autocomplete($searchTerm)
+    {
+
+        return $this->resultSet;
+    }
+
+    /**
      * Returns the current category ID
      *
      * @return array

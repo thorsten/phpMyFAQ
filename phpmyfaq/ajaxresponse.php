@@ -97,8 +97,8 @@ $http->addHeader();
 // Handle the search requests
 //
 if (!is_null($searchString)) {
-    $faqSearch->setCategory($categoryId);
-    $searchResult = $faqSearch->search($searchString, false);
+    $faqSearch->setCategory($category);
+    $searchResult = $faqSearch->autocomplete($searchString);
 
     $faqSearchResult->reviewResultset($searchResult);
 

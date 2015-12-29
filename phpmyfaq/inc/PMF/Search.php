@@ -95,7 +95,6 @@ class PMF_Search
         return $this->categoryId;
     }
 
-
     /**
      * The search function to handle the different search engines.
      *
@@ -110,6 +109,32 @@ class PMF_Search
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         } else {
             return $this->searchDatabase($searchTerm, $allLanguages);
+        }
+    }
+
+    /**
+     * The autocomplete function to handle the different search engines.
+     *
+     * @param string $searchTerm Text to auto complete
+     *
+     * @return array
+     */
+    public function autocomplete($searchTerm)
+    {
+        if ($this->_config->get('search.enableElasticsearch')) {
+
+            $esSearch = new PMF_Search_Elasticsearch($this->_config);
+            $allCategories = $this->getCategory()->getAllCategoryIds();
+
+            $esSearch->setCategoryIds($allCategories);
+            $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
+
+            return $esSearch->autocomplete($searchTerm);
+
+        } else {
+
+            return $this->searchDatabase($searchTerm, false);
+
         }
     }
 
