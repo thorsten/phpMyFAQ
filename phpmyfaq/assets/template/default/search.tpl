@@ -1,6 +1,10 @@
 <section>
             [searchTagsSection]
-                {searchTags}
+            <div class="clearfix">
+                <ul class="pmf-tags">
+                    {searchTags}
+                </ul>
+            </div>
             [/searchTagsSection]
 
             [tagListSection]
@@ -10,7 +14,11 @@
 
             [relatedTags]
             <h4>{relatedTagsHeader}</h4>
-                {relatedTags}
+            <div class="clearfix">
+                <ul class="pmf-tags">
+                    {relatedTags}
+                </ul>
+            </div>
             [/relatedTags]
 
             {printResult}

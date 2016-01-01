@@ -75,13 +75,13 @@ class PMF_Helper_Tags extends PMF_Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<a class="btn tag" href="?action=search&amp;tagging_id=%s">%s | X</a> ',
+                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i class="fa fa-minus-square"></i></a></li> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<a class="btn tag" href="?action=search&amp;search=">%s | X</a> ',
+                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i class="fa fa-minus-square"></i></a></li> ',
                 $tagName
             );
     }
@@ -98,8 +98,9 @@ class PMF_Helper_Tags extends PMF_Helper
     public function renderRelatedTag($tagId, $tagName, $relevance)
     {
         return sprintf(
-            '<a class="btn tag" href="?action=search&amp;tagging_id=%s">%s (%d)</a> ',
+            '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge">%d</span></a></li>',
             implode(',', $this->getTaggingIds()).','.$tagId,
+            '<i class="fa fa-plus-square"></i> ',
             $tagName,
             $relevance
         );
