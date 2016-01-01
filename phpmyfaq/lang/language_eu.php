@@ -1,24 +1,22 @@
 <?php
+
 /**
-* $Id: language_eu.php,v 1.24 2007-03-29 19:31:54 thorstenr Exp $
-*
-* Euskera language file
-*
-* @author       Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
-* @author       Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
-* @since        2005-12-28
-* @copyright    (c) 2005-2015 phpMyFAQ Team
-*
-* 
-* 
-* 
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * Euskera language file
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
+ * @author    Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
+ * @copyright 2005-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-02-19
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "eu";

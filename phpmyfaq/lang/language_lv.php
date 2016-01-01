@@ -5,7 +5,7 @@
  * Authors:				Kaspars Priedols <house@tvertne.nu>
  * Date:				2004-06-24
  * Last Update:		    2004-07-08
- * Copyright:           (c) 2006 phpMyFAQ Team
+ * Copyright:           (c) 2006-2016 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

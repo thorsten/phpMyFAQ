@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Spanish language file
  *
@@ -9,12 +10,11 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Eduardo Polidor
  * @author    Ivan Gil
  * @author    Lisandro López Villatoro
  * @author    Luis Carvalho <luis.carvalho@iberweb.pt>
- * @copyright 2004-2015 phpMyFAQ Team
+ * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24

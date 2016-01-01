@@ -1,23 +1,21 @@
 <?php
+
 /**
-* $Id: language_cy.php,v 1.24 2007-03-29 19:31:54 thorstenr Exp $
-*
-* The Cymraeg language file - Welsh (Cymraeg) translation
-*
-* @author       Duncan Thomas AKA Pinman <pinman@gmail.com>
-* @since        2006-08-23
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* 
-* 
-* 
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * The Cymraeg language file - Welsh (Cymraeg) translation
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Duncan Thomas AKA Pinman <pinman@gmail.com>
+ * @copyright 2006-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-08-23
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "cy";

@@ -1,18 +1,20 @@
 <?php
+
 /**
  * Arabic language file
  *
- * @category  phpMyFAQ
- * @package   Translation
- * @author    Ahmed Shalaby (ashalaby80@gmail.com)
- * @copyright 2004-2015 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
- * @since     2004-06-23
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Ahmed Shalaby <ashalaby80@gmail.com>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-23
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';

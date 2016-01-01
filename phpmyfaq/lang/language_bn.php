@@ -1,30 +1,21 @@
 ﻿<?php
+
 /**
-* $Id: language_bn.php,v 1.1 2008-04-23 16:22:36 thorstenr Exp $
-*
-* The Bangla language file - try to be the best of Bangladeshi Bangla
-*
-* @author       Md. Masum Billah <jewelurp@dhaka.net>
-* @since        2008-04-01
-*
-* The contents of this file are subject to Creative Commons License
-* Attribution 3.0 Unported (the "License"); 
-* You are free:
-* to Share — to copy, distribute and transmit the work to Remix — to adapt the work 
-* Under the following conditions:
-* You must attribute the work in the manner specified by the author or licensor 
-* (but not in any way that suggests that they endorse you or your use of the work). 
-*
-* For any reuse or distribution, you must make clear to others the license terms of this work. 
-* The best way to do this is with a link to this web page. 
-* Any of the above conditions can be waived if you get permission from the copyright holder. 
-* Nothing in this license impairs or restricts the author's moral rights. 
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * Bangla language file - try to be the best of Bangladeshi Bangla
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Md. Masum Billah <jewelurp@dhaka.net>
+ * @copyright 2008-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-04-01
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "bn";

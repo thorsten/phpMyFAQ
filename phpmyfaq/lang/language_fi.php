@@ -1,20 +1,25 @@
 <?php
+
 /**
- * $Id: language_fi.php,v 1.29 2007-03-29 19:31:54 thorstenr Exp $
- *
  * Finnish language file
  *
- * @author      Juha Tuomala <tuomala@iki.fi>
- * @author      Matti Kröger <matti.kroger@hotmail.com>
- * @author      Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
- * @author      Niklas Lampén <niklas.lampen@eventusmedia.fi>
- * @since       2004-02-19
- * @copyright   (c) 2006-2015 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Juha Tuomala <tuomala@iki.fi>
+ * @author    Matti Kröger <matti.kroger@hotmail.com>
+ * @author    Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
+ * @author    Niklas Lampén <niklas.lampen@eventusmedia.fi>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-19
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fi';
 $PMF_LANG['language'] = 'finnish';

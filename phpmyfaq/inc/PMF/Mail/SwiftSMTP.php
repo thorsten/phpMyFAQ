@@ -10,7 +10,7 @@
  * @category  phpMyFAQ
  *
  * @author    Christopher Andrews <http://arduino.land>
- * @copyright 2009-2014 Christopher Andrews, phpMyFAQ Team
+ * @copyright 2009-2016 Christopher Andrews, phpMyFAQ Team
  * @license   http://opensource.org/licenses/MIT MIT Public License
  *
  * @link      http://www.phpmyfaq.de

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Czech language file
  *
@@ -9,13 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Jaroslav Síka <jsika@vexcor.cz>
- * @copyright 2004-2015 phpMyFAQ Team
+ * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-04-07
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'cs';
 $PMF_LANG['language'] = 'Czech';
