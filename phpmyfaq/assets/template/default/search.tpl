@@ -9,7 +9,11 @@
 
             [tagListSection]
             <h3>{msgTags}</h3>
+            <div class="clearfix">
+                <ul class="pmf-tags">
                 {tagList}
+                </ul>
+            </div>
             [/tagListSection]
 
             [relatedTags]
@@ -65,12 +69,13 @@
             </section>
             [/searchBoxSection]
 
-
             [popularSearchesSection]
-            <p id="mostpopularsearches">
-                <h4>{msgMostPopularSearches}</h4>
-                {printMostPopularSearches}
-            </p>
+            <h4>{msgMostPopularSearches}</h4>
+            <div class="clearfix">
+                <ul class="pmf-tags">
+                    {printMostPopularSearches}
+                </ul>
+            </div>
             [/popularSearchesSection]
 
         </section>

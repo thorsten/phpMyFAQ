@@ -269,6 +269,15 @@ if ($tagSearch) {
             'openSearchLink' => $searchHelper->renderOpenSearchLink(),
         )
     );
+
+    $tpl->parseBlock(
+        'writeContent',
+        'popularSearchesSection',
+        [
+            'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
+            'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
+        ]
+    );
 }
 
 $tpl->parse(
@@ -276,9 +285,7 @@ $tpl->parse(
     array(
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
-        'printResult' => $searchResult,
-        'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
-        'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData),
+        'printResult' => $searchResult
     )
 );
 

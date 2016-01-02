@@ -371,12 +371,13 @@ class PMF_Helper_Search extends PMF_Helper
      */
     public function renderMostPopularSearches(Array $mostPopularSearches)
     {
-        $html = '<ul class="mostpopularsearcheslist">';
+        $html = '';
 
         foreach ($mostPopularSearches as $searchItem) {
             if (PMF_String::strlen($searchItem['searchterm']) > 0) {
+
                 $html .= sprintf(
-                    '<li><a href="?search=%s&submit=Search&action=search">%s</a> (%dx)</li>',
+                    '<li><a class="pmf tag" href="?search=%s&submit=Search&action=search">%s <span class="badge">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']
@@ -384,7 +385,7 @@ class PMF_Helper_Search extends PMF_Helper
             }
         }
 
-        return $html.'</ul>';
+        return $html;
     }
 
     /**
