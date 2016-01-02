@@ -599,7 +599,7 @@ Upgrading from 2.8.x is a major upgrade. Please make a full backup before you ru
 all files **except**:
 
 *   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
-*   all files in the directory **template/**
+*   all files in the directory **assets/template/**
 *   the directory **attachments/**
 *   the directory **data/**
 *   the directory **images/**
@@ -651,7 +651,7 @@ might know from the administration backend from older versions.
 
 We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that 
 the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS 
-compiler with node.js or a tool like [CodeKit](http://incident57.com/codekit/).
+compiler with Node.js or a tool like [CodeKit](http://incident57.com/codekit/).
 
 If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit 
 our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
@@ -1667,6 +1667,7 @@ This documentation is licensed under a [Creative Commons License](http://creativ
  [64]: #top
  [65]: #2.17
  [66]: #2.18
+ [68]: mailto:support AT phpmyfaq DOT de
  [88]: mailto:thorsten AT phpmyfaq DOT de
  [89]: mailto:stephan AT yauh DOT de
  [90]: mailto:mgl-mail AT t-online DOT de
