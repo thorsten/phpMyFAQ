@@ -56,19 +56,23 @@ class PMF_Instance_Elasticsearch
                 ],
                 'question' => [
                     'type' => 'string',
-                    'analyzer' => 'standard'
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => 'standard'
                 ],
                 'answer' => [
                     'type' => 'string',
-                    'analyzer' => 'standard'
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => 'standard'
                 ],
                 'keywords' => [
                     'type' => 'string',
-                    'analyzer' => 'standard'
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => 'standard'
                 ],
                 'categories' => [
                     'type' => 'string',
-                    'analyzer' => 'standard'
+                    'analyzer' => 'autocomplete',
+                    'search_analyzer' => 'standard'
                 ]
             ]
         ]
@@ -272,7 +276,26 @@ class PMF_Instance_Elasticsearch
             'body' => [
                 'settings' => [
                     'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
-                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS
+                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS,
+                    'analysis' => [
+                        'filter' => [
+                            'autocomplete_filter' => [
+                                'type' =>'edge_ngram',
+                                'min_gram' => 1,
+                                'max_gram' => 20
+                            ]
+                        ],
+                        'analyzer' => [
+                            'autocomplete' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'autocomplete_filter'
+                                ]
+                            ]
+                        ]
+                    ]
                 ]
             ]
         ];

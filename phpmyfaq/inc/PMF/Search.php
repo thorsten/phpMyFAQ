@@ -113,13 +113,13 @@ class PMF_Search
     }
 
     /**
-     * The autocomplete function to handle the different search engines.
+     * The auto complete function to handle the different search engines.
      *
      * @param string $searchTerm Text to auto complete
      *
      * @return array
      */
-    public function autocomplete($searchTerm)
+    public function autoComplete($searchTerm)
     {
         if ($this->_config->get('search.enableElasticsearch')) {
 
@@ -129,7 +129,7 @@ class PMF_Search
             $esSearch->setCategoryIds($allCategories);
             $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
 
-            return $esSearch->autocomplete($searchTerm);
+            return $esSearch->autoComplete($searchTerm);
 
         } else {
 

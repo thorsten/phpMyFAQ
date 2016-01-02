@@ -144,8 +144,54 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
      *
      * @return array
      */
-    public function autocomplete($searchTerm)
+    public function autoComplete($searchTerm)
     {
+        $searchParams = [
+            'index' => $this->esConfig['index'],
+            'type' => $this->esConfig['type'],
+            'size' => 1000,
+            'body' => [
+                'query' => [
+                    'filtered' => [
+                        'filter' => [
+                            'term' => [
+                                'lang' => $this->getLanguage()
+                            ]
+                        ],
+                        'query' => [
+                            'bool' => [
+                                'should' => [
+                                    [ 'match' => [ 'question' => $searchTerm ] ],
+                                    [ 'match' => [ 'answer' => $searchTerm ] ],
+                                    [ 'match' => [ 'keywords' => $searchTerm ] ]
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $result = $this->client->search($searchParams);
+
+        if (0 !== $result['hits']['total']) {
+
+            foreach ($result['hits']['hits'] as $hit) {
+                $resultSet = new stdClass();
+                $resultSet->id = $hit['_source']['id'];
+                $resultSet->lang = $hit['_source']['lang'];
+                $resultSet->question = $hit['_source']['question'];
+                $resultSet->answer = $hit['_source']['answer'];
+                $resultSet->keywords = $hit['_source']['keywords'];
+                $resultSet->category_id = $hit['_source']['category_id'];
+                $resultSet->score = $hit['_score'];
+
+                $this->resultSet[] = $resultSet;
+            }
+
+        } else {
+            $this->resultSet = [];
+        }
 
         return $this->resultSet;
     }

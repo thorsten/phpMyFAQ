@@ -10,14 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-27
  */
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -98,7 +97,7 @@ $http->addHeader();
 //
 if (!is_null($searchString)) {
     $faqSearch->setCategory($category);
-    $searchResult = $faqSearch->autocomplete($searchString);
+    $searchResult = $faqSearch->autoComplete($searchString);
 
     $faqSearchResult->reviewResultset($searchResult);
 
