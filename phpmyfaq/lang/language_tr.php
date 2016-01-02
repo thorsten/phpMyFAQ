@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Turkish language file
  *
@@ -9,10 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Zafer Gürsoy <zafergursoy@yahoo.com>
  * @author    Evren Yurtesen <yurtesen@ispro.net.tr>
- * @copyright 2006-2016 phpMyFAQ Team
+ * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004
@@ -21,14 +21,8 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "tr";
 $PMF_LANG["language"] = "Turkish";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategoriler";

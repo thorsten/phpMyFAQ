@@ -1,28 +1,27 @@
 <?php
-/******************************************************************************
- * File:				language_sl.php
- * Description:		    Slovenian language file
- * Authors:				Igor Isak <igor.isak@sgn.net>
- * Date:				2004-06-24
- * Last Update:		    2004-07-12
- * Copyright:           (c) 2006 phpMyFAQ Team
+
+/**
+ * Slovenian language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    Igor Isak <igor.isak@sgn.net>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sl";
 $PMF_LANG["language"] = "Slovenian";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "4";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorije";

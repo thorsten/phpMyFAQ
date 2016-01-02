@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Malay (Bahasa Melayu) language file
  *
@@ -15,6 +16,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2011-02-23
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ms';
 $PMF_LANG['language'] = 'malay';

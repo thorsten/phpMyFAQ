@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Italian language file.
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Stefano Bramato <stefano@pubblideaweb.it>
  * @auhtor    Rudy <webmaster@queenarena.com>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>

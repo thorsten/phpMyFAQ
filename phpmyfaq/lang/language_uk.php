@@ -1,30 +1,28 @@
 <?php
+
 /**
- * language_uk.php,v 1.1 2008/03/02 14:56:43 thorstenr Exp
- *
  * Ukranian language file
  *
- * @author      Oleg P. Suvolokin
- * @author      Denis A. Barybin
- * @since       2008-02-03
- * @copyright   (c) 2008-2016 Oleg P. Suvolokin, Denis A. Barybin, phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Oleg P. Suvolokin
+ * @author    Denis A. Barybin
+ * @copyright 2008-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-02-03
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "uk";
 $PMF_LANG["language"] = "Ukranian";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "3";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Розділи";

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Brazilian Portuguese language file
  *
@@ -9,13 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Pedro Lineu Orso <pedro.orso@gmail.com>
  * @copyright 2006-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-04-05
  */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'pt-BR';
 $PMF_LANG['language'] = 'Brazilian Portuguese';

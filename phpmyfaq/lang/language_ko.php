@@ -1,29 +1,27 @@
 <?php
-/******************************************************************************
- * File:				language_ko.php
- * Description:		    Korean language file
- * Authors:				YoungJoon Kim <yjkim@terracetech.com>
- * Date:				2004-02-19
- * First Created:	    2004-07-10
- * Last Updated:        2005-04-06
- * Copyright:           (c) 2006 phpMyFAQ Team
+
+/**
+ * Korean language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    YoungJoon Kim <yjkim@terratech.com>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-07-10
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "ko";
 $PMF_LANG["language"] = "Korean";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "카테고리";

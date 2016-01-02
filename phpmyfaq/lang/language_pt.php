@@ -1,4 +1,5 @@
 <?php
+
 /**
  * European Portuguese language file - post-1990 Orthographic Agreement (current): pt-PT
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    João Martins <jm@reit.up.pt>
  * @author    Fernando G. Monteiro <fgmont@reit.up.pt>
  * @author    Luis Costa <izhirahider@gmail.com>
@@ -19,6 +19,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pt';
 $PMF_LANG['language'] = 'Portuguese';

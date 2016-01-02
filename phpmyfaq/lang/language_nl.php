@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Dutch language file
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    René de Kat <rdkat@home.nl>
  * @author    Hans <hans@hansbosnl.nl>
  * @author    Ronald <ronald@proudsites.com>
@@ -19,6 +19,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-07-09
  */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nl';
 $PMF_LANG['language'] = 'Nederland';

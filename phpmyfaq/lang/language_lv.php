@@ -1,16 +1,21 @@
 <?php
-/******************************************************************************
- * File:				language_lv.php
- * Description:		    Latvian language file
- * Authors:				Kaspars Priedols <house@tvertne.nu>
- * Date:				2004-06-24
- * Last Update:		    2004-07-08
- * Copyright:           (c) 2006-2016 phpMyFAQ Team
+
+/**
+ * Latvian language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    Kaspars Priedols <house@tvertne.nu>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "lv";

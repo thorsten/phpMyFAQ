@@ -1,15 +1,22 @@
 <?php
+
 /**
- * The Thai language file
+ * Thai language file
  *
- * @author    Thanadon Somdee <jimmy@thaizone.com>
- * @date      2007-08-19
- * @copyright 2007-2016 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Thanadon Somdee <jimmy@thaizone.com>
+ * @copyright 2007-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2007-08-19
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'th';
 $PMF_LANG['language'] = 'thai';

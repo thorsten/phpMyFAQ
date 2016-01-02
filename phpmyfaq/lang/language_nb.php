@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Norwegian Bokmål language file
  *
@@ -9,13 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Hans Fredrik Nordhaug <hans@nordhaug.priv.no>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-31
  */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nb';
 $PMF_LANG['language'] = 'Norsk bokmål';

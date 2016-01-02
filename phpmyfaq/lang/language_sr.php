@@ -1,29 +1,30 @@
 <?php
+
 /**
  * Serbian language file
  *
- * @author    Vanja Hrustic <vanja@vanja.com>
- * @author    Slavisa Milojkovic <s.milojkovic@gmail.com>
- * @since     2004-06-24
- * @copyright 2006-2016 phpMyFAQ Team
- * @version   $Id: language_sr.php,v 1.26 2008-05-31 11:49:42 thorstenr Exp $
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Vanja Hrustic <vanja@vanja.com>
+ * @author    Slavisa Milojkovic <s.milojkovic@gmail.com>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sr";
 $PMF_LANG["language"] = "Serbian";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
 
 $PMF_LANG["nplurals"] = "3";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
+
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorije";
 $PMF_LANG["msgShowAllCategories"] = "Prika&#382;i sve kategorije";

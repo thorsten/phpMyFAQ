@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The French language file - try to be the best
+ * The French Canadian language file - try to be the best
  *
  * PHP Version 5.5
  *
@@ -15,6 +16,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2013-06-29
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fr-CA';
 $PMF_LANG['language'] = 'French Canada';

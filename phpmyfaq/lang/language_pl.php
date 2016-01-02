@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Polish language file
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Krzysztof Kudłacik <null@adres.pl>
  * @author    Sławomir Małusecki <mori@online-rpg.pl>
  * @author    Dariusz Grzesista  <darek@linux.rybnik.pl>
@@ -18,6 +18,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pl';
 $PMF_LANG['language'] = 'polski';

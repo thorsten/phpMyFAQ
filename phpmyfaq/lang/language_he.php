@@ -1,19 +1,24 @@
 <?php
+
 /**
- * $Id: language_he.php,v 1.28 2007-04-29 14:25:30 thorstenr Exp $
- *
  * Hebrew language file
  *
- * @author      Daniel Shkuri <dan-shk@bezeqint.net>
- * @author      Niran Shay <nirshay1@012.net.il>
- * @author      Roy Ronen <royroy15@gmail.com>
- * @since       2004-08-27
- * @copyright   (c) 2004-2016 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Daniel Shkuri <dan-shk@bezeqint.net>
+ * @author    Niran Shay <nirshay1@012.net.il>
+ * @author    Roy Ronen <royroy15@gmail.com>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-08-27
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'he';
 $PMF_LANG['language'] = 'hebrew';

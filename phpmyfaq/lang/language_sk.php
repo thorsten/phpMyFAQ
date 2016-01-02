@@ -1,6 +1,7 @@
 <?php
+
 /**
- * The Alovak language file
+ * The Slovak language file
  *
  * PHP Version 5.5
  *
@@ -10,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Tibor <tibor@topzone.sk>
- * @copyright 2011-2016 phpMyFAQ Team
+ * @copyright 2010-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-11

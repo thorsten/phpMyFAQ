@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The Japanese language file - try to be the best of Japanese
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Tadashi Jokagi <http://poyo.jp/>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @copyright 2004-2016 phpMyFAQ Team
@@ -17,6 +17,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ja';
 $PMF_LANG['language'] = '日本語';

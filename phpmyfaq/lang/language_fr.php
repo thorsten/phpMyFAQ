@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The French language file - try to be the best
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Sylvain Corvaisier <cocky@cocky.fr>
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
@@ -19,6 +19,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fr';
 $PMF_LANG['language'] = 'French';

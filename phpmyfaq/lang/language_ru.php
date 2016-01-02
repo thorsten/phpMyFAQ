@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Russian language file
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Hunter (3DCenter.ru)
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2004-2016 phpMyFAQ Team
@@ -17,6 +17,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ru';
 $PMF_LANG['language'] = 'Russian';

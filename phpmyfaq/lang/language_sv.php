@@ -1,19 +1,24 @@
 <?php
+
 /**
  * Swedish language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Emil Kennerberg <emil@kennerberg.se>
- * @author     Andreas <hq6830@yahoo.no>
- * @author     Thomas Höjemo <thomas@snt.se>
- * @since      2004-07-28
- * @copyright  2004-2016 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Emil Kennerberg <emil@kennerberg.se>
+ * @author    Andreas <hq6830@yahoo.no>
+ * @author    Thomas Höjemo <thomas@snt.se>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-07-28
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'sv';
 $PMF_LANG['language'] = 'Swedish';

@@ -1,30 +1,27 @@
 <?php
+
 /**
  * Vietnamese language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2004-06-23
- * @version    SVN: $Id$
- * @copyright  2004-2016 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2016 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-23
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "vi";
 $PMF_LANG["language"] = "Vietnamese";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Mục";

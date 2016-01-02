@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Taiwan Traditional Chinese language file
  *
@@ -9,7 +10,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Aaron Lin <devilkintw@gmail.com>
  * @author    Barlos Lee <barlos.lee@gmail.com>
  * @copyright 2004-2016 phpMyFAQ Team
