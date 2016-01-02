@@ -97,9 +97,13 @@ $http->addHeader();
 //
 if (!is_null($searchString)) {
     $faqSearch->setCategory($category);
-    $searchResult = $faqSearch->autoComplete($searchString);
 
-    $faqSearchResult->reviewResultset($searchResult);
+    try {
+        $searchResult = $faqSearch->autoComplete($searchString);
+        $faqSearchResult->reviewResultset($searchResult);
+    } catch (PMF_Search_Exception $e) {
+        // @todo handle the exception
+    }
 
     $faqSearchHelper = new PMF_Helper_Search($faqConfig);
     $faqSearchHelper->setSearchterm($searchString);

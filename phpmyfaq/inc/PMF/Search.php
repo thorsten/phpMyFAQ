@@ -1,5 +1,7 @@
 <?php
 
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+
 /**
  * The phpMyFAQ Search class.
  *
@@ -101,12 +103,18 @@ class PMF_Search
      * @param string $searchTerm   Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
      *
+     * @throws PMF_Search_Exception
+     *
      * @return array
      */
     public function search($searchTerm, $allLanguages = true)
     {
         if ($this->_config->get('search.enableElasticsearch')) {
-            return $this->searchElasticsearch($searchTerm, $allLanguages);
+            try {
+                return $this->searchElasticsearch($searchTerm, $allLanguages);
+            } catch (NoNodesAvailableException $e) {
+                throw new PMF_Search_Exception($e->getMessage());
+            }
         } else {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
@@ -116,6 +124,8 @@ class PMF_Search
      * The auto complete function to handle the different search engines.
      *
      * @param string $searchTerm Text to auto complete
+     *
+     * @throws PMF_Search_Exception
      *
      * @return array
      */
@@ -129,12 +139,13 @@ class PMF_Search
             $esSearch->setCategoryIds($allCategories);
             $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
 
-            return $esSearch->autoComplete($searchTerm);
-
+            try {
+                return $esSearch->autoComplete($searchTerm);
+            } catch (NoNodesAvailableException $e) {
+                throw new PMF_Search_Exception($e->getMessage());
+            }
         } else {
-
             return $this->searchDatabase($searchTerm, false);
-
         }
     }
 
