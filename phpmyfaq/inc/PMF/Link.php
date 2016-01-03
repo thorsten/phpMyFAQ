@@ -350,7 +350,7 @@ class PMF_Link
     /**
      * Returns the HTTP GET parameters.
      *
-     * @return array
+     * @return string
      */
     protected function getHttpGetParameters()
     {
@@ -476,7 +476,7 @@ class PMF_Link
         //           being requested, as obtained from the original URI given by the user or referring resource
 
         // Remove any ref to standard ports 80 and 443.
-        $pattern[0] = '/:80$/';   // HTTP: port 80
+        $pattern[0] = '/:80$/'; // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
         $sysUri = $this->getSystemScheme().preg_replace($pattern, '', $_SERVER['HTTP_HOST']);
 
@@ -744,7 +744,7 @@ class PMF_Link
      * @param string $text   Text
      * @param bool   $active Add CSS class named "active"?
      *
-     * @return string
+     * @return integer
      */
     public static function renderNavigationLink($url, $text, $active = false)
     {

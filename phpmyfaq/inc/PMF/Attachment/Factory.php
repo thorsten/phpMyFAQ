@@ -97,7 +97,7 @@ class PMF_Attachment_Factory
      * @param PMF_Configuration $config
      * @param int               $recordId ID of the record
      *
-     * @return array
+     * @return integer|null
      */
     public static function fetchByRecordId(PMF_Configuration $config, $recordId)
     {

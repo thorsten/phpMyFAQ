@@ -127,7 +127,7 @@ class PMF_Search_Database_Pgsql extends PMF_Search_Database
     /**
      * Add the matching columns into the columns for the resultset.
      *
-     * @return PMF_Search_Database
+     * @return string
      */
     public function getMatchingColumnsAsResult()
     {

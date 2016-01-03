@@ -53,9 +53,9 @@ class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem
     protected $aes;
 
     /**
-     * @param $filepath
-     * @param $mode
-     * @param $key
+     * @param string $filepath
+     * @param string $mode
+     * @param string $key
      *
      * @return PMF_Attachment_Filesystem_File_Encrypted
      */

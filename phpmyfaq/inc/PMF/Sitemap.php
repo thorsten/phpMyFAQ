@@ -198,7 +198,7 @@ class PMF_Sitemap
                     $this->_config->getLanguage()->getLanguage()
                 );
                 $oLink = new PMF_Link($url, $this->_config);
-                $oLink->text = (string) $letters;
+                $oLink->text = (string)$letters;
                 $writeLetters .= '<li>'.$oLink->toHtmlAnchor().'</li>';
             }
         }
