@@ -772,23 +772,31 @@ aside.pmf-comments {
 }
 
 .tt-dropdown-menu {
-  width: 422px;
   margin-top: 4px;
   padding: 4px 0;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
   box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  position: absolute;
+  left: auto !important;
+  right: 0 !important;
+  top: 100%;
+  width: 480px;
+  @media @small { width: 415px; }
+  @media @smaller { width: 100%; }
 }
 
 .tt-suggestion {
-  padding: 3px 20px;
+  color: @pmf-subheader-background;
   line-height: 24px;
+  padding: 3px 20px;
 }
 
 .tt-suggestion.tt-cursor {
-  color: #fff;
   background-color: @pmf-background;
+  color: @pmf-subheader-background;
+  cursor: pointer;
 }
 
 //
@@ -811,7 +819,7 @@ aside.pmf-comments {
 }
 
 //
-//
+// RSS Icon
 //
 .fa.fa-rss {
   color: orange;
