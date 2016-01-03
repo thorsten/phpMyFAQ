@@ -81,7 +81,7 @@ class PMF_Instance_Setup
     /**
      * Checks basic folders and creates them if necessary.
      *
-     * @param array $dirs
+     * @param string[] $dirs
      *
      * @return array
      */
@@ -184,7 +184,7 @@ class PMF_Instance_Setup
      * @param string $name Name of the new folder
      * @param string $path Path to the new folder
      *
-     * @return bool
+     * @return boolean|null
      */
     public function createFolder($name, $path)
     {

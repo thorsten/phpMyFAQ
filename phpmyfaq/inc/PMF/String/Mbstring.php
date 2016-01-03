@@ -282,8 +282,8 @@ class PMF_String_Mbstring extends PMF_String_Abstract
      */
     private static function appendU($str)
     {
-        $str = (string) $str;
+        $str = (string)$str;
 
-        return parent::isUTF8($str) ?  $str.'u' : $str;
+        return parent::isUTF8($str) ? $str.'u' : $str;
     }
 }

@@ -95,7 +95,7 @@ class PMF_Instance_Client extends PMF_Instance
      *
      * @param string $prefix SQL table prefix
      *
-     * @return bool
+     * @return boolean|null
      */
     public function createClientTables($prefix)
     {
@@ -181,7 +181,7 @@ class PMF_Instance_Client extends PMF_Instance
      * @param string $dest        Destination folder
      * @param string $templateDir Template folder
      *
-     * @return bool
+     * @return boolean|null
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {

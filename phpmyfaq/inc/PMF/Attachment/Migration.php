@@ -159,8 +159,8 @@ class PMF_Attachment_Migration
             case self::MIGRATION_TYPE1:
 
                 PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
-                                             '',
-                                             false);
+                                                '',
+                                                false);
                 $this->migrateFromOldFormatToFs();
                 // FIXME should attachment settings update be triggered here?
 
@@ -172,8 +172,8 @@ class PMF_Attachment_Migration
                  */
                 if (isset($options['defaultKey']) && !empty($options['defaultKey'])) {
                     PMF_Attachment_Factory::init(PMF_Attachment::STORAGE_TYPE_FILESYSTEM,
-                                                 $options['defaultKey'],
-                                                 true);
+                                                    $options['defaultKey'],
+                                                    true);
                     $this->migrateFromOldFormatToFs();
                 } else {
                     $this->error[] = 'Default key required to be set for this option';
