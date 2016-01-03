@@ -91,7 +91,7 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                             'bool' => [
                                 'must' => [
                                     [
-                                        'terms' => [ 'category_id' => $this->getCategoryIds() ]
+                                        'terms' => ['category_id' => $this->getCategoryIds()]
                                     ],
                                     $languageFilter
                                 ]
@@ -100,9 +100,9 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                         'query' => [
                             'bool' => [
                                 'should' => [
-                                    [ 'match' => [ 'question' => $searchTerm ] ],
-                                    [ 'match' => [ 'answer' => $searchTerm ] ],
-                                    [ 'match' => [ 'keywords' => $searchTerm ] ]
+                                    ['match' => ['question' => $searchTerm]],
+                                    ['match' => ['answer' => $searchTerm]],
+                                    ['match' => ['keywords' => $searchTerm]]
                                 ]
                             ]
                         ]
@@ -161,9 +161,9 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                         'query' => [
                             'bool' => [
                                 'should' => [
-                                    [ 'match' => [ 'question' => $searchTerm ] ],
-                                    [ 'match' => [ 'answer' => $searchTerm ] ],
-                                    [ 'match' => [ 'keywords' => $searchTerm ] ]
+                                    ['match' => ['question' => $searchTerm]],
+                                    ['match' => ['answer' => $searchTerm]],
+                                    ['match' => ['keywords' => $searchTerm]]
                                 ]
                             ]
                         ]
