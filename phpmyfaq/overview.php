@@ -16,6 +16,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2015-09-27
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -26,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 try {
-    $faqsession->userTracking('contact', 0);
+    $faqsession->userTracking('overview', 0);
 } catch (PMF_Exception $e) {
     // @todo handle the exception
 }
