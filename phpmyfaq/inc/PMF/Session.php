@@ -139,10 +139,14 @@ class PMF_Session
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '').';'.
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])).';'.
                         $_SERVER['REQUEST_TIME'].";\n";
-                $file = './data/tracking'.date('dmY');
+                $file = PMF_ROOT_DIR.'/data/tracking'.date('dmY');
+
+                if (!is_file($file)) {
+                    touch($file);
+                }
 
                 if (is_writeable($file)) {
-                    file_put_contents($file, $data, FILE_APPEND);
+                    file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
                 } else {
                     throw new PMF_Exception('Cannot write to '.$file);
                 }
