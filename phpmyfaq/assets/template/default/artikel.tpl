@@ -85,18 +85,21 @@
                 [/addTranslation]
             </ul>
 
-            <div class="tab-content faq-information">
+            <div class="tab-content pmf-faq-info">
                 <div class="tab-pane active hidden-print" id="votingForm">
-                    <form action="#" method="post" class="form-inline" accept-charset="utf-8">
+                    <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{saveVotingID}">
                         <div id="votings"></div>
-                        <div class="star-rating">
-                            <span data-stars="5">☆</span>
-                            <span data-stars="4">☆</span>
-                            <span data-stars="3">☆</span>
-                            <span data-stars="2">☆</span>
-                            <span data-stars="1">☆</span>
+                        <div class="pmf-stars">
+                            <div class="pmf-star-rating">
+                                <span data-stars="5">☆</span>
+                                <span data-stars="4">☆</span>
+                                <span data-stars="3">☆</span>
+                                <span data-stars="2">☆</span>
+                                <span data-stars="1">☆</span>
+                            </div>
                         </div>
+
                         <div class="pull-right">
                             <strong>{msgAverageVote}</strong><span id="rating">{printVotings}</span>
                         </div>
@@ -173,9 +176,9 @@
             });
 
             $(function() {
-                $("div.star-rating > span").on("click", function(e) {
-                    var numStars = $(e.target).data("stars");
-                    saveVoting("faq", {id}, numStars, "{lang}");
+                $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
+                    var numStars = $(e.target).data('stars');
+                    saveVoting('faq', {id}, numStars, '{lang}');
                 });
             });
 

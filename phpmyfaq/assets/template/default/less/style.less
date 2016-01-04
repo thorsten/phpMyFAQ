@@ -682,6 +682,33 @@ hr {
   }
 }
 
+.pmf-faq-info {
+  .clearfix();
+}
+.pmf-stars {
+  margin: auto;
+  .text-center();
+}
+.pmf-star-rating {
+  direction: rtl;
+  font-size: 30px;
+  line-height: 50px;
+  padding: 2px;
+  text-align: center;
+  unicode-bidi: bidi-override;
+  > span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+  }
+  > span:hover:before,
+  > span:hover ~ span:before {
+    content: '\2605';
+    cursor: pointer;
+    position: absolute;
+  }
+}
+
 //
 // Comments on FAQs
 //
