@@ -136,7 +136,7 @@
                     <div class="row">
                         <div class="col-md-6">
                             <input type="text" name="user" id="user" class="form-control input-lg" required
-                                   placeholder="{defaultContentName}" value="{defaultContentName}">
+                                   placeholder="{msgNewContentName}" value="{defaultContentName}">
                         </div>
                         <div class="col-md-6">
                             <input type="email" name="mail" id="mail" class="form-control input-lg" required
@@ -147,10 +147,8 @@
                     <textarea rows="10" name="comment_text" id="comment_text" class="form-control input-lg"
                               placeholder="{msgYourComment}"></textarea>
 
-
                     {captchaFieldset}
-
-
+                    
                     <div class="pmf-buttons clearfix">
                         <button class="btn btn-primary" id="submitcomment" type="submit">
                             {msgNewContentSubmit}
