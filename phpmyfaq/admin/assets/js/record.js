@@ -14,7 +14,7 @@
  * @since     2013-11-17
  */
 
-/*global $:false */
+/*global $:false, Bloodhound: false, Handlebars: false */
 
 if (window.jQuery) {
 
@@ -67,6 +67,54 @@ if (window.jQuery) {
                 }
             });
         });
-    });
 
+        // Instantiate the bloodhound suggestion engine
+        var tags = new Bloodhound({
+            datumTokenizer: function (d) {
+                return Bloodhound.tokenizers.whitespace(d.value);
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: 'index.php?action=ajax&ajax=tags&ajaxaction=list&q=%QUERY',
+                filter: function (tags) {
+                    return $.map(tags.results, function (tags) {
+                        return {
+                            tagName: tags.tagName
+                        };
+                    });
+                }
+            }
+        });
+
+        // Initialize the bBloodhound suggestion engine
+        tags.initialize();
+
+        // Instantiate the Typeahead UI
+        $('.pmf-tags-autocomplete').typeahead(null, {
+            source: tags.ttAdapter(),
+            displayKey: 'tags',
+            name: 'tags',
+            minLength: 1,
+            templates: {
+                empty: [
+                    '<div class="empty-message">',
+                    'unable to find any Best Picture winners that match the current query',
+                    '</div>'
+                ].join('\n'),
+                suggestion: Handlebars.compile('<div data-tagName="{{tagName}}">{{tagName}}</div>')
+            }
+        }).on('typeahead:selected typeahead:autocompleted', function (event, tag) {
+            var tags = $('#tags'),
+                currentTags = tags.data('tagList');
+
+            if (typeof currentTags === 'undefined') {
+                currentTags = tag.tagName;
+            } else {
+                currentTags = currentTags + ', ' + tag.tagName;
+            }
+
+            tags.data('tagList', currentTags);
+            $('.pmf-tags-autocomplete').typeahead('val', currentTags);
+        });
+    });
 }

@@ -10,14 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -46,7 +45,7 @@ switch ($ajaxAction) {
                 $arrayOfValues = explode(',', $autoCompleteValue);
                 $autoCompleteValue = end($arrayOfValues);
             }
-            $tags = $oTag->getAllTags(strtolower($autoCompleteValue), PMF_TAGS_CLOUD_RESULT_SET_SIZE, true);
+            $tags = $oTag->getAllTags(strtolower(trim($autoCompleteValue)), PMF_TAGS_CLOUD_RESULT_SET_SIZE, true);
         } else {
             $tags = $oTag->getAllTags();
         }
@@ -57,11 +56,13 @@ switch ($ajaxAction) {
             foreach ($tags as $tagName) {
                 ++$i;
                 if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
-                    $tagNames[] = $tagName;
+                    $currentTag = new stdClass();
+                    $currentTag->tagName = $tagName;
+                    $tagNames['results'][] = $currentTag;
                 }
             }
 
-            echo json_encode(array('tags' => $tagNames));
+            echo json_encode($tagNames);
         }
         break;
 

@@ -387,15 +387,13 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <!-- Tags -->
                         <div class="form-group">
                             <label class="col-lg-4 control-label" for="tags">
-                                <?php echo $PMF_LANG['ad_entry_tags'];
-    ?>:
+                                <?php echo $PMF_LANG['ad_entry_tags'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
-                                       data-provide="typeahead" data-mode="multiple" autocomplete="off"
-                                       class="form-control">
-                                <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp'];
-    ?></span>
+                                    autocomplete="off" class="form-control pmf-tags-autocomplete"
+                                    data-tagList="<?php echo $faqData['tags'] ?>">
+                                <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp'] ?></span>
                             </div>
                         </div>
 
@@ -794,30 +792,6 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             return result[1].trim();
         return '';
     }
-
-    /*
-    $('#tags').typeahead({
-        source: function (query, process) {
-            return $.get("index.php?action=ajax&ajax=tags_list", { q: query }, function (data) {
-                return process(data.tags);
-            });
-        },
-        updater: function(item) {
-            return this.$element.val().replace(/[^,]*$/,'')+item+',';
-        },
-        matcher: function (item) {
-            var tquery = extractor(this.query.toLowerCase());
-            if(!tquery) return false;
-            return ~item.toLowerCase().indexOf(tquery)
-        },
-        highlighter: function (item) {
-            var query = extractor(this.query).replace(/[\-\[\]{}()*+?.,\\\^$|#\s]/g, '\\$&')
-            return item.replace(new RegExp('(' + query + ')', 'ig'), function ($1, match) {
-                return '<strong>' + match + '</strong>'
-            })
-        }
-    });
-    */
 
     $(function() {
         /*
