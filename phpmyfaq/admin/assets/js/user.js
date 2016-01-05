@@ -86,7 +86,7 @@ $(document).ready(function() {
         return false;
     });
 
-    // instantiate the bloodhound suggestion engine
+    // Instantiate the bloodhound suggestion engine
     var users = new Bloodhound({
         datumTokenizer: function (d) {
             return Bloodhound.tokenizers.whitespace(d.value);
@@ -105,14 +105,15 @@ $(document).ready(function() {
         }
     });
 
-    // initialize the bloodhound suggestion engine
+    // Initialize the bBloodhound suggestion engine
     users.initialize();
 
-    // instantiate the Typeahead UI
-    $('#user_list_autocomplete').typeahead(null, {
+    // Instantiate the Typeahead UI
+    $('.pmf-user-autocomplete').typeahead(null, {
         source: users.ttAdapter(),
         displayKey: 'users',
         name: 'users',
+        minLength: 1,
         templates: {
             empty: [
                 '<div class="empty-message">',
@@ -121,9 +122,9 @@ $(document).ready(function() {
             ].join('\n'),
             suggestion: Handlebars.compile('<div data-userId="{{userId}}">{{userName}}</div>')
         }
-    }).on('typeahead:selected typeahead:autocompleted', function (obj, user) {
+    }).on('typeahead:selected typeahead:autocompleted', function (event, user) {
+        $('.pmf-user-autocomplete').typeahead('val', user.userName);
         $('#user_list_select').val(user.userId);
-        getUserData(user.userId);
-        getUserRights(user.userId);
+        updateUser(user.userId);
     });
 });
