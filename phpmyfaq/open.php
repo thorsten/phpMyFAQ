@@ -31,15 +31,22 @@ try {
     // @todo handle the exception
 }
 
+if ($faqConfig->get('main.enableRssFeeds')) {
+    $rssFeedOpenQuestions = '<a href="feed/openquestions/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
+} else {
+    $rssFeedOpenQuestions = '';
+}
+
 $tpl->parse(
     'writeContent',
-    array(
+    [
+        'rssFeedOpenQuestions' => $rssFeedOpenQuestions,
         'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
         'msgQuestionText' => $PMF_LANG['msgQuestionText'],
         'msgDate_User' => $PMF_LANG['msgDate_User'],
         'msgQuestion2' => $PMF_LANG['msgQuestion2'],
-        'printOpenQuestions' => $faq->printOpenQuestions(),
-    )
+        'printOpenQuestions' => $faq->printOpenQuestions()
+    ]
 );
 
 $tpl->parseBlock(

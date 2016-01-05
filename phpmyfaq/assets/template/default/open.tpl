@@ -1,11 +1,5 @@
 <section>
-            <header>
-                <h2>
-                    <a href="feed/openquestions/rss.php" target="_blank">
-                        <i class="fa fa-rss"></i>
-                    </a>
-                </h2>
-            </header>
+            {rssFeedOpenQuestions}
 
             <p>{msgQuestionText}</p>
 

@@ -28,7 +28,7 @@
 
         <section class="pmf-aside-widget">
             <header>
-                <h3>{writeTopTenHeader} <a href="feed/topten/rss.php" target="_blank"><i class="fa fa-rss"></i></a></h3>
+                <h3>{writeTopTenHeader} {rssFeedTopTen}</h3>
             </header>
             <div class="pmf-aside-widget-body">
                 <ol class="tpmf-list">
@@ -44,7 +44,7 @@
 
         <section class="pmf-aside-widget">
             <header>
-                <h3>{writeNewestHeader} <a href="feed/latest/rss.php" target="_blank"><i class="fa fa-rss"></i></a></h3>
+                <h3>{writeNewestHeader} {rssFeedLatest}</h3>
             </header>
             <div class="pmf-aside-widget-body">
                 <ol class="pmf-list">

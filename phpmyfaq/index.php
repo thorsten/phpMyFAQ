@@ -694,16 +694,26 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     );
 }
 
+if ($faqConfig->get('main.enableRssFeeds')) {
+    $rssFeedTopTen = '<a href="feed/topten/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
+    $rssFeedLatest = '<a href="feed/latest/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
+} else {
+    $rssFeedTopTen = '';
+    $rssFeedLatest = '';
+}
+
 $tpl->parse(
     'rightBox',
-    array(
+    [
         'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+        'rssFeedTopTen' => $rssFeedTopTen,
         'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+        'rssFeedLatest' => $rssFeedLatest,
         'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
         'writeTags' => $oTag->printHTMLTagsCloud(),
         'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
-        'allCatArticles' => $faq->showAllRecordsWoPaging($cat),
-    )
+        'allCatArticles' => $faq->showAllRecordsWoPaging($cat)
+    ]
 );
 
 if (DEBUG) {
