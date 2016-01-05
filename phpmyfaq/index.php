@@ -405,7 +405,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 }
 
 //
-// phpMyFAQ installtion is in maintenance mode
+// phpMyFAQ installation is in maintenance mode
 //
 if ($faqConfig->get('main.maintenanceMode')) {
     $indexSet = 'indexMaintenance.tpl';
@@ -456,7 +456,7 @@ if (!is_null($error)) {
 $faqSeo = new PMF_Seo($faqConfig);
 
 $tplMainPage = array(
-    'msgLoginUser' => $PMF_LANG['msgLoginUser'],
+    'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
     'title' => $faqConfig->get('main.titleFAQ').$title,
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'version' => $faqConfig->get('main.currentVersion'),
