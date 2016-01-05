@@ -38,7 +38,7 @@ if ($user instanceof PMF_User) {
         $gravatar = new PMF_Services_Gravatar($faqConfig);
         $gravatarImg = sprintf(
             '<a target="_blank" href="http://www.gravatar.com">%s</a>',
-            $gravatar->getImage($user->getUserData('email'), array('class' => 'ucp pull-right', 'size' => 125))
+            $gravatar->getImage($user->getUserData('email'), ['class' => 'img-circle', 'size' => 125])
         );
     } else {
         $gravatarImg = '';
