@@ -413,7 +413,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             </div>
         </header>
 
-        <script src="assets/js/user.js"></script>
         <script>
         /* <![CDATA[ */
 
@@ -462,60 +461,29 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
         <div class="row">
             <div class="col-lg-4" id="userAccounts">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_user_username'];
-        ?>
-                    </div>
-
-                    <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-                          method="post" accept-charset="utf-8" class="form-horizontal">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label class="control-label col-lg-3" for="user_list_autocomplete">
-                                <?php echo $PMF_LANG['ad_auth_user'];
-        ?>:
-                            </label>
-                            <div class="col-lg-9">
+                <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
+                      class="form-horizontal" method="post" role="form">
+                    <input type="hidden" id="user_list_select" name="user_list_select" value="">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <?php echo $PMF_LANG['ad_user_username']; ?>
+                        </div>
+                        <div class="panel-body">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
                                 <input type="search" id="user_list_autocomplete" name="user_list_search"
-                                       data-provide="typeahead" class="form-control">
+                                       class="form-control" placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>">
                             </div>
                         </div>
-                        <script>
-                        var mappedIds,
-                            userNames;
-                        /*
-                        $('#user_list_autocomplete').typeahead({
-                            source: function (query, process) {
-                                return $.get("index.php?action=ajax&ajax=user&ajaxaction=get_user_list", { q: query }, function (data) {
-                                    mappedIds = [];
-                                    userNames = [];
-                                    $.each(data, function(i, user) {
-                                        mappedIds[user.name] = user.user_id;
-                                        userNames.push(user.name);
-                                    });
-                                    return process(userNames);
-                                });
-                            },
-                            updater: function(userName) {
-                                userId = mappedIds[userName];
-                                $("#user_list_select").val(userId);
-                                getUserData(userId);
-                                getUserRights(userId);
-                            }
-                        });
-                        */
-                        </script>
+                        <div class="panel-footer">
+                            <div class="text-right">
+                                <button class="btn btn-primary" type="submit">
+                                    <?php echo $PMF_LANG['ad_gen_delete'] ?>
+                                </button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="panel-footer">
-                        <input type="hidden" id="user_list_select" name="user_list_select" value="">
-                            <button class="btn btn-danger" type="submit">
-                                <?php echo $PMF_LANG['ad_gen_delete'];
-        ?>
-                            </button>
-                    </div>
-                    </form>
-                </div>
+                </form>
             </div>
             <div class="col-lg-4" id="userDetails">
                 <div class="panel panel-default">
@@ -834,6 +802,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </script>
 <?php 
     }
+?>
+        <script src="assets/js/user.js"></script>
+<?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

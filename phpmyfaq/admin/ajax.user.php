@@ -45,14 +45,14 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     switch ($ajaxAction) {
 
         case 'get_user_list':
-            $users = [];
+            $allUsers = [];
             foreach ($user->searchUsers($usersearch) as $singleUser) {
-                $users[] = array(
-                    'user_id' => $singleUser['user_id'],
-                    'name' => $singleUser['login'],
-                );
+                $users = new stdClass();
+                $users->user_id = (int)$singleUser['user_id'];
+                $users->name = $singleUser['login'];
+                $allUsers['results'][] = $users;
             }
-            echo json_encode($users);
+            echo json_encode($allUsers);
             break;
 
         case 'get_user_data':

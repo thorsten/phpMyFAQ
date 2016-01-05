@@ -29,13 +29,24 @@
 //
 // Webfonts
 //
-@import url("//fonts.googleapis.com/css?family=Lato:400,700,400italic");
+@import url('//fonts.googleapis.com/css?family=Lato:400,700,400italic');
 
 
 //
 // Colors
 //
 @import "colors";
+
+//
+// Viewports
+//
+@large: ~"(min-width: 1200px)";
+@medium: ~"(min-width: 980px) and (max-width: 1199px)";
+@small: ~"(min-width: 768px) and (max-width: 979px)";
+@small-and-smaller: ~"(max-width: 979px)";
+@smaller: ~"(max-width: 767px)";
+@tiny: ~"(max-width: 480px)";
+
 
 //
 // Wrapper
@@ -223,4 +234,39 @@ label.mce-label {
   width: 0;
   height: 0;
   display: none;
+}
+
+//
+// Typeahead
+//
+.tt-query {
+  //box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+}
+
+.tt-hint {
+  //color: #999
+}
+
+.tt-dropdown-menu {
+  margin-top: 4px;
+  padding: 4px 0;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 5px 10px rgba(0,0,0,.2);
+  position: absolute;
+  top: 100%;
+  width: 240px;
+}
+
+.tt-suggestion {
+  color: @pmf-link-text;
+  line-height: 24px;
+  padding: 3px 20px;
+}
+
+.tt-suggestion.tt-cursor {
+  background-color: @pmf-bg;
+  color: @pmf-link-text;
+  cursor: pointer;
 }

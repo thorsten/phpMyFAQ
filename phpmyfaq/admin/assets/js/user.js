@@ -14,7 +14,7 @@
  * @since     2010-05-02
  */
 
-/*global $:false */
+/*global $:false, Bloodhound: false, Handlebars: false */
 
 /**
  * Fetches the user rights as JSON object and checks the checkboxes
@@ -22,6 +22,8 @@
  * @param userId User ID
  */
 function getUserRights(userId) {
+    'use strict';
+
     $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId,
         function(data) {
             $.each(data, function(i, val) {
@@ -37,19 +39,22 @@ function getUserRights(userId) {
  * @param userId User ID
  */
 function updateUser(userId) {
+    'use strict';
+
     getUserData(userId);
     getUserRights(userId);
 }
 
 
 $(document).ready(function() {
-    "use strict";
+    'use strict';
 
     var button   = $('#checkAll');
-    var checkbox = $('.permission');
+    var buttonOverridePassword = $('.pmf-user-password-override-action');
 
     button.data('type', 'check');
-    button.click(function(event) {
+    button.on('click', function (event) {
+        var checkbox = $('.permission');
         event.preventDefault();
         if (button.data('type') === 'check') {
             checkbox.prop('checked', true);
@@ -60,12 +65,8 @@ $(document).ready(function() {
         }
     });
 
-    var buttonOverridePassword = $('.pmf-user-password-override-action');
-
-    buttonOverridePassword.click(function(event) {
+    buttonOverridePassword.on('click', function(event) {
         event.preventDefault();
-
-        // Check if passwords are equal
 
         // Fetch data
         $.ajax({
@@ -83,5 +84,46 @@ $(document).ready(function() {
             }
         });
         return false;
+    });
+
+    // instantiate the bloodhound suggestion engine
+    var users = new Bloodhound({
+        datumTokenizer: function (d) {
+            return Bloodhound.tokenizers.whitespace(d.value);
+        },
+        queryTokenizer: Bloodhound.tokenizers.whitespace,
+        remote: {
+            url: 'index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=%QUERY',
+            filter: function (users) {
+                return $.map(users.results, function (users) {
+                    return {
+                        userId: users.user_id,
+                        userName: users.name
+                    };
+                });
+            }
+        }
+    });
+
+    // initialize the bloodhound suggestion engine
+    users.initialize();
+
+    // instantiate the Typeahead UI
+    $('#user_list_autocomplete').typeahead(null, {
+        source: users.ttAdapter(),
+        displayKey: 'users',
+        name: 'users',
+        templates: {
+            empty: [
+                '<div class="empty-message">',
+                'unable to find any Best Picture winners that match the current query',
+                '</div>'
+            ].join('\n'),
+            suggestion: Handlebars.compile('<div data-userId="{{userId}}">{{userName}}</div>')
+        }
+    }).on('typeahead:selected typeahead:autocompleted', function (obj, user) {
+        $('#user_list_select').val(user.userId);
+        getUserData(user.userId);
+        getUserRights(user.userId);
     });
 });
