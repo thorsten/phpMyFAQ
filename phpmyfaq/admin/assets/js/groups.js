@@ -42,7 +42,7 @@ $(document).ready(function() {
                 $('#update_group_id').val(data.group_id);
                 $('#update_group_name').val(data.name);
                 $('#update_group_description').val(data.description);
-                if (data.auto_join == 1) {
+                if (1 === data.auto_join) {
                     $('#update_group_auto_join').attr('checked', true);
                 } else {
                     $('#update_group_auto_join').attr('checked', false);
@@ -79,7 +79,7 @@ $(document).ready(function() {
     };
 
     var groupSelect = function (event) {
-        event = (event) ? event : ((windows.event) ? windows.event : null);
+        event = (event) ? event : ((window.event) ? window.event : null);
         if (event) {
             var select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
             if (select && select.value > 0) {
@@ -93,7 +93,7 @@ $(document).ready(function() {
                 getMemberList(select.value);
             }
         }
-    }
+    };
 
     /**
      * User related functions
