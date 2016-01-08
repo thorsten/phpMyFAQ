@@ -8,10 +8,12 @@
         [/tagListSection]
 
         <section>
-            {writeNewsRSS}
             <article>
                 {writeNews}
             </article>
-            <p>{showAllNews}</p>
+            <footer>
+                {showAllNews}
+                {writeNewsRSS}
+            </footer>
             <p class="text-center">{writeNumberOfArticles}</p>
         </section>

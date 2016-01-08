@@ -21,13 +21,13 @@
                                 <fieldset>
 
                                     <div class="form-group">
-                                        <input type="text" name="faqusername" id="faqusername" class="form-control"
-                                               placeholder="{username}" required>
+                                        <input type="text" name="faqusername" id="faqusername"
+                                               class="form-control input-lg" placeholder="{username}" required>
                                     </div>
 
                                     <div class="form-group">
-                                        <input type="password" name="faqpassword" id="faqpassword" class="form-control"
-                                               placeholder="{password}" required>
+                                        <input type="password" name="faqpassword" id="faqpassword"
+                                               class="form-control input-lg" placeholder="{password}" required>
                                     </div>
 
                                     <div class="checkbox">

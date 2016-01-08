@@ -32,7 +32,7 @@ try {
 }
 
 if ($faqConfig->get('main.enableRssFeeds')) {
-    $rssFeedOpenQuestions = '<a href="feed/openquestions/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
+    $rssFeedOpenQuestions = ' <a href="feed/openquestions/rss.php" target="_blank"><i class="fa fa-rss"></i></a>';
 } else {
     $rssFeedOpenQuestions = '';
 }
@@ -40,7 +40,6 @@ if ($faqConfig->get('main.enableRssFeeds')) {
 $tpl->parse(
     'writeContent',
     [
-        'rssFeedOpenQuestions' => $rssFeedOpenQuestions,
         'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
         'msgQuestionText' => $PMF_LANG['msgQuestionText'],
         'msgDate_User' => $PMF_LANG['msgDate_User'],
@@ -53,6 +52,6 @@ $tpl->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions']
+        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions'].$rssFeedOpenQuestions
     ]
 );

@@ -1,6 +1,4 @@
 <section>
-            {rssFeedOpenQuestions}
-
             <p>{msgQuestionText}</p>
 
             <table class="table table-striped">
