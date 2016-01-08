@@ -56,13 +56,14 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                             <fieldset>
 
                                 <div class="form-group">
-                                    <input type="text" name="faqusername" id="faqusername"  class="form-control"
+                                    <input type="text" name="faqusername" id="faqusername" class="form-control input-lg"
                                            placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>" required>
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="password" name="faqpassword" id="faqpassword" class="form-control"
-                                           placeholder="<?php echo $PMF_LANG['ad_auth_passwd'] ?>" required>
+                                    <input type="password" name="faqpassword" id="faqpassword"
+                                           class="form-control input-lg" placeholder="<?php echo $PMF_LANG['ad_auth_passwd'] ?>"
+                                           required>
                                 </div>
 
                                 <div class="checkbox">
@@ -73,14 +74,20 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="btn btn-lg btn-success btn-block" type="submit">
+                                    <button class="btn btn-lg btn-primary btn-block" type="submit">
                                         <?php echo $PMF_LANG['msgLoginUser'] ?>
                                     </button>
                                 </div>
 
                                 <div class="form-group">
                                     <p class="pull-right">
-                                        <a href="../index.php?action=password"><?php echo $PMF_LANG['lostPassword'] ?></a>
+                                        <a href="../?action=password">
+                                            <?php echo $PMF_LANG['lostPassword'] ?>
+                                        </a>
+                                        <br>
+                                        <a href="../?action=register">
+                                            <?php echo $PMF_LANG['msgRegistration'] ?>
+                                        </a>
                                     </p>
                                 </div>
                             </fieldset>
