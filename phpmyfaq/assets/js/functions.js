@@ -6,7 +6,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   JavaScript
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
@@ -20,8 +19,7 @@
 
 /*global document: false, window: false, $: false, self: false */
 
-var addAttachment,
-    addEngine,
+var addEngine,
     infoBox,
     selectSelectAll,
     selectUnselectAll,
@@ -32,20 +30,6 @@ var addAttachment,
 
 $(document).ready(function () {
     'use strict';
-    /**
-     * Open a small popup to upload an attachment
-     *
-     * @param pic
-     * @param title
-     */
-    addAttachment = function addAttachment(pic, title) {
-        var popup = window.open(
-            pic,
-            title,
-            'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
-        );
-        popup.focus();
-    };
 
     /**
      *

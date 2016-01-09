@@ -372,17 +372,17 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             'id'
                                         );
                                     }
-    printf(
-                                        '<a class="btn btn-success" onclick="addAttachment(\'attachment.php?record_id=%d&amp;record_lang=%s\', \'Attachment\');">%s</a>',
+                                    // onclick="addAttachment('attachment.php?record_id=%d&amp;record_lang=%s', 'Attachment');"
+                                    printf(
+                                        '<a class="btn btn-success pmf-add-attachment" data-faq-id="%d" data-faq-language="%s">%s</a>',
                                         $faqData['id'],
                                         $faqData['lang'],
                                         $PMF_LANG['ad_att_add']
                                     );
-    ?>
+                                    ?>
                                 </div>
                             </div>
-                        <?php endif;
-    ?>
+                        <?php endif; ?>
 
                         <!-- Tags -->
                         <div class="form-group">

@@ -22,6 +22,26 @@ if (window.jQuery) {
 
         'use strict';
 
+        var addAttachmentButton = $('.pmf-add-attachment'),
+            addAttachment = function (pic, title) {
+            var popup = window.open(
+                pic,
+                title,
+                'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
+            );
+            popup.focus();
+        };
+
+        addAttachmentButton.on('click', function () {
+            var faqId = $(this).data('faq-id'),
+                faqLanguage = $(this).data('faq-language');
+
+            addAttachment(
+                'attachment.php?record_id=' + faqId + '&record_lang=' + faqLanguage,
+                'Attachment'
+            );
+        });
+
         $('#submitDeleteQuestions').on('click', function () {
             var questions = $('#questionSelection').serialize(),
                 indicator = $('#saving_data_indicator');
