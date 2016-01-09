@@ -11,21 +11,24 @@
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="name">{msgNewContentName}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="name" id="name" value="{defaultContentName}" required>
+                        <input type="text" class="form-control" name="name" id="name" value="{defaultContentName}"
+                               required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="email">{msgNewContentMail}</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email" id="email" value="{defaultContentMail}" required>
+                        <input type="email" class="form-control" name="email" id="email" value="{defaultContentMail}"
+                               required>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label class="col-sm-3 control-label" for="question">{msgMessage}</label>
                     <div class="col-sm-9">
-                        <textarea class="form-control" cols="37" rows="5" name="question" id="question" required></textarea>
+                        <textarea class="form-control" cols="37" rows="5" name="question" id="question"
+                                  required></textarea>
                     </div>
                 </div>
 
@@ -42,7 +45,7 @@
 
             
             <!-- PLEASE DO NOT REMOVE THE COPYRIGHT NOTICE -->
-            <div id="copyright">
+            <div class="text-center">
                 <hr>
                 <small>
                     Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a><br>
@@ -60,7 +63,7 @@
 
         <script>
             $(function() {
-                $('#submitcontact').click(function() {
+                $('#submitcontact').on('click', function () {
                     saveFormValues('sendcontact', 'contact');
                 });
                 $('form#formValues').submit(function() { return false; });

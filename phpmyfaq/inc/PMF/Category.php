@@ -608,7 +608,6 @@ class PMF_Category
     {
         global $sids, $plr;
 
-        $totFaqRecords = 0;
         $number = [];
 
         $query = sprintf('
@@ -665,9 +664,11 @@ class PMF_Category
             if ($leveldiff > 1) {
                 $output .= '</li>';
                 for ($i = $leveldiff; $i > 1; --$i) {
-                    $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                    $output .= sprintf(
+                        "\n%s</ul>\n%s</li>\n",
                         str_repeat("\t", $level + $i + 1),
-                        str_repeat("\t", $level + $i));
+                        str_repeat("\t", $level + $i)
+                    );
                 }
             }
 
@@ -675,17 +676,21 @@ class PMF_Category
                 if (($level - $open) == -1) {
                     $output .= '</li>';
                 }
-                $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                $output .= sprintf(
+                    "\n%s</ul>\n%s</li>\n",
                     str_repeat("\t", $level + 2),
-                    str_repeat("\t", $level + 1));
+                    str_repeat("\t", $level + 1)
+                );
             } elseif ($level == $open && $y != 0) {
                 $output .= "</li>\n";
             }
 
             if ($level > $open) {
-                $output .= sprintf("\n%s<ul>\n%s<li>",
+                $output .= sprintf(
+                    "\n%s<ul>\n%s<li>",
                     str_repeat("\t", $level + 1),
-                    str_repeat("\t", $level + 1));
+                    str_repeat("\t", $level + 1)
+                );
             } else {
                 $output .= str_repeat("\t", $level + 1).'<li>';
             }
@@ -693,7 +698,6 @@ class PMF_Category
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $totFaqRecords += $number[$parent];
                 $numFaqs = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->_config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
@@ -727,7 +731,6 @@ class PMF_Category
 
         $output .= "\t</li>\n";
         $output .= "\t</ul>\n";
-        $output .= '<span id="totFaqRecords" style="display: none;">'.$totFaqRecords."</span>\n";
 
         return $output;
     }
