@@ -5,8 +5,10 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.26 - 2016-
+Version 2.8.26 - 2016-01-
+- dropped support for Internet Explorer 9 and 10 (Thorsten)
 - updated Italian translation (Agnese Morettini)
+- updated Norwegian Bokmål translation (Stian Svarholt)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.25 - 2015-12-05

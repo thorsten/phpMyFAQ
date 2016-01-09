@@ -153,9 +153,11 @@ Upload this file to your webspace and open it using your browser. The installati
 
 In case you have PHP below 5.3.2 installed you cannot use phpMyFAQ.
 
-phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) and Internet Explorer 9 or later for Windows. You have to enable JavaScript for the Ajax based functions as well.
+phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are Mozilla Firefox 3.6 and later (Windows/OS X/Linux), 
+Safari 5.x or later (OS X/Windows/iOS), Chrome 5 or later (Windows/OS X/Linux), Opera 11.0 or later (Windows/OS X/Linux) 
+and Internet Explorer 11 or Edge for Windows 10. You have to enable JavaScript for the Ajax based functions as well.
 
-We recommend to use always the latest version of Firefox, Chrome, Safari, Opera and Internet Explorer.
+We recommend to use always the latest version of Firefox, Chrome, Safari, Opera, Internet Explorer or Microsoft Edge.
 
 If you're using *lighttpd* you have to set the following configuration:
 
