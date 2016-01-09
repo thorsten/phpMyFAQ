@@ -27,7 +27,7 @@ if (window.jQuery) {
             var popup = window.open(
                 pic,
                 title,
-                'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
+                'width=550, height=130, titlebar=no, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
             );
             popup.focus();
         };

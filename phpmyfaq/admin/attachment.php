@@ -66,31 +66,20 @@ if ($user) {
 }
 
 if (is_null($currentAction) || !is_null($currentSave)) {
-    ?>
+?>
 <!DOCTYPE html>
-<!--[if lt IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage'];
-    ?>" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]> <html lang="<?php echo $PMF_LANG['metaLanguage'];
-    ?>" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]> <html lang="<?php echo $PMF_LANG['metaLanguage'];
-    ?>" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage'];
-    ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage'];
-    ?>" class="no-js"> <!--<![endif]-->
+<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
-    <title><?php echo $faqConfig->get('main.titleFAQ');
-    ?> - powered by phpMyFAQ</title>
-    <base href="<?php echo $faqConfig->getDefaultUrl();
-    ?>admin/" />
+    <title><?php echo $faqConfig->get('main.titleFAQ') ?> - powered by phpMyFAQ</title>
+    <base href="<?php echo $faqConfig->getDefaultUrl() ?>admin/" />
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion');
-    ?>">
+    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?>">
     <meta name="publisher" content="phpMyFAQ Team">
 
     <link rel="stylesheet" href="assets/css/style.css?v=1">
@@ -98,10 +87,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName();
-    ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName();
-    ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName() ?>/favicon.ico">
 </head>
 <body class="attachments">
 
@@ -115,24 +101,19 @@ if (is_null($currentAction) && $auth && $user->perm->checkRight($user->getUserId
         <form action="attachment.php?action=save" enctype="multipart/form-data" method="post" accept-charset="utf-8">
             <fieldset>
             <legend>
-                <?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'];
-    ?>
+                <?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?>
                 (max <?php echo round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
             </legend>
-                <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $faqConfig->get('records.maxAttachmentSize');
-    ?>" />
-                <input type="hidden" name="record_id" value="<?php echo $recordId;
-    ?>" />
-                <input type="hidden" name="record_lang" value="<?php echo $recordLang;
-    ?>" />
-                <input type="hidden" name="save" value="TRUE" />
-                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
-    ?>" />
-                <?php echo $PMF_LANG['ad_att_att'];
-    ?> <input name="userfile" type="file" id="fileUpload" />
+                <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $faqConfig->get('records.maxAttachmentSize') ?>">
+                <input type="hidden" name="record_id" value="<?php echo $recordId ?>">
+                <input type="hidden" name="record_lang" value="<?php echo $recordLang ?>">
+                <input type="hidden" name="save" value="TRUE">
+                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                <?php echo $PMF_LANG['ad_att_att'] ?>
+
+                <input name="userfile" type="file" id="fileUpload">
                 <button class="btn btn-primary" type="submit">
-                    <?php echo $PMF_LANG['ad_att_butt'];
-    ?>
+                    <?php echo $PMF_LANG['ad_att_butt'] ?>
                 </button>
                 <?php echo $PMF_LANG['msgAttachmentsFilesize'] ?>: <output id="filesize"></output>
             </fieldset>
@@ -154,8 +135,9 @@ if (!is_null($currentSave) && $currentSave == true && $auth &&
     $recordId = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
     ?>
-<p><strong><?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'];
-    ?></strong></p>
+<p>
+    <strong><?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?></strong>
+</p>
 <?php
     if (is_uploaded_file($_FILES['userfile']['tmp_name']) && !($_FILES['userfile']['size'] > $faqConfig->get('records.maxAttachmentSize'))) {
         $att = PMF_Attachment_Factory::create();
