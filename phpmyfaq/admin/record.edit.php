@@ -355,7 +355,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             );
                                             if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
                                                 printf(
-                                                    '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash"></i></a>',
+                                                    '<a class="label label-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash"></i></a>',
                                                     $faqData['id'],
                                                     $att->getId(),
                                                     $faqData['lang']

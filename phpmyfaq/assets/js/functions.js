@@ -102,7 +102,7 @@ $(document).ready(function () {
             append(
                 '<li>' +
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
-                '<a class="label label-important" href="?action=delatt&amp;record_id=' + recordId +
+                '<a class="label label-danger" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
                 '<i class="fa fa-trash"></i></a>' +
                 '</li>'
