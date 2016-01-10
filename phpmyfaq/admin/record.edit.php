@@ -344,26 +344,26 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     <?php echo $PMF_LANG['ad_menu_attachments'] ?>:
                                 </label>
                                 <div class="col-lg-8">
-                                    <ul class="form-control-static">
+                                    <ul class="form-control-static adminAttachments">
                                         <?php
                                         $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faqData['id']);
-    foreach ($attList as $att) {
-        printf(
+                                        foreach ($attList as $att) {
+                                            printf(
                                                 '<li><a href="../%s">%s</a> ',
                                                 $att->buildUrl(),
                                                 $att->getFilename()
                                             );
-        if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
-            printf(
+                                            if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
+                                                printf(
                                                     '<a class="label label-important" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash"></i></a>',
                                                     $faqData['id'],
                                                     $att->getId(),
                                                     $faqData['lang']
                                                 );
-        }
-        echo "</li>\n";
-    }
-    ?>
+                                        }
+                                        echo "</li>\n";
+                                    }
+                                    ?>
                                     </ul>
                                     <?php
                                     if (0 === $faqData['id']) {
@@ -372,7 +372,6 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             'id'
                                         );
                                     }
-                                    // onclick="addAttachment('attachment.php?record_id=%d&amp;record_lang=%s', 'Attachment');"
                                     printf(
                                         '<a class="btn btn-success pmf-add-attachment" data-faq-id="%d" data-faq-language="%s">%s</a>',
                                         $faqData['id'],
