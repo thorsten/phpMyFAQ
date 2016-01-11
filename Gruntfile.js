@@ -119,6 +119,7 @@ module.exports = function(grunt) {
                     'components/typeahead.js/dist/typeahead.bundle.js',
                     'components/handlebars/handlebars.js',
                     'phpmyfaq/assets/js/autosave.js',
+                    'phpmyfaq/assets/js/comments.js',
                     'phpmyfaq/assets/js/typeahead.js',
                     'phpmyfaq/assets/js/functions.js'
                 ],
@@ -149,6 +150,9 @@ module.exports = function(grunt) {
             beforeconcat: [
                 'phpmyfaq/admin/assets/js/*.js',
                 'phpmyfaq/assets/js/autosave.js',
+                'phpmyfaq/assets/js/comments.js',
+                'phpmyfaq/assets/js/setup.js',
+                'phpmyfaq/assets/js/typeahead.js',
                 'phpmyfaq/assets/js/functions.js'
             ]
         },
@@ -197,14 +201,14 @@ module.exports = function(grunt) {
                 files: '<%= jshint.gruntfile.src %>',
                 tasks: ['jshint:gruntfile'],
                 options: {
-                    reload: true
+                    livereload: true
                 }
             },
             js: {
                 files: ['phpmyfaq/admin/assets/js/**/*.js', 'phpmyfaq/assets/js/*.js'],
-                tasks: ['jshint', 'uglify'],
+                tasks: ['jshint', 'concat', 'uglify'],
                 options: {
-                    reload: true
+                    livereload: true
                 }
             },
             css: {

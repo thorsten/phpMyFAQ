@@ -371,8 +371,8 @@ class PMF_Comment
         foreach ($words as $word) {
             $comment .= $word.' ';
             if (15 === $numWords) {
-                $comment .= '<span class="comment-dots-'.$id.'">... </span>'.
-                        '<a onclick="showLongComment('.$id.')" class="comment-show-more-'.$id.
+                $comment .= '<span class="comment-dots-'.$id.'">&hellip; </span>'.
+                        '<a data-comment-id="'.$id.'" class="pmf-comments-show-more comment-show-more-'.$id.
                         ' pointer">'.$this->pmfStr['msgShowMore'].'</a>'.
                         '<span class="comment-more-'.$id.' hide">';
             }

@@ -168,10 +168,6 @@
         <link rel="stylesheet" href="assets/js/libs/default.css">
         <script>
 
-            $('.show-comment-form').on('click', function(event) {
-                event.preventDefault();
-                $('#pmf-create-comment').removeClass('hide');
-            });
 
             $(function() {
                 $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {

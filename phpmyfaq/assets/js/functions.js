@@ -25,7 +25,6 @@ var addEngine,
     selectUnselectAll,
     closeWindow,
     addAttachmentLink,
-    showLongComment,
     saveVoting;
 
 $(document).ready(function () {
@@ -116,15 +115,6 @@ $(document).ready(function () {
      */
     closeWindow = function closeWindow() {
         window.close();
-    };
-
-    /**
-     * Show long comment
-     */
-    showLongComment = function showLongComment(id) {
-        $('.comment-more-' + id).removeClass('hide');
-        $('.comment-dots-' + id).addClass('hide');
-        $('.comment-show-more-' + id).addClass('hide');
     };
 
     /**
