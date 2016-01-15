@@ -1685,7 +1685,7 @@ class PMF_Faq
         if ('visits' == $type) {
             $result = $this->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->_config->getLanguage()->getLanguage());
         } else {
-            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, 0, $this->_config->getLanguage()->getLanguage());
+            $result = $this->getTopVotedData(PMF_NUMBER_RECORDS_TOPTEN, $this->_config->getLanguage()->getLanguage());
         }
         $output = [];
 
@@ -1800,10 +1800,10 @@ class PMF_Faq
      }
 
     /**
-     * Sets the visibilty of a question.
+     * Sets the visibility of a question.
      *
      * @param int    $questionId
-     * @param string $is_visible
+     * @param string $isVisible
      *
      * @return bool
      */
@@ -1830,17 +1830,18 @@ class PMF_Faq
     }
 
     /**
-     * This function generates a data-set with the mosted voted recors.
+     * This function generates a data-set with the most voted FAQs.
      *  
      * @param int    $count    Number of records
-     * @param int    $category Category ID
      * @param string $language Language
      *
      * @return array
      */
-    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $category = 0, $language = null)
+    public function getTopVotedData($count = PMF_NUMBER_RECORDS_TOPTEN, $language = null)
     {
         global $sids;
+
+        $topten = $data = [];
 
         $now = date('YmdHis');
         $query =
@@ -1891,8 +1892,6 @@ class PMF_Faq
                 avg DESC';
 
         $result = $this->_config->getDb()->query($query);
-        $topten = [];
-        $data = [];
 
         $i = 1;
         $oldId = 0;

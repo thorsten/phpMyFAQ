@@ -742,6 +742,8 @@ class PMF_Installer
                 echo '<p class="alert alert-danger"><strong>Elasticsearch Error:</strong> No connection.</p>';
                 PMF_System::renderFooter(true);
             }
+        } else {
+            $esSetup = [];
         }
 
         // check loginname

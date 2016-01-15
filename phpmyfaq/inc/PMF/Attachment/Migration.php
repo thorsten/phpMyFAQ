@@ -89,7 +89,7 @@ class PMF_Attachment_Migration
     }
 
     /**
-     * @param $dir
+     * @param string $dir
      *
      * @return array
      */
