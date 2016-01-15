@@ -739,36 +739,36 @@ class PMF_Category
      * Returns the three parts of a line to display: category name, the ID of
      * the root node and the description.
      *
-     * @param int $y ID
+     * @param integer $node
      *
      * @return array
      */
-    public function getLineDisplay($y)
+    public function getLineDisplay($node)
     {
-        $ret[0] = $this->symbols[$this->treeTab[$y]['symbol']];
-        $ret[1] = $this->treeTab[$y]['name'];
-        $ret[2] = $this->treeTab[$y]['id'];
-        $ret[3] = $this->treeTab[$y]['description'];
-        $ret[4] = $this->treeTab[$y]['active'];
-
-        return $ret;
+        return [
+            $this->symbols[$this->treeTab[$node]['symbol']],
+            $this->treeTab[$node]['name'],
+            $this->treeTab[$node]['id'],
+            $this->treeTab[$node]['description'],
+            $this->treeTab[$node]['active']
+        ];
     }
 
     /**
      * Gets the next line in the array treeTab, depending of the
      * collapse/expand node.
      *
-     * @param int $l Current line
+     * @param int $line Current line
      *
      * @return int
      */
-    public function getNextLineTree($l)
+    public function getNextLineTree($line)
     {
-        if ($this->treeTab[$l]['symbol'] != 'plus') {
-            return $l + 1;
+        if ($this->treeTab[$line]['symbol'] != 'plus') {
+            return $line + 1;
         } else {
-            for ($i = $l + 1; $i < $this->height(); ++$i) {
-                if ($this->treeTab[$i]['level'] <= $this->treeTab[$l]['level']) {
+            for ($i = $line + 1; $i < $this->height(); ++$i) {
+                if ($this->treeTab[$i]['level'] <= $this->treeTab[$line]['level']) {
                     return $i;
                 }
             }
