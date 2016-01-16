@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
  */
@@ -27,12 +25,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Mail.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
  */
@@ -136,12 +132,13 @@ class PMF_Mail
      *
      * @var mixed
      */
-    public $priorities = array(
+    public $priorities = [
         1 => 'Highest',
         2 => 'High',
         3 => 'Normal',
         4 => 'Low',
-        5 => 'Lowest', );
+        5 => 'Lowest'
+    ];
 
     /**
      * Priority of the e-mail: 1 (Highest), 2 (High), 3 (Normal), 4 (Low), 5 (Lowest).
@@ -331,7 +328,7 @@ class PMF_Mail
         $mainBoundary = $this->boundary;
 
         // Cleanup body
-        $this->body = [];
+        $this->body = '';
 
         // Add lines
         if (strpos($this->contentType, 'multipart') !== false) {
@@ -857,7 +854,7 @@ class PMF_Mail
         );
 
         // Cleanup potentially dangerous HTML tags:
-        if ($sanitize) {
+        if ($sanitize && !is_null($message)) {
             // 1/2. <tag blahblahblah>blahblahblah</tag>
             $message = PMF_String::preg_replace(
                 '/<(applet|embed|head|meta|object|style|title)[^>]*>.*<\/\\1>/is',
