@@ -127,12 +127,16 @@ function renderInputForm($key, $type)
                     break;
 
                 case 'records.sortby':
-                    printf('<option value="DESC"%s>%s</option>',
+                    printf(
+                        '<option value="DESC"%s>%s</option>',
                         ('DESC' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['ad_conf_desc']);
-                    printf('<option value="ASC"%s>%s</option>',
+                        $PMF_LANG['ad_conf_desc']
+                    );
+                    printf(
+                        '<option value="ASC"%s>%s</option>',
                         ('ASC' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['ad_conf_asc']);
+                        $PMF_LANG['ad_conf_asc']
+                    );
                     break;
 
                 case 'security.permLevel':
@@ -153,42 +157,56 @@ function renderInputForm($key, $type)
 
                 case 'records.attachmentsStorageType':
                     foreach ($PMF_LANG['att_storage_type'] as $i => $item) {
-                        $selected = $faqConfig->get($key) == $i
-                                  ? ' selected'
-                                  : '';
-                        printf('<option value="%d"%s>%s</option>',
-                               $i, $selected, $item);
+                        $selected = (int)$faqConfig->get($key) === $i ? ' selected' : '';
+                        printf('<option value="%d"%s>%s</option>', $i, $selected, $item);
                     }
                     break;
 
                 case 'records.orderingPopularFaqs':
-                    printf('<option value="visits"%s>%s</option>',
-                        ('visits' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['records.orderingPopularFaqs.visits']);
-                    printf('<option value="voting"%s>%s</option>',
-                        ('voting' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['records.orderingPopularFaqs.voting']);
+                    printf(
+                        '<option value="visits"%s>%s</option>',
+                        ('visits' === $faqConfig->get($key)) ? ' selected' : '',
+                        $PMF_LANG['records.orderingPopularFaqs.visits']
+                    );
+                    printf(
+                        '<option value="voting"%s>%s</option>',
+                        ('voting' === $faqConfig->get($key)) ? ' selected' : '',
+                        $PMF_LANG['records.orderingPopularFaqs.voting']
+                    );
                     break;
 
                 case 'search.relevance':
-                    printf('<option value="thema,content,keywords"%s>%s</option>',
+                    printf(
+                        '<option value="thema,content,keywords"%s>%s</option>',
                         ('thema,content,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.thema-content-keywords']);
-                    printf('<option value="thema,keywords,content"%s>%s</option>',
-                        ('thema,keywords,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.thema-keywords-content']);
-                    printf('<option value="content,thema,keywords"%s>%s</option>',
+                        $PMF_LANG['search.relevance.thema-content-keywords']
+                    );
+                    printf(
+                        '<option value="thema,keywords,content"%s>%s</option>',
+                        (
+                            'thema,keywords,content' == $faqConfig->get($key)) ? ' selected' : '',
+                        $PMF_LANG['search.relevance.thema-keywords-content']
+                    );
+                    printf(
+                        '<option value="content,thema,keywords"%s>%s</option>',
                         ('content,thema,keywords' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.content-thema-keywords']);
-                    printf('<option value="content,keywords,thema"%s>%s</option>',
+                        $PMF_LANG['search.relevance.content-thema-keywords']
+                    );
+                    printf(
+                        '<option value="content,keywords,thema"%s>%s</option>',
                         ('content,keywords,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.content-keywords-thema']);
-                    printf('<option value="keywords,content,thema"%s>%s</option>',
+                        $PMF_LANG['search.relevance.content-keywords-thema']
+                    );
+                    printf(
+                        '<option value="keywords,content,thema"%s>%s</option>',
                         ('keywords,content,thema' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.keywords-content-thema']);
-                    printf('<option value="keywords,thema,content"%s>%s</option>',
+                        $PMF_LANG['search.relevance.keywords-content-thema']
+                    );
+                    printf(
+                        '<option value="keywords,thema,content"%s>%s</option>',
                         ('keywords,thema,content' == $faqConfig->get($key)) ? ' selected' : '',
-                        $PMF_LANG['search.relevance.keywords-thema-content']);
+                        $PMF_LANG['search.relevance.keywords-thema-content']
+                    );
                     break;
 
                 case 'seo.metaTagsHome':
