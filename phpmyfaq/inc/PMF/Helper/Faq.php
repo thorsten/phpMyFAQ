@@ -187,6 +187,23 @@ class PMF_Helper_Faq extends PMF_Helper
     }
 
     /**
+     * Renders a preview of the answer.
+     *
+     * @param string $answer
+     * @param integer $numWords
+     * @return string
+     */
+    public function renderAnswerPreview($answer, $numWords)
+    {
+        if ($this->_config->get('main.enableMarkdownEditor')) {
+            $parseDown = new ParsedownExtra();
+            return PMF_Utils::chopString(strip_tags($parseDown->text($answer)), $numWords);
+        } else {
+            return PMF_Utils::chopString(strip_tags($answer), $numWords);
+        }
+    }
+
+    /**
      * Creates an overview with all categories with their FAQs.
      *
      * @param PMF_Category $category

@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
@@ -26,11 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Helper.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-07
  */
@@ -238,7 +234,7 @@ class PMF_Helper_Search extends PMF_Helper
             $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
 
             $counter = $displayedCounter = 0;
-            $parsedown = new ParsedownExtra();
+            $faqHelper = new PMF_Helper_Faq($this->_config);
             foreach ($resultSet->getResultset() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
@@ -255,12 +251,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $categoryInfo = $this->Category->getCategoriesFromArticle($result->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = PMF_Utils::chopString($result->question, 15);
-
-                if ($this->_config->get('main.enableMarkdownEditor')) {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 25);
-                } else {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 25);
-                }
+                $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 25);
 
                 $searchterm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],

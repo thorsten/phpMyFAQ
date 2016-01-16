@@ -247,7 +247,7 @@ class PMF_Faq
         $num = $this->_config->getDb()->numRows($result);
 
         if ($num > 0) {
-            $parsedown = new ParsedownExtra();
+            $faqHelper = new PMF_Helper_Faq($this->_config);
             while (($row = $this->_config->getDb()->fetchObject($result))) {
                 if (empty($row->visits)) {
                     $visits = 0;
@@ -266,17 +266,12 @@ class PMF_Faq
                 $oLink = new PMF_Link($url, $this->_config);
                 $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->thema;
 
-                if ($this->_config->get('main.enableMarkdownEditor')) {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($row->record_content)), 25);
-                } else {
-                    $answerPreview = PMF_Utils::chopString(strip_tags($row->record_content), 25);
-                }
                 $faqdata[] = array(
                     'record_id' => $row->id,
                     'record_lang' => $row->lang,
                     'category_id' => $row->category_id,
                     'record_title' => $row->thema,
-                    'record_preview' => $answerPreview,
+                    'record_preview' => $faqHelper->renderAnswerPreview($row->record_content, 25),
                     'record_link' => $oLink->toString(),
                     'record_updated' => $row->updated,
                     'visits' => $visits,

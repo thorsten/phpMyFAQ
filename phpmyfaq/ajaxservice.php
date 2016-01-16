@@ -509,12 +509,14 @@ switch ($action) {
                 $faqSearchResult->reviewResultset($mergedResult);
 
                 if (0 < $faqSearchResult->getNumberOfResults()) {
-                    $response = sprintf('<p>%s</p>',
-                        $plr->GetMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults()));
+                    $response = sprintf(
+                        '<p>%s</p>',
+                        $plr->GetMsg('plmsgSearchAmount', $faqSearchResult->getNumberOfResults())
+                    );
 
                     $response .= '<ul>';
 
-                    $parsedown = new ParsedownExtra();
+                    $faqHelper = new PMF_Helper_Faq($faqConfig);
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=artikel&cat=%d&id=%d&artlang=%s',
@@ -526,14 +528,11 @@ switch ($action) {
                         $oLink = new PMF_Link($url, $faqConfig);
                         $oLink->text = PMF_Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
-                        if ($faqConfig->get('main.enableMarkdownEditor')) {
-                            $answerPreview = PMF_Utils::chopString(strip_tags($parsedown->text($result->answer)), 10);
-                        } else {
-                            $answerPreview = PMF_Utils::chopString(strip_tags($result->answer), 10);
-                        }
-                        $response   .= sprintf('<li>%s<br /><div class="searchpreview">%s...</div></li>',
+
+                        $response .= sprintf(
+                            '<li>%s<br /><div class="searchpreview">%s...</div></li>',
                             $oLink->toHtmlAnchor(),
-                            $answerPreview
+                            $faqHelper->renderAnswerPreview($result->answer, 10)
                         );
                     }
                     $response .= '</ul>';
