@@ -214,6 +214,8 @@ class PMF_Auth
      * @param string $encryptedPassword Encrypted password
      * @param string $clearPassword     Clear Password
      *
+     * @deprecated
+     *
      * @return bool
      */
     public function checkEncryptedPassword($encryptedPassword, $clearPassword)

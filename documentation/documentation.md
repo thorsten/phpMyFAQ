@@ -451,9 +451,7 @@ one word per line.
 phpMyFAQ supports encrypted attachments. The encryption is done using the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard) 
 algorithm implemented in mcrypt extension (if avaliable) or with native PHP Rijndael implementation. The key size vary 
 depending on implementation used and can be max 256 bits long. Use of mcrypt extension is strongly recommended because 
-of performance reasons, its avaliability is checked automatically at the run time.
-
-See the migration section if you're migrating from earlier versions.
+of performance reasons, its availability is checked automatically at the run time.
 
 Please be aware:
 
