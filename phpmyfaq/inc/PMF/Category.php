@@ -970,13 +970,19 @@ class PMF_Category
     /**
      * Returns the admin user of the selected category
      *
-     * @param   integer $category_id Category id
-     * @return  integer
-     * @todo    Return the name, not the ID
+     * @todo Return the name, not the ID?
+     *
+     * @param integer $categoryId Category ID
+     *
+     * @return integer
      */
-    public function getCategoryUser($category_id)
+    public function getCategoryUser($categoryId)
     {
-        return $this->categories[$category_id]['user_id'];
+        if (isset($this->categories[$categoryId]['user_id'])) {
+            return $this->categories[$categoryId]['user_id'];
+        } else {
+            return 1;
+        }
     }
 
     /**
