@@ -1143,9 +1143,9 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
-Date: 2013-04-21
+Date: 2016-01-24
 
-© 2001-2014 phpMyFAQ Team
+© 2001-2016 phpMyFAQ Team
 
 This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 

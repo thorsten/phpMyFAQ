@@ -6,7 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8">
     <meta http-equiv="content-language" content="en">
     <meta name="application-name" content="phpMyFAQ">
-    <meta name="copyright" content="(c) 2001-2015 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2016 phpMyFAQ Team">
     <script type="text/javascript" src="../../../../assets/js/libs/jquery.min.js"></script>
     <script type="text/javascript" src="../../tiny_mce_popup.js"></script>
     <script type="text/javascript" src="js/dialog.js"></script>

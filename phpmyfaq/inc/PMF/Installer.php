@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Installer
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2015 phpMyFAQ Team
+ * @copyright 2002-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Installer
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2002-2015 phpMyFAQ Team
+ * @copyright 2002-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-27

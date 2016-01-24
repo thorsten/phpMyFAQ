@@ -7,7 +7,7 @@
  * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
  * @since      2004-06-23
  * @version    SVN: $Id$
- * @copyright  2004-2015 phpMyFAQ Team
+ * @copyright  2004-2016 phpMyFAQ Team
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

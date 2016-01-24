@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   Language
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
+ * @copyright 2009-2016 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ
  * @package   Language
  * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2015 Aurimas Fišeras and phpMyFAQ Team
+ * @copyright 2009-2016 Aurimas Fišeras and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2009-07-30

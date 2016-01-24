@@ -32,7 +32,7 @@ require_once 'PMF_Search_Database_PgsqlTest.php';
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2015 phpMyFAQ Team
+ * @copyright 2009-2016 phpMyFAQ Team
  * @since     2009-05-16
  */
 class PMF_Search_Database_AllTests

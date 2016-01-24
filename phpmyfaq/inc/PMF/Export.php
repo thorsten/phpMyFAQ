@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @copyright 2005-2015 phpMyFAQ Team
+ * @copyright 2005-2016 phpMyFAQ Team
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
@@ -37,7 +37,7 @@ require_once PMF_CONFIG_DIR . '/constants.php';
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @copyright 2005-2015 phpMyFAQ Team
+ * @copyright 2005-2016 phpMyFAQ Team
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */

@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2015 phpMyFAQ Team
+ * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
@@ -37,7 +37,7 @@ require_once dirname(dirname(__DIR__)) . '/phpmyfaq/inc/PMF/Attachment/Filesyste
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2015 phpMyFAQ Team
+ * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31

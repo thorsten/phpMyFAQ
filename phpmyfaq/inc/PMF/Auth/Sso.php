@@ -12,7 +12,7 @@
  * @category  phpMyFAQ 
  * @package   Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2015 phpMyFAQ Team
+ * @copyright 2011-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2011-06-22
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ 
  * @package   Auth
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2015 phpMyFAQ Team
+ * @copyright 2011-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2011-06-22
