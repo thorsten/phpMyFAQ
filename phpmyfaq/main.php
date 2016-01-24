@@ -51,7 +51,7 @@ $tpl->parseBlock(
     'tagListSection',
     array(
         'msgTags' => $PMF_LANG['msgPopularTags'],
-        'tagList' => $oTag->renderPopularTags(),
+        'tagList' => $oTag->renderPopularTags(12),
     )
 );
 
