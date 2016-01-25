@@ -42,6 +42,7 @@ $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
+$tagId = PMF_Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
 //
 // Get language (default: english)
@@ -131,6 +132,15 @@ switch ($action) {
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
 
+    case 'getFAQsByTag':
+        $tags = new PMF_Tags($faqConfig);
+        $recordIds = $tags->getRecordsByTagId($tagId);
+        $faq = new PMF_Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $result = $faq->getRecordsByIds($recordIds);
+        break;
+
     case 'getFaq':
         $faq = new PMF_Faq($faqConfig);
         $faq->setUser($currentUser);
@@ -189,6 +199,11 @@ switch ($action) {
     case 'getPopularSearches':
         $search = new PMF_Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
+        break;
+
+    case 'getPopularTags':
+        $tags = new PMF_Tags($faqConfig);
+        $result = $tags->getPopularTagsAsArray(16);
         break;
 }
 

@@ -159,3 +159,5 @@ RewriteRule api/getPopular/([a-z\-]+)                       api.php?action=getPo
 RewriteRule api/getLatest/([a-z\-]+)                        api.php?action=getLatest&lang=$1 [L,QSA]
 RewriteRule api/getNews/([a-z\-]+)                          api.php?action=getNews&lang=$1 [L,QSA]
 RewriteRule api/getPopularSearches/([a-z\-]+)               api.php?action=getPopularSearches&lang=$1 [L,QSA]
+RewriteRule api/getPopularTags                              api.php?action=getPopularTags [L,QSA]
+RewriteRule api/getFAQsByTag/([a-z\-]+)/([0-9]+)            api.php?action=getFAQsByTag&lang=$1&tagId=$2 [L,QSA]

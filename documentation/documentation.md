@@ -1355,7 +1355,7 @@ You can call the resources with the following URIs:
     *   http://www.example.org/phpmyfaq/api/getFaqs/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *categoryId* for the category id. You'll get an JSON object as 
-    result with the follwing structure:
+    result with the following structure:
 
     <pre><code class="json">[
         {
@@ -1388,7 +1388,7 @@ You can call the resources with the following URIs:
     *   http://www.example.org/phpmyfaq/api/getFaq/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
-    result with the follwing structure:
+    result with the following structure:
 
     <pre><code class="json">{
         "id":"1",
@@ -1416,7 +1416,7 @@ You can call the resources with the following URIs:
     *   http://www.example.org/phpmyfaq/api.php?action=getAllFaqs&lang=en (standard)
     *   http://www.example.org/phpmyfaq/api/getAllFaqs/de (rewrite rules enabled)
 
-    You have the variable *lang* for the language. You'll get an JSON object as result with the follwing structure:
+    You have the variable *lang* for the language. You'll get an JSON object as result with the following structure:
 
     <pre><code class="json">[
         {
@@ -1467,7 +1467,7 @@ You can call the resources with the following URIs:
     *   http://www.example.org/phpmyfaq/api/getAttachmentsFromFaq/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
-    result with the follwing structure:
+    result with the following structure:
 
     <pre><code class="json">[
         {
@@ -1578,6 +1578,63 @@ You can call the resources with the following URIs:
             "lang": "en"
         }
     ]</code></pre>
+    
+*   **getPopularTags()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getPopularTagstandard)
+    *   http://www.example.org/phpmyfaq/api/getPopularTags (rewrite rules enabled)
+
+    The result will be a JSON object like the following:
+
+    <pre><code class="json">[
+        {
+            "tagId": 4,
+            "tagName": "phpMyFAQ",
+            "tagFrequency": 3
+        
+        },
+        {
+            "tagId": 1,
+            "tagName": "PHP 5",
+            "tagFrequency": 2
+        }
+    ]</code></pre>
+    
+*   **getFAQsByTag()**
+
+    *   http://www.example.org/phpmyfaq/api.php?action=getFAQsByTag&lang=en&tagId=1 (standard)
+    *   http://www.example.org/phpmyfaq/api/getFAQsByTag/en/1 (rewrite rules enabled)
+
+    You have two variables, *lang* for the language and *tagId* for the tag ID which you can get from the API endpoint
+    getPopularTags(). You'll get an JSON object as result with the following structure:
+
+    <pre><code class="json">[
+        {
+            "record_id":1,
+            "record_lang":"en",
+            "category_id":1,
+            "record_title":"Is there life after death?",
+            "record_preview":"Maybe!",
+            "record_link":"http:\/\/example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
+            "record_updated":"2008-09-03 21:30:17",
+            "visits":3,
+            "record_created":"2008-09-03 21:30:17"
+        },
+        {
+            "record_id":2,
+            "record_lang":"en",
+            "category_id":1,
+            "record_title":"How can I survive without phpMyFAQ?",
+            "record_preview":"It\'s easy!",
+            "record_link":"http:\/\/example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
+            "record_updated":"2008-09-03 21:30:17"
+            "visits":10,
+            "record_created":"2008-09-03 21:30:17"
+        }
+    ]</code></pre>
+    
+    
+    
     
 [back to top][64]
 

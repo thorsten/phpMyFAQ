@@ -633,7 +633,7 @@ class PMF_Tags
     /**
      * @param int $limit Specify the maximum amount of records to return
      *
-     * @return Array $tagId => $tagFrequency
+     * @return array $tagId => $tagFrequency
      */
     public function getPopularTags($limit = 0)
     {
@@ -679,7 +679,7 @@ class PMF_Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $direction = $this->isEnglish($tagName[0]) ? 'ltr' : 'rtl';
-            $html      .= sprintf(
+            $html .= sprintf(
                 '<li><a style="direction:%s;" href="?action=search&tagging_id=%d">%s <span class="badge">%d</span></a></li>',
                 $direction,
                 $tagId,
@@ -689,6 +689,28 @@ class PMF_Tags
         }
 
         return $html;
+    }
+
+    /**
+     * Returns the popular Tags as an array
+     *
+     * @param integer $limit
+     *
+     * @return array
+     */
+    public function getPopularTagsAsArray($limit = 0)
+    {
+        $data = [];
+        foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
+            $tagName = $this->getTagNameById($tagId);
+            $data[] = [
+                'tagId' => $tagId,
+                'tagName' => $tagName,
+                'tagFrequency' => (int)$tagFreq
+            ];
+        }
+
+        return $data;
     }
 
     /**

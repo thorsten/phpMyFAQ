@@ -785,6 +785,93 @@ class PMF_Faq
         return $this->_config->getDb()->query($query);
     }
 
+    public function getRecordsByIds(Array $faqIds)
+    {
+        $faqRecords = [];
+
+        $query = sprintf(
+            "SELECT
+                 fd.id AS id,
+                 fd.lang AS lang,
+                 fd.thema AS question,
+                 fd.content AS answer,
+                 fd.updated AS updated,
+                 fd.created AS created,
+                 fcr.category_id AS category_id,
+                 fv.visits AS visits
+            FROM
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqvisits AS fv
+            ON
+                fd.id = fv.id
+            AND
+                fv.lang = fd.lang
+            LEFT JOIN
+                %sfaqdata_user fdu
+            ON
+                fd.id = fdu.record_id
+            WHERE
+                fd.id IN (%s)
+            AND
+                fd.lang = '%s'
+                %s",
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            implode(',', $faqIds),
+            $this->_config->getLanguage()->getLanguage(),
+            $this->queryPermission($this->groupSupport)
+        );
+
+        $result = $this->_config->getDb()->query($query);
+
+        $faqHelper = new PMF_Helper_Faq($this->_config);
+        while ($row = $this->_config->getDb()->fetchObject($result)) {
+            if (empty($row->visits)) {
+                $visits = 0;
+            } else {
+                $visits = $row->visits;
+            }
+
+            $url = sprintf(
+                '%sindex.php?action=artikel&cat=%d&id=%d&artlang=%s',
+                $this->_config->getDefaultUrl(),
+                $row->category_id,
+                $row->id,
+                $row->lang
+            );
+            $oLink = new PMF_Link($url, $this->_config);
+            $oLink->itemTitle = $oLink->text = $oLink->tooltip = $row->question;
+
+            $faqRecords[] = [
+                'record_id' => (int)$row->id,
+                'record_lang' => $row->lang,
+                'category_id' => (int)$row->category_id,
+                'record_title' => $row->question,
+                'record_preview' => $faqHelper->renderAnswerPreview($row->answer, 25),
+                'record_link' => $oLink->toString(),
+                'record_updated' => PMF_Date::createIsoDate($row->updated).':00',
+                'visits' => (int)$visits,
+                'record_created' => $row->created
+            ];
+        }
+
+        return $faqRecords;
+    }
+
     /**
      * Adds a new record.
      *
