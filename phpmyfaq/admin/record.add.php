@@ -233,12 +233,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             ?>
     <script>
-//        (function() {
-//            setTimeout(function() {
-//                window.location = "index.php?action=editentry&id=<?php //print $recordId;
-//            ?>//&lang=<?php //print $recordData['lang'] ?>//";
-//            }, 5000);
-//        })();
+        (function() {
+            setTimeout(function() {
+                window.location = "index.php?action=editentry&id=<?php print $recordId;
+            ?>&lang=<?php print $recordData['lang'] ?>";
+            }, 5000);
+        })();
     </script>
 
 <?php
@@ -251,7 +251,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
     } else {
         printf(
-            '<header><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
+            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']
         );
         printf(
