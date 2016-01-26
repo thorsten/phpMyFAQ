@@ -31,7 +31,6 @@
 //
 @import url('//fonts.googleapis.com/css?family=Lato:400,700,400italic');
 
-
 //
 // Colors
 //
@@ -51,8 +50,9 @@
 //
 // Wrapper
 //
-#wrapper {
-    width: 100%;
+body, #wrapper {
+  background-color: @pmf-pmf-footer-bg;
+  width: 100%;
 }
 
 #page-wrapper {
@@ -86,11 +86,13 @@
 // Main navigation
 //
 .navbar-static-side {
+  background-color: @pmf-nav-bg;
   height: 100%;
   ul {
     li {
-      color: @gray-lighter;
+      background-color: @pmf-nav-bg;
       border-bottom: 1px solid #e7e7e7;
+      color: @gray-lighter;
       a {
         color: @navbar-inverse-link-color;
         &:hover {
@@ -288,4 +290,13 @@ label.mce-label {
 //
 .panel-button {
   padding: 0 15px 15px 15px;
+}
+
+//
+// Footer
+//
+footer {
+  background-color: @pmf-pmf-footer-bg;
+  color: @pmf-nav-text;
+  padding-top: 20px;
 }
