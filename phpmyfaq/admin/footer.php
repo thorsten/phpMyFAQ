@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </div>
 </div>
 
-<footer class="container-fluid">
+<footer class="page-footer container-fluid">
     <div class="row">
         <div class="col-lg-12">
             <p class="copyright text-right">
@@ -57,8 +57,8 @@ printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getD
 <?php
 if (isset($auth)) {
     ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE;
-    ?>" width="0" height="0"></iframe>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE ?>" width="0" height="0"
+        style="display: none;"></iframe>
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview'  == $action) ||
                          ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
