@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
@@ -150,7 +148,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             $faq->addPermission('user', $recordId, $permissions['restricted_user']);
             $category->addPermission('user', $categories['rubrik'], $permissions['restricted_user']);
             // Add group permission
-            if ($faqConfig->get('security.permLevel') != 'basic') {
+            if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
                 $category->addPermission('group', $categories['rubrik'], $permissions['restricted_groups']);
             }
@@ -230,7 +228,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
-
             ?>
     <script>
         (function() {
@@ -258,59 +255,39 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             '<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_entryins_fail']
         );
         ?>
-    <form action="?action=editpreview" method="post" accept-charset="utf-8">
-    <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question);
-        ?>" />
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content);
-        ?>" />
-    <input type="hidden" name="lang"                value="<?php print $recordLang;
-        ?>" />
-    <input type="hidden" name="keywords"            value="<?php print $keywords;
-        ?>" />
-    <input type="hidden" name="tags"                value="<?php print $tags;
-        ?>" />
-    <input type="hidden" name="author"              value="<?php print $author;
-        ?>" />
-    <input type="hidden" name="email"               value="<?php print $email;
-        ?>" />
-<?php
+    <form action="?action=editpreview" method="post">
+    <input type="hidden" name="question"            value="<?php print PMF_String::htmlspecialchars($question) ?>">
+    <input type="hidden" name="content" class="mceNoEditor" value="<?php print PMF_String::htmlspecialchars($content) ?>">
+    <input type="hidden" name="lang"                value="<?php print $recordLang ?>">
+    <input type="hidden" name="keywords"            value="<?php print $keywords ?>">
+    <input type="hidden" name="tags"                value="<?php print $tags ?>">
+    <input type="hidden" name="author"              value="<?php print $author ?>">
+    <input type="hidden" name="email"               value="<?php print $email ?>">
+    <?php
         if (is_array($categories['rubrik'])) {
             foreach ($categories['rubrik'] as $key => $_categories) {
                 print '    <input type="hidden" name="rubrik['.$key.']" value="'.$_categories.'" />';
             }
         }
-        ?>
-    <input type="hidden" name="solution_id"         value="<?php print $solutionId;
-        ?>" />
-    <input type="hidden" name="revision"            value="<?php print $revisionId;
-        ?>" />
-    <input type="hidden" name="active"              value="<?php print $active;
-        ?>" />
-    <input type="hidden" name="changed"             value="<?php print $changed;
-        ?>" />
-    <input type="hidden" name="comment"             value="<?php print $comment;
-        ?>" />
-    <input type="hidden" name="dateStart"           value="<?php print $dateStart;
-        ?>" />
-    <input type="hidden" name="dateEnd"             value="<?php print $dateEnd;
-        ?>" />
-    <input type="hidden" name="userpermission"      value="<?php print $user_permission;
-        ?>" />
-    <input type="hidden" name="restricted_users"    value="<?php print $permissions['restricted_user'];
-        ?>" />
-    <input type="hidden" name="grouppermission"     value="<?php print $group_permission;
-        ?>" />
-    <input type="hidden" name="restricted_group"    value="<?php print $permissions['restricted_groups'];
-        ?>" />
+    ?>
+    <input type="hidden" name="solution_id"         value="<?php print $solutionId ?>">
+    <input type="hidden" name="revision"            value="<?php print $revisionId ?>">
+    <input type="hidden" name="active"              value="<?php print $active ?>">
+    <input type="hidden" name="changed"             value="<?php print $changed ?>">
+    <input type="hidden" name="comment"             value="<?php print $comment ?>">
+    <input type="hidden" name="dateStart"           value="<?php print $dateStart ?>">
+    <input type="hidden" name="dateEnd"             value="<?php print $dateEnd ?>">
+    <input type="hidden" name="userpermission"      value="<?php print $user_permission ?>">
+    <input type="hidden" name="restricted_users"    value="<?php print $permissions['restricted_user'] ?>">
+    <input type="hidden" name="grouppermission"     value="<?php print $group_permission ?>">
+    <input type="hidden" name="restricted_group"    value="<?php print $permissions['restricted_groups'] ?>">
     <p class="text-center">
         <button class="btn btn-primary" type="submit" name="submit">
-            <?php print $PMF_LANG['ad_entry_back'];
-        ?>
+            <?php print $PMF_LANG['ad_entry_back'] ?>
         </button>
     </p>
     </form>
 <?php
-
     }
 } else {
     print $PMF_LANG['err_NotAuth'];

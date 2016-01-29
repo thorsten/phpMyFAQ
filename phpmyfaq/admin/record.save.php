@@ -9,11 +9,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
@@ -214,11 +212,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         // All the other translations        
         $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
         ?>
-    <script type="text/javascript">
+    <script>
         (function() {
             setTimeout(function() {
-                window.location = "index.php?action=editentry&id=<?php echo $recordId;
-        ?>&lang=<?php echo $recordData['lang'] ?>";
+                window.location = "index.php?action=editentry&id=<?php echo $recordId ?>&lang=<?php echo $recordData['lang'] ?>";
             }, 5000);
         })();
     </script>
