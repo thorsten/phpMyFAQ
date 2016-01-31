@@ -175,7 +175,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <div class="form-group">
                             <label class="col-sm-4 control-label" for="sql_password">Password:</label>
                             <div class="col-sm-8">
-                                <input name="sql_passwort" type="password" id="sql_password" class="form-control">
+                                <input name="sql_password" type="password" id="sql_password" class="form-control">
                                 <p class="help-block">Please enter your database password.</p>
                             </div>
                         </div>

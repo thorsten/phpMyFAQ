@@ -615,7 +615,7 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_passwort', FILTER_UNSAFE_RAW);
+        $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_password', FILTER_UNSAFE_RAW);
         if (is_null($dbSetup['dbPassword']) && !PMF_System::isSqlite($dbSetup['dbType'])) {
             // Password can be empty...
             $dbSetup['dbPassword'] = '';
