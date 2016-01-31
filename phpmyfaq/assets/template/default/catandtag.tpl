@@ -1,5 +1,4 @@
         [socialLinks]
-
         <section class="pmf-aside-widget">
             <div class="pmf-aside-widget-body pmf-social-links">
                 <a target="_blank" href="{link_pdf}" rel="nofollow" title="{writePDFTag}">
