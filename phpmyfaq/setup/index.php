@@ -183,7 +183,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <label class="col-sm-4 control-label" for="sql_db">Database:</label>
                             <div class="col-sm-8">
                                 <input type="text" name="sql_db" id="sql_db" class="form-control">
-                                <p class="help-block">Please enter your database name.</p>
+                                <p class="help-block">Please enter your existing database name.</p>
                             </div>
                         </div>
                     </div>
