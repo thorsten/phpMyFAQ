@@ -12,7 +12,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Tom Rochester <tom.rochester@gmail.com>
  * @author    Johannes Schlüter <johannes@php.net>
@@ -21,10 +20,10 @@
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
  */
+
 define('COPYRIGHT', '&copy; 2001-2015 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/inc');
@@ -51,7 +50,7 @@ require PMF_ROOT_DIR.'/config/constants.php';
 require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
 
 //
-// Setting up PSR-0 autoloader for Symfony Components
+// Setting up Symfony PSR-0 autoloader
 //
 require PMF_INCLUDE_DIR.'/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
@@ -62,17 +61,15 @@ $loader->register();
 
 ?>
 <!doctype html>
-<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</title>
+    <title>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
+    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion() ?>">
+    <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
@@ -111,7 +108,7 @@ $loader->register();
     <div class="container">
         <div class="row">
             <div class="jumbotron text-center">
-                <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Setup</h1>
+                <h1>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</h1>
                 <p>
                     Did you already read the
                     <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
@@ -148,9 +145,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <label class="col-sm-4 control-label" for="sql_type">Server:</label>
                         <div class="col-sm-8">
                             <select name="sql_type" id="sql_type" size="1" class="form-control">
-<?php
-    echo implode('', $system->getSupportedSafeDatabases(true));
-    ?>
+                                <?php echo implode('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
                             <p class="help-block">Please select your preferred database type.</p>
                         </div>
@@ -193,8 +188,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <label class="col-sm-4 control-label" for="sql_sqlitefile">SQLite database file:</label>
                             <div class="col-sm-8">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
-                                       value="<?php echo dirname(__DIR__);
-    ?>">
+                                       value="<?php echo dirname(__DIR__) ?>">
                                 <p class="help-block">
                                     Please enter the full path to your SQLite datafile which should be outside your
                                     docroot.
@@ -215,7 +209,6 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
                 </fieldset>
             </div>
-
 <?php if (extension_loaded('ldap')): ?>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
@@ -275,8 +268,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                 </fieldset>
             </div>
-<?php endif;
-    ?>
+<?php endif; ?>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
@@ -304,7 +296,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                 } else {
                                     echo '<option>english</option>';
                                 }
-    ?>
+                            ?>
                             </select>
                             <p class="help-block">Please select your default language.</p>
                         </div>
@@ -406,8 +398,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         <div class="row" style="padding-left: 20px; text-align: center;">
             <div class="form-group">
                 <button class="btn btn-success btn-lg" type="submit">
-                       Click to install phpMyFAQ <?php echo PMF_System::getVersion();
-    ?>
+                       Click to install phpMyFAQ <?php echo PMF_System::getVersion() ?>
                 </button>
             </div>
         </div>
@@ -415,8 +406,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         <div class="row">
             <p class="alert alert-info text-center">
                 <i class="fa fa-info-circle fa-fw"></i>
-                Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE;
-    ?></strong>. You can
+                Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE ?></strong>. You can
                 change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
         </div>
