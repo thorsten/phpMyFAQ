@@ -52,6 +52,7 @@ Version 2.9.0-beta2 - 2016-01-06
 - updated bundled SwiftMailer to version 5.4.1 (Christopher Andrews, Thorsten)
 - updated bundled Parsedown to version 1.5.3 (Jerry van Kooten, Thorsten)
 - updated bundled HighlightJS to version 8.9.1 (Thorsten)
+- updated Russian translation
 - removed bundled SyntaxHighlighter (Thorsten)
 - dropped support for ext/mysql (Thorsten)
 - dropped support for SQLite2 (Thorsten)
