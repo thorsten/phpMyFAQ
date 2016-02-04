@@ -35,8 +35,8 @@
                 {captchaFieldset}
 
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button class="btn btn-primary" type="submit" id="submitcontact">
+                    <div class="col-sm-12 text-right">
+                        <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">
                             {msgS2FButton}
                         </button>
                     </div>

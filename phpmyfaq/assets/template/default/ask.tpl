@@ -3,13 +3,13 @@
             <div id="questionForm">
                 <p>{msgNewQuestion}</p>
             </div>
-            <p class="hint-search-suggestion">
+            <p class="hint-search-suggestion hidden">
                 {msgMatchingQuestions}
             </p>
             <div id="answerForm"></div>
             <div id="answers"></div>
 
-            <p class="hint-search-suggestion">
+            <p class="hint-search-suggestion hidden">
                 {msgFinishSubmission}
             </p>
 
@@ -52,8 +52,8 @@
                 <div id="qerror"></div>
 
                 <div class="form-group">
-                    <div class="col-sm-offset-3 col-sm-9">
-                        <button class="btn btn-primary" type="submit" id="submitquestion">
+                    <div class="col-sm-12 text-right">
+                        <button class="btn btn-primary btn-lg" type="submit" id="submitquestion">
                             {msgNewContentSubmit}
                         </button>
                     </div>
