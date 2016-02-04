@@ -9,11 +9,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
@@ -41,22 +39,20 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_csv_head'];
-    ?>
+                        <?php echo $PMF_LANG['ad_csv_head'] ?>
                     </div>
                     <div class="panel-body">
-                        <p><?php echo $PMF_LANG['ad_csv_make'];
-    ?></p>
-                        <div class="text-center">
+                        <p><?php echo $PMF_LANG['ad_csv_make'] ?></p>
+                        <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linkdat'];
-    ?>
+                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
                             </a>
+                        </p>
+                        <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linklog'];
-    ?>
+                                <i class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
                             </a>
-                        </div>
+                        </p>
                     </div>
                 </div>
 
@@ -65,30 +61,25 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             <div class="col-lg-6">
                 <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8"
                     class="form-horizontal">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
-    ?>">
-                    <div class="panel panel-danger">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <?php echo $PMF_LANG['ad_csv_head2'];
-    ?>
+                            <?php echo $PMF_LANG['ad_csv_head2'] ?>
                         </div>
                         <div class="panel-body">
-                            <p><?php echo $PMF_LANG['ad_csv_restore'];
-    ?></p>
+                            <p><?php echo $PMF_LANG['ad_csv_restore'] ?></p>
                             <div class="form-group">
-                                <label class="col-lg-4 control-label"><?php echo $PMF_LANG['ad_csv_file'];
-    ?>:</label>
+                                <label class="col-lg-4 control-label"><?php echo $PMF_LANG['ad_csv_file'] ?>:</label>
                                 <div class="col-lg-8">
                                     <input type="file" name="userfile">
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="col-lg-offset-4 col-lg-8">
+                                <p class="text-right">
                                     <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-upload fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_ok'];
-    ?>
+                                        <i class="fa fa-upload fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_ok'] ?>
                                     </button>
-                                </div>
+                                </p>
                             </div>
                         </div>
                     </div>

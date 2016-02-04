@@ -9,12 +9,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
@@ -131,25 +129,22 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_vis'];
-    ?>:</td>
-                        <td><?php echo $vanz = $session->getNumberOfSessions();
-    ?></td>
+                        <td><?php echo $PMF_LANG['ad_stat_vis']; ?>:</td>
+                        <td><?php echo $vanz = $session->getNumberOfSessions() ?></td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_vpd'];
-    ?>:</td>
-                        <td><?php echo(($danz != 0) ? round(($vanz / $danz), 2) : 0);
-    ?></td>
+                        <td><?php echo $PMF_LANG['ad_stat_vpd'] ?>:</td>
+                        <td><?php echo ($danz != 0) ? round(($vanz / $danz), 2) : 0 ?></td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_fien'];
-    ?>:</td>
+                        <td><?php echo $PMF_LANG['ad_stat_fien'] ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $first))) {
         $fp = @fopen(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $first), 'r');
-        list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $qstamp) = fgetcsv($fp, 1024, ';');
+        while (($data = fgetcsv($fp, 1024, ';')) !== false) {
+            $qstamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $_SERVER['REQUEST_TIME'];
+        }
         fclose($fp);
         echo $date->format(date('Y-m-d H:i', $qstamp));
     } else {
@@ -159,20 +154,21 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_laen'];
-    ?>:</td>
+                        <td><?php echo $PMF_LANG['ad_stat_laen'] ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $last))) {
         $fp = fopen(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $last), 'r');
-        while (list($dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $dummy, $tstamp) = fgetcsv($fp, 1024, ';')) {
-            $stamp = $tstamp;
+
+        while (($data = fgetcsv($fp, 1024, ';')) !== false) {
+            $stamp = isset($data[7]) && 10 === strlen($data[7]) ? $data[7] : $_SERVER['REQUEST_TIME'];
         }
         fclose($fp);
 
         if (empty($stamp)) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
+
         echo $date->format(date('Y-m-d H:i', $stamp)).'<br />';
     } else {
         echo $PMF_LANG['ad_sess_noentry'].'<br />';
