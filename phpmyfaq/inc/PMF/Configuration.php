@@ -1,5 +1,7 @@
 <?php
 
+use Elasticsearch\Client;
+
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
@@ -302,9 +304,9 @@ class PMF_Configuration
     /**
      * Sets the Elasticsearch client instance.
      *
-     * @param Elasticsearch\Client $esClient
+     * @param Client $esClient
      */
-    public function setElasticsearch(Elasticsearch\Client $esClient)
+    public function setElasticsearch(Client $esClient)
     {
         $this->config['core.elasticsearch'] = $esClient;
     }
@@ -312,7 +314,7 @@ class PMF_Configuration
     /**
      * Returns the Elasticsearch client instance.
      *
-     * @return Elasticsearch\Client
+     * @return Client
      */
     public function getElasticsearch()
     {

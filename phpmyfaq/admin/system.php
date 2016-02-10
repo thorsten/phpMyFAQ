@@ -31,11 +31,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     $faqSystem = new PMF_System();
 
-    try {
-        $esConfig = $faqConfig->getElasticsearchConfig();
-        $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
-    } catch (NoNodesAvailableException $e) {
-        $esInformation = $e->getMessage();
+    $esConfig = $faqConfig->getElasticsearchConfig();
+
+    if ($faqConfig->get('search.enableElasticsearch')) {
+        try {
+            $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
+        } catch (NoNodesAvailableException $e) {
+            $esInformation = $e->getMessage();
+        }
+    } else {
+        $esInformation = 'n/a';
     }
 
     ?>
@@ -65,13 +70,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'Database Client Version' => $faqConfig->getDb()->clientVersion(),
                     'Elasticsearch' => $esInformation
                 ];
-    foreach ($systemInformation as $name => $info): ?>
+                foreach ($systemInformation as $name => $info): ?>
                     <tr>
                         <td class="col-lg-2"><strong><?php echo $name ?></strong></td>
                         <td><?php echo $info ?></td>
                     </tr>
                 <?php endforeach;
-    ?>
+                ?>
                 </tbody>
             </table>
         </div>
