@@ -14,6 +14,7 @@
     <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
     <meta name="robots" content="{metaRobots}">
     <meta name="revisit-after" content="7 days">
+    <meta name="apple-itunes-app" content="app-id=977896957">
 
     <!-- Share on Facebook -->
     <meta property="og:title" content="{title}">

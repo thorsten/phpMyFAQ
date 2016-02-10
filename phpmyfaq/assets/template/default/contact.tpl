@@ -50,8 +50,7 @@
                 <small>
                     Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a><br>
                     Original phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a><br>
-                    <i class="fa fa-apple"></i> Available on the
-                    <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957">App Store</a><br>
+                    <a href="https://geo.itunes.apple.com/de/app/phpmyfaq/id977896957?mt=8" style="display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:165px;height:40px;margin:10px;"></a><br>
                     &copy; 2001 - 2016 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License</a>.
                     All rights reserved.<br>
                 </small>
