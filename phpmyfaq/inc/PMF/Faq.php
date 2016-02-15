@@ -713,6 +713,7 @@ class PMF_Faq
                 'dateEnd' => $row->date_end,
                 'linkState' => $row->links_state,
                 'linkCheckDate' => $row->links_check_date,
+                'notes' => $row->notes,
                 'created' => $row->created,
             ];
         } else {
@@ -734,6 +735,7 @@ class PMF_Faq
                 'dateEnd' => '',
                 'linkState' => '',
                 'linkCheckDate' => '',
+                'notes' => '',
                 'created' => date('c'),
             ];
         }
@@ -755,7 +757,7 @@ class PMF_Faq
             "SELECT
                  id, lang, solution_id, revision_id, active, sticky, keywords,
                  thema, content, author, email, comment, updated, links_state,
-                 links_check_date, date_start, date_end, created
+                 links_check_date, date_start, date_end, created, notes
             FROM
                 %s%s fd
             LEFT JOIN
@@ -785,6 +787,13 @@ class PMF_Faq
         return $this->_config->getDb()->query($query);
     }
 
+    /**
+     * Return records from given IDs
+     *
+     * @param array $faqIds
+     *
+     * @return array
+     */
     public function getRecordsByIds(Array $faqIds)
     {
         $faqRecords = [];
@@ -889,11 +898,11 @@ class PMF_Faq
         }
 
         // Add new entry
-        $query = sprintf(
-            "INSERT INTO
+        $query = sprintf("
+            INSERT INTO
                 %sfaqdata
             VALUES
-                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s')",
+                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
             PMF_Db::getTablePrefix(),
             $recordId,
             $data['lang'],
@@ -912,7 +921,8 @@ class PMF_Faq
             $data['linkDateCheck'],
             $data['dateStart'],
             $data['dateEnd'],
-            date('Y-m-d H:i:s')
+            date('Y-m-d H:i:s'),
+            $data['notes']
         );
 
         $this->_config->getDb()->query($query);
@@ -947,7 +957,8 @@ class PMF_Faq
                 links_state = '%s',
                 links_check_date = %d,
                 date_start = '%s',
-                date_end = '%s'
+                date_end = '%s',
+                notes = '%s'
             WHERE
                 id = %d
             AND
@@ -967,8 +978,10 @@ class PMF_Faq
             $data['linkDateCheck'],
             $data['dateStart'],
             $data['dateEnd'],
+            $data['notes'],
             $data['id'],
-            $data['lang']);
+            $data['lang']
+        );
 
         $this->_config->getDb()->query($query);
 
@@ -1133,7 +1146,8 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             $table,
             $record_id,
-            $record_lang);
+            $record_lang
+        );
 
         $result = $this->_config->getDb()->query($query);
 
@@ -1283,6 +1297,7 @@ class PMF_Faq
                 'dateEnd' => $row->date_end,
                 'linkState' => $row->links_state,
                 'linkCheckDate' => $row->links_check_date,
+                'notes' => $row->notes
             );
         }
     }
@@ -1477,7 +1492,8 @@ class PMF_Faq
                 fd.date_start AS date_start,
                 fd.date_end AS date_end,
                 fd.sticky AS sticky,
-                fd.created AS created
+                fd.created AS created,
+                fd.notes AS notes
             FROM
                 %sfaqdata fd
             LEFT JOIN
@@ -1526,6 +1542,7 @@ class PMF_Faq
                 'dateStart' => $row->date_start,
                 'dateEnd' => $row->date_end,
                 'created' => $row->created,
+                'notes' => $row->notes
             ];
         }
     }
@@ -1543,9 +1560,11 @@ class PMF_Faq
             return $this->faqRecord['title'];
         }
 
+        $question = '';
+
         $query = sprintf(
             "SELECT
-                thema
+                thema AS question
             FROM
                 %sfaqdata
             WHERE
@@ -1558,13 +1577,13 @@ class PMF_Faq
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $output = $row->thema;
+                $question = $row->question;
             }
         } else {
-            $output = $this->pmf_lang['no_cats'];
+            $question = $this->pmf_lang['no_cats'];
         }
 
-        return $output;
+        return $question;
     }
 
     /**
@@ -1736,11 +1755,12 @@ class PMF_Faq
             AND
                 date_start <= '%s'
             AND
-                date_end   >= '%s'",
+                date_end >= '%s'",
             PMF_Db::getTablePrefix(),
             null == $language ? '' : "AND lang = '".$language."'",
             $now,
-            $now);
+            $now
+        );
 
         $num = $this->_config->getDb()->numRows($this->_config->getDb()->query($query));
 
@@ -2247,13 +2267,9 @@ class PMF_Faq
     /**
      * Returns the number of users from the table faqvotings.
      *
-     * @param int $record_id
+     * @param integer $record_id
      *
-     * @return int
-     *
-     * @since   2006-06-18
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return integer
      */
     public function getNumberOfVotings($record_id)
     {
@@ -2281,10 +2297,6 @@ class PMF_Faq
      * @param array $votingData
      *
      * @return bool
-     *
-     * @since    2006-06-18
-     *
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function addVoting($votingData)
     {
@@ -2344,10 +2356,6 @@ class PMF_Faq
      * @param int $questionId
      *
      * @return array
-     *
-     * @since    2006-11-11
-     *
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getQuestion($questionId)
     {
@@ -2450,10 +2458,6 @@ class PMF_Faq
      * @param array $votingData
      *
      * @return bool
-     *
-     * @since    2006-06-18
-     *
-     * @author   Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function updateVoting($votingData)
     {
@@ -2491,11 +2495,6 @@ class PMF_Faq
      * @param int    $revision_id
      *
      * @return bool
-     *
-     * @since   2006-08-18
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     public function createChangeEntry($id, $userId, $text, $lang, $revision_id = 0)
     {
@@ -2533,10 +2532,6 @@ class PMF_Faq
      * @param int $record_id
      *
      * @return array
-     *
-     * @since   2007-03-03
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getChangeEntries($record_id)
     {
@@ -2570,7 +2565,7 @@ class PMF_Faq
     /**
      * Retrieve faq records according to the constraints provided.
      *
-     * @param string $QueryType
+     * @param string $queryType
      * @param int    $nCatid
      * @param bool   $bDownwards
      * @param string $lang
@@ -2578,11 +2573,11 @@ class PMF_Faq
      *
      * @return array
      */
-    public function get($QueryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
+    public function get($queryType = FAQ_QUERY_TYPE_DEFAULT, $nCatid = 0, $bDownwards = true, $lang = '', $date = '')
     {
         $faqs = [];
 
-        $result = $this->_config->getDb()->query($this->_getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date));
+        $result = $this->_config->getDb()->query($this->_getSQLQuery($queryType, $nCatid, $bDownwards, $lang, $date));
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             $i = 0;
@@ -2604,6 +2599,7 @@ class PMF_Faq
                 $faq['lastmodified'] = $row->updated;
                 $faq['hits'] = $row->visits;
                 $faq['hits_last'] = $row->last_visit;
+                $faq['notes'] = $row->notes;
                 $faqs[$i] = $faq;
                 ++$i;
             }
@@ -2621,10 +2617,6 @@ class PMF_Faq
      * @param   $oCat
      *
      * @return string
-     *
-     * @since   2005-11-02
-     *
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     public function _getCatidWhereSequence($nCatid, $logicOp = 'OR', $oCat = null)
     {
@@ -2654,10 +2646,6 @@ class PMF_Faq
      * @param   $faqid
      *
      * @return array
-     *
-     * @since   2005-11-02
-     *
-     * @author  Matteo Scaramuccia <matteo@scaramuccia.com>
      */
     private function _getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date, $faqid = 0)
     {
@@ -2678,6 +2666,7 @@ class PMF_Faq
                 fd.email AS email,
                 fd.comment AS comment,
                 fd.updated AS updated,
+                fd.notes AS notes,
                 fv.visits AS visits,
                 fv.last_visit AS last_visit
             FROM
@@ -2850,8 +2839,6 @@ class PMF_Faq
      * @param int    $recordId
      *
      * @return array
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function getPermission($mode, $recordId)
     {
@@ -2890,10 +2877,6 @@ class PMF_Faq
      * @param int $category
      *
      * @return string
-     *
-     * @since   2007-04-04
-     *
-     * @author  Georgi Korchev <korchev@yahoo.com>
      */
     public function showAllRecordsWoPaging($category)
     {
@@ -2978,10 +2961,6 @@ class PMF_Faq
      * Prints the open questions as a XHTML table.
      *
      * @return string
-     *
-     * @since   2002-09-17
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function printOpenQuestions()
     {
