@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0-beta2",
+  "version": "2.9.0-rc",
   "main": "phpmyfaq.js",
   "ignore": [
     "**/.*",
@@ -8,13 +8,13 @@
     "components"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.5",
-    "font-awesome": "~4.4",
+    "bootstrap": "~3.3.6",
+    "font-awesome": "~4.5",
     "sparkline": "~2.1.2",
-    "tinymce": "~4.2",
+    "tinymce": "~4.3",
     "jquery": "~1.11.2",
     "bootstrap-datepicker": "~1.2.0",
-    "typeahead.js": "~0.10.5",
+    "typeahead.js": "~0.11",
     "handlebars": "~2.0.0",
     "highlightjs": "8.*"
   },
