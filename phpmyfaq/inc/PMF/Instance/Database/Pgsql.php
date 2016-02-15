@@ -142,6 +142,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            notes text DEFAULT NULL,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
@@ -163,6 +164,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            notes text DEFAULT NULL,
             PRIMARY KEY (id, lang, solution_id, revision_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (

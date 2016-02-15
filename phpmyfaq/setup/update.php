@@ -17,6 +17,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
+
 define('COPYRIGHT', '&copy; 2001-2015 <a target="_blank" href="http://www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
@@ -147,6 +148,7 @@ if ($step === 1) {
                     <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
                     <li>phpMyFAQ 2.7.x (out of support since end of 2013)</li>
                     <li>phpMyFAQ 2.8.x</li>
+                    <li>phpMyFAQ 2.9.x</li>
                 </ul>
 
                 <p>This update script <strong>will not</strong> work for the following versions:</p>
@@ -852,6 +854,14 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.9.0-beta2', '<')) {
         $faqConfig->add('search.enableElasticsearch', 'false');
+    }
+
+    //
+    // UPDATES FROM 2.9.0-RC
+    //
+    if (version_compare($version, '2.9.0-RC', '<')) {
+        $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD notes text DEFAULT NULL';
+        $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD notes text DEFAULT NULL';
     }
 
     // Always the last step: Update version number
