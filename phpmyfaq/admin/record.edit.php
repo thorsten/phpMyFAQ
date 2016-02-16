@@ -213,24 +213,19 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     // Revisions
     if ($user->perm->checkRight($user->getUserId(), 'changebtrevs')) {
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
-        if (count($revisions)) {
-            ?>
+        if (count($revisions)) { ?>
                     <div class="pull-right">
                         <form id="selectRevision" name="selectRevision" method="post" accept-charset="utf-8"
                               action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
                             <select name="revisionid_selected" onchange="selectRevision.submit();">
-                                <option value="<?php echo $faqData['revision_id'];
-            ?>">
-                                    <?php echo $PMF_LANG['ad_changerev'];
-            ?>
+                                <option value="<?php echo $faqData['revision_id'] ?>">
+                                    <?php echo $PMF_LANG['ad_changerev'] ?>
                                 </option>
-                                <?php foreach ($revisions as $revisionId => $revisionData) {
-    ?>
-                                    <option value="<?php echo $revisionData['revision_id'];
-    ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
-    echo 'selected="selected"';
+                                <?php foreach ($revisions as $revisionId => $revisionData) { ?>
+                                    <option value="<?php echo $revisionData['revision_id'] ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
+    echo 'selected';
 }
-    ?> >
+    ?>>
                                         <?php printf(
                                             '%s 1.%d: %s - %s',
                                             $PMF_LANG['ad_entry_revision'],
@@ -266,8 +261,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
         <div class="row">
 
-            <form id="faqEditor" action="?action=<?php echo $queryString;
-    ?>" method="post" class="form-horizontal">
+            <form id="faqEditor" action="?action=<?php echo $queryString ?>" method="post" class="form-horizontal">
+
             <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id'] ?>">
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id'] ?>">
             <input type="hidden" name="csrf" id="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
@@ -284,9 +279,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <div class="form-group">
                             <div class="col-lg-12">
                                 <textarea name="question" id="question" class="form-control" rows="2"
-                                          placeholder="<?php echo $PMF_LANG['ad_entry_theme'];
-    ?>"><?php
-                                    echo $faqData['title'] ?></textarea>
+                                          placeholder="<?php echo $PMF_LANG['ad_entry_theme'] ?>"
+                                ><?php echo $faqData['title'] ?></textarea>
                             </div>
                         </div>
 
@@ -296,11 +290,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             <div class="col-lg-12">
                                 <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                                 <textarea id="answer" name="answer" class="form-control" rows="7"
-                                          placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"><?php echo $faqData['content'] ?></textarea>
+                                          placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"
+                                ><?php echo $faqData['content'] ?></textarea>
                             </div>
                         </div>
-                        <?php endif;
-    ?>
+                        <?php endif; ?>
                         <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
                         <ul class="nav nav-tabs markdown-tabs">
                             <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
@@ -320,19 +314,16 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 </article>
                             </div>
                         </div>
-                        <?php endif;
-    ?>
+                        <?php endif; ?>
 
 
                         <!-- Language -->
                         <div class="form-group">
                             <label class="col-lg-4 control-label" for="lang">
-                                <?php echo $PMF_LANG['ad_entry_locale'];
-    ?>:
+                                <?php echo $PMF_LANG['ad_entry_locale'] ?>:
                             </label>
                             <div class="col-lg-8">
-                                <?php echo PMF_Language::selectLanguages($faqData['lang'], false, [], 'lang');
-    ?>
+                                <?php echo PMF_Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
                             </div>
                         </div>
 
@@ -392,29 +383,30 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
                                     autocomplete="off" class="form-control pmf-tags-autocomplete"
                                     data-tagList="<?php echo $faqData['tags'] ?>">
-                                <span id="tagsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp'] ?></span>
+                                <span id="tagsHelp" class="help-block hide">
+                                    <?php echo $PMF_LANG['msgShowHelp'] ?>
+                                </span>
                             </div>
                         </div>
 
                         <!-- Keywords -->
                         <div class="form-group">
                             <label class="col-lg-4 control-label" for="keywords">
-                                <?php echo $PMF_LANG['ad_entry_keywords'];
-    ?>:
+                                <?php echo $PMF_LANG['ad_entry_keywords'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input type="text" name="keywords" id="keywords"  maxlength="255" class="form-control"
                                        value="<?php echo $faqData['keywords'] ?>">
-                                <span id="keywordsHelp" class="hide"><?php echo $PMF_LANG['msgShowHelp'];
-    ?></span>
+                                <span id="keywordsHelp" class="help-block hide">
+                                    <?php echo $PMF_LANG['msgShowHelp'] ?>
+                                </span>
                             </div>
                         </div>
 
                         <!-- Author -->
                         <div class="form-group">
                             <label class="col-lg-4 control-label" for="author">
-                                <?php echo $PMF_LANG['ad_entry_author'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_author'] ?>
                             </label>
                             <div class="col-lg-8">
                                 <input type="text" name="author" id="author" value="<?php echo $faqData['author'] ?>"
@@ -425,8 +417,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <!-- E-Mail -->
                         <div class="form-group">
                             <label class="col-lg-4 control-label" for="email">
-                                <?php echo $PMF_LANG['ad_entry_email'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_email'] ?>
                             </label>
                             <div class="col-lg-8">
                                 <input type="email" name="email" id="email" value="<?php echo $faqData['email'] ?>"
@@ -444,40 +435,47 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         if ('00000000000000' == $faqData['dateStart']) {
                             $faqData['dateStart'] = '';
                         } else {
-                            $faqData['dateStart'] = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", '$1-$2-$3', $faqData['dateStart']);
+                            $faqData['dateStart'] = preg_replace(
+                                "/(\d{4})(\d{2})(\d{2}).*/",
+                                '$1-$2-$3',
+                                $faqData['dateStart']
+                            );
                         }
 
-    if ('99991231235959' == $faqData['dateEnd']) {
-        $faqData['dateEnd'] = '';
-    } else {
-        $faqData['dateEnd'] = preg_replace("/(\d{4})(\d{2})(\d{2}).*/", '$1-$2-$3', $faqData['dateEnd']);
-    }
-    ?>
+                        if ('99991231235959' == $faqData['dateEnd']) {
+                            $faqData['dateEnd'] = '';
+                        } else {
+                            $faqData['dateEnd'] = preg_replace(
+                                "/(\d{4})(\d{2})(\d{2}).*/",
+                                '$1-$2-$3',
+                                $faqData['dateEnd']
+                            );
+                        }
+                        ?>
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseTimespan">
-                            <?php echo $PMF_LANG['ad_record_expiration_window'];
-    ?>
+                            <?php echo $PMF_LANG['ad_record_expiration_window'] ?>
                             </a>
                         </div>
 
                         <div id="collapseTimespan" class="panel-collapse collapse in">
                             <div class="panel-body">
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from'];
-    ?></label>
+                                    <label class="col-lg-4 control-label" for="dateStart">
+                                        <?php echo $PMF_LANG['ad_news_from'] ?>
+                                    </label>
                                     <div class="col-lg-2">
-                                        <input name="dateStart" id="dateStart" class="date-pick form-control"  maxlength="10"
-                                               value="<?php echo $faqData['dateStart'];
-    ?>" />
+                                        <input name="dateStart" id="dateStart" class="date-pick form-control"
+                                               maxlength="10" value="<?php echo $faqData['dateStart'] ?>">
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to'];
-    ?></label>
+                                    <label class="col-lg-4 control-label" for="dateEnd">
+                                        <?php echo $PMF_LANG['ad_news_to'] ?>
+                                    </label>
                                     <div class="col-lg-2">
                                         <input name="dateEnd" id="dateEnd" class="date-pick form-control" maxlength="10"
-                                               value="<?php echo $faqData['dateEnd'];
-    ?>" />
+                                               value="<?php echo $faqData['dateEnd'] ?>">
                                     </div>
                                 </div>
                             </div>
@@ -487,23 +485,24 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseEditChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_changelog'] ?>
                             </a>
                         </div>
 
                         <div id="collapseEditChangelog" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="form-group" id="editChangelog">
-                                    <label class="col-lg-4 control-label"><?php echo $PMF_LANG['ad_entry_date'];
-    ?></label>
+                                    <label class="col-lg-4 control-label">
+                                        <?php echo $PMF_LANG['ad_entry_date'] ?>
+                                    </label>
                                     <div class="col-lg-8">
                                         <p class="form-control-static"><?php echo $faqData['date'] ?></p>
                                     </div>
                                 </div>
                                 <div class="form-group">
-                                    <label class="col-lg-4 control-label" for="changed"><?php echo $PMF_LANG['ad_entry_changed'];
-    ?></label>
+                                    <label class="col-lg-4 control-label" for="changed">
+                                        <?php echo $PMF_LANG['ad_entry_changed'] ?>
+                                    </label>
                                     <div class="col-lg-8">
                                         <textarea name="changed" id="changed" rows="3" class="form-control">
                                             <?php echo $faqData['changed'] ?>
@@ -517,8 +516,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_changelog'] ?>
                             </a>
                         </div>
 
@@ -530,20 +528,19 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     ?>
                                     <p class="small">
                                         <label>
-                                            <?php printf('%s  1.%d | %s | %s %s',
+                                            <?php printf(
+                                                '%s  1.%d | %s | %s %s',
                                                 $PMF_LANG['ad_entry_revision'],
                                                 $entry['revision_id'],
                                                 $date->format(date('Y-m-d H:i', $entry['date'])),
                                                 $PMF_LANG['ad_entry_author'],
-                                                $user->getUserData('display_name'));
-                                    ?>
+                                                $user->getUserData('display_name')
+                                            );
+                                            ?>
                                         </label>
-                                        <?php echo $entry['changelog'];
-                                    ?>
+                                        <?php echo $entry['changelog'] ?>
                                     </p>
-                                <?php 
-                                }
-    ?>
+                                <?php } ?>
                             </div>
                         </div>
                     </div>
@@ -554,8 +551,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             <div class="col-lg-4">
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_date'];
-    ?>
+                        <?php echo $PMF_LANG['ad_entry_date'] ?>
                     </div>
                     <div class="panel-body">
 
@@ -563,19 +559,16 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             <div class="col-lg-12 radio">
                                 <label>
                                     <input type="radio" id="dateActualize" checked name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);" />
-                                    <?php echo $PMF_LANG['msgUpdateFaqDate'];
-    ?>
+                                           onchange="setRecordDate(this.id);">
+                                    <?php echo $PMF_LANG['msgUpdateFaqDate'] ?>
                                     <br>
                                     <input type="radio" id="dateKeep" name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);" />
-                                    <?php echo $PMF_LANG['msgKeepFaqDate'];
-    ?>
+                                           onchange="setRecordDate(this.id);">
+                                    <?php echo $PMF_LANG['msgKeepFaqDate'] ?>
                                     <br>
                                     <input type="radio" id="dateCustomize" name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);" />
-                                    <?php echo $PMF_LANG['msgEditFaqDat'];
-    ?>
+                                           onchange="setRecordDate(this.id);">
+                                    <?php echo $PMF_LANG['msgEditFaqDat'] ?>
                                 </label>
                             </div>
                         </div>
@@ -590,16 +583,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 <div class="panel panel-default">
                     <!-- Categories -->
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_category'];
-    ?>
+                        <?php echo $PMF_LANG['ad_entry_category'] ?>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
                                 <select name="rubrik[]" id="phpmyfaq-categories" size="10" multiple
                                         class="form-control">
-                                    <?php echo $categoryHelper->renderOptions($categories);
-    ?>
+                                    <?php echo $categoryHelper->renderOptions($categories) ?>
                                 </select>
                             </div>
                         </div>
@@ -607,8 +598,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
                     <!-- Activation -->
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_active'];
-    ?>
+                        <?php echo $PMF_LANG['ad_entry_active'] ?>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
@@ -624,29 +614,21 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         $suf = null;
                                         $sul = ' checked';
                                     }
-    ?>
+                                ?>
                                     <label>
-                                        <input type="radio" id="active" name="active"  value="yes"<?php if (isset($suf)) {
-    echo $suf;
-}
-    ?> />
-                                        <?php echo $PMF_LANG['ad_gen_yes'];
-    ?>
+                                        <input type="radio" id="active" name="active" value="yes"
+                                            <?php if (isset($suf)) { echo $suf; } ?>>
+                                        <?php echo $PMF_LANG['ad_gen_yes'] ?>
                                         <br>
-                                        <input type="radio" name="active"  value="no"<?php if (isset($sul)) {
-    echo $sul;
-}
-    ?> />
-                                        <?php echo $PMF_LANG['ad_gen_no'];
-    ?>
+                                        <input type="radio" name="active" value="no"
+                                            <?php if (isset($sul)) { echo $sul; } ?>>
+                                        <?php echo $PMF_LANG['ad_gen_no'] ?>
                                 <?php else: ?>
                                         <br>
-                                        <input type="radio" name="active"  value="no" checked />
-                                        <?php echo $PMF_LANG['ad_gen_no'];
-    ?>
+                                        <input type="radio" name="active" value="no" checked>
+                                        <?php echo $PMF_LANG['ad_gen_no'] ?>
 
-                                <?php endif;
-    ?>
+                                <?php endif; ?>
                                     </label>
                             </div>
                         </div>
@@ -657,14 +639,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
                                 <label class="checkbox">
-                                    <input type="checkbox" id="sticky" name="sticky" <?php echo(isset($faqData['sticky']) && $faqData['sticky'] ? 'checked' : '') ?> />
-                                    <?php echo $PMF_LANG['ad_entry_sticky'];
-    ?>
+                                    <input type="checkbox" id="sticky" name="sticky"
+                                        <?php echo(isset($faqData['sticky']) && $faqData['sticky'] ? 'checked' : '') ?>>
+                                    <?php echo $PMF_LANG['ad_entry_sticky'] ?>
                                 </label>
                                 <label class="checkbox">
-                                    <input type="checkbox" name="comment" id="comment" value="y"<?php echo $faqData['comment'] ?> />
-                                    <?php echo $PMF_LANG['ad_entry_allowComments'];
-    ?>
+                                    <input type="checkbox" name="comment" id="comment" value="y"
+                                        <?php echo $faqData['comment'] ?>>
+                                    <?php echo $PMF_LANG['ad_entry_allowComments'] ?>
                                 </label>
                             </div>
                         </div>
@@ -672,12 +654,13 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
                     <div class="panel-body">
                         <div class="form-group">
-                            <label class="col-lg-6 control-label" for="solution_id"><?php echo $PMF_LANG['ad_entry_solution_id'];
-    ?>:</label>
+                            <label class="col-lg-6 control-label" for="solution_id">
+                                <?php echo $PMF_LANG['ad_entry_solution_id'] ?>:
+                            </label>
                             <div class="col-lg-6">
-                                <input type="number" name="solution_id" id="solution_id" size="5" class="form-control-static"
-                                       readonly value="<?php echo(isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId());
-    ?>"  />
+                                <input type="number" name="solution_id" id="solution_id" size="5"
+                                       class="form-control-static" readonly
+                                       value="<?php echo(isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>">
                             </div>
                         </div>
                     </div>
@@ -685,56 +668,47 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <!-- Permissions -->
                     <?php if ($faqConfig->get('security.permLevel') != 'basic'): ?>
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_grouppermission'];
-    ?>
+                        <?php echo $PMF_LANG['ad_entry_grouppermission'] ?>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
                                 <label>
-                                    <input type="radio" id="allgroups" name="grouppermission" value="all" <?php echo($allGroups ? 'checked' : '');
-    ?>/>
-                                    <?php echo $PMF_LANG['ad_entry_all_groups'];
-    ?>
+                                    <input type="radio" id="allgroups" name="grouppermission" value="all"
+                                        <?php echo($allGroups ? 'checked' : ''); ?>>
+                                    <?php echo $PMF_LANG['ad_entry_all_groups'] ?>
                                 </label>
                                 <label>
-                                    <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted" <?php echo($restrictedGroups ? 'checked' : '');
-    ?>/>
-                                    <?php echo $PMF_LANG['ad_entry_restricted_groups'];
-    ?>
+                                    <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted"
+                                        <?php echo($restrictedGroups ? 'checked' : ''); ?>>
+                                    <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission);
-    ?>
+                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission) ?>
                                     </select>
                                 </label>
                             </div>
                         </div>
                     </div>
                     <?php else: ?>
-                        <input type="hidden" name="grouppermission" value="all" />
-                    <?php endif;
-    ?>
+                        <input type="hidden" name="grouppermission" value="all">
+                    <?php endif; ?>
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_userpermission'];
-    ?>
+                        <?php echo $PMF_LANG['ad_entry_userpermission']; ?>
                     </div>
                     <div class="panel-body">
                         <div class="form-group">
                             <div class="col-lg-offset-1 col-lg-10">
                                 <label>
-                                    <input type="radio" id="allusers" name="userpermission" value="all" <?php echo($allUsers ? 'checked' : '');
-    ?>/>
-                                    <?php echo $PMF_LANG['ad_entry_all_users'];
-    ?>
+                                    <input type="radio" id="allusers" name="userpermission" value="all"
+                                        <?php echo($allUsers ? 'checked' : ''); ?>>
+                                    <?php echo $PMF_LANG['ad_entry_all_users'] ?>
                                 </label>
                                 <label>
-                                    <input type="radio" id="restrictedusers" name="userpermission" value="restricted" <?php echo($restrictedUsers ? 'checked' : '');
-    ?>/>
-                                    <?php echo $PMF_LANG['ad_entry_restricted_users'];
-    ?>
+                                    <input type="radio" id="restrictedusers" name="userpermission" value="restricted"
+                                        <?php echo($restrictedUsers ? 'checked' : ''); ?>>
+                                    <?php echo $PMF_LANG['ad_entry_restricted_users'] ?>
                                     <select name="restricted_users" size="1" class="form-control">
-                                        <?php echo $user->getAllUserOptions($userPermission[0], false);
-    ?>
+                                        <?php echo $user->getAllUserOptions($userPermission[0], false) ?>
                                     </select>
                                 </label>
                             </div>
@@ -742,39 +716,32 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <?php if ($queryString != 'insertentry'): ?>
                         <div class="form-group">
                             <label class="control-label" for="revision">
-                                <?php echo $PMF_LANG['ad_entry_new_revision'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_new_revision'] ?>
                             </label>
                             <div class="controls">
                                 <label>
                                     <input type="radio" name="revision" id="revision" value="yes">
-                                    <?php echo $PMF_LANG['ad_gen_yes'];
-    ?>
+                                    <?php echo $PMF_LANG['ad_gen_yes'] ?>
                                 </label>
                                 <label>
                                     <input type="radio" name="revision" value="no" checked>
-                                    <?php echo $PMF_LANG['ad_gen_no'];
-    ?>
+                                    <?php echo $PMF_LANG['ad_gen_no'] ?>
                                 </label>
                             </div>
                         </div>
-                        <?php endif;
-    ?>
+                        <?php endif ?>
                     </div>
                     <div class="panel-heading">
                         <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
                             <div class="text-center">
                                 <button class="btn btn-primary" type="submit">
-                                    <?php echo $PMF_LANG['ad_entry_save'];
-    ?>
+                                    <?php echo $PMF_LANG['ad_entry_save'] ?>
                                 </button>
                                 <button class="btn btn-info" type="reset">
-                                    <?php echo $PMF_LANG['ad_gen_reset'];
-    ?>
+                                    <?php echo $PMF_LANG['ad_gen_reset'] ?>
                                 </button>
                             </div>
-                        <?php endif;
-    ?>
+                        <?php endif ?>
                     </div>
                 </div>
 
@@ -811,8 +778,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         */
 
         // Show help for keywords and users
-        $('#keywords').focus(function() { showHelp('keywords'); });
-        $('#tags').focus(function() { showHelp('tags'); });
+        $('#keywords').on('focus', function() { showHelp('keywords'); });
+        $('#tags').on('focus', function() { showHelp('tags'); });
 
         // Override FAQ permissions with Category permission to avoid confused users
         $('#phpmyfaq-categories').click(function() {
@@ -852,7 +819,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         });
 
         // Toggle changelog tab
-        $("#toggleChangelog").click(function() {
+        $("#toggleChangelog").on.('click', function() {
             if ("hide" === $("#editChangelogHistory").attr("class")) {
                 $("#editChangelogHistory").fadeIn('fast').removeAttr("class");
             } else {
@@ -881,10 +848,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     }
 
     function showHelp(option) {
-        $('#' + option + 'Help').fadeIn(500);
+        $('#' + option + 'Help').removeClass('hide');
         $('#' + option + 'Help').fadeOut(2500);
     }
-    /* ]]> */
     </script>
 <?php
 
