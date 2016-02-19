@@ -39,6 +39,7 @@ Version 2.9.0-RC - 2016-02-
 - added moderator groups to categories (Thorsten)
 - added FAQ overview page (Thorsten)
 - added JSON export (Thorsten)
+- added private notes to FAQs (Thorsten)
 - added experimental support for bcrypt (Thorsten)
 - extended REST/JSON API (Thorsten)
 - added simple bash based backup script (Thorsten)
