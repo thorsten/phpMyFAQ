@@ -36,6 +36,7 @@ $(function () {
     $('.show-comment-form').on('click', function(event) {
         event.preventDefault();
         $('#pmf-create-comment').removeClass('hide');
+        document.getElementById('pmf-create-comment').scrollIntoView();
     });
 
     $('.pmf-comments-show-more').on('click', function (event) {

@@ -18,7 +18,7 @@
                         </div>
                         <div class="pmf-faq-comments">
                             <i class="fa fa-comments"></i>
-                            <span class="data"><a href="#comments">{numberOfComments}</a></span>
+                            <span class="data"><a class="show-comment-form" href="#">{numberOfComments}</a></span>
                         </div>
                         <div class="pmf-faq-edit">
                             {editThisEntry}
