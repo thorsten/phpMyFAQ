@@ -431,6 +431,25 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 <div class="panel-group" id="accordion">
 
                     <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseAdminNotes">
+                                <?php printf($PMF_LANG['ad_admin_notes_hint'], $PMF_LANG['ad_admin_notes']) ?>
+                            </a>
+                        </div>
+
+                        <div id="collapseAdminNotes" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <div class="form-group">
+                                    <textarea id="answer" name="notes" class="form-control" rows="7"
+                                              placeholder="<?php echo $PMF_LANG['ad_admin_notes'] ?>"
+                                    ><?php echo $faqData['notes'] ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="panel panel-default">
                         <?php
                         if ('00000000000000' == $faqData['dateStart']) {
                             $faqData['dateStart'] = '';
@@ -458,7 +477,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </a>
                         </div>
 
-                        <div id="collapseTimespan" class="panel-collapse collapse in">
+                        <div id="collapseTimespan" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="form-group">
                                     <label class="col-lg-4 control-label" for="dateStart">
@@ -751,13 +770,6 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
     <script src="assets/js/record.js"></script>
     <script>
-
-    function extractor(query) {
-        var result = /([^,]+)$/.exec(query);
-        if(result && result[1])
-            return result[1].trim();
-        return '';
-    }
 
     $(function() {
         /*

@@ -890,3 +890,5 @@ $PMF_LANG['ad_search_delfail'] = 'The seachterm was not deleted.';
 $PMF_LANG['msg_about_faq'] = 'About this FAQ';
 $LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');
 $PMF_LANG['msgTableOfContent'] = 'Table of Content';
+$PMF_LANG['ad_admin_notes'] = 'Private Notes';
+$PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';

@@ -1246,3 +1246,7 @@ $PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
 $PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';
 $PMF_LANG['ad_export_generate_json'] = 'Create JSON file';
 $PMF_LANG['ad_image_name_search'] = 'Search for image name';
+
+// added v2.9.0-RC - 2016-02-19 by Thorsten
+$PMF_LANG['ad_admin_notes'] = 'Private Notes';
+$PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';

@@ -73,6 +73,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $revisionId = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
     $changed = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
     $date = PMF_Filter::filterInput(INPUT_POST, 'date', FILTER_SANITIZE_STRING);
+    $notes = PMF_Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
 
     // Permissions
     $permissions = [];
@@ -142,7 +143,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart).'000000'),
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
             'linkState' => '',
-            'linkDateCheck' => 0, );
+            'linkDateCheck' => 0,
+            'notes' => $notes
+        );
 
         // Create ChangeLog entry
         $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
