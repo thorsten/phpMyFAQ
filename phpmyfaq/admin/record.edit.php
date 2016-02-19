@@ -819,7 +819,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         });
 
         // Toggle changelog tab
-        $("#toggleChangelog").on.('click', function() {
+        $('#toggleChangelog').on('click', function() {
             if ("hide" === $("#editChangelogHistory").attr("class")) {
                 $("#editChangelogHistory").fadeIn('fast').removeAttr("class");
             } else {

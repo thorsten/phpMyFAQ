@@ -27,6 +27,7 @@ $(window).load(function () {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: 'ajaxresponse.php?search=%QUERY',
+            wildcard: '%QUERY',
             filter: function (questions) {
                 return $.map(questions.results, function (question) {
                     return {

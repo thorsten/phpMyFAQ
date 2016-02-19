@@ -96,6 +96,7 @@ if (window.jQuery) {
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             remote: {
                 url: 'index.php?action=ajax&ajax=tags&ajaxaction=list&q=%QUERY',
+                wildcard: '%QUERY',
                 filter: function (tags) {
                     return $.map(tags.results, function (tags) {
                         return {
