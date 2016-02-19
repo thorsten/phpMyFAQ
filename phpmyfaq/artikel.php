@@ -239,6 +239,17 @@ if ($user->perm->checkRight($user->getUserId(), 'addtranslation')) {
     );
 }
 
+if ($user->perm->checkRight($user->getUserId(), 'editbt') && !empty($faq->faqRecord['notes'])) {
+    $tpl->parseBlock(
+        'writeContent',
+        'privateNotes',
+        [
+            'notesHeader' => $PMF_LANG['ad_admin_notes'],
+            'notes' => $faq->faqRecord['notes']
+        ]
+    );
+}
+
 if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
     $tpl->parseBlock(
         'writeContent',

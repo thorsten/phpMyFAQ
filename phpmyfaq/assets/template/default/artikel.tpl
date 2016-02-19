@@ -32,6 +32,16 @@
                     [tagsAvailable]
                     {renderTags}
                     [/tagsAvailable]
+                    [privateNotes]
+                    <div class="pmf-private-notes">
+                        <h4>
+                            {notesHeader}
+                        </h4>
+                        <p>
+                            {notes}
+                        </p>
+                    </div>
+                    [/privateNotes]
                     [relatedFaqs]
                     <aside id="faqAccordion" class="accordion related-faqs hidden-print">
                         <div class="accordion-group">

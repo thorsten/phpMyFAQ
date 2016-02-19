@@ -670,14 +670,20 @@ hr {
           margin-right:10px;
         }
       }
+
     }
   }
 
   .pmf-faq-body {
     margin-top:20px;
-    @media @large {padding-right:30px;}
+    @media @large { padding-right: 30px; }
+    .pmf-private-notes {
+      background-color: lighten(@pmf-background, 10%);
+      border: 1px solid darken(@pmf-background, 10%);
+      padding: 5px;
+    }
     p {
-      margin-bottom:20px;
+      margin-bottom: 20px;
     }
   }
 }
