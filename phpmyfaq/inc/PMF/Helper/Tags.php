@@ -71,13 +71,13 @@ class PMF_Helper_Tags extends PMF_Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i class="fa fa-minus-square"></i></a></li> ',
+                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a></li> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i class="fa fa-minus-square"></i></a></li> ',
+                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a></li> ',
                 $tagName
             );
     }
@@ -96,7 +96,7 @@ class PMF_Helper_Tags extends PMF_Helper
         return sprintf(
             '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge">%d</span></a></li>',
             implode(',', $this->getTaggingIds()).','.$tagId,
-            '<i class="fa fa-plus-square"></i> ',
+            '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
             $tagName,
             $relevance
         );

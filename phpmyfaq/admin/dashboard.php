@@ -43,7 +43,7 @@ $faqSession = new PMF_Session($faqConfig);
                         <?php endif; ?>
                     </a>
                 </div>
-                <i class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
+                <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
             </h2>
         </div>
     </header>
@@ -53,7 +53,7 @@ $faqSession = new PMF_Session($faqConfig);
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
+                    <i aria-hidden="true" class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
                 </div>
                 <div class="panel-body">
                 <?php
@@ -82,50 +82,50 @@ $faqSession = new PMF_Session($faqConfig);
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-bell fa-fw"></i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
+                    <i aria-hidden="true" class="fa fa-bell fa-fw"></i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
                         <a href="?action=viewsessions" class="list-group-item">
-                            <i class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_start_visits'] ?>
+                            <i aria-hidden="true" class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_start_visits'] ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqSession->getNumberOfSessions() ?></em>
                             </span>
                         </a>
                         <a href="?action=view" class="list-group-item">
-                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
+                            <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
-                            <i class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
+                            <i aria-hidden="true" class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="#" class="list-group-item">
-                            <i class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
+                            <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="#" class="list-group-item">
-                            <i class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
+                            <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
-                            <i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                            <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957" class="list-group-item">
-                            <i class="fa fa-apple fa-fw"></i> Available on the App Store
+                            <i aria-hidden="true" class="fa fa-apple fa-fw"></i> Available on the App Store
                             <span class="pull-right text-muted small">
-                                <i class="fa fa-heart"></i>
+                                <i aria-hidden="true" class="fa fa-heart"></i>
                             </span>
                         </a>
                     </div>
@@ -141,7 +141,7 @@ $faqSession = new PMF_Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-info-circle fa-fw"></i> <?php print $PMF_LANG['ad_online_info']; ?>
+                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?php print $PMF_LANG['ad_online_info']; ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -168,7 +168,7 @@ $faqSession = new PMF_Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG['ad_xmlrpc_button'];
+                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG['ad_xmlrpc_button'];
                         ?>
                             </button>
                         </form>
@@ -183,7 +183,7 @@ $faqSession = new PMF_Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i class="fa fa-certificate fa-fw"></i> <?php print $PMF_LANG['ad_online_verification'] ?>
+                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?php print $PMF_LANG['ad_online_verification'] ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -244,7 +244,7 @@ $faqSession = new PMF_Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG['ad_verification_button'] ?>
+                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG['ad_verification_button'] ?>
                             </button>
                         </form>
                     <?php

@@ -47,7 +47,7 @@ $pagination = new PMF_Pagination(
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-file"></i> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
+                    <i aria-hidden="true" class="fa fa-file"></i> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
                 </h2>
             </div>
         </header>
@@ -73,7 +73,7 @@ $pagination = new PMF_Pagination(
                             <td>
                                 <a href="javascript:deleteAttachment(<?php echo $item->id ?>); void(0);"
                                    class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
-                                    <i class="fa fa-trash-o"></i>
+                                    <i aria-hidden="true" class="fa fa-trash-o"></i>
                                 </a>
                             </td>
                         </tr>
@@ -97,7 +97,7 @@ $pagination = new PMF_Pagination(
         function deleteAttachment(att_id)
         {
             if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-                $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
+                $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
                 $.ajax({
                     type:    "GET",
                     url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",

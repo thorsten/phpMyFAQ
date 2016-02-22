@@ -46,7 +46,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-list"></i> <?php print $header ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php print $header ?></h2>
             </div>
         </header>
 
@@ -71,7 +71,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
                             </select>
                             <?php printf(
-                                '<p class="help-block"><i class="fa fa-info-circle fa-fw"></i> %s</p>',
+                                '<p class="help-block"><i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> %s</p>',
                                 $PMF_LANG['ad_categ_remark_move']
                             );
     ?>

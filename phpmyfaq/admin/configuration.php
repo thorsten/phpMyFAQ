@@ -90,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             <header class="row">
                 <div class="col-lg-12">
                     <h2 class="page-header">
-                        <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
+                        <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
                         <div class="pull-right">
                             <button class="btn btn-success" type="submit">
                                 <?php echo $PMF_LANG['ad_config_save'] ?>
@@ -109,49 +109,49 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="active">
                             <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-home"></i>
+                                <i aria-hidden="true" class="fa fa-home"></i>
                                 <?php echo $PMF_LANG['mainControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-th-list"></i>
+                                <i aria-hidden="true" class="fa fa-th-list"></i>
                                 <?php echo $PMF_LANG['recordsControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-search"></i>
+                                <i aria-hidden="true" class="fa fa-search"></i>
                                 <?php echo $PMF_LANG['searchControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-warning"></i>
+                                <i aria-hidden="true" class="fa fa-warning"></i>
                                 <?php echo $PMF_LANG['securityControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-thumbs-down"></i>
+                                <i aria-hidden="true" class="fa fa-thumbs-down"></i>
                                 <?php echo $PMF_LANG['spamControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-search"></i>
+                                <i aria-hidden="true" class="fa fa-search"></i>
                                 <?php echo $PMF_LANG['seoCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-retweet"></i>
+                                <i aria-hidden="true" class="fa fa-retweet"></i>
                                 <?php echo $PMF_LANG['socialNetworksControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation">
                             <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="toggleConfig">
-                                <i class="fa fa-inbox"></i>
+                                <i aria-hidden="true" class="fa fa-inbox"></i>
                                 <?php echo $PMF_LANG['mailControlCenter'] ?>
                             </a>
                         </li>

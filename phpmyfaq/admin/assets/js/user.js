@@ -75,7 +75,7 @@ $(document).ready(function() {
             data:     $('#pmf-modal-user-password-override form').serialize(),
             dataType: 'json',
             beforeSend: function() {
-                $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+                $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
             },
             success: function(message) {
                 $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');

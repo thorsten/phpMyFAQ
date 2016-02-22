@@ -250,7 +250,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
     } else {
         printf(
-            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></div></header>',
+            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']
         );
         printf(

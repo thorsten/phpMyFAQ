@@ -9,15 +9,15 @@
                     <h1>{writeThema}</h1>
                     <div class="pmf-faq-meta clearfix">
                         <div class="pmf-faq-author">
-                            <i class="fa fa-user"></i>
+                            <i aria-hidden="true" class="fa fa-user"></i>
                             <span class="data">{writeAuthor}</span>
                         </div>
                         <div class="pmf-faq-date">
-                            <i class="fa fa-calendar"></i>
+                            <i aria-hidden="true" class="fa fa-calendar"></i>
                             <span class="data">{writeDateMsg}</span>
                         </div>
                         <div class="pmf-faq-comments">
-                            <i class="fa fa-comments"></i>
+                            <i aria-hidden="true" class="fa fa-comments"></i>
                             <span class="data"><a class="show-comment-form" href="#">{numberOfComments}</a></span>
                         </div>
                         <div class="pmf-faq-edit">
@@ -136,7 +136,7 @@
 
                 <div id="loader"></div>
 
-                <h2><i class="fa fa-heart"></i> {msgCommentHeader}</h2>
+                <h2><i aria-hidden="true" class="fa fa-heart"></i> {msgCommentHeader}</h2>
 
                 <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
                     <input type="hidden" name="id" id="id" value="{id}">

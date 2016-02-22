@@ -138,7 +138,7 @@ if ($step === 1) {
             <div class="col-lg-12">
                 <p class="alert alert-info text-center">
                     <strong>
-                        <i class="fa fa-info-circle"></i> Please create a full backup of your database, your templates,
+                        <i aria-hidden="true" class="fa fa-info-circle"></i> Please create a full backup of your database, your templates,
                         attachments and uploaded images before running this update.
                     </strong>
                 </p>
@@ -170,7 +170,7 @@ if ($step === 1) {
                     printf(
                         '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
                         $version,
-                        '<i class="fa fa-check"></i>'
+                        '<i aria-hidden="true" class="fa fa-check"></i>'
                     );
                 } else {
                     printf(
@@ -271,7 +271,7 @@ if ($step == 2) {
         <div class="row setup-content" id="step2">
             <div class="col-lg-12">
                 <?php foreach ($updateMessages as $updateMessage) {
-                    printf('<p><i class="fa fa-check-circle"></i> %s</p>', $updateMessage);
+                    printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
                 } ?>
                 <p>Your phpMyFAQ configuration will be updated after the next step.</p>
                 <p style="text-align: center;">
@@ -888,7 +888,7 @@ if ($step == 3) {
         echo '<div class="center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
-            printf('<span title="%s"><i class="fa fa-circle"></i></span>', $executeQuery);
+            printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again '.
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';

@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2 class="page-header"><i class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+            <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
@@ -128,7 +128,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="label label-success"><i class="fa fa-check fa fa-white"></i></span></td>',
+                    '<span title="%s: %s" class="label label-success"><i aria-hidden="true" class="fa fa-check fa fa-white"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
@@ -139,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
                 printf(
-                    '<span title="%s" class="label label-inverse"><i class="fa fa-share fa fa-white"></i></span></a>',
+                    '<span title="%s" class="label label-inverse"><i aria-hidden="true" class="fa fa-share fa fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }

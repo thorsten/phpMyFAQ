@@ -48,7 +48,7 @@ if (window.jQuery) {
                 data: 'id=' + id + '&tag=' + tag,
                 dataType: 'json',
                 beforeSend: function () {
-                    $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+                    $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
                 },
                 success: function (message) {
                     input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');

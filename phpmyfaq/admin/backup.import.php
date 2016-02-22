@@ -36,7 +36,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 ?>
     <header>
         <h2 class="page-header">
-            <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
+            <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
         </h2>
     </header>
 <?php

@@ -30,10 +30,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
                     <div class="pull-right">
                         <a class="btn btn-danger" href="?action=truncatesearchterms">
-                            <i class="fa fa-trash-o fa-fw"></i> <?php echo $PMF_LANG['ad_searchterm_del'] ?>
+                            <i aria-hidden="true" class="fa fa-trash-o fa-fw"></i> <?php echo $PMF_LANG['ad_searchterm_del'] ?>
                         </a>
                     </div>
                 </h2>
@@ -133,7 +133,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                             <a class="btn btn-danger" href="javascript:;" title="<?php echo $PMF_LANG['ad_news_delete'];
         ?>"
                                onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
-                                <i class="fa fa-trash-o"></i>
+                                <i aria-hidden="true" class="fa fa-trash-o"></i>
                             </a>
                         </td>
                     </tr>

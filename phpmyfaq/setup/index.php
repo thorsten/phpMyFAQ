@@ -374,7 +374,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                        class="form-control" placeholder="127.0.0.1:9200">
                                 <span class="input-group-addon">
                                     <a title="Add more Elasticsearch hosts" style="cursor: pointer;" data-action="add">
-                                        <i class="fa fa-plus-circle"></i>
+                                        <i aria-hidden="true" class="fa fa-plus-circle"></i>
                                     </a>
                                 </span>
                             </div>
@@ -405,7 +405,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <div class="row">
             <p class="alert alert-info text-center">
-                <i class="fa fa-info-circle fa-fw"></i>
+                <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
                 Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE ?></strong>. You can
                 change the encryption type for passwords in <em>config/constants.php</em>.
             </p>

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
     <header>
-        <h2 class="page-header"><i class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
+        <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
     </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {

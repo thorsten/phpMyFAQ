@@ -103,7 +103,7 @@ $(document).ready(function () {
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
                 '<a class="label label-danger" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
-                '<i class="fa fa-trash"></i></a>' +
+                '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
                 '</li>'
             );
         window.close();

@@ -55,7 +55,7 @@
 
             <div id="mobile-nav-toggle" class="pull-right">
                 <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
-                    <i class="fa fa-bars"></i>
+                    <i aria-hidden="true" class="fa fa-bars"></i>
                 </a>
             </div>
 
@@ -105,7 +105,7 @@
                     <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
                     <button class="searchbutton" type="submit">
-                        <i class="fa fa-search"></i>
+                        <i aria-hidden="true" class="fa fa-search"></i>
                     </button>
                     <input type="text" class="searchfield typeahead" name="search" id="searchbox"
                            autocomplete="off" placeholder="{searchBox} ...">

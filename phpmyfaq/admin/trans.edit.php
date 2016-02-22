@@ -80,7 +80,7 @@ $leftNPlurals = (int) $_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
 $rightNPlurals = (int) $rightVarsOnly['PMF_LANG[nplurals]'];
 
 printf(
-    '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench"></i> %s</h2></div></header>',
+    '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench"></i> %s</h2></div></header>',
     $PMF_LANG['ad_menu_translations']
 );
 
@@ -257,7 +257,7 @@ $NPluralsErrorReported = false;
         {
             var result = false;
 
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php printf($PMF_LANG['msgTransToolRecordingPageBuffer'], $page); ?>');
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php printf($PMF_LANG['msgTransToolRecordingPageBuffer'], $page); ?>');
 
             $.ajax({url: 'index.php?action=ajax&ajax=trans&ajaxaction=save_page_buffer',
                    data: getFormData(),
@@ -286,7 +286,7 @@ $NPluralsErrorReported = false;
          */
         function save()
         {
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
 
             if(savePageBuffer()) {
                 $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',

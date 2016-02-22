@@ -144,7 +144,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-users fa-fw"></i>
+                    <i aria-hidden="true" class="fa fa-users fa-fw"></i>
                     <?php echo $PMF_LANG['ad_group_deleteGroup'] ?> "<?php echo $group_data['name'] ?>"
                 </h2>
             </div>
@@ -252,7 +252,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_group_add']?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_group_add']?></h2>
             </div>
         </header>
 
@@ -327,10 +327,10 @@ if ('list' === $groupAction) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-users"></i> <?php echo $PMF_LANG['ad_menu_group_administration'] ?>
+                    <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['ad_menu_group_administration'] ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=group&amp;group_action=add">
-                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_group_add_link'] ?>
+                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_group_add_link'] ?>
                         </a>
                     </div>
                 </h2>
@@ -380,13 +380,13 @@ if ('list' === $groupAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                         href="javascript:selectSelectAll('group_user_list')">
-                                        <i class="fa fa-toggle-on"></i>
+                                        <i aria-hidden="true" class="fa fa-toggle-on"></i>
                                     </a>
                                 </span>
                                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                         href="javascript:selectUnselectAll('group_user_list')">
-                                        <i class="fa fa-toggle-off"></i>
+                                        <i aria-hidden="true" class="fa fa-toggle-off"></i>
                                     </a>
                                 </span>
                             </div>
@@ -414,13 +414,13 @@ if ('list' === $groupAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                         href="javascript:selectSelectAll('group_member_list')">
-                                        <i class="fa fa-toggle-on"></i>
+                                        <i aria-hidden="true" class="fa fa-toggle-on"></i>
                                     </a>
                                 </span>
                                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                         href="javascript:selectUnselectAll('group_member_list')">
-                                        <i class="fa fa-toggle-off"></i>
+                                        <i aria-hidden="true" class="fa fa-toggle-off"></i>
                                     </a>
                                 </span>
                             </div>
@@ -498,7 +498,7 @@ if ('list' === $groupAction) {
                     <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
                         <input id="rights_group_id" type="hidden" name="group_id" value="0">
                     <div class="panel-heading" id="user_rights_legend">
-                        <i class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
+                        <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
                         <span class="pull-right">
                             <a class="btn btn-default btn-sm" href="#" id="checkAll">
                                 <?php echo $PMF_LANG['ad_user_checkall'] ?>

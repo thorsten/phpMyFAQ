@@ -239,13 +239,13 @@ switch ($action) {
                 <ul class="dropdown-menu">
                     <li>
                         <a href="index.php?action=passwd">
-                            <i class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+                            <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
                         </a>
                     </li>
                     <li class="divider"></li>
                     <li>
                         <a href="index.php?action=logout">
-                            <i class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+                            <i aria-hidden="true" class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
                         </a>
                     </li>
                 </ul>
@@ -266,12 +266,12 @@ switch ($action) {
             <ul class="nav" id="side-menu">
                 <li<?php echo($dashboardPage ? ' class="active"' : ''); ?>>
                     <a href="index.php">
-                        <i class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
+                        <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
                     </a>
                 </li>
                 <li<?php echo($userPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=user">
-                        <i class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                        <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo($userPage ? 'in' : '') ?>">
@@ -280,7 +280,7 @@ switch ($action) {
                 </li>
                 <li<?php echo($contentPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=content">
-                        <i class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
+                        <i aria-hidden="true" class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo($contentPage ? 'in' : '') ?>">
@@ -289,7 +289,7 @@ switch ($action) {
                 </li>
                 <li<?php echo($statisticsPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=statistics">
-                        <i class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
+                        <i aria-hidden="true" class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo($statisticsPage ? 'in' : '') ?>">
@@ -298,12 +298,12 @@ switch ($action) {
                 </li>
                 <li<?php echo($exportsPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=export">
-                        <i class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
+                        <i aria-hidden="true" class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
                     </a>
                 </li>
                 <li<?php echo($backupPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=backup">
-                        <i class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+                        <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                     </a>
                     <ul class="nav nav-second-level collapse">
                         <?php echo $secLevelEntries; ?>
@@ -311,7 +311,7 @@ switch ($action) {
                 </li>
                 <li<?php echo($configurationPage ? ' class="active"' : ''); ?>>
                     <a href="index.php?action=config">
-                        <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
+                        <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
                         <span class="fa arrow"></span>
                     </a>
                     <ul class="nav nav-second-level collapse <?php echo($configurationPage ? 'in' : '') ?>">
@@ -328,7 +328,7 @@ switch ($action) {
                 <li class="sidebar-sessioninfo">
                     <div>
                         <b class="fa fa-clock-o fa-fw"></b> <?php echo $PMF_LANG['ad_session_expiration']; ?>:
-                        <span id="sessioncounter"><i class="fa fa-spinner fa-spin"></i> Loading...</span>
+                        <span id="sessioncounter"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
                     </div>
                 </li>
             </ul>

@@ -46,7 +46,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     ?>
     <header class="row">
         <div class="col-lg-12">
-            <h2 class="page-header"><i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_system_info'] ?></h2>
+            <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_system_info'] ?></h2>
         </div>
     </header>
 

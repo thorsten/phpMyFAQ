@@ -40,11 +40,11 @@ $tt = new PMF_TransTool();
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
+                    <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
                     <?php if ($user->perm->checkRight($user->getUserId(), 'addtranslation') && $isTransDirWritable): ?>
                         <div class="pull-right">
                             <a class="btn btn-success" href="?action=transadd">
-                                <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
+                                <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
                             </a>
                         </div>
                     <?php endif; ?>
@@ -103,7 +103,7 @@ $tt = new PMF_TransTool();
                 <?php if ($user->perm->checkRight($user->getUserId(), 'edittranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-primary" href="?action=transedit&amp;translang=<?php echo $lang ?>" >
-                        <i class="fa fa-edit fa fa-white"></i>
+                        <i aria-hidden="true" class="fa fa-edit fa fa-white"></i>
                         <?php echo $PMF_LANG['msgEdit'] ?>
                     </a>
                 </td>
@@ -114,7 +114,7 @@ $tt = new PMF_TransTool();
                 <?php if ($user->perm->checkRight($user->getUserId(), 'deltranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
-                        <i class="fa fa-remove fa fa-white"></i>
+                        <i aria-hidden="true" class="fa fa-remove fa fa-white"></i>
                         <?php echo $PMF_LANG['msgDelete'] ?>
                     </a>
                 </td>
@@ -125,7 +125,7 @@ $tt = new PMF_TransTool();
                 <?php if ($user->perm->checkRight($user->getUserId(), 'edittranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
-                        <i class="fa fa-upload fa fa-white"></i>
+                        <i aria-hidden="true" class="fa fa-upload fa fa-white"></i>
                         <?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>
                     </a>
                 </td>
@@ -134,9 +134,9 @@ $tt = new PMF_TransTool();
                 <?php endif;
         ?>
                 <?php if ($isLangFileWritable): ?>
-                <td><i class="fa fa-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
+                <td><i aria-hidden="true" class="fa fa-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
                 <?php else: ?>
-                <td><i class="fa fa-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
+                <td><i aria-hidden="true" class="fa fa-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
                 <?php endif;
         ?>
                 <td>
@@ -165,7 +165,7 @@ $tt = new PMF_TransTool();
                 return;
             }
 
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
 
             $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
                   {translang: lang},
@@ -190,7 +190,7 @@ $tt = new PMF_TransTool();
          */
         function sendToTeam(lang)
         {
-             $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
+             $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
              var msg = '';;
 

@@ -43,18 +43,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
+                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
                 <div class="pull-right">
                     <button class="btn btn-default pmf-elasticsearch" data-action="create">
-                        <i class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
+                        <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
                     </button>
 
                     <button class="btn btn-default pmf-elasticsearch" data-action="import">
-                        <i class="fa fa-plus-square"></i> <?php echo $PMF_LANG['ad_es_bulk_index'] ?>
+                        <i aria-hidden="true" class="fa fa-plus-square"></i> <?php echo $PMF_LANG['ad_es_bulk_index'] ?>
                     </button>
 
                     <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
-                        <i class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_es_drop_index'] ?>
+                        <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_es_drop_index'] ?>
                     </button>
                 </div>
             </h2>

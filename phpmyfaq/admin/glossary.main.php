@@ -29,10 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
+                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=addglossary">
-                            <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                            <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>
                 </h2>
@@ -117,7 +117,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
             $items['id']
         );
         printf(
-            '<span title="%s"><i class="fa fa-trash-o"></i></span></a></td>',
+            '<span title="%s"><i aria-hidden="true" class="fa fa-trash-o"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';

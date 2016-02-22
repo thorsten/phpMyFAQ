@@ -111,8 +111,8 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         $icon = '<span class="fa-stack fa-lg">
-                        <i class="fa fa-square-o fa-stack-2x"></i>
-                        <i class="fa fa-facebook fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fa fa-facebook fa-stack-1x"></i>
                     </span>';
 
         return sprintf(
@@ -136,8 +136,8 @@ class PMF_Helper_Faq extends PMF_Helper
         }
 
         $icon = '<span class="fa-stack fa-lg">
-                        <i class="fa fa-square-o fa-stack-2x"></i>
-                        <i class="fa fa-twitter fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fa fa-twitter fa-stack-1x"></i>
                     </span>';
 
         return sprintf(

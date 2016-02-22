@@ -200,14 +200,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $selectedRevisionId
         );
         printf(
-            '<i class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s',
+            '<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s',
             $PMF_LANG['ad_entry_edit_1'],
             (0 === $faqData['id'] ? '' : $faqData['id']),
             $PMF_LANG['ad_entry_edit_2'],
             $currentRevision
         );
     } else {
-        printf('<i class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
+        printf('<i aria-hidden="true" class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
     }
 
     // Revisions
@@ -346,7 +346,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             );
                                             if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
                                                 printf(
-                                                    '<a class="label label-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i class="fa fa-trash"></i></a>',
+                                                    '<a class="label label-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
                                                     $faqData['id'],
                                                     $att->getId(),
                                                     $faqData['lang']

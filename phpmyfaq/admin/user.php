@@ -139,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-users"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
+                    <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['ad_user_deleteUser'] ?> <?php echo $user->getLogin() ?>
                 </h2>
             </div>
         </header>
@@ -307,7 +307,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_adus_adduser'] ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_adus_adduser'] ?></h2>
             </div>
         </header>
 
@@ -394,16 +394,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_user'];
+                    <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_user'];
         ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
+                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
         ?>
                         </a>
                         <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users'];
+                            <i aria-hidden="true" class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users'];
         ?>
                         </a>
                         <?php endif;
@@ -464,17 +464,17 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     <input type="hidden" id="user_list_select" name="user_list_select" value="">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <i class="fa fa-user"></i> <?php echo $PMF_LANG['msgSearch'] ?>
+                            <i aria-hidden="true" class="fa fa-user"></i> <?php echo $PMF_LANG['msgSearch'] ?>
                         </div>
                         <div class="panel-body">
                             <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <span class="input-group-addon"><i aria-hidden="true" class="fa fa-user"></i></span>
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
                                        class="form-control pmf-user-autocomplete"
                                        placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>">
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">
-                                        <i class="fa fa-trash"></i>
+                                        <i aria-hidden="true" class="fa fa-trash"></i>
                                     </button>
                                 </span>
                             </div>
@@ -484,7 +484,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                 <div class="panel panel-default">
                     <div class="panel-heading" id="user_data_legend">
-                        <i class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user_profou'] ?>
+                        <i aria-hidden="true" class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user_profou'] ?>
                     </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
                           class="form-horizontal">
@@ -508,7 +508,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         <div class="panel-footer">
                             <div class="panel-button text-right">
                                 <button class="btn btn-success" type="submit">
-                                    <i class="fa fa-check"></i> <?php echo $PMF_LANG['ad_gen_save'] ?>
+                                    <i aria-hidden="true" class="fa fa-check"></i> <?php echo $PMF_LANG['ad_gen_save'] ?>
                                 </button>
                             </div>
                         </div>
@@ -522,7 +522,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                     <div class="panel panel-default">
                         <div class="panel-heading" id="user_rights_legend">
-                            <i class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
+                            <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
                             <span class="pull-right">
                                 <a class="btn btn-default btn-sm" href="#" id="checkAll">
                                     <?php echo $PMF_LANG['ad_user_checkall'] ?>
@@ -645,11 +645,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-users"></i> <?php echo $PMF_LANG['ad_user'];
+                    <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['ad_user'];
         ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
+                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
         ?>
                         </a>
                     </div>

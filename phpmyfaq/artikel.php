@@ -183,7 +183,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
-        '<i class="fa fa-edit"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
+        '<i aria-hidden="true" class="fa fa-edit"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         PMF_Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,

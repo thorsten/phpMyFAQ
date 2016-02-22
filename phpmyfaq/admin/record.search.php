@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header>
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_menu_searchfaqs'] ?>
+                    <i aria-hidden="true" class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_menu_searchfaqs'] ?>
                 </h2>
             </div>
         <header>

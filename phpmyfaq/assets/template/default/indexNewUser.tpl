@@ -54,7 +54,7 @@
 
             <div id="mobile-nav-toggle" class="pull-right">
                 <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
-                    <i class="fa fa-bars"></i>
+                    <i aria-hidden="true" class="fa fa-bars"></i>
                 </a>
             </div>
 

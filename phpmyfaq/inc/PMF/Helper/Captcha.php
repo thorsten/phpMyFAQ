@@ -71,7 +71,7 @@ class PMF_Helper_Captcha extends PMF_Helper
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
-                '<a class="btn btn-primary" id="captcha-button" data-action="%s"><i class="fa fa-refresh"></i></a>',
+                '<a class="btn btn-primary" id="captcha-button" data-action="%s"><i aria-hidden="true" class="fa fa-refresh"></i></a>',
                 $action
             );
             $html .= '            </span>';

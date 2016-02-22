@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header>
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_entry_aor'] ?>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_entry_aor'] ?>
                 </h2>
             </div>
         <header>
@@ -415,7 +415,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <?php echo('yes' == $record['active'] ? 'checked' : '    ') ?>>
                                         </label>
                                         <?php } else { ?>
-                                        <span class="label label-important"><i class="fa fa-white fa fa-ban-circle"></i></span>
+                                        <span class="label label-important"><i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i></span>
                                         <?php } ?>
                                     </td>
                                     <td>
@@ -442,14 +442,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                     <td style="width: 16px;">
                                         <a class="btn btn-info" href="?action=copyentry&id=<?php echo $record['id'] ?>&lang=<?php echo $record['lang']; ?>"
                                            title="<?php echo $PMF_LANG['ad_categ_copy'] ?>">
-                                            <i class="fa fa-share"></i>
+                                            <i aria-hidden="true" class="fa fa-share"></i>
                                         </a>
                                     </td>
                                     <td style="width: 16px;">
                                         <a class="btn btn-danger" href="javascript:void(0);"
                                            onclick="javascript:deleteRecord(<?php echo $record['id'] ?>, '<?php echo $record['lang'] ?>', '<?php echo $user->getCsrfTokenFromSession() ?>'); return false;"
                                            title="<?php echo $PMF_LANG['ad_user_delete'] ?>">
-                                        <i class="fa fa-trash-o"></i>
+                                        <i aria-hidden="true" class="fa fa-trash-o"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -519,7 +519,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 csrf: csrf
             };
 
-        indicator.html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+        indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
 
         for (var i = 0; i < ids.length; i++) {
             var statusId = '#' + type + '_record_' + cid + '_' + ids[i];
@@ -575,7 +575,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
     {
         if (confirm('<?php echo addslashes($PMF_LANG['ad_entry_del_1'].' '.$PMF_LANG['ad_entry_del_3']);
         ?>')) {
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
             $.ajax({
                 type:    "POST",
                 url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",

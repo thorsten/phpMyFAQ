@@ -30,13 +30,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
+                    <i aria-hidden="true" class="fa fa-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=addcategory">
-                            <i class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
+                            <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
                         </a>
                         <a class="btn btn-info" href="?action=showcategory">
-                            <i class="fa fa-th fa-fw"></i> <?php echo $PMF_LANG['ad_categ_show'];?>
+                            <i aria-hidden="true" class="fa fa-th fa-fw"></i> <?php echo $PMF_LANG['ad_categ_show'];?>
                         </a>
                     </div>
                 </h2>

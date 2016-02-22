@@ -39,7 +39,7 @@ if (isset($_SESSION['trans'])) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
+                    <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
                 </h2>
             </div>
         </header>
@@ -116,7 +116,7 @@ if (isset($_SESSION['trans'])) {
          */
         function save()
         {
-            $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
 
             var data = {}
             var form = document.getElementById('newTranslationForm')

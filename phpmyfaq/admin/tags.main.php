@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i class="fa fa-tags"></i> <?php echo $PMF_LANG['ad_entry_tags'] ?>
+                <i aria-hidden="true" class="fa fa-tags"></i> <?php echo $PMF_LANG['ad_entry_tags'] ?>
             </h2>
         </div>
     </header>
@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         echo '<tr>';
         echo '<td><span data-tag-id="'.$key.'">'.$tag.'</span></td>';
         printf(
-            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i class="fa fa-edit"></i></a></td>',
+            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
             $key,
             $PMF_LANG['ad_user_edit']
         );
@@ -77,7 +77,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             $key
         );
         printf(
-            '<span title="%s"><i class="fa fa-trash-o"></i></span></a></td>',
+            '<span title="%s"><i aria-hidden="true" class="fa fa-trash-o"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
 

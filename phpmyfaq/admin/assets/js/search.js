@@ -35,7 +35,7 @@ if (window.jQuery) {
                 var result = $('.result'),
                     indicator = $('#saving_data_indicator');
 
-                indicator.html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+                indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
                 result.empty();
                 if (message.error) {
                     result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');

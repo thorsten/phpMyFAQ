@@ -38,7 +38,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i class="fa fa-list"></i> <?php echo $header ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php echo $header ?></h2>
             </div>
         </header>
 

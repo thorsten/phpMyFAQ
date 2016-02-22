@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 printf(
-    '<header class="row"><h2 class="page-header"><i class="fa fa-pencil"></i> %s</h2></header>',
+    '<header class="row"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></header>',
     $PMF_LANG['ad_comment_administration']
 );
 
@@ -183,7 +183,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                 data: comments,
                 success: function(msg) {
                     if (msg == 1) {
-                        $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Deleting ...');
+                        $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
                         $('tr td input:checked').parent().parent().fadeOut('slow');
                         $('#saving_data_indicator').fadeOut('slow');
                         $('#returnMessage').

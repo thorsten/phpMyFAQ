@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     printf(
-        '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
+        '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
         $PMF_LANG['ad_menu_stopwordsconfig']
     );
 
@@ -82,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 return;
             }
 
-            $('#stopwords_loading_indicator').html('<i class="fa fa-spinner fa-spin"></i>');
+            $('#stopwords_loading_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i>');
 
             $.get("index.php",
                   {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},
@@ -131,7 +131,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             }
 
             html += '</table>';
-            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
+            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
             return html;
         }

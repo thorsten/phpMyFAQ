@@ -39,8 +39,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <p class="copyright text-right">
                 Proudly powered by <strong>phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></strong> |
                 <a href="http://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
-                Follow us on <a href="http://twitter.com/phpMyFAQ"><i class="fa fa-twitter"></i></a> |
-                <i class="fa fa-apple"></i> Available on the
+                Follow us on <a href="http://twitter.com/phpMyFAQ"><i aria-hidden="true" class="fa fa-twitter"></i></a> |
+                <i aria-hidden="true" class="fa fa-apple"></i> Available on the
                 <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957">App Store</a> |
                 &copy; 2001-<?php echo date('Y') ?> <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
             </p>
@@ -156,7 +156,7 @@ if (isset($auth)) {
 
     /*
     function phpMyFAQSave () {
-        $('#saving_data_indicator').html('<i class="fa fa-spinner fa-spin"></i> Saving ...');
+        $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
         // Create an input field with the save button name
         var input = document.createElement("input");
         input.setAttribute('name', $('input:submit')[0].name);

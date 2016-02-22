@@ -30,12 +30,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i class="fa fa-wrench fa-fw"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
+                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php print $PMF_LANG['ad_menu_instances']; ?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
                           is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')): ?>
                     <div class="pull-right">
                         <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                            <i class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_instance_add'] ?>
+                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_instance_add'] ?>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -108,7 +108,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
-                    <i class="fa fa-pencil"></i>
+                    <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
                 <?php endif;
     ?>
@@ -118,7 +118,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 <a href="javascript:;" id="delete-instance-<?php print $site->id ?>"
                    class="btn btn-danger pmf-instance-delete"
                    data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>">
-                    <i class="fa fa-trash"></i>
+                    <i aria-hidden="true" class="fa fa-trash"></i>
                 </a>
                 <?php endif;
     ?>
@@ -234,11 +234,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                                 '<td>' + comment + '</td>' +
                                 '<td>' +
                                 '<a href="?action=editinstance&instance_id=' + data.added +
-                                '" class="btn btn-info"><i class="fa fa-pencil"></i></a>' +
+                                '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
                                 '</td>' +
                                 '<td>' +
                                 '<a href="javascript:;" id="delete-instance-' + data.added +
-                                '" class="btn btn-danger pmf-instance-delete"><i class="fa fa-trash"></i></a>' +
+                                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
                                 '</td>' +
                                 '</tr>'
                             );
