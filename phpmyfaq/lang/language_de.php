@@ -935,8 +935,8 @@ $PMF_LANG["msgTransToolLanguagePluralNotSet"] = "Für %s ist die Unterstützung 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgHomeArticlesOnline"][0] = "Es ist %d FAQ-Eintrag online.";
 $PMF_LANG["plmsgHomeArticlesOnline"][1] = "Es sind %d FAQ-Einträge online.";
-$PMF_LANG["plmsgViews"][0] = "%d mal gesehen";
-$PMF_LANG["plmsgViews"][1] = "%d mal gesehen";
+$PMF_LANG["plmsgViews"][0] = "%dx gesehen";
+$PMF_LANG["plmsgViews"][1] = "%dx gesehen";
 
 // added 2.6.0-alpha - 2009-08-30 by Aurimas Fišeras - Plural messages
 $PMF_LANG["plmsgGuestOnline"][0] = "%d Gast";
