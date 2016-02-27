@@ -160,6 +160,9 @@ ini_set('url_rewriter.tags', '');
 // Start the PHP session
 //
 PMF_Init::cleanRequest();
+if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
+    session_save_path(PMF_SESSION_SAVE_PATH);
+}
 session_start();
 
 //

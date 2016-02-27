@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-10
  */
@@ -34,84 +32,91 @@
  */
 define('PMF_DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
 
-/*
+/**
+ * Sets the current session save path if needed, by default not used
+ *
+ * @var string
+ */
+define('PMF_SESSION_SAVE_PATH', '');
+
+/**
  * Timeout for the admin section, in minutes
  *
  * @var integer
  */
 define('PMF_AUTH_TIMEOUT', 30);
 
-/*
+/**
  * Timeout for the warning about session timeout for the admin section, in minutes
  *
  * @var integer
  */
 define('PMF_AUTH_TIMEOUT_WARNING', 5);
 
-/*
+/**
  * Start value for the solution IDs
  *
- * @var const
+ * @var integer
  */
 define('PMF_SOLUTION_ID_START_VALUE', 1000);
 
-/*
+/**
  * Incremental value for the solution IDs
  *
- * @var const
+ * @var integer
  */
 define('PMF_SOLUTION_ID_INCREMENT_VALUE', 1);
 
-/*
+/**
  * Number of records for the Top 10
  *
- * @var const   10
+ * @var integer
  */
 define('PMF_NUMBER_RECORDS_TOPTEN', 10);
 
-/*
+/**
  * Number of records for the latest entries
  *
- * @var const   5
+ * @var integer
  */
 define('PMF_NUMBER_RECORDS_LATEST', 5);
 
-/*
+/**
  * This is the max number of open questions returned by the feed
  *
- * @var const   50
+ * @var integer
  */
 define('PMF_RSS_OPENQUESTIONS_MAX', 50);
 
-/*
+/**
  * This is the flag with which Latest and Topten RSS feeds will be forced to use the current PMF SEO URL schema
  *
- * @var const   true
+ * @var boolean
  */
 define('PMF_RSS_USE_SEO', true);
 
-/*
+/**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
  *
- * @var const   true
+ * @var boolean
  */
 define('PMF_SITEMAP_GOOGLE_USE_SEO', true);
 
-/*
+/**
  * This is the flag with which the Tags Cloud list is limited to
  *
- * @var const   50
+ * @var integer
  */
 define('PMF_TAGS_CLOUD_RESULT_SET_SIZE', 50);
 
-/*
- * This is the flag with which the Autocomplete list is limited to
+/**
+ * This is the flag with which the auto complete list is limited to
  *
- * @var const   20
+ * @var integer
  */
 define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
 
-/*
+/**
  * This is the flag for choosing the encryption type for passwords. Currently
  * you can choose
  *
@@ -121,7 +126,7 @@ define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
  * - crypt
  * - md5 (default before phpMyFAQ 2.8)
  *
- * @var const
+ * @var string
  */
 define('PMF_ENCRYPTION_TYPE', 'hash');
 
