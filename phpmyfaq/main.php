@@ -10,14 +10,13 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-23
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -49,21 +48,29 @@ if (!is_null($archived)) {
 $tpl->parseBlock(
     'writeContent',
     'tagListSection',
-    array(
+    [
         'msgTags' => $PMF_LANG['msgPopularTags'],
-        'tagList' => $oTag->renderPopularTags(12),
-    )
+        'tagList' => $oTag->renderPopularTags(12)
+    ]
 );
 
 $tpl->parse(
     'writeContent',
-    array(
+    [
         'writeNewsHeader' => $writeNewsHeader,
         'writeNewsRSS' => $writeNewsRSS,
         'writeNews' => $news->getNews($archived),
         'showAllNews' => $showAllNews,
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE)),
-    )
+        'writeSendAdress' => '?'.$sids.'action=search',
+        'searchBox' => $PMF_LANG['msgSearch'],
+        'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+        'msgSearch' => sprintf(
+            '<a class="help" href="%sindex.php?action=search">%s</a>',
+            $faqSystem->getSystemUri($faqConfig),
+            $PMF_LANG['msgAdvancedSearch']
+        )
+    ]
 );
 
 $tpl->parseBlock(
