@@ -36,18 +36,23 @@ switch ($ajaxAction) {
         $uploadDir = PMF_ROOT_DIR.'/images/';
         $uploadFile = basename($_FILES['upload']['name']);
         $isUploaded = false;
+        $height = $width = 0;
 
         if (is_uploaded_file($uploadedFile['tmp_name']) &&
             $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')) {
 
-            list($width, $height) = getimagesize($uploadedFile['tmp_name']);
+            $info = getimagesize($uploadedFile['tmp_name']);
 
-            if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir.$uploadFile)) {
-                $isUploaded = true;
-            } else {
+            if (false === $info) {
                 $isUploaded = false;
+            } else {
+                list($width, $height) = $info;
+                if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir.$uploadFile)) {
+                    $isUploaded = true;
+                } else {
+                    $isUploaded = false;
+                }
             }
-
             ?>
             <script>
                 window.parent.window.pmfImageUpload.uploadFinished({
@@ -74,4 +79,3 @@ switch ($ajaxAction) {
         }
         break;
 }
-?>
