@@ -86,7 +86,7 @@ if ($permission['addcateg']) {
 
 <?php
     if ($parentId === 0) {
-        if ($faqConfig->get('security.permLevel') != 'basic') {
+        if ($faqConfig->get('security.permLevel') !== 'basic') {
 ?>
             <div class="control-group">
                 <label class="control-label"><?php echo $PMF_LANG['ad_entry_grouppermission'] ?></label>
@@ -100,7 +100,7 @@ if ($permission['addcateg']) {
                         <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
                     <select name="restricted_groups[]" size="3" multiple>
-                        <?php echo $user->perm->getAllGroupsOptions() ?>
+                        <?php echo $user->perm->getAllGroupsOptions(array()) ?>
                     </select>
                 </div>
             </div>
