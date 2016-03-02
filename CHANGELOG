@@ -10,6 +10,7 @@ Version 2.8.26 - 2016-02-12
 - dropped support for Internet Explorer 9 and 10 (Thorsten)
 - updated Italian translation (Agnese Morettini)
 - updated Norwegian Bokmål translation (Stian Svarholt)
+- updated bundled Symfony ClassLoader to version 2.6.13 (Thorsten)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.25 - 2015-12-05

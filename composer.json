@@ -30,7 +30,7 @@
                 "name":    "tcpdf",
                 "version": "master",
                 "source": {
-                    "url":       "http://git.code.sf.net/p/tcpdf/code",
+                    "url":       "https://git.code.sf.net/p/tcpdf/code",
                     "type":      "git",
                     "reference": "master"
                 }
