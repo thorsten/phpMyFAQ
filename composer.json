@@ -27,18 +27,6 @@
         {
             "type": "package",
             "package": {
-                "name":    "tcpdf",
-                "version": "master",
-                "source": {
-                    "url":       "https://git.code.sf.net/p/tcpdf/code",
-                    "type":      "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
                 "name":    "thorsten/twitteroauth",
                 "version": "master",
                 "source": {
@@ -65,7 +53,7 @@
         "php":                      ">=5.3.3",
         "symfony/class-loader":     "2.6.*",
         "phpseclib":                "master@dev",
-        "tcpdf":                    "master@dev",
+        "tecnickcom/tcpdf":         "master@dev",
         "thorsten/twitteroauth":    "master@dev",
         "twbs/bootstrap":           "2.3.*",
         "jnaqsh/bootstrap":         "master@dev",
