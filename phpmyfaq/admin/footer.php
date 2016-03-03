@@ -152,23 +152,29 @@ function ajaxfilemanager(field_name, url, type, win)
  */
 function phpMyFAQSave()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif" /> Saving ...');
+    $('#saving_data_indicator').html('<img src="images/indicator.gif"> Saving ...');
     // Create an input field with the save button name
-    var input = document.createElement("input");
-    input.setAttribute('name', $('input:submit')[0].name);
+    var input = document.createElement('input');
+    input.setAttribute('name', $('button:submit')[0].name);
     input.setAttribute('id', 'temporarySaveButton');
     $('#answer')[0].parentNode.appendChild(input);
     // Submit the form by an ajax request
-    <?php if (isset($faqData['id']) && $faqData['id'] == 0): ?>
-    var data = {action: "ajax", ajax: 'recordAdd'};
+    <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
+    var data = {
+        action: 'ajax',
+        ajax: 'recordAdd'
+    };
     <?php else: ?>
-    var data = {action: "ajax", ajax: 'recordSave'};
+    var data = {
+        action: 'ajax',
+        ajax: 'recordSave'
+    };
     <?php endif; ?>
     var id = $('#answer')[0].parentNode.parentNode.id;
     $.each($('#' + id).serializeArray(), function(i, field) {
         data[field.name] = field.value;
     });
-    $.post("index.php", data, null);
+    $.post('index.php', data, null);
     $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
     $('#temporarySaveButton').remove();
 }
