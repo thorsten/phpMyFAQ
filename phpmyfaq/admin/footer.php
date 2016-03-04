@@ -75,7 +75,6 @@ if (isset($auth)) {
 ?>
 <!-- tinyMCE -->
 <script>
-/*<![CDATA[*/ //<!--
 $().tooltip({placement: 'bottom'});
 tinyMCE.init({
     // General options
@@ -152,9 +151,9 @@ function ajaxfilemanager(field_name, url, type, win)
  */
 function phpMyFAQSave()
 {
-    $('#saving_data_indicator').html('<img src="images/indicator.gif"> Saving ...');
-    // Create an input field with the save button name
-    var input = document.createElement('input');
+    var indicator = $('#saving_data_indicator'),
+        input = document.createElement('input');
+    indicator.html('<img src="images/indicator.gif"> Saving ...');
     input.setAttribute('name', $('button:submit')[0].name);
     input.setAttribute('id', 'temporarySaveButton');
     $('#answer')[0].parentNode.appendChild(input);
@@ -170,16 +169,16 @@ function phpMyFAQSave()
         ajax: 'recordSave'
     };
     <?php endif; ?>
-    var id = $('#answer')[0].parentNode.parentNode.id;
-    $.each($('#' + id).serializeArray(), function(i, field) {
+
+    $.each($('#faqEditor').serializeArray(), function(i, field) {
         data[field.name] = field.value;
     });
-    $.post('index.php', data, null);
-    $('#saving_data_indicator').html('<?php print $PMF_LANG['ad_entry_savedsuc']; ?>');
-    $('#temporarySaveButton').remove();
-}
 
-// --> /*]]>*/
+    $.post('index.php', data, null);
+    indicator.html('<?php echo $PMF_LANG['ad_entry_savedsuc'] ?>');
+    $('#temporarySaveButton').remove();
+    indicator.fadeOut(5000);
+}
 </script>
 <!-- /tinyMCE -->
 
