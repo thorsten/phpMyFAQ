@@ -1,9 +1,13 @@
-phpMyFAQ 2.8.26
+phpMyFAQ 2.8.27
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.27 - 2016-03-
+- added possibility to use fullscreen videos (Thorsten)
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.26 - 2016-02-12
 - 15 years of phpMyFAQ Edition
