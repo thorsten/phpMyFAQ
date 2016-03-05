@@ -4,7 +4,7 @@
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "devDependencies": {
-    "grunt": "~0.4.1",
+    "grunt": ">=0.4.0",
     "grunt-bumpup": "^0.6.2",
     "grunt-contrib-clean": "~0.4.1",
     "grunt-contrib-concat": "~0.3.0",
