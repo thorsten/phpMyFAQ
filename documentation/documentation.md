@@ -1648,7 +1648,11 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
+<<<<<<< HEAD
 Date: 2016-01-02
+=======
+Date: 2016-01-24
+>>>>>>> bbed1515719c0184252df8490995c1a4741fe6ac
 
 © 2001-2016 phpMyFAQ Team
 

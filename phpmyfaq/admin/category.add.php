@@ -139,7 +139,6 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </select>
                         </div>
                     </div>
-
 <?php
 
         } else {

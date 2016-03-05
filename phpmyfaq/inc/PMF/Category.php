@@ -1027,7 +1027,11 @@ class PMF_Category
      */
     public function getCategoryUser($categoryId)
     {
-        return $this->categories[$categoryId]['user_id'];
+        if (isset($this->categories[$categoryId]['user_id'])) {
+            return $this->categories[$categoryId]['user_id'];
+        } else {
+            return 1;
+        }
     }
 
     /**

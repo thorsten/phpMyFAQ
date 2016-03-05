@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2016 phpMyFAQ Team
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
@@ -29,6 +27,7 @@ require_once PMF_CONFIG_DIR.'/constants.php';
  * Export Class.
  *
  * This class manages the export formats supported by phpMyFAQ:
+ * - JSON
  * - PDF
  * - XHTML
  * - XML
@@ -39,7 +38,6 @@ require_once PMF_CONFIG_DIR.'/constants.php';
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2016 phpMyFAQ Team
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
