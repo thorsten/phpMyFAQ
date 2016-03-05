@@ -70,7 +70,7 @@ class PMF_System
         'xmlwriter',
         'filter',
         'zip',
-        'fileinfo',
+        'fileinfo'
     ];
 
     /**
@@ -86,11 +86,11 @@ class PMF_System
      * @var array
      */
     private $supportedDatabases = [
-        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x' ],
+        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x and later' ],
         'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x' ],
         'sqlite3' => [ self::VERSION_MINIMUM_PHP, 'SQLite 3' ],
         'mssql' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)' ],
-        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP'],
+        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP']
     ];
 
     /**
