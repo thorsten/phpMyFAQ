@@ -194,15 +194,13 @@ if ($permission['editbt']|| $permission['addbt']) {
                     $faqConfig->get('socialnetworks.twitterAccessTokenSecret')
                 );
 
-                $link = PMF_Link::getSystemRelativeUri() .
-                        sprintf(
-                            '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                            $category,
-                            $recordId,
-                            $recordLang
-                        );
-                $link             = $faqConfig->get('main.referenceURL') . str_replace('/admin/','/', $link);
-                $oLink            = new PMF_Link($link, $faqConfig);
+                $link = sprintf(
+                    'index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $category,
+                    $recordId,
+                    $recordLang
+                );
+                $oLink            = new PMF_Link($faqConfig->get('main.referenceURL') . $link, $faqConfig);
                 $oLink->itemTitle = $question;
                 $link             = $oLink->toString();
                 
