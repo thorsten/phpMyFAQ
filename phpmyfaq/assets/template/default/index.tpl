@@ -172,5 +172,7 @@
     </div>
 </footer>
 
+{debugMessages}
+
 </body>
 </html>
