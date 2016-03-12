@@ -139,13 +139,11 @@ All rights reserved.
 
 **2.1. <a id="2.1"></a>Requirements for phpMyFAQ**
 
-phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the following requirements:
+phpMyFAQ addresses a database system via PHP. In order to install it you will need a web server that meets the 
+following requirements:
 
 *   **[PHP](http://www.php.net)**
     *   from version 5.5.0 or 7.0 (recommended: latest PHP 5.x)
-    *   register_globals = off
-    *   magic_quotes_gpc = off
-    *   safe_mode = off (recommended)
     *   memory_limit = 64M
     *   GD support
     *   XMLWriter support
@@ -159,15 +157,14 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
     *   [PostgreSQL](http://www.postgresql.org) 9.x (recommended: latest 9.x)
     *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
     *   [SQLite](http://www.sqlite.org)
-    *   [MariaDB](http://montyprogram.com/mariadb/) 5.x (experimental)
+    *   [MariaDB](http://montyprogram.com/mariadb/) 5.x or later (experimental)
     *   [Percona Server](http://www.percona.com) 5.x (experimental)
 *   **Search engines**
     *   [Elasticsearch](https://www.elastic.co/products/elasticsearch) 2.x
 *   correctly set: access permissions, owner, group
 
-You can only run phpMyFAQ successfully, when the PHP directives safe_mode, register_globals and magic_quotes_gpc is set 
-to off, further constraints affect the directives open_basedir and disable_functions, which can be set in the central 
-php.ini or the httpd.conf respectively.
+You can only run phpMyFAQ successfully with constraints affect the directives open_basedir and disable_functions, which 
+can be set in the central php.ini or the httpd.conf respectively.
 
 In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The 
 files and directories must be owned by the webserver's user.
@@ -178,7 +175,7 @@ content: `<?php phpinfo(); ?>`
 Upload this file to your webspace and open it using your browser. The installation-script checks which version of PHP 
 is installed on your server. Should you not meet the requirements, you cannot start the installation process.
 
-In case you have PHP below 5.5.0 installed you cannot use phpMyFAQ.
+In case you're running PHP before 5.5 you cannot use phpMyFAQ.
 
 phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are latest Mozilla Firefox (Windows/OS X/Linux),
 Safari 8.x or later (OS X/iOS), latest Chrome (Windows/OS X/Linux), latest Opera (Windows/OS X/Linux), Internet 
@@ -221,6 +218,8 @@ even after the successful installation:
 *   the directory **images/**
 
 All other directories shouldn't be world-writable for your own security.
+
+**Note**: If you're running SELinux, you may need further configuration or you should disable it at all.
 
 The database user needs the permissions for CREATE, DROP, ALTER, INDEX, INSERT, UPDATE, DELETE and SELECT on all tables 
 in the database.
