@@ -209,7 +209,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
                 </fieldset>
             </div>
-            
+
             <?php if (extension_loaded('ldap')): ?>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>

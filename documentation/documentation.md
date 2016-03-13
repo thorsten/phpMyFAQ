@@ -145,6 +145,7 @@ following requirements:
 *   **[PHP](http://www.php.net)**
     *   from version 5.5.0 or 7.0 (recommended: latest PHP 5.x)
     *   memory_limit = 64M
+    *   cURL support
     *   GD support
     *   XMLWriter support
     *   JSON support
@@ -193,7 +194,7 @@ You can install phpMyFAQ via one of the provided packages as .zip or .tar.gz or 
 download it and unzip the archive on your hard disk. If you want to use Git, please run the following commands on your 
 shell:
 
-	$ git clone git@github.com:thorsten/phpMyFAQ.git
+	$ git clone git@github.com:thorsten/phpMyFAQ.git 2.9
 	$ cd phpMyFAQ
 	$ curl -s https://getcomposer.org/installer | php
 	$ php composer.phar install
@@ -971,7 +972,9 @@ time with all the relevant data of the specific entry. The meaning of the fields
 *   **Revision**
     
     Like a wiki, phpMyFAQ supports revisions of every entry. New revisions won't be created automatically but you can 
-    create a new one if you click on "yes". The old revision will be stored in the database and the new current revision will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an old revision and save them as a new one.
+    create a new one if you click on "yes". The old revision will be stored in the database and the new current revision 
+    will be displayed in the public frontend. You can also bring back old revisions into the frontend if you select an 
+    old revision and save them as a new one.
     
 *   **Date**
 
