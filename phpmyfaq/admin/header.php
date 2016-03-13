@@ -151,7 +151,14 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'elasticsearch', 'ad_menu_elasticsearch', $action);
+        if ($faqConfig->get('search.enableElasticsearch')) {
+            $secLevelEntries .= $adminHelper->addMenuEntry(
+                'editconfig',
+                'elasticsearch',
+                'ad_menu_elasticsearch',
+                $action
+            );
+        }
         $dashboardPage = false;
         $configurationPage = true;
         break;
