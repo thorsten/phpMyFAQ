@@ -394,20 +394,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_user'];
-        ?>
+                    <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_user'] ?>
                     <div class="pull-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
-        ?>
+                            <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'] ?>
                         </a>
                         <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i aria-hidden="true" class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users'];
-        ?>
+                            <i aria-hidden="true" class="fa fa-list"></i> <?php echo $PMF_LANG['list_all_users'] ?>
                         </a>
-                        <?php endif;
-        ?>
+                        <?php endif ?>
                     </div>
                 </h2>
             </div>
@@ -563,13 +559,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             </div>
         </div>
 
-<?php
-        if (isset($_GET['user_id'])) {
-            $userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
-            echo '<script type="text/javascript">updateUser('.$userId.');</script>';
-        }
-        ?>
-
         <div class="modal fade" id="pmf-modal-user-password-override">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -584,8 +573,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="npass">
-                                    <?php echo $PMF_LANG['ad_passwd_new'];
-        ?>
+                                    <?php echo $PMF_LANG['ad_passwd_new'] ?>
                                 </label>
                                 <div class="col-lg-9">
                                     <input type="password" name="npass" id="npass" class="form-control" required>
@@ -790,6 +778,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 ?>
         <script src="assets/js/user.js"></script>
 <?php
+    if (isset($_GET['user_id'])) {
+        $userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+        echo '        <script>updateUser('.$userId.');</script>';
+    }
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
