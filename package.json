@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0-rc",
+  "version": "2.9.0-rc2",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "devDependencies": {
