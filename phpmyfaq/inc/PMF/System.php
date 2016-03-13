@@ -65,6 +65,7 @@ class PMF_System
      * @var array
      */
     private $requiredExtensions = [
+        'curl',
         'gd',
         'json',
         'xmlwriter',
@@ -261,34 +262,6 @@ class PMF_System
         }
 
         if (count($this->missingExtensions) > 0) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if register_globals are activated.
-     *
-     * @return bool
-     */
-    public function checkRegisterGlobals()
-    {
-        if (ini_get('register_globals')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if magic_quotes_gpc are activated.
-     *
-     * @return bool
-     */
-    public function checkMagicQuotesGpc()
-    {
-        if (ini_get('magic_quotes_gpc')) {
             return false;
         }
 

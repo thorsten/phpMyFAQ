@@ -438,16 +438,6 @@ class PMF_Installer
             PMF_System::renderFooter();
         }
 
-        if (!$this->_system->checkRegisterGlobals()) {
-            echo '<p class="alert alert-danger">Please disable register_globals!</p>';
-            PMF_System::renderFooter();
-        }
-
-        if (!$this->_system->checkMagicQuotesGpc()) {
-            echo '<p class="alert alert-danger">Please disable magic_quotes_gpc!</p>';
-            PMF_System::renderFooter();
-        }
-
         if (!$this->_system->checkphpMyFAQInstallation()) {
             echo '<p class="alert alert-danger">It seems you\'re already running a version of phpMyFAQ. Please use the '.
                 '<a href="update.php">update script</a>.</p>';
@@ -471,16 +461,6 @@ class PMF_Installer
         if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>'.
                 'Please use the <a href="setup.php">install script</a>.</p>';
-            PMF_System::renderFooter();
-        }
-
-        if (!$this->_system->checkRegisterGlobals()) {
-            echo '<p class="alert alert-danger">Please disable register_globals!</p>';
-            PMF_System::renderFooter();
-        }
-
-        if (!$this->_system->checkMagicQuotesGpc()) {
-            echo '<p class="alert alert-danger">Please disable magic_quotes_gpc!</p>';
             PMF_System::renderFooter();
         }
     }

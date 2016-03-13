@@ -209,7 +209,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
                 </fieldset>
             </div>
-<?php if (extension_loaded('ldap')): ?>
+            
+            <?php if (extension_loaded('ldap')): ?>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>LDAP setup</legend>
@@ -268,7 +269,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                 </fieldset>
             </div>
-<?php endif; ?>
+            <?php endif; ?>
+
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
@@ -352,6 +354,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </fieldset>
             </div>
 
+            <?php if (extension_loaded('curl')): ?>
             <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
                 <fieldset>
                     <legend>Elasticsearch setup</legend>
@@ -392,6 +395,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
                 </fieldset>
             </div>
+            <?php endif; ?>
 
         </div>
 
