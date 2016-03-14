@@ -271,6 +271,8 @@ class PMF_Instance_Elasticsearch
      */
     private function getParams()
     {
+        global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
+
         return [
             'index' => $this->config['index'],
             'body' => [
@@ -283,6 +285,10 @@ class PMF_Instance_Elasticsearch
                                 'type' =>'edge_ngram',
                                 'min_gram' => 1,
                                 'max_gram' => 20
+                            ],
+                            'pmf_language_stemmer'=>[
+                                'type' => 'stemmer',
+                                'name' => $PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
                             ]
                         ],
                         'analyzer' => [
@@ -291,7 +297,8 @@ class PMF_Instance_Elasticsearch
                                 'tokenizer' => 'standard',
                                 'filter' => [
                                     'lowercase',
-                                    'autocomplete_filter'
+                                    'autocomplete_filter',
+                                    'pmf_language_stemmer'
                                 ]
                             ]
                         ]
