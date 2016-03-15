@@ -66,13 +66,6 @@ if ($faqConfig->get('security.enableLoginOnly')) {
     }
 }
 
-if (!$user instanceof PMF_User_CurrentUser) {
-    header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
-    header('HTTP/1.0 401 Unauthorized');
-    echo '<h1>401 Unauthorized</h1>';
-    exit;
-}
-
 //
 // Initalizing static string wrapper
 //
