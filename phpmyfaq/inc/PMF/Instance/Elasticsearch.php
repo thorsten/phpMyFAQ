@@ -40,6 +40,9 @@ class PMF_Instance_Elasticsearch
     /** @var Client */
     protected $client;
 
+    /** @var array */
+    protected $esConfig;
+
     /**
      * Elasticsearch mapping
      *
@@ -84,8 +87,9 @@ class PMF_Instance_Elasticsearch
      */
     public function __construct(PMF_Configuration $config)
     {
+        $this->config = $config;
         $this->client = $config->getElasticsearch();
-        $this->config = $config->getElasticsearchConfig();
+        $this->esConfig = $config->getElasticsearchConfig();
     }
 
     /**
@@ -106,7 +110,7 @@ class PMF_Instance_Elasticsearch
      */
     public function dropIndex()
     {
-        return $this->client->indices()->delete(['index' => $this->config['index']]);
+        return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
     }
 
     /**
@@ -118,11 +122,11 @@ class PMF_Instance_Elasticsearch
     {
         $response = $this->getMapping();
 
-        if (0 === count($response[$this->config['index']]['mappings'])) {
+        if (0 === count($response[$this->esConfig['index']]['mappings'])) {
 
             $params = [
-                'index' => $this->config['index'],
-                'type' => $this->config['type'],
+                'index' => $this->esConfig['index'],
+                'type' => $this->esConfig['type'],
                 'body' => $this->mappings
             ];
 
@@ -156,8 +160,8 @@ class PMF_Instance_Elasticsearch
     public function index(Array $faq)
     {
         $params = [
-            'index' => $this->config['index'],
-            'type' => $this->config['type'],
+            'index' => $this->esConfig['index'],
+            'type' => $this->esConfig['type'],
             'id' => $faq['solution_id'],
             'body' => [
                 'id' => $faq['id'],
@@ -188,8 +192,8 @@ class PMF_Instance_Elasticsearch
         foreach ($faqs as $faq) {
             $params['body'][] = [
                 'index' => [
-                    '_index' => $this->config['index'],
-                    '_type' => $this->config['type'],
+                    '_index' => $this->esConfig['index'],
+                    '_type' => $this->esConfig['type'],
                     '_id' => $faq['solution_id'],
                 ]
             ];
@@ -229,8 +233,8 @@ class PMF_Instance_Elasticsearch
     public function update(Array $faq)
     {
         $params = [
-            'index' => $this->config['index'],
-            'type' => $this->config['type'],
+            'index' => $this->esConfig['index'],
+            'type' => $this->esConfig['type'],
             'id' => $faq['solution_id'],
             'body' => [
                 'doc' => [
@@ -256,8 +260,8 @@ class PMF_Instance_Elasticsearch
     public function delete($solutionId)
     {
         $params = [
-            'index' => $this->config['index'],
-            'type' => $this->config['type'],
+            'index' => $this->esConfig['index'],
+            'type' => $this->esConfig['type'],
             'id' => $solutionId
         ];
 
@@ -274,7 +278,7 @@ class PMF_Instance_Elasticsearch
         global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
 
         return [
-            'index' => $this->config['index'],
+            'index' => $this->esConfig['index'],
             'body' => [
                 'settings' => [
                     'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,

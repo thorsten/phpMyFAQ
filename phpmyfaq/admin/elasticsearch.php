@@ -1,6 +1,6 @@
 <?php
 
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
 
 /**
  * phpMyFAQ Elasticsearch information.
@@ -35,7 +35,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     try {
         $esConfig = $faqConfig->getElasticsearchConfig();
         $esInformation = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
-    } catch (NoNodesAvailableException $e) {
+    } catch (Missing404Exception $e) {
         $esInformation = $e->getMessage();
     }
 
@@ -81,9 +81,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
                 <dd><?php echo $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
 
             </dl>
-            <?php } else { ?>
-            <p>
-                <?php echo $esInformation ?>
+            <?php
+            } else {
+                $error = json_decode($esInformation);
+            ?>
+            <p class="alert alert-warning">
+                Elasticsearch: <?php echo ucfirst($error->error->reason) ?>
             </p>
             <?php } ?>
 
