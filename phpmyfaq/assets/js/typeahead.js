@@ -29,6 +29,7 @@ $(window).load(function () {
             url: 'ajaxresponse.php?search=%QUERY',
             wildcard: '%QUERY',
             filter: function (questions) {
+
                 return $.map(questions.results, function (question) {
                     return {
                         category: question.categoryName,
@@ -43,7 +44,7 @@ $(window).load(function () {
     questions.initialize();
     // instantiate the typeahead UI
     $('.typeahead').typeahead(null, {
-        displayKey: 'question',
+        display: 'suggestion',
         source: questions.ttAdapter(),
         templates: {
             empty: [
@@ -51,7 +52,9 @@ $(window).load(function () {
                 'unable to find any Best Picture winners that match the current query',
                 '</div>'
             ].join('\n'),
-            suggestion: Handlebars.compile('<strong>{{category}}</strong>: <a href="{{url}}">{{question}}</a>')
+            suggestion: Handlebars.compile(
+                '<div><strong>{{category}}</strong>: <a href="{{url}}">{{question}}</a></div>'
+            )
         }
     }).on('typeahead:selected typeahead:autocompleted', function () {
         $('#searchfield').submit();
