@@ -185,7 +185,7 @@ class PMF_Glossary
 
         if (!empty($item)) {
             return sprintf(
-                '%s<abbr rel="tooltip" data-original-title="%s">%s</abbr>%s',
+                '%s<abbr data-toggle="tooltip" data-placement="bottom" title="%s">%s</abbr>%s',
                 $prefix,
                 $this->definition,
                 $item,

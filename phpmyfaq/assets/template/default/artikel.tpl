@@ -73,16 +73,12 @@
 
                 </div>
 
-
             </article>
 
-
-
-
             <script>
-                $(function(){
-                    $('abbr[rel="tooltip"]').tooltip();
-                });
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip();
+                })
             </script>
 
             <ul id="tab" class="nav nav-tabs hidden-print">
