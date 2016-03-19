@@ -12,7 +12,7 @@ Version 2.9.0-RC2 - 2016-03
 - added support for Elasticsearch (Thorsten)
 - added new mobile first, touch-friendly default layout (Thorsten)
 - added tag intersection based search (Tomer Weinberg, Thorsten)
-- added support for Markdown (Jerry van Kooten, Thorsten)
+- added support for Markdown (plus Mermaid) (Jerry van Kooten, Thorsten)
 - added permissions for guests (Thorsten)
 - added support for multiple LDAP/AD servers (Bernhard Müller, Thorsten)
 - added experimental support for LDAP dynamic user binding (Thorsten)
