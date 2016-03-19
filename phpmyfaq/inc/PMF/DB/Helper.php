@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
  */
@@ -27,12 +25,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_DB_Helper.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-12
  */
@@ -41,7 +37,7 @@ class PMF_DB_Helper
     /**
      * @var PMF_Configuration
      */
-    private $_config = null;
+    private $config = null;
 
     /**
      * Constructor.
@@ -52,7 +48,7 @@ class PMF_DB_Helper
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -65,14 +61,14 @@ class PMF_DB_Helper
      */
     public function buildInsertQueries($query, $table)
     {
-        if (!$result = $this->_config->getDb()->query($query)) {
+        if (!$result = $this->config->getDb()->query($query)) {
             [];
         }
         $ret = [];
 
         $ret[] = "\r\n-- Table: ".$table;
 
-        while ($row = $this->_config->getDb()->fetchArray($result)) {
+        while ($row = $this->config->getDb()->fetchArray($result)) {
             $p1 = [];
             $p2 = [];
             foreach ($row as $key => $val) {
@@ -83,7 +79,7 @@ class PMF_DB_Helper
                     if (is_null($val)) {
                         $p2[] = 'NULL';
                     } else {
-                        $p2[] = sprintf("'%s'", $this->_config->getDb()->escape($val));
+                        $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
                     }
                 }
             }
@@ -120,7 +116,7 @@ class PMF_DB_Helper
      * Align the prefix of the table name used in the PMF backup file,
      * from the (old) value of the system upon which the backup was performed
      * to the (new) prefix of the system upon which the backup will be restored.
-     * This alignment will be perfomed ONLY upon those given SQL queries starting
+     * This alignment will be performed ONLY upon those given SQL queries starting
      * with the given pattern.
      *
      * @param string $query

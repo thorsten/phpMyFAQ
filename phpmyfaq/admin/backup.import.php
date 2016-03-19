@@ -8,12 +8,10 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
@@ -72,14 +70,14 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
         }
 
         if ($ok == 1) {
-            $table_prefix = '';
+            $tablePrefix = '';
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);
             while ($dat = fgets($handle, 65536)) {
                 $dat = trim($dat);
-                $backup_prefix_pattern = '-- pmftableprefix:';
-                $backup_prefix_pattern_len = PMF_String::strlen($backup_prefix_pattern);
-                if (PMF_String::substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
-                    $table_prefix = trim(PMF_String::substr($dat, $backup_prefix_pattern_len));
+                $backupPrefixPattern = '-- pmftableprefix:';
+                $backupPrefixPatternLength = PMF_String::strlen($backupPrefixPattern);
+                if (PMF_String::substr($dat, 0, $backupPrefixPatternLength) === $backupPrefixPattern) {
+                    $tablePrefix = trim(PMF_String::substr($dat, $backupPrefixPatternLength));
                 }
                 if ((PMF_String::substr($dat, 0, 2) != '--') && ($dat != '')) {
                     $mquery[] = trim(PMF_String::substr($dat, 0, -1));
@@ -92,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $num = count($mquery);
             $kg = '';
             for ($i = 0; $i < $num; ++$i) {
-                $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
+                $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $tablePrefix, PMF_Db::getTablePrefix());
                 $kg = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
                     printf(
@@ -125,7 +123,8 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
                 break;
             case 2:
-                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
+                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' .
+                                'HTML form.';
                 break;
             case 3:
                 $errorMessage = 'The uploaded file was only partially uploaded.';
