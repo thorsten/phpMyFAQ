@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-RC2 - 2016-03
+Version 2.9.0-RC2 - 2016-03-20
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
