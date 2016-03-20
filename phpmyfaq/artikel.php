@@ -34,8 +34,7 @@ $faqTagging = new PMF_Tags($faqConfig);
 $faqRelation = new PMF_Relation($faqConfig);
 $faqRating = new PMF_Rating($faqConfig);
 $faqComment = new PMF_Comment($faqConfig);
-$parsedown = new ParsedownExtra();
-
+$markDown = new ParsedownExtra();
 $faqHelper = new PMF_Helper_Faq($faqConfig);
 
 if (is_null($user)) {
@@ -75,11 +74,7 @@ $faqVisits->logViews($recordId);
 // Add Glossary entries for answers only
 $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
-    $answer = sprintf(
-        '<div class="mermaid">%s</div>',
-        $parsedown->text($faq->faqRecord['content'])
-    );
-    $answer .= '<script>mermaid.initialize({startOnLoad:true});</script>';
+    $answer = $markDown->text($faq->faqRecord['content']);
 } else {
     $answer = $faq->faqRecord['content'];
 }
@@ -200,7 +195,7 @@ $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Does the user have the right to add a comment?
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
-    ($faq->faqRecord['active'] === 'no') || ('n' == $faq->faqRecord['comment']) || $expired) {
+    ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
     $commentMessage = sprintf(

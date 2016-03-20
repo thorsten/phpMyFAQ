@@ -118,7 +118,7 @@ module.exports = function(grunt) {
                     'components/bootstrap/js/tab.js',
                     'components/typeahead.js/dist/typeahead.bundle.js',
                     'components/handlebars/handlebars.js',
-                    'components/mermaid/dist/mermaid.js',
+                    //'components/mermaid/dist/mermaid.js',
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/comments.js',
                     'phpmyfaq/assets/js/typeahead.js',
