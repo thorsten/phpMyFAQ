@@ -118,11 +118,11 @@ module.exports = function(grunt) {
                     'components/bootstrap/js/tab.js',
                     'components/typeahead.js/dist/typeahead.bundle.js',
                     'components/handlebars/handlebars.js',
-                    //'components/mermaid/dist/mermaid.js',
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/comments.js',
                     'phpmyfaq/assets/js/typeahead.js',
-                    'phpmyfaq/assets/js/functions.js'
+                    'phpmyfaq/assets/js/functions.js',
+                    'components/mermaid/dist/mermaid.js',
                 ],
                 dest: 'phpmyfaq/assets/js/phpmyfaq.js'
             }

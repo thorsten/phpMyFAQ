@@ -74,7 +74,10 @@ $faqVisits->logViews($recordId);
 // Add Glossary entries for answers only
 $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
-    $answer = $markDown->text($faq->faqRecord['content']);
+    $answer = sprintf(
+        '<div class="mermaid">%s</div>',
+        $markDown->text($faq->faqRecord['content'])
+    );
 } else {
     $answer = $faq->faqRecord['content'];
 }

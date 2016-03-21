@@ -75,12 +75,6 @@
 
             </article>
 
-            <script>
-                $(function () {
-                    $('[data-toggle="tooltip"]').tooltip();
-                })
-            </script>
-
             <ul id="tab" class="nav nav-tabs hidden-print">
                 <li class="active"><a href="#votingForm" data-toggle="tab">{msgVoteUseability}</a></li>
                 [switchLanguage]
@@ -174,27 +168,31 @@
         <link rel="stylesheet" href="assets/js/libs/default.css">
         <script>
 
-
-            $(function() {
-                $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
-                    var numStars = $(e.target).data('stars');
-                    saveVoting('faq', {id}, numStars, '{lang}');
-                });
-            });
-
-            $('form#formValues').on('submit', function (e) {
-                e.preventDefault();
-                saveFormValues('savecomment', 'comment');
-                return false;
-            });
-
             $(document).ready(function() {
+
+                mermaid.initialize();
+
+                $(function() {
+                    $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
+                        var numStars = $(e.target).data('stars');
+                        saveVoting('faq', {id}, numStars, '{lang}');
+                    });
+                });
+
+                $('form#formValues').on('submit', function (e) {
+                    e.preventDefault();
+                    saveFormValues('savecomment', 'comment');
+                    return false;
+                });
+
+                $('[data-toggle="tooltip"]').tooltip();
                 hljs.configure({
                    useBR: true
                 });
                 $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                 });
+
             });
 
         </script>
