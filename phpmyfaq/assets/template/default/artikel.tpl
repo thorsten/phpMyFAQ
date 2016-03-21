@@ -169,9 +169,7 @@
         <script>
 
             $(document).ready(function() {
-
-                mermaid.initialize();
-
+                
                 $(function() {
                     $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
                         var numStars = $(e.target).data('stars');
