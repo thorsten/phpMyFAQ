@@ -169,7 +169,7 @@
         <script>
 
             $(document).ready(function() {
-                
+
                 $(function() {
                     $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
                         var numStars = $(e.target).data('stars');
