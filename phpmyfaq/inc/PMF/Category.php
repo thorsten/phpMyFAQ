@@ -297,7 +297,17 @@ class PMF_Category
         }
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchArray($result)) {
-            $this->categories[$row['id']] = $row;
+            $this->categories[$row['id']] = [
+                'id' => (int)$row['id'],
+                'lang' => $row['lang'],
+                'parent_id' => (int)$row['parent_id'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'user_id' => (int)$row['user_id'],
+                'group_id' => (int)$row['group_id'],
+                'active' => (int)$row['active'],
+                'level' => (int)$this->levelOf($row['id'])
+            ];
         }
 
         return $this->categories;

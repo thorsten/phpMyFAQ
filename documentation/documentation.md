@@ -1332,22 +1332,26 @@ You can call the resources with the following URIs:
 
     <pre><code class="json">[
         {
-            "id":"1",
-            "lang":"en",
-            "parent_id":"0",
-            "name":"phpMyFAQ 2.6",
-            "description":"Everything about phpMyFAQ 2.6",
-            "user_id":"1",
-            "level":0
+            "id": 1,
+            "lang": "de",
+            "parent_id": 0,
+            "name": "Test",
+            "description": "Hello, World! Hello, Tests!",
+            "user_id": 1,
+            "group_id": 1,
+            "active": 1,
+            "level": 0
         },
         {
-            "id":"2",
-            "lang":"en",
-            "parent_id":"0",
-            "name":"phpMyFAQ 2.8",
-            "description":"Everything about phpMyFAQ 2.8",
-            "user_id":"1",
-            "level":0
+            "id": 2,
+            "lang": "de",
+            "parent_id": 0,
+            "name": "Network",
+            "description": "",
+            "user_id": 1,
+            "group_id": -1,
+            "active": 1,
+            "level": 0
         }
     ]</code></pre>
     
