@@ -98,12 +98,12 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                             ]
                         ],
                         'query' => [
-                            'bool' => [
-                                'should' => [
-                                    ['match' => ['question' => $searchTerm]],
-                                    ['match' => ['answer' => $searchTerm]],
-                                    ['match' => ['keywords' => $searchTerm]]
-                                ]
+                            'multi_match' => [
+                                'fields' => [
+                                    'question', 'answer', 'keywords'
+                                ],
+                                'query' => $searchTerm,
+                                'fuzziness' => 'AUTO'
                             ]
                         ]
                     ]
@@ -159,12 +159,12 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                             ]
                         ],
                         'query' => [
-                            'bool' => [
-                                'should' => [
-                                    ['match' => ['question' => $searchTerm]],
-                                    ['match' => ['answer' => $searchTerm]],
-                                    ['match' => ['keywords' => $searchTerm]]
-                                ]
+                            'multi_match' => [
+                                'fields' => [
+                                    'question', 'answer', 'keywords'
+                                ],
+                                'query' => $searchTerm,
+                                'fuzziness' => 'AUTO'
                             ]
                         ]
                     ]
