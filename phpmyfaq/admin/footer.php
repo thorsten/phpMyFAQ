@@ -85,6 +85,7 @@ if (isset($auth)) {
         remove_linebreaks: false,
         use_native_selects: true,
         paste_remove_spans: true,
+        entities : '10',
         entity_encoding: 'raw',
 
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
