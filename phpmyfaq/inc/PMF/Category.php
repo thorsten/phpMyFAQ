@@ -651,7 +651,7 @@ class PMF_Category
         for ($y = 0;$y < $this->height(); $y = $this->getNextLineTree($y)) {
             list($hasChild, $categoryName, $parent, $description) = $this->getLineDisplay($y);
             $level = $this->treeTab[$y]['level'];
-            $leveldiff = $open - $level;
+            $levelDiff = $open - $level;
 
             if (!isset($number[$parent])) {
                 $number[$parent] = 0;
@@ -661,9 +661,9 @@ class PMF_Category
                 continue;
             }
 
-            if ($leveldiff > 1) {
+            if ($levelDiff > 1) {
                 $output .= '</li>';
-                for ($i = $leveldiff; $i > 1; --$i) {
+                for ($i = $levelDiff; $i > 1; --$i) {
                     $output .= sprintf(
                         "\n%s</ul>\n%s</li>\n",
                         str_repeat("\t", $level + $i + 1),
@@ -687,12 +687,16 @@ class PMF_Category
 
             if ($level > $open) {
                 $output .= sprintf(
-                    "\n%s<ul>\n%s<li>",
-                    str_repeat("\t", $level + 1),
-                    str_repeat("\t", $level + 1)
+                    '<ul><li data-category-id="%d" data-category-level="%d">',
+                    $parent,
+                    $level
                 );
             } else {
-                $output .= str_repeat("\t", $level + 1).'<li>';
+                $output .= sprintf(
+                    '<li data-category-id="%d" data-category-level="%d">',
+                    $parent,
+                    $level
+                );
             }
 
             if (0 === $number[$parent] && 0 === $level) {
