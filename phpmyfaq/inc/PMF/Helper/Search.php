@@ -388,7 +388,7 @@ class PMF_Helper_Search extends PMF_Helper
     {
         $html = sprintf('<span title="%s%%">', $relevance);
 
-        if ($relevance == 0) {
+        if (0 === (int)$relevance) {
             $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
         } elseif ($relevance < 33) {
             $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
