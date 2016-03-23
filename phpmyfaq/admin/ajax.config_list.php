@@ -42,12 +42,13 @@ if (!empty($_SESSION['access_token'])) {
 
 $configMode = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 $availableConfigModes = [
-        'main' => 1,
-        'records' => 1,
-        'spam' => 1,
-        'search' => 1,
-        'social' => 1,
-        'seo' => 1,
+    'main' => 1,
+    'records' => 1,
+    'spam' => 1,
+    'search' => 1,
+    'social' => 1,
+    'seo' => 1,
+    'mail' => 1
 ];
 
 /**
