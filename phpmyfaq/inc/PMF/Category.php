@@ -654,7 +654,7 @@ class PMF_Category
             }
         }
 
-        $output = "<ul>\n";
+        $output = '<ul class="pmf-category-overview">';
         $open = 0;
         $this->expandAll();
 
@@ -674,11 +674,7 @@ class PMF_Category
             if ($levelDiff > 1) {
                 $output .= '</li>';
                 for ($i = $levelDiff; $i > 1; --$i) {
-                    $output .= sprintf(
-                        "\n%s</ul>\n%s</li>\n",
-                        str_repeat("\t", $level + $i + 1),
-                        str_repeat("\t", $level + $i)
-                    );
+                    $output .= '</ul></li>';
                 }
             }
 
@@ -686,13 +682,9 @@ class PMF_Category
                 if (($level - $open) == -1) {
                     $output .= '</li>';
                 }
-                $output .= sprintf(
-                    "\n%s</ul>\n%s</li>\n",
-                    str_repeat("\t", $level + 2),
-                    str_repeat("\t", $level + 1)
-                );
+                $output .= '</ul></li>';
             } elseif ($level == $open && $y != 0) {
-                $output .= "</li>\n";
+                $output .= '</li>';
             }
 
             if ($level > $open) {
@@ -740,18 +732,17 @@ class PMF_Category
         }
 
         if (isset($level) && $level > 0) {
-            $output .= str_repeat("</li>\n\t</ul>\n\t", $level);
+            $output .= str_repeat('</li></ul>', $level);
         }
 
-        $output .= "\t</li>\n";
-        $output .= "\t</ul>\n";
+        $output .= '</li></ul>';
 
         return $output;
     }
 
     /**
-     * Returns the three parts of a line to display: category name, the ID of
-     * the root node and the description.
+     * Returns the four parts of a line to display: category name, the ID of
+     * the root node, the description and if the category is active
      *
      * @param integer $node
      *
@@ -778,7 +769,7 @@ class PMF_Category
      */
     public function getNextLineTree($line)
     {
-        if ($this->treeTab[$line]['symbol'] != 'plus') {
+        if ($this->treeTab[$line]['symbol'] !== 'plus') {
             return $line + 1;
         } else {
             for ($i = $line + 1; $i < $this->height(); ++$i) {
