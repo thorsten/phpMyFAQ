@@ -119,6 +119,7 @@ module.exports = function(grunt) {
                     'components/typeahead.js/dist/typeahead.bundle.js',
                     'components/handlebars/handlebars.js',
                     'phpmyfaq/assets/js/autosave.js',
+                    'phpmyfaq/assets/js/category.js',
                     'phpmyfaq/assets/js/comments.js',
                     'phpmyfaq/assets/js/typeahead.js',
                     'phpmyfaq/assets/js/functions.js',
