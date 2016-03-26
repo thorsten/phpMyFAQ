@@ -121,6 +121,7 @@ module.exports = function(grunt) {
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/category.js',
                     'phpmyfaq/assets/js/comments.js',
+                    'phpmyfaq/assets/js/records.js',
                     'phpmyfaq/assets/js/typeahead.js',
                     'phpmyfaq/assets/js/functions.js',
                     'components/mermaid/dist/mermaid.js',

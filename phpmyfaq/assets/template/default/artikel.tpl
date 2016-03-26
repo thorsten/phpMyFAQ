@@ -91,7 +91,7 @@
                         <input type="hidden" name="artikel" value="{saveVotingID}">
                         <div id="votings"></div>
                         <div class="pmf-stars">
-                            <div class="pmf-star-rating">
+                            <div class="pmf-star-rating" data-rating="{msgAverageVote}">
                                 <span data-stars="5">☆</span>
                                 <span data-stars="4">☆</span>
                                 <span data-stars="3">☆</span>
@@ -167,30 +167,12 @@
         <script src="assets/js/libs/highlight.pack.js"></script>
         <link rel="stylesheet" href="assets/js/libs/default.css">
         <script>
-
             $(document).ready(function() {
-
                 $(function() {
                     $('div.pmf-stars > div.pmf-star-rating > span').on('click', function(e) {
                         var numStars = $(e.target).data('stars');
                         saveVoting('faq', {id}, numStars, '{lang}');
                     });
                 });
-
-                $('form#formValues').on('submit', function (e) {
-                    e.preventDefault();
-                    saveFormValues('savecomment', 'comment');
-                    return false;
-                });
-
-                $('[data-toggle="tooltip"]').tooltip();
-                hljs.configure({
-                   useBR: true
-                });
-                $('pre code').each(function(i, block) {
-                    hljs.highlightBlock(block);
-                });
-
             });
-
         </script>

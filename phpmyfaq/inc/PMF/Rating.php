@@ -200,11 +200,12 @@ class PMF_Rating
             $row = $this->_config->getDb()->fetchObject($result);
 
             return sprintf(
-                ' %s ('.$this->plr->GetMsg('plmsgVotes', $row->usr).')',
+                ' <span data-rating="%s">%s</span> ('.$this->plr->GetMsg('plmsgVotes', $row->usr).')',
+                round($row->voting, 2),
                 round($row->voting, 2)
             );
         } else {
-            return '0 ('.$this->plr->GetMsg('plmsgVotes', 0).')';
+            return ' <span data-rating="0">0</span> ('.$this->plr->GetMsg('plmsgVotes', 0).')';
         }
     }
 
