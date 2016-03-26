@@ -286,7 +286,7 @@ class PMF_Helper_Search extends PMF_Helper
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
                 $html .= '<li>';
-                $html .= $this->renderScore($result->score);
+                $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf('<strong>%s</strong>: %s<br />',
                     $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor()
@@ -386,7 +386,7 @@ class PMF_Helper_Search extends PMF_Helper
      */
     private function renderScore($relevance = 0)
     {
-        $html = sprintf('<span title="%s%%">', $relevance);
+        $html = sprintf('<span title="%01.2f%%">', $relevance);
 
         if (0 === (int)$relevance) {
             $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
