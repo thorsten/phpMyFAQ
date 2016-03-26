@@ -16,21 +16,15 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    (function () {
-
-        'use strict';
-
-        $('h4.category-header').click(function () {
-            var div = $('#div_' + $(this).data('category-id'));
-            if (div.css('display') === 'none') {
-                div.fadeIn('fast');
-            } else {
-                div.fadeOut('fast');
-            }
-        });
-
-    })();
-
-}
+    $('h4.category-header').click(function () {
+        var div = $('#div_' + $(this).data('category-id'));
+        if (div.css('display') === 'none') {
+            div.fadeIn('fast');
+        } else {
+            div.fadeOut('fast');
+        }
+    });
+});

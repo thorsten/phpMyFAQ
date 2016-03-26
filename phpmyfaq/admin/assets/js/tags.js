@@ -16,49 +16,48 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    (function () {
+    $('.btn-edit').on('click', function () {
+        var id = $(this).data('btn-id');
+        var span = $('span[data-tag-id="' + id + '"]');
 
-        'use strict';
+        if (span.length > 0) {
+            span.replaceWith(
+                '<input name="tag" class="form-control" data-tag-id="' + id + '" value="' + span.html() + '">'
+            );
+        } else {
+            var input = $('input[data-tag-id="' + id + '"]');
+            input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');
+        }
+    });
 
-        $('.btn-edit').on('click', function () {
-            var id = $(this).data('btn-id');
-            var span = $('span[data-tag-id="' + id + '"]');
+    $('.tag-form').bind('submit', function (event) {
 
-            if (span.length > 0) {
-                span.replaceWith('<input name="tag" class="form-control" data-tag-id="' + id + '" value="' + span.html() + '">');
-            } else {
-                var input = $('input[data-tag-id="' + id + '"]');
+        event.preventDefault();
+
+        var input = $('input[data-tag-id]:focus');
+        var id = input.data('tag-id');
+        var tag = input.val();
+
+        $.ajax({
+            url: 'index.php?action=ajax&ajax=tags&ajaxaction=update',
+            type: 'POST',
+            data: 'id=' + id + '&tag=' + tag,
+            dataType: 'json',
+            beforeSend: function () {
+                $('#saving_data_indicator').html(
+                    '<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...'
+                );
+            },
+            success: function (message) {
                 input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');
+                $('span[data-tag-id="' + id + '"]').append(' ✓');
+                $('#saving_data_indicator').html('✓ ' + message);
             }
         });
 
-        $('.tag-form').bind('submit', function (event) {
-
-            event.preventDefault();
-
-            var input = $('input[data-tag-id]:focus');
-            var id = input.data('tag-id');
-            var tag = input.val();
-
-            $.ajax({
-                url: 'index.php?action=ajax&ajax=tags&ajaxaction=update',
-                type: 'POST',
-                data: 'id=' + id + '&tag=' + tag,
-                dataType: 'json',
-                beforeSend: function () {
-                    $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
-                },
-                success: function (message) {
-                    input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');
-                    $('span[data-tag-id="' + id + '"]').append(' ✓');
-                    $('#saving_data_indicator').html('✓ ' + message);
-                }
-            });
-
-            return false;
-        });
-    })();
-
-}
+        return false;
+    });
+});

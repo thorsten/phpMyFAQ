@@ -16,7 +16,7 @@
 
 /*global $:false, alert:false */
 
-$(document).ready(function() {
+$(document).ready(function () {
     'use strict';
 
     /**

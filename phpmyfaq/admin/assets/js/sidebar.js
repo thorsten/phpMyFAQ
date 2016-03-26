@@ -17,18 +17,14 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    (function () {
-
-        $(window).bind('load resize', function () {
-            'use strict';
-            if ($(this).width() < 768) {
-                $('div.sidebar-collapse').addClass('collapse');
-            } else {
-                $('div.sidebar-collapse').removeClass('collapse');
-            }
-        });
-    })();
-
-}
+    $(window).bind('load resize', function () {
+        if ($(this).width() < 768) {
+            $('div.sidebar-collapse').addClass('collapse');
+        } else {
+            $('div.sidebar-collapse').removeClass('collapse');
+        }
+    });
+});

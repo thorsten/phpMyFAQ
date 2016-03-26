@@ -16,41 +16,36 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    (function () {
+    var tabLoaded = false;
 
-        'use strict';
+    $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
-        var tabLoaded = false;
+        e.preventDefault();
 
-        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        var target = $(e.target).attr('href');
 
-            e.preventDefault();
-
-            var target = $(e.target).attr('href');
-
-            $.get('index.php', {
-                action: 'ajax',
-                ajax: 'config_list',
-                conf: target.substr(1)
-            }, function (data) {
-                $(target).empty().append(data);
-            });
-
-            tabLoaded = true;
+        $.get('index.php', {
+            action: 'ajax',
+            ajax: 'config_list',
+            conf: target.substr(1)
+        }, function (data) {
+            $(target).empty().append(data);
         });
 
-        if (!tabLoaded) {
+        tabLoaded = true;
+    });
 
-            $.get('index.php', {
-                action: 'ajax',
-                ajax: 'config_list',
-                conf: 'main'
-            }, function (data) {
-                $('#main').empty().append(data);
-            });
-        }
+    if (!tabLoaded) {
 
-    })();
-}
+        $.get('index.php', {
+            action: 'ajax',
+            ajax: 'config_list',
+            conf: 'main'
+        }, function (data) {
+            $('#main').empty().append(data);
+        });
+    }
+});

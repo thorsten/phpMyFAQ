@@ -16,27 +16,22 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    (function () {
-
-        'use strict';
-
-        $('#fileUpload').change(function () {
-            var iSize = ($('#fileUpload')[0].files[0].size / 1024);
-            if (iSize / 1024 > 1) {
-                if (((iSize / 1024) / 1024) > 1) {
-                    iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
-                    $('#filesize').html(iSize + 'GB');
-                } else {
-                    iSize = (Math.round((iSize / 1024) * 100) / 100);
-                    $('#filesize').html(iSize + 'MB');
-                }
+    $('#fileUpload').change(function () {
+        var iSize = ($('#fileUpload')[0].files[0].size / 1024);
+        if (iSize / 1024 > 1) {
+            if (((iSize / 1024) / 1024) > 1) {
+                iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
+                $('#filesize').html(iSize + 'GB');
             } else {
-                iSize = (Math.round(iSize * 100) / 100);
-                $('#filesize').html(iSize + 'kB');
+                iSize = (Math.round((iSize / 1024) * 100) / 100);
+                $('#filesize').html(iSize + 'MB');
             }
-        });
-    })();
-
-}
+        } else {
+            iSize = (Math.round(iSize * 100) / 100);
+            $('#filesize').html(iSize + 'kB');
+        }
+    });
+});

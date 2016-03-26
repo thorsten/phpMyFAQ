@@ -16,35 +16,30 @@
 
 /*global $:false */
 
-if (window.jQuery) {
+$(document).ready(function () {
+    'use strict';
 
-    $(document).ready(function () {
+    $('button.pmf-elasticsearch').on('click', function () {
 
-        'use strict';
+        var action = $(this).data('action');
 
-        $('button.pmf-elasticsearch').on('click', function () {
+        $.ajax({
+            url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
+            type: 'POST',
+            dataType: 'json'
+        })
+        .done(function(message) {
+            var result = $('.result'),
+                indicator = $('#saving_data_indicator');
 
-            var action = $(this).data('action');
-
-            $.ajax({
-                url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
-                type: 'POST',
-                dataType: 'json'
-            })
-            .done(function(message) {
-                var result = $('.result'),
-                    indicator = $('#saving_data_indicator');
-
-                indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
-                result.empty();
-                if (message.error) {
-                    result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');
-                } else {
-                    result.append('<p class="alert alert-success">✓ ' + message.success + '</p>');
-                }
-                indicator.fadeOut();
-            });
+            indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
+            result.empty();
+            if (message.error) {
+                result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');
+            } else {
+                result.append('<p class="alert alert-success">✓ ' + message.success + '</p>');
+            }
+            indicator.fadeOut();
         });
-
     });
-}
+});
