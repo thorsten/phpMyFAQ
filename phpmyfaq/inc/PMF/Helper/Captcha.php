@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Helper class for phpMyFAQ captchas.
+ * Helper class for the default phpMyFAQ captcha.
  *
  * PHP Version 5.5
  *
@@ -18,7 +18,7 @@
  */
 
 /**
- * Helper to render captchas
+ * Helper to render the default captcha
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -29,6 +29,9 @@
  */
 class PMF_Helper_Captcha extends PMF_Helper
 {
+    const FORM_ID = 'captcha';
+    const FORM_BUTTON = 'captcha-button';
+
     /**
      * Constructor.
      *
@@ -66,12 +69,15 @@ class PMF_Helper_Captcha extends PMF_Helper
             $html .= '    <div class="col-sm-5">';
             $html .= '        <div class="input-group">';
             $html .= sprintf(
-                '<input type="text" class="form-control" name="captcha" id="captcha" size="%d" required >',
+                '<input type="text" class="form-control" name="%s" id="%s" size="%d" autocomplete="off" required>',
+                self::FORM_ID,
+                self::FORM_ID,
                 $captcha->caplength
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
-                '<a class="btn btn-primary" id="captcha-button" data-action="%s"><i aria-hidden="true" class="fa fa-refresh"></i></a>',
+                '<a class="btn btn-primary" id="%s" data-action="%s"><i aria-hidden="true" class="fa fa-refresh"></i></a>',
+                self::FORM_BUTTON,
                 $action
             );
             $html .= '            </span>';
