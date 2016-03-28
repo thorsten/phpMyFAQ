@@ -63,10 +63,14 @@
         </section>
 
         <script>
-            $(function() {
-                $('#submitquestion').click(function() {
-                    checkQuestion();
+            $(document).ready(function() {
+                $(function () {
+                    $('#submitquestion').on('click', function () {
+                        checkQuestion();
+                    });
+                    $('form#formValues').on('submit', function () {
+                        return false;
+                    });
                 });
-                $('form#formValues').submit(function() { return false; });
             });
         </script>
