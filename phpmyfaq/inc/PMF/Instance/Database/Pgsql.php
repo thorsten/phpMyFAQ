@@ -34,11 +34,13 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
 {
     /** @var array */
     private $createTableStatements = [
+        'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
+
         'faqadminlog' => 'CREATE TABLE %sfaqadminlog (
             id SERIAL NOT NULL,
             time INT4 NOT NULL,
             usr INT4 NOT NULL,
-            `text` TEXT NOT NULL,
+            text TEXT NOT NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id))',
 
@@ -84,8 +86,10 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             category_lang VARCHAR(5) NOT NULL,
             record_id SERIAL NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
-            PRIMARY KEY (category_id, category_lang, record_id, record_lang)),
-            KEY idx_records (record_id, record_lang))',
+            PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
+
+        'idx_records' => 'CREATE INDEX idx_records ON %sfaqcategoryrelations
+            (record_id, record_lang)',
 
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
             category_id INT4 NOT NULL,
@@ -194,8 +198,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             name VARCHAR(25) NULL,
             description text NULL,
             auto_join INT4 NULL,
-            PRIMARY KEY(group_id)),
-            KEY idx_name (name)',
+            PRIMARY KEY(group_id))',
 
         'faqgroup_right' => 'CREATE TABLE %sfaqgroup_right (
             group_id INT4 NOT NULL,
