@@ -59,7 +59,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
 
         'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
-            contents BLOB NOT NULL,
+            contents BYTEA,
             PRIMARY KEY (virtual_hash))',
 
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
@@ -76,15 +76,15 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             parent_id SMALLINT NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
-            user_id SERIAL NOT NULL,
-            group_id SERIAL NOT NULL DEFAULT -1,
+            user_id INT4 NOT NULL,
+            group_id INT4 NOT NULL DEFAULT -1,
             active INT4 NULL DEFAULT 1,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
             category_id INT4 NOT NULL,
             category_lang VARCHAR(5) NOT NULL,
-            record_id SERIAL NOT NULL,
+            record_id INT4 NOT NULL,
             record_lang VARCHAR(5) NOT NULL,
             PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
 
@@ -93,19 +93,19 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
 
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
             category_id INT4 NOT NULL,
-            group_id SERIAL NOT NULL,
+            group_id INT4 NOT NULL,
             PRIMARY KEY (category_id, group_id))',
 
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INT4 NOT NULL,
-            user_id SERIAL NOT NULL,
+            user_id INT4 NOT NULL,
             PRIMARY KEY (category_id, user_id))',
 
         'faqchanges' => 'CREATE TABLE %sfaqchanges (
             id SERIAL NOT NULL,
             beitrag SMALLINT NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            revision_id SERIAL NOT NULL DEFAULT 0,
+            revision_id INT4 NOT NULL DEFAULT 0,
             usr INT4 NOT NULL ,
             datum INT4 NOT NULL,
             what text DEFAULT NULL,
@@ -130,13 +130,13 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
         'faqdata' => 'CREATE TABLE %sfaqdata (
             id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            solution_id SERIAL NOT NULL,
-            revision_id SERIAL NOT NULL DEFAULT 0,
+            solution_id INT4 NOT NULL,
+            revision_id INT4 NOT NULL DEFAULT 0,
             active char(3) NOT NULL,
             sticky INT4 NOT NULL,
             keywords TEXT DEFAULT NULL,
             thema TEXT NOT NULL,
-            content LONGTEXT DEFAULT NULL,
+            content TEXT DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
@@ -152,13 +152,13 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
             id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            solution_id SERIAL NOT NULL,
-            revision_id SERIAL NOT NULL DEFAULT 0,
+            solution_id INT4 NOT NULL,
+            revision_id INT4 NOT NULL DEFAULT 0,
             active char(3) NOT NULL,
             sticky INT4 NOT NULL,
             keywords TEXT DEFAULT NULL,
             thema TEXT NOT NULL,
-            content LONGTEXT DEFAULT NULL,
+            content TEXT DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
@@ -206,12 +206,12 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             PRIMARY KEY(group_id, right_id))',
 
         'faqinstances' => 'CREATE TABLE %sfaqinstances (
-            id INT4 NOT NULL,
+            id SERIAL NOT NULL,
             url VARCHAR(255) NOT NULL,
             instance VARCHAR(255) NOT NULL,
             comment TEXT NULL,
-            created DATETIME NOT NULL,
-            modified DATETIME NOT NULL,
+            created TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+            modified TIMESTAMP NOT NULL,
             PRIMARY KEY (id))',
 
         'faqinstances_config' => 'CREATE TABLE %sfaqinstances_config (
@@ -242,11 +242,11 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             lang VARCHAR(5) NOT NULL,
             username VARCHAR(100) NOT NULL,
             email VARCHAR(100) NOT NULL,
-            category_id SERIAL NOT NULL,
+            category_id INT4 NOT NULL,
             question text NOT NULL,
             created VARCHAR(20) NOT NULL,
             is_visible char(1) default \'Y\',
-            answer_id SERIAL NOT NULL DEFAULT 0,
+            answer_id INT4 NOT NULL DEFAULT 0,
             PRIMARY KEY (id))',
 
         'faqright' => 'CREATE TABLE %sfaqright (
@@ -266,7 +266,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
 
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid SERIAL NOT NULL,
-            user_id SERIAL NOT NULL,
+            user_id INT4 NOT NULL,
             ip VARCHAR(64) NOT NULL,
             time INT4 NOT NULL,
             PRIMARY KEY (sid))',
@@ -295,7 +295,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             auth_source VARCHAR(100) NULL,
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
-            success INT(1) NULL DEFAULT 1,
+            success SMALLINT NULL DEFAULT 1,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
