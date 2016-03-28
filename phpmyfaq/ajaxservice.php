@@ -469,9 +469,9 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
-        // If smart answering is disabled, save question immidiatly
+        // If smart answering is disabled, save question immediately
         if (false === $faqConfig->get('main.enableSmartAnswering')) {
-            $save = 1;
+            $save = true;
         }
 
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
@@ -482,25 +482,30 @@ switch ($action) {
                 $visibility = 'Y';
             }
 
-            $questionData = array(
+            $questionData = [
                 'username' => $name,
                 'email' => $email,
                 'category_id' => $ucategory,
                 'question' => $question,
-                'is_visible' => $visibility,
-            );
+                'is_visible' => $visibility
+            ];
 
-            if (1 !== $save) {
+            if (false === (boolean)$save) {
+
                 $cleanQuestion = $stopwords->clean($question);
 
                 $user = new PMF_User_CurrentUser($faqConfig);
                 $faqSearch = new PMF_Search($faqConfig);
+                $faqSearch->setCategory(new PMF_Category($faqConfig));
+                $faqSearch->setCategoryId($ucategory);
                 $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
                 $searchResult = [];
                 $mergedResult = [];
 
                 foreach ($cleanQuestion as $word) {
-                    $searchResult[] = $faqSearch->search($word);
+                    if (!empty($word)) {
+                        $searchResult[] = $faqSearch->search($word, false);
+                    }
                 }
                 foreach ($searchResult as $resultSet) {
                     foreach ($resultSet as $result) {
@@ -540,6 +545,7 @@ switch ($action) {
 
                     $message = array('result' => $response);
                 } else {
+
                     $faq->addQuestion($questionData);
 
                     $questionMail = 'User: '.$questionData['username'].

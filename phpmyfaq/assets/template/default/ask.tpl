@@ -65,11 +65,9 @@
         <script>
             $(document).ready(function() {
                 $(function () {
-                    $('#submitquestion').on('click', function () {
+                    $('#submitquestion').on('click', function (event) {
+                        event.preventDefault();
                         checkQuestion();
-                    });
-                    $('form#formValues').on('submit', function () {
-                        return false;
                     });
                 });
             });
