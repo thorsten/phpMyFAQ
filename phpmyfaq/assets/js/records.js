@@ -46,15 +46,4 @@ $(document).ready(function () {
     // Tooltips
     //
     $('[data-toggle="tooltip"]').tooltip();
-
-    //
-    // Highlighting
-    //
-    hljs.configure({
-        useBR: true
-    });
-    $('pre code').each(function(i, block) {
-        hljs.highlightBlock(block);
-    });
-
 });
