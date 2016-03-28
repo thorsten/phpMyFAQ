@@ -1261,8 +1261,8 @@ You can call the resources with the following URIs:
 
     This method returns the phpMyFAQ version number as string.
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getVersion (standard)
-    *   http://www.example.org/phpmyfaq/api/getVersion (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getVersion (standard)
+    *   https://www.example.org/phpmyfaq/api/getVersion (rewrite rules enabled)
 
     The result will be a string value like this:
 
@@ -1270,8 +1270,8 @@ You can call the resources with the following URIs:
     
 *   **getApiVersion()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)
-    *   http://www.example.org/phpmyfaq/api/getApiVersion (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getApiVersion (standard)
+    *   https://www.example.org/phpmyfaq/api/getApiVersion (rewrite rules enabled)
 
     Returns the version of the API as a string value. The version number is incremental and will be incremented every 
     time the API changes.
@@ -1280,8 +1280,8 @@ You can call the resources with the following URIs:
     
 *   **getCount()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getCount (standard)
-    *   http://www.example.org/phpmyfaq/api/getCount (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getCount (standard)
+    *   https://www.example.org/phpmyfaq/api/getCount (rewrite rules enabled)
 
     Returns the number of FAQs as integer value.
 
@@ -1289,8 +1289,8 @@ You can call the resources with the following URIs:
     
 *   **getDefaultLanguage()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getDefaultLanguage (standard)
-    *   http://www.example.org/phpmyfaq/api/getDefaultLanguage (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getDefaultLanguage (standard)
+    *   https://www.example.org/phpmyfaq/api/getDefaultLanguage (rewrite rules enabled)
 
     Returns the default language as language code.
 
@@ -1298,8 +1298,8 @@ You can call the resources with the following URIs:
     
 *   **search()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=search&lang=en&q=phpMyFAQ (standard)
-    *   http://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=search&lang=en&q=phpMyFAQ (standard)
+    *   https://www.example.org/phpmyfaq/api/search/en/phpMyFAQ (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *q* for the search term. You'll get an JSON object as result 
     with the following structure:
@@ -1325,8 +1325,8 @@ You can call the resources with the following URIs:
     
 *   **getCategories()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getCategories&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getCategories/en (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getCategories&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getCategories/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1357,8 +1357,8 @@ You can call the resources with the following URIs:
     
 *   **getFaqs()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getFaqs&lang=en&categoryId=1 (standard)
-    *   http://www.example.org/phpmyfaq/api/getFaqs/en/1 (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getFaqs&lang=en&categoryId=1 (standard)
+    *   https://www.example.org/phpmyfaq/api/getFaqs/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *categoryId* for the category id. You'll get an JSON object as 
     result with the following structure:
@@ -1390,8 +1390,8 @@ You can call the resources with the following URIs:
     
 *   **getFaq()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getFaq&lang=en&recordId=1 (standard)
-    *   http://www.example.org/phpmyfaq/api/getFaq/en/1 (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getFaq&lang=en&recordId=1 (standard)
+    *   https://www.example.org/phpmyfaq/api/getFaq/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
     result with the following structure:
@@ -1419,8 +1419,8 @@ You can call the resources with the following URIs:
     
 *   **getAllFaqs()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getAllFaqs&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getAllFaqs/de (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getAllFaqs&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getAllFaqs/de (rewrite rules enabled)
 
     You have the variable *lang* for the language. You'll get an JSON object as result with the following structure:
 
@@ -1469,8 +1469,8 @@ You can call the resources with the following URIs:
     
 *   **getAttachmentsFromFaq()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getAttachmentsFromFaq&lang=en&recordId=1 (standard)
-    *   http://www.example.org/phpmyfaq/api/getAttachmentsFromFaq/en/1 (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getAttachmentsFromFaq&lang=en&recordId=1 (standard)
+    *   https://www.example.org/phpmyfaq/api/getAttachmentsFromFaq/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *recordId* for the record id. You'll get an JSON object as 
     result with the following structure:
@@ -1478,18 +1478,32 @@ You can call the resources with the following URIs:
     <pre><code class="json">[
         {
             "filename":"test.pdf",
-            "url":"http://faq.phpmyfaq.de/index.php?action=attachment&amp;id=1"
+            "url":"https://www.example.org/index.php?action=attachment&amp;id=1"
         },
         {
             "filename":"phpmyfaq.pdf",
-            "url":"http://faq.phpmyfaq.de/index.php?action=attachment&amp;id=2"
+            "url":"https://www.example.org/index.php?action=attachment&amp;id=2"
+        }
+    ]</code></pre>
+
+*   **getFaqAsPdf()**
+
+    *   https://www.example.org/phpmyfaq/api.php?action=getFaqAsPdf&lang=en&categoryId=1&recordId=2 (standard)
+    *   https://www.example.org/phpmyfaq/api/getFaqAsPdf/en/1/2 (rewrite rules enabled)
+
+    You have two variables, *lang* for the language, the *catgeroyId* for the catgeroy ID and *recordId* for the record 
+    ID. You'll get an JSON object as  result with the following structure:
+
+    <pre><code class="json">[
+        {
+            "pdfUrl":"https://www.example.org/pdf.php?cat=1&id=2&artlang=en"
         }
     ]</code></pre>
 
 *   **getPopular()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getPopular&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getPopular/en (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getPopular&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getPopular/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1499,7 +1513,7 @@ You can call the resources with the following URIs:
             "question": "How can I survive without phpMyFAQ?",
             "date": "20091014181500",
             "last_visit": "1426523991",
-            "url": "/phpMyFAQ-2.9/phpmyfaq/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+            "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
@@ -1507,15 +1521,15 @@ You can call the resources with the following URIs:
             "question": "Is there life after death?",
             "date": "20091010175452",
             "last_visit": "1423399890",
-            "url": "\phpmyfaq/phpmyfaq/index.php?action=artikel&cat=1&id=1&artlang=en"
+            "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
         
         }
     ]</code></pre>
     
 *   **getLatest()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getLatest&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getLatest/en (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getLatest&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getLatest/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1525,7 +1539,7 @@ You can call the resources with the following URIs:
             "question": "How can I survive without phpMyFAQ?",
             "answer": "A good question!",
             "visits": "10",
-            "url": "/phpMyFAQ-2.9/phpmyfaq/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+            "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
@@ -1533,14 +1547,14 @@ You can call the resources with the following URIs:
             "question": "Is there life after death?",
             "answer": "Maybe!",
             "visits": "3",
-            "url": "\phpmyfaq/phpmyfaq/index.php?action=artikel&cat=1&id=1&artlang=en"
+            "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
         }
     ]</code></pre>
     
 *   **getNews()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getNews&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getNews/en (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getNews&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getNews/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1565,8 +1579,8 @@ You can call the resources with the following URIs:
     
 *   **getPopularSearches()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getPopularSearches&lang=en (standard)
-    *   http://www.example.org/phpmyfaq/api/getPopularSearches/en (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getPopularSearches&lang=en (standard)
+    *   https://www.example.org/phpmyfaq/api/getPopularSearches/en (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1587,8 +1601,8 @@ You can call the resources with the following URIs:
     
 *   **getPopularTags()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getPopularTagstandard)
-    *   http://www.example.org/phpmyfaq/api/getPopularTags (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getPopularTagstandard)
+    *   https://www.example.org/phpmyfaq/api/getPopularTags (rewrite rules enabled)
 
     The result will be a JSON object like the following:
 
@@ -1608,8 +1622,8 @@ You can call the resources with the following URIs:
     
 *   **getFAQsByTag()**
 
-    *   http://www.example.org/phpmyfaq/api.php?action=getFAQsByTag&lang=en&tagId=1 (standard)
-    *   http://www.example.org/phpmyfaq/api/getFAQsByTag/en/1 (rewrite rules enabled)
+    *   https://www.example.org/phpmyfaq/api.php?action=getFAQsByTag&lang=en&tagId=1 (standard)
+    *   https://www.example.org/phpmyfaq/api/getFAQsByTag/en/1 (rewrite rules enabled)
 
     You have two variables, *lang* for the language and *tagId* for the tag ID which you can get from the API endpoint
     getPopularTags(). You'll get an JSON object as result with the following structure:
@@ -1621,7 +1635,7 @@ You can call the resources with the following URIs:
             "category_id":1,
             "record_title":"Is there life after death?",
             "record_preview":"Maybe!",
-            "record_link":"http:\/\/example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
+            "record_link":"https:\/\/www.example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=1&artlang=en",
             "record_updated":"2008-09-03 21:30:17",
             "visits":3,
             "record_created":"2008-09-03 21:30:17"
@@ -1632,7 +1646,7 @@ You can call the resources with the following URIs:
             "category_id":1,
             "record_title":"How can I survive without phpMyFAQ?",
             "record_preview":"It\'s easy!",
-            "record_link":"http:\/\/example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
+            "record_link":"https:\/\/www.example.org\/phpmyfaq\/phpmyfaq\/index.php?action=artikel&cat=1&id=2&artlang=en",
             "record_updated":"2008-09-03 21:30:17"
             "visits":10,
             "record_created":"2008-09-03 21:30:17"
@@ -1654,11 +1668,7 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
-<<<<<<< HEAD
-Date: 2016-01-02
-=======
-Date: 2016-01-24
->>>>>>> bbed1515719c0184252df8490995c1a4741fe6ac
+Date: 2016-03-28
 
 © 2001-2016 phpMyFAQ Team
 
