@@ -282,7 +282,7 @@ class PMF_Installer
      *
      * @var array
      */
-    protected $_mainConfig = array(
+    protected $_mainConfig = [
         'main.currentVersion' => null,
         'main.currentApiVersion' => null,
         'main.language' => '__PHPMYFAQ_LANGUAGE__',
@@ -379,7 +379,12 @@ class PMF_Installer
         'seo.metaTagsCategories' => 'index, follow',
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
-    );
+
+        'mail.remoteSMTP' => 'false',
+        'mail.remoteSMTPServer' => '',
+        'mail.remoteSMTPUsername' => '',
+        'mail.remoteSMTPPassword' => ''
+    ];
 
     /**
      * Constructor.
