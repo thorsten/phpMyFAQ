@@ -86,7 +86,8 @@ printf('<p style="color: red;">%s</p>', $PMF_LANG['msgTransToolNoteFileSaving'])
 $NPluralsErrorReported = false;
 ?>
         <form id="transDiffForm" accept-charset="utf-8">
-        <table class="list" style="width: 100%">
+        <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+            <table class="list" style="width: 100%">
         <tr>
             <th><?php print $PMF_LANG['msgVariable'] ?></th>
             <th>en</th>
@@ -273,10 +274,12 @@ $NPluralsErrorReported = false;
          */
         function save()
         {
-            $('#saving_data_indicator').html('<img src="images/indicator.gif" /> <?php print $PMF_LANG['msgSaving3Dots'] ?>');
+            $('#saving_data_indicator').html(
+                '<img src="images/indicator.gif" /> <?php echo $PMF_LANG['msgSaving3Dots'] ?>'
+            );
 
-            if(savePageBuffer()) {
-                $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
+            if (savePageBuffer()) {
+                $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang&csrf=<?php echo $user->getCsrfTokenFromSession() ?>',
                         null,
                         function (retval, status) {
                             if (1*retval > 0 && 'success' == status) {
