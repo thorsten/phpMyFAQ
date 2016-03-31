@@ -420,7 +420,9 @@ class PMF_Session
             $stats[date('Y-m-d', $date)] = 0;
         }
         foreach ($visits as $visitDate) {
-            $stats[date('Y-m-d', $visitDate)]++;
+            if (isset($stats[date('Y-m-d', $visitDate)])) {
+                $stats[date('Y-m-d', $visitDate)]++;
+            }
         }
 
         return $stats;
