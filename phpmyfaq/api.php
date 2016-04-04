@@ -101,6 +101,8 @@ switch ($action) {
         $faq = new PMF_Faq($faqConfig);
         $user = new PMF_User($faqConfig);
         $search = new PMF_Search($faqConfig);
+        $search->setCategory(new PMF_Category($faqConfig));
+
         $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
 
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
@@ -109,7 +111,7 @@ switch ($action) {
 
         $faqSearchResult->reviewResultset($searchResults);
 
-        $result = array();
+        $result = [];
         foreach ($faqSearchResult->getResultset() as $data) {
             $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
             $data->answer = PMF_Utils::makeShorterText($data->answer, 12);
