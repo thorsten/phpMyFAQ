@@ -174,9 +174,6 @@
                         saveVoting('faq', {id}, numStars, '{lang}');
                     });
                 });
-                hljs.configure({
-                    useBR: true
-                });
                 $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                 });

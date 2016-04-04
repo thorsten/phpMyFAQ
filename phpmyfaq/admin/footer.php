@@ -106,7 +106,8 @@ if (isset($auth)) {
             { title: 'Blocks', items: [
                 { title: 'p', block: 'p' },
                 { title: 'div', block: 'div' },
-                { title: 'pre', block: 'pre' }
+                { title: 'pre', block: 'pre' },
+                { title: 'code', block: 'code' }
             ]},
 
             { title: 'Containers', items: [
