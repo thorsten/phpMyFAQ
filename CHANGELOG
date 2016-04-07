@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.8.27 - 2016-03-
+Version 2.8.27 - 2016-04-
 - added possibility to use fullscreen videos (Thorsten)
+- added compatibility with MySQL 5.7 (Thorsten)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.26 - 2016-02-12
