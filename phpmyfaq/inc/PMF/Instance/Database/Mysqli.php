@@ -207,7 +207,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             url VARCHAR(255) NOT NULL,
             instance VARCHAR(255) NOT NULL,
             comment TEXT NULL,
-            created DATETIME NOT NULL,
+            created TIMESTAMP DEFAULT \'1977-04-07 14:47:00\',
             modified DATETIME NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
