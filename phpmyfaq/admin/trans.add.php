@@ -47,6 +47,7 @@ if (isset($_SESSION['trans'])) {
         <div class="row">
             <div class="col-lg-12">
                 <form class="form-horizontal" id="newTranslationForm" accept-charset="utf-8">
+                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <div class="form-group">
                         <label class="col-lg-2 control-label">
                             <?php echo $PMF_LANG['msgLanguage'] ?>
@@ -116,30 +117,37 @@ if (isset($_SESSION['trans'])) {
          */
         function save()
         {
-            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgAdding3Dots'] ?>');
+            $('#saving_data_indicator').html(
+                '<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgAdding3Dots'] ?>'
+            );
 
-            var data = {}
-            var form = document.getElementById('newTranslationForm')
-            var author = []
-            for(var i=0; i < form.elements.length;i++) {
-                if('author[]' == form.elements[i].name) {
-                    author.push(form.elements[i].value)
+            var data = {};
+            var form = document.getElementById('newTranslationForm');
+            var author = [];
+            for (var i=0; i < form.elements.length;i++) {
+                if ('author[]' == form.elements[i].name) {
+                    author.push(form.elements[i].value);
                 } else {
-                    data[form.elements[i].name] = form.elements[i].value
+                    data[form.elements[i].name] = form.elements[i].value;
                 }
             }
-            data['author[]'] = author
+            data['author[]'] = author;
 
-            $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_added_trans',
-                   data,
-                   function(retval, status) {
-                       if(1*retval > 0 && 'success' == status) {
-                           $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolTransCreated'] ?>');
-                           document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
-                       } else {
-                           $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolCouldntCreateTrans'] ?>');
-                       }
-                   }
+            $.post(
+                'index.php?action=ajax&ajax=trans&ajaxaction=save_added_trans&csrf=<?php echo $user->getCsrfTokenFromSession() ?>',
+                data,
+                function (retval, status) {
+                    if (1 * retval > 0 && 'success' === status) {
+                       $('#saving_data_indicator').html(
+                           '<?php echo $PMF_LANG['msgTransToolTransCreated'] ?>'
+                       );
+                       document.location = '?action=transedit&translang=' + $('#translang').val().toLowerCase()
+                    } else {
+                       $('#saving_data_indicator').html(
+                           '<?php echo $PMF_LANG['msgTransToolCouldntCreateTrans'] ?>'
+                       );
+                    }
+                }
             );
         }
         </script>

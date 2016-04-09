@@ -60,8 +60,9 @@ Version 2.9.0-RC2 - 2016-03-20
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 - fixed a lot of minor bugs (Thorsten)
 
-Version 2.8.27 - 2016-03-
+Version 2.8.27 - 2016-04-
 - added possibility to use fullscreen videos (Thorsten)
+- added compatibility with MySQL 5.7 (Thorsten)
 - fixed some minor bugs (Thorsten)
 
 Version 2.8.26 - 2016-02-12

@@ -29,6 +29,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+if (is_null($csrfToken)) {
+    $csrfToken  = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+}
+
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    exit(1);
+}
 
 switch ($ajax_action) {
 
@@ -91,7 +99,7 @@ switch ($ajax_action) {
 
         echo 1;
     break;
-
+    
     case 'save_translated_lang':
 
         if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
@@ -137,7 +145,7 @@ switch ($ajax_action) {
 
         $retval = file_put_contents($filename, $newFileContents);
         echo intval($retval);
-    break;
+        break;
 
     case 'remove_lang_file':
 
@@ -164,7 +172,7 @@ switch ($ajax_action) {
         }
 
         echo 1;
-    break;
+        break;
 
     case 'save_added_trans':
 

@@ -99,6 +99,7 @@ $NPluralsErrorReported = false;
                     <th><?php echo $translateLang ?></th>
                 </tr>
         <?php while (list($key, $line) = each($leftVarsOnly)): ?>
+
         <?php
     // These parameters are not real translations, so don't offer to translate them
     if ($tt->isKeyIgnorable($key)) {
@@ -286,10 +287,12 @@ $NPluralsErrorReported = false;
          */
         function save()
         {
-            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSaving3Dots'] ?>');
+            $('#saving_data_indicator').html(
+                '<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSaving3Dots'] ?>'
+            );
 
-            if(savePageBuffer()) {
-                $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang',
+            if (savePageBuffer()) {
+                $.post('index.php?action=ajax&ajax=trans&ajaxaction=save_translated_lang&csrf=<?php echo $user->getCsrfTokenFromSession() ?>',
                         null,
                         function (retval, status) {
                             if (1*retval > 0 && 'success' == status) {

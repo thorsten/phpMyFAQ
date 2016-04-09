@@ -438,7 +438,7 @@ class PMF_Session
         }
 
         foreach ($visits as $visitDate) {
-            isset($stats[date('Y-m-d', $visitDate)]) ? $stats[date('Y-m-d', $visitDate)]++ : 0;
+            isset($stats[date('Y-m-d', $visitDate)]) ? $stats[date('Y-m-d', $visitDate)]++ : null;
         }
 
         return $stats;
