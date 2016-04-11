@@ -1,3 +1,21 @@
+CHANGED FILES FROM 2.8.26 -> 2.8.27
+
+./admin/ajax.trans.php
+./admin/category.add.php
+./admin/footer.php
+./admin/record.add.php
+./admin/trans.add.php
+./admin/trans.edit.php
+./assets/template/default/index.tpl
+./feed/news/rss.php
+./inc/PMF/Category.php
+./inc/PMF/Session.php
+./inc/PMF/System.php
+./install/mysql.sql.php
+./install/mysqli.sql.php
+
+
+
 CHANGED FILES FROM 2.8.25 -> 2.8.26
 
 ./admin/ajax.attachment.php
