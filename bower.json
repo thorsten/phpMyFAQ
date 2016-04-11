@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.0-rc2",
+  "version": "2.9.0-rc3",
   "main": "phpmyfaq.js",
   "ignore": [
     "**/.*",

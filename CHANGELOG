@@ -1,11 +1,12 @@
-phpMyFAQ 2.9.0-RC2
+phpMyFAQ 2.9.0-RC3
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-RC2 - 2016-03-20
+Version 2.9.0-RC3 - 2016-04-11
+- fixed CSRF security issue (High-Tech Bridge Security Research Lab)
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
@@ -60,7 +61,8 @@ Version 2.9.0-RC2 - 2016-03-20
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 - fixed a lot of minor bugs (Thorsten)
 
-Version 2.8.27 - 2016-04-
+Version 2.8.27 - 2016-04-11
+- fixed CSRF security issue (High-Tech Bridge Security Research Lab)
 - added possibility to use fullscreen videos (Thorsten)
 - added compatibility with MySQL 5.7 (Thorsten)
 - fixed some minor bugs (Thorsten)
