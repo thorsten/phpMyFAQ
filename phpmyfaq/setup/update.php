@@ -919,7 +919,7 @@ if ($step == 3) {
         }
     }
     // Remove 'setup.php' file
-    if (is_writeable(__DIR__.'/setup.php') && @unlink(__DIR__.'/setup.php')) {
+    if (is_writeable(__DIR__.'/index.php') && @unlink(__DIR__.'/index.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";

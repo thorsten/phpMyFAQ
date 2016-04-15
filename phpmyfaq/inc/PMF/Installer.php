@@ -914,11 +914,13 @@ class PMF_Installer
 
     /**
      * Cleanup all files after an installation.
+     *
+     * @return void
      */
     public function cleanUpFiles()
     {
-        // Remove 'setup.php' file
-        if (@unlink(basename($_SERVER['SCRIPT_NAME']))) {
+        // Remove 'index.php' file
+        if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/index.php')) {
             echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
         } else {
             echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
