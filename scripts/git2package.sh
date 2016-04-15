@@ -64,7 +64,7 @@ cd $cwd
 mv $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq $cwd/build/package/${PMF_PACKAGE_FOLDER}
 
 # build packages
-tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/package/${PMF_PACKAGE_FOLDER}/phpmyfaq/ .
+tar cfvz ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/package/${PMF_PACKAGE_FOLDER} phpmyfaq
 cd $cwd/build/package/${PMF_PACKAGE_FOLDER}
 zip -r $cwd/${PMF_PACKAGE_FOLDER}.zip phpmyfaq
 cd $cwd
