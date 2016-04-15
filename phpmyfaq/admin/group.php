@@ -337,6 +337,7 @@ if ('list' === $groupAction) {
             </div>
         </header>
 
+        <script src="assets/js/user.js"></script>
         <script src="assets/js/groups.js"></script>
 
         <div id="user_message"><?php echo $message ?></div>
