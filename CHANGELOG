@@ -1,11 +1,11 @@
-phpMyFAQ 2.9.0-RC3
+phpMyFAQ 2.9.0-RC4
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-RC3 - 2016-04-11
+Version 2.9.0-RC4 - 2016-04-
 - fixed CSRF security issue (High-Tech Bridge Security Research Lab)
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
