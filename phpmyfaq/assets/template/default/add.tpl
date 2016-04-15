@@ -72,37 +72,77 @@
         </section>
 
         [enableWysiwygEditor]
-        <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
-        <script type="text/javascript">
+        <script src="admin/assets/js/editor/tinymce.min.js?{currentTimestamp}"></script>
+        <script>
             $(document).ready(function() {
                 if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
                     tinyMCE.init({
-                        mode : "exact",
-                        language : "en",
-                        elements : "answer",
-                        theme : "advanced",
-                        plugins : "fullscreen",
-                        theme_advanced_buttons1 : "bold,italic,underline,|,strikethrough,justifyleft,justifycenter,justifyright,justifyfull,bullist,numlist,undo,redo,link,unlink,|,fullscreen",
-                        theme_advanced_buttons2 : "",
-                        theme_advanced_buttons3 : "",
-                        theme_advanced_toolbar_location : "top",
-                        theme_advanced_toolbar_align : "left",
-                        theme_advanced_statusbar_location : "bottom",
-                        use_native_selects : true,
-                        entity_encoding : "raw",
-                        extended_valid_elements : "code"
+                        // General options
+                        mode     : 'exact',
+                        language : 'en',
+                        elements : 'answer',
+                        theme    : 'modern',
+                        plugins: [
+                            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+                            'searchreplace wordcount visualblocks visualchars code fullscreen',
+                            'insertdatetime media nonbreaking save table contextmenu directionality',
+                            'emoticons template paste textcolor'
+                        ],
+                        relative_urls: false,
+                        convert_urls: false,
+                        remove_linebreaks: false,
+                        use_native_selects: true,
+                        paste_remove_spans: true,
+                        entities : '10',
+                        entity_encoding: 'raw',
+
+                        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+                        toolbar2: "link | forecolor backcolor emoticons | print",
+                        image_advtab: true,
+
+                        // Formatting
+                        style_formats: [
+                            { title: 'Headers', items: [
+                                { title: 'h1', block: 'h1' },
+                                { title: 'h2', block: 'h2' },
+                                { title: 'h3', block: 'h3' },
+                                { title: 'h4', block: 'h4' },
+                                { title: 'h5', block: 'h5' },
+                                { title: 'h6', block: 'h6' }
+                            ]},
+
+                            { title: 'Blocks', items: [
+                                { title: 'p', block: 'p' },
+                                { title: 'div', block: 'div' },
+                                { title: 'pre', block: 'pre' },
+                                { title: 'code', block: 'code' }
+                            ]},
+
+                            { title: 'Containers', items: [
+                                { title: 'blockquote', block: 'blockquote', wrapper: true },
+                                { title: 'figure', block: 'figure', wrapper: true }
+                            ]}
+                        ],
+
+                        visualblocks_default_state: true,
+                        end_container_on_empty_block: true,
+                        extended_valid_elements : "code[class],video[*],audio[*],source[*]",
+                        removeformat : [
+                            { selector : '*', attributes : ['style'], split : false, expand : false, deep : true }
+                        ],
+                        importcss_append: true,
                     });
                 }
             });
         </script>
         [/enableWysiwygEditor]
 
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 $('#submitfaq').click(function() {
                     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
-                        tinyMCE.get("answer").setContent(tinyMCE.activeEditor.getContent());
-                        document.getElementById("answer").value = tinyMCE.activeEditor.getContent();
+                        tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
+                        document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
                     }
                     saveFormValues('savefaq', 'faq');
                 });
