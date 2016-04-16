@@ -49,7 +49,7 @@
 <header>
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
-            <a id="logo" title="{header}" href="{faqHome}">
+            <a id="logo" title="{header}" href="{faqHome}" tabindex="1">
                 <img src="assets/img/phpmyfaq-logo.png" alt="phpMyFAQ">
             </a>
 
@@ -62,14 +62,14 @@
             <nav class="pull-right pmf-nav">
                 <div class="collapse navbar-collapse">
                     <ul class="nav nav-pills navbar-nav">
-                        <li class="{activeSearch}">{msgSearch}</li>
-                        <li class="{activeAllCategories}">{allCategories}</li>
-                        <li class="{activeAddContent}">{msgAddContent}</li>
-                        <li class="{activeAddQuestion}">{msgQuestion}</li>
-                        <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
+                        <li class="{activeSearch}" tabindex="2">{msgSearch}</li>
+                        <li class="{activeAllCategories}" tabindex="3">{allCategories}</li>
+                        <li class="{activeAddContent}" tabindex="4">{msgAddContent}</li>
+                        <li class="{activeAddQuestion}" tabindex="5">{msgQuestion}</li>
+                        <li class="{activeOpenQuestions}" tabindex="6">{msgOpenQuestions}</li>
 
                         <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" tabindex="7">
                                 {msgLoginUser}
                                 <b class="caret"></b>
                             </a>
@@ -104,11 +104,11 @@
                 <form role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
                     <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
-                    <button class="searchbutton" type="submit">
+                    <button class="searchbutton" type="submit" tabindex="9">
                         <i aria-hidden="true" aria-label="search" class="fa fa-search"></i>
                     </button>
                     <input type="text" class="searchfield typeahead" name="search" id="searchbox"
-                           autocomplete="off" placeholder="{searchBox} ...">
+                           autocomplete="off" placeholder="{searchBox} ..." tabindex="8">
                 </form>
             </div>
         </div>
