@@ -105,7 +105,7 @@
                     <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
                     <button class="searchbutton" type="submit">
-                        <i aria-hidden="true" class="fa fa-search"></i>
+                        <i aria-hidden="true" aria-label="search" class="fa fa-search"></i>
                     </button>
                     <input type="text" class="searchfield typeahead" name="search" id="searchbox"
                            autocomplete="off" placeholder="{searchBox} ...">
