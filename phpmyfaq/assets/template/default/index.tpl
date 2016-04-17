@@ -104,8 +104,8 @@
                 <form role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
                     <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
-                    <button class="searchbutton" type="submit" tabindex="9">
-                        <i aria-hidden="true" aria-label="search" class="fa fa-search"></i>
+                    <button class="searchbutton" type="submit" aria-label="{searchBox}" tabindex="9">
+                        <i aria-hidden="true" class="fa fa-search"></i>
                     </button>
                     <input type="text" class="searchfield typeahead" name="search" id="searchbox"
                            autocomplete="off" placeholder="{searchBox} ..." tabindex="8">
