@@ -5,8 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-RC4 - 2016-04-
-- fixed CSRF security issue (High-Tech Bridge Security Research Lab)
+Version 2.9.0-RC4 - 2016-04-17
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)
@@ -54,6 +53,7 @@ Version 2.9.0-RC4 - 2016-04-
 - updated bundled SwiftMailer to version 5.4.1 (Christopher Andrews, Thorsten)
 - updated bundled Parsedown to version 1.5.3 (Jerry van Kooten, Thorsten)
 - updated bundled HighlightJS to version 8.9.1 (Thorsten)
+- updated bundled Elasticsearch client to version 2.1.5 (Thorsten)
 - updated Russian translation
 - removed bundled SyntaxHighlighter (Thorsten)
 - dropped support for ext/mysql (Thorsten)

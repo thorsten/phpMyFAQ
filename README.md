@@ -44,7 +44,7 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
     $ npm install bower less grunt-cli -g
     $ npm install
     $ bower install
-    $ grunt
+    $ grunt build
 
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 
@@ -114,7 +114,7 @@ Licensed under the terms of the New BSD License
 
 Licensed under the terms of the MIT and BSD licenses
 
-**[Bootstrap](http://twbs.github.com/bootstrap/)**
+**[Bootstrap](http://getbootstrap.com/)**
 
 Licensed under the terms of the Apache License v2.0
 
@@ -134,7 +134,7 @@ Licensed under the terms of the GNU Lesser General Public License
 
 Licensed under the terms of the MIT License
 
-**[Font Awesome](http://fortawesome.github.com/Font-Awesome/)**
+**[Font Awesome](http://fontawesome.io/)**
 
 Licenced under the terms of the SIL Open Font License and MIT License
 
