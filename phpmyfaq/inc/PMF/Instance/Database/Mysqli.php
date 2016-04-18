@@ -158,7 +158,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
-            datum VARCHAR(15) NOT NULL,
+            updated VARCHAR(15) NOT NULL,
             links_state VARCHAR(7) DEFAULT NULL,
             links_check_date INT(11) DEFAULT 0 NOT NULL,
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
