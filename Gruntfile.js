@@ -131,7 +131,8 @@ module.exports = function(grunt) {
         },
         uglify: {
             options: {
-                banner: '<%= banner %>'
+                banner: '<%= banner %>',
+                preserveComments: 'some'
             },
             frontend: {
                 files: { 'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ] }
