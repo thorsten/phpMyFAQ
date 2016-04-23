@@ -217,7 +217,7 @@ class PMF_Helper_Search extends PMF_Helper
 
         if (0 < $numOfResults) {
             $html .= sprintf(
-                "<p>%s</p>\n",
+                "<p role=\"heading\" aria-level=\"1\">%s</p>\n",
                 $this->plurals->GetMsg('plmsgSearchAmount', $numOfResults)
             );
 
