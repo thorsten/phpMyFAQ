@@ -36,7 +36,7 @@
                         <input id="searchfield" type="search" name="search" value="{searchString}"
                                class="form-control input-lg" placeholder="{msgSearch}">
                             <span class="input-group-addon">
-                                <button type="submit" class="btn btn-lg">
+                                <button type="submit" class="btn btn-lg" aria-label="{msgSearch}">
                                     <span class="fa fa-search"></span>
                                 </button>
                             </span>
