@@ -10,14 +10,12 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16
  */
@@ -29,14 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Ldap.
  *
  * @category  phpMyFAQ
- *
  * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16
  */
@@ -121,7 +117,7 @@ class PMF_Ldap
         // optionally set Bind version
         if (isset($this->_ldapConfig['ldap_options'])) {
             foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
-                if (!ldap_set_option($this->ds, $key, $value)) {
+                if (!ldap_set_option($this->ds, constant($key), $value)) {
                     $this->errno = ldap_errno($this->ds);
                     $this->error = sprintf(
                         'Unable to set LDAP option "%s" to "%s" (Error: %s).',
