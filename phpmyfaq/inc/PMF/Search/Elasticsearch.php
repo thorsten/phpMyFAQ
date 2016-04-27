@@ -70,16 +70,6 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
      */
     public function search($searchTerm)
     {
-        if ('' !== $this->getLanguage()) {
-            $languageFilter = [
-                'term' => [
-                    'lang' => $this->getLanguage()
-                ]
-            ];
-        } else {
-            $languageFilter = '';
-        }
-
         $searchParams = [
             'index' => $this->esConfig['index'],
             'type' => $this->esConfig['type'],
@@ -92,8 +82,7 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                                 'must' => [
                                     [
                                         'terms' => ['category_id' => $this->getCategoryIds()]
-                                    ],
-                                    $languageFilter
+                                    ]
                                 ]
                             ]
                         ],
