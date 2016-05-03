@@ -91,6 +91,10 @@ if (isset($auth)) {
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
         toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
         image_advtab: true,
+        image_class_list: [
+            { title: 'None', value: '' },
+            { title: 'Responsive', value: 'img-responsive' }
+        ],
 
         // Formatting
         style_formats: [
