@@ -476,8 +476,11 @@ $tplMainPage = array(
     'writeSendAdress' => '?'.$sids.'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
     'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+    'showInstantResponse' => '', // @deprecated
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
+    'showCategories' => $categoryHelper->renderNavigation($cat),
+    'topCategories' => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
     'languageBox' => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress' => $writeLangAdress,
@@ -594,12 +597,13 @@ if (isset($auth)) {
     $tpl->parseBlock(
         'index',
         'userloggedIn',
-        array(
+        [
             'msgUserControl' => $adminSection,
+            'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'msgUserControlDropDown' => '<a href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>',
             'msgLogoutUser' => '<a href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
-            'activeUserControl' => ('ucp' == $action) ? 'active' : '',
-        )
+            'activeUserControl' => ('ucp' == $action) ? 'active' : ''
+        ]
     );
 } else {
     if ($faqConfig->get('main.maintenanceMode')) {
