@@ -26,8 +26,8 @@
     <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
-    <script src="{baseHref}assets/js/modernizr.min.js" async></script>
-    <script src="{baseHref}assets/js/phpmyfaq.min.js" async></script>
+    <script src="{baseHref}assets/js/modernizr.min.js"></script>
+    <script src="{baseHref}assets/js/phpmyfaq.min.js"></script>
 
     <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{baseHref}feed/news/rss.php">
     <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{baseHref}feed/topten/rss.php">

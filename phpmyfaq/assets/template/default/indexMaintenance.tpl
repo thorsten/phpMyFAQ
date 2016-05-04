@@ -20,8 +20,8 @@
     <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
-    <script src="{baseHref}assets/js/modernizr.min.js" async></script>
-    <script src="{baseHref}assets/js/phpmyfaq.min.js" async></script>
+    <script src="{baseHref}assets/js/modernizr.min.js"></script>
+    <script src="{baseHref}assets/js/phpmyfaq.min.js"></script>
 
     <script>
         if (self === top) {
