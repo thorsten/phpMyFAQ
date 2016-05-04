@@ -20,6 +20,6 @@ install:
   - npm install bower less grunt-cli -g
   - npm install
   - bower install
-  - grunt
+  - grunt build
 
 script: ./bin/phpunit --configuration phpunit.xml --coverage-text

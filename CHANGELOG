@@ -1,11 +1,11 @@
-phpMyFAQ 2.9.0-RC4
+phpMyFAQ 2.9.0
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.0-RC4 - 2016-04-17
+Version 2.9.0 - 2016-05-
 - ready for PHP 7 (Thorsten)
 - changed PHP requirement to PHP 5.5+ and PHP 7 (Thorsten)
 - added support for HHVM 3.4.2+ (Thorsten)

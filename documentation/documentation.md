@@ -548,7 +548,8 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Open the following URL in your browser:
+Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
@@ -575,7 +576,8 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Open the following URL in your browser:
+Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
@@ -602,7 +604,8 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Open the following URL in your browser:
+Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
@@ -627,14 +630,13 @@ Updating an existing phpMyFAQ 2.9.x installation is fairly simple. Via FTP copy 
 *   the directory **data/**
 *   the directory **images/**
 
-Open the following URL in your browser:
+Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
 updated.
-
-You can find the changed files between the 2.9.x versions in the file *CHANGEDFILES*.
 
 [back to top][64]
 
@@ -642,7 +644,7 @@ You can find the changed files between the 2.9.x versions in the file *CHANGEDFI
 
 **3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.9.x**
 
-Your current 2.6.x, 2.7.x and 2.8.x templates are **barely** compatible with phpMyFAQ 2.9 because we changed the 
+Your current 2.6.x and 2.7.x atemplates are **barely** compatible with phpMyFAQ 2.9 because we changed the 
 complete CSS framework to Bootstrap v3. We're also using a lot of Ajax based technologies and CSS3 in the frontend now. 
 We moved the login from a dropdown form to an own page with the login form. We also added a glossary page which you 
 might know from the administration backend from older versions.
@@ -654,6 +656,9 @@ compiler with Node.js or a tool like [CodeKit](http://incident57.com/codekit/).
 If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit 
 our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
 and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
+
+The 2.8.x default template is mostly compatible with 2.9.x, you have to remove the occurrances of SyntaxHighlighting
+script in artikel.tpl and use the new HighlightJS based code.
 
 Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you 
 have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with 
