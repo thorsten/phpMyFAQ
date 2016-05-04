@@ -101,18 +101,14 @@
             </div>
 
             <div class="pmf-searchbox">
-                <form role="search" id="search" action="{writeSendAdress}" method="get" accept-charset="utf-8">
+                <form role="search" id="search" action="{writeSendAdress}" method="get">
                     <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
-                    <div class="input-group">
-                        <span class="input-group-btn">
-                        <button class="searchbutton" type="submit" aria-label="{searchBox}">
-                            <i aria-hidden="true" class="fa fa-search"></i>
-                        </button>
-                        </span>
-                        <input type="text" class="searchfield typeahead" name="search" id="searchbox"
-                               autocomplete="off" placeholder="{searchBox} ...">
-                    </div>
+                    <button class="searchbutton" type="submit" aria-label="{searchBox}">
+                        <i aria-hidden="true" class="fa fa-search"></i>
+                    </button>
+                    <input type="text" class="searchfield typeahead" name="search" id="searchbox"
+                           autocomplete="off" placeholder="{searchBox} ...">
                 </form>
             </div>
         </div>
