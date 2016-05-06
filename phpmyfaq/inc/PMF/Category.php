@@ -307,13 +307,11 @@ class PMF_Category
     {
         $tt = [];
         $x = 0;
-        $loop = 0;
 
-        foreach ($this->categories as $n) {
+        foreach ($this->categories as $k => $n) {
             if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
-                $tt[$x++] = $loop;
+                $tt[$x++] = $k;
             }
-            $loop++;
         }
 
         if ($x != 0) {
