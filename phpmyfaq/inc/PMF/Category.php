@@ -111,6 +111,13 @@ class PMF_Category
     public $treeTab = [];
 
     /**
+     * Category owners
+     *
+     * @var array
+     */
+    private $owner = array();
+
+    /**
      * Symbol for each item
      * NOTE: We do not use this currently.
      *
@@ -231,8 +238,9 @@ class PMF_Category
         if ($result) {
             while ($row = $this->_config->getDb()->fetchArray($result)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[$row['id']] = &$this->categoryName[$row['id']];
-                $this->children[$row['parent_id']][$row['id']] = &$this->categoryName[$row['id']];
+                $this->categories[] =& $this->categoryName[$row['id']];
+                $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
+                $this->owner[$row['id']] =& $row['user_id'];
             }
         }
 
@@ -352,13 +360,12 @@ class PMF_Category
     public function buildTree($id_parent = 0, $indent = 0)
     {
         $tt = [];
-        $x = $loop = 0;
+        $x = 0;
 
-        foreach ($this->categories as $category_id => $n) {
+        foreach ($this->categories as $categoryId => $n) {
             if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
-                $tt[$x++] = $category_id;
+                $tt[$x++] = $categoryId;
             }
-            ++$loop;
         }
 
         if ($x != 0) {
@@ -1024,6 +1031,7 @@ class PMF_Category
     }
 
     /**
+<<<<<<< HEAD
      * Returns the admin user of the given category.
      *
      * @param int $categoryId
@@ -1041,6 +1049,9 @@ class PMF_Category
 
     /**
      * Returns the moderator group ID of the given category.
+=======
+     * Adds a new category entry
+>>>>>>> Fixed broken category tree, closes #1125
      *
      * @param int $categoryId
      *
@@ -1677,5 +1688,17 @@ class PMF_Category
     public function setLanguage($language)
     {
         $this->language = $language;
+    }
+
+    /**
+     * Returns the user id of the category owner
+     *
+     * @param integer $categoryId
+     *
+     * @return integer
+     */
+    public function getOwner($categoryId)
+    {
+        return isset($this->owner[$categoryId]) ? $this->owner[$categoryId] : 1;
     }
 }

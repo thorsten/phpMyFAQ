@@ -227,7 +227,7 @@ switch ($action) {
                 $category = new PMF_Category($faqConfig, $current_groups);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
-                    $userId = $category->getCategoryUser($_category);
+                    $userId = $category->getOwner($_category);
                     $catUser = new PMF_User($faqConfig);
                     $catUser->getUserById($userId);
                     $catOwnerEmail = $catUser->getUserData('email');
@@ -399,7 +399,7 @@ switch ($action) {
             $send[$faqConfig->get('main.administrationMail')] = 1;
 
             foreach ($categories as $_category) {
-                $userId = $category->getCategoryUser($_category);
+                $userId = $category->getOwner($_category);
                 $groupId = $category->getModeratorGroupId($_category);
 
                 // @todo Move this code to Category.php
@@ -554,8 +554,8 @@ switch ($action) {
                                 wordwrap($question, 72)."\n\n".
                                 $faqConfig->getDefaultUrl().'admin/';
 
-                    $userId = $cat->getCategoryUser($questionData['category_id']);
-                    $oUser = new PMF_User($faqConfig);
+                    $userId = $cat->getOwner($questionData['category_id']);
+                    $oUser  = new PMF_User($faqConfig);
                     $oUser->getUserById($userId);
 
                     $userEmail = $oUser->getUserData('email');
@@ -584,8 +584,8 @@ switch ($action) {
                                 wordwrap($question, 72)."\n\n".
                                 $faqConfig->getDefaultUrl().'admin/';
 
-                $userId = $cat->getCategoryUser($questionData['category_id']);
-                $oUser = new PMF_User($faqConfig);
+                $userId = $cat->getOwner($questionData['category_id']);
+                $oUser  = new PMF_User($faqConfig);
                 $oUser->getUserById($userId);
 
                 $userEmail = $oUser->getUserData('email');
