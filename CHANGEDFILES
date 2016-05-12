@@ -1,3 +1,12 @@
+CHANGED FILES FROM 2.8.27 -> 2.8.28
+
+./ajaxservice.php
+./inc/PMF/Auth/Ldap.php
+./inc/PMF/Category.php
+./inc/PMF/System.php
+
+
+
 CHANGED FILES FROM 2.8.26 -> 2.8.27
 
 ./admin/ajax.trans.php
