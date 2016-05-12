@@ -248,15 +248,15 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
             $this->ldapServer[$this->activeServer]['ldap_port'],
             $this->ldapServer[$this->activeServer]['ldap_base'],
             $bindLogin,
-            $password
+            htmlspecialchars_decode($password)
         );
 
-        if (!$this->ldap->bind($bindLogin, $password)) {
+        if (! $this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
             $this->errors[] = $this->ldap->error;
 
             return false;
         } else {
-            $this->add($login, $password);
+            $this->add($login, htmlspecialchars_decode($password));
 
             return true;
         }
