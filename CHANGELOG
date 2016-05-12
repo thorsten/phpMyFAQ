@@ -1,9 +1,12 @@
-phpMyFAQ 2.8.27
+phpMyFAQ 2.8.28
 Codename "Perdita"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.8.27 - 2016-05-13
+- fixed some minor bugs (Thorsten)
 
 Version 2.8.27 - 2016-04-11
 - fixed CSRF security issue (High-Tech Bridge Security Research Lab)
