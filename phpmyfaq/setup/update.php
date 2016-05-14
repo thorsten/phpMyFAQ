@@ -713,7 +713,9 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+        } elseif ('pgsql' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INT(1) NULL DEFAULT 1';
         }
