@@ -36,11 +36,7 @@ if (version_compare(PHP_VERSION, '5.5.0') < 0) {
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 if (!defined('DEBUG')) {
-    define('DEBUG', true);
-}
-
-if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
-    set_time_limit(0);
+    define('DEBUG', false);
 }
 
 session_name('phpmyfaq-setup');

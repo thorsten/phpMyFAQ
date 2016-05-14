@@ -22,10 +22,6 @@ define('COPYRIGHT', '&copy; 2001-2016 <a target="_blank" href="http://www.phpmyf
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-if ((@ini_get('safe_mode') != 'On' || @ini_get('safe_mode') !== 1)) {
-    set_time_limit(0);
-}
-
 if (version_compare(PHP_VERSION, '5.5.0') < 0) {
     die('Sorry, but you need PHP 5.5.0 or later!'); // Die hard because of "use"
 }
