@@ -37,12 +37,12 @@ class PMF_System
     /**
      * Minor version.
      */
-    const VERSION_MINOR = 9;
+    const VERSION_MINOR = 10;
 
     /**
      * Patchlevel.
      */
-    const VERSION_PATCHLEVEL = 10;
+    const VERSION_PATCHLEVEL = 0;
 
     /**
      * Pre-release version.
