@@ -29,8 +29,8 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/inc');
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-    die('Sorry, but you need PHP 5.5.0 or later!'); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+    die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
 }
 
 use Symfony\Component\ClassLoader\Psr4ClassLoader;

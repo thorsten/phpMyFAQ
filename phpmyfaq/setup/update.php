@@ -22,8 +22,8 @@ define('COPYRIGHT', '&copy; 2001-2016 <a target="_blank" href="http://www.phpmyf
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '5.5.0') < 0) {
-    die('Sorry, but you need PHP 5.5.0 or later!'); // Die hard because of "use"
+if (version_compare(PHP_VERSION, '5.6.0') < 0) {
+    die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
 }
 
 require PMF_ROOT_DIR.'/inc/Bootstrap.php';
