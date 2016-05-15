@@ -37,7 +37,7 @@ phpmyfaq/inc/libs/phpseclib
 phpmyfaq/inc/libs/psr
 phpmyfaq/inc/libs/react
 phpmyfaq/inc/libs/swiftmailer
-phpmyfaq/inc/libs/Symfony
+phpmyfaq/inc/libs/symfony
 phpmyfaq/inc/libs/tcpdf/config
 phpmyfaq/inc/libs/tcpdf/include
 phpmyfaq/inc/libs/tcpdf/*.php

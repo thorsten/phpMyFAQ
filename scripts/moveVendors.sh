@@ -10,6 +10,7 @@ mkdir -p $cwd/phpmyfaq/inc/libs/phpseclib/Crypt
 mkdir -p $cwd/phpmyfaq/inc/libs/psr/log/Psr
 mkdir -p $cwd/phpmyfaq/inc/libs/react/promise/src
 mkdir -p $cwd/phpmyfaq/inc/libs/swiftmailer
+mkdir -p $cwd/phpmyfaq/inc/libs/symfony/class-loader
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf
 
 cp -r $cwd/vendor/elasticsearch/elasticsearch/src/Elasticsearch/* $cwd/phpmyfaq/inc/libs/elasticsearch/src/Elasticsearch
@@ -21,7 +22,7 @@ cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/inc/libs/phpseclib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/inc/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/inc/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/inc/libs/swiftmailer
-cp -r $cwd/vendor/symfony/class-loader/* $cwd/phpmyfaq/inc/libs/
+cp -r $cwd/vendor/symfony/class-loader/* $cwd/phpmyfaq/inc/libs/symfony/class-loader
 cp -r $cwd/vendor/thorsten/twitteroauth/twitteroauth $cwd/phpmyfaq/inc/libs/twitteroauth
 
 # TCPDF
@@ -29,7 +30,7 @@ mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf/config
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf/include
 
-cp $cwd/vendor/tecnick.com/tcpdf/*.php $cwd/phpmyfaq/inc/libs/tcpdf
+cp $cwd/vendor/tecnickcom/tcpdf/*.php $cwd/phpmyfaq/inc/libs/tcpdf
 
-cp -r $cwd/vendor/tecnick.com/tcpdf/config/*.php $cwd/phpmyfaq/inc/libs/tcpdf/config
-cp -r $cwd/vendor/tecnick.com/tcpdf/include/*.php $cwd/phpmyfaq/inc/libs/tcpdf/include
+cp -r $cwd/vendor/tecnickcom/tcpdf/config/*.php $cwd/phpmyfaq/inc/libs/tcpdf/config
+cp -r $cwd/vendor/tecnickcom/tcpdf/include/*.php $cwd/phpmyfaq/inc/libs/tcpdf/include
