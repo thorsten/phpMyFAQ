@@ -46,7 +46,7 @@ define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
 //
 // Setting up PSR-0 autoloader for Symfony Components
 //
-require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+require PMF_INCLUDE_DIR . '/libs/symfony/class-loader/UniversalClassLoader.php';
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');

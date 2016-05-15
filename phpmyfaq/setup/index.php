@@ -48,7 +48,7 @@ require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
 //
 // Setting up Symfony PSR-0 autoloader
 //
-require PMF_INCLUDE_DIR.'/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/UniversalClassLoader.php';
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR.'/libs');
