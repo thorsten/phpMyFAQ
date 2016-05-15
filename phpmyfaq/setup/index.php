@@ -33,6 +33,7 @@ if (version_compare(PHP_VERSION, '5.5.0') < 0) {
     die('Sorry, but you need PHP 5.5.0 or later!'); // Die hard because of "use"
 }
 
+use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 if (!defined('DEBUG')) {
@@ -46,14 +47,18 @@ require PMF_ROOT_DIR.'/config/constants.php';
 require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
 
 //
-// Setting up Symfony PSR-0 autoloader
+// Setting up Symfony PSR-0 and PSR-4 autoloader
 //
 require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/UniversalClassLoader.php';
+require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/Psr4ClassLoader.php';
 
 $loader = new UniversalClassLoader();
-$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR.'/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
 $loader->register();
+
+$psr4Loader = new Psr4ClassLoader();
+$psr4Loader->addPrefix('Symfony', PMF_INCLUDE_DIR.'/libs/symfony/');
+$psr4Loader->register();
 
 ?>
 <!doctype html>
