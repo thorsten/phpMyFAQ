@@ -42,12 +42,12 @@ class PMF_System
     /**
      * Patchlevel.
      */
-    const VERSION_PATCHLEVEL = 1;
+    const VERSION_PATCHLEVEL = 10;
 
     /**
      * Pre-release version.
      */
-    const VERSION_PRERELEASE = null;
+    const VERSION_PRERELEASE = 'dev';
 
     /**
      * API version.

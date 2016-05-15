@@ -1,12 +1,15 @@
-phpMyFAQ 2.9.1
-Codename "Proteus"
+phpMyFAQ 2.10.0
+Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.1 - 2016-05
+Version 2.10.0 - 2016-
+-
 
+Version 2.9.1 - 2016-05
+-
 
 Version 2.9.0 - 2016-05-13
 - ready for PHP 7 (Thorsten)

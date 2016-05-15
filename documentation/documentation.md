@@ -1,4 +1,4 @@
-# phpMyFAQ 2.9 Documentation
+# phpMyFAQ 2.10 Documentation
 
 1.  **[Introduction][1]**
     1.  [License][2]

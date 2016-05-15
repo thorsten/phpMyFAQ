@@ -1,6 +1,6 @@
-# phpMyFAQ 2.9
+# phpMyFAQ 2.10
 
-[![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/2.9.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
+[![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/2.10.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
 [![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D5.5-%23777BB4.svg?style=flat-square)](https://php.net/)
 [![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com)
 
@@ -38,7 +38,7 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
-    $ git checkout 2.9
+    $ git checkout 2.10
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ npm install bower less grunt-cli -g
