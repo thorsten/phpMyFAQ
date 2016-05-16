@@ -2735,7 +2735,6 @@ class PMF_Faq
                     $query .= ' AND';
                 }
                 $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
-                $needAndOp = true;
                 break;
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
@@ -2744,14 +2743,12 @@ class PMF_Faq
                     $query .= ' AND';
                 }
                 $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
-                $needAndOp = true;
                 break;
             default:
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
                 $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
-                $needAndOp = true;
                 break;
         }
         // Sort criteria
