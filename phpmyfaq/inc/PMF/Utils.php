@@ -267,9 +267,9 @@ class PMF_Utils
      */
     public static function setHighlightedString($string, $highlight)
     {
-        $attributes = array(
+        $attributes = [
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'face', 'size', 'dir', 'rel', 'rev',
+            'face', 'size', 'dir', 'rel', 'rev', 'role',
             'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
             'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline', 'ononline',
             'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload',
@@ -285,14 +285,15 @@ class PMF_Utils
             'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
             'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
             'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute',
-        );
+        ];
 
         return PMF_String::preg_replace_callback(
             '/('.$highlight.'="[^"]*")|'.
             '(('.implode('|', $attributes).')="[^"]*'.$highlight.'[^"]*")|'.
             '('.$highlight.')/mis',
-            array('PMF_Utils', 'highlightNoLinks'),
-            $string);
+            ['PMF_Utils', 'highlightNoLinks'],
+            $string
+        );
     }
 
     /**
@@ -308,12 +309,30 @@ class PMF_Utils
         $item = isset($matches[4]) ? $matches[4] : '';
         $postfix = isset($matches[5]) ? $matches[5] : '';
 
-        if (!empty($item)) {
-            return '<mark>'.$prefix.$item.$postfix.'</mark>';
+        if (!empty($item) && !self::isForbiddenElement($item)) {
+            return '<mark class="pmf-highlighted-string">'.$prefix.$item.$postfix.'</mark>';
         }
 
         // Fallback: the original matched string
         return $matches[0];
+    }
+
+    /**
+     * Tries to detect if a string could be a HTML element
+     * @param $string
+     * @return bool
+     */
+    public static function isForbiddenElement($string)
+    {
+        $forbiddenElements = [
+            'img', 'picture'
+        ];
+
+        if (false !== array_search($string, $forbiddenElements)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**

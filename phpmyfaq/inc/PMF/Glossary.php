@@ -136,15 +136,15 @@ class PMF_Glossary
             $content = PMF_String::preg_replace_callback(
                 '/'
                 // a. the glossary item could be an attribute name
-.'('.$item['item'].'="[^"]*")|'
+                .'('.$item['item'].'="[^"]*")|'
                 // b. the glossary item could be inside an attribute value
-.'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
+                .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
                 // c. the glossary item could be everywhere as a distinct word
-.'(\W+)('.$item['item'].')(\W+)|'
+                .'(\W+)('.$item['item'].')(\W+)|'
                 // d. the glossary item could be at the beginning of the string as a distinct word
-.'^('.$item['item'].')(\W+)|'
+                .'^('.$item['item'].')(\W+)|'
                 // e. the glossary item could be at the end of the string as a distinct word
-.'(\W+)('.$item['item'].')$'
+                .'(\W+)('.$item['item'].')$'
                 .'/mis',
                 array($this, 'setTooltip'),
                 $content,
@@ -172,7 +172,7 @@ class PMF_Glossary
             $item = $matches[10];
             $postfix = '';
         } elseif (count($matches) > 7) {
-            // if the word is at the begining of the string
+            // if the word is at the beginning of the string
             $prefix = '';
             $item = $matches[7];
             $postfix = $matches[8];
