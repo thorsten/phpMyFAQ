@@ -104,13 +104,13 @@ $faqSession = new PMF_Session($faqConfig);
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a href="?action=question" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a href="?action=news" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="pull-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqnews']; ?></em>
