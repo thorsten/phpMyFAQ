@@ -2415,18 +2415,19 @@ class PMF_Faq
         return $question;
     }
 
-     /**
-      * Returns all open questions.
-      *
-      * @param  $all boolean If true, then return visible and unvisble questions; otherwise only visible ones
-      *
-      * @return array
-      */
-     public function getAllOpenQuestions($all = true)
-     {
-         $questions = [];
+    /**
+     * Returns all open questions.
+     *
+     * @param boolean $all If true, then return visible and non-visible
+     *                     questions; otherwise only visible ones
+     *
+     * @return array
+     */
+    public function getAllOpenQuestions($all = true)
+    {
+        $questions = [];
 
-         $query = sprintf("
+        $query = sprintf("
             SELECT
                 id, lang, username, email, category_id, question, created, answer_id, is_visible
             FROM
@@ -2441,9 +2442,9 @@ class PMF_Faq
             ($all == false ? " AND is_visible = 'Y'" : '')
         );
 
-         if ($result = $this->_config->getDb()->query($query)) {
-             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                 $questions[] = array(
+        if ($result = $this->_config->getDb()->query($query)) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
+                $questions[] = array(
                     'id' => $row->id,
                     'lang' => $row->lang,
                     'username' => $row->username,
@@ -2455,10 +2456,10 @@ class PMF_Faq
                     'is_visible' => $row->is_visible,
                 );
              }
-         }
+        }
 
-         return $questions;
-     }
+        return $questions;
+    }
 
     /**
      * Updates an existing voting record.
