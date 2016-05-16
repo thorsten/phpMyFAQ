@@ -2045,7 +2045,7 @@ class PMF_Faq
 '            SELECT
                 fd.id AS id,
                 fd.lang AS lang,
-                fd.thema AS thema,
+                fd.thema AS question,
                 fd.updated AS updated,
                 fcr.category_id AS category_id,
                 fv.visits AS visits,
@@ -2094,7 +2094,7 @@ class PMF_Faq
             ORDER BY
                 fv.visits DESC';
 
-        $result = $this->_config->getDb()->query($query, 0, $count);
+        $result = $this->_config->getDb()->query($query);
         $topten = [];
         $data = [];
 
@@ -2110,11 +2110,11 @@ class PMF_Faq
             }
 
             $data['visits'] = $row->visits;
-            $data['question'] = $row->thema;
+            $data['question'] = $row->question;
             $data['date'] = $row->updated;
             $data['last_visit'] = $row->last_visit;
 
-            $title = $row->thema;
+            $title = $row->question;
             $url = sprintf(
                 '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
                 $this->_config->getDefaultUrl(),
@@ -2124,11 +2124,15 @@ class PMF_Faq
                 $row->lang
             );
             $oLink = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $row->thema;
+            $oLink->itemTitle = $row->question;
             $oLink->tooltip = $title;
             $data['url'] = $oLink->toString();
 
-            $topten[] = $data;
+            $topten[$row->id] = $data;
+
+            if (count($topten) === $count) {
+                break;
+            }
         }
 
         return $topten;
