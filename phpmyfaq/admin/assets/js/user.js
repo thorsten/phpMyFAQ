@@ -94,6 +94,7 @@ $(document).ready(function() {
         queryTokenizer: Bloodhound.tokenizers.whitespace,
         remote: {
             url: 'index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=%QUERY',
+            wildcard: '%QUERY',
             filter: function (users) {
                 return $.map(users.results, function (users) {
                     return {
