@@ -87,8 +87,7 @@ if (isset($auth)) {
         paste_remove_spans: true,
         entities : '10',
         entity_encoding: 'raw',
-
-        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
+        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste",
         toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
         image_advtab: true,
         image_class_list: [
@@ -120,6 +119,7 @@ if (isset($auth)) {
             ]}
         ],
 
+        paste_word_valid_elements: "b,strong,i,em,h1,h2,h3,h4,h5,h6"
         visualblocks_default_state: true,
         end_container_on_empty_block: true,
         extended_valid_elements : "code[class],video[*],audio[*],source[*]",
