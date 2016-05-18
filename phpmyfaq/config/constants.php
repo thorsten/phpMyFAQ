@@ -247,7 +247,6 @@ $languageCodes = [
     'DZ' => 'Bhutani',
     'EL' => 'Greek',
     'EN' => 'English',
-    'EN-US' => 'American English',
     'EO' => 'Esperanto',
     'ES' => 'Spanish',
     'ET' => 'Estonian',
