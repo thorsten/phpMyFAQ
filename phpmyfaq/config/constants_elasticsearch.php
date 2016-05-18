@@ -44,7 +44,6 @@ $PMF_ELASTICSEARCH_STEMMING_LANGUAGE = [
     'de' => 'light_german',
     'el' => 'greek',
     'en' => 'english',
-    'en-us' => 'english',
     'es' => 'light_spanish',
     'eu' => 'basque',
     'fa' => 'english', // NOT SUPPORTED BY ELASTICSEARCH
