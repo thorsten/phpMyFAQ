@@ -48,19 +48,19 @@ module.exports = function(grunt) {
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/js/tinymce/plugins/',
+                        cwd: 'components/tinymce/plugins/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/js/editor/plugins/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/js/tinymce/skins/',
+                        cwd: 'components/tinymce/skins/',
                         src: '**/*.!(less)',
                         dest: 'phpmyfaq/admin/assets/js/editor/skins/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/js/tinymce/themes/',
+                        cwd: 'components/tinymce/themes/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/js/editor/themes/'
                     }
