@@ -282,7 +282,8 @@ switch ($action) {
             $answer = nl2br($answer);
         }
         $translation = PMF_Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
-        $contentlink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_VALIDATE_URL);
+        $contentLink = PMF_Filter::filterInput(INPUT_POST, 'contentlink', FILTER_SANITIZE_STRING);
+        $contentLink = PMF_Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
         $keywords = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
         $categories = PMF_Filter::filterInputArray(
             INPUT_POST,

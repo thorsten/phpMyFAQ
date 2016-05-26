@@ -68,6 +68,9 @@ Version 2.9.0 - 2016-05-13
 - dropped support for Zeus Webserver, IIS 6 and lighttpd (Thorsten)
 - fixed a lot of minor bugs (Thorsten)
 
+Version 2.8.29 - 2016-05-31
+-
+
 Version 2.8.28 - 2016-05-13
 - fixed some minor bugs (Thorsten)
 
