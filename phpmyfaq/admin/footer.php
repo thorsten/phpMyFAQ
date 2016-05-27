@@ -120,6 +120,7 @@ if (isset($auth)) {
         ],
 
         paste_word_valid_elements: "b,strong,i,em,h1,h2,h3,h4,h5,h6",
+        paste_data_images: true,
         visualblocks_default_state: true,
         end_container_on_empty_block: true,
         extended_valid_elements : "code[class],video[*],audio[*],source[*]",
