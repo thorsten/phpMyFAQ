@@ -117,7 +117,7 @@ class PMF_Ldap
         // optionally set Bind version
         if (isset($this->_ldapConfig['ldap_options'])) {
             foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
-                if (!ldap_set_option($this->ds, $key, $value)) {
+                if (!ldap_set_option($this->ds, constant($key), $value)) {
                     $this->errno = ldap_errno($this->ds);
                     $this->error = sprintf(
                         'Unable to set LDAP option "%s" to "%s" (Error: %s).',
