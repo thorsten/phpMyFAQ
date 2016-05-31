@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.8.29 - 2016-05-31
--
+- fixed stored XSS vulnerability (Kacper Szurek)
 
 Version 2.8.28 - 2016-05-13
 - fixed some minor bugs (Thorsten)
