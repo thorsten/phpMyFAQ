@@ -5,7 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.1 - 2016-05-
+Version 2.9.1 - 2016-05-31
+- fixed stored XSS vulnerability (Kacper Szurek)
 - added new source code paste plugin (Thorsten)
 - removed American English translation (Thorsten)
 - updated bundled TinyMCE to version 4.3.12 (Thorsten)
@@ -69,7 +70,7 @@ Version 2.9.0 - 2016-05-13
 - fixed a lot of minor bugs (Thorsten)
 
 Version 2.8.29 - 2016-05-31
--
+- fixed stored XSS vulnerability (Kacper Szurek)
 
 Version 2.8.28 - 2016-05-13
 - fixed some minor bugs (Thorsten)
