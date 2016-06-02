@@ -1,9 +1,12 @@
-phpMyFAQ 2.9.1
+phpMyFAQ 2.9.2
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.2 - 2016-06-
+-
 
 Version 2.9.1 - 2016-05-31
 - fixed stored XSS vulnerability (Kacper Szurek)
