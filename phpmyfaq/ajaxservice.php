@@ -262,7 +262,7 @@ switch ($action) {
     case 'savefaq':
 
         if (!$faqConfig->get('records.allowNewFaqsForGuests') &&
-            $user->perm->checkRight($user->getUserId(), 'addfaq')) {
+            !$user->perm->checkRight($user->getUserId(), 'addfaq')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
