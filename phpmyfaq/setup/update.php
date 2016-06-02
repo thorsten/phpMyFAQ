@@ -100,7 +100,7 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 <?php
 
 $installer = new PMF_Installer();
-$installer->checkPreUpgrade();
+$installer->checkPreUpgrade($DB['type']);
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) {
