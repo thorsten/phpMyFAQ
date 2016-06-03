@@ -8,11 +8,7 @@
     "homepage": "http://www.phpmyfaq.de",
     "license": "MPL 2.0",
     "type": "application",
-<<<<<<< HEAD
     "version": "2.10.0",
-=======
-    "version": "2.9.2",
->>>>>>> e3ac5961e0f4d40487473aa816dd96002e222b78
     "authors": [
         {
             "name": "Thorsten Rinne",
