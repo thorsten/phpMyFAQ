@@ -452,8 +452,12 @@ class PMF_Installer
 
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
+     *
+     * @param string $type
+     *
+     * @return void
      */
-    public function checkPreUpgrade()
+    public function checkPreUpgrade($type = '')
     {
         if (!$this->checkMinimumPhpVersion()) {
             printf(
@@ -467,6 +471,22 @@ class PMF_Installer
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>'.
                 'Please use the <a href="setup.php">install script</a>.</p>';
             PMF_System::renderFooter();
+        }
+
+        if ('' !== $type) {
+            $databaseFound = false;
+            foreach ($this->_system->getSupportedDatabases() as $database => $values) {
+                if ($database === $type) {
+                    $databaseFound = true;
+                    break;
+                }
+            }
+            if (!$databaseFound) {
+                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>'.
+                    'We found '.ucfirst($database).'<br>'.
+                    'Please use the change the database type in config/database.php.</p>';
+                PMF_System::renderFooter();
+            }
         }
     }
 

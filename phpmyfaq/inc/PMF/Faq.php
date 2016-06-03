@@ -2098,40 +2098,42 @@ class PMF_Faq
         $topten = [];
         $data = [];
 
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
-            if ($this->groupSupport) {
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+        if ($result) {
+            while ($row = $this->_config->getDb()->fetchObject($result)) {
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
-            } else {
-                if (!in_array($row->user_id, array(-1, $this->user))) {
-                    continue;
+
+                $data['visits'] = $row->visits;
+                $data['question'] = $row->question;
+                $data['date'] = $row->updated;
+                $data['last_visit'] = $row->last_visit;
+
+                $title = $row->question;
+                $url = sprintf(
+                    '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+                    $this->_config->getDefaultUrl(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
+                $oLink->itemTitle = $row->question;
+                $oLink->tooltip = $title;
+                $data['url'] = $oLink->toString();
+
+                $topten[$row->id] = $data;
+
+                if (count($topten) === $count) {
+                    break;
                 }
-            }
-
-            $data['visits'] = $row->visits;
-            $data['question'] = $row->question;
-            $data['date'] = $row->updated;
-            $data['last_visit'] = $row->last_visit;
-
-            $title = $row->question;
-            $url = sprintf(
-                '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
-                $this->_config->getDefaultUrl(),
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
-            $oLink = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $row->question;
-            $oLink->tooltip = $title;
-            $data['url'] = $oLink->toString();
-
-            $topten[$row->id] = $data;
-
-            if (count($topten) === $count) {
-                break;
             }
         }
 
@@ -2203,43 +2205,45 @@ class PMF_Faq
         $latest = [];
         $data = [];
 
-        while (($row = $this->_config->getDb()->fetchObject($result))) {
-            if ($this->groupSupport) {
-                if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
-                    continue;
+        if ($result) {
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                if ($this->groupSupport) {
+                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                        continue;
+                    }
+                } else {
+                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                        continue;
+                    }
                 }
-            } else {
-                if (!in_array($row->user_id, array(-1, $this->user))) {
-                    continue;
+
+                $data['date'] = $row->updated;
+                $data['question'] = $row->question;
+                $data['answer'] = $row->content;
+                $data['visits'] = $row->visits;
+
+                $title = $row->question;
+                $url = sprintf(
+                    '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+                    $this->_config->getDefaultUrl(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
+                $oLink = new PMF_Link($url, $this->_config);
+                $oLink->itemTitle = $row->question;
+                $oLink->tooltip = $title;
+                $data['url'] = $oLink->toString();
+
+                $latest[$row->id] = $data;
+
+                if (count($latest) === $count) {
+                    break;
                 }
-            }
-
-            $data['date'] = $row->updated;
-            $data['question'] = $row->question;
-            $data['answer'] = $row->content;
-            $data['visits'] = $row->visits;
-
-            $title = $row->question;
-            $url = sprintf(
-                '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
-                $this->_config->getDefaultUrl(),
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
-            $oLink = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $row->question;
-            $oLink->tooltip = $title;
-            $data['url'] = $oLink->toString();
-
-            $latest[$row->id] = $data;
-
-            if (count($latest) === $count) {
-                break;
             }
         }
-
+        
         return $latest;
     }
 

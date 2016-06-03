@@ -548,7 +548,7 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -576,7 +576,7 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -604,7 +604,7 @@ all files **except**:
 *   the directory **data/**
 *   the directory **images/**
 
-Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
@@ -621,8 +621,7 @@ folder **assets/template/default/**.
 
 **3.4. <a id="3.4"></a>Upgrading phpMyFAQ 2.9.x**
 
-Updating an existing phpMyFAQ 2.9.x installation is fairly simple. Via FTP copy all new files from the phpMyFAQ package 
-**except**:
+Updating an existing phpMyFAQ 2.9.x installation is fairly simple. First you have to delete all files **except**:
 
 *   all files in the directory **config/**
 *   all files in the directory **assets/template/**
@@ -630,7 +629,7 @@ Updating an existing phpMyFAQ 2.9.x installation is fairly simple. Via FTP copy 
 *   the directory **data/**
 *   the directory **images/**
 
-Download the latetst phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
 URL in your browser:
 
 `http://www.example.com/faq/setup/update.php`
