@@ -738,7 +738,7 @@ if ($step == 3) {
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD active INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD active INT NULL DEFAULT 1';
         }
     }
 
