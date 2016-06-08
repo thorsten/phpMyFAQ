@@ -559,7 +559,8 @@ updated. You have to update a lot of your template files due to our change using
 You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
 folder **assets/template/default/**.
 
-Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
+Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder. If you use rewrite
+rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
 
 [back to top][64]
 
@@ -587,7 +588,8 @@ updated. You have to update a lot of your template files due to our change using
 You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
 folder **assets/template/default/**.
 
-Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder.
+Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder. If you use rewrite
+rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
 
 [back to top][64]
 
@@ -615,6 +617,8 @@ updated. You have to update a lot of your template files due to our change using
 You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
 folder **assets/template/default/**.
 
+If you use rewrite rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
+
 [back to top][64]
 
 * * *
@@ -636,6 +640,8 @@ URL in your browser:
 
 Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
 updated.
+
+If you use rewrite rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
 
 [back to top][64]
 
