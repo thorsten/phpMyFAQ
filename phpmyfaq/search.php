@@ -230,34 +230,34 @@ if ($tagSearch) {
     $tpl->parseBlock(
         'writeContent',
         'searchTagsSection',
-        array(
+        [
             'searchTags' => $tagHelper->renderTagList($tags),
-        )
+        ]
     );
     $tpl->parseBlock(
         'writeContent',
         'relatedTags',
-        array(
+        [
             'relatedTagsHeader' => $PMF_LANG['msgRelatedTags'],
             'relatedTags' => $relTags,
-        )
+        ]
     );
 } else {
     if ('' === $search) {
         $tpl->parseBlock(
             'writeContent',
             'tagListSection',
-            array(
+            [
                 'msgTags' => $PMF_LANG['msgPopularTags'],
                 'tagList' => $tagging->renderPopularTags(0),
-            )
+            ]
         );
     }
 
     $tpl->parseBlock(
         'writeContent',
         'searchBoxSection',
-        array(
+        [
             'writeSendAdress' => '?'.$sids.'action=search',
             'searchString' => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
             'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
@@ -267,7 +267,7 @@ if ($tagSearch) {
             'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
             'msgSearch' => $PMF_LANG['msgSearch'],
             'openSearchLink' => $searchHelper->renderOpenSearchLink(),
-        )
+        ]
     );
 
     $tpl->parseBlock(
@@ -282,11 +282,23 @@ if ($tagSearch) {
 
 $tpl->parse(
     'writeContent',
-    array(
+    [
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
-        'printResult' => $searchResult
-    )
+        /* @deprecated, the following variables will be removed with v3.0 */
+        'printResult' => $searchResult,
+        'writeSendAdress' => '?'.$sids.'action=search',
+        'searchString' => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
+        'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
+        'checkedAllLanguages' => $allLanguages ? ' checked="checked"' : '',
+        'selectCategories' => $PMF_LANG['msgSelectCategories'],
+        'allCategories' => $PMF_LANG['msgAllCategories'],
+        'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
+        'msgSearch' => $PMF_LANG['msgSearch'],
+        'openSearchLink' => $searchHelper->renderOpenSearchLink(),
+        'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
+        'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
+    ]
 );
 
 $tpl->parseBlock(
