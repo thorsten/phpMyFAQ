@@ -19,18 +19,6 @@
         {
             "type": "package",
             "package": {
-                "name": "phpseclib",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/phpseclib/phpseclib.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        },
-        {
-            "type": "package",
-            "package": {
                 "name": "tcpdf",
                 "version": "master",
                 "source": {
@@ -56,12 +44,12 @@
     "require": {
         "php": ">=5.5.0",
         "symfony/class-loader": "2.6.*",
-        "phpseclib": "master@dev",
+        "phpseclib/phpseclib": "master@dev",
         "thorsten/twitteroauth": "master@dev",
         "swiftmailer/swiftmailer": "@stable",
         "erusev/parsedown": "~1.5.2",
         "erusev/parsedown-extra": "~0.7.0",
-        "tecnick.com/tcpdf": "^6.2",
+        "tecnickcom/tcpdf": "^6.2",
         "elasticsearch/elasticsearch": "~2.0",
         "monolog/monolog": "^1.17"
     },
