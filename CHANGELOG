@@ -10,7 +10,8 @@ Version 2.10.0 - 2016-
 - updated bundled Symfony ClassLoader to version 2.7.13 (Thorsten)
 
 Version 2.9.2 - 2016-06-
--
+- updated bundled phpseclib to version 2.0.2 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.1 - 2016-05-31
 - fixed stored XSS vulnerability (Kacper Szurek)
