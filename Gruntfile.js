@@ -82,6 +82,22 @@ module.exports = function(grunt) {
                     }
                 ]
             },
+            glyphicons: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'components/bootstrap/fonts/',
+                        src: '**',
+                        dest: 'phpmyfaq/admin/assets/fonts/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'components/bootstrap/fonts/',
+                        src: '**',
+                        dest: 'phpmyfaq/assets/template/default/fonts/'
+                    }
+                ]
+            },
             highlightjs: {
                 files: [
                     {
