@@ -582,9 +582,9 @@ if ($step == 3) {
         $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 44)';
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN remember_me VARCHAR(150) NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN remember_me VARCHAR(150) NULL DEFAULT \'\'';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD remember_me VARCHAR(150) NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD remember_me VARCHAR(150) NULL DEFAULT \'\'';
         }
     }
 
@@ -754,10 +754,10 @@ if ($step == 3) {
         $faqConfig->add('records.numberMaxStoredRevisions', '10');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
             $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD lang VARCHAR(5) NOT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
             $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD group_id INT NULL DEFAULT -1';
         }
         $query[] = 'UPDATE '.$prefix."faqquestions SET lang = '".$faqConfig->getDefaultLanguage()."'";
