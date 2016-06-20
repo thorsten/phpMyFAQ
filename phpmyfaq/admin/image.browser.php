@@ -71,11 +71,12 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
         if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
             continue;
         }
+        $path = str_replace(dirname(__DIR__).'/', '', $file->getPath());
         printf(
             '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
-            $faqConfig->getDefaultUrl() . 'images/' . $file->getFilename(),
-            $faqConfig->getDefaultUrl() . 'images/' . $file->getFilename(),
-            $file->getFilename()
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+            $faqConfig->getDefaultUrl() . $path . '/' . $file->getFilename(),
+            $path . '/' . $file->getFilename()
         );
     }
 }
