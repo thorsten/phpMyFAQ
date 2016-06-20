@@ -86,11 +86,13 @@ switch ($ajax_action) {
         if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             $faq = new PMF_Faq($faqConfig);
             $faqSearch = new PMF_Search($faqConfig);
+            $faqSearch->setCategory(new PMF_Category($faqConfig));
             $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
             $searchResult = '';
             $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
             if (!is_null($searchString)) {
+
                 $searchResult = $faqSearch->search($searchString, false);
 
                 $faqSearchResult->reviewResultset($searchResult);

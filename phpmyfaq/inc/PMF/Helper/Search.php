@@ -175,8 +175,15 @@ class PMF_Helper_Search extends PMF_Helper
                     continue;
                 }
 
+                if (!isset($result->solution_id)) {
+                    $faq = new PMF_Faq($this->_config);
+                    $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
+                } else {
+                    $solutionId = $result->solution_id;
+                }
+
                 // Build the link to the faq record
-                $currentUrl = sprintf('index.php?solution_id=%d', $result->solution_id);
+                $currentUrl = sprintf('index.php?solution_id=%d', $solutionId);
 
                 $html .= sprintf(
                     '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br>',
