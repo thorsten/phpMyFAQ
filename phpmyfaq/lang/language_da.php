@@ -689,7 +689,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortering af indl&aeli
 $PMF_LANG['ad_conf_order_id'] = 'ID (standard)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titel';
 $PMF_LANG['ad_conf_order_visits'] = 'Antal g&aelig;ster';
-$PMF_LANG['ad_conf_order_datum'] = 'Dato';
+$PMF_LANG['ad_conf_order_updated'] = 'Dato';
 $PMF_LANG['ad_conf_order_author'] = 'Forfatter';
 $PMF_LANG['ad_conf_desc'] = 'faldende';
 $PMF_LANG['ad_conf_asc'] = 'stigende';

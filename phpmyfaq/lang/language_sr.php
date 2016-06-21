@@ -846,7 +846,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortiranje unosa (uzla
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Naslov';
 $PMF_LANG['ad_conf_order_visits'] = 'Broj posetilaca';
-$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_updated'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'silazno';
 $PMF_LANG['ad_conf_asc'] = 'uzlazno';

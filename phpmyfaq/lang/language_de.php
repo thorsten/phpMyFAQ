@@ -819,7 +819,7 @@ $LANG_CONF["records.sortby"] = array(0 => "select", 1 => "Sortierung (absteigend
 $PMF_LANG["ad_conf_order_id"] = "ID <br>(Standard)";
 $PMF_LANG["ad_conf_order_thema"] = "Frage";
 $PMF_LANG["ad_conf_order_visits"] = "Anzahl der Besucher";
-$PMF_LANG["ad_conf_order_datum"] = "Datum";
+$PMF_LANG["ad_conf_order_updated"] = "Datum";
 $PMF_LANG["ad_conf_order_author"] = "Verfasser";
 $PMF_LANG["ad_conf_desc"] = "absteigend";
 $PMF_LANG["ad_conf_asc"] = "aufsteigend";

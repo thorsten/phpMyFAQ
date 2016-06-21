@@ -692,7 +692,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'เรียงลำ�
 $PMF_LANG['ad_conf_order_id'] = 'เลขที่ (ค่าปกติ)';
 $PMF_LANG['ad_conf_order_thema'] = 'หัวเรื่อง';
 $PMF_LANG['ad_conf_order_visits'] = 'จำนวนคนเปิดดู';
-$PMF_LANG['ad_conf_order_datum'] = 'วัน';
+$PMF_LANG['ad_conf_order_updated'] = 'วัน';
 $PMF_LANG['ad_conf_order_author'] = 'ผู้เขียน';
 $PMF_LANG['ad_conf_desc'] = 'จากบนลงล่าง';
 $PMF_LANG['ad_conf_asc'] = 'จากล่างขึ้นบน';

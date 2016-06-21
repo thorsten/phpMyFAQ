@@ -825,7 +825,7 @@ $LANG_CONF['records.sortby'] = array(0 => "select", 1 => "記錄排序 Record so
 $PMF_LANG['ad_conf_order_id'] = "ID (預設 default)";
 $PMF_LANG['ad_conf_order_thema'] = "標題 Title";
 $PMF_LANG['ad_conf_order_visits'] = "訪客人數 Number of visitors";
-$PMF_LANG['ad_conf_order_datum'] = "日期 Date";
+$PMF_LANG['ad_conf_order_updated'] = "日期 Date";
 $PMF_LANG['ad_conf_order_author'] = "作者 Author";
 $PMF_LANG['ad_conf_desc'] = "由上往下降 descending";
 $PMF_LANG['ad_conf_asc'] = "由下往上升 ascending";

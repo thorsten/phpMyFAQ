@@ -849,7 +849,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Liệt kê nội dung 
 $PMF_LANG['ad_conf_order_id'] = 'ID (mặc định)';
 $PMF_LANG['ad_conf_order_thema'] = 'Tiêu đề';
 $PMF_LANG['ad_conf_order_visits'] = 'Số lượng khách thăm';
-$PMF_LANG['ad_conf_order_datum'] = 'Ngày';
+$PMF_LANG['ad_conf_order_updated'] = 'Ngày';
 $PMF_LANG['ad_conf_order_author'] = 'Tác giả';
 $PMF_LANG['ad_conf_desc'] = 'giảm dần';
 $PMF_LANG['ad_conf_asc'] = 'tăng dần';

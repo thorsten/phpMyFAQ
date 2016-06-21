@@ -706,7 +706,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Řazení záznamů (se
 $PMF_LANG['ad_conf_order_id'] = 'ID (výchozí)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titulek';
 $PMF_LANG['ad_conf_order_visits'] = 'Počet návštěvníků';
-$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_updated'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'sestupně';
 $PMF_LANG['ad_conf_asc'] = 'vzestupně';

@@ -702,7 +702,7 @@ $LANG_CONF['records.sortby'] = array(0 => "select", 1 => "Arkiston lajittelu (la
 $PMF_LANG['ad_conf_order_id'] = 'ID (oletus)';
 $PMF_LANG['ad_conf_order_thema'] = 'Otsikko';
 $PMF_LANG['ad_conf_order_visits'] = 'Vierailijoiden määrä';
-$PMF_LANG['ad_conf_order_datum'] = 'Päivämäärä';
+$PMF_LANG['ad_conf_order_updated'] = 'Päivämäärä';
 $PMF_LANG['ad_conf_order_author'] = 'Kirjoittaja';
 $PMF_LANG['ad_conf_desc'] = 'laskeva';
 $PMF_LANG['ad_conf_asc'] = 'nouseva';

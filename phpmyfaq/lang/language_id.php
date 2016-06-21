@@ -848,7 +848,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Pengurutan data (biasa
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Judul';
 $PMF_LANG['ad_conf_order_visits'] = 'Jumlah pengunjung';
-$PMF_LANG['ad_conf_order_datum'] = 'Tanggal';
+$PMF_LANG['ad_conf_order_updated'] = 'Tanggal';
 $PMF_LANG['ad_conf_order_author'] = 'Penulis';
 $PMF_LANG['ad_conf_desc'] = 'terbalik';
 $PMF_LANG['ad_conf_asc'] = 'biasa';
