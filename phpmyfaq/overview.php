@@ -34,6 +34,9 @@ try {
 
 $faqHelper = new PMF_Helper_Faq($faqConfig);
 
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
+
 $tpl->parse(
     'writeContent',
     [
