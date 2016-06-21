@@ -584,7 +584,11 @@ $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-    if (count($user->perm->getAllUserRights($user->getUserId()))) {
+
+    $userRights = $user->perm->getAllUserRights($user->getUserId());
+    $minRights = ['37', '39', '40', '41'];
+
+    if (count(array_intersect($userRights, $minRights)) === count($minRights)) {
         $adminSection = sprintf(
             '<a href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',

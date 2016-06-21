@@ -235,7 +235,7 @@ class PMF_Installer
             'name' => 'dlattachment',
             'description' => 'Right to download attachments',
         ),
-        // 38 => 'dlattachment'
+        // 38 => 'reports'
         array(
             'name' => 'reports',
             'description' => 'Right to generate reports',
