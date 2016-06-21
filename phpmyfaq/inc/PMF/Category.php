@@ -976,12 +976,15 @@ class PMF_Category
             AND
                 fcr.category_lang = '%s'
             AND
-                fc.lang = '%s'",
+                fc.lang = '%s'
+            ORDER BY
+                %s.%s %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $articleId,
             $this->language,
-            $this->language);
+            $this->language
+        );
 
         $result = $this->_config->getDb()->query($query);
         $num = $this->_config->getDb()->numRows($result);

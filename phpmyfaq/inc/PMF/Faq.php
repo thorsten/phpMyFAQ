@@ -2893,7 +2893,7 @@ class PMF_Faq
         global $sids;
 
         $now = date('YmdHis');
-        $query = '
+        $query = sprintf("
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -2901,41 +2901,53 @@ class PMF_Faq
                 fcr.category_id AS category_id,
                 fv.visits AS visits
             FROM
-                '.PMF_Db::getTablePrefix().'faqdata fd
+                %sfaqdata fd
             LEFT JOIN
-                '.PMF_Db::getTablePrefix().'faqcategoryrelations fcr
+                %sfaqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                '.PMF_Db::getTablePrefix().'faqvisits fv
+                %sfaqvisits fv
             ON
                 fd.id = fv.id
             AND
                 fv.lang = fd.lang
             LEFT JOIN
-                '.PMF_Db::getTablePrefix().'faqdata_group fdg
+                %sfaqdata_group fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                '.PMF_Db::getTablePrefix().'faqdata_user fdu
+                %sfaqdata_user fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                fd.date_start <= \''.$now.'\'
+                fd.date_start <= '%s'
             AND
-                fd.date_end   >= \''.$now.'\'
+                fd.date_end   >= '%s'
             AND
-                fd.active = \'yes\'
+                fd.active = 'yes'
             AND
-                fcr.category_id = '.$category.'
+                fcr.category_id = %d
             AND
-                fd.lang = \''.$this->_config->getLanguage()->getLanguage().'\'
+                fd.lang = '%s'
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits
             ORDER BY
-                fd.id';
+                fd.%s %s",
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            $now,
+            $now,
+            $category,
+            $this->_config->getLanguage()->getLanguage(),
+            $this->_config->get('records.orderby'),
+            $this->_config->get('records.sortby')
+        );
 
         $result = $this->_config->getDb()->query($query);
 
