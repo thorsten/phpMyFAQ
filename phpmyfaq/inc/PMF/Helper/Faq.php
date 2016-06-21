@@ -222,21 +222,21 @@ class PMF_Helper_Faq extends PMF_Helper
         $category->transform(0);
 
         // Get all FAQs
-        $faqData = $faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, 0, true, $language);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
 
-        if (count($faqData)) {
+        if (count($faq->faqRecords)) {
             $lastCategory = 0;
-            foreach ($faqData as $data) {
+            foreach ($faq->faqRecords as $data) {
                 if ($data['category_id'] !== $lastCategory) {
                     $output .= sprintf('<h3>%s</h3>', $category->getPath($data['category_id'], ' &raquo; '));
                 }
 
-                $output .= sprintf('<h4>%s</h4>', strip_tags($data['topic']));
+                $output .= sprintf('<h4>%s</h4>', strip_tags($data['title']));
                 $output .= sprintf('<article>%s</article>', $data['content']);
                 $output .= sprintf('<p>%s: %s<br>%s',
                     $PMF_LANG['msgAuthor'],
-                    $data['author_name'],
-                    $PMF_LANG['msgLastUpdateArticle'].PMF_Date::createIsoDate($data['lastmodified'])
+                    $data['author'],
+                    $PMF_LANG['msgLastUpdateArticle'].PMF_Date::createIsoDate($data['updated'])
                 );
                 $output .= '<hr>';
 
