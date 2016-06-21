@@ -694,7 +694,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Ordinamento delle FAQ 
 $PMF_LANG['ad_conf_order_id'] = 'Identificativo (predefinito)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titolo';
 $PMF_LANG['ad_conf_order_visits'] = 'Numero di visitatori';
-$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_updated'] = 'Data';
 $PMF_LANG['ad_conf_order_author'] = 'Autore';
 $PMF_LANG['ad_conf_desc'] = 'Decrescente';
 $PMF_LANG['ad_conf_asc'] = 'Crescente';

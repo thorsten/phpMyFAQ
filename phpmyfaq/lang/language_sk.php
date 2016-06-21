@@ -848,7 +848,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Triedenie záznamov (z
 $PMF_LANG['ad_conf_order_id'] = 'ID (prednastavené)';
 $PMF_LANG['ad_conf_order_thema'] = 'Názov';
 $PMF_LANG['ad_conf_order_visits'] = 'Počet návštev';
-$PMF_LANG['ad_conf_order_datum'] = 'Dátum';
+$PMF_LANG['ad_conf_order_updated'] = 'Dátum';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'zostupne';
 $PMF_LANG['ad_conf_asc'] = 'vzostupne';

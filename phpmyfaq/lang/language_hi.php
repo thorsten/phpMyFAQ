@@ -855,7 +855,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'रिकॉर्ड 
 $PMF_LANG['ad_conf_order_id'] = 'ID (पूर्वनिर्धारित)';
 $PMF_LANG['ad_conf_order_thema'] = 'शीर्षक';
 $PMF_LANG['ad_conf_order_visits'] = 'दर्शनार्थियों की संख्या';
-$PMF_LANG['ad_conf_order_datum'] = 'दिनांक';
+$PMF_LANG['ad_conf_order_updated'] = 'दिनांक';
 $PMF_LANG['ad_conf_order_author'] = 'लेखक';
 $PMF_LANG['ad_conf_desc'] = 'घटते क्रम में';
 $PMF_LANG['ad_conf_asc'] = 'बढ़ते क्रम में';

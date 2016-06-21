@@ -854,7 +854,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Įrašų rikiavimas (d
 $PMF_LANG['ad_conf_order_id'] = 'Identifikatorius (numatytas)';
 $PMF_LANG['ad_conf_order_thema'] = 'Antraštė';
 $PMF_LANG['ad_conf_order_visits'] = 'Lankytojų skaičius';
-$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_updated'] = 'Data';
 $PMF_LANG['ad_conf_order_author'] = 'Autorius';
 $PMF_LANG['ad_conf_desc'] = 'mažėjančiai';
 $PMF_LANG['ad_conf_asc'] = 'didėjančiai';

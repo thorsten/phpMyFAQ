@@ -691,7 +691,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Penyusunan rekod (menu
 $PMF_LANG['ad_conf_order_id'] = 'ID (lalai)';
 $PMF_LANG['ad_conf_order_thema'] = 'Tajuk';
 $PMF_LANG['ad_conf_order_visits'] = 'Bilangan pelawat';
-$PMF_LANG['ad_conf_order_datum'] = 'Tarikh';
+$PMF_LANG['ad_conf_order_updated'] = 'Tarikh';
 $PMF_LANG['ad_conf_order_author'] = 'Pengarang';
 $PMF_LANG['ad_conf_desc'] = 'menurun';
 $PMF_LANG['ad_conf_asc'] = 'menaik';

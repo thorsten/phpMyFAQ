@@ -552,7 +552,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Type de Tri (descendan
 $PMF_LANG['ad_conf_order_id'] = 'ID (defaut)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titre';
 $PMF_LANG['ad_conf_order_visits'] = 'Nombres de visites';
-$PMF_LANG['ad_conf_order_datum'] = 'Date';
+$PMF_LANG['ad_conf_order_updated'] = 'Date';
 $PMF_LANG['ad_conf_order_author'] = 'Auteur';
 $PMF_LANG['ad_conf_desc'] = 'descendant';
 $PMF_LANG['ad_conf_asc'] = 'ascendant';

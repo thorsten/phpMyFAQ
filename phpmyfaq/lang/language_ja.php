@@ -692,7 +692,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'レコードの並び�
 $PMF_LANG['ad_conf_order_id'] = 'ID (デフォルト)';
 $PMF_LANG['ad_conf_order_thema'] = '題名';
 $PMF_LANG['ad_conf_order_visits'] = '訪問者数';
-$PMF_LANG['ad_conf_order_datum'] = '日付';
+$PMF_LANG['ad_conf_order_updated'] = '日付';
 $PMF_LANG['ad_conf_order_author'] = '制作者';
 $PMF_LANG['ad_conf_desc'] = '降順';
 $PMF_LANG['ad_conf_asc'] = '昇順';

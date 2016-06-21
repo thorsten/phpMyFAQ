@@ -849,7 +849,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Kayıt sıralama (büy
 $PMF_LANG['ad_conf_order_id'] = 'ID (varsayılan)';
 $PMF_LANG['ad_conf_order_thema'] = 'Başlık';
 $PMF_LANG['ad_conf_order_visits'] = 'Ziyaretçi sayısı';
-$PMF_LANG['ad_conf_order_datum'] = 'Tarih';
+$PMF_LANG['ad_conf_order_updated'] = 'Tarih';
 $PMF_LANG['ad_conf_order_author'] = 'Yazar';
 $PMF_LANG['ad_conf_desc'] = 'büyükten küçüğe';
 $PMF_LANG['ad_conf_asc'] = 'küçükten büyüğe';

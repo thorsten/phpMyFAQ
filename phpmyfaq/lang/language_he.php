@@ -695,7 +695,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'מיון ערכים (�
 $PMF_LANG['ad_conf_order_id'] = 'ID (ברירת מחדל)';
 $PMF_LANG['ad_conf_order_thema'] = 'כותרת';
 $PMF_LANG['ad_conf_order_visits'] = 'מספר צפיות';
-$PMF_LANG['ad_conf_order_datum'] = 'תאריך';
+$PMF_LANG['ad_conf_order_updated'] = 'תאריך';
 $PMF_LANG['ad_conf_order_author'] = 'כותב';
 $PMF_LANG['ad_conf_desc'] = 'סדר יורד';
 $PMF_LANG['ad_conf_asc'] = 'סדר עולה';
