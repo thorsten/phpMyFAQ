@@ -33,8 +33,9 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
     die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
 }
 
+set_time_limit(0);
+
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
-use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 if (!defined('DEBUG')) {
     define('DEBUG', false);

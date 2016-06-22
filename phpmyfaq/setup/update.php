@@ -26,6 +26,8 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
     die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
 }
 
+set_time_limit(0);
+
 require PMF_ROOT_DIR.'/inc/Bootstrap.php';
 
 $step = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
