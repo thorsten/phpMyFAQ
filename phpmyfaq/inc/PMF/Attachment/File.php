@@ -192,7 +192,7 @@ class PMF_Attachment_File extends PMF_Attachment_Abstract implements PMF_Attachm
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
             header('Content-Type: '.$this->mimeType, true);
             header('Content-Length: '.$this->filesize, true);
-            header("Content-Disposition: $disposition; filename=\"{$this->filename}\"", true);
+            header("Content-Disposition: $disposition; filename=\"".rawurlencode($this->filename)."\"", true);
             header("Content-MD5: {$this->realHash}", true);
         }
 
