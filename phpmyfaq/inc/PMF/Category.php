@@ -976,9 +976,7 @@ class PMF_Category
             AND
                 fcr.category_lang = '%s'
             AND
-                fc.lang = '%s'
-            ORDER BY
-                %s.%s %s",
+                fc.lang = '%s'",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $articleId,

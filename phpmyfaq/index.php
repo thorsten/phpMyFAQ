@@ -272,6 +272,13 @@ $category->setUser($current_user);
 $oTag = new PMF_Tags($faqConfig);
 
 //
+// Create URL
+//
+$faqSystem = new PMF_System();
+$faqLink = new PMF_Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
+$currentPageUrl = $faqLink->getCurrentUrl();
+
+//
 // Found a record ID?
 //
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -300,6 +307,17 @@ if (!is_null($solutionId)) {
         $title = ' - '.$faq->getRecordTitle($id);
         $keywords = ','.$faq->getRecordKeywords($id);
         $metaDescription = str_replace('"', '', PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12));
+        $url = sprintf(
+            '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+            $faqConfig->getDefaultUrl(),
+            $sids,
+            $faqData['category_id'],
+            $id,
+            $lang
+        );
+        $faqLink = new PMF_Link($url, $faqConfig);
+        $faqLink->itemTitle = $faqData['question'];
+        $currentPageUrl = $faqLink->toString();
     }
 }
 
@@ -433,8 +451,6 @@ if ($faqConfig->get('main.enableUserTracking')) {
     $usersOnline = '';
 }
 
-$faqSystem = new PMF_System();
-
 $categoryHelper = new PMF_Helper_Category();
 $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
@@ -443,9 +459,6 @@ $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->g
 $keywordsArray = array_filter($keywordsArray, 'strlen');
 shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
-
-$faqLink = new PMF_Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
-$currentPageUrl = $faqLink->getCurrentUrl();
 
 if (!is_null($error)) {
     $loginMessage = '<p class="error">'.$error.'</p>';
@@ -470,7 +483,7 @@ $tplMainPage = array(
     'metaRobots' => $faqSeo->getMetaRobots($action),
     'phpmyfaqversion' => $faqConfig->get('main.currentVersion'),
     'stylesheet' => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
-    'currentPageUrl' => preg_match('/(\S+\/content\/\S+.html)\?\S*/', $currentPageUrl, $canonical) === 1 ? $canonical[1] : $currentPageUrl,
+    'currentPageUrl' => $currentPageUrl,
     'action' => $action,
     'dir' => $PMF_LANG['dir'],
     'writeSendAdress' => '?'.$sids.'action=search',

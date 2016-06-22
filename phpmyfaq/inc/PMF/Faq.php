@@ -1313,11 +1313,22 @@ class PMF_Faq
     {
         $query = sprintf('
             SELECT
-                id, lang, content
+                fd.id,
+                fd.lang,
+                fd.thema AS question,
+                fd.content, 
+                fcr.category_id AS category_id
             FROM
-                %sfaqdata
+                %sfaqdata fd
+            LEFT JOIN
+                %sfaqcategoryrelations fcr
+            ON
+                fd.id = fcr.record_id
+            AND
+                fd.lang = fcr.record_lang
             WHERE
-                solution_id = %d',
+                fd.solution_id = %d',
+            PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             $solutionId
         );
@@ -1328,7 +1339,9 @@ class PMF_Faq
             return [
                 'id' => $row->id,
                 'lang' => $row->lang,
-                'content' => $row->content
+                'question' => $row->question,
+                'content' => $row->content,
+                'category_id' => $row->category_id
             ];
         }
 
