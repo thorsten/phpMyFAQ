@@ -715,7 +715,7 @@ if ($step == 3) {
         } elseif ('pgsql' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INTEGER NULL DEFAULT 1';
         }
     }
 

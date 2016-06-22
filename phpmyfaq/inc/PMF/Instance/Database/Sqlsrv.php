@@ -294,7 +294,7 @@ class PMF_Instance_Database_Sqlsrv extends PMF_Instance_Database implements PMF_
             auth_source VARCHAR(100) NULL,
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
-            success INT(1) NULL DEFAULT 1,
+            success INTEGER NULL DEFAULT 1,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
