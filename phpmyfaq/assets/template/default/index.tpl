@@ -102,7 +102,6 @@
 
             <div class="pmf-searchbox">
                 <form role="search" id="search" action="{writeSendAdress}" method="get">
-                    <input type="hidden" name="searchcategory" value="{categoryId}">
                     <input type="hidden" name="action" value="search">
                     <button class="searchbutton" type="submit" aria-label="{searchBox}">
                         <i aria-hidden="true" class="fa fa-search"></i>
