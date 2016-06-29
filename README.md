@@ -33,11 +33,23 @@ The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.p
 unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ### Git for developers
+If you are behind a proxy, run following:
+
+    git config --global url.http://git.code.sf.net/p/tcpdf/code.insteadOf git://git.code.sf.net/p/tcpdf/code
+
+or add the following to your ~/.gitconfig:
+
+    [url "http://git.code.sf.net/p/tcpdf/code"]
+        insteadOf = git://git.code.sf.net/p/tcpdf/code
+
+To install run:
+
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
+    # Don't run the following commands as root, otherwise they fail
     $ npm install
     $ bower install
     $ grunt
