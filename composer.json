@@ -70,7 +70,8 @@
         "phpunit/dbunit": "1.3.*"
     },
     "config": {
-        "bin-dir": "bin"
+        "bin-dir": "bin",
+        "secure-http": false
     },
     "minimum-stability": "stable",
     "scripts": {
