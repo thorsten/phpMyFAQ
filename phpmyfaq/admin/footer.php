@@ -94,6 +94,7 @@ if (isset($auth)) {
             { title: 'None', value: '' },
             { title: 'Responsive', value: 'img-responsive' }
         ],
+        image_dimensions: true,
 
         // Formatting
         style_formats: [
