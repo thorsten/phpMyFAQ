@@ -2123,7 +2123,7 @@ class PMF_Faq
                     }
                 }
 
-                $data['visits'] = $row->visits;
+                $data['visits'] = (int)$row->visits;
                 $data['question'] = $row->question;
                 $data['date'] = $row->updated;
                 $data['last_visit'] = $row->last_visit;
@@ -2148,6 +2148,8 @@ class PMF_Faq
                     break;
                 }
             }
+
+            array_multisort($topten, SORT_DESC);
         }
 
         return $topten;
