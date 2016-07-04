@@ -284,7 +284,7 @@ class PMF_Utils
             'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset',
             'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
             'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
-            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute',
+            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute'
         ];
 
         return PMF_String::preg_replace_callback(
@@ -310,7 +310,10 @@ class PMF_Utils
         $postfix = isset($matches[5]) ? $matches[5] : '';
 
         if (!empty($item) && !self::isForbiddenElement($item)) {
-            return '<mark class="pmf-highlighted-string">'.$prefix.$item.$postfix.'</mark>';
+            return sprintf(
+                '<mark class="pmf-highlighted-string">%s</mark>',
+                $prefix.$item.$postfix
+            );
         }
 
         // Fallback: the original matched string
@@ -319,13 +322,15 @@ class PMF_Utils
 
     /**
      * Tries to detect if a string could be a HTML element
+     *
      * @param $string
+     *
      * @return bool
      */
     public static function isForbiddenElement($string)
     {
         $forbiddenElements = [
-            'img', 'picture'
+            'img', 'picture', 'mark'
         ];
 
         if (false !== array_search($string, $forbiddenElements)) {
