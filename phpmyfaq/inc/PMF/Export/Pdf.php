@@ -109,9 +109,11 @@ class PMF_Export_Pdf extends PMF_Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
         $categories = $this->category->catTree;
 
-        $categoryGroup = 0;
-        foreach ($categories as $category) {
-            if ($category['id'] !== $categoryGroup) {
+        $categoryGroup = '';
+        $this->pdf->AddPage();
+        foreach ($categories as $catKey => $category) {
+
+            if (0 === $catKey || $this->category->categoryName[$category['id']]['name'] !== $categoryGroup) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
                         $this->category->categoryName[$category['id']]['name'], ENT_QUOTES, 'utf-8'
@@ -119,13 +121,14 @@ class PMF_Export_Pdf extends PMF_Export
                     $category['level'],
                     0
                 );
-                $categoryGroup = $category['id'];
+                $this->pdf->setCategory($category['id']);
+                $categoryGroup = $this->category->categoryName[$category['id']]['name'];
             }
 
             foreach ($faqdata as $faq) {
+
                 if ($faq['category_id'] === $category['id']) {
                     $this->pdf->AddPage();
-                    $this->pdf->setCategory($category['id']);
                     $this->pdf->Bookmark(
                         html_entity_decode(
                             $faq['topic'], ENT_QUOTES, 'utf-8'
