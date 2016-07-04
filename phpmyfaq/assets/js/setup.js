@@ -52,5 +52,10 @@ $(document).ready(function() {
 
     setupForm.find('a').on('click', addInput);
     setupType.on('change', selectDatabaseSetup);
+    var setupTypeOptions= $('#sql_type option');
+    if( setupTypeOptions.length===1 ) {
+        $('#dbsqlite').show().removeClass('hide');
+        $('#dbdatafull').hide();
+    }
 
 });
