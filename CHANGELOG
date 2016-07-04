@@ -11,6 +11,7 @@ Version 2.10.0 - 2016-
 
 Version 2.9.2 - 2016-06-
 - updated bundled phpseclib to version 2.0.2 (Thorsten)
+- updated bundled TinyMCE to version 4.4.0 (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 2.9.1 - 2016-05-31
