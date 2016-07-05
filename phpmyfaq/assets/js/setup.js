@@ -20,8 +20,11 @@ $(document).ready(function() {
 
     'use strict';
 
-    var setupForm = $('.form-horizontal');
-    var setupType = $('#sql_type');
+    var setupForm = $('.form-horizontal'),
+        setupType = $('#sql_type'),
+        setupTypeOptions = $('#sql_type option'),
+        $dbSqlite = $('#dbsqlite'),
+        $dbFull = $('#dbdatafull');
 
     var addInput = function (event) {
 
@@ -35,27 +38,26 @@ $(document).ready(function() {
         return false;
     };
 
-    var selectDatabaseSetup = function (field) {
+    var selectDatabaseSetup = function () {
 
         switch ($(this).val()) {
             case 'sqlite3':
-                $('#dbsqlite').show().removeClass('hide');
-                $('#dbdatafull').hide();
+                $dbSqlite.show().removeClass('hide');
+                $dbFull.hide();
                 break;
             default:
-                $('#dbsqlite').hide();
-                $('#dbdatafull').show();
+                $dbSqlite.hide();
+                $dbFull.show();
                 break;
         }
     };
 
-
     setupForm.find('a').on('click', addInput);
     setupType.on('change', selectDatabaseSetup);
-    var setupTypeOptions= $('#sql_type option');
-    if( setupTypeOptions.length===1 ) {
-        $('#dbsqlite').show().removeClass('hide');
-        $('#dbdatafull').hide();
+
+    if (setupTypeOptions.length === 1) {
+        $dbSqlite.show().removeClass('hide');
+        $dbFull.hide();
     }
 
 });
