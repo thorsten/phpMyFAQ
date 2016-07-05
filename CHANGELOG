@@ -9,7 +9,7 @@ Version 2.10.0 - 2016-
 - changed PHP requirement to PHP 5.6+ and PHP 7 (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.13 (Thorsten)
 
-Version 2.9.2 - 2016-06-
+Version 2.9.2 - 2016-07-05
 - updated bundled phpseclib to version 2.0.2 (Thorsten)
 - updated bundled TinyMCE to version 4.4.0 (Thorsten)
 - fixed minor bugs (Thorsten)
