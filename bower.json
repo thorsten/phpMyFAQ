@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.2",
+  "version": "2.9.3",
   "main": "phpmyfaq.js",
   "ignore": [
     "**/.*",
@@ -20,7 +20,6 @@
     "mermaid": "~0.5.8"
   },
   "resolutions": {
-    "bootstrap": "~3.3.0",
-    "typeahead.js": "~0.11"
+    "bootstrap": "~3.3.0"
   }
 }

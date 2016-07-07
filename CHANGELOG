@@ -1,9 +1,12 @@
-phpMyFAQ 2.9.2
+phpMyFAQ 2.9.3
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.3 - 2016-07-
+- 
 
 Version 2.9.2 - 2016-07-05
 - updated bundled phpseclib to version 2.0.2 (Thorsten)
