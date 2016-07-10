@@ -225,7 +225,7 @@ class PMF_Category
                 fc.id = fu.category_id
             %s
             GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id fc.group_id, fc.active
             ORDER BY
                 fc.parent_id, fc.id',
             PMF_Db::getTablePrefix(),
