@@ -643,9 +643,12 @@ class PMF_Installer
         // check database connection
         PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
         $db = PMF_Db::factory($dbSetup['dbType']);
-        $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
+        try {
+            $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
+        } catch (PMF_Exception $e) {
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $e->getMessage());
+        }
         if (!$db) {
-            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             PMF_System::renderFooter(true);
         }
 
