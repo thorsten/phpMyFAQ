@@ -860,8 +860,13 @@ if ($step == 3) {
     // UPDATES FROM 2.9.0-RC
     //
     if (version_compare($version, '2.9.0-RC', '<')) {
-        $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD notes text DEFAULT NULL';
-        $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD notes text DEFAULT NULL';
+        if ($DB['type'] === 'mssql' || $DB['type'] === 'sqlsrv') {
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD notes VARCHAR(MAX) DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD notes VARCHAR(MAX) DEFAULT NULL';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD notes text DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD notes text DEFAULT NULL';
+        }
     }
 
     // Always the last step: Update version number
