@@ -168,6 +168,7 @@ class PMF_Utils
      */
     public static function makeShorterText($str, $char)
     {
+        $matches = [];  
         preg_match("/(?:\w+(?:\W+|$)){0,$char}/", $str, $matches);
         if (strlen($str) > strlen($matches[0])) {
                 $shortStr = $matches[0].'...';
