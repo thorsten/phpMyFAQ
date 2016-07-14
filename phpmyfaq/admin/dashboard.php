@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqTableInfo = $faqConfig->getDb()->getTableStatus();
+$faqTableInfo = $faqConfig->getDb()->getTableStatus(PMF_Db::getTablePrefix());
 $faqSystem = new PMF_System();
 $faqSession = new PMF_Session($faqConfig);
 ?>

@@ -216,9 +216,11 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
+     * @param string $prefix Table prefix
+     *
      * @return array
      */
-    public function getTableStatus()
+    public function getTableStatus($prefix = '')
     {
         $select = 'SELECT relname FROM pg_stat_user_tables ORDER BY relname;';
         $arr = [];

@@ -219,17 +219,18 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
+     * @param string $prefix Table prefix
+     *
      * @return array
      */
-    public function getTableStatus()
+    public function getTableStatus($prefix = '')
     {
-        $arr = [];
-        $result = $this->query('SHOW TABLE STATUS');
-        while ($row = $this->fetchArray($result)) {
-            $arr[$row['Name']] = $row['Rows'];
+        $status = [];
+        foreach ($this->getTableNames($prefix) as $table) {
+            $status[$table] = $this->getOne('SELECT count(*) FROM '.$table);
         }
 
-        return $arr;
+        return $status;
     }
 
     /**
@@ -369,4 +370,19 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         return 'NOW()';
     }
+
+    /**
+     * Returns just one row.
+     *
+     * @param string
+     *
+     * @return string
+     */
+    private function getOne($query)
+    {
+        $row = $this->conn->query($query)->fetch_row();
+
+        return $row[0];
+    }
+
 }
