@@ -68,7 +68,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @throws PMF_Exception
      *
-     * @return bool true, if connected, otherwise false
+     * @return null|boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -144,7 +144,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * This function fetches a result row as an object.
      *
-     * @param mixed $result
+     * @param resource $result
      *
      * @return mixed
      */
@@ -300,7 +300,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {
@@ -375,6 +375,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      * Returns just one row.
      *
      * @param string
+     * @param string $query
      *
      * @return string
      */
