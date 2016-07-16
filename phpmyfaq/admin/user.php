@@ -32,6 +32,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     $user->perm->checkRight($user->getUserId(), 'deluser') ||
     $user->perm->checkRight($user->getUserId(), 'adduser')) {
+?>
+    <script src="assets/js/user.js"></script>
+<?php
 
     // set some parameters
     $selectSize = 10;
@@ -41,6 +44,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     // what shall we do?
     // actions defined by url: user_action=
     $userAction = PMF_Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
+    $currentUser = new PMF_User_CurrentUser($faqConfig);
+
     // actions defined by submit button
     if (isset($_POST['user_action_deleteConfirm'])) {
         $userAction = 'delete_confirm';
@@ -77,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']);
-            $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
+            $message .= '<script>updateUser('.$userId.');</script>';
             $user = new PMF_User_CurrentUser($faqConfig);
         }
     }
@@ -114,7 +119,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     $PMF_LANG['ad_msg_savedsuc_1'],
                     $user->getLogin(),
                     $PMF_LANG['ad_msg_savedsuc_2']);
-                $message .= '<script type="text/javascript">updateUser('.$userId.');</script>';
+                $message .= '<script>updateUser('.$userId.');</script>';
             }
         }
     }
@@ -148,7 +153,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <form action ="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
             <input type="hidden" name="user_id" value="<?php echo $userId;
                 ?>" />
-            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
+            <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession();
                 ?>" />
             <p class="text-center">
                 <button class="btn btn-danger" type="submit">
@@ -317,7 +322,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
             <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" role="form"
                   accept-charset="utf-8">
-            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
+            <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession();
         ?>">
 
             <div class="form-group">
@@ -486,7 +491,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                           class="form-horizontal">
                         <div class="panel-body">
                             <input id="update_user_id" type="hidden" name="user_id" value="0">
-                            <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession(); ?>">
+                            <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession(); ?>">
                             <div class="form-group">
                                 <label for="user_status_select" class="col-lg-3 control-label">
                                     <?php echo $PMF_LANG['ad_user_status'] ?>
@@ -513,7 +518,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             </div>
             <div class="col-lg-8" id="userRights">
                 <form id="rightsForm" action="?action=user&amp;user_action=update_rights" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="user_id" id="rights_user_id" value="0">
 
                     <div class="panel panel-default">
@@ -568,7 +573,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     </div>
                     <div class="modal-body">
                         <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
-                            <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                            <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession() ?>">
                             <input type="hidden" name="user_id" value="<?php echo $userId ?>">
 
                             <div class="form-group">
@@ -721,7 +726,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
                     <a href="javascript:;" onclick="deleteUser(this); return false;" class="btn btn-danger"
-                       data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>"
+                       data-csrf-token="<?php echo $currentUser->getCsrfTokenFromSession() ?>"
                        data-user-id="<?php echo $user->getUserData('user_id') ?>">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
                     </a>
@@ -775,9 +780,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </script>
 <?php 
     }
-?>
-        <script src="assets/js/user.js"></script>
-<?php
     if (isset($_GET['user_id'])) {
         $userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
         echo '        <script>updateUser('.$userId.');</script>';
