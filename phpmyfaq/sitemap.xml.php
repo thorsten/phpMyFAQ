@@ -19,11 +19,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2006-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
  */
@@ -102,9 +100,9 @@ if (count($items) > 0) {
 // Sitemap header
 $sitemap =
      '<?xml version="1.0" encoding="UTF-8"?>'
-    .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.84"'
+    .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
     .' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-    .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84'
+    .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(
