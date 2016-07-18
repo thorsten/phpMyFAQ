@@ -131,7 +131,7 @@ foreach ($items as $item) {
         }
     }
     $sitemap .= buildSitemapNode(
-        $faqConfig->getDefaultUrl().$link,
+        $link,
         PMF_Date::createIsoDate($item['date'], DATE_W3C),
         // @todo: manage changefreq node with the info provided by faqchanges,
         // if this will not add a big load to the server (+1 query/faq)
@@ -149,7 +149,7 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
         header('Content-Type: application/x-gzip');
         header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
         header('Content-Length: '.strlen($sitemapGz));
-        print $sitemapGz;
+        echo $sitemapGz;
     } else {
         $http = new PMF_Helper_Http();
         $http->sendStatus(404);
@@ -157,8 +157,8 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
 } else {
     header('Content-Type: text/xml');
     header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
-    header('Content-Length: '.PMF_String::strlen($sitemap));
-    print $sitemap;
+    header('Content-Length: '.strlen($sitemap));
+    echo $sitemap;
 }
 
 $faqConfig->getDb()->close();
