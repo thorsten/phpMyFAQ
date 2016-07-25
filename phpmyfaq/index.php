@@ -283,9 +283,21 @@ $currentPageUrl = $faqLink->getCurrentUrl();
 //
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
-    $title = ' - '.$faq->getRecordTitle($id);
-    $keywords = ','.$faq->getRecordKeywords($id);
+    $faq->getRecord($id);
+    $title = ' - '.$faq->faqRecord['title'];
+    $keywords = ','.$faq->faqRecord['keywords'];
     $metaDescription = str_replace('"', '', $faq->getRecordPreview($id));
+    $url = sprintf(
+        '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+        $faqConfig->getDefaultUrl(),
+        $sids,
+        $category->getCategoryIdFromArticle($id),
+        $id,
+        $lang
+    );
+    $faqLink = new PMF_Link($url, $faqConfig);
+    $faqLink->itemTitle = $faq->faqRecord['title'];
+    $currentPageUrl = $faqLink->toString();
 } else {
     $id = '';
     $title = ' -  powered by phpMyFAQ '.$faqConfig->get('main.currentVersion');
