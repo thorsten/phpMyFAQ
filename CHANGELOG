@@ -5,8 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.3 - 2016-07-
--
+Version 2.9.3 - 2016-08-01
+- fixed minor bugs (Thorsten)
 
 Version 2.9.2 - 2016-07-05
 - updated bundled phpseclib to version 2.0.2 (Thorsten)
