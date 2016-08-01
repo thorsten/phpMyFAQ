@@ -68,7 +68,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @throws PMF_Exception
      *
-     * @return bool true, if connected, otherwise false
+     * @return null|boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -144,7 +144,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * This function fetches a result row as an object.
      *
-     * @param mixed $result
+     * @param resource $result
      *
      * @return mixed
      */
@@ -219,17 +219,18 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     /**
      * This function returns the table status.
      *
+     * @param string $prefix Table prefix
+     *
      * @return array
      */
-    public function getTableStatus()
+    public function getTableStatus($prefix = '')
     {
-        $arr = [];
-        $result = $this->query('SHOW TABLE STATUS');
-        while ($row = $this->fetchArray($result)) {
-            $arr[$row['Name']] = $row['Rows'];
+        $status = [];
+        foreach ($this->getTableNames($prefix) as $table) {
+            $status[$table] = $this->getOne('SELECT count(*) FROM '.$table);
         }
 
-        return $arr;
+        return $status;
     }
 
     /**
@@ -299,7 +300,7 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {
@@ -369,4 +370,20 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
     {
         return 'NOW()';
     }
+
+    /**
+     * Returns just one row.
+     *
+     * @param string
+     * @param string $query
+     *
+     * @return string
+     */
+    private function getOne($query)
+    {
+        $row = $this->conn->query($query)->fetch_row();
+
+        return $row[0];
+    }
+
 }

@@ -114,6 +114,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </select>
                 </div>
             </div>
+<?php
+    if ($faqConfig->get('security.permLevel') != 'basic') {
+        ?>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
@@ -123,9 +126,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </select>
                 </div>
             </div>
-<?php
-    if ($faqConfig->get('security.permLevel') != 'basic') {
-        ?>
+
             <div class="form-group">
                 <label class="col-lg-2 control-label">
                     <?php echo $PMF_LANG['ad_entry_grouppermission'] ?>

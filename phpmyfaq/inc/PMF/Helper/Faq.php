@@ -223,7 +223,8 @@ class PMF_Helper_Faq extends PMF_Helper
 
         // Get all FAQs
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
-
+        $date = new PMF_Date($this->_config);
+        
         if (count($faq->faqRecords)) {
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
@@ -236,7 +237,7 @@ class PMF_Helper_Faq extends PMF_Helper
                 $output .= sprintf('<p>%s: %s<br>%s',
                     $PMF_LANG['msgAuthor'],
                     $data['author'],
-                    $PMF_LANG['msgLastUpdateArticle'].PMF_Date::createIsoDate($data['updated'])
+                    $PMF_LANG['msgLastUpdateArticle'].$date->format($data['updated'])
                 );
                 $output .= '<hr>';
 

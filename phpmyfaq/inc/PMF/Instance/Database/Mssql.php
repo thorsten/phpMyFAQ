@@ -57,7 +57,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
 
         'faqattachment file' => 'CREATE TABLE %sfaqattachment_file (
             virtual_hash CHAR(32) NOT NULL,
-            contents TEXT NOT NULL,
+            contents VARCHAR(MAX) NOT NULL,
             PRIMARY KEY (virtual_hash))',
 
         'faqcaptcha' => 'CREATE TABLE %sfaqcaptcha (
@@ -105,7 +105,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             revision_id INTEGER NOT NULL DEFAULT 0,
             usr INTEGER NOT NULL ,
             datum INTEGER NOT NULL,
-            what text DEFAULT NULL,
+            what VARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcomments' => 'CREATE TABLE %sfaqcomments (
@@ -114,9 +114,9 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             type VARCHAR(10) NOT NULL,
             usr VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
-            comment text NOT NULL,
+            comment VARCHAR(MAX) NOT NULL,
             datum VARCHAR(64) NOT NULL,
-            helped text DEFAULT NULL,
+            helped VARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id_comment))',
 
         'faqconfig' => 'CREATE TABLE %sfaqconfig (
@@ -131,9 +131,9 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             revision_id INTEGER NOT NULL DEFAULT 0,
             active char(3) NOT NULL,
             sticky INTEGER NOT NULL,
-            keywords text DEFAULT NULL,
-            thema text NOT NULL,
-            content text DEFAULT NULL,
+            keywords VARCHAR(MAX) DEFAULT NULL,
+            thema VARCHAR(MAX) NOT NULL,
+            content VARCHAR(MAX) DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
@@ -143,7 +143,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created DATETIME DEFAULT CURRENT_TIMESTAMP,
-            notes text DEFAULT NULL,
+            notes VARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
@@ -153,9 +153,9 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             revision_id INTEGER NOT NULL DEFAULT 0,
             active char(3) NOT NULL,
             sticky INTEGER NOT NULL,
-            keywords text DEFAULT NULL,
-            thema text NOT NULL,
-            content text DEFAULT NULL,
+            keywords VARCHAR(MAX) DEFAULT NULL,
+            thema VARCHAR(MAX) NOT NULL,
+            content VARCHAR(MAX) DEFAULT NULL,
             author VARCHAR(255) NOT NULL,
             email VARCHAR(255) NOT NULL,
             comment char(1) default \'y\',
@@ -165,7 +165,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             date_start VARCHAR(14) NOT NULL DEFAULT \'00000000000000\',
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created DATETIME DEFAULT CURRENT_TIMESTAMP,
-            notes text DEFAULT NULL,
+            notes VARCHAR(MAX) DEFAULT NULL,
             PRIMARY KEY (id, lang, solution_id, revision_id))',
 
         'faqdata_group' => 'CREATE TABLE %sfaqdata_group (
@@ -187,13 +187,13 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             id INTEGER NOT NULL ,
             lang VARCHAR(5) NOT NULL ,
             item VARCHAR(255) NOT NULL ,
-            definition text NOT NULL,
+            definition VARCHAR(MAX) NOT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqgroup' => 'CREATE TABLE %sfaqgroup (
             group_id INTEGER NOT NULL,
             name VARCHAR(25) NULL,
-            description text NULL,
+            description VARCHAR(MAX) NULL,
             auto_join INTEGER NULL,
             PRIMARY KEY(group_id))',
 
@@ -208,7 +208,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             id INT NOT NULL,
             url VARCHAR(255) NOT NULL,
             instance VARCHAR(255) NOT NULL,
-            comment TEXT NULL,
+            comment VARCHAR(MAX) NULL,
             created DATETIME NOT NULL,
             modified DATETIME NOT NULL,
             PRIMARY KEY (id))',
@@ -223,7 +223,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
             header VARCHAR(255) NOT NULL,
-            artikel text NOT NULL,
+            artikel VARCHAR(MAX) NOT NULL,
             datum VARCHAR(14) NOT NULL,
             author_name  VARCHAR(255) NULL,
             author_email VARCHAR(255) NULL,
@@ -242,7 +242,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             username VARCHAR(100) NOT NULL,
             email VARCHAR(100) NOT NULL,
             category_id INTEGER NOT NULL,
-            question text NOT NULL,
+            question VARCHAR(MAX) NOT NULL,
             created VARCHAR(20) NOT NULL,
             is_visible char(1) default \'Y\',
             answer_id INTEGER NOT NULL DEFAULT 0,
@@ -251,7 +251,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
         'faqright' => 'CREATE TABLE %sfaqright (
             right_id INTEGER NOT NULL,
             name VARCHAR(50) NULL,
-            description text NULL,
+            description VARCHAR(MAX) NULL,
             for_users INTEGER NULL DEFAULT 1,
             for_groups INTEGER NULL DEFAULT 1,
             PRIMARY KEY (right_id))',

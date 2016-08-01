@@ -116,9 +116,11 @@ interface PMF_DB_Driver
     /**
      * This function returns the table status.
      *
+     * @param string $prefix Table prefix
+     *
      * @return array
      */
-    public function getTableStatus();
+    public function getTableStatus($prefix = '');
 
     /**
      * Returns the next ID of a table.

@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'activate_user':
-            $user->getUserById($userId);
+            $user->getUserById($userId, true);
             $user->setStatus('active');
             echo json_encode($user->getStatus());
             break;

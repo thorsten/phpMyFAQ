@@ -55,7 +55,7 @@ $(document).ready(function() {
     setupForm.find('a').on('click', addInput);
     setupType.on('change', selectDatabaseSetup);
 
-    if (setupTypeOptions.length === 1) {
+    if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {
         $dbSqlite.show().removeClass('hide');
         $dbFull.hide();
     }

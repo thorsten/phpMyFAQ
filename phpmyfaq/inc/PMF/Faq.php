@@ -1714,10 +1714,10 @@ class PMF_Faq
      */
     public function getRecordPreview($recordId, $wordCount = 12)
     {
-        $answerPreview = '';
-
-        if (isset($this->faqRecord['id']) && ($this->faqRecord['id'] == $recordId)) {
+        if (isset($this->faqRecord['id']) && ((int)$this->faqRecord['id'] === (int)$recordId)) {
             $answerPreview = $this->faqRecord['content'];
+
+            return PMF_Utils::makeShorterText($answerPreview, $wordCount);
         }
 
         $query = sprintf("
@@ -1731,7 +1731,8 @@ class PMF_Faq
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
             $recordId,
-            $this->_config->getLanguage()->getLanguage());
+            $this->_config->getLanguage()->getLanguage()
+        );
 
         $result = $this->_config->getDb()->query($query);
 

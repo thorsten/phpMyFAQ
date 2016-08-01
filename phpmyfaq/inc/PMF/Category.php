@@ -225,7 +225,7 @@ class PMF_Category
                 fc.id = fu.category_id
             %s
             GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active
             ORDER BY
                 fc.parent_id, fc.id',
             PMF_Db::getTablePrefix(),
@@ -295,18 +295,20 @@ class PMF_Category
      */
     public function getAllCategories()
     {
+        $categories = [];
         $query = sprintf('
             SELECT
                 id, lang, parent_id, name, description, user_id, group_id, active
             FROM
                 %sfaqcategories',
-            PMF_Db::getTablePrefix());
+            PMF_Db::getTablePrefix()
+        );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang = '".$this->language."'";
         }
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchArray($result)) {
-            $this->categories[$row['id']] = [
+            $categories[(int)$row['id']] = [
                 'id' => (int)$row['id'],
                 'lang' => $row['lang'],
                 'parent_id' => (int)$row['parent_id'],
@@ -319,7 +321,7 @@ class PMF_Category
             ];
         }
 
-        return $this->categories;
+        return $categories;
     }
 
     /**
