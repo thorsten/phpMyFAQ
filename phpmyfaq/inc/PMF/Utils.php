@@ -168,12 +168,19 @@ class PMF_Utils
      */
     public static function makeShorterText($str, $char)
     {
-        $matches = [];  
-        preg_match("/(?:\w+(?:\W+|$)){0,$char}/", $str, $matches);
-        if (strlen($str) > strlen($matches[0])) {
-                $shortStr = $matches[0].'...';
+
+        $str = PMF_String::preg_replace('/\s+/u', ' ', $str);
+        $arrStr = explode(' ', $str);
+        $shortStr = '';
+        $num = count($arrStr);
+
+        if ($num > $char) {
+            for ($j = 0; $j <= $char; ++$j) {
+                $shortStr .= $arrStr[$j].' ';
+            }
+            $shortStr .= '...';
         } else {
-                $shortStr = $matches[0];
+            $shortStr = $str;
         }
 
         return $shortStr;
