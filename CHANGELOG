@@ -5,8 +5,11 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.4 - 2016-08-
--
+Version 2.9.4 - 2016-08-02
+- deactivated debug mode (Thorsten)
+- updated bundled TinyMCE to version 4.4.1 (Thorsten)
+- updated bundled Bootstrap to version 3.3.7 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.3 - 2016-08-01
 - fixed minor bugs (Thorsten)
