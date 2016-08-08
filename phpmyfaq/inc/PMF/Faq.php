@@ -2951,7 +2951,7 @@ class PMF_Faq
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits
             ORDER BY
-                fd.%s %s",
+                %s %s",
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),

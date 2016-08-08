@@ -26,7 +26,7 @@ use Elasticsearch\ClientBuilder;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -179,7 +179,7 @@ if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap
 //
 // Connect to Elasticsearch if enabled
 //
-if ($faqConfig->get('search.enableElasticsearch')) {
+if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR.'/elasticsearch.php')) {
 
     require PMF_CONFIG_DIR.'/elasticsearch.php';
     require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
