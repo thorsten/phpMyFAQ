@@ -3,20 +3,18 @@
 /**
  * Manages user authentication with LDAP server.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -27,14 +25,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Auth_Ldap.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Alberto Cabello <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -46,13 +42,6 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
      * @var PMF_Ldap
      */
     private $ldap = null;
-
-    /**
-     * LDAP configuration.
-     *
-     * @var array
-     */
-    private $_ldapConfig = [];
 
     /**
      * LDAP server(s).
@@ -87,14 +76,13 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
     public function __construct(PMF_Configuration $config)
     {
         $this->_config = $config;
-        $this->_ldapConfig = $this->_config->getLdapConfig();
         $this->ldapServer = $this->_config->getLdapServer();
-        $this->multipleServers = isset($this->_ldapConfig['ldap_use_multiple_servers']) ?: false;
+        $this->multipleServers = $this->_config->get('ldap.ldap_use_multiple_servers');
 
         parent::__construct($this->_config);
 
         if (0 === count($this->ldapServer)) {
-            throw new PMF_Exception('An error ocurred while contacting LDAP: No configruation found.');
+            throw new PMF_Exception('An error occurred while contacting LDAP: No configuration found.');
         }
 
         $this->ldap = new PMF_Ldap($this->_config);
@@ -222,7 +210,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         }
 
         $bindLogin = $login;
-        if ($this->_ldapConfig['ldap_use_domain_prefix']) {
+        if ($this->_config->get('ldap.ldap_use_domain_prefix')) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'].'\\'.$login;
             }

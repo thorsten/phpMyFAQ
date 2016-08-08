@@ -43,6 +43,9 @@ class PMF_Ldap
      */
     private $_ldapConfig = [];
 
+    /** @var array */
+    private $config = [];
+
     /**
      * The connection handle.
      *
@@ -80,7 +83,8 @@ class PMF_Ldap
      */
     public function __construct(PMF_Configuration $config)
     {
-        $this->_ldapConfig = $config->getLdapConfig();
+        $this->config = $config;
+        $this->_ldapConfig = $this->config->getLdapConfig();
     }
 
     /**
@@ -114,28 +118,26 @@ class PMF_Ldap
             return false;
         }
 
-        // optionally set Bind version
-        if (isset($this->_ldapConfig['ldap_options'])) {
-            foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
-                if (!ldap_set_option($this->ds, constant($key), $value)) {
-                    $this->errno = ldap_errno($this->ds);
-                    $this->error = sprintf(
-                        'Unable to set LDAP option "%s" to "%s" (Error: %s).',
-                        $key,
-                        $value,
-                        ldap_error($this->ds)
-                    );
+        // Set LDAP options
+        foreach ($this->config->getLdapOptions() as $key => $value) {
+            if (!ldap_set_option($this->ds, constant($key), (int)$value)) {
+                $this->errno = ldap_errno($this->ds);
+                $this->error = sprintf(
+                    'Unable to set LDAP option "%s" to "%d" (Error: %s).',
+                    $key,
+                    (int)$value,
+                    ldap_error($this->ds)
+                );
 
-                    return false;
-                }
+                return false;
             }
         }
 
-        if (isset($this->_ldapConfig['ldap_use_dynamic_login']) && $this->_ldapConfig['ldap_use_dynamic_login']) {
+        if ($this->config->get('ldap.ldap_use_dynamic_login')) {
             // Check for dynamic user binding
-            $ldapRdn = $this->_ldapConfig['ldap_dynamic_login_attribute'].'='.$ldapUser.','.$ldapBase;
+            $ldapRdn = $this->config->get('ldap.ldap_dynamic_login_attribute').'='.$ldapUser.','.$ldapBase;
             $ldapBind = $this->bind($ldapRdn, $ldapPassword);
-        } elseif (isset($this->_ldapConfig['ldap_use_anonymous_login']) && $this->_ldapConfig['ldap_use_anonymous_login']) {
+        } elseif ($this->config->get('ldap.ldap_use_anonymous_login')) {
             // Check for anonymous binding
             $ldapBind = $this->bind();
         } else {
@@ -251,22 +253,23 @@ class PMF_Ldap
         if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
                 'The requested datafield "%s" does not exist in LDAP mapping configuration.',
-                $data);
+                $data
+            );
 
             return false;
         }
 
         $filter = sprintf(
             '(%s=%s)',
-            $this->_ldapConfig['ldap_mapping']['username'],
+            $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
 
-        if (true === $this->_ldapConfig['ldap_use_memberOf']) {
+        if ($this->config->get('ldap.ldap_use_memberOf')) {
             $filter = sprintf(
                 '(&%s(memberof=%s))',
                 $filter,
-                $this->_ldapConfig['ldap_mapping']['memberOf']
+                $this->config->get('ldap.ldap_mapping.memberOf')
             );
         }
 
@@ -317,7 +320,7 @@ class PMF_Ldap
         }
 
         $filter = sprintf('(%s=%s)',
-            $this->_ldapConfig['ldap_mapping']['username'],
+            $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );
         $sr = ldap_search($this->ds, $this->base, $filter);

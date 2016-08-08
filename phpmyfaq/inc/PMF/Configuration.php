@@ -271,13 +271,13 @@ class PMF_Configuration
 
         // Set LDAP configuration
         $this->config['core.ldapConfig'] = [
-            'ldap_use_multiple_servers' => $ldapConfig['ldap_use_multiple_servers'],
-            'ldap_mapping' => $ldapConfig['ldap_mapping'],
-            'ldap_use_domain_prefix' => $ldapConfig['ldap_use_domain_prefix'],
-            'ldap_options' => $ldapConfig['ldap_options'],
-            'ldap_use_memberOf' => $ldapConfig['ldap_use_memberOf'],
-            'ldap_use_sasl' => $ldapConfig['ldap_use_sasl'],
-            'ldap_use_anonymous_login' => $ldapConfig['ldap_use_anonymous_login'],
+            'ldap_use_multiple_servers' => $this->get('ldap.ldap_use_multiple_servers'),
+            'ldap_mapping' => $this->getLdapMapping(),
+            'ldap_use_domain_prefix' => $this->get('ldap.ldap_use_domain_prefix'),
+            'ldap_options' => $this->getLdapOptions(),
+            'ldap_use_memberOf' => $this->get('ldap.ldap_use_memberOf'),
+            'ldap_use_sasl' => $this->get('ldap.ldap_use_sasl'),
+            'ldap_use_anonymous_login' => $this->get('ldap.ldap_use_anonymous_login'),
         ];
     }
 
@@ -289,6 +289,34 @@ class PMF_Configuration
     public function getLdapConfig()
     {
         return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
+    }
+
+    /**
+     * Returns the LDAP mapping configuration.
+     *
+     * @return array
+     */
+    public function getLdapMapping()
+    {
+        return [
+            'name' => $this->get('ldap.ldap_mapping.name'),
+            'username' => $this->get('ldap.ldap_mapping.username'),
+            'mail' => $this->get('ldap.ldap_mapping.mail'),
+            'memberOf' => $this->get('ldap.ldap_mapping.memberOf')
+        ];
+    }
+
+    /**
+     * Returns the LDAP options configuration.
+     * 
+     * @return array
+     */
+    public function getLdapOptions()
+    {
+        return [
+            'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
+            'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS')
+        ];
     }
 
     /**

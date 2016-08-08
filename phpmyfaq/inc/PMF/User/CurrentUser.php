@@ -130,10 +130,10 @@ class PMF_User_CurrentUser extends PMF_User
         $optData = [];
 
         // Additional code for LDAP: user\\domain
-        if ($this->config->get('security.ldapSupport') && isset($this->_ldapConfig['ldap_use_domain_prefix']) &&
-            $this->_ldapConfig['ldap_use_domain_prefix'] && '' !== $password) {
-            // if LDAP configuration is enabled, and ldap_use_domain_prefix is available (in file constants_ldap.php)
-            // and ldap_use_domain_prefix is set to true and LDAP data are provided (password is not empty)
+        if ($this->config->get('security.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix') &&
+            '' !== $password) {
+            // If LDAP configuration and ldap_use_domain_prefix is true
+            // and LDAP credentials are provided (password is not empty)
             if (($pos = strpos($login, '\\')) !== false) {
                 if ($pos !== 0) {
                     $optData['domain'] = substr($login, 0, $pos);
