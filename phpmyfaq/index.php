@@ -699,7 +699,8 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
-if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
+if ($hasTags && ('artikel' == $action || 'show' == $action || is_numeric($solutionId))) {
+
     // We need some Links from social networks
     $faqServices = new PMF_Services($faqConfig);
     $faqServices->setCategoryId($cat);
@@ -713,7 +714,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $tpl->parseBlock(
         'rightBox',
         'socialLinks',
-        array(
+        [
             'baseHref' => $faqSystem->getSystemUri($faqConfig),
             'writePDFTag' => $PMF_LANG['msgPDF'],
             'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
@@ -722,8 +723,8 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
             'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
             'link_email' => $faqServices->getSuggestLink(),
             'link_pdf' => $faqServices->getPdfLink(),
-            'facebookLikeButton' => $faqHelper->renderFacebookLikeButton($faqServices->getLink()),
-        )
+            'facebookLikeButton' => $faqHelper->renderFacebookLikeButton($faqServices->getLink())
+        ]
     );
 }
 
