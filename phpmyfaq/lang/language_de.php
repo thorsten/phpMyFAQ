@@ -1213,3 +1213,18 @@ $PMF_LANG['ad_image_name_search'] = 'Suche nach Bildnamen';
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Private Notizen';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (nur für Editoren sichtbar)';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = array(0 => 'input', 1 => 'LDAP Mapping für den Namen, "cn" bei Nutzung eines ADS');
+$LANG_CONF['ldap.ldap_mapping.username'] = array(0 => 'input', 1 => 'LDAP Mapping für den Usernamen, "samAccountName" bei Nutzung eines ADS');
+$LANG_CONF['ldap.ldap_mapping.mail'] = array(0 => 'input', 1 => 'LDAP Mapping für E-Mmail, "mail" bei Nutzung eines ADS');
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = array(0 => 'input', 1 => 'LDAP Mapping für "member of" bei Nutzung von LDAP Gruppen');
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = array('checkbox', 'LDAP Domänenprefix, z.B. "DOMAIN\username"<br>(Standard: aktiviert)');
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = array(0 => 'input', 1 => 'LDAP Protokoll Version<br>(Standard: 3)');
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = array(0 => 'input', 1 => 'LDAP Verweise<br>(Standard: 0)');
+$LANG_CONF['ldap.ldap_use_memberOf'] = array('checkbox', 'Aktiviere Support für LDAP Gruppen, z.B. "DOMAIN\username"<br>(Standard: deaktiviert)');
+$LANG_CONF['ldap.ldap_use_sasl'] = array('checkbox', 'Aktiviere Support für LDAP mit SASL<br>(Standard: deaktiviert)');
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = array('checkbox', 'Aktiviere Support für multiple LDAP Server<br>(Standard: deaktiviert)');
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Aktiviere Support für anonyme LDAP Verbindungen<br>(Standard: deaktiviert)');
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Aktiviere Support für dynamisches User Binding<br>(Standard: deaktiviert)');
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP Attribut bei dynamisches User Binding, "uid" bei Nutzung eines ADS');

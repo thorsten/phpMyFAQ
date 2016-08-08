@@ -869,6 +869,25 @@ if ($step == 3) {
         }
     }
 
+    //
+    // UPDATES FROM 2.10.0-alpha
+    //
+    if (version_compare($version, '2.10.0-alpha', '<')) {
+        $faqConfig->add('ldap.ldap_mapping.name', 'cn');
+        $faqConfig->add('ldap.ldap_mapping.username', 'samAccountName');
+        $faqConfig->add('ldap.ldap_mapping.mail', 'mail');
+        $faqConfig->add('ldap.ldap_mapping.memberOf', '');
+        $faqConfig->add('ldap.ldap_use_domain_prefix', 'true');
+        $faqConfig->add('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION', '3');
+        $faqConfig->add('ldap.ldap_options.LDAP_OPT_REFERRALS', '0');
+        $faqConfig->add('ldap.ldap_use_memberOf', 'false');
+        $faqConfig->add('ldap.ldap_use_sasl', 'false');
+        $faqConfig->add('ldap.ldap_use_multiple_servers', 'false');
+        $faqConfig->add('ldap.ldap_use_anonymous_login', 'false');
+        $faqConfig->add('ldap.ldap_use_dynamic_login', 'false');
+        $faqConfig->add('ldap.ldap_dynamic_login_attribute', 'uid');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));

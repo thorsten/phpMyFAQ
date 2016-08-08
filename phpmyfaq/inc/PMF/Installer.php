@@ -383,7 +383,21 @@ class PMF_Installer
         'mail.remoteSMTP' => 'false',
         'mail.remoteSMTPServer' => '',
         'mail.remoteSMTPUsername' => '',
-        'mail.remoteSMTPPassword' => ''
+        'mail.remoteSMTPPassword' => '',
+        
+        'ldap.ldap_mapping.name' => 'cn',
+        'ldap.ldap_mapping.username' => 'samAccountName',
+        'ldap.ldap_mapping.mail' => 'mail',
+        'ldap.ldap_mapping.memberOf' => '',
+        'ldap.ldap_use_domain_prefix' => 'true',
+        'ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION' => '3',
+        'ldap.ldap_options.LDAP_OPT_REFERRALS' => '0',
+        'ldap.ldap_use_memberOf' => 'false',
+        'ldap.ldap_use_sasl' => 'false',
+        'ldap.ldap_use_multiple_servers' => 'false',
+        'ldap.ldap_use_anonymous_login' => 'false',
+        'ldap.ldap_use_dynamic_login' => 'false',
+        'ldap.ldap_dynamic_login_attribute' => 'uid'
     ];
 
     /**

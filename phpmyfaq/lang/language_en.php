@@ -996,7 +996,7 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 //$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
@@ -1250,3 +1250,18 @@ $PMF_LANG['ad_image_name_search'] = 'Search for image name';
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Private Notes';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
+
+// added 2.10.0-alpha - 2016-08-08 by Thorsten
+$LANG_CONF['ldap.ldap_mapping.name'] = array(0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS');
+$LANG_CONF['ldap.ldap_mapping.username'] = array(0 => 'input', 1 => 'LDAP mapping for username, "samAccountName" when using an ADS');
+$LANG_CONF['ldap.ldap_mapping.mail'] = array(0 => 'input', 1 => 'LDAP mapping for email, "mail" when using an ADS');
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = array(0 => 'input', 1 => 'LDAP mapping for "member of" when using LDAP groups');
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = array('checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"<br>(default: activated)');
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = array(0 => 'input', 1 => 'LDAP protocol version<br>(default: 3)');
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = array(0 => 'input', 1 => 'LDAP referrals<br>(default: 0)');
+$LANG_CONF['ldap.ldap_use_memberOf'] = array('checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"<br>(default: deactivated)');
+$LANG_CONF['ldap.ldap_use_sasl'] = array('checkbox', 'Enable LDAP SASL support<br>(default: deactivated)');
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = array('checkbox', 'Enable multiple LDAP servers support<br>(default: deactivated)');
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymous LDAP connections<br>(default: deactivated)');
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding<br>(default: deactivated)');
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
