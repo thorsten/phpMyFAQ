@@ -15,7 +15,7 @@
  * @since     2016-03-25
  */
 
-/*global $: false, hljs: false, saveFormValues: false */
+/*global $: false, hljs: false, saveFormValues: false, mermaid: false */
 
 $(document).ready(function () {
     'use strict';
@@ -46,4 +46,13 @@ $(document).ready(function () {
     // Tooltips
     //
     $('[data-toggle="tooltip"]').tooltip();
+
+    //
+    // Initialize Mermaid
+    //
+    var config = {
+        startOnLoad:true,
+        arrowMarkerAbsolute:true
+    };
+    mermaid.initialize(config);
 });
