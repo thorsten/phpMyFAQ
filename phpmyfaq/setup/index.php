@@ -35,6 +35,7 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
 
 set_time_limit(0);
 
+use Symfony\Component\ClassLoader\UniversalClassLoader;
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
 
 if (!defined('DEBUG')) {
