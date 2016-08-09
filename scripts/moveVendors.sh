@@ -18,7 +18,7 @@ cp -r $cwd/vendor/guzzlehttp/ringphp/src/* $cwd/phpmyfaq/inc/libs/guzzlehttp/rin
 cp -r $cwd/vendor/monolog/monolog/src/Monolog/* $cwd/phpmyfaq/inc/libs/monolog/src/Monolog
 cp -r $cwd/vendor/erusev/parsedown/Parsedown.php $cwd/phpmyfaq/inc/libs/parsedown/Parsedown.php
 cp -r $cwd/vendor/erusev/parsedown-extra/ParsedownExtra.php $cwd/phpmyfaq/inc/libs/parsedown/ParsedownExtra.php
-cp -r $cwd/vendor/phpseclib/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/inc/libs/phpseclib
+cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/inc/libs/phpseclib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/inc/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/inc/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/inc/libs/swiftmailer
