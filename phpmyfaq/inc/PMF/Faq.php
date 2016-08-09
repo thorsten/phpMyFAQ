@@ -2558,11 +2558,11 @@ class PMF_Faq
     /**
      * Returns the changelog of a FAQ record.
      *
-     * @param int $record_id
+     * @param int $recordId
      *
      * @return array
      */
-    public function getChangeEntries($record_id)
+    public function getChangeEntries($recordId)
     {
         $entries = [];
 
@@ -2573,10 +2573,10 @@ class PMF_Faq
                 %sfaqchanges
             WHERE
                 beitrag = %d
-            ORDER BY id DESC',
+            ORDER BY revision_id DESC',
             PMF_Db::getTablePrefix(),
-            $record_id
-            );
+            $recordId
+        );
 
         if ($result = $this->_config->getDb()->query($query)) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
