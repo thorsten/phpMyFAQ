@@ -1515,10 +1515,22 @@ class PMF_Faq
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            %s
             %s
             %s',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            $this->queryPermission($this->groupSupport),
             $where,
             $orderBy
         );
