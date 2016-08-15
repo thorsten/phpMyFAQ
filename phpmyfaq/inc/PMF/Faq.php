@@ -1506,7 +1506,9 @@ class PMF_Faq
                 fd.date_end AS date_end,
                 fd.sticky AS sticky,
                 fd.created AS created,
-                fd.notes AS notes
+                fd.notes AS notes,
+                fdg.record_id,
+                fdu.record_id
             FROM
                 %sfaqdata fd
             LEFT JOIN
@@ -1530,8 +1532,8 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
-            $this->queryPermission($this->groupSupport),
             $where,
+            $this->queryPermission($this->groupSupport),
             $orderBy
         );
 
