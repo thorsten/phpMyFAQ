@@ -120,11 +120,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 pmf-maincontent">
-                <div class="row">
-
-                    {writeContent}
-
-                </div>
+                {writeContent}
             </div>
             <aside class="col-md-4 pmf-aside">
 

@@ -1515,11 +1515,23 @@ class PMF_Faq
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
+            LEFT JOIN
+                %sfaqdata_group AS fdg
+            ON
+                fd.id = fdg.record_id
+            LEFT JOIN
+                %sfaqdata_user AS fdu
+            ON
+                fd.id = fdu.record_id
+            %s
             %s
             %s',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix(),
             $where,
+            $this->queryPermission($this->groupSupport),
             $orderBy
         );
 
@@ -2558,11 +2570,11 @@ class PMF_Faq
     /**
      * Returns the changelog of a FAQ record.
      *
-     * @param int $record_id
+     * @param int $recordId
      *
      * @return array
      */
-    public function getChangeEntries($record_id)
+    public function getChangeEntries($recordId)
     {
         $entries = [];
 
@@ -2573,10 +2585,10 @@ class PMF_Faq
                 %sfaqchanges
             WHERE
                 beitrag = %d
-            ORDER BY id DESC',
+            ORDER BY revision_id DESC',
             PMF_Db::getTablePrefix(),
-            $record_id
-            );
+            $recordId
+        );
 
         if ($result = $this->_config->getDb()->query($query)) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {

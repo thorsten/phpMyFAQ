@@ -102,7 +102,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         // new entry
         $logging = new PMF_Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreatesave');
-        printf("<h2 class=\"page-header\">%s</h2>\n", $PMF_LANG['ad_entry_aor']);
+        printf(
+            '<header class="row"><div class="col-lg-12"><h2 class="page-header">%s</h2></div></header>',
+            $PMF_LANG['ad_entry_aor']
+        );
 
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
