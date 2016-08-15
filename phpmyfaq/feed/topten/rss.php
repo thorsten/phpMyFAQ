@@ -144,7 +144,9 @@ if ($num > 0) {
         $rss->writeElement('link', $faqConfig->getDefaultUrl().$link);
         $rss->writeElement('guid', $faqConfig->getDefaultUrl().$link);
 
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], false));
+        $date = new DateTime($item['last_visit']);
+        
+        $rss->writeElement('pubDate', $date->format(DATE_RFC822));
         $rss->endElement();
     }
 }

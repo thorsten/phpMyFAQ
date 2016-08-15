@@ -52,9 +52,9 @@ class PMF_System
     /**
      * API version.
      */
-    const VERSION_API = '1.2';
+    const VERSION_API = '2.0';
 
-    /**
+    /**     
      * Minimum required PHP version.
      */
     const VERSION_MINIMUM_PHP = '5.6.0';

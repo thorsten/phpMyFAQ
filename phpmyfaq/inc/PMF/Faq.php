@@ -2138,8 +2138,8 @@ class PMF_Faq
 
                 $data['visits'] = (int)$row->visits;
                 $data['question'] = $row->question;
-                $data['date'] = $row->updated;
-                $data['last_visit'] = $row->last_visit;
+                $data['date'] = PMF_Date::createIsoDate($row->updated, DATE_ISO8601, true);
+                $data['last_visit'] = date('c', $row->last_visit);
 
                 $title = $row->question;
                 $url = sprintf(
