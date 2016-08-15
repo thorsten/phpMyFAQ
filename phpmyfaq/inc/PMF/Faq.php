@@ -1506,9 +1506,7 @@ class PMF_Faq
                 fd.date_end AS date_end,
                 fd.sticky AS sticky,
                 fd.created AS created,
-                fd.notes AS notes,
-                fdg.record_id,
-                fdu.record_id
+                fd.notes AS notes
             FROM
                 %sfaqdata fd
             LEFT JOIN
