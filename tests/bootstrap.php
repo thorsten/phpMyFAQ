@@ -20,6 +20,8 @@
 use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 date_default_timezone_set('Europe/Berlin');
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
 error_reporting(E_ALL | E_STRICT);
 
 //
@@ -28,19 +30,23 @@ error_reporting(E_ALL | E_STRICT);
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 define('PMF_CONFIG_DIR', dirname(__DIR__) . '/phpmyfaq/config');
 define('PMF_TEST_DIR', __DIR__);
-define('DEBUG', false);
+define('IS_VALID_PHPMYFAQ', true);
+define('COPYRIGHT', 'Hello, World.');
+define('DEBUG', true);
+
+$_SERVER['HTTP_HOST'] = 'https://localhost/';
 
 require PMF_CONFIG_DIR . '/constants.php';
 require PMF_CONFIG_DIR . '/constants_ldap.php';
 
-/**
- * The include directory
- */
+//
+// The include directory
+//
 define('PMF_INCLUDE_DIR', dirname(__DIR__) . '/phpmyfaq/inc');
 
-/**
- * The directory where the translations reside
- */
+//
+// The directory where the translations reside
+//
 define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
 
 //
@@ -53,3 +59,25 @@ $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
 $loader->registerPrefix('PMFTest_', PMF_TEST_DIR);
 $loader->register();
+
+//
+// Delete possible SQLite file first
+//
+@unlink(PMF_TEST_DIR.'/test.db');
+
+//
+// Create database credentials for SQLite
+//
+$setup = [
+    'dbServer' => PMF_TEST_DIR.'/test.db',
+    'dbType' => 'sqlite3',
+    'loginname' => 'admin',
+    'password' => 'password',
+    'password_retyped' => 'password',
+    'rootDir' => PMF_TEST_DIR
+];
+
+$installer = new PMF_Installer();
+$installer->startInstall($setup);
+
+require PMF_TEST_DIR.'/config/database.php';

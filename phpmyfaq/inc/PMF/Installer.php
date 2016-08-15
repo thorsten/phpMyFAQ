@@ -594,9 +594,9 @@ class PMF_Installer
     /**
      * Starts the installation.
      *
-     * @param array $DB
+     * @param array $setup
      */
-    public function startInstall(Array $DB = null)
+    public function startInstall(Array $setup = null)
     {
         $query = $uninst = $dbSetup = [];
 
@@ -607,7 +607,7 @@ class PMF_Installer
         }
 
         // Check database entries
-        $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING);
+        $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING, $setup['dbType']);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
             if (!file_exists(PMF_INCLUDE_DIR.'/PMF/Instance/Database/'.ucfirst($dbSetup['dbType']).'.php')) {
@@ -622,19 +622,19 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
-        $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING);
+        $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_server', FILTER_SANITIZE_STRING, '');
         if (is_null($dbSetup['dbServer']) && !PMF_System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database server.</p>\n";
             PMF_System::renderFooter(true);
         }
 
-        $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
+        $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING, '');
         if (is_null($dbSetup['dbUser']) && !PMF_System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
             PMF_System::renderFooter(true);
         }
 
-        $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_password', FILTER_UNSAFE_RAW);
+        $dbSetup['dbPassword'] = PMF_Filter::filterInput(INPUT_POST, 'sql_password', FILTER_UNSAFE_RAW, '');
         if (is_null($dbSetup['dbPassword']) && !PMF_System::isSqlite($dbSetup['dbType'])) {
             // Password can be empty...
             $dbSetup['dbPassword'] = '';
@@ -647,7 +647,12 @@ class PMF_Installer
         }
 
         if (PMF_System::isSqlite($dbSetup['dbType'])) {
-            $dbSetup['dbServer'] = PMF_Filter::filterInput(INPUT_POST, 'sql_sqlitefile', FILTER_SANITIZE_STRING);
+            $dbSetup['dbServer'] = PMF_Filter::filterInput(
+                INPUT_POST,
+                'sql_sqlitefile',
+                FILTER_SANITIZE_STRING,
+                $setup['dbServer']
+            );
             if (is_null($dbSetup['dbServer'])) {
                 echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
                 PMF_System::renderFooter(true);
@@ -714,7 +719,6 @@ class PMF_Installer
             }
         }
 
-
         //
         // Check Elasticsearch if enabled
         //
@@ -769,20 +773,25 @@ class PMF_Installer
         }
 
         // check loginname
-        $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+        $loginname = PMF_Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING, $setup['loginname']);
         if (is_null($loginname)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a loginname for your account.</p>';
             PMF_System::renderFooter(true);
         }
 
         // check user entries
-        $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        $password = PMF_Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, $setup['password']);
         if (is_null($password)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your account.</p>';
             PMF_System::renderFooter(true);
         }
 
-        $password_retyped = PMF_Filter::filterInput(INPUT_POST, 'password_retyped', FILTER_SANITIZE_STRING);
+        $password_retyped = PMF_Filter::filterInput(
+            INPUT_POST,
+            'password_retyped',
+            FILTER_SANITIZE_STRING,
+            $setup['password_retyped']
+        );
         if (is_null($password_retyped)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a retyped password.</p>';
             PMF_System::renderFooter(true);
@@ -804,8 +813,10 @@ class PMF_Installer
         $email = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL, '');
         $permLevel = PMF_Filter::filterInput(INPUT_POST, 'permLevel', FILTER_SANITIZE_STRING, 'basic');
 
+        $rootDir = isset($setup['rootDir']) ? $setup['rootDir'] : PMF_ROOT_DIR;
+
         $instanceSetup = new PMF_Instance_Setup();
-        $instanceSetup->setRootDir(PMF_ROOT_DIR);
+        $instanceSetup->setRootDir($rootDir);
 
         // Write the DB variables in database.php
         if (!$instanceSetup->createDatabaseFile($dbSetup)) {
@@ -833,7 +844,7 @@ class PMF_Installer
         }
 
         // connect to the database using config/database.php
-        require PMF_ROOT_DIR.'/config/database.php';
+        require $rootDir.'/config/database.php';
         $db = PMF_Db::factory($dbSetup['dbType']);
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
         if (!$db) {
@@ -931,8 +942,8 @@ class PMF_Installer
         $faqInstanceMaster->createMaster($faqInstance);
 
         // connect to Elasticsearch if enabled
-        if (!is_null($esEnabled) && is_file(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
-            require PMF_ROOT_DIR.'/config/elasticsearch.php';
+        if (!is_null($esEnabled) && is_file($rootDir.'/config/elasticsearch.php')) {
+            require $rootDir.'/config/elasticsearch.php';
 
             $configuration->setElasticsearchConfig($PMF_ES);
 

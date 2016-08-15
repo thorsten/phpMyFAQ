@@ -17,9 +17,6 @@
  * @since     2009-05-16
  */
 
-// Define the named constant used as a check by any included PHP file
-define('IS_VALID_PHPMYFAQ', null);
-
 /**
  * AllTests
  *

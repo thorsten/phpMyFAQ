@@ -45,6 +45,7 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         PMF_String::init('en');
 
         $this->dbHandle  = new PMF_DB_Sqlite3();
+        $this->dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
         $this->pmfConfig = new PMF_Configuration($this->dbHandle);
     }
 
