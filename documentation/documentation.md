@@ -377,8 +377,8 @@ If you're entered the correct LDAP information during the installation you have 
 configuration in the admin backend. Now your user can authenticate themselves in phpMyFAQ against your LDAP server or 
 even an Microsoft Active Directory.
 
-If you need special options for your LDAP or ADS configuration you have to edit the LDAP constants in the file 
-**config/constants_ldap.php**.
+If you need special options for your LDAP or ADS configuration you can change the LDAP configuration in the admin
+configuration panel.
 
 If you want to add LDAP support later, you can use the file **config/ldap.php.original** as template and if you rename 
 it to **config/ldap.php** you can use the LDAP features as well after you enabled it in the administration backend.
@@ -1158,13 +1158,11 @@ To backup the whole data located on your web server you can run our simple backu
             .
             |-- [...]
             |-- config
-            |   |-- constants_ldap.php
             |   |-- constants.php
             |   `-- database.php
             `-- multisite
                 |-- multisite.php
                 `-- beta.faq.example.org
-                    |-- constants_ldap.php
                     |-- constants.php
                     `-- database.php
 

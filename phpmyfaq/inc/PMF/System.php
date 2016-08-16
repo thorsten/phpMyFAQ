@@ -328,7 +328,7 @@ class PMF_System
         );
         $blacklist = array(
             '/config/constants.php' => false,
-            '/config/constants_ldap.php' => false,
+            '/config/constants_elasticsearch.php' => false,
             '/config/database.php' => false,
             '/config/ldap.php' => false,
         );

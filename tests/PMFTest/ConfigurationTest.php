@@ -17,8 +17,6 @@
  * @since     2013-12-30
  */
 
-require_once dirname(dirname(__DIR__)) . '/phpmyfaq/config/constants_ldap.php';
-
 /**
  * Configuration_AllTests
  *
@@ -68,7 +66,6 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        // Demo data from config/constants_ldap.php:
         $PMF_LDAP["ldap_use_multiple_servers"] = false;
 
         $expected = [
@@ -96,7 +93,6 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        // Demo data from config/constants_ldap.php:
         $PMF_LDAP["ldap_use_multiple_servers"] = true;
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';
@@ -137,7 +133,6 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        // Demo data from config/constants_ldap.php:
         $PMF_LDAP["ldap_use_multiple_servers"] = false;
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';

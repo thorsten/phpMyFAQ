@@ -5,7 +5,7 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -266,8 +266,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                     <p class="alert alert-info">
-                        You can add additional LDAP configuration and more LDAP servers in the file
-                        config/constants_ldap.php.
+                        You can add additional LDAP configuration in the admin configuration panel.
                     </p>
 
                 </fieldset>

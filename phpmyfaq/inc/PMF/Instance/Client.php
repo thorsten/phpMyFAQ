@@ -3,18 +3,16 @@
 /**
  * The main phpMyFAQ instances class for instance clients.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-31
  */
@@ -155,21 +153,6 @@ class PMF_Instance_Client extends PMF_Instance
     {
         return $this->fileSystem->copy(
             $this->fileSystem->getRootPath().'/config/constants.php',
-            $dest
-        );
-    }
-
-    /**
-     * Copies the config/constants_ldap.php file to a new client instance.
-     *
-     * @param string $dest Destination file
-     *
-     * @return bool
-     */
-    public function copyLdapConstantsFile($dest)
-    {
-        return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath().'/config/constants_ldap.php',
             $dest
         );
     }

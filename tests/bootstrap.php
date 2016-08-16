@@ -36,8 +36,7 @@ define('DEBUG', true);
 
 $_SERVER['HTTP_HOST'] = 'https://localhost/';
 
-require PMF_CONFIG_DIR . '/constants.php';
-require PMF_CONFIG_DIR . '/constants_ldap.php';
+require PMF_CONFIG_DIR.'/constants.php';
 
 //
 // The include directory

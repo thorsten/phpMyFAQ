@@ -2,7 +2,7 @@
 /**
  * Test case for PMF_Link
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
@@ -23,7 +23,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2012-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
@@ -65,8 +65,7 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Instance_Client = null;
         @unlink(PMF_TEST_DIR . '/constants.test.php');
-        @unlink(PMF_TEST_DIR . '/constants_ldap.test.php');
-        
+
         if (is_dir(PMF_TEST_DIR . '/assets/template/default/')) {
             $files = new RecursiveIteratorIterator(
                 new RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/template/default/'),
@@ -86,14 +85,6 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
 
         $this->assertTrue($return);
         $this->assertFileExists(PMF_TEST_DIR . '/constants.test.php');
-    }
-
-    public function testCopyLdapConstantsFile()
-    {
-        $return = $this->PMF_Instance_Client->copyLdapConstantsFile(PMF_TEST_DIR . '/constants_ldap.test.php');
-
-        $this->assertTrue($return);
-        $this->assertFileExists(PMF_TEST_DIR . '/constants_ldap.test.php');
     }
 
     public function testCopyTemplateFolder()
