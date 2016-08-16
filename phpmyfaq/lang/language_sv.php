@@ -468,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Antal v
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blockera följande IP-adresser");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktivera stöd för mod_rewrite? (förvalt: inaktivt)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'Som ny huvudkategori';
 $PMF_LANG['ad_categ_paste_error'] = 'Att flytta denna kategori är inte möjligt.';
 $PMF_LANG['ad_categ_move'] = 'flytta kategori';

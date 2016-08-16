@@ -47,7 +47,7 @@ class PMF_Auth_Sso extends PMF_Auth implements PMF_Auth_Driver
      */
     public function add($login, $pass)
     {
-        if ($this->_config->get('security.ldapSupport')) {
+        if ($this->_config->get('ldap.ldapSupport')) {
             // LDAP + SSO
             $authLdap = new PMF_Auth_Ldap($this->_config);
             $result = $authLdap->add($login, $pass);

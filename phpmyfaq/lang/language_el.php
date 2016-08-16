@@ -466,7 +466,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Αρι�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ως νέα κύρια κατηγορία';
 $PMF_LANG['ad_categ_paste_error'] = 'Δεν ήταν δυνατή η μετακίνηση αυτής της κατηγορίας.';
 $PMF_LANG['ad_categ_move'] = 'μετακίνηση κατηγορίας';

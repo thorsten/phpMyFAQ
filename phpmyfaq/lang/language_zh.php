@@ -754,7 +754,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "每页�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "新内容数据");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "禁止这些IP地址访问");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "启用mod_rewrite吗?(默认:禁止)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "启用LDAP支持吗? (默认:禁止)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "启用LDAP支持吗? (默认:禁止)");
 $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "链接验启用的基本 URL 网址 (设置为首页 URL 网址)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "AJAX 连接验证间隔时间 (单位：秒)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "显示新问题?(默认:禁止)");

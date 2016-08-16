@@ -468,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "تعد�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "تعداد مقالات جدید");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "قدغن کردن این آی‌پی‌ها");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "پشتیبانی از mod_rewrite فعال شود؟ (پیش‌فرض: غیرفعال)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "پشتیبانی از LDAP فعال شود؟ (پیش‌فرض: غیرفعال)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'به عنوان موضوع اصلی';
 $PMF_LANG['ad_categ_paste_error'] = 'انتقال این موضوع ممکن نیست.';
 $PMF_LANG['ad_categ_move'] = 'انتقال موضوع';

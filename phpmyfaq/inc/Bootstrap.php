@@ -168,7 +168,7 @@ session_start();
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqConfig->get('security.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap.php') && extension_loaded('ldap')) {
+if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap.php') && extension_loaded('ldap')) {
     require PMF_CONFIG_DIR.'/constants_ldap.php';
     require PMF_CONFIG_DIR.'/ldap.php';
     $faqConfig->setLdapConfig($PMF_LDAP);

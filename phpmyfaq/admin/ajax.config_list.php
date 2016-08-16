@@ -2,19 +2,17 @@
 /**
  * AJAX: lists the complete configuration items as text/html.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
  */
@@ -41,15 +39,6 @@ if (!empty($_SESSION['access_token'])) {
 }
 
 $configMode = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
-$availableConfigModes = [
-    'main' => 1,
-    'records' => 1,
-    'spam' => 1,
-    'search' => 1,
-    'social' => 1,
-    'seo' => 1,
-    'mail' => 1
-];
 
 /**
  * @param mixed  $key
@@ -231,7 +220,7 @@ function renderInputForm($key, $type)
             if ($faqConfig->get($key)) {
                 echo ' checked';
             }
-            if ('security.ldapSupport' === $key && !extension_loaded('ldap')) {
+            if ('ldap.ldapSupport' === $key && !extension_loaded('ldap')) {
                 echo ' disabled';
             }
             if ('security.useSslOnly' === $key && empty($_SERVER['HTTPS'])) {
@@ -307,8 +296,7 @@ foreach ($LANG_CONF as $key => $value) {
         ?>
                 </label>
                 <div class="col-lg-6">
-                    <?php renderInputForm($key, $value[0]);
-        ?>
+                    <?php renderInputForm($key, $value[0]) ?>
                 </div>
 <?php
 

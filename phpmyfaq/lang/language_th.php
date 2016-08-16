@@ -467,7 +467,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "จำ�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "จำนวนประกาศข่าว");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "ห้ามการใช้งานจากหมายเลขที่อยู่ไอพี");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "เปิดใช้งาน mod_rewrite (ค่าเริ่มต้น: ปิด)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "เปิดใช้งาน LDAP (ค่าเริ่มต้น: ปิด)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "เปิดใช้งาน LDAP (ค่าเริ่มต้น: ปิด)");
 $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL หลักสำหรับการตรวจสอบลิงค์ (ตัวอย่าง: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "ช่วงเวลาสำหรับการตรวจลิงค์ของ AJAX  (หน่วยเป็นวินาที)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "ปิดการแสดงผลของคำถามใหม่");

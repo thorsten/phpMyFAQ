@@ -468,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Liczba 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Liczba newsów");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Zbanuj te adresy IP");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Użyć wsparcia dla mod_rewrite? (domyślnie wyłączone)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Użyć wsparcia dla LDAP? (domyślnie wyłączone)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Użyć wsparcia dla LDAP? (domyślnie wyłączone)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'jako nową główną kategorię';
 $PMF_LANG['ad_categ_paste_error'] = 'Przesunięcie tej kategorii nie jest możliwe.';
 $PMF_LANG['ad_categ_move'] = 'przesuń kategorię';

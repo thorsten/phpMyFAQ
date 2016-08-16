@@ -446,7 +446,7 @@ if ($step == 3) {
             WHERE config_name = 'main.ipCheck'";
         $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.enableLoginOnly'
             WHERE config_name = 'main.enableLoginOnly'";
-        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.ldapSupport'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'ldap.ldapSupport'
             WHERE config_name = 'main.ldapSupport'";
         $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'security.bannedIPs'
             WHERE config_name = 'main.bannedIPs'";
@@ -887,6 +887,9 @@ if ($step == 3) {
         $faqConfig->add('ldap.ldap_use_dynamic_login', 'false');
         $faqConfig->add('ldap.ldap_dynamic_login_attribute', 'uid');
         $faqConfig->update(['main.currentApiVersion' => PMF_System::getApiVersion()]);
+
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'ldap.ldapSupport'
+            WHERE config_name = 'security.ldapSupport'";
     }
 
     // Always the last step: Update version number

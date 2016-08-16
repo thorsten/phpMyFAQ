@@ -352,7 +352,7 @@ class PMF_Installer
         'security.permLevel' => 'basic',
         'security.ipCheck' => 'false',
         'security.enableLoginOnly' => 'false',
-        'security.ldapSupport' => 'false',
+        'ldap.ldapSupport' => 'false',
         'security.bannedIPs' => '',
         'security.ssoSupport' => 'false',
         'security.ssoLogoutRedirect' => '',

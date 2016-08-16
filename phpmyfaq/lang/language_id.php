@@ -566,7 +566,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Nonaktifkan link untuk membuat Pertanyaan Baru?");

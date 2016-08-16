@@ -566,7 +566,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "페이�
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "공지사항 표시 개수");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";

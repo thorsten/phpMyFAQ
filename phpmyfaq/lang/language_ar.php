@@ -466,7 +466,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "عدد 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "عدد مقالات الأخبار");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "حجب ومنع هذة العناوين");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'كتصنيف رئيسي جديد';
 $PMF_LANG['ad_categ_paste_error'] = 'نقل هذا التصنيف غير ممكن';
 $PMF_LANG['ad_categ_move'] = 'نقل تصنيف';

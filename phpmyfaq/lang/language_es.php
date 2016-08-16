@@ -468,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Número
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Número de nuevos artículos");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Bloquear estas IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activar soporte para mod_rewrite? (por omisión: deshabilitado)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Quiere activar soporte para LDAP? (por omisión: deshabilitado)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Quiere activar soporte para LDAP? (por omisión: deshabilitado)");
 $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL Base para validar ligas (e.g.: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervalo entre verificaciones de ligas AJAX (en segundos)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "¿Deshabilitar visibilidad de nuevas preguntas?");

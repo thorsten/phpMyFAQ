@@ -755,7 +755,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Aantal 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Aantal nieuws artikelen');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Blokkeer deze IP adressen');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Basis URL voor link verificatie (bijv.: http://www.voorbeeld.nl/faq)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Interval tussen AJAX link verificaties (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Uitschakelen zichtbaarheid van nieuwe vragen?');

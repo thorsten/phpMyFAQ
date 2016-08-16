@@ -574,7 +574,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakuts
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";
 $PMF_LANG["ad_categ_paste_error"] = "Ezinezkoa da atal hau mugitzea.";

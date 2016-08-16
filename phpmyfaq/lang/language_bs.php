@@ -569,7 +569,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj pr
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";

@@ -467,7 +467,7 @@ $LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => "input", 1 => "ページ�
 $LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => "input", 1 => "お知らせの表示数");
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => '拒否する IP アドレス');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'mod_rewrite のサポートを使用しますか? (初期値: 無効)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP のサポートを有効にしますか? (初期値: 無効)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP のサポートを有効にしますか? (初期値: 無効)');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'リンク確認の基準 URL (例: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'AJAX リンクの確認間隔 (秒単位)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => '新しい質問の表示を無効にする');

@@ -755,7 +755,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Antall 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Antall nyhetsartikler');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Steng ute disse IP-ene');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Aktiver mod_rewrite støtte? (Standard: deaktivert)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'Vil du aktivere LDAP-støtte? (Standard: deaktivert)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'Vil du aktivere LDAP-støtte? (Standard: deaktivert)');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Basis url for verifikasjon av link (f.eks.: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Intervall for AJAX linksjekk (i sekunder)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Vise nye spørsmål automatisk?');

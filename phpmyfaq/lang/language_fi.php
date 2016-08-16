@@ -469,7 +469,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Näytet
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Uutisten määrä');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Estä käyttö näistä IP-osoitteista');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Käytä mod_rewrite:a? (oletus: ei käytössä)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP-tuki päälle? (oletus: ei käytössä)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP-tuki päälle? (oletus: ei käytössä)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'uutena pääkategoriana';
 $PMF_LANG['ad_categ_paste_error'] = 'Tämän kategorian siirto ei ole mahdollista.';
 $PMF_LANG['ad_categ_move'] = 'siirrä kategoriaa';

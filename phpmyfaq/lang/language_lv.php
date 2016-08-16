@@ -567,7 +567,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

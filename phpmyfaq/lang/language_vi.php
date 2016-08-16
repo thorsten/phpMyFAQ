@@ -561,7 +561,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Số l�
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Số lượng bài mới");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Loại bỏ các IP này");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Không chọn chức năng cho xem các câu hỏi mới?");

@@ -572,7 +572,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapy
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Išjungti naujų klausimų matomumą?");

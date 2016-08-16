@@ -465,7 +465,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Téma /
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Új cikkek száma');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Büntetett IP címek:');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'mod_rewrite bekapcsolva (alapértelmezett: disabled)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP támogatás (alapértelmezett: disabled)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP támogatás (alapértelmezett: disabled)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'mint új főkategória';
 $PMF_LANG['ad_categ_paste_error'] = 'A kategória mozgatása nem lehetséges.';
 $PMF_LANG['ad_categ_move'] = 'kategória mozgatása';

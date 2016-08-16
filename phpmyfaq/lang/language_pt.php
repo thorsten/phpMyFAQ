@@ -450,7 +450,7 @@ $LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Número de
 $LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Número de notícias');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Barrar estes IPs');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Ativar o suporte de <em>mod_rewrite</em> ? <small>(pré-definição: desativado)</small>');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL-base para verificação de <em>links</em> <small>( ex.: http://www.example.org/faq/ )</small>');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Intervalo entre verificações de <em>links</em> pelo AJAX <small>(segundos)</small>');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Desativar a visibilidade de novos artigos?');

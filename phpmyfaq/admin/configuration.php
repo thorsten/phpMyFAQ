@@ -9,12 +9,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
  */
@@ -155,6 +153,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                                 <?php echo $PMF_LANG['mailControlCenter'] ?>
                             </a>
                         </li>
+                        <li role="presentation">
+                            <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="toggleConfig">
+                                <i aria-hidden="true" class="fa fa-sitemap"></i>
+                                <?php echo 'LDAP' ?>
+                            </a>
+                        </li>
                     </ul>
 
                     <div class="tab-content" style="margin-top: 20px;">
@@ -166,6 +170,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         <div role="tabpanel" class="tab-pane fade" id="seo"></div>
                         <div role="tabpanel" class="tab-pane fade" id="social"></div>
                         <div role="tabpanel" class="tab-pane fade" id="mail"></div>
+                        <div role="tabpanel" class="tab-pane fade" id="ldap"></div>
                     </div>
                 </div>
             </div>
