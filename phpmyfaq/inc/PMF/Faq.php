@@ -2072,6 +2072,7 @@ class PMF_Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS question,
+                fd.content AS answer,
                 fd.updated AS updated,
                 fcr.category_id AS category_id,
                 fv.visits AS visits,
@@ -2138,6 +2139,7 @@ class PMF_Faq
 
                 $data['visits'] = (int)$row->visits;
                 $data['question'] = $row->question;
+                $data['answer'] = $row->answer;
                 $data['date'] = PMF_Date::createIsoDate($row->updated, DATE_ISO8601, true);
                 $data['last_visit'] = date('c', $row->last_visit);
 
