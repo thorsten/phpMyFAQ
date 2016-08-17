@@ -253,8 +253,10 @@ switch ($action) {
 // Header of the admin page including the navigation
 require 'header.php';
 
+$numRights = count($user->perm->getAllUserRights($user->getUserId()));
+
 // User is authenticated
-if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0) {
+if (isset($auth) && $numRights > 0) {
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {
@@ -349,7 +351,7 @@ if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0
         require 'dashboard.php';
     }
 // User is authenticated, but has no rights
-} elseif (isset($auth) && !in_array(true, $permission)) {
+} elseif (isset($auth) && $numRights === 0) {
     require 'noperm.php';
 // User is NOT authenticated
 } else {
