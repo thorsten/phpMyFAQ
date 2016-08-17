@@ -257,7 +257,7 @@ class PMF_Configuration
         ];
 
         // Add multiple LDAP servers if enabled
-        if (true === $ldapConfig['ldap_use_multiple_servers']) {
+        if (true === $this->get('ldap.ldap_use_multiple_servers')) {
             $key = 1;
             while ($key >= 1) {
                 if (isset($ldapConfig[$key])) {
