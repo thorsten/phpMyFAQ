@@ -1522,7 +1522,7 @@ You can call the resources with the following URIs:
             "answer": "Nope!",
             "date": "2016-03-17T22:10:00+0100",
             "last_visit": "2016-08-14T21:16:29+02:00",
-            "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+            "url": "https://www.example.org/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
@@ -1531,7 +1531,7 @@ You can call the resources with the following URIs:
             "answer": "Maybe!",
             "date": "2015-12-14T07:01:00+0100",
             "last_visit": "2016-05-16T20:36:53+02:00",
-            "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
+            "url": "https://www.example.org/index.php?action=artikel&cat=1&id=1&artlang=en"
         
         }
     ]</code></pre>
@@ -1549,7 +1549,7 @@ You can call the resources with the following URIs:
             "question": "How can I survive without phpMyFAQ?",
             "answer": "A good question!",
             "visits": 10,
-            "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
+            "url": "https://www.example.org/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
@@ -1557,7 +1557,7 @@ You can call the resources with the following URIs:
             "question": "Is there life after death?",
             "answer": "Maybe!",
             "visits": 3,
-            "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
+            "url": "https://www.example.org/index.php?action=artikel&cat=1&id=1&artlang=en"
         }
     ]</code></pre>
     
@@ -1570,9 +1570,9 @@ You can call the resources with the following URIs:
 
     <pre><code class="json">[
         {
-            "id": "1",
+            "id": 1,
             "lang": "de",
-            "date": "20091010175452",
+            "date": "2011-08-23T20:43:00+0200",
             "header": "Hallo, World!",
             "content": "<p>Hello, phpMyFAQ!</p>",
             "authorName": "Thorsten",
@@ -1583,7 +1583,8 @@ You can call the resources with the following URIs:
             "allowComments": true,
             "link": "",
             "linkTitle": "",
-            "target": ""
+            "target": "",
+            "url": "https://www.example.org/?action=news&amp;newsid=7&amp;newslang=de
         }
     ]</code></pre>
     

@@ -110,10 +110,19 @@ class PMF_News
                    ((!$showArchive) && (!$forceConfLimit) &&
                    ($counter <= $this->_config->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
-                    $item = array(
-                        'id' => $row->id,
+
+                    $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                        $this->_config->getDefaultUrl(),
+                        $row->id,
+                        $row->lang
+                    );
+                    $oLink = new PMF_Link($url, $this->_config);
+                    $oLink->itemTitle = $row->header;
+
+                    $item = [
+                        'id' => (int)$row->id,
                         'lang' => $row->lang,
-                        'date' => $row->datum,
+                        'date' => PMF_Date::createIsoDate($row->datum, DATE_ISO8601, true),
                         'lang' => $row->lang,
                         'header' => $row->header,
                         'content' => $row->artikel,
@@ -125,7 +134,9 @@ class PMF_News
                         'allowComments' => ('y' == $row->comment),
                         'link' => $row->link,
                         'linkTitle' => $row->linktitel,
-                        'target' => $row->target, );
+                        'target' => $row->target,
+                        'url' => $oLink->toString()
+                    ];
                     $news[] = $item;
                 }
             }
