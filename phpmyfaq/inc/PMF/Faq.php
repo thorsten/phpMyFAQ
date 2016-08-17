@@ -2247,10 +2247,10 @@ class PMF_Faq
                     }
                 }
 
-                $data['date'] = $row->updated;
+                $data['date'] = PMF_Date::createIsoDate($row->updated, DATE_ISO8601, true);
                 $data['question'] = $row->question;
                 $data['answer'] = $row->content;
-                $data['visits'] = $row->visits;
+                $data['visits'] = (int)$row->visits;
 
                 $title = $row->question;
                 $url = sprintf(

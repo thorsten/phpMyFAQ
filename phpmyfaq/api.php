@@ -183,14 +183,14 @@ switch ($action) {
         $faq = new PMF_Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $result = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
+        $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
         break;
 
     case 'getLatest':
         $faq = new PMF_Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $result = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
+        $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
         break;
 
     case 'getNews':

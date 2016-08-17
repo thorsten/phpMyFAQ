@@ -1274,7 +1274,7 @@ You can call the resources with the following URIs:
 
     The result will be a string value like this:
 
-    <pre><code class="json">{"version":"2.9.0"}</code></pre>
+    <pre><code class="json">{"version":"2.10.0"}</code></pre>
     
 *   **getApiVersion()**
 
@@ -1284,7 +1284,7 @@ You can call the resources with the following URIs:
     Returns the version of the API as a string value. The version number is incremental and will be incremented every 
     time the API changes.
 
-    <pre><code class="json">{"apiVersion": "1.1"}</code></pre>
+    <pre><code class="json">{"apiVersion": "2.0"}</code></pre>
     
 *   **getCount()**
 
@@ -1519,16 +1519,18 @@ You can call the resources with the following URIs:
         {
             "visits": "10",
             "question": "How can I survive without phpMyFAQ?",
-            "date": "20091014181500",
-            "last_visit": "1426523991",
+            "answer": "Nope!",
+            "date": "2016-03-17T22:10:00+0100",
+            "last_visit": "2016-08-14T21:16:29+02:00",
             "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
             "visits": "3",
             "question": "Is there life after death?",
-            "date": "20091010175452",
-            "last_visit": "1423399890",
+            "answer": "Maybe!",
+            "date": "2015-12-14T07:01:00+0100",
+            "last_visit": "2016-05-16T20:36:53+02:00",
             "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
         
         }
@@ -1543,18 +1545,18 @@ You can call the resources with the following URIs:
 
     <pre><code class="json">[
         {
-            "date": "20091014181500",
+            "date": "2016-07-13T11:28:00+0200",
             "question": "How can I survive without phpMyFAQ?",
             "answer": "A good question!",
-            "visits": "10",
+            "visits": 10,
             "url": "/index.php?action=artikel&amp;cat=1&amp;id=36&amp;artlang=de"
         
         },
         {
-            "date": "20091010175452",
+            "date": "2016-06-19T21:48:00+0200",
             "question": "Is there life after death?",
             "answer": "Maybe!",
-            "visits": "3",
+            "visits": 3,
             "url": "/index.php?action=artikel&cat=1&id=1&artlang=en"
         }
     ]</code></pre>
