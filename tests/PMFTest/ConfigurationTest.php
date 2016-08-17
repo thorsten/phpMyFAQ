@@ -66,7 +66,7 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $PMF_LDAP["ldap_use_multiple_servers"] = false;
+        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'false');
 
         $expected = [
             0 => [
@@ -93,7 +93,8 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $PMF_LDAP["ldap_use_multiple_servers"] = true;
+        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'true');
+
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';
         $PMF_LDAP[1]["ldap_port"] = '389';
@@ -133,7 +134,7 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
         $PMF_LDAP["ldap_user"] = 'admin';
         $PMF_LDAP["ldap_password"] = 'foobar';
         $PMF_LDAP["ldap_base"] = 'DC=foo,DC=bar,DC=baz';
-        $PMF_LDAP["ldap_use_multiple_servers"] = false;
+        $this->pmfConfig->set('ldap.ldap_use_multiple_servers', 'false');
         // Second server
         $PMF_LDAP[1]["ldap_server"] = '::1';
         $PMF_LDAP[1]["ldap_port"] = '389';
