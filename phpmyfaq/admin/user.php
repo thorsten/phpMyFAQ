@@ -428,7 +428,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $('#update_user_id').val(data.user_id);
                 $('#user_status_select').val(data.status);
                 $('#user_list_autocomplete').val(data.login);
-                $("#user_list_select").val(data.user_id);
+                $('#user_list_select').val(data.user_id);
+                $('#modal_user_id').val(data.user_id);
                 // Append input fields
                 $('#user_data_table').append(
                     '<div class="form-group">' +
@@ -574,7 +575,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     <div class="modal-body">
                         <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
                             <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession() ?>">
-                            <input type="hidden" name="user_id" value="<?php echo $userId ?>">
+                            <input type="hidden" name="user_id" id="modal_user_id" value="<?php echo $userId ?>">
 
                             <div class="form-group">
                                 <label class="col-lg-3 control-label" for="npass">
