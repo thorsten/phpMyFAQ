@@ -1664,8 +1664,29 @@ You can call the resources with the following URIs:
         }
     ]</code></pre>
     
+*   **getComments()**
+
+    *   https://www.example.org/phpmyfaq/api.php?action=getComments&recordId=1 (standard)
+    *   https://www.example.org/phpmyfaq/api/getComments/1 (rewrite rules enabled)
+
+    You'll get an JSON object as result with the following structure:
     
-    
+    <pre><code class="json">[
+        {
+            "id": 3,
+            "content": "Hello, World!",
+            "date": "2016-08-27T21:15:31+0200",
+            "user": "Thorsten",
+            "email": "foo@bar.baz"
+        },
+        {
+            "id": 5,
+            "content": "Hello, phpMyFAQ",
+            "date": "2012-08-27T21:15:31+0200",
+            "user": "Thorsten",
+            "email": "foo@bar.baz"
+        }
+    ]</code></pre>
     
 [back to top][64]
 

@@ -147,9 +147,9 @@ class PMF_Comment
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $comments[] = array(
-                    'id' => $row->id_comment,
+                    'id' => (int)$row->id_comment,
                     'content' => $row->comment,
-                    'date' => $row->datum,
+                    'date' => PMF_Date::createIsoDate($row->datum, DATE_ISO8601, false),
                     'user' => $row->usr,
                     'email' => $row->email,
                 );

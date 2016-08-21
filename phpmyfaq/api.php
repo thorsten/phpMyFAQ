@@ -148,7 +148,14 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getRecord($recordId);
+        
         $result = $faq->faqRecord;
+        break;
+
+    case 'getComments':
+        $comment = new PMF_Comment($faqConfig);
+
+        $result = $comment->getCommentsData($recordId, 'faq');
         break;
 
     case 'getAllFaqs':
@@ -156,6 +163,7 @@ switch ($action) {
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
+
         $result = $faq->faqRecords;
         break;
 
