@@ -428,7 +428,7 @@ class PMF_Configuration
             'core.database',           // PMF_DB_Driver
             'core.instance',           // PMF_Instance
             'core.language',           // Language
-            'core.ldap',               // PMF_Ldap
+            'core.ldapServer',         // PMF_Ldap
             'core.ldapConfig',         // $PMF_LDAP
             'core.elasticsearch',      // Elasticsearch\Client
             'core.elasticsearchConfig' // $PMF_ES
@@ -480,10 +480,12 @@ class PMF_Configuration
         $output = '';
 
         foreach ($options as $value) {
-            printf('<option value="%s"%s>%s</option>',
+            printf(
+                '<option value="%s" %s>%s</option>',
                 $value,
-                ($value == $current) ? ' selected' : '',
-                $PMF_LANG['ad_conf_order_'.$value]);
+                ($value == $current) ? 'selected' : '',
+                $PMF_LANG['ad_conf_order_'.$value]
+            );
         }
 
         return $output;
