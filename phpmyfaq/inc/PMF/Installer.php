@@ -352,7 +352,6 @@ class PMF_Installer
         'security.permLevel' => 'basic',
         'security.ipCheck' => 'false',
         'security.enableLoginOnly' => 'false',
-        'ldap.ldapSupport' => 'false',
         'security.bannedIPs' => '',
         'security.ssoSupport' => 'false',
         'security.ssoLogoutRedirect' => '',
@@ -379,12 +378,14 @@ class PMF_Installer
         'seo.metaTagsCategories' => 'index, follow',
         'seo.metaTagsPages' => 'index, follow',
         'seo.metaTagsAdmin' => 'noindex, nofollow',
+        'seo.enableXMLSitemap' => 'true',
 
         'mail.remoteSMTP' => 'false',
         'mail.remoteSMTPServer' => '',
         'mail.remoteSMTPUsername' => '',
         'mail.remoteSMTPPassword' => '',
-        
+
+        'ldap.ldapSupport' => 'false',
         'ldap.ldap_mapping.name' => 'cn',
         'ldap.ldap_mapping.username' => 'samAccountName',
         'ldap.ldap_mapping.mail' => 'mail',

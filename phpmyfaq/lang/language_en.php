@@ -1265,3 +1265,4 @@ $LANG_CONF['ldap.ldap_use_multiple_servers'] = array('checkbox', 'Enable multipl
 $LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymous LDAP connections<br>(default: deactivated)');
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding<br>(default: deactivated)');
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
+$LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap<br>(default: activated)');

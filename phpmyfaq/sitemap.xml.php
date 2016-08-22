@@ -58,6 +58,10 @@ require 'inc/Bootstrap.php';
 //
 PMF_String::init('en');
 
+if (false === $faqConfig->get('seo.enableXMLSitemap')) {
+    exit();
+}
+
 // {{{ Functions
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
