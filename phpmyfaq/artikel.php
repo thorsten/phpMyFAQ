@@ -201,7 +201,8 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
     $commentMessage = sprintf(
         '%s<a href="#" class="show-comment-form">%s</a>',
         $PMF_LANG['msgYouCan'],
-        $PMF_LANG['msgWriteComment']);
+        $PMF_LANG['msgWriteComment']
+    );
 }
 
 $translationUrl = sprintf(

@@ -188,7 +188,7 @@ class PMF_Comment
                 );
             $output .= sprintf(
                 '            <span class="pmf-comment-date">%s</span>',
-                $date->format(PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false))
+                $date->format($item['date'])
                 );
             $output .= '        </div>';
             $output .= '    </header>';

@@ -258,7 +258,7 @@ class PMF_Mail
 
         // Set phpMyFAQ related data
         $this->_mailer = 'phpMyFAQ/'.$this->_config->get('main.currentVersion');
-        $this->setFrom($this->_config->get('main.administrationMail'));
+        $this->setFrom($this->_config->get('main.administrationMail'), $this->_config->get('main.titleFAQ'));
     }
 
     /**
