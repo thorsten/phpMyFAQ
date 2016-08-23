@@ -72,7 +72,7 @@
 **1. <a id="1"></a>Introduction**
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports  various databases to store all data, PHP 
-5.5.0+ or HHVM 3.4.2+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management
+5.6.0+ or HHVM 3.4.2+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user 
 support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, 
 user-tracking, 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, 
@@ -143,7 +143,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
 following requirements:
 
 *   **[PHP](http://www.php.net)**
-    *   from version 5.5.0 or 7.0 (recommended: latest PHP 5.x)
+    *   from version 5.6.0 or 7.0 (recommended: latest PHP 7.x)
     *   memory_limit = 64M
     *   cURL support
     *   GD support
@@ -152,14 +152,14 @@ following requirements:
     *   Filter support
     *   SPL support
     *   FileInfo support
-*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 0.7+ or [IIS](http://www.microsoft.com/) 7.0+)
+*   **Web server** ( [Apache](http://httpd.apache.org) 2.x or [nginx](http://www.nginx.net/) 1.0+ or [IIS](http://www.microsoft.com/) 7.0+)
 *   **Database server**
     *   [MySQL](http://www.mysql.com) 5.x with the MySQLi extension (recommended: 5.7.x)
     *   [PostgreSQL](http://www.postgresql.org) 9.x (recommended: latest 9.x)
     *   [Microsoft SQL Server](http://www.microsoft.com/sql/) 2012 and later
     *   [SQLite](http://www.sqlite.org)
-    *   [MariaDB](http://montyprogram.com/mariadb/) 5.x or later (experimental)
-    *   [Percona Server](http://www.percona.com) 5.x (experimental)
+    *   [MariaDB](http://montyprogram.com/mariadb/) 10.x or later (experimental)
+    *   [Percona Server](http://www.percona.com) 5.7.x (experimental)
 *   **Search engines**
     *   [Elasticsearch](https://www.elastic.co/products/elasticsearch) 2.x
 *   correctly set: access permissions, owner, group
@@ -178,9 +178,9 @@ is installed on your server. Should you not meet the requirements, you cannot st
 
 In case you're running PHP before 5.5 you cannot use phpMyFAQ.
 
-phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are latest Mozilla Firefox (Windows/OS X/Linux),
-Safari 8.x or later (OS X/iOS), latest Chrome (Windows/OS X/Linux), latest Opera (Windows/OS X/Linux), Internet 
-Explorer 10 and 11 for Windows and Microsoft Edge on Windows 10. 
+phpMyFAQ uses a modern HTML5/CSS3 powered markup. The supported browsers are latest Mozilla Firefox (Windows/macOS/Linux),
+latest Safari (macOS/iOS), latest Chrome (Windows/macOS/Linux), latest Opera (Windows/macOS/Linux), Internet Explorer 11 
+for Windows and Microsoft Edge on Windows 10. 
 
 We recommend to use always the latest version of Firefox, Chrome, Safari, Opera, Internet Explorer and Microsoft Edge.
 
@@ -314,7 +314,7 @@ done depends on the browser you are using.
     `Settings -> Details -> Language settings`
 * Safari
 
-  Safari uses the OS X system preferences to determine your preferred language:
+  Safari uses the macOS system preferences to determine your preferred language:
   
   `System preferences -> International -> Language`
 * Opera

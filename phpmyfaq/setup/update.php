@@ -18,7 +18,7 @@
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2016 <a target="_blank" href="http://www.phpmyfaq.de/">phpMyFAQ Team</a>');
+define('COPYRIGHT', '&copy; 2001-2016 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -34,15 +34,14 @@ $step = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query = [];
 
-if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    require PMF_ROOT_DIR.'/inc/data.php'; // before 2.6.0-alpha
-} else {
-    if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
-        header('Location: setup.php');
-        exit();
-    }
-    require PMF_ROOT_DIR.'/config/database.php'; // after 2.6.0-alpha
+
+if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+    header('Location: setup.php');
+    exit();
 }
+
+require PMF_ROOT_DIR.'/config/database.php';
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -78,10 +77,10 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         </div>
         <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
-                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
-                <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+                <li><a target="_blank" href="//www.phpmyfaq.de/documentation">Documentation</a></li>
+                <li><a target="_blank" href="//www.phpmyfaq.de/support">Support</a></li>
+                <li><a target="_blank" href="//forum.phpmyfaq.de/">Forums</a></li>
+                <li><a target="_blank" href="//faq.phpmyfaq.de/">FAQ</a></li>
                 <li class="divider-vertical"></li>
                 <li><a href="../">Back to your FAQ</a></li>
             </ul>
@@ -136,16 +135,16 @@ if ($step === 1) {
             <div class="col-lg-12">
                 <p class="alert alert-info text-center">
                     <strong>
-                        <i aria-hidden="true" class="fa fa-info-circle"></i> Please create a full backup of your database, your templates,
+                        <i aria-hidden="true" class="fa fa-info-circle"></i>
+                        Please create a full backup of your database, your templates,
                         attachments and uploaded images before running this update.
                     </strong>
                 </p>
 
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
-                    <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
                     <li>phpMyFAQ 2.7.x (out of support since end of 2013)</li>
-                    <li>phpMyFAQ 2.8.x</li>
+                    <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
                     <li>phpMyFAQ 2.9.x</li>
                 </ul>
 
@@ -155,16 +154,12 @@ if ($step === 1) {
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
                     <li>phpMyFAQ 2.5.x</li>
+                    <li>phpMyFAQ 2.6.x</li>
                 </ul>
                 <?php
-                // 2.5 versions only
-                if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
-                    echo '<p class="alert alert-danger text-center"><strong>Please change the directory ../template '.
-                         'and its contents writable (777 on Linux/UNIX).</strong></p>';
-                }
 
-                // We only support updates from 2.6+
-                if (version_compare($version, '2.6.0', '>')) {
+                // We only support updates from 2.7+
+                if (version_compare($version, '2.7.0', '>')) {
                     printf(
                         '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
                         $version,
@@ -177,15 +172,14 @@ if ($step === 1) {
                     );
                     echo '<p>Please update to the latest phpMyFAQ 2.7 version first.</p>';
                 }
-    if ('hash' !== PMF_ENCRYPTION_TYPE) {
-        printf(
+                if ('hash' !== PMF_ENCRYPTION_TYPE) {
+                    printf(
                         '<p class="alert alert-info text-center">Your passwords are currently encoded with a %s() method.</p>',
                         PMF_ENCRYPTION_TYPE
                     );
-    }
-    ?>
-
-                <p style="text-align: center">
+                }
+                ?>
+                <p class="text-center">
                     <button class="btn btn-primary btn-lg" type="submit">
                         Go to step 2 of 3
                     </button>
@@ -243,8 +237,7 @@ if ($step == 2) {
     if ($checkDatabaseSetupFile && $checkLdapSetupFile && $checkElasticsearchSetupFile) {
         ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php echo $version;
-        ?>">
+        <input type="hidden" name="version" value="<?php echo $version ?>">
         <div class="row form-group">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
