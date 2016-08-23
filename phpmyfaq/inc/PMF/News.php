@@ -189,9 +189,9 @@ class PMF_News
                     $item['linkTitle']);
             }
 
-            $output .= sprintf('
-                <div class="date">%s</div>',
-                $date->format(PMF_Date::createIsoDate($item['date']))
+            $output .= sprintf(
+                '<div class="date">%s</div>',
+                $date->format($item['date'])
             );
         }
 
