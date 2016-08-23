@@ -16,9 +16,8 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --prefer-source
-  - npm install bower less grunt-cli -g
+  - npm install less grunt-cli -g
   - npm install
-  - bower install
   - grunt build
 
 script: ./bin/phpunit --configuration phpunit.xml --coverage-text

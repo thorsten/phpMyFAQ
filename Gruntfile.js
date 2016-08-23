@@ -31,7 +31,7 @@ module.exports = function(grunt) {
         pkg: grunt.file.readJSON('package.json'),
         banner: '/*! phpMyFAQ v<%= pkg.version %> - <%= pkg.homepage %> - Copyright (c) 2001 - <%= grunt.template.today("yyyy") %> Thorsten Rinne and phpMyFAQ Team */\n',
         bumpup: {
-            files: ['package.json', 'bower.json', 'composer.json']
+            files: ['package.json', 'composer.json']
         },
 
         //
@@ -42,25 +42,25 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        src: 'components/tinymce/tinymce.min.js',
+                        src: 'node_modules/tinymce/tinymce.min.js',
                         flatten: true,
                         dest: 'phpmyfaq/admin/assets/js/editor'
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/plugins/',
+                        cwd: 'node_modules/tinymce/plugins/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/js/editor/plugins/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/skins/',
+                        cwd: 'node_modules/tinymce/skins/',
                         src: '**/*.!(less)',
                         dest: 'phpmyfaq/admin/assets/js/editor/skins/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/tinymce/themes/',
+                        cwd: 'node_modules/tinymce/themes/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/js/editor/themes/'
                     }
@@ -70,13 +70,13 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'components/font-awesome/fonts/',
+                        cwd: 'node_modules/font-awesome/fonts/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/fonts/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/font-awesome/fonts/',
+                        cwd: 'node_modules/font-awesome/fonts/',
                         src: '**',
                         dest: 'phpmyfaq/assets/template/default/fonts/'
                     }
@@ -86,13 +86,13 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'components/bootstrap/fonts/',
+                        cwd: 'node_modules/bootstrap/fonts/',
                         src: '**',
                         dest: 'phpmyfaq/admin/assets/fonts/'
                     },
                     {
                         expand: true,
-                        cwd: 'components/bootstrap/fonts/',
+                        cwd: 'node_modules/bootstrap/fonts/',
                         src: '**',
                         dest: 'phpmyfaq/assets/template/default/fonts/'
                     }
@@ -102,13 +102,13 @@ module.exports = function(grunt) {
                 files: [
                     {
                         expand: true,
-                        src: 'components/highlightjs/highlight.pack.js',
+                        src: 'node_modules/highlightjs/highlight.pack.js',
                         flatten: true,
                         dest: 'phpmyfaq/assets/js/libs'
                     },
                     {
                         expand: true,
-                        src: 'components/highlightjs/styles/default.css',
+                        src: 'node_modules/highlightjs/styles/default.css',
                         flatten: true,
                         dest: 'phpmyfaq/assets/js/libs'
                     }
@@ -122,25 +122,25 @@ module.exports = function(grunt) {
             },
             dist: {
                 src: [
-                    'components/jquery/dist/jquery.js',
-                    'components/bootstrap/js/tooltip.js',
-                    'components/bootstrap/js/transition.js',
-                    'components/bootstrap/js/alert.js',
-                    'components/bootstrap/js/button.js',
-                    'components/bootstrap/js/collapse.js',
-                    'components/bootstrap/js/dropdown.js',
-                    'components/bootstrap/js/modal.js',
-                    'components/bootstrap/js/popover.js',
-                    'components/bootstrap/js/tab.js',
-                    'components/typeahead.js/dist/typeahead.bundle.js',
-                    'components/handlebars/handlebars.js',
+                    'node_modules/jquery/dist/jquery.js',
+                    'node_modules/bootstrap/js/tooltip.js',
+                    'node_modules/bootstrap/js/transition.js',
+                    'node_modules/bootstrap/js/alert.js',
+                    'node_modules/bootstrap/js/button.js',
+                    'node_modules/bootstrap/js/collapse.js',
+                    'node_modules/bootstrap/js/dropdown.js',
+                    'node_modules/bootstrap/js/modal.js',
+                    'node_modules/bootstrap/js/popover.js',
+                    'node_modules/bootstrap/js/tab.js',
+                    'node_modules/typeahead.js/dist/typeahead.bundle.js',
+                    'node_modules/handlebars/handlebars.js',
                     'phpmyfaq/assets/js/autosave.js',
                     'phpmyfaq/assets/js/category.js',
                     'phpmyfaq/assets/js/comments.js',
                     'phpmyfaq/assets/js/records.js',
                     'phpmyfaq/assets/js/typeahead.js',
                     'phpmyfaq/assets/js/functions.js',
-                    'components/mermaid/dist/mermaid.js',
+                    'node_modules/mermaid/dist/mermaid.js',
                 ],
                 dest: 'phpmyfaq/assets/js/phpmyfaq.js'
             }

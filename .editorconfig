@@ -12,6 +12,6 @@ indent_style = space
 indent_size = 4
 
 # JSON and LESS files
-[{package.json,.travis.yml,bower.json,*.less}]
+[{package.json,.travis.yml,*.less}]
 indent_style = space
 indent_size = 2

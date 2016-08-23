@@ -61,9 +61,6 @@ phpmyfaq/assets/template/default/fonts/*
 bin/*
 vendor/*
 
-# Bower related stuff
-components/*
-
 # node.js modules for development
 node_modules/*
 

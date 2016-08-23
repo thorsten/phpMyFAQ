@@ -199,7 +199,6 @@ shell:
 	$ curl -s https://getcomposer.org/installer | php
 	$ php composer.phar install
 	$ npm install
-	$ bower install
 	$ grunt
 
 You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [below][55]. Copy 

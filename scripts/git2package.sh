@@ -56,7 +56,6 @@ cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 # add dependecies
 composer install --no-dev
 npm install
-bower install
 grunt build
 
 # prepare packaging

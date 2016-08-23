@@ -41,9 +41,8 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
     $ git checkout 2.10
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ npm install bower less grunt-cli -g
+    $ npm install less grunt-cli -g
     $ npm install
-    $ bower install
     $ grunt build
 
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
