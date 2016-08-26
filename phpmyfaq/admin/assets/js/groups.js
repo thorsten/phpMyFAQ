@@ -74,8 +74,8 @@ $(document).ready(function () {
             });
     };
 
-    var clearGroupRights = function () {
-        $('#group_rights_table input').attr('checked', false);
+    var clearGroupRights = function() {
+        $('.pmf-user-permissions input[type=checkbox]').prop('checked', false);
     };
 
     var groupSelect = function (event) {
