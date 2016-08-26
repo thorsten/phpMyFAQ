@@ -325,7 +325,7 @@ class PMF_Link
         $itemTitle = PMF_String::preg_replace('/\s/m', '-', $itemTitle);
         // Hack: remove some chars for having a better readable title
         $itemTitle = str_replace(
-            array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>'),
+            array('+', ',', ';', ':', '.', '?', '!', '"', '(', ')', '[', ']', '{', '}', '<', '>', '%'),
             '',
             $itemTitle
         );
