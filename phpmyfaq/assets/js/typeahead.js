@@ -21,15 +21,13 @@ $(window).load(function () {
 
     // instantiate the bloodhound suggestion engine
     var questions = new Bloodhound({
-        datumTokenizer: function (d) {
-            return Bloodhound.tokenizers.whitespace(d.value);
-        },
+        datumTokenizer: Bloodhound.tokenizers.whitespace,
         queryTokenizer: Bloodhound.tokenizers.whitespace,
+        limit: Number.MAX_VALUE,
         remote: {
             url: 'ajaxresponse.php?search=%QUERY',
             wildcard: '%QUERY',
-            filter: function (questions) {
-
+            transform: function (questions) {
                 return $.map(questions.results, function (question) {
                     return {
                         category: question.categoryName,
@@ -40,16 +38,13 @@ $(window).load(function () {
             }
         }
     });
-    // initialize the bloodhound suggestion engine
-    questions.initialize();
     // instantiate the typeahead UI
     $('.typeahead').typeahead(null, {
         display: 'suggestion',
-        source: questions.ttAdapter(),
         templates: {
-            empty: [
+            notFound: [
                 '<div class="empty-message">',
-                'unable to find any Best Picture winners that match the current query',
+                'Nothing found... :-(',
                 '</div>'
             ].join('\n'),
             suggestion: Handlebars.compile(
