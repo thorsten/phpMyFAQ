@@ -96,7 +96,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         );
 
         $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) == 1) {
+        if ($this->config->getDb()->numRows($res) >= 1) {
             return true;
         }
 
