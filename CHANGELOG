@@ -1,9 +1,12 @@
-phpMyFAQ 2.9.5
+phpMyFAQ 2.9.6
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.6 - 2016-09-
+-
 
 Version 2.9.5 - 2016-08-31
 - fixed minor bugs (Thorsten, Matt Brennan)
