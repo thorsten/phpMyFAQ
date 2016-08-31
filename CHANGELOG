@@ -23,8 +23,8 @@ Version 2.10.0 - 2016-09-
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
 - removed Bower, now using NPM only (Thorsten)
 
-Version 2.9.5 - 2016-08
-- fixed minor bugs (Thorsten)
+Version 2.9.5 - 2016-08-31
+- fixed minor bugs (Thorsten, Matt Brennan)
 
 Version 2.9.4 - 2016-08-02
 - deactivated debug mode (Thorsten)

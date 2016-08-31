@@ -512,7 +512,7 @@ if ('list' === $groupAction) {
                     <div class="panel-body">
                         <div class="row">
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                            <div class="col-xs-6 form-group">
+                            <div class="col-xs-6 form-group pmf-user-permissions">
                                 <div class="checkbox">
                                     <label class="checkbox-inline">
                                         <input id="group_right_<?php echo $right['right_id'] ?>" type="checkbox"

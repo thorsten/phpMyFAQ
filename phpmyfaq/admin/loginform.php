@@ -84,10 +84,12 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                         <a href="../?action=password">
                                             <?php echo $PMF_LANG['lostPassword'] ?>
                                         </a>
+                                        <?php if ($faqConfig->get('security.enableRegistration')) { ?>
                                         <br>
                                         <a href="../?action=register">
                                             <?php echo $PMF_LANG['msgRegistration'] ?>
                                         </a>
+                                        <?php } ?>
                                     </p>
                                 </div>
                             </fieldset>
