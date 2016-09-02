@@ -143,19 +143,19 @@ $PMF_LANG["msgMailContact"] = "Vasa poruka je poslana administratoru.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Nije uspeo pristup bazi.";
 $PMF_LANG["err_noHeaders"] = "Nema kategorija.";
-$PMF_LANG["err_noArticles"] = "<p>Nema unosa.</p>";
-$PMF_LANG["err_badID"] = "<p>Pogre&#353;an ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>TOP10 jo&#353; ne postoji.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Unos nije prona&#273;en.</p>";
+$PMF_LANG["err_noArticles"] = "Nema unosa.";
+$PMF_LANG["err_badID"] = "Pogre&#353;an ID.";
+$PMF_LANG["err_noTopTen"] = "TOP10 jo&#353; ne postoji.";
+$PMF_LANG["err_nothingFound"] = "Unos nije prona&#273;en.";
 $PMF_LANG["err_SaveEntries"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong>, <strong>kategorija</strong>, <strong>naslov</strong> i <strong>unos</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>komentar</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ura&#269;unavamo dvostruko glasanje. Kliknite ovde, da se vratite na prethodnu stranicu.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Niste vrednovali unos!</strong> <a href=\"javascript:history.back();\">Nazad</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "Ne ura&#269;unavamo dvostruko glasanje. Kliknite ovde, da se vratite na prethodnu stranicu.";
+$PMF_LANG["err_noVote"] = "<strong>Niste vrednovali unos!</strong> <a href=\"javascript:history.back();\">Nazad</a>";
 $PMF_LANG["err_noMailAdress"] = "Va&#353;a email adresa nije ispravna.<br /><a href=\"javascript:history.back();\">nazad</a>";
 $PMF_LANG["err_sendMail"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>pitanje</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Pretraga:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Pretraga:</strong><br />";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";

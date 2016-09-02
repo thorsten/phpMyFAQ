@@ -101,7 +101,7 @@ $PMF_LANG["msgSearchContent"] = "Edukia: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "FAQ proposamena";
 $PMF_LANG["msgNewContentAddon"] = "Zure FAQ proposamena ez da berehala argitaratuko, bitartekari batek aztertu behar du. Beharrezko eremuak ondorengoak dira: <strong>zure izena</strong>, <strong>posta elektronikoaren helbidea</strong>, <strong>atala</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa</strong>. Mesedez, banatu hitz gakoak tabulazio tarte batez.";
-$PMF_LANG["msgNewContentUBB"] = "<p>UBB kodeak erabil ditzakezu zure erregistrorako. <a href=\"help/ubbcode.php\" target=\"_blank\">UBB kodeei buruzko laguntza.</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "UBB kodeak erabil ditzakezu zure erregistrorako. <a href=\"help/ubbcode.php\" target=\"_blank\">UBB kodeei buruzko laguntza.</a>";
 $PMF_LANG["msgNewContentName"] = "Zure izena:";
 $PMF_LANG["msgNewContentMail"] = "Zure posta helbidea:";
 $PMF_LANG["msgNewContentCategory"] = "Zein atal hautatu nahi duzu?";
@@ -125,7 +125,7 @@ $PMF_LANG["msg2answer"] = "Erantzuna";
 $PMF_LANG["msgQuestionText"] = "Hemen beste erabiltzaileen galderak <strong>ikus</strong> eta <strong>erantzun</strong> ditzakezu. FAQean erantsiko dira.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.</p>";
+$PMF_LANG["msgHelpText"] = "FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Administratzaileari idatzi:";
@@ -147,19 +147,19 @@ $PMF_LANG["msgMailContact"] = "Zure mezua administratzaileari bidali diogu!";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ez dago datu-basearekin konexiorik!";
 $PMF_LANG["err_noHeaders"] = "Ez da atalik aurkitu!";
-$PMF_LANG["err_noArticles"] = "<p>Ez dago sarrerarik.</p>";
-$PMF_LANG["err_badID"] = "<p>ID okerra!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Oraindik ez dago TOP Ten-ik.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ez da sarrerarik aurkitu.</p>";
+$PMF_LANG["err_noArticles"] = "Ez dago sarrerarik.";
+$PMF_LANG["err_badID"] = "ID okerra!";
+$PMF_LANG["err_noTopTen"] = "Oraindik ez dago TOP Ten-ik.";
+$PMF_LANG["err_nothingFound"] = "Ez da sarrerarik aurkitu.";
 $PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br /><br />\n<a href=\"javascript:history.back();\">atzera itzuli</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br /><br />\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Bi aldiz bozkatzen baduzu, ez da zenbatuko Klikatu hemen, itzultzeko.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Bi aldiz bozkatzen baduzu, ez da zenbatuko Klikatu hemen, itzultzeko.";
+$PMF_LANG["err_noVote"] = "<strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.";
 $PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br /><a href=\"javascript:history.back();\">itzuli</a>";
 $PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea<strong> eta <strong>zure galdera</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Erregistro bilaketa:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Erregistro bilaketa:</strong><br />";
 
 // Menú
 $PMF_LANG["ad"] = "ADMINSTRATZAILEAREN ATALA";

@@ -116,7 +116,7 @@ $PMF_LANG["msg2answer"] = "odpoveď";
 $PMF_LANG["msgQuestionText"] = "Tu môžete vidieť otázky od ostatných užívateľov. Keď otázku zodpoviete, odpoveď bude vložená do FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Štruktúra FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) je jednoduchá. Ďalej môžete hľadať <strong><a href=\"?action=show\">categories</a></strong> alebo nechať <strong><a href=\"?action=search\">vyhľadávať FAQ</a></strong> kľúčové slová.</p>";
+$PMF_LANG["msgHelpText"] = "Štruktúra FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) je jednoduchá. Ďalej môžete hľadať <strong><a href=\"?action=show\">categories</a></strong> alebo nechať <strong><a href=\"?action=search\">vyhľadávať FAQ</a></strong> kľúčové slová.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-mail webmasterovi:";
@@ -138,19 +138,19 @@ $PMF_LANG["msgMailContact"] = "Vaša správa bola poslaná administrátorovi.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Žiadne spojenie s databázou.";
 $PMF_LANG["err_noHeaders"] = "Kategória sa nenašla.";
-$PMF_LANG["err_noArticles"] = "<p>FAQ nedostupná.</p>";
-$PMF_LANG["err_badID"] = "<p>Chybné ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Nie je dostupné žiadne FAQ.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Vstup sa nenašiel.</p>";
+$PMF_LANG["err_noArticles"] = "FAQ nedostupná.";
+$PMF_LANG["err_badID"] = "Chybné ID.";
+$PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
+$PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
 $PMF_LANG["err_SaveEntries"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>názov</strong>, <strong>Váš záznam</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">o jednu stránku späť</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>, <strong>Váš e-mail</strong>, <strong>Vaše komentáre</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">o jednu stránku späť</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Dvojité hlasovania nebudú započítané.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Dvojité hlasovania nebudú započítané.";
+$PMF_LANG["err_noVote"] = "<strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
 $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br /><a href=\"javascript:history.back();\">späť</a>";
 $PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Hľadanie záznamu:</strong><br />So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.</p><p><strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.</p>";
+$PMF_LANG["help_search"] = "<strong>Hľadanie záznamu:</strong><br />So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.<strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
 
 // Menï¿½
 $PMF_LANG["ad"] = "SEKCIA PRE ADMINISTRÁTORA";
