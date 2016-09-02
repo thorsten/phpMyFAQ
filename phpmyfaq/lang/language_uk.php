@@ -147,7 +147,7 @@ $PMF_LANG["err_noTopTen"] = "<p>Нічого поки не немає.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>No entry found.</p>";
 $PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. <a href=\"javascript:history.back();\">Click here</a>, to go back.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>We do not count double votings. </p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно!</strong> <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.</p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!";

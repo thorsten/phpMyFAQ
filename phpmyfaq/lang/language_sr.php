@@ -148,7 +148,7 @@ $PMF_LANG["err_noTopTen"] = "<p>TOP10 jo&#353; ne postoji.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Unos nije prona&#273;en.</p>";
 $PMF_LANG["err_SaveEntries"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong>, <strong>kategorija</strong>, <strong>naslov</strong> i <strong>unos</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>komentar</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ura&#269;unavamo dvostruko glasanje. <a href=\"javascript:history.back();\">Kliknite ovde</a>, da se vratite na prethodnu stranicu.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ura&#269;unavamo dvostruko glasanje.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Niste vrednovali unos!</strong> <a href=\"javascript:history.back();\">Nazad</a></p>";
 $PMF_LANG["err_noMailAdress"] = "Va&#353;a email adresa nije ispravna.<br /><a href=\"javascript:history.back();\">nazad</a>";
 $PMF_LANG["err_sendMail"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>pitanje</strong>!";

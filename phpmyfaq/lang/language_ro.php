@@ -124,7 +124,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Inca nu este disponibil Topul intrebarilor.</p>'
 $PMF_LANG['err_nothingFound'] = '<p>Nu am gasit nimic.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Campuri obligatorii: <strong>numele tau</strong>, <strong>adresa ta de email</strong>, <strong>categoria</strong>, <strong>titlu</strong> si <strong>intrebarea ta</strong>!<br /><br /><a href="nojavascript...history.back();">inapoi</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>observatiile tale</strong>!<br /><br /><a href="nojavascript...history.back();">inapoi</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Nu contorizam votarile multiple. <a href="nojavascript...history.back();">Click aici</a>, pentru a merge inapoi.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Nu contorizam votarile multiple.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Inca nu ai apreciat aceasta intrebare!</strong> <a href="nojavascript...history.back();">Click aici</a>, pentru a aprecia!</p>';
 $PMF_LANG['err_noMailAdress'] = 'Adresa ta de email nu este corecta!<br /><a href="nojavascript...history.back();">back</a>';
 $PMF_LANG['err_sendMail'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!';

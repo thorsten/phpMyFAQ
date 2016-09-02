@@ -126,7 +126,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Er is nog geen top 10 beschikbaar.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Geen vragen gevonden.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong>, <strong>categorie</strong>, <strong>koptekst</strong> en <strong>uw vraag</strong>!<br /><br /><a href="nojavascript...history.back();">één pagina terug</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw commentaar</strong>!<br /><br /><a href="nojavascript...history.back();">één pagina terug</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Dubbele stemmen worden niet geteld. <a href="nojavascript...history.back();">Klik hier</a> om terug te gaan.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Dubbele stemmen worden niet geteld.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Er werd geen beoordeling gegeven!</strong> <a href="nojavascript...history.back();">Klik hier</a> om te stemmen.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Uw emailadres is niet correct.<br /><a href="nojavascript...history.back();">terug</a>';
 $PMF_LANG['err_sendMail'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!';

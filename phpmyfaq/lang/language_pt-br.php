@@ -123,7 +123,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Sem TOP TEN disponivel.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Sem registros.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Campos obrigatórios são <strong>Nome</strong>, <strong>E-mail</strong>, <strong>Categoria</strong>, <strong>Titulo</strong> e <strong>Texto</strong>!<br /><br /><a href="nojavascript...history.back();">voltar</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Campos obrigatórios são <strong>Nome</strong>, <strong>E-mail</strong> e <strong>Comentário</strong>!<br /><br /><a href="nojavascript...history.back();">voltar</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Já fez o voto. <a href="nojavascript...history.back();">Clique aqui</a>, para voltar.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Já fez o voto.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Não avaliou!</strong> <a href="nojavascript...history.back();">Clique aqui</a>, para votar.</p>';
 $PMF_LANG['err_noMailAdress'] = 'E-mail incorreto.<br /><a href="nojavascript...history.back();">voltar</a>';
 $PMF_LANG['err_sendMail'] = 'Campos obrigatórios são <strong>nome</strong>, <strong>e-mail</strong> and <strong>questï¿½o</strong>!';

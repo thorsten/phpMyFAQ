@@ -124,7 +124,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Δεν υπάρχει top-10 ακόμη.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Δε βρέθηκε καμία καταχώρηση.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong>, <strong>κατηγορία</strong>, <strong>τίτλος</strong> και <strong>η καταχώρησή σας</strong>!<br /><br />\n<a href="nojavascript...history.back();">μία σελίδα πίσω</a><br /><br />\n';
 $PMF_LANG['err_SaveComment'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>το σχόλιό σας</strong>!<br /><br />\n<a href="nojavascript...history.back();">μία σελίδα πίσω</a><br /><br />\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Δεν μετρούμε διπλές ψήφους. <a href="nojavascript...history.back();">κλικ</a>, για επιστροφή.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Δεν μετρούμε διπλές ψήφους. κλικ, για επιστροφή.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Δε βαθμολογήσατε αυτή την ερώτηση</strong> <a href="nojavascript...history.back();">κλικ εδώ</a>, για επιστροφή στη βαθμολόγηση.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Λανθασμένη καταχώρηση διεύθυνσης email.<br /><a href="nojavascript...history.back();">Επιστροφή</a>';
 $PMF_LANG['err_sendMail'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!';

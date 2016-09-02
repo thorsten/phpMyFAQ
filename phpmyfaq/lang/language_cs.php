@@ -125,7 +125,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Žádné z TOP 10 není k dispozici.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Žádné záznamy nenalezeny.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong>, <strong>kategorie</strong>, <strong>předmět</strong> a <strong>dotaz</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpět</a><br /><br />\n';
 $PMF_LANG['err_SaveComment'] = 'Povinná pole jsou <strong>jméno</strong>, <strong>e-mailová adresa</strong> a <strong>komentář</strong>!<br /><br />\n<a href=\"javascript:history.back();\">O stránku zpět</a><br /><br />\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Opakované hlasování se nepočítá. <a href=\"javascript:history.back();\">Klikněte zde</a> pro návrat.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Opakované hlasování se nepočítá. Klikněte zde pro návrat.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Není hodnocení!</strong> <a href=\"javascript:history.back();\">Prosím klikněte zde</a> pro hlasování.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Adresa není správná.<br /><a href=\"javascript:history.back();\">zpět</a>';
 $PMF_LANG['err_sendMail'] = 'Povinná pole jsou <strong>jméno</strong>, <strong>email adresa</strong> a <strong>dotaz</strong>!';

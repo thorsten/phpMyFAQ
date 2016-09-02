@@ -123,7 +123,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Pas d\'article Les plus visités actuellement.</
 $PMF_LANG['err_nothingFound'] = '<p>Pas d\'entrée trouvée.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong>, <strong>catégorie</strong>, <strong>titre</strong> et <strong>votre article</strong>!<br /><br />n<a href="nojavascript...history.back();">retour d\'une page</a><br /><br />n';
 $PMF_LANG['err_SaveComment'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong> et <strong>vos commentaires</strong>!<br /><br />n<a href="nojavascript...history.back();">retour d\'une page</a><br /><br />n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Nous ne comptons pas les doubles votes. <a href="nojavascript...history.back();">Cliquez ici</a>, afin de retourner en arrière.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Nous ne comptons pas les doubles votes. Cliquez ici, afin de retourner en arrière.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Vous n\'avez pas voté!</strong> <a href="nojavascript...history.back();">Veuillez cliquer ici</a>, afin de voter.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Votre adresse courriel n\'est pas correcte.<br /><a href="nojavascript...history.back();">retour</a>';
 $PMF_LANG['err_sendMail'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong> et <strong>votre question</strong>!';

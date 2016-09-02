@@ -146,7 +146,7 @@ $PMF_LANG["err_noTopTen"] = "<p>Ni 10 NAJ vnosov trenutno.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ne najdem vnosa.</p>";
 $PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne štejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da greš nazaj.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Ne štejejo dvojna glasovanja.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
 $PMF_LANG["err_noMailAdress"] = "Tvoj email ni pravilen.<br /><a href=\"javascript:history.back();\">nazaj</a>";
 $PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>!";

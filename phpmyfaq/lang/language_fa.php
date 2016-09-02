@@ -125,7 +125,7 @@ $PMF_LANG['err_noTopTen'] = '<p>هنوز مطالب برتر ایجاد نشده
 $PMF_LANG['err_nothingFound'] = '<p>مطلبی پیدا نشد.</p>';
 $PMF_LANG['err_SaveEntries'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما </strong>, <strong>موضوع </strong>, <strong>headline</strong>, <strong>your Record</strong> and, when requested, the <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong> هستند!<br /><br /><a href="javascript:history.back();">یک صفحه برگرد </a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'کادرهای اجباری <strong>نام شما </strong>, <strong>ایمیل شما </strong>, <strong>نظر شما </strong> و, اگر خواسته شده باشه, <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong>هستند!<br /><br /><a href="javascript:history.back();">یک صفحه برگرد</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>امتیازات تکراری حساب نمیشوند. <a href="javascript:history.back();"> کلیک کنید </a>, برای برگشت.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>امتیازات تکراری حساب نمیشوند. کلیک کنید , برای برگشت.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>امتیاز ثبت نشد!</strong> <a href="javascript:history.back();">کلید کنید </a>, برای امتیاز دادن.</p>';
 $PMF_LANG['err_noMailAdress'] = 'ایمیل شما صحیح به نظر نمیرسد.<br /><a href="javascript:history.back();">برگشت</a>';
 $PMF_LANG['err_sendMail'] = 'کادرهای اجباری <strong>نام شما</strong>, <strong>ایمیل شما</strong>, <strong>پرسش شما</strong> و, اگر تقاضا شده باشد, <strong><a href="http://en.wikipedia.org/wiki/Captcha" title="Read more >Captcha</a> کد </strong>!';

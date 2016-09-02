@@ -124,7 +124,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Még nincs TOP 10.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Nincs bejegyzés.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Kötelező mezők: <strong>név</strong>, <strong>email</strong>, <strong>kategória</strong>, <strong>cím</strong> és <strong>a kérdés</strong>!<br /><br /><a href="javascript:history.back();">egy oldal vissza</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your comments</strong>!<br /><br /><a href="javascript:history.back();">one page back</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>We do not count double votings. <a href="javascript:history.back();">Click here</a>, to go back.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>We do not count double votings. Click here, to go back.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>You did not rate the question!</strong> <a href="javascript:history.back();">Please click here</a>, to vote.</p>';
 $PMF_LANG['err_noMailAdress'] = 'E-mail cím helytelen<br /><a href="javascript:history.back();">vissza</a>';
 $PMF_LANG['err_sendMail'] = 'Kötelező mezők: <strong>név</strong>, <strong>email</strong> és a <strong>kérdés</strong>!';

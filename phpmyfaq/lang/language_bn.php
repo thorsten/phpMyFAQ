@@ -150,7 +150,7 @@ $PMF_LANG["err_badID"] = "<p>ভুল পরিচয়।</p>";
 $PMF_LANG["err_noTopTen"] = "<p>সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।</p>";
 $PMF_LANG["err_nothingFound"] = "<p>কোনো প্রশ্ন পাওয়া যায়নি।</p>";
 $PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরনাম</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>একাধিক ভোট দেয়া যায়না। <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>একাধিক ভোট দেয়া যায়না। আগের পাতায় ফেরত যান</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না!</strong> <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a></p>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";

@@ -151,7 +151,7 @@ $PMF_LANG["err_noTopTen"] = "<p>Does dim Deg Uchaf ar gael eto.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ni chafwyd cofnod.</p>";
 $PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. <a href=\"javascript:history.back();\">Cliciwch yma </a>, i fynd yn ôl.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. Cliciwch yma, i fynd yn ôl.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong> ni wnaethoch ateb y cwestiwn hwn!</strong> <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.</p>";
 $PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir.<br /><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!";

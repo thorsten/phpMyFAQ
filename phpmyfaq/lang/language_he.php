@@ -127,7 +127,7 @@ $PMF_LANG['err_noTopTen'] = '<p>אין עשרה גדולים עדיין.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>לא נמצאו שאלות.</p>';
 $PMF_LANG['err_SaveEntries'] = 'שדות נחוצים הם <strong>שמך</strong>, <strong>הדואל שלך</strong>, <strong>קטגוריה</strong>, <strong>כותרת</strong> ו<strong>תוכן</strong>!<br /><br /><a href="javascript:history.back();">הקודם</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'השדות הנחוצים הם <strong>שמך</strong>, <strong>כתובת הדואל שלך</strong> ו<strong>תגובתך</strong>!<br /><br /><a href="javascript:history.back();">הקודם</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>איננו סופרים הצבעות כפולות. <a href="javascript:history.back();">לחץ כאן</a>, כדי לחזור לעמוד הקודם.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>איננו סופרים הצבעות כפולות. לחץ כאן,כדי לחזור לעמוד הקודם.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>לא דרגת את השאלה!</strong> <a href="javascript:history.back();">אנא לחץ כאן</a>, להצבעה.</p>';
 $PMF_LANG['err_noMailAdress'] = 'כתובת האימייל אינה נכונה.<br /><a href="javascript:history.back();">חזור</a>';
 $PMF_LANG['err_sendMail'] = 'שדות נחוצים <strong>שם פרטי</strong>, <strong>כתובת אמייל</strong>ו<strong>שאלתך</strong>!';

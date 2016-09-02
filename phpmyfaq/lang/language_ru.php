@@ -124,7 +124,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Ничего не найдено.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Ничего не найдено.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong>, <strong>категория</strong>, <strong>заголовок</strong> и <strong>текст вопроса</strong>!<br><br>\n<a href="nojavascript...history.back();">Вернитесь назад и заполните необходимые поля</a><br><br>\n';
 $PMF_LANG['err_SaveComment'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>арес email</strong> и <strong>ваш комментарий</strong>!<br><br>\n<a href="nojavascript...history.back();">Вернуться назад</a><br><br>\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Мы не засчитываем повторное голосование. <a href="nojavascript...history.back();">Click here</a>, to go back.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Мы не засчитываем повторное голосование.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Вы забыли поставить оценку этому ответу или пытаетесь сделать это повторно!</strong> <a href="nojavascript...history.back();">Нажмите сюда</a>, для возврата на предыдущую страницу.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Не корректный email.<br><a href="nojavascript...history.back();">back</a>';
 $PMF_LANG['err_sendMail'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст сообщения</strong>!';

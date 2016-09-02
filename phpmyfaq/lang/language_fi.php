@@ -127,7 +127,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Suosittuja kysymyksiä ei ole vielä saatavilla.
 $PMF_LANG['err_nothingFound'] = '<p>Tietuetta ei löydy.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> ja <strong>Tietueesi</strong>!<br /><br />\n<a href="nojavascript...history.back();">yksi sivu takaisin</a><br /><br />\n';
 $PMF_LANG['err_SaveComment'] = 'Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kommenttisi</strong>!<br /><br />\n<a href="nojavascript...history.back();">yksi sivu takaisin</a><br /><br />\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Emme laske kuin yhden arvostelun. <a href="nojavascript...history.back();">Klikkaa tästä</a>, päästäksesi takaisin.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Emme laske kuin yhden arvostelun. Klikkaa tästä, päästäksesi takaisin.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Et arvostellut kysymystä!</strong> <a href="nojavascript...history.back();">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Sähköpostiosoitteesi ei ole oikein.<br /><a href="nojavascript...history.back();">takaisin</a>';
 $PMF_LANG['err_sendMail'] = 'Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!';

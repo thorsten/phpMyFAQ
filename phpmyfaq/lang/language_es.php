@@ -125,7 +125,7 @@ $PMF_LANG['err_noTopTen'] = 'No hay TOP Five disponibles aún.';
 $PMF_LANG['err_nothingFound'] = '<p>No se han encontrado entradas.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Campos requeridos son <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong>, <strong>categoría</strong>, <strong>encabezado</strong> y <strong>tu Registro</strong>!<br /><br /><a href="javascript:history.back();">volver atrás</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Campos requeridos son <strong>tu Nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tus comentarios</strong>!<br /><br /><a href="javascript:history.back();">volver atrás</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>No se contabilizan votaciones dobles. <a href="javascript:history.back();">Click aquí</a>, para volver.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>No se contabilizan votaciones dobles. Click aquí, para volver.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>¡No se ha evaluado!</strong> <a href="javascript:history.back();">Por favor, pulsa aquí</a>, para votar.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Tu dirección de e-mail no es correcta.<br /><a href="javascript:history.back();">volver</a>';
 $PMF_LANG['err_sendMail'] = 'Campos requeridos son <strong>tu nombre</strong>, <strong>tu dirección de e-mail</strong> y <strong>tu pregunta</strong>!<br /><br /><a href="javascript:history.back();">volver atrás</a><br /><br />';

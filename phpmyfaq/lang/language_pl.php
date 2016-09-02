@@ -127,7 +127,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Jeszcze nie ma TOP 10.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>Brak wpisów.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Wymagane pola: <strong>imię i nazwisko</strong>, <strong>adres e-mail</strong>, <strong>kategoria</strong>, <strong>nagłówek</strong> oraz <strong>treść wpisu</strong>!<br /><br /><a href="nojavascript...history.back();">wróć do poprzedniej strony</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Wymagane pola: <strong>imię i nazwisko</strong>, <strong>adres e-mail</strong> oraz <strong>treść komentarza</strong>!<br /><br /><a href="nojavascript...history.back();">wróć do poprzedniej strony</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Można głosować tylko jeden raz. <a href="nojavascript...history.back();">wróć do poprzedniej strony</a>.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Można głosować tylko jeden raz.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Nie oddałeś głosu!</strong> <a href="nojavascript...history.back();">wejdź tutaj</a>, aby oddać głos.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Nieprawidłowy adres e-mail.<br /><a href="nojavascript...history.back();">wróć</a>';
 $PMF_LANG['err_sendMail'] = 'Wymagane pola: <strong>imię i nazwisko</strong>, <strong>adres e-mail</strong> oraz <strong>treść wiadomości</strong>!';

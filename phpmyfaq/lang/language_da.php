@@ -126,7 +126,7 @@ $PMF_LANG['err_noTopTen'] = '<p>Ikke indlæg nok til en Top 10.</p>';
 $PMF_LANG['err_nothingFound'] = '<p>ingen indlæg fundet.</p>';
 $PMF_LANG['err_SaveEntries'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit indlæg</strong>!<br /><br /><a href="javascript:history.back();">Gå tilbage</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dine kommentarer</strong>!<br /><br /><a href="javascript:history.back();">En side tilbage</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Vi tæller ikke dobbelt stemmer. <a href="javascript:history.back();">Klik her</a>, for at gå tilbage.</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>Vi tæller ikke dobbelt stemmer. Klik her, for at gå tilbage.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Du vurderede ikke spørgsmålet!</strong> <a href="javascript:history.back();">Klik venligst her</a>, for at stemme.</p>';
 $PMF_LANG['err_noMailAdress'] = 'din e-mail-adresse er ikke korrekt.<br /><a href="javascript:history.back();">tilbage</a>';
 $PMF_LANG['err_sendMail'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit spørgsmål</strong>!<br /><br /><a href="javascript:history.back();">En side tilbage</a><br /><br />';

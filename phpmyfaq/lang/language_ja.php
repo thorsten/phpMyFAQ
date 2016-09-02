@@ -124,7 +124,7 @@ $PMF_LANG['err_noTopTen'] = '<p>人気の FAQ がまだ利用できません。<
 $PMF_LANG['err_nothingFound'] = '<p>エントリーが見つかりません。</p>';
 $PMF_LANG['err_SaveEntries'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>カテゴリー</strong>、<strong>件名</strong>、<strong>FAQ 内容</strong>、要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須フィールドです!<br /><br /><a href="javascript:history.back();">戻る</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>コメント</strong>と要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!<br /><br /><a href="javascript:history.back();">戻る</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>複数回の評価はできません。<a href="javascript:history.back();">ここ</a>をクリックすると戻ります。</p>';
+$PMF_LANG['err_VoteTooMuch'] = '<p>複数回の評価はできません。ここをクリックすると戻ります。</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>評価点数を選択してください。</strong> 評価をするためには<a href="javascript:history.back();">ここ</a>をクリックしてください。</p>';
 $PMF_LANG['err_noMailAdress'] = 'メールアドレスが正しくありません。<br /><a href="javascript:history.back();">戻る</a>';
 $PMF_LANG['err_sendMail'] = '<strong>名前</strong>、<strong>メールアドレス</strong>、<strong>質問</strong>と要求された場合は <strong><a href="http://ja.wikipedia.org/wiki/Captcha" title="Wikipedia で Captcha について読む" target="_blank">Captcha</a> コード</strong> は必須項目です!';

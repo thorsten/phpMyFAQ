@@ -155,7 +155,7 @@ $PMF_LANG["err_noTopTen"] = "<p>Pa&eth;laik TOP 10 nav pieejams.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>Ieraksts netika atrasts.</p>";
 $PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br /><br /><a href=\"javascript:history.back();\">Atgriezties</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br /><br /><a href=\"javascript:history.back();\">atgriezties</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts. <a href=\"javascript:history.back();\">Atgriezties</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a></p>";
 $PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br /><a href=\"javascript:history.back();\">Atgriezties</a>";
 $PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!";

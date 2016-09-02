@@ -145,7 +145,7 @@ $PMF_LANG["err_noTopTen"] = "<p>TOP 10을 이용하실 수 없습니다.</p>";
 $PMF_LANG["err_nothingFound"] = "<p>검색 결과가 없습니다.</p>";
 $PMF_LANG["err_SaveEntries"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>코멘트 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>중복 평가 하실 수 없습니다. 되돌아 가시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "<p>중복 평가 하실 수 없습니다. 되돌아 가시려면여기를 클릭하세요.</p>";
 $PMF_LANG["err_noVote"] = "<p><strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
 $PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br /><a href=\"javascript:history.back();\">되돌아 가기</a>";
 $PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.";
