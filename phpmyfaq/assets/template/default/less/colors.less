@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 2.9 default layout variables
+ * phpMyFAQ 2.10 default layout variables
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -15,21 +15,21 @@
  */
 
 // Standard body text
-@text: #424142;
+@text: #252839;
 
 // Links
-@link-primary: #d9534f;
+@link-primary: #729f98;
 @link-primary-hover: darken(@link-primary, 10%);
 @link-secondary: darken(@link-primary, 10%);
 
 // Background
-@pmf-background: #f2f2f2;
-@pmf-background-shadow: #ababab;
+@pmf-background: #f4f4f4;
+@pmf-background-shadow: darken(@pmf-background, 10%);
 
 // Masthead
-@pmf-masthead-background: #2b3d4c;
-@pmf-masthead-text: #f2f2f2;
-@pmf-masthead-link: @pmf-masthead-text;
+@pmf-masthead-background: #252839;
+@pmf-masthead-text: #729f98;
+@pmf-masthead-link: darken(@pmf-masthead-text, 10%);
 
 @pmf-subheader-background: darken(@pmf-masthead-background, 10%);
 @pmf-subheader-text: #f2f2f2;
@@ -47,7 +47,7 @@
 @navigation-dropdown-shadow: darken(@pmf-masthead-background, 10%);
 @navigation-dropdown-link: @navigation-link;
 
-@navigation-dropdown-hover: rgba(255, 255, 255, 0.15);
+@navigation-dropdown-hover: darken(@pmf-masthead-background, 1%);
 @navigation-dropdown-hover-legacy: #9a988a;
 
 @mobilenav-background: @navigation-active-background;
@@ -72,21 +72,21 @@
 
 @vertical-separator: #ced5db;
 
-@pmf-meta-background: #d9534f;
+@pmf-meta-background: #2d2c31;
 @pmf-meta-text: white;
 
-@pmf-separator: #ced5db;
+@pmf-separator: darken(@pmf-background, 10%);
 
 @widget-link: darken(@link-primary, 50%);
 @widget-header-text: #48535f;
-@widget-gradient-start: #f6f5f5;
-@widget-gradient-end: #ebeaea;
+@widget-gradient-start: @pmf-separator;
+@widget-gradient-end: lighten(@pmf-separator, 5%);
 
-@tags-background: #e6e6e6;
-@tags-background-hover: #f0c5c1;
+@tags-background: @pmf-separator;
+@tags-background-hover: lighten(@pmf-separator, 10%);
 
 // pmf-footer
-@pmf-footer-background: #2b3d4c;
+@pmf-footer-background: #252839;
 @pmf-footer-text: @pmf-masthead-text;
 @pmf-footer-link: @pmf-masthead-text;
 @pmf-footer-heading: @pmf-masthead-text;
