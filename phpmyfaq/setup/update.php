@@ -2,7 +2,7 @@
 /**
  * Main update script.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -884,6 +884,12 @@ if ($step == 3) {
 
         $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'ldap.ldapSupport'
             WHERE config_name = 'security.ldapSupport'";
+
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN image VARCHAR(255) DEFAULT NULL';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD image VARCHAR(255) DEFAULT NULL';
+        }
     }
 
     // Always the last step: Update version number

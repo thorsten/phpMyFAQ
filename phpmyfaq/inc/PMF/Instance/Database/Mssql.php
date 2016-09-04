@@ -3,7 +3,7 @@
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -77,6 +77,7 @@ class PMF_Instance_Database_Mssql extends PMF_Instance_Database implements PMF_I
             user_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL DEFAULT -1,
             active INTEGER NULL DEFAULT 1,
+            image VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (

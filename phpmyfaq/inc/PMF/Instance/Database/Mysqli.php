@@ -3,7 +3,7 @@
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MySQL.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -77,6 +77,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             user_id INT(11) NOT NULL,
             group_id INT(11) NOT NULL DEFAULT -1,
             active INT(11) NULL DEFAULT 1,
+            image VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (

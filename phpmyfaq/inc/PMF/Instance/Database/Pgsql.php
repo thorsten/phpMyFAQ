@@ -3,7 +3,7 @@
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for PostgreSQL.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -79,6 +79,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             user_id INT4 NOT NULL,
             group_id INT4 NOT NULL DEFAULT -1,
             active INT4 NULL DEFAULT 1,
+            image VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
