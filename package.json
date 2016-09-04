@@ -6,6 +6,7 @@
   "dependencies": {
     "bootstrap": "^3.3.7",
     "bootstrap-datepicker": "^1.6.4",
+    "bootstrap-fileinput": "^4.3.4",
     "font-awesome": "^4.6.3",
     "handlebars": "^4.0.5",
     "highlightjs": "^8.7.0",

@@ -149,5 +149,10 @@ Licensed under the terms of the MIT License
 
 Licensed under the terms of the Apache License v2.0
 
+**[bootstrap-fileinput](http://plugins.krajee.com/file-input)**
+
+Licensed under the terms of the BSD 3-Clause License
+
+
 
 Copyright (c) 2001-2016 Thorsten Rinne and the phpMyFAQ Team
