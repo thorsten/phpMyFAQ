@@ -3,7 +3,7 @@
 /**
  * German language file
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -1229,3 +1229,4 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Aktiviere Suppo
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Aktiviere Support für dynamisches User Binding<br>(Standard: deaktiviert)');
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP Attribut bei dynamisches User Binding, "uid" bei Nutzung eines ADS');
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Aktiviere XML Sitemap<br>(Standard: aktiviert)');
+$PMF_LANG['ad_category_image'] = 'Kategorie-Bild';

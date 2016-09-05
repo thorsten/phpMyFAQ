@@ -2,18 +2,16 @@
 /**
  * List all categories in the admin section.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
@@ -54,6 +52,8 @@ if ('category' != $action && 'content' != $action &&
     $csrfCheck = true;
 }
 
+var_dump($_POST);
+
 if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Save a new category
@@ -69,6 +69,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
             'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
+            'image' => PMF_Filter::filterInput(INPUT_POST, 'image', FILTER_SANITIZE_STRING)
         );
 
         $permissions = [];

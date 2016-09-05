@@ -93,8 +93,20 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </div>
                         </div>
                     </div>
+
                     <div class="form-group">
-                        <label class="col-lg-2 control-label" for="user_id"><?php echo $PMF_LANG['ad_categ_owner'] ?>:</label>
+                        <label class="col-lg-2 control-label" for="pmf-category-image-upload">
+                            <?php echo $PMF_LANG['ad_category_image'] ?>:
+                        </label>
+                        <div class="col-lg-4">
+                            <input id="pmf-category-image-upload" name="image" type="file" class="file">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label" for="user_id">
+                            <?php echo $PMF_LANG['ad_categ_owner'] ?>:
+                        </label>
                         <div class="col-lg-4">
                             <select name="user_id" id="user_id" size="1" class="form-control">
                             <?php echo $user->getAllUserOptions() ?>

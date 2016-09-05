@@ -2,7 +2,7 @@
 /**
  * Edits a category.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -101,6 +101,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                             <?php echo $PMF_LANG['ad_user_active'] ?>
                         </label>
                     </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-lg-2 control-label" for="pmf-category-image-upload">
+                    <?php echo $PMF_LANG['ad_category_image'] ?>:
+                </label>
+                <div class="col-lg-4">
+                    <input id="pmf-category-image-upload" name="image" type="file" class="file"
+                           value="<?php echo $categoryData->getImage() ?>">
                 </div>
             </div>
 

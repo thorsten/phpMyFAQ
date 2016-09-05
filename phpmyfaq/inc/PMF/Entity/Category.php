@@ -3,18 +3,16 @@
 /**
  * Category entity class.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2014-08-14
  */
@@ -75,6 +73,9 @@ class PMF_Entity_Category
      * @var bool
      */
     private $active;
+
+    /** @var string */
+    private $image = '';
 
     /**
      * @param bool $active
@@ -234,5 +235,25 @@ class PMF_Entity_Category
     public function getUserId()
     {
         return $this->userId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param string $image
+     *
+     * @return PMF_Entity_Category
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+
+        return $this;
     }
 }

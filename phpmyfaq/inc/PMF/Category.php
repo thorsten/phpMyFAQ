@@ -3,21 +3,19 @@
 /**
  * The main category class.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
@@ -298,7 +296,7 @@ class PMF_Category
         $categories = [];
         $query = sprintf('
             SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active
+                id, lang, parent_id, name, description, user_id, group_id, active, image
             FROM
                 %sfaqcategories',
             PMF_Db::getTablePrefix()
@@ -317,6 +315,7 @@ class PMF_Category
                 'user_id' => (int)$row['user_id'],
                 'group_id' => (int)$row['group_id'],
                 'active' => (int)$row['active'],
+                'image' => $row['image'],
                 'level' => (int)$this->levelOf($row['id'])
             ];
         }
@@ -1088,9 +1087,9 @@ class PMF_Category
         $query = sprintf("
             INSERT INTO
                 %sfaqcategories
-            (id, lang, parent_id, name, description, user_id, group_id, active)
+            (id, lang, parent_id, name, description, user_id, group_id, active, image)
                 VALUES
-            (%d, '%s', %d, '%s', '%s', %d, %d, %d)",
+            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s')",
             PMF_Db::getTablePrefix(),
             $id,
             $categoryData['lang'],
@@ -1099,7 +1098,8 @@ class PMF_Category
             $categoryData['description'],
             $categoryData['user_id'],
             $categoryData['group_id'],
-            $categoryData['active']
+            $categoryData['active'],
+            $categoryData['image']
         );
         $this->_config->getDb()->query($query);
 
@@ -1163,14 +1163,16 @@ class PMF_Category
         $result = $this->_config->getDb()->query($query);
 
         if ($row = $this->_config->getDb()->fetchObject($result)) {
-            $entity->setId($row->id)
+            $entity
+                ->setId($row->id)
                 ->setLang($row->lang)
                 ->setParentId($row->parent_id)
                 ->setName($row->name)
                 ->setDescription($row->description)
                 ->setUserId($row->user_id)
                 ->setGroupId($row->group_id)
-                ->setActive($row->active);
+                ->setActive($row->active)
+                ->setImage($row->image);
         }
 
         return $entity;
