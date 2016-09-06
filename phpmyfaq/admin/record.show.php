@@ -246,7 +246,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 'sticky' => $row->sticky,
                 'title' => $row->thema,
                 'content' => $row->content,
-                'date' => PMF_Date::createIsoDate($row->updated),
+                'updated' => PMF_Date::createIsoDate($row->updated),
             );
 
             if (!isset($numActiveByCat[$row->category_id])) {
