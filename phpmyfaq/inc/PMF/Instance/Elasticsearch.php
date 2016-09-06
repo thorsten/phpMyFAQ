@@ -190,6 +190,10 @@ class PMF_Instance_Elasticsearch
         $i = 1;
 
         foreach ($faqs as $faq) {
+            if ('no' === $faq['active']) {
+                continue;
+            }
+
             $params['body'][] = [
                 'index' => [
                     '_index' => $this->esConfig['index'],
