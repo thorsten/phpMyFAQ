@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.6 - 2016-09-
--
+- fixed minor bugs (Thorsten)
 
 Version 2.9.5 - 2016-08-31
 - fixed minor bugs (Thorsten, Matt Brennan)
