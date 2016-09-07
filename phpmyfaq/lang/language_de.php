@@ -136,12 +136,12 @@ $PMF_LANG["msgMailCheck"] = "Es ist ein neuer FAQ-Beitrag vorhanden. Sie können
 $PMF_LANG["msgMailContact"] = "Die Anfrage wurde an den Administrator versendet!";
 
 // Fehlermeldungen
-$PMF_LANG["err_noDatabase"] = "<p>Keine Datenbankverbindung möglich!</p>";
-$PMF_LANG["err_noHeaders"] = "<p>Keine Kategorie gefunden!</p>";
-$PMF_LANG["err_noArticles"] = "<p>Es gibt noch keine Einträge.</p>";
-$PMF_LANG["err_badID"] = "<p>Fehlerhafte ID!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Derzeit sind keine beliebten FAQs verfügbar.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Es wurde kein Eintrag gefunden.</p>";
+$PMF_LANG["err_noDatabase"] = "Keine Datenbankverbindung möglich!";
+$PMF_LANG["err_noHeaders"] = "Keine Kategorie gefunden!";
+$PMF_LANG["err_noArticles"] = "Es gibt noch keine Einträge.";
+$PMF_LANG["err_badID"] = "Fehlerhafte ID!";
+$PMF_LANG["err_noTopTen"] = "Derzeit sind keine beliebten FAQs verfügbar.";
+$PMF_LANG["err_nothingFound"] = "Es wurde kein Eintrag gefunden.";
 $PMF_LANG["err_SaveEntries"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong>, <strong>Kategorie</strong>, <strong>Frage</strong> und <strong>Antwort</strong>!";
 $PMF_LANG["err_SaveComment"] = "Pflichtfelder sind <strong>Name</strong>, <strong>E-Mail-Adresse</strong> und <strong>Kommentar</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "Leider konnte die Bewertung nicht gespeichert werden, da mit der IP bereits bewertet wurde.";
@@ -150,7 +150,7 @@ $PMF_LANG["err_noMailAdress"] = "Die angegebene E-Mail-Adresse ist nicht korrekt
 $PMF_LANG["err_sendMail"] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Antwort finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.</p><p><strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.</p>";
+$PMF_LANG["help_search"] = "<strong>Antwort finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.<strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN-BEREICH";

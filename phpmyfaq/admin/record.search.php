@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows the admin search frontend for FAQs.
  *
@@ -9,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-09-29
  */
@@ -59,12 +58,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <form action="?action=view" method="post" class="form-horizontal" accept-charset="utf-8">
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php print $PMF_LANG['msgSearchWord'];
-    ?>:</label>
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['msgSearchWord'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
-                                   value="<?php print $searchterm;
-    ?>" />
+                                   value="<?php echo $searchterm ?>">
 
                         </div>
                     </div>
@@ -73,24 +70,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4 checkbox">
                             <label>
-                                <input type="checkbox" name="linkstate" value="linkbad" />
-                                <?php print $PMF_LANG['ad_linkcheck_searchbadonly'];
-    ?>
+                                <input type="checkbox" name="linkstate" value="linkbad">
+                                <?php echo $PMF_LANG['ad_linkcheck_searchbadonly'] ?>
                             </label>
                         </div>
                     </div>
-                    <?php endif;
-    ?>
+                    <?php endif; ?>
 
                     <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php print $PMF_LANG['msgCategory'];
-    ?>:</label>
+                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['msgCategory'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
-                                <option value="0"><?php print $PMF_LANG['msgShowAllCategories'];
-    ?></option>
-                                <?php print $categoryHelper->renderOptions($searchcat);
-    ?>
+                                <option value="0"><?php echo $PMF_LANG['msgShowAllCategories'] ?></option>
+                                <?php echo $categoryHelper->renderOptions($searchcat) ?>
                             </select>
                         </div>
                     </div>
@@ -98,17 +90,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php print $PMF_LANG['msgSearch'];
-    ?>
+                                <?php echo $PMF_LANG['msgSearch'] ?>
                             </button>
                         </div>
                     </div>
                 </form>
-
 <?php
 
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
 ?>
             </div>

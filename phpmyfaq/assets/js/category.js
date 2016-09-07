@@ -43,7 +43,7 @@ $(document).ready(function () {
         }
     });
 
-    if (menuCounter > 4) {
+    if (menuCounter > 10) {
         $('.pmf-main-category').find('ul').hide();
         $('.pmf-sub-category-list').hide();
     } else{

@@ -613,7 +613,7 @@ if (isset($auth)) {
     $userRights = $user->perm->getAllUserRights($user->getUserId());
     $minRights = ['37', '39', '40', '41'];
 
-    if (count(array_intersect($userRights, $minRights)) === count($minRights)) {
+    if (array_values(array_intersect($userRights, $minRights)) === $minRights) {
         $adminSection = sprintf(
             '<a href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',

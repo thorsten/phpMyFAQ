@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Save an existing FAQ record.
  *
@@ -15,6 +16,9 @@
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use Elasticsearch\Common\Exceptions\Missing404Exception;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -196,20 +200,27 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             $faq->addPermission('group', $recordId, $permissions['restricted_groups']);
         }
 
-        // If Elasticsearch is enabled, index new FAQ document
+        // If Elasticsearch is enabled, update active or delete inactive FAQ document
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new PMF_Instance_Elasticsearch($faqConfig);
-            $esInstance->update(
-                [
-                    'id' => $recordId,
-                    'lang' => $recordLang,
-                    'solution_id' => $solutionId,
-                    'question' => $recordData['thema'],
-                    'answer' => $recordData['content'],
-                    'keywords' => $keywords,
-                    'category_id' => $categories['rubrik'][0]
-                ]
-            );
+            try {
+                $esInstance->delete($solutionId);
+            } catch (Missing404Exception $e) {
+
+            }
+            if ('yes' === $active) {
+                $esInstance->index(
+                    [
+                        'id' => $recordId,
+                        'lang' => $recordLang,
+                        'solution_id' => $solutionId,
+                        'question' => $recordData['thema'],
+                        'answer' => $recordData['content'],
+                        'keywords' => $keywords,
+                        'category_id' => $categories['rubrik'][0]
+                    ]
+                );
+            }
         }
 
         // All the other translations        

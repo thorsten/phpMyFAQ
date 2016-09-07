@@ -117,7 +117,7 @@ $PMF_LANG["msg2answer"] = "Cevap";
 $PMF_LANG["msgQuestionText"] = "Burada diğer kullanıcıların sormuş olduğu soruları görebilirsiniz. Eğer bu soruyu cevaplayacaksanız, cevabınız SSS'da yerleştirilebilir.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.</p>";
+$PMF_LANG["msgHelpText"] = "SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Webmaster 'a E-Mail:";
@@ -139,19 +139,19 @@ $PMF_LANG["msgMailContact"] = "Mesajınız yöneticiye yollandı.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Herhangi bir veritabanı bağlantısı yok.";
 $PMF_LANG["err_noHeaders"] = "Herhangi bir kategori bulunamadı.";
-$PMF_LANG["err_noArticles"] = "<p>Herhangi bir girdi yok.</p>";
-$PMF_LANG["err_badID"] = "<p>Yanlış ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Henüz İlk On yok.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Bir girdi bulunamadı.</p>";
+$PMF_LANG["err_noArticles"] = "Herhangi bir girdi yok.";
+$PMF_LANG["err_badID"] = "Yanlış ID.";
+$PMF_LANG["err_noTopTen"] = "Henüz İlk On yok.";
+$PMF_LANG["err_nothingFound"] = "Bir girdi bulunamadı.";
 $PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Mükerrer oylar sayılmamaktadır. <a href=\"javascript:history.back();\">Buraya Tıkla</a>, geri dönmek için.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Mükerrer oylar sayılmamaktadır.";
+$PMF_LANG["err_noVote"] = "<strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz yanlış.<br /><a href=\"javascript:history.back();\">geri</a>";
 $PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!";
 
 // Yardım ve Arama
-$PMF_LANG["help_search"] = "<p><strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.</p><p><strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.</p>";
+$PMF_LANG["help_search"] = "<strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.<strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.";
 
 // Menü
 $PMF_LANG["ad"] = "ADMıN ALANI";

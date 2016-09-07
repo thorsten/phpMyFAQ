@@ -94,7 +94,7 @@ $PMF_LANG["msgSearchContent"] = "Vsebina: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Predlog za vprašanje";
 $PMF_LANG["msgNewContentAddon"] = "Tvoj predlog ne bo takoj objavljen, ampak bo dostavljen administratorju v predogled. Obvezni podatki: <strong>tvoje ime</strong>, <strong>tvoj email naslov</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>. Prosim lo&egrave;i vnose besed z presledkom.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Lahko uporabiš UBB kode za vprašanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "Lahko uporabiš UBB kode za vprašanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a>";
 $PMF_LANG["msgNewContentName"] = "Tvoje ime:";
 $PMF_LANG["msgNewContentMail"] = "Tvoj email naslov:";
 $PMF_LANG["msgNewContentCategory"] = "Katero kategorijo boš izbral?";
@@ -118,7 +118,7 @@ $PMF_LANG["msg2answer"] = "odgovor";
 $PMF_LANG["msgQuestionText"] = "Tukaj lahko vidiš vprašanja drugih uporabnikov. &Egrave;e odgovoriš na katero vprašanje, bo tvoj odgovor mogo&egrave;e dodan v seznam.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.</p>";
+$PMF_LANG["msgHelpText"] = "Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "email za webmasterja:";
@@ -140,19 +140,19 @@ $PMF_LANG["msgMailContact"] = "Tvoje sporo&egrave;ilo je bilo poslano administra
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ni povezave z bazo.";
 $PMF_LANG["err_noHeaders"] = "Ni kategorij.";
-$PMF_LANG["err_noArticles"] = "<p>Ni nobenega vnosa.</p>";
-$PMF_LANG["err_badID"] = "<p>Napa&egrave;en ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Ni 10 NAJ vnosov trenutno.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ne najdem vnosa.</p>";
+$PMF_LANG["err_noArticles"] = "Ni nobenega vnosa.";
+$PMF_LANG["err_badID"] = "Napa&egrave;en ID.";
+$PMF_LANG["err_noTopTen"] = "Ni 10 NAJ vnosov trenutno.";
+$PMF_LANG["err_nothingFound"] = "Ne najdem vnosa.";
 $PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne štejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da greš nazaj.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Ne štejejo dvojna glasovanja.";
+$PMF_LANG["err_noVote"] = "<strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.";
 $PMF_LANG["err_noMailAdress"] = "Tvoj email ni pravilen.<br /><a href=\"javascript:history.back();\">nazaj</a>";
 $PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Iskanje po vnosih:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Iskanje po vnosih:</strong><br />";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";

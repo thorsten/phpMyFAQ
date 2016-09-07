@@ -135,10 +135,10 @@ $PMF_LANG["msgMailContact"] = "您的訊息已經傳遞給管理員。";
 // Fehlermeldungen / Error Message / 錯誤訊息
 $PMF_LANG["err_noDatabase"] = "沒有可用資料庫連接。";
 $PMF_LANG["err_noHeaders"] = "沒有發現類別。";
-$PMF_LANG["err_noArticles"] = "<p>沒有 FAQs 存在。</p>";
-$PMF_LANG["err_badID"] = "<p>錯誤 ID。</p>";
-$PMF_LANG["err_noTopTen"] = "<p>尚無熱門 FAQs。</p>";
-$PMF_LANG["err_nothingFound"] = "<p>尚未有記錄.</p>";
+$PMF_LANG["err_noArticles"] = "沒有 FAQs 存在。";
+$PMF_LANG["err_badID"] = "錯誤 ID。";
+$PMF_LANG["err_noTopTen"] = "尚無熱門 FAQs。";
+$PMF_LANG["err_nothingFound"] = "尚未有記錄.";
 $PMF_LANG["err_SaveEntries"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>類別</strong>，<strong>問題</strong>, <strong>您的紀錄</strong> 與，, 何時提出，<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 $PMF_LANG["err_SaveComment"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email </strong>，<strong>您的評論</strong> 和，何時提出，<strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 $PMF_LANG["err_VoteTooMuch"] = "我們不統計重複評分。";
@@ -147,7 +147,7 @@ $PMF_LANG["err_noMailAdress"] = "您的 email 地址不正確。";
 $PMF_LANG["err_sendMail"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email</strong>，<strong>您的問題</strong> 和，何時提出， <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 
 // Hilfe zur Suche / Help to the search / 搜尋提示幫忙
-$PMF_LANG["help_search"] = "<p><strong>搜尋記錄:</strong><br />與一筆記錄類似 <strong style=\"color: Red;\">字串1 字串2</strong> 您也可以用兩個或更多的搜尋選項來排序。</p><p><strong>注意:</strong> 您的搜尋至少必須有四個字元，不然不會被執行。</p>";
+$PMF_LANG["help_search"] = "<strong>搜尋記錄:</strong><br />與一筆記錄類似 <strong style=\"color: Red;\">字串1 字串2</strong> 您也可以用兩個或更多的搜尋選項來排序。<strong>注意:</strong> 您的搜尋至少必須有四個字元，不然不會被執行。";
 
 // Menu 選項單
 $PMF_LANG["ad"] = "管理員介面";

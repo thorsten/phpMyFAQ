@@ -116,7 +116,7 @@ $PMF_LANG["msg2answer"] = "Jawaban";
 $PMF_LANG["msgQuestionText"] = "Di sini anda bisa bertanya pada pengguna lainnya. Jika anda menjawab pertanyaan ini dengan baik, jawaban anda mungkin akan dimasukkan ke dalam materi.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <strong><a href=\"?action=show\">kategori</a></strong> atau gunakan <strong><a href=\"?action=search\">mesin pencari</a></strong> untuk melakukan pencarian atas kata kunci tertentu.</p>";
+$PMF_LANG["msgHelpText"] = "Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <strong><a href=\"?action=show\">kategori</a></strong> atau gunakan <strong><a href=\"?action=search\">mesin pencari</a></strong> untuk melakukan pencarian atas kata kunci tertentu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Kirim pesan ke pengelola:";
@@ -138,19 +138,19 @@ $PMF_LANG["msgMailContact"] = "Pesan anda sudah dikirim ke pengelola.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Koneksi database sedang bermasalah.";
 $PMF_LANG["err_noHeaders"] = "Tidak ditemukan kategori.";
-$PMF_LANG["err_noArticles"] = "<p>Tidak ada materi yang tersedia.</p>";
-$PMF_LANG["err_badID"] = "<p>ID Salah.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Belum ada materi yang populer.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Tidak ada materi yang ditemukan.</p>";
+$PMF_LANG["err_noArticles"] = "Tidak ada materi yang tersedia.";
+$PMF_LANG["err_badID"] = "ID Salah.";
+$PMF_LANG["err_noTopTen"] = "Belum ada materi yang populer.";
+$PMF_LANG["err_nothingFound"] = "Tidak ada materi yang ditemukan.";
 $PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Kategori</strong>, <strong>Pengantar</strong>, <strong>Isi Materi</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">mundur satu halaman</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Isi Komentar</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">mundur satu halaman</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Anda sudah pernah menilai sebelumnya. <a href=\"javascript:history.back();\">Klik di sini</a>, untuk kembali.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Anda sudah pernah menilai sebelumnya. Klik di sini, untuk kembali.";
+$PMF_LANG["err_noVote"] = "<strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.";
 $PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar.<br /><a href=\"javascript:history.back();\">kembali</a>";
 $PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Pertanyaan Anda</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Pencarian materi:</strong><br />Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.</p><p><strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.</p>";
+$PMF_LANG["help_search"] = "<strong>Pencarian materi:</strong><br />Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.<strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.";
 
 // Men?
 $PMF_LANG["ad"] = "BAGIAN ADMIN";

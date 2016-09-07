@@ -117,7 +117,7 @@ $PMF_LANG["msg2answer"] = "trả lời";
 $PMF_LANG["msgQuestionText"] = "Tại đây, bạn có thể xem những câu hỏi do những thành viên khác nêu ra. Bạn có thể đề nghị một câu trả lời, câu trả lời của bạn có thể được sử dụng làm lời giải đáp trong phần Các câu hỏi thường gặp.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.</p>";
+$PMF_LANG["msgHelpText"] = "Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Gửi email cho bộ phận hỗ trợ kỹ thuật của chúng tôi:";
@@ -140,19 +140,19 @@ $PMF_LANG["msgMailContactBack"] = "Trở về trang chủ";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Không thiết lập được kết nối với cơ sở dữ liệu!";
 $PMF_LANG["err_noHeaders"] = "Không tìm thấy mục này!";
-$PMF_LANG["err_noArticles"] = "<p>Không có kết quả nào.</p>";
-$PMF_LANG["err_badID"] = "<p>Tên đăng nhập sai!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Hiện không có TOP 10.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Nội dung không tìm thấy.</p>";
+$PMF_LANG["err_noArticles"] = "Không có kết quả nào.";
+$PMF_LANG["err_badID"] = "Tên đăng nhập sai!";
+$PMF_LANG["err_noTopTen"] = "Hiện không có TOP 10.";
+$PMF_LANG["err_nothingFound"] = "Nội dung không tìm thấy.";
 $PMF_LANG["err_SaveEntries"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>mục</strong>, <strong>tựa đề</strong>, <strong>nội dung</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>bình luận của bạn</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Chúng tôi không tính trường hợp bình chọn hai lần. <a href=\"javascript:history.back();\">Nhấp vào đây</a>, để trở về.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Bạn chưa bình chọn câu hỏi!</strong> <a href=\"javascript:history.back();\">Vui lòng nhấp vào đây</a>, để bình chọn.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Chúng tôi không tính trường hợp bình chọn hai lần.";
+$PMF_LANG["err_noVote"] = "<strong>Bạn chưa bình chọn câu hỏi!</strong> <a href=\"javascript:history.back();\">Vui lòng nhấp vào đây</a>, để bình chọn.";
 $PMF_LANG["err_noMailAdress"] = "Địa chỉ email của bạn không chính xác.<br /><a href=\"javascript:history.back();\">trở về</a>";
 $PMF_LANG["err_sendMail"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>câu hỏi của bạn</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Tìm kiếm cho nội dung:</strong><br />Với một nội dung như <strong style=\"color: Red;\">từ1 từ2</strong> bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.</p><p><strong>Chú ý:</strong> Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.</p>";
+$PMF_LANG["help_search"] = "<strong>Tìm kiếm cho nội dung:</strong><br />Với một nội dung như <strong style=\"color: Red;\">từ1 từ2</strong> bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.<strong>Chú ý:</strong> Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.";
 
 // Men�
 $PMF_LANG["ad"] = "QUẢN TRỊ";
