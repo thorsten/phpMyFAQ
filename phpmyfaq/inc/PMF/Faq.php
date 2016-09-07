@@ -2372,8 +2372,9 @@ class PMF_Faq
         $query = sprintf("
             INSERT INTO
                 %sfaqquestions
-            VALUES
-                (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
+            (id, lang, username, email, category_id, question, created, is_visible, answer_id)
+                VALUES
+            (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             PMF_Db::getTablePrefix(),
             $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqquestions', 'id'),
             $this->_config->getLanguage()->getLanguage(),
