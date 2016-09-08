@@ -869,6 +869,15 @@ if ($step == 3) {
         }
     }
 
+    //
+    // UPDATES FROM 2.9.6
+    //
+    if (version_compare($version, '2.9.6', '<')) {
+        if ($DB['type'] === 'mysqli') {
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD FULLTEXT(keywords,thema,content);';
+        }
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, PMF_System::getVersion(), '<')) {
         $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
