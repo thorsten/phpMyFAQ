@@ -71,18 +71,21 @@ class PMF_Network
         $bannedIps = explode(' ', $this->_config->get('security.bannedIPs'));
 
         foreach ($bannedIps as $ipAddress) {
-            if (0 == strlen($ipAddress)) {
+            if (0 === strlen($ipAddress)) {
                 continue;
             }
 
-            if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) &&
+                false === filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                 // Handle IPv4
                 if ($this->checkForAddrMatchIpv4($ip, $ipAddress)) {
                     return false;
                 }
             } else {
                 // Handle IPv6
-                if ($this->checkForAddrMatchIpv6($ip, $ipAddress)) {
+                try {
+                    return $this->checkForAddrMatchIpv6($ip, $ipAddress);
+                } catch (InvalidArgumentException $e) {
                     return false;
                 }
             }
