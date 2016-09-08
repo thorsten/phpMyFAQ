@@ -120,8 +120,8 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
 
         $result = $this->conn->query($query);
 
-        if (!$result) {
-            $this->sqllog .= $this->error();
+        if (false === $result) {
+            $this->sqllog .= $this->conn->errno.': '.$this->error();
         }
 
         return $result;
