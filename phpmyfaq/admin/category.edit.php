@@ -51,7 +51,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'].' '.$categoryData->getName().' '.$PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'].' "'.$categoryData->getName().'" '.$PMF_LANG['ad_categ_edit_2'];
     ?>
 
         <header class="row">
@@ -67,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 
             </div>
         </div>
-        <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
+        <form enctype="multipart/form-data" class="form-horizontal" action="?action=updatecategory" method="post">
             <input type="hidden" name="id" value="<?php echo $categoryId ?>">
             <input type="hidden" id="catlang" name="catlang" value="<?php echo $categoryData->getLang() ?>">
             <input type="hidden" name="parent_id" value="<?php echo $categoryData->getParentId() ?>">
@@ -194,6 +194,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 </div>
             </div>
     </form>
+
+    <script>
+        $('#pmf-category-image-upload').fileinput({
+            uploadAsync: false,
+            showUpload: false,
+            uploadUrl: "?action=updatecategory",
+            <?php if ('' !== $categoryData->getImage()) { ?>
+            initialPreview: [
+                '<img src="<?php echo $faqConfig->getDefaultUrl().'/images/'.$categoryData->getImage() ?>" class="file-preview-image" alt="phpMyFAQ" width="120">'
+            ],
+            <?php } ?>
+            initialPreviewShowDelete: true
+        });
+    </script>
 <?php
 
 } else {

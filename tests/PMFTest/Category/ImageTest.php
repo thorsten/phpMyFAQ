@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The category image class.
+ * The category image test class.
  *
  * PHP Version 5.6
  *
@@ -22,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Category images.
+ * Test category images.
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -33,14 +33,50 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class PMFTest_Category_ImageTest extends PHPUnit_Framework_TestCase
 {
-    /**
-     * @var PMF_Category_Image
-     */
-    protected $instance;
+
+    /** @var PMF_Category_Image */
+    private $instance;
 
     protected function setUp()
     {
-        $this->instance = new PMF_Category_Image();
+        $dbHandle  = new PMF_DB_Sqlite3();
+        $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
+        $pmfConfig = new PMF_Configuration($dbHandle);
+        $pmfConfig->set('records.maxAttachmentSize', 1234567890);
+        $this->instance = new PMF_Category_Image($pmfConfig);
     }
 
+    public function testNoUploadGetFileName()
+    {
+        $categoryId = 1;
+        $categoryName = 'de';
+        $uploadedFile = [
+            'name' => '',
+            'type' => '',
+            'tmp_name' => '',
+            'error' => 4,
+            'size' => 0
+        ];
+
+        $this->instance->setUploadedFile($uploadedFile);
+
+        $this->assertEquals('', $this->instance->getFileName($categoryId, $categoryName));
+    }
+
+    public function testUploadedGetFileName()
+    {
+        $categoryId = 1;
+        $categoryName = 'de';
+        $uploadedFile = [
+            'name' => 'Foobar.png',
+            'type' => 'image/png',
+            'tmp_name' => '/private/var/tmp/phpSgODqb',
+            'error' => 0,
+            'size' => 1336915
+        ];
+
+        $this->instance->setUploadedFile($uploadedFile);
+        
+        $this->assertEquals('category-1-de.png', $this->instance->getFileName($categoryId, $categoryName));
+    }
 }

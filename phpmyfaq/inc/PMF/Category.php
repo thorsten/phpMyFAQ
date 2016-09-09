@@ -1123,7 +1123,8 @@ class PMF_Category
                 description = '%s',
                 user_id = %d,
                 group_id = %d,
-                active = %d
+                active = %d,
+                image = '%s'
             WHERE
                 id = %d
             AND
@@ -1134,12 +1135,12 @@ class PMF_Category
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
+            $categoryData['image'],
             $categoryData['id'],
             $categoryData['lang']
         );
-        $this->_config->getDb()->query($query);
 
-        return true;
+        return $this->_config->getDb()->query($query);
     }
 
     /**
