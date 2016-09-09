@@ -85,7 +85,7 @@ class PMF_String_Basic extends PMF_String_Abstract
      *
      * @return int
      */
-    public function strlen($str)
+    public static function strlen($str)
     {
         return strlen($str);
     }

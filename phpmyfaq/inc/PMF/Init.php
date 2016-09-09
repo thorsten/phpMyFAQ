@@ -3,7 +3,7 @@
 /**
  * Some basic functions and PMF_Init class.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,6 @@
  * All Rights Reserved.
  *
  * @category  phpMyFAQ
- *
  * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Stefan Esser <sesser@php.net>
@@ -21,7 +20,6 @@
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
@@ -37,7 +35,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * and sets the current language.
  *
  * @category  phpMyFAQ
- *
  * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Stefan Esser <sesser@php.net>
@@ -45,7 +42,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-24
  */
