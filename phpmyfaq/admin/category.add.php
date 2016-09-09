@@ -43,7 +43,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $category->setGroups($currentAdminGroups);
     $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
-                <form class="form-horizontal" action="?action=savecategory" method="post" accept-charset="utf-8">
+                <form enctype="multipart/form-data" class="form-horizontal" action="?action=savecategory" method="post">
                     <input type="hidden" id="lang" name="lang" value="<?php echo $LANGCODE ?>">
                     <input type="hidden" name="parent_id" value="<?php echo $parentId ?>">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">

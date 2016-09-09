@@ -71,7 +71,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setGroups($currentAdminGroups);
         $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryId = $faqConfig->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
+        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $categoryData = array(
             'lang' => $categoryLang,
             'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),

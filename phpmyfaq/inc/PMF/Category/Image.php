@@ -100,6 +100,8 @@ class PMF_Category_Image
     }
 
     /**
+     * Uploads the current file and moves it into the images/ folder.
+     *
      * @return bool
      */
     public function upload()
@@ -110,17 +112,23 @@ class PMF_Category_Image
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
                 return false;
             } else {
-                if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
+                if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR.$this->fileName)) {
                     return true;
                 } else {
                     return false;
                 }
             }
-        } else {
-            // @todo delete image
         }
+    }
 
-        return false;
+    /**
+     * Deletes the current file.
+     *
+     * @return bool
+     */
+    public function delete()
+    {
+        return unlink(self::UPLOAD_DIR.$this->fileName);
     }
 
     /**
