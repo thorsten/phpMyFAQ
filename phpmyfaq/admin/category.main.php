@@ -213,17 +213,24 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Deletes an existing category
     if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
+
+        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $deleteAll = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        $deleteAll = strtolower($deleteAll) == 'yes' ? true : false;
+
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $deleteall = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
-        $delete_all = strtolower($deleteall) == 'yes' ? true : false;
 
-        if ($category->deleteCategory($id, $lang, $delete_all) &&
-            $category->deleteCategoryRelation($id, $lang, $delete_all) &&
-            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
+        $categoryImage = new PMF_Category_Image($faqConfig);
+        $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
+
+        if ($category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
+            $category->deleteCategoryRelation($categoryId, $categoryLang, $deleteAll) &&
+            $category->deletePermission('user', [$categoryId]) &&
+            $category->deletePermission('group', [$categoryId]) &&
+            $categoryImage->delete()) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());

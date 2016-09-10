@@ -58,14 +58,8 @@ class PMF_Category_Image
     }
 
     /**
-     * @return array
-     */
-    public function getUploadedFile()
-    {
-        return $this->uploadedFile;
-    }
-
-    /**
+     * Sets the uploaded file array from $_FILES.
+     *
      * @param array $uploadedFile
      *
      * @return PMF_Category_Image
@@ -81,18 +75,23 @@ class PMF_Category_Image
     }
 
     /**
+     * Returns the filename for the given category ID and language.
+     *
      * @param integer $categoryId
      * @param string $categoryName
+     *
      * @return string
      */
     public function getFileName($categoryId, $categoryName)
     {
         if ($this->isUpload) {
-            $this->fileName = sprintf(
-                'category-%d-%s.%s',
-                (int)$categoryId,
-                (string)$categoryName,
-                $this->getFileExtension($this->uploadedFile['type'])
+            $this->setFileName(
+                sprintf(
+                    'category-%d-%s.%s',
+                    (int)$categoryId,
+                    (string)$categoryName,
+                    $this->getFileExtension($this->uploadedFile['type'])
+                )
             );
         }
 
@@ -132,7 +131,10 @@ class PMF_Category_Image
     }
 
     /**
+     * Returns the image file extension from a given MIME type.
+     *
      * @param string $mimeType
+     *
      * @return string
      */
     private function getFileExtension($mimeType)
@@ -144,5 +146,19 @@ class PMF_Category_Image
         ];
 
         return isset($mapping[$mimeType]) ? $mapping[$mimeType] : '';
+    }
+
+    /**
+     * Returns the filename.
+     * 
+     * @param string $fileName
+     *
+     * @return PMF_Category_Image
+     */
+    public function setFileName($fileName)
+    {
+        $this->fileName = $fileName;
+
+        return $this;
     }
 }
