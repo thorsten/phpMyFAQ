@@ -8,7 +8,13 @@
 
             <div class="tab-content">
                 <div class="tab-pane active" id="faqs">
-                    <p>{categoryDescription}</p>
+                    <p>
+                        {categoryDescription}
+                        [categoryImage]
+                        <img src="{categoryImage}" alt="{categoryFaqsHeader}" width="140" height="140"
+                             class="img-rounded img-responsive pull-right">
+                        [/categoryImage]
+                    </p>
                     {categoryContent}
                     <p>{categoryLevelUp}</p>
                 </div>

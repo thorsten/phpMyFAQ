@@ -1,14 +1,15 @@
-phpMyFAQ 2.10.0
+phpMyFAQ 2.10.0-alpha
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0 - 2016-09-
+Version 2.10.0-alpha - 2016-09-
 - changed PHP requirement to PHP 5.6+ and PHP 7 (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
+- added support for category images (Thorsten)
 - improved REST/JSON API (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.16 (Thorsten)
 - updated bundled SwiftMailer to version 5.4.3 (Thorsten)

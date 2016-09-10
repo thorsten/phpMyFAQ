@@ -154,7 +154,7 @@ class PMF_Entity_Category
      */
     public function getId()
     {
-        return $this->id;
+        return (int) $this->id;
     }
 
     /**
@@ -214,7 +214,7 @@ class PMF_Entity_Category
      */
     public function getParentId()
     {
-        return $this->parentId;
+        return (int) $this->parentId;
     }
 
     /**
@@ -234,11 +234,11 @@ class PMF_Entity_Category
      */
     public function getUserId()
     {
-        return $this->userId;
+        return (int) $this->userId;
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getImage()
     {
