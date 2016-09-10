@@ -121,13 +121,17 @@ class PMF_Category_Image
     }
 
     /**
-     * Deletes the current file.
+     * Deletes the current file, returns true, if no file is available.
      *
      * @return bool
      */
     public function delete()
     {
-        return unlink(self::UPLOAD_DIR.$this->fileName);
+        if (is_file(self::UPLOAD_DIR.$this->fileName)) {
+            return unlink(self::UPLOAD_DIR.$this->fileName);
+        }
+
+        return true;
     }
 
     /**
@@ -150,7 +154,7 @@ class PMF_Category_Image
 
     /**
      * Returns the filename.
-     * 
+     *
      * @param string $fileName
      *
      * @return PMF_Category_Image
