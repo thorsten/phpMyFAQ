@@ -3257,27 +3257,26 @@ class PMF_Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $output[] = array(
-                    'title' => PMF_Utils::makeShorterText($row['thema'], 8),
-                    'preview' => $row['thema'],
-                    'url' => $row['url'],
-                );
+                $output['title'][] = PMF_Utils::makeShorterText($row['thema'], 8);
+                $output['preview'][] = $row['thema'];
+                $output['url'][] = $row['url'];
             }
         } else {
             $output['error'] = sprintf('<li>%s</li>', $this->pmf_lang['err_noTopTen']);
         }
-        if (!isset($output['error'])) {
-            $html = '';
-            foreach ($output as $entry) {
-                $html .= sprintf(
-                    '<li><a class="sticky-faqs" data-toggle="tooltip" data-placement="top" title="%s" href="%s">%s</a></li>',
-                    $entry['preview'],
-                    $entry['url'],
-                    $entry['title']
-                );
-            }
-            $output['html'] = $html;
-        }
+
+//        if (!isset($output['error'])) {
+//            $html = '';
+//            foreach ($output['raw'] as $entry) {
+//                $html .= sprintf(
+//                    '<li><a class="sticky-faqs" data-toggle="tooltip" data-placement="top" title="%s" href="%s">%s</a></li>',
+//                    $entry['preview'],
+//                    $entry['url'],
+//                    $entry['title']
+//                );
+//            }
+//            $output['html'] = $html;
+//        }
 
         return $output;
     }

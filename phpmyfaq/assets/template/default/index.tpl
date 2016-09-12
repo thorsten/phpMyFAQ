@@ -126,18 +126,23 @@
 
                 {rightBox}
 
-                [stickyFaqs]
                 <div class="pmf-aside-widget">
                     <header>
                         <h3>{stickyRecordsHeader}</h3>
                     </header>
                     <div class="pmf-aside-widget-body">
                         <ul class="pmf-list">
-                            {stickyRecordsList}
+                            [stickyRecordsList]
+                            <li>
+                                <a class="sticky-faqs" title="{stickyTitle}" href="{stickyUrl}"
+                                   data-toggle="tooltip" data-placement="top">
+                                    {stickyPreview}
+                                </a>
+                            </li>
+                            [/stickyRecordsList]
                         </ul>
                     </div>
                 </div>
-                [/stickyFaqs]
 
             </aside>
         </div>

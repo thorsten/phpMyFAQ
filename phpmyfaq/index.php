@@ -510,6 +510,7 @@ $tplMainPage = array(
     'languageBox' => $PMF_LANG['msgLangaugeSubmit'],
     'writeLangAdress' => $writeLangAdress,
     'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
+    'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'userOnline' => $usersOnline,
     'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
                               $faqConfig->get('main.currentVersion'),
@@ -561,11 +562,12 @@ $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
     $tpl->parseBlock(
         'index',
-        'stickyFaqs',
-        array(
-            'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-            'stickyRecordsList' => $stickyRecordsParams['html'],
-        )
+        'stickyRecordsList',
+        [
+            'stickyTitle' => $stickyRecordsParams['title'],
+            'stickyUrl' => $stickyRecordsParams['url'],
+            'stickyPreview' => $stickyRecordsParams['preview']
+        ]
     );
 }
 
