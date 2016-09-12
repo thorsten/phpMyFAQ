@@ -59,7 +59,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null
 $plr = new PMF_Language_Plurals($PMF_LANG);
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
@@ -204,7 +204,7 @@ if (!$internal) {
         try {
             $faqsession->userTracking('new_session', 0);
         } catch (PMF_Exception $e) {
-            $pmfExeptions[] = $e->getMessage();
+            $pmfExceptions[] = $e->getMessage();
         }
     } else {
         try {
@@ -214,7 +214,7 @@ if (!$internal) {
                 $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
             }
         } catch (PMF_Exception $e) {
-            $pmfExeptions[] = $e->getMessage();
+            $pmfExceptions[] = $e->getMessage();
         }
     }
 }
@@ -757,7 +757,7 @@ if (DEBUG) {
         'index',
         'debugMode',
         array(
-            'debugExceptions' => implode('<br>', $pmfExeptions),
+            'debugExceptions' => implode('<br>', $pmfExceptions),
             'debugQueries' => $faqConfig->getDb()->log(),
         )
     );

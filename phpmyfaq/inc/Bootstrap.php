@@ -39,6 +39,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$pmfExceptions = [];
+
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
 //
