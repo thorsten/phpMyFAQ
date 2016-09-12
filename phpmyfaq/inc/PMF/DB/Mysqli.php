@@ -144,13 +144,19 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
      *
      * This function fetches a result row as an object.
      *
-     * @param resource $result
+     * @param mysqli_result $result
+     *
+     * @throws PMF_Exception
      *
      * @return mixed
      */
     public function fetchObject($result)
     {
-        return $result->fetch_object();
+        if ($result instanceof mysqli_result) {
+            return $result->fetch_object();
+        }
+
+        throw new PMF_Exception($this->error());
     }
 
     /**
