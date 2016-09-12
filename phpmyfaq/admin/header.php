@@ -50,10 +50,12 @@ switch ($action) {
     case 'cookies':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_users'];
         $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
-        if ($faqConfig->get('security.permLevel') != 'basic') {
+        if ($faqConfig->get('security.permLevel') !== 'basic') {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
-        $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+        if (!$faqConfig->get('ldap.ldapSupport')) {
+            $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+        }
         $dashboardPage = false;
         $userPage = true;
         break;
@@ -244,12 +246,14 @@ switch ($action) {
                     <b class="fa fa-caret-down"></b>
                 </a>
                 <ul class="dropdown-menu">
+                    <?php if (!$faqConfig->get('ldap.ldapSupport')) { ?>
                     <li>
                         <a href="index.php?action=passwd">
                             <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
                         </a>
                     </li>
                     <li class="divider"></li>
+                    <?php } ?>
                     <li>
                         <a href="index.php?action=logout">
                             <i aria-hidden="true" class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>

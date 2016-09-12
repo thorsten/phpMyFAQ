@@ -625,13 +625,19 @@ if (isset($auth)) {
         $adminSection = '';
     }
 
+    if ($faqConfig->get('ldap.ldapSupport')) {
+        $userControlDropdown = '';
+    } else {
+        $userControlDropdown = '<a href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>';
+    }
+
     $tpl->parseBlock(
         'index',
         'userloggedIn',
         [
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
-            'msgUserControlDropDown' => '<a href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>',
+            'msgUserControlDropDown' => $userControlDropdown,
             'msgLogoutUser' => '<a href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]
