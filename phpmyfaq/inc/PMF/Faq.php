@@ -3176,8 +3176,10 @@ class PMF_Faq
                 fd.id AS id,
                 fd.lang AS lang,
                 fd.thema AS thema,
-                fcr.category_id AS category_id
+                fcr.category_id AS category_id,
+                fv.visits AS visits
             FROM
+                %sfaqvisits fv,
                 %sfaqdata fd
             LEFT JOIN
                 %sfaqcategoryrelations fcr
@@ -3203,7 +3205,16 @@ class PMF_Faq
                 fd.active = 'yes'
             AND 
                 fd.sticky = 1
-            %s",
+            AND
+                fd.id = fv.id
+            AND 
+                fd.lang = fv.lang
+            %s
+            GROUP BY
+                fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
+            ORDER BY
+                fv.visits DESC",
+            PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
