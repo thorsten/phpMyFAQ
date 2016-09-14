@@ -41,7 +41,7 @@ require PMF_CONFIG_DIR.'/constants.php';
 //
 // The include directory
 //
-define('PMF_INCLUDE_DIR', dirname(__DIR__) . '/phpmyfaq/inc');
+define('PMF_INCLUDE_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 
 //
 // The directory where the translations reside
