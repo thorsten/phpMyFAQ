@@ -29,7 +29,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 if ($faqConfig->get('socialnetworks.twitterConsumerKey') === '' ||
     $faqConfig->get('socialnetworks.twitterConsumerSecret') === '') {

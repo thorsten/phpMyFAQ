@@ -28,7 +28,7 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
 
 set_time_limit(0);
 
-require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 $step = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);

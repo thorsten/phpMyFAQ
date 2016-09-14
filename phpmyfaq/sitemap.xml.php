@@ -51,7 +51,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require 'inc/Bootstrap.php';
+require 'src/Bootstrap.php';
 
 //
 // Initalizing static string wrapper

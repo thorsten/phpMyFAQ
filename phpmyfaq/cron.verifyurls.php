@@ -50,7 +50,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 
     define('IS_VALID_PHPMYFAQ', null);
 
-    require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+    require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
     // Preload English strings
     require_once PMF_ROOT_DIR.'/lang/language_en.php';

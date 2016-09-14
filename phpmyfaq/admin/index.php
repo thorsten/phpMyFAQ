@@ -40,7 +40,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 // get language (default: english)
 $Language = new PMF_Language($faqConfig);

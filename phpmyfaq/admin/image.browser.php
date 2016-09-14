@@ -18,7 +18,7 @@
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
-require PMF_ROOT_DIR.'/inc/Bootstrap.php';
+require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 $Language = new PMF_Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));

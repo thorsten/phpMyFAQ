@@ -22,7 +22,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Prepend and start the PHP session
 //
-require 'inc/Bootstrap.php';
+require 'src/Bootstrap.php';
 
 $searchString = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
 $ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');

@@ -29,19 +29,19 @@ phpmyfaq/attachments/*
 phpmyfaq/.htaccess
 
 # Third party PHP libraries
-phpmyfaq/inc/libs/elasticsearch
-phpmyfaq/inc/libs/guzzlehttp/ringphp
-phpmyfaq/inc/libs/monolog
-phpmyfaq/inc/libs/parsedown
-phpmyfaq/inc/libs/phpseclib
-phpmyfaq/inc/libs/psr
-phpmyfaq/inc/libs/react
-phpmyfaq/inc/libs/swiftmailer
-phpmyfaq/inc/libs/symfony
-phpmyfaq/inc/libs/tcpdf/config
-phpmyfaq/inc/libs/tcpdf/include
-phpmyfaq/inc/libs/tcpdf/*.php
-phpmyfaq/inc/libs/twitteroauth
+phpmyfaq/src/libs/elasticsearch
+phpmyfaq/src/libs/guzzlehttp/ringphp
+phpmyfaq/src/libs/monolog
+phpmyfaq/src/libs/parsedown
+phpmyfaq/src/libs/phpseclib
+phpmyfaq/src/libs/psr
+phpmyfaq/src/libs/react
+phpmyfaq/src/libs/swiftmailer
+phpmyfaq/src/libs/symfony
+phpmyfaq/src/libs/tcpdf/config
+phpmyfaq/src/libs/tcpdf/include
+phpmyfaq/src/libs/tcpdf/*.php
+phpmyfaq/src/libs/twitteroauth
 
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css/*

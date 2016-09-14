@@ -20,7 +20,7 @@
  */
 define('IS_VALID_PHPMYFAQ', null);
 
-require __DIR__.'/inc/Bootstrap.php';
+require __DIR__.'/src/Bootstrap.php';
 require PMF_LANGUAGE_DIR.'/'.$faqConfig->get('main.language');
 
 $baseUrl = $faqConfig->getDefaultUrl();
