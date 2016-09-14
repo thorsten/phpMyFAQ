@@ -140,8 +140,8 @@ if (is_array($records)) {
         $rss->writeCdata($item['record_preview']);
         $rss->endElement();
 
-        $rss->writeElement('link', $faqConfig->getDefaultUrl().$link);
-        $rss->writeElement('guid', $faqConfig->getDefaultUrl().$link);
+        $rss->writeElement('link', $link);
+        $rss->writeElement('guid', $link);
 
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_updated'], true));
 
