@@ -141,8 +141,8 @@ if ($num > 0) {
         $rss->writeCdata('['.$i.'.] '.$item['question'].' ('.$item['visits'].' '.$PMF_LANG['msgViews'].')');
         $rss->endElement();
 
-        $rss->writeElement('link', $faqConfig->getDefaultUrl().$link);
-        $rss->writeElement('guid', $faqConfig->getDefaultUrl().$link);
+        $rss->writeElement('link', $link);
+        $rss->writeElement('guid', $link);
 
         $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['last_visit'], false));
         $rss->endElement();
