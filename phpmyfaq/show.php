@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
  */
@@ -27,76 +25,71 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedCategoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
-if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory])) {
+if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
-        $faqsession->userTracking('show_category', $currentCategory);
+        $faqsession->userTracking('show_category', $selectedCategoryId);
     } catch (PMF_Exception $e) {
         // @todo handle the exception
     }
 
-    $catParent = $category->categoryName[$currentCategory]['parent_id'];
-    $catName = $category->categoryName[$currentCategory]['name'];
-    $catDescription = $category->categoryName[$currentCategory]['description'];
+    $categoryData = $category->getCategoryData($selectedCategoryId);
     $records = $faq->showAllRecords(
-        $currentCategory,
+        $selectedCategoryId,
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')
     );
 
-    if (empty($records) || $category->getChildNodes($currentCategory)) {
+    if (empty($records) || $category->getChildNodes($selectedCategoryId)) {
         $subCategory = new PMF_Category($faqConfig, $current_groups, true);
         $subCategory->setUser($current_user);
-        $subCategory->transform($currentCategory);
+        $subCategory->transform($selectedCategoryId);
         if (empty($records)) {
             $records = $subCategory->viewTree();
         }
-        if (count($category->getChildNodes($currentCategory))) {
+        if (count($category->getChildNodes($selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
             $subCategoryContent = $subCategory->viewTree();
             $tpl->parseBlock(
                 'writeContent',
                 'subCategories',
-                array(
-                    'categorySubsHeader' => $categoryFaqsHeader,
-                )
+                [
+                    'categorySubsHeader' => $categoryFaqsHeader
+                ]
             );
         }
     }
 
-    $up = '';
-    if ($catParent != 0) {
-        $url = sprintf(
-            '%s?%saction=show&amp;cat=%d',
-            PMF_Link::getSystemRelativeUri(),
-            $sids,
-            $catParent
-        );
-        $oLink = new PMF_Link($url, $faqConfig);
-        $oLink->itemTitle = $category->categoryName[$catParent]['name'];
-        $oLink->text = $PMF_LANG['msgCategoryUp'];
-        $up = $oLink->toHtmlAnchor();
-    }
+    $url = sprintf(
+        '%s?%saction=show&amp;cat=%d',
+        PMF_Link::getSystemRelativeUri(),
+        $sids,
+        $categoryData->getParentId()
+    );
+    $oLink = new PMF_Link($url, $faqConfig);
+    $oLink->itemTitle = $categoryData->getName();
+    $oLink->text = $PMF_LANG['msgCategoryUp'];
+    $up = $oLink->toHtmlAnchor();
 
     $tpl->parse(
         'writeContent',
-        array(
-            'categoryHeader' => $PMF_LANG['msgEntriesIn'].$catName,
-            'categoryDescription' => $catDescription,
+        [
+            'categoryHeader' => $PMF_LANG['msgEntriesIn'].$categoryData->getName(),
+            'categoryDescription' => $categoryData->getDescription(),
             'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
             'categoryContent' => $records,
             'subCategoryContent' => $subCategoryContent,
-            'categoryLevelUp' => $up,
-        )
+            'categoryLevelUp' => $up
+        ]
     );
 
     $tpl->parseBlock(
         'index',
         'breadcrumb',
         [
-            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'].$catName
+            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'].$categoryData->getName()
         ]
     );
 
@@ -109,14 +102,14 @@ if (!is_null($currentCategory) && isset($category->categoryName[$currentCategory
 
     $tpl->parse(
         'writeContent',
-        array(
+        [
             'categoryHeader' => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',
             'categoryFaqsHeader' => '',
             'categoryContent' => $category->viewTree(),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',
-        )
+        ]
     );
 
     $tpl->parseBlock(
