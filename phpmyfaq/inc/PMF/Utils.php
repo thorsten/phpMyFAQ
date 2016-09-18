@@ -334,11 +334,13 @@ class PMF_Utils
             'img', 'picture', 'mark'
         ];
 
-        if (false !== array_search($string, $forbiddenElements)) {
-            return true;
-        } else {
-            return false;
+        foreach ($forbiddenElements as $element) {
+            if (strpos($element, $string)) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**
