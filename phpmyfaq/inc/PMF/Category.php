@@ -118,6 +118,13 @@ class PMF_Category
     private $owner = [];
 
     /**
+     * Category moderators
+     *
+     * @var array
+     */
+    private $moderators = [];
+
+    /**
      * Symbol for each item
      * NOTE: We do not use this currently.
      *
@@ -242,6 +249,7 @@ class PMF_Category
                 $this->categories[] =& $this->categoryName[$row['id']];
                 $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
                 $this->owner[$row['id']] =& $row['user_id'];
+                $this->moderators[$row['id']] =& $row['group_id'];
             }
         }
 
@@ -1054,11 +1062,6 @@ class PMF_Category
 
     /**
      * Returns the moderator group ID of the given category.
-=======
-=======
->>>>>>> dbd37f228765b4eecf911bcd8542119f9e928703
-     * Adds a new category entry
->>>>>>> Fixed broken category tree, closes #1125
      *
      * @param int $categoryId
      *
@@ -1066,7 +1069,7 @@ class PMF_Category
      */
     public function getModeratorGroupId($categoryId)
     {
-        return $this->categories[$categoryId]['group_id'];
+        return $this->moderators[$categoryId];
     }
 
     /**
