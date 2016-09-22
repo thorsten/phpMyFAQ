@@ -73,7 +73,7 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
         $searchParams = [
             'index' => $this->esConfig['index'],
             'type' => $this->esConfig['type'],
-            'size' => 1000,
+            'size' => 100,
             'body' => [
                 'query' => [
                     'filtered' => [
@@ -125,9 +125,9 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
     }
 
     /**
-     * Prepares the autocomplete search and executes it.
+     * Prepares the auto complete search and executes it.
      *
-     * @param string $searchTerm Search term for autocompletion
+     * @param string $searchTerm Search term for autoc ompletion
      *
      * @throws PMF_Search_Exception
      *
@@ -138,7 +138,7 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
         $searchParams = [
             'index' => $this->esConfig['index'],
             'type' => $this->esConfig['type'],
-            'size' => 1000,
+            'size' => 100,
             'body' => [
                 'query' => [
                     'filtered' => [
