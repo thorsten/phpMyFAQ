@@ -185,6 +185,7 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR.
     require PMF_CONFIG_DIR.'/elasticsearch.php';
     require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
     require PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
+    require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/Psr4ClassLoader.php';
 
     $psr4Loader = new Psr4ClassLoader();
     $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
