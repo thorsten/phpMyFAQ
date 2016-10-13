@@ -31,7 +31,7 @@
  <target name="pdepend" description="Generate jdepend.xml and software metrics charts">
   <exec executable="pdepend">
    <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml
-              --ignore=${basedir}/phpmyfaq/inc/libs ./" />
+              --ignore=${basedir}/phpmyfaq/src/libs ./" />
   </exec>
  </target>
 
@@ -40,7 +40,7 @@
   <exec executable="phpmd">
    <arg line="./ xml codesize,design,naming,unusedcode
               --reportfile ${basedir}/build/logs/pmd.xml
-              --exclude    ${basedir}/phpmyfaq/inc/libs,
+              --exclude    ${basedir}/phpmyfaq/src/libs,
                            ${basedir}/phpmyfaq/tests" />
   </exec>
  </target>
@@ -50,7 +50,7 @@
   <exec executable="phpcpd">
    <arg line="--log-pmd  ${basedir}/build/logs/pmd-cpd.xml
               --suffixes php
-              --exclude  ${basedir}/phpmyfaq/inc/libs
+              --exclude  ${basedir}/phpmyfaq/src/libs
               --exclude  ${basedir}/phpmyfaq/tests ./" />
   </exec>
  </target>
@@ -62,14 +62,14 @@
               --report-file=${basedir}/build/logs/checkstyle.xml 
               --standard=Zend
               --extensions=php
-              --ignore=${basedir}/phpmyfaq/inc/libs,${basedir}/phpmyfaq/tests ./" />
+              --ignore=${basedir}/phpmyfaq/src/libs,${basedir}/phpmyfaq/tests ./" />
   </exec>
  </target>
 
  <!-- Generate API documentation -->
  <target name="phpdoc">
   <exec executable="phpdoc">
-   <arg line="-d ${basedir}/phpmyfaq/inc -t ${basedir}/build/api" />
+   <arg line="-d ${basedir}/phpmyfaq/src -t ${basedir}/build/api" />
   </exec>
  </target>
  
@@ -78,7 +78,7 @@
    <arg line="--log         ${basedir}/build/logs
               --source      ${basedir}
               --output      ${basedir}/build/code-browser
-              --excludePCRE %(${basedir}/phpmyfaq/inc/libs/.*)|(${basedir}/build/.*)|(${basedir}/phpmyfaq/scripts/.*)|(${basedir}/phpmyfaq/tests/.*)%" />
+              --excludePCRE %(${basedir}/phpmyfaq/src/libs/.*)|(${basedir}/build/.*)|(${basedir}/phpmyfaq/scripts/.*)|(${basedir}/phpmyfaq/tests/.*)%" />
   </exec>
  </target>
 

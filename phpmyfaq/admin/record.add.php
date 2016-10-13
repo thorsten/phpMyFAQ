@@ -205,7 +205,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
-                require '../inc/libs/twitteroauth/twitteroauth.php';
+                require '../src/libs/twitteroauth/twitteroauth.php';
 
                 $connection = new TwitterOAuth(
                     $faqConfig->get('socialnetworks.twitterConsumerKey'),

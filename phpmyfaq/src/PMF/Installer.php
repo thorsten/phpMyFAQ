@@ -705,7 +705,7 @@ class PMF_Installer
             $ldapSetup['ldapPassword'] = PMF_Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
             // check LDAP connection
-            require PMF_ROOT_DIR.'/inc/PMF/Ldap.php';
+            require PMF_ROOT_DIR.'/src/PMF/Ldap.php';
             $ldap = new PMF_Ldap($configuration);
             $ldap->connect(
                 $ldapSetup['ldapServer'],

@@ -26,7 +26,7 @@
 
 define('COPYRIGHT', '&copy; 2001-2016 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/inc');
+define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
 
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {

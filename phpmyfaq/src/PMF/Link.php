@@ -458,7 +458,7 @@ class PMF_Link
             return str_replace($path, '', $_SERVER['SCRIPT_NAME']);
         }
 
-        return str_replace('/inc/Link.php', '', $_SERVER['SCRIPT_NAME']);
+        return str_replace('/src/Link.php', '', $_SERVER['SCRIPT_NAME']);
     }
 
     /**
