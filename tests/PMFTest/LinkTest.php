@@ -224,7 +224,7 @@ class PMFTest_LinkTest extends PHPUnit_Framework_TestCase
     {
         $this->link = new PMF_Link('https://faq.example.org/my-test-faq/', $this->config);
 
-        $_SERVER['SCRIPT_NAME'] = '/my-test-faq/inc/Link.php';
+        $_SERVER['SCRIPT_NAME'] = '/my-test-faq/src/Link.php';
         $this->assertEquals('/my-test-faq', $this->link->getSystemRelativeUri());
 
         $_SERVER['SCRIPT_NAME'] = '/my-test-faq/index.php';
