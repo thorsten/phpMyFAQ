@@ -16,7 +16,7 @@
 
 /*global $: false, Bloodhound: false, Handlebars: false */
 
-$(window).load(function () {
+$(window).on('load', function () {
     'use strict';
 
     // instantiate the bloodhound suggestion engine
@@ -41,6 +41,7 @@ $(window).load(function () {
     // instantiate the typeahead UI
     $('.typeahead').typeahead(null, {
         display: 'suggestion',
+        source: questions.ttAdapter(),
         templates: {
             notFound: [
                 '<div class="empty-message">',
