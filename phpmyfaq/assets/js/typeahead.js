@@ -41,6 +41,7 @@ $(window).load(function () {
     // instantiate the typeahead UI
     $('.typeahead').typeahead(null, {
         display: 'suggestion',
+        source: questions.ttAdapter(),
         templates: {
             notFound: [
                 '<div class="empty-message">',
