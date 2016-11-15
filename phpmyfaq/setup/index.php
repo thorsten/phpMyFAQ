@@ -88,9 +88,14 @@ $twig->loadTemplate('layout.twig')->display($tplLayoutVars);
 // not yet POSTed
 if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
 
+    $databases= $system->getSupportedSafeDatabases(true);
+    // Whether the only supported RDBMS is sqlite and/or sqlite3 (in any order):
+    $onlySqlite= count($databases)<=2 && strpos(strtolower($databases[0]), 'sqlite')!==FALSE
+            && ( count($databases)===1 || strpos(strtolower($databases[1]), 'sqlite')!==FALSE );
     $tplDatabaseVars = array(
-        'databases' => $system->getSupportedSafeDatabases(true),
-        'dirname'   => dirname(__DIR__)
+        'databases' => $databases,
+        'dirname'   => dirname(__DIR__),
+        'onlySqlite' => $onlySqlite
     );
     ?>
 
