@@ -593,7 +593,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         </div>
                         <div id="recordDateInputContainer" class="form-group hide">
                             <div class="col-lg-12">
-                                <input type="text" name="date" id="date" maxlength="16" class="form-control">
+                                <input type="text" name="date" id="date" class="form-control"
+                                       placeholder="<?php echo $faqData['date'] ?>">
                             </div>
                         </div>
                     </div>
@@ -842,7 +843,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
     function showIDContainer() {
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
-        $('#recordDateInputContainer').attr('style', 'display: ' + display);
+        $('#recordDateInputContainer').removeClass('hide');
     }
 
     function setRecordDate(how) {
