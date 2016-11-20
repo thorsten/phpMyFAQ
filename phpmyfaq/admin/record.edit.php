@@ -568,6 +568,26 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
             <!-- sidebar -->
             <div class="col-lg-4">
+                <?php if (0 !== $faqData['id'] && 'copyentry' !== $action) {
+                    $url = sprintf(
+                        '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+                        $faqConfig->get('main.referenceURL'),
+                        array_values($categories)[0]['category_id'],
+                        $faqData['id'],
+                        $faqData['lang']
+                    );
+                    $link = new PMF_Link($url, $faqConfig);
+                    $link->itemTitle = $faqData['title'];
+                    ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="btn btn-info" href="<?php echo $link->toString() ?>">
+                            <?php echo $PMF_LANG['msgSeeFAQinFrontend'] ?>
+                        </a>
+                    </div>
+                </div>
+                <?php } ?>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <?php echo $PMF_LANG['ad_entry_date'] ?>
