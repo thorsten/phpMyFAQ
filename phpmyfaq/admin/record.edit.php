@@ -535,7 +535,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog'] ?>
+                                <?php echo $PMF_LANG['ad_entry_changelog_history'] ?>
                             </a>
                         </div>
 
