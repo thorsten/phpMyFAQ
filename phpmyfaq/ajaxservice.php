@@ -117,7 +117,7 @@ switch ($action) {
     case 'savecomment':
 
         if (!$faqConfig->get('records.allowCommentsForGuests') &&
-            $user->perm->checkRight($user->getUserId(), 'addcomment')) {
+            !$user->perm->checkRight($user->getUserId(), 'addcomment')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
