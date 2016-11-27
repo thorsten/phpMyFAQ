@@ -875,6 +875,7 @@ if ($step == 3) {
     if (version_compare($version, '2.9.6', '<')) {
         if ($DB['type'] === 'mysqli') {
             $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD FULLTEXT(keywords,thema,content);';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE COLUMN lang lang VARCHAR(5) AFTER id';
         }
     }
 
