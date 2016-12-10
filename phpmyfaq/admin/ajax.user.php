@@ -71,7 +71,8 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
         case 'activate_user':
             $user->getUserById($userId, true);
-            $user->setStatus('active');
+            $user->setStatus('blocked');
+            $user->activateUser();
             echo json_encode($user->getStatus());
             break;
 
