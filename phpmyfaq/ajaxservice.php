@@ -435,7 +435,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/';
+                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId;
             $result = $mail->send();
             unset($mail);
 
