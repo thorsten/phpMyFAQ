@@ -15,7 +15,7 @@
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de

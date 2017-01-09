@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @author    Aaron Lin <devilkintw@gmail.com>
  * @author    Barlos Lee <barlos.lee@gmail.com>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-08-01

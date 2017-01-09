@@ -14,7 +14,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello Sanchez <alberto@unex.es>
  * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-12-16

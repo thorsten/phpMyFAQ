@@ -151,4 +151,4 @@ Licensed under the terms of the MIT License
 Licensed under the terms of the Apache License v2.0
 
 
-Copyright (c) 2001-2016 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2017 Thorsten Rinne and the phpMyFAQ Team

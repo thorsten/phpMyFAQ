@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Jacqueline Gazaille Tétreault <gazaillegen@gmail.com>
- * @copyright 2013-2016 phpMyFAQ Team
+ * @copyright 2013-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-06-29
