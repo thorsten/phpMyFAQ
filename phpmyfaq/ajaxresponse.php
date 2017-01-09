@@ -76,8 +76,9 @@ if (isset($user) && is_object($user)) {
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category($faqConfig);
+$category = new PMF_Category($faqConfig, $current_groups);
 $category->setUser($current_user);
+$category->setGroups($current_groups);
 $category->transform(0);
 $category->buildTree();
 
