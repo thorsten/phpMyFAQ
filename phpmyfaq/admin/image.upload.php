@@ -52,6 +52,7 @@ if ($user) {
 
 <form class="form-inline" name="upload" action="index.php?action=ajax&ajax=image&ajaxaction=upload"
       method="post" enctype="multipart/form-data" target="pmf-upload-iframe" onsubmit="pmfImageUpload.inProgress();">
+    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 
     <div id="pmf-upload-progress" class="hidden">
         <i aria-hidden="true" class="fa fa-cog fa-spin"></i> Upload in progress&hellip;
