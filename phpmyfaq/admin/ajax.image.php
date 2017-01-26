@@ -34,17 +34,16 @@ $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING)
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfOkay = false;
 }
+switch ($ajaxAction) {
 
-if ($csrfOkay) {
-    switch ($ajaxAction) {
+    case 'upload':
 
-        case 'upload':
+        $uploadDir = PMF_ROOT_DIR . '/images/';
+        $uploadFile = basename($_FILES['upload']['name']);
+        $isUploaded = false;
+        $height = $width = 0;
 
-            $uploadDir = PMF_ROOT_DIR . '/images/';
-            $uploadFile = basename($_FILES['upload']['name']);
-            $isUploaded = false;
-            $height = $width = 0;
-
+        if ($csrfOkay) {
             if (is_uploaded_file($uploadedFile['tmp_name']) &&
                 $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')
             ) {
@@ -53,7 +52,17 @@ if ($csrfOkay) {
 
                 if (false === $info) {
                     $isUploaded = false;
+                }
+
+                if (($info[2] !== IMAGETYPE_GIF) &&
+                    ($info[2] !== IMAGETYPE_JPEG) &&
+                    ($info[2] !== IMAGETYPE_PNG)) {
+                    $isUploaded = false;
                 } else {
+                    $isUploaded = true;
+                }
+
+                if ($info) {
                     list($width, $height) = $info;
                     if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadFile)) {
                         $isUploaded = true;
@@ -85,18 +94,19 @@ if ($csrfOkay) {
                 </script>
                 <?php
             }
-            break;
-    }
-} else {
-    ?>
-    <script>
-        window.parent.window.pmfImageUpload.uploadFinished({
-            filename: '',
-            result: 'Wrong token.',
-            resultCode: 'failed',
-            height: 0,
-            width: 0
-        });
-    </script>
-    <?php
+        } else {
+            ?>
+            <script>
+                window.parent.window.pmfImageUpload.uploadFinished({
+                    filename: '',
+                    result: 'Wrong token.',
+                    resultCode: 'failed',
+                    height: 0,
+                    width: 0
+                });
+            </script>
+            <?php
+        }
+
+        break;
 }
