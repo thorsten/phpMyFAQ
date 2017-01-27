@@ -5,7 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.6 - 2017-01-
+Version 2.9.6 - 2017-01-27
+- fixed possible arbitrary PHP code execution (Thorsten)
+- ready for PHP 7.1 (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 2.9.5 - 2016-08-31
