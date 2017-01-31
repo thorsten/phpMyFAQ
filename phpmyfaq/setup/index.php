@@ -18,7 +18,7 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2002-2016 phpMyFAQ Team
+ * @copyright 2002-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20

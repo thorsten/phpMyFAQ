@@ -155,4 +155,4 @@ Licensed under the terms of the BSD 3-Clause License
 
 
 
-Copyright (c) 2001-2016 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2017 Thorsten Rinne and the phpMyFAQ Team

@@ -25,7 +25,7 @@
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2016 phpMyFAQ Team
+ * @copyright 2009-2017 phpMyFAQ Team
  * @since     2009-05-16
  */
 abstract class Database_PostgressTest extends Database_AbstractTest 

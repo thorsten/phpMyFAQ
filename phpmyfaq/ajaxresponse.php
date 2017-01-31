@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2016 phpMyFAQ Team
+ * @copyright 2007-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-27
@@ -76,8 +76,9 @@ if (isset($user) && is_object($user)) {
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category($faqConfig);
+$category = new PMF_Category($faqConfig, $current_groups);
 $category->setUser($current_user);
+$category->setGroups($current_groups);
 $category->transform(0);
 $category->buildTree();
 

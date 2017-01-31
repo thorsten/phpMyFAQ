@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2016 phpMyFAQ Team
+ * @copyright 2010-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -117,7 +117,7 @@ switch ($action) {
     case 'savecomment':
 
         if (!$faqConfig->get('records.allowCommentsForGuests') &&
-            $user->perm->checkRight($user->getUserId(), 'addcomment')) {
+            !$user->perm->checkRight($user->getUserId(), 'addcomment')) {
             $message = array('error' => $PMF_LANG['err_NotAuth']);
             break;
         }
@@ -434,7 +434,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/';
+                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId;
             $result = $mail->send();
             unset($mail);
 

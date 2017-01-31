@@ -13,7 +13,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2016 phpMyFAQ Team
+ * @copyright 2002-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -91,30 +91,15 @@ if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight
     $searchItems = explode(' ', $highlight);
 
     foreach ($searchItems as $item) {
-        $question = PMF_Utils::setHighlightedString($question, $item);
-        $answer = PMF_Utils::setHighlightedString($answer, $item);
+        if (PMF_String::strlen($item) > 2) {
+            $question = PMF_Utils::setHighlightedString($question, $item);
+            $answer = PMF_Utils::setHighlightedString($answer, $item);
+        }
     }
 }
 
-// Hack: Apply the new SEO schema to those HTML anchors to
-//       other faq records (Internal Links) added with WYSIWYG Editor:
-//         href="index.php?action=artikel&cat=NNN&id=MMM&artlang=XYZ"
-// Search for href attribute links
-$oLnk = new PMF_Linkverifier($faqConfig);
-$oLnk->resetPool();
-$oLnk->parseString($answer);
-$fixedContent = str_replace('href="#',
-    sprintf('href="index.php?action=artikel&amp;lang=%s&amp;cat=%d&amp;id=%d&amp;artlang=%s#',
-        $LANGCODE,
-        $currentCategory,
-        $recordId,
-        $LANGCODE),
-    $answer);
-$oLnk->resetPool();
-$oLnk->parseString($fixedContent);
-
-// Search for href attributes only
-$linkArray = $oLnk->getUrlpool();
+$linkVerifier = new PMF_Linkverifier($faqConfig);
+$linkArray = $linkVerifier->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
         $xpos = strpos($_url, 'index.php?action=artikel');
@@ -123,7 +108,7 @@ if (isset($linkArray['href'])) {
             $matches = array();
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id = $matches[1];
-            $_title = $faq->getRecordTitle($_id, false);
+            $_title = $faq->getRecordTitle($_id);
             $_link = substr($_url, $xpos + 9);
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
@@ -131,12 +116,10 @@ if (isset($linkArray['href'])) {
             $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
-            $fixedContent = str_replace($_url, $newFaqPath, $fixedContent);
+            $answer = str_replace($_url, $newFaqPath, $answer);
         }
     }
 }
-
-$answer = $fixedContent;
 
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {

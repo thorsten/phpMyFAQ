@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2016 phpMyFAQ Team
+ * @copyright 2003-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -535,7 +535,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog'] ?>
+                                <?php echo $PMF_LANG['ad_entry_changelog_history'] ?>
                             </a>
                         </div>
 
@@ -568,6 +568,26 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
             <!-- sidebar -->
             <div class="col-lg-4">
+                <?php if (0 !== $faqData['id'] && 'copyentry' !== $action) {
+                    $url = sprintf(
+                        '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+                        $faqConfig->get('main.referenceURL'),
+                        array_values($categories)[0]['category_id'],
+                        $faqData['id'],
+                        $faqData['lang']
+                    );
+                    $link = new PMF_Link($url, $faqConfig);
+                    $link->itemTitle = $faqData['title'];
+                    ?>
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <a class="btn btn-info" href="<?php echo $link->toString() ?>">
+                            <?php echo $PMF_LANG['msgSeeFAQinFrontend'] ?>
+                        </a>
+                    </div>
+                </div>
+                <?php } ?>
+
                 <div class="panel panel-default">
                     <div class="panel-heading">
                         <?php echo $PMF_LANG['ad_entry_date'] ?>
@@ -593,7 +613,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         </div>
                         <div id="recordDateInputContainer" class="form-group hide">
                             <div class="col-lg-12">
-                                <input type="text" name="date" id="date" maxlength="16" class="form-control">
+                                <input type="text" name="date" id="date" class="form-control"
+                                       placeholder="<?php echo $faqData['date'] ?>">
                             </div>
                         </div>
                     </div>
@@ -842,7 +863,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
     function showIDContainer() {
         var display = 0 == arguments.length || !!arguments[0] ? 'block' : 'none';
-        $('#recordDateInputContainer').attr('style', 'display: ' + display);
+        $('#recordDateInputContainer').removeClass('hide');
     }
 
     function setRecordDate(how) {

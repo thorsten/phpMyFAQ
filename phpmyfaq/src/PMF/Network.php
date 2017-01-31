@@ -15,7 +15,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Kenneth Shaw <ken@expitrans.com>
  * @author    David Soria Parra <dsp@php.net>
- * @copyright 2011-2016 phpMyFAQ Team
+ * @copyright 2011-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Kenneth Shaw <ken@expitrans.com>
  * @author    David Soria Parra <dsp@php.net>
- * @copyright 2011-2016 phpMyFAQ Team
+ * @copyright 2011-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -71,18 +71,21 @@ class PMF_Network
         $bannedIps = explode(' ', $this->_config->get('security.bannedIPs'));
 
         foreach ($bannedIps as $ipAddress) {
-            if (0 == strlen($ipAddress)) {
+            if (0 === strlen($ipAddress)) {
                 continue;
             }
 
-            if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+            if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6) &&
+                false === filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
                 // Handle IPv4
                 if ($this->checkForAddrMatchIpv4($ip, $ipAddress)) {
                     return false;
                 }
             } else {
                 // Handle IPv6
-                if ($this->checkForAddrMatchIpv6($ip, $ipAddress)) {
+                try {
+                    return $this->checkForAddrMatchIpv6($ip, $ipAddress);
+                } catch (InvalidArgumentException $e) {
                     return false;
                 }
             }

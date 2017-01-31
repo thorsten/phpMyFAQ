@@ -13,7 +13,7 @@
  * @author    ATang <atang007@163.com>
  * @author    saphrfans <saphrfans@yahoo.com>
  * @author    Techice.Young <techice.young@prettymay.net>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-23

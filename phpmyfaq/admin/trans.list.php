@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2016 phpMyFAQ Team
+ * @copyright 2009-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-11
  */
@@ -109,8 +107,7 @@ $tt = new PMF_TransTool();
                 </td>
                 <?php else: ?>
                 <td><?php echo $PMF_LANG['msgEdit'] ?></td>
-                <?php endif;
-        ?>
+                <?php endif; ?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'deltranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
@@ -120,8 +117,7 @@ $tt = new PMF_TransTool();
                 </td>
                 <?php else: ?>
                 <td><?php echo $PMF_LANG['msgDelete'] ?></td>
-                <?php endif;
-        ?>
+                <?php endif; ?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'edittranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
@@ -131,14 +127,12 @@ $tt = new PMF_TransTool();
                 </td>
                 <?php else: ?>
                 <td><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></td>
-                <?php endif;
-        ?>
+                <?php endif; ?>
                 <?php if ($isLangFileWritable): ?>
                 <td><i aria-hidden="true" class="fa fa-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
                 <?php else: ?>
                 <td><i aria-hidden="true" class="fa fa-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
-                <?php endif;
-        ?>
+                <?php endif; ?>
                 <td>
                     <?php echo $percents ?>%
                     <meter value="<?php echo $percents ?>" max="100" min="0" title="<?php echo $percents ?>%">
@@ -155,28 +149,29 @@ $tt = new PMF_TransTool();
         /**
          * Remove a language file
          *
-         * @param string lang Language to remove
+         * @param lang
          *
          * @return void
          */
-        function del(lang)
-        {
+        function del(lang) {
+            var $indicator = $('#saving_data_indicator');
+
             if (!confirm('<?php echo $PMF_LANG['msgTransToolSureDeleteFile'] ?>')) {
                 return;
             }
 
-            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
+            $indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgRemoving3Dots'] ?>');
 
             $.get('index.php?action=ajax&ajax=trans&ajaxaction=remove_lang_file',
-                  {translang: lang},
-                  function(retval, status) {
-                      if (1*retval > 0 && 'success' == status) {
-                          $('.lang_' + lang + '_container').fadeOut('slow');
-                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
-                      } else {
-                          $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
-                          alert('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
-                      }
+                {translang: lang},
+                function (retval, status) {
+                    if (1 * retval > 0 && 'success' === status) {
+                        $('.lang_' + lang + '_container').fadeOut('slow');
+                        $indicator.html('<?php echo $PMF_LANG['msgTransToolFileRemoved'] ?>');
+                    } else {
+                        $indicator.html('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
+                        alert('<?php echo $PMF_LANG['msgTransToolErrorRemovingFile'] ?>');
+                    }
                 }
             );
         }
@@ -184,28 +179,29 @@ $tt = new PMF_TransTool();
         /**
          * Send a translation file to the phpMyFAQ team
          *
-         * @param string lang
+         * @param lang
          *
          * @return void
          */
-        function sendToTeam(lang)
-        {
-             $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
+        function sendToTeam(lang) {
+            var $indicator = $('#saving_data_indicator');
 
-             var msg = '';;
+            $indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> <?php echo $PMF_LANG['msgSending3Dots'] ?>');
 
-             $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
-                     {translang: lang},
-                     function(retval, status) {
-                         if (1*retval > 0 && 'success' == status) {
-                             msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
-                         } else {
-                             msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
-                         }
-                   }
-               );
+            var msg = '';
 
-             $('#saving_data_indicator').html('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
-             alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
+            $.get('index.php?action=ajax&ajax=trans&ajaxaction=send_translated_file',
+                {translang: lang},
+                function (retval, status) {
+                    if (1 * retval > 0 && 'success' === status) {
+                        msg = '<?php echo $PMF_LANG['msgTransToolFileSent'] ?>';
+                    } else {
+                        msg = '<?php echo $PMF_LANG['msgTransToolErrorSendingFile'] ?>';
+                    }
+                }
+            );
+
+            $indicator.html('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
+            alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
         }
         </script>

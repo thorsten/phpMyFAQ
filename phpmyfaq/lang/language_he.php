@@ -13,7 +13,7 @@
  * @author    Daniel Shkuri <dan-shk@bezeqint.net>
  * @author    Niran Shay <nirshay1@012.net.il>
  * @author    Roy Ronen <royroy15@gmail.com>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-08-27

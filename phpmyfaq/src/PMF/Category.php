@@ -14,7 +14,7 @@
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -114,6 +114,13 @@ class PMF_Category
      * @var array
      */
     private $owner = [];
+
+    /**
+     * Category moderators
+     *
+     * @var array
+     */
+    private $moderators = [];
 
     /**
      * Symbol for each item
@@ -240,6 +247,7 @@ class PMF_Category
                 $this->categories[] =& $this->categoryName[$row['id']];
                 $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
                 $this->owner[$row['id']] =& $row['user_id'];
+                $this->moderators[$row['id']] =& $row['group_id'];
             }
         }
 
@@ -1053,11 +1061,6 @@ class PMF_Category
 
     /**
      * Returns the moderator group ID of the given category.
-=======
-=======
->>>>>>> dbd37f228765b4eecf911bcd8542119f9e928703
-     * Adds a new category entry
->>>>>>> Fixed broken category tree, closes #1125
      *
      * @param int $categoryId
      *
@@ -1065,7 +1068,7 @@ class PMF_Category
      */
     public function getModeratorGroupId($categoryId)
     {
-        return $this->categories[$categoryId]['group_id'];
+        return $this->moderators[$categoryId];
     }
 
     /**

@@ -13,7 +13,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2004-2016 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -141,8 +141,8 @@ if ($num > 0) {
         $rss->writeCdata('['.$i.'.] '.$item['question'].' ('.$item['visits'].' '.$PMF_LANG['msgViews'].')');
         $rss->endElement();
 
-        $rss->writeElement('link', $faqConfig->getDefaultUrl().$link);
-        $rss->writeElement('guid', $faqConfig->getDefaultUrl().$link);
+        $rss->writeElement('link', $link);
+        $rss->writeElement('guid', $link);
 
         $date = new DateTime($item['last_visit']);
         

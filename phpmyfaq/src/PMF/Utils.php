@@ -13,7 +13,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2016 phpMyFAQ Team
+ * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -43,7 +43,7 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2016 phpMyFAQ Team
+ * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -334,11 +334,13 @@ class PMF_Utils
             'img', 'picture', 'mark'
         ];
 
-        if (false !== array_search($string, $forbiddenElements)) {
-            return true;
-        } else {
-            return false;
+        foreach ($forbiddenElements as $element) {
+            if (strpos($element, $string)) {
+                return true;
+            }
         }
+
+        return false;
     }
 
     /**

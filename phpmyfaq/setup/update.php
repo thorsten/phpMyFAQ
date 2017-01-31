@@ -12,7 +12,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2016 phpMyFAQ Team
+ * @copyright 2002-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
@@ -859,6 +859,16 @@ if ($step == 3) {
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD notes text DEFAULT NULL';
             $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD notes text DEFAULT NULL';
+        }
+    }
+
+    //
+    // UPDATES FROM 2.9.6
+    //
+    if (version_compare($version, '2.9.6', '<')) {
+        if ($DB['type'] === 'mysqli') {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD FULLTEXT(keywords,thema,content);';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions CHANGE COLUMN lang lang VARCHAR(5) AFTER id';
         }
     }
 

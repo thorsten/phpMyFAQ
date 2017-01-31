@@ -37,7 +37,7 @@
  * @category  phpMyFAQ 
  *
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2016 phpMyFAQ Team
+ * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -53,7 +53,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @category  phpMyFAQ 
  *
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2016 phpMyFAQ Team
+ * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de

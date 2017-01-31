@@ -10,7 +10,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2016 phpMyFAQ Team
+ * @copyright 2015-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-18
@@ -52,6 +52,7 @@ if ($user) {
 
 <form class="form-inline" name="upload" action="index.php?action=ajax&ajax=image&ajaxaction=upload"
       method="post" enctype="multipart/form-data" target="pmf-upload-iframe" onsubmit="pmfImageUpload.inProgress();">
+    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 
     <div id="pmf-upload-progress" class="hidden">
         <i aria-hidden="true" class="fa fa-cog fa-spin"></i> Upload in progress&hellip;

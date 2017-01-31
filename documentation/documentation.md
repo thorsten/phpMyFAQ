@@ -1611,7 +1611,7 @@ You can call the resources with the following URIs:
     
 *   **getPopularTags()**
 
-    *   https://www.example.org/phpmyfaq/api.php?action=getPopularTagstandard)
+    *   https://www.example.org/phpmyfaq/api.php?action=getPopularTags (standard)
     *   https://www.example.org/phpmyfaq/api/getPopularTags (rewrite rules enabled)
 
     The result will be a JSON object like the following:

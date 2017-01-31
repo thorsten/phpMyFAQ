@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2016 phpMyFAQ Team
+ * @copyright 2015-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-06
@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2016 phpMyFAQ Team
+ * @copyright 2015-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2015-04-06
@@ -144,6 +144,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             date_end VARCHAR(14) NOT NULL DEFAULT \'99991231235959\',
             created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             notes TEXT DEFAULT NULL,
+            FULLTEXT (keywords,thema,content),
             PRIMARY KEY (id, lang)) ENGINE = MYISAM DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqdata_revisions' => 'CREATE TABLE %sfaqdata_revisions (
