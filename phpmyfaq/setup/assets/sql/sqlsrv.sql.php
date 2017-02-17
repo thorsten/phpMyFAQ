@@ -343,7 +343,7 @@ last_login varchar(14) NULL,
 auth_source varchar(100) NULL,
 member_since varchar(14) NULL,
 remember_me VARCHAR(150) NULL,
-success INT(1) NULL DEFAULT 1,
+success INT NULL DEFAULT 1,
 PRIMARY KEY (user_id))";
 
 //faquserdata
