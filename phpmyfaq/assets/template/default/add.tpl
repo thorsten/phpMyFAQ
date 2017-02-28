@@ -69,7 +69,8 @@
             <div id="faqs"></div>
 
             [enableWysiwygEditor]
-            <script src="admin/editor/tiny_mce.js?{currentTimestamp}"></script>
+	    <script src="admin/kindeditor/kindeditor-all.js"></script>
+	    <script src="admin/kindeditor/lang/zh-CN.js"></script>
             <script type="text/javascript">
                 $(document).ready(function() {
                     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
@@ -89,7 +90,15 @@
                             entity_encoding : "raw",
                             extended_valid_elements : "code"
                         });
-                    }
+                    } else if (typeof KindEditor !== 'undefined' && undefined !== KindEditor) {
+                            KindEditor.ready(function(K) {
+        			window.editor= K.create('#answer',{
+					width: '400px',
+					maxWidth :'500px' ,
+					items:['source','|','undo','redo','|','cut','copy','paste','plainpaste','wordpaste','|','image','baidumap']
+				});
+});
+		    }
                 });
             </script>
             [/enableWysiwygEditor]
@@ -100,7 +109,9 @@
                         if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
                             tinyMCE.get("answer").setContent(tinyMCE.activeEditor.getContent());
                             document.getElementById("answer").value = tinyMCE.activeEditor.getContent();
-                        }
+                        } else if (typeof KindEditor !== 'undefined' && undefined !== KindEditor) {
+                            editor.sync();
+			}
                         saveFormValues('savefaq', 'faq');
                     });
                     $('form#formValues').submit(function() { return false; });

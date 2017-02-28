@@ -102,6 +102,10 @@ Mozilla Public License 2.0, see LICENSE for more information.
 
 ## Bundled libraries
 
+**[KindEditor](http://kindeditor.net/)**
+
+Licensed under the terms of the GNU Lesser General Public License
+
 **[TinyMCE](http://tinymce.moxiecode.com/)**  
 
 Licensed under the terms of the GNU Lesser General Public License
