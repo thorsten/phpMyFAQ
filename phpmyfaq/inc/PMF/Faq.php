@@ -2137,7 +2137,7 @@ class PMF_Faq
                 }
 
                 $data['visits'] = (int)$row->visits;
-                $data['question'] = $row->question;
+                $data['question'] = PMF_Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['date'] = $row->updated;
                 $data['last_visit'] = $row->last_visit;
 
@@ -2246,7 +2246,7 @@ class PMF_Faq
                 }
 
                 $data['date'] = $row->updated;
-                $data['question'] = $row->question;
+                $data['question'] = PMF_Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['answer'] = $row->content;
                 $data['visits'] = $row->visits;
 
@@ -2260,7 +2260,7 @@ class PMF_Faq
                     $row->lang
                 );
                 $oLink = new PMF_Link($url, $this->_config);
-                $oLink->itemTitle = $row->question;
+                $oLink->itemTitle = $title;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
