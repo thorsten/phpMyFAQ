@@ -2116,7 +2116,7 @@ class PMF_Faq
                 '.$this->queryPermission($this->groupSupport).'
 
             GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
+                fd.id, fd.lang, fd.thema, fd.updated, fcr.category_id, fv.visits, fv.last_visit, fdg.group_id, fdu.user_id
             ORDER BY
                 fv.visits DESC';
 
@@ -2225,7 +2225,7 @@ class PMF_Faq
         $query .= '
                 '.$this->queryPermission($this->groupSupport).'
             GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
+                fd.id, fd.lang, fcr.category_id, fd.thema, fd.content, fd.updated, fv.visits, fdg.group_id, fdu.user_id
             ORDER BY
                 fd.updated DESC';
 
@@ -2962,7 +2962,7 @@ class PMF_Faq
             AND
                 fd.lang = '%s'
             GROUP BY
-                fd.id,fd.lang,fcr.category_id,fv.visits
+                fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
             ORDER BY
                 %s %s",
             PMF_Db::getTablePrefix(),
