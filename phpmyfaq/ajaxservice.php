@@ -66,7 +66,7 @@ $captcha->setSessionId(
 //
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
-$http->addHeader();
+//$http->addHeader();
 
 //
 // Set session
@@ -224,7 +224,7 @@ switch ($action) {
                 $send[$faqConfig->get('main.administrationMail')] = 1;
 
                 // Let the category owner get a copy of the message
-                $category = new PMF_Category($faqConfig, $current_groups);
+                $category = new PMF_Category($faqConfig);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getOwner($_category);
