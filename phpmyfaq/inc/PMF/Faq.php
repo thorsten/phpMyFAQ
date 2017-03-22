@@ -2983,7 +2983,7 @@ class PMF_Faq
         $output = '<ul class="phpmyfaq_ul">';
 
         while (($row = $this->_config->getDb()->fetchObject($result))) {
-            $title = $row->thema;
+            $title = PMF_Filter::filterVar($row->thema, FILTER_SANITIZE_STRING);
             $url = sprintf(
                 '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                 PMF_Link::getSystemRelativeUri(),
@@ -2994,10 +2994,9 @@ class PMF_Faq
             );
 
             $oLink = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $row->thema;
+            $oLink->itemTitle = $title;
             $oLink->text = $title;
             $oLink->tooltip = $title;
-            $listItem = sprintf('<li>%s</li>', $oLink->toHtmlAnchor(), $this->pmf_lang['msgViews']);
             $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
             $output .= $listItem;
