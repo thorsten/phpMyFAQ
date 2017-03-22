@@ -95,7 +95,7 @@ class PMF_Instance_Elasticsearch
     /**
      * Creates the Elasticsearch index.
      *
-     * @return array
+     * @return boolean
      */
     public function createIndex()
     {
@@ -116,7 +116,7 @@ class PMF_Instance_Elasticsearch
     /**
      * Puts phpMyFAQ Elasticsearch mapping into index.
      *
-     * @return bool
+     * @return boolean
      */
     public function putMapping()
     {

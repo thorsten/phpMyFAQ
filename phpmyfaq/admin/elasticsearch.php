@@ -1,6 +1,7 @@
 <?php
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Elasticsearch\Common\Exceptions\Forbidden403Exception;
 
 /**
  * phpMyFAQ Elasticsearch information.
@@ -35,6 +36,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     try {
         $esConfig = $faqConfig->getElasticsearchConfig();
         $esInformation = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
+    } catch (Forbidden403Exception $e) {
+        $esInformation = $e->getMessage();
     } catch (Missing404Exception $e) {
         $esInformation = $e->getMessage();
     }
