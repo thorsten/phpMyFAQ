@@ -571,7 +571,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 <?php if (0 !== $faqData['id'] && 'copyentry' !== $action) {
                     $url = sprintf(
                         '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
-                        $faqConfig->get('main.referenceURL'),
+                        $faqConfig->getDefaultUrl(),
                         array_values($categories)[0]['category_id'],
                         $faqData['id'],
                         $faqData['lang']
