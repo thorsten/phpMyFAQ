@@ -76,17 +76,8 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
             'size' => 1000,
             'body' => [
                 'query' => [
-                    'filtered' => [
-                        'filter' => [
-                            'bool' => [
-                                'must' => [
-                                    [
-                                        'terms' => ['category_id' => $this->getCategoryIds()]
-                                    ]
-                                ]
-                            ]
-                        ],
-                        'query' => [
+                    'bool' => [
+                        'must' => [
                             'multi_match' => [
                                 'fields' => [
                                     'question', 'answer', 'keywords'
@@ -94,7 +85,10 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
                                 'query' => $searchTerm,
                                 'fuzziness' => 'AUTO'
                             ]
-                        ]
+                        ],
+                        'filter' => [
+                            'terms' => ['category_id' => $this->getCategoryIds()]
+                        ],
                     ]
                 ]
             ]
@@ -141,19 +135,19 @@ class PMF_Search_Elasticsearch extends PMF_Search_Abstract implements PMF_Search
             'size' => 1000,
             'body' => [
                 'query' => [
-                    'filtered' => [
-                        'filter' => [
-                            'term' => [
-                                'lang' => $this->getLanguage()
-                            ]
-                        ],
-                        'query' => [
+                    'bool' => [
+                        'must' => [
                             'multi_match' => [
                                 'fields' => [
                                     'question', 'answer', 'keywords'
                                 ],
                                 'query' => $searchTerm,
                                 'fuzziness' => 'AUTO'
+                            ]
+                        ],
+                        'filter' => [
+                            'term' => [
+                                'lang' => $this->getLanguage()
                             ]
                         ]
                     ]
