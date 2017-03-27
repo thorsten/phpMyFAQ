@@ -602,6 +602,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 }
 
 $tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();
+$tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
 $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';

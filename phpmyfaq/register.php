@@ -24,6 +24,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
+    exit();
+}
+
+if (!$faqConfig->get('security.enableRegistration')) {
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }

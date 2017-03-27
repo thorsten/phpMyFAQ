@@ -380,13 +380,13 @@ class PMF_Link
     }
 
     /**
-     * Returns the Query of an URL.
+     * Returns the query of an URL.
      *
-     * @return string
+     * @return array
      */
     protected function getQuery()
     {
-        $query = '';
+        $query = [];
 
         if (!empty($this->url)) {
             $parsed = parse_url($this->url);

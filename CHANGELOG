@@ -25,6 +25,9 @@ Version 2.10.0-alpha - 2017
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
 - removed Bower, now using NPM only (Thorsten)
 
+Version 2.9.7 - 2017-03
+- fixed minor bugs (Thorsten)
+
 Version 2.9.6 - 2017-01-27
 - fixed possible arbitrary PHP code execution (Thorsten)
 - ready for PHP 7.1 (Thorsten)

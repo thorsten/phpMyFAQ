@@ -66,7 +66,7 @@ $captcha->setSessionId(
 //
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
-$http->addHeader();
+//$http->addHeader();
 
 //
 // Set session

@@ -1,5 +1,6 @@
 <?php
 
+use Elasticsearch\Common\Exceptions\BadRequest400Exception;
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 
 /**
@@ -36,6 +37,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     if ($faqConfig->get('search.enableElasticsearch')) {
         try {
             $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
+        } catch (BadRequest400Exception $e) {
+            $esInformation = $e->getMessage();
         } catch (NoNodesAvailableException $e) {
             $esInformation = $e->getMessage();
         }
