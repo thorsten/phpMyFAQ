@@ -488,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-백업";
 $PMF_LANG["ad_xml_hint"] = "모든 FAQ를 한개의 XML 파일로 저장";
 $PMF_LANG["ad_xml_gen"] = "XML 파일 만들기";
 $PMF_LANG["ad_entry_locale"] = "언어";
-$PMF_LANG["msgLangaugeSubmit"] = "언어 변경";
+$PMF_LANG["msgLanguageSubmit"] = "언어 변경";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "미리 보기";

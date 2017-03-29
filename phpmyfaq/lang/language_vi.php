@@ -484,7 +484,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Lưu toàn bộ nội dung của phần Câu hỏi thường gặp trong một tập tin XML.";
 $PMF_LANG["ad_xml_gen"] = "tạo tập tin XML";
 $PMF_LANG["ad_entry_locale"] = "Ngôn ngữ";
-$PMF_LANG["msgLangaugeSubmit"] = "Thay đổi ngôn ngữ";
+$PMF_LANG["msgLanguageSubmit"] = "Thay đổi ngôn ngữ";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Xem trước";

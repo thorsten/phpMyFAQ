@@ -487,7 +487,7 @@ $PMF_LANG["ad_xml_head"] = "XML-záloha";
 $PMF_LANG["ad_xml_hint"] = "Uložiť všetky záznamy FAQ do jedného XML súboru.";
 $PMF_LANG["ad_xml_gen"] = "vytvoriť XML súbor";
 $PMF_LANG["ad_entry_locale"] = "Jazyk";
-$PMF_LANG["msgLangaugeSubmit"] = "Zvoliť jazyk:";
+$PMF_LANG["msgLanguageSubmit"] = "Zvoliť jazyk:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Náhľad";

@@ -507,7 +507,7 @@ $PMF_LANG["ad_passwdsuc"] = "Your password has been changed.";
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "Create XML export";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "Change language";
+$PMF_LANG["msgLanguageSubmit"] = "Change language";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "The attached file must be smaller than %s Bytes.";

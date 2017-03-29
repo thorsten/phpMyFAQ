@@ -494,7 +494,7 @@ $PMF_LANG["ad_xml_head"] = "XML-बेकप";
 $PMF_LANG["ad_xml_hint"] = "अपने सारे रिकॉर्ड XML फाइल में संजोयें.";
 $PMF_LANG["ad_xml_gen"] = "XML फाइल बनाएं";
 $PMF_LANG["ad_entry_locale"] = "भाषा";
-$PMF_LANG["msgLangaugeSubmit"] = "भाषा बदलें";
+$PMF_LANG["msgLanguageSubmit"] = "भाषा बदलें";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "पूर्व दर्शन";

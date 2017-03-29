@@ -488,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Yedek";
 $PMF_LANG["ad_xml_hint"] = "SSS kayıtlarının hepsini bir XML dosyaya kaydet.";
 $PMF_LANG["ad_xml_gen"] = "XML dosya oluştur";
 $PMF_LANG["ad_entry_locale"] = "Dil";
-$PMF_LANG["msgLangaugeSubmit"] = "Dili değiştir";
+$PMF_LANG["msgLanguageSubmit"] = "Dili değiştir";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Önizleme";

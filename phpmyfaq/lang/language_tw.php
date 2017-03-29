@@ -480,7 +480,7 @@ $PMF_LANG["ad_passwdsuc"] = "您的密碼已變更完成。";
 // Added v1.3.0 - 04.03.2003 - Thorsten 開發者
 $PMF_LANG["ad_xml_gen"] = "建立 XML 匯出檔案 (Create XML export)";
 $PMF_LANG["ad_entry_locale"] = "語言";
-$PMF_LANG["msgLangaugeSubmit"] = "變更語言";
+$PMF_LANG["msgLanguageSubmit"] = "變更語言";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten 開發者
 $PMF_LANG["ad_attach_4"] = "上傳附加檔案必須小於 %s Bytes。 (The attached file must be smaller than %s Bytes.)";

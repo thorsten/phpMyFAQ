@@ -495,7 +495,7 @@ $PMF_LANG["ad_xml_head"] = "Архівація у формат XML";
 $PMF_LANG["ad_xml_hint"] = "Збереження всіх записів бази даних у форматі XML."; 
 $PMF_LANG["ad_xml_gen"] = "створити XML файл"; 
 $PMF_LANG["ad_entry_locale"] = "Мова"; 
-$PMF_LANG["msgLangaugeSubmit"] = "змінити мову"; 
+$PMF_LANG["msgLanguageSubmit"] = "змінити мову";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten 
 

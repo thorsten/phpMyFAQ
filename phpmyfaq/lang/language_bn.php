@@ -493,7 +493,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "ভাষা পরির্বতন";
+$PMF_LANG["msgLanguageSubmit"] = "ভাষা পরির্বতন";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";

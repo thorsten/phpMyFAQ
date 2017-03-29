@@ -488,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-varnostna kopija";
 $PMF_LANG["ad_xml_hint"] = "Shrani vse vnose v eni XML datoteki.";
 $PMF_LANG["ad_xml_gen"] = "ustvari XML datoteko";
 $PMF_LANG["ad_entry_locale"] = "Jezik";
-$PMF_LANG["msgLangaugeSubmit"] = "spremeni jezik";
+$PMF_LANG["msgLanguageSubmit"] = "spremeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preglej";
