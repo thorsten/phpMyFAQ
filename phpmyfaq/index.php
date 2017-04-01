@@ -286,7 +286,7 @@ if (!is_null($id)) {
     $faq->getRecord($id);
     $title = ' - '.$faq->faqRecord['title'];
     $keywords = ','.$faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', $faq->getRecordPreview($id));
+    $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
         $faqConfig->getDefaultUrl(),
