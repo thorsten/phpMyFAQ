@@ -605,6 +605,7 @@ $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';
 $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
+$tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 
 //
 // Show login box or logged-in user information
