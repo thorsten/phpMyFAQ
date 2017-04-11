@@ -491,7 +491,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Wrth gefn";
 $PMF_LANG["ad_xml_hint"] = "Cadw pob cofnod o'ch Cwestiynau Cyffredin mewn un ffeil XML.";
 $PMF_LANG["ad_xml_gen"] = "Gwneud ffeil XML";
 $PMF_LANG["ad_entry_locale"] = "Iaith";
-$PMF_LANG["msgLangaugeSubmit"] = "newid iaith";
+$PMF_LANG["msgLanguageSubmit"] = "newid iaith";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";

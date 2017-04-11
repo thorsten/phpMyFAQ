@@ -490,7 +490,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Snimi sve unose iz FAQ-a kao XML fajl.";
 $PMF_LANG["ad_xml_gen"] = "napravi XML fajl";
 $PMF_LANG["ad_entry_locale"] = "Jezik";
-$PMF_LANG["msgLangaugeSubmit"] = "promeni jezik";
+$PMF_LANG["msgLanguageSubmit"] = "promeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Proba (Preview)";

@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha - 2017
+Version 2.10.0-alpha - 2017-04
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
@@ -25,7 +25,8 @@ Version 2.10.0-alpha - 2017
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
 - removed Bower, now using NPM only (Thorsten)
 
-Version 2.9.7 - 2017-03
+Version 2.9.7 - 2017-04-02
+- fixed stored XSS vulnerability (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 2.9.6 - 2017-01-27

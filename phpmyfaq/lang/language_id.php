@@ -487,7 +487,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Simpan semua data materi dalam satu berkas.";
 $PMF_LANG["ad_xml_gen"] = "buat berkas XML";
 $PMF_LANG["ad_entry_locale"] = "Bahasa";
-$PMF_LANG["msgLangaugeSubmit"] = "Pilih bahasa:";
+$PMF_LANG["msgLanguageSubmit"] = "Pilih bahasa:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Pratinjau";

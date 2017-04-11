@@ -207,7 +207,7 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
         'writeContent',
         'switchLanguage',
         array(
-            'msgChangeLanguage' => $PMF_LANG['msgLangaugeSubmit'],
+            'msgChangeLanguage' => $PMF_LANG['msgLanguageSubmit'],
         )
     );
 }

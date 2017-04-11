@@ -496,7 +496,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Zure FAQeko erregistro guztiak XML fitxategi batean gorde.";
 $PMF_LANG["ad_xml_gen"] = "XML fitxategia sortu";
 $PMF_LANG["ad_entry_locale"] = "Hizkuntza";
-$PMF_LANG["msgLangaugeSubmit"] = "Hizkuntza aldatu";
+$PMF_LANG["msgLanguageSubmit"] = "Hizkuntza aldatu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Aurreikusi";

@@ -493,7 +493,7 @@ $PMF_LANG["ad_xml_head"] = "XML atsarginė kopija";
 $PMF_LANG["ad_xml_hint"] = "Išsaugoti visus jūsų DUK įrašus viename XML faile.";
 $PMF_LANG["ad_xml_gen"] = "sukurti XML failą";
 $PMF_LANG["ad_entry_locale"] = "Kalba";
-$PMF_LANG["msgLangaugeSubmit"] = "Parinkti kalbą:";
+$PMF_LANG["msgLanguageSubmit"] = "Parinkti kalbą:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Peržiūra";

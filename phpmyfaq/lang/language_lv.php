@@ -491,7 +491,7 @@ $PMF_LANG["ad_xml_head"] = "XML-rezerves kopija";
 $PMF_LANG["ad_xml_hint"] = "Saglab&acirc;t visus sist&ccedil;mas ierakstus vien&acirc; XML fail&acirc;.";
 $PMF_LANG["ad_xml_gen"] = "izveidot XML failu";
 $PMF_LANG["ad_entry_locale"] = "Valoda";
-$PMF_LANG["msgLangaugeSubmit"] = "main&icirc;t valodu";
+$PMF_LANG["msgLanguageSubmit"] = "main&icirc;t valodu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Apskat&icirc;t";

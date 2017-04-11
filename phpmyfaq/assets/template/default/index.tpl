@@ -68,7 +68,7 @@
                         <li class="{activeAddQuestion}">{msgQuestion}</li>
                         <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
 
-                        <li class="dropdown">
+                        <li class="dropdown {activeLogin}">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 {msgLoginUser}
                                 <b class="caret"></b>

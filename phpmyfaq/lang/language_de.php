@@ -480,7 +480,7 @@ $PMF_LANG["ad_passwdsuc"] = "Das Passwort wurde erfolgreich geändert!";
 // Added v1.3.0 - 04.03.2003 - Thorsten
 $PMF_LANG["ad_xml_gen"] = "Als XML-Datei exportieren";
 $PMF_LANG["ad_entry_locale"] = "Sprache";
-$PMF_LANG["msgLangaugeSubmit"] = "Sprache ändern";
+$PMF_LANG["msgLanguageSubmit"] = "Sprache ändern";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_attach_4"] = "Bitte eine Datei auswählen die innerhalb der Maximalgröße von %s Bytes für Attachments liegt.";

@@ -286,7 +286,7 @@ if (!is_null($id)) {
     $faq->getRecord($id);
     $title = ' - '.$faq->faqRecord['title'];
     $keywords = ','.$faq->faqRecord['keywords'];
-    $metaDescription = str_replace('"', '', $faq->getRecordPreview($id));
+    $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
         $faqConfig->getDefaultUrl(),
@@ -507,7 +507,7 @@ $tplMainPage = array(
     'showCategories' => $categoryHelper->renderNavigation($cat),
     'topCategories' => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
-    'languageBox' => $PMF_LANG['msgLangaugeSubmit'],
+    'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'writeLangAdress' => $writeLangAdress,
     'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
     'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
@@ -537,7 +537,7 @@ $tpl->parseBlock(
     'categoryListSection',
     array(
         'showCategories' => $categoryHelper->renderNavigation($cat),
-        'categoryDropDown' => $categoryHelper->renderCategoryDropDown($cat),
+        'categoryDropDown' => $categoryHelper->renderCategoryDropDown(),
     )
 );
 
@@ -607,6 +607,7 @@ $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';
 $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
+$tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 
 //
 // Show login box or logged-in user information
