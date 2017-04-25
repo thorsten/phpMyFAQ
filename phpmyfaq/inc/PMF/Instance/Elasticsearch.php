@@ -167,7 +167,7 @@ class PMF_Instance_Elasticsearch
                 'id' => $faq['id'],
                 'lang' => $faq['lang'],
                 'question' => $faq['question'],
-                'answer' => $faq['answer'],
+                'answer' => strip_tags($faq['answer']),
                 'keywords' => $faq['keywords'],
                 'category_id' => $faq['category_id']
             ]
@@ -206,7 +206,7 @@ class PMF_Instance_Elasticsearch
                 'id' => $faq['id'],
                 'lang' => $faq['lang'],
                 'question' => $faq['title'],
-                'answer' => $faq['content'],
+                'answer' => strip_tags($faq['content']),
                 'keywords' => $faq['keywords'],
                 'category_id' => $faq['category_id']
             ];
@@ -245,7 +245,7 @@ class PMF_Instance_Elasticsearch
                     'id' => $faq['id'],
                     'lang' => $faq['lang'],
                     'question' => $faq['question'],
-                    'answer' => $faq['answer'],
+                    'answer' => strip_tags($faq['answer']),
                     'keywords' => $faq['keywords'],
                     'category_id' => $faq['category_id']
                 ]
