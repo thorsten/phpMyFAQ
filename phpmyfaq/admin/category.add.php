@@ -95,6 +95,17 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                     </div>
 
                     <div class="form-group">
+                        <div class="col-lg-offset-2 col-lg-4">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="show_home" value="1" checked>
+                                    <?php echo $PMF_LANG['ad_user_show_home'] ?>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label class="col-lg-2 control-label" for="pmf-category-image-upload">
                             <?php echo $PMF_LANG['ad_category_image'] ?>:
                         </label>

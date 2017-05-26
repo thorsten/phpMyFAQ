@@ -72,6 +72,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             <input type="hidden" id="catlang" name="catlang" value="<?php echo $categoryData->getLang() ?>">
             <input type="hidden" name="parent_id" value="<?php echo $categoryData->getParentId() ?>">
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+            <input type="hidden" name="existing_image" value="<?php echo $categoryData->getImage() ?>">
 
             <div class="form-group">
                 <label class="col-lg-2 control-label">
@@ -103,6 +104,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </div>
                 </div>
             </div>
+
+          <div class="form-group">
+            <div class="col-lg-offset-2 col-lg-4">
+              <div class="checkbox">
+                <label>
+                  <input type="checkbox" name="show_home" value="1"
+                      <?php echo(1 === (int)$categoryData->getShowHome() ? 'checked' : '') ?>>
+                  <?php echo $PMF_LANG['ad_user_show_home'] ?>
+                </label>
+              </div>
+            </div>
+          </div>
 
             <div class="form-group">
                 <label class="col-lg-2 control-label" for="pmf-category-image-upload">
@@ -196,7 +209,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     </form>
 
     <script>
-        $('#pmf-category-image-upload').fileinput({
+        var categoryImageUpload = $('#pmf-category-image-upload');
+        categoryImageUpload.fileinput({
             uploadAsync: false,
             showUpload: false,
             uploadUrl: "?action=updatecategory",
@@ -206,6 +220,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             ],
             <?php } ?>
             initialPreviewShowDelete: true
+        });
+        categoryImageUpload.on('fileclear', function(event) {
+            $('input[name=existing_image]').val('');
         });
     </script>
 <?php

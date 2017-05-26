@@ -74,6 +74,11 @@ class PMF_Entity_Category
      */
     private $active;
 
+    /**
+     * @var bool
+     */
+    private $showHome;
+
     /** @var string */
     private $image = '';
 
@@ -255,5 +260,25 @@ class PMF_Entity_Category
         $this->image = $image;
 
         return $this;
+    }
+
+    /**
+     * @param $showHome $active
+     *
+     * @return PMF_Entity_Category
+     */
+    public function setShowHome($showHome)
+    {
+        $this->showHome = $showHome;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function getShowHome()
+    {
+        return $this->showHome;
     }
 }

@@ -897,8 +897,10 @@ if ($step == 3) {
 
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN image VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN show_home SMALLINT DEFAULT NULL';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD image VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD show_home INT(1) DEFAULT NULL';
         }
     }
 

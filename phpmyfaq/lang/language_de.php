@@ -1230,3 +1230,4 @@ $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Aktiviere Support
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP Attribut bei dynamisches User Binding, "uid" bei Nutzung eines ADS');
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Aktiviere XML Sitemap<br>(Standard: aktiviert)');
 $PMF_LANG['ad_category_image'] = 'Kategorie-Bild';
+$PMF_LANG["ad_user_show_home"] = "Auf der Startseite anzeigen";

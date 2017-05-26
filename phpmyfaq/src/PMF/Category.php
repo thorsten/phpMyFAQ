@@ -14,11 +14,12 @@
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -32,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2016 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -72,6 +73,13 @@ class PMF_Category
      * @var array
      */
     public $categoryName = [];
+
+    /**
+     * The image as an array.
+     *
+     * @var array
+     */
+    public $image = [];
 
     /**
      * The category tree.
@@ -140,9 +148,9 @@ class PMF_Category
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config   Configuration object
-     * @param array             $groups   Array with group IDs
-     * @param bool              $withperm With or without permission check
+     * @param PMF_Configuration $config Configuration object
+     * @param array $groups Array with group IDs
+     * @param bool $withperm With or without permission check
      */
     public function __construct(PMF_Configuration $config, $groups = [], $withperm = true)
     {
@@ -205,7 +213,7 @@ class PMF_Category
             WHERE' : '
             AND';
             $where .= "
-                fc.lang = '".$this->language."'";
+                fc.lang = '" . $this->language . "'";
         }
 
         $query = sprintf('
@@ -217,7 +225,9 @@ class PMF_Category
                 fc.description AS description,
                 fc.user_id AS user_id,
                 fc.group_id AS group_id,
-                fc.active AS active
+                fc.active AS active,
+                fc.image AS image,
+                fc.show_home AS show_home
             FROM
                 %sfaqcategories fc
             LEFT JOIN
@@ -230,7 +240,7 @@ class PMF_Category
                 fc.id = fu.category_id
             %s
             GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, fc.show_home
             ORDER BY
                 fc.parent_id, fc.id',
             PMF_Db::getTablePrefix(),
@@ -258,7 +268,7 @@ class PMF_Category
      * Gets the main categories and write them in an array.
      *
      * @param string $categories Array of parent category ids
-     * @param bool   $parentId  Only top level categories?
+     * @param bool $parentId Only top level categories?
      *
      * @return array
      */
@@ -267,7 +277,7 @@ class PMF_Category
         $_query = '';
         $query = sprintf('
             SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active
+                id, lang, parent_id, name, description, user_id, group_id, active, image, show_home
             FROM
                 %sfaqcategories
             WHERE ',
@@ -277,13 +287,13 @@ class PMF_Category
             $query .= 'parent_id = 0';
         }
         foreach (explode(',', $categories) as $cats) {
-            $_query .= ' OR parent_id = '.$cats;
+            $_query .= ' OR parent_id = ' . $cats;
         }
         if (false === $parentId && 0 < PMF_String::strlen($_query)) {
             $query .= PMF_String::substr($_query, 4);
         }
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " AND lang = '".$this->language."'";
+            $query .= " AND lang = '" . $this->language . "'";
         }
         $query .= ' ORDER BY id';
         $result = $this->_config->getDb()->query($query);
@@ -304,13 +314,13 @@ class PMF_Category
         $categories = [];
         $query = sprintf('
             SELECT
-                id, lang, parent_id, name, description, user_id, group_id, active, image
+                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
             FROM
                 %sfaqcategories',
             PMF_Db::getTablePrefix()
         );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " WHERE lang = '".$this->language."'";
+            $query .= " WHERE lang = '" . $this->language . "'";
         }
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchArray($result)) {
@@ -323,6 +333,88 @@ class PMF_Category
                 'user_id' => (int)$row['user_id'],
                 'group_id' => (int)$row['group_id'],
                 'active' => (int)$row['active'],
+                'show_home' => (int)$row['show_home'],
+                'image' => $row['image'],
+                'level' => (int)$this->levelOf($row['id'])
+            ];
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Get top level categories and returns them in an array.
+     *
+     * @return array
+     */
+    public function getTopLevelCategories()
+    {
+        $categories = [];
+        $query = sprintf('
+            SELECT
+                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
+            FROM
+                %sfaqcategories
+            WHERE 
+                parent_id = 0',
+            PMF_Db::getTablePrefix()
+        );
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $query .= " AND lang = '" . $this->language . "'";
+        }
+        $result = $this->_config->getDb()->query($query);
+
+        while ($row = $this->_config->getDb()->fetchArray($result)) {
+            $categories[(int)$row['id']] = [
+                'id' => (int)$row['id'],
+                'lang' => $row['lang'],
+                'parent_id' => (int)$row['parent_id'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'user_id' => (int)$row['user_id'],
+                'group_id' => (int)$row['group_id'],
+                'active' => (int)$row['active'],
+                'show_home' => (int)$row['show_home'],
+                'image' => $row['image'],
+                'level' => (int)$this->levelOf($row['id'])
+            ];
+        }
+
+        return $categories;
+    }
+
+    /**
+     * Gets all categories and write them in an array.
+     *
+     * @return array
+     */
+    public function getHomeCategories()
+    {
+        $categories = [];
+        $query = sprintf('
+            SELECT
+                id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
+            FROM
+                %sfaqcategories
+            WHERE 
+                show_home = 1',
+            PMF_Db::getTablePrefix()
+        );
+        if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
+            $query .= " AND lang = '" . $this->language . "'";
+        }
+        $result = $this->_config->getDb()->query($query);
+        while ($row = $this->_config->getDb()->fetchArray($result)) {
+            $categories[(int)$row['id']] = [
+                'id' => (int)$row['id'],
+                'lang' => $row['lang'],
+                'parent_id' => (int)$row['parent_id'],
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'user_id' => (int)$row['user_id'],
+                'group_id' => (int)$row['group_id'],
+                'active' => (int)$row['active'],
+                'show_home' => (int)$row['show_home'],
                 'image' => $row['image'],
                 'level' => (int)$this->levelOf($row['id'])
             ];
@@ -355,7 +447,7 @@ class PMF_Category
         $result = $this->_config->getDb()->query($query);
 
         while ($row = $this->_config->getDb()->fetchArray($result)) {
-            $categories[] = (int) $row['id'];
+            $categories[] = (int)$row['id'];
         }
 
         return $categories;
@@ -365,7 +457,7 @@ class PMF_Category
      * Builds the category tree.
      *
      * @param int $id_parent Parent id
-     * @param int $indent    Indention
+     * @param int $indent Indention
      */
     public function buildTree($id_parent = 0, $indent = 0)
     {
@@ -426,13 +518,14 @@ class PMF_Category
      */
     public function transform($id)
     {
-        $parentId = $level = 0;
+        $parentId = $level = $showHome = 0;
         $tree = [];
         $tabs = isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
         $num = count($tabs);
         $symbol = 'minus';
         $name = $description = '';
         $active = true;
+        $image = '';
 
         if ($id > 0) {
             $active = $this->categoryName[$id]['active'];
@@ -440,6 +533,8 @@ class PMF_Category
             $level = $this->categoryName[$id]['level'];
             $name = $this->categoryName[$id]['name'];
             $parentId = $this->categoryName[$id]['parent_id'];
+            $image = $this->categoryName[$id]['image'];
+            $showHome = $this->categoryName[$id]['show_home'];
         }
 
         if ($num < 0) {
@@ -471,6 +566,8 @@ class PMF_Category
                 'tree' => $tree,
                 'description' => $description,
                 'active' => $active,
+                'image' => $image,
+                'show_home' => $showHome
             );
         }
 
@@ -500,15 +597,13 @@ class PMF_Category
     /**
      * List in a array of the $id of the child.
      *
-     * @param int $id Category id
+     * @param integer $categoryId
      *
      * @return array
-     *
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
      */
-    public function getChildren($id)
+    public function getChildren($categoryId)
     {
-        return isset($this->children[$id]) ? array_keys($this->children[$id]) : [];
+        return isset($this->children[$categoryId]) ? array_keys($this->children[$categoryId]) : [];
     }
 
     /**
@@ -520,16 +615,16 @@ class PMF_Category
      */
     public function getChildNodes($id)
     {
-        $childs = [];
+        $children = [];
 
         if (isset($this->children[$id])) {
             foreach (array_keys($this->children[$id]) as $childId) {
-                $childs = array_merge($childs, array($childId));
-                $childs = array_merge($childs, $this->getChildNodes($childId));
+                $children = array_merge($children, array($childId));
+                $children = array_merge($children, $this->getChildNodes($childId));
             }
         }
 
-        return $childs;
+        return $children;
     }
 
     /**
@@ -664,22 +759,19 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
-
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 $number[$row->category_id] = $row->number;
             }
         }
-
         $output = '<ul class="pmf-category-overview">';
         $open = 0;
         $this->expandAll();
 
-        for ($y = 0;$y < $this->height(); $y = $this->getNextLineTree($y)) {
+        for ($y = 0; $y < $this->height(); $y = $this->getNextLineTree($y)) {
             list($hasChild, $categoryName, $parent, $description) = $this->getLineDisplay($y);
             $level = $this->treeTab[$y]['level'];
             $levelDiff = $open - $level;
-
             if (!isset($number[$parent])) {
                 $number[$parent] = 0;
             }
@@ -721,7 +813,7 @@ class PMF_Category
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $numFaqs = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries', $number[$parent]);
+                $numFaqs = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->_config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
                         ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fa fa-rss"></i></a>',
@@ -744,7 +836,7 @@ class PMF_Category
             $oLink->text = $categoryName;
             $oLink->tooltip = $description;
 
-            $output .= $oLink->toHtmlAnchor().$numFaqs;
+            $output .= $oLink->toHtmlAnchor() . $numFaqs;
             $open = $level;
         }
 
@@ -772,7 +864,8 @@ class PMF_Category
             $this->treeTab[$node]['name'],
             $this->treeTab[$node]['id'],
             $this->treeTab[$node]['description'],
-            $this->treeTab[$node]['active']
+            $this->treeTab[$node]['active'],
+            $this->treeTab[$node]['image']
         ];
     }
 
@@ -814,17 +907,23 @@ class PMF_Category
     /**
      * Creates a category link.
      *
-     * @param string $sids         Session id
-     * @param int    $categoryId   Parent category
+     * @param string $sids Session id
+     * @param int $categoryId Parent category
      * @param string $categoryName Category name
-     * @param string $description  Description
-     * @param bool   $hasChildren  Child categories available
-     * @param bool   $isActive     Sets a link active via CSS
+     * @param string $description Description
+     * @param bool $hasChildren Child categories available
+     * @param bool $isActive Sets a link active via CSS
      *
      * @return string
      */
-    public function addCategoryLink($sids, $categoryId, $categoryName, $description, $hasChildren = false, $isActive = false)
-    {
+    public function addCategoryLink(
+        $sids,
+        $categoryId,
+        $categoryName,
+        $description,
+        $hasChildren = false,
+        $isActive = false
+    ) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
             PMF_Link::getSystemRelativeUri(),
@@ -833,7 +932,7 @@ class PMF_Category
         );
 
         $oLink = new PMF_Link($url, $this->_config);
-        $oLink->id = 'category_'.$categoryId;
+        $oLink->id = 'category_' . $categoryId;
         $oLink->itemTitle = $categoryName;
         $oLink->text = $categoryName;
 
@@ -853,12 +952,59 @@ class PMF_Category
     }
 
     /**
+     * Get Category Data for the next level
+     *
+     * @param array $ids category id
+     * @param $parentId parent category
+     *
+     * @return array
+     */
+    public function getCategoriesDataNextLevel(Array $ids, $parentId)
+    {
+        $result = [];
+        foreach ($ids as $catId) {
+            $category = $this->getCategoryData($catId);
+            if ($parentId == $category->getParentId()) {
+                array_push($result, $this->getCategoryData($catId));
+            }
+        }
+
+        return $result;
+    }
+
+    /*
+     * Generate HTML for Categories each level
+     *
+     * @param array $categories
+     * @param integer $level
+     * @return string
+     */
+    public function generateCategoriesList(array $categories, $level)
+    {
+        $output = '<div class="pmf-categories pmf-slider-categories-' . $level . '" ><ul id="categories_' . $level . '">';
+        if (count($categories) > 0) {
+            foreach ($categories as $category) {
+                $output .= '<li class="slide_category_2" id="' . $category->getId() . '" >';
+                $output .= '<span class="info">' . $category->getName() . '</span>';
+                if ('' != $category->getImage()) {
+                    $output .= '<img src="' . '/images/' . $category->getImage() . '" alt="' . $category->getName() . '">';
+                } else {
+                    $output .= '<img src="/images/no_picture.png" alt="' . $category->getName() . '">';
+                }
+                $output .= '</li>';
+            }
+            $output .= '</ul></div>';
+        }
+        return $output;
+    }
+
+    /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int    $id                Category ID
-     * @param string $separator         Path separator
-     * @param bool   $renderAsMicroData Renders breadcrumbs as HTML5 microdata
-     * @param string $useCssClass       Use CSS class "breadcrumb"
+     * @param int $id Category ID
+     * @param string $separator Path separator
+     * @param bool $renderAsMicroData Renders breadcrumbs as HTML5 microdata
+     * @param string $useCssClass Use CSS class "breadcrumb"
      *
      * @return string
      */
@@ -924,7 +1070,7 @@ class PMF_Category
     /**
      * Returns the categories from a record id and language.
      *
-     * @param int $record_id   record id
+     * @param int $record_id record id
      * @param int $record_lang record language
      *
      * @return array
@@ -950,7 +1096,8 @@ class PMF_Category
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $categories[$row->category_id] = array(
                 'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang, );
+                'category_lang' => $row->category_lang,
+            );
         }
 
         return $categories;
@@ -1042,8 +1189,6 @@ class PMF_Category
     }
 
     /**
-<<<<<<< HEAD
-<<<<<<< HEAD
      * Returns the admin user of the given category.
      *
      * @param int $categoryId
@@ -1075,8 +1220,8 @@ class PMF_Category
      * Adds a new category entry.
      *
      * @param array $categoryData Array of category data
-     * @param int   $parentId     Parent id
-     * @param int   $id           Category id
+     * @param int $parentId Parent id
+     * @param int $id Category id
      *
      * @return int
      */
@@ -1084,15 +1229,15 @@ class PMF_Category
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
-            $id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
+            $id = $this->_config->getDb()->nextId(PMF_Db::getTablePrefix() . 'faqcategories', 'id');
         }
 
         $query = sprintf("
             INSERT INTO
                 %sfaqcategories
-            (id, lang, parent_id, name, description, user_id, group_id, active, image)
+            (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
                 VALUES
-            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s')",
+            (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
             PMF_Db::getTablePrefix(),
             $id,
             $categoryData['lang'],
@@ -1102,7 +1247,8 @@ class PMF_Category
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
-            $categoryData['image']
+            $categoryData['image'],
+            $categoryData['show_home']
         );
         $this->_config->getDb()->query($query);
 
@@ -1127,6 +1273,7 @@ class PMF_Category
                 user_id = %d,
                 group_id = %d,
                 active = %d,
+                show_home = %d,
                 image = '%s'
             WHERE
                 id = %d
@@ -1138,6 +1285,7 @@ class PMF_Category
             $categoryData['user_id'],
             $categoryData['group_id'],
             $categoryData['active'],
+            $categoryData['show_home'],
             $categoryData['image'],
             $categoryData['id'],
             $categoryData['lang']
@@ -1176,6 +1324,7 @@ class PMF_Category
                 ->setUserId($row->user_id)
                 ->setGroupId($row->group_id)
                 ->setActive($row->active)
+                ->setShowHome($row->show_home)
                 ->setImage($row->image);
         }
 
@@ -1186,7 +1335,7 @@ class PMF_Category
      * Move the categories ownership for users.
      *
      * @param int $from Old user id
-     * @param int $to   New user id
+     * @param int $to New user id
      *
      * @return bool
      */
@@ -1215,7 +1364,7 @@ class PMF_Category
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int    $category_id   Category id
+     * @param int $category_id Category id
      * @param string $category_lang Category language
      *
      * @return bool
@@ -1257,29 +1406,30 @@ class PMF_Category
             array('faqcategories' => 'parent_id'),
             array('faqcategoryrelations' => 'category_id'),
             array('faqcategory_group' => 'category_id'),
-            array('faqcategory_user' => 'category_id'), );
+            array('faqcategory_user' => 'category_id'),
+        );
 
         $result = true;
         foreach ($tables as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->_config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $temp_cat,
-                    $_field,
-                    $category_id_2));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $temp_cat,
+                        $_field,
+                        $category_id_2));
                 $result = $result && $this->_config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $category_id_2,
-                    $_field,
-                    $category_id_1));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_2,
+                        $_field,
+                        $category_id_1));
                 $result = $result && $this->_config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $category_id_1,
-                    $_field,
-                    $temp_cat));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_1,
+                        $_field,
+                        $temp_cat));
             }
         }
 
@@ -1288,23 +1438,23 @@ class PMF_Category
         foreach ($tables2 as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $temp_cat,
-                    $_field,
-                    $category_id_2));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $temp_cat,
+                        $_field,
+                        $category_id_2));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $category_id_2,
-                    $_field,
-                    $category_id_1));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_2,
+                        $_field,
+                        $category_id_1));
                 $result = $result && $this->_config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                    PMF_Db::getTablePrefix().$_table,
-                    $_field,
-                    $category_id_1,
-                    $_field,
-                    $temp_cat));
+                        PMF_Db::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_1,
+                        $_field,
+                        $temp_cat));
             }
         }
 
@@ -1315,7 +1465,7 @@ class PMF_Category
      * Updates the parent category.
      *
      * @param int $category_id Category id
-     * @param int $parent_id   Parent category id
+     * @param int $parent_id Parent category id
      *
      * @return bool
      */
@@ -1343,9 +1493,9 @@ class PMF_Category
     /**
      * Deletes a category.
      *
-     * @param int    $category_id   Category id
+     * @param int $category_id Category id
      * @param string $category_lang Categiry language
-     * @param bool   $delete_all    Delete all languages?
+     * @param bool $delete_all Delete all languages?
      *
      * @return bool
      */
@@ -1359,18 +1509,19 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
-            $query .= " AND lang = '".$category_lang."'";
+            $query .= " AND lang = '" . $category_lang . "'";
         }
         $this->_config->getDb()->query($query);
 
         return true;
     }
+
     /**
      * Deletes a category relation.
      *
-     * @param int    $category_id   Category id
+     * @param int $category_id Category id
      * @param string $category_lang Categiry language
-     * @param bool   $delete_all    Delete all languages?
+     * @param bool $delete_all Delete all languages?
      *
      * @return bool
      */
@@ -1384,7 +1535,7 @@ class PMF_Category
             PMF_Db::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
-            $query .= " AND category_lang = '".$category_lang."'";
+            $query .= " AND category_lang = '" . $category_lang . "'";
         }
         $this->_config->getDb()->query($query);
 
@@ -1397,10 +1548,6 @@ class PMF_Category
      * @param int $category_id
      *
      * @return array
-     *
-     * @since   2006-09-10
-     *
-     * @author  Rudi Ferrari <bookcrossers@gmx.de>
      */
     public function getCategoryLanguagesTranslated($category_id)
     {
@@ -1419,12 +1566,12 @@ class PMF_Category
                    id = %d
                AND
                    lang = '%s'",
-               PMF_Db::getTablePrefix(),
-               $category_id,
-               $language);
+                PMF_Db::getTablePrefix(),
+                $category_id,
+                $language);
             $result = $this->_config->getDb()->query($query);
             if ($row = $this->_config->getDb()->fetchArray($result)) {
-                $translated[$languageCodes[strtoupper($language)]] = $row['name'].('' == $row['description'] ? '' : '  ('.$row['description'].')');
+                $translated[$languageCodes[strtoupper($language)]] = $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
             }
         }
         ksort($translated);
@@ -1435,7 +1582,7 @@ class PMF_Category
     /**
      * Create all languages which can be used for translation as <option>.
      *
-     * @param int    $category_id   Category id
+     * @param int $category_id Category id
      * @param string $selected_lang Selected language
      *
      * @return string
@@ -1447,11 +1594,11 @@ class PMF_Category
 
         foreach (PMF_Language::getAvailableLanguages() as $lang => $langname) {
             if (!in_array(strtolower($lang), $existcatlang)) {
-                $output .= "\t<option value=\"".strtolower($lang).'"';
+                $output .= "\t<option value=\"" . strtolower($lang) . '"';
                 if ($lang == $selected_lang) {
                     $output .= ' selected="selected"';
                 }
-                $output .=  '>'.$langname."</option>\n";
+                $output .= '>' . $langname . "</option>\n";
             }
         }
 
@@ -1471,7 +1618,7 @@ class PMF_Category
                 %sfaqcategories',
             PMF_Db::getTablePrefix());
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
-            $query .= " WHERE lang != '".$this->language."'";
+            $query .= " WHERE lang != '" . $this->language . "'";
         }
         $query .= ' ORDER BY id';
         $result = $this->_config->getDb()->query($query);
@@ -1510,9 +1657,9 @@ class PMF_Category
     /**
      * Adds the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories ID of the current category
-     * @param array  $ids        Array of group or user IDs
+     * @param string $mode 'group' or 'user'
+     * @param array $categories ID of the current category
+     * @param array $ids Array of group or user IDs
      *
      * @return bool
      */
@@ -1556,8 +1703,8 @@ class PMF_Category
     /**
      * Deletes the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories ID of the current category
+     * @param string $mode 'group' or 'user'
+     * @param array $categories ID of the current category
      *
      * @return bool
      */
@@ -1588,8 +1735,8 @@ class PMF_Category
     /**
      * Returns the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories Array of category ids
+     * @param string $mode 'group' or 'user'
+     * @param array $categories Array of category ids
      *
      * @return array
      */
@@ -1680,8 +1827,8 @@ class PMF_Category
                 fd.lang = fcr.category_lang
             ORDER BY
                 fcr.category_id, fd.id',
-             PMF_Db::getTablePrefix(),
-             PMF_Db::getTablePrefix());
+            PMF_Db::getTablePrefix(),
+            PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {

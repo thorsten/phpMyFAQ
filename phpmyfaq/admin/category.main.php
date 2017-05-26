@@ -58,7 +58,7 @@ if ('category' != $action && 'content' != $action &&
 //
 // Image upload
 //
-$uploadedFile = isset($_FILES['image']) ? $_FILES['image'] : [];
+$uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
 $categoryImage = new PMF_Category_Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
@@ -72,15 +72,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryId = $faqConfig->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
         $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $categoryData = array(
+        $categoryData = [
             'lang' => $categoryLang,
             'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
             'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
-            'image' => $categoryImage->getFileName($categoryId, $categoryLang)
-        );
+            'image' => $categoryImage->getFileName($categoryId, $categoryLang),
+            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
+        ];
 
         $permissions = [];
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
@@ -139,6 +140,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $categoryId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
+        $existingImage = PMF_Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_STRING);
+        $image = count($uploadedFile) ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
         $categoryData = [
             'id' => $categoryId,
             'lang' => $categoryLang,
@@ -148,7 +151,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
             'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
-            'image' => $categoryImage->getFileName($categoryId, $categoryLang)
+            'image' => $image,
+            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT),
         ];
 
         $permissions = [];
