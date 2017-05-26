@@ -78,6 +78,7 @@ class PMF_Instance_Database_Sqlsrv extends PMF_Instance_Database implements PMF_
             group_id INTEGER NOT NULL DEFAULT -1,
             active INTEGER NULL DEFAULT 1,
             image VARCHAR(255) DEFAULT NULL,
+            show_home SMALLINT DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (

@@ -78,6 +78,7 @@ class PMF_Instance_Database_Mysqli extends PMF_Instance_Database implements PMF_
             group_id INT(11) NOT NULL DEFAULT -1,
             active INT(11) NULL DEFAULT 1,
             image VARCHAR(255) DEFAULT NULL,
+            show_home INT(1) DEFAULT NULL,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (

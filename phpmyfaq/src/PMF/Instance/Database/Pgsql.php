@@ -80,6 +80,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             group_id INT4 NOT NULL DEFAULT -1,
             active INT4 NULL DEFAULT 1,
             image VARCHAR(255) DEFAULT NULL,
+            show_home INT4 DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (

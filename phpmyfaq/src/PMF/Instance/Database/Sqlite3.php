@@ -78,6 +78,7 @@ class PMF_Instance_Database_Sqlite3 extends PMF_Instance_Database implements PMF
             group_id INTEGER NOT NULL DEFAULT -1,
             active INTEGER NULL DEFAULT 1,
             image VARCHAR(255) DEFAULT NULL,
+            show_home INTEGER DEFAULT NULL,
             PRIMARY KEY (id, lang))',
 
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
