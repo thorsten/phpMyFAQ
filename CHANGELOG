@@ -11,7 +11,7 @@ Version 2.10.0-alpha - 2017-05-
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
 - added support for categories on startpage (Thorsten)
-- improved REST/JSON API (Thorsten)
+- improved REST/JSON API including login (Thorsten)
 - improved sticky records (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.16 (Thorsten)
 - updated bundled SwiftMailer to version 5.4.3 (Thorsten)

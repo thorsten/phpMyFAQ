@@ -1687,6 +1687,27 @@ You can call the resources with the following URIs:
         }
     ]</code></pre>
     
+*   **login**
+
+    * https://www.example.org/phpmyfaq/api.php?action=login (standard)
+    * https://www.example.org/phpmyfaq/api/login (rewrite rules enabled)
+    * POST values: `faqusername=<username>&faqpassword=<password>`
+
+    If the login was successful, you can grad the session cookie from the HTTP response, you'll get an JSON object as 
+    result with the following structure:
+    
+    <pre><code class="json">{
+        "loggedin": true,
+        "error": ""
+    }</code></pre>
+    
+    Otherwise, the result will be:
+    
+    <pre><code class="json">{
+        "loggedin": false,
+        "error": "Error message"
+    }</code></pre>
+    
 [back to top][64]
 
 * * *
@@ -1699,9 +1720,9 @@ Author: [Thorsten Rinne][88]
 
 Co-Authors: [Stephan Hochhaus][89], [Markus Gläser][90]
 
-Date: 2016-03-28
+Date: 2017-05-26
 
-© 2001-2016 phpMyFAQ Team
+© 2001-2017 phpMyFAQ Team
 
 This documentation is licensed under a [Creative Commons License](http://creativecommons.org/licenses/by/2.0/).
 

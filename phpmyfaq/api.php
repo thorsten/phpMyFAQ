@@ -3,7 +3,7 @@
 /**
  * The rest/json application interface.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -37,12 +37,16 @@ $http->addHeader();
 //
 $currentUser = -1;
 $currentGroups = array(-1);
+$auth = false;
 
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
 $categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = PMF_Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
+
+$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 
 //
 // Get language (default: english)
@@ -68,9 +72,25 @@ PMF_String::init($language);
 $result = [];
 
 //
+// Check if user is already authenticated
+//
+if (is_null($faqusername) && is_null($faqpassword)) {
+    $currentUser = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    // authenticate with session information
+    if (!$currentUser instanceof PMF_User_CurrentUser) {
+        $currentUser = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
+    if ($currentUser instanceof PMF_User_CurrentUser) {
+        $auth = true;
+    } else {
+        $currentUser = new PMF_User_CurrentUser($faqConfig);
+    }
+}
+
+//
 // Check if FAQ should be secured
 //
-if ($faqConfig->get('security.enableLoginOnly')) {
+if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
     echo json_encode(array('You are not allowed to view this content.'));
     $http->sendStatus(403);
 }
@@ -110,8 +130,6 @@ switch ($action) {
         $url = $faqConfig->getDefaultUrl().'index.php?action=artikel&cat=%d&id=%d&artlang=%s';
 
         $faqSearchResult->reviewResultset($searchResults);
-
-        $result = [];
         foreach ($faqSearchResult->getResultset() as $data) {
             $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
             $data->answer = PMF_Utils::makeShorterText($data->answer, 12);
@@ -214,6 +232,28 @@ switch ($action) {
     case 'getPopularTags':
         $tags = new PMF_Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
+        break;
+
+    case 'login':
+        $currentUser = new PMF_User_CurrentUser($faqConfig);
+        if ($currentUser->login($faqusername, $faqpassword)) {
+            if ($currentUser->getStatus() != 'blocked') {
+                $result = [
+                    'loggedin' => true,
+                    'error' => ''
+                ];
+            } else {
+                $result = [
+                    'loggedin' => false,
+                    'error' => $PMF_LANG['ad_auth_fail'].' ('.$faqusername.')'
+                ];
+            }
+        } else {
+            $result = [
+                'loggedin' => false,
+                'error' => $PMF_LANG['ad_auth_fail']
+            ];
+        }
         break;
 }
 
