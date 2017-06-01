@@ -11,6 +11,7 @@ Version 2.10.0-alpha - 2017-05-
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
 - added support for categories on startpage (Thorsten)
+- added image slider template (Thorsten)
 - improved REST/JSON API including login (Thorsten)
 - improved sticky records (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.16 (Thorsten)
@@ -24,6 +25,7 @@ Version 2.10.0-alpha - 2017-05-
 - updated bundled HighlightJS to version 8.9.1 (Thorsten)
 - updated bundled Mermaid to version 6.0.0 (Thorsten)
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
+- updated bundled TinyMCE to version 4.6.3 (Thorsten)
 - removed Bower, now using NPM only (Thorsten)
 
 Version 2.9.7 - 2017-04-02

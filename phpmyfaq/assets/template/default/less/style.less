@@ -50,8 +50,9 @@
 //
 // Basic layout definition
 //
-body {
+html, body {
   font-size: 16px;
+  height: 100%;
   line-height: 27px;
   font-family: @font-family;
   color: @text;
@@ -674,7 +675,7 @@ hr {
   }
 
   .pmf-faq-body {
-    margin-top:20px;
+    margin-top: 20px;
     @media @large { padding-right: 30px; }
     .pmf-private-notes {
       background-color: lighten(@pmf-background, 10%);
@@ -884,3 +885,53 @@ aside.pmf-comments {
 // Mermaid CSS
 //
 @import (less)"../../../../../node_modules/mermaid/dist/mermaid.forest.css";
+
+//
+// Slider templates
+//
+.slider-container{
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  text-align: center;
+}
+
+.menu {
+  position: absolute;
+  left: 0;
+  z-index: 900;
+  width: 100%;
+  bottom: 0;
+}
+
+.menu label {
+  cursor: pointer;
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  background: #fff;
+  border-radius: 50px;
+  margin: 0 .2em 1em;
+  &:hover {
+    background: red;
+  }
+}
+
+.slide {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  z-index: 10;
+  background-size: cover;
+  background-position: 50% 50%;
+  transition: left 0s .75s;
+}
+
+[id^="slide"]:checked + .slide {
+  left: 0;
+  z-index: 100;
+  transition: left .65s ease-out;
+}

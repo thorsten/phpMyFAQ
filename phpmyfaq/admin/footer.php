@@ -142,6 +142,10 @@ if (isset($auth)) {
             user_id: '<?php echo $user->userdata->get('user_id') ?>'
         },
 
+        templates: [
+            { title: 'Slider', description: 'phpMyFAQ Image Slider', url: 'assets/templates/image-slider.html' }
+        ],
+
         // File browser
         file_browser_callback: function(fieldName, url, type, win){
             var fileBrowser = 'image.browser.php';
