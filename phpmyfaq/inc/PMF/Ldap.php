@@ -264,7 +264,7 @@ class PMF_Ldap
 
         if (true === $this->_ldapConfig['ldap_use_memberOf']) {
             $filter = sprintf(
-                '(&%s(memberof=%s))',
+                '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))',
                 $filter,
                 $this->_ldapConfig['ldap_mapping']['memberOf']
             );

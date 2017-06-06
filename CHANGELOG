@@ -1,9 +1,13 @@
-phpMyFAQ 2.9.7
+phpMyFAQ 2.9.8
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.8 - 2017-06-
+- add LDAP search in sub groups (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.7 - 2017-04-02
 - fixed stored XSS vulnerability (Thorsten)
