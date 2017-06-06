@@ -493,7 +493,7 @@ class PMF_User
      * @param string $pass   Password
      * @param int    $userId User ID
      *
-     * @return mixed
+     * @return boolean
      */
     public function createUser($login, $pass = '', $userId = 0)
     {
@@ -831,7 +831,7 @@ class PMF_User
     /**
      * Returns the data aof the auth container.
      *
-     * @return array
+     * @return PMF_Auth_Driver[]
      */
     public function getAuthContainer()
     {
@@ -1108,6 +1108,8 @@ class PMF_User
     /**
      * Sends mail to the current user.
      *
+     * @param string $subject
+     * @param string $message
      * @return bool
      */
     public function mailUser($subject, $message)
