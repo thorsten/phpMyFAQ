@@ -71,6 +71,7 @@ class PMF_User
     const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
     const ERROR_USER_NOWRITABLE = 'No authentication object is writable. ';
     const ERROR_USER_NO_LOGIN_DATA = 'A username and password must be provided. ';
+    const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You are currently locked out.';
 
     const STATUS_USER_PROTECTED = 'User account is protected. ';
     const STATUS_USER_BLOCKED = 'User account is blocked. ';
@@ -116,7 +117,7 @@ class PMF_User
     /**
      * authentication container.
      *
-     * @var array
+     * @var PMF_Auth_Driver[]
      */
     protected $authContainer = [];
 
@@ -161,11 +162,11 @@ class PMF_User
      *
      * @var array
      */
-    private $allowedStatus = array(
+    private $allowedStatus = [
         'active' => self::STATUS_USER_ACTIVE,
         'blocked' => self::STATUS_USER_BLOCKED,
         'protected' => self::STATUS_USER_PROTECTED,
-    );
+    ];
 
     /**
      * Configuration.

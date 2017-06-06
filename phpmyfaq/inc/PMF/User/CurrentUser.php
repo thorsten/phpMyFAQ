@@ -53,7 +53,7 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @var bool
      */
-    private $_loggedIn = false;
+    private $loggedIn = false;
 
     /**
      * Specifies the timeout for the session in minutes. If the session ID was
@@ -62,7 +62,7 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @var int
      */
-    private $_sessionTimeout = PMF_AUTH_TIMEOUT;
+    private $sessionTimeout = PMF_AUTH_TIMEOUT;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
@@ -72,21 +72,21 @@ class PMF_User_CurrentUser extends PMF_User
      *
      * @var int
      */
-    private $_sessionIdTimeout = 1;
+    private $sessionIdTimeout = 1;
 
     /**
      * LDAP configuration if available.
      *
      * @var array
      */
-    private $_ldapConfig = [];
+    private $ldapConfig = [];
 
     /**
      * Remember me activated or deactivated.
      *
      * @var bool
      */
-    private $_rememberMe = false;
+    private $rememberMe = false;
 
     /**
      * Login successful or auth failure:
@@ -97,18 +97,17 @@ class PMF_User_CurrentUser extends PMF_User
      */
     private $loginState = 1;
 
+    private $lockoutTime = 600;
+
     /**
      * Constructor.
      *
      * @param PMF_Configuration $config
-     *
-     * @return PMF_User_CurrentUser
      */
     public function __construct(PMF_Configuration $config)
     {
         parent::__construct($config);
-
-        $this->_ldapConfig = $config->getLdapConfig();
+        $this->ldapConfig = $config->getLdapConfig();
     }
 
     /**
@@ -128,10 +127,18 @@ class PMF_User_CurrentUser extends PMF_User
     public function login($login, $password)
     {
         $optData = [];
+        $loginError = $passwordError = $count = 0;
+
+        // First check for brute force attack
+        $this->getUserByLogin($login);
+        if ($this->isFailedLastLoginAttempt()) {
+            $this->errors[] = parent::ERROR_USER_TOO_MANY_FAILED_LOGINS;
+            return false;
+        }
 
         // Additional code for LDAP: user\\domain
-        if ($this->config->get('security.ldapSupport') && isset($this->_ldapConfig['ldap_use_domain_prefix']) &&
-            $this->_ldapConfig['ldap_use_domain_prefix'] && '' !== $password) {
+        if ($this->config->get('security.ldapSupport') && isset($this->ldapConfig['ldap_use_domain_prefix']) &&
+            $this->ldapConfig['ldap_use_domain_prefix'] && '' !== $password) {
             // if LDAP configuration is enabled, and ldap_use_domain_prefix is available (in file constants_ldap.php)
             // and ldap_use_domain_prefix is set to true and LDAP data are provided (password is not empty)
             if (($pos = strpos($login, '\\')) !== false) {
@@ -159,10 +166,6 @@ class PMF_User_CurrentUser extends PMF_User
         }
 
         // authenticate user by login and password
-        $loginError = 0;
-        $passwordError = 0;
-        $count = 0;
-
         foreach ($this->authContainer as $name => $auth) {
             ++$count;
 
@@ -171,11 +174,13 @@ class PMF_User_CurrentUser extends PMF_User
                 --$count;
                 continue;
             }
+
             // $login does not exist, so continue
             if (!$auth->checkLogin($login, $optData)) {
                 ++$loginError;
                 continue;
             }
+
             // $login exists, but $pass is incorrect, so stop!
             if (!$auth->checkPassword($login, $password, $optData)) {
                 ++$passwordError;
@@ -185,12 +190,13 @@ class PMF_User_CurrentUser extends PMF_User
 
             // but hey, this must be a valid match, so get user object
             $this->getUserByLogin($login);
-            $this->_loggedIn = true;
+            $this->loggedIn = true;
             $this->updateSessionId(true);
             $this->saveToSession();
             $this->saveCrsfTokenToSession();
+
             // save remember me cookie if set
-            if (true === $this->_rememberMe) {
+            if (true === $this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
                 PMF_Session::setCookie(
@@ -212,26 +218,25 @@ class PMF_User_CurrentUser extends PMF_User
                 $this->config->getDb()->escape($name),
                 $this->getUserId()
             );
-            $res = $this->config->getDb()->query($update);
-            if (!$res) {
+            $result = $this->config->getDb()->query($update);
+            if (!$result) {
                 $this->setSuccess(false);
-
                 return false;
             }
 
-            // Login successfull
+            // Login successful
             $this->setSuccess(true);
-
             return true;
         }
 
         // raise errors and return false
-        if ($loginError == $count) {
+        if ($loginError === $count) {
             $this->setSuccess(false);
             $this->errors[] = parent::ERROR_USER_INCORRECT_LOGIN;
         }
         if ($passwordError > 0) {
-            $this->setSuccess(false);
+            $this->getUserByLogin($login);
+            $this->setLoginAttempt();
             $this->errors[] = parent::ERROR_USER_INCORRECT_PASSWORD;
         }
 
@@ -245,7 +250,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function isLoggedIn()
     {
-        return $this->_loggedIn;
+        return $this->loggedIn;
     }
 
     /**
@@ -258,7 +263,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function sessionIsTimedOut()
     {
-        if ($this->_sessionTimeout <= $this->sessionAge()) {
+        if ($this->sessionTimeout <= $this->sessionAge()) {
             return true;
         }
 
@@ -272,7 +277,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function sessionIdIsTimedOut()
     {
-        if ($this->_sessionIdTimeout <= $this->sessionAge()) {
+        if ($this->sessionIdTimeout <= $this->sessionAge()) {
             return true;
         }
 
@@ -407,7 +412,7 @@ class PMF_User_CurrentUser extends PMF_User
         unset($_SESSION[PMF_SESSION_CURRENT_USER]);
 
         // log CurrentUser out
-        $this->_loggedIn = false;
+        $this->loggedIn = false;
 
         // delete session-ID
         $update = sprintf('
@@ -489,7 +494,7 @@ class PMF_User_CurrentUser extends PMF_User
             $user->updateSessionId();
         }
         // user is now logged in
-        $user->_loggedIn = true;
+        $user->loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
 
@@ -528,7 +533,7 @@ class PMF_User_CurrentUser extends PMF_User
         // sessionId needs to be updated
         $user->updateSessionId(true);
         // user is now logged in
-        $user->_loggedIn = true;
+        $user->loggedIn = true;
         // save current user to session and return the instance
         $user->saveToSession();
         // add CSRF token to session
@@ -545,7 +550,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function setSessionTimeout($timeout)
     {
-        $this->_sessionTimeout = abs($timeout);
+        $this->sessionTimeout = abs($timeout);
     }
 
     /**
@@ -557,7 +562,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function setSessionIdTimeout($timeout)
     {
-        $this->_sessionIdTimeout = abs($timeout);
+        $this->sessionIdTimeout = abs($timeout);
     }
 
     /**
@@ -565,7 +570,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     public function enableRememberMe()
     {
-        $this->_rememberMe = true;
+        $this->rememberMe = true;
     }
 
     /**
@@ -593,7 +598,7 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Sets login succuess/failure.
+     * Sets login success/failure.
      *
      * @param bool $success
      *
@@ -616,6 +621,67 @@ class PMF_User_CurrentUser extends PMF_User
         );
 
         return $this->config->getDb()->query($update);
+    }
+
+    /**
+     * Sets IP and session timestamp, success flag to false.
+     *
+     * @return mixed
+     */
+    protected function setLoginAttempt()
+    {
+        $update = sprintf("
+            UPDATE
+                %sfaquser
+            SET
+                session_timestamp ='%s',
+                ip = '%s',
+                success = 0
+            WHERE
+                user_id = %d",
+            PMF_Db::getTablePrefix(),
+            $_SERVER['REQUEST_TIME'],
+            $_SERVER['REMOTE_ADDR'],
+            $this->getUserId()
+        );
+
+        return $this->config->getDb()->query($update);
+    }
+
+    /**
+     * Checks if the last login attempt from current user failed.
+     *
+     * @return bool
+     */
+    protected function isFailedLastLoginAttempt()
+    {
+        $select = sprintf("
+            SELECT
+                session_timestamp,
+                ip,
+                success
+            FROM
+                %sfaquser
+            WHERE
+                user_id = %d
+            AND
+                session_timestamp < '%s'
+            AND
+                ip = '%s'
+            AND
+                success = 0",
+            PMF_Db::getTablePrefix(),
+            $this->getUserId(),
+            $_SERVER['REQUEST_TIME'] + $this->lockoutTime,
+            $_SERVER['REMOTE_ADDR']
+        );
+
+        $result = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($result) !== 0) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
