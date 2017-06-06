@@ -2,7 +2,7 @@
 /**
  * Ajax interface for attachments.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -56,15 +56,17 @@ $pagination = new PMF_Pagination(
                 <table class="table table-striped">
                     <thead>
                     <tr>
+                        <th>#</th>
                         <th><?php echo $PMF_LANG['msgAttachmentsFilename'] ?></th>
                         <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
                         <th><?php echo $PMF_LANG['msgAttachmentsFilesize'] ?></th>
-                        <th colspan="2"><?php echo $PMF_LANG['msgAttachmentsMimeType'] ?></th>
+                        <th colspan="3"><?php echo $PMF_LANG['msgAttachmentsMimeType'] ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($crumbs as $item): ?>
                         <tr class="att_<?php echo $item->id ?>" title="<?php echo $item->thema ?>">
+                            <td><?php echo $item->id ?></td>
                             <td><?php echo $item->filename ?></td>
                             <td><?php echo $item->record_lang ?></td>
                             <td><?php echo $item->filesize ?></td>
@@ -73,6 +75,12 @@ $pagination = new PMF_Pagination(
                                 <a href="javascript:deleteAttachment(<?php echo $item->id ?>); void(0);"
                                    class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
                                     <i aria-hidden="true" class="fa fa-trash-o"></i>
+                                </a>
+                            </td>
+                            <td>
+                                <a title="<?php echo $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
+                                   href="../index.php?action=artikel&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
+                                  <i aria-hidden="true" class="fa fa-external-link"></i>
                                 </a>
                             </td>
                         </tr>
@@ -87,25 +95,26 @@ $pagination = new PMF_Pagination(
             </div>
         </div>
         
-        <script type="text/javascript">
+        <script>
         /**
          * Ajax call for deleting attachments
          *
          * @param att_id Attachment id
          */
-        function deleteAttachment(att_id)
-        {
-            if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-                $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
-                $.ajax({
-                    type:    "GET",
-                    url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",
-                    data:    {attId: att_id},
-                    success: function(msg) {
-                        $('.att_' + att_id).fadeOut('slow');
-                        $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
-                    }
-                });
-            }
+        function deleteAttachment(att_id) {
+          if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
+            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
+            $.ajax(
+              {
+                type: "GET",
+                url: "index.php?action=ajax&ajax=att&ajaxaction=delete",
+                data: {attId: att_id},
+                success: function (msg) {
+                  $('.att_' + att_id).fadeOut('slow');
+                  $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
+                }
+              }
+            );
+          }
         }
         </script>

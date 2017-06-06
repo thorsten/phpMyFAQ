@@ -5,13 +5,14 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha - 2017-05-
+Version 2.10.0-alpha - 2017-06-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
 - added support for categories on startpage (Thorsten)
 - added image slider template (Thorsten)
+- added improved attachment overview (Thorsten)
 - improved REST/JSON API including login (Thorsten)
 - improved sticky records (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.16 (Thorsten)
