@@ -401,10 +401,7 @@ if ($action != 'main') {
 //
 // Set right column
 //
-// Check in any tags with at least one entry exist
-//
-$hasTags = $oTag->existTagRelations();
-if ($hasTags && (($action == 'artikel') || ($action == 'show'))) {
+if (($action == 'artikel') || ($action == 'show')) {
     $rightSidebarTemplate = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
 } else {
     $rightSidebarTemplate = 'startpage.tpl';
@@ -701,7 +698,7 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
-if ($hasTags && ('artikel' == $action || 'show' == $action || is_numeric($solutionId))) {
+if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
 
     // We need some Links from social networks
     $faqServices = new PMF_Services($faqConfig);
