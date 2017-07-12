@@ -1,9 +1,12 @@
-phpMyFAQ 2.9.8
+phpMyFAQ 2.9.9
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.9 - 2017-08
+-
 
 Version 2.9.8 - 2017-07-12
 - fixed improper restriction (Thorsten)
