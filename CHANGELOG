@@ -5,8 +5,10 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.8 - 2017-06-
+Version 2.9.8 - 2017-07-12
+- fixed improper restriction (Thorsten)
 - add LDAP search in sub groups (Thorsten)
+- updated French translation
 - fixed minor bugs (Thorsten)
 
 Version 2.9.7 - 2017-04-02
