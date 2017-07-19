@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha - 2017-07-19
+Version 2.10.0-alpha2 - 2017-07-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
@@ -16,7 +16,7 @@ Version 2.10.0-alpha - 2017-07-19
 - improved REST/JSON API including login (Thorsten)
 - improved sticky records (Thorsten)
 - updated bundled Symfony ClassLoader to version 2.7.32 (Thorsten)
-- updated bundled SwiftMailer to version 6.0.1 (Thorsten)
+- updated bundled SwiftMailer to version 5.4.8 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
 - updated bundled Font Awesome to version 4.7.0 (Thorsten)
 - updated bundled jQuery to version 3.2.1 (Thorsten)
