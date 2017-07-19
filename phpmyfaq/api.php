@@ -75,6 +75,7 @@ $result = [];
 // Check if user is already authenticated
 //
 if (is_null($faqusername) && is_null($faqpassword)) {
+
     $currentUser = PMF_User_CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
     if (!$currentUser instanceof PMF_User_CurrentUser) {
@@ -85,14 +86,6 @@ if (is_null($faqusername) && is_null($faqpassword)) {
     } else {
         $currentUser = new PMF_User_CurrentUser($faqConfig);
     }
-}
-
-//
-// Check if FAQ should be secured
-//
-if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
-    echo json_encode(array('You are not allowed to view this content.'));
-    $http->sendStatus(403);
 }
 
 //
@@ -238,9 +231,9 @@ switch ($action) {
         $currentUser = new PMF_User_CurrentUser($faqConfig);
         if ($currentUser->login($faqusername, $faqpassword)) {
             if ($currentUser->getStatus() != 'blocked') {
+                $auth = true;
                 $result = [
-                    'loggedin' => true,
-                    'error' => ''
+                    'loggedin' => true
                 ];
             } else {
                 $result = [
@@ -255,6 +248,18 @@ switch ($action) {
             ];
         }
         break;
+}
+
+//
+// Check if FAQ should be secured
+//
+if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
+    echo json_encode(
+        [
+            'error' => 'You are not allowed to view this content.'
+        ]
+    );
+    $http->sendStatus(403);
 }
 
 // print result as JSON

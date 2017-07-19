@@ -1,9 +1,21 @@
 language: php
 
+addons:
+  apt:
+    sources:
+    - sourceline: deb https://dl.yarnpkg.com/debian/ stable main
+      key_url: https://dl.yarnpkg.com/debian/pubkey.gpg
+    packages:
+    - yarn
 php:
   - 5.6
   - 7.0
   - hhvm
+
+cache:
+  yarn: true
+  directories:
+    - node_modules
 
 matrix:
   allow_failures:
@@ -12,12 +24,12 @@ matrix:
 sudo: false
 
 before_install:
+  - yarn global add greenkeeper-lockfile@1
   - composer self-update
 
 install:
   - travis_retry composer install --no-interaction --prefer-source
-  - npm install less grunt-cli -g
-  - npm install
-  - grunt build
+  - bin/yarn install
+  - bin/grunt build
 
 script: ./bin/phpunit --configuration phpunit.xml --coverage-text
