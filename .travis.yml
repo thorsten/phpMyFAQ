@@ -17,7 +17,7 @@ matrix:
   allow_failures:
     - php: hhvm
 
-sudo: false
+sudo: true
 
 before_install:
   - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
