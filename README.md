@@ -27,12 +27,14 @@ Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search
 engine, you need Elasticsearch 2.x as well. Check our detailed requirements on 
 [phpmyfaq.de](http://www.phpmyfaq.de/requirements.php) for more information.
 
+
 ## Installation
 
 ### Package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download.php),
 unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in your browser.
+
 
 ### Git for developers
 
@@ -41,9 +43,9 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
     $ git checkout 2.10
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
-    $ npm install less grunt-cli -g
-    $ npm install
-    $ grunt build
+    $ curl -o- -L https://yarnpkg.com/install.sh | bash
+    $ yarn install
+    $ yarn build
 
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 

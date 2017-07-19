@@ -5,29 +5,35 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha - 2017-06-
+Version 2.10.0-alpha - 2017-07-19
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
-- added support for categories on startpage (Thorsten)
+- added support for categories on homepage (Thorsten)
 - added image slider template (Thorsten)
 - added improved attachment overview (Thorsten)
 - improved REST/JSON API including login (Thorsten)
 - improved sticky records (Thorsten)
-- updated bundled Symfony ClassLoader to version 2.7.16 (Thorsten)
-- updated bundled SwiftMailer to version 5.4.3 (Thorsten)
+- updated bundled Symfony ClassLoader to version 2.7.32 (Thorsten)
+- updated bundled SwiftMailer to version 6.0.1 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
-- updated bundled Font Awesome to version 4.6.3 (Thorsten)
-- updated bundled jQuery to version 3.1.0 (Thorsten)
+- updated bundled Font Awesome to version 4.7.0 (Thorsten)
+- updated bundled jQuery to version 3.2.1 (Thorsten)
 - updated bundled jQuery datePicker plugin to version 1.6.4 (Thorsten)
-- updated bundled Typeahead.js to version 0.11.1 (Thorsten)
+- updated bundled Typeahead.js to version CoreJS Typeahead 1.1.1 (Thorsten)
 - updated bundled Handlebars to version 4.0.5 (Thorsten)
-- updated bundled HighlightJS to version 8.9.1 (Thorsten)
+- updated bundled HighlightJS to version 9.10.0 (Thorsten)
 - updated bundled Mermaid to version 6.0.0 (Thorsten)
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
-- updated bundled TinyMCE to version 4.6.3 (Thorsten)
-- removed Bower, now using NPM only (Thorsten)
+- updated bundled TinyMCE to version 4.6.4 (Thorsten)
+- removed Bower, now using NPM/Yarn only (Thorsten)
+
+Version 2.9.8 - 2017-07-12
+- fixed improper restriction (Thorsten)
+- add LDAP search in sub groups (Thorsten)
+- updated French translation
+- fixed minor bugs (Thorsten)
 
 Version 2.9.7 - 2017-04-02
 - fixed stored XSS vulnerability (Thorsten)

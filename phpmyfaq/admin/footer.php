@@ -138,7 +138,7 @@ if (isset($auth)) {
 
         // Replace values for the template plugin
         template_replace_values : {
-            username: '<?php echo $user->userdata->get('display_name') ?>',
+            username: '<?php echo addslashes($user->userdata->get('display_name')) ?>',
             user_id: '<?php echo $user->userdata->get('user_id') ?>'
         },
 

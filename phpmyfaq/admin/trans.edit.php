@@ -92,6 +92,7 @@ $NPluralsErrorReported = false;
                     <?php echo $PMF_LANG['msgTransToolNoteFileSaving'] ?>
                 </p>
                 <form id="transDiffForm" accept-charset="utf-8">
+                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                 <table class="table table-hover">
                 <tr>
                     <th><?php echo $PMF_LANG['msgVariable'] ?></th>

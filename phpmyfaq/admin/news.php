@@ -111,7 +111,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         <label class="col-lg-2 control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url'];
     ?></label>
                         <div class="col-lg-4">
-                            <input class="form-control" type="url" name="link" id="link" value="http://">
+                            <input class="form-control" type="url" name="link" id="link" placeholder="http://www.example.com/">
                         </div>
                     </div>
 

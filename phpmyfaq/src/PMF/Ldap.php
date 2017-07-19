@@ -120,12 +120,12 @@ class PMF_Ldap
 
         // Set LDAP options
         foreach ($this->config->getLdapOptions() as $key => $value) {
-            if (!ldap_set_option($this->ds, constant($key), (int)$value)) {
+            if (!ldap_set_option($this->ds, $key, (int)$value)) {
                 $this->errno = ldap_errno($this->ds);
                 $this->error = sprintf(
-                    'Unable to set LDAP option "%s" to "%d" (Error: %s).',
+                    'Unable to set LDAP option "%s" to "%s" (Error: %s).',
                     $key,
-                    (int)$value,
+                    $value,
                     ldap_error($this->ds)
                 );
 
@@ -267,7 +267,7 @@ class PMF_Ldap
 
         if ($this->config->get('ldap.ldap_use_memberOf')) {
             $filter = sprintf(
-                '(&%s(memberof=%s))',
+                '(&%s(memberOf:1.2.840.113556.1.4.1941:=%s))',
                 $filter,
                 $this->config->get('ldap.ldap_mapping.memberOf')
             );

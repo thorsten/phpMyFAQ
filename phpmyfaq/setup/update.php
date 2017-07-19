@@ -18,7 +18,7 @@
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2016 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
+define('COPYRIGHT', '&copy; 2001-2017 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
