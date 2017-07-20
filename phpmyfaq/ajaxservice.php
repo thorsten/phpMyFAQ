@@ -126,18 +126,18 @@ switch ($action) {
         $oComment = new PMF_Comment($faqConfig);
         $category = new PMF_Category($faqConfig);
         $type = PMF_Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
-        $faqid = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $newsid = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
+        $faqId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
+        $newsId = PMF_Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
         $username = PMF_Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
         $mail = PMF_Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
         $comment = PMF_Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'news':
-                $id = $newsid;
+                $id = $newsId;
                 break;
             case 'faq';
-                $id = $faqid;
+                $id = $faqId;
                 break;
         }
 
@@ -270,7 +270,7 @@ switch ($action) {
         $category = new PMF_Category($faqConfig);
         $name = PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqid = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
+        $faqId = PMF_Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
         $faqlanguage = PMF_Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
         $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
@@ -302,10 +302,10 @@ switch ($action) {
         if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
             !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
-            ((is_null($faqid) && !is_null($categories['rubrik'])) || (!is_null($faqid) && !is_null($faqlanguage) &&
+            ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqlanguage) &&
             PMF_Language::isASupportedLanguage($faqlanguage)))) {
             $isNew = true;
-            if (!is_null($faqid)) {
+            if (!is_null($faqId)) {
                 $isNew = false;
                 try {
                     $faqsession->userTracking('save_new_translation_entry', 0);
@@ -358,7 +358,7 @@ switch ($action) {
             if ($isNew) {
                 $categories = $categories['rubrik'];
             } else {
-                $newData['id'] = $faqid;
+                $newData['id'] = $faqId;
                 $categories = $category->getCategoryIdsFromArticle($newData['id']);
             }
 
