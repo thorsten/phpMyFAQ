@@ -42,28 +42,34 @@ switch ($ajaxAction) {
         $uploadFile = basename($_FILES['upload']['name']);
         $isUploaded = false;
         $height = $width = 0;
+        $validFileExtensions = [ 'gif', 'jpg', 'jpeg', 'png' ];
 
         if ($csrfOkay) {
             if (is_uploaded_file($uploadedFile['tmp_name']) &&
                 $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')
             ) {
 
-                $info = getimagesize($uploadedFile['tmp_name']);
+                $fileInfo = getimagesize($uploadedFile['tmp_name']);
+                $fileExtension = pathinfo($uploadFile, PATHINFO_EXTENSION);;
 
-                if (false === $info) {
+                if (false === $fileInfo) {
                     $isUploaded = false;
                 }
 
-                if (($info[2] !== IMAGETYPE_GIF) &&
-                    ($info[2] !== IMAGETYPE_JPEG) &&
-                    ($info[2] !== IMAGETYPE_PNG)) {
+                if (($fileInfo[2] !== IMAGETYPE_GIF) &&
+                    ($fileInfo[2] !== IMAGETYPE_JPEG) &&
+                    ($fileInfo[2] !== IMAGETYPE_PNG)) {
                     $isUploaded = false;
                 } else {
                     $isUploaded = true;
                 }
 
-                if ($info) {
-                    list($width, $height) = $info;
+                if (!in_array($fileExtension, $validFileExtensions)) {
+                    $isUploaded = false;
+                }
+
+                if ($fileInfo && $isUploaded) {
+                    list($width, $height) = $fileInfo;
                     if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadFile)) {
                         $isUploaded = true;
                     } else {
