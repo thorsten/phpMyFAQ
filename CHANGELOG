@@ -6,7 +6,11 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.9 - 2017-08
--
+- updated bundled Bootstrap to version 3.3.7 (Thorsten)
+- updated bundled Font Awesome to version 4.7.0 (Thorsten)
+- updated bundled TinyMCE to version 4.5.7 (Thorsten)
+- updated bundled HighlightJS to version 9.12.0 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.8 - 2017-07-12
 - fixed improper restriction (Thorsten)
