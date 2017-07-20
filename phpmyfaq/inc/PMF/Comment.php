@@ -221,8 +221,8 @@ class PMF_Comment
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
-            $commentData['usermail'],
-            $commentData['comment'],
+            $this->config->getDb()->escape($commentData['usermail']),
+            $this->config->getDb()->escape($commentData['comment']),
             $commentData['date'],
             $commentData['helped']
         );
