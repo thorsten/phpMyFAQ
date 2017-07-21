@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $loginMessage = '';
 if (!is_null($error)) {
-    $loginMessage = '<p class="alert alert-danger">'.$error.'</p>';
+    $loginMessage = '<p class="alert alert-danger">'.$error.'<br>('.implode($user->errors, ' ').')</p>';
 }
 
 try {

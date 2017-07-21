@@ -71,7 +71,7 @@ class PMF_User
     const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
     const ERROR_USER_NOWRITABLE = 'No authentication object is writable. ';
     const ERROR_USER_NO_LOGIN_DATA = 'A username and password must be provided. ';
-    const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You are currently locked out.';
+    const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are temporarily blocked. Please try again later.';
 
     const STATUS_USER_PROTECTED = 'User account is protected. ';
     const STATUS_USER_BLOCKED = 'User account is blocked. ';
@@ -807,7 +807,7 @@ class PMF_User
     }
 
     /**
-     * returns true if auth is a valid authentication object.
+     * Returns true if auth is a valid authentication object.
      *
      * @param PMF_Auth $auth Auth object
      *
@@ -815,11 +815,9 @@ class PMF_User
      */
     protected function checkAuth($auth)
     {
-        $methods = array('checkPassword');
+        $methods = ['checkPassword'];
         foreach ($methods as $method) {
-            if (!method_exists($auth, strtolower($method))) {
-                $this->errors[] = self::ERROR_USER_NO_AUTH;
-
+            if (!method_exists($auth, $method)) {
                 return false;
                 break;
             }
