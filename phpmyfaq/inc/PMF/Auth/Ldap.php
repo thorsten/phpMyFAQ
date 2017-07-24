@@ -94,7 +94,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
         parent::__construct($this->_config);
 
         if (0 === count($this->ldapServer)) {
-            throw new PMF_Exception('An error ocurred while contacting LDAP: No configruation found.');
+            throw new PMF_Exception('An error ocurred while contacting LDAP: No configuration found.');
         }
 
         $this->ldap = new PMF_Ldap($this->_config);
