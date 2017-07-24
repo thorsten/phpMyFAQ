@@ -64,8 +64,6 @@ switch ($ajaxAction) {
         $faq->getAllRecords();
         $result = $esInstance->bulkIndex($faq->faqRecords);
 
-        var_dump($result);
-
         break;
 }
 

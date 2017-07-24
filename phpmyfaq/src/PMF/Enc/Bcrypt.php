@@ -41,11 +41,6 @@ class PMF_Enc_Bcrypt extends PMF_Enc
      */
     public function encrypt($password)
     {
-        $options = [
-            'cost' => 42,
-            'salt' => $this->salt,
-        ];
-
-        return password_hash($password, PASSWORD_BCRYPT, $options);
+        return password_hash($password, PASSWORD_BCRYPT);
     }
 }
