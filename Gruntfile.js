@@ -113,6 +113,34 @@ module.exports = function (grunt) {
             dest: 'phpmyfaq/assets/js/libs'
           }
         ]
+      },
+      bxslider: {
+        files: [
+          {
+            expand: true,
+            src: 'node_modules/bxslider/dist/jquery.bxslider.css',
+            flatten: true,
+            dest: 'phpmyfaq/assets/js/libs'
+          },
+          {
+            expand: true,
+            src: 'node_modules/bxslider/dist/jquery.bxslider.js',
+            flatten: true,
+            dest: 'phpmyfaq/assets/js/libs'
+          },
+          {
+            expand: true,
+            src: 'node_modules/bxslider/dist/images/bx_loader.gif',
+            flatten: true,
+            dest: 'phpmyfaq/assets/template/default/css/images'
+          },
+          {
+            expand: true,
+            src: 'node_modules/bxslider/dist/images/controls.png',
+            flatten: true,
+            dest: 'phpmyfaq/assets/template/default/css/images'
+          }
+        ]
       }
     },
     concat: {
@@ -136,6 +164,7 @@ module.exports = function (grunt) {
           'node_modules/handlebars/dist/handlebars.js',
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
+          'node_modules/bxslider/dist/jquery.bxslider.js',
           'phpmyfaq/assets/js/autosave.js',
           'phpmyfaq/assets/js/category.js',
           'phpmyfaq/assets/js/comments.js',

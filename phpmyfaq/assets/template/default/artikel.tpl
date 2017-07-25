@@ -148,7 +148,7 @@
                               placeholder="{msgYourComment}"></textarea>
 
                     {captchaFieldset}
-                    
+
                     <div class="pmf-buttons clearfix">
                         <button class="btn btn-primary" id="submitcomment" type="submit">
                             {msgNewContentSubmit}
@@ -177,5 +177,6 @@
                 $('pre code').each(function(i, block) {
                     hljs.highlightBlock(block);
                 });
+                $('.bxslider').bxSlider();
             });
         </script>
