@@ -96,12 +96,13 @@
 
     <div class="pmf-wrapper pmf-subheader">
         <div class="container">
+            <!--
             <div class="pmf-breadcrumb">
                 [breadcrumb]
                 {breadcrumbHeadline}
                 [/breadcrumb]
             </div>
-
+            -->
             <div class="pmf-searchbox">
                 <form role="search" id="search" action="{writeSendAdress}" method="get">
                     <input type="hidden" name="action" value="search">

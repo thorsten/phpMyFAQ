@@ -194,6 +194,7 @@ switch ($action) {
     <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="assets/css/style.css?v=1">
 
     <script src="../assets/js/modernizr.min.js"></script>

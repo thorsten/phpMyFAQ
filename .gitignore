@@ -54,8 +54,8 @@ phpmyfaq/assets/js/libs
 phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js
 phpmyfaq/assets/js/phpmyfaq.min.js
-phpmyfaq/assets/template/default/css/*
-phpmyfaq/assets/template/default/fonts/*
+phpmyfaq/assets/themes/default/css/*
+phpmyfaq/assets/themes/default/fonts/*
 
 # Composer related stuff
 bin/*
