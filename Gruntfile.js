@@ -78,7 +78,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: 'node_modules/font-awesome/fonts/',
             src: '**',
-            dest: 'phpmyfaq/assets/template/default/fonts/'
+            dest: 'phpmyfaq/assets/themes/default/fonts/'
           }
         ]
       },
@@ -94,7 +94,7 @@ module.exports = function (grunt) {
             expand: true,
             cwd: 'node_modules/bootstrap/fonts/',
             src: '**',
-            dest: 'phpmyfaq/assets/template/default/fonts/'
+            dest: 'phpmyfaq/assets/themes/default/fonts/'
           }
         ]
       },
@@ -132,13 +132,13 @@ module.exports = function (grunt) {
             expand: true,
             src: 'node_modules/bxslider/dist/images/bx_loader.gif',
             flatten: true,
-            dest: 'phpmyfaq/assets/template/default/css/images'
+            dest: 'phpmyfaq/assets/themes/default/css/images'
           },
           {
             expand: true,
             src: 'node_modules/bxslider/dist/images/controls.png',
             flatten: true,
-            dest: 'phpmyfaq/assets/template/default/css/images'
+            dest: 'phpmyfaq/assets/themes/default/css/images'
           }
         ]
       }
@@ -210,16 +210,16 @@ module.exports = function (grunt) {
         files: {
           'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
-          'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
-          //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/less/style.less'
+          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/less/style.rtl.less'
         }
       },
       production: {
         files: {
           'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
-          'phpmyfaq/assets/template/default/css/style.css': 'phpmyfaq/assets/template/default/less/style.less'
-          //'phpmyfaq/assets/template/default/css/style.rtl.css': 'phpmyfaq/assets/template/default/less/style.rtl.less'
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/less/style.less'
+          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/less/style.rtl.less'
         },
         compress: true
       }
@@ -233,8 +233,8 @@ module.exports = function (grunt) {
         files: {
           'phpmyfaq/admin/assets/css/style.min.css': 'phpmyfaq/admin/assets/css/style.css',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/css/style.rtl.css',
-          'phpmyfaq/assets/template/default/css/style.min.css': ['phpmyfaq/assets/template/default/css/style.css']
-          //'phpmyfaq/assets/template/default/css/style.rtl.min.css': ['phpmyfaq/assets/template/default/css/style.rtl.css']
+          'phpmyfaq/assets/themes/default/css/style.min.css': ['phpmyfaq/assets/themes/default/css/style.css']
+          //'phpmyfaq/assets/themes/default/css/style.rtl.min.css': ['phpmyfaq/assets/themes/default/css/style.rtl.css']
         }
       }
     },
@@ -260,7 +260,7 @@ module.exports = function (grunt) {
         }
       },
       css: {
-        files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/template/default/less/*.less'],
+        files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/themes/default/less/*.less'],
         tasks: ['less', 'cssmin'],
         options: {
           livereload: true

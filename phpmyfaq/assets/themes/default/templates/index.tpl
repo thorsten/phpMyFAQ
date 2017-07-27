@@ -21,9 +21,10 @@
     <meta property="og:description" content="{metaDescription}">
     <meta property="og:image" content="">
 
-    <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
-    <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
+    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="{baseHref}assets/themes/{tplSetName}/css/{stylesheet}.min.css?v=1">
+    <link rel="shortcut icon" href="{baseHref}assets/themes/{tplSetName}/img/favicon.ico">
+    <link rel="apple-touch-icon" href="{baseHref}assets/themes/{tplSetName}/img/apple-touch-icon.png">
     <link rel="canonical" href="{currentPageUrl}">
 
     <script src="{baseHref}assets/js/modernizr.min.js"></script>
@@ -50,7 +51,7 @@
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
             <a id="logo" title="{header}" href="{faqHome}">
-                <img src="{baseHref}assets/template/{tplSetName}/img/logo.png" alt="phpMyFAQ">
+                <img src="{baseHref}assets/themes/{tplSetName}/img/logo.png" alt="phpMyFAQ">
             </a>
 
             <div id="mobile-nav-toggle" class="pull-right">
@@ -62,12 +63,13 @@
             <nav class="pull-right pmf-nav">
                 <div class="collapse navbar-collapse">
                     <ul class="nav nav-pills navbar-nav">
+                        <!--
                         <li class="{activeSearch}">{msgSearch}</li>
                         <li class="{activeAllCategories}">{allCategories}</li>
                         <li class="{activeAddContent}">{msgAddContent}</li>
                         <li class="{activeAddQuestion}">{msgQuestion}</li>
                         <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
-
+                        -->
                         <li class="dropdown {activeLogin}">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                                 {msgLoginUser}

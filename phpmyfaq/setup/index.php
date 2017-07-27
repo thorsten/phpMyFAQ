@@ -80,7 +80,7 @@ $psr4Loader->register();
     <script src="../assets/js/phpmyfaq.min.js"></script>
     <script src="../assets/js/setup.js"></script>
 
-    <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
+    <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
 
 </head>
 <body>

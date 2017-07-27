@@ -134,7 +134,7 @@ if (isset($auth)) {
         save_onsavecallback: "phpMyFAQSave",
 
         // phpMyFAQ CSS
-        content_css: '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
+        content_css: '../assets/themes/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
 
         // Replace values for the template plugin
         template_replace_values : {

@@ -57,8 +57,8 @@
     12. [Configuration][53]
     13. [Multisite Configuration][54]
 6.  **[Customizing phpMyFAQ][55]**
-    1.  [The file assets/template/default/index.tpl][56]
-    2.  [The file assets/template/default/style.css][57]
+    1.  [The file assets/themes/default/templates/index.tpl][56]
+    2.  [The file assets/themes/default/css/style.css][57]
     3.  [More Templates][58]
 7.  **[Customizing phpMyFAQ][59]**
     1.  [Creating custom layout][60]
@@ -1174,7 +1174,7 @@ To backup the whole data located on your web server you can run our simple backu
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit 
 your own needs. The most important files for phpMyFAQ's default layout can be found in the directory 
-*assets/template/default/*. All original templates are valid HTML5 and we don't use tables for layout reasons.
+*assets/themes/default/*. All original templates are valid HTML5 and we don't use tables for layout reasons.
 
 **Note:** You can change the layout of the admin area using the CSS file *admin/css/style.css*.
 
@@ -1182,7 +1182,7 @@ your own needs. The most important files for phpMyFAQ's default layout can be fo
 
 * * *
 
-**6.1. <a id="6.1"></a>The file assets/template/default/index.tpl**
+**6.1. <a id="6.1"></a>The file assets/themes/default/templates/index.tpl**
 
 The default layout of phpMyFAQ is saved in the **index.tpl** file. This is a normal HTML5 file including some variables 
 in curly brackets, serving as placeholders for content.
@@ -1199,7 +1199,7 @@ You can change the template as you wish, but you may want to keep the original t
 
 * * *
 
-**6.2. <a id="6.2"></a>The file assets/template/default/css/style.css**
+**6.2. <a id="6.2"></a>The file assets/themes/default/css/style.css**
 
 All formatting such as fonts and the like can be modified in the CSS-file **style.css** for left-to-right languages and 
 in **style.rtl.css** for left-to-right languages.
@@ -1229,8 +1229,8 @@ is a templates/default directory where the default layouts get shipped.
 
 Follow these steps to create a custom template set:
 
-*   copy the directory assets/templates/default to assets/templates/<custom\_template\_set>
-*   adjust template files in assets/templates/<custom\_template\_set> to fit your needs
+*   copy the directory assets/themes/default to assets/themes/<custom\_template\_set>
+*   adjust template files in assets/themes/<custom\_template\_set> to fit your needs
 *   activate <custom\_template\_set> within Admin->Config->Main
 
 **Note:** There is a magic variable *{tplSetName}* containing the name of the actual layout available in each template 

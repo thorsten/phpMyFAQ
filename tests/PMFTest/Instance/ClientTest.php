@@ -66,9 +66,9 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
         $this->PMF_Instance_Client = null;
         @unlink(PMF_TEST_DIR . '/constants.test.php');
 
-        if (is_dir(PMF_TEST_DIR . '/assets/template/default/')) {
+        if (is_dir(PMF_TEST_DIR . '/assets/themes/default/')) {
             $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/template/default/'),
+                new RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/themes/default/'),
                 RecursiveIteratorIterator::SELF_FIRST
             );
             foreach ($files as $file) {
@@ -91,6 +91,6 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Instance_Client->copyTemplateFolder(PMF_TEST_DIR);
 
-        $this->assertFileExists(PMF_TEST_DIR . '/assets/template/default/index.tpl');
+        $this->assertFileExists(PMF_TEST_DIR . '/assets/themes/default/index.tpl');
     }
 }

@@ -1,8 +1,5 @@
 language: php
 
-cache:
-  yarn: true
-
 php:
   - 5.6
   - 7.0
@@ -30,7 +27,7 @@ before_install:
 
 install:
   - travis_retry composer install --no-interaction --prefer-source
-  - yarn install
+  - npm install
   - grunt build
 
 script: ./bin/phpunit --configuration phpunit.xml --coverage-text

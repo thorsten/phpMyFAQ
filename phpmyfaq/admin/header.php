@@ -206,8 +206,8 @@ switch ($action) {
     <script src="../assets/js/autosave.js" async></script>
 <?php endif; ?>
 
-    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/template/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body dir="<?php echo $PMF_LANG['dir']; ?>">
 

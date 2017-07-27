@@ -60,7 +60,7 @@ require PMF_ROOT_DIR.'/config/database.php';
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
+    <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
 </head>
 <body>
 

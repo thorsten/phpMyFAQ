@@ -158,7 +158,7 @@ class PMF_Db
                 <meta charset="utf-8">
                 <title>Fatal phpMyFAQ Error</title>
                 <style type="text/css">
-                @import url("assets/template/default/css/style.min.css");
+                @import url("assets/themes/default/css/style.min.css");
                 </style>
             </head>
             <body>

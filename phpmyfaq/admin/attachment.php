@@ -88,7 +88,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="shortcut icon" href="../assets/template/<?php echo PMF_Template::getTplSetName() ?>/favicon.ico">
+    <link rel="shortcut icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName() ?>/favicon.ico">
 </head>
 <body class="attachments">
 

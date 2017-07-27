@@ -159,7 +159,7 @@ class PMF_Instance_Client extends PMF_Instance
 
     /**
      * Copies a defined template folder to a new client instance, by default
-     * the default template located at ./assets/template/default/ will be copied.
+     * the default template located at ./assets/themes/default/ will be copied.
      *
      * @param string $dest        Destination folder
      * @param string $templateDir Template folder
@@ -168,8 +168,8 @@ class PMF_Instance_Client extends PMF_Instance
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
-        $sourceTpl = $this->fileSystem->getRootPath().'/assets/template/'.$templateDir;
-        $destTpl = $dest.'/assets/template/';
+        $sourceTpl = $this->fileSystem->getRootPath().'/assets/themes/'.$templateDir;
+        $destTpl = $dest.'/assets/themes/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }
