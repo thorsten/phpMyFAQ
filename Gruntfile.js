@@ -55,7 +55,7 @@ module.exports = function (grunt) {
           {
             expand: true,
             cwd: 'node_modules/tinymce/skins/',
-            src: '**/*.!(less)',
+            src: '**/*.!(scss)',
             dest: 'phpmyfaq/admin/assets/js/editor/skins/'
           },
           {
@@ -204,22 +204,25 @@ module.exports = function (grunt) {
         'phpmyfaq/assets/js/functions.js'
       ]
     },
-    less: {
+    sass: {
+      options: {
+        sourceMap: true
+      },
       development: {
         banner: '<%= banner %>',
         files: {
-          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
-          //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
-          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/less/style.less'
-          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/less/style.rtl.less'
+          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
+          //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss'
+          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
         }
       },
       production: {
         files: {
-          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/less/style.less',
-          //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/less/style.rtl.less',
-          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/less/style.less'
-          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/less/style.rtl.less'
+          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
+          //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss'
+          //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
         },
         compress: true
       }
@@ -260,8 +263,8 @@ module.exports = function (grunt) {
         }
       },
       css: {
-        files: ['phpmyfaq/admin/assets/less/*.less', 'phpmyfaq/assets/themes/default/less/*.less'],
-        tasks: ['less', 'cssmin'],
+        files: ['phpmyfaq/admin/assets/scss/*.scss', 'phpmyfaq/assets/themes/default/scss/*.scss'],
+        tasks: ['sass', 'cssmin'],
         options: {
           livereload: true
         }
@@ -270,10 +273,10 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'less:development', 'cssmin', 'modernizr']);
+  grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
 
   // Build task
-  grunt.registerTask('build', ['copy', 'concat', 'uglify', 'less:production', 'cssmin', 'modernizr']);
+  grunt.registerTask('build', ['copy', 'concat', 'uglify', 'sass:production', 'cssmin', 'modernizr']);
 
   // Watcher
   grunt.event.on('watch', function (action, filepath, target) {

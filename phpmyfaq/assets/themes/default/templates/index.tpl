@@ -160,7 +160,6 @@
             <div class="row">
                 <div class="col-md-9">
                     <ul class="footer-menu">
-                        <li>{userOnline}</li>
                         <li>{faqOverview}</li>
                         <li>{showSitemap}</li>
                         <li>{msgGlossary}</li>

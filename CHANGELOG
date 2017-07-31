@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha2 - 2017-07-
+Version 2.10.0-alpha2 - 2017-08-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
@@ -18,6 +18,7 @@ Version 2.10.0-alpha2 - 2017-07-
 - updated bundled Symfony ClassLoader to version 2.7.32 (Thorsten)
 - updated bundled SwiftMailer to version 5.4.8 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
+- updated bundled Bootstrap to version 4.0.0-alpha6 (Thorsten)
 - updated bundled Font Awesome to version 4.7.0 (Thorsten)
 - updated bundled jQuery to version 3.2.1 (Thorsten)
 - updated bundled jQuery datePicker plugin to version 1.6.4 (Thorsten)
@@ -28,6 +29,7 @@ Version 2.10.0-alpha2 - 2017-07-
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
 - updated bundled TinyMCE to version 4.6.4 (Thorsten)
 - removed Bower, now using NPM/Yarn only (Thorsten)
+- switch CSS development from LESS to SCSS (Thorsten)
 
 Version 2.9.9 - 2017-08
 - updated bundled Bootstrap to version 3.3.7 (Thorsten)
