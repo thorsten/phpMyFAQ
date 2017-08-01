@@ -49,7 +49,7 @@
                 <hr>
                 <small>
                     Template/CSS by <a href="http://www.rinne.info">Thorsten Rinne</a><br>
-                    Original phpMyFAQ logo by <a href="http://www.lieven.be/">Lieven Op De Beeck</a><br>
+                    Original phpMyFAQ logo by <b>Lieven Op De Beeck</b><br>
                     <a href="https://geo.itunes.apple.com/de/app/phpmyfaq/id977896957?mt=8" style="display:inline-block;overflow:hidden;background:url(http://linkmaker.itunes.apple.com/images/badges/en-us/badge_appstore-lrg.svg) no-repeat;width:165px;height:40px;margin:10px;"></a><br>
                     &copy; 2001 - 2017 by <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> under the <a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License</a>.
                     All rights reserved.<br>
