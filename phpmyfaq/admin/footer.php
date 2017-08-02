@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <a href="http://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
                 Follow us on <a href="http://twitter.com/phpMyFAQ"><i aria-hidden="true" class="fa fa-twitter"></i></a> |
                 <i aria-hidden="true" class="fa fa-apple"></i> Available on the
-                <a target="_blank" href="https://itunes.apple.com/en/app/phpmyfaq/id977896957">App Store</a> |
+                <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957">App Store</a> |
                 &copy; 2001-<?php echo date('Y') ?> <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
             </p>
         </div>

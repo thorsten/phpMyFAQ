@@ -74,9 +74,9 @@
         [enableWysiwygEditor]
         <script src="admin/assets/js/editor/tinymce.min.js?{{ currentTimestamp }}"></script>
         <script>
-            $(document).ready(function() {{
-                if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {{
-                    tinyMCE.init({{
+            $(document).ready(function() {
+                if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
+                    tinyMCE.init({
                         // General options
                         mode     : 'exact',
                         language : 'en',
@@ -102,51 +102,51 @@
 
                         // Formatting
                         style_formats: [
-                            {{  title: 'Headers', items: [
-                                {{  title: 'h1', block: 'h1'  }},
-                                {{  title: 'h2', block: 'h2'  }},
-                                {{  title: 'h3', block: 'h3'  }},
-                                {{  title: 'h4', block: 'h4'  }},
-                                {{  title: 'h5', block: 'h5'  }},
-                                {{  title: 'h6', block: 'h6'  }}
-                            ] }},
+                            {  title: 'Headers', items: [
+                                {  title: 'h1', block: 'h1'  },
+                                {  title: 'h2', block: 'h2'  },
+                                {  title: 'h3', block: 'h3'  },
+                                {  title: 'h4', block: 'h4'  },
+                                {  title: 'h5', block: 'h5'  },
+                                {  title: 'h6', block: 'h6'  }
+                            ] },
 
-                            {{  title: 'Blocks', items: [
-                                {{  title: 'p', block: 'p'  }},
-                                {{  title: 'div', block: 'div'  }},
-                                {{  title: 'pre', block: 'pre'  }},
-                                {{  title: 'code', block: 'code'  }}
-                            ] }},
+                            {  title: 'Blocks', items: [
+                                {  title: 'p', block: 'p'  },
+                                {  title: 'div', block: 'div'  },
+                                {  title: 'pre', block: 'pre'  },
+                                {  title: 'code', block: 'code'  }
+                            ] },
 
-                            {{  title: 'Containers', items: [
-                                {{  title: 'blockquote', block: 'blockquote', wrapper: true  }},
-                                {{  title: 'figure', block: 'figure', wrapper: true  }}
-                            ] }}
+                            {  title: 'Containers', items: [
+                                {  title: 'blockquote', block: 'blockquote', wrapper: true  },
+                                {  title: 'figure', block: 'figure', wrapper: true  }
+                            ] }
                         ],
 
                         visualblocks_default_state: true,
                         end_container_on_empty_block: true,
                         extended_valid_elements : "code[class],video[*],audio[*],source[*]",
                         removeformat : [
-                            {{  selector : '*', attributes : ['style'], split : false, expand : false, deep : true  }}
+                            {  selector : '*', attributes : ['style'], split : false, expand : false, deep : true  }
                         ],
                         importcss_append: true,
-                     }});
-                 }}
-             }});
+                     });
+                 }
+             });
         </script>
         [/enableWysiwygEditor]
 
         <script>
-            $(document).ready(function() {{
-                $('#submitfaq').click(function() {{
-                    if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {{
+            $(document).ready(function() {
+                $('#submitfaq').click(function() {
+                    if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
                         tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
                         document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
-                     }}
+                     }
                     saveFormValues('savefaq', 'faq');
-                 }});
-                $('form#formValues').submit(function() {{  return false;  }});
-             }});
+                 });
+                $('form#formValues').submit(function() { return false; });
+             });
         </script>
 

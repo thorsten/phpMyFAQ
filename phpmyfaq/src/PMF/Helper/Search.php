@@ -141,10 +141,11 @@ class PMF_Helper_Search extends PMF_Helper
                 );
 
                 $link = new PMF_Link($currentUrl, $this->_config);
+                $link->itemTitle = $result->question;
                 $faq = new stdClass();
                 $faq->categoryName = $this->Category->getPath($result->category_id);
                 $faq->faqQuestion = PMF_Utils::chopString($result->question, 15);
-                $faq->faqLink = $link->toUri();
+                $faq->faqLink = $link->toString();
 
                 $results['results'][] = $faq;
             }
