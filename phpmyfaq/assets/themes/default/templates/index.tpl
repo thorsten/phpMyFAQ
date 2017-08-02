@@ -1,57 +1,98 @@
 <!doctype html>
-<!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
+<!--[if IE 9 ]> <html lang="{{ metaLanguage }}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{{ metaLanguage }}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
-    <title>{title}</title>
-    <base href="{baseHref}">
+    <title>{{ title }}</title>
+    <base href="{{ baseHref }}">
 
-    <meta name="description" content="{metaDescription}">
-    <meta name="keywords" content="{metaKeywords}">
-    <meta name="author" content="{metaPublisher}">
+    <meta name="description" content="{{ metaDescription }}">
+    <meta name="keywords" content="{{ metaKeywords }}">
+    <meta name="author" content="{{ metaPublisher }}">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="robots" content="{metaRobots}">
+    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+    <meta name="robots" content="{{ metaRobots }}">
     <meta name="revisit-after" content="7 days">
     <meta name="apple-itunes-app" content="app-id=977896957">
 
     <!-- Share on Facebook -->
-    <meta property="og:title" content="{title}">
-    <meta property="og:description" content="{metaDescription}">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ metaDescription }}">
     <meta property="og:image" content="">
 
     <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{baseHref}assets/themes/{tplSetName}/css/{stylesheet}.min.css?v=1">
-    <link rel="shortcut icon" href="{baseHref}assets/themes/{tplSetName}/img/favicon.ico">
-    <link rel="apple-touch-icon" href="{baseHref}assets/themes/{tplSetName}/img/apple-touch-icon.png">
-    <link rel="canonical" href="{currentPageUrl}">
+    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.min.css?v=1">
+    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
+    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
+    <link rel="canonical" href="{{ currentPageUrl }}">
 
-    <script src="{baseHref}assets/js/modernizr.min.js"></script>
-    <script src="{baseHref}assets/js/phpmyfaq.min.js"></script>
+    <script src="{{ baseHref }}assets/js/modernizr.min.js"></script>
+    <script src="{{ baseHref }}assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{baseHref}feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{baseHref}feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{baseHref}feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{baseHref}feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
+    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
+    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
+    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/latest/rss.php">
+    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/openquestions/rss.php">
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
 
     <script>
-        if (self === top) {
+        if (self === top) {{ {{
             document.documentElement.style.display = 'block';
-        } else {
+         }} else {{ {{
             top.location = self.location;
-        }
+         }}
     </script>
-    <style> html{display:none;} </style>
+    <style> html{{ display:none; }} </style>
 </head>
-<body dir="{dir}">
+<body dir="{{ dir }}">
+
+<header>
+    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" title="{{ header }}" href="{{ faqHome }}">
+            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+        </a>
+
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+            <div class="navbar-nav mr-auto">
+                <li class="nav-item {{ activeSearch }}">{{ msgSearch }}</li>
+                <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
+                <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
+                <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+                <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
+
+                <li class="nav-item dropdown {{ activeLogin }}">
+                    <a class="nav-link dropdown-toggle" id="pmf-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
+                        {{ msgLoginUser }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="pmf-dropdown">
+                        [notLoggedIn]
+                        <li>{{ msgRegisterUser }}</li>
+                        <li>{{ msgLoginUser }}</li>
+                        [/notLoggedIn]
+                        [userloggedIn]
+                        <li>{{ msgUserControlDropDown }}</li>
+                        <li>{{ msgUserControl }}</li>
+                        <li>{{ msgLogoutUser }}</li>
+                        [/userloggedIn]
+                    </div>
+                </li>
+
+        </div>
+    </nav>
+</header>
+
+
+
 
 <header>
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
-            <a id="logo" title="{header}" href="{faqHome}">
-                <img src="{baseHref}assets/themes/{tplSetName}/img/logo.png" alt="phpMyFAQ">
+            <a id="logo" title="{{ header }}" href="{{ faqHome }}">
+                <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
             </a>
 
             <div id="mobile-nav-toggle" class="pull-right">
@@ -63,27 +104,27 @@
             <nav class="pull-right pmf-nav">
                 <div class="collapse navbar-collapse">
                     <ul class="nav nav-pills navbar-nav">
-                        <!--
-                        <li class="{activeSearch}">{msgSearch}</li>
-                        <li class="{activeAllCategories}">{allCategories}</li>
-                        <li class="{activeAddContent}">{msgAddContent}</li>
-                        <li class="{activeAddQuestion}">{msgQuestion}</li>
-                        <li class="{activeOpenQuestions}">{msgOpenQuestions}</li>
-                        -->
-                        <li class="dropdown {activeLogin}">
+
+                        <li class="{{ activeSearch }}">{{ msgSearch }}</li>
+                        <li class="{{ activeAllCategories }}">{{ allCategories }}</li>
+                        <li class="{{ activeAddContent }}">{{ msgAddContent }}</li>
+                        <li class="{{ activeAddQuestion }}">{{ msgQuestion }}</li>
+                        <li class="{{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
+
+                        <li class="dropdown {{ activeLogin }}">
                             <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {msgLoginUser}
+                                {{ msgLoginUser }}
                                 <b class="caret"></b>
                             </a>
                             <ul class="dropdown-menu">
                                 [notLoggedIn]
-                                <li>{msgRegisterUser}</li>
-                                <li>{msgLoginUser}</li>
+                                <li>{{ msgRegisterUser }}</li>
+                                <li>{{ msgLoginUser }}</li>
                                 [/notLoggedIn]
                                 [userloggedIn]
-                                <li>{msgUserControlDropDown}</li>
-                                <li>{msgUserControl}</li>
-                                <li>{msgLogoutUser}</li>
+                                <li>{{ msgUserControlDropDown }}</li>
+                                <li>{{ msgUserControl }}</li>
+                                <li>{{ msgLogoutUser }}</li>
                                 [/userloggedIn]
                             </ul>
                         </li>
@@ -99,18 +140,18 @@
             <!--
             <div class="pmf-breadcrumb">
                 [breadcrumb]
-                {breadcrumbHeadline}
+                {{ breadcrumbHeadline }}
                 [/breadcrumb]
             </div>
             -->
             <div class="pmf-searchbox">
-                <form role="search" id="search" action="{writeSendAdress}" method="get">
+                <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
                     <input type="hidden" name="action" value="search">
-                    <button class="searchbutton" type="submit" aria-label="{searchBox}">
+                    <button class="searchbutton" type="submit" aria-label="{{ searchBox }}">
                         <i aria-hidden="true" class="fa fa-search"></i>
                     </button>
                     <input type="text" class="searchfield typeahead" name="search" id="searchbox"
-                           autocomplete="off" placeholder="{searchBox} ...">
+                           autocomplete="off" placeholder="{{ searchBox }} ...">
                 </form>
             </div>
         </div>
@@ -123,23 +164,23 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 pmf-maincontent">
-                {writeContent}
+                {{ writeContent }}
             </div>
             <aside class="col-md-4 pmf-aside">
 
-                {rightBox}
+                {{ rightBox }}
 
                 <div class="pmf-aside-widget">
                     <header>
-                        <h3>{stickyRecordsHeader}</h3>
+                        <h3>{{ stickyRecordsHeader }}</h3>
                     </header>
                     <div class="pmf-aside-widget-body">
                         <ul class="pmf-list">
                             [stickyRecordsList]
                             <li>
-                                <a class="sticky-faqs" title="{stickyTitle}" href="{stickyUrl}"
+                                <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
                                    data-toggle="tooltip" data-placement="top">
-                                    {stickyPreview}
+                                    {{ stickyPreview }}
                                 </a>
                             </li>
                             [/stickyRecordsList]
@@ -160,15 +201,15 @@
             <div class="row">
                 <div class="col-md-9">
                     <ul class="footer-menu">
-                        <li>{faqOverview}</li>
-                        <li>{showSitemap}</li>
-                        <li>{msgGlossary}</li>
-                        <li>{msgContact}</li>
+                        <li>{{ faqOverview }}</li>
+                        <li>{{ showSitemap }}</li>
+                        <li>{{ msgGlossary }}</li>
+                        <li>{{ msgContact }}</li>
                     </ul>
                 </div>
                 <div class="col-md-3">
-                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                        {switchLanguages}
+                    <form action="{{ writeLangAdress }}" method="post" class="pull-right" accept-charset="utf-8">
+                        {{ switchLanguages }}
                         <input type="hidden" name="action" value="" />
                     </form>
                 </div>
@@ -179,7 +220,7 @@
     <div class="pmf-wrapper copyright">
         <div class="container">
             <div class="pull-right">
-                {copyright}
+                {{ copyright }}
             </div>
         </div>
     </div>
@@ -189,10 +230,10 @@
         <h3>DEBUG INFORMATION</h3>
         <hr>
         <h4>EXCEPTIONS</h4>
-        {debugExceptions}
+        {{ debugExceptions }}
         <hr>
         <h4>DATABASE QUERIES</h4>
-        {debugQueries}
+        {{ debugQueries }}
     </div>
     [/debugMode]
 

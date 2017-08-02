@@ -1,55 +1,55 @@
 <!doctype html>
-<!--[if IE 9 ]> <html lang="{metaLanguage}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{metaLanguage}" class="no-js"> <!--<![endif]-->
+<!--[if IE 9 ]> <html lang="{{ metaLanguage }}" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{{ metaLanguage }}" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
 
-    <title>{title}</title>
-    <base href="{baseHref}">
+    <title>{{ title }}</title>
+    <base href="{{ baseHref }}">
 
-    <meta name="description" content="{metaDescription}">
-    <meta name="keywords" content="{metaKeywords}">
-    <meta name="author" content="{metaPublisher}">
+    <meta name="description" content="{{ metaDescription }}">
+    <meta name="keywords" content="{{ metaKeywords }}">
+    <meta name="author" content="{{ metaPublisher }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ {phpmyfaqversion}">
-    <meta name="robots" content="{metaRobots}">
+    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+    <meta name="robots" content="{{ metaRobots }}">
     <meta name="revisit-after" content="7 days">
 
     <!-- Share on Facebook -->
-    <meta property="og:title" content="{title}">
-    <meta property="og:description" content="{metaDescription}">
+    <meta property="og:title" content="{{ title }}">
+    <meta property="og:description" content="{{ metaDescription }}">
     <meta property="og:image" content="">
 
-    <link rel="stylesheet" href="{baseHref}assets/template/{tplSetName}/css/{stylesheet}.min.css?v=1">
-    <link rel="shortcut icon" href="{baseHref}assets/template/{tplSetName}/favicon.ico">
-    <link rel="apple-touch-icon" href="{baseHref}assets/template/{tplSetName}/apple-touch-icon.png">
-    <link rel="canonical" href="{currentPageUrl}">
+    <link rel="stylesheet" href="{{ baseHref }}assets/template/{{ tplSetName }}/css/{{ stylesheet }}.min.css?v=1">
+    <link rel="shortcut icon" href="{{ baseHref }}assets/template/{{ tplSetName }}/favicon.ico">
+    <link rel="apple-touch-icon" href="{{ baseHref }}assets/template/{{ tplSetName }}/apple-touch-icon.png">
+    <link rel="canonical" href="{{ currentPageUrl }}">
 
-    <script src="{baseHref}assets/js/modernizr.min.js"></script>
-    <script src="{baseHref}assets/js/phpmyfaq.min.js"></script>
+    <script src="{{ baseHref }}assets/js/modernizr.min.js"></script>
+    <script src="{{ baseHref }}assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{baseHref}feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{baseHref}feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{baseHref}feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{baseHref}feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{metaTitle}" href="{opensearch}">
+    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
+    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
+    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/latest/rss.php">
+    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/openquestions/rss.php">
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
 
     <script>
-        if (self === top) {
+        if (self === top) {{
             document.documentElement.style.display = 'block';
-        } else {
+         }} else {{
             top.location = self.location;
-        }
+         }}
     </script>
-    <style> html{display:none;} </style>
+    <style> html{{ display:none; }} </style>
 </head>
-<body dir="{dir}">
+<body dir="{{ dir }}">
 
 <header>
     <div class="pmf-wrapper pmf-masthead">
         <div class="container">
-            <a id="logo" title="{header}" href="{faqHome}">
-                <img src="{baseHref}assets/template/{tplSetName}/img/logo.png" alt="phpMyFAQ">
+            <a id="logo" title="{{ header }}" href="{{ faqHome }}">
+                <img src="{{ baseHref }}assets/template/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
             </a>
         </div>
     </div>
@@ -58,7 +58,7 @@
         <div class="container">
             <div class="pmf-breadcrumb">
                 [breadcrumb]
-                {breadcrumbHeadline}
+                {{ breadcrumbHeadline }}
                 [/breadcrumb]
             </div>
     </div>
@@ -73,11 +73,11 @@
 
                         [useSslForLogins]
                         <p>
-                            <a href="{secureloginurl}">{securelogintext}</a>
+                            <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
                         </p>
                         [/useSslForLogins]
 
-                        {loginMessage}
+                        {{ loginMessage }}
 
                         <div class="row">
                             <div class="col-md-6 col-md-offset-3">
@@ -88,18 +88,18 @@
                                         </header>
                                     </div>
                                     <div class="panel-body">
-                                        <form action="{writeLoginPath}" method="post" role="form">
+                                        <form action="{{ writeLoginPath }}" method="post" role="form">
                                             <fieldset>
 
                                                 <div class="form-group">
                                                     <input type="text" name="faqusername" id="faqusername"
-                                                           class="form-control input-lg" placeholder="{username}"
+                                                           class="form-control input-lg" placeholder="{{ username }}"
                                                            required>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <input type="password" name="faqpassword" id="faqpassword"
-                                                           class="form-control input-lg" placeholder="{password}"
+                                                           class="form-control input-lg" placeholder="{{ password }}"
                                                            required>
                                                 </div>
 
@@ -107,21 +107,21 @@
                                                     <label>
                                                         <input type="checkbox" id="faqrememberme" name="faqrememberme"
                                                                value="rememberMe">
-                                                        {rememberMe}
+                                                        {{ rememberMe }}
                                                     </label>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                                        {loginHeader}
+                                                        {{ loginHeader }}
                                                     </button>
                                                 </div>
 
                                                 <div class="form-group">
                                                     <p class="pull-right">
-                                                        {sendPassword}
+                                                        {{ sendPassword }}
                                                         <br>
-                                                        {registerUser}
+                                                        {{ registerUser }}
                                                     </p>
                                                 </div>
                                             </fieldset>
@@ -142,8 +142,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-3 col-md-offset-9">
-                    <form action="{writeLangAdress}" method="post" class="pull-right" accept-charset="utf-8">
-                        {switchLanguages}
+                    <form action="{{ writeLangAdress }}" method="post" class="pull-right" accept-charset="utf-8">
+                        {{ switchLanguages }}
                         <input type="hidden" name="action" value="" />
                     </form>
                 </div>
@@ -154,7 +154,7 @@
     <div class="pmf-wrapper copyright">
         <div class="container">
             <div class="pull-right">
-                {copyright}
+                {{ copyright }}
             </div>
         </div>
     </div>
@@ -164,10 +164,10 @@
         <h3>DEBUG INFORMATION</h3>
         <hr>
         <h4>EXCEPTIONS</h4>
-        {debugExceptions}
+        {{ debugExceptions }}
         <hr>
         <h4>DATABASE QUERIES</h4>
-        {debugQueries}
+        {{ debugQueries }}
     </div>
     [/debugMode]
 

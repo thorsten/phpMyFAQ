@@ -1,6 +1,6 @@
 <section>
 
-    {overview}
+    {{ overview }}
 
 </section>
 

@@ -1,8 +1,8 @@
 <section>
             <div class="navbar navbar-inverse">
-                {writeLetters}
+                {{ writeLetters }}
             </div>
 
-            <p>{writeMap}</p>
+            <p>{{ writeMap }}</p>
         </section>
 

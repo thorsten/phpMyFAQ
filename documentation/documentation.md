@@ -128,7 +128,7 @@ If you're interested, just take a look at our [support page](http://www.phpmyfaq
 
 **1.3. <a id="1.3"></a>Copyright**
 
-© 2001-2016 by Thorsten Rinne and phpMyFAQ Team under the [ Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). 
+© 2001-2017 by Thorsten Rinne and phpMyFAQ Team under the [Mozilla Public License 2.0](http://www.mozilla.org/MPL/2.0/). 
 All rights reserved.
 
 [back to top][64]
@@ -143,7 +143,7 @@ phpMyFAQ addresses a database system via PHP. In order to install it you will ne
 following requirements:
 
 *   **[PHP](http://www.php.net)**
-    *   from version 5.6.0 or 7.0 (recommended: latest PHP 7.x)
+    *   from version 5.6.x or 7.x (recommended: latest PHP 7.x)
     *   memory_limit = 64M
     *   cURL support
     *   GD support
@@ -168,7 +168,7 @@ You can only run phpMyFAQ successfully with constraints affect the directives op
 can be set in the central php.ini or the httpd.conf respectively.
 
 In case PHP runs as module of the Apache, you will have to be able to do a chown on the files before installation. The 
-files and directories must be owned by the webserver's user.
+files and directories must be owned by the web server's user.
 
 You can determine which versions your web server is running by creating a file called **info.php** with the following 
 content: `<?php phpinfo(); ?>`
@@ -194,12 +194,13 @@ You can install phpMyFAQ via one of the provided packages as .zip or .tar.gz or 
 download it and unzip the archive on your hard disk. If you want to use Git, please run the following commands on your 
 shell:
 
-	$ git clone git@github.com:thorsten/phpMyFAQ.git 2.9
+	$ git clone git@github.com:thorsten/phpMyFAQ.git 2.10
 	$ cd phpMyFAQ
 	$ curl -s https://getcomposer.org/installer | php
 	$ php composer.phar install
-	$ npm install
-	$ grunt
+	$ curl -o- -L https://yarnpkg.com/install.sh | bash
+	$ yarn install
+	$ yarn build
 
 You can modify the layout of phpMyFAQ using templates. A description of how this is done can be found [below][55]. Copy 
 all unzipped files to your web server in a directory using FTP. A good choice would be the directory **faq/**.
@@ -646,23 +647,18 @@ If you use rewrite rules with an Apache Webserver, please rename the _.htaccess 
 
 * * *
 
-**3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.9.x**
+**3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.10.x**
 
-Your current 2.6.x and 2.7.x atemplates are **barely** compatible with phpMyFAQ 2.9 because we changed the 
-complete CSS framework to Bootstrap v3. We're also using a lot of Ajax based technologies and CSS3 in the frontend now. 
-We moved the login from a dropdown form to an own page with the login form. We also added a glossary page which you 
-might know from the administration backend from older versions.
+Your current templates are **not** compatible with phpMyFAQ 2.10 because we changed the complete CSS framework to 
+Bootstrap v4.
 
 We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that 
-the style sheets are written with [LESS](http://lesscss.org/). You have to compile the LESS files into CSS using a LESS 
-compiler with Node.js or a tool like [CodeKit](http://incident57.com/codekit/).
+the style sheets are written with [SCSS](http://sass-lang.com/). You have to compile the SCSS files into CSS using a SCSS 
+compiler with Node.js.
 
 If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit 
 our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
 and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
-
-The 2.8.x default template is mostly compatible with 2.9.x, you have to remove the occurrances of SyntaxHighlighting
-script in artikel.tpl and use the new HighlightJS based code.
 
 Note: The character set for all languages and templates is UTF-8. If you notice problems with e.g. German umlauts you 
 have to convert your templates to UTF-8 encoding. Please use UNIX file endings \n instead of Windows file endings with 
@@ -1185,11 +1181,11 @@ your own needs. The most important files for phpMyFAQ's default layout can be fo
 **6.1. <a id="6.1"></a>The file assets/themes/default/templates/index.tpl**
 
 The default layout of phpMyFAQ is saved in the **index.tpl** file. This is a normal HTML5 file including some variables 
-in curly brackets, serving as placeholders for content.
+in double curly brackets like Twig or Handlebars, serving as placeholders for content.
 
 Example:
 
-`<span class="useronline">{userOnline}</span>`
+`<span class="useronline">{{ userOnline }}</span>`
 
 The template-parser of the FAQ converts the placeholder *{userOnline}* to the actual number of visitors online.
 
@@ -1233,8 +1229,8 @@ Follow these steps to create a custom template set:
 *   adjust template files in assets/themes/<custom\_template\_set> to fit your needs
 *   activate <custom\_template\_set> within Admin->Config->Main
 
-**Note:** There is a magic variable *{tplSetName}* containing the name of the actual layout available in each template 
-file.
+**Note:** There is a magic variable *{{ tplSetName }}* containing the name of the actual layout available in each 
+template file.
 
 [back to top][64]
 
@@ -1248,19 +1244,19 @@ This part of documentation is for developers who want to contribute to phpMyFAQ.
 
 **8.1. <a id="8.1"></a>phpMyFAQ development**
 
-phpMyFAQ is developed using PHP and JavaScript.
+phpMyFAQ is developed using PHP, JavaScript and SCSS.
 
 
 [back to top][64]
 
 * * *
 
-### **8.2. <a id="8.2"></a>rest/json API**
+### **8.2. <a id="8.2"></a>REST/JSON API**
 
-Beginning with version 2.6 phpMyFAQ will offer more and more interfaces to access phpMyFAQ installations with other 
-clients like the iPhone. phpMyFAQ includes a rest/json interface and offers an API for various services like fetching 
-the phpMyFAQ version and the phpMyFAQ API version. Currently we implemented an interface for the search, the possibility 
-to fetch all categories, all FAQ entries for a selected category and a FAQ entry.
+phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone. phpMyFAQ includes a 
+REST/JSON interface and offers an API for various services like fetching the phpMyFAQ version and the phpMyFAQ API 
+version. Currently we implemented an interface for the search, the possibility to fetch all categories, all FAQ entries 
+for a selected category and a FAQ entry.
 
 You can call the resources with the following URIs:
 

@@ -1,7 +1,7 @@
 [attachmentErrors]
 <section>
             <p>
-                {item}
+                {{ item }}
             </p>
         </section>
 [/attachmentErrors]

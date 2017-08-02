@@ -570,10 +570,10 @@ if (!isset($stickyRecordsParams['error'])) {
 
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = array(
-        'msgSearch' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
-        'msgAddContent' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'addcontent.html">'.$PMF_LANG['msgAddContent'].'</a>',
-        'msgQuestion' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
-        'msgOpenQuestions' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'open.html">'.$PMF_LANG['msgOpenQuestions'].'</a>',
+        'msgSearch' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
+        'msgAddContent' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'addcontent.html">'.$PMF_LANG['msgAddContent'].'</a>',
+        'msgQuestion' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'open.html">'.$PMF_LANG['msgOpenQuestions'].'</a>',
         'msgHelp' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'help.html">'.$PMF_LANG['msgHelp'].'</a>',
         'msgContact' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'contact.html">'.$PMF_LANG['msgContact'].'</a>',
         'msgGlossary' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'glossary.html">'.$PMF_LANG['ad_menu_glossary'].'</a>',
@@ -584,10 +584,10 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html', );
 } else {
     $tplNavigation = array(
-        'msgSearch' => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
-        'msgAddContent' => '<a href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG['msgAddContent'].'</a>',
-        'msgQuestion' => '<a href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG['msgQuestion'].'</a>',
-        'msgOpenQuestions' => '<a href="index.php?'.$sids.'action=open">'.$PMF_LANG['msgOpenQuestions'].'</a>',
+        'msgSearch' => '<a class="nav-link" href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
+        'msgAddContent' => '<a class="nav-link" href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG['msgAddContent'].'</a>',
+        'msgQuestion' => '<a class="nav-link" href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG['msgQuestion'].'</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="index.php?'.$sids.'action=open">'.$PMF_LANG['msgOpenQuestions'].'</a>',
         'msgHelp' => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG['msgHelp'].'</a>',
         'msgContact' => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG['msgContact'].'</a>',
         'msgGlossary' => '<a href="index.php?'.$sids.'action=glossary">'.$PMF_LANG['ad_menu_glossary'].'</a>',

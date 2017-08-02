@@ -1,43 +1,43 @@
 <section>
-            <p>{msgContactOwnText}</p>
-            <p><strong>{msgContactEMail}</strong></p>
+            <p>{{ msgContactOwnText }}</p>
+            <p><strong>{{ msgContactEMail }}</strong></p>
 
             <div id="loader"></div>
             <div id="contacts"></div>
 
             <form class="form-horizontal" id="formValues" action="#" method="post">
-                <input type="hidden" name="lang" id="lang" value="{lang}">
+                <input type="hidden" name="lang" id="lang" value="{{ lang }}">
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="name">{msgNewContentName}</label>
+                    <label class="col-sm-3 control-label" for="name">{{ msgNewContentName }}</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" name="name" id="name" value="{defaultContentName}"
+                        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}"
                                required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="email">{msgNewContentMail}</label>
+                    <label class="col-sm-3 control-label" for="email">{{ msgNewContentMail }}</label>
                     <div class="col-sm-9">
-                        <input type="email" class="form-control" name="email" id="email" value="{defaultContentMail}"
+                        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}"
                                required>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <label class="col-sm-3 control-label" for="question">{msgMessage}</label>
+                    <label class="col-sm-3 control-label" for="question">{{ msgMessage }}</label>
                     <div class="col-sm-9">
                         <textarea class="form-control" cols="37" rows="5" name="question" id="question"
                                   required></textarea>
                     </div>
                 </div>
 
-                {captchaFieldset}
+                {{ captchaFieldset }}
 
                 <div class="form-group">
                     <div class="col-sm-12 text-right">
                         <button class="btn btn-primary btn-lg" type="submit" id="submitcontact">
-                            {msgS2FButton}
+                            {{ msgS2FButton }}
                         </button>
                     </div>
                 </div>
@@ -61,10 +61,10 @@
         </section>
 
         <script>
-            $(function() {
-                $('#submitcontact').on('click', function () {
+            $(function() {{
+                $('#submitcontact').on('click', function () {{
                     saveFormValues('sendcontact', 'contact');
-                });
-                $('form#formValues').submit(function() { return false; });
-            });
+                 }});
+                $('form#formValues').submit(function() {{  return false;  }});
+             }});
         </script>

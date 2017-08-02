@@ -1,19 +1,19 @@
         [tagListSection]
         <div class="well clearfix">
-            <h3>{msgTags}</h3>
+            <h3>{{ msgTags }}</h3>
             <ul class="pmf-tags">
-                {tagList}
+                {{ tagList }}
             </ul>
         </div>
         [/tagListSection]
 
         <section>
             <article>
-                {writeNews}
+                {{ writeNews }}
             </article>
             <footer>
-                {showAllNews}
-                {writeNewsRSS}
+                {{ showAllNews }}
+                {{ writeNewsRSS }}
             </footer>
-            <p class="text-center">{writeNumberOfArticles}</p>
+            <p class="text-center">{{ writeNumberOfArticles }}</p>
         </section>

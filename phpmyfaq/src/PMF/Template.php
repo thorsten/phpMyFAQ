@@ -104,7 +104,7 @@ class PMF_Template
      */
     public function merge($from, $into)
     {
-        $this->outputs[$into] = str_replace('{'.$from.'}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$into] = str_replace('{{ '.$from.' }}', $this->outputs[$from], $this->outputs[$into]);
         $this->outputs[$from] = null;
     }
 
@@ -138,7 +138,7 @@ class PMF_Template
         if (isset($this->blocks[$templateName]['unblocked'])) {
             $templateContent = $this->_checkContent($templateContent);
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
-                $varName = PMF_String::preg_replace('/[\{\}]/', '', $tplVar);
+                $varName = trim(PMF_String::preg_replace('/[\{\}\}]/', '', $tplVar));
                 if (isset($templateContent[$varName])) {
                     $tmp = str_replace($tplVar, $templateContent[$varName], $tmp);
                 }
@@ -146,7 +146,7 @@ class PMF_Template
         }
 
         // add magic variables for each template
-        $tmp = str_replace('{tplSetName}', self::$tplSetName, $tmp);
+        $tmp = str_replace('{{ tplSetName }}', self::$tplSetName, $tmp);
 
         if (isset($this->outputs[$templateName])) {
             $this->outputs[$templateName] .= $tmp;
@@ -202,7 +202,7 @@ class PMF_Template
                     $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
                     break;
                 } else {
-                    $block = str_replace('{'.$var.'}', $val, $block);
+                    $block = str_replace('{{ '.$var.' }}', $val, $block);
                 }
             }
 
@@ -277,7 +277,7 @@ class PMF_Template
                 $multiplyTimes = count($val);
                 $replace[$var] = $val;
             } elseif ((is_array($val) && $multiplyTimes)) {
-                //check if all further arrays in $blockContent have the same lenght
+                //check if all further arrays in $blockContent have the same length
                 if ($multiplyTimes == count($val)) {
                     $replace[$var] = $val;
                 } else {
@@ -295,7 +295,7 @@ class PMF_Template
         for ($i = 0; $i < $multiplyTimes; ++$i) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
-                $tmpBlock[$i] = str_replace('{'.$var.'}', $val[$i], $tmpBlock[$i]);
+                $tmpBlock[$i] = str_replace('{{ '.$var.' }}', $val[$i], $tmpBlock[$i]);
             }
         }
 
@@ -307,7 +307,7 @@ class PMF_Template
      *
      * @param string $tpl Block to read
      *
-     * @return array
+     * @return string
      */
     private function _readBlocks($tpl)
     {
@@ -336,7 +336,7 @@ class PMF_Template
             }
 
             $hits = [];
-            PMF_String::preg_match_all('/\{.+?\}/', $unblocked, $hits);
+            PMF_String::preg_match_all('/\{\{.+?\}\}/', $unblocked, $hits);
             $tplBlocks['unblocked'] = $hits[0];
         } else {
             // no blocks defined

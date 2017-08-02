@@ -268,6 +268,13 @@ module.exports = function (grunt) {
         options: {
           livereload: true
         }
+      },
+      templates: {
+        files: ['hpmyfaq/assets/themes/default/templates/defautl/*.tpl'],
+        tasks: ['sass', 'cssmin'],
+        options: {
+          livereload: true
+        }
       }
     }
   });
