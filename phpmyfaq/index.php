@@ -383,16 +383,16 @@ if (!isset($allowedVariables[$action])) {
 // Select the template for the requested page
 //
 if ($action != 'main') {
-    $includeTemplate = $action.'.tpl';
+    $includeTemplate = $action.'.html';
     $includePhp = $action.'.php';
     $writeLangAdress = '?sid='.$sid;
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
-        $includeTemplate = 'artikel.tpl';
+        $includeTemplate = 'artikel.html';
         $includePhp = 'artikel.php';
     } else {
-        $includeTemplate = 'main.tpl';
+        $includeTemplate = 'main.html';
         $includePhp = 'main.php';
     }
     $writeLangAdress = '?sid='.$sid;
@@ -402,9 +402,9 @@ if ($action != 'main') {
 // Set right column
 //
 if (($action == 'artikel') || ($action == 'show')) {
-    $rightSidebarTemplate = $action == 'artikel' ? 'catandtag.tpl' : 'tagcloud.tpl';
+    $rightSidebarTemplate = $action == 'artikel' ? 'catandtag.html' : 'tagcloud.html';
 } else {
-    $rightSidebarTemplate = 'startpage.tpl';
+    $rightSidebarTemplate = 'startpage.html';
 }
 
 //
@@ -412,30 +412,30 @@ if (($action == 'artikel') || ($action == 'show')) {
 //
 if ($faqConfig->get('security.enableLoginOnly')) {
     if ($auth) {
-        $indexSet = 'index.tpl';
+        $indexSet = 'index.html';
     } else {
         switch ($action) {
             case 'register':
             case 'thankyou':
-                $indexSet = 'indexNewUser.tpl';
+                $indexSet = 'indexNewUser.html';
                 break;
             case 'password':
-                $indexSet = 'indexPassword.tpl';
+                $indexSet = 'indexPassword.html';
                 break;
             default:
-                $indexSet = 'indexLogin.tpl';
+                $indexSet = 'indexLogin.html';
                 break;
         }
     }
 } else {
-    $indexSet = 'index.tpl';
+    $indexSet = 'index.html';
 }
 
 //
 // phpMyFAQ installation is in maintenance mode
 //
 if ($faqConfig->get('main.maintenanceMode')) {
-    $indexSet = 'indexMaintenance.tpl';
+    $indexSet = 'indexMaintenance.html';
 }
 
 //

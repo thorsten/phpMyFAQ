@@ -91,6 +91,6 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
     {
         $this->PMF_Instance_Client->copyTemplateFolder(PMF_TEST_DIR);
 
-        $this->assertFileExists(PMF_TEST_DIR . '/assets/themes/default/index.tpl');
+        $this->assertFileExists(PMF_TEST_DIR . '/assets/themes/default/index.html');
     }
 }

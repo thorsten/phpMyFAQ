@@ -57,7 +57,7 @@
     12. [Configuration][53]
     13. [Multisite Configuration][54]
 6.  **[Customizing phpMyFAQ][55]**
-    1.  [The file assets/themes/default/templates/index.tpl][56]
+    1.  [The file assets/themes/default/templates/index.html][56]
     2.  [The file assets/themes/default/css/style.css][57]
     3.  [More Templates][58]
 7.  **[Customizing phpMyFAQ][59]**
@@ -559,7 +559,7 @@ updated. You have to update a lot of your template files due to our change using
 You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
 folder **assets/template/default/**.
 
-Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder. If you use rewrite
+Please copy the template file **assets/template/default/indexLogin.html** into your template folder. If you use rewrite
 rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
 
 [back to top][64]
@@ -588,7 +588,7 @@ updated. You have to update a lot of your template files due to our change using
 You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
 folder **assets/template/default/**.
 
-Please copy the template file **assets/template/default/indexLogin.tpl** into your template folder. If you use rewrite
+Please copy the template file **assets/template/default/indexLogin.html** into your template folder. If you use rewrite
 rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
 
 [back to top][64]
@@ -826,7 +826,7 @@ The user generated accounts are unactivated by default and the administrator has
 
 If enabled by the administrator a phpMyFAQ installation can be completely secured. This means all content is only 
 available after a successful login. For RSS feeds we provide a simple HTTP auth logic within the feeds to access for 
-registered users. To avoid crawled content on search engines you should change the meta tags in index.tpl file 
+registered users. To avoid crawled content on search engines you should change the meta tags in index.html file 
 from *INDEX, FOLLOW* to *NOINDEX, NOFOLLOW*.
 
 [back to top][64]
@@ -1170,7 +1170,7 @@ To backup the whole data located on your web server you can run our simple backu
 
 In phpMyFAQ code and layout are separated. The layout is based on several template files, that you can modify to suit 
 your own needs. The most important files for phpMyFAQ's default layout can be found in the directory 
-*assets/themes/default/*. All original templates are valid HTML5 and we don't use tables for layout reasons.
+*assets/themes/default/*. All original templates are valid HTML5.
 
 **Note:** You can change the layout of the admin area using the CSS file *admin/css/style.css*.
 
@@ -1178,9 +1178,9 @@ your own needs. The most important files for phpMyFAQ's default layout can be fo
 
 * * *
 
-**6.1. <a id="6.1"></a>The file assets/themes/default/templates/index.tpl**
+**6.1. <a id="6.1"></a>The file assets/themes/default/templates/index.html**
 
-The default layout of phpMyFAQ is saved in the **index.tpl** file. This is a normal HTML5 file including some variables 
+The default layout of phpMyFAQ is saved in the **index.html** file. This is a normal HTML5 file including some variables 
 in double curly brackets like Twig or Handlebars, serving as placeholders for content.
 
 Example:
