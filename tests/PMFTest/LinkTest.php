@@ -307,7 +307,7 @@ class PMFTest_LinkTest extends PHPUnit_Framework_TestCase
         );
 
         $this->link = new PMF_Link(
-            'http://faq.example.org/my-test-faq/index.php?action=artikel&cat=1&id=36&artlang=de',
+            'http://faq.example.org/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
             $this->config
         );
         $this->link->itemTitle = 'HD Ready';

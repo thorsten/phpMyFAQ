@@ -168,7 +168,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 }
 
                 $url = sprintf(
-                    '%s?action=artikel&cat=%d&id=%d&artlang=%s',
+                    '%s?action=faq&cat=%d&id=%d&artlang=%s',
                     $faqConfig->getDefaultUrl(),
                     $categories['rubrik'][0],
                     $recordId,
@@ -215,7 +215,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 );
 
                 $link = sprintf(
-                    'index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    'index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $category,
                     $recordId,
                     $recordLang

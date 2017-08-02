@@ -161,7 +161,7 @@ class PMF_Helper_Faq extends PMF_Helper
 
         $html = '';
         $faqUrl = sprintf(
-            '?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
+            '?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%%s',
             $categoryId,
             $faq->faqRecord['id']
         );

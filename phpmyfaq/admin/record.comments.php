@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                         <?php echo $faqcomment['username'] ?>
                     </a> |
                     <?php echo $date->format(date('Y-m-d H:i', $faqcomment['date'])) ?> |
-                    <a href="<?php printf('../?action=artikel&cat=%d&id=%d&artlang=%s',
+                    <a href="<?php printf('../?action=faq&cat=%d&id=%d&artlang=%s',
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],
                        $LANGCODE) ?>">

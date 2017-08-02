@@ -131,7 +131,7 @@ class PMF_Helper_Search extends PMF_Helper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=artikel&cat=%d&id=%d&artlang=%s&highlight=%s',
+                $currentUrl = sprintf('%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
                     PMF_Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
                     $this->sessionId,
                     $result->category_id,
@@ -280,7 +280,7 @@ class PMF_Helper_Search extends PMF_Helper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $this->sessionId,
                     $result->category_id,
@@ -343,7 +343,7 @@ class PMF_Helper_Search extends PMF_Helper
                 ++$counter;
 
                 $url = sprintf(
-                    '%s?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $result->category_id,
                     $result->id,

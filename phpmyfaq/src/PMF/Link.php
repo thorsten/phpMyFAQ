@@ -81,7 +81,7 @@ class PMF_Link
     const PMF_LINK_GET_LANGS = 'langs';
 
     const PMF_LINK_GET_ACTION_ADD = 'add';
-    const PMF_LINK_GET_ACTION_ARTIKEL = 'artikel';
+    const PMF_LINK_GET_ACTION_ARTIKEL = 'faq';
     const PMF_LINK_GET_ACTION_ASK = 'ask';
     const PMF_LINK_GET_ACTION_CONTACT = 'contact';
     const PMF_LINK_GET_ACTION_GLOSSARY = 'glossary';

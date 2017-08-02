@@ -429,7 +429,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
             $this->SetFont($this->currentFont, '', 8);
             $baseUrl = 'index.php';
             if (is_array($this->faq) && !empty($this->faq)) {
-                $baseUrl .= '?action=artikel&amp;';
+                $baseUrl .= '?action=faq&amp;';
                 if (array_key_exists($this->category, $this->categories)) {
                     $baseUrl .= 'cat='.$this->categories[$this->category]['id'];
                 } else {

@@ -102,7 +102,7 @@ $linkVerifier = new PMF_Linkverifier($faqConfig);
 $linkArray = $linkVerifier->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
-        $xpos = strpos($_url, 'index.php?action=artikel');
+        $xpos = strpos($_url, 'index.php?action=faq');
         if (!($xpos === false)) {
             // Get the Faq link title
             $matches = array();

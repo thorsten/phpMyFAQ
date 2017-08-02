@@ -86,7 +86,7 @@ class PMF_Services
     public function getLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -107,7 +107,7 @@ class PMF_Services
     public function getShareOnFacebookLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
@@ -128,7 +128,7 @@ class PMF_Services
     public function getShareOnTwitterLink()
     {
         $url = sprintf(
-            '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
+            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),

@@ -79,7 +79,7 @@ $pagination = new PMF_Pagination(
                             </td>
                             <td>
                                 <a title="<?php echo $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
-                                   href="../index.php?action=artikel&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
+                                   href="../index.php?action=faq&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
                                   <i aria-hidden="true" class="fa fa-external-link"></i>
                                 </a>
                             </td>

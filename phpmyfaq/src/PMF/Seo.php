@@ -64,7 +64,7 @@ class PMF_Seo
                 return $this->config->get('seo.metaTagsHome');
                 break;
 
-            case 'artikel':
+            case 'faq':
                 return $this->config->get('seo.metaTagsFaqs');
                 break;
 

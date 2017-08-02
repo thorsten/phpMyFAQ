@@ -288,7 +288,7 @@ if (!is_null($id)) {
     $keywords = ','.$faq->faqRecord['keywords'];
     $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
-        '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+        '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         $faqConfig->getDefaultUrl(),
         $sids,
         $category->getCategoryIdFromArticle($id),
@@ -320,7 +320,7 @@ if (!is_null($solutionId)) {
         $keywords = ','.$faq->getRecordKeywords($id);
         $metaDescription = str_replace('"', '', PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12));
         $url = sprintf(
-            '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+            '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
             $faqConfig->getDefaultUrl(),
             $sids,
             $faqData['category_id'],
@@ -389,8 +389,8 @@ if ($action != 'main') {
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
-        $includeTemplate = 'artikel.html';
-        $includePhp = 'artikel.php';
+        $includeTemplate = 'faq.html';
+        $includePhp = 'faq.php';
     } else {
         $includeTemplate = 'main.html';
         $includePhp = 'main.php';

@@ -256,7 +256,7 @@ class PMF_Faq
                 }
 
                 $url = sprintf(
-                    '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->_config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -414,7 +414,7 @@ class PMF_Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
@@ -604,7 +604,7 @@ class PMF_Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
@@ -856,7 +856,7 @@ class PMF_Faq
             }
 
             $url = sprintf(
-                '%sindex.php?action=artikel&cat=%d&id=%d&artlang=%s',
+                '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                 $this->_config->getDefaultUrl(),
                 $row->category_id,
                 $row->id,
@@ -2032,7 +2032,7 @@ class PMF_Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,
@@ -2145,7 +2145,7 @@ class PMF_Faq
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->_config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -2254,7 +2254,7 @@ class PMF_Faq
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=artikel&cat=%d&id=%d&artlang=%s',
+                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
                     $this->_config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -2987,7 +2987,7 @@ class PMF_Faq
         while (($row = $this->_config->getDb()->fetchObject($result))) {
             $title = $row->thema;
             $url = sprintf(
-                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                 PMF_Link::getSystemRelativeUri(),
                 $sids,
                 $row->category_id,
@@ -3083,7 +3083,7 @@ class PMF_Faq
                 );
                 if ($this->_config->get('records.enableCloseQuestion') && $row->answer_id) {
                     $output .= sprintf(
-                        '<td><a id="PMF_openQuestionAnswered" href="?%saction=artikel&amp;cat=%d&amp;id=%d">%s</a></td>',
+                        '<td><a id="PMF_openQuestionAnswered" href="?%saction=faq&amp;cat=%d&amp;id=%d">%s</a></td>',
                         $sids,
                         $row->category_id,
                         $row->answer_id,
@@ -3237,7 +3237,7 @@ class PMF_Faq
 
                 $title = $row->thema;
                 $url = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,

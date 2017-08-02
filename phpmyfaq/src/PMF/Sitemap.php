@@ -323,7 +323,7 @@ class PMF_Sitemap
             if ($oldId != $row->id) {
                 $title = PMF_String::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
                 $url = sprintf(
-                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     PMF_Link::getSystemRelativeUri(),
                     $sids,
                     $row->category_id,

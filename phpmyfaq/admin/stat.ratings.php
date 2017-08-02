@@ -79,7 +79,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
         $question = PMF_String::htmlspecialchars(trim($data['question']));
         $url = sprintf(
-            '../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+            '../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
             $data['category_id'],
             $data['id'],
             $data['lang']

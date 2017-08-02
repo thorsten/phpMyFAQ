@@ -182,7 +182,7 @@ switch ($action) {
                         $emailTo = $faq->faqRecord['email'];
                     }
                     $faqUrl = sprintf(
-                        '%s?action=artikel&cat=%d&id=%d&artlang=%s',
+                        '%s?action=faq&cat=%d&id=%d&artlang=%s',
                         $faqConfig->getDefaultUrl(),
                         $category->getCategoryIdFromArticle($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
@@ -525,7 +525,7 @@ switch ($action) {
                     $faqHelper = new PMF_Helper_Faq($faqConfig);
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
-                            '%sindex.php?action=artikel&cat=%d&id=%d&artlang=%s',
+                            '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                             $faqConfig->getDefaultUrl(),
                             $result->category_id,
                             $result->id,

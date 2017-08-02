@@ -120,7 +120,7 @@ switch ($action) {
 
         $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
-        $url = $faqConfig->getDefaultUrl().'index.php?action=artikel&cat=%d&id=%d&artlang=%s';
+        $url = $faqConfig->getDefaultUrl().'index.php?action=faq&cat=%d&id=%d&artlang=%s';
 
         $faqSearchResult->reviewResultset($searchResults);
         foreach ($faqSearchResult->getResultset() as $data) {

@@ -116,7 +116,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
             printf('<td>%s</td>', $data['faq_last_author']);
         }
         if ($useUrl) {
-            $url = sprintf('<a href="../index.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s">Link</a>',
+            $url = sprintf('<a href="../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s">Link</a>',
                 $data['category_id'],
                 $data['faq_id'],
                 $data['faq_language']
