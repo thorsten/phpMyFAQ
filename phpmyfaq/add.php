@@ -79,7 +79,8 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
 
 $tpl->parse(
     'writeContent',
-    array(
+    [
+        'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],
         'lang' => $Language->getLanguage(),
@@ -98,7 +99,7 @@ $tpl->parse(
         'msgNewContentLink' => $PMF_LANG['msgNewContentLink'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    )
+    ]
 );
 
 $tpl->parseBlock(

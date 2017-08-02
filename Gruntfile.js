@@ -165,9 +165,11 @@ module.exports = function (grunt) {
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
           'node_modules/bxslider/dist/jquery.bxslider.js',
+          'phpmyfaq/assets/js/add.js',
           'phpmyfaq/assets/js/autosave.js',
           'phpmyfaq/assets/js/category.js',
           'phpmyfaq/assets/js/comments.js',
+          'phpmyfaq/assets/js/editor.js',
           'phpmyfaq/assets/js/records.js',
           'phpmyfaq/assets/js/typeahead.js',
           'phpmyfaq/assets/js/functions.js'
@@ -197,11 +199,7 @@ module.exports = function (grunt) {
       },
       beforeconcat: [
         'phpmyfaq/admin/assets/js/*.js',
-        'phpmyfaq/assets/js/autosave.js',
-        'phpmyfaq/assets/js/comments.js',
-        'phpmyfaq/assets/js/setup.js',
-        'phpmyfaq/assets/js/typeahead.js',
-        'phpmyfaq/assets/js/functions.js'
+        'phpmyfaq/assets/js/*.js'
       ]
     },
     sass: {
