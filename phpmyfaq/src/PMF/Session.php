@@ -456,11 +456,18 @@ class PMF_Session
      */
     public static function setCookie($name, $sessionId = '', $timeout = PMF_SESSION_EXPIRED_TIME)
     {
+        $protocol = 'http';
+        if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
+            $protocol = 'https';
+        }
         return setcookie(
             $name,
             $sessionId,
             $_SERVER['REQUEST_TIME'] + $timeout,
-            dirname($_SERVER['SCRIPT_NAME'])
+            dirname($_SERVER['SCRIPT_NAME']),
+            $protocol.'://'.$_SERVER['HTTP_HOST'],
+            ('https' === $protocol) ? true : false,
+            true
         );
     }
 }
