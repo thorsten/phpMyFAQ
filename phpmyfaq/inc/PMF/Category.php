@@ -10,14 +10,12 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
@@ -29,14 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Category.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-16
  */
@@ -182,20 +178,22 @@ class PMF_Category
      * Returns all categories with ordered category IDs according to the user
      * and group permissions.
      *
-     * @param bool $withperm With or without permission check
+     * @param bool $withPermission With or without permission check
      *
      * @return array
      */
-    private function getOrderedCategories($withperm = true)
+    private function getOrderedCategories($withPermission = true)
     {
         $where = '';
 
-        if ($withperm) {
+        if ($withPermission) {
             $where = sprintf('
                 WHERE
                     ( fg.group_id IN (%s)
                 OR
-                    (fu.user_id = %d AND fg.group_id IN (%s)))',
+                    (fu.user_id = %d AND fg.group_id IN (%s)))
+                AND
+                    fc.active = 1',
                 implode(', ', $this->groups),
                 $this->user,
                 implode(', ', $this->groups)
