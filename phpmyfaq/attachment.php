@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-06-23
  */
@@ -69,7 +67,7 @@ if (in_array($user->getUserId(), $userPermission)) {
 }
 
 // get user rights
-$permission = array();
+$permission = [];
 if (isset($auth)) {
     // read all rights, set them FALSE
     $allRights = $user->perm->getAllRightsData();
@@ -85,9 +83,6 @@ if (isset($auth)) {
     }
 }
 
-if (true === $faqConfig->get('records.allowDownloadsForGuests')) {
-}
-
 if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
     (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))) {
     try {
@@ -101,5 +96,5 @@ if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
 }
 
 // If we're here, there was an error with file download
-$tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br/>', $attachmentErrors)));
+$tpl->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br>', $attachmentErrors)));
 $tpl->parse('writeContent', []);
