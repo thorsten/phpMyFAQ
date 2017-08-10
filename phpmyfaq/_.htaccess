@@ -22,6 +22,11 @@ Header always append X-Frame-Options SAMEORIGIN
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
 
+<IfModule mod_fcgid.c>
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
+
 # the path to your phpMyFAQ installation
 RewriteBase /phpmyfaq/
 
