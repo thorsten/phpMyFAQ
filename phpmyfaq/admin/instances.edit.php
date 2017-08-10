@@ -27,8 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-    <header>
-        <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?></h2>
+    <header class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">
+                <i aria-hidden="true" class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?>
+            </h2>
+        </div>
     </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
@@ -40,43 +44,47 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     ?>
     <form class="form-horizontal" action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
-        <div class="control-group">
-            <label class="control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>
-            <div class="controls">
-                <input type="url" name="url" id="url" required="required" value="<?php echo $instanceData->url ?>">
+        <div class="form-group">
+            <label for="url" class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>
+            <div class="col-lg-8">
+                <input type="url" name="url" id="url" class="form-control" value="<?php echo $instanceData->url ?>" required>
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label"><?php echo $PMF_LANG['ad_instance_path'] ?>:</label>
-            <div class="controls">
-                <input type="text" name="instance" id="instance" required="required"
+        <div class="form-group">
+            <label for="instance"  class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_path'] ?>:</label>
+            <div class="col-lg-8">
+                <input type="text" name="instance" id="instance" class="form-control" required
                        value="<?php echo $instanceData->instance ?>">
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label"><?php echo $PMF_LANG['ad_instance_name'] ?>:</label>
-            <div class="controls">
-                <input type="text" name="comment" id="comment" required="required"
+        <div class="form-group">
+            <label for="comment" class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_name'] ?>:</label>
+            <div class="col-lg-8">
+                <input type="text" name="comment" id="comment" class="form-control" required
                        value="<?php echo $instanceData->comment ?>">
             </div>
         </div>
-        <div class="control-group">
-            <label class="control-label"><?php echo $PMF_LANG['ad_instance_config'] ?>:</label>
-            <div class="controls">
+        <div class="form-group">
+            <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_config'] ?>:</label>
+            <div class="col-lg-8">
+                <p class="form-control-static">
             <?php
             foreach ($instance->getInstanceConfig($instanceData->id) as $key => $config) {
                 echo '<span class="uneditable-input">'.$key.': '.$config.'</span><br/>';
             }
-    ?>
+            ?>
+                </p>
             </div>
         </div>
         <div class="form-group">
-            <button class="btn btn-primary" type="submit">
-                <?php echo $PMF_LANG['ad_instance_button'] ?>
-            </button>
-            <a class="btn btn-info" href="?action=instances">
-                <?php echo $PMF_LANG['ad_entry_back'] ?>
-            </a>
+            <div class="col-lg-offset-2 col-lg-4">
+                <button class="btn btn-primary" type="submit">
+                    <?php echo $PMF_LANG['ad_instance_button'] ?>
+                </button>
+                <a class="btn btn-info" href="?action=instances">
+                    <?php echo $PMF_LANG['ad_entry_back'] ?>
+                </a>
+            </div>
         </div>
     </form>
 <?php

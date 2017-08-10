@@ -106,12 +106,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <td><?php print $site->instance ?></td>
             <td><?php print $site->comment ?></td>
             <td>
-                <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
                 <a href="?action=editinstance&instance_id=<?php print $site->id ?>" class="btn btn-info">
                     <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
-                <?php endif;
-    ?>
             </td>
             <td>
                 <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
