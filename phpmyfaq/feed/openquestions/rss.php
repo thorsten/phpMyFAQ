@@ -48,6 +48,48 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 PMF_String::init($LANGCODE);
 
+if ($faqConfig->get('security.enableLoginOnly')) {
+    if (!isset($_SERVER['PHP_AUTH_USER'])) {
+        header('WWW-Authenticate: Basic realm="phpMyFAQ RSS Feeds"');
+        header('HTTP/1.0 401 Unauthorized');
+        exit;
+    } else {
+        $user = new PMF_User_CurrentUser($faqConfig);
+        if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
+            if ($user->getStatus() != 'blocked') {
+                $auth = true;
+            } else {
+                $user = null;
+            }
+        } else {
+            $user = null;
+        }
+    }
+} else {
+    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    if (!$user instanceof PMF_User_CurrentUser) {
+        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    }
+}
+
+//
+// Get current user and group id - default: -1
+//
+if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
+    $current_user = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_Medium) {
+        $current_groups = $user->perm->getUserGroups($current_user);
+    } else {
+        $current_groups = array(-1);
+    }
+    if (0 == count($current_groups)) {
+        $current_groups = array(-1);
+    }
+} else {
+    $current_user = -1;
+    $current_groups = array(-1);
+}
+
 if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
