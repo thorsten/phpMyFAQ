@@ -2145,7 +2145,7 @@ class PMF_Faq
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->_config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
@@ -2254,7 +2254,7 @@ class PMF_Faq
 
                 $title = $row->question;
                 $url = sprintf(
-                    '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
+                    '%sindex.php?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
                     $this->_config->getDefaultUrl(),
                     $sids,
                     $row->category_id,

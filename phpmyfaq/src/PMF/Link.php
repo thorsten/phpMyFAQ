@@ -81,7 +81,7 @@ class PMF_Link
     const PMF_LINK_GET_LANGS = 'langs';
 
     const PMF_LINK_GET_ACTION_ADD = 'add';
-    const PMF_LINK_GET_ACTION_ARTIKEL = 'faq';
+    const PMF_LINK_GET_ACTION_FAQ = 'faq';
     const PMF_LINK_GET_ACTION_ASK = 'ask';
     const PMF_LINK_GET_ACTION_CONTACT = 'contact';
     const PMF_LINK_GET_ACTION_GLOSSARY = 'glossary';
@@ -366,6 +366,7 @@ class PMF_Link
             if (!strpos($query['main'], '&amp;')) {
                 $query['main'] = str_replace('&', '&amp;', $query['main']);
             }
+
             $params = explode(self::PMF_LINK_AMPERSAND, $query['main']);
             foreach ($params as $param) {
                 if (!empty($param)) {
@@ -578,7 +579,7 @@ class PMF_Link
                             $url .= self::PMF_LINK_HTML_ADDCONTENT;
                             break;
 
-                        case self::PMF_LINK_GET_ACTION_ARTIKEL:
+                        case self::PMF_LINK_GET_ACTION_FAQ:
                             $url .= self::PMF_LINK_CONTENT.
                                     $getParams[self::PMF_LINK_GET_CATEGORY].
                                     self::PMF_LINK_HTML_SLASH.
