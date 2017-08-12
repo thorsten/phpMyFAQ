@@ -4,10 +4,11 @@
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "dependencies": {
-    "bootstrap": "4.0.0-alpha.6",
+    "bootstrap": "4.0.0-beta",
     "bootstrap-datepicker": "1.7.1",
     "bootstrap-fileinput": "^4.3.4",
     "bxslider": "^4.2.11",
+    "cookieconsent": "^3.0.4",
     "corejs-typeahead": "^1.1.1",
     "font-awesome": "4.7.0",
     "handlebars": "4.0.10",
@@ -15,7 +16,7 @@
     "jquery": "3.2.1",
     "jquery-sparkline": "^2.3.2",
     "mermaid": "^7.0.3",
-    "tinymce": "4.6.4"
+    "tinymce": "^4.6.5"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

@@ -20,7 +20,7 @@ Version 2.10.0-alpha2 - 2017-08-
 - updated bundled Symfony ClassLoader to version 2.7.32 (Thorsten)
 - updated bundled SwiftMailer to version 5.4.8 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
-- updated bundled Bootstrap to version 4.0.0-alpha6 (Thorsten)
+- updated bundled Bootstrap to version 4.0.0-beta (Thorsten)
 - updated bundled Font Awesome to version 4.7.0 (Thorsten)
 - updated bundled jQuery to version 3.2.1 (Thorsten)
 - updated bundled jQuery datePicker plugin to version 1.6.4 (Thorsten)
