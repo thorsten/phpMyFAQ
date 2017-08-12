@@ -48,15 +48,16 @@
 <body dir="{{ dir }}">
 
 <header>
-    <nav class="navbar navbar-toggleable-md navbar-inverse bg-inverse fixed-top">
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+    <nav class="navbar navbar-toggleable-md navbar-dark fixed-top bg-dark">
+
         <a class="navbar-brand" title="{{ header }}" href="{{ faqHome }}">
             <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
         </a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarCollapse">
             <div class="navbar-nav mr-auto">
                 <li class="nav-item {{ activeSearch }}">{{ msgSearch }}</li>
                 <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>

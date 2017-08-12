@@ -268,7 +268,7 @@ module.exports = function (grunt) {
         }
       },
       templates: {
-        files: ['hpmyfaq/assets/themes/default/templates/defautl/*.html'],
+        files: ['hpmyfaq/assets/themes/default/templates/default/*.html'],
         tasks: ['sass', 'cssmin'],
         options: {
           livereload: true

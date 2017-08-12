@@ -6,10 +6,15 @@ root = true
 end_of_line = LF
 insert_final_newline = true
 
-# PHP and JS files
+# PHP files
 [{*.php,*.js}]
 indent_style = space
 indent_size = 4
+
+# HTML, SCSS and JS files
+[{*.html,*.scss,*.js}]
+indent_style = space
+indent_size = 2
 
 # JSON and LESS files
 [{package.json,.travis.yml,*.less}]
