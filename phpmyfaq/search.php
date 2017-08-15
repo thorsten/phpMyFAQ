@@ -265,8 +265,7 @@ if ($tagSearch) {
             'selectCategories' => $PMF_LANG['msgSelectCategories'],
             'allCategories' => $PMF_LANG['msgAllCategories'],
             'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
-            'msgSearch' => $PMF_LANG['msgSearch'],
-            'openSearchLink' => $searchHelper->renderOpenSearchLink(),
+            'msgSearch' => $PMF_LANG['msgSearch']
         ]
     );
 
@@ -295,7 +294,6 @@ $tpl->parse(
         'allCategories' => $PMF_LANG['msgAllCategories'],
         'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
         'msgSearch' => $PMF_LANG['msgSearch'],
-        'openSearchLink' => $searchHelper->renderOpenSearchLink(),
         'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
         'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
     ]

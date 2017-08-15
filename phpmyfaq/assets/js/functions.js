@@ -19,8 +19,7 @@
 
 /*global document: false, window: false, $: false, self: false */
 
-var addEngine,
-    infoBox,
+var infoBox,
     selectSelectAll,
     selectUnselectAll,
     closeWindow,
@@ -29,21 +28,6 @@ var addEngine,
 
 $(document).ready(function () {
     'use strict';
-
-    /**
-     *
-     * @param uri
-     * @param name
-     * @param ext
-     * @param cat
-     */
-    addEngine = function addEngine(uri, name, ext, cat) {
-        if ((typeof window.sidebar === 'object') && (typeof window.sidebar.addSearchEngine === 'function')) {
-            window.sidebar.addSearchEngine(uri + '/' + name + '.src', uri + '/images/' + name + '.' + ext, name, cat);
-        } else {
-            window.alert('Mozilla Firefox is needed to install the search plugin!');
-        }
-    };
 
     /**
      * selects all list options in the select with the given ID.

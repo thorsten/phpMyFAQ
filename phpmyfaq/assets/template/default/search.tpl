@@ -62,9 +62,6 @@
                         </select>
                     </div>
 
-                    <div class="pull-right">
-                        <small>{openSearchLink}</small>
-                    </div>
                 </form>
             </section>
             [/searchBoxSection]
