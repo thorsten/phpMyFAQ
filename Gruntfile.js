@@ -178,6 +178,17 @@ module.exports = function (grunt) {
         dest: 'phpmyfaq/assets/js/phpmyfaq.js'
       }
     },
+    babel: {
+      options: {
+        sourceMap: true,
+        presets: ['env']
+      },
+      dist: {
+        files: {
+          'phpmyfaq/assets/js/phpmyfaq.js': 'phpmyfaq/assets/js/phpmyfaq.js'
+        }
+      }
+    },
     uglify: {
       options: {
         banner: '<%= banner %>',
@@ -279,10 +290,10 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', ['copy', 'concat', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
+  grunt.registerTask('default', ['copy', 'jshint', 'concat', 'babel', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
 
   // Build task
-  grunt.registerTask('build', ['copy', 'concat', 'uglify', 'sass:production', 'cssmin', 'modernizr']);
+  grunt.registerTask('build', ['copy', 'concat', 'babel','uglify', 'sass:production', 'cssmin', 'modernizr']);
 
   // Watcher
   grunt.event.on('watch', function (action, filepath, target) {
