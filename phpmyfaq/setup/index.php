@@ -30,7 +30,7 @@ define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
 
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
+    die('Sorry, but you need PHP 5.6.0 or later!');
 }
 
 set_time_limit(0);
@@ -80,43 +80,45 @@ $psr4Loader->register();
     <script src="../assets/js/phpmyfaq.min.js"></script>
     <script src="../assets/js/setup.js"></script>
 
-    <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
+    <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 
 </head>
 <body>
 
-<nav class="navbar navbar-default" role="navigation">
-    <div class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-            data-target="#phpmyfaq-navbar-collapse" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
-                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
-                <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
-                <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
-            </ul>
-        </div>
-    </div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item">
+        <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+      </li>
+      <li class="nav-item">
+      <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
+      </li>
+    </ul>
+  </div>
 </nav>
 
 <section id="content">
     <div class="container">
         <div class="row">
-            <div class="jumbotron text-center">
-                <h1>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</h1>
-                <p>
-                    Did you already read the
-                    <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
-                    carefully before starting the phpMyFAQ setup?
-                </p>
+            <div class="jumbotron">
+              <div class="container">
+                <h1 class="display-3">phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</h1>
+                <p class="text-center">
+                  Did you already read the
+                  <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
+                  carefully before starting the phpMyFAQ setup?</p>
+              </div>
             </div>
         </div>
 

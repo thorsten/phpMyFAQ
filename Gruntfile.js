@@ -151,6 +151,7 @@ module.exports = function (grunt) {
       dist: {
         src: [
           'node_modules/jquery/dist/jquery.js',
+          'node_modules/popper.js/dist/popper.js',
           'node_modules/bootstrap/js/dist/util.js',
           'node_modules/bootstrap/js/dist/tooltip.js',
           'node_modules/bootstrap/js/dist/alert.js',
@@ -278,7 +279,7 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', ['copy', 'jshint', 'concat', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
+  grunt.registerTask('default', ['copy', 'concat', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
 
   // Build task
   grunt.registerTask('build', ['copy', 'concat', 'uglify', 'sass:production', 'cssmin', 'modernizr']);

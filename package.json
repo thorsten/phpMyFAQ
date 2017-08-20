@@ -16,6 +16,7 @@
     "jquery": "3.2.1",
     "jquery-sparkline": "^2.3.2",
     "mermaid": "^7.0.3",
+    "popper.js": "^1.11.1",
     "tinymce": "^4.6.5"
   },
   "devDependencies": {
