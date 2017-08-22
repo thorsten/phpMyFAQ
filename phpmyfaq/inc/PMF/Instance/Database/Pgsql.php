@@ -88,7 +88,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             record_lang VARCHAR(5) NOT NULL,
             PRIMARY KEY (category_id, category_lang, record_id, record_lang))',
 
-        'idx_records' => 'CREATE INDEX idx_records ON %sfaqcategoryrelations
+        'idx_records' => 'CREATE INDEX idx_records_%s ON %sfaqcategoryrelations
             (record_id, record_lang)',
 
         'faqcategory_group' => 'CREATE TABLE %sfaqcategory_group (
@@ -271,7 +271,7 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
             time INT4 NOT NULL,
             PRIMARY KEY (sid))',
 
-        'faqsessions_idx' => 'CREATE INDEX idx_time ON %sfaqsessions (time)',
+        'faqsessions_idx' => 'CREATE INDEX idx_time_%s ON %sfaqsessions (time)',
 
         'faqstopwords' => 'CREATE TABLE %sfaqstopwords (
             id SERIAL NOT NULL,
@@ -355,8 +355,12 @@ class PMF_Instance_Database_Pgsql extends PMF_Instance_Database implements PMF_I
      */
     public function createTables($prefix = '')
     {
-        foreach ($this->createTableStatements as $stmt) {
-            $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+        foreach ($this->createTableStatements as $key => $stmt) {
+            if ($key == 'idx_records' || $key == 'faqsessions_idx') {
+                $result = $this->config->getDb()->query(sprintf($stmt, $prefix, $prefix));
+            } else {
+                $result = $this->config->getDb()->query(sprintf($stmt, $prefix));
+            }
 
             if (!$result) {
                 return false;
