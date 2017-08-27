@@ -33,6 +33,7 @@
   "eqnull": false,
   "es5": false,
   "esnext": false,
+  "esversion": 6,
   "moz": false,
   "evil": false,
   "expr": false,

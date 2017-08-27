@@ -55,6 +55,8 @@ phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js
 phpmyfaq/assets/js/phpmyfaq.js.map
 phpmyfaq/assets/js/phpmyfaq.min.js
+phpmyfaq/assets/js/vendors.js
+phpmyfaq/assets/js/vendors.js.map
 phpmyfaq/assets/themes/default/css/*.css
 phpmyfaq/assets/themes/default/css/*.map
 phpmyfaq/assets/themes/default/fonts/*

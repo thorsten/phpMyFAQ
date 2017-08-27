@@ -42,7 +42,7 @@ $(document).ready(function() {
 
         switch ($(this).val()) {
             case 'sqlite3':
-                $dbSqlite.show().removeClass('hide');
+                $dbSqlite.show();
                 $dbFull.hide();
                 break;
             default:

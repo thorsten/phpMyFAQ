@@ -77,8 +77,8 @@ $psr4Loader->register();
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
     <script src="../assets/js/modernizr.min.js"></script>
+    <script src="../assets/js/vendors.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
-    <script src="../assets/js/setup.js"></script>
 
     <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 
@@ -143,58 +143,58 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <form class="form-horizontal" action="index.php" method="post">
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="col-6">
                 <fieldset>
                 <legend>Database setup</legend>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="sql_type">Server:</label>
-                        <div class="col-sm-8">
+                        <label for="sql_type">Server:</label>
+                        <div>
                             <select name="sql_type" id="sql_type" size="1" class="form-control">
                                 <?php echo implode('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
-                            <p class="help-block">Please select your preferred database type.</p>
+                            <p class="form-text text-muted">Please select your preferred database type.</p>
                         </div>
                     </div>
 
-                    <div id="dbdatafull">
+                    <div id="dbdatafull" style="display: block;">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_server">Host/Socket:</label>
-                            <div class="col-sm-8">
+                            <label for="sql_server">Host/Socket:</label>
+                            <div>
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="e.g. 127.0.0.1">
-                                <p class="help-block">Please enter the host or path to the socket of your database server.</p>
+                                <p class="form-text text-muted">Please enter the host or path to the socket of your database server.</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_user">User:</label>
-                            <div class="col-sm-8">
+                            <label for="sql_user">User:</label>
+                            <div>
                                 <input type="text" name="sql_user" id="sql_user" class="form-control">
-                                <p class="help-block">Please enter your database user.</p>
+                                <p class="form-text text-muted">Please enter your database user.</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_password">Password:</label>
-                            <div class="col-sm-8">
+                            <label for="sql_password">Password:</label>
+                            <div>
                                 <input name="sql_password" type="password" id="sql_password" class="form-control">
-                                <p class="help-block">Please enter your database password.</p>
+                                <p class="form-text text-muted">Please enter your database password.</p>
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_db">Database:</label>
-                            <div class="col-sm-8">
+                            <label for="sql_db">Database:</label>
+                            <div>
                                 <input type="text" name="sql_db" id="sql_db" class="form-control">
-                                <p class="help-block">Please enter your existing database name.</p>
+                                <p class="form-text text-muted">Please enter your existing database name.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div id="dbsqlite" class="hide">
+                    <div id="dbsqlite" style="display: none;">
                         <div class="form-group">
-                            <label class="col-sm-4 control-label" for="sql_sqlitefile">SQLite database file:</label>
-                            <div class="col-sm-8">
+                            <label for="sql_sqlitefile">SQLite database file:</label>
+                            <div>
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
                                        value="<?php echo dirname(__DIR__) ?>">
-                                <p class="help-block">
+                                <p class="form-text text-muted">
                                     Please enter the full path to your SQLite datafile which should be outside your
                                     docroot.
                                 </p>
@@ -203,10 +203,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="sqltblpre">Table prefix:</label>
-                        <div class="col-sm-8">
+                        <label for="sqltblpre">Table prefix:</label>
+                        <div>
                             <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
-                            <p class="help-block">
+                            <p class="form-text text-muted">
                                 Please enter a table prefix here if you want to install more phpMyFAQ installations on
                                 one database.
                             </p>
@@ -216,53 +216,53 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
             <?php if (extension_loaded('ldap')): ?>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="col-6">
                 <fieldset>
                 <legend>LDAP setup</legend>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_enabled">&nbsp;</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_enabled">&nbsp;</label>
+                        <div>
                             <label class="checkbox-inline">
                                 <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes">
                                 Enable LDAP support?
                             </label>
-                            <p class="help-block">You can enable LDAP later if you like.</p>
+                            <p class="form-text text-muted">You can enable LDAP later if you like.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_server">Host:</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_server">Host:</label>
+                        <div>
                             <input type="text" name="ldap_server" id="ldap_server" class="form-control"
                                    placeholder="127.0.0.1">
-                            <p class="help-block">Please enter the host of your LDAP server.</p>
+                            <p class="form-text text-muted">Please enter the host of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_port">Port:</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_port">Port:</label>
+                        <div>
                             <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
-                            <p class="help-block">Please enter the port of your LDAP server.</p>
+                            <p class="form-text text-muted">Please enter the port of your LDAP server.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_user">User DN:</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_user">User DN:</label>
+                        <div>
                             <input type="text" name="ldap_user" id="ldap_user" class="form-control">
-                            <p class="help-block">Please enter your specified RDN username.</p>
+                            <p class="form-text text-muted">Please enter your specified RDN username.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_password">Password:</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_password">Password:</label>
+                        <div>
                             <input name="ldap_password" type="password" id="ldap_password" class="form-control">
-                            <p class="help-block">Please enter your LDAP password.</p>
+                            <p class="form-text text-muted">Please enter your LDAP password.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="ldap_base">Base DN:</label>
-                        <div class="col-sm-8">
+                        <label for="ldap_base">Base DN:</label>
+                        <div>
                         <input type="text" name="ldap_base" id="ldap_base" class="form-control">
-                            <p class="help-block">
+                            <p class="form-text text-muted">
                                 Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
                             </p>
                         </div>
@@ -275,12 +275,12 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
             <?php endif; ?>
 
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="col-6">
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="language">Default language:</label>
-                        <div class="col-sm-8">
+                        <label for="language">Default language:</label>
+                        <div>
                             <select name="language" size="1" id="language" class="form-control">
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
@@ -304,78 +304,78 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                 }
                             ?>
                             </select>
-                            <p class="help-block">Please select your default language.</p>
+                            <p class="form-text text-muted">Please select your default language.</p>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="permLevel">Permission level:</label>
-                        <div class="col-sm-8">
+                        <label for="permLevel">Permission level:</label>
+                        <div>
                                 <select id="permLevel" name="permLevel" size="1" class="form-control">
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                             </select>
-                            <p class="help-block">
+                            <p class="form-text text-muted">
                                 Complexity of rights and permissions.
                             </p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="realname">Your name:</label>
-                        <div class="col-sm-8">
+                        <label for="realname">Your name:</label>
+                        <div>
                             <input type="text" name="realname" id="realname" class="form-control">
-                            <p class="help-block">Please enter your real name.</p>
+                            <p class="form-text text-muted">Please enter your real name.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="email">Your email address:</label>
-                        <div class="col-sm-8">
+                        <label for="email">Your email address:</label>
+                        <div>
                             <input type="email" name="email" id="email" class="form-control">
-                            <p class="help-block">Please enter your email adress.</p>
+                            <p class="form-text text-muted">Please enter your email adress.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="loginname">Your login name:</label>
-                        <div class="col-sm-8">
+                        <label for="loginname">Your login name:</label>
+                        <div>
                             <input type="text" name="loginname" id="loginname" class="form-control">
-                            <p class="help-block">Please enter your login name.</p>
+                            <p class="form-text text-muted">Please enter your login name.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="password">Your password:</label>
-                        <div class="col-sm-8">
+                        <label for="password">Your password:</label>
+                        <div>
                             <input type="password" name="password" id="password" class="form-control">
-                            <p class="help-block">Please enter your password.</p>
+                            <p class="form-text text-muted">Please enter your password.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="password_retype">Retype password:</label>
-                        <div class="col-sm-8">
+                        <label for="password_retype">Retype password:</label>
+                        <div>
                             <input type="password" name="password_retyped" id="password_retype" class="form-control">
-                            <p class="help-block">Please retype your password.</p>
+                            <p class="form-text text-muted">Please retype your password.</p>
                         </div>
                     </div>
                 </fieldset>
             </div>
 
             <?php if (extension_loaded('curl')): ?>
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+            <div class="col-6">
                 <fieldset>
                     <legend>Elasticsearch setup</legend>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="elasticsearch_enabled">&nbsp;</label>
-                        <div class="col-sm-8">
+                        <label for="elasticsearch_enabled">&nbsp;</label>
+                        <div>
                             <label class="checkbox-inline">
                                 <input id="elasticsearch_enabled" type="checkbox" name="elasticsearch_enabled"
                                 value="yes">
                                 Enable Elasticsearch support?
                             </label>
-                            <p class="help-block">You can enable Elasticsearch later if you like.</p>
+                            <p class="form-text text-muted">You can enable Elasticsearch later if you like.</p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="elasticsearch_server">Host:</label>
-                        <div class="col-sm-8">
+                        <label for="elasticsearch_server">Host:</label>
+                        <div>
                             <div class="input-group">
                                 <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
                                        class="form-control" placeholder="127.0.0.1:9200">
@@ -385,16 +385,16 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                     </a>
                                 </span>
                             </div>
-                            <p class="help-block">
+                            <p class="form-text text-muted">
                                 Please enter the host (domain or IP) with port number of your Elasticsearch server.
                             </p>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-4 control-label" for="elasticsearch_index">Index name:</label>
-                        <div class="col-sm-8">
+                        <label for="elasticsearch_index">Index name:</label>
+                        <div>
                             <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
-                            <p class="help-block">Please enter your Elasticsearch index name.</p>
+                            <p class="form-text text-muted">Please enter your Elasticsearch index name.</p>
                         </div>
                     </div>
                 </fieldset>

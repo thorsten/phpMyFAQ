@@ -6,8 +6,8 @@
   "dependencies": {
     "bootstrap": "4.0.0-beta",
     "bootstrap-datepicker": "1.7.1",
-    "bootstrap-fileinput": "^4.3.4",
-    "bxslider": "^4.2.11",
+    "bootstrap-fileinput": "^4.4.3",
+    "bxslider": "^4.2.13",
     "cookieconsent": "^3.0.4",
     "corejs-typeahead": "^1.1.1",
     "font-awesome": "4.7.0",
@@ -15,15 +15,12 @@
     "highlightjs": "9.10.0",
     "jquery": "3.2.1",
     "jquery-sparkline": "^2.3.2",
-    "mermaid": "^7.0.3",
-    "popper.js": "^1.11.1",
+    "mermaid": "^7.0.4",
+    "popper.js": "^1.12.3",
     "tinymce": "^4.6.5"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-preset-env": "^1.6.0",
     "grunt": "^1.0.1",
-    "grunt-babel": "^7.0.0",
     "grunt-bumpup": "^0.6.2",
     "grunt-contrib-clean": "^1.1.0",
     "grunt-contrib-concat": "^1.0.1",

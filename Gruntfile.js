@@ -37,6 +37,18 @@ module.exports = function (grunt) {
     //
     // Task configuration.
     //
+
+    clean: {
+      build: {
+        src: [
+          'phpmyfaq/assets/js/vendor.js',
+          'phpmyfaq/assets/js/phpmyfaq.js',
+          'phpmyfaq/assets/js/phpmyfaq.js.map',
+          'phpmyfaq/assets/js/phpmyfaq.min.js',
+          'phpmyfaq/assets/js/modernizr.min.js'
+        ]
+      }
+    },
     copy: {
       tinymce: {
         files: [
@@ -148,10 +160,10 @@ module.exports = function (grunt) {
         banner: '<%= banner %>',
         stripBanners: false
       },
-      dist: {
+      vendors: {
         src: [
-          'node_modules/jquery/dist/jquery.js',
-          'node_modules/popper.js/dist/popper.js',
+          'node_modules/jquery/dist/jquery.min.js',
+          'node_modules/popper.js/dist/umd/popper.min.js',
           'node_modules/bootstrap/js/dist/util.js',
           'node_modules/bootstrap/js/dist/tooltip.js',
           'node_modules/bootstrap/js/dist/alert.js',
@@ -165,7 +177,12 @@ module.exports = function (grunt) {
           'node_modules/handlebars/dist/handlebars.js',
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
-          'node_modules/bxslider/dist/jquery.bxslider.js',
+          'node_modules/bxslider/dist/jquery.bxslider.js'
+        ],
+        dest: 'phpmyfaq/assets/js/vendors.js'
+      },
+      dist: {
+        src: [
           'phpmyfaq/assets/js/add.js',
           'phpmyfaq/assets/js/autosave.js',
           'phpmyfaq/assets/js/category.js',
@@ -173,20 +190,10 @@ module.exports = function (grunt) {
           'phpmyfaq/assets/js/editor.js',
           'phpmyfaq/assets/js/records.js',
           'phpmyfaq/assets/js/typeahead.js',
-          'phpmyfaq/assets/js/functions.js'
+          'phpmyfaq/assets/js/functions.js',
+          'phpmyfaq/assets/js/setup.js'
         ],
         dest: 'phpmyfaq/assets/js/phpmyfaq.js'
-      }
-    },
-    babel: {
-      options: {
-        sourceMap: true,
-        presets: ['env']
-      },
-      dist: {
-        files: {
-          'phpmyfaq/assets/js/phpmyfaq.js': 'phpmyfaq/assets/js/phpmyfaq.js'
-        }
       }
     },
     uglify: {
@@ -195,7 +202,9 @@ module.exports = function (grunt) {
         preserveComments: 'some'
       },
       frontend: {
-        files: {'phpmyfaq/assets/js/phpmyfaq.min.js': ['<%= concat.dist.dest %>']}
+        files: {
+          'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ]
+        }
       },
       phpmyfaq_tinymce_plugin: {
         files: {
@@ -267,7 +276,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['phpmyfaq/admin/assets/js/**/*.js', 'phpmyfaq/assets/js/*.js'],
-        tasks: ['jshint', 'concat', 'uglify'],
+        tasks: ['clean', 'jshint', 'concat', 'uglify'],
         options: {
           livereload: true
         }
@@ -290,10 +299,10 @@ module.exports = function (grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', ['copy', 'jshint', 'concat', 'babel', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
+  grunt.registerTask('default', ['clean', 'copy', 'jshint', 'concat', 'uglify', 'sass:development', 'cssmin', 'modernizr']);
 
   // Build task
-  grunt.registerTask('build', ['copy', 'concat', 'babel','uglify', 'sass:production', 'cssmin', 'modernizr']);
+  grunt.registerTask('build', ['clean', 'copy', 'concat', 'uglify', 'sass:production', 'cssmin', 'modernizr']);
 
   // Watcher
   grunt.event.on('watch', function (action, filepath, target) {
