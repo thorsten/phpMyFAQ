@@ -15,20 +15,18 @@
     8.  [Enabling support for SEO-friendly URLs][13]
     9.  [Enabling LDAP support][14]
     10. [PDF export][15]
-    11. [Mozilla Firefox, Google Chrome and IE9+ search plugins][16]
-    12. [Static solution ID][17]
-    13. [Spam protection][18]
-    14. [Attachments][19]
-    15. [Twitter][20]
-    16. [Server side recommendations][21]
-    17. [Syntax Highlighting][65]
-    18. [Elasticsearch Support][66]
+    11. [Static solution ID][17]
+    12. [Spam protection][18]
+    13. [Attachments][19]
+    14. [Twitter][20]
+    15. [Server side recommendations][21]
+    16. [Syntax Highlighting][65]
+    17. [Elasticsearch Support][66]
 3.  **[Upgrading][22]**
-    1.  [Upgrading from phpMyFAQ 2.6.x][23]
-    2.  [Upgrading from phpMyFAQ 2.7.x][24]
-    3.  [Upgrading from phpMyFAQ 2.8.x][25]
-    4.  [Upgrading phpMyFAQ 2.9.x versions][26]
-    5.  [Modifying templates for phpMyFAQ 2.9.x][27]
+    1.  [Upgrading from phpMyFAQ 2.8.x][23]
+    2.  [Upgrading from phpMyFAQ 2.9.x][24]
+    3.  [Upgrading phpMyFAQ 2.10.x versions][26]
+    4.  [Modifying templates for phpMyFAQ 2.10.x][27]
 4.  **[Frontend][28]**
     1.  [Change languages][29]
     2.  [RSS Feeds][30]
@@ -407,18 +405,7 @@ Main features of the PDF export:
 
 * * *
 
-**2.11. <a id="2.11"></a>Mozilla Firefox, Google Chrome and IE9+ search plugins**
-
-phpMyFAQ provides search plugins for Mozilla Firefox, Google Chrome and Internet Explorer 9+ based on the OpenSearch 
-specification. Every user in the frontend can install it. With an installed search plugin you can search through the 
-phpMyFAQ installation with the search box in upper right corner of Mozilla Firefox, Google Chrome, Internet Explorer or
-Microsoft Edge.
-
-[back to top][64]
-
-* * *
-
-**2.12. <a id="2.8"></a>Static solution ID**
+**2.11. <a id="2.8"></a>Static solution ID**
 
 phpMyFAQ implements a static solution ID which never changes. This ID is displayed next to the question on a FAQ record 
 page. You may think why do you need such an ID? If you have a record ID *1042* it is now possible to enter only the ID 
@@ -430,7 +417,7 @@ can also change the value of the incrementation of the static IDs.
 
 * * *
 
-**2.13. <a id="2.13"></a>Spam protection**
+**2.12. <a id="2.13"></a>Spam protection**
 
 phpMyFAQ performs these three checks on public forms:
 
@@ -446,7 +433,7 @@ one word per line.
 
 * * *
 
-**2.14. <a id="2.14"></a>Attachments**
+**2.13. <a id="2.14"></a>Attachments**
 
 phpMyFAQ supports encrypted attachments. The encryption is done using the [AES](http://en.wikipedia.org/wiki/Advanced_Encryption_Standard) 
 algorithm implemented in mcrypt extension (if avaliable) or with native PHP Rijndael implementation. The key size vary 
@@ -468,7 +455,7 @@ etc), so there is no way to asses a file directly using the name it was uploaded
 
 * * *
 
-**2.15. <a id="2.15"></a>Twitter support**
+**2.14. <a id="2.15"></a>Twitter support**
 
 phpMyFAQ supports Twitter via OAuth. If you enable Twitter support in the social network configuration and add phpMyFAQ
 as a Twitter application on [twitter.com](https://dev.twitter.com/apps/new), all new FAQ additions in the administration
@@ -479,7 +466,7 @@ backend will also post the question of the FAQ, the URL of the FAQ and all tags 
 
 * * *
 
-**2.16 <a id="2.16"></a>Server side recommendations**
+**2.15 <a id="2.16"></a>Server side recommendations**
 
 ***MySQL / Percona Server / MariaDB***
 
@@ -491,7 +478,7 @@ backend will also post the question of the FAQ, the URL of the FAQ and all tags 
 
 * * *
 
-**2.17 <a id="2.17"></a>Syntax Highlighting**
+**2.16 <a id="2.17"></a>Syntax Highlighting**
 
 The bundled [highlight.js](https://highlightjs.org/) syntax highlighting component will find and highlight code inside 
 of &lt;pre&gt;&lt;code&gt; tags; it tries to detect the language automatically. If automatic detection doesn’t work for 
@@ -510,7 +497,7 @@ To disable highlighting altogether use the nohighlight class:
 
 * * *
 
-**2.18 <a id="2.18"></a>Elasticsearch Support**
+**2.17 <a id="2.18"></a>Elasticsearch Support**
 
 To improve the search performance and quality of search results it's possible to use Elasticsearch 2.x. You need a
 running Elasticsearch 2.x installation accessible by phpMyFAQ via HTTP/REST. You can add the IP(s)/Domain(s) and port(s)
@@ -524,78 +511,20 @@ built.
 
 **3. <a id="3"></a>Upgrading**
 
-Upgrading to phpMyFAQ 2.8.x is possible from the following versions:
+Upgrading to phpMyFAQ 2.10.x is possible from the following versions:
 
-*   phpMyFAQ 2.6.x
-*   phpMyFAQ 2.7.x
 *   phpMyFAQ 2.8.x
+*   phpMyFAQ 2.9.x
+*   phpMyFAQ 2.10.x
 
 If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating 
-an old FAQ from the 1.x, 2.0.x or 2.5.x series, please send us an [e-mail][68].
+an old FAQ from the 1.x, 2.0.x, 2.5.x, 2.6.x or 2.7.x series, please send us an [e-mail][68].
 
 [back to top][64]
 
 * * *
 
-**3.1. <a id="3.1"></a>Upgrading from phpMyFAQ 2.6.x**
-
-Upgrading from 2.6.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
-all files **except**:
-
-*   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
-*   all files in the directory **template/**
-*   the directory **attachments/**
-*   the directory **data/**
-*   the directory **images/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
-URL in your browser:
-
-`http://www.example.com/faq/setup/update.php`
-
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
-updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
-
-You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
-folder **assets/template/default/**.
-
-Please copy the template file **assets/template/default/indexLogin.html** into your template folder. If you use rewrite
-rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
-
-[back to top][64]
-
-* * *
-
-**3.2. <a id="3.2"></a>Upgrading from phpMyFAQ 2.7.x**
-
-Upgrading from 2.7.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
-all files **except**:
-
-*   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
-*   all files in the directory **template/**
-*   the directory **attachments/**
-*   the directory **data/**
-*   the directory **images/**
-
-Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
-URL in your browser:
-
-`http://www.example.com/faq/setup/update.php`
-
-Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
-updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
-
-You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
-folder **assets/template/default/**.
-
-Please copy the template file **assets/template/default/indexLogin.html** into your template folder. If you use rewrite
-rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
-
-[back to top][64]
-
-* * *
-
-**3.3. <a id="3.3"></a>Upgrading from phpMyFAQ 2.8.x**
+**3.1. <a id="3.1"></a>Upgrading from phpMyFAQ 2.8.x**
 
 Upgrading from 2.8.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
 all files **except**:
@@ -623,12 +552,40 @@ If you use rewrite rules with an Apache Webserver, please rename the _.htaccess 
 
 * * *
 
-**3.4. <a id="3.4"></a>Upgrading phpMyFAQ 2.9.x**
+**3.2. <a id="3.2"></a>Upgrading from phpMyFAQ 2.9.x**
 
-Updating an existing phpMyFAQ 2.9.x installation is fairly simple. First you have to delete all files **except**:
+Upgrading from 2.8.x is a major upgrade. Please make a full backup before you run the upgrade! First you have to delete 
+all files **except**:
+
+*   **database.php** and **ldap.php** (if you use LDAP) in the directory **config/**
+*   all files in the directory **assets/template/**
+*   the directory **attachments/**
+*   the directory **data/**
+*   the directory **images/**
+
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
+
+`http://www.example.com/faq/setup/update.php`
+
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated. You have to update a lot of your template files due to our change using the Bootstrap framework.
+
+You have to move your template files to the directory **assets/template/**. The default layout is be stored in the 
+folder **assets/template/default/**.
+
+If you use rewrite rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
+
+[back to top][64]
+
+* * *
+
+**3.3. <a id="3.4"></a>Upgrading phpMyFAQ 2.10.x**
+
+Updating an existing phpMyFAQ 2.10.x installation is fairly simple. First you have to delete all files **except**:
 
 *   all files in the directory **config/**
-*   all files in the directory **assets/template/**
+*   all files in the directory **assets/themes/**
 *   the directory **attachments/**
 *   the directory **data/**
 *   the directory **images/**
