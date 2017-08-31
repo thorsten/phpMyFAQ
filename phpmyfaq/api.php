@@ -81,8 +81,9 @@ switch ($action) {
         $faq             = new PMF_Faq($faqConfig);
         $user            = new PMF_User($faqConfig);
         $search          = new PMF_Search($faqConfig);
+        $search->setCategoryId($categoryId);
+        
         $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
-
         $searchString  = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
         $url           = $faqConfig->get('main.referenceURL') . '/index.php?action=artikel&cat=%d&id=%d&artlang=%s';
