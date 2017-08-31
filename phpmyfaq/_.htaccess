@@ -148,7 +148,7 @@ RewriteRule api/getVersion                                  api.php?action=getVe
 RewriteRule api/getApiVersion                               api.php?action=getApiVersion [L,QSA]
 RewriteRule api/getCount                                    api.php?action=getCount [L,QSA]
 RewriteRule api/getDefaultLanguage                          api.php?action=getDefaultLanguage [L,QSA]
-RewriteRule api/search/([a-z\-]+)/([0-9]+)/([a-z\-]+)$      api.php?action=search&lang=$1&categoryId=$2q=$2 [L,QSA]
+RewriteRule api/search/([a-z\-]+)/([0-9]+)/([a-z\-]+)$      api.php?action=search&lang=$1&categoryId=$2&q=$2 [L,QSA]
 RewriteRule api/getCategories/([a-z\-]+)                    api.php?action=getCategories&lang=$1 [L,QSA]
 RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)                 api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
 RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)                  api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]
