@@ -1602,7 +1602,7 @@ class PMF_Faq
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $question = $row->question;
+                $question = PMF_String::htmlspecialchars($row->question);
             }
         } else {
             $question = $this->pmf_lang['no_cats'];
