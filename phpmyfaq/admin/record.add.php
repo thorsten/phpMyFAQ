@@ -116,8 +116,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             'lang' => $recordLang,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
-            'thema' => html_entity_decode($question),
-            'content' => html_entity_decode($content),
+            'thema' => PMF_Filter::removeAttributes(html_entity_decode($question)),
+            'content' => PMF_Filter::removeAttributes(html_entity_decode($content)),
             'keywords' => $keywords,
             'author' => $author,
             'email' => $email,
@@ -127,7 +127,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
-            'notes' => $notes
+            'notes' => PMF_Filter::removeAttributes($notes)
         );
 
         // Add new record and get that ID

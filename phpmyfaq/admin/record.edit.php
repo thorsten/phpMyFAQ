@@ -442,7 +442,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 <div class="form-group">
                                     <textarea id="answer" name="notes" class="form-control" rows="7"
                                               placeholder="<?php echo $PMF_LANG['ad_admin_notes'] ?>"
-                                    ><?php echo $faqData['notes'] ?></textarea>
+                                    ><?php echo isset($faqData['notes']) ? $faqData['notes'] : '' ?></textarea>
                                 </div>
                             </div>
                         </div>

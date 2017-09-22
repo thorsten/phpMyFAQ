@@ -104,4 +104,30 @@ class PMF_Filter
 
         return http_build_query($cleanUrlData);
     }
+
+    /**
+     * Removes a lot of HTML attributes.
+     *
+     * @param $html
+     *
+     * @return string
+     */
+    public static function removeAttributes($html = '')
+    {
+        $keep = [
+            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
+            'size', 'dir', 'rel', 'rev', 'target', 'width', 'height'
+        ];
+
+        preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
+
+        foreach ($attributes[0] as $attribute) {
+            $attributeName = stristr($attribute, '=', true);
+            if (!in_array($attributeName, $keep)) {
+                $html = str_replace(' ' . $attribute, '', $html);
+            }
+        }
+
+        return $html;
+    }
 }
