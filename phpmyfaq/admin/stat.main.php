@@ -30,7 +30,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_stat_sess'] ?>
                     <div class="pull-right">
-                        <a class="btn btn-danger" href="?action=clear-visits">
+                        <a class="btn btn-danger"
+                           href="?action=clear-visits&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
                             <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_clear_all_visits'] ?>
                         </a>
                     </div>
@@ -47,10 +48,17 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $visits = new PMF_Visits($faqConfig);
     $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
     $month = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
-    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfTokenFromPost = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfTokenFromGet = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
         $statdelete = null;
+    }
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
+        $clearVisits = false;
+    } else {
+        $clearVisits = true;
     }
 
     // Delete sessions and session files
@@ -80,7 +88,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     }
 
     // Reset all visits and sessions
-    if ('clear-visits' === $action) {
+    if ('clear-visits' === $action && $clearVisits) {
 
         // Clear visits
         $visits->resetAll();
