@@ -568,7 +568,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
             <!-- sidebar -->
             <div class="col-lg-4">
-                <?php if (0 !== $faqData['id'] && 'copyentry' !== $action) {
+                <?php if ('' !== $faqData['dateEnd'] && 'copyentry' !== $action) {
                     $url = sprintf(
                         '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
                         $faqConfig->getDefaultUrl(),
