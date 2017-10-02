@@ -29,22 +29,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $logging = new PMF_Logging($faqConfig);
+$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $deleteLog = false;
+} else {
+    $deleteLog = true;
+}
 
 if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
     $date = new PMF_Date($faqConfig);
     $perpage = 15;
     $pages = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
     $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
-    $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
     if (is_null($pages)) {
         $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
-    }
-
-    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-        $deleteLog = false;
-    } else {
-        $deleteLog = true;
     }
 
     $start = ($page - 1) * $perpage;
