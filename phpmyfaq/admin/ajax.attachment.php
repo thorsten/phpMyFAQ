@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-20
  */
@@ -29,16 +27,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $attId = PMF_Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
+$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $att = PMF_Attachment_Factory::create($attId);
 
 if ($att) {
     switch ($ajaxAction) {
         case 'delete':
+
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                echo $PMF_LANG['err_NotAuth'];
+                exit(1);
+            }
+
             if ($att->delete()) {
-                print $PMF_LANG['msgAttachmentsDeleted'];
+                echo $PMF_LANG['msgAttachmentsDeleted'];
             } else {
-                print $PMF_LANG['ad_att_delfail'];
+                echo $PMF_LANG['ad_att_delfail'];
             }
             break;
     }
