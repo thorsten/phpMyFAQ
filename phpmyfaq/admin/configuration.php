@@ -50,7 +50,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             'main.contactInformations',
             'main.customPdfHeader',
             'main.customPdfFooter',
-            'main.titleFAQ'
+            'main.titleFAQ',
+            'main.metaKeywords'
         ];
 
         // Special checks
