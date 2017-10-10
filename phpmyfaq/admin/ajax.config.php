@@ -38,6 +38,11 @@ switch ($ajaxAction) {
 
     case 'add_instance':
 
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
         $url = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
         $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
         $comment = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);

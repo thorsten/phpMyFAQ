@@ -97,9 +97,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         <?php
         foreach ($instance->getAllInstances() as $site):
             $currentInstance = new PMF_Instance($faqConfig);
-    $currentInstance->getInstanceById($site->id);
-    $currentInstance->setId($site->id);
-    ?>
+            $currentInstance->getInstanceById($site->id);
+            $currentInstance->setId($site->id);
+            ?>
         <tr id="row-instance-<?php print $site->id ?>">
             <td><?php print $site->id ?></td>
             <td><a href="<?php print $site->url.$site->instance ?>"><?php print $site->url ?></a></td>
@@ -117,12 +117,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                    data-csrf-token="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <i aria-hidden="true" class="fa fa-trash"></i>
                 </a>
-                <?php endif;
-    ?>
+                <?php endif; ?>
             </td>
         </tr>
-        <?php endforeach;
-    ?>
+        <?php endforeach; ?>
         </tbody>
     </table>
 
@@ -135,6 +133,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 </div>
                 <div class="modal-body">
                     <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
+                        <input type="hidden" name="csrf" id="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                         <div class="form-group">
                             <label class="control-label col-lg-4">
                                 <?php echo $PMF_LANG['ad_instance_url'] ?>:
@@ -205,6 +204,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             // Add instance
             $('.pmf-instance-add').click(function(event) {
                 event.preventDefault();
+                var csrf     = $('#csrf').val();
                 var url      = $('#url').val();
                 var instance = $('#instance').val();
                 var comment  = $('#comment').val();
@@ -213,8 +213,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 var password = $('#password').val();
 
                 $.get('index.php',
-                    { action: 'ajax', ajax: 'config', ajaxaction: 'add_instance',
-                        url: url, instance: instance, comment: comment, email: email, admin: admin, password: password
+                    {
+                        action: 'ajax', ajax: 'config', ajaxaction: 'add_instance', csrf: csrf, url: url,
+                        instance: instance, comment: comment, email: email, admin: admin, password: password
                     },
                     function(data) {
                         if (typeof(data.added) === 'undefined') {
