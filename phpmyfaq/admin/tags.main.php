@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="row">
         <div class="col-lg-12">
             <form action="" method="post" class="tag-form">
-
+                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $tags = new PMF_Tags($faqConfig);
@@ -63,7 +63,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     foreach ($tagData as $key => $tag) {
         echo '<tr>';
-        echo '<td><span data-tag-id="'.$key.'">'.$tag.'</span></td>';
+        echo '<td><span data-tag-id="'.$key.'">'.PMF_String::htmlspecialchars($tag).'</span></td>';
         printf(
             '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
             $key,
