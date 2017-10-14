@@ -59,18 +59,14 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
     if (count($openquestions) > 0) {
         ?>
             <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
-                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession();
-        ?>">
+                <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession() ?>">
                 <table class="table table-striped">
                 <thead>
                     <tr>
                         <th></th>
-                        <th><?php echo $PMF_LANG['ad_entry_author'];
-        ?></th>
-                        <th><?php echo $PMF_LANG['ad_entry_theme'];
-        ?></th>
-                        <th colspan="2"><?php echo $PMF_LANG['ad_entry_visibility'];
-        ?>?</th>
+                        <th><?php echo $PMF_LANG['ad_entry_author'] ?></th>
+                        <th><?php echo $PMF_LANG['ad_entry_theme'] ?></th>
+                        <th colspan="2"><?php echo $PMF_LANG['ad_entry_visibility'] ?>?</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -82,18 +78,14 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
                             <label>
                             <input id="questions[]"
                                    name="questions[]"
-                                   value="<?php echo $question['id'];
-            ?>" type="checkbox">
+                                   value="<?php echo $question['id'] ?>" type="checkbox">
                             </label>
                         </td>
                         <td>
-                            <?php echo $date->format(PMF_Date::createIsoDate($question['created']));
-            ?>
+                            <?php echo $date->format(PMF_Date::createIsoDate($question['created'])) ?>
                             <br>
-                            <a href="mailto:<?php echo $question['email'];
-            ?>">
-                                <?php echo $question['username'];
-            ?>
+                            <a href="mailto:<?php echo $question['email'] ?>">
+                                <?php echo $question['username'] ?>
                             </a>
                         </td>
                         <td>
@@ -102,30 +94,22 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
                             <?php echo $question['question'] ?>
                         </td>
                         <td>
-                            <a href="?action=question&amp;id=<?php echo $question['id'];
-            ?>&amp;is_visible=toggle"
+                            <a href="?action=question&amp;id=<?php echo $question['id'] ?>&amp;is_visible=toggle"
                                class="btn btn-info">
-                                <?php echo ('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'];
-            ?>
+                                <?php echo ('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
                             </a>
                         </td>
                         <td>
-                            <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) {
-    ?>
-                            <a href="?action=editentry&amp;id=<?php echo $question['answer_id'];
-    ?>&amp;lang=<?php echo $LANGCODE;
-    ?>"
+                            <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
+                            <a href="?action=editentry&amp;id=<?php echo $question['answer_id'] ?>&amp;lang=<?php echo $LANGCODE ?>"
                                class="btn btn-success">
-                                <?php echo $PMF_LANG['msg2answerFAQ'];
-    ?>
+                                <?php echo $PMF_LANG['msg2answerFAQ'] ?>
                             </a>
                             <?php 
 } else {
     ?>
-                            <a href="?action=takequestion&amp;id=<?php echo $question['id'];
-    ?>" class="btn btn-success">
-                                <?php echo $PMF_LANG['ad_ques_take'];
-    ?>
+                            <a href="?action=takequestion&amp;id=<?php echo $question['id'] ?>" class="btn btn-success">
+                                <?php echo $PMF_LANG['ad_ques_take'] ?>
                             </a>
                             <?php 
 }
@@ -143,8 +127,8 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
 
                 <p>
                     <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
-                        <?php echo $PMF_LANG['ad_entry_delete'];
-        ?>
+                        <?php echo $PMF_LANG['ad_entry_delete'] ?>
+                        <?php echo $PMF_LANG['ad_entry_delete'] ?>
                     </button>
                 </p>
 
