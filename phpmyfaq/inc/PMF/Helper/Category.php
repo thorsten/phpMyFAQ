@@ -283,6 +283,8 @@ class PMF_Helper_Category extends PMF_Helper
                     'category_lang' => '',
                 ),
             );
+        } elseif (isset($categoryId['category_id'])) {
+            $categoryId = array($categoryId);
         }
 
         $i = 0;
