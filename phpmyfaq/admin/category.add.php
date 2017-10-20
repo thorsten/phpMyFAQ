@@ -37,13 +37,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
+$current_user_id = 1;
+
+if ( (string)$faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+
+    $current_user_id = $user->getUserId();
+}
+
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
-                <form enctype="multipart/form-data" class="form-horizontal" action="?action=savecategory" method="post">
+                <form class="form-horizontal" action="?action=savecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" id="lang" name="lang" value="<?php echo $LANGCODE ?>">
                     <input type="hidden" name="parent_id" value="<?php echo $parentId ?>">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
@@ -76,6 +83,18 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         </div>
                     </div>
 
+<!--                     <div class="form-group">
+                        <label class="col-lg-2 control-label" for="name"><?php echo $PMF_LANG['ad_categ_camp'] ?>:</label>
+                        <div class="col-lg-4">
+                            <select name="camp_id" id="camp_id" size="1" class="form-control">
+                                <option value="1">Test Campaign</option>
+                                <option value="2">Test Campaign 2</option>
+                                <option value="3">Test Campaign 3</option>
+                            </select>
+                        </div>
+                    </div>
+ -->
+
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="description"><?php echo $PMF_LANG['ad_categ_desc'] ?>:</label>
                         <div class="col-lg-4">
@@ -93,31 +112,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             </div>
                         </div>
                     </div>
-
                     <div class="form-group">
-                        <div class="col-lg-offset-2 col-lg-4">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="show_home" value="1" checked>
-                                    <?php echo $PMF_LANG['ad_user_show_home'] ?>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="pmf-category-image-upload">
-                            <?php echo $PMF_LANG['ad_category_image'] ?>:
-                        </label>
-                        <div class="col-lg-4">
-                            <input id="pmf-category-image-upload" name="image" type="file" class="file">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="user_id">
-                            <?php echo $PMF_LANG['ad_categ_owner'] ?>:
-                        </label>
+                        <label class="col-lg-2 control-label" for="user_id"><?php echo $PMF_LANG['ad_categ_owner'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="user_id" id="user_id" size="1" class="form-control">
                             <?php echo $user->getAllUserOptions() ?>
@@ -130,7 +126,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="group_id" id="group_id" size="1" class="form-control">
-                                <?php echo $user->perm->getAllGroupsOptions([]) ?>
+                                <!-- <?php echo $user->perm->getAllGroupsOptions([]) ?> -->
+                                <?php echo $user->perm->getAllGroupsOptions([],$current_user_id) ?>
                             </select>
                         </div>
                     </div>
@@ -158,7 +155,8 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                                 <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                             </label>
                             <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                <?php echo $user->perm->getAllGroupsOptions([]) ?>
+                                <!-- <?php echo $user->perm->getAllGroupsOptions([]) ?> -->
+                                <?php echo $user->perm->getAllGroupsOptions([],$current_user_id) ?>
                             </select>
                         </div>
                     </div>

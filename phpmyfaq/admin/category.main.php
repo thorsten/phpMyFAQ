@@ -2,16 +2,18 @@
 /**
  * List all categories in the admin section.
  *
- * PHP Version 5.6
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
@@ -44,9 +46,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-//
-// CSRF Check
-//
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if ('category' != $action && 'content' != $action &&
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
@@ -54,13 +53,6 @@ if ('category' != $action && 'content' != $action &&
 } else {
     $csrfCheck = true;
 }
-
-//
-// Image upload
-//
-$uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
-$categoryImage = new PMF_Category_Image($faqConfig);
-$categoryImage->setUploadedFile($uploadedFile);
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
@@ -70,18 +62,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryId = $faqConfig->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $categoryData = [
-            'lang' => $categoryLang,
+        $categoryData = array(
+            'lang' => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'camp_id' => PMF_Filter::filterInput(INPUT_POST, 'camp_id', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
             'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
-            'image' => $categoryImage->getFileName($categoryId, $categoryLang),
-            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
-        ];
+        );
 
         $permissions = [];
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
@@ -122,8 +111,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $category->addPermission('user', array($categoryId), $permissions['restricted_user']);
             $category->addPermission('group', array($categoryId), $permissions['restricted_groups']);
 
-            $categoryImage->upload();
-
             // All the other translations
             $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
@@ -138,22 +125,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
-        $existingImage = PMF_Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_STRING);
-        $image = count($uploadedFile) ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
-        $categoryData = [
-            'id' => $categoryId,
-            'lang' => $categoryLang,
+        $categoryData = array(
+            'id' => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+            'lang' => PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING),
             'parent_id' => $parentId,
             'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
             'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
             'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
             'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
-            'image' => $image,
-            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT),
-        ];
+            'camp_id' => PMF_Filter::filterInput(INPUT_POST, 'camp_id', FILTER_VALIDATE_INT)
+
+        );
 
         $permissions = [];
         if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
@@ -202,9 +185,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 $category->deletePermission('group', array($categoryData['id']));
                 $category->addPermission('user', array($categoryData['id']), $permissions['restricted_user']);
                 $category->addPermission('group', array($categoryData['id']), $permissions['restricted_groups']);
-
-                $categoryImage->upload();
-
                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
             } else {
                 printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
@@ -217,24 +197,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Deletes an existing category
     if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
-
-        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $deleteAll = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
-        $deleteAll = strtolower($deleteAll) == 'yes' ? true : false;
-
         $category = new PMF_Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
+        $id = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $deleteall = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        $delete_all = strtolower($deleteall) == 'yes' ? true : false;
 
-        $categoryImage = new PMF_Category_Image($faqConfig);
-        $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
-
-        if ($category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
-            $category->deleteCategoryRelation($categoryId, $categoryLang, $deleteAll) &&
-            $category->deletePermission('user', [$categoryId]) &&
-            $category->deletePermission('group', [$categoryId]) &&
-            $categoryImage->delete()) {
+        if ($category->deleteCategory($id, $lang, $delete_all) &&
+            $category->deleteCategoryRelation($id, $lang, $delete_all) &&
+            $category->deletePermission('user', array($id)) && $category->deletePermission('group', array($id))) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_deleted']);
         } else {
             printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
@@ -285,9 +258,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     if (isset($category)) {
         unset($category);
     }
+
+    // old code
     $category = new PMF_Category($faqConfig, [], false);
+
+    if ($faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+        // new code
+        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+    }
+
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+    //
     $category->getMissingCategories();
     $category->buildTree();
 
