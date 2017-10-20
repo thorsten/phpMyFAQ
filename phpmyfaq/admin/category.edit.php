@@ -2,7 +2,7 @@
 /**
  * Edits a category.
  *
- * PHP Version 5.6
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -22,6 +22,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     }
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
+}
+
+$current_user_id = 1;
+if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+    $current_user_id = $user->getUserId();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
@@ -51,7 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $restrictedGroups = true;
     }
 
-    $header = $PMF_LANG['ad_categ_edit_1'].' "'.$categoryData->getName().'" '.$PMF_LANG['ad_categ_edit_2'];
+    $header = $PMF_LANG['ad_categ_edit_1'].' '.$categoryData->getName().' '.$PMF_LANG['ad_categ_edit_2'];
     ?>
 
         <header class="row">
@@ -67,12 +72,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 
             </div>
         </div>
-        <form enctype="multipart/form-data" class="form-horizontal" action="?action=updatecategory" method="post">
+        <form class="form-horizontal" action="?action=updatecategory" method="post" accept-charset="utf-8">
             <input type="hidden" name="id" value="<?php echo $categoryId ?>">
             <input type="hidden" id="catlang" name="catlang" value="<?php echo $categoryData->getLang() ?>">
             <input type="hidden" name="parent_id" value="<?php echo $categoryData->getParentId() ?>">
             <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
-            <input type="hidden" name="existing_image" value="<?php echo $categoryData->getImage() ?>">
 
             <div class="form-group">
                 <label class="col-lg-2 control-label">
@@ -80,9 +84,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 </label>
                 <div class="col-lg-4">
                     <input type="text" id="name" name="name" value="<?php echo $categoryData->getName() ?>"
-                        class="form-control">
+                        class="form-control" required>
                 </div>
             </div>
+
+<!--             <div class="form-group">
+                <label class="col-lg-2 control-label" for="name"><?php echo $PMF_LANG['ad_categ_camp'] ?>:</label>
+                <div class="col-lg-4">
+                    <select name="camp_id" id="camp_id" size="1" class="form-control">
+                        <?php echo $user->getAllCampaigns($categoryData->getCampID()) ?>
+                        <option value="1">Test Campaign</option>
+                        <option value="2">Test Campaign 2</option>
+                        <option value="3">Test Campaign 3</option>
+                    </select>
+                </div>
+            </div> -->
+
 
             <div class="form-group">
                 <label class="col-lg-2 control-label">
@@ -105,28 +122,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 </div>
             </div>
 
-          <div class="form-group">
-            <div class="col-lg-offset-2 col-lg-4">
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" name="show_home" value="1"
-                      <?php echo(1 === (int)$categoryData->getShowHome() ? 'checked' : '') ?>>
-                  <?php echo $PMF_LANG['ad_user_show_home'] ?>
-                </label>
-              </div>
-            </div>
-          </div>
-
-            <div class="form-group">
-                <label class="col-lg-2 control-label" for="pmf-category-image-upload">
-                    <?php echo $PMF_LANG['ad_category_image'] ?>:
-                </label>
-                <div class="col-lg-4">
-                    <input id="pmf-category-image-upload" name="image" type="file" class="file"
-                           value="<?php echo $categoryData->getImage() ?>">
-                </div>
-            </div>
-
             <div class="form-group">
                 <label class="col-lg-2 control-label">
                     <?php echo $PMF_LANG['ad_categ_owner'] ?>:
@@ -145,7 +140,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                 <div class="col-lg-4">
                     <select name="group_id" id="group_id" size="1" class="form-control">
-                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()]) ?>
+                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()],$current_user_id) ?>
                     </select>
                 </div>
             </div>
@@ -166,7 +161,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                         <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                        <?php echo $user->perm->getAllGroupsOptions($groupPermission) ?>
+                        <?php echo $user->perm->getAllGroupsOptions($groupPermission,$current_user_id) ?>
                     </select>
                 </div>
             </div>
@@ -207,24 +202,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 </div>
             </div>
     </form>
-
-    <script>
-        var categoryImageUpload = $('#pmf-category-image-upload');
-        categoryImageUpload.fileinput({
-            uploadAsync: false,
-            showUpload: false,
-            uploadUrl: "?action=updatecategory",
-            <?php if ('' !== $categoryData->getImage()) { ?>
-            initialPreview: [
-                '<img src="<?php echo $faqConfig->getDefaultUrl().'/images/'.$categoryData->getImage() ?>" class="file-preview-image" alt="phpMyFAQ" width="120">'
-            ],
-            <?php } ?>
-            initialPreviewShowDelete: true
-        });
-        categoryImageUpload.on('fileclear', function(event) {
-            $('input[name=existing_image]').val('');
-        });
-    </script>
 <?php
 
 } else {

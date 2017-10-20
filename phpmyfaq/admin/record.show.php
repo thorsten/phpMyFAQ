@@ -133,6 +133,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     $comment = new PMF_Comment($faqConfig);
     $faq = new PMF_Faq($faqConfig);
+    $faq->setUser($currentAdminUser);
+    $faq->setGroups($currentAdminGroups);
     $date = new PMF_Date($faqConfig);
 
     $internalSearch = '';
@@ -174,7 +176,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
-    $numRecordsByCat = $category->getNumberOfRecordsOfCategory();
+    $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->config['main.enable_category_restrictions'],$user->getUserId());
 
     $matrix = $category->getCategoryRecordsMatrix();
     foreach ($matrix as $catkey => $value) {
@@ -184,10 +186,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
             }
         }
-    }
+    } 
 
     if (is_null($searchTerm)) {
-        $faq->getAllRecords($orderBy, null, $sortBy);
+
+        // new code 10-02 added language in params.
+        if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+            $Language = new PMF_Language($faqConfig);
+            $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+            $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
+        }else{
+            $faq->getAllRecords($orderBy, null, $sortBy);
+        }
+            
         foreach ($faq->faqRecords as $record) {
             if (!isset($numActiveByCat[$record['category_id']])) {
                 $numActiveByCat[$record['category_id']] = 0;
@@ -222,6 +233,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
 
         $result = $search->search($searchTerm);
+
         $laction = 'view';
         $internalSearch = '&search='.$searchTerm;
         $wasSearch = true;
@@ -236,7 +248,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             if (in_array($row->id, $idsFound)) {
                 continue; // only show one entry if FAQ is in mulitple categories
             }
-
             $faqsFound[$row->category_id][$row->id] = array(
                 'id' => $row->id,
                 'category_id' => $row->category_id,
@@ -266,7 +277,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
         }
     }
-
     if (count($faq->faqRecords) > 0) {
         $old = 0;
         $faqIds = [];
