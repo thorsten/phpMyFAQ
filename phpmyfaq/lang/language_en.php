@@ -3,13 +3,13 @@
 /**
  * The English language file - try to be the best of British and American English
  *
- * PHP Version 5.6
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @category  Segue Knowledge Base
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
@@ -233,6 +233,9 @@ $PMF_LANG["ad_user_del_3"] = "Are you sure?";
 $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
+$PMF_LANG["ad_password_length_err"] = "Password must be 8 characters.";
+$PMF_LANG["ad_cpassword_length_err"] = "Confirm Password must be 8 characters.";
+
 // Beitragsverwaltung
 $PMF_LANG["ad_entry_aor"] = "FAQ administration";
 $PMF_LANG["ad_entry_id"] = "ID";
@@ -303,6 +306,7 @@ $PMF_LANG["ad_categ_id"] = "#";
 $PMF_LANG["ad_categ_categ"] = "Category";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
 $PMF_LANG["ad_categ_titel"] = "Category title";
+$PMF_LANG["ad_categ_camp"] = "Campaign";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
@@ -423,13 +427,13 @@ $PMF_LANG["ad_att_fail"] = "An error occurred while attaching the file.";
 $PMF_LANG["ad_att_close"] = "Close this window";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG["ad_csv_restore"] = "With this form you can restore the content of the database, using a backup made with phpMyFAQ. Please note that the existing data will be overwritten.";
+$PMF_LANG["ad_csv_restore"] = "With this form you can restore the content of the database, using a backup made with Segue Knowledge Base. Please note that the existing data will be overwritten.";
 $PMF_LANG["ad_csv_file"] = "File";
 $PMF_LANG["ad_csv_ok"] = "OK";
 $PMF_LANG["ad_csv_linklog"] = "backup logfiles";
 $PMF_LANG["ad_csv_linkdat"] = "backup data";
 $PMF_LANG["ad_csv_head2"] = "Restore";
-$PMF_LANG["ad_csv_no"] = "This does not seem to be a backup of phpMyFAQ.";
+$PMF_LANG["ad_csv_no"] = "This does not seem to be a backup of Segue Knowledge Base.";
 $PMF_LANG["ad_csv_prepare"] = "Preparing the database queries...";
 $PMF_LANG["ad_csv_process"] = "Querying...";
 $PMF_LANG["ad_csv_of"] = "of";
@@ -554,7 +558,7 @@ $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>,
 $LANG_CONF['main.language'] = array(0 => "select", 1 => "Language");
 $LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic language detection");
 $LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of your FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ Version");
+$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "Segue Knowledge Base Version");
 $LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description");
 $LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
 $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
@@ -565,12 +569,13 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
+$LANG_CONF["main.enable_category_restrictions"] = array(0 => "checkbox", 1 => "Enable category restrictions.");
 $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
+$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL of your FAQ (e.g.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
@@ -590,7 +595,7 @@ $PMF_LANG["lostpwd_text_1"] = "Thank you for requesting your account information
 $PMF_LANG["lostpwd_text_2"] = "Please set a new personal password in the admin section of your FAQ.";
 $PMF_LANG["lostpwd_mail_okay"] = "E-Mail was sent.";
 
-$PMF_LANG["ad_xmlrpc_button"] = "Click to check version of your phpMyFAQ installation";
+$PMF_LANG["ad_xmlrpc_button"] = "Click to check version of your Segue Knowledge Base installation";
 $PMF_LANG["ad_xmlrpc_latest"] = "Latest version available on";
 
 // added v1.5.0 - 2005-07-31 by Thorsten
@@ -614,7 +619,7 @@ $PMF_LANG['ad_changerev'] = 'Select Revision';
 $PMF_LANG['msgCaptcha'] = "Please enter the captcha code";
 $PMF_LANG['msgSelectCategories'] = 'Search in ...';
 $PMF_LANG['msgAllCategories'] = '... all categories';
-$PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
+$PMF_LANG['ad_you_should_update'] = 'Your Segue Knowledge Base installation is outdated. You should update to the latest available version.';
 $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 
 // added v1.6.1 - 2006-04-25 by Matteoï and Thorsten
@@ -866,7 +871,7 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
-$PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
+$PMF_LANG['ad_pmf_info'] = 'Segue Knowledge Base Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';
 $PMF_LANG['ad_system_info'] = 'System Information';
 
@@ -941,9 +946,9 @@ $PMF_LANG['msgTransToolCreateTranslation'] = 'Create Translation';
 $PMF_LANG['msgTransToolTransCreated'] = 'New translation successfully created';
 $PMF_LANG['msgTransToolCouldntCreateTrans'] = 'Could not create the new translation';
 $PMF_LANG['msgAdding3Dots'] = 'adding ...';
-$PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpMyFAQ team';
+$PMF_LANG['msgTransToolSendToTeam'] = 'Send to phpmyFAQ team';
 $PMF_LANG['msgSending3Dots'] = 'sending ...';
-$PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the phpMyFAQ team. Thank you very much for sharing it.';
+$PMF_LANG['msgTransToolFileSent'] = 'Language file was successfully sent to the Segue Knowledge Base team. Thank you very much for sharing it.';
 $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending the language file';
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
 
@@ -996,14 +1001,14 @@ $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
+$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
 //$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
 //$PMF_LANG['att_storage_type'][0] = 'Filesystem';
 //$PMF_LANG['att_storage_type'][1] = 'Database';
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
-$PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
+$PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of Segue Knowledge Base. You do not need to upgrade.';
 $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection?<br>(default: disabled)");
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
@@ -1113,9 +1118,10 @@ $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 // added 2.7.5 - 2012-03-02 by Thorsten
 $PMF_LANG["msgExportAllFaqs"] = "Print all as PDF";
 $PMF_LANG["ad_online_verification"] = "Online verification check";
-$PMF_LANG["ad_verification_button"] = "Click to verify your phpMyFAQ installation";
-$PMF_LANG["ad_verification_notokay"] = "Your version of phpMyFAQ has local changes:";
-$PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully verified.";
+
+$PMF_LANG["ad_verification_button"] = "Click to verify your Segue Knowledge Base installation";
+$PMF_LANG["ad_verification_notokay"] = "Your version of Segue Knowledge Base has local changes:";
+$PMF_LANG["ad_verification_okay"] = "Your version of Segue Knowledge Base was successfully verified.";
 
 // added v2.8.0-alpha - 2011-09-29 by Thorsten
 $PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
@@ -1160,7 +1166,7 @@ $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwo
 $PMF_LANG["ad_visits_per_day"] = "Visits per day";
 
 // added v2.8.0-RC2 - 2013-02-17 by Thorsten
-$PMF_LANG["ad_instance_add"] = "Add a new phpMyFAQ multi site instance";
+$PMF_LANG["ad_instance_add"] = "Add a new Segue Knowledge Base multi site instance";
 $PMF_LANG["ad_instance_error_notwritable"] = "The folder /multisite isn\'t writable.";
 $PMF_LANG["ad_instance_url"] = "Instance URL";
 $PMF_LANG["ad_instance_path"] = "Instance path";
@@ -1168,7 +1174,7 @@ $PMF_LANG["ad_instance_name"] = "Instance name";
 $PMF_LANG["ad_instance_email"] = "Your admin email";
 $PMF_LANG["ad_instance_admin"] = "Admin login name";
 $PMF_LANG["ad_instance_password"] = "Admin password";
-$PMF_LANG["ad_instance_hint"] = "Caution: It will take some seconds to create a new phpMyFAQ instance!";
+$PMF_LANG["ad_instance_hint"] = "Caution: It will take some seconds to create a new Segue Knowledge Base instance!";
 $PMF_LANG["ad_instance_button"] = "Save instance";
 $PMF_LANG["ad_instance_error_cannotdelete"] = "Could not delete instance ";
 $PMF_LANG["ad_instance_config"] = "Instance configuration";
@@ -1250,21 +1256,3 @@ $PMF_LANG['ad_image_name_search'] = 'Search for image name';
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Private Notes';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
-
-// added 2.10.0-alpha - 2016-08-08 by Thorsten
-$LANG_CONF['ldap.ldap_mapping.name'] = array(0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.username'] = array(0 => 'input', 1 => 'LDAP mapping for username, "samAccountName" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.mail'] = array(0 => 'input', 1 => 'LDAP mapping for email, "mail" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.memberOf'] = array(0 => 'input', 1 => 'LDAP mapping for "member of" when using LDAP groups');
-$LANG_CONF['ldap.ldap_use_domain_prefix'] = array('checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"<br>(default: activated)');
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = array(0 => 'input', 1 => 'LDAP protocol version<br>(default: 3)');
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = array(0 => 'input', 1 => 'LDAP referrals<br>(default: 0)');
-$LANG_CONF['ldap.ldap_use_memberOf'] = array('checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"<br>(default: deactivated)');
-$LANG_CONF['ldap.ldap_use_sasl'] = array('checkbox', 'Enable LDAP SASL support<br>(default: deactivated)');
-$LANG_CONF['ldap.ldap_use_multiple_servers'] = array('checkbox', 'Enable multiple LDAP servers support<br>(default: deactivated)');
-$LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymous LDAP connections<br>(default: deactivated)');
-$LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding<br>(default: deactivated)');
-$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
-$LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap<br>(default: activated)');
-$PMF_LANG['ad_category_image'] = 'Category image';
-$PMF_LANG["ad_user_show_home"] = "Show on startpage";
