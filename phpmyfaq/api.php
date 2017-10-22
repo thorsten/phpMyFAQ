@@ -114,6 +114,7 @@ switch ($action) {
         $faq = new PMF_Faq($faqConfig);
         $user = new PMF_User($faqConfig);
         $search = new PMF_Search($faqConfig);
+        $search->setCategoryId($categoryId);
         $search->setCategory(new PMF_Category($faqConfig));
 
         $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
