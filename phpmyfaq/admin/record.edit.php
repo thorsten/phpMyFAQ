@@ -26,11 +26,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$current_user_id = 1;
+
 if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     $user->perm->checkRight($user->getUserId(), 'addbt')) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+    // old code
     $category = new PMF_Category($faqConfig, [], false);
+    if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+        // new code
+        $current_user_id = $user->getUserId();
+        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+    }
+
+
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+
     $category->buildTree();
 
     $categoryHelper = new PMF_Helper_Category();
@@ -570,7 +581,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             <div class="col-lg-4">
                 <?php if ('' !== $faqData['dateEnd'] && 'copyentry' !== $action) {
                     $url = sprintf(
-                        '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
+                        '%sindex.php?action=artikel&cat=%s&id=%d&artlang=%s',
                         $faqConfig->getDefaultUrl(),
                         array_values($categories)[0]['category_id'],
                         $faqData['id'],
@@ -723,7 +734,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         <?php echo($restrictedGroups ? 'checked' : ''); ?>>
                                     <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission) ?>
+                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission,$current_user_id) ?>
                                     </select>
                                 </label>
                             </div>
