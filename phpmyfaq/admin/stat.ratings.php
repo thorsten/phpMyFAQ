@@ -41,7 +41,8 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                     <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_rs'] ?>
 
                     <div class="pull-right">
-                        <a class="btn btn-danger" href="?action=clear-statistics">
+                        <a class="btn btn-danger" 
+                           href="?action=clear-statistics&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
                             <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_delete_all_votings'] ?>
                         </a>
                     </div>
@@ -50,7 +51,15 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         </header>
 
 <?php
-    if ('clear-statistics' === $action) {
+    $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $clearStatistics = false;
+    } else {
+        $clearStatistics = true;
+    }
+
+    if ('clear-statistics' === $action && $clearStatistics) {
         if ($ratings->deleteAll()) {
             echo '<p class="alert alert-success">Statistics successfully deleted.</p>';
         } else {

@@ -29,6 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $logging = new PMF_Logging($faqConfig);
+$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+    $deleteLog = false;
+} else {
+    $deleteLog = true;
+}
 
 if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
     $date = new PMF_Date($faqConfig);
@@ -66,7 +73,8 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
                 <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_adminlog'];
     ?>
                 <div class="pull-right">
-                    <a class="btn btn-danger" href="?action=deleteadminlog">
+                    <a class="btn btn-danger"
+                       href="?action=deleteadminlog&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
                         <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
                     </a>
                 </div>
@@ -122,17 +130,17 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
         ?></td>
             <td><small><?php
             $text = $logging_value['text'];
-        $text = str_replace('Loginerror', $PMF_LANG['ad_log_lger'], $text);
-        $text = str_replace('Session expired', $PMF_LANG['ad_log_sess'], $text);
-        $text = str_replace('Useredit, ', $PMF_LANG['ad_log_edit'], $text);
-        $text = str_replace('Beitragcreatesave', $PMF_LANG['ad_log_crsa'], $text);
-        $text = str_replace('Beitragcreate', $PMF_LANG['ad_log_crea'], $text);
-        $text = str_replace('Usersave, ', $PMF_LANG['ad_log_ussa'], $text);
-        $text = str_replace('Userdel, ', $PMF_LANG['ad_log_usde'], $text);
-        $text = str_replace('Beitragedit, ', $PMF_LANG['ad_log_beed'], $text);
-        $text = str_replace('Beitragdel, ', $PMF_LANG['ad_log_bede'], $text);
-        echo $text;
-        ?></small>
+            $text = str_replace('Loginerror', $PMF_LANG['ad_log_lger'], $text);
+            $text = str_replace('Session expired', $PMF_LANG['ad_log_sess'], $text);
+            $text = str_replace('Useredit, ', $PMF_LANG['ad_log_edit'], $text);
+            $text = str_replace('Beitragcreatesave', $PMF_LANG['ad_log_crsa'], $text);
+            $text = str_replace('Beitragcreate', $PMF_LANG['ad_log_crea'], $text);
+            $text = str_replace('Usersave, ', $PMF_LANG['ad_log_ussa'], $text);
+            $text = str_replace('Userdel, ', $PMF_LANG['ad_log_usde'], $text);
+            $text = str_replace('Beitragedit, ', $PMF_LANG['ad_log_beed'], $text);
+            $text = str_replace('Beitragdel, ', $PMF_LANG['ad_log_bede'], $text);
+            echo $text;
+            ?></small>
             </td>
         </tr>
 <?php
@@ -144,7 +152,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
 
 <?php
 
-} elseif ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'deleteadminlog' == $action && $deleteLog) {
     if ($logging->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_adminlog_delete_success']);
     } else {

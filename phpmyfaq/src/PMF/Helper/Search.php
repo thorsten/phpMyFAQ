@@ -97,20 +97,6 @@ class PMF_Helper_Search extends PMF_Helper
     }
 
     /**
-     * Renders the OpenSearchLink.
-     *
-     * @return string
-     */
-    public function renderOpenSearchLink()
-    {
-        return sprintf(
-            '<a class="searchplugin" href="#" onclick="window.external.AddSearchProvider(\'%s\'); return false;">%s</a>',
-            $this->_config->getDefaultUrl().'opensearch.php',
-            $this->translation['opensearch_plugin_install']
-        );
-    }
-
-    /**
      * Renders the results for Typehead.
      *
      * @param PMF_Search_Resultset $resultSet PMF_Search_Resultset object

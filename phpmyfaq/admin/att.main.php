@@ -72,7 +72,7 @@ $pagination = new PMF_Pagination(
                             <td><?php echo $item->filesize ?></td>
                             <td><?php echo $item->mime_type ?></td>
                             <td>
-                                <a href="javascript:deleteAttachment(<?php echo $item->id ?>); void(0);"
+                                <a href="javascript:deleteAttachment(<?php echo $item->id ?>, '<?php echo $user->getCsrfTokenFromSession() ?>'); void(0);"
                                    class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
                                     <i aria-hidden="true" class="fa fa-trash-o"></i>
                                 </a>
@@ -100,21 +100,21 @@ $pagination = new PMF_Pagination(
          * Ajax call for deleting attachments
          *
          * @param att_id Attachment id
+         * @apram csrf CSRF token
          */
-        function deleteAttachment(att_id) {
-          if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
-            $.ajax(
-              {
-                type: "GET",
-                url: "index.php?action=ajax&ajax=att&ajaxaction=delete",
-                data: {attId: att_id},
-                success: function (msg) {
-                  $('.att_' + att_id).fadeOut('slow');
-                  $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
-                }
-              }
-            );
-          }
+        function deleteAttachment(att_id, csrf)
+        {
+            if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
+                $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
+                $.ajax({
+                    type:    "GET",
+                    url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",
+                    data:    { attId: att_id, csrf: csrf},
+                    success: function(msg) {
+                        $('.att_' + att_id).fadeOut('slow');
+                        $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
+                    }
+                });
+            }
         }
         </script>

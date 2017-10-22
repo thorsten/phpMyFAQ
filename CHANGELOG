@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha2 - 2017-08-
+Version 2.10.0-alpha2 - 2017-10-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
@@ -32,7 +32,8 @@ Version 2.10.0-alpha2 - 2017-08-
 - updated bundled TinyMCE to version 4.6.4 (Thorsten)
 - removed Bower, now using NPM/Yarn only (Thorsten)
 
-Version 2.9.9 - 2017-08
+Version 2.9.9 - 2017-10-19
+- fixed multiple XSS and CSRF vulnerabilities (Thorsten)
 - updated bundled Bootstrap to version 3.3.7 (Thorsten)
 - updated bundled Font Awesome to version 4.7.0 (Thorsten)
 - updated bundled TinyMCE to version 4.5.7 (Thorsten)

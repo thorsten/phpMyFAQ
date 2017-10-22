@@ -9,11 +9,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
  */
@@ -42,12 +40,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
+
+$csrfTokenFromPost = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfTokenFromGet = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
+    $csrfCheck = false;
+} else {
+    $csrfCheck = true;
+}
+if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromGet) {
+    $csrfCheckDelete = false;
+} else {
+    $csrfCheckDelete = true;
+}
+
 if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     $user->perm->checkRight($user->getUserId(), 'editglossary') ||
     $user->perm->checkRight($user->getUserId(), 'delglossary')) {
     $glossary = new PMF_Glossary($faqConfig);
 
-    if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary')) {
+    if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary') && $csrfCheck) {
         $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->addGlossaryItem($item, $definition)) {
@@ -61,7 +73,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         }
     }
 
-    if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary')) {
+    if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary') && $csrfCheck) {
         $id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
         $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -76,7 +88,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
         }
     }
 
-    if ('deleteglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary')) {
+    if ('deleteglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary') && $csrfCheckDelete) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
@@ -111,10 +123,12 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
             $items['definition']
         );
         printf(
-            '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d">',
+            '<td><a class="btn btn-danger" onclick="return confirm(\'%s\'); return false;" href="%s%d%s%s">',
             $PMF_LANG['ad_user_del_3'],
             '?action=deleteglossary&amp;id=',
-            $items['id']
+            $items['id'],
+            '&csrf=',
+            $user->getCsrfTokenFromSession()
         );
         printf(
             '<span title="%s"><i aria-hidden="true" class="fa fa-trash-o"></i></span></a></td>',

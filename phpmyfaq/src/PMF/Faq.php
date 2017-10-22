@@ -491,19 +491,19 @@ class PMF_Faq
     /**
      * This function returns all not expired records from the given record ids.
      *
-     * @param array  $record_ids Array of record ids
+     * @param array  $recordIds Array of record ids
      * @param string $orderby    Order by
-     * @param string $sortby     Sort by
+     * @param string $sortBy     Sort by
      *
      * @return string
      */
-    public function showAllRecordsByIds(Array $record_ids, $orderby = 'fd.id', $sortby = 'ASC')
+    public function showAllRecordsByIds(Array $recordIds, $orderBy = 'fd.id', $sortBy = 'ASC')
     {
         global $sids;
 
-        $records = implode(', ', $record_ids);
+        $records = implode(', ', $recordIds);
         $page = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
-        $tagging_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+        $taggingId = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_DEFAULT);
         $output = '';
 
         $now = date('YmdHis');
@@ -559,8 +559,8 @@ class PMF_Faq
             $records,
             $this->_config->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
-            $this->_config->getDb()->escape($orderby),
-            $this->_config->getDb()->escape($sortby));
+            $this->_config->getDb()->escape($orderBy),
+            $this->_config->getDb()->escape($sortBy));
 
         $result = $this->_config->getDb()->query($query);
 
@@ -638,7 +638,7 @@ class PMF_Faq
             $vor = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
-                $url = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$vor;
+                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$vor;
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url, $this->_config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->pmf_lang['msgPrevious'];
@@ -647,7 +647,7 @@ class PMF_Faq
             }
             $output .= ' ';
             if ($next <= $pages) {
-                $url = $sids.'&amp;action=search&amp;tagging_id='.$tagging_id.'&amp;seite='.$next;
+                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$next;
                 $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().'?'.$url, $this->_config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->pmf_lang['msgNext'];
@@ -1602,7 +1602,7 @@ class PMF_Faq
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $question = $row->question;
+                $question = PMF_String::htmlspecialchars($row->question);
             }
         } else {
             $question = $this->pmf_lang['no_cats'];

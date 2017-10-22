@@ -29,7 +29,7 @@ $(document).ready(function () {
             );
         } else {
             var input = $('input[data-tag-id="' + id + '"]');
-            input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');
+            input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
         }
     });
 
@@ -40,11 +40,12 @@ $(document).ready(function () {
         var input = $('input[data-tag-id]:focus');
         var id = input.data('tag-id');
         var tag = input.val();
+        var csrf = $('input[name=csrf]').val();
 
         $.ajax({
             url: 'index.php?action=ajax&ajax=tags&ajaxaction=update',
             type: 'POST',
-            data: 'id=' + id + '&tag=' + tag,
+            data: 'id=' + id + '&tag=' + tag + '&csrf=' + csrf,
             dataType: 'json',
             beforeSend: function () {
                 $('#saving_data_indicator').html(
@@ -52,9 +53,9 @@ $(document).ready(function () {
                 );
             },
             success: function (message) {
-                input.replaceWith('<span data-tag-id="' + id + '">' + input.val() + '</span>');
-                $('span[data-tag-id="' + id + '"]').append(' ✓');
-                $('#saving_data_indicator').html('✓ ' + message);
+                input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
+                $('span[data-tag-id="' + id + '"]');
+                $('#saving_data_indicator').html(message);
             }
         });
 

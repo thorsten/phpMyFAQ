@@ -37,7 +37,15 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 
     // If we have to save a new password, do that first
     $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-    if (!is_null($save)) {
+    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfCheck = false;
+    } else {
+        $csrfCheck = true;
+    }
+
+    if (!is_null($save) && $csrfCheck) {
 
         // Define the (Local/Current) Authentication Source
         $auth = new PMF_Auth($faqConfig);
@@ -71,7 +79,8 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
         <div class="row">
             <div class="col-lg-12">
                 <form class="form-horizontal" action="?action=passwd" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="save" value="newpassword" />
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="save" value="newpassword">
                     <div class="form-group">
                         <label class="col-lg-2 control-label" for="opass">
                             <?php echo $PMF_LANG['ad_passwd_old'];

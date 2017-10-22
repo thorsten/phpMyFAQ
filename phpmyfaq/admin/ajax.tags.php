@@ -70,6 +70,12 @@ switch ($ajaxAction) {
 
         $id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         $tag = PMF_Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
+        $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            echo json_encode($PMF_LANG['err_NotAuth']);
+            exit(1);
+        }
 
         $entity = new PMF_Entity_Tags();
         $entity->setId($id);

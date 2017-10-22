@@ -128,7 +128,7 @@ class PMF_Search_Resultset
                 }
             }
             // check permission for user
-            if ($permission || 'basic' === $this->_config->get('security.permLevel')) {
+            if ('basic' === $this->_config->get('security.permLevel')) {
                 $userPermission = $this->faq->getPermission('user', $result->id);
                 if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
                     $permission = true;

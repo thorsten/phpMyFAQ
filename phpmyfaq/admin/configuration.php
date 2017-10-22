@@ -44,7 +44,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         // Set the new values
         $forbiddenValues = ['{', '}', '$'];
         $newConfigValues = [];
-        $escapeValues = ['main.contactInformations', 'main.customPdfHeader', 'main.customPdfFooter'];
+        $escapeValues = [
+            'main.contactInformations',
+            'main.customPdfHeader',
+            'main.customPdfFooter',
+            'main.titleFAQ',
+            'main.metaKeywords'
+        ];
 
         // Special checks
         if (isset($editData['edit']['main.enableMarkdownEditor'])) {
@@ -56,7 +62,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
             // Escape some values
             if (isset($escapeValues[$key])) {
-                $newConfigValues[$key] = PMF_String::htmlspecialchars($value, ENT_HTML5);
+                $newConfigValues[$key] = PMF_String::htmlspecialchars($value, ENT_QUOTES);
             }
             $keyArray = array_values(explode('.', $key));
             $newConfigClass = array_shift($keyArray);

@@ -43,6 +43,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
     $glossaryItem = $glossary->getGlossaryItem($id);
     ?>
                 <form class="form-horizontal" action="?action=updateglossary" method="post" accept-charset="utf-8">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="id" value="<?php echo $glossaryItem['id'];
     ?>" />
                     <div class="form-group">

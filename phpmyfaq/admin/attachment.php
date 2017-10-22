@@ -140,7 +140,11 @@ if (!is_null($currentSave) && $currentSave == true && $auth &&
     <strong><?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?></strong>
 </p>
 <?php
-    if (is_uploaded_file($_FILES['userfile']['tmp_name']) && !($_FILES['userfile']['size'] > $faqConfig->get('records.maxAttachmentSize'))) {
+    if (
+        is_uploaded_file($_FILES['userfile']['tmp_name']) &&
+        !($_FILES['userfile']['size'] > $faqConfig->get('records.maxAttachmentSize')) &&
+        $_FILES['userfile']['type'] !== "text/html"
+    ) {
         $att = PMF_Attachment_Factory::create();
         $att->setRecordId($recordId);
         $att->setRecordLang($recordLang);

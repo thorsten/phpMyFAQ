@@ -77,6 +77,6 @@ $tpl->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $faqConfig->get('main.titleFAQ')
+        'breadcrumbHeadline' => PMF_String::htmlspecialchars($faqConfig->get('main.titleFAQ'))
     ]
 );
