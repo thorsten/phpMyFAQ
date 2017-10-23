@@ -24,6 +24,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$current_user_id = 1;
+if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+    $current_user_id = $user->getUserId();
+}
+
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
@@ -145,7 +150,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                 <div class="col-lg-4">
                     <select name="group_id" id="group_id" size="1" class="form-control">
-                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()]) ?>
+                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()],$current_user_id) ?>
                     </select>
                 </div>
             </div>
@@ -166,7 +171,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                         <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                        <?php echo $user->perm->getAllGroupsOptions($groupPermission) ?>
+                        <?php echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()],$current_user_id) ?>
                     </select>
                 </div>
             </div>

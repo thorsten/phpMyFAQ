@@ -285,7 +285,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     if (isset($category)) {
         unset($category);
     }
+    // old code
     $category = new PMF_Category($faqConfig, [], false);
+    //
+
+    // new code
+    if ($faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+        
+        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+    }
+    //
+    
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();
