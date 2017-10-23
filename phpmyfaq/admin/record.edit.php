@@ -26,9 +26,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$current_user_id = 1;
+
 if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     $user->perm->checkRight($user->getUserId(), 'addbt')) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+    // old code
     $category = new PMF_Category($faqConfig, [], false);
+    //
+
+    // new code
+    if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+        $current_user_id = $user->getUserId();
+        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+    }
+    //
+    
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
@@ -723,7 +735,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         <?php echo($restrictedGroups ? 'checked' : ''); ?>>
                                     <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission) ?>
+                                        <?php echo $user->perm->getAllGroupsOptions($groupPermission,$current_user_id) ?>
                                     </select>
                                 </label>
                             </div>

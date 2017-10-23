@@ -37,6 +37,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
+$current_user_id = 1;
+
+if ( $faqConfig->config['main.enable_category_restrictions'] == 'true' && $user->getUserId() != 1){
+
+    $current_user_id = $user->getUserId();
+}
+
+
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -130,7 +138,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="group_id" id="group_id" size="1" class="form-control">
-                                <?php echo $user->perm->getAllGroupsOptions([]) ?>
+                                <?php echo $user->perm->getAllGroupsOptions([],$current_user_id) ?>
                             </select>
                         </div>
                     </div>
