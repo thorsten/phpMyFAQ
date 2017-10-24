@@ -1484,6 +1484,8 @@ class PMF_Faq
                 break;
         }
 
+        // prevents multiple display of FAQ incase it is tagged under multiple groups.
+        $group_by = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
         $query = sprintf('
             SELECT
                 fd.id AS id,
@@ -1525,6 +1527,7 @@ class PMF_Faq
                 fd.id = fdu.record_id
             %s
             %s
+            %s
             %s',
             PMF_Db::getTablePrefix(),
             PMF_Db::getTablePrefix(),
@@ -1532,6 +1535,7 @@ class PMF_Faq
             PMF_Db::getTablePrefix(),
             $where,
             $this->queryPermission($this->groupSupport),
+            $group_by,
             $orderBy
         );
 

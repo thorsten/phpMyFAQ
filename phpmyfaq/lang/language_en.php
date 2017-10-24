@@ -565,6 +565,7 @@ $LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
+$LANG_CONF["main.enableCategoryRestrictions"] = array(0 => "checkbox", 1 => "Enable category restrictions");
 $LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
 $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
