@@ -5,36 +5,31 @@ namespace phpMyFAQ;
 /**
  * The reporting class for simple report generation.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2011-02-04
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Report.
+ * Class Report.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2011-02-04
  */
@@ -57,10 +52,9 @@ class Report
 
     /**
      * Generates a huge array for the report.
-     *
      * @return array
      */
-    public function getReportingData()
+    public function getReportingData(): array
     {
         $report = [];
 
@@ -141,11 +135,10 @@ class Report
     /**
      * Convert string to the correct encoding and removes possible
      * bad strings to avoid formula injection attacks.
-     *
      * @param string $outputString String to encode.
      * @return string Encoded string.
      */
-    public function convertEncoding($outputString)
+    public function convertEncoding($outputString): string
     {
         $outputString = html_entity_decode($outputString, ENT_QUOTES, 'utf-8');
         $outputString = str_replace(',', ' ', $outputString);

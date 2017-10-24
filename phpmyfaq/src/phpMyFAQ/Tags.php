@@ -45,6 +45,11 @@ class Tags
     private $config;
 
     /**
+     * @var array
+     */
+    private $recordsByTagName = [];
+
+    /**
      * Constructor.
      *
      * @param Configuration $config
@@ -529,15 +534,17 @@ class Tags
 
     /**
      * Returns all FAQ record IDs where all tags are included.
-     *
      * @param string $tagName The name of the tag
-     *
      * @return array
      */
-    public function getRecordsByTagName($tagName)
+    public function getRecordsByTagName(string $tagName): array
     {
         if (!is_string($tagName)) {
-            return false;
+            return [];
+        }
+
+        if (count($this->recordsByTagName)) {
+            return $this->recordsByTagName;
         }
 
         $query = sprintf("
@@ -558,13 +565,13 @@ class Tags
             Db::getTablePrefix(),
             $this->config->getDb()->escape($tagName));
 
-        $records = [];
+        $this->recordsByTagName = [];
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $records[] = $row->record_id;
+            $this->recordsByTagName[] = $row->record_id;
         }
 
-        return $records;
+        return $this->recordsByTagName;
     }
 
     /**
@@ -577,7 +584,7 @@ class Tags
     public function getRecordsByTagId($tagId)
     {
         if (!is_integer($tagId)) {
-            return false;
+            return [];
         }
 
         $query = sprintf('

@@ -5,8 +5,6 @@ namespace phpMyFAQ\Search;
 /**
  * Implements result sets for phpMyFAQ search classes.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,6 +19,7 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search_Resultset.
+ * Class Resultset.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -84,7 +83,7 @@ class Resultset
     /**
      * FaqHelper object.
      *
-     * @var PMF_Faq
+     * @var Faq
      */
     protected $faq = null;
 

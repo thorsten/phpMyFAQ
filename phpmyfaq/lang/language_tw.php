@@ -534,7 +534,7 @@ $LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "發佈者姓名 Nam
 $LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "管理員的 Email 地址 <br>Email address of the Admin");
 $LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "聯絡資訊 Contact information");
 $LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "寄送給朋友的文字訊息頁面 Text for the send to friend page");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "上傳檔案最大容量 (max. %sByte) <br>Maximum size for attachments in Bytes (max. %sByte)");
+$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "上傳檔案最大容量<br>Maximum size for attachments in Bytes (max. %sByte)");
 $LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "啟用放加檔案預覽 Enable visibilty of attachments");
 $LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "啟用使用者追蹤 Enable user tracking");
 $LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "使用管理日誌檔案? use Adminlog?");

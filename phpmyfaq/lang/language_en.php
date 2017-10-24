@@ -1240,8 +1240,11 @@ $PMF_LANG['ad_image_name_search'] = 'Search for image name';
 $PMF_LANG['ad_admin_notes'] = 'Private Notes';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
 
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Add new FAQ in this category';
+
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
-$LANG_CONF['ldap.ldap_mapping.name'] = array(0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS');
+$LANG_CONF['ldap.ldap_mapping.nae'] = array(0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS');
 $LANG_CONF['ldap.ldap_mapping.username'] = array(0 => 'input', 1 => 'LDAP mapping for username, "samAccountName" when using an ADS');
 $LANG_CONF['ldap.ldap_mapping.mail'] = array(0 => 'input', 1 => 'LDAP mapping for email, "mail" when using an ADS');
 $LANG_CONF['ldap.ldap_mapping.memberOf'] = array(0 => 'input', 1 => 'LDAP mapping for "member of" when using LDAP groups');
@@ -1273,7 +1276,6 @@ $PMF_LANG["msgPrivacyNote"] = "Privacy Statement";
 
 // added 3.0.0-alpha2 - 2018-03-27 by Thorsten
 $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatic check for new versions'];
-$PMF_LANG['ad_quick_entry'] = 'Add FAQ in this category';
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
 $PMF_LANG['ad_user_override_passwd'] = 'Override password';
 $LANG_CONF['records.enableAutoRevisions'] = ['checkbox', 'Versioning of all FAQ changes'];

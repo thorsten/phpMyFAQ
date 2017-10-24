@@ -306,7 +306,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             $catInfo = '';
             $cid = $record['category_id'];
 
-            if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
+            if (isset($numRecordsByCat[$cid])) {
                 $catInfo .= sprintf(
                     '<span class="badge badge-info" id="category_%d_item_count">%d %s</span> ',
                     $cid,
