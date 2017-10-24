@@ -82,6 +82,7 @@ if (isset($auth)) {
         ],
         relative_urls: false,
         convert_urls: false,
+        document_base_url: '<?php echo $faqConfig->getDefaultUrl() ?>',
         remove_linebreaks: false,
         use_native_selects: true,
         paste_remove_spans: true,
