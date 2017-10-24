@@ -32,10 +32,17 @@ $groupId = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
-    $user->perm->checkRight($user->getUserId(), 'deluser')) {
-    $user = new PMF_User($faqConfig);
-    $userList = $user->getAllUsers();
-    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
+    $user->perm->checkRight($user->getUserId(), 'deluser')) ||
+    $user->perm->checkRight($user->getUserId(), 'editgroup')) {
+    
+    // pass the user id of the current user so it'll check which group he belongs to
+    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups($user->getUserId()) : [];
+
+    if ($faqConfig->config['main.enableCategoryRestrictions'] == false){
+        // orig code
+        $user = new PMF_User($faqConfig);
+        $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
+    }
 
     // Returns all groups
     if ('get_all_groups' == $ajaxAction) {

@@ -133,6 +133,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     $comment = new PMF_Comment($faqConfig);
     $faq = new PMF_Faq($faqConfig);
+    $faq->setUser($currentAdminUser);
+    $faq->setGroups($currentAdminGroups);
     $date = new PMF_Date($faqConfig);
 
     $internalSearch = '';
@@ -174,7 +176,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
-    $numRecordsByCat = $category->getNumberOfRecordsOfCategory();
+    $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->config['main.enableCategoryRestrictions'],$user->getUserId());
 
     $matrix = $category->getCategoryRecordsMatrix();
     foreach ($matrix as $catkey => $value) {
@@ -187,7 +189,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     }
 
     if (is_null($searchTerm)) {
-        $faq->getAllRecords($orderBy, null, $sortBy);
+        // new code 10-02-17 added language in params.
+        if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true' && $user->getUserId() != 1){
+            $Language = new PMF_Language($faqConfig);
+            $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+            $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
+        }else{
+            $faq->getAllRecords($orderBy, null, $sortBy);
+        }
+        //
+        
         foreach ($faq->faqRecords as $record) {
             if (!isset($numActiveByCat[$record['category_id']])) {
                 $numActiveByCat[$record['category_id']] = 0;
