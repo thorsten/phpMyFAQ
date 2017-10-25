@@ -648,11 +648,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
 
     /**
      * Returns an array with the IDs of all groups stored in the
-     * database.
-     *
+     * database if no user ID is passed.
+     * @param int userId 
      * @return array
      */
-    public function getAllGroups()
+    public function getAllGroups($userId = 1)
     {
         $select = sprintf('
             SELECT
@@ -661,6 +661,21 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
                 %sfaqgroup',
             PMF_Db::getTablePrefix()
         );
+        if ($userId != 1){
+            $select = sprintf('
+                SELECT
+                    fg.group_id
+                FROM
+                    %sfaqgroup fg
+                LEFT JOIN
+                    %sfaquser_group fug ON fg.group_id=fug.group_id
+                WHERE
+                    fug.user_id = %d',
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                $userId
+            );
+        }
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -678,10 +693,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      *
      * @return string
      */
-    public function getAllGroupsOptions(Array $groups)
+    public function getAllGroupsOptions(Array $groups, $userID = 1)
     {
         $options = '';
-        $allGroups = $this->getAllGroups();
+        $allGroups = $this->getAllGroups($userID);
 
         foreach ($allGroups as $groupId) {
             if (-1 != $groupId) {

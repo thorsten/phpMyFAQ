@@ -37,6 +37,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
+
+$currentUserId = $user->getUserId();
+
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -130,7 +133,13 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         <label class="col-lg-2 control-label" for="group_id"><?php echo $PMF_LANG['ad_categ_moderator'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="group_id" id="group_id" size="1" class="form-control">
-                                <?php echo $user->perm->getAllGroupsOptions([]) ?>
+                                <?php 
+                                    if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
+                                        echo $user->perm->getAllGroupsOptions([],$currentUserId);
+                                    } else {
+                                        echo $user->perm->getAllGroupsOptions([]); 
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>
@@ -158,7 +167,13 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                                 <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                             </label>
                             <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                <?php echo $user->perm->getAllGroupsOptions([]) ?>
+                               <?php 
+                                    if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
+                                        echo $user->perm->getAllGroupsOptions([],$currentUserId);
+                                    }else{
+                                        echo $user->perm->getAllGroupsOptions([]);
+                                    }
+                                ?>
                             </select>
                         </div>
                     </div>
