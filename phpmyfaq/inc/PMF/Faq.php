@@ -2980,29 +2980,29 @@ class PMF_Faq
 
         $result = $this->_config->getDb()->query($query);
 
-        $output = '<ul class="phpmyfaq_ul">';
+        if ($result) {
+            $output = '<ul class="phpmyfaq_ul">';
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                $title = PMF_Filter::filterVar($row->thema, FILTER_SANITIZE_STRING);
+                $url = sprintf(
+                    '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    PMF_Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
 
-        while (($row = $this->_config->getDb()->fetchObject($result))) {
-            $title = PMF_Filter::filterVar($row->thema, FILTER_SANITIZE_STRING);
-            $url = sprintf(
-                '%s?%saction=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                PMF_Link::getSystemRelativeUri(),
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
+                $oLink = new PMF_Link($url, $this->_config);
+                $oLink->itemTitle = $title;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $listItem = '<li>' . $oLink->toHtmlAnchor() . '</li>';
 
-            $oLink = new PMF_Link($url, $this->_config);
-            $oLink->itemTitle = $title;
-            $oLink->text = $title;
-            $oLink->tooltip = $title;
-            $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
-
-            $output .= $listItem;
+                $output .= $listItem;
+            }
+            $output .= '</ul>';
         }
-
-        $output .= '</ul>';
 
         return $output;
     }
