@@ -2979,7 +2979,8 @@ class PMF_Faq
         );
 
         $result = $this->_config->getDb()->query($query);
-
+        $output = '';
+        
         if ($result) {
             $output = '<ul class="phpmyfaq_ul">';
             while (($row = $this->_config->getDb()->fetchObject($result))) {
