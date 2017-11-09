@@ -211,7 +211,8 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     );
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'addtranslation')) {
+if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
+    !empty($availableLanguages) && count($availableLanguages) > 1) {
     $tpl->parseBlock(
         'writeContent',
         'addTranslation',
