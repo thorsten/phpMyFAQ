@@ -177,7 +177,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
 // Does the user have the right to add a comment?
-if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
+if ((!$faqConfig->get('records.allowCommentsForGuests') && !$user->perm->checkRight($user->getUserId(), 'addcomment')) ||
     ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired) {
     $commentMessage = $PMF_LANG['msgWriteNoComment'];
 } else {
@@ -269,6 +269,27 @@ $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
 $numComments = $faqComment->getNumberOfComments();
 
+if (!$faqConfig->get('records.allowCommentsForGuests') &&
+    !$user->perm->checkRight($user->getUserId(), 'addcomment')) {
+    $tpl->parse(
+        'writeContent',
+        'AllowComment',
+        [
+            'msgWriteComment' => $PMF_LANG['msgWriteComment'],
+            'id' => $recordId,
+            'lang' => $lang,
+            'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
+            'msgNewContentName' => $PMF_LANG['msgNewContentName'],
+            'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+            'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+            'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+            'msgYourComment' => $PMF_LANG['msgYourComment'],
+            'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+            'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
+        ]
+    );
+}
+
 $tpl->parse(
     'writeContent',
     array(
@@ -308,17 +329,8 @@ $tpl->parse(
         'msgVoteGood' => $PMF_LANG['msgVoteGood'],
         'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
         'writeCommentMsg' => $commentMessage,
-        'msgWriteComment' => $PMF_LANG['msgWriteComment'],
         'id' => $recordId,
         'lang' => $lang,
-        'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
-        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgYourComment' => $PMF_LANG['msgYourComment'],
-        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
         'writeComments' => $faqComment->getComments($recordId, PMF_Comment::COMMENT_TYPE_FAQ),
         'msg_about_faq' => $PMF_LANG['msg_about_faq'],
     )

@@ -39,6 +39,11 @@ $(function () {
         document.getElementById('pmf-create-comment').scrollIntoView();
     });
 
+    $('.show-comments').on('click', function(event) {
+        event.preventDefault();
+        document.getElementById('pmf-comments').scrollIntoView();
+    });
+
     $('.pmf-comments-show-more').on('click', function (event) {
         var commentId = $(this).data('comment-id');
         event.preventDefault();

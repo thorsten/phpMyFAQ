@@ -66,20 +66,32 @@ $categoryHelper->setCategory($category);
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
-// Enable/Disable WYSIWYG editor
-if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
+
+if(!$faqConfig->get('records.allowNewFaqsForGuests') &&
+   !$user->perm->checkRight($user->getUserId(), 'addfaq')) {
+    $tpl->parseBlock(
+        'writeContent',
+        'DisallowNewFaq',
+        [
+            'msgErrNotAuth' => $PMF_LANG['err_NotAuth'],
+        ]
+    );
+} else {
+    // Enable/Disable WYSIWYG editor
+    if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     $tpl->parseBlock(
         'writeContent',
         'enableWysiwygEditor',
-        array(
+            [
             'currentTimestamp' => $_SERVER['REQUEST_TIME'],
-        )
+            ]
     );
-}
+    }
 
-$tpl->parse(
+    $tpl->parseBlock(
     'writeContent',
-    array(
+        'AllowNewFaq',
+        [
         'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],
         'lang' => $Language->getLanguage(),
@@ -98,7 +110,13 @@ $tpl->parse(
         'msgNewContentLink' => $PMF_LANG['msgNewContentLink'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    )
+        ]
+    );
+}
+
+$tpl->parse(
+    'writeContent',
+    []
 );
 
 $tpl->parseBlock(

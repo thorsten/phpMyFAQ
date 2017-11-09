@@ -605,6 +605,20 @@ $tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
 $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 
 //
+// Hide "Add new FAQ" and "Add Question" from navigation if user does not have permission
+//
+if(!$faqConfig->get('records.allowNewFaqsForGuests') &&
+   !$user->perm->checkRight($user->getUserId(), 'addfaq'))
+{
+    $tplNavigation['msgAddContent'] = '';
+}
+if(!$faqConfig->get('records.allowQuestionsForGuests') &&
+   !$user->perm->checkRight($user->getUserId(), 'addquestion'))
+{
+    $tplNavigation['msgQuestion'] = '';
+}
+
+//
 // Show login box or logged-in user information
 //
 if (isset($auth)) {

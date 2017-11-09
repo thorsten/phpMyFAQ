@@ -1,3 +1,12 @@
+[DisallowNewFaq]
+<section>
+            <p class="alert alert-danger">
+                {msgErrNotAuth}
+            </p>
+        </section>
+[/DisallowNewFaq]
+
+[AllowNewFaq]
 <section>
             <p>{msgNewContentAddon}</p>
             <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
@@ -71,7 +80,21 @@
 
         </section>
 
-        [enableWysiwygEditor]
+        <script>
+            $(document).ready(function() {
+                $('#submitfaq').click(function() {
+                    if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
+                        tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
+                        document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
+                    }
+                    saveFormValues('savefaq', 'faq');
+                });
+                $('form#formValues').submit(function() { return false; });
+            });
+        </script>
+[/AllowNewFaq]
+
+[enableWysiwygEditor]
         <script src="admin/assets/js/editor/tinymce.min.js?{currentTimestamp}"></script>
         <script>
             $(document).ready(function() {
@@ -135,18 +158,5 @@
                 }
             });
         </script>
-        [/enableWysiwygEditor]
-
-        <script>
-            $(document).ready(function() {
-                $('#submitfaq').click(function() {
-                    if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
-                        tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
-                        document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
-                    }
-                    saveFormValues('savefaq', 'faq');
-                });
-                $('form#formValues').submit(function() { return false; });
-            });
-        </script>
+[/enableWysiwygEditor]
 
