@@ -128,7 +128,6 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
                 <p>
                     <button class="btn btn-danger" id="submitDeleteQuestions" type="submit">
                         <?php echo $PMF_LANG['ad_entry_delete'] ?>
-                        <?php echo $PMF_LANG['ad_entry_delete'] ?>
                     </button>
                 </p>
 
