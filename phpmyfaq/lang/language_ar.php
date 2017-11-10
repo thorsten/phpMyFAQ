@@ -1,18 +1,20 @@
 <?php
+
 /**
  * Arabic language file
  *
- * @category  phpMyFAQ
- * @package   Translation
- * @author    Ahmed Shalaby (ashalaby80@gmail.com)
- * @copyright 2004-2014 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
- * @since     2004-06-23
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Ahmed Shalaby <ashalaby80@gmail.com>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-23
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';
@@ -84,7 +86,7 @@ $PMF_LANG['msgSearchCategory'] = 'التصنيف ';
 $PMF_LANG['msgSearchContent'] = 'السؤال ';
 $PMF_LANG['msgNewContentHeader'] = 'شارك معنا الآن.. ';
 $PMF_LANG['msgNewContentAddon'] = 'لن يتم نشر مشاركتك مباشرة حتى يتم عرضها على المشر';
-$PMF_LANG['msgNewContentUBB'] = '<p>تستطيع إستخدام شفرات UBB المساعدة اثناء كتا';
+$PMF_LANG['msgNewContentUBB'] = 'تستطيع إستخدام شفرات UBB المساعدة اثناء كتا';
 $PMF_LANG['msgNewContentName'] = 'إسمك';
 $PMF_LANG['msgNewContentMail'] = 'عنوان بريدك';
 $PMF_LANG['msgNewContentCategory'] = 'إختر القسم المناسب';
@@ -104,7 +106,7 @@ $PMF_LANG['msgDate_User'] = 'التاريخ / المستخدم';
 $PMF_LANG['msgQuestion2'] = 'السؤال';
 $PMF_LANG['msg2answer'] = 'الإجابــة';
 $PMF_LANG['msgQuestionText'] = 'هنا تجد بعض الأسئلة المطروحة من قبل بعض المستخدم';
-$PMF_LANG['msgHelpText'] = '<p>طريقة بناء برنامج الاسئلة المتكررة سهل جدا , وتسطيع أن تبحث عن الأسئلة إما في   . <a href="?aktion=anzeigen">التصنيفات</a> أو تستعمل ';
+$PMF_LANG['msgHelpText'] = 'طريقة بناء برنامج الاسئلة المتكررة سهل جدا , وتسطيع أن تبحث عن الأسئلة إما في   . <a href="?aktion=anzeigen">التصنيفات</a> أو تستعمل ';
 $PMF_LANG['msgContactEMail'] = 'مراسلة المشرف:';
 $PMF_LANG['msgMessage'] = 'رسالتــك:';
 $PMF_LANG['msgTopTen'] = 'أكثر 10 أسئلة قراءة';
@@ -117,17 +119,17 @@ $PMF_LANG['msgMailCheck'] = 'يوجد سؤال جديدة في مركز الأس
 $PMF_LANG['msgMailContact'] = 'تم إرسال رسالتك إلى المشرف العام .';
 $PMF_LANG['err_noDatabase'] = 'لا يوجد إتصال بقاعدة البيانات بعد .';
 $PMF_LANG['err_noHeaders'] = 'لا يوجد تصنيفات بعد .';
-$PMF_LANG['err_noArticles'] = '<p>لا يوجد أسئلة بعد .</p>';
-$PMF_LANG['err_badID'] = '<p>رقم تعري ? خاطيء</p>';
-$PMF_LANG['err_noTopTen'] = '<p>لا يوجد أفضل 10 أسئلة حتى الآن .</p>';
-$PMF_LANG['err_nothingFound'] = '<p>لا يوجد أسئلة حتى الآن .</p>';
+$PMF_LANG['err_noArticles'] = 'لا يوجد أسئلة بعد .';
+$PMF_LANG['err_badID'] = 'رقم تعري ? خاطيء';
+$PMF_LANG['err_noTopTen'] = 'لا يوجد أفضل 10 أسئلة حتى الآن .';
+$PMF_LANG['err_nothingFound'] = 'لا يوجد أسئلة حتى الآن .';
 $PMF_LANG['err_SaveEntries'] = 'الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <fo';
 $PMF_LANG['err_SaveComment'] = 'الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <fo';
-$PMF_LANG['err_VoteTooMuch'] = '<p>نحن لا نقوم بإحتساب التقييم المزدوج أو المتكرر ';
-$PMF_LANG['err_noVote'] = '<p>لم تقم بتقييم هذا السؤال بعد ! <a href=';
+$PMF_LANG['err_VoteTooMuch'] = 'نحن لا نقوم بإحتساب التقييم المزدوج أو المتكرر ';
+$PMF_LANG['err_noVote'] = 'لم تقم بتقييم هذا السؤال بعد ! <a href=';
 $PMF_LANG['err_noMailAdress'] = 'عنوان بريدك الإلكتروني غير صحيح .<br /><a href=';
 $PMF_LANG['err_sendMail'] = 'الحقول المطلوبة هي <font color=\"red\">إسمك</font>, <fo';
-$PMF_LANG['help_search'] = '<p>إبحث عن سؤال:<br /></p>';
+$PMF_LANG['help_search'] = 'إبحث عن سؤال:<br />';
 $PMF_LANG['ad'] = 'قسم الإدارة';
 $PMF_LANG['ad_menu_user_administration'] = 'إدارة الأعضاء';
 $PMF_LANG['ad_menu_entry_aprove'] = 'إعتماد أسئلة';
@@ -396,7 +398,7 @@ $PMF_LANG['ad_xml_head'] = ' XML نسخ كــ';
 $PMF_LANG['ad_xml_hint'] = 'حفظ جميع الأسئلة الموجودة على شكل ملف من نوع X';
 $PMF_LANG['ad_xml_gen'] = 'إنشاء ملف XML ';
 $PMF_LANG['ad_entry_locale'] = 'اللغة';
-$PMF_LANG['msgLangaugeSubmit'] = 'تغيير اللغة';
+$PMF_LANG['msgLanguageSubmit'] = 'تغيير اللغة';
 $PMF_LANG['ad_entry_preview'] = 'عرض';
 $PMF_LANG['ad_attach_1'] = 'فضلاً قم بتحديد مسار المجلد الذي سيتم فيه ح ';
 $PMF_LANG['ad_attach_2'] = 'فضلاً قم بتحديد وصلة عنوان المجلد الذي سي';
@@ -464,7 +466,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "عدد 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "عدد مقالات الأخبار");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "حجب ومنع هذة العناوين");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "? mod_rewrite هل تريد تشغيل خاصية ال  (default: disabled)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "هل تريد ان تشغل خاصية ال  LDAP? (default: disabled)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'كتصنيف رئيسي جديد';
 $PMF_LANG['ad_categ_paste_error'] = 'نقل هذا التصنيف غير ممكن';
 $PMF_LANG['ad_categ_move'] = 'نقل تصنيف';
@@ -665,7 +667,6 @@ $PMF_LANG['msgEditFaqDat'] = 'تحرير';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => 'Sorting of the top faq\'s');
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Instant Response on startpage (default: deactivated)');
 $PMF_LANG['msgTransToolRemove'] = 'حذف';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Number of plural forms';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'This language has only one plural form';
@@ -847,16 +848,13 @@ $PMF_LANG['ad_groups'] = 'المجموعات';
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'العنوان';
 $PMF_LANG['ad_conf_order_visits'] = 'عدد الزوار';
-$PMF_LANG['ad_conf_order_datum'] = 'التاريخ';
+$PMF_LANG['ad_conf_order_updated'] = 'التاريخ';
 $PMF_LANG['ad_conf_order_author'] = 'الكاتب';
 $PMF_LANG['ad_conf_desc'] = 'تصاعديا';
 $PMF_LANG['ad_conf_asc'] = 'تنازليا';
 $PMF_LANG['mainControlCenter'] = 'الاعدادت الاساسية';
 $PMF_LANG['recordsControlCenter'] = 'اعداد المدخلات';
-$PMF_LANG['msgInstantResponse'] = 'بحث سريع';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'أبدأ البحث هنا لتحصل على الاجابة حالا ...';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';

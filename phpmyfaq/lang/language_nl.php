@@ -1,24 +1,25 @@
 <?php
+
 /**
  * Dutch language file
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    René de Kat <rdkat@home.nl>
  * @author    Hans <hans@hansbosnl.nl>
  * @author    Ronald <ronald@proudsites.com>
  * @author    Almar van Pel <almar@makeweb.nl>
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-07-09
  */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'nl';
 $PMF_LANG['language'] = 'Nederland';
@@ -31,7 +32,7 @@ $PMF_LANG['msgAddContent'] = 'Vraag toevoegen';
 $PMF_LANG['msgQuestion'] = 'Vraag stellen';
 $PMF_LANG['msgOpenQuestions'] = 'Nog niet beantwoord';
 $PMF_LANG['msgHelp'] = 'Hulp';
-$PMF_LANG['msgContact'] = 'Contact';
+$PMF_LANG['msgContact'] = 'Contactpersoon';
 $PMF_LANG['msgHome'] = 'Home';
 $PMF_LANG['msgNews'] = 'Nieuws';
 $PMF_LANG['msgUserOnline'] = 'Gebruikers';
@@ -106,7 +107,7 @@ $PMF_LANG['msgDate_User'] = 'Datum / Gebruiker';
 $PMF_LANG['msgQuestion2'] = 'Vraag';
 $PMF_LANG['msg2answer'] = 'Antwoord';
 $PMF_LANG['msgQuestionText'] = 'Hier kunt u vragen zien die gesteld zijn door andere gebruikers. Als u één van de vragen beantwoordt, kan uw antwoord in de FAQ worden opgenomen.';
-$PMF_LANG['msgHelpText'] = '<p>De structuur van de FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is erg simpel. U kunt of door de <strong><a href="?action=show">categorieën</a></strong> zoeken of de <strong><a href="?action=search">FAQ zoekmachine</a></strong> laten zoeken op sleutelwoorden.</p>';
+$PMF_LANG['msgHelpText'] = 'De structuur van de FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) is erg simpel. U kunt of door de <strong><a href="?action=show">categorieën</a></strong> zoeken of de <strong><a href="?action=search">FAQ zoekmachine</a></strong> laten zoeken op sleutelwoorden.';
 $PMF_LANG['msgContactEMail'] = 'E-mail naar de beheerder:';
 $PMF_LANG['msgMessage'] = 'Uw bericht:';
 $PMF_LANG['msgTopTen'] = 'Meest bekeken';
@@ -119,17 +120,17 @@ $PMF_LANG['msgMailCheck'] = 'Er zijn nieuwe vragen in de FAQ! Controleer het beh
 $PMF_LANG['msgMailContact'] = 'Uw bericht is naar een beheerder verzonden.';
 $PMF_LANG['err_noDatabase'] = 'Geen databaseverbinding beschikbaar.';
 $PMF_LANG['err_noHeaders'] = 'Geen categorie gevonden.';
-$PMF_LANG['err_noArticles'] = '<p>Geen vragen beschikbaar.</p>';
-$PMF_LANG['err_badID'] = '<p>Verkeerde ID.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Er is nog geen top 10 beschikbaar.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Geen vragen gevonden.</p>';
+$PMF_LANG['err_noArticles'] = 'Geen vragen beschikbaar.';
+$PMF_LANG['err_badID'] = 'Verkeerde ID.';
+$PMF_LANG['err_noTopTen'] = 'Er is nog geen top 10 beschikbaar.';
+$PMF_LANG['err_nothingFound'] = 'Geen vragen gevonden.';
 $PMF_LANG['err_SaveEntries'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong>, <strong>categorie</strong>, <strong>koptekst</strong> en <strong>uw vraag</strong>!<br /><br /><a href="nojavascript...history.back();">één pagina terug</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw commentaar</strong>!<br /><br /><a href="nojavascript...history.back();">één pagina terug</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Dubbele stemmen worden niet geteld. <a href="nojavascript...history.back();">Klik hier</a> om terug te gaan.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Er werd geen beoordeling gegeven!</strong> <a href="nojavascript...history.back();">Klik hier</a> om te stemmen.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Dubbele stemmen worden niet geteld.';
+$PMF_LANG['err_noVote'] = '<strong>Er werd geen beoordeling gegeven!</strong> <a href="nojavascript...history.back();">Klik hier</a> om te stemmen.';
 $PMF_LANG['err_noMailAdress'] = 'Uw emailadres is niet correct.<br /><a href="nojavascript...history.back();">terug</a>';
 $PMF_LANG['err_sendMail'] = 'Verplichte velden zijn <strong>uw naam</strong>, <strong>uw emailadres</strong> en <strong>uw vraag</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Zoek naar vragen:</strong><br />Met een ingave als <strong style="color: Red;">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.</p><p><strong>Let op:</strong> Uw zoekcriteria moet uit minstens vier (4) karakters bestaan, anders wordt uw zoekactie geweigerd.</p>';
+$PMF_LANG['help_search'] = '<strong>Zoek naar vragen:</strong><br />Met een ingave als <strong style="color: Red;">woord1 woord2</strong> kunt u een zoekactie doen voor twee of meer zoekcriteria met aflopende relevantie.<strong>Let op:</strong> Uw zoekcriteria moet uit minstens vier (4) karakters bestaan, anders wordt uw zoekactie geweigerd.';
 $PMF_LANG['ad'] = 'ADMIN AFDELING';
 $PMF_LANG['ad_menu_user_administration'] = 'Gebruikers';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Vragen goedkeuren';
@@ -399,7 +400,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-Backup';
 $PMF_LANG['ad_xml_hint'] = 'Sla alle records van uw FAQ op in één XML bestand.';
 $PMF_LANG['ad_xml_gen'] = 'maak XML bestand';
 $PMF_LANG['ad_entry_locale'] = 'Taal';
-$PMF_LANG['msgLangaugeSubmit'] = 'Wijzig taal:';
+$PMF_LANG['msgLanguageSubmit'] = 'Wijzig taal:';
 $PMF_LANG['ad_entry_preview'] = 'Voorvertoning';
 $PMF_LANG['ad_attach_1'] = 'Kies eerst in de configuratie voor een map voor de bijlagen.';
 $PMF_LANG['ad_attach_2'] = 'Kies eerst in de configuratie voor een link voor de bijlagen.';
@@ -663,16 +664,13 @@ $PMF_LANG['ad_groups'] = 'Groepen';
 $PMF_LANG['ad_conf_order_id'] = 'ID (standaard)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titel';
 $PMF_LANG['ad_conf_order_visits'] = 'Aantal bezoekers';
-$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_updated'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Auteur';
 $PMF_LANG['ad_conf_desc'] = 'aflopend';
 $PMF_LANG['ad_conf_asc'] = 'oplopend';
 $PMF_LANG['mainControlCenter'] = 'Hoofdconfiguratie';
 $PMF_LANG['recordsControlCenter'] = 'FAQ vragen configuratie';
-$PMF_LANG['msgInstantResponse'] = 'Direct antwoord';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Zoek onder de eerste %d vragen.';
 $PMF_LANG['msgAllCatArticles'] = 'Vragen in deze categorie';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Typ en vind het antwoord...';
 $PMF_LANG['msgTagSearch'] = 'Gelabelde items';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ informatie';
 $PMF_LANG['ad_online_info'] = 'Online versie controleren';
@@ -757,7 +755,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Aantal 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Aantal nieuws artikelen');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Blokkeer deze IP adressen');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'mod_rewrite ondersteuning activeren? (standaard: gedeactiveerd)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP ondersteuning activeren? (standaard: gedeactiveerd)');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Basis URL voor link verificatie (bijv.: http://www.voorbeeld.nl/faq)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Interval tussen AJAX link verificaties (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Uitschakelen zichtbaarheid van nieuwe vragen?');
@@ -788,7 +786,6 @@ $PMF_LANG['msgEditFaqDat'] = 'bewerk';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Aantal genoteerde zoektermen');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => 'Sortering van de top FAQ\'s');
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-mail adres als verplicht veld (standaard: gedeactiveerd)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Directe Response op startpagina (standaard: gedeactiveerd)');
 $PMF_LANG['msgTransToolRemove'] = 'Verwijder';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Aantal meervoud';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Deze taal kent slechts een meervoudsvorm';
@@ -913,11 +910,6 @@ $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
 $PMF_LANG['msgMode'] = 'Modus';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQ is in maintenance';
 $PMF_LANG['msgOnlineMode'] = 'FAQ is online';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
 $LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Close open question after answer?');
 $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Delete open question after answer?');
 $LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ autosaving');

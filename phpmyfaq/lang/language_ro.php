@@ -1,16 +1,20 @@
 <?php
+
 /**
  * Romanian language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Karoly SIMO <skaroly@bestdomain.ro>
- * @since      2004-11-09
- * @copyright  2004-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Karoly SIMO <skaroly@bestdomain.ro>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-11-09
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';
@@ -23,10 +27,10 @@ $PMF_LANG['msgShowAllCategories'] = 'Toate categoriile';
 $PMF_LANG['msgSearch'] = 'Cauta';
 $PMF_LANG['msgAddContent'] = 'Adauga intrebare';
 $PMF_LANG['msgQuestion'] = 'Intreaba si tu';
-$PMF_LANG['msgOpenQuestions'] = 'Intrebari la care se asteapta raspuns';
+$PMF_LANG['msgOpenQuestions'] = 'Intrebari la care asteapta un raspuns';
 $PMF_LANG['msgHelp'] = 'Ajutor';
 $PMF_LANG['msgContact'] = 'Contact';
-$PMF_LANG['msgHome'] = 'Home';
+$PMF_LANG['msgHome'] = 'Acasa';
 $PMF_LANG['msgNews'] = ' Noutati';
 $PMF_LANG['msgUserOnline'] = ' Useri online';
 $PMF_LANG['msgXMLExport'] = 'XML-File';
@@ -101,7 +105,7 @@ $PMF_LANG['msgDate_User'] = 'Data / User';
 $PMF_LANG['msgQuestion2'] = 'Intrebare';
 $PMF_LANG['msg2answer'] = 'raspuns';
 $PMF_LANG['msgQuestionText'] = 'Aici poti vedea raspunsurile altor utilizatori. Daca raspunzi la aceasta intrebare, raspunsul tau va fi introdus aici.';
-$PMF_LANG['msgHelpText'] = '<p>Structura Intrebarilor frecvente-FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) este foarte simpla. Poti sa cauti in <strong><a href="?action=show">categoriile</a></strong> create sau in <strong><a href="?action=search">motorul de cautare in FAQ</a></strong> dupa cuvinte-cheie.</p>';
+$PMF_LANG['msgHelpText'] = 'Structura Intrebarilor frecvente-FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) este foarte simpla. Poti sa cauti in <strong><a href="?action=show">categoriile</a></strong> create sau in <strong><a href="?action=search">motorul de cautare in FAQ</a></strong> dupa cuvinte-cheie.';
 $PMF_LANG['msgContactEMail'] = 'e-mail catre webmaster:';
 $PMF_LANG['msgMessage'] = 'Mesajul tau:';
 $PMF_LANG['msgTopTen'] = 'TOP 10';
@@ -114,17 +118,17 @@ $PMF_LANG['msgMailCheck'] = 'Sunt noi intrebari in FAQ, verifica in sectiunea Ad
 $PMF_LANG['msgMailContact'] = 'Intrebarea ta a fost trimisa catre administrator.';
 $PMF_LANG['err_noDatabase'] = 'Eroare la conectarea la baza de date.';
 $PMF_LANG['err_noHeaders'] = 'Categoria nu exista.';
-$PMF_LANG['err_noArticles'] = '<p>Nu sunt inregistrari.</p>';
-$PMF_LANG['err_badID'] = '<p>ID gresit</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Inca nu este disponibil Topul intrebarilor.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Nu am gasit nimic.</p>';
+$PMF_LANG['err_noArticles'] = 'Nu sunt inregistrari.';
+$PMF_LANG['err_badID'] = 'ID gresit';
+$PMF_LANG['err_noTopTen'] = 'Inca nu este disponibil Topul intrebarilor.';
+$PMF_LANG['err_nothingFound'] = 'Nu am gasit nimic.';
 $PMF_LANG['err_SaveEntries'] = 'Campuri obligatorii: <strong>numele tau</strong>, <strong>adresa ta de email</strong>, <strong>categoria</strong>, <strong>titlu</strong> si <strong>intrebarea ta</strong>!<br /><br /><a href="nojavascript...history.back();">inapoi</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>observatiile tale</strong>!<br /><br /><a href="nojavascript...history.back();">inapoi</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Nu contorizam votarile multiple. <a href="nojavascript...history.back();">Click aici</a>, pentru a merge inapoi.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Inca nu ai apreciat aceasta intrebare!</strong> <a href="nojavascript...history.back();">Click aici</a>, pentru a aprecia!</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Nu contorizam votarile multiple.';
+$PMF_LANG['err_noVote'] = '<strong>Inca nu ai apreciat aceasta intrebare!</strong> <a href="nojavascript...history.back();">Click aici</a>, pentru a aprecia!';
 $PMF_LANG['err_noMailAdress'] = 'Adresa ta de email nu este corecta!<br /><a href="nojavascript...history.back();">back</a>';
 $PMF_LANG['err_sendMail'] = 'Campuri obligatorii <strong>numele tau</strong>, <strong>adresa ta de email</strong> si <strong>intrebarea ta</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Cauta inregistrarile:</strong><br />care contin cuvintele <strong style="color: Red;">cuvant1 cuvant2</strong> poti avea ordonarea dupa relevanta pentru doua sa mai multe criterii de cautare.</p><p><strong>Nota:</strong> Criteriile tale de cautare rtebuie sa fie de minimum 4 caractere, in caz contrar cautarea nu poate fi efectuata.</p>';
+$PMF_LANG['help_search'] = '<strong>Cauta inregistrarile:</strong><br />care contin cuvintele <strong style="color: Red;">cuvant1 cuvant2</strong> poti avea ordonarea dupa relevanta pentru doua sa mai multe criterii de cautare.<strong>Nota:</strong> Criteriile tale de cautare rtebuie sa fie de minimum 4 caractere, in caz contrar cautarea nu poate fi efectuata.';
 $PMF_LANG['ad'] = 'ADMIN SECTION';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrare useri';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Aproba inregistrari';
@@ -394,7 +398,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-Back-up';
 $PMF_LANG['ad_xml_hint'] = 'Salveaza toate inregistrarile din FAQ-ul tau intr-un fisier XML.';
 $PMF_LANG['ad_xml_gen'] = 'creaza fisier XML';
 $PMF_LANG['ad_entry_locale'] = 'Limba de afisare';
-$PMF_LANG['msgLangaugeSubmit'] = 'Schimba limba de afisare';
+$PMF_LANG['msgLanguageSubmit'] = 'Schimba limba de afisare';
 $PMF_LANG['ad_entry_preview'] = 'Vezi cum va arata';
 $PMF_LANG['ad_attach_1'] = 'Te rog sa setezi mai intai un director pentru atasamente in sectiunea de configurare.';
 $PMF_LANG['ad_attach_2'] = 'Te rog alege mai intai un link pentru atasamente in sectiunea de configurare.';
@@ -462,7 +466,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Numarul
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Numarul stirilor per pagina");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Restrictioneaza urmatoarele IP-uri");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activezi suportul mod_rewrite? (normal:dezactivat)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Vrei sa activezi suportul LDAP ? (normal:dezactivat)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Vrei sa activezi suportul LDAP ? (normal:dezactivat)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ca si o noua categorie principala';
 $PMF_LANG['ad_categ_paste_error'] = 'Nu poti sa muti aceasta categorie.';
 $PMF_LANG['ad_categ_move'] = 'muta categoria';
@@ -564,7 +568,6 @@ $PMF_LANG['msgEditFaqDat'] = 'editeaza';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Numarul listei de termeni cautati');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorteaza  topul intrebarilor");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Adresa de email camp obligatoriu (normal:dezactivat)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Raspuns instant pe pagina de start (normal: dezactivat)');
 $PMF_LANG['msgTransToolRemove'] = 'Sterge';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = 'Numarul formelor plurale';
 $PMF_LANG['msgTransToolLanguageOnePlural'] = 'Aceasta limba are decat o forma plurala';
@@ -684,16 +687,13 @@ $PMF_LANG['ad_groups'] = 'Groupuri';
 $PMF_LANG['ad_conf_order_id'] = 'ID (normal)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titlu';
 $PMF_LANG['ad_conf_order_visits'] = 'Numarul de vizitatori';
-$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_updated'] = 'Data';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'descendent';
 $PMF_LANG['ad_conf_asc'] = 'ascendent';
 $PMF_LANG['mainControlCenter'] = 'Configuratia scriptului';
 $PMF_LANG['recordsControlCenter'] = 'Configuratia inregistrarilor intrebarilor frectente';
-$PMF_LANG['msgInstantResponse'] = 'Raspuns instant';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Gasiti dedesubtul primelor %d inregistrari.';
 $PMF_LANG['msgAllCatArticles'] = 'Inregistrari in aceasta categorie';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Doar scrieti si gasiti raspunsurile ...';
 $PMF_LANG['msgTagSearch'] = 'Intrarile cu taguri';
 $PMF_LANG['ad_pmf_info'] = 'Informatii phpMyFAQ ';
 $PMF_LANG['ad_online_info'] = 'Verificarea online a versiunii ';

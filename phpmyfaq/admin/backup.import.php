@@ -1,28 +1,26 @@
 <?php
 /**
- * The import function to import the phpMyFAQ backups
+ * The import function to import the phpMyFAQ backups.
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- * @package   Administration
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2014 phpMyFAQ Team
+ * @copyright 2003-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -33,25 +31,27 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 } else {
     $csrfCheck = true;
 }
-
+?>
+    <header>
+        <h2 class="page-header">
+            <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
+        </h2>
+    </header>
+<?php
 if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
-
-    printf('<header><h2 class="page-header">%s</h2></header>', $PMF_LANG['ad_csv_rest']);
-
     if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
-        
-        $ok  = 1;
+        $ok = 1;
         $finfo = new finfo(FILEINFO_MIME_ENCODING);
         if ('utf-8' == $finfo->file($_FILES['userfile']['tmp_name'])) {
             print 'This file is not UTF_8 encoded.';
             $ok = 0;
         }
-        $handle          = fopen($_FILES['userfile']['tmp_name'], 'r');
-        $dat             = fgets($handle, 65536);
-        $versionFound    = PMF_String::substr($dat, 0, 9);
-        $versionExpected = '-- pmf' . substr($faqConfig->get('main.currentVersion'), 0, 3);
+        $handle = fopen($_FILES['userfile']['tmp_name'], 'r');
+        $dat = fgets($handle, 65536);
+        $versionFound = PMF_String::substr($dat, 0, 9);
+        $versionExpected = '-- pmf'.substr($faqConfig->get('main.currentVersion'), 0, 3);
 
-        if ($versionFound != $versionExpected) {
+        if ($versionFound !== $versionExpected) {
             printf('%s (Version check failure: "%s" found, "%s" expected)',
                 $PMF_LANG['ad_csv_no'],
                 $versionFound,
@@ -63,23 +63,23 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $dat = trim(PMF_String::substr($dat, 11));
             $tbl = explode(' ', $dat);
             $num = count($tbl);
-            for ($h = 0; $h < $num; $h++) {
+            for ($h = 0; $h < $num; ++$h) {
                 $mquery[] = 'DELETE FROM '.$tbl[$h];
             }
             $ok = 1;
         }
 
         if ($ok == 1) {
-            $table_prefix = '';
+            $tablePrefix = '';
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_prepare']);
             while ($dat = fgets($handle, 65536)) {
-                $dat                       = trim($dat);
-                $backup_prefix_pattern     = "-- pmftableprefix:";
-                $backup_prefix_pattern_len = PMF_String::strlen($backup_prefix_pattern);
-                if (PMF_String::substr($dat, 0, $backup_prefix_pattern_len) == $backup_prefix_pattern) {
-                    $table_prefix = trim(PMF_String::substr($dat, $backup_prefix_pattern_len));
+                $dat = trim($dat);
+                $backupPrefixPattern = '-- pmftableprefix:';
+                $backupPrefixPatternLength = PMF_String::strlen($backupPrefixPattern);
+                if (PMF_String::substr($dat, 0, $backupPrefixPatternLength) === $backupPrefixPattern) {
+                    $tablePrefix = trim(PMF_String::substr($dat, $backupPrefixPatternLength));
                 }
-                if ( (PMF_String::substr($dat, 0, 2) != '--') && ($dat != '') ) {
+                if ((PMF_String::substr($dat, 0, 2) != '--') && ($dat != '')) {
                     $mquery[] = trim(PMF_String::substr($dat, 0, -1));
                 }
             }
@@ -88,24 +88,29 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $g = 0;
             printf("<p>%s</p>\n", $PMF_LANG['ad_csv_process']);
             $num = count($mquery);
-            $kg  = '';
-            for ($i = 0; $i < $num; $i++) {
-                $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $table_prefix, PMF_Db::getTablePrefix());
-                $kg         = $faqConfig->getDb()->query($mquery[$i]);
+            $kg = '';
+            for ($i = 0; $i < $num; ++$i) {
+                $mquery[$i] = PMF_DB_Helper::alignTablePrefix($mquery[$i], $tablePrefix, PMF_Db::getTablePrefix());
+                $kg = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
-                    printf('<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
-                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
+                    printf(
+                    '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
+                        PMF_String::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
-                        "\n");
-                    $k++;
+                        "\n"
+                    );
+                    ++$k;
                 } else {
-                    printf('<!-- <div style="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
-                        PMF_String::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
-                        "\n");
-                    $g++;
+                    printf(
+                        '<!-- <div class="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
+                        PMF_String::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
+                        "\n"
+                    );
+                    ++$g;
                 }
             }
-            printf('<p class="alert alert-success">%d %s %d %s</p>',
+            printf(
+                '<p class="alert alert-success">%d %s %d %s</p>',
                 $g,
                 $PMF_LANG['ad_csv_of'],
                 $num,
@@ -118,7 +123,8 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
                 break;
             case 2:
-                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the HTML form.';
+                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' .
+                                'HTML form.';
                 break;
             case 3:
                 $errorMessage = 'The uploaded file was only partially uploaded.';

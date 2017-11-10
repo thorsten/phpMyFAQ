@@ -1,29 +1,27 @@
 <?php
-/******************************************************************************
- * File:				language_ko.php
- * Description:		    Korean language file
- * Authors:				YoungJoon Kim <yjkim@terracetech.com>
- * Date:				2004-02-19
- * First Created:	    2004-07-10
- * Last Updated:        2005-04-06
- * Copyright:           (c) 2006 phpMyFAQ Team
+
+/**
+ * Korean language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    YoungJoon Kim <yjkim@terratech.com>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-07-10
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "ko";
 $PMF_LANG["language"] = "Korean";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "카테고리";
@@ -119,7 +117,7 @@ $PMF_LANG["msg2answer"] = "답변";
 $PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 수 있습니다. 질문에 답변하시면 FAQ에 추가될 수 있습니다.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.</p>";
+$PMF_LANG["msgHelpText"] = "FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "관리자에게 메일 보내기:";
@@ -141,19 +139,19 @@ $PMF_LANG["msgMailContact"] = "관리자에게 메시지가 전달되었습니�
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "데이터베이스에 접속할 수 없습니다.";
 $PMF_LANG["err_noHeaders"] = "등록된 카테고리가 없습니다.";
-$PMF_LANG["err_noArticles"] = "<p>등록된 데이터가 없습니다.</p>";
-$PMF_LANG["err_badID"] = "<p>잘못된 ID</p>";
-$PMF_LANG["err_noTopTen"] = "<p>TOP 10을 이용하실 수 없습니다.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>검색 결과가 없습니다.</p>";
+$PMF_LANG["err_noArticles"] = "등록된 데이터가 없습니다.";
+$PMF_LANG["err_badID"] = "잘못된 ID";
+$PMF_LANG["err_noTopTen"] = "TOP 10을 이용하실 수 없습니다.";
+$PMF_LANG["err_nothingFound"] = "검색 결과가 없습니다.";
 $PMF_LANG["err_SaveEntries"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>코멘트 내용</strong>은 필수 입력 항목입니다.<br /><br />\n<a href=\"javascript:history.back();\">되돌아 가기</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>중복 평가 하실 수 없습니다. 되돌아 가시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "중복 평가 하실 수 없습니다. 되돌아 가시려면여기를 클릭하세요.";
+$PMF_LANG["err_noVote"] = "<strong>평점을 선택하지 않으셨습니다.</strong> 평가를  다시 하시려면<a href=\"javascript:history.back();\">여기</a>를 클릭하세요.";
 $PMF_LANG["err_noMailAdress"] = "메일주소가 바르지 않습니다.<br /><a href=\"javascript:history.back();\">되돌아 가기</a>";
 $PMF_LANG["err_sendMail"] = "<strong>이름</strong>, <strong>메일주소</strong>, <strong>질문 내용</strong>은 필수 입력 항목입니다.";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>내용 검색:</strong><br /><strong style=\"color: Red;\">단어1 단어2</strong>로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.</p><p><strong>주의:</strong> 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.</p>";
+$PMF_LANG["help_search"] = "<strong>내용 검색:</strong><br /><strong style=\"color: Red;\">단어1 단어2</strong>로 검색하시면, 2개 이상의 검색 결과를 관련이 높은 순서대로 찾으실 수 있습니다.<strong>주의:</strong> 검색시에는 적어도 영문 4자 이상을 입력하셔야 합니다.";
 
 // Men
 $PMF_LANG["ad"] = "관리자 페이지";
@@ -490,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-백업";
 $PMF_LANG["ad_xml_hint"] = "모든 FAQ를 한개의 XML 파일로 저장";
 $PMF_LANG["ad_xml_gen"] = "XML 파일 만들기";
 $PMF_LANG["ad_entry_locale"] = "언어";
-$PMF_LANG["msgLangaugeSubmit"] = "언어 변경";
+$PMF_LANG["msgLanguageSubmit"] = "언어 변경";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "미리 보기";
@@ -568,7 +566,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "페이�
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "공지사항 표시 개수");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "해당 IP주소로 부터 사용 금지");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite 기능을 사용하시겠습니까? (기본값: 사용안함)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP을 지원하도록 하시겠습니까? (기본값: 사용안함)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "새로운 메인 카테고리로";
 $PMF_LANG["ad_categ_paste_error"] = "이 카테고리를 옮기는 것은 불가능합니다.";

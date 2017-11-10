@@ -1,40 +1,41 @@
 <?php
+
 /**
  * This is the page there a user can add a FAQ record.
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Frontend
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2014 phpMyFAQ Team
+ * @copyright 2002-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuests'))) {
-    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
+    header('Location:'.$faqSystem->getSystemUri($faqConfig).'?action=login');
 }
 
 $captcha = new PMF_Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
-if (! is_null($showCaptcha)) {
+if (!is_null($showCaptcha)) {
     $captcha->showCaptchaImg();
     exit;
 }
@@ -52,7 +53,7 @@ $selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_IN
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {
     $oQuestion = $faq->getQuestion($selectedQuestion);
-    $question  = $oQuestion['question'];
+    $question = $oQuestion['question'];
     if (PMF_String::strlen($question)) {
         $readonly = ' readonly';
     }
@@ -71,33 +72,40 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
         'writeContent',
         'enableWysiwygEditor',
         array(
-            'currentTimestamp' => $_SERVER['REQUEST_TIME']
+            'currentTimestamp' => $_SERVER['REQUEST_TIME'],
         )
     );
 }
 
 $tpl->parse(
-    'writeContent', 
-    array(
-        'msgNewContentHeader'   => $PMF_LANG['msgNewContentHeader'],
-        'msgNewContentAddon'    => $PMF_LANG['msgNewContentAddon'],
-        'lang'                  => $Language->getLanguage(),
-        'openQuestionID'        => $selectedQuestion,
-        'defaultContentMail'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName'    => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
-        'msgNewContentName'     => $PMF_LANG['msgNewContentName'],
-        'msgNewContentMail'     => $PMF_LANG['msgNewContentMail'],
+    'writeContent',
+    [
+        'baseHref' => $faqSystem->getSystemUri($faqConfig),
+        'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
+        'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],
+        'lang' => $Language->getLanguage(),
+        'openQuestionID' => $selectedQuestion,
+        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'msgNewContentName' => $PMF_LANG['msgNewContentName'],
+        'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-        'printCategoryOptions'  => $categoryHelper->renderOptions($selectedCategory),
-        'msgNewContentTheme'    => $PMF_LANG['msgNewContentTheme'],
-        'readonly'              => $readonly,
-        'printQuestion'         => $question,
-        'msgNewContentArticle'  => $PMF_LANG['msgNewContentArticle'],
+        'printCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
+        'msgNewContentTheme' => $PMF_LANG['msgNewContentTheme'],
+        'readonly' => $readonly,
+        'printQuestion' => $question,
+        'msgNewContentArticle' => $PMF_LANG['msgNewContentArticle'],
         'msgNewContentKeywords' => $PMF_LANG['msgNewContentKeywords'],
-        'msgNewContentLink'     => $PMF_LANG['msgNewContentLink'],
-        'captchaFieldset'       => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
-        'msgNewContentSubmit'   => $PMF_LANG['msgNewContentSubmit']
-    )
+        'msgNewContentLink' => $PMF_LANG['msgNewContentLink'],
+        'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
+        'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
+    ]
 );
 
-$tpl->merge('writeContent', 'index');
+$tpl->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => $PMF_LANG['msgNewContentHeader']
+    ]
+);

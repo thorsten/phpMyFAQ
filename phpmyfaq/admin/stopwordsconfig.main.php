@@ -1,41 +1,41 @@
 <?php
 /**
- * The main stop words configuration frontend
+ * The main stop words configuration frontend.
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     printf(
-        '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
+        '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> %s</h2></div></header>',
         $PMF_LANG['ad_menu_stopwordsconfig']
     );
 
     $sortedLanguageCodes = $languageCodes;
     asort($sortedLanguageCodes);
     reset($sortedLanguageCodes);
-?>
+    ?>
     <div class="row">
         <div class="col-lg-12">
 
@@ -46,17 +46,21 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)"
                         id="stopwords_lang_selector">
                 <option value="none">---</option>
-    <?php foreach($sortedLanguageCodes as $key => $value) { ?>
-        <option value="<?php echo strtolower($key); ?>"><?php echo $value; ?></option>
-    <?php } ?>
+    <?php foreach ($sortedLanguageCodes as $key => $value) {
+    ?>
+        <option value="<?php echo strtolower($key);
+    ?>"><?php echo $value;
+    ?></option>
+    <?php 
+}
+    ?>
                 </select>
                 <span id="stopwords_loading_indicator"></span>
             </p>
 
             <div id="stopwords_content"></div>
 
-            <script type="text/javascript">
-            /* <![CDATA[ */
+            <script>
 
         /**
          * column count in the stop words table
@@ -78,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 return;
             }
 
-            $('#stopwords_loading_indicator').html('<img src="images/indicator.gif" />');
+            $('#stopwords_loading_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i>');
 
             $.get("index.php",
                   {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},
@@ -127,7 +131,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             }
 
             html += '</table>';
-            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
+            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
             return html;
         }
@@ -217,17 +221,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         {
             var info =  parseStopWordInputElemId(elem_id);
 
-            if($('#' + elem_id).attr('old_value') != $('#' + elem_id).attr('value')) {
-                $.get("index.php",
-                      {action: "ajax",
-                       ajax: 'config',
-                       ajaxaction: "save_stop_word",
-                       stopword_id: info.id,
-                       stopword: $('#' + elem_id).val(),
-                       stopwords_lang: info.lang}
-                  );
+            if ($('#' + elem_id).attr('old_value') !== $('#' + elem_id).val()) {
+                $.get("index.php", {
+                    action: "ajax",
+                    ajax: 'config',
+                    ajaxaction: "save_stop_word",
+                    stopword_id: info.id,
+                    stopword: $('#' + elem_id).val(),
+                    stopwords_lang: info.lang,
+                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
+                    }
+                );
             } else {
-                if(0 > info.id && '' == $('#' + elem_id).attr('value')) {
+                if (0 > info.id && '' == $('#' + elem_id).val()) {
                     $('#' + elem_id).remove();
                     return;
                 }
@@ -244,7 +251,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          */
         function saveOldValue(elem_id)
         {
-            $('#' + elem_id).attr('old_value', $('#' + elem_id).attr('value'));
+            $('#' + elem_id).attr('old_value', $('#' + elem_id).val());
         }
 
 
@@ -261,16 +268,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
             $('#' + elem_id).fadeOut('slow');
 
-            $.get("index.php",
-                    {action: "ajax",
-                     ajax: 'config',
-                     ajaxaction: "delete_stop_word",
-                     stopword_id: info.id,
-                     stopwords_lang: info.lang},
-                    function (){
-                         loadStopWordsByLang(info.lang)
-                    }
-                );
+            $.get("index.php", {
+                    action: "ajax",
+                    ajax: 'config',
+                    ajaxaction: "delete_stop_word",
+                    stopword_id: info.id,
+                    stopwords_lang: info.lang,
+                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
+                },
+                function () {
+                    loadStopWordsByLang(info.lang)
+                }
+            );
         }
 
         /**
@@ -280,27 +290,30 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          */
         function addStopWordInputElem()
         {
-            var word = prompt('<?php echo $PMF_LANG["ad_config_stopword_input"]?>', '');
+            var word = prompt('<?php echo $PMF_LANG['ad_config_stopword_input']?>', '');
             var lang = $('#stopwords_lang_selector').val();
 
-            if(!!word) {
-               $.get("index.php",
-               {action: "ajax",
-                ajax: 'config',
-                ajaxaction: "save_stop_word",
-                stopword: word,
-                stopwords_lang: lang},
-                function (){
+            if (!!word) {
+                $.get("index.php", {
+                        action: "ajax",
+                        ajax: 'config',
+                        ajaxaction: "save_stop_word",
+                        stopword: word,
+                        stopwords_lang: lang,
+                        csrf: '<?php echo $user->getCsrfTokenFromSession();
+    ?>'
+                },
+                function () {
                     loadStopWordsByLang(lang)
-               }
-               );
+                }
+                );
             }
         }
-        /* ]]> */
         </script>
         </div>
     </div>
 <?php
+
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

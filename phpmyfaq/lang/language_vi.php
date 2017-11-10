@@ -1,30 +1,27 @@
 <?php
+
 /**
  * Vietnamese language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Thorsten Rinne <thorsten@phpmyfaq.de>
- * @since      2004-06-23
- * @version    SVN: $Id$
- * @copyright  2004-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-23
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "vi";
 $PMF_LANG["language"] = "Vietnamese";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Mục";
@@ -120,7 +117,7 @@ $PMF_LANG["msg2answer"] = "trả lời";
 $PMF_LANG["msgQuestionText"] = "Tại đây, bạn có thể xem những câu hỏi do những thành viên khác nêu ra. Bạn có thể đề nghị một câu trả lời, câu trả lời của bạn có thể được sử dụng làm lời giải đáp trong phần Các câu hỏi thường gặp.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.</p>";
+$PMF_LANG["msgHelpText"] = "Cấu trúc của phần 'Các câu hỏi thường gặp' khá đơn giản. Bạn có thể tìm kiếm <strong><a href=\"?action=show\">thông qua các mục</a></strong> hay để cho <strong><a href=\"?action=search\">hệ thống</a></strong> tìm thông qua từ khóa.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Gửi email cho bộ phận hỗ trợ kỹ thuật của chúng tôi:";
@@ -143,19 +140,19 @@ $PMF_LANG["msgMailContactBack"] = "Trở về trang chủ";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Không thiết lập được kết nối với cơ sở dữ liệu!";
 $PMF_LANG["err_noHeaders"] = "Không tìm thấy mục này!";
-$PMF_LANG["err_noArticles"] = "<p>Không có kết quả nào.</p>";
-$PMF_LANG["err_badID"] = "<p>Tên đăng nhập sai!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Hiện không có TOP 10.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Nội dung không tìm thấy.</p>";
+$PMF_LANG["err_noArticles"] = "Không có kết quả nào.";
+$PMF_LANG["err_badID"] = "Tên đăng nhập sai!";
+$PMF_LANG["err_noTopTen"] = "Hiện không có TOP 10.";
+$PMF_LANG["err_nothingFound"] = "Nội dung không tìm thấy.";
 $PMF_LANG["err_SaveEntries"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>mục</strong>, <strong>tựa đề</strong>, <strong>nội dung</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>bình luận của bạn</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Chúng tôi không tính trường hợp bình chọn hai lần. <a href=\"javascript:history.back();\">Nhấp vào đây</a>, để trở về.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Bạn chưa bình chọn câu hỏi!</strong> <a href=\"javascript:history.back();\">Vui lòng nhấp vào đây</a>, để bình chọn.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Chúng tôi không tính trường hợp bình chọn hai lần.";
+$PMF_LANG["err_noVote"] = "<strong>Bạn chưa bình chọn câu hỏi!</strong> <a href=\"javascript:history.back();\">Vui lòng nhấp vào đây</a>, để bình chọn.";
 $PMF_LANG["err_noMailAdress"] = "Địa chỉ email của bạn không chính xác.<br /><a href=\"javascript:history.back();\">trở về</a>";
 $PMF_LANG["err_sendMail"] = "Những nội dung sau là bắt buộc <strong>tên của bạn</strong>, <strong>email của bạn</strong>, <strong>câu hỏi của bạn</strong> và, khi được yêu cầu, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Xem thêm về Captcha trên Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">trở về trang trước</a><br /><br />";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Tìm kiếm cho nội dung:</strong><br />Với một nội dung như <strong style=\"color: Red;\">từ1 từ2</strong> bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.</p><p><strong>Chú ý:</strong> Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.</p>";
+$PMF_LANG["help_search"] = "<strong>Tìm kiếm cho nội dung:</strong><br />Với một nội dung như <strong style=\"color: Red;\">từ1 từ2</strong> bạn có thể tìm kiếm với độ chính xác giảm dần cho hai hoặc nhiều tiêu chí tìm kiếm.<strong>Chú ý:</strong> Tiêu chí tìm kiếm của bạn phải gồm ít nhất 4 chữ cái, nếu không yêu cầu của bạn sẽ bị từ chối.";
 
 // Men�
 $PMF_LANG["ad"] = "QUẢN TRỊ";
@@ -487,7 +484,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Lưu toàn bộ nội dung của phần Câu hỏi thường gặp trong một tập tin XML.";
 $PMF_LANG["ad_xml_gen"] = "tạo tập tin XML";
 $PMF_LANG["ad_entry_locale"] = "Ngôn ngữ";
-$PMF_LANG["msgLangaugeSubmit"] = "Thay đổi ngôn ngữ";
+$PMF_LANG["msgLanguageSubmit"] = "Thay đổi ngôn ngữ";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Xem trước";
@@ -564,8 +561,8 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Số l�
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Số lượng bài mới");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Loại bỏ các IP này");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Kích hoạt hỗ trợ mod_rewrite? (mặc định: không kích hoạt)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Bạn có muốn kích hoạt hỗ trợ LDAP? (mặc định: không kích hoạt)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Tham chiếu URL để kiểm tra đường dẫn (vd.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Khoảng cách giữa các lần kiểm tra đường dẫn AJAX (tính bằng giây)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Không chọn chức năng cho xem các câu hỏi mới?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
@@ -852,16 +849,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Liệt kê nội dung 
 $PMF_LANG['ad_conf_order_id'] = 'ID (mặc định)';
 $PMF_LANG['ad_conf_order_thema'] = 'Tiêu đề';
 $PMF_LANG['ad_conf_order_visits'] = 'Số lượng khách thăm';
-$PMF_LANG['ad_conf_order_datum'] = 'Ngày';
+$PMF_LANG['ad_conf_order_updated'] = 'Ngày';
 $PMF_LANG['ad_conf_order_author'] = 'Tác giả';
 $PMF_LANG['ad_conf_desc'] = 'giảm dần';
 $PMF_LANG['ad_conf_asc'] = 'tăng dần';
 $PMF_LANG['mainControlCenter'] = 'Cấu hình chính';
 $PMF_LANG['recordsControlCenter'] = 'Cấu hình nội dung Câu hỏi thường gặp';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Trả lời nhanh';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Xem dưới đây %d nội dung đầu tiên.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Kích hoạt một nội dung mới (mặc định: không kích hoạt)");
@@ -869,7 +862,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Cho ph
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Nội dung trong mục này';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Chỉ cần đánh vào, bạn sẽ có câu trả lời ...';
 $PMF_LANG['msgTagSearch'] = 'Những nội dung được tag';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Kiểm tra phiên bản trực tuyến';

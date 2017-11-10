@@ -1,17 +1,17 @@
 <?php
+
 /**
- * The Alovak language file
+ * The Slovak language file
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Tibor <tibor@topzone.sk>
- * @copyright 2011 phpMyFAQ Team
+ * @copyright 2010-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-11
@@ -116,7 +116,7 @@ $PMF_LANG["msg2answer"] = "odpoveď";
 $PMF_LANG["msgQuestionText"] = "Tu môžete vidieť otázky od ostatných užívateľov. Keď otázku zodpoviete, odpoveď bude vložená do FAQ.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Štruktúra FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) je jednoduchá. Ďalej môžete hľadať <strong><a href=\"?action=show\">categories</a></strong> alebo nechať <strong><a href=\"?action=search\">vyhľadávať FAQ</a></strong> kľúčové slová.</p>";
+$PMF_LANG["msgHelpText"] = "Štruktúra FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) je jednoduchá. Ďalej môžete hľadať <strong><a href=\"?action=show\">categories</a></strong> alebo nechať <strong><a href=\"?action=search\">vyhľadávať FAQ</a></strong> kľúčové slová.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "E-mail webmasterovi:";
@@ -138,19 +138,19 @@ $PMF_LANG["msgMailContact"] = "Vaša správa bola poslaná administrátorovi.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Žiadne spojenie s databázou.";
 $PMF_LANG["err_noHeaders"] = "Kategória sa nenašla.";
-$PMF_LANG["err_noArticles"] = "<p>FAQ nedostupná.</p>";
-$PMF_LANG["err_badID"] = "<p>Chybné ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Nie je dostupné žiadne FAQ.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Vstup sa nenašiel.</p>";
+$PMF_LANG["err_noArticles"] = "FAQ nedostupná.";
+$PMF_LANG["err_badID"] = "Chybné ID.";
+$PMF_LANG["err_noTopTen"] = "Nie je dostupné žiadne FAQ.";
+$PMF_LANG["err_nothingFound"] = "Vstup sa nenašiel.";
 $PMF_LANG["err_SaveEntries"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>category</strong>, <strong>názov</strong>, <strong>Váš záznam</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">o jednu stránku späť</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Povinné polia sú <strong>Vaše meno </strong>, <strong>Váš e-mail</strong>, <strong>Vaše komentáre</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br /><a href=\"javascript:history.back();\">o jednu stránku späť</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Dvojité hlasovania nebudú započítané. <a href=\"javascript:history.back();\">Kliknite semClick here</a>, pre návrat.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Dvojité hlasovania nebudú započítané.";
+$PMF_LANG["err_noVote"] = "<strong>Neohodnotili ste otázku!</strong> <a href=\"javascript:history.back();\">Prosím kliknite sem</a>, pre hlasovanie.";
 $PMF_LANG["err_noMailAdress"] = "Váš e-mail je nesprávny.<br /><a href=\"javascript:history.back();\">späť</a>";
 $PMF_LANG["err_sendMail"] = "Povinné polia sú <strong>Vaše meno</strong>, <strong>Váš e-mail</strong>, <strong>your question</strong> a, na požiadanie, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Čítajte viac na Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Hľadanie záznamu:</strong><br />So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.</p><p><strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.</p>";
+$PMF_LANG["help_search"] = "<strong>Hľadanie záznamu:</strong><br />So vstupnými údajmi <strong style=\"color: Red;\">slovo1 slovo2</strong> môžete vyhľadávať aj vzostupne pre dve alebo viac hľadaných výrazov.<strong>Poznámka:</strong> Hľadané výrazy musia mať aspoň 4 písmená a preto bude Vaša požiadavka zrušená.";
 
 // Menï¿½
 $PMF_LANG["ad"] = "SEKCIA PRE ADMINISTRÁTORA";
@@ -487,7 +487,7 @@ $PMF_LANG["ad_xml_head"] = "XML-záloha";
 $PMF_LANG["ad_xml_hint"] = "Uložiť všetky záznamy FAQ do jedného XML súboru.";
 $PMF_LANG["ad_xml_gen"] = "vytvoriť XML súbor";
 $PMF_LANG["ad_entry_locale"] = "Jazyk";
-$PMF_LANG["msgLangaugeSubmit"] = "Zvoliť jazyk:";
+$PMF_LANG["msgLanguageSubmit"] = "Zvoliť jazyk:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Náhľad";
@@ -566,8 +566,8 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Počet 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Počet článkov");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Zakázať tieto IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktivovať mód_podporu prepisovania? (prednastavené: nepovoliť)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Chcete povoliť LDAP podporu? (Prednastavené: nepovoliť)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Overiť URL (e.g.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval medzi AJAX overením (v sekundách)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Vypnúť viditeľnosť nových otázok?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Úroveň povolenia");
@@ -848,16 +848,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Triedenie záznamov (z
 $PMF_LANG['ad_conf_order_id'] = 'ID (prednastavené)';
 $PMF_LANG['ad_conf_order_thema'] = 'Názov';
 $PMF_LANG['ad_conf_order_visits'] = 'Počet návštev';
-$PMF_LANG['ad_conf_order_datum'] = 'Dátum';
+$PMF_LANG['ad_conf_order_updated'] = 'Dátum';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'zostupne';
 $PMF_LANG['ad_conf_asc'] = 'vzostupne';
 $PMF_LANG['mainControlCenter'] = 'Hlavné nastavenia';
 $PMF_LANG['recordsControlCenter'] = 'Nastavenia FAQ záznamov';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Okamžitá reakcia';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Hľadať pod prvým %d záznamom.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivovať nový záznam (prednastavené: deaktivované)");
@@ -865,7 +861,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Povoli
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Záznamy v tejto kategórii';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Iba napísať a vyhľadať odpovede ...';
 $PMF_LANG['msgTagSearch'] = 'Označené položky';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informácie';
 $PMF_LANG['ad_online_info'] = 'Kontrola online verzie';
@@ -1036,4 +1031,3 @@ $PMF_LANG['msgUpdateFaqDate'] = 'aktualizovať';
 $PMF_LANG['msgKeepFaqDate'] = 'ponechať'; 
 $PMF_LANG['msgEditFaqDat'] = 'upraviť';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-mailová adresa ako povinné pole (prednastavené: deaktivované)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Okamžité presmerovanie na úvodnú stránku (prednastavené: deaktivované)');

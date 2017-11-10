@@ -1,35 +1,36 @@
 <?php
+
 /**
  * Russian language file
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Hunter (3DCenter.ru)
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'ru';
 $PMF_LANG['language'] = 'Russian';
 $PMF_LANG['dir'] = 'ltr';
 $PMF_LANG['nplurals'] = '3';
 $PMF_LANG['msgCategory'] = 'Разделы';
-$PMF_LANG['msgShowAllCategories'] = 'Разделы'; /*Показать все разделы*/
+$PMF_LANG['msgShowAllCategories'] = 'Разделы';
 $PMF_LANG['msgSearch'] = 'Поиск';
-$PMF_LANG['msgAddContent'] = 'ответ'; /*Опубликовать ответ*/
-$PMF_LANG['msgQuestion'] = 'вопрос'; /*Задать вопрос*/
+$PMF_LANG['msgAddContent'] = 'ответ';
+$PMF_LANG['msgQuestion'] = 'вопрос'; 
 $PMF_LANG['msgOpenQuestions'] = 'Открытые вопросы';
 $PMF_LANG['msgHelp'] = 'Помощь';
-$PMF_LANG['msgContact'] = 'Адм'; /*Администрация*/
+$PMF_LANG['msgContact'] = 'Адм'; 
 $PMF_LANG['msgHome'] = 'Содержание';
 $PMF_LANG['msgNews'] = ' Новости';
 $PMF_LANG['msgUserOnline'] = ' - активных пользователей';
@@ -54,7 +55,7 @@ $PMF_LANG['msgAverageVote'] = 'Рейтинг ответа:';
 $PMF_LANG['msgVoteUseability'] = 'Пожалуйста оцените этот ответ:';
 $PMF_LANG['msgVoteFrom'] = 'из';
 $PMF_LANG['msgVoteBad'] = 'Так себе';
-$PMF_LANG['msgVoteGood'] = 'Очень <br />сильно помог';
+$PMF_LANG['msgVoteGood'] = 'Очень <br>сильно помог';
 $PMF_LANG['msgVotings'] = 'Голосов ';
 $PMF_LANG['msgVoteSubmit'] = 'Оценить';
 $PMF_LANG['msgVoteThanks'] = 'Спасибо за оценку!';
@@ -91,7 +92,7 @@ $PMF_LANG['msgNewContentCategory'] = 'Выбор раздела:';
 $PMF_LANG['msgNewContentTheme'] = 'Текст вопроса:';
 $PMF_LANG['msgNewContentArticle'] = 'Текст ответа:';
 $PMF_LANG['msgNewContentKeywords'] = 'Ключевые слова:';
-$PMF_LANG['msgNewContentLink'] = 'Ссылка на сайт<br /> или страницу<br /> связанную с вопросом';
+$PMF_LANG['msgNewContentLink'] = 'Ссылка на сайт<br> или страницу<br> связанную с вопросом';
 $PMF_LANG['msgNewContentSubmit'] = 'Отправить';
 $PMF_LANG['msgInfo'] = 'Дополнительная информация: ';
 $PMF_LANG['msgNewContentThanks'] = 'Спасибо! Ваш ответ принят';
@@ -104,7 +105,7 @@ $PMF_LANG['msgDate_User'] = 'Дата / пользователь';
 $PMF_LANG['msgQuestion2'] = 'Раздел / Вопрос';
 $PMF_LANG['msg2answer'] = 'Ответить';
 $PMF_LANG['msgQuestionText'] = 'Здесь находятся вопросы заданные пользователями и еще не получившими свой ответ. Если вы ответите на какой нибудь из вопросов, то он после проверки администратором будет перенесен в основной раздел F.A.Q.';
-$PMF_LANG['msgHelpText'] = '<p>Структура Вопросов & Ответов проста и удобна и я думаю у вас не возникнет вопросов: \'как и что?\'. Вы можете просмотреть список <strong><a href="?aktion=anzeigen">разделов</a></strong> или воспользоваться функцией <strong><a href="?aktion=search">поиска по всей базе</a></strong>.</p>';
+$PMF_LANG['msgHelpText'] = 'Структура Вопросов & Ответов проста и удобна и я думаю у вас не возникнет вопросов: \'как и что?\'. Вы можете просмотреть список <strong><a href="?aktion=anzeigen">разделов</a></strong> или воспользоваться функцией <strong><a href="?aktion=search">поиска по всей базе</a></strong>.';
 $PMF_LANG['msgContactEMail'] = 'Здесь вы можете написать письмо веб-мастеру:';
 $PMF_LANG['msgMessage'] = 'Текст письма:';
 $PMF_LANG['msgTopTen'] = 'Десятка самых популярных вопросов/ответов';
@@ -117,6 +118,7 @@ $PMF_LANG['msgMailCheck'] = 'Добавлена новая запись в ба�
 $PMF_LANG['msgMailContact'] = 'Сообщение отправлено администратору.';
 $PMF_LANG['err_noDatabase'] = 'Нет соединения с базой данных.';
 $PMF_LANG['err_noHeaders'] = 'Категорий не найдено.';
+<<<<<<< HEAD
 $PMF_LANG['err_noArticles'] = '<p>Ничего не найдено</p>';
 $PMF_LANG['err_badID'] = '<p>Неверный ID.</p>';
 $PMF_LANG['err_noTopTen'] = '<p>Ничего не найдено.</p>';
@@ -126,8 +128,19 @@ $PMF_LANG['err_SaveComment'] = 'Не заполнены обязательные
 $PMF_LANG['err_VoteTooMuch'] = '<p>Мы не засчитываем повторное голосование. <a href="nojavascript...history.back();">Click here</a>, to go back.</p>';
 $PMF_LANG['err_noVote'] = '<p><strong>Вы забыли поставить оценку этому ответу или пытаетесь сделать это повторно!</strong> <a href="nojavascript...history.back();">Нажмите сюда</a>, для возврата на предыдущую страницу.</p>';
 $PMF_LANG['err_noMailAdress'] = 'Некорректный email.<br /><a href="nojavascript...history.back();">back</a>';
+=======
+$PMF_LANG['err_noArticles'] = 'Ничего не найдено';
+$PMF_LANG['err_badID'] = 'Неверный ID.';
+$PMF_LANG['err_noTopTen'] = 'Ничего не найдено.';
+$PMF_LANG['err_nothingFound'] = 'Ничего не найдено.';
+$PMF_LANG['err_SaveEntries'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong>, <strong>категория</strong>, <strong>заголовок</strong> и <strong>текст вопроса</strong>!<br><br>\n<a href="nojavascript...history.back();">Вернитесь назад и заполните необходимые поля</a><br><br>\n';
+$PMF_LANG['err_SaveComment'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>арес email</strong> и <strong>ваш комментарий</strong>!<br><br>\n<a href="nojavascript...history.back();">Вернуться назад</a><br><br>\n';
+$PMF_LANG['err_VoteTooMuch'] = 'Мы не засчитываем повторное голосование.';
+$PMF_LANG['err_noVote'] = '<strong>Вы забыли поставить оценку этому ответу или пытаетесь сделать это повторно!</strong> <a href="nojavascript...history.back();">Нажмите сюда</a>, для возврата на предыдущую страницу.';
+$PMF_LANG['err_noMailAdress'] = 'Не корректный email.<br><a href="nojavascript...history.back();">back</a>';
+>>>>>>> 2.10
 $PMF_LANG['err_sendMail'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст сообщения</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Поиск по базе В&О:</strong><br /></p>';
+$PMF_LANG['help_search'] = '<strong>Поиск по базе В&О:</strong><br>';
 $PMF_LANG['ad'] = 'Секция администратора';
 $PMF_LANG['ad_menu_user_administration'] = 'Пользователи';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Проверка новых записей';
@@ -266,7 +279,7 @@ $PMF_LANG['ad_passwd_new'] = 'Новый пароль:';
 $PMF_LANG['ad_passwd_con'] = 'Подтверждение:';
 $PMF_LANG['ad_passwd_change'] = 'Изменить пароль';
 $PMF_LANG['ad_passwd_suc'] = 'Пароль успешно изменен.';
-$PMF_LANG['ad_passwd_remark'] = '<strong>ВНИМАНИЕ:</strong><br /> информация о сессии сохранена в вашем компьютере!';
+$PMF_LANG['ad_passwd_remark'] = '<strong>ВНИМАНИЕ:</strong><br> информация о сессии сохранена в вашем компьютере!';
 $PMF_LANG['ad_passwd_fail'] = 'Старый пароль <strong>должен быть</strong> введен правильно, а новый подтвержден тоже <strong>правильно</strong>.';
 $PMF_LANG['ad_adus_adduser'] = 'Новый пользователь';
 $PMF_LANG['ad_adus_name'] = 'Логин:';
@@ -397,7 +410,7 @@ $PMF_LANG['ad_xml_head'] = 'Архивирование в формат XML';
 $PMF_LANG['ad_xml_hint'] = 'Сохранение всех записей базы данных в формате XML.';
 $PMF_LANG['ad_xml_gen'] = 'создать XML файл';
 $PMF_LANG['ad_entry_locale'] = 'Язык';
-$PMF_LANG['msgLangaugeSubmit'] = 'изменить язык';
+$PMF_LANG['msgLanguageSubmit'] = 'изменить язык';
 $PMF_LANG['ad_entry_preview'] = 'Предпросмотр';
 $PMF_LANG['ad_attach_1'] = 'Неверно указана директория для прикрепленных файлов в панели управления.';
 $PMF_LANG['ad_attach_2'] = 'Неверно указана ссылка для прикрепленных файлов в панели управления.';
@@ -450,7 +463,7 @@ $PMF_LANG['ad_user_realname'] = 'Настоящее имя:';
 $PMF_LANG['ad_export_generate_pdf'] = 'Сгенерировать PDF файл';
 $PMF_LANG['ad_export_full_faq'] = 'База В&О в виде PDF файла: ';
 $PMF_LANG['err_bannedIP'] = 'Доступ к системе с вашего IP адреса запрещен.';
-$PMF_LANG['err_SaveQuestion'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст вопроса</strong>.<br /><br /><a href="nojavascript...history.back();">Вернутсья назад</a><br /><br />\n';
+$PMF_LANG['err_SaveQuestion'] = 'Не заполнены обязательные поля <strong>ваше имя</strong>, <strong>адрес email</strong> и <strong>текст вопроса</strong>.<br><br><a href="nojavascript...history.back();">Вернутсья назад</a><br><br>\n';
 $PMF_LANG['ad_entry_fontcolor'] = 'Цвет шрифта: ';
 $PMF_LANG['ad_entry_fontsize'] = 'Размер шрифта: ';
 $PMF_LANG['ad_categ_new_main_cat'] = 'как новая главная категория';
@@ -642,7 +655,11 @@ $PMF_LANG['ad_quick_record'] = 'Добавить новую запись в ра
 $PMF_LANG['ad_quick_user'] = 'Добавить нового пользователя';
 $PMF_LANG['ad_quick_group'] = 'Добавить новую группу';
 $PMF_LANG['msgNewTranslationHeader'] = 'Перевод';
+<<<<<<< HEAD
 $PMF_LANG['msgNewTranslationAddon'] = 'Ваше предложение не будет опубликовано сразу, а только после получения его администратором. Обязательные для заполнения поля: <strong> ваше имя </ STRONG>, <strong> ваш адрес электронной почты </ STRONG>, <strong> ваш заголовок перевода </ STRONG> и <strong> ваш перевод В&О </ STRONG>. Пожалуйста, разделяйте ключевые слова только пробелами.';
+=======
+$PMF_LANG['msgNewTranslationAddon'] = 'Ваше предложение не будет опубликовано сразу, только после получения его администратором. Обязательные для заполнения поля: <strong> ваше имя </strong>, <strong> ваш адрес электронной почты </strong>, <strong> ваш заголовок перевода </strong> и <strong> ваш перевод В&О </strong>. Пожалуйста, разделяйте ключевые слова только пробелами.';
+>>>>>>> 2.10
 $PMF_LANG['msgNewTransSourcePane'] = 'Источник';
 $PMF_LANG['msgNewTranslationPane'] = 'Перевод';
 $PMF_LANG['msgNewTranslationName'] = 'Ваше имя:';
@@ -661,16 +678,13 @@ $PMF_LANG['ad_groups'] = 'Группы';
 $PMF_LANG['ad_conf_order_id'] = 'ID (по умолчанию)';
 $PMF_LANG['ad_conf_order_thema'] = 'Заголовок';
 $PMF_LANG['ad_conf_order_visits'] = 'Число посетителей';
-$PMF_LANG['ad_conf_order_datum'] = 'Дата';
+$PMF_LANG['ad_conf_order_updated'] = 'Дата';
 $PMF_LANG['ad_conf_order_author'] = 'Автор';
 $PMF_LANG['ad_conf_desc'] = 'убывнию';
 $PMF_LANG['ad_conf_asc'] = 'возрастанию';
 $PMF_LANG['mainControlCenter'] = 'Основные настройки';
 $PMF_LANG['recordsControlCenter'] = 'Настройка раздела ВАЖНОЕ';
-$PMF_LANG['msgInstantResponse'] = 'Мгновенный ответ';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Найти первые %d записей.';
 $PMF_LANG['msgAllCatArticles'] = 'Записей в этой категории';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Просто наберите и найдите ответы ...';
 $PMF_LANG['msgTagSearch'] = 'Статьи с тегами';
 $PMF_LANG['ad_pmf_info'] = 'информация о phpMyFAQ';
 $PMF_LANG['ad_online_info'] = 'Проверить новые версии';
@@ -847,8 +861,8 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Кол�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Количество новостных статей");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Заблокировать эти IP-Адреса");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Активировать mod_rewrite? (по умолчанию отключено)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Активировать LDAP? (по умолчанию отключено)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Базовый URL для проверки ссылок (например http://www.example.org/faq)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Активировать LDAP? (по умолчанию отключено)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Базовый URL для проверки ссылок (например http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Интервал между AJAX-проверками ссылок (в секундах)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Запретить отображение неактивных вопросов?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Уровень доступа");
@@ -858,13 +872,13 @@ $LANG_CONF['spam.enableCaptchaCode'] = array(0 => "checkbox", 1 => "Исполь
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Количество связанных записей");
 $LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Шаблон который будет использоваться");
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Включить визуальный (WYSIWYG) редактор (по умолчанию: включено)");
-$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Путь на сервере для прикреплённых файлов.<br /><small>Относительный путь означает папку внутри веб пространства</small>");
+$LANG_CONF['main.attachmentsPath'] = array(0 => "input", 1 => "Путь на сервере для прикреплённых файлов.<br><small>Относительный путь означает папку внутри веб пространства</small>");
 $LANG_CONF['search.enableRelevance'] = array(0 => "checkbox", 1 => "Включить поддержку релевантности? (по умолчанию: выключено)");
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Сортировка популярных ответов");
 $LANG_CONF['records.enableAttachmentEncryption'] = array(0 => "checkbox", 1 => "Шифровать прикрепляемые файлы?");
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Новые записи надо активировать?");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Разрешить коментарии для новых записей?");
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Путь, куда будет сохранен прикрепленный файл.<br /><small>Относительный путь означает папку в корневой директории веб-сервера</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Путь, куда будет сохранен прикрепленный файл.<br><small>Относительный путь означает папку в корневой директории веб-сервера</small>");
 $LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => "input", 1 => ' Ключ шифрования по умолчанию для вложений <br><small>Игнорируется,если шифрование отключено</small><br><small><font color="red">ВНИМАНИЕ: не изменять,если включено шифрование файлов!!!</font></small>');
 $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Сортировать по:');
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Сортировать по:');
@@ -877,3 +891,97 @@ $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 =>
 $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Поддержка Facebook (по умолчанию: отключено)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Одноразовый вход для поддержки (по умолчанию: отключено)');
 $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Использовать только защищенное соединение?");
+$PMF_LANG['msgExportAllFaqs'] = 'Печатать всё в PDF';
+$PMF_LANG['ad_online_verification'] = 'Online verification check';
+$PMF_LANG['ad_verification_button'] = 'Click to verify your phpMyFAQ installation';
+$PMF_LANG['ad_verification_notokay'] = 'Your version of phpMyFAQ has local changes:';
+$PMF_LANG['ad_verification_okay'] = 'Your version of phpMyFAQ was successfully verified.';
+$PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
+$PMF_LANG['msg2answerFAQ'] = 'Отвечено';
+$PMF_LANG['headerUserControlPanel'] = 'Панель управления пользователя';
+$PMF_LANG['rememberMe'] = 'Залогиниться автоматически в следующий раз';
+$PMF_LANG['ad_menu_instances'] = 'FAQ Multi-sites';
+$PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
+$PMF_LANG['msgMode'] = 'Modus';
+$PMF_LANG['msgMaintenanceMode'] = 'FAQ is in maintenance';
+$PMF_LANG['msgOnlineMode'] = 'FAQ is online';
+$PMF_LANG['msgShowMore'] = 'show more';
+$PMF_LANG['msgQuestionAnswered'] = 'Вопрос отвечен';
+$PMF_LANG['msgMessageQuestionAnswered'] = 'Your question at %s was answered. Please check it here:';
+$PMF_LANG['ad_stopwords_desc'] = 'Please select a language to add or edit stopwords.';
+$PMF_LANG['ad_visits_per_day'] = 'Визитов в день';
+$PMF_LANG['ad_instance_add'] = 'Add a new phpMyFAQ multi site instance';
+$PMF_LANG['ad_instance_error_notwritable'] = 'The folder /multisite isn\'t writable.';
+$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only<br>(default: deactivated)');
+$LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Close open question after answer?');
+$LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Delete open question after answer?');
+$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ autosaving');
+$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving in seconds, default 180');
+$LANG_CONF['main.maintenanceMode'] = array(0 => 'checkbox', 1 => 'Set FAQ in maintenance mode');
+$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Sort FAQs randomly<br>(default: deactivated)');
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Enable bundled WYSIWYG editor in frontend<br>(default: disabled)');
+$LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => 'Gravatar Support<br>(default: disabled)');
+$PMF_LANG['ad_instance_url'] = 'Instance URL';
+$PMF_LANG['ad_instance_path'] = 'Instance path';
+$PMF_LANG['ad_instance_name'] = 'Instance name';
+$PMF_LANG['ad_instance_email'] = 'Your admin email';
+$PMF_LANG['ad_instance_admin'] = 'Admin login name';
+$PMF_LANG['ad_instance_password'] = 'Admin password';
+$PMF_LANG['ad_instance_hint'] = 'Caution: It will take some seconds to create a new phpMyFAQ instance!';
+$PMF_LANG['ad_instance_button'] = 'Save instance';
+$PMF_LANG['ad_instance_error_cannotdelete'] = 'Could not delete instance ';
+$PMF_LANG['ad_instance_config'] = 'Instance configuration';
+$PMF_LANG['msgAboutThisNews'] = 'Об этой новости';
+$PMF_LANG['msgAccessDenied'] = 'Доступ запрещён.';
+$PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
+$PMF_LANG['msgRelatedTags'] = 'Добавить поисковое слово';
+$PMF_LANG['msgPopularTags'] = 'Популярные поисковые слова';
+$PMF_LANG['ad_searchterm_del'] = 'Delete all logged search terms';
+$PMF_LANG['ad_searchterm_del_suc'] = 'Deleted successfully all search terms.';
+$PMF_LANG['ad_searchterm_del_err'] = 'Couldn\'t delete all search terms.';
+$PMF_LANG['ad_tag_delete_success'] = 'The tag was deleted successfully.';
+$PMF_LANG['ad_tag_delete_error'] = 'The tag was not deleted because an error occured.';
+$PMF_LANG['seoCenter'] = 'SEO';
+$LANG_CONF['search.enableHighlighting'] = array(0 => 'checkbox', 1 => 'Highlight search terms');
+$LANG_CONF['main.enableRssFeeds'] = array(0 => 'checkbox', 1 => 'RSS Feeds<br>(default: enabled)');
+$LANG_CONF['records.allowCommentsForGuests'] = array(0 => 'checkbox', 1 => 'Allow comments for guests<br>(default: enabled)');
+$LANG_CONF['records.allowQuestionsForGuests'] = array(0 => 'checkbox', 1 => 'Allow adding questions for guests<br>(default: enabled)');
+$LANG_CONF['records.allowNewFaqsForGuests'] = array(0 => 'checkbox', 1 => 'Allow adding new FAQs<br>(default: enabled)');
+$LANG_CONF['records.hideEmptyCategories'] = array(0 => 'checkbox', 1 => 'Hide empty categories<br>(default: disabled)');
+$LANG_CONF['search.searchForSolutionId'] = array(0 => 'checkbox', 1 => 'Search for solution ID<br>(default: enabled)');
+$LANG_CONF['socialnetworks.disableAll'] = array(0 => 'checkbox', 1 => 'Disable all social networks<br>(default: disabled)');
+$LANG_CONF['main.enableGzipCompression'] = array(0 => 'checkbox', 1 => 'Enable GZIP compression<br>(default: enabled)');
+$LANG_CONF['seo.metaTagsHome'] = array(0 => 'select', 1 => 'Meta Tags start page');
+$LANG_CONF['seo.metaTagsFaqs'] = array(0 => 'select', 1 => 'Meta Tags FAQs');
+$PMF_LANG['msgMatchingQuestions'] = 'Следующие результаты возможно соответствуют вашему вопросу:';
+$PMF_LANG['msgFinishSubmission'] = 'Если ни один из вышеперечисленных ответов не соответствует вашему вопросу, нажмите на кнопку ниже, чтобы Отправить свой вопрос.';
+$PMF_LANG['mailControlCenter'] = 'Mail setup';
+$PMF_LANG['ad_msgNoteAboutPasswords'] = 'Внимание! При вводе пароля, вы перезаписываете пароль пользователя.';
+$PMF_LANG['ad_delete_all_votings'] = 'Очистить все голосования';
+$PMF_LANG['ad_categ_moderator'] = 'Модераторы';
+$PMF_LANG['ad_clear_all_visits'] = 'Очистить все посещения';
+$PMF_LANG['ad_reset_visits_success'] = 'The visits were resetted successfully.';
+$PMF_LANG['faqOverview'] = 'FAQ Overview';
+$PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
+$PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch configuration';
+$PMF_LANG['ad_es_create_index'] = 'Create Index';
+$PMF_LANG['ad_es_drop_index'] = 'Drop Index';
+$PMF_LANG['ad_es_bulk_index'] = 'Full import';
+$PMF_LANG['ad_es_create_index_success'] = 'Index successfully created.';
+$PMF_LANG['ad_es_drop_index_success'] = 'Index successfully dropped.';
+$LANG_CONF['seo.metaTagsCategories'] = array(0 => 'select', 1 => 'Meta Tags category pages');
+$LANG_CONF['seo.metaTagsPages'] = array(0 => 'select', 1 => 'Meta Tags static pages');
+$LANG_CONF['seo.metaTagsAdmin'] = array(0 => 'select', 1 => 'Meta Tags Admin');
+$LANG_CONF['main.enableLinkVerification'] = array(0 => 'checkbox', 1 => 'Enable automatic link verification<br>(default: enabled)');
+$LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Manually activate new users (default: activated)');
+$LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Use remote SMTP server (default: deactivated)');
+$LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address');
+$LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
+$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Password');
+$LANG_CONF['security.enableRegistration'] = array('checkbox', 'Enable registration for visitors<br>(default: activated)');
+$LANG_CONF['main.customPdfHeader'] = array('area', 'Custom PDF Header (HTML allowed)');
+$LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allowed)');
+$LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests<br>(default: disabled)');
+$LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Markdown editor<br>(default: disabled)');
+$LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answering for user questions<br>(default: activated)');
+$LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support<br>(default: deactivated)');

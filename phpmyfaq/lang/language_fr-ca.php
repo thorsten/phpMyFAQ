@@ -1,21 +1,22 @@
 <?php
+
 /**
- * The French language file - try to be the best
+ * The French Canadian language file - try to be the best
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Jacqueline Gazaille Tétreault <gazaillegen@gmail.com>
- * @copyright 2013 phpMyFAQ Team
+ * @copyright 2013-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-06-29
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fr-CA';
 $PMF_LANG['language'] = 'French Canada';
@@ -103,7 +104,7 @@ $PMF_LANG['msgDate_User'] = 'Date / Utilisateur';
 $PMF_LANG['msgQuestion2'] = 'Question';
 $PMF_LANG['msg2answer'] = 'Réponse';
 $PMF_LANG['msgQuestionText'] = 'Ici, vous pouvez voir les questions posées par d\'autres personnes. Vous pouvez y proposer une réponse, qui sera peut-être insérée dans la FAQ.';
-$PMF_LANG['msgHelpText'] = '<p>La FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Foire Aux Questions) dispose d\'une navigation simple. Vous pouvez chercher parmi les différentes <strong><a href="?action=show">catégories</a></strong> ou bien laisser l\'<strong><a href="?action=search">outil de recherche</a></strong> chercher à partir de mots-clefs.</p>';
+$PMF_LANG['msgHelpText'] = 'La FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions - Foire Aux Questions) dispose d\'une navigation simple. Vous pouvez chercher parmi les différentes <strong><a href="?action=show">catégories</a></strong> ou bien laisser l\'<strong><a href="?action=search">outil de recherche</a></strong> chercher à partir de mots-clefs.';
 $PMF_LANG['msgContactEMail'] = 'Envoyer un courriel au webmestre :';
 $PMF_LANG['msgMessage'] = 'Votre message :';
 $PMF_LANG['msgTopTen'] = 'Les plus visités';
@@ -116,17 +117,17 @@ $PMF_LANG['msgMailCheck'] = 'Il y a une nouvelle publication dans la FAQ ! Veuil
 $PMF_LANG['msgMailContact'] = 'Votre message a été envoyé à l\'administrateur !';
 $PMF_LANG['err_noDatabase'] = 'Pas de connection à la base de données !';
 $PMF_LANG['err_noHeaders'] = 'Aucune catégorie trouvée !';
-$PMF_LANG['err_noArticles'] = '<p>Aucun résultat.</p>';
-$PMF_LANG['err_badID'] = '<p>Mauvais identifiant!</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Pas d\'article Les plus visités actuellement.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Pas d\'entrée trouvée.</p>';
+$PMF_LANG['err_noArticles'] = 'Aucun résultat.';
+$PMF_LANG['err_badID'] = 'Mauvais identifiant!';
+$PMF_LANG['err_noTopTen'] = 'Pas d\'article Les plus visités actuellement.';
+$PMF_LANG['err_nothingFound'] = 'Pas d\'entrée trouvée.';
 $PMF_LANG['err_SaveEntries'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong>, <strong>catégorie</strong>, <strong>titre</strong> et <strong>votre article</strong>!<br /><br />n<a href="nojavascript...history.back();">retour d\'une page</a><br /><br />n';
 $PMF_LANG['err_SaveComment'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong> et <strong>vos commentaires</strong>!<br /><br />n<a href="nojavascript...history.back();">retour d\'une page</a><br /><br />n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Nous ne comptons pas les doubles votes. <a href="nojavascript...history.back();">Cliquez ici</a>, afin de retourner en arrière.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Vous n\'avez pas voté!</strong> <a href="nojavascript...history.back();">Veuillez cliquer ici</a>, afin de voter.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Nous ne comptons pas les doubles votes. Cliquez ici, afin de retourner en arrière.';
+$PMF_LANG['err_noVote'] = '<strong>Vous n\'avez pas voté!</strong> <a href="nojavascript...history.back();">Veuillez cliquer ici</a>, afin de voter.';
 $PMF_LANG['err_noMailAdress'] = 'Votre adresse courriel n\'est pas correcte.<br /><a href="nojavascript...history.back();">retour</a>';
 $PMF_LANG['err_sendMail'] = 'Les champs requis sont <strong>votre nom</strong>, <strong>votre adresse courriel</strong> et <strong>votre question</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Ainsi, vous trouverez un article :</strong><br />Avec l\'entrée <b style="color: Red;">Terme1 Terme2</b> on peut chercher plusieurs termes.</p><p><strong>Note :</strong> Votre mot-clef doit contenir au moins 4 lettres.</p>';
+$PMF_LANG['help_search'] = '<strong>Ainsi, vous trouverez un article :</strong><br />Avec l\'entrée <b style="color: Red;">Terme1 Terme2</b> on peut chercher plusieurs termes.<strong>Note :</strong> Votre mot-clef doit contenir au moins 4 lettres.';
 $PMF_LANG['ad'] = 'SECTION ADMIN';
 $PMF_LANG['ad_menu_user_administration'] = 'Administration des utilisateurs';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Approuver un article';
@@ -470,7 +471,7 @@ $PMF_LANG['msgPDF'] = 'version PDF';
 $PMF_LANG['ad_xml_head'] = 'Sauvegarde XML';
 $PMF_LANG['ad_xml_hint'] = 'Sauvegarder tous les articles de votre FAQ dans un fichier XML.';
 $PMF_LANG['ad_entry_locale'] = 'Langue ';
-$PMF_LANG['msgLangaugeSubmit'] = 'modifier langue';
+$PMF_LANG['msgLanguageSubmit'] = 'modifier langue';
 $PMF_LANG['ad_entry_preview'] = 'Prévisualisation';
 $PMF_LANG['ad_attach_1'] = 'Veuillez d\'abord choisir un répertoire pour les pièces jointes dans la configuration.';
 $PMF_LANG['ad_attach_2'] = 'Veuillez d\'abord choisir un répertoire pour le lien dans la configuration.';
@@ -537,8 +538,8 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Nombre 
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Nombre de nouveaux articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => "Bannir ces adresses IP");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Activer le support du mod_rewrite? (défault : désactivé)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Voulez-vous activer le support de LDAP? (défault : désactivé)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL pour vérification des liens (e.g. : http://www.example.org/faq)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Voulez-vous activer le support de LDAP? (défault : désactivé)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "URL pour vérification des liens (e.g. : http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervalle entre la vérification des liens AJAX (en secondes)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Désactiver la visibilité de nouvelles questions ?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "niveau d'autorisation");
@@ -548,7 +549,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Type de Tri (descendan
 $PMF_LANG['ad_conf_order_id'] = 'ID (defaut)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titre';
 $PMF_LANG['ad_conf_order_visits'] = 'Nombres de visites';
-$PMF_LANG['ad_conf_order_datum'] = 'Date';
+$PMF_LANG['ad_conf_order_updated'] = 'Date';
 $PMF_LANG['ad_conf_order_author'] = 'Auteur';
 $PMF_LANG['ad_conf_desc'] = 'descendant';
 $PMF_LANG['ad_conf_asc'] = 'ascendant';
@@ -712,10 +713,6 @@ $PMF_LANG['msgEditFaqDat'] = 'édition';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => "Nombre de termes trouvés");
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Trier par Faq les plus populaires");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => "checkbox", 1 => "Adresse courriel comme champ obligatoire (défaut : désactivé)");
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => "checkbox", 1 => "Réponse immédiate en page d\'accueil (défaut : désactivée)");
-$PMF_LANG['msgInstantResponse'] = 'Réponse immédiate';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Trouver ci-dessous les premiers %d enregistrements.';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Tapez des mots et trouvez la réponse ...';
 $PMF_LANG['ad_record_sticky'] = 'Épingler cette faq :';
 $PMF_LANG['ad_entry_sticky'] = 'Épingler cette faq ';
 $PMF_LANG['stickyRecordsHeader'] = 'FAQs épinglées';

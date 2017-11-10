@@ -1,24 +1,25 @@
 <?php
+
 /**
  * European Portuguese language file - post-1990 Orthographic Agreement (current): pt-PT
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    João Martins <jm@reit.up.pt>
  * @author    Fernando G. Monteiro <fgmont@reit.up.pt>
  * @author    Luis Costa <izhirahider@gmail.com>
  * @author... Carlos E. Gorges <carlos@linuxwaves.com>
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pt';
 $PMF_LANG['language'] = 'Portuguese';
@@ -118,17 +119,17 @@ $PMF_LANG['msgMailCheck'] = 'Existe um novo registo nas FAQ: consultar a secç�
 $PMF_LANG['msgMailContact'] = 'A sua mensagem foi enviada para o Administrador.';
 $PMF_LANG['err_noDatabase'] = 'Sem ligação à base de dados.';
 $PMF_LANG['err_noHeaders'] = 'Sem categorias.';
-$PMF_LANG['err_noArticles'] = '<p>Sem artigos disponíveis.</p>';
-$PMF_LANG['err_badID'] = '<p>ID Incorreto.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>O TOP 10 ainda não se encontra disponível.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Sem artigos.</p>';
+$PMF_LANG['err_noArticles'] = 'Sem artigos disponíveis.';
+$PMF_LANG['err_badID'] = 'ID Incorreto.';
+$PMF_LANG['err_noTopTen'] = 'O TOP 10 ainda não se encontra disponível.';
+$PMF_LANG['err_nothingFound'] = 'Sem artigos.';
 $PMF_LANG['err_SaveEntries'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Categoria</strong>, <strong>Questão</strong>, a sua <strong>Entrada</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
 $PMF_LANG['err_SaveComment'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Comentário</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
 $PMF_LANG['err_VoteTooMuch'] = 'Avaliações em duplicado não são contabilizadas.';
 $PMF_LANG['err_noVote'] = '<strong>Não efetuou a avaliação.</strong>';
 $PMF_LANG['err_noMailAdress'] = '<em>E-mail</em> incorreto.';
 $PMF_LANG['err_sendMail'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
-$PMF_LANG['help_search'] = '<p><strong>Pesquisa de artigos:</strong><br />Usando uma expressão do tipo <strong style="color: red;">palavra1 palavra2</strong> pode obter resultados por relevância descendente para dois ou mais critérios de pesquisa.</p><p><strong>Nota:</strong> A expressão a pesquisar tem que ter pelo menos 4 carateres, caso contrário será ignorada<br /><small>(no caso de uma sigla com três carateres acrescente um espaco no final)</small>.</p>';
+$PMF_LANG['help_search'] = '<strong>Pesquisa de artigos:</strong><br />Usando uma expressão do tipo <strong style="color: red;">palavra1 palavra2</strong> pode obter resultados por relevância descendente para dois ou mais critérios de pesquisa.<strong>Nota:</strong> A expressão a pesquisar tem que ter pelo menos 4 carateres, caso contrário será ignorada<br /><small>(no caso de uma sigla com três carateres acrescente um espaco no final)</small>.';
 $PMF_LANG['ad'] = '<strong>Secção de Administração</strong>';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrar Utilizadores';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Aprovar Artigos';
@@ -394,7 +395,7 @@ $PMF_LANG['msgPageDoublePoint'] = 'Página: ';
 $PMF_LANG['msgMainCategory'] = 'Categoria principal';
 $PMF_LANG['ad_passwdsuc'] = 'A sua <em>password</em> foi alterada.';
 $PMF_LANG['ad_entry_locale'] = 'Idioma';
-$PMF_LANG['msgLangaugeSubmit'] = 'Escolha o idioma:';
+$PMF_LANG['msgLanguageSubmit'] = 'Escolha o idioma:';
 $PMF_LANG['ad_attach_4'] = 'O anexo tem que possuir menos de %s Bytes.';
 $PMF_LANG['ad_menu_export'] = 'Exportar as FAQ';
 $PMF_LANG['rightsLanguage']['adduser'] = 'adicionar utilizador';
@@ -449,8 +450,8 @@ $LANG_CONF['main.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Número de
 $LANG_CONF['main.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Número de notícias');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Barrar estes IPs');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Ativar o suporte de <em>mod_rewrite</em> ? <small>(pré-definição: desativado)</small>');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
-$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL-base para verificação de <em>links</em> <small>( ex.: http://www.example.org/faq )</small>');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
+$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL-base para verificação de <em>links</em> <small>( ex.: http://www.example.org/faq/ )</small>');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Intervalo entre verificações de <em>links</em> pelo AJAX <small>(segundos)</small>');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Desativar a visibilidade de novos artigos?');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Nível de Permissão');
@@ -673,18 +674,15 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Ordenação dos regist
 $PMF_LANG['ad_conf_order_id'] = 'ID (pré-definido)';
 $PMF_LANG['ad_conf_order_thema'] = 'Título';
 $PMF_LANG['ad_conf_order_visits'] = 'Número de visitantes';
-$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_updated'] = 'Data';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'descendente';
 $PMF_LANG['ad_conf_asc'] = 'ascendente';
 $PMF_LANG['mainControlCenter'] = 'Configuração Principal';
 $PMF_LANG['recordsControlCenter'] = 'Configuração dos registos das FAQ';
-$PMF_LANG['msgInstantResponse'] = 'Resposta Imediata';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '.<br />Lista da(s) primeira(s) %d entrada(s):';
 $LANG_CONF['records.defaultActivation'] = array(0 => 'checkbox', 1 => 'Ativar automaticamente os novos registos <small>(pré-definição: desativada)</small>');
 $LANG_CONF['records.defaultAllowComments'] = array(0 => 'checkbox', 1 => 'Permitir comentários nos novos registos <small>(pré-definição: desativada)</small>');
 $PMF_LANG['msgAllCatArticles'] = 'Registos nesta categoria';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Simples: escreva a expressão e verifique as sugestões que vão surgindo…';
 $PMF_LANG['msgTagSearch'] = 'Entradas etiquetadas';
 $PMF_LANG['ad_pmf_info'] = 'Informação sobre o phpMyFAQ';
 $PMF_LANG['ad_online_info'] = 'Verificação <em>on-line</em> da versão mais recente do phpMyFAQ';
@@ -801,7 +799,6 @@ $PMF_LANG['msgUpdateFaqDate'] = 'Atualizar';
 $PMF_LANG['msgKeepFaqDate'] = 'Manter';
 $PMF_LANG['msgEditFaqDat'] = 'Editar';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Marcar como obrigatório o campo do endereço de <em>e-mail</em> <small>(pré-definição: desativada)</small>');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Resposta Imediata na página inicial <small>(pré-definição: desativada)</small>');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Ordenar por relevância');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Ativar a utilização da relevância? <small>(pré-definição: desativada)</small>');
 $PMF_LANG['searchControlCenter'] = 'Pesquisa';
@@ -862,11 +859,6 @@ $PMF_LANG['ad_verification_button'] = 'Verificar a sua instalação do phpMyFAQ
 $PMF_LANG['ad_verification_notokay'] = 'O phpMyFAQ instalado possui algumas alterações em relação ao original:';
 $PMF_LANG['ad_verification_okay'] = 'Foi executada a verificação do phpMyFAQ instalado.';
 $PMF_LANG['cacheControlCenter'] = '<em>Cache</em> - configuração';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Ativar o Varnish (>=3.0)<br /><small>Requisito: <em>varnish PECL extension</em></small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish - <em>host</em>');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish - porta');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => '<em>Varnish secret</em>');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish <em>timeout</em>');
 $PMF_LANG['ad_menu_searchfaqs'] = 'Pesquisar artigos <small>(tipo FAQ)</small>';
 $LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Fechar a questão em aberto depois de responder?');
 $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Apagar a questão em aberto depois de responder?');

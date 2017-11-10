@@ -9,21 +9,22 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014 phpMyFAQ Team
+ * @copyright 2014-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2014-03-22
  */
 
-/** global $: false */
+/*global $:false */
 
-$(function() {
-    $(window).bind('load resize', function() {
-        'use strict';
+$(document).ready(function () {
+    'use strict';
+
+    $(window).bind('load resize', function () {
         if ($(this).width() < 768) {
             $('div.sidebar-collapse').addClass('collapse');
         } else {
             $('div.sidebar-collapse').removeClass('collapse');
         }
-    })
-})
+    });
+});

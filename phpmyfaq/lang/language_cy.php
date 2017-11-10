@@ -1,23 +1,21 @@
 <?php
+
 /**
-* $Id: language_cy.php,v 1.24 2007-03-29 19:31:54 thorstenr Exp $
-*
-* The Cymraeg language file - Welsh (Cymraeg) translation
-*
-* @author       Duncan Thomas AKA Pinman <pinman@gmail.com>
-* @since        2006-08-23
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* 
-* 
-* 
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * The Cymraeg language file - Welsh (Cymraeg) translation
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Duncan Thomas AKA Pinman <pinman@gmail.com>
+ * @copyright 2006-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2006-08-23
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "cy";
@@ -125,7 +123,7 @@ $PMF_LANG["msg2answer"] = "Ateb";
 $PMF_LANG["msgQuestionText"] = "Gallwch weld cwestiynau a ofynnwyd gan ddefnyddwyr eraill yma. Os byddwch yn ateb y cwestiynau hyn, efallai caiff eich atebion eu cynnwys yn y Cwestiynau Cyffredin.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilior <strong><a href=\"?action=show\">Categorïau</a></strong> neu adael i <strong><a href=\"?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.</p>";
+$PMF_LANG["msgHelpText"] = "Mae strwythur CC (Cwestiynau Cyffredin) yn eithaf syml. Gallwch naill ai chwilior <strong><a href=\"?action=show\">Categorïau</a></strong> neu adael i <strong><a href=\"?action=search\">beiriant chwilio CC</a></strong> chwilio am eiriau allweddol.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "e-bostio at y gwefeistr:";
@@ -147,19 +145,19 @@ $PMF_LANG["msgMailContact"] = "Anfonwyd eich neges at y gweinyddwr.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Does dim cysylltiad cronfa ddata ar gael.";
 $PMF_LANG["err_noHeaders"] = "Ni chafwyd categori.";
-$PMF_LANG["err_noArticles"] = "<p>Dim cofnodion ar gael.</p>";
-$PMF_LANG["err_badID"] = "<p>Gwybodaeth adnabod anghywir.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Does dim Deg Uchaf ar gael eto.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ni chafwyd cofnod.</p>";
+$PMF_LANG["err_noArticles"] = "Dim cofnodion ar gael.";
+$PMF_LANG["err_badID"] = "Gwybodaeth adnabod anghywir.";
+$PMF_LANG["err_noTopTen"] = "Does dim Deg Uchaf ar gael eto.";
+$PMF_LANG["err_nothingFound"] = "Ni chafwyd cofnod.";
 $PMF_LANG["err_SaveEntries"] = " Y meysydd gofynnol yw <strong>eich enw</strong>, <strong> eich cyfeiriad e-bost</strong>, <strong>categori</strong>, <strong>pennawd</strong>, <strong> eich cofnod </strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich sylwadau</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">un dudalen yn ôl </a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p> nid ydym yn cyfrif pleidleisio ddwywaith. <a href=\"javascript:history.back();\">Cliciwch yma </a>, i fynd yn ôl.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong> ni wnaethoch ateb y cwestiwn hwn!</strong> <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.</p>";
+$PMF_LANG["err_VoteTooMuch"] = " nid ydym yn cyfrif pleidleisio ddwywaith. Cliciwch yma, i fynd yn ôl.";
+$PMF_LANG["err_noVote"] = "<strong> ni wnaethoch ateb y cwestiwn hwn!</strong> <a href=\"javascript:history.back();\">Cliciwch yma </a>, to vote.";
 $PMF_LANG["err_noMailAdress"] = " nid yw eich cyfeiriad e-bost yn gywir.<br /><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = " Y meysydd gofynnol yw <strong> eich enw </strong>, <strong> eich cyfeiriad e-bost </strong>, <strong> eich cwestiwn</strong> a phan ofynnir amdano, <strong>Captcha Code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong> chwilior cofnodion:</strong><br /> Gyda chofnod fel <strong style=\"color: Red;\"> gair1 gair2</strong> gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy.</p><p><strong> Sylwer:</strong> rhaid ich maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.</p>";
+$PMF_LANG["help_search"] = "<strong> chwilior cofnodion:</strong><br /> Gyda chofnod fel <strong style=\"color: Red;\"> gair1 gair2</strong> gallwch wneud chwiliad yn ôl perthnasedd ar gyfer dau faen prawf chwilio neu fwy.<strong> Sylwer:</strong> rhaid ich maen prawf chwilio fod o leiaf 4 llythyren neu fel arall bydd eich cais yn cael ei wrthod.";
 
 // Menü
 $PMF_LANG["ad"] = "ADRAN WEINYDDOL";
@@ -493,7 +491,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Wrth gefn";
 $PMF_LANG["ad_xml_hint"] = "Cadw pob cofnod o'ch Cwestiynau Cyffredin mewn un ffeil XML.";
 $PMF_LANG["ad_xml_gen"] = "Gwneud ffeil XML";
 $PMF_LANG["ad_entry_locale"] = "Iaith";
-$PMF_LANG["msgLangaugeSubmit"] = "newid iaith";
+$PMF_LANG["msgLanguageSubmit"] = "newid iaith";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";
@@ -572,7 +570,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => " Nifer 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => " Nifer yr erthyglau newyddion");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => " Gwahardd yr Ips hyn");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => " Actifadu mod_ailysgrifennur gefnogaeth? (diofyn: analluogi)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => " Hoffech chi osod cefnogaeth LDAP? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "fel prif gategori newydd";
 $PMF_LANG["ad_categ_paste_error"] = "Nid yw'n bosibl symud y categori hwn.";

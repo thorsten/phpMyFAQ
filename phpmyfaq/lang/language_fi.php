@@ -1,20 +1,25 @@
 <?php
+
 /**
- * $Id: language_fi.php,v 1.29 2007-03-29 19:31:54 thorstenr Exp $
- *
  * Finnish language file
  *
- * @author      Juha Tuomala <tuomala@iki.fi>
- * @author      Matti Kröger <matti.kroger@hotmail.com>
- * @author      Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
- * @author      Niklas Lampén <niklas.lampen@eventusmedia.fi>
- * @since       2004-02-19
- * @copyright   (c) 2006-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Juha Tuomala <tuomala@iki.fi>
+ * @author    Matti Kröger <matti.kroger@hotmail.com>
+ * @author    Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
+ * @author    Niklas Lampén <niklas.lampen@eventusmedia.fi>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-02-19
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'fi';
 $PMF_LANG['language'] = 'finnish';
@@ -103,7 +108,7 @@ $PMF_LANG['msgDate_User'] = 'Päiväys / Käyttäjä';
 $PMF_LANG['msgQuestion2'] = 'Kysymys';
 $PMF_LANG['msg2answer'] = 'Vastaus';
 $PMF_LANG['msgQuestionText'] = 'Täältä näet muiden käyttäjien kysymät kysymykset. Jos vastaat kysymykseen, vastauksesi voi päätyä kysymyksen tietoihin.';
-$PMF_LANG['msgHelpText'] = '<p>Kysymyksen (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) rakenne on melko yksinkertainen. Voit joko selata <strong><a href="?action=show">kategorioita</a></strong> tai anna <strong><a href="?action=search">hakukoneen</a></strong> etsiä avainsanoja.</p>';
+$PMF_LANG['msgHelpText'] = 'Kysymyksen (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) rakenne on melko yksinkertainen. Voit joko selata <strong><a href="?action=show">kategorioita</a></strong> tai anna <strong><a href="?action=search">hakukoneen</a></strong> etsiä avainsanoja.';
 $PMF_LANG['msgContactEMail'] = 'Lähetä ylläpitäjälle sähköpostia alla olevalla kaavakkeella.';
 $PMF_LANG['msgMessage'] = 'Viestisi:';
 $PMF_LANG['msgTopTen'] = 'Suosituimmat kysymykset';
@@ -116,17 +121,17 @@ $PMF_LANG['msgMailCheck'] = 'Uusi kysymys saatavilla!\nOle hyvä ja tarkasta yll
 $PMF_LANG['msgMailContact'] = 'Viestisi on lähetetty ylläpitäjälle.';
 $PMF_LANG['err_noDatabase'] = 'Tietokantayhteyttä ei ole saatavilla.';
 $PMF_LANG['err_noHeaders'] = 'Kategoriaa ei löydy.';
-$PMF_LANG['err_noArticles'] = '<p>Tietueita ei ole saatavilla.</p>';
-$PMF_LANG['err_badID'] = '<p>Väärä ID.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Suosittuja kysymyksiä ei ole vielä saatavilla.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Tietuetta ei löydy.</p>';
+$PMF_LANG['err_noArticles'] = 'Tietueita ei ole saatavilla.';
+$PMF_LANG['err_badID'] = 'Väärä ID.';
+$PMF_LANG['err_noTopTen'] = 'Suosittuja kysymyksiä ei ole vielä saatavilla.';
+$PMF_LANG['err_nothingFound'] = 'Tietuetta ei löydy.';
 $PMF_LANG['err_SaveEntries'] = 'Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong>, <strong>kategoria</strong>, <strong>otsikko</strong> ja <strong>Tietueesi</strong>!<br /><br />\n<a href="nojavascript...history.back();">yksi sivu takaisin</a><br /><br />\n';
 $PMF_LANG['err_SaveComment'] = 'Vaadittavat kentät ovat <strong>Nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kommenttisi</strong>!<br /><br />\n<a href="nojavascript...history.back();">yksi sivu takaisin</a><br /><br />\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Emme laske kuin yhden arvostelun. <a href="nojavascript...history.back();">Klikkaa tästä</a>, päästäksesi takaisin.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Et arvostellut kysymystä!</strong> <a href="nojavascript...history.back();">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Emme laske kuin yhden arvostelun. Klikkaa tästä, päästäksesi takaisin.';
+$PMF_LANG['err_noVote'] = '<strong>Et arvostellut kysymystä!</strong> <a href="nojavascript...history.back();">Ole hyvä ja klikkaa tästä</a>, arvostellaksesi.';
 $PMF_LANG['err_noMailAdress'] = 'Sähköpostiosoitteesi ei ole oikein.<br /><a href="nojavascript...history.back();">takaisin</a>';
 $PMF_LANG['err_sendMail'] = 'Vaadittavat kentät ovat <strong>nimesi</strong>, <strong>sähköposti osoitteesi</strong> ja <strong>kysymyksesi</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Etsi tietueita:</strong><br />Tietueella kuten <strong style="color: Red;">sana1 sana2</strong> voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.</p><p><strong>Huomaa:</strong> Haku kriteerisi tulee olla ainakin 4 merkkiä pitkä tai muuten hakusi hylätään.</p>';
+$PMF_LANG['help_search'] = '<strong>Etsi tietueita:</strong><br />Tietueella kuten <strong style="color: Red;">sana1 sana2</strong> voit tehdä asiaan kuuluvan laskevan haun kahdella tai useammalla hakukriteerillä.<strong>Huomaa:</strong> Haku kriteerisi tulee olla ainakin 4 merkkiä pitkä tai muuten hakusi hylätään.';
 $PMF_LANG['ad'] = 'Ylläpito';
 $PMF_LANG['ad_menu_user_administration'] = 'Käyttäjät';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Hyväksy kysymys';
@@ -396,7 +401,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-Varmuuskopio';
 $PMF_LANG['ad_xml_hint'] = 'Tallenna kaikki kysymyksetyhtenä XML-tiedostona.';
 $PMF_LANG['ad_xml_gen'] = 'tee XML tiedosto';
 $PMF_LANG['ad_entry_locale'] = 'Kieli';
-$PMF_LANG['msgLangaugeSubmit'] = 'Vaihda kieli';
+$PMF_LANG['msgLanguageSubmit'] = 'Vaihda kieli';
 $PMF_LANG['ad_entry_preview'] = 'Esikatsele';
 $PMF_LANG['ad_attach_1'] = 'Valitse ensin asetuksista hakemisto liitetiedostoille.';
 $PMF_LANG['ad_attach_2'] = 'Valitse ensin asetuksista linkki liitetiedostoille.';
@@ -464,7 +469,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Näytet
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Uutisten määrä');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Estä käyttö näistä IP-osoitteista');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Käytä mod_rewrite:a? (oletus: ei käytössä)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP-tuki päälle? (oletus: ei käytössä)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP-tuki päälle? (oletus: ei käytössä)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'uutena pääkategoriana';
 $PMF_LANG['ad_categ_paste_error'] = 'Tämän kategorian siirto ei ole mahdollista.';
 $PMF_LANG['ad_categ_move'] = 'siirrä kategoriaa';
@@ -697,18 +702,15 @@ $LANG_CONF['records.sortby'] = array(0 => "select", 1 => "Arkiston lajittelu (la
 $PMF_LANG['ad_conf_order_id'] = 'ID (oletus)';
 $PMF_LANG['ad_conf_order_thema'] = 'Otsikko';
 $PMF_LANG['ad_conf_order_visits'] = 'Vierailijoiden määrä';
-$PMF_LANG['ad_conf_order_datum'] = 'Päivämäärä';
+$PMF_LANG['ad_conf_order_updated'] = 'Päivämäärä';
 $PMF_LANG['ad_conf_order_author'] = 'Kirjoittaja';
 $PMF_LANG['ad_conf_desc'] = 'laskeva';
 $PMF_LANG['ad_conf_asc'] = 'nouseva';
 $PMF_LANG['mainControlCenter'] = 'Yleiset asetukset';
 $PMF_LANG['recordsControlCenter'] = 'Kysymysten asetukset';
-$PMF_LANG['msgInstantResponse'] = 'Pikavastaus';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Alta löydät %d ensimmäistä osumaa.';
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivoi uudet kysymykset (oletus: ei valittu)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Salli uusien kysymysten kommentointi (oletus: ei valittu)");
 $PMF_LANG['msgAllCatArticles'] = 'Kysymyksiä tässä kategoriassa';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Kirjoita ja vastaukset ilmestyvät sitä mukaa...';
 $PMF_LANG['msgTagSearch'] = 'Tietueita tunnisteilla';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ:n tiedot';
 $PMF_LANG['ad_online_info'] = 'Version tarkistus';
@@ -825,7 +827,6 @@ $PMF_LANG['msgUpdateFaqDate'] = 'päivitä';
 $PMF_LANG['msgKeepFaqDate'] = 'pidä';
 $PMF_LANG['msgEditFaqDat'] = 'muokkaa';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Sähköpostiosoite pakollisena kenttänä (oletus: ei käytössä)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Pikavastaus aloitussivulla (oletus: ei käytössä)');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Järjestä relevanssin mukaan');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Aktivoi relevanssituki? (oletus: pois käytöstä)');
 $PMF_LANG['searchControlCenter'] = 'Haun asetukset';
@@ -906,7 +907,7 @@ $PMF_LANG['rightsLanguage']['backup'] = 'luo turvakopio';
 $PMF_LANG['rightsLanguage']['restore'] = 'palauta turvakopio';
 $PMF_LANG['rightsLanguage']['delquestion'] = 'poista avoimia kysymyksiä';
 $PMF_LANG['rightsLanguage']['changebtrevs'] = 'muokkaa versioita';
-$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Linkkivarmennnuksen URL (esim.: http://www.example.org/faq)');
+$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'Linkkivarmennnuksen URL (esim.: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'AJAX -linkkivarmennuksen aikaväli (sekuntia)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Estä uusien kysymysten näkyvyys?');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Käyttöoikeustasot');
@@ -926,11 +927,6 @@ $PMF_LANG['msgMode'] = 'Toimintatapa';
 $PMF_LANG['msgMaintenanceMode'] = 'FAQia huolletaan';
 $PMF_LANG['msgOnlineMode'] = 'FAQ on online';
 $PMF_LANG['msgShowMore'] = 'näytä lisää';
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Käytä Varnish >=3.0 -tukea<br><small>Tarvitset varnish PECL -laajennuksen</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish -isäntä');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish -portti');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish salainen');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish -vanhentuminen');
 $LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Sulje avoin kysymys vastauksen jälkeen?');
 $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Poista avoin kysymys vastauksen jälkeen?');
 $LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Aktivoi FAQ automaattitallennus');

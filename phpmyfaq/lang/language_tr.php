@@ -1,18 +1,18 @@
 <?php
+
 /**
  * Turkish language file
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Zafer Gürsoy <zafergursoy@yahoo.com>
  * @author    Evren Yurtesen <yurtesen@ispro.net.tr>
- * @copyright 2006-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004
@@ -21,14 +21,8 @@
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "tr";
 $PMF_LANG["language"] = "Turkish";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "1";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategoriler";
@@ -123,7 +117,7 @@ $PMF_LANG["msg2answer"] = "Cevap";
 $PMF_LANG["msgQuestionText"] = "Burada diğer kullanıcıların sormuş olduğu soruları görebilirsiniz. Eğer bu soruyu cevaplayacaksanız, cevabınız SSS'da yerleştirilebilir.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.</p>";
+$PMF_LANG["msgHelpText"] = "SSS'ın yapısı (<strong>S</strong>ıkça <strong>S</strong>orulan <strong>S</strong>orular) oldukça basit. Ayrıca <strong><a href=\"?action=show\">Kategoriler</a></strong> içinde araştırma yapabilir, veya <strong><a href=\"?action=search\">SSS Arama Motoru</a></strong> ile anahtar sözcüklere göre arama yapabilirsiniz.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Webmaster 'a E-Mail:";
@@ -145,19 +139,19 @@ $PMF_LANG["msgMailContact"] = "Mesajınız yöneticiye yollandı.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Herhangi bir veritabanı bağlantısı yok.";
 $PMF_LANG["err_noHeaders"] = "Herhangi bir kategori bulunamadı.";
-$PMF_LANG["err_noArticles"] = "<p>Herhangi bir girdi yok.</p>";
-$PMF_LANG["err_badID"] = "<p>Yanlış ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Henüz İlk On yok.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Bir girdi bulunamadı.</p>";
+$PMF_LANG["err_noArticles"] = "Herhangi bir girdi yok.";
+$PMF_LANG["err_badID"] = "Yanlış ID.";
+$PMF_LANG["err_noTopTen"] = "Henüz İlk On yok.";
+$PMF_LANG["err_nothingFound"] = "Bir girdi bulunamadı.";
 $PMF_LANG["err_SaveEntries"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>kategori</strong>, <strong>başlık</strong> ve <strong>yazınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Gerekli alanlar <strong>your name</strong>, <strong>e-mail adresiniz</strong> ve <strong>yorumlarınız</strong>!<br /><br />\n<a href=\"javascript:history.back();\">bir sayfa geri</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Mükerrer oylar sayılmamaktadır. <a href=\"javascript:history.back();\">Buraya Tıkla</a>, geri dönmek için.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Mükerrer oylar sayılmamaktadır.";
+$PMF_LANG["err_noVote"] = "<strong>Soruyu oylayamazsınız!</strong> <a href=\"javascript:history.back();\">Lütfen buraya tıklayın</a>, oy kullanmak için.";
 $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz yanlış.<br /><a href=\"javascript:history.back();\">geri</a>";
 $PMF_LANG["err_sendMail"] = "Gerekli alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong> ve <strong>sorunuz</strong>!";
 
 // Yardım ve Arama
-$PMF_LANG["help_search"] = "<p><strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.</p><p><strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.</p>";
+$PMF_LANG["help_search"] = "<strong>Yazı Ara:</strong><br />şu kelimelere benzeyen girdileri ara <strong style=\"color: Red;\">kelime1 kelime2</strong> ıki veya daha fazla kritere inen arama yapabilirsiniz.<strong>Dikkat:</strong> Arama kriteriniz en az 4 harf uzunluğunda olmalıdır, aksi halde istek reddedilir.";
 
 // Menü
 $PMF_LANG["ad"] = "ADMıN ALANI";
@@ -494,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Yedek";
 $PMF_LANG["ad_xml_hint"] = "SSS kayıtlarının hepsini bir XML dosyaya kaydet.";
 $PMF_LANG["ad_xml_gen"] = "XML dosya oluştur";
 $PMF_LANG["ad_entry_locale"] = "Dil";
-$PMF_LANG["msgLangaugeSubmit"] = "Dili değiştir";
+$PMF_LANG["msgLanguageSubmit"] = "Dili değiştir";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Önizleme";
@@ -573,8 +567,8 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Sayfa b
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Haber yazılarının sayısı");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Bu IP'leri karalistele");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "mod_rewrite desteğini etkinleştir? (varsayılan: kapalı)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "LDAP desteğini etkinleştir? (varsayılan: kapalı)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Link kontrolü için baz URL (örn.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "AJAX link kontrolü zaman aralığı (saniye olarak)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Yeni soruların görünürlüğünü kapat?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "İzin düzeyi");
@@ -855,16 +849,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Kayıt sıralama (büy
 $PMF_LANG['ad_conf_order_id'] = 'ID (varsayılan)';
 $PMF_LANG['ad_conf_order_thema'] = 'Başlık';
 $PMF_LANG['ad_conf_order_visits'] = 'Ziyaretçi sayısı';
-$PMF_LANG['ad_conf_order_datum'] = 'Tarih';
+$PMF_LANG['ad_conf_order_updated'] = 'Tarih';
 $PMF_LANG['ad_conf_order_author'] = 'Yazar';
 $PMF_LANG['ad_conf_desc'] = 'büyükten küçüğe';
 $PMF_LANG['ad_conf_asc'] = 'küçükten büyüğe';
 $PMF_LANG['mainControlCenter'] = 'Ana ayarlar';
 $PMF_LANG['recordsControlCenter'] = 'SSS kayıt ayarları';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Anında Cevap';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Aşağıda ilk %d kayıt bulundu.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Yeni kayıtları aktifleştir (varsayılan: kapalı)");
@@ -872,7 +862,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Yeni k
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Bu kategorideki kayıtlar';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Cevap bulmak için sorunuzu yazın ...';
 $PMF_LANG['msgTagSearch'] = 'Etiketlenmiş girdiler';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Bilgisi';
 $PMF_LANG['ad_online_info'] = 'Online sürüm kontrolü';

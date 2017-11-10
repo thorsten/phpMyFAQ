@@ -8,7 +8,7 @@
  * @category  phpMyFAQ
  * @package   JavaScript
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2012-3013 phpMyFAQ Team
+ * @copyright 2012-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-07-07
@@ -17,8 +17,8 @@
 /*global document: false, window: false, $: false */
 
 $(document).ready(function () {
-    "use script";
-    $(window).unload(function () {
+    'use script';
+    $(window).on('unload', function () {
         if (typeof window.tinyMCE !== "undefined" && window.tinyMCE.activeEditor !== null) {
             if (window.tinyMCE.activeEditor.isDirty()) {
                 var chk = window.confirm('Do you want to save the article before navigating away?');

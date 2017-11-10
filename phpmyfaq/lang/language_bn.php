@@ -1,30 +1,21 @@
 ﻿<?php
+
 /**
-* $Id: language_bn.php,v 1.1 2008-04-23 16:22:36 thorstenr Exp $
-*
-* The Bangla language file - try to be the best of Bangladeshi Bangla
-*
-* @author       Md. Masum Billah <jewelurp@dhaka.net>
-* @since        2008-04-01
-*
-* The contents of this file are subject to Creative Commons License
-* Attribution 3.0 Unported (the "License"); 
-* You are free:
-* to Share — to copy, distribute and transmit the work to Remix — to adapt the work 
-* Under the following conditions:
-* You must attribute the work in the manner specified by the author or licensor 
-* (but not in any way that suggests that they endorse you or your use of the work). 
-*
-* For any reuse or distribution, you must make clear to others the license terms of this work. 
-* The best way to do this is with a link to this web page. 
-* Any of the above conditions can be waived if you get permission from the copyright holder. 
-* Nothing in this license impairs or restricts the author's moral rights. 
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * Bangla language file - try to be the best of Bangladeshi Bangla
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Md. Masum Billah <jewelurp@dhaka.net>
+ * @copyright 2008-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2008-04-01
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "bn";
@@ -132,7 +123,7 @@ $PMF_LANG["msg2answer"] = "উত্তর";
 $PMF_LANG["msgQuestionText"] = "এখানে আপনি অন্য ব্যবহারকারীর প্রশ্ন দেখতে পারেন। আপনি কোন প্রশ্নের উত্তর দিলে তা প্রশ্ন-উত্তর তালিকায় আসার সম্ভাবনা আছে।";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।</p>";
+$PMF_LANG["msgHelpText"] = "প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "ওয়েবমাস্টারকে ই-মেইল করুন:";
@@ -154,18 +145,18 @@ $PMF_LANG["msgMailContact"] = "আপনার প্রশ্ন প্রশ�
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "ডাটাবেজ সংযোগ নেই।";
 $PMF_LANG["err_noHeaders"] = "কোনো বিভাগ পাওয়া যায় নি";
-$PMF_LANG["err_noArticles"] = "<p>কোনো লেখা পাওয়া যায়নি।</p>";
-$PMF_LANG["err_badID"] = "<p>ভুল পরিচয়।</p>";
-$PMF_LANG["err_noTopTen"] = "<p>সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।</p>";
-$PMF_LANG["err_nothingFound"] = "<p>কোনো প্রশ্ন পাওয়া যায়নি।</p>";
+$PMF_LANG["err_noArticles"] = "কোনো লেখা পাওয়া যায়নি।";
+$PMF_LANG["err_badID"] = "ভুল পরিচয়।";
+$PMF_LANG["err_noTopTen"] = "সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।";
+$PMF_LANG["err_nothingFound"] = "কোনো প্রশ্ন পাওয়া যায়নি।";
 $PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরনাম</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>একাধিক ভোট দেয়া যায়না। <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a></p>";
-$PMF_LANG["err_noVote"] = "<p><strong>আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না!</strong> <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "একাধিক ভোট দেয়া যায়না। আগের পাতায় ফেরত যান";
+$PMF_LANG["err_noVote"] = "<strong>আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না!</strong> <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a>";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>প্রশ্ন-উত্তর তালিকা খুঁজুন:</strong><br />একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।</p><p><strong>নোটিশ:</strong> শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।</p>";
+$PMF_LANG["help_search"] = "<strong>প্রশ্ন-উত্তর তালিকা খুঁজুন:</strong><br />একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।<strong>নোটিশ:</strong> শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN SECTION";
@@ -502,7 +493,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Save all records of your FAQ in one XML file.";
 $PMF_LANG["ad_xml_gen"] = "make XML file";
 $PMF_LANG["ad_entry_locale"] = "Language";
-$PMF_LANG["msgLangaugeSubmit"] = "ভাষা পরির্বতন";
+$PMF_LANG["msgLanguageSubmit"] = "ভাষা পরির্বতন";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preview";
@@ -581,8 +572,8 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Base URL for link verification (e.g.: http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
@@ -863,16 +854,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descen
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Title';
 $PMF_LANG['ad_conf_order_visits'] = 'Number of visitors';
-$PMF_LANG['ad_conf_order_datum'] = 'Date';
+$PMF_LANG['ad_conf_order_updated'] = 'Date';
 $PMF_LANG['ad_conf_order_author'] = 'Author';
 $PMF_LANG['ad_conf_desc'] = 'descending';
 $PMF_LANG['ad_conf_asc'] = 'ascending';
 $PMF_LANG['mainControlCenter'] = 'Main Control Center';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'তাৎক্ষণিক অনুসন্ধান';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. নীচে প্রথম %dটি প্রশ্ন খুঁজুন।';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate a new records (default: deactivated)");
@@ -880,7 +867,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow 
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'এই বিভাগের প্রশ্ন';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'যেকোনো শব্দ টাইপ করে খুঁজুন ...';
 $PMF_LANG['msgTagSearch'] = 'ট্যাগ';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Information';
 $PMF_LANG['ad_online_info'] = 'Online version check';

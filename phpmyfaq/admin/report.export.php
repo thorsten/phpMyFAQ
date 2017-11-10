@@ -1,51 +1,54 @@
 <?php
+
 /**
- * Export of a generated report
+ * Export of a generated report.
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2014 phpMyFAQ Team
+ * @copyright 2011-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2011-01-12
  */
+<<<<<<< HEAD
 
 use Symfony\Component\HttpFoundation\Response;
 
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON'){
+    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'reports')) {
-    
-    $useCategory     = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
-    $useSubcategory  = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
-    $useTranslation  = PMF_Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
-    $useLanguage     = PMF_Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
-    $useId           = PMF_Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
-    $useSticky       = PMF_Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
-    $useTitle        = PMF_Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
+    $useCategory = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
+    $useSubcategory = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
+    $useTranslation = PMF_Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
+    $useLanguage = PMF_Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
+    $useId = PMF_Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
+    $useSticky = PMF_Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
+    $useTitle = PMF_Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
     $useCreationDate = PMF_Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
-    $useOwner        = PMF_Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
+    $useOwner = PMF_Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
     $useLastModified = PMF_Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
-    $useUrl          = PMF_Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
-    $useVisits       = PMF_Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
+    $useUrl = PMF_Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
+    $useVisits = PMF_Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
 
-
-    $text    = [];
+    $text = [];
     $text[0] = [];
     ($useCategory)     ? $text[0][] = $PMF_LANG['ad_stat_report_category'] : '';
     ($useSubcategory)  ? $text[0][] = $PMF_LANG['ad_stat_report_sub_category'] : '';
@@ -104,8 +107,8 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         }
         if ($useUrl) {
             $text[$i][] = $report->convertEncoding(
-                sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $faqConfig->get('main.referenceURL'),
+                sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    $faqConfig->getDefaultUrl(),
                     $data['category_id'],
                     $data['faq_id'],
                     $data['faq_language']
@@ -119,11 +122,12 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
 
     $content = '';
     foreach ($text as $row) {
-        $content .= implode(";", $row);
+        $content .= implode(';', $row);
         $content .= "\r\n";
     }
 
     $oHttpStreamer = new PMF_HttpStreamer(Response::create(), 'csv', $content);
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
-
+} else {
+    echo $PMF_LANG['err_noArticles'];
 }

@@ -9,9 +9,8 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Tóth Balázs <tbalazs@uhulinux.hu>
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -86,7 +85,7 @@ $PMF_LANG['msgSearchCategory'] = 'Kategória: ';
 $PMF_LANG['msgSearchContent'] = 'Tartalom: ';
 $PMF_LANG['msgNewContentHeader'] = 'Javaslat a GYIK-hoz';
 $PMF_LANG['msgNewContentAddon'] = 'A javaslatod nem jelenik meg egyből a GYIK-ban, további sorsáról az adminisztrátor dönt. A kötelező mezők: <strong>neved</strong>, <strong>email címed</strong>, <strong>kategória</strong>, <strong>cím</strong> és <strong>bejegyzés</strong>. A kulcsszavakat csak szóközzel válaszd el.';
-$PMF_LANG['msgNewContentUBB'] = '<p>Használhatsz UBB kódokat a kérdésedben. <a href=\"help/ubbcode.php\" target=\"_blank\">Segítség a UBB kódokhoz</a></p>';
+$PMF_LANG['msgNewContentUBB'] = 'Használhatsz UBB kódokat a kérdésedben. <a href=\"help/ubbcode.php\" target=\"_blank\">Segítség a UBB kódokhoz</a>';
 $PMF_LANG['msgNewContentName'] = 'Neved:';
 $PMF_LANG['msgNewContentMail'] = 'Email címed:';
 $PMF_LANG['msgNewContentCategory'] = 'Kategória:';
@@ -106,7 +105,7 @@ $PMF_LANG['msgDate_User'] = 'Dátum / Felhasználó';
 $PMF_LANG['msgQuestion2'] = 'Kérdés';
 $PMF_LANG['msg2answer'] = 'Javaslat';
 $PMF_LANG['msgQuestionText'] = 'Itt a többi látogató által feltett kérdéseket láthatod. Ha válaszolsz valamelyik kérdésre, akkor a válaszod bekerülhet a GYIK-ba.';
-$PMF_LANG['msgHelpText'] = '<p>A GYIK (<strong>GY</strong>akran <strong>I</strong>smételt <strong>K</strong>érdések) használata meglehetősen egyszerű. Kereshetsz a <strong><a href=\"?action=show\">kategóriákban</a></strong> vagy <strong><a href=\"?action=search\">kulcsszavakra</a></strong>.</p>';
+$PMF_LANG['msgHelpText'] = 'A GYIK (<strong>GY</strong>akran <strong>I</strong>smételt <strong>K</strong>érdések) használata meglehetősen egyszerű. Kereshetsz a <strong><a href=\"?action=show\">kategóriákban</a></strong> vagy <strong><a href=\"?action=search\">kulcsszavakra</a></strong>.';
 $PMF_LANG['msgContactEMail'] = 'email az adminisztrátornak:';
 $PMF_LANG['msgMessage'] = 'Üzenet:';
 $PMF_LANG['msgTopTen'] = 'TOP 10';
@@ -119,17 +118,17 @@ $PMF_LANG['msgMailCheck'] = 'Új bejegyzés a GYIK-ban!Ellenőrizd az admin rés
 $PMF_LANG['msgMailContact'] = 'Az üzenet postázva az adminisztrátornak.';
 $PMF_LANG['err_noDatabase'] = 'Az adabázis elérhetetlen.';
 $PMF_LANG['err_noHeaders'] = 'Nincsenek kategóriák.';
-$PMF_LANG['err_noArticles'] = '<p>Nincsenek bejegyzések.</p>';
-$PMF_LANG['err_badID'] = '<p>Rossz ID.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Még nincs TOP 10.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Nincs bejegyzés.</p>';
+$PMF_LANG['err_noArticles'] = 'Nincsenek bejegyzések.';
+$PMF_LANG['err_badID'] = 'Rossz ID.';
+$PMF_LANG['err_noTopTen'] = 'Még nincs TOP 10.';
+$PMF_LANG['err_nothingFound'] = 'Nincs bejegyzés.';
 $PMF_LANG['err_SaveEntries'] = 'Kötelező mezők: <strong>név</strong>, <strong>email</strong>, <strong>kategória</strong>, <strong>cím</strong> és <strong>a kérdés</strong>!<br /><br /><a href="javascript:history.back();">egy oldal vissza</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Required fields are <strong>your name</strong>, <strong>your email address</strong> and <strong>your comments</strong>!<br /><br /><a href="javascript:history.back();">one page back</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>We do not count double votings. <a href="javascript:history.back();">Click here</a>, to go back.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>You did not rate the question!</strong> <a href="javascript:history.back();">Please click here</a>, to vote.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'We do not count double votings. Click here, to go back.';
+$PMF_LANG['err_noVote'] = '<strong>You did not rate the question!</strong> <a href="javascript:history.back();">Please click here</a>, to vote.';
 $PMF_LANG['err_noMailAdress'] = 'E-mail cím helytelen<br /><a href="javascript:history.back();">vissza</a>';
 $PMF_LANG['err_sendMail'] = 'Kötelező mezők: <strong>név</strong>, <strong>email</strong> és a <strong>kérdés</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Találatok:</strong><br /></p>';
+$PMF_LANG['help_search'] = '<strong>Találatok:</strong><br />';
 $PMF_LANG['ad'] = 'ADMIN RÉSZ';
 $PMF_LANG['ad_menu_user_administration '] = 'Felhasználók beállításai';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Javasolt bejegyzések';
@@ -398,7 +397,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-Backup';
 $PMF_LANG['ad_xml_hint'] = 'A GYIK mentése XML fájlba.';
 $PMF_LANG['ad_xml_gen'] = 'XML fájl készítése';
 $PMF_LANG['ad_entry_locale'] = 'Nyelv';
-$PMF_LANG['msgLangaugeSubmit'] = 'nyelv megváltoztatása';
+$PMF_LANG['msgLanguageSubmit'] = 'nyelv megváltoztatása';
 $PMF_LANG['ad_entry_preview'] = 'Előnézet';
 $PMF_LANG['ad_attach_1'] = 'Először add meg a csatolt fájlok helyét a beállításokban.';
 $PMF_LANG['ad_attach_2'] = 'Először állítsd be a linkeket a beállításokban.';
@@ -466,7 +465,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'Téma /
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'Új cikkek száma');
 $LANG_CONF['security.bannedIPs'] = array(0 => 'area', 1 => 'Büntetett IP címek:');
 $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'mod_rewrite bekapcsolva (alapértelmezett: disabled)');
-$LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP támogatás (alapértelmezett: disabled)');
+$LANG_CONF['ldap.ldapSupport'] = array(0 => 'checkbox', 1 => 'LDAP támogatás (alapértelmezett: disabled)');
 $PMF_LANG['ad_categ_new_main_cat'] = 'mint új főkategória';
 $PMF_LANG['ad_categ_paste_error'] = 'A kategória mozgatása nem lehetséges.';
 $PMF_LANG['ad_categ_move'] = 'kategória mozgatása';
@@ -527,11 +526,6 @@ $PMF_LANG['msgMaintenanceMode'] = 'FAQ karbantartás alatt';
 $PMF_LANG['msgOnlineMode'] = 'FAQ online';
 $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ (default: deactivated)');
 $LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only (default: deactivated)');
-$LANG_CONF['cache.varnishEnable'] = array(0 => 'checkbox', 1 => 'Enable Varnish >=3.0 support<br><small>You will need varnish PECL extension</small>');
-$LANG_CONF['cache.varnishHost'] = array(0 => 'input', 1 => 'Varnish host');
-$LANG_CONF['cache.varnishPort'] = array(0 => 'input', 1 => 'Varnish port');
-$LANG_CONF['cache.varnishSecret'] = array(0 => 'input', 1 => 'Varnish secret');
-$LANG_CONF['cache.varnishTimeout'] = array(0 => 'input', 1 => 'Varnish timeout');
 $LANG_CONF['records.enableCloseQuestion'] = array(0 => 'checkbox', 1 => 'Close open question after answer?');
 $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Delete open question after answer?');
 $LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Bejegyzés auto-mentésének bekapcsolása');
@@ -594,7 +588,6 @@ $PMF_LANG['socialNetworksControlCenter'] = 'Közösségi beállítások';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Találatok száma');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => 'Sorting of the top FAQ\'s');
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field (default: deactivated)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Azonnali válasz a kezdőlapon (alapértelmezetten: kikapcsolva)');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Relevancia szerint sorba');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Activate relevance support? (default: disabled)');
 $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support (default: deactivated)');
@@ -710,16 +703,13 @@ $PMF_LANG['ad_groups'] = 'Csoportok';
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Cím';
 $PMF_LANG['ad_conf_order_visits'] = 'Látogatók száma';
-$PMF_LANG['ad_conf_order_datum'] = 'Dátum';
+$PMF_LANG['ad_conf_order_updated'] = 'Dátum';
 $PMF_LANG['ad_conf_order_author'] = 'Szerző';
 $PMF_LANG['ad_conf_desc'] = 'csökkenő';
 $PMF_LANG['ad_conf_asc'] = 'növekvő';
 $PMF_LANG['mainControlCenter'] = 'Alapvető beállítások';
 $PMF_LANG['recordsControlCenter'] = 'FAQ records configuration';
-$PMF_LANG['msgInstantResponse'] = 'Azonnali válasz';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Csak kezd el gépelni a kérdést ...';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Információ';
 $PMF_LANG['ad_online_info'] = 'Online version check';
@@ -916,7 +906,7 @@ $PMF_LANG['msgNewTranslationKeywords'] = 'Kulcsszavak:';
 $PMF_LANG['msgNewTranslationSubmit'] = 'Küldd el a javaslatod';
 $PMF_LANG['msgTranslate'] = 'Bejegyzés fordítása';
 $PMF_LANG['msgTranslateSubmit'] = 'Fordítás elkezdése...';
-$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL for link verification (e.g.: http://www.example.org/faq)');
+$LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL for link verification (e.g.: http://www.example.org/faq/)');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Interval between AJAX link verification (in seconds)');
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Új kérdések láthatóságának kikapcsolása');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Hozzáférési szint');

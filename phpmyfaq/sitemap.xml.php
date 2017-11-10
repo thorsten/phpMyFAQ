@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The dynamic Google Sitemap builder.
  *
@@ -11,23 +12,25 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   SEO
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2014 phpMyFAQ Team
+ * @copyright 2006-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
  */
+<<<<<<< HEAD
 
 use Symfony\Component\HttpFoundation\Response;
 
+=======
+>>>>>>> 2.10
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
@@ -42,7 +45,6 @@ define('PMF_SITEMAP_GOOGLE_PRIORITY_MIN', '0.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_MAX', '1.0');
 define('PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT', '0.5');
 
-
 define('PMF_SITEMAP_GOOGLE_GET_GZIP', 'gz');
 define('PMF_SITEMAP_GOOGLE_GET_INDEX', 'idx');
 define('PMF_SITEMAP_GOOGLE_FILENAME', 'sitemap.xml');
@@ -55,12 +57,16 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require 'inc/Bootstrap.php';
+require 'src/Bootstrap.php';
 
 //
 // Initalizing static string wrapper
 //
 PMF_String::init('en');
+
+if (false === $faqConfig->get('seo.enableXMLSitemap')) {
+    exit();
+}
 
 // {{{ Functions
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
@@ -95,32 +101,32 @@ $oFaq = new PMF_Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
-$visitMin  = 0;
+$visitMin = 0;
 if (count($items) > 0) {
     $visitsMax = $items[0]['visits'];
-    $visitMin  = $items[count($items)-1]['visits'];
+    $visitMin = $items[count($items) - 1]['visits'];
 }
 
 // Sitemap header
 $sitemap =
      '<?xml version="1.0" encoding="UTF-8"?>'
-    .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.84"'
+    .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
     .' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-    .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.84'
+    .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(
-    $faqConfig->get('main.referenceURL'),
+    $faqConfig->getDefaultUrl(),
     PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
     PMF_SITEMAP_GOOGLE_PRIORITY_MAX
 );
-           
+
 // nth entry: each faq
 foreach ($items as $item) {
     $priority = PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT;
     if (($visitsMax - $visitMin) > 0) {
-        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
+        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin) / ($visitsMax - $visitMin))));
     }
     // a. We use plain PMF urls w/o any SEO schema
     $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
@@ -133,7 +139,7 @@ foreach ($items as $item) {
         }
     }
     $sitemap .= buildSitemapNode(
-        $faqConfig->get('main.referenceURL').$link,
+        $link,
         PMF_Date::createIsoDate($item['date'], DATE_W3C),
         // @todo: manage changefreq node with the info provided by faqchanges,
         // if this will not add a big load to the server (+1 query/faq)
@@ -150,18 +156,32 @@ $getgezip = PMF_Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILT
 if (!is_null($getgezip) && (1 == $getgezip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($sitemap);
+<<<<<<< HEAD
         $response->headers->set('Content-Type', 'application/x-gzip');
         $response->headers->set('Content-Disposition', 'attachment; filename="' . PMF_SITEMAP_GOOGLE_FILENAME_GZ . '"');
         $response->headers->set('Content-Length', strlen($sitemapGz));
         $response->setContent($sitemapGz);
+=======
+        header('Content-Type: application/x-gzip');
+        header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
+        header('Content-Length: '.strlen($sitemapGz));
+        echo $sitemapGz;
+>>>>>>> 2.10
     } else {
         $response->setStatusCode(404);
     }
 } else {
+<<<<<<< HEAD
     $response->headers->set('Content-Type', 'text/xml');
     $response->headers->set('Content-Disposition', 'inline; filename="' . PMF_SITEMAP_GOOGLE_FILENAME . '"');
     $response->headers->set('Content-Length', PMF_String::strlen($sitemap));
     $response->setContent($sitemap);
+=======
+    header('Content-Type: text/xml');
+    header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
+    header('Content-Length: '.strlen($sitemap));
+    echo $sitemap;
+>>>>>>> 2.10
 }
 
 $response->send();

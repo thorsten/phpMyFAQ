@@ -8,10 +8,12 @@
     convertWarningsToExceptions="true"
     processIsolation="false"
     stopOnFailure="false"
-    syntaxCheck="false">
+    syntaxCheck="false"
+    bootstrap="tests/bootstrap.php">
+
     <testsuites>
         <testsuite name="phpMyFAQ Test Suite">
-            <file>./tests/AllTests.php</file>
+            <file>tests/AllTests.php</file>
         </testsuite>
     </testsuites>
 </phpunit>

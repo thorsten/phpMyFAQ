@@ -1,19 +1,21 @@
 <?php
+
 /**
  * User has successfully authenticated with Twitter. Access tokens saved to
  * session and database.
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Services
+ *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2014 phpMyFAQ Team
+ * @copyright 2010-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-18
  */
@@ -27,8 +29,8 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR . '/inc/Bootstrap.php';
-require PMF_ROOT_DIR . '/inc/libs/twitteroauth/twitteroauth.php';
+require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR.'/src/libs/twitteroauth/twitteroauth.php';
 
 if (empty($_SESSION['access_token']) ||
     empty($_SESSION['access_token']['oauth_token']) ||
@@ -48,5 +50,5 @@ $connection = new TwitterOAuth(
 $content = $connection->get('account/verify_credentials');
 
 if (isset($content->screen_name)) {
-    header('../admin/index.php');
+    header('Location: ../../admin/index.php');
 }

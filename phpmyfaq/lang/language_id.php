@@ -1,15 +1,22 @@
 <?php
+
 /**
  * Indonesian language file
  *
- * @author    Tri Agus Prayitno <tap@ruangweb.co.id>
- * @since     2009-12-28
- * @copyright 2004-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Tri Agus Prayitno <tap@ruangweb.co.id>
+ * @copyright 2009-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-12-28
  */
+
 $PMF_LANG['metaCharset'] = 'utf-8';
 $PMF_LANG['metaLanguage'] = 'id';
 $PMF_LANG['language'] = 'indonesian';
@@ -109,7 +116,7 @@ $PMF_LANG["msg2answer"] = "Jawaban";
 $PMF_LANG["msgQuestionText"] = "Di sini anda bisa bertanya pada pengguna lainnya. Jika anda menjawab pertanyaan ini dengan baik, jawaban anda mungkin akan dimasukkan ke dalam materi.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <strong><a href=\"?action=show\">kategori</a></strong> atau gunakan <strong><a href=\"?action=search\">mesin pencari</a></strong> untuk melakukan pencarian atas kata kunci tertentu.</p>";
+$PMF_LANG["msgHelpText"] = "Struktur situs ini sangatlah sederhana. Di sini anda bisa melakukan pencarian menurut <strong><a href=\"?action=show\">kategori</a></strong> atau gunakan <strong><a href=\"?action=search\">mesin pencari</a></strong> untuk melakukan pencarian atas kata kunci tertentu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Kirim pesan ke pengelola:";
@@ -131,19 +138,19 @@ $PMF_LANG["msgMailContact"] = "Pesan anda sudah dikirim ke pengelola.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Koneksi database sedang bermasalah.";
 $PMF_LANG["err_noHeaders"] = "Tidak ditemukan kategori.";
-$PMF_LANG["err_noArticles"] = "<p>Tidak ada materi yang tersedia.</p>";
-$PMF_LANG["err_badID"] = "<p>ID Salah.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Belum ada materi yang populer.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Tidak ada materi yang ditemukan.</p>";
+$PMF_LANG["err_noArticles"] = "Tidak ada materi yang tersedia.";
+$PMF_LANG["err_badID"] = "ID Salah.";
+$PMF_LANG["err_noTopTen"] = "Belum ada materi yang populer.";
+$PMF_LANG["err_nothingFound"] = "Tidak ada materi yang ditemukan.";
 $PMF_LANG["err_SaveEntries"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Kategori</strong>, <strong>Pengantar</strong>, <strong>Isi Materi</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">mundur satu halaman</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Isi Komentar</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!<br /><br /><a href=\"javascript:history.back();\">mundur satu halaman</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Anda sudah pernah menilai sebelumnya. <a href=\"javascript:history.back();\">Klik di sini</a>, untuk kembali.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Anda sudah pernah menilai sebelumnya. Klik di sini, untuk kembali.";
+$PMF_LANG["err_noVote"] = "<strong>Anda belum memasukkan penilaian anda!</strong> <a href=\"javascript:history.back();\">Klik di sini</a>, untuk memberi penilaian.";
 $PMF_LANG["err_noMailAdress"] = "Alamat email anda tidak benar.<br /><a href=\"javascript:history.back();\">kembali</a>";
 $PMF_LANG["err_sendMail"] = "Bagian yang harus diisi adalah <strong>Nama Anda</strong>, <strong>Alamat Email</strong>, <strong>Pertanyaan Anda</strong> dan, jika diminta, <strong>kode <a href=\"http://id.wikipedia.org/wiki/CAPTCHA\" title=\"lebih lanjut tentang Captcha di Wikipedia\" target=\"_blank\">Captcha</a></strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Pencarian materi:</strong><br />Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.</p><p><strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.</p>";
+$PMF_LANG["help_search"] = "<strong>Pencarian materi:</strong><br />Dengan entri seperti <strong style=\"color: Red;\">kata1 kata2</strong> anda bisa melakukan pencarian menurut relevansi atas dua atau lebih kata.<strong>Perhatian:</strong> Kriteria pencarian anda minimal berisi 4 huruf.";
 
 // Men?
 $PMF_LANG["ad"] = "BAGIAN ADMIN";
@@ -480,7 +487,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Simpan semua data materi dalam satu berkas.";
 $PMF_LANG["ad_xml_gen"] = "buat berkas XML";
 $PMF_LANG["ad_entry_locale"] = "Bahasa";
-$PMF_LANG["msgLangaugeSubmit"] = "Pilih bahasa:";
+$PMF_LANG["msgLanguageSubmit"] = "Pilih bahasa:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Pratinjau";
@@ -559,7 +566,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Jumlah 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Jumlah artikel berita");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blokir IP ini");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktifkan dukungan mod_rewrite? (default: non-aktif)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Aktifkan dukungan LDAP? (default: non-aktif)");
 $LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL dasar untuk verifikasi link (mis.: http://www.situsanda.com/faq)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval antara verifikasi link AJAX (dalam detik)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Nonaktifkan link untuk membuat Pertanyaan Baru?");
@@ -841,16 +848,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Pengurutan data (biasa
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Judul';
 $PMF_LANG['ad_conf_order_visits'] = 'Jumlah pengunjung';
-$PMF_LANG['ad_conf_order_datum'] = 'Tanggal';
+$PMF_LANG['ad_conf_order_updated'] = 'Tanggal';
 $PMF_LANG['ad_conf_order_author'] = 'Penulis';
 $PMF_LANG['ad_conf_desc'] = 'terbalik';
 $PMF_LANG['ad_conf_asc'] = 'biasa';
 $PMF_LANG['mainControlCenter'] = 'Konfigurasi utama';
 $PMF_LANG['recordsControlCenter'] = 'Konfigurasi konten materi';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Pencarian Cepat';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Berikut ini adalah %d hasil pertama.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktifkan data baru (default: non-aktif)");
@@ -858,7 +861,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Bolehk
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Data dalam kategori ini';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Ketik yang ingin anda cari...';
 $PMF_LANG['msgTagSearch'] = 'Entri dengan tag';
 $PMF_LANG['ad_pmf_info'] = 'Informasi phpMyFAQ';
 $PMF_LANG['ad_online_info'] = 'Periksa versi secara online';

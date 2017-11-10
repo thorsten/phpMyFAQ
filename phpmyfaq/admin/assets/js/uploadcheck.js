@@ -8,27 +8,30 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013 phpMyFAQ Team
+ * @copyright 2013-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-01-07
  */
 
-$(document).ready(function() {
-    $("#fileUpload").change(function ()
-    {
-        var iSize = ($("#fileUpload")[0].files[0].size / 1024);
+/*global $:false */
+
+$(document).ready(function () {
+    'use strict';
+
+    $('#fileUpload').change(function () {
+        var iSize = ($('#fileUpload')[0].files[0].size / 1024);
         if (iSize / 1024 > 1) {
             if (((iSize / 1024) / 1024) > 1) {
                 iSize = (Math.round(((iSize / 1024) / 1024) * 100) / 100);
-                $("#filesize").html( iSize + "GB");
+                $('#filesize').html(iSize + 'GB');
             } else {
-                iSize = (Math.round((iSize / 1024) * 100) / 100)
-                $("#filesize").html( iSize + "MB");
+                iSize = (Math.round((iSize / 1024) * 100) / 100);
+                $('#filesize').html(iSize + 'MB');
             }
         } else {
-            iSize = (Math.round(iSize * 100) / 100)
-            $("#filesize").html( iSize  + "kB");
+            iSize = (Math.round(iSize * 100) / 100);
+            $('#filesize').html(iSize + 'kB');
         }
     });
 });

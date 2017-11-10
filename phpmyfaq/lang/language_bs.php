@@ -2,16 +2,15 @@
 /**
  * Serbian language file
  *
- * PHP Version 5.2
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Alen Durmo <dual_ze@hotmail.com>
- * @copyright 2012 phpMyFAQ Team
+ * @copyright 2012-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-05-25
@@ -144,19 +143,19 @@ $PMF_LANG["msgMailContact"] = "Vasa poruka je poslana administratoru.";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Nije uspeo pristup bazi.";
 $PMF_LANG["err_noHeaders"] = "Nema kategorija.";
-$PMF_LANG["err_noArticles"] = "<p>Nema unosa.</p>";
-$PMF_LANG["err_badID"] = "<p>Pogre&#353;an ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>TOP10 jo&#353; ne postoji.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Unos nije prona&#273;en.</p>";
+$PMF_LANG["err_noArticles"] = "Nema unosa.";
+$PMF_LANG["err_badID"] = "Pogre&#353;an ID.";
+$PMF_LANG["err_noTopTen"] = "TOP10 jo&#353; ne postoji.";
+$PMF_LANG["err_nothingFound"] = "Unos nije prona&#273;en.";
 $PMF_LANG["err_SaveEntries"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong>, <strong>kategorija</strong>, <strong>naslov</strong> i <strong>unos</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>komentar</strong>! <br /><br /><a href=\"javascript:history.back();\">nazad</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne ura&#269;unavamo dvostruko glasanje. <a href=\"javascript:history.back();\">Kliknite ovde</a>, da se vratite na prethodnu stranicu.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Niste vrednovali unos!</strong> <a href=\"javascript:history.back();\">Nazad</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "Ne ura&#269;unavamo dvostruko glasanje. Kliknite ovde, da se vratite na prethodnu stranicu.";
+$PMF_LANG["err_noVote"] = "<strong>Niste vrednovali unos!</strong> <a href=\"javascript:history.back();\">Nazad</a>";
 $PMF_LANG["err_noMailAdress"] = "Va&#353;a email adresa nije ispravna.<br /><a href=\"javascript:history.back();\">nazad</a>";
 $PMF_LANG["err_sendMail"] = "Obavezna polja su <strong>va&#353;e ime</strong>, <strong>email adresa</strong> i <strong>pitanje</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Pretraga:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Pretraga:</strong><br />";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";
@@ -492,7 +491,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Snimi sve unose iz FAQ-a kao XML fajl.";
 $PMF_LANG["ad_xml_gen"] = "napravi XML fajl";
 $PMF_LANG["ad_entry_locale"] = "Jezik";
-$PMF_LANG["msgLangaugeSubmit"] = "promeni jezik";
+$PMF_LANG["msgLanguageSubmit"] = "promeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Proba (Preview)";
@@ -570,7 +569,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Broj pr
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Broj &#269;lanaka vesti");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Banuj ove IP");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Uklju&#269;i mod_rewrite podr&#269;ku? (isklju&#269;eno)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Da li &#382;elite LDAP podr&scaron;ku? (isklju&#269;eno)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "kao nova glavna kategorija";
 $PMF_LANG["ad_categ_paste_error"] = "Preme&scaron;tanje ove kategorije nije mogu&#263;e.";
@@ -848,16 +847,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortiranje unosa (uzla
 $PMF_LANG['ad_conf_order_id'] = 'ID (default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Naslov';
 $PMF_LANG['ad_conf_order_visits'] = 'Broj posetilaca';
-$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_updated'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Autor';
 $PMF_LANG['ad_conf_desc'] = 'silazno';
 $PMF_LANG['ad_conf_asc'] = 'uzlazno';
 $PMF_LANG['mainControlCenter'] = 'Glavna konfiguracija';
 $PMF_LANG['recordsControlCenter'] = 'FAQ konfiguracija unosa';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Odgovori mi';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nadi ispod %d unosa.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Ukljucite nove unose (iskljuceno)");
@@ -865,7 +860,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Dozvol
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Unosi u ovoj kategoriji';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Samo kucajte da nadete odgovor ...';
 $PMF_LANG['msgTagSearch'] = 'Oznaceni unosi';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ Informacije';
 $PMF_LANG['ad_online_info'] = 'Provera Verzije';

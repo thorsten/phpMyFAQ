@@ -1,19 +1,19 @@
 <?php
+
 /**
  *
  * Danish language file
  *
- * PHP Version 5.4
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Translation
  * @author    Max Andersen <max@militant.dk>
  * @author    Poul Melgaard <pcm@surfray.com>
- * @copyright 2004-2014 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -107,7 +107,7 @@ $PMF_LANG['msgDate_User'] = 'Dato / Bruger';
 $PMF_LANG['msgQuestion2'] = 'Spørgsmål';
 $PMF_LANG['msg2answer'] = 'svar';
 $PMF_LANG['msgQuestionText'] = 'Her kan du se spørgsmål oprettet af andre brugere. Hvis du besvarer et spørgsmål, bliver dit svar muligvis brugt i FAQ\'en.';
-$PMF_LANG['msgHelpText'] = '<p>Strukturen af denne FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er rimelig simpel. Du kan enten navigere i <strong><a href="?action=show">kategorierne</a></strong> eller lade <strong><a href="?action=search">FAQ maskinen</a></strong> søge efter nøgleord.</p>';
+$PMF_LANG['msgHelpText'] = 'Strukturen af denne FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) er rimelig simpel. Du kan enten navigere i <strong><a href="?action=show">kategorierne</a></strong> eller lade <strong><a href="?action=search">FAQ maskinen</a></strong> søge efter nøgleord.';
 $PMF_LANG['msgContactEMail'] = 'send e-mail til webmaster:';
 $PMF_LANG['msgMessage'] = 'Din besked:';
 $PMF_LANG['msgTopTen'] = 'TOP 10';
@@ -120,17 +120,17 @@ $PMF_LANG['msgMailCheck'] = 'Der er et nyt indlæg i FAQen!Kontroller venligst a
 $PMF_LANG['msgMailContact'] = 'Din besked er sendt til administratoren.';
 $PMF_LANG['err_noDatabase'] = 'Ingen forbindelse til databasen.';
 $PMF_LANG['err_noHeaders'] = 'Ingen kategori fundet.';
-$PMF_LANG['err_noArticles'] = '<p>Ingen indlæg fundet.</p>';
-$PMF_LANG['err_badID'] = '<p>Forkert ID.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Ikke indlæg nok til en Top 10.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>ingen indlæg fundet.</p>';
+$PMF_LANG['err_noArticles'] = 'Ingen indlæg fundet.';
+$PMF_LANG['err_badID'] = 'Forkert ID.';
+$PMF_LANG['err_noTopTen'] = 'Ikke indlæg nok til en Top 10.';
+$PMF_LANG['err_nothingFound'] = 'ingen indlæg fundet.';
 $PMF_LANG['err_SaveEntries'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong>, <strong>kategori</strong>, <strong>overskrift</strong> og <strong>dit indlæg</strong>!<br /><br /><a href="javascript:history.back();">Gå tilbage</a><br /><br />';
 $PMF_LANG['err_SaveComment'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dine kommentarer</strong>!<br /><br /><a href="javascript:history.back();">En side tilbage</a><br /><br />';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Vi tæller ikke dobbelt stemmer. <a href="javascript:history.back();">Klik her</a>, for at gå tilbage.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Du vurderede ikke spørgsmålet!</strong> <a href="javascript:history.back();">Klik venligst her</a>, for at stemme.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Vi tæller ikke dobbelt stemmer. Klik her, for at gå tilbage.';
+$PMF_LANG['err_noVote'] = '<strong>Du vurderede ikke spørgsmålet!</strong> <a href="javascript:history.back();">Klik venligst her</a>, for at stemme.';
 $PMF_LANG['err_noMailAdress'] = 'din e-mail-adresse er ikke korrekt.<br /><a href="javascript:history.back();">tilbage</a>';
 $PMF_LANG['err_sendMail'] = 'Nødvendige felter: <strong>dit navn</strong>, <strong>din e-mail-adresse</strong> og <strong>dit spørgsmål</strong>!<br /><br /><a href="javascript:history.back();">En side tilbage</a><br /><br />';
-$PMF_LANG['help_search'] = '<p><strong>Fundne indlæg:</strong><br /></p>';
+$PMF_LANG['help_search'] = '<strong>Fundne indlæg:</strong><br />';
 $PMF_LANG['ad'] = 'ADMIN SEKTION';
 $PMF_LANG['ad_menu_user_administration'] = 'Brugere';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Godkend ';
@@ -399,7 +399,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-Sikkerhedskopi';
 $PMF_LANG['ad_xml_hint'] = 'Gem alle spørgsmål i FAQ i een XML-fil.';
 $PMF_LANG['ad_xml_gen'] = 'opret XML file';
 $PMF_LANG['ad_entry_locale'] = 'Sprog';
-$PMF_LANG['msgLangaugeSubmit'] = 'Skift sprog:';
+$PMF_LANG['msgLanguageSubmit'] = 'Skift sprog:';
 $PMF_LANG['ad_entry_preview'] = 'Eksempel';
 $PMF_LANG['ad_attach_1'] = 'Vælg venligst først et bibliotek for vedhæftninger i konfiguration.';
 $PMF_LANG['ad_attach_2'] = 'Vælg venligst først et link til vedhæftninger.';
@@ -468,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Antal v
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Antal nyhedsartikler");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af mod_rewrite? (standard: sl&aring;et fra)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af LDAP? (standard: sl&aring;et fra)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Aktiver underst&oslash;ttelse af LDAP? (standard: sl&aring;et fra)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'as new main category';
 $PMF_LANG['ad_categ_paste_error'] = 'Moving this category isn\'t possible.';
 $PMF_LANG['ad_categ_move'] = 'Flyt kategori';
@@ -689,18 +689,15 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortering af indl&aeli
 $PMF_LANG['ad_conf_order_id'] = 'ID (standard)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titel';
 $PMF_LANG['ad_conf_order_visits'] = 'Antal g&aelig;ster';
-$PMF_LANG['ad_conf_order_datum'] = 'Dato';
+$PMF_LANG['ad_conf_order_updated'] = 'Dato';
 $PMF_LANG['ad_conf_order_author'] = 'Forfatter';
 $PMF_LANG['ad_conf_desc'] = 'faldende';
 $PMF_LANG['ad_conf_asc'] = 'stigende';
 $PMF_LANG['mainControlCenter'] = 'Konfiguration';
 $PMF_LANG['recordsControlCenter'] = 'Konfiguration af FAQ-indl&aelig;g';
-$PMF_LANG['msgInstantResponse'] = 'Kviks&oslash;gning';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Find below the first %d records.';
 $LANG_CONF['records.defaultActivation'] = array(0 => 'checkbox', 1 => "Activate a new records (standard: deactivated)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => 'checkbox', 1 => "Allow comments for new records (standard: disallowed)");
 $PMF_LANG['msgAllCatArticles'] = 'Indl&aelig;g i denne kategori';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Kviksvar s&oslash;ger mens du taster, s&aring; du hurtigt kan finde svaret!';
 $PMF_LANG['msgTagSearch'] = 'Tagged entries';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ information';
 $PMF_LANG['ad_online_info'] = 'Online versionscheck';

@@ -1,23 +1,22 @@
 <?php
+
 /**
-* $Id: language_el.php,v 1.21 2007-03-29 19:31:54 thorstenr Exp $
-*
-* The Hellenic language file
-*
-* @author       Sakis Efthimiadis <sakis@my-zone2.com>
-* @since        2005-09-30
-* @copyright    (c) 2006 phpMyFAQ Team
-*
-* 
-* 
-* 
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * Hellenic language file
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Sakis Efthimiadis <sakis@my-zone2.com>
+ * @copyright 2005-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-09-30
+ */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'el';
 $PMF_LANG['language'] = 'Ελληνικά';
@@ -106,7 +105,7 @@ $PMF_LANG['msgDate_User'] = 'Ημν-νία / Χρήστης ';
 $PMF_LANG['msgQuestion2'] = 'Ερώτηση';
 $PMF_LANG['msg2answer'] = 'Απάντηση';
 $PMF_LANG['msgQuestionText'] = 'Ερωτήσεις που τέθηκαν από άλλους χρήστες. Εαν απαντήσετε σε αυτές τις ερωτήσεις, οι απάντησή σας μπορεί να εμφανιστεί στο FAQ.';
-$PMF_LANG['msgHelpText'] = '<p>H Δομή του FAQ (<strong>F</strong>requently (Συχνες)<strong>A</strong>sked (Ερωτούμενες)<strong>Q</strong>uestions(Ερωτήσεις)) είναι πολύ απλή. Μπορείτε είτε να αναζητήσετε <strong><a href="?action=show">κατηγορίες</a></strong> η να αφήσετε τη <strong><a href="?action=search">μηχανή αναζήτησης</a></strong> για λέξεις κλειδιά.</p>';
+$PMF_LANG['msgHelpText'] = 'H Δομή του FAQ (<strong>F</strong>requently (Συχνες)<strong>A</strong>sked (Ερωτούμενες)<strong>Q</strong>uestions(Ερωτήσεις)) είναι πολύ απλή. Μπορείτε είτε να αναζητήσετε <strong><a href="?action=show">κατηγορίες</a></strong> η να αφήσετε τη <strong><a href="?action=search">μηχανή αναζήτησης</a></strong> για λέξεις κλειδιά.';
 $PMF_LANG['msgContactEMail'] = 'αποστολή e-mail προς το διαχειριστή:';
 $PMF_LANG['msgMessage'] = 'Το μήνυμά σας:';
 $PMF_LANG['msgTopTen'] = 'Πιο δημοφιλή FAQs';
@@ -119,17 +118,17 @@ $PMF_LANG['msgMailCheck'] = 'Υπάρχει μια νέα καταχώρηση �
 $PMF_LANG['msgMailContact'] = 'Το μήνυμά σας έχει σταλλεί στο διαχειριστή';
 $PMF_LANG['err_noDatabase'] = 'Δεν λειτουργεί η σύνδεση με την βάση δεδομένων.';
 $PMF_LANG['err_noHeaders'] = 'Δεν υπάρχει τέτοια κατηγορία.';
-$PMF_LANG['err_noArticles'] = '<p>Δεν υπάρχουν καταχωρήσεις.</p>';
-$PMF_LANG['err_badID'] = '<p>Λάθος αναγνωριστικό.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Δεν υπάρχει top-10 ακόμη.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Δε βρέθηκε καμία καταχώρηση.</p>';
+$PMF_LANG['err_noArticles'] = 'Δεν υπάρχουν καταχωρήσεις.';
+$PMF_LANG['err_badID'] = 'Λάθος αναγνωριστικό.';
+$PMF_LANG['err_noTopTen'] = 'Δεν υπάρχει top-10 ακόμη.';
+$PMF_LANG['err_nothingFound'] = 'Δε βρέθηκε καμία καταχώρηση.';
 $PMF_LANG['err_SaveEntries'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong>, <strong>κατηγορία</strong>, <strong>τίτλος</strong> και <strong>η καταχώρησή σας</strong>!<br /><br />\n<a href="nojavascript...history.back();">μία σελίδα πίσω</a><br /><br />\n';
 $PMF_LANG['err_SaveComment'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>το σχόλιό σας</strong>!<br /><br />\n<a href="nojavascript...history.back();">μία σελίδα πίσω</a><br /><br />\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Δεν μετρούμε διπλές ψήφους. <a href="nojavascript...history.back();">κλικ</a>, για επιστροφή.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Δε βαθμολογήσατε αυτή την ερώτηση</strong> <a href="nojavascript...history.back();">κλικ εδώ</a>, για επιστροφή στη βαθμολόγηση.</p>';
+$PMF_LANG['err_VoteTooMuch'] = 'Δεν μετρούμε διπλές ψήφους. κλικ, για επιστροφή.';
+$PMF_LANG['err_noVote'] = '<strong>Δε βαθμολογήσατε αυτή την ερώτηση</strong> <a href="nojavascript...history.back();">κλικ εδώ</a>, για επιστροφή στη βαθμολόγηση.';
 $PMF_LANG['err_noMailAdress'] = 'Λανθασμένη καταχώρηση διεύθυνσης email.<br /><a href="nojavascript...history.back();">Επιστροφή</a>';
 $PMF_LANG['err_sendMail'] = 'Τα απαραίτητα πεδία είναι: <strong>Το όνομά σας</strong>, <strong>το email σας</strong> και <strong>η ερώτησή σας</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Αναζήτηση καταχωρήσεων:</strong><br />Συμπληρώνοντας το πιο κάτω πεδίο με τη μορφή <strong style="color: Red;">κλειδί1 κλειδί2</strong> μπορείτε να κάνετε μία σχεσιακή αναζήτηση στη βάση για δύο ή περισσότερες λέξεις κλειδιά.</p><p><strong>Σημείωση:</strong> Το κριτήριο αναζήτησης, θα πρέπει να είναι τουλάχιστο 4 γραμμάτα σε μήκος διαφορετικά το σύστημα θα την απορρίψει.</p>';
+$PMF_LANG['help_search'] = '<strong>Αναζήτηση καταχωρήσεων:</strong><br />Συμπληρώνοντας το πιο κάτω πεδίο με τη μορφή <strong style="color: Red;">κλειδί1 κλειδί2</strong> μπορείτε να κάνετε μία σχεσιακή αναζήτηση στη βάση για δύο ή περισσότερες λέξεις κλειδιά.<strong>Σημείωση:</strong> Το κριτήριο αναζήτησης, θα πρέπει να είναι τουλάχιστο 4 γραμμάτα σε μήκος διαφορετικά το σύστημα θα την απορρίψει.';
 $PMF_LANG['ad'] = 'ΠΕΡΙΟΧΗ ΔΙΑΧΕΙΡΙΣΗΣ';
 $PMF_LANG['ad_menu_user_administration'] = 'Διαχείριση χρηστών';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Έγκριση καταχωρήσεων';
@@ -399,7 +398,7 @@ $PMF_LANG['ad_xml_head'] = 'Λήψη αρχείου ασφαλείας σε μο
 $PMF_LANG['ad_xml_hint'] = 'Αποθήκευση όλων των καταχωρήσεων του FAQ σε ένα XML αρχείο.';
 $PMF_LANG['ad_xml_gen'] = 'δημιουργία αρχείου XML';
 $PMF_LANG['ad_entry_locale'] = 'Γλώσσα';
-$PMF_LANG['msgLangaugeSubmit'] = 'Επιλογή γλώσσας';
+$PMF_LANG['msgLanguageSubmit'] = 'Επιλογή γλώσσας';
 $PMF_LANG['ad_entry_preview'] = 'Προεπισκόπιση';
 $PMF_LANG['ad_attach_1'] = 'Παρακαλούμε επιλέξτε πρώτα τον κατάλογο των συνημμένων από τις ρυθμίσεις της σελίδας.';
 $PMF_LANG['ad_attach_2'] = 'Παρακαλούμε επιλέξτε πρώτα κάποιο σύνδεσμο για τα συνημμένα στις ρυθμίσεις της σελίδας.';
@@ -467,7 +466,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Αρι�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Αριθμός ειδήσεων");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Απαγόρευση πρόσβασης των παρακάτω διευθύνσεων IP");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Ενεργοποίηση της υποστήριξης mod_rewrite; (Προεπιλογή: απενεργοποιημένο)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Θέλετε να ενεργοποιήσετε την υποστήριξη LDAP; (Προεπιλογή: απενεργοποιημένο)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'ως νέα κύρια κατηγορία';
 $PMF_LANG['ad_categ_paste_error'] = 'Δεν ήταν δυνατή η μετακίνηση αυτής της κατηγορίας.';
 $PMF_LANG['ad_categ_move'] = 'μετακίνηση κατηγορίας';
@@ -498,7 +497,7 @@ $PMF_LANG['ad_entry_revision'] = 'Έκδοση';
 $PMF_LANG['ad_changerev'] = 'Επιλογή έκδοσης';
 $PMF_LANG['msgCaptcha'] = 'Παρακαλώ εισάγετε τους χαρακτήρες που διαβάζετε στην εικόνα';
 $PMF_LANG['msgSelectCategories'] = 'Αναζήτηση σε ...';
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Base URL για αναγώριση (e.g.: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Base URL για αναγώριση (e.g.: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Διάστημα ανάμεσα σε AJAX αναγνωρίσεις (σε δευτερόλεπτα)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Απενεργοποίηση εμφάνισης νέων καταχωρήσεων;");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Επίπεδο δικαιωμάτων");
@@ -694,16 +693,13 @@ $PMF_LANG['ad_groups'] = 'Ομάδες';
 $PMF_LANG['ad_conf_order_id'] = 'Αναγνωριστικό (προεπιλογή)';
 $PMF_LANG['ad_conf_order_thema'] = 'Τίτλος';
 $PMF_LANG['ad_conf_order_visits'] = 'Σύνολο επισκεπτών';
-$PMF_LANG['ad_conf_order_datum'] = 'Ημερομηνία';
+$PMF_LANG['ad_conf_order_updated'] = 'Ημερομηνία';
 $PMF_LANG['ad_conf_order_author'] = 'Συγγραφέας';
 $PMF_LANG['ad_conf_desc'] = 'φθίνουσα';
 $PMF_LANG['ad_conf_asc'] = 'αυξάνουσα';
 $PMF_LANG['mainControlCenter'] = 'Κύρια ρύθμιση';
 $PMF_LANG['recordsControlCenter'] = 'Ρύθμιση καταχωρήσεων';
-$PMF_LANG['msgInstantResponse'] = 'Άμεση Ανταπόκριση';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Αναζήτηση ανάμεσα στων πρώτων %d καταχωρήσεων.';
 $PMF_LANG['msgAllCatArticles'] = 'Καταχωρήσεις σε αυτή τη κατηγορία';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Εισάγετε και λάβετε απαντήσεις...';
 $PMF_LANG['msgTagSearch'] = 'Καταχωρήσεις με ετικέτες:';
 $PMF_LANG['ad_pmf_info'] = 'Πληροφορίες phpMyFAQ';
 $PMF_LANG['ad_online_info'] = 'Άμεσος έλεγχος έκδοσης';

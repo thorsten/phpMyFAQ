@@ -7,7 +7,7 @@ $PMF_LDAP['ldap_password'] = '';
 $PMF_LDAP['ldap_base'] = '';
 
 // More LDAP servers
-// You can as much as you like, please set $PMF_LDAP['ldap_use_multiple_servers'] = true in config/constants_ldap.php
+// You can as much as you like, please activate it in the admin configuration panel
 // Start with 1
 $PMF_LDAP[1]['ldap_server'] = '';
 $PMF_LDAP[1]['ldap_port'] = '';

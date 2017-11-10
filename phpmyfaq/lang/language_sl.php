@@ -1,28 +1,27 @@
 <?php
-/******************************************************************************
- * File:				language_sl.php
- * Description:		    Slovenian language file
- * Authors:				Igor Isak <igor.isak@sgn.net>
- * Date:				2004-06-24
- * Last Update:		    2004-07-12
- * Copyright:           (c) 2006 phpMyFAQ Team
+
+/**
+ * Slovenian language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    Igor Isak <igor.isak@sgn.net>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "sl";
 $PMF_LANG["language"] = "Slovenian";
-// ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "4";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Kategorije";
@@ -95,7 +94,7 @@ $PMF_LANG["msgSearchContent"] = "Vsebina: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Predlog za vprašanje";
 $PMF_LANG["msgNewContentAddon"] = "Tvoj predlog ne bo takoj objavljen, ampak bo dostavljen administratorju v predogled. Obvezni podatki: <strong>tvoje ime</strong>, <strong>tvoj email naslov</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>. Prosim lo&egrave;i vnose besed z presledkom.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Lahko uporabiš UBB kode za vprašanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "Lahko uporabiš UBB kode za vprašanje. <a href=\"help/ubbcode.php\" target=\"_blank\">Pomo&egrave; za UBB kode</a>";
 $PMF_LANG["msgNewContentName"] = "Tvoje ime:";
 $PMF_LANG["msgNewContentMail"] = "Tvoj email naslov:";
 $PMF_LANG["msgNewContentCategory"] = "Katero kategorijo boš izbral?";
@@ -119,7 +118,7 @@ $PMF_LANG["msg2answer"] = "odgovor";
 $PMF_LANG["msgQuestionText"] = "Tukaj lahko vidiš vprašanja drugih uporabnikov. &Egrave;e odgovoriš na katero vprašanje, bo tvoj odgovor mogo&egrave;e dodan v seznam.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.</p>";
+$PMF_LANG["msgHelpText"] = "Struktura aplikacije vprašanja je zelo preposta. Lahko iš&egrave;eš <strong><a href=\"?action=show\">po kategorijah</a></strong> ali <strong><a href=\"?action=search\">napredno iskanje</a></strong> po besedah.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "email za webmasterja:";
@@ -141,19 +140,19 @@ $PMF_LANG["msgMailContact"] = "Tvoje sporo&egrave;ilo je bilo poslano administra
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ni povezave z bazo.";
 $PMF_LANG["err_noHeaders"] = "Ni kategorij.";
-$PMF_LANG["err_noArticles"] = "<p>Ni nobenega vnosa.</p>";
-$PMF_LANG["err_badID"] = "<p>Napa&egrave;en ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Ni 10 NAJ vnosov trenutno.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ne najdem vnosa.</p>";
+$PMF_LANG["err_noArticles"] = "Ni nobenega vnosa.";
+$PMF_LANG["err_badID"] = "Napa&egrave;en ID.";
+$PMF_LANG["err_noTopTen"] = "Ni 10 NAJ vnosov trenutno.";
+$PMF_LANG["err_nothingFound"] = "Ne najdem vnosa.";
 $PMF_LANG["err_SaveEntries"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong>, <strong>kategorija</strong>, <strong>zaglavje</strong> in <strong>tvoj vnos</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoj komentar</strong>!<br /><br /><a href=\"javascript:history.back();\">ena stran nazaj</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Ne štejejo dvojna glasovanja. <a href=\"javascript:history.back();\">Klikni tukaj</a>, da greš nazaj.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Ne štejejo dvojna glasovanja.";
+$PMF_LANG["err_noVote"] = "<strong>Nisi glasoval za vprašanje!</strong> <a href=\"javascript:history.back();\">Prosim klikni tukaj</a>, za glasovanje.";
 $PMF_LANG["err_noMailAdress"] = "Tvoj email ni pravilen.<br /><a href=\"javascript:history.back();\">nazaj</a>";
 $PMF_LANG["err_sendMail"] = "Potrebna polja so <strong>tvoje ime</strong>, <strong>tvoj email</strong> in <strong>tvoje vprašanje</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Iskanje po vnosih:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Iskanje po vnosih:</strong><br />";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTRACIJA";
@@ -489,7 +488,7 @@ $PMF_LANG["ad_xml_head"] = "XML-varnostna kopija";
 $PMF_LANG["ad_xml_hint"] = "Shrani vse vnose v eni XML datoteki.";
 $PMF_LANG["ad_xml_gen"] = "ustvari XML datoteko";
 $PMF_LANG["ad_entry_locale"] = "Jezik";
-$PMF_LANG["msgLangaugeSubmit"] = "spremeni jezik";
+$PMF_LANG["msgLanguageSubmit"] = "spremeni jezik";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Preglej";
@@ -567,7 +566,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

@@ -8,7 +8,7 @@
 # @author    Thorsten Rinne <thorsten@phpmyfaq.de>
 # @author    Patrick Preuster <sica@php-q.net>
 # @author    Matteo Scaramuccia <matteo@scaramuccia.com>
-# @copyright 2004-2013 phpMyFAQ Team
+# @copyright 2004-2017 phpMyFAQ Team
 # @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
 # @link      http://www.phpmyfaq.de
 # @since     2004-11-13
@@ -16,8 +16,16 @@
 # always follow the symlinks
 Options +FollowSymlinks -MultiViews -Indexes 
 
+# X-Frame-Options to prevent clickjacking
+Header always append X-Frame-Options SAMEORIGIN
+
 # if you want to use mod_rewrite, set this 'On'
 RewriteEngine On
+
+<IfModule mod_fcgid.c>
+    RewriteCond %{HTTP:Authorization} .
+    RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
+</IfModule>
 
 # the path to your phpMyFAQ installation
 RewriteBase /phpmyfaq/
@@ -68,10 +76,14 @@ RewriteRule ^(.*)$                  index.php?action=contact [L,QSA]
 RewriteCond %{REQUEST_URI}          /glossary\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=glossary [L,QSA]
 
+# the overview page
+RewriteCond %{REQUEST_URI}          /overview\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=overview [L,QSA]
+
 # a page with a record (backward compatibility)
 # * http://[...]/1_1_en.html
 RewriteCond %{REQUEST_URI}              ([0-9]+)_([0-9]+)_([a-z\-]+)\.html$ [NC]
-RewriteRule ^(.*)_(.*)_(.*)\.html$      index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
+RewriteRule ^(.*)_(.*)_(.*)\.html$      index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
 
 # a category page with page count (backward compatibility)
 # * http://[...]/category1_1.html
@@ -97,7 +109,7 @@ RewriteRule ^solution_id_(.*)\.html$    index.php?solution_id=$1 [L,QSA]
 # PMF faq record page
 # * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.htm
 # * http://[...]/content/1/1/<LANGUAGE CODE>/<FAQ TOPIC>.html
-RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=artikel&cat=$1&id=$2&artlang=$3 [L,QSA]
+RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=faq&cat=$1&id=$2&artlang=$3 [L,QSA]
 
 # PMF category page with page count
 # * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
@@ -135,16 +147,23 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagg
 # * http://[...]/tags/<ID>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
 
-# the instant response page
-RewriteCond %{REQUEST_URI}          instantresponse\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=instantresponse [L,QSA]
-
 # REST/JSON API
 # * http://[...]/api/<ACTION>/<LANGUAGE CODE>/<...>
-RewriteRule api/getVersion                        api.php?action=getVersion [L,QSA]
-RewriteRule api/getApiVersion                     api.php?action=getApiVersion [L,QSA]
-RewriteRule api/getCount                          api.php?action=getCount [L,QSA]
-RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$     api.php?action=search&lang=$1&q=$2 [L,QSA]
-RewriteRule api/getCategories                     api.php?action=getCategories [L,QSA]
-RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)       api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
-RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)        api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]
+RewriteRule api/getVersion                                  api.php?action=getVersion [L,QSA]
+RewriteRule api/getApiVersion                               api.php?action=getApiVersion [L,QSA]
+RewriteRule api/getCount                                    api.php?action=getCount [L,QSA]
+RewriteRule api/getDefaultLanguage                          api.php?action=getDefaultLanguage [L,QSA]
+RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$               api.php?action=search&lang=$1&q=$2 [L,QSA]
+RewriteRule api/getCategories/([a-z\-]+)                    api.php?action=getCategories&lang=$1 [L,QSA]
+RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)                 api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
+RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)                  api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]
+RewriteRule api/getComments/([0-9]+)                        api.php?action=getComments&recordId=$1 [L,QSA]
+RewriteRule api/getAllFaqs/([a-z\-]+)                       api.php?action=getAllFaqs&lang=$1 [L,QSA]
+RewriteRule api/getFaqAsPdf/([a-z\-]+)/([0-9]+)/([0-9]+)    api.php?action=getFaqAsPdf&lang=$1&categoryId=$2&recordId=$3 [L,QSA]
+RewriteRule api/getAttachmentsFromFaq/([a-z\-]+)/([0-9]+)   api.php?action=getAttachmentsFromFaq&lang=$1&recordId=$2 [L,QSA]
+RewriteRule api/getPopular/([a-z\-]+)                       api.php?action=getPopular&lang=$1 [L,QSA]
+RewriteRule api/getLatest/([a-z\-]+)                        api.php?action=getLatest&lang=$1 [L,QSA]
+RewriteRule api/getNews/([a-z\-]+)                          api.php?action=getNews&lang=$1 [L,QSA]
+RewriteRule api/getPopularSearches/([a-z\-]+)               api.php?action=getPopularSearches&lang=$1 [L,QSA]
+RewriteRule api/getPopularTags                              api.php?action=getPopularTags [L,QSA]
+RewriteRule api/getFAQsByTag/([a-z\-]+)/([0-9]+)            api.php?action=getFAQsByTag&lang=$1&tagId=$2 [L,QSA]

@@ -6,81 +6,28 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   JavaScript
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Periklis Tsirakidis <tsirakidis@phpdevel.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2003-2013 phpMyFAQ Team
+ * @copyright 2003-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-11-13
  */
 
-/*global document: false, window: false, $: false */
+/*global document: false, window: false, $: false, self: false */
 
-var toggleFieldset,
-    addAttachment,
-    addEngine,
-    infoBox,
+var infoBox,
     selectSelectAll,
     selectUnselectAll,
-    formCheckAll,
-    formUncheckAll,
-    checkAll,
     closeWindow,
     addAttachmentLink,
-    showLongComment,
     saveVoting;
 
 $(document).ready(function () {
     'use strict';
-    /**
-     * Open a small popup to upload an attachment
-     *
-     * @param pic
-     * @param title
-     */
-    addAttachment = function addAttachment(pic, title) {
-        var popup = window.open(
-            pic,
-            title,
-            'width=550, height=130, toolbar=no, directories=no, status=no, scrollbars=no, resizable=yes, menubar=no'
-        );
-        popup.focus();
-    };
-
-    /**
-     * Checks all checkboxes
-     *
-     * @param checkBox
-     */
-    checkAll = function checkAll(checkBox) {
-        var v = checkBox.checked,
-            f = checkBox.form,
-            i = 0;
-        for (i = 0; i < f.elements.length; i += 1) {
-            if (f.elements[i].type === 'checkbox') {
-                f.elements[i].checked = v;
-            }
-        }
-    };
-
-    /**
-     *
-     * @param uri
-     * @param name
-     * @param ext
-     * @param cat
-     */
-    addEngine = function addEngine(uri, name, ext, cat) {
-        if ((typeof window.sidebar === 'object') && (typeof window.sidebar.addSearchEngine === 'function')) {
-            window.sidebar.addSearchEngine(uri + '/' + name + '.src', uri + '/images/' + name + '.' + ext, name, cat);
-        } else {
-            window.alert('Mozilla Firefox is needed to install the search plugin!');
-        }
-    };
 
     /**
      * selects all list options in the select with the given ID.
@@ -111,34 +58,6 @@ $(document).ready(function () {
     };
 
     /**
-     * checks all checkboxes in form with the given ID.
-     *
-     * @param   form_id
-     * @return  void
-     */
-    formCheckAll = function formCheckAll(form_id) {
-        var inputElements = $('#' + form_id + ' input'),
-            i;
-        for (i = 0; i < inputElements.length; i = 1 + 1) {
-            inputElements[i].checked = true;
-        }
-    };
-
-    /**
-     * unchecks all checkboxes in form with the given ID.
-     *
-     * @param   form_id
-     * @return  void
-     */
-    formUncheckAll = function formUncheckAll(form_id) {
-        var inputElements = $('#' + form_id + ' input'),
-            i;
-        for (i = 0; i < inputElements.length; i = 1 + 1) {
-            inputElements[i].checked = false;
-        }
-    };
-
-    /**
      * Displays or hides the info boxes
      *
      * @return void
@@ -150,22 +69,6 @@ $(document).ready(function () {
             domId.show();
         } else {
             domId.hide();
-        }
-    };
-
-    /**
-     * Toggle fieldsets
-     *
-     * @param fieldset ID of the fieldset
-     *
-     * @return void
-     */
-    toggleFieldset = function toggleFieldset(fieldset) {
-        var div = $('#div_' + fieldset);
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
-        } else {
-            div.fadeOut('fast');
         }
     };
 
@@ -182,9 +85,9 @@ $(document).ready(function () {
             append(
                 '<li>' +
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
-                '<a class="label label-important" href="?action=delatt&amp;record_id=' + recordId +
+                '<a class="label label-danger" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
-                '<i class="fa fa-trash"></i></a>' +
+                '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
                 '</li>'
             );
         window.close();
@@ -196,15 +99,6 @@ $(document).ready(function () {
      */
     closeWindow = function closeWindow() {
         window.close();
-    };
-
-    /**
-     * Show long comment
-     */
-    showLongComment = function showLongComment(id) {
-        $('.comment-more-' + id).removeClass('hide');
-        $('.comment-dots-' + id).addClass('hide');
-        $('.comment-show-more-' + id).addClass('hide');
     };
 
     /**
@@ -258,50 +152,18 @@ $(document).ready(function () {
     };
 
     /**
-     * Auto-suggest function for instant response
-     *
-     * @return void
-     */
-    var autoSuggest = function autoSuggest() {
-        $('input#instantfield').keyup(function () {
-            var search   = $('#instantfield').val(),
-                language = $('#ajaxlanguage').val(),
-                category = $('#searchcategory').val();
-
-            if (search.length > 0) {
-                $.ajax({
-                    type:    'POST',
-                    url:     'ajaxresponse.php',
-                    data:    'search=' + search + '&ajaxlanguage=' + language + '&searchcategory=' + category,
-                    success: function (searchresults) {
-                        $('#instantresponse').empty();
-                        if (searchresults.length > 0) {
-                            $('#instantresponse').append(searchresults);
-                        }
-                    }
-                });
-            }
-        });
-
-        $('#instantform').submit(function () {
-            return false;
-        });
-    };
-
-    autoSuggest();
-
-    /**
      * Saves the voting by Ajax
      *
      * @param type
      * @param id
      * @param value
+     * @param lang
      */
-    saveVoting = function saveVoting(type, id, value) {
+    saveVoting = function saveVoting(type, id, value, lang) {
         $.ajax({
             type:     'post',
             url:      'ajaxservice.php?action=savevoting',
-            data:     'type=' + type + '&id=' + id + '&vote=' + value,
+            data:     'type=' + type + '&id=' + id + '&vote=' + value + '&lang=' + lang,
             dataType: 'json',
             cache:    false,
             success:  function (json) {
@@ -353,6 +215,7 @@ $(document).ready(function () {
                     $('#loader').hide();
                 } else if (json.success === undefined) {
                     $('#qerror').empty();
+                    $('.hint-search-suggestion').show();
                     $('#questionForm').fadeOut('slow');
                     $('#answerForm').html(json.result);
                     $('#answerForm').fadeIn('slow');

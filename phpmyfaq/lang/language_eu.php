@@ -1,24 +1,22 @@
 <?php
+
 /**
-* $Id: language_eu.php,v 1.24 2007-03-29 19:31:54 thorstenr Exp $
-*
-* Euskera language file
-*
-* @author       Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
-* @author       Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
-* @since        2005-12-28
-* @copyright    (c) 2005-2014 phpMyFAQ Team
-*
-* 
-* 
-* 
-* http://www.mozilla.org/MPL/
-*
-* Software distributed under the License is distributed on an "AS IS"
-* This Source Code Form is subject to the terms of the Mozilla Public License,
-* v. 2.0. If a copy of the MPL was not distributed with this file, You can
-* under the License.
-*/
+ * Euskera language file
+ *
+ * PHP Version 5.5
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Jokin Lacalle Usabiaga<jlacalle@ordizia.ikastola.net>
+ * @author    Maite Goñi Eizmendi<mgoni@ordizia.ikastola.net>
+ * @copyright 2005-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2005-02-19
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "eu";
@@ -103,7 +101,7 @@ $PMF_LANG["msgSearchContent"] = "Edukia: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "FAQ proposamena";
 $PMF_LANG["msgNewContentAddon"] = "Zure FAQ proposamena ez da berehala argitaratuko, bitartekari batek aztertu behar du. Beharrezko eremuak ondorengoak dira: <strong>zure izena</strong>, <strong>posta elektronikoaren helbidea</strong>, <strong>atala</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa</strong>. Mesedez, banatu hitz gakoak tabulazio tarte batez.";
-$PMF_LANG["msgNewContentUBB"] = "<p>UBB kodeak erabil ditzakezu zure erregistrorako. <a href=\"help/ubbcode.php\" target=\"_blank\">UBB kodeei buruzko laguntza.</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "UBB kodeak erabil ditzakezu zure erregistrorako. <a href=\"help/ubbcode.php\" target=\"_blank\">UBB kodeei buruzko laguntza.</a>";
 $PMF_LANG["msgNewContentName"] = "Zure izena:";
 $PMF_LANG["msgNewContentMail"] = "Zure posta helbidea:";
 $PMF_LANG["msgNewContentCategory"] = "Zein atal hautatu nahi duzu?";
@@ -127,7 +125,7 @@ $PMF_LANG["msg2answer"] = "Erantzuna";
 $PMF_LANG["msgQuestionText"] = "Hemen beste erabiltzaileen galderak <strong>ikus</strong> eta <strong>erantzun</strong> ditzakezu. FAQean erantsiko dira.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.</p>";
+$PMF_LANG["msgHelpText"] = "FAQaren egitura(<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions)nahiko sinplea da. <strong><a href=\"?action=show\">Atal</a></strong> ezberdinen artean bilatzea hauta dezakezu edota <strong><a href=\"?action=search\">bilatzaileak</a></strong> hitz klabeak erakusteko hautatu.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Administratzaileari idatzi:";
@@ -149,19 +147,19 @@ $PMF_LANG["msgMailContact"] = "Zure mezua administratzaileari bidali diogu!";
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Ez dago datu-basearekin konexiorik!";
 $PMF_LANG["err_noHeaders"] = "Ez da atalik aurkitu!";
-$PMF_LANG["err_noArticles"] = "<p>Ez dago sarrerarik.</p>";
-$PMF_LANG["err_badID"] = "<p>ID okerra!</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Oraindik ez dago TOP Ten-ik.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ez da sarrerarik aurkitu.</p>";
+$PMF_LANG["err_noArticles"] = "Ez dago sarrerarik.";
+$PMF_LANG["err_badID"] = "ID okerra!";
+$PMF_LANG["err_noTopTen"] = "Oraindik ez dago TOP Ten-ik.";
+$PMF_LANG["err_nothingFound"] = "Ez da sarrerarik aurkitu.";
 $PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br /><br />\n<a href=\"javascript:history.back();\">atzera itzuli</a><br /><br />\n";
 $PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br /><br />\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br /><br />\n";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Bi aldiz bozkatzen baduzu, ez da zenbatuko<a href=\"javascript:history.back();\">Klikatu hemen</a>, itzultzeko.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Bi aldiz bozkatzen baduzu, ez da zenbatuko Klikatu hemen, itzultzeko.";
+$PMF_LANG["err_noVote"] = "<strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.";
 $PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br /><a href=\"javascript:history.back();\">itzuli</a>";
 $PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea<strong> eta <strong>zure galdera</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Erregistro bilaketa:</strong><br /></p>";
+$PMF_LANG["help_search"] = "<strong>Erregistro bilaketa:</strong><br />";
 
 // Menú
 $PMF_LANG["ad"] = "ADMINSTRATZAILEAREN ATALA";
@@ -498,7 +496,7 @@ $PMF_LANG["ad_xml_head"] = "XML-Backup";
 $PMF_LANG["ad_xml_hint"] = "Zure FAQeko erregistro guztiak XML fitxategi batean gorde.";
 $PMF_LANG["ad_xml_gen"] = "XML fitxategia sortu";
 $PMF_LANG["ad_entry_locale"] = "Hizkuntza";
-$PMF_LANG["msgLangaugeSubmit"] = "Hizkuntza aldatu";
+$PMF_LANG["msgLanguageSubmit"] = "Hizkuntza aldatu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Aurreikusi";
@@ -576,7 +574,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Erakuts
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Artikulu berrien kopurua");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "IP hauek blokeatu");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Mod_rewrite-rentzat euskarria aktibatu? (besterik esan ezean, desaktibatua)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "LDAPrentzat euskarria gaitu nahi al duzu? (besterik esan ezean, desaktibatua)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "Atal nagusi berri gisa";
 $PMF_LANG["ad_categ_paste_error"] = "Ezinezkoa da atal hau mugitzea.";

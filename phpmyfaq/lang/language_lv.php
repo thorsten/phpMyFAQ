@@ -1,16 +1,21 @@
 <?php
-/******************************************************************************
- * File:				language_lv.php
- * Description:		    Latvian language file
- * Authors:				Kaspars Priedols <house@tvertne.nu>
- * Date:				2004-06-24
- * Last Update:		    2004-07-08
- * Copyright:           (c) 2006 phpMyFAQ Team
+
+/**
+ * Latvian language file
+ *
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
- ******************************************************************************/
+ *
+ * @category  phpMyFAQ
+ * @author    Kaspars Priedols <house@tvertne.nu>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-24
+ */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
 $PMF_LANG["metaLanguage"] = "lv";
@@ -98,7 +103,7 @@ $PMF_LANG["msgSearchContent"] = "Saturs: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Tavs jaut&acirc;jums";
 $PMF_LANG["msgNewContentAddon"] = "Jaut&acirc;jumi netiks uzreiz public&ccedil;ti, bet p&ccedil;c sa&ograve;em&eth;ana tos p&acirc;rskat&icirc;s administr&acirc;cija. Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>konkr&ccedil;tu sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>. Atsl&ccedil;gv&acirc;rdi j&acirc;atdala ar atstarpi.";
-$PMF_LANG["msgNewContentUBB"] = "<p>Vari izmantot t&acirc; saucamos UBB kodus. <a href=\"help/ubbcode.php\" target=\"_blank\">K&acirc; tos izmantot?</a></p>";
+$PMF_LANG["msgNewContentUBB"] = "Vari izmantot t&acirc; saucamos UBB kodus. <a href=\"help/ubbcode.php\" target=\"_blank\">K&acirc; tos izmantot?</a>";
 $PMF_LANG["msgNewContentName"] = "Tavs v&acirc;rds:";
 $PMF_LANG["msgNewContentMail"] = "Tava e-pasta adrese:";
 $PMF_LANG["msgNewContentCategory"] = "K&acirc;da sada&iuml;a?";
@@ -122,7 +127,7 @@ $PMF_LANG["msg2answer"] = "atbilde";
 $PMF_LANG["msgQuestionText"] = "&ETH;eit var redz&ccedil;t citu cilv&ccedil;ku uzdotos jaut&acirc;jumus. Ja v&ccedil;lies atbild&ccedil;t uz k&acirc;du no tiem, dari to un tava atbilde, visticam&acirc;k, tiks public&ccedil;ta.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>BUJ (<strong>B</strong>ie&thorn;i <strong>U</strong>zdoto <strong>J</strong>ut&acirc;jumu) ideja ir &iuml;oti vienk&acirc;r&eth;a. Vari mekl&ccedil;t pa <strong><a href=\"?action=show\">sada&iuml;&acirc;m</a></strong> vai ar&icirc; izmantot <strong><a href=\"?action=search\">mekl&ccedil;t&acirc;ju</a></strong> un samekl&ccedil;t inform&acirc;ciju p&ccedil;c atsl&ccedil;gv&acirc;rdiem.</p><p>Sada&iuml;as <strong>Jaut&acirc;t</strong> un <strong>Atbild&ccedil;t</strong> nepiecie&eth;amas dinamiskai jaut&acirc;jumu uzdo&eth;anai un atbild&ccedil;&eth;anai (pat, ja atbilde uz jaut&acirc;jumu nav zin&acirc;ma), savuk&acirc;rt sada&iuml;a <strong>Pievienot BUJ</strong> dom&acirc;ta bie&thorn;i uzdodama jaut&acirc;juma un atbilsto&eth;as atbildes public&ccedil;&eth;anai.</p>";
+$PMF_LANG["msgHelpText"] = "BUJ (<strong>B</strong>ie&thorn;i <strong>U</strong>zdoto <strong>J</strong>ut&acirc;jumu) ideja ir &iuml;oti vienk&acirc;r&eth;a. Vari mekl&ccedil;t pa <strong><a href=\"?action=show\">sada&iuml;&acirc;m</a></strong> vai ar&icirc; izmantot <strong><a href=\"?action=search\">mekl&ccedil;t&acirc;ju</a></strong> un samekl&ccedil;t inform&acirc;ciju p&ccedil;c atsl&ccedil;gv&acirc;rdiem.Sada&iuml;as <strong>Jaut&acirc;t</strong> un <strong>Atbild&ccedil;t</strong> nepiecie&eth;amas dinamiskai jaut&acirc;jumu uzdo&eth;anai un atbild&ccedil;&eth;anai (pat, ja atbilde uz jaut&acirc;jumu nav zin&acirc;ma), savuk&acirc;rt sada&iuml;a <strong>Pievienot BUJ</strong> dom&acirc;ta bie&thorn;i uzdodama jaut&acirc;juma un atbilsto&eth;as atbildes public&ccedil;&eth;anai.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Zi&ograve;a administratoram:";
@@ -144,19 +149,19 @@ $PMF_LANG["msgMailContact"] = "Zi&ograve;a nos&ucirc;t&icirc;ta administratoram.
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Datu b&acirc;ze nav pieejama.";
 $PMF_LANG["err_noHeaders"] = "Nav sada&iuml;u.";
-$PMF_LANG["err_noArticles"] = "<p>Nekas nav atrasts.<br/><br/><a href=\"javascript:history.back();\">Atgriezties</a></p>";
-$PMF_LANG["err_badID"] = "<p>Nepareizs ID.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Pa&eth;laik TOP 10 nav pieejams.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Ieraksts netika atrasts.</p>";
+$PMF_LANG["err_noArticles"] = "Nekas nav atrasts.<br/><br/><a href=\"javascript:history.back();\">Atgriezties</a>";
+$PMF_LANG["err_badID"] = "Nepareizs ID.";
+$PMF_LANG["err_noTopTen"] = "Pa&eth;laik TOP 10 nav pieejams.";
+$PMF_LANG["err_nothingFound"] = "Ieraksts netika atrasts.";
 $PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br /><br /><a href=\"javascript:history.back();\">Atgriezties</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br /><br /><a href=\"javascript:history.back();\">atgriezties</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts. <a href=\"javascript:history.back();\">Atgriezties</a></p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a></p>";
+$PMF_LANG["err_VoteTooMuch"] = "Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts.";
+$PMF_LANG["err_noVote"] = "<strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a>";
 $PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br /><a href=\"javascript:history.back();\">Atgriezties</a>";
 $PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Ierakstu mekl&ccedil;&eth;ana:</strong><br/><br/>\"+\" z&icirc;me noz&icirc;m&ccedil;, ka mekl&ccedil;jamie v&acirc;rdi tiks lo&igrave;iski apvienoti ar UN<br/>\"-\" z&icirc;me &iuml;auj izsl&ccedil;gt no mekl&ccedil;&eth;anas z&icirc;mei pievienoto atsl&ccedil;gv&acirc;rdu<br/>\"|\" z&icirc;me &iuml;auj atdal&icirc;t atsl&ccedil;gv&acirc;rdus ar lo&igrave;isko VAI<br/><br/><strong>Piem&ccedil;ri:</strong><br/><br/>Rakstot <strong>+PERL+PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur gan PERL, gan PHP<br/>Rakstot <strong>+PERL -PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur PERL, bet, kuros nav PHP<br/>Rakstot <strong>PERL | PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur vai nu PERL, vai ar&icirc; PHP<br/></p>";
+$PMF_LANG["help_search"] = "<strong>Ierakstu mekl&ccedil;&eth;ana:</strong><br/><br/>\"+\" z&icirc;me noz&icirc;m&ccedil;, ka mekl&ccedil;jamie v&acirc;rdi tiks lo&igrave;iski apvienoti ar UN<br/>\"-\" z&icirc;me &iuml;auj izsl&ccedil;gt no mekl&ccedil;&eth;anas z&icirc;mei pievienoto atsl&ccedil;gv&acirc;rdu<br/>\"|\" z&icirc;me &iuml;auj atdal&icirc;t atsl&ccedil;gv&acirc;rdus ar lo&igrave;isko VAI<br/><br/><strong>Piem&ccedil;ri:</strong><br/><br/>Rakstot <strong>+PERL+PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur gan PERL, gan PHP<br/>Rakstot <strong>+PERL -PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur PERL, bet, kuros nav PHP<br/>Rakstot <strong>PERL | PHP</strong>, tiks mekl&ccedil;ti visi ieraksti, kas satur vai nu PERL, vai ar&icirc; PHP<br/>";
 
 // Men&uuml;
 $PMF_LANG["ad"] = "ADMINISTR&Ccedil;&ETH;ANA";
@@ -486,7 +491,7 @@ $PMF_LANG["ad_xml_head"] = "XML-rezerves kopija";
 $PMF_LANG["ad_xml_hint"] = "Saglab&acirc;t visus sist&ccedil;mas ierakstus vien&acirc; XML fail&acirc;.";
 $PMF_LANG["ad_xml_gen"] = "izveidot XML failu";
 $PMF_LANG["ad_entry_locale"] = "Valoda";
-$PMF_LANG["msgLangaugeSubmit"] = "main&icirc;t valodu";
+$PMF_LANG["msgLanguageSubmit"] = "main&icirc;t valodu";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Apskat&icirc;t";
@@ -562,7 +567,7 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number 
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Activate mod_rewrite support? (default: disabled)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Do you want to enable LDAP support? (default: disabled)");
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";

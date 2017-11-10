@@ -1,37 +1,47 @@
 <?php
+
 /**
- * AJAX: handling of Ajax configuration calls
+ * AJAX: handling of Ajax configuration calls.
  *
- * PHP 5.3
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @package   Administration
+ *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2014 phpMyFAQ Team
+ * @copyright 2009-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
+<<<<<<< HEAD
 
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 use PMF\Helper\ResponseWrapper;
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId(), 'editconfig')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$ajaxAction    = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$instanceId    = PMF_Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
-$stopwordId    = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword      = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
+$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$instanceId = PMF_Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
+$stopwordId = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
+$stopword = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
 $stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
+$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
+<<<<<<< HEAD
+=======
+$http = new PMF_Helper_Http();
+>>>>>>> 2.10
 $stopwords = new PMF_Stopwords($faqConfig);
 
 $response = new JsonResponse;
@@ -40,21 +50,26 @@ switch ($ajaxAction) {
 
     case 'add_instance':
 
-        $url      = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
+        $url = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
         $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
-        $comment  = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $email    = PMF_Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
-        $admin    = PMF_Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
+        $comment = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
+        $email = PMF_Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+        $admin = PMF_Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
         $password = PMF_Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
         $data = array(
-            'url'      => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
+            'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
             'instance' => $instance,
-            'comment'  => $comment
+            'comment' => $comment,
         );
 
         $faqInstance = new PMF_Instance($faqConfig);
-        $instanceId  = $faqInstance->addInstance($data);
+        $instanceId = $faqInstance->addInstance($data);
 
         $faqInstanceClient = new PMF_Instance_Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
@@ -63,25 +78,23 @@ switch ($ajaxAction) {
         $hostname = $urlParts['host'];
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
-
-            $clientDir   = PMF_ROOT_DIR . '/multisite/' . $hostname;
+            $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
             $clientSetup = new PMF_Instance_Setup();
             $clientSetup->setRootDir($clientDir);
 
-            $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
-            $faqInstanceClient->copyLdapConstantsFile($clientDir . '/constants_ldap.php');
+            $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
 
             $dbSetup = array(
-                'dbServer'       => $DB['server'],
-                'dbUser'         => $DB['user'],
-                'dbPassword'     => $DB['password'],
+                'dbServer' => $DB['server'],
+                'dbUser' => $DB['user'],
+                'dbPassword' => $DB['password'],
                 'dbDatabaseName' => $DB['db'],
-                'dbPrefix'       => substr($hostname, 0, strpos($hostname, '.')),
-                'dbType'         => $DB['type']
+                'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
+                'dbType' => $DB['type'],
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl('http://' . $hostname);
+            $faqInstanceClient->setClientUrl('http://'.$hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
             PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
@@ -92,7 +105,7 @@ switch ($ajaxAction) {
             $instanceAdmin->setStatus('protected');
             $instanceAdminData = array(
                 'display_name' => '',
-                'email'        => $email
+                'email' => $email,
             );
             $instanceAdmin->setUserData($instanceAdminData);
 
@@ -101,7 +114,6 @@ switch ($ajaxAction) {
 
             PMF_Db::setTablePrefix($DB['prefix']);
         } else {
-
             $faqInstance->removeInstance($instanceId);
             $payload = array('error' => 'Cannot create instance.');
         }
@@ -115,9 +127,15 @@ switch ($ajaxAction) {
         break;
 
     case 'delete_instance':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
         if (null !== $instanceId) {
             $faqInstance = new PMF_Instance($faqConfig);
-            if ($faqInstance->removeInstance($instanceId)) {
+            if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {
                 $payload = array('error' => $instanceId);
@@ -155,14 +173,18 @@ switch ($ajaxAction) {
         break;
 
     case 'save_stop_word':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+            exit(1);
+        }
+
         if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
             if (null !== $stopwordId && -1 < $stopwordId) {
                 echo $stopwords->update($stopwordId, $stopword);
-            } elseif (!$stopwords->match($stopword)){
+            } elseif (!$stopwords->match($stopword)) {
                 echo $stopwords->add($stopword);
-            } else {
-
             }
         }
         break;

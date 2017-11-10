@@ -4,7 +4,7 @@
 .settings*
 .buildpath
 
-# PhpStorm folder
+# PhpStorm/IntelliJ folder
 .idea*
 
 # Mac OS X crap
@@ -15,7 +15,11 @@ build/*
 
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
-phpmyfaq/config/database.bak.php
+phpmyfaq/config/database.php.bak
+phpmyfaq/config/ldap.php
+phpmyfaq/config/ldap.php.bak
+phpmyfaq/config/elasticsearch.php
+phpmyfaq/config/elasticsearch.php.bak
 phpmyfaq/config/index.html
 phpmyfaq/data/*
 phpmyfaq/images/*
@@ -24,17 +28,53 @@ phpmyfaq/attachments/*
 # .htaccess, if used
 phpmyfaq/.htaccess
 
+<<<<<<< HEAD
 # Third party libraries
 phpmyfaq/inc/libs/*
 
 # Bower related stuff
 components/*
+=======
+# Third party PHP libraries
+phpmyfaq/src/libs/elasticsearch
+phpmyfaq/src/libs/guzzlehttp/ringphp
+phpmyfaq/src/libs/monolog
+phpmyfaq/src/libs/parsedown
+phpmyfaq/src/libs/phpseclib
+phpmyfaq/src/libs/psr
+phpmyfaq/src/libs/react
+phpmyfaq/src/libs/swiftmailer
+phpmyfaq/src/libs/symfony
+phpmyfaq/src/libs/tcpdf/config
+phpmyfaq/src/libs/tcpdf/include
+phpmyfaq/src/libs/tcpdf/*.php
+phpmyfaq/src/libs/twitteroauth
+
+# Third party frontend libraries and generated JS/CSS
+phpmyfaq/admin/assets/css/*
+phpmyfaq/admin/assets/fonts/*
+phpmyfaq/admin/assets/js/editor/tinymce.min.js
+phpmyfaq/admin/assets/js/editor/plugins/
+phpmyfaq/admin/assets/js/editor/skins/
+phpmyfaq/admin/assets/js/editor/themes/
+phpmyfaq/assets/js/libs
+phpmyfaq/assets/js/modernizr.min.js
+phpmyfaq/assets/js/phpmyfaq.js
+phpmyfaq/assets/js/phpmyfaq.js.map
+phpmyfaq/assets/js/phpmyfaq.min.js
+phpmyfaq/assets/js/vendors.js
+phpmyfaq/assets/js/vendors.js.map
+phpmyfaq/assets/themes/default/css/*.css
+phpmyfaq/assets/themes/default/css/*.map
+phpmyfaq/assets/themes/default/fonts/*
+>>>>>>> 2.10
 
 # Composer related stuff
+bin/*
 vendor/*
-
-# Bower related stuff
-components/*
 
 # node.js modules for development
 node_modules/*
+
+# Backup folder
+backup/*

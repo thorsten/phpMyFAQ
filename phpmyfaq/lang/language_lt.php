@@ -1,16 +1,20 @@
 <?php
+
 /**
- * The Lithuanian language file
+ * Lithuanian language file
  *
- * @package    phpMyFAQ
- * @subpackage i18n
- * @author     Aurimas Fišeras <aurimas@gmail.com>
- * @since      2009-07-12
- * @copyright  Aurimas Fišeras, UAB „Avakompas“, 2009.
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @copyright 2009-2017 Aurimas Fišeras, UAB „Avakompas“, phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2009-07-12
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
@@ -118,7 +122,7 @@ $PMF_LANG["msg2answer"] = "Atsakymas";
 $PMF_LANG["msgQuestionText"] = "Čia jūs matote kitų naudotojų užduotus klausimus. Jei atsakysite į šiuos klausimus, jūsų atsakymai gali būti įdėti į DUK.";
 
 // Help
-$PMF_LANG["msgHelpText"] = "<p>DUK (<strong>D</strong>ažniausiai <strong>U</strong>žduodami <strong>K</strong>lausimai) struktūra yra gana paprasta. Jūs arba galite ieškoti <strong><a href=\"?action=show\">grupėse</a></strong>, arba naudoti <strong><a href=\"?action=search\">DUK paieškos sistemą</a></strong> raktažodžių paieškai.</p>";
+$PMF_LANG["msgHelpText"] = "DUK (<strong>D</strong>ažniausiai <strong>U</strong>žduodami <strong>K</strong>lausimai) struktūra yra gana paprasta. Jūs arba galite ieškoti <strong><a href=\"?action=show\">grupėse</a></strong>, arba naudoti <strong><a href=\"?action=search\">DUK paieškos sistemą</a></strong> raktažodžių paieškai.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Siųsti pranešimą svetainės administratoriui:";
@@ -140,19 +144,19 @@ $PMF_LANG["msgMailContact"] = "Jūsų pranešimas buvo išsiųstas administrator
 // Fehlermeldungen
 $PMF_LANG["err_noDatabase"] = "Nėra ryšio su duomenų baze.";
 $PMF_LANG["err_noHeaders"] = "Nerasta grupė.";
-$PMF_LANG["err_noArticles"] = "<p>Nėra prieinamų DUK.</p>";
-$PMF_LANG["err_badID"] = "<p>Blogas identifikatorius.</p>";
-$PMF_LANG["err_noTopTen"] = "<p>Populiariausi DUK kol kas neprieinami.</p>";
-$PMF_LANG["err_nothingFound"] = "<p>Įrašų nerasta.</p>";
+$PMF_LANG["err_noArticles"] = "Nėra prieinamų DUK.";
+$PMF_LANG["err_badID"] = "Blogas identifikatorius.";
+$PMF_LANG["err_noTopTen"] = "Populiariausi DUK kol kas neprieinami.";
+$PMF_LANG["err_nothingFound"] = "Įrašų nerasta.";
 $PMF_LANG["err_SaveEntries"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>grupė</strong>, <strong>antraštė</strong>, <strong>jūsų įrašas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
 $PMF_LANG["err_SaveComment"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų komentarai</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
-$PMF_LANG["err_VoteTooMuch"] = "<p>Mes neskaičiuojame dvigubų balsų. <a href=\"javascript:history.back();\">Į ankstesnį tinklalapį</a>.</p>";
-$PMF_LANG["err_noVote"] = "<p><strong>Jūs neįvertinote klausimo!</strong> Norėdami balsuoti <a href=\"javascript:history.back();\">spauskite čia</a>.</p>";
+$PMF_LANG["err_VoteTooMuch"] = "Mes neskaičiuojame dvigubų balsų. Į ankstesnį tinklalapį.";
+$PMF_LANG["err_noVote"] = "<strong>Jūs neįvertinote klausimo!</strong> Norėdami balsuoti <a href=\"javascript:history.back();\">spauskite čia</a>.";
 $PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas.<br /><a href=\"javascript:history.back();\">atgal</a>";
 $PMF_LANG["err_sendMail"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Ieškoti įrašų:</strong><br />Su tokia paieška <strong style=\"color: Red;\">žodis1 žodis2</strong> jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.</p><p><strong>Pastaba:</strong> Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.</p>";
+$PMF_LANG["help_search"] = "<strong>Ieškoti įrašų:</strong><br />Su tokia paieška <strong style=\"color: Red;\">žodis1 žodis2</strong> jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.<strong>Pastaba:</strong> Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
 
 // Men�
 $PMF_LANG["ad"] = "ADMINISTRAVIMO SEKCIJA";
@@ -489,7 +493,7 @@ $PMF_LANG["ad_xml_head"] = "XML atsarginė kopija";
 $PMF_LANG["ad_xml_hint"] = "Išsaugoti visus jūsų DUK įrašus viename XML faile.";
 $PMF_LANG["ad_xml_gen"] = "sukurti XML failą";
 $PMF_LANG["ad_entry_locale"] = "Kalba";
-$PMF_LANG["msgLangaugeSubmit"] = "Parinkti kalbą:";
+$PMF_LANG["msgLanguageSubmit"] = "Parinkti kalbą:";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Peržiūra";
@@ -568,8 +572,8 @@ $LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Puslapy
 $LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Naujienų straipsnių skaičius");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Drausti šiuos IP adresus");
 $LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Aktyvinti „mod_rewrite“ palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["security.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq)");
+$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Ar įjungti LDAP palaikymą? (numatyta r.: išjungta)");
+$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "Bazinis URL saitų tikrinimui (pvz., http://www.example.org/faq/)");
 $LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Intervalas tarp AJAX saitų tikrinimo (sekundėmis)");
 $LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Išjungti naujų klausimų matomumą?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Leidimų lygis");
@@ -850,16 +854,12 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Įrašų rikiavimas (d
 $PMF_LANG['ad_conf_order_id'] = 'Identifikatorius (numatytas)';
 $PMF_LANG['ad_conf_order_thema'] = 'Antraštė';
 $PMF_LANG['ad_conf_order_visits'] = 'Lankytojų skaičius';
-$PMF_LANG['ad_conf_order_datum'] = 'Data';
+$PMF_LANG['ad_conf_order_updated'] = 'Data';
 $PMF_LANG['ad_conf_order_author'] = 'Autorius';
 $PMF_LANG['ad_conf_desc'] = 'mažėjančiai';
 $PMF_LANG['ad_conf_asc'] = 'didėjančiai';
 $PMF_LANG['mainControlCenter'] = 'Pagrindinė konfigūracija';
 $PMF_LANG['recordsControlCenter'] = 'DUK įrašų konfigūracija';
-
-// added v2.0.0 - 2007-03-17 by Thorsten
-$PMF_LANG['msgInstantResponse'] = 'Greitas atsakymas';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Žemiau rasite pirmus %d įrašų.';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktyvinti naujus įrašus (numatyta r.: neaktyvinti)");
@@ -867,7 +867,6 @@ $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Leisti
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Įrašai šioje grupėje';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Tiesiog rašykite ir gaukite atsakymus...';
 $PMF_LANG['msgTagSearch'] = 'Įrašai su gairėmis';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ informacija';
 $PMF_LANG['ad_online_info'] = 'Tiesioginis versijos tikrinimas';
@@ -1045,4 +1044,3 @@ $PMF_LANG['msgUpdateFaqDate'] = 'atnaujinti';
 $PMF_LANG['msgKeepFaqDate'] = 'palikti'; 
 $PMF_LANG['msgEditFaqDat'] = 'redaguoti';
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'El. pašto adresas yra būtinas laukas (numatyta r.: išjungta)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Greitas atsakymas pradžios tinklalapyje (numatyta r.: išjungta)');

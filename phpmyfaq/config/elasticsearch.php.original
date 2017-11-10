@@ -1,0 +1,4 @@
+<?php
+$PMF_ES['hosts'] = ['127.0.0.1:9200'];
+$PMF_ES['index'] = '';
+$PMF_ES['type'] = '';

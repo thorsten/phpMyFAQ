@@ -1,17 +1,24 @@
 <?php
+
 /**
- * Chinese (simplified) language file
+ * Chinese Simplified language file
  *
- * @author    ATang <atang007@163.com>
- * @author    saphrfans <saphrfans@yahoo.com>
- * @author    Techice.Young <techice.young@prettymay.net>
- * @since     2004-06-23
- * @copyright 2004-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    ATang <atang007@163.com>
+ * @author    saphrfans <saphrfans@yahoo.com>
+ * @author    Techice.Young <techice.young@prettymay.net>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-06-23
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'zh';
 $PMF_LANG['language'] = 'Chinese Simplified (UTF-8)';
@@ -99,7 +106,7 @@ $PMF_LANG['msgDate_User'] = '日期 / 用户';
 $PMF_LANG['msgQuestion2'] = '问题';
 $PMF_LANG['msg2answer'] = '答案';
 $PMF_LANG['msgQuestionText'] = '这里你可以看到别的用户提出的问题。如果你回答了这些问题，您的回答有可能会被加入系统。';
-$PMF_LANG['msgHelpText'] = '<p><strong>常见问题解答</strong>系统的结构经常简单，你可以按照<strong>';
+$PMF_LANG['msgHelpText'] = '<strong>常见问题解答</strong>系统的结构经常简单，你可以按照<strong>';
 $PMF_LANG['msgContactEMail'] = '给管理员发邮件：';
 $PMF_LANG['msgMessage'] = '内容：';
 $PMF_LANG['msgTopTen'] = '热门问题';
@@ -112,17 +119,17 @@ $PMF_LANG['msgMailCheck'] = '系统有新问答，请进入管理员界面察看
 $PMF_LANG['msgMailContact'] = '您的信息已经发送给管理员。';
 $PMF_LANG['err_noDatabase'] = '没有数据库连接。';
 $PMF_LANG['err_noHeaders'] = '没有类别。';
-$PMF_LANG['err_noArticles'] = '<p>暂时没有问题。</p>';
-$PMF_LANG['err_badID'] = '<p>错误的ID。</p>';
-$PMF_LANG['err_noTopTen'] = '<p>暂时没有问题。</p>';
-$PMF_LANG['err_nothingFound'] = '<p>暂时没有问题。</p>';
-$PMF_LANG['err_SaveEntries'] = '必须输入的字段是<strong>姓名</strong>, <strong>email地址</strong>, <strong>类别</strong';
+$PMF_LANG['err_noArticles'] = '暂时没有问题。';
+$PMF_LANG['err_badID'] = '错误的ID。';
+$PMF_LANG['err_noTopTen'] = '暂时没有问题。';
+$PMF_LANG['err_nothingFound'] = '暂时没有问题。';
+$PMF_LANG['err_SaveEntries'] = '必须输入的字段是<strong>姓名</strong>, <strong>email地址</strong>, <strong>类别</strong>';
 $PMF_LANG['err_SaveComment'] = '必须输入的字段是<strong>姓名</strong>, <strong>email</strong> 和 <strong>您的';
-$PMF_LANG['err_VoteTooMuch'] = '<p>您已经评过分了。<a href="nojavascript...history.back();">点击这里</a>, 返回.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>你没有给此问题评分！</strong> <a href="nojavascript...history.back();">请点击这里</a>, 进';
-$PMF_LANG['err_noMailAdress'] = '你输入的email地不正确。<br /><a href="nojavascript...history.back();">返回</a>';
+$PMF_LANG['err_VoteTooMuch'] = '您已经评过分了。';
+$PMF_LANG['err_noVote'] = '<strong>你没有给此问题评分！</strong>';
+$PMF_LANG['err_noMailAdress'] = '你输入的email地不正确。';
 $PMF_LANG['err_sendMail'] = '必须输入<strong>姓名</strong>, <strong>email 地址</strong> 和 <strong>问题</strong>!<br /><';
-$PMF_LANG['help_search'] = '<p><strong>搜索问题:</strong><br />包含 <strong style="color: Red;">关键词1 关键词2</strong> ';
+$PMF_LANG['help_search'] = '<strong>搜索问题:</strong><br />包含 <strong style="color: Red;">关键词1 关键词2</strong> ';
 $PMF_LANG['ad'] = '管理员界面';
 $PMF_LANG['ad_menu_user_administration'] = '用户管理';
 $PMF_LANG['ad_menu_entry_aprove'] = '审核问答';
@@ -392,7 +399,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-备份';
 $PMF_LANG['ad_xml_hint'] = '将所有的 FAQ 以单一XML文件保存。';
 $PMF_LANG['ad_xml_gen'] = '制作XML文件';
 $PMF_LANG['ad_entry_locale'] = '语言';
-$PMF_LANG['msgLangaugeSubmit'] = '选择语言';
+$PMF_LANG['msgLanguageSubmit'] = '选择语言';
 $PMF_LANG['ad_entry_preview'] = '预览';
 $PMF_LANG['ad_attach_1'] = '请现在设置中指定保存附件的目录。';
 $PMF_LANG['ad_attach_2'] = '请现在设置中指定附件的链接。';
@@ -656,16 +663,13 @@ $PMF_LANG['ad_groups'] = '群组';
 $PMF_LANG['ad_conf_order_id'] = '编号 默认)';
 $PMF_LANG['ad_conf_order_thema'] = '标题';
 $PMF_LANG['ad_conf_order_visits'] = '访问者数';
-$PMF_LANG['ad_conf_order_datum'] = '日期';
+$PMF_LANG['ad_conf_order_updated'] = '日期';
 $PMF_LANG['ad_conf_order_author'] = '作者';
 $PMF_LANG['ad_conf_desc'] = '降序';
 $PMF_LANG['ad_conf_asc'] = '升序';
 $PMF_LANG['mainControlCenter'] = '主要设置';
 $PMF_LANG['recordsControlCenter'] = '问答记录设置';
-$PMF_LANG['msgInstantResponse'] = '快速搜索';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. 在下面的第 %d 个记录寻找。';
 $PMF_LANG['msgAllCatArticles'] = '本分类其他问答';
-$PMF_LANG['msgDescriptionInstantResponse'] = '输入查询条件，相关结果会立即在下方显示。';
 $PMF_LANG['msgTagSearch'] = '标签搜索';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ 信息';
 $PMF_LANG['ad_online_info'] = '在线版本检查';
@@ -750,7 +754,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "每页�
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "新内容数据");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "禁止这些IP地址访问");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "启用mod_rewrite吗?(默认:禁止)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "启用LDAP支持吗? (默认:禁止)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "启用LDAP支持吗? (默认:禁止)");
 $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "链接验启用的基本 URL 网址 (设置为首页 URL 网址)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "AJAX 连接验证间隔时间 (单位：秒)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "显示新问题?(默认:禁止)");
@@ -805,7 +809,6 @@ $PMF_LANG['msgEditFaqDat'] = '编辑';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => '列出的搜索条目数目');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => 'select', 1 => '为顶级问答排序');
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => '邮件地址作为强制要求 (默认: 不激活)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => '开始页实时应答 (默认: 不激活)');
 $PMF_LANG['securityControlCenter'] = '安全设置';
 $PMF_LANG['ad_search_delsuc'] = '搜索语句删除成功';
 $PMF_LANG['ad_search_delfail'] = '搜索语句未被删除。';

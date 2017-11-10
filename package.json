@@ -1,5 +1,6 @@
 {
   "name": "phpMyFAQ",
+<<<<<<< HEAD
   "version": "3.0.0-dev",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
@@ -21,14 +22,52 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/thorsten/phpMyFAQ.git"
+=======
+  "version": "2.10.0-alpha2",
+  "description": "phpMyFAQ",
+  "main": "Gruntfile.js",
+  "dependencies": {
+    "bootstrap": "4.0.0-beta.2",
+    "bootstrap-datepicker": "1.7.1",
+    "bootstrap-fileinput": "^4.4.5",
+    "bxslider": "^4.2.13",
+    "cookieconsent": "^3.0.4",
+    "corejs-typeahead": "^1.2.1",
+    "font-awesome": "4.7.0",
+    "handlebars": "^4.0.11",
+    "highlightjs": "9.10.0",
+    "jquery": "3.2.1",
+    "jquery-sparkline": "^2.3.2",
+    "mermaid": "^7.1.0",
+    "popper.js": "^1.12.6",
+    "tinymce": "^4.7.1"
   },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-bumpup": "^0.6.2",
+    "grunt-contrib-clean": "^1.1.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-csslint": "^2.0.0",
+    "grunt-contrib-cssmin": "^2.2.1",
+    "grunt-contrib-jshint": "^1.1.0",
+    "grunt-contrib-uglify": "^3.1.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-exec": "^3.0.0",
+    "grunt-modernizr": "^1.0.0",
+    "grunt-sass": "^2.0.0",
+    "load-grunt-tasks": "^3.5.2"
+>>>>>>> 2.10
+  },
+  "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
-  "license": "MPL 2.0",
+  "license": "MPL-2.0",
   "readmeFilename": "README.md",
   "bugs": {
     "url": "https://github.com/thorsten/phpMyFAQ/issues"
   },
   "keywords": [
     "phpMyFAQ"
-  ]
+  ],
+  "homepage": "http://www.phpmyfaq.de/"
 }

@@ -1,19 +1,24 @@
 <?php
+
 /**
  * Swedish language file
  *
- * @package    phpMyFAQ
- * @subpackage Translation
- * @author     Emil Kennerberg <emil@kennerberg.se>
- * @author     Andreas <hq6830@yahoo.no>
- * @author     Thomas Höjemo <thomas@snt.se>
- * @since      2004-07-28
- * @copyright  2004-2014 phpMyFAQ Team
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @category  phpMyFAQ
+ * @author    Emil Kennerberg <emil@kennerberg.se>
+ * @author    Andreas <hq6830@yahoo.no>
+ * @author    Thomas Höjemo <thomas@snt.se>
+ * @copyright 2004-2017 phpMyFAQ Team
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      http://www.phpmyfaq.de
+ * @since     2004-07-28
  */
+
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'sv';
 $PMF_LANG['language'] = 'Swedish';
@@ -102,7 +107,7 @@ $PMF_LANG['msgDate_User'] = 'Datum / Besökare';
 $PMF_LANG['msgQuestion2'] = 'Fråga';
 $PMF_LANG['msg2answer'] = 'Svar';
 $PMF_LANG['msgQuestionText'] = 'Dessa obesvarade/öppna frågor kan du besvara. Om den webbplatsansvarige godkänner ditt svar så publiceras det.';
-$PMF_LANG['msgHelpText'] = '<p>Hitta svaret på din fråga genom att antingen navigera med hjälp av <strong><a href="?action=show">kategorierna</a></strong> eller söka efter nyckelord med <strong><a href="?action=search">sökmotorn.</a></strong></p>';
+$PMF_LANG['msgHelpText'] = 'Hitta svaret på din fråga genom att antingen navigera med hjälp av <strong><a href="?action=show">kategorierna</a></strong> eller söka efter nyckelord med <strong><a href="?action=search">sökmotorn.</a></strong>';
 $PMF_LANG['msgContactEMail'] = 'Skicka e-post till webbplatsansvarig:';
 $PMF_LANG['msgMessage'] = 'Ditt meddelande:';
 $PMF_LANG['msgTopTen'] = 'Topp 10';
@@ -115,17 +120,17 @@ $PMF_LANG['msgMailCheck'] = 'En ny fråga finns!\n Logga in på kontrollpanelen.
 $PMF_LANG['msgMailContact'] = 'Ditt meddelande har skickats till den som är ansvarig för webbplatsen.';
 $PMF_LANG['err_noDatabase'] = 'Ingen databaskoppling finns.';
 $PMF_LANG['err_noHeaders'] = 'Inga kategorier.';
-$PMF_LANG['err_noArticles'] = '<p>Inga frågor funna.</p>';
-$PMF_LANG['err_badID'] = '<p>Fel id.</p>';
-$PMF_LANG['err_noTopTen'] = '<p>Det finns ingen tio-i-topp lista.</p>';
-$PMF_LANG['err_nothingFound'] = '<p>Inga frågor funna.</p>';
+$PMF_LANG['err_noArticles'] = 'Inga frågor funna.';
+$PMF_LANG['err_badID'] = 'Fel id.';
+$PMF_LANG['err_noTopTen'] = 'Det finns ingen tio-i-topp lista.';
+$PMF_LANG['err_nothingFound'] = 'Inga frågor funna.';
 $PMF_LANG['err_SaveEntries'] = 'Nödvändiga fält är <strong>ditt namn</strong>, <strong>din epostadress</strong>, <strong>kategori</strong>, <strong>rubrik</strong> och <strong>din fråga/svar</strong>!<br><br>\n<a href="nojavascript...history.back();">Backa</a><br><br>\n';
 $PMF_LANG['err_SaveComment'] = 'Nödvändiga fält är <strong>ditt namn</strong>, <strong>din epostadress</strong> och <strong>din kommentar</strong>!<br><br>\n<a href="nojavascript...history.back();">Backa</a><br><br>\n';
-$PMF_LANG['err_VoteTooMuch'] = '<p>Vi räknar inte dubbla röster.<a href="nojavascript...history.back();">Klicka här</a> för att gå tillbaka.</p>';
-$PMF_LANG['err_noVote'] = '<p><strong>Du röstade inte på frågan!</strong> <a href="nojavascript...history.back();">Klicka här</a>, för att rösta.</p>';
-$PMF_LANG['err_noMailAdress'] = 'Din epostadress är inte korrekt.<br /><a href="nojavascript...history.back();">Backa</a>';
+$PMF_LANG['err_VoteTooMuch'] = 'Vi räknar inte dubbla röster.';
+$PMF_LANG['err_noVote'] = '<strong>Du röstade inte på frågan!</strong>';
+$PMF_LANG['err_noMailAdress'] = 'Din epostadress är inte korrekt.';
 $PMF_LANG['err_sendMail'] = 'Nödvändiga fält är <strong>ditt namn</strong>, <strong>din epostadress</strong> och <strong>din fråga</strong>!';
-$PMF_LANG['help_search'] = '<p><strong>Sök efter inlägg:</strong><br />Med ett innehåll likt: <strong style="color: Red;">ord1 ord2</strong> du kan göra en relevanssökning (i fallande ordning), med två eller fler sökkriterier.</p><p><strong>Obs:</strong> Ditt sökkriterium måste vara minst 4 tecken långt.</p>';
+$PMF_LANG['help_search'] = '<strong>Sök efter inlägg:</strong><br />Med ett innehåll likt: <strong style="color: Red;">ord1 ord2</strong> du kan göra en relevanssökning (i fallande ordning), med två eller fler sökkriterier.<strong>Obs:</strong> Ditt sökkriterium måste vara minst 4 tecken långt.';
 $PMF_LANG['ad'] = 'Administrationsdel';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrera användare';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Godkänn svar';
@@ -395,7 +400,7 @@ $PMF_LANG['ad_xml_head'] = 'XML-säkerhetskopia';
 $PMF_LANG['ad_xml_hint'] = 'Spara all data i en XML-fil.';
 $PMF_LANG['ad_xml_gen'] = 'skapa XML-fil';
 $PMF_LANG['ad_entry_locale'] = 'Språk';
-$PMF_LANG['msgLangaugeSubmit'] = 'Ändra språk';
+$PMF_LANG['msgLanguageSubmit'] = 'Ändra språk';
 $PMF_LANG['ad_entry_preview'] = 'Förhandsgranskning';
 $PMF_LANG['ad_attach_1'] = 'Välj en katalog för bilagor i inställningar först.';
 $PMF_LANG['ad_attach_2'] = 'Välj en länk för bilagor i inställningar först.';
@@ -463,7 +468,7 @@ $LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => "input", 1 => "Antal v
 $LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => "input", 1 => "Antal nyhetsartiklar");
 $LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Blockera följande IP-adresser");
 $LANG_CONF['main.enableRewriteRules'] = array(0 => "checkbox", 1 => "Aktivera stöd för mod_rewrite? (förvalt: inaktivt)");
-$LANG_CONF['security.ldapSupport'] = array(0 => "checkbox", 1 => "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
+$LANG_CONF['ldap.ldapSupport'] = array(0 => "checkbox", 1 => "Vill du aktivera stöd för LDAP? (förvalt: inaktivt)");
 $PMF_LANG['ad_categ_new_main_cat'] = 'Som ny huvudkategori';
 $PMF_LANG['ad_categ_paste_error'] = 'Att flytta denna kategori är inte möjligt.';
 $PMF_LANG['ad_categ_move'] = 'flytta kategori';
@@ -724,7 +729,6 @@ $PMF_LANG['msgEditFaqDat'] = 'redigera';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Antal söktermer');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sortera de mest populära inläggen");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'E-post-adress är obligatorisk (standard: valfri)');
-$LANG_CONF['search.useAjaxSearchOnStartpage'] = array(0 => 'checkbox', 1 => 'Omedelbar respons på startsida (standard: avaktiverad)');
 $PMF_LANG['msgEdit'] = 'Redigera';
 $PMF_LANG['msgDelete'] = 'Ta bort';
 $PMF_LANG['msgYes'] = 'ja';
@@ -802,16 +806,13 @@ $PMF_LANG['ad_groups'] = 'Grupper';
 $PMF_LANG['ad_conf_order_id'] = 'Id (standardval)';
 $PMF_LANG['ad_conf_order_thema'] = 'Titel';
 $PMF_LANG['ad_conf_order_visits'] = 'Antal besökare';
-$PMF_LANG['ad_conf_order_datum'] = 'Datum';
+$PMF_LANG['ad_conf_order_updated'] = 'Datum';
 $PMF_LANG['ad_conf_order_author'] = 'Av';
 $PMF_LANG['ad_conf_desc'] = 'nyast först';
 $PMF_LANG['ad_conf_asc'] = 'äldst först';
 $PMF_LANG['mainControlCenter'] = 'Huvudinställningar';
 $PMF_LANG['recordsControlCenter'] = 'Inläggsinställningar';
-$PMF_LANG['msgInstantResponse'] = 'Omedelbart svar';
-$PMF_LANG['msgInstantResponseMaxRecords'] = '. Nedan finns de %d första inläggen.';
 $PMF_LANG['msgAllCatArticles'] = 'Inlägg i den här kategorin';
-$PMF_LANG['msgDescriptionInstantResponse'] = 'Skriv och sök svar...';
 $PMF_LANG['msgTagSearch'] = 'Märkta inlägg';
 $PMF_LANG['ad_pmf_info'] = 'phpMyFAQ-information';
 $PMF_LANG['ad_online_info'] = 'Versionskontroll via Internet';
@@ -820,7 +821,7 @@ $LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Sortera inlägg (efte
 $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Sortera inlägg (nyaste eller äldst först)');
 $LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Aktivera nya inlägg (standardval: ej aktiverat)");
 $LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Tillåt kommentarer till nya inlägg (standardval: ej aktiverat)");
-$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Grundadress för länkkontroll (t ex: http://www.example.org/faq)");
+$LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Grundadress för länkkontroll (t ex: http://www.example.org/faq/)");
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervall mellan länkkontroll via AJAX (i sekunder)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Låt nya frågor vara dolda?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Åtkomstnivå");
