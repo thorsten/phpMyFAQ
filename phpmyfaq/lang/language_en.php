@@ -1207,3 +1207,6 @@ $PMF_LANG["ad_searchterm_del_err"] = 'Couldn\'t delete all search terms.';
 $LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Hide empty categories<br>(default: disabled)");
 $LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Search for solution ID<br>(default: enabled)");
 $LANG_CONF["socialnetworks.disableAll"] = array(0 => "checkbox", 1 => "Disable all social networks<br>(default: disabled)");
+
+// added v.2.9.0-RC - 2017-11-9 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'View FAQ';

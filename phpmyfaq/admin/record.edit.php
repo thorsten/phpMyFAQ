@@ -201,9 +201,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 <?php
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf(
-            ' <span class="badge badge-important">%s 1.%d</span> ',
-            $PMF_LANG['ad_entry_revision'],
-            $selectedRevisionId
+'<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-info">%s</a>',
+            $PMF_LANG['ad_entry_edit_1'],
+            (0 === $faqData['id'] ? '' : $faqData['id']),
+            $PMF_LANG['ad_entry_edit_2'],
+            $currentRevision,
+			$faqData['id'],
+			$faqData['lang'],
+			$PMF_LANG['ad_view_faq']
         );
         printf(
             '<i class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s',
