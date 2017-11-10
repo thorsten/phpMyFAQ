@@ -200,11 +200,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $selectedRevisionId
         );
         printf(
-            '<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s',
+			'<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-info">%s</a>',
             $PMF_LANG['ad_entry_edit_1'],
             (0 === $faqData['id'] ? '' : $faqData['id']),
             $PMF_LANG['ad_entry_edit_2'],
-            $currentRevision
+            $currentRevision,
+			$faqData['id'],
+			$faqData['lang'],
+			$PMF_LANG['ad_view_faq']
         );
     } else {
         printf('<i aria-hidden="true" class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
