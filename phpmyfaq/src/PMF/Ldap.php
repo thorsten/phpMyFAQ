@@ -118,6 +118,20 @@ class PMF_Ldap
             return false;
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Ldap.php
+        // optionally set Bind version
+        if (isset($this->_ldapConfig['ldap_options'])) {
+            foreach ($this->_ldapConfig['ldap_options'] as $key => $value) {
+                if (! ldap_set_option($this->ds, constant($key), $value)) {
+                    $this->errno = ldap_errno($this->ds);
+                    $this->error = sprintf(
+                        'Unable to set LDAP option "%s" to "%s" (Error: %s).',
+                        $key,
+                        $value,
+                        ldap_error($this->ds)
+                    );
+                }
+=======
         // Set LDAP options
         foreach ($this->config->getLdapOptions() as $key => $value) {
             if (!ldap_set_option($this->ds, constant($key), $value)) {
@@ -130,6 +144,7 @@ class PMF_Ldap
                 );
 
                 return false;
+>>>>>>> 2.10:phpmyfaq/src/PMF/Ldap.php
             }
         }
 

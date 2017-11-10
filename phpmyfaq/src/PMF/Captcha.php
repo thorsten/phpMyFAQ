@@ -20,6 +20,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2006-02-04
  */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Captcha.php
+
+use Symfony\Component\HttpFoundation\StreamedResponse;
+
+=======
+>>>>>>> 2.10:phpmyfaq/src/PMF/Captcha.php
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -207,13 +213,29 @@ class PMF_Captcha
         $this->drawlines();
         $this->generateCaptchaCode($this->caplength);
         $this->drawText();
+
+        $response = new StreamedResponse;
+        $img = $this->img;
+
         if (function_exists('imagejpeg')) {
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Captcha.php
+            $response->headers->set('Content-Type', 'image/jpeg');
+            $quality = (int) $this->quality;
+            $response->setCallback(function() use ($img, $quality) {
+                imagejpeg($img, null, $quality);
+            });
+
+=======
             header('Content-Type: image/jpeg');
             imagejpeg($this->img, null, (int) $this->quality);
+>>>>>>> 2.10:phpmyfaq/src/PMF/Captcha.php
         } elseif (function_exists('imagegif')) {
-            header('Content-Type: image/gif');
-            imagegif($this->img);
+            $response->headers->set('Content-Type', 'image/gif');
+            $response->setCallback(function() use ($img) {
+                imagegif($img);
+            });
         }
+        $response->send();
         imagedestroy($this->img);
     }
 

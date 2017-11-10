@@ -19,6 +19,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2011-01-12
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -120,7 +126,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         $content .= "\r\n";
     }
 
-    $oHttpStreamer = new PMF_HttpStreamer('csv', $content);
+    $oHttpStreamer = new PMF_HttpStreamer(Response::create(), 'csv', $content);
     $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 } else {
     echo $PMF_LANG['err_noArticles'];

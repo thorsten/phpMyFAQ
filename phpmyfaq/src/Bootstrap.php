@@ -18,8 +18,12 @@
  */
 
 use Symfony\Component\ClassLoader\UniversalClassLoader;
+<<<<<<< HEAD:phpmyfaq/inc/Bootstrap.php
+use Symfony\Component\HttpFoundation\RedirectResponse;
+=======
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Elasticsearch\ClientBuilder;
+>>>>>>> 2.10:phpmyfaq/src/Bootstrap.php
 
 //
 // Debug mode:
@@ -39,7 +43,38 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD:phpmyfaq/inc/Bootstrap.php
+if (!defined('PMF_ROOT_DIR')) {
+    /**
+     * The root directory
+     */
+    define('PMF_ROOT_DIR', dirname(__DIR__));
+}
+
+/**
+ * The include directory
+ */
+define('PMF_INCLUDE_DIR', __DIR__);
+
+/**
+ * The directory where the translations reside
+ */
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
+
+//
+// Setting up PSR-0 autoloader for Symfony Components
+//
+require PMF_INCLUDE_DIR . '/libs/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+
+$loader = new UniversalClassLoader();
+$loader->registerNamespace('PMF', PMF_INCLUDE_DIR);
+$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
+$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->registerPrefix('Twig_', PMF_INCLUDE_DIR . '/libs');
+$loader->register();
+=======
 $pmfExceptions = [];
+>>>>>>> 2.10:phpmyfaq/src/Bootstrap.php
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
@@ -72,6 +107,8 @@ if (file_exists(__DIR__.'/../multisite/multisite.php') && 'cli' !== PHP_SAPI) {
 }
 
 //
+<<<<<<< HEAD:phpmyfaq/inc/Bootstrap.php
+=======
 // The root directory
 //
 if (!defined('PMF_ROOT_DIR')) {
@@ -79,6 +116,7 @@ if (!defined('PMF_ROOT_DIR')) {
 }
 
 //
+>>>>>>> 2.10:phpmyfaq/src/Bootstrap.php
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
@@ -92,8 +130,14 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
+<<<<<<< HEAD:phpmyfaq/inc/Bootstrap.php
+
+if (!file_exists(PMF_CONFIG_DIR . '/database.php') && !file_exists(PMF_ROOT_DIR . '/inc/data.php')) {
+    RedirectResponse::create('setup/index.php')->send();
+=======
 if (!file_exists(PMF_CONFIG_DIR.'/database.php') && !file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
     header('Location: setup/index.php');
+>>>>>>> 2.10:phpmyfaq/src/Bootstrap.php
     exit();
 }
 
@@ -104,6 +148,8 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 }
 require PMF_CONFIG_DIR.'/constants.php';
 
+<<<<<<< HEAD:phpmyfaq/inc/Bootstrap.php
+=======
 /*
  * The include directory
  */
@@ -127,6 +173,7 @@ $loader->register();
 require PMF_INCLUDE_DIR.'/libs/parsedown/Parsedown.php';
 require PMF_INCLUDE_DIR.'/libs/parsedown/ParsedownExtra.php';
 
+>>>>>>> 2.10:phpmyfaq/src/Bootstrap.php
 //
 // Set the error handler to our pmf_error_handler() function
 //

@@ -1,0 +1,112 @@
+<!doctype html>
+<!--[if lt IE 7 ]> <html lang="en" class="no-js ie6"> <![endif]-->
+<!--[if IE 7 ]> <html lang="en" class="no-js ie7"> <![endif]-->
+<!--[if IE 8 ]> <html lang="en" class="no-js ie8"> <![endif]-->
+<!--[if IE 9 ]> <html lang="en" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="en" class="no-js"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>phpMyFAQ {{ version }} Setup</title>
+
+    <meta name="viewport" content="width=device-width;">
+    <meta name="application-name" content="phpMyFAQ {{ version }}">
+    <meta name="copyright" content="(c) 2001-{{ currentYear }} phpMyFAQ Team">
+
+    <link rel="stylesheet" href="../assets/template/default/css/style.css?v=1">
+
+    <script src="../assets/js/libs/modernizr.min.js"></script>
+    <script src="../assets/js/libs/jquery.min.js"></script>
+
+    <link rel="shortcut icon" href="../assets/template/default/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/template/default/apple-touch-icon.png">
+
+    <script type="text/javascript">
+        function selectDatabaseSetup(field) {
+            switch (field.value) {
+                case 'sqlite':
+                case 'sqlite3':
+                    $('#dbsqlite').show();
+                    $('#dbdatafull').hide();
+                    break;
+                default:
+                    $('#dbsqlite').hide();
+                    $('#dbdatafull').show();
+                    break;
+            }
+        }
+    </script>
+</head>
+<body>
+
+<nav class="navbar navbar-default" role="navigation">
+    <div class="container">
+        <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation.php">Documentation</a></li>
+                <li><a target="_blank" href="http://www.phpmyfaq.de/support.php">Support</a></li>
+                <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
+                <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<section id="content" class="phpmyfaq-setup">
+    <div class="container">
+        <div class="row">
+            <div class="jumbotron hello-phpmyfaq">
+                <h1>phpMyFAQ {{ version }} Setup</h1>
+                <p>
+                    Did you already read the <a href="http://www.phpmyfaq.de/documentation.php">documentation</a> carefully before starting the
+                    phpMyFAQ setup? :-)
+                </p>
+            </div>
+        </div>
+        <div class="row">
+
+            {% if criticalErrors|length > 0 %}
+                <div class="alert alert-error">
+                    <ul>
+                        {% for criticalError in criticalErrors %}
+                            <li>{{ criticalError|e }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            {% if filePermErrors|length > 0 %}
+                <div class="alert alert-error">
+                    {{ filePermError|e }}
+                </div>
+            {% endif %}
+
+            {% if nonCriticalErrors|length > 0 %}
+                <div class="alert alert-danger">
+                    <ul>
+                    {% for nonCriticalError in nonCriticalErrors %}
+                        <li>{{ nonCriticalError|e }}</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+
+            <!--
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <p class="pull-right">
+            &copy; 2001-2013 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> |
+            Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
+            All rights reserved.
+        </p>
+    <div>
+</footer>
+
+</body>
+</html>
+            -->

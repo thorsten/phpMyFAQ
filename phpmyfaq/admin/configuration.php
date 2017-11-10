@@ -37,8 +37,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             'filter' => FILTER_UNSAFE_RAW,
             'flags' => FILTER_REQUIRE_ARRAY,
         );
+<<<<<<< HEAD
+        $editData        = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+        $userAction      = 'listConfig';
+=======
         $editData = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
         $userAction = 'listConfig';
+>>>>>>> 2.10
         $oldConfigValues = $faqConfig->config;
 
         // Set the new values
@@ -86,6 +91,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             $faqConfig->update($newConfigValues);
         }
     }
+<<<<<<< HEAD
+    // Lists the current configuration
+    if ('listConfig' === $userAction) {
+        $userAction = 'listConfig';
+    }
+
+    $twig->loadTemplate('configuration.twig')
+        ->display(
+            array('PMF_LANG' => $PMF_LANG)
+        );
+=======
     ?>
         <form class="form-horizontal" id="config_list" name="config_list" method="post"
               action="?action=config&amp;config_action=saveConfig">
@@ -186,6 +202,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         <script src="assets/js/configuration.js"></script>
 <?php
 
+>>>>>>> 2.10
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    require 'noperm.php';
 }

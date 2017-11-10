@@ -110,6 +110,6 @@ class PMF_Services_Gravatar extends PMF_Services
      */
     public static function getHash($email)
     {
-        return md5($email);
+        return md5(strtolower(trim($email)));
     }
 }

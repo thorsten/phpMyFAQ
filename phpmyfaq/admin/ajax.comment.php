@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-20
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,6 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
+$response = new JsonResponse;
 if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
     $comment = new PMF_Comment($faqConfig);
     $checkFaqs = array(
@@ -55,8 +62,18 @@ if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'de
             $ret = $comment->deleteComment($recordId, $commentId);
         }
     }
+<<<<<<< HEAD
+    
+    $response->setData($ret);
+} else {
+    $response->setData(0);
+}
+
+$response->send();
+=======
 
     print $ret;
 } else {
     print 0;
 }
+>>>>>>> 2.10

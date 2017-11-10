@@ -19,6 +19,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-31
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -45,7 +51,13 @@ if (!isset($items[0][2])) {
     $items[0][2] = 0;
 }
 
+<<<<<<< HEAD
+$response = new Response;
+
+switch($ajax_action) {
+=======
 switch ($ajax_action) {
+>>>>>>> 2.10
 
     // save active FAQs
     case 'save_active_records':
@@ -53,14 +65,22 @@ switch ($ajax_action) {
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
 
+<<<<<<< HEAD
+                $output = '';
+                foreach ($items as $item) {
+                    if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+                        $output .= $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
+=======
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
                         echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'active');
+>>>>>>> 2.10
                     }
                 }
+                $response->setContent($output);
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            $response->setContent($PMF_LANG['err_NotAuth']);
         }
         break;
 
@@ -70,14 +90,20 @@ switch ($ajax_action) {
             if (!empty($items)) {
                 $faq = new PMF_Faq($faqConfig);
 
+                $output = '';
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+<<<<<<< HEAD
+                        $output .= $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
+=======
                         echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'sticky');
+>>>>>>> 2.10
                     }
                 }
+                $response->setContent($output);
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            $response->setContent($PMF_LANG['err_NotAuth']);
         }
         break;
 
@@ -100,10 +126,10 @@ switch ($ajax_action) {
                 $searchHelper = new PMF_Helper_Search($faqConfig);
                 $searchHelper->setSearchterm($searchString);
 
-                echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                $response->setContent($searchHelper->renderAdminSuggestionResult($faqSearchResult));
             }
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            $response->setContent($PMF_LANG['err_NotAuth']);
         }
         break;
 
@@ -117,9 +143,14 @@ switch ($ajax_action) {
             $logging->logAdmin($user, 'Deleted FAQ ID '.$recordId);
 
             $faq->deleteRecord($recordId, $recordLang);
+<<<<<<< HEAD
+            $response->setContent($PMF_LANG['ad_entry_delsuc']);
+            
+=======
             echo $PMF_LANG['ad_entry_delsuc'];
+>>>>>>> 2.10
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            $response->setContent($PMF_LANG['err_NotAuth']);
         }
         break;
 
@@ -137,9 +168,11 @@ switch ($ajax_action) {
                     $faq->deleteQuestion((int) $questionId);
                 }
             }
-            echo $PMF_LANG['ad_entry_delsuc'];
+            $response->setContent($PMF_LANG['ad_entry_delsuc']);
         } else {
-            echo $PMF_LANG['err_NotAuth'];
+            $response->setContent($PMF_LANG['err_NotAuth']);
         }
         break;
 }
+
+$response->send();

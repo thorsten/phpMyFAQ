@@ -26,6 +26,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+if (!$user->perm->checkRight($user->getUserId(), "addtranslation")) {
+    unset($_SESSION['trans']);
+
+
+    $templateVars = array(
+        'PMF_LANG'  => $PMF_LANG,
+        'languages' => array()
+    );
+
+    $avaliableLanguages = array_keys(PMF_Language::getAvailableLanguages());
+    foreach ($languageCodes as $langCode => $langName) {
+        if (!in_array(strtolower($langCode), $avaliableLanguages)) {
+            $templateVars['languages'][$langCode] = $langName;
+=======
 if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
     echo $PMF_LANG['err_NotAuth'];
 
@@ -149,5 +164,12 @@ if (isset($_SESSION['trans'])) {
                     }
                 }
             );
+>>>>>>> 2.10
         }
-        </script>
+    }
+
+    $twig->loadTemplate('translation/add.twig')
+        ->display($templateVars);
+} else {
+    require 'noperm.php';
+}

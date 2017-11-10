@@ -32,6 +32,34 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();
+<<<<<<< HEAD
+    $id               = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $user_permission  = $category->getPermissions('user', array($id));
+    $group_permission = $category->getPermissions('group', array($id));
+    $selectedLanguage = PMF_Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
+
+    $twig->loadTemplate('category/translate.twig')
+        ->display(
+            array(
+                'PMF_LANG'        => $PMF_LANG,
+                'categoryName'    => $category->categoryName[$id]['name'],
+                'csrfToken'       => $user->getCsrfTokenFromSession(),
+                'languageOptions' => $category->getCategoryLanguagesToTranslate($id, $selectedLanguage),
+                'groupPermission' => $faqConfig->get('security.permLevel') !== 'basic' ? $group_permission[0] : -1,
+                'id'              => $id,
+                'parentId'        => $category->categoryName[$id]['parent_id'],
+                'showcat'         => $selectedLanguage !== $LANGCODE,
+                'translations'    => $category->getCategoryLanguagesTranslated($id),
+                'userOptions'     => $user->getAllUserOptions($category->categoryName[$id]['user_id']),
+                'userPermission'  => $user_permission[0]
+            )
+        );
+
+    unset($category, $id, $user_permission, $group_permission, $selectedLanguage);
+
+} else {
+    require 'noperm.php';
+=======
     $id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
@@ -145,4 +173,5 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
 } else {
     print $PMF_LANG['err_NotAuth'];
+>>>>>>> 2.10
 }

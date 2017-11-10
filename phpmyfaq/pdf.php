@@ -22,6 +22,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-12
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -92,8 +98,12 @@ $faq->setGroups($current_groups);
 $category = new PMF_Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
 
+<<<<<<< HEAD
+$pdf  = new PMF_Export_Pdf($faq, $category, $faqConfig);
+=======
 $pdf = new PMF_Export_Pdf($faq, $category, $faqConfig);
 $http = new PMF_Helper_Http();
+>>>>>>> 2.10
 
 if (true === $getAll) {
     $category->buildTree();
@@ -102,6 +112,14 @@ $tags = new PMF_Tags($faqConfig);
 
 session_cache_limiter('private');
 
+<<<<<<< HEAD
+if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
+    $filename = 'FAQs.pdf';
+    $pdfFile  = $pdf->generate(0, true, $lang);
+} elseif (is_null($currentCategory) || is_null($id)) {
+    Response::create('Wrong HTTP GET parameters values.', 403)->send();
+    exit;
+=======
 $headers = array(
     'Pragma: public',
     'Expires: 0',
@@ -111,6 +129,7 @@ $headers = array(
 if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
     $filename = 'FAQs.pdf';
     $pdfFile = $pdf->generate(0, true, $lang);
+>>>>>>> 2.10
 } else {
     if (is_null($currentCategory) || is_null($id)) {
         $http->redirect($faqConfig->getDefaultUrl());
@@ -124,12 +143,24 @@ if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
     $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
 }
 
+<<<<<<< HEAD
+$response = Response::create($pdfFile);
+$response->headers->set('Pragma', 'public');
+$response->headers->set('Expires', '0');
+$response->headers->set('Cache-Control', 'must-revalidate, post-check=0, pre-check=0');
+$response->headers->set('Content-type', 'application/pdf');
+
+if (preg_match("/MSIE/i", $_SERVER["HTTP_USER_AGENT"])) {
+    $response->headers->set('Content-Transfer-Encoding', 'binary');
+    $response->headers->set('Content-Disposition', 'attachment; filename=' . $filename);
+=======
 if (preg_match('/MSIE/i', $_SERVER['HTTP_USER_AGENT'])) {
     $headers[] = 'Content-type: application/pdf';
     $headers[] = 'Content-Transfer-Encoding: binary';
     $headers[] = 'Content-Disposition: attachment; filename='.$filename;
 } else {
     $headers[] = 'Content-Type: application/pdf';
+>>>>>>> 2.10
 }
 
-$http->sendWithHeaders($pdfFile, $headers);
+$response->send();

@@ -30,6 +30,38 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
+<<<<<<< HEAD
+    $categories      = $category->getAllCategories();
+    $userPermission  = $category->getPermissions('user', array($categoryId));
+    $groupPermission = $category->getPermissions('group', array($categoryId));
+
+    $templateVars = array(
+        'PMF_LANG'               => $PMF_LANG,
+        'allGroups'              => $groupPermission[0] == -1,
+        'allUsers'               => $userPermission[0] == -1,
+        'categoryId'             => $categoryId,
+        'categoryDescription'    => $categories[$categoryId]['description'],
+        'categoryLanguage'       => $categories[$categoryId]['lang'],
+        'categoryName'           => $categories[$categoryId]['name'],
+        'csrfToken'              => $user->getCsrfTokenFromSession(),
+        'parentId'               => $categories[$categoryId]['parent_id'],
+        'renderGroupPermissions' => false,
+        'restrictedGroups'       => $groupPermission[0] != -1,
+        'restrictedUsers'        => $userPermission[0] != -1,
+        'userOptionsOwner'       => $user->getAllUserOptions($categories[$categoryId]['user_id']),
+        'userOptionsPermissions' => $user->getAllUserOptions($userPermission[0])
+    );
+
+    if ($faqConfig->get('security.permLevel') != 'basic') {
+        $templateVars['renderGroupPermissions'] = true;
+        $templateVars['groupOptions']           = $user->perm->getAllGroupsOptions($groupPermission);
+    }
+
+    $twig->loadTemplate('category/edit.twig')
+        ->display($templateVars);
+
+    unset($templateVars, $categoryId, $category, $categories, $userPermission, $groupPermission);
+=======
 
     $categoryData = $category->getCategoryData($categoryId);
     $userPermission = $category->getPermissions('user', array($categoryId));
@@ -226,7 +258,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         });
     </script>
 <?php
+>>>>>>> 2.10
 
 } else {
-    echo $PMF_LANG['err_NotAuth'];
+    require 'noperm.php';
 }

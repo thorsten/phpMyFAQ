@@ -25,6 +25,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'backup')) {
+<<<<<<< HEAD
+    $twig->loadTemplate('backup/main.twig')
+        ->display(
+            array(
+                'PMF_LANG'  => $PMF_LANG,
+                'csrfToken' => $user->getCsrfTokenFromSession()
+            )
+        );
+} else {
+    require 'noperm.php';
+=======
     ?>
         <header class="row">
             <div class="col-lg-12">
@@ -90,4 +101,5 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
 } else {
     echo $PMF_LANG['err_NotAuth'];
+>>>>>>> 2.10
 }

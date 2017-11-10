@@ -278,7 +278,11 @@ class PMF_Mail
         // Sanity check
         if (!self::validateEmail($address)) {
             trigger_error(
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Mail.php
+                "<strong>Mail Class</strong>: Value '$address' is not a valid e-mail address!",
+=======
                 '<strong>Mail Class</strong>: '.$address.' is not a valid e-mail address!',
+>>>>>>> 2.10:phpmyfaq/src/PMF/Mail.php
                 E_USER_ERROR
             );
 

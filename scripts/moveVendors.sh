@@ -2,6 +2,13 @@
 
 cwd=`pwd`
 
+<<<<<<< HEAD
+mkdir -p $cwd/phpmyfaq/inc/libs/phpseclib/Crypt
+cp -r $cwd/vendor/phpseclib/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/inc/libs/phpseclib
+cp -r $cwd/vendor/kertz/twitteroauth/twitteroauth $cwd/phpmyfaq/inc/libs/twitteroauth
+cp -r $cwd/vendor/symfony/*/* $cwd/phpmyfaq/inc/libs/
+cp -r $cwd/vendor/twig/twig/lib/Twig $cwd/phpmyfaq/inc/libs/
+=======
 mkdir -p $cwd/phpmyfaq/src/libs/elasticsearch/src/Elasticsearch
 mkdir -p $cwd/phpmyfaq/src/libs/guzzlehttp/ringphp/src
 mkdir -p $cwd/phpmyfaq/src/libs/monolog/src/Monolog
@@ -34,3 +41,4 @@ cp $cwd/vendor/tecnickcom/tcpdf/*.php $cwd/phpmyfaq/src/libs/tcpdf
 
 cp -r $cwd/vendor/tecnickcom/tcpdf/config/*.php $cwd/phpmyfaq/src/libs/tcpdf/config
 cp -r $cwd/vendor/tecnickcom/tcpdf/include/*.php $cwd/phpmyfaq/src/libs/tcpdf/include
+>>>>>>> 2.10

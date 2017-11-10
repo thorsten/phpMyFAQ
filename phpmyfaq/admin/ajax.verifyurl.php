@@ -27,6 +27,13 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+use PMF\Helper\ResponseWrapper;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,43 +43,73 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new PMF_Helper_Http();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
+$response = new Response;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
+<<<<<<< HEAD
+    $response
+        ->setContent("disabled")
+        ->send();
+    exit;
+=======
     print 'disabled';
     exit();
+>>>>>>> 2.10
 }
 
 $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
+<<<<<<< HEAD
+    $response
+        ->setStatusCode(401)
+        ->send();
+    exit;
+=======
     header('HTTP/1.0 401 Unauthorized');
     header('Status: 401 Unauthorized');
     exit();
+>>>>>>> 2.10
 }
 
 $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
+<<<<<<< HEAD
+    $response
+        ->setStatusCode(401)
+        ->send();
+    exit;
+=======
     header('HTTP/1.0 401 Unauthorized');
     header('Status: 401 Unauthorized');
     exit();
+>>>>>>> 2.10
 }
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
 }
 
+<<<<<<< HEAD
+$linkverifier->parse_string($faq->faqRecord['content']);
+$linkverifier->VerifyURLs($faqConfig->get('main.referenceURL'));
+$linkverifier->markEntry($id, $lang);
+$response
+    ->setContent($linkverifier->getLinkStateString())
+    ->send();
+=======
 $linkVerifier->parseString($faq->faqRecord['content']);
 $linkVerifier->verifyURLs($faqConfig->getDefaultUrl());
 $linkVerifier->markEntry($id, $lang);
 print $linkVerifier->getLinkStateString();
 exit();
+>>>>>>> 2.10

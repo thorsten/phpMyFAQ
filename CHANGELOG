@@ -1,10 +1,23 @@
+<<<<<<< HEAD
+phpMyFAQ 3.0.0-dev
+Codename "Poseidon"
+=======
 phpMyFAQ 2.10.0-alpha
 Codename "Phobos"
+>>>>>>> 2.10
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
+<<<<<<< HEAD
+Version 3.0.0-dev - 2015-
+- added Symfony HTTP Foundation 2.4 (Alexander M. Turek, Thorsten)
+- added Twig 1.15 as new template engine (Alexander M. Turek, Thorsten)
+
+Version 2.9.0-dev 2014-
+- changed PHP requirement to PHP 5.4.4 and later (Thorsten)
+=======
 Version 2.10.0-alpha2 - 2017-10-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
@@ -86,6 +99,7 @@ Version 2.9.0 - 2016-05-13
 - added support for HHVM 3.4.2+ (Thorsten)
 - added support for Elasticsearch (Thorsten)
 - added new mobile first, touch-friendly default layout (Thorsten)
+>>>>>>> 2.10
 - added tag intersection based search (Tomer Weinberg, Thorsten)
 - added support for Markdown (Jerry van Kooten, Thorsten)
 - added permissions for guests (Thorsten)

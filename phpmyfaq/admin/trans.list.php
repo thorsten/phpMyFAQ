@@ -26,13 +26,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 clearstatcache();
+<<<<<<< HEAD
+unset($_SESSION['trans']);
+=======
 if (isset($_SESSION['trans'])) {
     unset($_SESSION['trans']);
 }
+>>>>>>> 2.10
 
 $langDir = PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'lang';
 $transDir = new DirectoryIterator($langDir);
 $isTransDirWritable = is_writable($langDir);
+<<<<<<< HEAD
+$tt                 = new PMF_TransTool;
+=======
 $tt = new PMF_TransTool();
 ?>
         <header class="row">
@@ -49,11 +56,60 @@ $tt = new PMF_TransTool();
                 </h2>
             </div>
         </header>
+>>>>>>> 2.10
 
-        <div class="row">
-            <div class="col-lg-12">
-                <p><?php echo $PMF_LANG['msgChooseLanguageToTranslate'] ?>:</p>
+$templateVars = array(
+    'PMF_LANG'                      => $PMF_LANG,
+    'isTransDirWritable'            => $isTransDirWritable,
+    'renderAddNewTranslationButton' => $permission["addtranslation"] && $isTransDirWritable,
+    'translations'                  => array()
+);
 
+<<<<<<< HEAD
+$sortedLangList = array();
+
+foreach ($transDir as $file) {
+    if ($file->isFile() && '.php' == PMF_String::substr($file, -4) && 'bak' != PMF_String::substr($file, -7, -4)) {
+        $lang = str_replace(array('language_', '.php'), '', $file);
+
+        /**
+         * English is our exemplary language which won't be changed
+         */
+        if ('en' == $lang) {
+            continue;
+        }
+
+        $sortedLangList[] = $lang;
+    }
+}
+
+sort($sortedLangList);
+
+foreach ($sortedLangList as $lang) {
+    $isLangFileWritable   = is_writable($langDir . DIRECTORY_SEPARATOR . "language_$lang.php");
+    $showActions          = $isTransDirWritable && $isLangFileWritable;
+    $translatedPercentage = $tt->getTranslatedPercentage(
+        $langDir . DIRECTORY_SEPARATOR . "language_en.php",
+        $langDir . DIRECTORY_SEPARATOR . "language_$lang.php"
+    );
+
+    $currentTranslation = array(
+        'editButtonUrl'          => '?action=transedit&translang=' . $lang,
+        'isLangFileWritable'     => $isLangFileWritable,
+        'lang'                   => $lang,
+        'name'                   => $languageCodes[strtoupper($lang)],
+        'renderDeleteButton'     => $permission["deltranslation"] && $showActions,
+        'renderEditButton'       => $permission["edittranslation"] && $showActions,
+        'renderSendToTeamButton' => $permission["edittranslation"] && $showActions,
+        'translatedPercentage'   => $translatedPercentage . '%'
+    );
+
+    $templateVars['translations'][] = $currentTranslation;
+}
+
+$twig->loadTemplate('translation/list.twig')
+    ->display($templateVars);
+=======
                 <?php if (!$isTransDirWritable):
                     echo '<p class="alert alert-danger">'.$PMF_LANG['msgLangDirIsntWritable'].'</p>';
                 endif; ?>
@@ -205,3 +261,4 @@ $tt = new PMF_TransTool();
             alert('<?php echo $PMF_LANG['msgTransToolFileSent'] ?>');
         }
         </script>
+>>>>>>> 2.10

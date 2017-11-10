@@ -27,6 +27,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
+    $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+
+    $templateVars = array(
+        'LANGCODE'               => $LANGCODE,
+        'PMF_LANG'               => $PMF_LANG,
+        'csrfToken'              => $user->getCsrfTokenFromSession(),
+        'parentId'               => $parentId,
+        'renderGroupPermissions' => false,
+        'userOptions'            => $user->getAllUserOptions()
+    );
+
+    $category = new PMF_Category($faqConfig, [], false);
+    $category->setUser($currentAdminUser);
+    $category->setGroups($currentAdminGroups);
+
+    if ($parentId > 0) {
+        $userAllowed                            = $category->getPermissions('user', array($parentId));
+        $groupsAllowed                          = $category->getPermissions('group', array($parentId));
+        $templateVars['userAllowed']            = $userAllowed[0];
+        $templateVars['groupsAllowed']          = $groupsAllowed;
+        $templateVars['parentCategoryName']     = $category->categoryName[$parentId]['name'];
+        $templateVars['parentCategoryLanguage'] = $languageCodes[PMF_String::strtoupper($category->categoryName[$parentId]['lang'])];
+    } elseif ($faqConfig->get('security.permLevel') != 'basic') {
+        $templateVars['renderGroupPermissions'] = true;
+        $templateVars['groupOptions']           = $user->perm->getAllGroupsOptions([]);
+    }
+=======
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -75,14 +104,18 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                     </div>
+>>>>>>> 2.10
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="description"><?php echo $PMF_LANG['ad_categ_desc'] ?>:</label>
-                        <div class="col-lg-4">
-                            <textarea id="description" name="description" rows="3" class="form-control"></textarea>
-                        </div>
-                    </div>
+    $twig->loadTemplate('category/add.twig')
+        ->display($templateVars);
 
+<<<<<<< HEAD
+    unset($templateVars, $parentId, $category, $userAllowed, $groupsAllowed);
+
+} else {
+    require 'noperm.php';
+}
+=======
                     <div class="form-group">
                         <div class="col-lg-offset-2 col-lg-4">
                             <div class="checkbox">
@@ -207,3 +240,4 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

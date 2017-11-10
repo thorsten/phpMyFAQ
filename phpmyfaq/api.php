@@ -18,6 +18,14 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-03
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use PMF\Helper\ResponseWrapper;
+
+=======
+>>>>>>> 2.10
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -25,12 +33,20 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'src/Bootstrap.php';
 
+<<<<<<< HEAD
+$response = new JsonResponse;
+
+// Send headers
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
+=======
 //
 // Send headers
 //
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
+>>>>>>> 2.10
 
 //
 // Set user permissions
@@ -263,4 +279,8 @@ if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
 }
 
 // print result as JSON
+<<<<<<< HEAD
+$response->setData($result)->send();
+=======
 echo json_encode($result);
+>>>>>>> 2.10

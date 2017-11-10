@@ -32,12 +32,16 @@ class PMF_System
     /**
      * Major version.
      */
-    const VERSION_MAJOR = 2;
+    const VERSION_MAJOR = 3;
 
     /**
      * Minor version.
      */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/System.php
+    const VERSION_MINOR = 0;
+=======
     const VERSION_MINOR = 10;
+>>>>>>> 2.10:phpmyfaq/src/PMF/System.php
 
     /**
      * Patchlevel.
@@ -79,13 +83,28 @@ class PMF_System
      *
      * @var array
      */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/System.php
+    private $_missingExtensions = [];
+=======
     private $missingExtensions = [];
+>>>>>>> 2.10:phpmyfaq/src/PMF/System.php
 
     /**
      * Supported databases for phpMyFAQ.
      *
      * @var array
      */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/System.php
+    private $_supportedDatabases = array(
+        'mysqli'    => 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x',
+        'pdo_mysql' => 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x (PDO_MYSQL, experimental)',
+        'pgsql'     => 'PostgreSQL 9.x',
+        'sqlite'    => 'SQLite (deprecated)',
+        'sqlite3'   => 'SQLite 3 (experimental)',
+        'mssql'     => 'MS SQL Server 2012 and later (deprecated)',
+        'sqlsrv'    => 'MS SQL Server 2012 Driver for PHP'
+    );
+=======
     private $supportedDatabases = [
         'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x and later' ],
         'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x' ],
@@ -93,6 +112,7 @@ class PMF_System
         'mssql' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated)' ],
         'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP']
     ];
+>>>>>>> 2.10:phpmyfaq/src/PMF/System.php
 
     /**
      * Database handle.
@@ -195,9 +215,17 @@ class PMF_System
     {
         $retVal = [];
         foreach ($this->getSupportedDatabases() as $extension => $database) {
+<<<<<<< HEAD:phpmyfaq/inc/PMF/System.php
+            if (extension_loaded($extension)) {
+                // prevent MySQLi with zend.ze1_compatibility_mode enabled due to a few cloning isssues
+                if (($extension == 'mysqli') && ini_get('zend.ze1_compatibility_mode')) {
+                    continue;
+                }
+=======
             if (extension_loaded($extension) && version_compare(PHP_VERSION, $database[0]) >= 0) {
+>>>>>>> 2.10:phpmyfaq/src/PMF/System.php
                 if ($html) {
-                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database[1]);
+                    $retVal[] = sprintf('<option value="%s">%s</option>', $extension, $database);
                 } else {
                     $retVal[$extension] = $database;
                 }
@@ -278,7 +306,11 @@ class PMF_System
      */
     public function checkphpMyFAQInstallation()
     {
+<<<<<<< HEAD:phpmyfaq/inc/PMF/System.php
+        if (is_file(PMF_ROOT_DIR . '/config/database.php')) {
+=======
         if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR.'/config/database.php')) {
+>>>>>>> 2.10:phpmyfaq/src/PMF/System.php
             return false;
         } else {
             return true;
@@ -388,6 +420,8 @@ class PMF_System
 
     /**
      * Print out the HTML5 Footer.
+     *
+     * @deprecated
      *
      * @param bool $onePageBack
      */

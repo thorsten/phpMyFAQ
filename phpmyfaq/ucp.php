@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-01-12
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -72,6 +78,13 @@ if ($user instanceof PMF_User) {
 
 } else {
     // Redirect to login
+<<<<<<< HEAD
+    RedirectResponse::create($faqConfig->get('main.referenceURL') . '/')
+        ->send();
+    exit;
+}
+=======
     header('Location: '.$faqConfig->getDefaultUrl());
     exit();
 }
+>>>>>>> 2.10

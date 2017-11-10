@@ -26,6 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+=======
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -33,11 +35,32 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </div>
         </header>
 <?php
+>>>>>>> 2.10
 if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();
+<<<<<<< HEAD
+    $id         = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+
+    $twig->loadTemplate('category/delete.twig')
+        ->display(
+            array(
+                'LANGCODE'            => $LANGCODE,
+                'PMF_LANG'            => $PMF_LANG,
+                'categoryDescription' => $categories[$id]['description'],
+                'categoryName'        => $categories[$id]['name'],
+                'csrfToken'           => $user->getCsrfTokenFromSession(),
+                'id'                  => $id
+            )
+        );
+
+    unset($category, $categories, $id);
+} else {
+    require 'noperm.php';
+}
+=======
     $id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
         <div class="row">
@@ -98,3 +121,4 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

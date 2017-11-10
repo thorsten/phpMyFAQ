@@ -16,6 +16,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-20
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -31,6 +37,8 @@ $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $att = PMF_Attachment_Factory::create($attId);
 
+$response = new Response;
+
 if ($att) {
     switch ($ajaxAction) {
         case 'delete':
@@ -41,10 +49,18 @@ if ($att) {
             }
 
             if ($att->delete()) {
+<<<<<<< HEAD
+                $response->setContent($PMF_LANG['msgAttachmentsDeleted']);
+            } else {
+                $response->setContent($PMF_LANG['ad_att_delfail']);
+=======
                 echo $PMF_LANG['msgAttachmentsDeleted'];
             } else {
                 echo $PMF_LANG['ad_att_delfail'];
+>>>>>>> 2.10
             }
             break;
     }
 }
+
+$response->send();

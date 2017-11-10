@@ -5,7 +5,11 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  *
+<<<<<<< HEAD
+ * PHP Version 5.3
+=======
  * PHP Version 5.6
+>>>>>>> 2.10
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -56,8 +60,11 @@ require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/Psr4ClassLoader.php';
 
 $loader = new UniversalClassLoader();
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader->registerPrefix('Twig_', PMF_INCLUDE_DIR . '/libs');
 $loader->register();
 
+<<<<<<< HEAD
+=======
 $psr4Loader = new Psr4ClassLoader();
 $psr4Loader->addPrefix('Symfony', PMF_INCLUDE_DIR.'/libs/symfony/');
 $psr4Loader->register();
@@ -124,6 +131,7 @@ $psr4Loader->register();
 
         <div class="row">
 <?php
+>>>>>>> 2.10
 //
 // Initialize static string wrapper
 //
@@ -132,17 +140,72 @@ PMF_String::init('en');
 $installer = new PMF_Installer();
 $system = new PMF_System();
 
-$installer->checkBasicStuff();
-$installer->checkFilesystemPermissions();
+//
+// Initializing Twig
+//
+$twig = new Twig_Environment(
+    new Twig_Loader_Filesystem(PMF_ROOT_DIR . '/setup/assets/twig')
+);
 
+<<<<<<< HEAD
+$tplLayoutVars = array(
+    'version'           => PMF_System::getVersion(),
+    'currentYear'       => date('Y'),
+    'criticalErrors'    => $installer->checkBasicStuff(),
+    'filePermErrors'    => $installer->checkFilesystemPermissions(),
+    'nonCriticalErrors' => $installer->checkNoncriticalSettings()
+);
+=======
 // not yet POSTed
 if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
     $installer->checkNoncriticalSettings()
 ?>
         </div>
+>>>>>>> 2.10
 
-        <form class="form-horizontal" action="index.php" method="post">
+$twig->loadTemplate('layout.twig')->display($tplLayoutVars);
+
+// not yet POSTed
+if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
+
+    $databases= $system->getSupportedSafeDatabases(true);
+    // Whether the only supported RDBMS is sqlite and/or sqlite3 (in any order):
+    $onlySqlite= count($databases)<=2 && strpos(strtolower($databases[0]), 'sqlite')!==FALSE
+            && ( count($databases)===1 || strpos(strtolower($databases[1]), 'sqlite')!==FALSE );
+    $tplDatabaseVars = array(
+        'databases' => $databases,
+        'dirname'   => dirname(__DIR__),
+        'onlySqlite' => $onlySqlite
+    );
+    ?>
+
+    <form class="form-horizontal" action="index.php" method="post">
         <div class="row">
+<<<<<<< HEAD
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <?php
+                $twig->loadTemplate('database.twig')->display($tplDatabaseVars);
+                ?>
+            </div>
+
+            <?php if (extension_loaded('ldap')): ?>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <?php
+                $twig->loadTemplate('ldap.twig')->display($tplDatabaseVars);
+                ?>
+            </div>
+        </div>
+        <div class="row">
+            <?php endif; ?>
+
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <?php
+                $tplConfigVars = array(
+                    'languageOptions' => $installer->renderLanguageOptions($languageCodes)
+                );
+                $twig->loadTemplate('mainconfig.twig')->display($tplConfigVars);
+                ?>
+=======
             <div class="col-6">
                 <fieldset>
                 <legend>Database setup</legend>
@@ -356,6 +419,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                 </fieldset>
+>>>>>>> 2.10
             </div>
 
             <?php if (extension_loaded('curl')): ?>
@@ -403,6 +467,17 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         </div>
 
+<<<<<<< HEAD
+        <div class="row text-center">
+            <button class="btn btn-primary btn-lg" type="submit">
+                Click to install phpMyFAQ <?php echo PMF_System::getVersion(); ?>
+            </button>
+        </div>
+        <div class="row" style="padding-left: 20px;">
+            <p class="alert alert-info" style="margin-top: 20px;">
+                Your password will be saved with a <strong><?php echo PMF_ENCRYPTION_TYPE; ?></strong>
+                encryption. You can change the encryption type for passwords in <em>config/constants.php</em>.
+=======
         <div class="row" style="padding-left: 20px; text-align: center;">
             <div class="form-group">
                 <button class="btn btn-success btn-lg" type="submit">
@@ -416,23 +491,24 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
                 Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE ?></strong>. You can
                 change the encryption type for passwords in <em>config/constants.php</em>.
+>>>>>>> 2.10
             </p>
         </div>
-        </form>
-<?php
+    </form>
+    <?php
     PMF_System::renderFooter();
 } else {
     $installer->startInstall();
+<<<<<<< HEAD
+=======
     ?>
         <p class="alert alert-success">
             Wow, looks like the installation worked like a charm. This is pretty cool, isn't it? :-)
         </p>
+>>>>>>> 2.10
 
-        <p>
-            You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
-            <a href="../admin/index.php">admin section</a>.
-         </p>
-<?php
+    $twig->loadTemplate('success.twig')->display([]);
+
     $installer->cleanUpFiles();
     PMF_System::renderFooter();
 }

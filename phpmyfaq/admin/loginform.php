@@ -18,6 +18,16 @@
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
  */
+<<<<<<< HEAD
+
+$templateVars = array(
+    'PMF_LANG'             => $PMF_LANG,
+    'displayError'         => false,
+    'displayLogoutMessage' => $action == 'logout',
+    'forceSecureSwitch'    => false
+);
+
+=======
 ?>
         <div class="row">
             <div class="col-md-4 col-md-offset-4">
@@ -29,23 +39,17 @@
                     </div>
                     <div class="panel-body">
 <?php
+>>>>>>> 2.10
 if (isset($error) && 0 < strlen($error)) {
-    $message = sprintf(
-        '<p class="alert alert-danger">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-        $error
-    );
-} else {
-    $message = sprintf('<p>%s</p>', $PMF_LANG['ad_auth_insert']);
-}
-if ($action == 'logout') {
-    $message = sprintf(
-        '<p class="alert alert-success">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
-        $PMF_LANG['ad_logout']
-    );
+    $templateVars['displayError'] = true;
+    $templateVars['errorMessage'] = $error;
 }
 
+<<<<<<< HEAD
+if (!isset($_SERVER['HTTPS']) && $faqConfig->get('security.useSslForLogins')) {
+    $templateVars['forceSecureSwitch'] = true;
+    $templateVars['secureSwitchUrl']   = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+=======
 if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
@@ -101,8 +105,8 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
         $_SERVER['HTTP_HOST'],
         $_SERVER['REQUEST_URI'],
         $PMF_LANG['msgSecureSwitch']);
+>>>>>>> 2.10
 }
-?>
-                        </form>
-                    </div>
-                </div>
+
+$twig->loadTemplate('loginform.twig')
+    ->display($templateVars);

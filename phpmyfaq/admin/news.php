@@ -29,6 +29,35 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $news = new PMF_News($faqConfig);
 
+<<<<<<< HEAD
+if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
+    $twig->loadTemplate('news/add.twig')
+        ->display(
+            array(
+                'PMF_LANG'         => $PMF_LANG,
+                'languageSelector' => PMF_Language::selectLanguages($LANGCODE, false, array(), 'langTo'),
+                'userDisplayName'  => $user->getUserData('display_name'),
+                'userEmail'        => $user->getUserData('email')
+            )
+        );
+
+} elseif ('news' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
+    $date       = new PMF_Date($faqConfig);
+    $newsHeader = $news->getNewsHeader();
+    foreach($newsHeader as $key => $newsItem) {
+        $newsHeader[$key]['date'] = $date->format($newsItem['date']);
+    }
+
+    $twig->loadTemplate('news/list.twig')
+        ->display(
+            array(
+                'PMF_LANG'   => $PMF_LANG,
+                'newsHeader' => $newsHeader
+            )
+        );
+
+    unset($date, $newsHeader, $key, $newsItem);
+=======
 $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfCheck = false;
@@ -241,9 +270,21 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         </div>
 <?php
 
+>>>>>>> 2.10
 } elseif ('editnews' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
     $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
+<<<<<<< HEAD
+    $dateStart = ($newsData['dateStart'] != '00000000000000' ? PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
+    $dateEnd   = ($newsData['dateEnd'] != '99991231235959' ? PMF_Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
+    $newsId   = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $oComment = new PMF_Comment($faqConfig);
+    $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
+
+    foreach ($comments as $item) {
+        $item['date'] = PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false);
+    }
+=======
     ?>
         <header class="row">
             <div class="col-lg-12">
@@ -473,11 +514,22 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?></h2>
             </div>
         </header>
+>>>>>>> 2.10
 
+    $twig->loadTemplate('news/edit.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'comments' => $comments,
+                'commentType' => PMF_Comment::COMMENT_TYPE_NEWS,
+                'dateEnd' => $dateEnd,
+                'dateStart' => $dateStart,
+                'languageSelector' => PMF_Language::selectLanguages($newsData['lang'], false, array(), 'langTo'),
+                'newsData' => $newsData
+            )
+        );
+} elseif ('savenews' == $action && $user->perm->checkRight($user->getUserId(), "addnews")) {
 
-        <div class="row">
-            <div class="col-lg-12">
-<?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -507,6 +559,18 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         'target' => (is_null($target)) ? '' : $target,
     );
 
+<<<<<<< HEAD
+    $success = $news->addNewsEntry($newsData);
+
+    $twig->loadTemplate('news/save.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'success'  => $success
+            )
+        );
+} elseif ('updatenews' == $action && $user->perm->checkRight($user->getUserId(), "editnews")) {
+=======
     if ($news->addNewsEntry($newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
@@ -526,10 +590,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?></h2>
             </div>
         </header>
+>>>>>>> 2.10
 
-        <div class="row">
-            <div class="col-lg-12">
-<?php
     $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $header = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
@@ -560,6 +622,44 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     );
 
     $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+<<<<<<< HEAD
+    $success = $news->updateNewsEntry($newsId, $newsData);
+
+    $twig->loadTemplate('news/update.twig')
+        ->display(
+            array(
+                'PMF_LANG' => $PMF_LANG,
+                'success'  => $success
+            )
+        );
+} elseif ('deletenews' == $action && $user->perm->checkRight($user->getUserId(), "delnews")) {
+
+    $precheck  = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
+    $delete_id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+
+    if ('no' == $precheck) {
+        $twig->loadTemplate('news/delete_check.twig')
+            ->display(
+                array(
+                    'PMF_LANG' => $PMF_LANG,
+                    'deleteId' => $delete_id
+                )
+            );
+
+    } else {
+        $delete_id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $news->deleteNews($delete_id);
+
+        $twig->loadTemplate('news/delete_success.twig')
+            ->display(
+                array(
+                    'PMF_LANG' => $PMF_LANG
+                )
+            );
+    }
+} else {
+    require 'noperm.php';
+=======
     if ($news->updateNewsEntry($newsId, $newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
@@ -625,4 +725,5 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];
+>>>>>>> 2.10
 }

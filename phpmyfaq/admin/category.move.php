@@ -39,6 +39,30 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->getCategories($parent_id, false);
     $category->buildTree($parent_id);
 
+<<<<<<< HEAD
+    $templateVars = array(
+        'PMF_LANG'        => $PMF_LANG,
+        'categoryName'    => $category->categories[$id]['name'],
+        'categoryOptions' => array(),
+        'csrfToken'       => $user->getCsrfTokenFromSession(),
+        'id'              => $id
+    );
+
+    foreach ($category->categories as $cat) {
+        if ($id != $cat["id"]) {
+            $templateVars['categoryOptions'][$cat['id']] = $cat['name'];
+        }
+    }
+
+    $twig->loadTemplate('category/move.twig')
+        ->display($templateVars);
+
+    unset($templateVars, $category, $id, $parent_id, $cat);
+
+} else {
+    require 'noperm.php';
+}
+=======
     $header = sprintf('%s: <em>%s</em>',
         $PMF_LANG['ad_categ_move'],
         $category->categories[$id]['name']
@@ -94,3 +118,4 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

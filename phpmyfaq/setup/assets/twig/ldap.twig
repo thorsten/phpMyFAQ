@@ -1,0 +1,56 @@
+                <fieldset>
+                    <legend>LDAP setup</legend>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_enabled">&nbsp;</label>
+                        <div class="col-sm-8">
+                            <label class="checkbox-inline">
+                                <input id="ldap_enabled" type="checkbox" name="ldap_enabled" value="yes">
+                                Enable LDAP support?
+                            </label>
+                            <p class="help-block">You can enable LDAP later if you like.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_server">Host:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ldap_server" id="ldap_server" class="form-control"
+                                   placeholder="127.0.0.1">
+                            <p class="help-block">Please enter the host of your LDAP server.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_port">Port:</label>
+                        <div class="col-sm-8">
+                            <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
+                            <p class="help-block">Please enter the port of your LDAP server.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_user">User DN:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ldap_user" id="ldap_user" class="form-control">
+                            <p class="help-block">Please enter your specified RDN username.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_password">Password:</label>
+                        <div class="col-sm-8">
+                            <input name="ldap_password" type="password" id="ldap_password" class="form-control">
+                            <p class="help-block">Please enter your LDAP password.</p>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label" for="ldap_base">Base DN:</label>
+                        <div class="col-sm-8">
+                            <input type="text" name="ldap_base" id="ldap_base" class="form-control">
+                            <p class="help-block">
+                                Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
+                            </p>
+                        </div>
+                    </div>
+                    <p class="alert alert-info">
+                        You can add additional LDAP configuration and more LDAP servers in the file
+                        config/constants_ldap.php.
+                    </p>
+
+                </fieldset>

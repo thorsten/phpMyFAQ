@@ -32,6 +32,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
 
+<<<<<<< HEAD
+    $id        = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $parent_id = $category->categoryName[$id]['parent_id'];
+
+    $templateVars = array(
+        'PMF_LANG'             => $PMF_LANG,
+        'categoryName'         => $category->categoryName[$id]['name'],
+        'categoryOptions'      => array(),
+        'csrfToken'            => $user->getCsrfTokenFromSession(),
+        'displayMainCatOption' => $parent_id != 0,
+        'id'                   => $id
+    );
+
+    foreach ($category->catTree as $cat) {
+        $indent = str_repeat('…', $cat['indent']);
+=======
     $id = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     $parent_id = $category->categoryName[$id]['parent_id'];
     $header = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $category->categoryName[$id]['name']);
@@ -61,15 +77,21 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         for ($j = 0; $j < $cat['indent']; ++$j) {
             $indent .= '...';
         }
+>>>>>>> 2.10
         if ($id != $cat['id']) {
-            printf("<option value=\"%s\">%s%s</option>\n", $cat['id'], $indent, $cat['name']);
+            $templateVars['categoryOptions'][$cat['id']] = $indent . $cat['name'];
         }
     }
 
-    if ($parent_id != 0) {
-        printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
-    }
+    $twig->loadTemplate('category/cut.twig')
+        ->display($templateVars);
 
+<<<<<<< HEAD
+    unset($templateVars, $category, $id, $cat, $indent);
+} else {
+    require 'noperm.php';
+}
+=======
     ?>
                             </select>
                         </div>
@@ -90,3 +112,4 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

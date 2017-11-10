@@ -19,6 +19,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-05-12
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,6 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$response = new JsonResponse;
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (is_null($csrfToken)) {
@@ -96,16 +103,35 @@ switch ($ajax_action) {
                 $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
             }
         }
+<<<<<<< HEAD
+        
+        $response->setData(1);
+=======
 
         echo 1;
+>>>>>>> 2.10
     break;
     
     case 'save_translated_lang':
 
         if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
-            echo $PMF_LANG['err_NotAuth'];
-            exit;
+            $response->setData($PMF_LANG['err_NotAuth']);
+            break;
         }
+<<<<<<< HEAD
+        
+        $lang     = strtolower($_SESSION['trans']['rightVarsOnly']["PMF_LANG[metaLanguage]"]);
+        $filename = PMF_ROOT_DIR . "/lang/language_" . $lang . ".php";
+        
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
+            $response->setData(0);
+            break;
+        }     
+        
+        if (!copy($filename, PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+            $response->setData(0);
+            break;
+=======
 
         $lang = strtolower($_SESSION['trans']['rightVarsOnly']['PMF_LANG[metaLanguage]']);
         $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
@@ -118,6 +144,7 @@ switch ($ajax_action) {
         if (!copy($filename, PMF_ROOT_DIR.'/lang/language_'.$lang.'.bak.php')) {
             echo 0;
             exit;
+>>>>>>> 2.10
         }
 
         $newFileContents = '';
@@ -142,19 +169,48 @@ switch ($ajax_action) {
         $newFileContents .= implode("\n", $tmpLines);
 
         unset($_SESSION['trans']);
+<<<<<<< HEAD
+        
+        $retval = @file_put_contents($filename, $newFileContents);
+        $response->setData(intval($retval));
+    break;
+    
+=======
 
         $retval = file_put_contents($filename, $newFileContents);
         echo intval($retval);
         break;
 
+>>>>>>> 2.10
     case 'remove_lang_file':
 
         if (!$user->perm->checkRight($user->getUserId(), 'deltranslation')) {
-            echo $PMF_LANG['err_NotAuth'];
-            exit;
+            $response->setData($PMF_LANG['err_NotAuth']);
+            break;
         }
 
         $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+<<<<<<< HEAD
+        
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
+            $response->setData(0);
+            break;
+        }     
+        
+        if (!copy(PMF_ROOT_DIR . "/lang/language_$lang.php", PMF_ROOT_DIR . "/lang/language_$lang.bak.php")) {
+            $response->setData(0);
+            break;
+        }
+        
+        if (!unlink(PMF_ROOT_DIR . "/lang/language_$lang.php")) {
+            $response->setData(0);
+            break;
+        }
+
+        $response->setData(1);
+    break;
+    
+=======
 
         if (!is_writable(PMF_ROOT_DIR.'/lang')) {
             echo 0;
@@ -174,9 +230,33 @@ switch ($ajax_action) {
         echo 1;
         break;
 
+>>>>>>> 2.10
     case 'save_added_trans':
 
         if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
+<<<<<<< HEAD
+            $response->setData($PMF_LANG['err_NotAuth']);
+            break;
+        }        
+        
+        if (!is_writable(PMF_ROOT_DIR . "/lang")) {
+            $response->setData(0);
+            break;
+        }
+        
+        $langCode    = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
+        $langName    = @$languageCodes[$langCode];
+        $langCharset = "UTF-8";
+        $langDir     = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+        $langNPlurals= strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
+        $langDesc    = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
+        $author      = (array) @$_POST['author'];
+        
+        if(empty($langCode) || empty($langName) || empty($langCharset) ||
+            empty($langDir) || empty($langDesc) || empty($author)) {
+            $response->setData(0);
+            break;
+=======
             echo $PMF_LANG['err_NotAuth'];
             exit;
         }
@@ -198,6 +278,7 @@ switch ($ajax_action) {
            empty($langDir) || empty($langDesc) || empty($author)) {
             echo 0;
             exit;
+>>>>>>> 2.10
         }
 
         $fileTpl = <<<FILE
@@ -234,8 +315,13 @@ FILE;
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
                                      $langCharset, strtolower($langCode), $langName, $langDir, $langNPlurals);
 
+<<<<<<< HEAD
+        $retval = @file_put_contents(PMF_ROOT_DIR . '/lang/language_' . strtolower($langCode) . '.php', $fileTpl);
+        $response->setData(intval($retval));
+=======
         $retval = @file_put_contents(PMF_ROOT_DIR.'/lang/language_'.strtolower($langCode).'.php', $fileTpl);
         echo intval($retval);
+>>>>>>> 2.10
     break;
 
     case 'send_translated_file':
@@ -244,8 +330,8 @@ FILE;
         $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
 
         if (!file_exists($filename)) {
-            echo 0;
-            exit;
+            $response->setData(0);
+            break;
         }
 
         $letterTpl = '';
@@ -260,6 +346,12 @@ FILE;
         $mail->addTo('thorsten@phpmyfaq.de');
         $mail->addAttachment($filename, null, 'text/plain');
 
+<<<<<<< HEAD
+        $response->setData((int) $mail->send());
+=======
         echo (int) $mail->send();
+>>>>>>> 2.10
     break;
 }
+
+$response->send();

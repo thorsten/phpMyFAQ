@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/HttpStreamer.php
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10:phpmyfaq/src/PMF/HttpStreamer.php
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -95,6 +101,9 @@ class PMF_HttpStreamer
     private $disposition;
 
     /**
+<<<<<<< HEAD:phpmyfaq/inc/PMF/HttpStreamer.php
+     * HTTP streaming data length
+=======
      * HTTP streaming data.
      *
      * @var string
@@ -103,25 +112,45 @@ class PMF_HttpStreamer
 
     /**
      * HTTP streaming data length.
+>>>>>>> 2.10:phpmyfaq/src/PMF/HttpStreamer.php
      *
      * @var int
      */
     private $size;
 
     /**
-     * Constructor.
-     *
-     * @param string $type    Type
-     * @param string $content Content
-     *
-     * @return PMF_HttpStreamer
+<<<<<<< HEAD:phpmyfaq/inc/PMF/HttpStreamer.php
+     * @var Response
      */
+    private $response;
+
+    /**
+     * Constructor
+=======
+     * Constructor.
+>>>>>>> 2.10:phpmyfaq/src/PMF/HttpStreamer.php
+     *
+     * @param Response $response
+     * @param string   $type     Type
+     * @param string   $content  Content
+     */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/HttpStreamer.php
+    public function __construct(Response $response, $type, $content)
+    {
+        $this->response    = $response;
+        $this->type        = $type;
+        $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
+        $this->size        = strlen($content);
+
+        $response->setContent($content);
+=======
     public function __construct($type, $content)
     {
         $this->type = $type;
         $this->disposition = self::HTTP_CONTENT_DISPOSITION_INLINE;
         $this->content = $content;
         $this->size = strlen($this->content);
+>>>>>>> 2.10:phpmyfaq/src/PMF/HttpStreamer.php
     }
 
     /**
@@ -149,10 +178,7 @@ class PMF_HttpStreamer
         if (self::EXPORT_BUFFER_ENABLE) {
             ob_start();
         }
-        // Send the right HTTP headers
-        $this->_setHttpHeaders();
-        // Send the raw content
-        $this->_streamContent();
+        $this->response->send();
         // Manage output buffer flushing
         if (self::EXPORT_BUFFER_ENABLE) {
             ob_end_flush();
@@ -212,6 +238,28 @@ class PMF_HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
+<<<<<<< HEAD:phpmyfaq/inc/PMF/HttpStreamer.php
+        $this->response->headers->set("Last-Modified", gmdate("D, d M Y H:i:s") . " GMT");
+        $this->response->headers->set("Expires", "0");
+        $this->response->headers->set("Cache-Control", "private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0");
+        $this->response->headers->set("Pragma", "no-cache");
+
+        // 2. Set the correct values for file streaming
+        if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) && 
+             isset($_SERVER["HTTP_USER_AGENT"]) && !(strpos($_SERVER["HTTP_USER_AGENT"], "MSIE") === false)) {
+            $this->response->headers->set("Content-Type", "application/force-download");
+        } else {
+            $this->response->headers->set("Content-Type", $mimeType);
+        }
+        // RFC2616, �19.5.1: $filename must be a quoted-string
+        $this->response->headers->set("Content-Disposition", $this->disposition."; filename=\"" . PMF_Export::getExportTimestamp() . "_" . $filename."\"");
+        if (!empty($description)) {
+            $this->response->headers->set("Content-Description", $description);
+        }
+        $this->response->headers->set("Content-Transfer-Encoding", "binary");
+        $this->response->headers->set("Accept-Ranges", "none");
+        $this->response->headers->set("Content-Length", $this->size);
+=======
         header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
         header('Expires: 0');
         header('Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
@@ -239,5 +287,6 @@ class PMF_HttpStreamer
     private function _streamContent()
     {
         print $this->content;
+>>>>>>> 2.10:phpmyfaq/src/PMF/HttpStreamer.php
     }
 }

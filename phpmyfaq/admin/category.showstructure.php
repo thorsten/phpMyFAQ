@@ -27,11 +27,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+=======
 ?>
         <header>
             <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
+>>>>>>> 2.10
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category = new PMF_Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -41,6 +44,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $all_languages = [];
     $all_lang = [];
     $showcat = PMF_Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
+
+    $templateVars = array(
+        'PMF_LANG'       => $PMF_LANG,
+        'allLanguages'   => array($currentLanguage),
+        'categoryTable'  => array(),
+        'errorMessage'   => '',
+        'successMessage' => ''
+    );
 
     // translate an existing category
     if (!is_null($showcat) && $showcat == 'yes') {
@@ -55,14 +66,26 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
-            printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
+            $templateVars['successMessage'] = $PMF_LANG['ad_categ_translated'];
         } else {
-            printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
+            $templateVars['errorMessage'] = $faqConfig->getDb()->error();
         }
     }
 
     $category->getMissingCategories();
     $category->buildTree();
+<<<<<<< HEAD
+
+    // get languages in use for all categories
+    $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');
+    foreach ($all_languages as $lang) {
+        $all_lang[$lang] = $languageCodes[strtoupper($lang)];
+    }
+    asort($all_lang);
+    foreach ($all_lang as $lang => $language) {
+        if ($language != $currentLanguage) {
+            $templateVars['allLanguages'][] = $language;
+=======
     ?>
         <table class="table table-striped">
         <thead>
@@ -91,13 +114,25 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $indent = '';
         for ($i = 0; $i < $cat['indent']; ++$i) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
+>>>>>>> 2.10
         }
-        // category translated in this language?
-        ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
+    }
 
-        // show category name in actual language
-        print '<td>';
+    foreach ($category->catTree as $cat) {
+        $currentRow = array(
+            'catname'               => $cat['name'],
+            'indent'                => str_repeat('&nbsp;&nbsp;&nbsp;', $cat['indent']),
+            'translations'          => array(),
+            'renderTranslateButton' => $cat['lang'] != $LANGCODE,
+            'translateButtonUrl'    => sprintf('?action=translatecategory&cat=%s&trlang=%s', $cat['id'], $LANGCODE)
+        );
+
+        // category translated in this language?
         if ($cat['lang'] != $LANGCODE) {
+<<<<<<< HEAD
+            $currentRow['catname'] .= ' (' . $languageCodes[strtoupper($cat['lang'])] . ')';
+        }
+=======
             // translate category
            printf(
                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
@@ -112,6 +147,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             $indent,
             $catname);
         print "</td>\n";
+>>>>>>> 2.10
 
         // get languages in use for categories
         $id_languages = $category->getCategoryLanguagesTranslated($cat['id']);
@@ -121,7 +157,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 continue;
             }
 
+            $currentTranslation = array(
+                'isTranslated' => false,
+                'tooltip'      => ''
+            );
+
             if (array_key_exists($language, $id_languages)) {
+<<<<<<< HEAD
+                $currentTranslation['isTranslated'] = true;
+                $currentTranslation['tooltip']      = sprintf(
+                    '%s: %s',
+=======
                 $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf('<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
@@ -129,10 +175,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 );
                 printf(
                     '<span title="%s: %s" class="label label-success"><i aria-hidden="true" class="fa fa-check fa fa-white"></i></span></td>',
+>>>>>>> 2.10
                     $PMF_LANG['ad_categ_titel'],
-                    $spokenLanguage
+                    PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language])
                 );
             } else {
+<<<<<<< HEAD
+                $currentTranslation['translateButtonUrl'] = sprintf('?action=translatecategory&cat=%s&trlang=%s', $cat['id'], $lang);
+                $currentTranslation['tooltip']            = $PMF_LANG['ad_categ_translate'];
+=======
                 printf('<td><a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s">',
                     $currentLink,
                     $cat['id'],
@@ -142,11 +193,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     '<span title="%s" class="label label-inverse"><i aria-hidden="true" class="fa fa-share fa fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
+>>>>>>> 2.10
             }
-            print "</td>\n";
+
+            $currentRow['translations'][] = $currentTranslation;
         }
-        print "</tr>\n";
+
+        $templateVars['categoryTable'][] = $currentRow;
     }
+<<<<<<< HEAD
+
+    $twig->loadTemplate('category/showstructure.twig')
+        ->display($templateVars);
+} else {
+    require 'noperm.php';
+}
+=======
     ?>
         </tbody>
         </table>
@@ -155,3 +217,4 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 } else {
     print $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

@@ -1,5 +1,28 @@
 {
   "name": "phpMyFAQ",
+<<<<<<< HEAD
+  "version": "3.0.0-dev",
+  "description": "phpMyFAQ",
+  "main": "Gruntfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-clean": "~0.4.1",
+    "grunt-contrib-copy": "~0.4.1",
+    "grunt-contrib-concat": "~0.3.0",
+    "grunt-contrib-csslint": "~0.1.2",
+    "grunt-contrib-cssmin": "~0.6.1",
+    "grunt-contrib-jshint": "~0.6.0",
+    "grunt-contrib-less": "~0.6.1",
+    "grunt-contrib-uglify": "~0.2.2",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-bower-task": "~0.2.3",
+    "load-grunt-tasks": "^0.4.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/thorsten/phpMyFAQ.git"
+=======
   "version": "2.10.0-alpha2",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
@@ -34,6 +57,7 @@
     "grunt-modernizr": "^1.0.0",
     "grunt-sass": "^2.0.0",
     "load-grunt-tasks": "^3.5.2"
+>>>>>>> 2.10
   },
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",

@@ -18,6 +18,13 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-04
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+use PMF\Helper\ResponseWrapper;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -33,9 +40,9 @@ $usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
 $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 // Send headers
-$http = new PMF_Helper_Http();
-$http->setContentType('application/json');
-$http->addHeader();
+$response = new JsonResponse;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
 
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
@@ -52,7 +59,11 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                 $users->name = $singleUser['login'];
                 $allUsers['results'][] = $users;
             }
+<<<<<<< HEAD
+            $response->setData($users);
+=======
             echo json_encode($allUsers);
+>>>>>>> 2.10
             break;
 
         case 'get_user_data':
@@ -60,6 +71,15 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             $userdata = [];
             $userdata = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
+<<<<<<< HEAD
+            $userdata['login']  = $user->getLogin();
+            $response->setData($userdata);
+            break;
+
+        case 'get_user_rights':
+            $user->getUserById($userId);
+            $response->setData($user->perm->getUserRights($userId));
+=======
             $userdata['login'] = $user->getLogin();
             echo json_encode($userdata);
             break;
@@ -67,6 +87,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
         case 'get_user_rights':
             $user->getUserById($userId, true);
             echo json_encode($user->perm->getUserRights($userId));
+>>>>>>> 2.10
             break;
 
         case 'activate_user':
@@ -102,6 +123,14 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                     $message = '<p class="success">'.$PMF_LANG['ad_user_deleted'].'</p>';
                 }
             }
+<<<<<<< HEAD
+            $response->setData($message);
+            break;
+    }
+}
+
+$response->send();
+=======
             echo json_encode($message);
             break;
 
@@ -134,3 +163,4 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
     }
 }
+>>>>>>> 2.10

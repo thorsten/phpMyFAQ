@@ -20,9 +20,27 @@
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
+// Check if config/database.php exist -> if not, redirect to installer
+//
+if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+    RedirectResponse::create(str_replace('admin/index.php', '', $_SERVER['SCRIPT_NAME']).'setup/index.php')
+        ->send();
+    exit;
+}
+
+//
+=======
+define('PMF_ROOT_DIR', dirname(__DIR__));
+
+//
+>>>>>>> 2.10
 // Define the named constant used as a check by any included PHP file
 //
 define('IS_VALID_PHPMYFAQ', null);
@@ -239,6 +257,11 @@ switch ($action) {
         exit();
         break;
 }
+
+//Initializing Twig
+$twig = new Twig_Environment(
+    new Twig_Loader_Filesystem(PMF_ROOT_DIR . '/admin/assets/twig')
+);
 
 // Header of the admin page including the navigation
 require 'header.php';

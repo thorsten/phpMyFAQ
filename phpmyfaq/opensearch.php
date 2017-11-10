@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2006-11-19
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 define('IS_VALID_PHPMYFAQ', null);
 
 require __DIR__.'/src/Bootstrap.php';
@@ -52,3 +58,10 @@ $xml->endDocument();
 
 header('Content-type: text/xml');
 print $xml->outputMemory(true);
+<<<<<<< HEAD
+$response = Response::create()
+	->setContent($opensearchXml->outputMemory(true));
+$response->headers->set('Content-Type', 'text/xml');
+$response->send();
+=======
+>>>>>>> 2.10

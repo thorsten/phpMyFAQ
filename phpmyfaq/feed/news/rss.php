@@ -19,6 +19,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2004-11-05
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -131,6 +137,12 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
+<<<<<<< HEAD
+$response = Response::create($rssData);
+$response->headers->set('Content-Type', 'application/rss+xml');
+$response->headers->set('Content-Length', strlen($rssData));
+$response->send();
+=======
 $headers = array(
     'Content-Type: application/rss+xml',
     'Content-Length: '.strlen($rssData),
@@ -138,5 +150,6 @@ $headers = array(
 
 $http = new PMF_Helper_Http();
 $http->sendWithHeaders($rssData, $headers);
+>>>>>>> 2.10
 
 $faqConfig->getDb()->close();

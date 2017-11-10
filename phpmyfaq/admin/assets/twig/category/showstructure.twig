@@ -1,0 +1,52 @@
+<header>
+    <h2>
+        <i class="icon-list"></i>
+        {{ PMF_LANG['ad_menu_categ_structure'] }}
+    </h2>
+</header>
+
+{% if successMessage %}
+<p class="alert alert-success">{{ successMessage }}</p>
+{% endif %}
+
+{% if errorMessage %}
+<p class="alert alert-error">{{ errorMessage }}</p>
+{% endif %}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            {% for currentLanguage in allLanguages %}
+            <th>{{ currentLanguage }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for currentRow in categoryTable %}
+        <tr>
+            <td>
+                {% if currentRow['renderTranslateButton'] %}<a href="{{ translateButtonUrl }}" title="{{ PMF_LANG['ad_categ_translate'] }}"><span title="{{ PMF_LANG['ad_categ_translate'] }}" class="icon-share"></span></a>{% endif %}&nbsp;{{ currentRow['indent']|raw }}<strong>{{ currentRow['catname'] }}</strong>
+            </td>
+            {% for currentTranslation in currentRow['translations'] %}
+            {% if currentTranslation['isTranslated'] %}
+            <td title="{{ currentTranslation['tooltip'] }}">
+                <span title="{{ currentTranslation['tooltip'] }}" class="label label-success">
+                    <i class="icon-check icon-white"></i>
+                </span>
+            </td>
+            {% else %}
+            <td>
+                <a href="{{ currentTranslation['translateButtonUrl'] }}" title="{{ currentTranslation['tooltip'] }}">
+                    <span title="{{ currentTranslation['tooltip'] }}" class="label label-inverse">
+                        <i class="icon-share icon-white"></i>
+                    </span>
+                </a>
+            </td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<p>{{ PMF_LANG['ad_categ_remark_overview'] }}</p>

@@ -40,8 +40,13 @@
   <exec executable="phpmd">
    <arg line="./ xml codesize,design,naming,unusedcode
               --reportfile ${basedir}/build/logs/pmd.xml
+<<<<<<< HEAD
+              --exclude    ${basedir}/phpmyfaq/inc/libs,
+                           ${basedir}/tests" />
+=======
               --exclude    ${basedir}/phpmyfaq/src/libs,
                            ${basedir}/phpmyfaq/tests" />
+>>>>>>> 2.10
   </exec>
  </target>
 
@@ -50,8 +55,13 @@
   <exec executable="phpcpd">
    <arg line="--log-pmd  ${basedir}/build/logs/pmd-cpd.xml
               --suffixes php
+<<<<<<< HEAD
+              --exclude  ${basedir}/phpmyfaq/inc/libs
+              --exclude  ${basedir}/tests ./" />
+=======
               --exclude  ${basedir}/phpmyfaq/src/libs
               --exclude  ${basedir}/phpmyfaq/tests ./" />
+>>>>>>> 2.10
   </exec>
  </target>
 
@@ -62,7 +72,11 @@
               --report-file=${basedir}/build/logs/checkstyle.xml 
               --standard=Zend
               --extensions=php
+<<<<<<< HEAD
+              --ignore=${basedir}/phpmyfaq/inc/libs,${basedir}/tests ./" />
+=======
               --ignore=${basedir}/phpmyfaq/src/libs,${basedir}/phpmyfaq/tests ./" />
+>>>>>>> 2.10
   </exec>
  </target>
 
@@ -78,7 +92,11 @@
    <arg line="--log         ${basedir}/build/logs
               --source      ${basedir}
               --output      ${basedir}/build/code-browser
+<<<<<<< HEAD
+              --excludePCRE %(${basedir}/phpmyfaq/inc/libs/.*)|(${basedir}/build/.*)|(${basedir}/scripts/.*)|(${basedir}/tests/.*)%" />
+=======
               --excludePCRE %(${basedir}/phpmyfaq/src/libs/.*)|(${basedir}/build/.*)|(${basedir}/phpmyfaq/scripts/.*)|(${basedir}/phpmyfaq/tests/.*)%" />
+>>>>>>> 2.10
   </exec>
  </target>
 

@@ -26,6 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
+    $templateVars = array(
+        'PMF_LANG'       => $PMF_LANG,
+        'successMessage' => '',
+        'errorMessage'   => ''
+    );
+=======
 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -34,6 +42,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
+>>>>>>> 2.10
 
     // If we have to save a new password, do that first
     $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
@@ -53,12 +62,36 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
+<<<<<<< HEAD
+        $oldPassword     = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
+        $newPassword     = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+=======
         $oldPassword = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
         $newPassword = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+>>>>>>> 2.10
         $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {
+<<<<<<< HEAD
+                $templateVars['errorMessage'] = $PMF_LANG["ad_passwd_fail"];
+            } else {
+                $templateVars['successMessage'] = $PMF_LANG["ad_passwdsuc"];
+            }
+        } else {
+            $templateVars['errorMessage'] = $PMF_LANG["ad_passwd_fail"];
+        }
+    }
+
+    $twig->loadTemplate('user/passwd.twig')
+        ->display($templateVars);
+
+    unset($templateVars);
+
+} else {
+    require 'noperm.php';
+}
+=======
                 printf(
                     '<p class="alert alert-danger"><button type="button" class="close" data-dismiss="alert">&times;</button>%s</p>',
                     $PMF_LANG['ad_passwd_fail']
@@ -127,3 +160,4 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

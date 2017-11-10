@@ -831,6 +831,31 @@ $LANG_CONF['records.defaultAttachmentEncKey'] = array(0 => 'input', 1 => 'Defaul
 $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => 'Only allow logins over secure connection? (default: disabled)');
 $PMF_LANG['plmsgUserOnline']['0'] = '%d usuário online';
 $PMF_LANG['plmsgUserOnline']['1'] = '';
+<<<<<<< HEAD
+$PMF_LANG['msgSeeFAQinFrontend'] = 'Veja FAQ no Frontend';
+$PMF_LANG['msgRelatedTags'] = 'Adicionar Pesquisa Palavra';
+$PMF_LANG['msgPopularTags'] = 'Pesquisar Palavras populares';
+$PMF_LANG['ad_searchterm_del'] = 'Excluir todos os termos de pesquisa registrados';
+$PMF_LANG['ad_searchterm_del_err'] = 'Não foi possível excluir todos os termos de pesquisa.';
+$PMF_LANG['ad_tag_delete_success'] = 'A tag foi excluído com sucesso.';
+$PMF_LANG['ad_tag_delete_error'] = 'A tag não foi excluída porque ocorreu um erro.';
+$PMF_LANG['seoCenter'] = 'SEO';
+$PMF_LANG['mailControlCenter'] = 'configuração de e-mail';
+$PMF_LANG['ad_delete_all_votings'] = 'Limpar todas as votações';
+$PMF_LANG['ad_categ_moderator'] = 'moderadores';
+$PMF_LANG['ad_clear_all_visits'] = 'Limpar todas as visitas';
+$PMF_LANG['ad_reset_visits_success'] = 'As visitas foram resetadas com sucesso.';
+$PMF_LANG['faqOverview'] = 'Visão geral da FAQ';
+$PMF_LANG['ad_dir_missing'] = 'O directório %s está faltando.';
+$PMF_LANG['ad_es_create_index'] = 'Criar índice';
+$PMF_LANG['ad_es_bulk_index'] = 'importação completa';
+$PMF_LANG['ad_es_create_index_success'] = 'Índice criado com sucesso.';
+$PMF_LANG['ad_es_drop_index_success'] = 'Índice removida com sucesso.';
+$PMF_LANG['ad_export_generate_json'] = 'Criar arquivo JSON';
+$PMF_LANG['ad_image_name_search'] = 'Procurar por nome de imagem';
+$PMF_LANG['ad_admin_notes'] = 'Notas privadas';
+$PMF_LANG['ad_admin_notes_hint'] = '%s (visível apenas para os editores)';
+=======
 $PMF_LANG['msgShowMore'] = 'mostrar mais';
 $PMF_LANG['msgQuestionAnswered'] = 'Questão respondida';
 $PMF_LANG['msgMessageQuestionAnswered'] = 'Sua questão %s foi respondida. Por favor, verifique-a aqui:';
@@ -932,3 +957,4 @@ $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
+>>>>>>> 2.10

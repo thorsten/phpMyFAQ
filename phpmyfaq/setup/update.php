@@ -143,7 +143,13 @@ if ($step === 1) {
 
                 <p>This update script will work <strong>only</strong> for the following versions:</p>
                 <ul>
+<<<<<<< HEAD
+                    <li>phpMyFAQ 2.6.x (out of support since end of 2011)</li>
+                    <li>phpMyFAQ 2.7.x</li>
+                    <li>phpMyFAQ 2.8.x</li>
+=======
                     <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
+>>>>>>> 2.10
                     <li>phpMyFAQ 2.9.x</li>
                 </ul>
 
@@ -153,6 +159,14 @@ if ($step === 1) {
                     <li>phpMyFAQ 1.x</li>
                     <li>phpMyFAQ 2.0.x</li>
                     <li>phpMyFAQ 2.5.x</li>
+<<<<<<< HEAD
+
+                </ul>
+                <?php
+
+                // We only support updates from 2.6+
+                if (version_compare($version, '2.6.0', '>')) {
+=======
                     <li>phpMyFAQ 2.6.x</li>
                     <li>phpMyFAQ 2.7.x</li>
                 </ul>
@@ -160,6 +174,7 @@ if ($step === 1) {
 
                 // We only support updates from 2.8+
                 if (version_compare($version, '2.8.0', '>')) {
+>>>>>>> 2.10
                     printf(
                         '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
                         $version,
@@ -193,6 +208,17 @@ if ($step === 1) {
 
 /**************************** STEP 2 OF 3 ***************************/
 if ($step == 2) {
+<<<<<<< HEAD
+
+    $checkDatabaseSetupFile = $checkLdapSetupFile = false;
+
+    // The backup an existing config/database.php
+    // 2.6+ updates
+    if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+        if (!copy(PMF_ROOT_DIR . '/config/database.php', PMF_ROOT_DIR . '/config/database.bak.php')) {
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> The backup file ../config/database.bak.php " .
+                  "could not be written. Please correct this!</p>";
+=======
     $checkDatabaseSetupFile = $checkLdapSetupFile = $checkElasticsearchSetupFile = false;
     $updateMessages = [];
 
@@ -212,6 +238,7 @@ if ($step == 2) {
         if (!copy(PMF_ROOT_DIR.'/config/ldap.php', PMF_ROOT_DIR.'/config/ldap.bak.php')) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/ldap.bak.php '.
                 'could not be written. Please correct this!</p>';
+>>>>>>> 2.10
         } else {
             $checkLdapSetupFile = true;
             $updateMessages[] = 'A backup of your LDAP configuration file has been made.';
@@ -220,11 +247,19 @@ if ($step == 2) {
         $checkLdapSetupFile = true;
     }
 
+<<<<<<< HEAD
+    // The backup an existing LDAP configuration file
+    if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
+        if (!copy(PMF_ROOT_DIR . '/config/ldap.php', PMF_ROOT_DIR . '/config/ldap.bak.php')) {
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> The backup file ../config/ldap.bak.php " .
+                  "could not be written. Please correct this!</p>";
+=======
     // Backup of config/elasticsearch.php if exists
     if (file_exists(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/elasticsearch.php', PMF_ROOT_DIR.'/config/elasticsearch.bak.php')) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
                 '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
+>>>>>>> 2.10
         } else {
             $checkElasticsearchSetupFile = true;
             $updateMessages[] = 'A backup of your Elasticsearch configuration file has been made.';
@@ -314,6 +349,16 @@ if ($step == 3) {
     $faqConfig->getAll();
 
     //
+<<<<<<< HEAD
+    // UPDATES FROM 2.6.99
+    //
+    if (version_compare($version, '2.6.99', '<')) {
+        $faqConfig->add('search.relevance', 'thema,content,keywords');
+        $faqConfig->add('search.enableRelevance', 'false');
+        $faqConfig->add('main.enableGoogleTranslation', 'false');
+        $faqConfig->add('main.googleTranslationKey', 'INSERT-YOUR-KEY');
+    }
+=======
     // Enable maintenance mode
     //
     if ($faqConfig->set('main.maintenanceMode', 'true')) {
@@ -345,6 +390,7 @@ if ($step == 3) {
         $faqConfig->add('search.searchForSolutionId', 'true');
         $faqConfig->add('socialnetworks.disableAll', 'false');
         $faqConfig->add('main.enableGzipCompression', 'true');
+>>>>>>> 2.10
 
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';

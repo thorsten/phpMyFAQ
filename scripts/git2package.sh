@@ -51,12 +51,21 @@ mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}/
 mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/phpseclib/Crypt
 mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/swiftmailer
 
+<<<<<<< HEAD
+# copy dependencies
+cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/phpseclib/Crypt
+cp -r $cwd/vendor/twitteroauth/twitteroauth $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/twitteroauth
+cp -r $cwd/vendor/symfony/*/* $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/inc/libs/
+cp -r $cwd/vendor/twig/twig/lib/Twig $cwd/phpmyfaq/inc/libs/
+cp -r $cwd/vendor/fontawesome/build/assets/font-awesome/font $cwd/build/${PMF_PACKAGE_FOLDER}/phpmyfaq/admin/assets
+=======
 cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
 # add dependecies
 composer install --no-dev
 npm install
 grunt build
+>>>>>>> 2.10
 
 # prepare packaging
 cd $cwd

@@ -136,9 +136,20 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
     $perm = $user->perm;
     $groupId = PMF_Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
         $groupAction = $defaultGroupAction;
     } else {
+<<<<<<< HEAD
+        $twig->loadTemplate('group/delete_confirm.twig')
+            ->display(
+                array(
+                    'PMF_LANG'  => $PMF_LANG,
+                    'csrfToken' => $user->getCsrfTokenFromSession(),
+                    'groupData' => $perm->getGroupData($groupId),
+                    'groupId'   => $groupId
+                )
+            );
+=======
         $group_data = $perm->getGroupData($groupId);
         ?>
         <header class="row">
@@ -169,6 +180,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
         </div>
 <?php
 
+>>>>>>> 2.10
     }
 }
 
@@ -230,11 +242,11 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
     // no errors, show list
     if (count($messages) == 0) {
         $groupAction = $defaultGroupAction;
-        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
-    // display error messages and show form again
+        $message     = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
+        // display error messages and show form again
     } else {
         $groupAction = 'add';
-        $message = '<p class="alert alert-danger">';
+        $message     = '<p class="alert alert-error">';
         foreach ($messages as $err) {
             $message .= $err.'<br />';
         }
@@ -249,6 +261,48 @@ if (!isset($message)) {
 // show new group form
 if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgroup')) {
     $user = new PMF_User_CurrentUser($faqConfig);
+<<<<<<< HEAD
+    $twig->loadTemplate('group/add.twig')
+        ->display(
+            array(
+                'PMF_LANG'         => $PMF_LANG,
+                'csrfToken'        => $user->getCsrfTokenFromSession(),
+                'descriptionCols'  => $descriptionCols,
+                'descriptionRows'  => $descriptionRows,
+                'groupAutoJoin'    => !empty($group_auto_join),
+                'groupDescription' => isset($group_description) ? $group_description : '',
+                'groupName'        => isset($group_name) ? $group_name : '',
+                'message'          => $message
+            )
+        );
+} // end if ($groupAction == 'add')
+
+// show list of users
+if ($groupAction == 'list') {
+    $rightsData = $user->perm->getAllRightsData();
+
+    foreach ($rightsData as $key => $right) {
+        if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+            $rightsData[$key]['description'] = $PMF_LANG['rightsLanguage'][$right['name']];
+        }
+    }
+
+    $twig->loadTemplate('group/list.twig')
+        ->display(
+            array(
+                'PMF_LANG'         => $PMF_LANG,
+                'descriptionCols'  => $descriptionCols,
+                'descriptionRows'  => $descriptionRows,
+                'groupAutoJoin'    => !empty($group_auto_join),
+                'groupDescription' => isset($group_description) ? $group_description : '',
+                'groupName'        => isset($group_name) ? $group_name : '',
+                'groupSelectSize'  => $groupSelectSize,
+                'memberSelectSize' => $memberSelectSize,
+                'message'          => $message,
+                'rightsData'       => $rightsData
+            )
+        );
+=======
     ?>
         <header class="row">
             <div class="col-lg-12">
@@ -545,4 +599,5 @@ if ('list' === $groupAction) {
     </div>
 <?php
 
+>>>>>>> 2.10
 }

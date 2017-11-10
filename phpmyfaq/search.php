@@ -16,6 +16,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -171,11 +177,19 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
     // Before a redirection we must force the PHP session update for preventing data loss
     session_write_close();
     if ($faqConfig->get('main.enableRewriteRules')) {
+<<<<<<< HEAD
+        $location = $faqConfig->get('main.referenceURL') . '/solution_id_' . $inputSearchTerm . '.html';
+    } else {
+        $location = $faqConfig->get('main.referenceURL') . '/index.php?solution_id=' . $inputSearchTerm;
+=======
         header('Location: '.$faqConfig->getDefaultUrl().'solution_id_'.$inputSearchTerm.'.html');
     } else {
         header('Location: '.$faqConfig->getDefaultUrl().'index.php?solution_id='.$inputSearchTerm);
+>>>>>>> 2.10
     }
-    exit();
+    RedirectResponse::create($location)
+        ->send();
+    exit;
 }
 
 $category->buildTree();

@@ -27,6 +27,104 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+<<<<<<< HEAD
+$faqTableInfo = $faqConfig->getDb()->getTableStatus();
+
+$templateVars = array(
+    'PMF_LANG'                 => $PMF_LANG,
+    'dashboardArticles'        => $faqTableInfo[PMF_Db::getTablePrefix() . "faqdata"],
+    'dashboardComments'        => $faqTableInfo[PMF_Db::getTablePrefix() . "faqcomments"],
+    'dashboardNews'            => $faqTableInfo[PMF_Db::getTablePrefix() . "faqnews"],
+    'dashboardOpenQuestions'   => $faqTableInfo[PMF_Db::getTablePrefix() . "faqquestions"],
+    'dashboardUsers'           => $faqTableInfo[PMF_Db::getTablePrefix() . 'faquser'] - 1,
+    'dashboardVisits'          => $faqTableInfo[PMF_Db::getTablePrefix() . 'faqsessions'],
+    'enableUserTracking'       => $faqConfig->get('main.enableUserTracking'),
+    'inMaintenanceMode'        => $faqConfig->get('main.maintenanceMode'),
+    'onlineVerificationActive' => false,
+    'onlineVerificationError'  => false,
+    'updateCheckActive'        => false
+);
+
+if ($faqConfig->get('main.enableUserTracking')) {
+    $session = new PMF_Session($faqConfig);
+    $visits  = $session->getLast30DaysVisits();
+
+    $templateVars['visitsData'] = implode(',', $visits);
+
+    unset($session, $visits);
+}
+
+// Perform update check
+$version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
+if (!is_null($version) && $version == 'version') {
+    $json   = file_get_contents('http://www.phpmyfaq.de/api/version');
+    $result = json_decode($json);
+    if ($result instanceof stdClass) {
+        $installed                         = $faqConfig->get('main.currentVersion');
+        $available                         = $result->stable;
+        $templateVars['updateCheckActive'] = true;
+        $templateVars['updateAvailable']   = -1 == version_compare($installed, $available);
+        $templateVars['lastestVersion']    = $available;
+    }
+}
+unset($json, $result, $installed, $available, $version);
+
+
+// Perform online verification
+$getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
+if (!is_null($getJson) && 'verify' === $getJson) {
+    $templateVars['onlineVerificationActive'] = true;
+
+    set_error_handler(
+        function ($severity, $message, $file, $line)
+        {
+            throw new ErrorException($message, $severity, $severity, $file, $line);
+        }
+    );
+
+    $faqSystem         = new PMF_System();
+    $localHashes       = $faqSystem->createHashes();
+    $versionCheckError = true;
+    try {
+        $remoteHashes = file_get_contents(
+            'http://www.phpmyfaq.de/api/verify/' . $faqConfig->get('main.currentVersion')
+        );
+        if (!is_array(json_decode($remoteHashes, true))) {
+            $versionCheckError = true;
+        } else {
+            $versionCheckError = false;
+        }
+    } catch (ErrorException $e) {
+        $templateVars['onlineVerificationError'] = true;
+    }
+
+    restore_error_handler();
+
+    if ($versionCheckError) {
+        $templateVars['onlineVerificationError'] = true;
+    } else {
+        $diff = array_diff(
+            json_decode($localHashes, true),
+            json_decode($remoteHashes, true)
+        );
+
+        if (1 < count($diff)) {
+            $templateVars['onlineVerificationSuccessful'] = false;
+            $templateVars['onlineVerificationDiff']       = array();
+
+            foreach ($diff as $file => $hash) {
+                if ('created' === $file) {
+                    continue;
+                }
+                $templateVars['onlineVerificationDiff'][$hash] = $file;
+            }
+        } else {
+            $templateVars['onlineVerificationSuccessful'] = true;
+        }
+    }
+}
+unset($getJson, $faqSystem, $localHashes, $remoteHashes, $diff, $file, $hash);
+=======
 $faqTableInfo = $faqConfig->getDb()->getTableStatus(PMF_Db::getTablePrefix());
 $faqSystem = new PMF_System();
 $faqSession = new PMF_Session($faqConfig);
@@ -255,8 +353,8 @@ $faqSession = new PMF_Session($faqConfig);
                 </div>
             </div>
         </div>
+>>>>>>> 2.10
 
-        <div style="font-size: 5px; text-align: right; color: #f5f5f5">NOTE: Art is resistance.</div>
-    </section>
+$twig->loadTemplate('dashboard.twig')->display($templateVars);
 
-    <?php endif; ?>
+unset($templateVars);

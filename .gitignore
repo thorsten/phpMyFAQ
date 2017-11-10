@@ -28,6 +28,13 @@ phpmyfaq/attachments/*
 # .htaccess, if used
 phpmyfaq/.htaccess
 
+<<<<<<< HEAD
+# Third party libraries
+phpmyfaq/inc/libs/*
+
+# Bower related stuff
+components/*
+=======
 # Third party PHP libraries
 phpmyfaq/src/libs/elasticsearch
 phpmyfaq/src/libs/guzzlehttp/ringphp
@@ -60,6 +67,7 @@ phpmyfaq/assets/js/vendors.js.map
 phpmyfaq/assets/themes/default/css/*.css
 phpmyfaq/assets/themes/default/css/*.map
 phpmyfaq/assets/themes/default/fonts/*
+>>>>>>> 2.10
 
 # Composer related stuff
 bin/*

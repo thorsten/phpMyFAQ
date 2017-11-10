@@ -18,6 +18,14 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-15
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+use PMF\Helper\ResponseWrapper;
+
+=======
+>>>>>>> 2.10
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -61,12 +69,19 @@ $captcha->setSessionId(
     PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
 );
 
+<<<<<<< HEAD
+// Prepare response
+$response = new JsonResponse;
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addCommonHeaders();
+=======
 //
 // Send headers
 //
 $http = new PMF_Helper_Http();
 $http->setContentType('application/json');
 //$http->addHeader();
+>>>>>>> 2.10
 
 //
 // Set session
@@ -106,8 +121,8 @@ if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
 }
 
 if (isset($message['error'])) {
-    print json_encode($message);
-    exit();
+    $response->setData($message)->send();
+    exit;
 }
 
 // Save user generated content
@@ -897,4 +912,4 @@ switch ($action) {
         break;
 }
 
-echo json_encode($message);
+$response->setData($message)->send();

@@ -20,6 +20,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\RedirectResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -42,8 +48,14 @@ $oNews = new PMF_News($faqConfig);
 $newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
+<<<<<<< HEAD
+    RedirectResponse::create('http://'.$_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']))
+        ->send();
+    exit;
+=======
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
+>>>>>>> 2.10
 }
 
 try {

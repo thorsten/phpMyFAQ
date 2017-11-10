@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2011-08-24
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -31,16 +37,19 @@ $ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_S
 $searchTerm = PMF_Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
 
 $search = new PMF_Search($faqConfig);
+$response = new JsonResponse;
 
 switch ($ajaxAction) {
 
     case 'delete_searchterm':
-
-        if ($search->deleteSearchTerm($searchTerm)) {
-            print true;
-        } else {
-            print false;
-        }
+        $response->setData(
+            $search->deleteSearchTerm($searchTerm)
+        );
 
         break;
 }
+<<<<<<< HEAD
+
+$response->send();
+=======
+>>>>>>> 2.10

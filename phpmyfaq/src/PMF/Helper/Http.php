@@ -35,6 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-13
+ * @deprecated
  */
 class PMF_Helper_Http extends PMF_Helper
 {
@@ -68,6 +69,9 @@ class PMF_Helper_Http extends PMF_Helper
         header('Vary: Negotiate,Accept');
         header('Content-type: '.$this->contentType);
     }
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Helper/Http.php
+}
+=======
 
     /**
      * Returns a HTTP status header.
@@ -148,3 +152,4 @@ class PMF_Helper_Http extends PMF_Helper
         }
     }
 }
+>>>>>>> 2.10:phpmyfaq/src/PMF/Helper/Http.php

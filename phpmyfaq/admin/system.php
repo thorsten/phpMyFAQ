@@ -21,16 +21,42 @@ use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
  * @since     2013-01-02
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
+<<<<<<< HEAD
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+=======
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+>>>>>>> 2.10
     exit();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     $faqSystem = new PMF_System();
+<<<<<<< HEAD
+
+    $twig->loadTemplate('system.twig')
+        ->display(
+            array(
+                'PMF_LANG'          => $PMF_LANG,
+                'systemInformation' => array(
+                    'phpMyFAQ Version'           => $faqSystem->getVersion(),
+                    'Server Software'            => $_SERVER['SERVER_SOFTWARE'],
+                    'Server Document root'       => $_SERVER['DOCUMENT_ROOT'],
+                    'phpMyFAQ installation path' => dirname(dirname($_SERVER['SCRIPT_FILENAME'])),
+                    'PHP Version'                => PHP_VERSION,
+                    'Webserver Interface'        => strtoupper(PHP_SAPI),
+                    'PHP Extensions'             => implode(', ', get_loaded_extensions()),
+                    'PHP Session path'           => session_save_path(),
+                    'Database Server'            => PMF_Db::getType(),
+                    'Database Server Version'    => $faqConfig->getDb()->serverVersion(),
+                    'Database Client Version'    => $faqConfig->getDb()->clientVersion(),
+                )
+            )
+        );
+=======
 
     $esConfig = $faqConfig->getElasticsearchConfig();
 
@@ -85,6 +111,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         </div>
     </div>
 <?php
+>>>>>>> 2.10
 
 } else {
     echo $PMF_LANG['err_NotAuth'];

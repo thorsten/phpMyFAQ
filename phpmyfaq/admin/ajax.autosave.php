@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-07-07
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -26,6 +32,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
+
+$response = new JsonResponse;
 
 $do = PMF_Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
@@ -152,14 +160,28 @@ if ('insertentry' === $do &&
             }
         }
 
+<<<<<<< HEAD
+        $response->setData(
+            array(
+                'msg' => sprintf("Item autosaved at revision %d", $revision_id),
+                'revision_id' => $revision_id,
+                'record_id' => $record_id,
+            )
+=======
         $out = array(
             'msg' => sprintf('Item autosaved at revision %d', $revision_id),
             'revision_id' => $revision_id,
             'record_id' => $record_id,
+>>>>>>> 2.10
         );
-
-        print json_encode($out);
     }
 } else {
+<<<<<<< HEAD
+    $response->setData(array("msg" => "Unsuficcient article rights"));
+}
+
+$response->send();
+=======
     print json_encode(array('msg' => 'Unsuficcient article rights'));
 }
+>>>>>>> 2.10

@@ -282,6 +282,86 @@ class PMF_Installer
      *
      * @var array
      */
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+    protected $_mainConfig = array(
+        'main.currentVersion'                     => null,
+        'main.currentApiVersion'                  => null,
+        'main.language'                           => '__PHPMYFAQ_LANGUAGE__',
+        'main.languageDetection'                  => 'true',
+        'main.phpMyFAQToken'                      => null,
+        'main.referenceURL'                       => '__PHPMYFAQ_REFERENCE_URL__',
+        'main.administrationMail'                 => 'webmaster@example.org',
+        'main.contactInformations'                => '',
+        'main.enableAdminLog'                     => 'true',
+        'main.enableRewriteRules'                 => 'false',
+        'main.enableUserTracking'                 => 'true',
+        'main.metaDescription'                    => 'phpMyFAQ should be the answer for all questions in life',
+        'main.metaKeywords'                       => '',
+        'main.metaPublisher'                      => '__PHPMYFAQ_PUBLISHER__',
+        'main.send2friendText'                    => '',
+        'main.titleFAQ'                           => 'phpMyFAQ Codename Poseidon',
+        'main.urlValidateInterval'                => '86400',
+        'main.enableWysiwygEditor'                => 'true',
+        'main.enableWysiwygEditorFrontend'        => 'false',
+        'main.templateSet'                        => 'default',
+        'main.optionalMailAddress'                => 'false',
+        'main.dateFormat'                         => 'Y-m-d H:i',
+        'main.maintenanceMode'                    => 'false',
+        'main.enableGravatarSupport'              => 'false',
+        'main.enableRssFeeds'                     => 'true',
+
+        'records.numberOfRecordsPerPage'          => '10',
+        'records.numberOfShownNewsEntries'        => '3',
+        'records.defaultActivation'               => 'false',
+        'records.defaultAllowComments'            => 'false',
+        'records.enableVisibilityQuestions'       => 'false',
+        'records.numberOfRelatedArticles'         => '5',
+        'records.orderby'                         => 'id',
+        'records.sortby'                          => 'DESC',
+        'records.orderingPopularFaqs'             => 'visits',
+        'records.disableAttachments'              => 'true',
+        'records.maxAttachmentSize'               => '100000',
+        'records.attachmentsPath'                 => 'attachments',
+        'records.attachmentsStorageType'          => '0',
+        'records.enableAttachmentEncryption'      => 'false',
+        'records.defaultAttachmentEncKey'         => '',
+        'records.enableCloseQuestion'             => 'false',
+        'records.enableDeleteQuestion'            => 'false',
+        'records.autosaveActive'                  => 'false',
+        'records.autosaveSecs'                    => '180',
+        'records.randomSort'                      => 'false',
+        'records.allowCommentsForGuests'          => 'true',
+        'records.allowQuestionsForGuests'         => 'true',
+        'records.allowNewFaqsForGuests'           => 'true',
+        'records.hideEmptyCategories'             => 'false',
+
+        'search.useAjaxSearchOnStartpage'         => 'false',
+        'search.numberSearchTerms'                => '10',
+        'search.relevance'                        => 'thema,content,keywords',
+        'search.enableRelevance'                  => 'false',
+        'search.enableHighlighting'               => 'true',
+        'search.searchForSolutionId'              => 'true',
+
+        'security.permLevel'                      => 'basic',
+        'security.ipCheck'                        => 'false',
+        'security.enableLoginOnly'                => 'false',
+        'security.ldapSupport'                    => 'false',
+        'security.bannedIPs'                      => '',
+        'security.ssoSupport'                     => 'false',
+        'security.ssoLogoutRedirect'              => '',
+        'security.useSslForLogins'                => 'false',
+        'security.useSslOnly'                     => 'false',
+        'security.forcePasswordUpdate'            => 'false',
+
+        'spam.checkBannedWords'                   => 'true',
+        'spam.enableCaptchaCode'                  => null,
+        'spam.enableSafeEmail'                    => 'true',
+
+        'socialnetworks.enableTwitterSupport'     => 'false',
+        'socialnetworks.twitterConsumerKey'       => '',
+        'socialnetworks.twitterConsumerSecret'    => '',
+        'socialnetworks.twitterAccessTokenKey'    => '',
+=======
     protected $_mainConfig = [
         'main.currentVersion' => null,
         'main.currentApiVersion' => null,
@@ -369,6 +449,7 @@ class PMF_Installer
         'socialnetworks.twitterConsumerKey' => '',
         'socialnetworks.twitterConsumerSecret' => '',
         'socialnetworks.twitterAccessTokenKey' => '',
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
         'socialnetworks.twitterAccessTokenSecret' => '',
         'socialnetworks.enableFacebookSupport' => 'false',
         'socialnetworks.disableAll' => 'false',
@@ -419,11 +500,35 @@ class PMF_Installer
     }
 
     /**
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+     * Check absolutely necessary stuff and die
+     *
+     * @return array
+=======
      * Check absolutely necessary stuff and die.
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
      */
     public function checkBasicStuff()
     {
+        $errors = array();
+
         if (!$this->checkMinimumPhpVersion()) {
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+            $errors[] = sprintf(
+                'Sorry, but you need PHP %s or later!',
+                PMF_System::VERSION_MINIMUM_PHP
+            );
+        }
+
+        if (! function_exists('date_default_timezone_set')) {
+            $errors[] = 'Sorry, but setting a default timezone doesn\'t work in your environment!';
+        }
+
+        if (! $this->_system->checkDatabase()) {
+            $dbError = "No supported database detected! Please install one of the following database systems and " .
+                        "enable the corresponding PHP extension in php.ini:";
+            $dbError .= "<ul>";
+=======
             printf(
                 '<p class="alert alert-danger">Sorry, but you need PHP %s or later!</p>',
                 PMF_System::VERSION_MINIMUM_PHP
@@ -440,29 +545,52 @@ class PMF_Installer
             echo '<p class="alert alert-danger">No supported database detected! Please install one of the following'.
                 ' database systems and enable the corresponding PHP extension in php.ini:</p>';
             echo '<ul>';
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
             foreach ($this->_system->getSupportedDatabases() as $database) {
-                printf('    <li>%s</li>', $database[1]);
+                $dbError .= sprintf("    <li>%s</li>\n", $database[1]);
             }
-            echo '</ul>';
-            PMF_System::renderFooter();
+            $dbError .= "</ul>";
+            $errors[] = $dbError;
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        if (! $this->_system->checkRequiredExtensions()) {
+            $extError  = "The following extensions are missing! Please enable the PHP extension(s) in php.ini.";
+            $extError .= "<ul>";
+=======
         if (!$this->_system->checkRequiredExtensions()) {
             echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in '.
                 'php.ini.</p>';
             echo '<ul>';
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
             foreach ($this->_system->getMissingExtensions() as $extension) {
-                printf('    <li>ext/%s</li>', $extension);
+                $extError .= sprintf("    <li>ext/%s</li>\n", $extension);
             }
-            echo '</ul>';
-            PMF_System::renderFooter();
+            $extError .= "</ul>";
+            $errors[] = $extError;
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        if (! $this->_system->checkRegisterGlobals()) {
+            $errors[] = "Please disable register_globals!";
+        }
+
+        if (! $this->_system->checkMagicQuotesGpc()) {
+            $errors[] = "Please disable magic_quotes_gpc!";
+        }
+
+        if (! $this->_system->checkphpMyFAQInstallation()) {
+            $errors[] = "It seems you're already running a version of phpMyFAQ. Please use the " .
+                        "<a href=\"update.php\">update script</a>.";
+=======
         if (!$this->_system->checkphpMyFAQInstallation()) {
             echo '<p class="alert alert-danger">It seems you\'re already running a version of phpMyFAQ. Please use the '.
                 '<a href="update.php">update script</a>.</p>';
             PMF_System::renderFooter();
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
         }
+
+        return $errors;
     }
 
     /**
@@ -482,8 +610,13 @@ class PMF_Installer
             PMF_System::renderFooter();
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        if (! is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+            echo '<p class="alert alert-error">It seems you never run a version of phpMyFAQ.<br />' .
+=======
         if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>'.
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
                 'Please use the <a href="setup.php">install script</a>.</p>';
             PMF_System::renderFooter();
         }
@@ -520,43 +653,87 @@ class PMF_Installer
     }
 
     /**
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+     * Checks if the file permissions are okay
+     *
+     * @return string
+=======
      * Checks if the file permissions are okay.
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
      */
     public function checkFilesystemPermissions()
     {
         $instanceSetup = new PMF_Instance_Setup();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        $permError  = '';
+        $dirs       = array('/attachments', '/config', '/data', '/images');
+=======
         $dirs = array('/attachments', '/config', '/data', '/images');
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
         $failedDirs = $instanceSetup->checkDirs($dirs);
         $numDirs = sizeof($failedDirs);
 
         if (1 <= $numDirs) {
-            printf(
-                '<p class="alert alert-danger">The following %s could not be created or %s not writable:</p><ul>',
+            $permError = sprintf(
+                'The following %s could not be created or %s not writable:<ul>',
                 (1 < $numDirs) ? 'directories' : 'directory',
                 (1 < $numDirs) ? 'are' : 'is'
             );
             foreach ($failedDirs as $dir) {
-                echo "<li>$dir</li>\n";
+                $permError .= sprintf("<li>%s</li>\n", $dir);
             }
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+            $permError .= sprintf(
+                "</ul>Please create %s manually and/or change access to chmod 755 (or greater if necessary).",
+=======
             printf(
                 '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or '.
                     'greater if necessary).</p>',
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
                 (1 < $numDirs) ? 'them' : 'it'
             );
-            PMF_System::renderFooter();
         }
+
+        return $permError;
     }
 
     /**
      * Checks some non critical settings and print some hints.
      *
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+     * @return array
+=======
      * @todo We should return an array of messages
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
      */
     public function checkNoncriticalSettings()
     {
+        $errors = array();
+
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+            $errors[] = "The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write in some " .
+                        "directories.";
+        }
+        if (! extension_loaded('gd')) {
+            $errors[] = "You don't have GD support enabled in your PHP installation. Please enable GD support in " .
+                        "your php.ini file otherwise you can't use Captchas for spam protection.";
+        }
+        if (! function_exists('imagettftext')) {
+            $errors[] = "You don't have Freetype support enabled in the GD extension of your PHP installation. " .
+                        "Please enable Freetype support in GD extension otherwise the Captchas for spam protection " .
+                        "will be quite easy to break.";
+        }
+        if (! extension_loaded('curl') || ! extension_loaded('openssl')) {
+            $errors[] = "You don't have cURL and/or OpenSSL support enabled in your PHP installation. Please enable " .
+                        "cURL and/or OpenSSL support in your php.ini file otherwise you can't use the Twitter support.";
+        }
+        if (! extension_loaded('fileinfo')) {
+            $errors[] = "You don't have Fileinfo support enabled in your PHP installation. Please enable Fileinfo " .
+                        "support in your php.ini file otherwise you can't use our backup/restore functionality.";
+=======
             echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write '.
                 ' in some directories.</p>';
         }
@@ -578,7 +755,9 @@ class PMF_Installer
             echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. '.
                 'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore '.
                 'functionality.</p>';
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
         }
+        return $errors;
     }
 
     /**
@@ -611,7 +790,11 @@ class PMF_Installer
         $dbSetup['dbType'] = PMF_Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING, $setup['dbType']);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+            if (! file_exists(PMF_ROOT_DIR . '/setup/assets/sql/' . $dbSetup['dbType'] . '.sql.php')) {
+=======
             if (!file_exists(PMF_INCLUDE_DIR.'/PMF/Instance/Database/'.ucfirst($dbSetup['dbType']).'.php')) {
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
                 printf(
                     '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
@@ -629,8 +812,19 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        $dbSetup['dbPort'] = PMF_Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
+        if (is_null($dbSetup['dbPort']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
+            PMF_System::renderFooter(true);
+        }
+
+        $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING);
+        if (is_null($dbSetup['dbUser']) && ! PMF_System::isSqlite($dbSetup['dbType'])) {
+=======
         $dbSetup['dbUser'] = PMF_Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING, '');
         if (is_null($dbSetup['dbUser']) && !PMF_System::isSqlite($dbSetup['dbType'])) {
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
             PMF_System::renderFooter(true);
         }
@@ -854,11 +1048,16 @@ class PMF_Installer
             PMF_System::renderFooter(true);
         }
 
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+        require PMF_ROOT_DIR . '/setup/assets/sql/' . $dbSetup['dbType'] . '.sql.php'; // CREATE TABLES
+        require PMF_ROOT_DIR . '/setup/assets/sql/stopwords.sql.php';  // INSERTs for stopwords
+=======
         $databaseInstaller = PMF_Instance_Database::factory($configuration, $dbSetup['dbType']);
         $databaseInstaller->createTables($dbSetup['dbPrefix']);
 
         $stopwords = new PMF_Instance_Database_Stopwords($configuration);
         $stopwords->executeInsertQueries($dbSetup['dbPrefix']);
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php
 
         $this->_system->setDatabase($db);
 
@@ -981,4 +1180,38 @@ class PMF_Installer
             echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
         }
     }
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Installer.php
+
+    /**
+     * Renders the <option> list with supported languages
+     *
+     * @param array $languageCodes
+     *
+     * @return string
+     */
+    public function renderLanguageOptions(Array $languageCodes)
+    {
+        $options = '';
+        if ($dir = @opendir(PMF_ROOT_DIR . '/lang')) {
+            while ($dat = @readdir($dir)) {
+                if (substr($dat, -4) == '.php') {
+                    $options .= sprintf('<option value="%s"', $dat);
+                    if ($dat == "language_en.php") {
+                        $options .= ' selected';
+                    }
+                    $options .= sprintf(
+                        '>%s</option>',
+                        $languageCodes[substr(strtoupper($dat), 9, 2)]
+                    );
+                }
+            }
+        } else {
+            $options = '<option>English</option>';
+        }
+
+        return $options;
+    }
 }
+=======
+}
+>>>>>>> 2.10:phpmyfaq/src/PMF/Installer.php

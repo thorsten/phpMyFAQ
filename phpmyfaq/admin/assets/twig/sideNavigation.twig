@@ -1,0 +1,12 @@
+<ul class="nav nav-list">
+    <li class="nav-header">{{ secLevelHeader }}</li>
+    {% for currentEntry in entries %}
+    <li{% if currentEntry['isActive'] %} class="active"{% endif %}>
+        <a href="{{ currentEntry['linkUrl'] }}">{{ currentEntry['caption'] }}</a>
+    </li>
+    {% endfor %}
+    <li class="nav-header">Admin worklog</li>
+    <li><span id="saving_data_indicator"></span></li>
+    <li class="nav-header">{{ PMF_LANG['ad_session_expiration'] }}</li>
+    <li><span id="sessioncounter"><img src="images/indicator.gif"> Loading...</span></li>
+</ul>

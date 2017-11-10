@@ -1,0 +1,150 @@
+<header>
+    <h2>
+        <i class="icon-pencil"></i>
+        {{ PMF_LANG['ad_news_data'] }}
+    </h2>
+</header>
+
+<form class="form-horizontal" action="?action=updatenews" method="post">
+    <fieldset>
+        <legend>
+            {{ PMF_LANG['ad_news_edit'] }}
+        </legend>
+
+        <input type="hidden" name="id" value="{{ newsData['id'] }}"/>
+
+        <div class="control-group">
+            <label class="control-label" for="newsheader">{{ PMF_LANG['ad_news_header'] }}</label>
+            <div class="controls">
+                <input type="text" name="newsheader" id="newsheader"
+                       value="{{ newsData['header'] }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="news">{{ PMF_LANG['ad_news_text'] }}:</label>
+            <div class="controls">
+                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                <textarea id="news" name="news" cols="84" rows="5">{{ newsData['content'] }}</textarea>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="authorName">{{ PMF_LANG['ad_news_author_name'] }}</label>
+            <div class="controls">
+                <input type="text" name="authorName" value="{{ newsData['authorName'] }}"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="authorEmail">{{ PMF_LANG['ad_news_author_email'] }}</label>
+            <div class="controls">
+                <input type="email" name="authorEmail" value="{{ newsData['authorEmail'] }}"/>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="active">{{ PMF_LANG['ad_news_set_active'] }}</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="active" id="active" value="y"{% if newsData['active'] %} checked{% endif %}/>
+                    {{ PMF_LANG['ad_gen_yes'] }}
+                </label>
+            </div>
+
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="comment">{{ PMF_LANG['ad_news_allowComments'] }}</label>
+            <div class="controls">
+                <label class="checkbox">
+                    <input type="checkbox" name="comment" id="comment" value="y"{% if newsData['allowComments'] %} checked{% endif %}/>
+                    {{ PMF_LANG['ad_gen_yes'] }}
+                </label>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="link">{{ PMF_LANG['ad_news_link_url'] }}</label>
+            <div class="controls">
+                <input type="url" name="link" value="{{ newsData['link'] }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="linkTitle">{{ PMF_LANG['ad_news_link_title'] }}</label>
+            <div class="controls">
+                <input type="text" name="linkTitle" value="{{ newsData['linkTitle'] }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="target">{{ PMF_LANG['ad_news_link_target'] }}</label>
+            <div class="controls">
+                <label class="radio">
+                    <input type="radio" name="target" value="blank"{% if 'blank' == newsData['target'] %} checked="checked"{% endif %}/>
+                    {{ PMF_LANG['ad_news_link_window'] }}
+                </label>
+                <label class="radio">
+                    <input type="radio" name="target" value="self"{% if 'self' == newsData['target'] %} checked="checked"{% endif %}/>
+                    {{ PMF_LANG['ad_news_link_faq'] }}
+                </label>
+                <label class="radio">
+                    <input type="radio" name="target" value="parent" {% if 'parent' == newsData['target'] %} checked="checked"{% endif %}/>
+                    {{ PMF_LANG['ad_news_link_parent'] }}
+                </label>
+            </div>
+        </div>
+        <div class="control-group">
+            <label class="control-label" for="langTo">{{ PMF_LANG['ad_entry_locale'] }}:</label>
+            <div class="controls">
+                {{ languageSelector|raw }}
+            </div>
+    </fieldset>
+
+    <fieldset>
+        <legend>{{ PMF_LANG['ad_news_expiration_window'] }}</legend>
+        <div class="control-group">
+            <label class="control-label" for="dateStart">{{ PMF_LANG['ad_news_from'] }}</label>
+            <div class="controls">
+                <input name="dateStart" id="dateStart" class="date-pick" value="{{ dateStart }}">
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="dateEnd">{{ PMF_LANG['ad_news_to'] }}</label>
+            <div class="controls">
+                <input name="dateEnd" id="dateEnd" class="date-pick" value="{{ dateEnd }}">
+            </div>
+        </div>
+    </fieldset>
+
+    <div class="form-actions">
+        <button class="btn btn-primary" type="submit">
+            {{ PMF_LANG['ad_news_edit'] }}
+        </button>
+        <a class="btn btn-info" href="?action=news">
+            {{ PMF_LANG['ad_entry_back'] }}
+        </a>
+    </div>
+</form>
+
+{% if comments %}
+<div class="control-group">
+    <strong>{{ PMF_LANG['ad_entry_comment'] }}</strong>
+</div>
+
+{% for item in comments %}
+<div class="control-group">
+    {{ PMF_LANG['ad_entry_commentby'] }}
+    <a href="mailto:{{ item['email'] }}">
+        {{ item['user'] }}
+    </a>:<br/>
+    {{ item['content'] }}<br/>
+    {{ PMF_LANG['newsCommentDate'] }} {{ item['date'] }}
+    <a href="?action=delcomment&amp;artid={{ newsId }}&amp;cmtid={{ item['id'] }}&amp;type={{ commentType }}">
+        <img src="images/delete.gif" alt="{{ PMF_LANG['ad_entry_delete'] }}" title="{{ PMF_LANG['ad_entry_delete'] }}" border="0" width="17" height="18" align="right"/>
+    </a>
+</div>
+{% endfor %}
+{% endif %}

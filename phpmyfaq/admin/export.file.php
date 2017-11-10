@@ -19,6 +19,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -42,6 +48,17 @@ if ($user->perm->checkRight($user->getUserId(), 'export')) {
     $export = PMF_Export::create($faq, $category, $faqConfig, $type);
     $content = $export->generate($categoryId, $downwards);
 
+<<<<<<< HEAD
+$tags = new PMF_Tags($faqConfig);
+
+$export  = PMF_Export::create($faq, $category, $faqConfig, $type);
+$content = $export->generate($categoryId, $downwards);
+
+// Stream the file content
+$oHttpStreamer = new PMF_HttpStreamer(Response::create(), $type, $content);
+if ('inline' == $inlineDisposition) {
+    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_INLINE);
+=======
     // Stream the file content
     $oHttpStreamer = new PMF_HttpStreamer($type, $content);
     if ('inline' === $inlineDisposition) {
@@ -49,6 +66,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export')) {
     } else {
         $oHttpStreamer->send(PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
     }
+>>>>>>> 2.10
 } else {
     echo $PMF_LANG['err_noArticles'];
 }

@@ -18,9 +18,19 @@
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
  */
+<<<<<<< HEAD
+
+$twig->loadTemplate('noperm.twig')
+    ->display(
+        array(
+            'PMF_LANG' => $PMF_LANG
+        )
+    );
+=======
 ?>
     <header>
         <h2 class="page-header"><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
     </header>
 
     <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>
+>>>>>>> 2.10

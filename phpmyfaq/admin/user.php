@@ -77,13 +77,22 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             foreach ($userRights as $rightId) {
                 $perm->grantUserRight($userId, $rightId);
             }
+<<<<<<< HEAD
+            $idUser = $user->getUserById($userId);
+=======
             $idUser = $user->getUserById($userId, true);
+>>>>>>> 2.10
             $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']);
+<<<<<<< HEAD
+            $message .= '<script type="text/javascript">updateUser(' . $userId . ');</script>';
+            $user     = new PMF_User_CurrentUser($faqConfig);
+=======
             $message .= '<script>updateUser('.$userId.');</script>';
             $user = new PMF_User_CurrentUser($faqConfig);
+>>>>>>> 2.10
         }
     }
 
@@ -107,9 +116,31 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             $stats = $user->getStatus();
             // set new password an send email if user is switched to active
             if ($stats == 'blocked' && $userStatus == 'active') {
+<<<<<<< HEAD
+                $consonants  = array("b", "c", "d", "f", "g", "h", "j", "k", "l", "m", "n", "p", "r", "s", "t", "v", "w", "x", "y", "z");
+                $vowels      = array("a", "e", "i", "o", "u");
+                $newPassword = '';
+                srand((double)microtime() * 1000000);
+                for ($i = 1; $i <= 4; $i++) {
+                    $newPassword .= $consonants[rand(0, 19)];
+                    $newPassword .= $vowels[rand(0, 4)];
+                }
+                $user->changePassword($newPassword);
+
+                $mail = new PMF_Mail($faqConfig);
+                $mail->addTo($userData['email']);
+                $mail->subject = '[%sitename%] Login name / activation';
+                $mail->message = sprintf("\nName: %s\nLogin name: %s\nNew password: %s\n\n",
+                    $userData['display_name'],
+                    $user->getLogin(),
+                    $newPassword);
+                $result        = $mail->send();
+                unset($mail);
+=======
                 if (!$user->activateUser($faqConfig)) {
                     $userStatus == 'invalid_status';
                 }
+>>>>>>> 2.10
             }
 
             if (!$user->userdata->set(array_keys($userData), array_values($userData)) or !$user->setStatus($userStatus)) {
@@ -119,7 +150,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     $PMF_LANG['ad_msg_savedsuc_1'],
                     $user->getLogin(),
                     $PMF_LANG['ad_msg_savedsuc_2']);
+<<<<<<< HEAD
+                $message .= '<script type="text/javascript">updateUser(' . $userId . ');</script>';
+=======
                 $message .= '<script>updateUser('.$userId.');</script>';
+>>>>>>> 2.10
             }
         }
     }
@@ -127,19 +162,35 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     // delete user confirmation
     if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
         $message = '';
+<<<<<<< HEAD
+        $user    = new PMF_User_CurrentUser($faqConfig);
+        $userId  = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
+=======
         $user = new PMF_User_CurrentUser($faqConfig);
 
         $userId = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
+>>>>>>> 2.10
         if ($userId == 0) {
-            $message   .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+            $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
         } else {
             $user->getUserById($userId, true);
             // account is protected
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message   .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
+                $message .= sprintf('<p class="alert alert-error">%s</p>', $PMF_LANG['ad_user_error_protectedAccount']);
                 $userAction = $defaultUserAction;
             } else {
+<<<<<<< HEAD
+                $twig->loadTemplate('user/delete_confirm.twig')
+                    ->display(
+                        array(
+                            'PMF_LANG'  => $PMF_LANG,
+                            'csrfToken' => $user->getCsrfTokenFromSession(),
+                            'userId'    => $userId,
+                            'userLogin' => $user->getLogin()
+                        )
+                    );
+=======
                 ?>
         <header class="row">
             <div class="col-lg-12">
@@ -168,12 +219,20 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </form>
 <?php
 
+>>>>>>> 2.10
             }
         }
     }
 
     // delete user
     if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
+<<<<<<< HEAD
+        $message   = '';
+        $user      = new PMF_User($faqConfig);
+        $userId    = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $csrfOkay  = true;
+        $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+=======
         $message = '';
         $user = new PMF_User($faqConfig);
         $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -181,6 +240,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
         $userAction = $defaultUserAction;
 
+>>>>>>> 2.10
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
@@ -309,6 +369,20 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
     // show new user form
     if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
+<<<<<<< HEAD
+        $twig->loadTemplate('user/add.twig')
+            ->display(
+                array(
+                    'PMF_LANG'            => $PMF_LANG,
+                    'csrfToken'           => $user->getCsrfTokenFromSession(),
+                    'userEmail'           => isset($user_email) ? $user_email : '',
+                    'userName'            => isset($user_name) ? $user_name : '',
+                    'userPassword'        => isset($user_password) ? $user_password : '',
+                    'userPasswordConfirm' => isset($user_password_confirm) ? $user_password_confirm : '',
+                    'userRealName'        => isset($user_realname) ? $user_realname : ''
+                )
+            );
+=======
         ?>
         <header class="row">
             <div class="col-lg-12">
@@ -390,11 +464,30 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </form>
 </div> <!-- end #user_create -->
 <?php
+>>>>>>> 2.10
 
     }
 
     // show list of users
     if ($userAction == 'list') {
+<<<<<<< HEAD
+        $templateVars = array(
+            'PMF_LANG'               => $PMF_LANG,
+            'message'                => $message,
+            'renderUpdateUserScript' => false,
+            'rights'                 => $user->perm->getAllRightsData(),
+            'showListAllUsers'       => $permission['edituser']
+        );
+
+
+        if (isset($_GET['user_id'])) {
+            $templateVars['renderUpdateUserScript'] = true;
+            $templateVars['updateUserId']           = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+        }
+
+        $twig->loadTemplate('user/list.twig')
+            ->display($templateVars);
+=======
         ?>
         <header class="row">
             <div class="col-lg-12">
@@ -608,16 +701,33 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         </div>
 <?php
 
+>>>>>>> 2.10
     }
 
     // show list of all users
     if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
+<<<<<<< HEAD
+        $templateVars = array(
+            'PMF_LANG'          => $PMF_LANG,
+            'displayPagination' => false,
+            'message'           => $message,
+            'users'             => array()
+        );
+
+        $allUsers  = $user->getAllUsers();
+        $numUsers  = count($allUsers);
+        $page      = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
+        $perPage   = 10;
+        $numPages  = ceil($numUsers / $perPage);
+        $lastPage  = $page * $perPage;
+=======
         $allUsers = $user->getAllUsers();
         $numUsers = count($allUsers);
         $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
         $numPages = ceil($numUsers / $perPage);
         $lastPage = $page * $perPage;
+>>>>>>> 2.10
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(
@@ -626,6 +736,32 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             $page
         );
 
+<<<<<<< HEAD
+        if ($perPage < $numUsers) {
+            // Pagination options
+            $options = array(
+                'baseUrl'       => $baseUrl,
+                'total'         => $numUsers,
+                'perPage'       => $perPage,
+                'pageParamName' => 'page'
+            );
+            $pagination = new PMF_Pagination($faqConfig, $options);
+
+            $templateVars['displayPagination'] = true;
+            $templateVars['pagination']        = $pagination->render();
+        }
+
+        $counter = $displayedCounter = 0;
+        foreach ($allUsers as $userId) {
+            $user->getUserById($userId);
+
+            if ($displayedCounter >= $perPage) {
+                continue;
+            }
+            $counter++;
+            if ($counter <= $firstPage) {
+                continue;
+=======
         // Pagination options
         $options = array(
             'baseUrl' => $baseUrl,
@@ -775,16 +911,54 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         $('.btn_user_id_' + userId).remove();
                         console.log($(this));
                     });
+>>>>>>> 2.10
             }
+            $displayedCounter++;
+
+            $icon = '';
+            switch ($user->getStatus()) {
+                case 'active':
+                    $icon = 'icon-ok';
+                    break;
+                case 'blocked':
+                    $icon = 'icon-lock';
+                    break;
+                case 'protected':
+                    $icon = 'icon-ok-sign';
+                    break;
+            }
+
+            $templateVars['users'][] = array(
+                'id'               => $user->getUserId(),
+                'displayName'      => $user->getUserData('display_name'),
+                'editUrl'          => '?action=user&amp;user_id=' . $user->getUserData('user_id'),
+                'email'            => $user->getUserData('email'),
+                'icon'             => $icon,
+                'loginName'        => $user->getLogin(),
+                'showDeleteButton' => $user->getStatus() !== 'protected',
+                'status'           => $user->getStatus()
+            );
         }
 
+<<<<<<< HEAD
+        $twig->loadTemplate('user/listallusers.twig')
+            ->display($templateVars);
+
+        unset($templateVars, $allUsers, $numUsers, $page, $perPage, $numPages, $lastPage, $firstPage, $baseUrl, $options, $pagination, $counter, $displayedCounter, $icon);
+=======
         </script>
 <?php 
+>>>>>>> 2.10
     }
     if (isset($_GET['user_id'])) {
         $userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
         echo '        <script>updateUser('.$userId.');</script>';
     }
 } else {
+<<<<<<< HEAD
+    require 'noperm.php';
+}
+=======
     echo $PMF_LANG['err_NotAuth'];
 }
+>>>>>>> 2.10

@@ -887,12 +887,19 @@ time with all the relevant data of the specific entry. The meaning of the fields
     language to, let's say Brazilian Portuguese. *Save* the FAQ record. Now you can, when you click *edit records*, see 
     both FAQs in your list, having the same id, yet different languages.
     
+<<<<<<< HEAD
+*    **Attachments**
+
+    You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload size will be checked.
+
+=======
 *   **Attachments**
      
     You can add attachments like PDFs or any other binary data using the **Add attachment** button. If you click on the 
     button, a popup opens and you can upload an attachment. Please keep in mind that the PHP configuration about upload 
     size will be checked.
  
+>>>>>>> 2.10
 *   **Keywords**
     
     Keywords are relevant for searching through the database. In case you didn't include a specific word in the FAQ 

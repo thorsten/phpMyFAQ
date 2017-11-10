@@ -17,6 +17,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
  */
+<<<<<<< HEAD
+
+use PMF\Helper\AdminMenuBuilder;
+
+=======
+>>>>>>> 2.10
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -30,6 +36,33 @@ $httpHeader = new PMF_Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
+<<<<<<< HEAD
+$templateVars = array(
+    'PMF_LANG'              => $PMF_LANG,
+    'appleTouchIcon'        => '../assets/template/' . PMF_Template::getTplSetName() . '/apple-touch-icon.png',
+    'baseUrl'               => $faqConfig->get('main.referenceURL') . '/admin/',
+    'editorAutosaveActive'  => ('editentry' === $action) && $faqConfig->get('records.autosaveActive'),
+    'editorAutosaveSeconds' => $faqConfig->get('records.autosaveSecs'),
+    'gravatarActive'        => $faqConfig->get('main.enableGravatarSupport'),
+    'isAuthenticated'       => isset($auth) && in_array(true, $permission),
+    'pmfVersion'            => $faqConfig->get('main.currentVersion'),
+    'secLevelEntries'       => '',
+    'shortcutIcon'          => '../assets/template/' . PMF_Template::getTplSetName() . '/favicon.ico',
+    'time'                  => time(),
+    'titleFAQ'              => $faqConfig->get('main.titleFAQ'),
+    'userDisplayName'       => isset($user) ? $user->getUserData('display_name'): '',
+    'userTooltip'           => isset($user) ? $PMF_LANG['ad_user_loggedin'] . $user->getLogin() : '',
+    'userEmail'             => isset($user) ? $user->getUserData('email') : ''
+);
+
+if (isset($user) && $faqConfig->get('main.enableGravatarSupport')) {
+    $avatar = new PMF_Services_Gravatar($faqConfig);
+    $templateVars['gravatarImage'] = $avatar->getImage($user->getUserData('email'), array('size' => 30));
+    unset($avatar);
+} else {
+    $templateVars['gravatarImage'] = '';
+}
+=======
 $secLevelEntries = '';
 $dashboardPage = true;
 $contentPage = false;
@@ -39,15 +72,25 @@ $exportsPage = false;
 $backupPage = false;
 $configurationPage = false;
 $edAutosave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
+>>>>>>> 2.10
 
-$adminHelper = new PMF_Helper_Administration();
-$adminHelper->setUser($user);
+$adminMenuBuilder = new AdminMenuBuilder($twig);
+$adminMenuBuilder->setUser($user);
 
 switch ($action) {
     case 'user':
     case 'group':
     case 'passwd':
     case 'cookies':
+<<<<<<< HEAD
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_users']);
+        $adminMenuBuilder->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+        if ($faqConfig->get('security.permLevel') != 'basic') {
+            $adminMenuBuilder->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
+        }
+        $adminMenuBuilder->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
+        $templateVars['activePage'] = 'user';
+=======
         $secLevelHeader = $PMF_LANG['admin_mainmenu_users'];
         $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
         if ($faqConfig->get('security.permLevel') !== 'basic') {
@@ -58,6 +101,7 @@ switch ($action) {
         }
         $dashboardPage = false;
         $userPage = true;
+>>>>>>> 2.10
         break;
     case 'content':
     case 'category':
@@ -94,6 +138,19 @@ switch ($action) {
     case 'takequestion':
     case 'comments':
     case 'attachments':
+<<<<<<< HEAD
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_content']);
+        $adminMenuBuilder->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
+        $adminMenuBuilder->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'searchfaqs', 'ad_menu_searchfaqs', $action);
+        $adminMenuBuilder->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
+        $adminMenuBuilder->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
+        $adminMenuBuilder->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
+        $adminMenuBuilder->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
+        $adminMenuBuilder->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
+        $templateVars['activePage'] = 'content';
+=======
     case 'tags':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
@@ -108,6 +165,7 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('editbt', 'tags', 'ad_entry_tags', $action);
         $dashboardPage = false;
         $contentPage = true;
+>>>>>>> 2.10
         break;
     case 'statistics':
     case 'viewsessions':
@@ -117,6 +175,25 @@ switch ($action) {
     case 'searchstats':
     case 'reports':
     case 'reportview':
+<<<<<<< HEAD
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_statistics']);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
+        $adminMenuBuilder->addMenuEntry('adminlog', 'adminlog', 'ad_menu_adminlog', $action);
+        $adminMenuBuilder->addMenuEntry('viewlog', 'searchstats', 'ad_menu_searchstats', $action);
+        $adminMenuBuilder->addMenuEntry('reports', 'reports', 'ad_menu_reports', $action);
+        $templateVars['activePage'] = 'statistics';
+        break;
+    case 'export':
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_exports']);
+        $adminMenuBuilder->addMenuEntry('', 'export', 'ad_menu_export', $action);
+        $templateVars['activePage'] = 'exports';
+        break;
+    case 'backup':
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_backup']);
+        $adminMenuBuilder->addMenuEntry('', 'backup', 'ad_menu_export', $action);
+        $templateVars['activePage'] = 'backup';
+=======
         $secLevelHeader = $PMF_LANG['admin_mainmenu_statistics'];
         $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('viewlog', 'viewsessions', 'ad_menu_session', $action);
@@ -137,6 +214,7 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'backup', 'ad_menu_export', $action);
         $dashboardPage = false;
         $backupPage = true;
+>>>>>>> 2.10
         break;
     case 'config':
     case 'stopwordsconfig':
@@ -146,6 +224,26 @@ switch ($action) {
     case 'upgrade':
     case 'instances':
     case 'system':
+<<<<<<< HEAD
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_configuration']);
+        $adminMenuBuilder->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
+        $adminMenuBuilder->addMenuEntry('', 'system', 'ad_system_info', $action, false);
+        $adminMenuBuilder->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
+        $adminMenuBuilder->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+        $adminMenuBuilder->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
+        $templateVars['activePage'] = 'configuration';
+        break;
+    default:
+        $adminMenuBuilder->setHeader($PMF_LANG['admin_mainmenu_home']);
+        $adminMenuBuilder->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
+        $adminMenuBuilder->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
+        $adminMenuBuilder->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+        $adminMenuBuilder->addMenuEntry('delquestion', 'question', 'ad_menu_open');
+        $adminMenuBuilder->addMenuEntry('', 'system', 'ad_system_info', $action, false);
+        $templateVars['activePage'] = 'dashboard';
+        break;
+}
+=======
     case 'elasticsearch':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_configuration'];
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
@@ -347,7 +445,10 @@ switch ($action) {
         </div>
     </nav>
     <?php endif; ?>
+>>>>>>> 2.10
 
+$templateVars['sideNavigation'] = $adminMenuBuilder->render();
 
+$twig->loadTemplate('header.twig')->display($templateVars);
 
-    <div id="page-wrapper">
+unset($templateVars);

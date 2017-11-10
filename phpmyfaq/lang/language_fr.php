@@ -14,7 +14,12 @@
  * @author    Thomas Bassetto <tbassetto@gmail.com>
  * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
  * @author    Cédric Frayssinet
+<<<<<<< HEAD
+ * @author    Mustapha Alaouy <alaouym@gmail.com>
+ * @copyright 2004-2014 phpMyFAQ Team
+=======
  * @copyright 2004-2017 phpMyFAQ Team
+>>>>>>> 2.10
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -811,8 +816,13 @@ $PMF_LANG['err_inactiveNews'] = 'Cette news est en cours de révision et ne peut
 $PMF_LANG['ad_categ_trans_1'] = 'Traduire';
 $PMF_LANG['ad_categ_trans_2'] = 'Catégorie';
 $PMF_LANG['ad_categ_translatecateg'] = 'Traduire la catégorie';
+<<<<<<< HEAD
+$PMF_LANG['ad_categ_translate'] = 'Traduire';
+$PMF_LANG['ad_categ_transalready'] = 'Déjà traduit en:';
+=======
 $PMF_LANG['ad_categ_translate'] = 'Traduitre';
 $PMF_LANG['ad_categ_transalready'] = 'Déjà traduit en :';
+>>>>>>> 2.10
 $PMF_LANG['ad_categ_deletealllang'] = 'Supprimer dans toutes les langues?';
 $PMF_LANG['ad_categ_deletethislang'] = 'Supprimer seulement dans cette langue?';
 $PMF_LANG['ad_categ_translated'] = 'La catégorie a été traduite.';
@@ -822,8 +832,13 @@ $PMF_LANG['ad_linkcheck_checkResult'] = 'Résultat de la vérification automatiq
 $PMF_LANG['ad_linkcheck_checkSuccess'] = 'OK';
 $PMF_LANG['ad_linkcheck_checkFailed'] = 'Echec';
 $PMF_LANG['ad_linkcheck_failReason'] = 'Raison(s) de l\'échec :';
+<<<<<<< HEAD
+$PMF_LANG['ad_linkcheck_noLinksFound'] = 'Aucun URL compatible avec la fonctionnalité vérification de lien trouvé.';
+$PMF_LANG['ad_linkcheck_infoReason'] = 'Information supplémentaires :';
+=======
 $PMF_LANG['ad_linkcheck_noLinksFound'] = 'Aucune URL compatible avec la fonctionnalité vérification de lien trouvée.';
 $PMF_LANG['ad_linkcheck_infoReason'] = 'Informations supplémentaires :';
+>>>>>>> 2.10
 $PMF_LANG['ad_linkcheck_openurl_infoprefix'] = 'Trouvé lors de tests <strong>%s</strong>: ';
 $PMF_LANG['ad_linkcheck_openurl_notready'] = 'Vérificateur d\'URL pas prêt.';
 $PMF_LANG['ad_linkcheck_openurl_maxredirect'] = 'Nombre maximum de redirections <strong>%d</strong> dépassé.';

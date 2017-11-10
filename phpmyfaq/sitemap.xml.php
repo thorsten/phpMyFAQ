@@ -25,6 +25,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
  */
+<<<<<<< HEAD
+
+use Symfony\Component\HttpFoundation\Response;
+
+=======
+>>>>>>> 2.10
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
@@ -144,23 +150,40 @@ foreach ($items as $item) {
 
 $sitemap .= '</urlset>';
 
+$response = new Response;
+
 $getgezip = PMF_Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
 if (!is_null($getgezip) && (1 == $getgezip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($sitemap);
+<<<<<<< HEAD
+        $response->headers->set('Content-Type', 'application/x-gzip');
+        $response->headers->set('Content-Disposition', 'attachment; filename="' . PMF_SITEMAP_GOOGLE_FILENAME_GZ . '"');
+        $response->headers->set('Content-Length', strlen($sitemapGz));
+        $response->setContent($sitemapGz);
+=======
         header('Content-Type: application/x-gzip');
         header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
         header('Content-Length: '.strlen($sitemapGz));
         echo $sitemapGz;
+>>>>>>> 2.10
     } else {
-        $http = new PMF_Helper_Http();
-        $http->sendStatus(404);
+        $response->setStatusCode(404);
     }
 } else {
+<<<<<<< HEAD
+    $response->headers->set('Content-Type', 'text/xml');
+    $response->headers->set('Content-Disposition', 'inline; filename="' . PMF_SITEMAP_GOOGLE_FILENAME . '"');
+    $response->headers->set('Content-Length', PMF_String::strlen($sitemap));
+    $response->setContent($sitemap);
+=======
     header('Content-Type: text/xml');
     header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
     header('Content-Length: '.strlen($sitemap));
     echo $sitemap;
+>>>>>>> 2.10
 }
+
+$response->send();
 
 $faqConfig->getDb()->close();

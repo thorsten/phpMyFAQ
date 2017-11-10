@@ -114,6 +114,17 @@ class PMF_Instance_Setup
     public function createDatabaseFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
+<<<<<<< HEAD:phpmyfaq/inc/PMF/Instance/Setup.php
+            $this->_rootDir . $folder . '/database.php',
+            "<?php\n" .
+            "\$DB['server'] = '" . $data['dbServer'] . "';\n" .
+            "\$DB['port'] = '" . $data['dbPort'] . "';\n" .
+            "\$DB['user'] = '" . $data['dbUser'] . "';\n" .
+            "\$DB['password'] = '" . $data['dbPassword'] . "';\n" .
+            "\$DB['db'] = '" . $data['dbDatabaseName'] . "';\n" .
+            "\$DB['prefix'] = '" . $data['dbPrefix'] . "';\n" .
+            "\$DB['type'] = '" . $data['dbType'] . "';",
+=======
             $this->_rootDir.$folder.'/database.php',
             "<?php\n".
             "\$DB['server'] = '".$data['dbServer']."';\n".
@@ -122,6 +133,7 @@ class PMF_Instance_Setup
             "\$DB['db'] = '".$data['dbDatabaseName']."';\n".
             "\$DB['prefix'] = '".$data['dbPrefix']."';\n".
             "\$DB['type'] = '".$data['dbType']."';",
+>>>>>>> 2.10:phpmyfaq/src/PMF/Instance/Setup.php
             LOCK_EX
         );
 

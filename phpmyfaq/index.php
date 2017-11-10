@@ -24,6 +24,11 @@
  * @since     2001-02-12
  */
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
+
+use PMF\Helper\ResponseWrapper;
+
 //
 // Define the named constant used as a check by any included PHP file
 //
@@ -151,11 +156,20 @@ if ('logout' === $action && isset($auth)) {
     $auth = null;
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
+<<<<<<< HEAD
+    if ($faqConfig->get('security.ssoSupport') && !empty ($ssoLogout)) {
+        $location =  $ssoLogout;
+    } else {
+        $location = $faqConfig->get('main.referenceURL');
+=======
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
         header('Location: '.$ssoLogout);
     } else {
         header('Location: '.$faqConfig->getDefaultUrl());
+>>>>>>> 2.10
     }
+    RedirectResponse::create($location)->send();
+    exit;
 }
 
 //
@@ -783,16 +797,24 @@ $tpl->merge('rightBox', 'index');
 $tpl->merge('writeContent', 'index');
 
 //
+// Prepate the response
+//
+$response = Response::create();
+
+<<<<<<< HEAD
+//
 // Send headers and print template
 //
-$httpHeader = new PMF_Helper_Http();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
-
+$responseWrapper = new ResponseWrapper($response);
+$responseWrapper->addContentTypeHeader('text/html');
+$responseWrapper->addCommonHeaders();
+=======
 if (false === $faqConfig->get('main.enableGzipCompression') || !DEBUG) {
     ob_start('ob_gzhandler');
 }
+>>>>>>> 2.10
 
-echo $tpl->render();
+$response->setContent($tpl->render());
+$response->send();
 
 $faqConfig->getDb()->close();
