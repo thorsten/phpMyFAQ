@@ -1268,3 +1268,6 @@ $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap<br>(default: activated)');
 $PMF_LANG['ad_category_image'] = 'Category image';
 $PMF_LANG["ad_user_show_home"] = "Show on startpage";
+
+// added v.2.10.0-alpha - 2017-11-9 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'View FAQ';
