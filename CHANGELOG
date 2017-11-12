@@ -6,6 +6,8 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.10 - 2017-
+- updated Dutch translation (https://github.com/joskevos)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.9 - 2017-10-19
 - fixed multiple XSS and CSRF vulnerabilities (Thorsten)
