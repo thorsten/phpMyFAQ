@@ -192,23 +192,24 @@ class PMF_Template
     public function parseBlock($templateName, $blockName, Array $blockContent)
     {
         if (isset($this->blocks[$templateName][$blockName])) {
-            $block = $this->blocks[$templateName][$blockName];
+            foreach($this->blocks[$templateName][$blockName] as $blockKey => $block) {
 
-            // security check
-            $blockContent = $this->_checkContent($blockContent);
-            foreach ($blockContent as $var => $val) {
-                // if array given, multiply block
-                if (is_array($val)) {
-                    $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
-                    break;
-                } else {
-                    $block = str_replace('{{ '.$var.' }}', $val, $block);
+                // security check
+                $blockContent = $this->_checkContent($blockContent);
+                foreach ($blockContent as $var => $val) {
+                    // if array given, multiply block
+                    if (is_array($val)) {
+                        $block = $this->_multiplyBlock($block, $blockContent);
+                        break;
+                    } else {
+                        $block = str_replace('{{ '.$var.' }}', $val, $block);
+                    }
                 }
-            }
 
-            $this->blocksTouched[] = $blockName;
-            $block = str_replace('&acute;', '`', $block);
-            $this->blocks[$templateName][$blockName] = $block;
+                $this->blocksTouched[] = $blockName;
+                $block = str_replace('&acute;', '`', $block);
+                $this->blocks[$templateName][$blockName][$blockKey] = $block;
+            }
         }
     }
 
@@ -327,17 +328,17 @@ class PMF_Template
                 //remove block tags from block
                 $res = str_replace('['.$name[0].']', '', $tmpBlocks[0][$i]);
                 $res = str_replace('[/'.$name[0].']', '', $res);
-                $tplBlocks[$name[0]] = $res;
+
+                $tplBlocks[$name[0]][] = $res;
 
                 //unblocked content
-                $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
-                $unblocked = str_replace('['.$name[0].']', '', $unblocked);
-                $unblocked = str_replace('[/'.$name[0].']', '', $unblocked);
+                $unblocked = str_replace($tmpBlocks[0][$i], '', $unblocked);
             }
 
             $hits = [];
             PMF_String::preg_match_all('/\{\{.+?\}\}/', $unblocked, $hits);
             $tplBlocks['unblocked'] = $hits[0];
+
         } else {
             // no blocks defined
             $tplBlocks = $tpl;
