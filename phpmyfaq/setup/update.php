@@ -533,6 +533,7 @@ if ($step == 3) {
         $faqConfig->add('ldap.ldap_use_dynamic_login', 'false');
         $faqConfig->add('ldap.ldap_dynamic_login_attribute', 'uid');
         $faqConfig->add('seo.enableXMLSitemap', 'true');
+        $faqConfig->add('main.enableCategoryRestrictions', 'true');
         $faqConfig->update(['main.currentApiVersion' => PMF_System::getApiVersion()]);
 
         $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'ldap.ldapSupport'

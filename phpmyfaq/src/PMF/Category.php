@@ -1775,24 +1775,47 @@ class PMF_Category
      *
      * @return array
      */
-    public function getNumberOfRecordsOfCategory()
+    public function getNumberOfRecordsOfCategory($categoryRestriction = false)
     {
         $numRecordsByCat = [];
 
-        $query = sprintf('
-            SELECT
-                fcr.category_id AS category_id,
-                COUNT(fcr.record_id) AS number
-            FROM
-                %sfaqcategoryrelations fcr, %sfaqdata fd
-            WHERE
-                fcr.record_id = fd.id
-            AND
-                fcr.record_lang = fd.lang
-            GROUP BY fcr.category_id',
-            PMF_Db::getTablePrefix(),
-            PMF_Db::getTablePrefix());
-
+        if ( $categoryRestriction == 'true'){
+            // when category restriction is enabled.
+            $query = sprintf('
+                SELECT
+                    fcr.category_id AS category_id,
+                    COUNT(fcr.record_id) AS number
+                FROM
+                    %sfaqcategoryrelations fcr
+                LEFT JOIN
+                    %sfaqdata fd on fcr.record_id = fd.id
+                LEFT JOIN
+                    %sfaqdata_group fdg on fdg.record_id = fcr.record_id
+                WHERE
+                    fdg.group_id = %s
+                AND
+                    fcr.record_lang = fd.lang
+                GROUP BY fcr.category_id',
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix(),
+                $this->groups[1]);
+        }else{
+            // orignal query
+            $query = sprintf('
+                SELECT
+                    fcr.category_id AS category_id,
+                    COUNT(fcr.record_id) AS number
+                FROM
+                    %sfaqcategoryrelations fcr, %sfaqdata fd
+                WHERE
+                    fcr.record_id = fd.id
+                AND
+                    fcr.record_lang = fd.lang
+                GROUP BY fcr.category_id',
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix());
+        }
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {
