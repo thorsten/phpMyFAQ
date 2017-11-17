@@ -165,7 +165,7 @@ bootstrap-fileinput@^4.4.5:
     bootstrap ">= 3.0.0"
     jquery ">= 1.9.0"
 
-bootstrap@4.0.0-beta2:
+bootstrap@4.0.0-beta.2:
   version "4.0.0-beta.2"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
 

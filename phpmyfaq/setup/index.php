@@ -65,23 +65,22 @@ $psr4Loader->register();
 ?>
 <!doctype html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</title>
+  <title>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</title>
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion() ?>">
-    <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion() ?>">
+  <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
 
-    <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
+  <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
-    <script src="../assets/js/modernizr.min.js"></script>
-    <script src="../assets/js/vendors.js"></script>
-    <script src="../assets/js/phpmyfaq.min.js"></script>
+  <script src="../assets/js/modernizr.min.js"></script>
+  <script src="../assets/js/vendors.js"></script>
+  <script src="../assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
-
+  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
 <body>
 
@@ -143,7 +142,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <form class="form-horizontal" action="index.php" method="post">
         <div class="row">
-            <div class="col-6">
+            <div class="col-sm">
                 <fieldset>
                 <legend>Database setup</legend>
                     <div class="form-group">
@@ -216,7 +215,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
             <?php if (extension_loaded('ldap')): ?>
-            <div class="col-6">
+            <div class="col-sm">
                 <fieldset>
                 <legend>LDAP setup</legend>
                     <div class="form-group">
@@ -273,9 +272,12 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                 </fieldset>
             </div>
+        </div>
+
+        <div class="row">
             <?php endif; ?>
 
-            <div class="col-6">
+            <div class="col-sm">
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
                     <div class="form-group">
@@ -359,7 +361,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
 
             <?php if (extension_loaded('curl')): ?>
-            <div class="col-6">
+            <div class="col-sm">
                 <fieldset>
                     <legend>Elasticsearch setup</legend>
                     <div class="form-group">
@@ -400,23 +402,26 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </fieldset>
             </div>
             <?php endif; ?>
-
         </div>
 
-        <div class="row" style="padding-left: 20px; text-align: center;">
-            <div class="form-group">
-                <button class="btn btn-success btn-lg" type="submit">
-                       Click to install phpMyFAQ <?php echo PMF_System::getVersion() ?>
-                </button>
+        <div class="row">
+          <div class="col-sm">
+              <div class="form-group">
+                  <button class="btn btn-success btn-lg btn-block" type="submit">
+                         Click to install phpMyFAQ <?php echo PMF_System::getVersion() ?>
+                  </button>
+              </div>
             </div>
         </div>
 
         <div class="row">
+          <div class="col-sm">
             <p class="alert alert-info text-center">
                 <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
                 Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE ?></strong>. You can
                 change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
+            </div>
         </div>
         </form>
 <?php
