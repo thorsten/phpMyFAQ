@@ -54,12 +54,13 @@
         <a class="navbar-brand" title="{{ header }}" href="{{ faqHome }}">
             <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
         </a>
+
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarCollapse">
-            <div class="navbar-nav mr-auto">
+            <ul class="navbar-nav mr-auto">
                 <li class="nav-item {{ activeSearch }}">{{ msgSearch }}</li>
                 <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
                 <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
@@ -70,7 +71,7 @@
                     <a class="nav-link dropdown-toggle" id="pmf-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
                         {{ msgLoginUser }}
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="pmf-dropdown">
+                    <ul class="dropdown-menu" aria-labelledby="pmf-dropdown">
                         [notLoggedIn]
                         <li>{{ msgRegisterUser }}</li>
                         <li>{{ msgLoginUser }}</li>
@@ -80,9 +81,9 @@
                         <li>{{ msgUserControl }}</li>
                         <li>{{ msgLogoutUser }}</li>
                         [/userloggedIn]
-                    </div>
+                    </ul>
                 </li>
-
+            </ul>
         </div>
     </nav>
 </header>
