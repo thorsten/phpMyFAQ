@@ -28,27 +28,27 @@
             <!-- Comment Form -->
             <a name="comment"></a>
             <div id="commentForm" class="hide">
-                <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
+                <form id="formValues" action="#" method="post"  accept-charset="utf-8">
                     <input type="hidden" name="newsid" value="{{ newsId }}" />
                     <input type="hidden" name="lang" value="{{ newsLang }}" />
                     <input type="hidden" name="type" value="news" />
 
                     <div class="control-group">
-                        <label class="control-label" for="user">{{ msgNewContentName }}</label>
+                        <label class="form-control-label" for="user">{{ msgNewContentName }}</label>
                         <div class="controls">
                             <input type="text" id="user" name="user" value="{{ defaultContentName }}" required="required" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="mail">{{ msgNewContentMail }}</label>
+                        <label class="form-control-label" for="mail">{{ msgNewContentMail }}</label>
                         <div class="controls">
                             <input type="email" id="mail" name="mail" value="{{ defaultContentMail }}" required="required" />
                         </div>
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="comment_text">{{ msgYourComment }}</label>
+                        <label class="form-control-label" for="comment_text">{{ msgYourComment }}</label>
                         <div class="controls">
                             <textarea id="comment_text" name="comment_text" required="required" /></textarea>
                         </div>

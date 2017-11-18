@@ -42,12 +42,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
     $glossary = new PMF_Glossary($faqConfig);
     $glossaryItem = $glossary->getGlossaryItem($id);
     ?>
-                <form class="form-horizontal" action="?action=updateglossary" method="post" accept-charset="utf-8">
+                <form  action="?action=updateglossary" method="post" accept-charset="utf-8">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="id" value="<?php echo $glossaryItem['id'];
     ?>" />
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'];
     ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item"
@@ -57,7 +57,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
                     </div>
 
             <div class="control-group">
-                <label class="control-label" for="definition">
+                <label class="form-control-label" for="definition">
                     <?php echo $PMF_LANG['ad_glossary_definition'];
     ?>:
                 </label>
@@ -67,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
                 </div>
             </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
                                 <?php echo $PMF_LANG['ad_glossary_save'];

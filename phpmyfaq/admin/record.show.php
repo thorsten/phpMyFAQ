@@ -338,7 +338,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <div id="category-<?php echo $cid ?>" class="panel-collapse collapse" role="tabpanel"
                     aria-labelledby="category-heading-<?php echo $cid ?>">
                     <div class="panel-body">
-                        <table class="table table-condensed">
+                        <table class="table table-sm">
                             <thead>
                                 <tr>
                                     <th colspan="2" style="width: 24px;">

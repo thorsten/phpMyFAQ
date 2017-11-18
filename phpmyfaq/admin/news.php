@@ -46,10 +46,10 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" id="faqEditor" name="faqEditor" action="?action=savenews" method="post" accept-charset="utf-8">
+                <form  id="faqEditor" name="faqEditor" action="?action=savenews" method="post" accept-charset="utf-8">
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="newsheader">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="newsheader">
                             <?php echo $PMF_LANG['ad_news_header'] ?>
                         </label>
                         <div class="col-lg-4">
@@ -57,32 +57,32 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="news"><?php echo $PMF_LANG['ad_news_text'] ?>:</label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="news"><?php echo $PMF_LANG['ad_news_text'] ?>:</label>
                         <div class="col-lg-4">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                             <textarea name="news" rows="5" class="form-control"></textarea>
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name'] ?></label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="authorName" id="authorName"
                                    value="<?php echo $user->getUserData('display_name') ?>">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email'] ?></label>
                         <div class="col-lg-4">
                             <input class="form-control" type="email" name="authorEmail" id="authorEmail"
                                    value="<?php echo $user->getUserData('email') ?>">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="active">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="active">
                             <?php echo $PMF_LANG['ad_news_set_active'] ?>:
                         </label>
                         <div class="col-lg-4 checkbox">
@@ -93,8 +93,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments'] ?></label>
                         <div class="col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="comment" id="comment" value="y">
@@ -103,22 +103,22 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-lg-4">
                             <input class="form-control" type="url" name="link" id="link" placeholder="http://www.example.com/">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title'] ?></label>
                         <div class="col-lg-4">
                             <input type="text" name="linkTitle" id="linkTitle" class="form-control">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" ><?php echo $PMF_LANG['ad_news_link_target'] ?></label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" ><?php echo $PMF_LANG['ad_news_link_target'] ?></label>
                         <div class="col-lg-4 radio">
                             <label>
                                 <input type="radio" name="target" value="blank">
@@ -132,31 +132,31 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                             </label>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'] ?>:</label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
                             <?php echo PMF_Language::selectLanguages($LANGCODE, false, [], 'langTo') ?>
                         </div>
                     </div>
 
                     <legend><?php echo $PMF_LANG['ad_news_expiration_window'] ?></legend>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from'];
     ?></label>
                         <div class="col-lg-2">
                             <input type="date" name="dateStart" id="dateStart" class="form-control date-pick">
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to'];
     ?></label>
                         <div class="col-lg-2">
                             <input type="date" name="dateEnd" id="dateEnd" class="form-control date-pick">
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
                                 <?php echo $PMF_LANG['ad_news_add'];
@@ -254,12 +254,12 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" action="?action=updatenews" method="post" accept-charset="utf-8">
+                <form  action="?action=updatenews" method="post" accept-charset="utf-8">
                     <input type="hidden" name="id" value="<?php echo $newsData['id'];
     ?>">
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="newsheader"><?php echo $PMF_LANG['ad_news_header'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="newsheader"><?php echo $PMF_LANG['ad_news_header'];
     ?></label>
                         <div class="col-lg-4">
                             <input type="text" name="newsheader" id="newsheader" class="form-control"
@@ -270,8 +270,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="news"><?php echo $PMF_LANG['ad_news_text'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="news"><?php echo $PMF_LANG['ad_news_text'];
     ?>:</label>
                         <div class="col-lg-4">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
@@ -283,8 +283,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="authorName"><?php echo $PMF_LANG['ad_news_author_name'];
     ?></label>
                         <div class="col-lg-4">
                             <input type="text" name="authorName" value="<?php echo $newsData['authorName'];
@@ -292,8 +292,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="authorEmail"><?php echo $PMF_LANG['ad_news_author_email'];
     ?></label>
                         <div class="col-lg-4">
                             <input type="email" name="authorEmail" value="<?php echo $newsData['authorEmail'];
@@ -301,8 +301,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="active">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="active">
                             <?php echo $PMF_LANG['ad_news_set_active'];
     ?>:
                         </label>
@@ -320,8 +320,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="comment"><?php echo $PMF_LANG['ad_news_allowComments'];
     ?></label>
                         <div class="col-lg-4">
                             <label>
@@ -335,8 +335,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="link"><?php echo $PMF_LANG['ad_news_link_url'];
     ?></label>
                         <div class="col-lg-4">
                             <input type="url" name="link" value="<?php echo $newsData['link'];
@@ -344,8 +344,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="linkTitle"><?php echo $PMF_LANG['ad_news_link_title'];
     ?></label>
                         <div class="col-lg-4">
                             <input type="text" name="linkTitle" value="<?php echo $newsData['linkTitle'];
@@ -353,8 +353,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="target"><?php echo $PMF_LANG['ad_news_link_target'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="target"><?php echo $PMF_LANG['ad_news_link_target'];
     ?></label>
                         <div class="col-lg-4">
                             <label>
@@ -384,8 +384,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'];
     ?>:</label>
                         <div class="col-lg-4">
                         <?php echo PMF_Language::selectLanguages($newsData['lang'], false, [], 'langTo');
@@ -399,8 +399,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                     <legend><?php echo $PMF_LANG['ad_news_expiration_window'];
     ?></legend>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="dateStart"><?php echo $PMF_LANG['ad_news_from'];
     ?></label>
                         <div class="col-lg-2">
                             <input name="dateStart" id="dateStart" class="form-control date-pick" value="<?php echo $dateStart;
@@ -408,8 +408,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="dateEnd"><?php echo $PMF_LANG['ad_news_to'];
     ?></label>
                         <div class="col-lg-2">
                             <input name="dateEnd" id="dateEnd" class="form-control date-pick" value="<?php echo $dateEnd;
@@ -417,7 +417,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         </div>
                     </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <div class="col-lg-offset-2 col-lg-4">
                         <button class="btn btn-primary" type="submit">
                             <?php echo $PMF_LANG['ad_news_edit'];
@@ -436,13 +436,13 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
         ?>
-                <div class="form-group"><strong><?php echo $PMF_LANG['ad_entry_comment'] ?></strong></div>
+                <div class="form-group row"><strong><?php echo $PMF_LANG['ad_entry_comment'] ?></strong></div>
 <?php
 
     }
     foreach ($comments as $item) {
         ?>
-                <div class="form-group">
+                <div class="form-group row">
                     <?php echo $PMF_LANG['ad_entry_commentby'] ?>
                     <a href="mailto:<?php print($item['email']);
         ?>">
@@ -512,7 +512,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     } else {
         printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_insertfail']);
     }
-    printf('<div class="form-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+    printf('<div class="form-group row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     ?>
             </div>
         </div>
@@ -565,7 +565,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     } else {
         printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_news_updatefail']);
     }
-    printf('<div class="form-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+    printf('<div class="form-group row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
     ?>
             </div>
         </div>
@@ -588,7 +588,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 
     if ('no' == $precheck) {
         ?>
-    <div class="form-group"><?php echo $PMF_LANG['ad_news_del'];
+    <div class="form-group row"><?php echo $PMF_LANG['ad_news_del'];
         ?></div>
     <div class="text-center">
     <form action="?action=deletenews" method="post" accept-charset="utf-8">
@@ -620,7 +620,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
             $deleteId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
             $news->deleteNews($deleteId);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
-            printf('<div class="form-group">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
+            printf('<div class="form-group row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);
         }
     }
 } else {

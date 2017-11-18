@@ -48,11 +48,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
             <h2 class="page-header">
                 <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
                 <div class="pull-right">
-                    <button class="btn btn-default pmf-elasticsearch" data-action="create">
+                    <button class="btn btn-secondary pmf-elasticsearch" data-action="create">
                         <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
                     </button>
 
-                    <button class="btn btn-default pmf-elasticsearch" data-action="import">
+                    <button class="btn btn-secondary pmf-elasticsearch" data-action="import">
                         <i aria-hidden="true" class="fa fa-plus-square"></i> <?php echo $PMF_LANG['ad_es_bulk_index'] ?>
                     </button>
 

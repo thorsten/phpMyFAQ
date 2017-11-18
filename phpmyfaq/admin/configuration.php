@@ -87,7 +87,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         }
     }
     ?>
-        <form class="form-horizontal" id="config_list" name="config_list" method="post"
+        <form  id="config_list" name="config_list" method="post"
               action="?action=config&amp;config_action=saveConfig">
             <input type="hidden" name="csrf" value="<?php echo $currentToken ?>">
 

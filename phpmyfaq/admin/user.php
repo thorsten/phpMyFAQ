@@ -320,13 +320,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         ?></div>
         <div id="user_create">
 
-            <form class="form-horizontal" action="?action=user&amp;user_action=addsave" method="post" role="form"
+            <form  action="?action=user&amp;user_action=addsave" method="post" role="form"
                   accept-charset="utf-8">
             <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession();
         ?>">
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label" for="user_name"><?php echo $PMF_LANG['ad_adus_name'];
+            <div class="form-group row">
+                <label class="col-lg-2 form-control-label" for="user_name"><?php echo $PMF_LANG['ad_adus_name'];
         ?></label>
                 <div class="col-lg-3">
                     <input type="text" name="user_name" id="user_name" required tabindex="1" class="form-control"
@@ -335,8 +335,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label" for="user_realname"><?php echo $PMF_LANG['ad_user_realname'];
+            <div class="form-group row">
+                <label class="col-lg-2 form-control-label" for="user_realname"><?php echo $PMF_LANG['ad_user_realname'];
         ?></label>
                 <div class="col-lg-3">
                 <input type="text" name="user_realname" id="user_realname" required tabindex="2" class="form-control"
@@ -345,8 +345,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label" for="user_email"><?php echo $PMF_LANG['ad_entry_email'];
+            <div class="form-group row">
+                <label class="col-lg-2 form-control-label" for="user_email"><?php echo $PMF_LANG['ad_entry_email'];
         ?></label>
                 <div class="col-lg-3">
                     <input type="email" name="user_email" id="user_email" required tabindex="3" class="form-control"
@@ -355,8 +355,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </div>
             </div>
 
-            <div class="form-group">
-                <label class="col-lg-2 control-label" for="password"><?php echo $PMF_LANG['ad_adus_password'];
+            <div class="form-group row">
+                <label class="col-lg-2 form-control-label" for="password"><?php echo $PMF_LANG['ad_adus_password'];
         ?></label>
                 <div class="col-lg-3">
                     <input type="password" name="user_password" id="password" required tabindex="4" class="form-control"
@@ -365,8 +365,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </div>
             </div>
 
-             <div class="form-group">
-                 <label class="col-lg-2 control-label" for="password_confirm"><?php echo $PMF_LANG['ad_passwd_con'];
+             <div class="form-group row">
+                 <label class="col-lg-2 form-control-label" for="password_confirm"><?php echo $PMF_LANG['ad_passwd_con'];
         ?></label>
                  <div class="col-lg-3">
                     <input type="password" name="user_password_confirm" id="password_confirm" required class="form-control"
@@ -375,7 +375,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                  </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group row">
                 <div class="col-lg-offset-2 col-lg-10">
                     <button class="btn btn-success" type="submit">
                         <?php echo $PMF_LANG['ad_gen_save'];
@@ -432,19 +432,19 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $('#modal_user_id').val(data.user_id);
                 // Append input fields
                 $('#user_data_table').append(
-                    '<div class="form-group">' +
-                        '<label class="col-lg-3 control-label"><?php echo $PMF_LANG['ad_user_realname'] ?></label>' +
+                    '<div class="form-group row">' +
+                        '<label class="col-lg-3 form-control-label"><?php echo $PMF_LANG['ad_user_realname'] ?></label>' +
                         '<div class="col-lg-9">' +
                             '<input type="text" name="display_name" value="' + data.display_name + '" class="form-control" required>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="form-group">' +
-                        '<label class="col-lg-3 control-label"><?php echo $PMF_LANG['ad_entry_email'] ?></label>' +
+                    '<div class="form-group row">' +
+                        '<label class="col-lg-3 form-control-label"><?php echo $PMF_LANG['ad_entry_email'] ?></label>' +
                         '<div class="col-lg-9">' +
                             '<input type="email" name="email" value="' + data.email + '" class="form-control" required>' +
                         '</div>' +
                     '</div>' +
-                    '<div class="form-group">' +
+                    '<div class="form-group row">' +
                         '<div class="col-lg-9 col-lg-offset-3">' +
                             '<a class="btn btn-danger pmf-admin-override-password" data-toggle="modal" ' +
                             '   href="#pmf-modal-user-password-override">Override user\'s password</a>' +
@@ -462,7 +462,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         <div class="row">
             <div class="col-lg-4">
                 <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
-                      class="form-horizontal" method="post" role="form">
+                       method="post" role="form">
                     <input type="hidden" id="user_list_select" name="user_list_select" value="">
                     <div class="panel panel-default">
                         <div class="panel-heading">
@@ -489,12 +489,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         <i aria-hidden="true" class="fa fa-user"></i> <?php echo $PMF_LANG['ad_user_profou'] ?>
                     </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
-                          class="form-horizontal">
+                          >
                         <div class="panel-body">
                             <input id="update_user_id" type="hidden" name="user_id" value="0">
                             <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession(); ?>">
-                            <div class="form-group">
-                                <label for="user_status_select" class="col-lg-3 control-label">
+                            <div class="form-group row">
+                                <label for="user_status_select" class="col-lg-3 form-control-label">
                                     <?php echo $PMF_LANG['ad_user_status'] ?>
                                 </label>
                                 <div class="col-lg-9">
@@ -526,7 +526,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         <div class="panel-heading" id="user_rights_legend">
                             <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
                             <span class="pull-right">
-                                <a class="btn btn-default btn-sm" href="#" id="checkAll">
+                                <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                                     <?php echo $PMF_LANG['ad_user_checkall'] ?>
                                     /
                                     <?php echo $PMF_LANG['ad_user_uncheckall'] ?>
@@ -536,7 +536,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         <div class="panel-body">
                             <div class="row">
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                                <div class="col-xs-6 form-group">
+                                <div class="col-xs-6 form-group row">
                                     <div class="checkbox">
                                         <label class="checkbox-inline">
                                             <input id="user_right_<?php echo $right['right_id'] ?>" type="checkbox"
@@ -573,12 +573,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         <h3><?php echo $PMF_LANG['ad_menu_passwd'] ?></h3>
                     </div>
                     <div class="modal-body">
-                        <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
+                        <form  action="#" method="post" accept-charset="utf-8">
                             <input type="hidden" name="csrf" value="<?php echo $currentUser->getCsrfTokenFromSession() ?>">
                             <input type="hidden" name="user_id" id="modal_user_id" value="<?php echo $userId ?>">
 
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="npass">
+                            <div class="form-group row">
+                                <label class="col-lg-3 form-control-label" for="npass">
                                     <?php echo $PMF_LANG['ad_passwd_new'] ?>
                                 </label>
                                 <div class="col-lg-9">
@@ -586,8 +586,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="bpass">
+                            <div class="form-group row">
+                                <label class="col-lg-3 form-control-label" for="bpass">
                                     <?php echo $PMF_LANG['ad_passwd_con'];
         ?>
                                 </label>

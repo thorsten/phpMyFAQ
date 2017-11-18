@@ -132,10 +132,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                     <h3><?php echo $PMF_LANG['ad_instance_add'] ?></h3>
                 </div>
                 <div class="modal-body">
-                    <form class="form-horizontal" action="#" method="post" accept-charset="utf-8">
+                    <form  action="#" method="post" accept-charset="utf-8">
                         <input type="hidden" name="csrf" id="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
-                        <div class="form-group">
-                            <label class="control-label col-lg-4">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4">
                                 <?php echo $PMF_LANG['ad_instance_url'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -146,40 +146,40 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-lg-4">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4">
                                 <?php echo $PMF_LANG['ad_instance_path'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="instance" id="instance" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-lg-4">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4">
                                 <?php echo $PMF_LANG['ad_instance_name'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="comment" id="comment" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-lg-4" for="email">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4" for="email">
                                 <?php echo $PMF_LANG['ad_instance_email'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="email" name="email" id="email" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-lg-4">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4">
                                 <?php echo $PMF_LANG['ad_instance_admin'] ?>:
                             </label>
                             <div class="col-lg-8">
                                 <input class="form-control" type="text" name="admin" id="admin" required>
                             </div>
                         </div>
-                        <div class="form-group">
-                            <label class="control-label col-lg-4" for="password">
+                        <div class="form-group row">
+                            <label class="form-control-label col-lg-4" for="password">
                                 <?php echo $PMF_LANG['ad_instance_password'] ?>:
                             </label>
                             <div class="col-lg-8">

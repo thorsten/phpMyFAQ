@@ -156,7 +156,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
     ?>"></td>
                     <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits;
     ?>"></td>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <button class="btn btn-primary" type="submit">
                             <?php echo $PMF_LANG['ad_stat_report_make_csv'];
     ?>

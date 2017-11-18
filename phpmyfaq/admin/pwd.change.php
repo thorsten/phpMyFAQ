@@ -78,11 +78,11 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
     ?>
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" action="?action=passwd" method="post" accept-charset="utf-8">
+                <form  action="?action=passwd" method="post" accept-charset="utf-8">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="save" value="newpassword">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="opass">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="opass">
                             <?php echo $PMF_LANG['ad_passwd_old'];
     ?>
                         </label>
@@ -91,8 +91,8 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="npass">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="npass">
                             <?php echo $PMF_LANG['ad_passwd_new'];
     ?>
                         </label>
@@ -101,8 +101,8 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="bpass">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="bpass">
                             <?php echo $PMF_LANG['ad_passwd_con'];
     ?>
                         </label>
@@ -111,7 +111,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
                                 <?php echo $PMF_LANG['ad_passwd_change'];

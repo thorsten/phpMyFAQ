@@ -55,10 +55,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
     ?>
 
-                <form action="?action=view" method="post" class="form-horizontal" accept-charset="utf-8">
+                <form action="?action=view" method="post"  accept-charset="utf-8">
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['msgSearchWord'] ?>:</label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['msgSearchWord'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
                                    value="<?php echo $searchterm ?>">
@@ -67,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     </div>
 
                     <?php if ($linkVerifier->isReady() === true): ?>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="linkstate" value="linkbad">
@@ -77,8 +77,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     </div>
                     <?php endif; ?>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['msgCategory'] ?>:</label>
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['msgCategory'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
                                 <option value="0"><?php echo $PMF_LANG['msgShowAllCategories'] ?></option>
@@ -87,7 +87,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?php echo $PMF_LANG['msgSearch'] ?>

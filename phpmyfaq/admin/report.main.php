@@ -42,7 +42,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                 <h4><?php echo $PMF_LANG['ad_stat_report_fields'];
     ?></h4>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <label class="checkbox" for="report_category">
                         <input type="checkbox" name="report_category" id="report_category" checked value="1">
                         <?php echo $PMF_LANG['ad_stat_report_category'];
@@ -105,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     </label>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group row">
                     <button class="btn btn-primary" type="submit">
                         <?php echo $PMF_LANG['ad_stat_report_make_report'];
     ?>

@@ -219,7 +219,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 </table>
                 </form>
 
-                <form action="?action=viewsessions" method="post" class="form-horizontal">
+                <form action="?action=viewsessions" method="post" >
                 <fieldset>
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
     ?>">
@@ -227,7 +227,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     ?></legend>
 
                     <div class="control-group">
-                        <label class="control-label" for="month"><?php echo $PMF_LANG['ad_stat_choose'];
+                        <label class="form-control-label" for="month"><?php echo $PMF_LANG['ad_stat_choose'];
     ?>:</label>
                         <div class="controls">
                             <select name="month" id="month" size="1">
@@ -255,7 +255,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <button class="btn btn-primary" type="submit" name="statdelete">
                             <?php echo $PMF_LANG['ad_stat_delete'];
     ?>

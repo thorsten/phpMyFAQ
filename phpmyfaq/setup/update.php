@@ -64,42 +64,48 @@ require PMF_ROOT_DIR.'/config/database.php';
 </head>
 <body>
 
-<div class="navbar navbar-default navbar-static-top">
-    <nav class="container">
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
-                    data-target="#phpmyfaq-navbar-collapse" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-        </div>
-        <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li><a target="_blank" href="//www.phpmyfaq.de/documentation">Documentation</a></li>
-                <li><a target="_blank" href="//www.phpmyfaq.de/support">Support</a></li>
-                <li><a target="_blank" href="//forum.phpmyfaq.de/">Forums</a></li>
-                <li><a target="_blank" href="//faq.phpmyfaq.de/">FAQ</a></li>
-                <li class="divider-vertical"></li>
-                <li><a href="../">Back to your FAQ</a></li>
-            </ul>
-        </div>
-    </nav>
-</div>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-<section id="content">
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main role="main">
+  <section id="content">
+
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-4 text-center">
+          phpMyFAQ <?php echo PMF_System::getVersion() ?> Update
+        </h1>
+      </div>
+      </div>
+    </div>
+
     <div class="container">
-        <div class="row">
-            <div class="jumbotron text-center">
-                <h1>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</h1>
-                <?php
-                $version = $faqConfig->get('main.currentVersion');
-                ?>
-            </div>
-        </div>
+      <div class="row">
 <?php
 
+$version = $faqConfig->get('main.currentVersion');
 $installer = new PMF_Installer();
 $installer->checkPreUpgrade($DB['type']);
 
@@ -109,7 +115,7 @@ if ($step === 1) {
         <form action="update.php?step=2" method="post">
         <input name="version" type="hidden" value="<?php echo $version;
     ?>">
-        <div class="row form-group">
+        <div class="row form-group row">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
                     <li class="active">
@@ -238,7 +244,7 @@ if ($step == 2) {
         ?>
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php echo $version ?>">
-        <div class="row form-group">
+        <div class="row form-group row">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
                     <li class="disabled"><a href="#">
@@ -285,7 +291,7 @@ if ($step == 2) {
 if ($step == 3) {
     ?>
 
-        <div class="row form-group">
+        <div class="row form-group row">
             <div class="col-lg-12">
                 <ul class="nav nav-pills nav-justified thumbnail setup-panel">
                     <li class="disabled"><a href="#">

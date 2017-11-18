@@ -46,10 +46,10 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
         $categoryHelper = new PMF_Helper_Category();
         $categoryHelper->setCategory($category);
         ?>
-                <form class="form-horizontal" action="?action=exportfile" method="post" accept-charset="utf-8">
+                <form  action="?action=exportfile" method="post" accept-charset="utf-8">
                     <h4><?php echo $PMF_LANG['ad_export_which_cat'] ?></h4>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="catid">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="catid">
                             <?php echo $PMF_LANG['ad_entry_category'];
         ?>
                         </label>
@@ -61,7 +61,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <div class="checkbox">
                                 <label for="downwards">
@@ -76,7 +76,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
     }
     ?>
                     <h4><?php echo $PMF_LANG['ad_export_type'] ?></h4>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-8 radio">
                             <p><?php echo $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
@@ -101,7 +101,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4 radio">
                             <p><?php echo $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
@@ -119,7 +119,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submitExport">
                                 <?php echo $PMF_LANG['ad_menu_export'];

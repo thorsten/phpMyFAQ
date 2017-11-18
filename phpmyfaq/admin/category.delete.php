@@ -42,7 +42,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
     ?>
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" action="?action=removecategory" method="post" accept-charset="utf-8">
+                <form  action="?action=removecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" name="cat" value="<?php echo $id;
     ?>" />
                     <input type="hidden" name="lang" value="<?php echo $LANGCODE;
@@ -50,8 +50,8 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
     ?>" />
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_titel'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_titel'];
     ?>:</label>
                         <div class="col-lg-4">
                             <p class="form-control-static"><?php echo $categories[$id]['name'];
@@ -59,8 +59,8 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_desc'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_desc'];
     ?>:</label>
                         <div class="col-lg-4">
                             <?php echo $categories[$id]['description'];
@@ -78,7 +78,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-danger" type="submit" name="submit">
                                 <?php echo $PMF_LANG['ad_categ_del_yes'];

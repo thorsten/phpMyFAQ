@@ -128,23 +128,23 @@
 
                 <h2><i aria-hidden="true" class="fa fa-heart"></i> {{ msgCommentHeader }}</h2>
 
-                <form id="formValues" action="#" method="post" class="form-horizontal" accept-charset="utf-8">
+                <form id="formValues" action="#" method="post"  accept-charset="utf-8">
                     <input type="hidden" name="id" id="id" value="{{ id }}">
                     <input type="hidden" name="lang" id="lang" value="{{ lang }}">
                     <input type="hidden" name="type" id="type" value="faq">
 
                     <div class="row">
                         <div class="col-md-6">
-                            <input type="text" name="user" id="user" class="form-control input-lg" required
+                            <input type="text" name="user" id="user" class="form-control form-control-lg" required
                                    placeholder="{{ msgNewContentName }}" value="{{ defaultContentName }}">
                         </div>
                         <div class="col-md-6">
-                            <input type="email" name="mail" id="mail" class="form-control input-lg" required
+                            <input type="email" name="mail" id="mail" class="form-control form-control-lg" required
                                    placeholder="{{ msgNewContentMail }}"  value="{{ defaultContentMail }}">
                         </div>
                     </div>
 
-                    <textarea rows="10" name="comment_text" id="comment_text" class="form-control input-lg"
+                    <textarea rows="10" name="comment_text" id="comment_text" class="form-control form-control-lg"
                               placeholder="{{ msgYourComment }}"></textarea>
 
                     {{ captchaFieldset }}

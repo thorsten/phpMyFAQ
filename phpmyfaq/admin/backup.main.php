@@ -60,7 +60,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
             <div class="col-lg-6">
                 <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8"
-                    class="form-horizontal">
+                    >
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
@@ -68,13 +68,13 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                         </div>
                         <div class="panel-body">
                             <p><?php echo $PMF_LANG['ad_csv_restore'] ?></p>
-                            <div class="form-group">
-                                <label class="col-lg-4 control-label"><?php echo $PMF_LANG['ad_csv_file'] ?>:</label>
+                            <div class="form-group row">
+                                <label class="col-lg-4 form-control-label"><?php echo $PMF_LANG['ad_csv_file'] ?>:</label>
                                 <div class="col-lg-8">
                                     <input type="file" name="userfile">
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group row">
                                 <p class="text-right">
                                     <button class="btn btn-primary" type="submit">
                                         <i aria-hidden="true" class="fa fa-upload fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_ok'] ?>

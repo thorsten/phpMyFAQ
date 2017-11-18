@@ -40,19 +40,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
     ?>
-                <form class="form-horizontal" action="?action=saveglossary" method="post" accept-charset="utf-8">
+                <form  action="?action=saveglossary" method="post" accept-charset="utf-8">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'];
     ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item" required />
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="definition">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="definition">
                             <?php echo $PMF_LANG['ad_glossary_definition'];
     ?>:
                         </label>
@@ -61,7 +61,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
                                 <?php echo $PMF_LANG['ad_glossary_save'];

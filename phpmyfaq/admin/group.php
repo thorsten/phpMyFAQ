@@ -260,12 +260,12 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
             <div class="col-lg-12">
                 <div id="user_message"><?php echo $message;
     ?></div>
-                <form class="form-horizontal" name="group_create" action="?action=group&amp;group_action=addsave" method="post">
+                <form  name="group_create" action="?action=group&amp;group_action=addsave" method="post">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
     ?>" />
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="group_name"><?php echo $PMF_LANG['ad_group_name'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="group_name"><?php echo $PMF_LANG['ad_group_name'];
     ?></label>
                         <div class="col-lg-3">
                             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
@@ -274,8 +274,8 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="group_description"><?php echo $PMF_LANG['ad_group_description'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="group_description"><?php echo $PMF_LANG['ad_group_description'];
     ?></label>
                         <div class="col-lg-3">
                             <textarea name="group_description" id="group_description" cols="<?php echo $descriptionCols;
@@ -287,8 +287,8 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label" for="group_auto_join"><?php echo $PMF_LANG['ad_group_autoJoin'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label" for="group_auto_join"><?php echo $PMF_LANG['ad_group_autoJoin'];
     ?></label>
                         <div class="col-lg-3">
                             <div class="checkbox">
@@ -301,7 +301,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
                                 <?php echo $PMF_LANG['ad_gen_save'];
@@ -376,7 +376,7 @@ if ('list' === $groupAction) {
                         <?php echo $PMF_LANG['ad_group_membership'] ?>
                     </div>
                     <div class="panel-body">
-                        <div class="form-group">
+                        <div class="form-group row">
                             <div class="text-right">
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
@@ -393,14 +393,14 @@ if ('list' === $groupAction) {
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group row">
                             <select id="group_user_list" class="form-control" size="<?php echo $memberSelectSize ?>"
                                 multiple>
                                 <option value="0">...user list...</option>
                             </select>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group row">
                             <div class="text-center">
                                 <input class="btn btn-success pmf-add-member" type="button"
                                     value="<?php echo $PMF_LANG['ad_group_addMember'] ?>">
@@ -409,7 +409,7 @@ if ('list' === $groupAction) {
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group row">
                             <?php echo $PMF_LANG['ad_group_members'] ?>
                             <div class="pull-right">
                                 <span class="select_all">
@@ -427,7 +427,7 @@ if ('list' === $groupAction) {
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group row">
                             <select id="group_member_list" name="group_members[]" class="form-control" multiple
                                     size="<?php echo $memberSelectSize ?>">
                                 <option value="0">...member list...</option>
@@ -450,11 +450,11 @@ if ('list' === $groupAction) {
                     <div class="panel-heading">
                         <?php echo $PMF_LANG['ad_group_details'] ?>
                     </div>
-                    <form action="?action=group&group_action=update_data" method="post" class="form-horizontal">
+                    <form action="?action=group&group_action=update_data" method="post" >
                     <input id="update_group_id" type="hidden" name="group_id" value="0">
                         <div class="panel-body">
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="update_group_name">
+                            <div class="form-group row">
+                                <label class="col-lg-3 form-control-label" for="update_group_name">
                                     <?php echo $PMF_LANG['ad_group_name'] ?>
                                 </label>
                                 <div class="col-lg-9">
@@ -462,8 +462,8 @@ if ('list' === $groupAction) {
                                            tabindex="1" value="<?php echo(isset($group_name) ? $group_name : '') ?>">
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-lg-3 control-label" for="update_group_description">
+                            <div class="form-group row">
+                                <label class="col-lg-3 form-control-label" for="update_group_description">
                                     <?php echo $PMF_LANG['ad_group_description'] ?>
                                 </label>
                                 <div class="col-lg-9">
@@ -473,7 +473,7 @@ if ('list' === $groupAction) {
                                         echo(isset($group_description) ? $group_description : '') ?></textarea>
                                 </div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group row">
                                 <div class="col-lg-offset-3 col-lg-9">
                                     <div class="checkbox">
                                         <label>
@@ -501,7 +501,7 @@ if ('list' === $groupAction) {
                     <div class="panel-heading" id="user_rights_legend">
                         <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
                         <span class="pull-right">
-                            <a class="btn btn-default btn-sm" href="#" id="checkAll">
+                            <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                                 <?php echo $PMF_LANG['ad_user_checkall'] ?>
                                 /
                                 <?php echo $PMF_LANG['ad_user_uncheckall'] ?>
@@ -512,7 +512,7 @@ if ('list' === $groupAction) {
                     <div class="panel-body">
                         <div class="row">
                             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-                            <div class="col-xs-6 form-group pmf-user-permissions">
+                            <div class="col-xs-6 form-group row pmf-user-permissions">
                                 <div class="checkbox">
                                     <label class="checkbox-inline">
                                         <input id="group_right_<?php echo $right['right_id'] ?>" type="checkbox"

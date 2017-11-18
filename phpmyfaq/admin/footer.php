@@ -92,7 +92,7 @@ if (isset($auth)) {
         image_advtab: true,
         image_class_list: [
             { title: 'None', value: '' },
-            { title: 'Responsive', value: 'img-responsive' }
+            { title: 'Responsive', value: 'img-fluid' }
         ],
         image_dimensions: true,
 

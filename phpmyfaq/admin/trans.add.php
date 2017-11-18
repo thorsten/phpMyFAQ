@@ -46,10 +46,10 @@ if (isset($_SESSION['trans'])) {
 
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" id="newTranslationForm" accept-charset="utf-8">
+                <form  id="newTranslationForm" accept-charset="utf-8">
                 <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label">
                             <?php echo $PMF_LANG['msgLanguage'] ?>
                         </label>
                         <div class="col-lg-4">
@@ -64,8 +64,8 @@ if (isset($_SESSION['trans'])) {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label">
                             <?php echo $PMF_LANG['msgTransToolLanguageDir'] ?>
                         </label>
                         <div class="col-lg-4">
@@ -75,31 +75,31 @@ if (isset($_SESSION['trans'])) {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label">
                             <?php echo $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] ?>
                         </label>
                         <div class="col-lg-4">
                             <input type="number" min="1" max="10" step="1" class="form-control" name="langnplurals">
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label">
                             <?php echo $PMF_LANG['msgTransToolLanguageDesc'] ?>
                         </label>
                         <div class="col-lg-4">
                             <textarea class="form-control" rows="3" name="langdesc"></textarea>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label">
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label">
                             <?php echo $PMF_LANG['msgAuthor'] ?>
                         </label>
                         <div class="col-lg-4">
                             <input type="text" class="form-control" name="author[]">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <input type="button" class="btn btn-primary"
                                    value="<?php echo $PMF_LANG['msgTransToolCreateTranslation'] ?>"

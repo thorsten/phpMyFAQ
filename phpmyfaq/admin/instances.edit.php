@@ -42,30 +42,30 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     $instanceData = $instance->getInstanceById($instanceId);
 
     ?>
-    <form class="form-horizontal" action="?action=updateinstance" method="post" accept-charset="utf-8">
+    <form  action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
-        <div class="form-group">
-            <label for="url" class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>
+        <div class="form-group row">
+            <label for="url" class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>
             <div class="col-lg-8">
                 <input type="url" name="url" id="url" class="form-control" value="<?php echo $instanceData->url ?>" required>
             </div>
         </div>
-        <div class="form-group">
-            <label for="instance"  class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_path'] ?>:</label>
+        <div class="form-group row">
+            <label for="instance"  class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_path'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="instance" id="instance" class="form-control" required
                        value="<?php echo $instanceData->instance ?>">
             </div>
         </div>
-        <div class="form-group">
-            <label for="comment" class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_name'] ?>:</label>
+        <div class="form-group row">
+            <label for="comment" class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_name'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="comment" id="comment" class="form-control" required
                        value="<?php echo $instanceData->comment ?>">
             </div>
         </div>
-        <div class="form-group">
-            <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_instance_config'] ?>:</label>
+        <div class="form-group row">
+            <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_config'] ?>:</label>
             <div class="col-lg-8">
                 <p class="form-control-static">
             <?php
@@ -76,7 +76,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 </p>
             </div>
         </div>
-        <div class="form-group">
+        <div class="form-group row">
             <div class="col-lg-offset-2 col-lg-4">
                 <button class="btn btn-primary" type="submit">
                     <?php echo $PMF_LANG['ad_instance_button'] ?>

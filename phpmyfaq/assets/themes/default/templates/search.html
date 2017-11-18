@@ -34,7 +34,7 @@
 
                     <div class="input-group pmf-search-advanced">
                         <input id="searchfield" type="search" name="search" value="{{ searchString }}"
-                               class="form-control input-lg" placeholder="{{ msgSearch }}">
+                               class="form-control form-control-lg" placeholder="{{ msgSearch }}">
                             <span class="input-group-addon">
                                 <button type="submit" class="btn btn-lg" aria-label="{{ msgSearch }}">
                                     <span class="fa fa-search"></span>
@@ -43,7 +43,7 @@
                     </div>
 
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="checkbox">
                             <label>
                                 <input type="checkbox" {{ checkedAllLanguages }} name="langs" id="langs" value="all">
@@ -52,11 +52,11 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
+                    <div class="form-group row">
                         <label>
                             {{ selectCategories }}
                         </label>
-                        <select class="form-control input-lg" name="searchcategory" size="1">
+                        <select class="form-control form-control-lg" name="searchcategory" size="1">
                             <option value="%" selected="selected">{{ allCategories }}</option>
                             {{ printCategoryOptions }}
                         </select>

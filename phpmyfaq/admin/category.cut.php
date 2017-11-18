@@ -44,13 +44,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
         <div class="row">
             <div class="col-lg-12">
-                <form class="form-horizontal" action="?action=pastecategory" method="post" accept-charset="utf-8">
+                <form  action="?action=pastecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" name="cat" value="<?php echo $id;
     ?>">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
     ?>">
-                    <div class="form-group">
-                        <label class="col-lg-2 control-label"><?php echo $PMF_LANG['ad_categ_paste2'];
+                    <div class="form-group row">
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_paste2'];
     ?></label>
                         <div class="col-lg-4">
                             <select name="after" size="1" class="form-control">
@@ -74,7 +74,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?php echo $PMF_LANG['ad_categ_updatecateg'];
