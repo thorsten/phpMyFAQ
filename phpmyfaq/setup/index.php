@@ -84,44 +84,48 @@ $psr4Loader->register();
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+  <div class="container">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
-      </li>
-      <li class="nav-item">
-      <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
-      </li>
-    </ul>
+    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+        </li>
+        <li class="nav-item">
+        <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
-<section id="content">
-    <div class="container">
-        <div class="row">
-            <div class="jumbotron">
-              <div class="container">
-                <h1 class="display-3">phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</h1>
-                <p class="text-center">
-                  Did you already read the
-                  <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
-                  carefully before starting the phpMyFAQ setup?</p>
-              </div>
-            </div>
-        </div>
+<main role="main">
+  <section id="content">
 
-        <div class="row">
+    <div class="jumbotron">
+      <div class="container">
+        <h1 class="display-4 text-center">
+          phpMyFAQ <?php echo PMF_System::getVersion() ?>
+        </h1>
+        <p class="text-center">
+          Did you already read the
+          <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
+          carefully before starting the phpMyFAQ setup?</p>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
 <?php
 //
 // Initialize static string wrapper
