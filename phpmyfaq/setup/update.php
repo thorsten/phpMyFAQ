@@ -64,45 +64,43 @@ require PMF_ROOT_DIR.'/config/database.php';
 </head>
 <body>
 
-<nav class="navbar navbar-expand-md navbar-dark bg-dark">
-  <div class="container">
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
+  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
+    <div class="container">
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
 
-    <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
-        </li>
-      </ul>
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
+          </li>
+        </ul>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
 
 <main role="main">
   <section id="content">
 
-    <div class="jumbotron">
-      <div class="container">
-        <h1 class="display-4 text-center">
-          phpMyFAQ <?php echo PMF_System::getVersion() ?> Update
-        </h1>
-      </div>
-      </div>
-    </div>
-
+  <div class="jumbotron">
     <div class="container">
-      <div class="row">
+      <h1 class="display-4 text-center">
+        phpMyFAQ <?php echo PMF_System::getVersion() ?> Update
+      </h1>
+    </div>
+  </div>
+
+  <div class="container">
 <?php
 
 $version = $faqConfig->get('main.currentVersion');
@@ -110,89 +108,101 @@ $installer = new PMF_Installer();
 $installer->checkPreUpgrade($DB['type']);
 
 /**************************** STEP 1 OF 3 ***************************/
-if ($step === 1) {
-    ?>
-        <form action="update.php?step=2" method="post">
-        <input name="version" type="hidden" value="<?php echo $version;
-    ?>">
-        <div class="row form-group row">
-            <div class="col-lg-12">
-                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                    <li class="active">
-                        <a href="#">
-                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                            <p class="list-group-item-text">Update information</p>
-                        </a>
-                    </li>
-                    <li class="disabled"><a href="update.php?step=2">
-                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                            <p class="list-group-item-text">File backups</p>
-                        </a>
-                    </li>
-                    <li class="disabled"><a href="#">
-                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                            <p class="list-group-item-text">Database updates</p>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+if ($step === 1) { ?>
+
+    <form action="update.php?step=2" method="post">
+      <input name="version" type="hidden" value="<?php echo $version ?>">
+      <div class="row">
+        <div class="col">
+          <ul class="nav nav-pills nav-fill">
+            <li class="nav-item">
+              <a class="nav-link active" href="#">
+                <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                <p class="list-group-item-text">Update information</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                <p class="list-group-item-text">File backups</p>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">
+                <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                <p class="list-group-item-text">Database updates</p>
+              </a>
+            </li>
+          </ul>
         </div>
-        <div class="row setup-content" id="step1">
-            <div class="col-lg-12">
-                <p class="alert alert-info text-center">
-                    <strong>
-                        <i aria-hidden="true" class="fa fa-info-circle"></i>
-                        Please create a full backup of your database, your templates,
-                        attachments and uploaded images before running this update.
-                    </strong>
-                </p>
+      </div>
 
-                <p>This update script will work <strong>only</strong> for the following versions:</p>
-                <ul>
-                    <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
-                    <li>phpMyFAQ 2.9.x</li>
-                </ul>
-
-                <p>This update script <strong>will not</strong> work for the following versions:</p>
-                <ul>
-                    <li>phpMyFAQ 0.x</li>
-                    <li>phpMyFAQ 1.x</li>
-                    <li>phpMyFAQ 2.0.x</li>
-                    <li>phpMyFAQ 2.5.x</li>
-                    <li>phpMyFAQ 2.6.x</li>
-                    <li>phpMyFAQ 2.7.x</li>
-                </ul>
-                <?php
-
-                // We only support updates from 2.8+
-                if (version_compare($version, '2.8.0', '>')) {
-                    printf(
-                        '<p class="alert alert-success text-center">Your current phpMyFAQ version: %s %s</p>',
-                        $version,
-                        '<i aria-hidden="true" class="fa fa-check"></i>'
-                    );
-                } else {
-                    printf(
-                        '<p class="alert alert-danger text-center">Your current phpMyFAQ version: %s</p>',
-                        $version
-                    );
-                    echo '<p>Please update to the latest phpMyFAQ 2.8 version first.</p>';
-                }
-                if ('hash' !== PMF_ENCRYPTION_TYPE) {
-                    printf(
-                        '<p class="alert alert-info text-center">Your passwords are currently encoded with a %s() method.</p>',
-                        PMF_ENCRYPTION_TYPE
-                    );
-                }
-                ?>
-                <p class="text-center">
-                    <button class="btn btn-primary btn-lg" type="submit">
-                        Go to step 2 of 3
-                    </button>
-                </p>
-            </div>
+      <div class="row setup-content" id="step1">
+        <div class="col">
+          <div class="alert alert-warning text-center" role="alert">
+            <strong>
+              <i aria-hidden="true" class="fa fa-info-circle"></i>
+              Please create a full backup of your database, your templates,
+              attachments and uploaded images before running this update.
+            </strong>
+          </div>
         </div>
-        </form>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <p>This update script will work <strong>only</strong> for the following versions:</p>
+          <ul>
+            <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
+            <li>phpMyFAQ 2.9.x</li>
+            <li>phpMyFAQ 2.10.x</li>
+          </ul>
+        </div>
+        <div class="col">
+          <p>This update script <strong>will not</strong> work for the following versions:</p>
+          <ul>
+            <li>phpMyFAQ 0.x</li>
+            <li>phpMyFAQ 1.x</li>
+            <li>phpMyFAQ 2.0.x</li>
+            <li>phpMyFAQ 2.5.x</li>
+            <li>phpMyFAQ 2.6.x</li>
+            <li>phpMyFAQ 2.7.x</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+            <?php
+              // We only support updates from 2.8+
+            if (version_compare($version, '2.8.0', '>')) {
+                printf(
+                    '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
+                    $version,
+                    '<i aria-hidden="true" class="fa fa-check"></i>'
+                );
+            } else {
+                printf(
+                    '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
+                    $version
+                );
+                echo '<p>Please update to the latest phpMyFAQ 2.8 version first.</p>';
+            }
+            if ('hash' !== PMF_ENCRYPTION_TYPE) {
+                printf(
+                    '<div class="alert alert-info text-center" role="alert">Your passwords are currently encoded with a %s() method.</div>',
+                    PMF_ENCRYPTION_TYPE
+                );
+            }
+            ?>
+          <p class="text-center">
+            <button class="btn btn-primary btn-lg" type="submit">
+              Go to step 2 of 3
+            </button>
+          </p>
+        </div>
+      </div>
+    </form>
 <?php
     PMF_System::renderFooter();
 }
@@ -245,28 +255,31 @@ if ($step == 2) {
         <form action="update.php?step=3" method="post">
         <input type="hidden" name="version" value="<?php echo $version ?>">
         <div class="row form-group row">
-            <div class="col-lg-12">
-                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                    <li class="disabled"><a href="#">
-                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                            <p class="list-group-item-text">Update information</p>
-                        </a>
-                    </li>
-                    <li class="active"><a href="#">
-                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                            <p class="list-group-item-text">File backups</p>
-                        </a>
-                    </li>
-                    <li class="disabled"><a href="update.php?step=3">
-                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                            <p class="list-group-item-text">Database updates</p>
-                        </a>
-                   </li>
-                </ul>
+            <div class="col">
+              <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                    <p class="list-group-item-text">Update information</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">
+                    <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                    <p class="list-group-item-text">File backups</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                    <p class="list-group-item-text">Database updates</p>
+                  </a>
+                </li>
+              </ul>
             </div>
         </div>
         <div class="row setup-content" id="step2">
-            <div class="col-lg-12">
+            <div class="col">
                 <?php foreach ($updateMessages as $updateMessage) {
                     printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
                 } ?>
@@ -292,28 +305,31 @@ if ($step == 3) {
     ?>
 
         <div class="row form-group row">
-            <div class="col-lg-12">
-                <ul class="nav nav-pills nav-justified thumbnail setup-panel">
-                    <li class="disabled"><a href="#">
-                            <h4 class="list-group-item-heading">Step 1 of 3</h4>
-                            <p class="list-group-item-text">Update information</p>
-                        </a>
-                    </li>
-                    <li class="disabled"><a href="#">
-                            <h4 class="list-group-item-heading">Step 2 of 3</h4>
-                            <p class="list-group-item-text">File backups</p>
-                        </a>
-                    </li>
-                    <li class="active"><a href="#">
-                            <h4 class="list-group-item-heading">Step 3 of 3</h4>
-                            <p class="list-group-item-text">Database updates</p>
-                        </a>
-                    </li>
-                </ul>
+            <div class="col">
+              <ul class="nav nav-pills nav-fill">
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <h4 class="list-group-item-heading">Step 1 of 3</h4>
+                    <p class="list-group-item-text">Update information</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#">
+                    <h4 class="list-group-item-heading">Step 2 of 3</h4>
+                    <p class="list-group-item-text">File backups</p>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link active" href="#">
+                    <h4 class="list-group-item-heading">Step 3 of 3</h4>
+                    <p class="list-group-item-text">Database updates</p>
+                  </a>
+                </li>
+              </ul>
             </div>
         </div>
         <div class="row setup-content" id="step2">
-            <div class="col-lg-12">
+            <div class="col">
 <?php
     $images = [];
     $prefix = PMF_Db::getTablePrefix();

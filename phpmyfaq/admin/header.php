@@ -253,7 +253,7 @@ switch ($action) {
                             <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
                         </a>
                     </li>
-                    <li class="divider"></li>
+                    <li class="dropdown-divider"></li>
                     <?php } ?>
                     <li>
                         <a href="index.php?action=logout">

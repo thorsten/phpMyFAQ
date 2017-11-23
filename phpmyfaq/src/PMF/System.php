@@ -400,7 +400,7 @@ class PMF_System
             );
         }
         printf(
-            '</div></section></main><footer class="container"><p class="text-right">%s</p></footer></body></html>',
+            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer></body></html>',
             COPYRIGHT
         );
         exit(-1);
