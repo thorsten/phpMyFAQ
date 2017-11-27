@@ -138,7 +138,7 @@ class PMF_Template
         if (isset($this->blocks[$templateName]['unblocked'])) {
             $templateContent = $this->_checkContent($templateContent);
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
-                $varName = trim(PMF_String::preg_replace('/[\{\}\}]/', '', $tplVar));
+                $varName = trim(PMF_String::preg_replace('/[\{\{\}\}]/', '', $tplVar));
                 if (isset($templateContent[$varName])) {
                     $tmp = str_replace($tplVar, $templateContent[$varName], $tmp);
                 }
@@ -273,25 +273,25 @@ class PMF_Template
         //create the replacement array
         foreach ($blockContent as $var => $val) {
             if (is_array($val) && !$multiplyTimes) {
-                //the first array in $blockContent defines $multiplyTimes
+                // the first array in $blockContent defines $multiplyTimes
                 $multiplyTimes = count($val);
                 $replace[$var] = $val;
             } elseif ((is_array($val) && $multiplyTimes)) {
-                //check if all further arrays in $blockContent have the same length
+                // check if all further arrays in $blockContent have the same length
                 if ($multiplyTimes == count($val)) {
                     $replace[$var] = $val;
                 } else {
                     die('Wrong parameter length!');
                 }
             } else {
-                //multiply strings to $multiplyTimes
+                // multiply strings to $multiplyTimes
                 for ($i = 0; $i < $multiplyTimes; ++$i) {
                     $replace[$var][] = $val;
                 }
             }
         }
 
-        //do the replacement
+        // do the replacement
         for ($i = 0; $i < $multiplyTimes; ++$i) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
@@ -307,29 +307,29 @@ class PMF_Template
      *
      * @param string $tpl Block to read
      *
-     * @return string
+     * @return array
      */
     private function _readBlocks($tpl)
     {
         $tmpBlocks = [];
 
         // read all blocks into $tmpBlocks
-        PMF_String::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
+        PMF_String::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\{\}\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
 
         $unblocked = $tpl;
         if (isset($tmpBlocks)) {
             $blockCount = count($tmpBlocks[0]);
             for ($i = 0; $i < $blockCount; ++$i) {
                 $name = '';
-                //find block name
+                // find block name
                 PMF_String::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
                 $name = PMF_String::preg_replace('/[\[\[\/\]]/', '', $name);
-                //remove block tags from block
+                // remove block tags from block
                 $res = str_replace('['.$name[0].']', '', $tmpBlocks[0][$i]);
                 $res = str_replace('[/'.$name[0].']', '', $res);
                 $tplBlocks[$name[0]] = $res;
 
-                //unblocked content
+                // unblocked content
                 $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
                 $unblocked = str_replace('['.$name[0].']', '', $unblocked);
                 $unblocked = str_replace('[/'.$name[0].']', '', $unblocked);

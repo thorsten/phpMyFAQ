@@ -15,8 +15,12 @@
  */
 
 // Bootstrap
-@import "../../../../../node_modules/bootstrap/scss/bootstrap";
+@import '../../../../../node_modules/bootstrap/scss/bootstrap';
 
 // phpMyFAQ colors and mixins
-@import "mixins";
-@import "colors";
+@import 'mixins';
+@import 'colors';
+
+body {
+  margin-bottom: 3rem;
+}

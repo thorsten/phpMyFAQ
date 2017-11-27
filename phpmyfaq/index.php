@@ -578,7 +578,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgContact' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'contact.html">'.$PMF_LANG['msgContact'].'</a>',
         'msgGlossary' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'glossary.html">'.$PMF_LANG['ad_menu_glossary'].'</a>',
         'backToHome' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'index.html">'.$PMF_LANG['msgHome'].'</a>',
-        'allCategories' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
+        'allCategories' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
         'faqOverview' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'overview.html">'.$PMF_LANG['faqOverview'].'</a>',
         'showSitemap' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html', );
@@ -616,7 +616,7 @@ if (isset($auth)) {
 
     if (array_values(array_intersect($userRights, $minRights)) === $minRights) {
         $adminSection = sprintf(
-            '<a href="%s">%s</a>',
+            '<a class="dropdown-item" href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',
             $PMF_LANG['adminSection']
         );
@@ -627,7 +627,7 @@ if (isset($auth)) {
     if ($faqConfig->get('ldap.ldapSupport')) {
         $userControlDropdown = '';
     } else {
-        $userControlDropdown = '<a href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>';
+        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>';
     }
 
     $tpl->parseBlock(
@@ -637,21 +637,21 @@ if (isset($auth)) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'msgUserControlDropDown' => $userControlDropdown,
-            'msgLogoutUser' => '<a href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
+            'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]
     );
 } else {
     if ($faqConfig->get('main.maintenanceMode')) {
-        $msgLoginUser = '<a href="./admin/">%s</a>';
+        $msgLoginUser = '<a class="dropdown-item" href="./admin/">%s</a>';
     } else {
-        $msgLoginUser = '<a href="?action=login">%s</a>';
+        $msgLoginUser = '<a class="dropdown-item" href="?action=login">%s</a>';
     }
     $tpl->parseBlock(
         'index',
         'notLoggedIn',
         array(
-            'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegisterUser'].'</a>' : '',
+            'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a class="dropdown-item" href="?action=register">'.$PMF_LANG['msgRegisterUser'].'</a>' : '',
             'msgLoginUser' => sprintf($msgLoginUser, $PMF_LANG['msgLoginUser']),
             'activeRegister' => ('register' == $action) ? 'active' : '',
             'activeLogin' => ('login' == $action) ? 'active' : '',

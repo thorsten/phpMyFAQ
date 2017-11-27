@@ -48,119 +48,60 @@
 </head>
 <body dir="{{ dir }}">
 
-<header>
-    <nav class="navbar navbar-toggleable-md navbar-dark fixed-top bg-dark">
-
-        <a class="navbar-brand" title="{{ header }}" href="{{ faqHome }}">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" id="logo" title="{{ header }}" href="{{ faqHome }}">
             <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
         </a>
-
-        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmfNavbar" aria-controls="pmfNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarCollapse">
+        <div class="collapse navbar-collapse" id="pmfNavbar">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item {{ activeSearch }}">{{ msgSearch }}</li>
-                <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
-                <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
-                <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-                <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
 
-                <li class="nav-item dropdown {{ activeLogin }}">
-                    <a class="nav-link dropdown-toggle" id="pmf-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#">
-                        {{ msgLoginUser }}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="pmf-dropdown">
-                        [notLoggedIn]
-                        <li>{{ msgRegisterUser }}</li>
-                        <li>{{ msgLoginUser }}</li>
-                        [/notLoggedIn]
-                        [userloggedIn]
-                        <li>{{ msgUserControlDropDown }}</li>
-                        <li>{{ msgUserControl }}</li>
-                        <li>{{ msgLogoutUser }}</li>
-                        [/userloggedIn]
-                    </ul>
-                </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+              <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
+              <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
+              <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+              <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
 
-
-
-
-<header>
-    <div class="pmf-wrapper pmf-masthead">
-        <div class="container">
-            <a id="logo" title="{{ header }}" href="{{ faqHome }}">
-                <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-            </a>
-
-            <div id="mobile-nav-toggle" class="pull-right">
-                <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
-                    <i aria-hidden="true" class="fa fa-bars"></i>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {{ msgLoginUser }}
                 </a>
-            </div>
-
-            <nav class="pull-right pmf-nav">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav nav-pills navbar-nav">
-
-                        <li class="{{ activeSearch }}">{{ msgSearch }}</li>
-                        <li class="{{ activeAllCategories }}">{{ allCategories }}</li>
-                        <li class="{{ activeAddContent }}">{{ msgAddContent }}</li>
-                        <li class="{{ activeAddQuestion }}">{{ msgQuestion }}</li>
-                        <li class="{{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
-
-                        <li class="dropdown {{ activeLogin }}">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                {{ msgLoginUser }}
-                                <b class="caret"></b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                [notLoggedIn]
-                                <li>{{ msgRegisterUser }}</li>
-                                <li>{{ msgLoginUser }}</li>
-                                [/notLoggedIn]
-                                [userloggedIn]
-                                <li>{{ msgUserControlDropDown }}</li>
-                                <li>{{ msgUserControl }}</li>
-                                <li>{{ msgLogoutUser }}</li>
-                                [/userloggedIn]
-                            </ul>
-                        </li>
-                    </ul>
+                <div class="dropdown-menu" aria-labelledby="dropdown">
+                  [notLoggedIn]
+                  {{ msgRegisterUser }}
+                  {{ msgLoginUser }}
+                  [/notLoggedIn]
+                  [userloggedIn]
+                  {{ msgUserControlDropDown }}
+                  {{ msgUserControl }}
+                  {{ msgLogoutUser }}
+                  [/userloggedIn]
                 </div>
-            </nav>
+              </li>
 
+            </ul>
+            <form  class="form-inline my-2 my-md-0"role="search" id="search" action="{{ writeSendAdress }}" method="get">
+                <input type="hidden" name="action" value="search">
+                <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..." aria-label="Search" autocomplete="off">
+            </form>
+
+            </form>
         </div>
     </div>
+</nav>
 
-    <div class="pmf-wrapper pmf-subheader">
-        <div class="container">
-            <!--
-            <div class="pmf-breadcrumb">
-                [breadcrumb]
-                {{ breadcrumbHeadline }}
-                [/breadcrumb]
-            </div>
-            -->
-            <div class="pmf-searchbox">
-                <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
-                    <input type="hidden" name="action" value="search">
-                    <button class="searchbutton" type="submit" aria-label="{{ searchBox }}">
-                        <i aria-hidden="true" class="fa fa-search"></i>
-                    </button>
-                    <input type="text" class="searchfield typeahead" name="search" id="searchbox"
-                           autocomplete="off" placeholder="{{ searchBox }} ...">
-                </form>
-            </div>
-        </div>
-    </div>
+<!--
+<header>
+  <div class="pmf-breadcrumb">
+    [breadcrumb]
+    {{ breadcrumbHeadline }}
+    [/breadcrumb]
+  </div>
 </header>
-
+-->
 
 
 <div class="pmf-wrapper pmf-main">
