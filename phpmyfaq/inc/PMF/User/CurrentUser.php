@@ -624,7 +624,7 @@ class PMF_User_CurrentUser extends PMF_User
     }
 
     /**
-     * Sets IP and session timestamp plus lockout time, success flag to
+     * Sets IP and session timestamp, success flag to
      * false.
      *
      * @return mixed
@@ -641,7 +641,7 @@ class PMF_User_CurrentUser extends PMF_User
             WHERE
                 user_id = %d",
             PMF_Db::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] + $this->lockoutTime,
+            $_SERVER['REQUEST_TIME'],
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
