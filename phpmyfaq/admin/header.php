@@ -199,6 +199,7 @@ switch ($action) {
 
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
+    <script src="../assets/js/vendors.js"></script>
     <script src="assets/js/sidebar.js"></script>
     <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>"></script>
 
@@ -214,25 +215,24 @@ switch ($action) {
 
 <div id="wrapper">
 
-    <nav class="navbar navbar-default navbar-static-top navbar-admin">
-        <div class="navbar-header">
-            <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".sidebar-collapse">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="navbar-header mr-auto">
+			<?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?> 
+			<!-- TODO: FIX VERTICAL NAV COLLAPSE
+            <button type="button" class="btn navbar-toggler-icon" data-toggle="collapse" data-target=".navbar-collapse">
                 <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
             </button>
-            <?php endif; ?>
+            -->
+			<?php endif; ?> 
             <a class="navbar-brand" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
-                phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?>
+                phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?> 
             </a>
         </div>
 
-        <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+		<?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?> 
+        <ul class="nav navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
                     <?php
                     if ($faqConfig->get('main.enableGravatarSupport')) {
                         $avatar = new PMF_Services_Gravatar($faqConfig);
@@ -240,114 +240,132 @@ switch ($action) {
                     } else {
                         echo '<b class="fa fa-user"></b>';
                     }
-                    ?>
+                    ?> 
                     <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
-                        <?php echo $user->getUserData('display_name'); ?>
+                        <?php echo $user->getUserData('display_name'); ?> 
                     </span>
                     <b class="fa fa-caret-down"></b>
                 </a>
                 <ul class="dropdown-menu">
-                    <?php if (!$faqConfig->get('ldap.ldapSupport')) { ?>
+                    <?php if (!$faqConfig->get('ldap.ldapSupport')) { ?> 
                     <li>
-                        <a href="index.php?action=passwd">
-                            <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+                        <a class="dropdown-item" href="index.php?action=passwd">
+                            <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?> 
                         </a>
                     </li>
+                    
                     <li class="dropdown-divider"></li>
-                    <?php } ?>
+                    <?php } ?> 
                     <li>
-                        <a href="index.php?action=logout">
-                            <i aria-hidden="true" class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+                        <a class="dropdown-item" href="index.php?action=logout">
+                            <i aria-hidden="true" class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?> 
                         </a>
                     </li>
+                    
                 </ul>
             </li>
-            <li>
+            <li class="nav-item">
                 <form action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post"
                       class="navbar-form navbar-right" role="form" accept-charset="utf-8">
-                    <?php echo PMF_Language::selectLanguages($LANGCODE, true); ?>
+                    <?php echo PMF_Language::selectLanguages($LANGCODE, true); ?> 
                 </form>
             </li>
         </ul>
-        <?php endif; ?>
+		<?php endif; ?> 
     </nav>
-
-    <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-    <nav class="navbar-default navbar-static-side" role="navigation">
-        <div class="sidebar-collapse">
-            <ul class="nav" id="side-menu">
-                <li<?php echo($dashboardPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php">
-                        <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
-                    </a>
-                </li>
-                <li<?php echo($userPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=user">
-                        <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level collapse <?php echo($userPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
-                    </ul>
-                </li>
-                <li<?php echo($contentPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=content">
-                        <i aria-hidden="true" class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level collapse <?php echo($contentPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
-                    </ul>
-                </li>
-                <li<?php echo($statisticsPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=statistics">
-                        <i aria-hidden="true" class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level collapse <?php echo($statisticsPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
-                    </ul>
-                </li>
-                <li<?php echo($exportsPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=export">
-                        <i aria-hidden="true" class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
-                    </a>
-                </li>
-                <li<?php echo($backupPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=backup">
-                        <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
-                    </a>
-                    <ul class="nav nav-second-level collapse">
-                        <?php echo $secLevelEntries; ?>
-                    </ul>
-                </li>
-                <li<?php echo($configurationPage ? ' class="active"' : ''); ?>>
-                    <a href="index.php?action=config">
-                        <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
-                        <span class="fa arrow"></span>
-                    </a>
-                    <ul class="nav nav-second-level collapse <?php echo($configurationPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
-                    </ul>
-                </li>
-
-                <li class="sidebar-adminlog">
-                    <div>
-                        <b class="fa fa-info-circle fa-fw"></b> Admin worklog<br>
-                        <span id="saving_data_indicator"></span>
-                    </div>
-                </li>
-                <li class="sidebar-sessioninfo">
-                    <div>
-                        <b class="fa fa-clock-o fa-fw"></b> <?php echo $PMF_LANG['ad_session_expiration']; ?>:
-                        <span id="sessioncounter"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </nav>
-    <?php endif; ?>
-
-
-
-    <div id="page-wrapper">
+    
+    <div class="row">
+	    <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?> 
+	    <nav class="col-2 navbar-default navbar-nav flex-sm-column navbar-collapse navbar-dark" role="navigation" aria-orientation="vertical">
+	        <ul class="nav navbar-nav flex-sm-column" id="side-menu">
+	            <li class="nav-item <?php echo($dashboardPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php">
+	                    <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?> 
+	                </a>
+	            </li>
+	            
+	            <li class="nav-item <?php echo($userPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=user">
+	                    <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?> 
+	                    <span class="fa arrow"></span>
+	                </a>
+	                <?php if ($userPage) { ?> 
+	                <ul class="navbar-nav navbar-dark ml-3 <?php echo($userPage ? 'in' : '') ?>" id="user-menu">
+	                    <?php echo $secLevelEntries; ?> 
+	                </ul>
+	                <?php } ?> 
+	            </li>
+	            
+	            <li class="nav-item <?php echo($contentPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=content">
+	                    <i aria-hidden="true" class="fa fa-edit fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?> 
+	                    <span class="fa arrow"></span>
+	                </a>
+	                <?php if ($contentPage) { ?> 
+	                <ul class="navbar-nav navbar-dark ml-3 <?php echo($contentPage ? 'in' : '') ?>">
+	                    <?php echo $secLevelEntries; ?> 
+	                </ul>
+	                <?php } ?> 
+	            </li>
+	            
+	            <li class="nav-item <?php echo($statisticsPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=statistics">
+	                    <i aria-hidden="true" class="fa fa-tasks fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?> 
+	                    <span class="fa arrow"></span>
+	                </a>
+	                <?php if ($statisticsPage) { ?> 
+	                <ul class="navbar-nav navbar-dark ml-3 <?php echo($statisticsPage ? 'in' : '') ?>">
+	                    <?php echo $secLevelEntries; ?> 
+	                </ul>
+	                <?php } ?> 
+	            </li>
+	            
+	            <li class="nav-item <?php echo($exportsPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=export">
+	                    <i aria-hidden="true" class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
+	                </a>
+	            </li>
+	            
+	            <li class="nav-item <?php echo($backupPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=backup">
+	                    <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+	                </a>
+	                <?php if ($backupPage) { ?> 
+	                <ul class="navbar-nav navbar-dark ml-3 <?php echo($backupPage ? 'in' : '') ?>">
+	                    <?php echo $secLevelEntries; ?>
+	                </ul>
+	                <?php } ?> 
+	            </li>
+	            
+	            <li class="nav-item <?php echo($configurationPage ? 'active' : ''); ?>">
+	                <a class="nav-link" href="index.php?action=config">
+	                    <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
+	                    <span class="fa arrow"></span>
+	                </a>
+	                <?php if ($configurationPage) { ?> 
+	                <ul class="navbar-nav navbar-dark ml-3 <?php echo($configurationPage ? 'in' : '') ?>">
+	                    <?php echo $secLevelEntries; ?>
+	                </ul>
+	                <?php } ?> 
+	            </li>
+	
+	            <li class="sidebar-adminlog">
+	                <div>
+	                    <b class="fa fa-info-circle fa-fw"></b> Admin worklog<br>
+	                    <span id="saving_data_indicator"></span>
+	                </div>
+	            </li>
+	            
+	            <li class="sidebar-sessioninfo">
+	                <div>
+	                    <b class="fa fa-clock-o fa-fw"></b> <?php echo $PMF_LANG['ad_session_expiration']; ?>:
+	                    <span id="sessioncounter"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
+	                </div>
+	            </li>
+	        </ul>
+	    </nav>
+	    <?php endif; ?>
+	
+	
+	
+	    <div class="col-10" id="page-wrapper">
