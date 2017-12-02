@@ -7,7 +7,7 @@
 ## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
-various databases to store all data, PHP 5.6+ or HHVM 3.4.2+ is needed in order to
+various databases to store all data, PHP 5.6+ is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, real time search support with
 Elasticsearch, flexible multi-user support with user and group based permissions 
