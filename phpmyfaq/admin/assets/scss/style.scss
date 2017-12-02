@@ -29,6 +29,35 @@ body {
   margin-bottom: 3rem;
 }
 
+
+#wrapper {
+  background-color: #2f4354;
+  /*
+  margin-bottom: 0;
+  width: 100%;
+  */
+}
+
+#page-wrapper {
+  /*
+  padding: 0 15px;
+  */
+  min-height: 568px;
+  background-color: white;
+}
+@media (min-width: 768px) {
+  #page-wrapper {
+    position: inherit;
+    /*
+    margin: 0 0 0 250px;
+    padding: 0 30px;
+    height: 100%;
+    */
+    border-left: 1px solid #e7e7e7;
+  }
+}
+
+
 .footer {
   position: absolute;
   bottom: 0;

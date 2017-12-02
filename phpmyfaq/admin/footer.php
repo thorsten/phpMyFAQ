@@ -28,10 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-            </div>
-        </div>
-    </div>
-</div>
+        </div> <!-- row -->
+    </div> <!-- page-wrapper -->
+</div> <!-- wrapper -->
 
 <footer class="page-footer container-fluid">
     <div class="row">

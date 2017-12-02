@@ -59,9 +59,9 @@ class PMF_Helper_Administration
         global $PMF_LANG;
 
         if ($active == $action) {
-            $active = ' class="active"';
+            $active = ' class="nav-item active"';
         } else {
-            $active = '';
+            $active = ' class="nav-item"';
         }
 
         if ($action != '') {
@@ -75,7 +75,7 @@ class PMF_Helper_Administration
         }
 
         $output = sprintf(
-            '<li%s><a href="?%s">%s</a></li>%s',
+            '<li%s><a class="nav-link" href="?%s">%s</a></li>%s',
             $active,
             $action,
             $renderedCaption,
