@@ -3,6 +3,7 @@
   "version": "2.10.0-alpha2",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
+  "scripts": {},
   "dependencies": {
     "bootstrap": "4.0.0-beta.2",
     "bootstrap-datepicker": "1.7.1",
@@ -33,8 +34,8 @@
     "grunt-exec": "^3.0.0",
     "grunt-modernizr": "^1.0.0",
     "grunt-sass": "^2.0.0",
-    "sigmund": "^1.0.1",
-    "load-grunt-tasks": "^3.5.2"
+    "load-grunt-tasks": "^3.5.2",
+    "sigmund": "^1.0.1"
   },
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
   "author": "Thorsten Rinne",
