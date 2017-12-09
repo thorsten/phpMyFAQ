@@ -10,11 +10,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
@@ -26,11 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Perm_Medium.
  *
  * @category  phpMyFAQ 
- *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
@@ -41,11 +37,11 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      *
      * @var array
      */
-    public $defaultGroupData = array(
+    public $defaultGroupData = [
         'name' => 'DEFAULT_GROUP',
         'description' => 'Short group description.',
         'auto_join' => false,
-    );
+    ];
 
     /**
      * Constructor.
@@ -610,7 +606,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an array that contains the IDs of all groups in which
      * the user $userId is a member.
      *
-     * @param int $userId User ID
+     * @param integer $userId User ID
      *
      * @return array
      */
@@ -687,7 +683,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             if (-1 != $groupId) {
                 $options .= sprintf('<option value="%d"%s>%s</option>',
                     $groupId,
-                    (in_array($groupId, $groups) ? ' selected="selected"' : ''),
+                    (in_array($groupId, $groups) ? ' selected' : ''),
                     $this->getGroupName($groupId)
                 );
             }
@@ -702,10 +698,10 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns true if the user $userId owns the right $rightId
      * because of a group-membership, otherwise false.
      *
-     * @param int $userId  User ID
-     * @param int $rightId Right ID
+     * @param integer $userId  User ID
+     * @param integer $rightId Right ID
      *
-     * @return bool
+     * @return boolean
      */
     public function checkUserGroupRight($userId, $rightId)
     {
@@ -740,7 +736,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         );
 
         $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) == 1) {
+        if ($this->config->getDb()->numRows($res) >= 1) {
             return true;
         }
 
@@ -778,14 +774,14 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * the user $userId owns. User-rights and the rights the user
      * owns because of a group-membership are taken into account.
      *
-     * @param int $userId User ID
+     * @param integer $userId User ID
      *
      * @return array
      */
     public function getAllUserRights($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
-            return false;
+            return [];
         }
         $userRights = $this->getUserRights($userId);
         $groupRights = $this->getUserGroupRights($userId);
@@ -801,7 +797,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * then has to be called every time a new user registers.
      * Returns true on success, otherwise false.
      *
-     * @param int $userId User ID
+     * @param integer $userId User ID
      *
      * @return bool
      */
@@ -843,7 +839,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes the user $userId from all groups.
      * Returns true on success, otherwise false.
      *
-     * @param int $userId User ID
+     * @param integer $userId User ID
      *
      * @return bool
      */
@@ -875,7 +871,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a group-membership.
      *
-     * @param int $userId User ID
+     * @param integer $userId User ID
      *
      * @return array
      */
@@ -920,7 +916,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Refuses all group rights.
      * Returns true on success, otherwise false.
      *
-     * @param int $groupId Group ID
+     * @param integer $groupId Group ID
      *
      * @return bool
      */
@@ -949,14 +945,14 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
     /**
      * Returns the name of the group $groupId.
      *
-     * @param int $groupId Group ID
+     * @param integer $groupId Group ID
      *
      * @return string
      */
     public function getGroupName($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
-            return false;
+            return '';
         }
 
         $select = sprintf('
@@ -972,7 +968,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return [];
+            return '';
         }
         $row = $this->config->getDb()->fetchArray($res);
 
@@ -983,7 +979,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      * Removes all users from the group $groupId.
      * Returns true on success, otherwise false.
      *
-     * @param int $groupId Group ID
+     * @param integer $groupId Group ID
      *
      * @return bool
      */
