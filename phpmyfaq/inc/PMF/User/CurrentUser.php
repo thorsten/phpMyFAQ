@@ -97,6 +97,11 @@ class PMF_User_CurrentUser extends PMF_User
      */
     private $loginState = 1;
 
+    /**
+     * Lockout time in seconds
+     *
+     * @var integer
+     */
     private $lockoutTime = 600;
 
     /**
