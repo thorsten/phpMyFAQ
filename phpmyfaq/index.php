@@ -444,7 +444,6 @@ if ($faqConfig->get('main.maintenanceMode')) {
 $tpl = new PMF_Template(
     array(
         'index' => $indexSet,
-        'rightBox' => $rightSidebarTemplate,
         'writeContent' => $includeTemplate,
     ),
     $faqConfig->get('main.templateSet')
@@ -669,7 +668,7 @@ if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {
     $tpl->parseBlock(
-        'rightBox',
+        'index',
         'toptenList',
         array(
             'toptenUrl' => $toptenParams['url'],
@@ -680,7 +679,7 @@ if (!isset($toptenParams['error'])) {
     );
 } else {
     $tpl->parseBlock(
-        'rightBox',
+        'index',
         'toptenListError',
         array(
             'errorMsgTopTen' => $toptenParams['error'],
@@ -691,7 +690,7 @@ if (!isset($toptenParams['error'])) {
 $latestEntriesParams = $faq->getLatest();
 if (!isset($latestEntriesParams['error'])) {
     $tpl->parseBlock(
-        'rightBox',
+        'index',
         'latestEntriesList',
         array(
             'latestEntriesUrl' => $latestEntriesParams['url'],
@@ -701,8 +700,12 @@ if (!isset($latestEntriesParams['error'])) {
         )
     );
 } else {
-    $tpl->parseBlock('rightBox', 'latestEntriesListError', array(
-        'errorMsgLatest' => $latestEntriesParams['error'], )
+    $tpl->parseBlock(
+        'index',
+        'latestEntriesListError',
+        [
+            'errorMsgLatest' => $latestEntriesParams['error']
+        ]
     );
 }
 
@@ -719,7 +722,7 @@ if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
 
     $tpl->parseBlock(
-        'rightBox',
+        'index',
         'socialLinks',
         [
             'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -743,19 +746,16 @@ if ($faqConfig->get('main.enableRssFeeds')) {
     $rssFeedLatest = '';
 }
 
-$tpl->parse(
-    'rightBox',
-    [
-        'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-        'rssFeedTopTen' => $rssFeedTopTen,
-        'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-        'rssFeedLatest' => $rssFeedLatest,
-        'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
-        'writeTags' => $oTag->printHTMLTagsCloud(),
-        'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
-        'allCatArticles' => $faq->showAllRecordsWoPaging($cat)
-    ]
-);
+$tplHeaders = [
+    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+    'rssFeedTopTen' => $rssFeedTopTen,
+    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+    'rssFeedLatest' => $rssFeedLatest,
+    'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
+    'writeTags' => $oTag->printHTMLTagsCloud(),
+    'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
+    'allCatArticles' => $faq->showAllRecordsWoPaging($cat)
+];
 
 if (DEBUG) {
     $tpl->parseBlock(
@@ -776,10 +776,7 @@ require $includePhp;
 //
 // Get main template, set main variables
 //
-$tpl->parse('index', array_merge($tplMainPage, $tplNavigation));
-
-$tpl->merge('rightBox', 'index');
-
+$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
 $tpl->merge('writeContent', 'index');
 
 //
