@@ -1,98 +1,105 @@
 <!doctype html>
 <html lang="{{ metaLanguage }}">
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>{{ title }}</title>
-    <base href="{{ baseHref }}">
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}">
 
-    <meta name="description" content="{{ metaDescription }}">
-    <meta name="keywords" content="{{ metaKeywords }}">
-    <meta name="author" content="{{ metaPublisher }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
-    <meta name="robots" content="{{ metaRobots }}">
-    <meta name="revisit-after" content="7 days">
-    <meta name="apple-itunes-app" content="app-id=977896957">
+  <meta name="description" content="{{ metaDescription }}">
+  <meta name="keywords" content="{{ metaKeywords }}">
+  <meta name="author" content="{{ metaPublisher }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+  <meta name="robots" content="{{ metaRobots }}">
+  <meta name="revisit-after" content="7 days">
+  <meta name="apple-itunes-app" content="app-id=977896957">
 
-    <!-- Share on Facebook -->
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="{{ metaDescription }}">
-    <meta property="og:image" content="">
+  <!-- Share on Facebook -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ metaDescription }}">
+  <meta property="og:image" content="">
 
-    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.min.css?v=1">
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
-    <link rel="canonical" href="{{ currentPageUrl }}">
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.min.css?v=1">
+  <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
+  <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
+  <link rel="canonical" href="{{ currentPageUrl }}">
 
-    <script src="{{ baseHref }}assets/js/modernizr.min.js"></script>
-    <script src="{{ baseHref }}assets/js/vendors.js"></script>
-    <script src="{{ baseHref }}assets/js/phpmyfaq.min.js"></script>
+  <!-- @todo move to bottom -->
+  <script src="{{ baseHref }}assets/js/modernizr.min.js"></script>
+  <script src="{{ baseHref }}assets/js/vendors.js"></script>
+  <script src="{{ baseHref }}assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
+  <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
+  <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
+  <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/latest/rss.php">
+  <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/openquestions/rss.php">
+  <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
 
-    <script>
-        if (self === top) {
-            document.documentElement.style.display = 'block';
-         } else {
-            top.location = self.location;
-         }
-    </script>
-    <style> html { display:none; }</style>
+  <script>
+    if (self === top) {
+      document.documentElement.style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <style> html {
+    display: none;
+  }</style>
 </head>
 <body dir="{{ dir }}">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
-        <a class="navbar-brand" id="logo" title="{{ header }}" href="{{ faqHome }}">
-            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmfNavbar" aria-controls="pmfNavbar" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+  <div class="container">
+    <a class="navbar-brand" id="logo" title="{{ header }}" href="{{ faqHome }}">
+      <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmfNavbar"
+            aria-controls="pmfNavbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="pmfNavbar">
-            <ul class="navbar-nav mr-auto">
+    <div class="collapse navbar-collapse" id="pmfNavbar">
+      <ul class="navbar-nav mr-auto">
 
-              <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
-              <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
-              <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
-              <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
+        <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
+        <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
+        <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+        <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
 
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  {{ msgLoginUser }}
-                </a>
-                <div class="dropdown-menu" aria-labelledby="dropdown">
-                  [notLoggedIn]
-                  {{ msgRegisterUser }}
-                  {{ msgLoginUser }}
-                  [/notLoggedIn]
-                  [userloggedIn]
-                  {{ msgUserControlDropDown }}
-                  {{ msgUserControl }}
-                  {{ msgLogoutUser }}
-                  [/userloggedIn]
-                </div>
-              </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false">
+            {{ msgLoginUser }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown">
+            [notLoggedIn]
+            {{ msgRegisterUser }}
+            {{ msgLoginUser }}
+            [/notLoggedIn]
+            [userloggedIn]
+            {{ msgUserControlDropDown }}
+            {{ msgUserControl }}
+            {{ msgLogoutUser }}
+            [/userloggedIn]
+          </div>
+        </li>
 
-            </ul>
-            <form  class="form-inline my-2 my-md-0"role="search" id="search" action="{{ writeSendAdress }}" method="get">
-                <input type="hidden" name="action" value="search">
-                <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..." aria-label="Search" autocomplete="off">
-            </form>
+      </ul>
+      <form class="form-inline my-2 my-md-0" role="search" id="search" action="{{ writeSendAdress }}" method="get">
+        <input type="hidden" name="action" value="search">
+        <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..."
+               aria-label="Search" autocomplete="off">
+      </form>
 
-            </form>
-        </div>
+      </form>
     </div>
+  </div>
 </nav>
 
-<!--
 <header>
   <div class="pmf-breadcrumb">
     [breadcrumb]
@@ -100,152 +107,155 @@
     [/breadcrumb]
   </div>
 </header>
--->
-
 
 <div class="pmf-wrapper pmf-main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-8 pmf-maincontent">
-                {{ writeContent }}
-            </div>
-            <aside class="col-md-4 pmf-aside">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 pmf-maincontent">
+        {{ writeContent }}
+      </div>
+      <aside class="col-md-4 pmf-aside">
 
-              [socialLinks]
-              <section class="pmf-aside-widget">
-                <div class="pmf-aside-widget-body pmf-social-links">
-                  <a target="_blank" href="{{ link_pdf }}" rel="nofollow" title="{{ writePDFTag }}">
+        [socialLinks]
+        <section class="pmf-aside-widget">
+          <div class="pmf-aside-widget-body pmf-social-links">
+            <a target="_blank" href="{{ link_pdf }}" rel="nofollow" title="{{ writePDFTag }}">
                     <span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                         <i aria-hidden="true" class="fa fa-file-pdf-o fa-stack-1x"></i>
                     </span>
-                  </a>
-                  <a href="javascript:window.print();" rel="nofollow" title="{{ writePrintMsgTag }}">
+            </a>
+            <a href="javascript:window.print();" rel="nofollow" title="{{ writePrintMsgTag }}">
                     <span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                         <i aria-hidden="true" class="fa fa-print fa-stack-1x"></i>
                     </span>
-                  </a>
-                  <a href="{{ link_email }}" title="{{ writeSend2FriendMsgTag }}">
+            </a>
+            <a href="{{ link_email }}" title="{{ writeSend2FriendMsgTag }}">
                     <span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                         <i aria-hidden="true" class="fa fa-envelope fa-stack-1x"></i>
                     </span>
-                  </a>
-                  {{ shareOnFacebook }}
-                  {{ shareOnTwitter }}
-                  {{ facebookLikeButton }}
-                </div>
-              </section>
-              [/socialLinks]
+            </a>
+            {{ shareOnFacebook }}
+            {{ shareOnTwitter }}
+            {{ facebookLikeButton }}
+          </div>
+        </section>
+        [/socialLinks]
 
 
-              <section class="pmf-aside-widget">
-                <header>
-                  <h3>{{ writeTopTenHeader }} {{ rssFeedTopTen }}</h3>
-                </header>
-                <div class="pmf-aside-widget-body">
-                  <ol class="tpmf-list">
-                    [toptenList]
-                    <li><a class="topten" data-toggle="tooltip" data-placement="top" title="{{ toptenPreview }}" href="{{ toptenUrl }}">{{ toptenTitle }}</a> <small>({{ toptenVisits }})</small></li>
-                    [/toptenList]
-                    [toptenListError]
-                    <li>{{ errorMsgTopTen }}</li>
-                    [/toptenListError]
-                  </ol>
-                </div>
-              </section>
+        <section class="pmf-aside-widget">
+          <header>
+            <h3>{{ writeTopTenHeader }} {{ rssFeedTopTen }}</h3>
+          </header>
+          <div class="pmf-aside-widget-body">
+            <ol class="tpmf-list">
+              [toptenList]
+              <li><a class="topten" data-toggle="tooltip" data-placement="top" title="{{ toptenPreview }}"
+                     href="{{ toptenUrl }}">{{ toptenTitle }}</a>
+                <small>({{ toptenVisits }})</small>
+              </li>
+              [/toptenList]
+              [toptenListError]
+              <li>{{ errorMsgTopTen }}</li>
+              [/toptenListError]
+            </ol>
+          </div>
+        </section>
 
-              <section class="pmf-aside-widget">
-                <header>
-                  <h3>{{ writeNewestHeader }} {{ rssFeedLatest }}</h3>
-                </header>
-                <div class="pmf-aside-widget-body">
-                  <ol class="pmf-list">
-                    [latestEntriesList]
-                    <li><a class="latest-entries" data-toggle="tooltip" data-placement="top" title="{{ latestEntriesPreview }}" href="{{ latestEntriesUrl }}">{{ latestEntriesTitle }}</a> <small>({{ latestEntriesDate }})</small></li>
-                    [/latestEntriesList]
-                    [latestEntriesListError]
-                    <li>{{ errorMsgLatest }}</li>
-                    [/latestEntriesListError]
-                  </ol>
-                </div>
-              </section>
+        <section class="pmf-aside-widget">
+          <header>
+            <h3>{{ writeNewestHeader }} {{ rssFeedLatest }}</h3>
+          </header>
+          <div class="pmf-aside-widget-body">
+            <ol class="pmf-list">
+              [latestEntriesList]
+              <li><a class="latest-entries" data-toggle="tooltip" data-placement="top"
+                     title="{{ latestEntriesPreview }}" href="{{ latestEntriesUrl }}">{{ latestEntriesTitle }}</a>
+                <small>({{ latestEntriesDate }})</small>
+              </li>
+              [/latestEntriesList]
+              [latestEntriesListError]
+              <li>{{ errorMsgLatest }}</li>
+              [/latestEntriesListError]
+            </ol>
+          </div>
+        </section>
 
 
-              <div class="pmf-aside-widget">
-                    <header>
-                        <h3>{{ stickyRecordsHeader }}</h3>
-                    </header>
-                    <div class="pmf-aside-widget-body">
-                        <ul class="pmf-list">
-                            [stickyRecordsList]
-                            <li>
-                                <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
-                                   data-toggle="tooltip" data-placement="top">
-                                    {{ stickyPreview }}
-                                </a>
-                            </li>
-                            [/stickyRecordsList]
-                        </ul>
-                    </div>
-                </div>
-
-            </aside>
+        <div class="pmf-aside-widget">
+          <header>
+            <h3>{{ stickyRecordsHeader }}</h3>
+          </header>
+          <div class="pmf-aside-widget-body">
+            <ul class="pmf-list">
+              [stickyRecordsList]
+              <li>
+                <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
+                   data-toggle="tooltip" data-placement="top">
+                  {{ stickyPreview }}
+                </a>
+              </li>
+              [/stickyRecordsList]
+            </ul>
+          </div>
         </div>
+
+      </aside>
     </div>
+  </div>
 </div>
 
 
-
 <footer>
-    <div class="pmf-wrapper pmf-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-9">
-                    <ul class="footer-menu">
-                        <li>{{ faqOverview }}</li>
-                        <li>{{ showSitemap }}</li>
-                        <li>{{ msgGlossary }}</li>
-                        <li>{{ msgContact }}</li>
-                    </ul>
-                </div>
-                <div class="col-md-3">
-                    <form action="{{ writeLangAdress }}" method="post" class="pull-right" accept-charset="utf-8">
-                        {{ switchLanguages }}
-                        <input type="hidden" name="action" value="" />
-                    </form>
-                </div>
-            </div>
+  <div class="pmf-wrapper pmf-footer">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-9">
+          <ul class="footer-menu">
+            <li>{{ faqOverview }}</li>
+            <li>{{ showSitemap }}</li>
+            <li>{{ msgGlossary }}</li>
+            <li>{{ msgContact }}</li>
+          </ul>
         </div>
-    </div>
-
-    <div class="pmf-wrapper copyright">
-        <div class="container">
-            <div class="pull-right">
-                {{ copyright }}
-            </div>
+        <div class="col-md-3">
+          <form action="{{ writeLangAdress }}" method="post" class="pull-right" accept-charset="utf-8">
+            {{ switchLanguages }}
+            <input type="hidden" name="action" value=""/>
+          </form>
         </div>
+      </div>
     </div>
+  </div>
 
-    [debugMode]
-    <div class="container debug-mode">
-        <h3>DEBUG INFORMATION</h3>
-        <hr>
-        <h4>EXCEPTIONS</h4>
-        {{ debugExceptions }}
-        <hr>
-        <h4>DATABASE QUERIES</h4>
-        {{ debugQueries }}
+  <div class="pmf-wrapper copyright">
+    <div class="container">
+      <div class="pull-right">
+        {{ copyright }}
+      </div>
     </div>
-    [/debugMode]
+  </div>
+
+  [debugMode]
+  <div class="container debug-mode">
+    <h3>DEBUG INFORMATION</h3>
+    <hr>
+    <h4>EXCEPTIONS</h4>
+    {{ debugExceptions }}
+    <hr>
+    <h4>DATABASE QUERIES</h4>
+    {{ debugQueries }}
+  </div>
+  [/debugMode]
 
 </footer>
 
 <script>
-    $('.topten').tooltip();
-    $('.latest-entries').tooltip();
-    $('.sticky-faqs').tooltip();
+  $('.topten').tooltip();
+  $('.latest-entries').tooltip();
+  $('.sticky-faqs').tooltip();
 </script>
 
 </body>
