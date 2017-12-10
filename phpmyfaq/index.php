@@ -786,12 +786,10 @@ $tpl->merge('writeContent', 'index');
 // Send headers and print template
 //
 $httpHeader = new PMF_Helper_Http();
+$httpHeader->setConfiguration($faqConfig);
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
-
-if (false === $faqConfig->get('main.enableGzipCompression') || !DEBUG) {
-    ob_start('ob_gzhandler');
-}
+$httpHeader->startCompression();
 
 echo $tpl->render();
 

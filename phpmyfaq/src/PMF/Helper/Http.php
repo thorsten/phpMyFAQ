@@ -70,6 +70,16 @@ class PMF_Helper_Http extends PMF_Helper
     }
 
     /**
+     *
+     */
+    public function startCompression()
+    {
+        if (false === $this->_config->get('main.enableGzipCompression') || !DEBUG) {
+            ob_start('ob_gzhandler');
+        }
+    }
+
+    /**
      * Returns a HTTP status header.
      *
      * @param int $code HTTP status code

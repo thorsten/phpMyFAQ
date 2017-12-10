@@ -67,7 +67,7 @@ abstract class PMF_Helper
     /**
      * phpMyFAQ's session ID.
      *
-     * @var onteger
+     * @var integer
      */
     protected $sessionId = null;
 
