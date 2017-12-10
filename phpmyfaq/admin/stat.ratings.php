@@ -40,7 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_rs'] ?>
 
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-danger" 
                            href="?action=clear-statistics&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
                             <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_delete_all_votings'] ?>

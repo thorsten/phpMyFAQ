@@ -328,7 +328,7 @@ if ('list' === $groupAction) {
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['ad_menu_group_administration'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-success" href="?action=group&amp;group_action=add">
                             <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_group_add_link'] ?>
                         </a>
@@ -411,7 +411,7 @@ if ('list' === $groupAction) {
 
                         <div class="form-group row">
                             <?php echo $PMF_LANG['ad_group_members'] ?>
-                            <div class="pull-right">
+                            <div class="float-right">
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                         href="javascript:selectSelectAll('group_member_list')">
@@ -500,7 +500,7 @@ if ('list' === $groupAction) {
                         <input id="rights_group_id" type="hidden" name="group_id" value="0">
                     <div class="panel-heading" id="user_rights_legend">
                         <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
-                        <span class="pull-right">
+                        <span class="float-right">
                             <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                                 <?php echo $PMF_LANG['ad_user_checkall'] ?>
                                 /

@@ -47,7 +47,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
         <div class="col-lg-12">
             <h2 class="page-header">
                 <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
-                <div class="pull-right">
+                <div class="float-right">
                     <button class="btn btn-secondary pmf-elasticsearch" data-action="create">
                         <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
                     </button>

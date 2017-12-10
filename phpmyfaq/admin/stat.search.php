@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-danger" href="?action=truncatesearchterms">
                             <i aria-hidden="true" class="fa fa-trash-o fa-fw"></i> <?php echo $PMF_LANG['ad_searchterm_del'] ?>
                         </a>

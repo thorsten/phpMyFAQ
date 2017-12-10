@@ -89,30 +89,52 @@
         </li>
 
       </ul>
-      <form class="form-inline my-2 my-md-0" role="search" id="search" action="{{ writeSendAdress }}" method="get">
-        <input type="hidden" name="action" value="search">
-        <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..."
-               aria-label="Search" autocomplete="off">
-      </form>
+
 
       </form>
     </div>
   </div>
 </nav>
 
+<!-- SEARCH -->
+<div class="jumbotron">
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <h3 class="display-5 text-center">How can we help you?</h3>
+        <div class="justify-content-center">
+          <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
+            <input type="hidden" name="action" value="search">
+            <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..."
+                   aria-label="Search" autocomplete="off">
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--
 <header>
-  <div class="pmf-breadcrumb">
-    [breadcrumb]
-    {{ breadcrumbHeadline }}
-    [/breadcrumb]
+  <div class="container">
+    <div class="pmf-breadcrumb">
+      [breadcrumb]
+      {{ breadcrumbHeadline }}
+      [/breadcrumb]
+    </div>
   </div>
 </header>
+-->
+
+{{ writeContent }}
+
+
+
 
 <div class="pmf-wrapper pmf-main">
   <div class="container">
     <div class="row">
       <div class="col-md-8 pmf-maincontent">
-        {{ writeContent }}
       </div>
       <aside class="col-md-4 pmf-aside">
 
@@ -144,64 +166,6 @@
         </section>
         [/socialLinks]
 
-
-        <section class="pmf-aside-widget">
-          <header>
-            <h3>{{ writeTopTenHeader }} {{ rssFeedTopTen }}</h3>
-          </header>
-          <div class="pmf-aside-widget-body">
-            <ol class="tpmf-list">
-              [toptenList]
-              <li><a class="topten" data-toggle="tooltip" data-placement="top" title="{{ toptenPreview }}"
-                     href="{{ toptenUrl }}">{{ toptenTitle }}</a>
-                <small>({{ toptenVisits }})</small>
-              </li>
-              [/toptenList]
-              [toptenListError]
-              <li>{{ errorMsgTopTen }}</li>
-              [/toptenListError]
-            </ol>
-          </div>
-        </section>
-
-        <section class="pmf-aside-widget">
-          <header>
-            <h3>{{ writeNewestHeader }} {{ rssFeedLatest }}</h3>
-          </header>
-          <div class="pmf-aside-widget-body">
-            <ol class="pmf-list">
-              [latestEntriesList]
-              <li><a class="latest-entries" data-toggle="tooltip" data-placement="top"
-                     title="{{ latestEntriesPreview }}" href="{{ latestEntriesUrl }}">{{ latestEntriesTitle }}</a>
-                <small>({{ latestEntriesDate }})</small>
-              </li>
-              [/latestEntriesList]
-              [latestEntriesListError]
-              <li>{{ errorMsgLatest }}</li>
-              [/latestEntriesListError]
-            </ol>
-          </div>
-        </section>
-
-
-        <div class="pmf-aside-widget">
-          <header>
-            <h3>{{ stickyRecordsHeader }}</h3>
-          </header>
-          <div class="pmf-aside-widget-body">
-            <ul class="pmf-list">
-              [stickyRecordsList]
-              <li>
-                <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
-                   data-toggle="tooltip" data-placement="top">
-                  {{ stickyPreview }}
-                </a>
-              </li>
-              [/stickyRecordsList]
-            </ul>
-          </div>
-        </div>
-
       </aside>
     </div>
   </div>
@@ -221,7 +185,7 @@
           </ul>
         </div>
         <div class="col-md-3">
-          <form action="{{ writeLangAdress }}" method="post" class="pull-right" accept-charset="utf-8">
+          <form action="{{ writeLangAdress }}" method="post" class="float-right" accept-charset="utf-8">
             {{ switchLanguages }}
             <input type="hidden" name="action" value=""/>
           </form>
@@ -232,7 +196,7 @@
 
   <div class="pmf-wrapper copyright">
     <div class="container">
-      <div class="pull-right">
+      <div class="float-right">
         {{ copyright }}
       </div>
     </div>

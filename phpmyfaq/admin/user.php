@@ -400,7 +400,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['ad_user'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
                             <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'] ?>
                         </a>
@@ -525,7 +525,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     <div class="panel panel-default">
                         <div class="panel-heading" id="user_rights_legend">
                             <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_user_rights'] ?>
-                            <span class="pull-right">
+                            <span class="float-right">
                                 <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                                     <?php echo $PMF_LANG['ad_user_checkall'] ?>
                                     /
@@ -641,7 +641,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-users"></i> <?php echo $PMF_LANG['ad_user'];
         ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-success" href="?action=user&amp;user_action=add">
                             <i aria-hidden="true" class="fa fa-plus"></i> <?php echo $PMF_LANG['ad_user_add'];
         ?>

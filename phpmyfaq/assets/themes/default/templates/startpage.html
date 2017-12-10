@@ -1,0 +1,101 @@
+<div class="container">
+
+  <!-- CARDS STARTPAGE -->
+  <div class="row">
+
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ stickyRecordsHeader }}</h4>
+          <ul class="pmf-list">
+            [stickyRecordsList]
+            <li>
+              <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
+                 data-toggle="tooltip" data-placement="top">
+                {{ stickyPreview }}
+              </a>
+            </li>
+            [/stickyRecordsList]
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ writeTopTenHeader }} {{ rssFeedTopTen }}</h4>
+          <ol class="tpmf-list">
+            [toptenList]
+            <li><a class="topten" data-toggle="tooltip" data-placement="top" title="{{ toptenPreview }}"
+                   href="{{ toptenUrl }}">{{ toptenTitle }}</a>
+              <small>({{ toptenVisits }})</small>
+            </li>
+            [/toptenList]
+            [toptenListError]
+            <li>{{ errorMsgTopTen }}</li>
+            [/toptenListError]
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{ writeNewestHeader }} {{ rssFeedLatest }}</h4>
+          <ol class="pmf-list">
+            [latestEntriesList]
+            <li><a class="latest-entries" data-toggle="tooltip" data-placement="top"
+                   title="{{ latestEntriesPreview }}" href="{{ latestEntriesUrl }}">{{ latestEntriesTitle }}</a>
+              <small>({{ latestEntriesDate }})</small>
+            </li>
+            [/latestEntriesList]
+            [latestEntriesListError]
+            <li>{{ errorMsgLatest }}</li>
+            [/latestEntriesListError]
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEWS -->
+  <section class="row">
+    <div class="col">
+      <article>
+        {{ writeNews }}
+      </article>
+      <footer>
+        {{ showAllNews }}
+        {{ writeNewsRSS }}
+      </footer>
+    </div>
+  </section>
+
+  <div class="row">
+    <div class="col">
+      [tagListSection]
+      <div class="well clearfix">
+        <h3>{{ msgTags }}</h3>
+        <ul class="pmf-tags">
+          {{ tagList }}
+        </ul>
+      </div>
+      [/tagListSection]
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <p class="text-center">{{ writeNumberOfArticles }}</p>
+    </div>
+  </div>
+
+</div>
+
+
+
+
+
+

@@ -382,7 +382,7 @@ if (!isset($allowedVariables[$action])) {
 //
 // Select the template for the requested page
 //
-if ($action != 'main') {
+if ($action !== 'main') {
     $includeTemplate = $action.'.html';
     $includePhp = $action.'.php';
     $writeLangAdress = '?sid='.$sid;
@@ -392,8 +392,8 @@ if ($action != 'main') {
         $includeTemplate = 'faq.html';
         $includePhp = 'faq.php';
     } else {
-        $includeTemplate = 'main.html';
-        $includePhp = 'main.php';
+        $includeTemplate = 'startpage.html';
+        $includePhp = 'startpage.php';
     }
     $writeLangAdress = '?sid='.$sid;
 }
@@ -506,7 +506,7 @@ $tplMainPage = array(
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'writeLangAdress' => $writeLangAdress,
     'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
-    'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
+    // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'userOnline' => $usersOnline,
     'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
                               $faqConfig->get('main.currentVersion'),
@@ -551,19 +551,6 @@ if ('main' == $action || 'show' == $action) {
                 $PMF_LANG['msgAdvancedSearch']
             ),
         )
-    );
-}
-
-$stickyRecordsParams = $faq->getStickyRecords();
-if (!isset($stickyRecordsParams['error'])) {
-    $tpl->parseBlock(
-        'index',
-        'stickyRecordsList',
-        [
-            'stickyTitle' => $stickyRecordsParams['title'],
-            'stickyUrl' => $stickyRecordsParams['url'],
-            'stickyPreview' => $stickyRecordsParams['preview']
-        ]
     );
 }
 
@@ -658,57 +645,6 @@ if (isset($auth)) {
     );
 }
 
-// generate top ten list
-if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
-    $param = 'visits';
-} else {
-    $param = 'voted';
-}
-
-$toptenParams = $faq->getTopTen($param);
-if (!isset($toptenParams['error'])) {
-    $tpl->parseBlock(
-        'index',
-        'toptenList',
-        array(
-            'toptenUrl' => $toptenParams['url'],
-            'toptenTitle' => $toptenParams['title'],
-            'toptenPreview' => $toptenParams['preview'],
-            'toptenVisits' => $toptenParams[$param],
-        )
-    );
-} else {
-    $tpl->parseBlock(
-        'index',
-        'toptenListError',
-        array(
-            'errorMsgTopTen' => $toptenParams['error'],
-        )
-    );
-}
-
-$latestEntriesParams = $faq->getLatest();
-if (!isset($latestEntriesParams['error'])) {
-    $tpl->parseBlock(
-        'index',
-        'latestEntriesList',
-        array(
-            'latestEntriesUrl' => $latestEntriesParams['url'],
-            'latestEntriesTitle' => $latestEntriesParams['title'],
-            'latestEntriesPreview' => $latestEntriesParams['preview'],
-            'latestEntriesDate' => $latestEntriesParams['date'],
-        )
-    );
-} else {
-    $tpl->parseBlock(
-        'index',
-        'latestEntriesListError',
-        [
-            'errorMsgLatest' => $latestEntriesParams['error']
-        ]
-    );
-}
-
 if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
 
     // We need some Links from social networks
@@ -747,10 +683,10 @@ if ($faqConfig->get('main.enableRssFeeds')) {
 }
 
 $tplHeaders = [
-    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-    'rssFeedTopTen' => $rssFeedTopTen,
-    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-    'rssFeedLatest' => $rssFeedLatest,
+//    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+//    'rssFeedTopTen' => $rssFeedTopTen,
+//    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+//    'rssFeedLatest' => $rssFeedLatest,
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
     'writeTags' => $oTag->printHTMLTagsCloud(),
     'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],

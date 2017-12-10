@@ -95,7 +95,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 <div class="col-lg-12">
                     <h2 class="page-header">
                         <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
-                        <div class="pull-right">
+                        <div class="float-right">
                             <button class="btn btn-success" type="submit">
                                 <?php echo $PMF_LANG['ad_config_save'] ?>
                             </button>

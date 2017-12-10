@@ -40,7 +40,7 @@ $tt = new PMF_TransTool();
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_translations'] ?>
                     <?php if ($user->perm->checkRight($user->getUserId(), 'addtranslation') && $isTransDirWritable): ?>
-                        <div class="pull-right">
+                        <div class="float-right">
                             <a class="btn btn-success" href="?action=transadd">
                                 <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['msgTransToolAddNewTranslation'] ?>
                             </a>

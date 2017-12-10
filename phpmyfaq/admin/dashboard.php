@@ -34,7 +34,7 @@ $faqSession = new PMF_Session($faqConfig);
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <div class="pull-right">
+                <div class="float-right">
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
                         <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
@@ -88,43 +88,43 @@ $faqSession = new PMF_Session($faqConfig);
                     <div class="list-group">
                         <a href="?action=viewsessions" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_start_visits'] ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqSession->getNumberOfSessions() ?></em>
                             </span>
                         </a>
                         <a href="?action=view" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="?action=question" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="?action=news" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-apple fa-fw"></i> Available on the App Store
-                            <span class="pull-right text-muted small">
+                            <span class="float-right text-muted small">
                                 <i aria-hidden="true" class="fa fa-heart"></i>
                             </span>
                         </a>

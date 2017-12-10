@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_stat_sess'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-danger"
                            href="?action=clear-visits&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
                             <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_clear_all_visits'] ?>

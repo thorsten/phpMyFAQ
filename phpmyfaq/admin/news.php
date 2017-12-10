@@ -179,7 +179,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-pencil"></i> <?php echo $PMF_LANG['msgNews'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-success" href="?action=addnews">
                             <i aria-hidden="true" class="fa fa-plus fa fa-white"></i> <?php echo $PMF_LANG['ad_menu_news_add'] ?>
                         </a>

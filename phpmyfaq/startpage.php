@@ -45,6 +45,71 @@ if (!is_null($archived)) {
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
+
+$stickyRecordsParams = $faq->getStickyRecords();
+if (!isset($stickyRecordsParams['error'])) {
+    $tpl->parseBlock(
+        'writeContent',
+        'stickyRecordsList',
+        [
+            'stickyTitle' => $stickyRecordsParams['title'],
+            'stickyUrl' => $stickyRecordsParams['url'],
+            'stickyPreview' => $stickyRecordsParams['preview']
+        ]
+    );
+}
+
+// generate top ten list
+if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
+    $param = 'visits';
+} else {
+    $param = 'voted';
+}
+
+$toptenParams = $faq->getTopTen($param);
+if (!isset($toptenParams['error'])) {
+    $tpl->parseBlock(
+        'writeContent',
+        'toptenList',
+        array(
+            'toptenUrl' => $toptenParams['url'],
+            'toptenTitle' => $toptenParams['title'],
+            'toptenPreview' => $toptenParams['preview'],
+            'toptenVisits' => $toptenParams[$param],
+        )
+    );
+} else {
+    $tpl->parseBlock(
+        'writeContent',
+        'toptenListError',
+        array(
+            'errorMsgTopTen' => $toptenParams['error'],
+        )
+    );
+}
+
+$latestEntriesParams = $faq->getLatest();
+if (!isset($latestEntriesParams['error'])) {
+    $tpl->parseBlock(
+        'writeContent',
+        'latestEntriesList',
+        array(
+            'latestEntriesUrl' => $latestEntriesParams['url'],
+            'latestEntriesTitle' => $latestEntriesParams['title'],
+            'latestEntriesPreview' => $latestEntriesParams['preview'],
+            'latestEntriesDate' => $latestEntriesParams['date'],
+        )
+    );
+} else {
+    $tpl->parseBlock(
+        'writeContent',
+        'latestEntriesListError',
+        [
+            'errorMsgLatest' => $latestEntriesParams['error']
+        ]
+    );
+}
+
 $tpl->parseBlock(
     'writeContent',
     'tagListSection',
@@ -57,6 +122,11 @@ $tpl->parseBlock(
 $tpl->parse(
     'writeContent',
     [
+        'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
+        'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+        'rssFeedTopTen' => $rssFeedTopTen,
+        'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+        'rssFeedLatest' => $rssFeedLatest,
         'writeNewsHeader' => $writeNewsHeader,
         'writeNewsRSS' => $writeNewsRSS,
         'writeNews' => $news->getNews($archived),

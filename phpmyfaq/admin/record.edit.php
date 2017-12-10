@@ -228,7 +228,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     if ($user->perm->checkRight($user->getUserId(), 'changebtrevs')) {
         $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
         if (count($revisions)) { ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <form id="selectRevision" name="selectRevision" method="post" accept-charset="utf-8"
                               action="?action=editentry&amp;id=<?php echo $faqData['id'] ?>&amp;lang=<?php echo $faqData['lang'] ?>">
                             <select name="revisionid_selected" onchange="selectRevision.submit();">

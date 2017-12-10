@@ -80,7 +80,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 </div>
 
                                 <div class="form-group row">
-                                    <p class="pull-right">
+                                    <p class="float-right">
                                         <a href="../?action=password">
                                             <?php echo $PMF_LANG['lostPassword'] ?>
                                         </a>

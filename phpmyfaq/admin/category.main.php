@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-list"></i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
-                    <div class="pull-right">
+                    <div class="float-right">
                         <a class="btn btn-success" href="?action=addcategory">
                             <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
                         </a>
