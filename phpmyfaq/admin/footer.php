@@ -89,7 +89,7 @@ if (isset($auth)) {
         entities : '10',
         entity_encoding: 'raw',
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
-        toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
+        toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print save",
         image_advtab: true,
         image_class_list: [
             { title: 'None', value: '' },
@@ -132,7 +132,7 @@ if (isset($auth)) {
         importcss_append: true,
 
         // Save function
-        save_onsavecallback: "phpMyFAQSave",
+        save_onsavecallback: function () { phpMyFAQSave(); },
 
         // phpMyFAQ CSS
         content_css: '../assets/template/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
