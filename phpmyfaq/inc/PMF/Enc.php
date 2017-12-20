@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
  */
@@ -27,12 +25,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Enc.
  *
  * @category  phpMyFAQ
- *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-18
  */
@@ -93,7 +89,7 @@ class PMF_Enc
     /**
      * This method is called statically. The parameter enctype specifies the
      * of encryption method for the encryption object. Supported
-     * are 'crypt', 'md5', 'sha' and 'none'.
+     * are 'crypt', 'md5', 'sha1' and 'none'.
      *
      * $enc = Enc::selectEnc('md5');
      *

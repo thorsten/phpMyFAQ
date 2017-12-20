@@ -121,10 +121,10 @@ define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
  * you can choose
  *
  * - hash (default)
- * - bcrypt (PHP 5.5+, experimental)
- * - sha1
- * - crypt
- * - md5 (default before phpMyFAQ 2.8)
+ * - bcrypt
+ * - sha1 (not recommended)
+ * - crypt (not recommended)
+ * - md5 (not recommended default before phpMyFAQ 2.8)
  *
  * @var string
  */
