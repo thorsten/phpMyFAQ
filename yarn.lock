@@ -152,7 +152,7 @@ boom@2.x.x:
   dependencies:
     hoek "2.x.x"
 
-bootstrap-datepicker@1.7.1:
+bootstrap-datepicker@^1.7.1:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/bootstrap-datepicker/-/bootstrap-datepicker-1.7.1.tgz#4ee7faf34888dbec7834fbf9dbe7c4277e01ddaf"
   dependencies:
@@ -165,13 +165,13 @@ bootstrap-fileinput@^4.4.5:
     bootstrap ">= 3.0.0"
     jquery ">= 1.9.0"
 
-bootstrap@4.0.0-beta.2:
-  version "4.0.0-beta.2"
-  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
-
 "bootstrap@>= 3.0.0":
   version "3.3.7"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-3.3.7.tgz#5a389394549f23330875a3b150656574f8a9eb71"
+
+bootstrap@^4.0.0-beta.2:
+  version "4.0.0-beta.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.0.0-beta.2.tgz#4d67d2aa2219f062cd90bc1247e6747b9e8fd051"
 
 brace-expansion@^1.1.7:
   version "1.1.8"
@@ -391,9 +391,9 @@ d3@3.5.17:
   version "3.5.17"
   resolved "https://registry.yarnpkg.com/d3/-/d3-3.5.17.tgz#bc46748004378b21a360c9fc7cf5231790762fb8"
 
-dagre-d3-renderer@^0.4.24:
-  version "0.4.24"
-  resolved "https://registry.yarnpkg.com/dagre-d3-renderer/-/dagre-d3-renderer-0.4.24.tgz#b36ce2fe4ea20de43e7698627c6ede2a9f15ec45"
+dagre-d3-renderer@^0.4.25:
+  version "0.4.25"
+  resolved "https://registry.yarnpkg.com/dagre-d3-renderer/-/dagre-d3-renderer-0.4.25.tgz#9eec8e63854394b3567c51f2b1d0c8137919a18d"
   dependencies:
     d3 "3.5.17"
     dagre-layout "^0.8.0"
@@ -586,7 +586,7 @@ findup-sync@~0.3.0:
   dependencies:
     glob "~5.0.0"
 
-font-awesome@4.7.0:
+font-awesome@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/font-awesome/-/font-awesome-4.7.0.tgz#8fa8cf0411a1a31afd07b06d2902bb9fc815a133"
 
@@ -772,12 +772,12 @@ grunt-contrib-jshint@^1.1.0:
     jshint "~2.9.4"
 
 grunt-contrib-uglify@^3.1.0:
-  version "3.2.1"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-3.2.1.tgz#8458943eb6053badff829b6f0c9126b1ea624c4a"
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-3.3.0.tgz#dcc29bee1dd4768698930e46fb8bff8e8d37fb08"
   dependencies:
     chalk "^1.0.0"
     maxmin "^1.1.0"
-    uglify-js "~3.2.0"
+    uglify-js "~3.3.0"
     uri-path "^1.0.0"
 
 grunt-contrib-watch@^1.0.0:
@@ -937,7 +937,7 @@ he@^1.1.1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/he/-/he-1.1.1.tgz#93410fd21b009735151f8868c2f271f3427e23fd"
 
-highlightjs@9.10.0:
+highlightjs@^9.10.0:
   version "9.10.0"
   resolved "https://registry.yarnpkg.com/highlightjs/-/highlightjs-9.10.0.tgz#fca9b78ddaa3b1abca89d6c3ee105ad270a80190"
 
@@ -1065,7 +1065,7 @@ jquery-sparkline@^2.3.2:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/jquery-sparkline/-/jquery-sparkline-2.4.0.tgz#1be8b7b704dd3857152708aefb1d4a4b3a69fb33"
 
-jquery@3.2.1, "jquery@>= 1.9.0", jquery@>=1.11, "jquery@>=1.7.1 <4.0.0":
+"jquery@>= 1.9.0", jquery@>=1.11, "jquery@>=1.7.1 <4.0.0", jquery@^3.2.1:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -1263,15 +1263,15 @@ meow@^3.1.0, meow@^3.3.0, meow@^3.7.0:
     trim-newlines "^1.0.0"
 
 mermaid@^7.1.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-7.1.0.tgz#c9080e7b517adb8adb582470755799348bf127a2"
+  version "7.1.1"
+  resolved "https://registry.yarnpkg.com/mermaid/-/mermaid-7.1.1.tgz#b013cfb807eea90087ead88bc8c1cd75baf95e71"
   dependencies:
     d3 "3.5.17"
-    dagre-d3-renderer "^0.4.24"
+    dagre-d3-renderer "^0.4.25"
     dagre-layout "^0.8.0"
     he "^1.1.1"
     lodash "^4.17.4"
-    moment "^2.18.1"
+    moment "^2.20.1"
 
 mime-db@~1.27.0:
   version "1.27.0"
@@ -1331,7 +1331,11 @@ modernizr@^3.0.0-alpha:
     requirejs "2.1.22"
     yargs "7.0.2"
 
-moment@^2.18.1, moment@^2.8.3:
+moment@^2.20.1:
+  version "2.20.1"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.20.1.tgz#d6eb1a46cbcc14a2b2f9434112c1ff8907f313fd"
+
+moment@^2.8.3:
   version "2.18.1"
   resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.1.tgz#c36193dd3ce1c2eed2adb7c802dbbc77a81b1c0f"
 
@@ -1911,8 +1915,8 @@ tiny-lr@^0.2.1:
     qs "~5.1.0"
 
 tinymce@^4.7.1:
-  version "4.7.3"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.7.3.tgz#3ac7a3d44daab61814e560132f596cc47d0147ac"
+  version "4.7.4"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.7.4.tgz#1d7ebb192aa1c238cb9fc8350376c2ea2efb8891"
 
 tough-cookie@~2.3.0:
   version "2.3.2"
@@ -1954,9 +1958,9 @@ uglify-js@^2.6:
   optionalDependencies:
     uglify-to-browserify "~1.0.0"
 
-uglify-js@~3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.2.0.tgz#cb411ee4ca0e0cadbfe3a4e1a1da97e6fa0d19c1"
+uglify-js@~3.3.0:
+  version "3.3.0"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.0.tgz#5d36460ccdb144a7aedb13f0dcdb7a76909e6682"
   dependencies:
     commander "~2.12.1"
     source-map "~0.6.1"
