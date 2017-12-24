@@ -174,29 +174,27 @@
 </div>
 
 
-<footer>
-  <div class="pmf-wrapper pmf-footer">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-9">
-          <ul class="footer-menu">
-            <li>{{ faqOverview }}</li>
-            <li>{{ showSitemap }}</li>
-            <li>{{ msgGlossary }}</li>
-            <li>{{ msgContact }}</li>
-          </ul>
-        </div>
-        <div class="col-md-3">
-          <form action="{{ writeLangAdress }}" method="post" class="float-right" accept-charset="utf-8">
-            {{ switchLanguages }}
-            <input type="hidden" name="action" value=""/>
-          </form>
-        </div>
+<footer class="pmf-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm">
+        <ul class="footer-menu">
+          <li>{{ faqOverview }}</li>
+          <li>{{ showSitemap }}</li>
+          <li>{{ msgGlossary }}</li>
+          <li>{{ msgContact }}</li>
+        </ul>
+      </div>
+      <div class="col-sm">
+        <form action="{{ writeLangAdress }}" method="post" class="float-right" accept-charset="utf-8">
+          {{ switchLanguages }}
+          <input type="hidden" name="action" value=""/>
+        </form>
       </div>
     </div>
   </div>
 
-  <div class="pmf-wrapper copyright">
+  <div class="copyright">
     <div class="container">
       <div class="float-right">
         {{ copyright }}
@@ -205,7 +203,7 @@
   </div>
 
   [debugMode]
-  <div class="container debug-mode">
+  <div class="debug-mode">
     <h3>DEBUG INFORMATION</h3>
     <hr>
     <h4>EXCEPTIONS</h4>
