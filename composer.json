@@ -55,7 +55,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "5.*",
-        "phpunit/dbunit": "1.3.*"
+        "phpunit/dbunit": "1.3.*",
+        "phpstan/phpstan": "^0.9.1"
     },
     "config": {
         "bin-dir": "bin",
