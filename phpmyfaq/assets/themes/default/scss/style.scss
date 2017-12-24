@@ -21,6 +21,51 @@
 @import 'mixins';
 @import 'colors';
 
+//
+// MAIN LAYOUT
+//
 body {
   margin-bottom: 3rem;
+}
+
+
+//
+// LOGIN
+//
+.pmf-form-login {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+
+  .pmf-form-login-heading, .checkbox {
+    margin-bottom: 10px;
+  }
+
+  .checkbox {
+    font-weight: 400;
+  }
+
+  .form-control {
+    position: relative;
+    box-sizing: border-box;
+    height: auto;
+    padding: 10px;
+    font-size: 16px;
+
+    &:focus {
+      z-index: 2;
+    }
+  }
+
+  input[type="text"] {
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
+  }
+
+  input[type="password"] {
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
 }

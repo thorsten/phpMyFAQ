@@ -1,60 +1,32 @@
-<section>
+<div class="row">
 
-            [useSslForLogins]
-            <p>
-                <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
-            </p>
-            [/useSslForLogins]
+  [useSslForLogins]
+  <p>
+    <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+  </p>
+  [/useSslForLogins]
 
-            {{ loginMessage }}
+  {{ loginMessage }}
 
-            <div class="row">
-                <div class="col-md-8 col-md-offset-2">
-                    <div class="login-panel panel panel-default">
-                        <div class="panel-heading">
-                            <header>
-                                <h3 class="panel-title text-center">phpMyFAQ Login</h3>
-                            </header>
-                        </div>
-                        <div class="panel-body">
-                            <form action="{{ writeLoginPath }}" method="post" role="form">
-                                <fieldset>
+  <form class="pmf-form-login" action="{{ writeLoginPath }}" method="post" role="form">
+    <h2 class="pmf-form-login-heading">phpMyFAQ Login</h2>
+    <label for="faqusername" class="sr-only">{{ username }}</label>
+    <input type="text" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
+    <label for="faqpassword" class="sr-only">{{ password }}</label>
+    <input type="password" id="faqpassword" class="form-control" placeholder="{{ password }}" required>
+    <div class="checkbox">
+      <label>
+        <input type="checkbox" value="remember-me"> {{ rememberMe }}
+      </label>
+    </div>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
+    <div class="form-group row">
+      <p class="float-right">
+        {{ sendPassword }}
+        <br>
+        {{ registerUser }}
+      </p>
+    </div>
+  </form>
 
-                                    <div class="form-group row">
-                                        <input type="text" name="faqusername" id="faqusername"
-                                               class="form-control form-control-lg" placeholder="{{ username }}" required>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <input type="password" name="faqpassword" id="faqpassword"
-                                               class="form-control form-control-lg" placeholder="{{ password }}" required>
-                                    </div>
-
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" id="faqrememberme" name="faqrememberme"
-                                                   value="rememberMe">
-                                            {{ rememberMe }}
-                                        </label>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                            {{ loginHeader }}
-                                        </button>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <p class="float-right">
-                                            {{ sendPassword }}
-                                            <br>
-                                            {{ registerUser }}
-                                        </p>
-                                    </div>
-                                </fieldset>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+</div>
