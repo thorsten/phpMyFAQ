@@ -11,9 +11,9 @@
   <form class="pmf-form-login" action="{{ writeLoginPath }}" method="post" role="form">
     <h2 class="pmf-form-login-heading">phpMyFAQ Login</h2>
     <label for="faqusername" class="sr-only">{{ username }}</label>
-    <input type="text" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
+    <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
     <label for="faqpassword" class="sr-only">{{ password }}</label>
-    <input type="password" id="faqpassword" class="form-control" placeholder="{{ password }}" required>
+    <input type="password" name="faqpassword" id="faqpassword" class="form-control" placeholder="{{ password }}" required>
     <div class="checkbox">
       <label>
         <input type="checkbox" value="remember-me"> {{ rememberMe }}
