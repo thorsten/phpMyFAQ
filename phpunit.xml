@@ -13,7 +13,7 @@
 
     <testsuites>
         <testsuite name="phpMyFAQ Test Suite">
-            <file>tests/AllTests.php</file>
+            <file>./tests/PMFTest</file>
         </testsuite>
     </testsuites>
 </phpunit>

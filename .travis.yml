@@ -33,4 +33,4 @@ install:
   - npm install
   - grunt build
 
-script: ./bin/phpunit --configuration phpunit.xml --coverage-text
+script: ./bin/phpunit tests/PMFTest/

@@ -17,8 +17,7 @@
  * @since     2012-03-07
  */
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
-use Symfony\Component\ClassLoader\Psr4ClassLoader;
+use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 
 //
@@ -115,13 +114,12 @@ define('PMF_INCLUDE_DIR', __DIR__);
 define('PMF_LANGUAGE_DIR', dirname(__DIR__).'/lang');
 
 //
-// Setting up PSR-0 autoloader for Symfony Components
+// Setting up PSR-0 autoloader
 //
-require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/UniversalClassLoader.php';
+require PMF_INCLUDE_DIR.'/libs/autoload.php';
 
-$loader = new UniversalClassLoader();
-$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR.'/libs');
-$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
+$loader = new ClassLoader();
+$loader->add('PMF_', PMF_INCLUDE_DIR);
 $loader->register();
 
 require PMF_INCLUDE_DIR.'/libs/parsedown/Parsedown.php';
@@ -184,15 +182,13 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR.
 
     require PMF_CONFIG_DIR.'/elasticsearch.php';
     require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
-    require PMF_INCLUDE_DIR.'/libs/react/promise/src/functions.php';
-    require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/Psr4ClassLoader.php';
 
-    $psr4Loader = new Psr4ClassLoader();
-    $psr4Loader->addPrefix('Elasticsearch', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
-    $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
-    $psr4Loader->addPrefix('Monolog', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
-    $psr4Loader->addPrefix('Psr', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
-    $psr4Loader->addPrefix('React\\Promise\\', PMF_INCLUDE_DIR.'/libs/react/promise/src');
+    $psr4Loader = new ClassLoader();
+    $psr4Loader->addPsr4('Elasticsearch\\', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
+    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
+    $psr4Loader->addPsr4('Monolog\\', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
+    $psr4Loader->addPsr4('Psr\\', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
+    $psr4Loader->addPsr4('React\\Promise\\', PMF_INCLUDE_DIR.'/libs/react/promise/src');
     $psr4Loader->register();
 
     $esClient = ClientBuilder::create()

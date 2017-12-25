@@ -17,7 +17,7 @@
  * @since     2015-02-12
  */
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
+use Composer\Autoload\ClassLoader;
 
 date_default_timezone_set('Europe/Berlin');
 ini_set('display_errors', 1);
@@ -49,14 +49,11 @@ define('PMF_INCLUDE_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
 
 //
-// Setting up PSR-0 autoloader for Symfony Components
+// Setting up PSR-0 autoloader
 //
-require PMF_INCLUDE_DIR . '/libs/symfony/class-loader/UniversalClassLoader.php';
-
-$loader = new UniversalClassLoader();
-$loader->registerNamespace('Symfony', PMF_INCLUDE_DIR . '/libs');
-$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
-$loader->registerPrefix('PMFTest_', PMF_TEST_DIR);
+$loader = new ClassLoader();
+$loader->add('PMF_', PMF_INCLUDE_DIR);
+$loader->add('PMFTest_', PMF_TEST_DIR.'/PMFTest');
 $loader->register();
 
 //
