@@ -52,9 +52,9 @@ Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser
 
 ## Testing
 
-To run our unittest via PHPUnit v5, just execute this command on your CLI
+To run our unittest via PHPUnit v5.x, just execute this command on your CLI
 
-    $ bin/phpunit tests/PMFTest
+    $ ./bin/phpunit
 
 Please note that phpMyFAQ needs to be installed via Composer.
 
