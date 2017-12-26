@@ -179,8 +179,6 @@ class PMF_User
      * Constructor.
      *
      * @param PMF_Configuration $config
-     *
-     * @return PMF_User
      */
     public function __construct(PMF_Configuration $config)
     {
@@ -204,7 +202,7 @@ class PMF_User
         }
 
         // additionally, set given $auth objects
-        if (count($auth) > 0) {
+        if (count($this->authContainer) > 0) {
             foreach ($auth as $name => $authObject) {
                 if (!$authObject instanceof PMF_Auth_Driver && !$this->addAuth($authObject, $name)) {
                     break;
