@@ -14,11 +14,10 @@
  * @since     2010-01-17
  */
 
-// Bootstrap
+// phpMyFAQ colors and mixins
+@import 'colors';
 @import "../../../../node_modules/bootstrap/scss/bootstrap";
-
-// phpMyFAQ colors
-@import "colors";
+@import 'mixins';
 
 html {
   position: relative;

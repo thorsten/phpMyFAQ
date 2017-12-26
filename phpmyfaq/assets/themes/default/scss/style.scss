@@ -14,12 +14,10 @@
  * @since     2010-01-17
  */
 
-// Bootstrap
-@import '../../../../../node_modules/bootstrap/scss/bootstrap';
-
 // phpMyFAQ colors and mixins
-@import 'mixins';
 @import 'colors';
+@import '../../../../../node_modules/bootstrap/scss/bootstrap';
+@import 'mixins';
 
 //
 // MAIN LAYOUT
@@ -35,6 +33,30 @@ body {
   & > .container {
     padding: 3rem 1.5rem 0;
   }
+}
+
+//
+// TYPEAHEAD SEARCH
+//
+.typeahead, .tt-query, .tt-hint {
+  width: 20rem;
+  height: 2rem;
+  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  line-height: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 0.8rem;
+  outline: none;
+}
+.tt-menu {
+  text-align: left;
+  width: 20rem;
+  margin: 0.4rem 0;
+  padding: 0.8rem 0.4rem;
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  border-radius: 0.8rem;
+  box-shadow: 0 0.5rem 1rem rgba(0,0,0,.2);
 }
 
 //

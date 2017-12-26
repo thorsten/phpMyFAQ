@@ -126,7 +126,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
     $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
     $outstr = '';
 
-    foreach ($attList as $att)
+    foreach ($attList as $att) {
         $outstr .= sprintf('<a href="%s">%s</a>, ',
             $att->buildUrl(),
             $att->getFilename());

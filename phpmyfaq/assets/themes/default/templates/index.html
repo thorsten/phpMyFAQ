@@ -21,7 +21,7 @@
   <meta property="og:image" content="">
 
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.min.css?v=1">
+  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
   <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
   <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
   <link rel="canonical" href="{{ currentPageUrl }}">
@@ -52,7 +52,7 @@
 </head>
 <body dir="{{ dir }}">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
   <div class="container">
     <a class="navbar-brand" id="logo" title="{{ header }}" href="{{ faqHome }}">
       <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
@@ -97,12 +97,12 @@
 </nav>
 
 <!-- SEARCH -->
-<div class="jumbotron">
+<div class="jumbotron bg-dark">
   <div class="container">
     <div class="row">
       <div class="col">
         <h3 class="display-5 text-center">How can we help you?</h3>
-        <div class="justify-content-center">
+        <div class="text-center">
           <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
             <input type="hidden" name="action" value="search">
             <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..."
