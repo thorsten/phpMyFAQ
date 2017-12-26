@@ -50,7 +50,7 @@ class PMF_TransTool
         if (file_exists($filepath) && is_readable($filepath)) {
             $orig = file($filepath);
 
-            while (list(, $line) = each($orig)) {
+            foreach ($orig as $line){
                 $line = rtrim($line);
                 // Bypass all but variable definitions
                 if (strlen($line) && '$' == $line[0]) {
@@ -100,7 +100,7 @@ class PMF_TransTool
         $retval = $countAll = $countTranslated = 0;
 
         if ($exemplary) {
-            while (list($key, $val) = each($exemplary)) {
+            foreach ($exemplary as $key => $val) {
                 if (!$this->isKeyIgnorable($key) && !$this->isValIgnorable($val)) {
                     if ($this->isKeyAFirstPluralForm($key)) {
                         if ($toCheckNPlurals != -1 && isset($toCheck[$key]) && $toCheck[$key] != $val) {

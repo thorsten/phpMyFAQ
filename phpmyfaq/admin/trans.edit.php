@@ -99,7 +99,7 @@ $NPluralsErrorReported = false;
                     <th>en</th>
                     <th><?php echo $translateLang ?></th>
                 </tr>
-        <?php while (list($key, $line) = each($leftVarsOnly)): ?>
+        <?php foreach ($leftVarsOnly as $key => $line): ?>
 
         <?php
     // These parameters are not real translations, so don't offer to translate them
@@ -194,7 +194,7 @@ $NPluralsErrorReported = false;
                     <td><input class="form-control alert-danger" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($line) ?>" /></td>
                     <?php endif; ?>
                 </tr>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 <tr>
                     <td colspan="3"><?php echo $pageBar; ?></td>
                 </tr>

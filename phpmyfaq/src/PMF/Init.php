@@ -141,11 +141,11 @@ class PMF_Init
    private static function _cleanFilenames()
    {
        reset($_FILES);
-       while (list($key, $value) = each($_FILES)) {
+       foreach ($_FILES as $key => $value) {
            if (is_array($_FILES[$key]['name'])) {
                reset($_FILES[$key]['name']);
-                // We have a multiple upload with the same name for <input />
-                while (list($idx, $value2) = each($_FILES[$key]['name'])) {
+               // We have a multiple upload with the same name for <input />
+               foreach ($_FILES[$key]['name'] as $idx => $valu2) {
                     $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
                         $_FILES[$key]['type'][$idx] = '';

@@ -267,7 +267,7 @@ class PMF_Linkverifier
 
         // Clean $this->urlpool
         $this->urlpool = [];
-        while (list(, $type) = each($types)) {
+        foreach ($types as $type) {
             preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:\#%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches);
             $sz = sizeof($matches[2]);
             for ($i = 0;$i < $sz; ++$i) {
