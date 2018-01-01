@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de

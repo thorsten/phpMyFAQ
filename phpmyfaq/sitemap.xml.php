@@ -20,7 +20,7 @@
  *
  * @category  phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26

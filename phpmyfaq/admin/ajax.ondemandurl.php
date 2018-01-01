@@ -19,7 +19,7 @@
  * @category  phpMyFAQ
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 NetJapan, Inc.
+ * @copyright 2005-2018 NetJapan, Inc.
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -68,7 +68,7 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2017 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 

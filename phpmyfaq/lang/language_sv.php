@@ -13,7 +13,7 @@
  * @author    Emil Kennerberg <emil@kennerberg.se>
  * @author    Andreas <hq6830@yahoo.no>
  * @author    Thomas Höjemo <thomas@snt.se>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-07-28

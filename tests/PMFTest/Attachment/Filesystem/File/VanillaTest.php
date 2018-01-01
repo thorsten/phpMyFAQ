@@ -17,7 +17,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
@@ -31,7 +31,7 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31

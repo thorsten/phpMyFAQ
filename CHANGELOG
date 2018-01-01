@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.9.10 - 2017-
+Version 2.9.10 - 2018-
 - updated Dutch translation (https://github.com/joskevos)
 - fixed minor bugs (Thorsten)
 
@@ -1363,4 +1363,4 @@ basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
 License for the specific language governing rights and limitations
 under the License.
 
-(c) 2001-2017 phpMyFAQ Team
+(c) 2001-2018 phpMyFAQ Team
