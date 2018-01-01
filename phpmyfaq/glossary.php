@@ -3,7 +3,7 @@
 /**
  * This is the page there a user can view all glossary items.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -29,20 +29,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqsession->userTracking('glossary', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
-$page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+$page = phpMyFAQ\Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
-$glossary = new PMF_Glossary($faqConfig);
+$glossary = new phpMyFAQ\Glossary($faqConfig);
 $glossaryItems = $glossary->getAllGlossaryItems();
 $numItems = count($glossaryItems);
 $itemsPerPage = 10;
 
 $baseUrl = sprintf(
     '%s?action=glossary&amp;page=%d',
-    PMF_Link::getSystemRelativeUri(),
+    Link::getSystemRelativeUri(),
     $page
 );
 
@@ -53,7 +53,7 @@ $options = array(
     'perPage' => $itemsPerPage,
     'pageParamName' => 'page',
 );
-$pagination = new PMF_Pagination($faqConfig, $options);
+$pagination = new phpMyFAQ\Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
     $output = [];

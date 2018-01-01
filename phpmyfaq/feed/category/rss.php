@@ -3,7 +3,7 @@
 /**
  * The RSS feed for categories.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2008-2017 phpMyFAQ Team
+ * @copyright 2008-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -29,13 +29,13 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 //
 // get language (default: english)
 //
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -47,7 +47,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new phpMyFAQ\CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -59,16 +59,16 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-    if (!$user instanceof PMF_User_CurrentUser) {
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user = CurrentUser::getFromCookie($faqConfig);
+    if (!$user instanceof CurrentUser) {
+        $user = CurrentUser::getFromSession($faqConfig);
     }
 }
 
 //
 // Get current user and group id - default: -1
 //
-if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
+if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
@@ -87,12 +87,12 @@ if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$category_id = PMF_Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
-$category = new PMF_Category($faqConfig);
+$category_id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
+$category = new phpMyFAQ\Category($faqConfig);
 $category->setUser($current_user);
 $category->setGroups($current_groups);
 
-$faq = new PMF_Faq($faqConfig);
+$faq = new phpMyFAQ\Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
@@ -126,7 +126,7 @@ if (is_array($records)) {
 
         if (PMF_RSS_USE_SEO) {
             if (isset($item['record_title'])) {
-                $oLink = new PMF_Link($link, $faqConfig);
+                $oLink = new phpMyFAQ\Link($link, $faqConfig);
                 $oLink->itemTitle = $item['record_title'];
                 $link = $oLink->toString();
             }
@@ -143,7 +143,7 @@ if (is_array($records)) {
         $rss->writeElement('link', $link);
         $rss->writeElement('guid', $link);
 
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['record_updated'], true));
+        $rss->writeElement('pubDate', Date::createRFC822Date($item['record_updated'], true));
 
         $rss->endElement();
     }
@@ -158,7 +158,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData),
 );
 
-$http = new PMF_Helper_Http();
+$http = new phpMyFAQ\Helper_Http();
 $http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();

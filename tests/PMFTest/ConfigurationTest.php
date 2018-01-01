@@ -2,7 +2,7 @@
 /**
  * Test suite for PMF_Configuration
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,6 +17,11 @@
  * @since     2013-12-30
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Strings;
+use PHPUnit\Framework\TestCase;
+
 /**
  * Configuration_AllTests
  *
@@ -28,7 +33,7 @@
  * @link      http://www.phpmyfaq.de
  * @since     2013-12-30
  */
-class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
+class ConfigurationTest extends TestCase
 {
     private $pmfConfig;
     private $dbHandle;
@@ -40,11 +45,11 @@ class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        PMF_String::init('en');
+        Strings::init('en');
 
-        $this->dbHandle  = new PMF_DB_Sqlite3();
+        $this->dbHandle  = new Sqlite3();
         $this->dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
-        $this->pmfConfig = new PMF_Configuration($this->dbHandle);
+        $this->pmfConfig = new Configuration($this->dbHandle);
     }
 
     /**

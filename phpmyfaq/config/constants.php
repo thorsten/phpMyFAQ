@@ -3,7 +3,7 @@
 /**
  * Constants for phpMyFAQ.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-10
@@ -30,7 +30,7 @@
  *
  * @var string
  */
-define('PMF_DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
+define('DateTIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
 
 /**
  * Sets the current session save path if needed, by default not used
@@ -371,11 +371,11 @@ $languageCodes = [
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
 // Misc parameters
-define('PMF_LANGUAGE_EXPIRED_TIME', 3600);      // 30 minutes
+define('Language_EXPIRED_TIME', 3600);      // 30 minutes
 define('PMF_SESSION_EXPIRED_TIME', 3600);       // 30 minutes
 define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
 
 //
 // Set the default timezone used by all date/time functions
 //
-date_default_timezone_set(PMF_DATETIME_TIMEZONE_DEFAULT);
+date_default_timezone_set(DateTIME_TIMEZONE_DEFAULT);

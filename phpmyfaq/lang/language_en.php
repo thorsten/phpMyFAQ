@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matthias Sommerfeld <mso@bluebirdy.de>
  * @author    Henning Schulzrinne <hgs@cs.columbia.edu>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -115,7 +115,7 @@ $PMF_LANG["msgSearchWord"] = "Keyword";
 $PMF_LANG["msgSearchFind"] = "Search result for ";
 $PMF_LANG["msgSearchAmount"] = " search result";
 $PMF_LANG["msgSearchAmounts"] = " search results";
-$PMF_LANG["msgSearchCategory"] = "Category: ";
+$PMF_LANG["msgSearchCategory"] = "Entity: ";
 $PMF_LANG["msgSearchContent"] = "Answer: ";
 
 // new Content
@@ -123,7 +123,7 @@ $PMF_LANG["msgNewContentHeader"] = "Proposal for a new FAQ";
 $PMF_LANG["msgNewContentAddon"] = "Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>category</strong>, <strong>question</strong> and <strong>answer</strong>. Please separate the keywords with commas only.";
 $PMF_LANG["msgNewContentName"] = "Your name:";
 $PMF_LANG["msgNewContentMail"] = "Email";
-$PMF_LANG["msgNewContentCategory"] = "Category:";
+$PMF_LANG["msgNewContentCategory"] = "Entity:";
 $PMF_LANG["msgNewContentTheme"] = "Your question:";
 $PMF_LANG["msgNewContentArticle"] = "Your answer:";
 $PMF_LANG["msgNewContentKeywords"] = "Keywords:";
@@ -135,7 +135,7 @@ $PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Ask your question below:";
-$PMF_LANG["msgAskCategory"] = "Category:";
+$PMF_LANG["msgAskCategory"] = "Entity:";
 $PMF_LANG["msgAskYourQuestion"] = "Your question:";
 $PMF_LANG["msgAskThx4Mail"] = "Thanks for your question!";
 $PMF_LANG["msgDate_User"] = "Date / User";
@@ -244,7 +244,7 @@ $PMF_LANG["ad_entry_theme"] = "Question";
 $PMF_LANG["ad_entry_content"] = "Answer:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
 $PMF_LANG["ad_entry_author"] = "Author:";
-$PMF_LANG["ad_entry_category"] = "Category:";
+$PMF_LANG["ad_entry_category"] = "Entity:";
 $PMF_LANG["ad_entry_active"] = "Visible:";
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
@@ -293,30 +293,30 @@ $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Add new category";
-$PMF_LANG["ad_categ_catnum"] = "Category number:";
+$PMF_LANG["ad_categ_catnum"] = "Entity number:";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory number:";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Category title:";
+$PMF_LANG["ad_categ_titel"] = "Entity title:";
 $PMF_LANG["ad_categ_add"] = "Add category";
 $PMF_LANG["ad_categ_existing"] = "Existing categories";
 $PMF_LANG["ad_categ_id"] = "#";
-$PMF_LANG["ad_categ_categ"] = "Category";
+$PMF_LANG["ad_categ_categ"] = "Entity";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Category title";
+$PMF_LANG["ad_categ_titel"] = "Entity title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
-$PMF_LANG["ad_categ_updatecateg"] = "Update Category";
+$PMF_LANG["ad_categ_updatecateg"] = "Update Entity";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
 $PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
-$PMF_LANG["ad_categ_edit_2"] = "Category";
+$PMF_LANG["ad_categ_edit_2"] = "Entity";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
 $PMF_LANG["ad_categ_updated"] = "The category was updated.";
 $PMF_LANG["ad_categ_del_yes"] = "yes, delete!";
 $PMF_LANG["ad_categ_del_no"] = "no!";
 $PMF_LANG["ad_categ_deletesure"] = "Are you sure to delete this category?";
-$PMF_LANG["ad_categ_deleted"] = "Category deleted.";
+$PMF_LANG["ad_categ_deleted"] = "Entity deleted.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "The cookie was <strong>successfully</strong> set.";
@@ -368,7 +368,7 @@ $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
 $PMF_LANG["ad_sess_referer"] = "Referer:";
 $PMF_LANG["ad_sess_browser"] = "Browser:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Category:";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Entity:";
 $PMF_LANG["ad_sess_ai_artikel"] = "Record:";
 $PMF_LANG["ad_sess_ai_sb"] = "Search-Strings:";
 $PMF_LANG["ad_sess_ai_sid"] = "Session ID:";
@@ -744,7 +744,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Category owner';
+$PMF_LANG["ad_categ_owner"] = 'Entity owner';
 $PMF_LANG['adminSection'] = 'Administration';
 $PMF_LANG['err_expiredArticle'] = 'This entry is expired and can not be displayed';
 $PMF_LANG['err_expiredNews'] = 'This news is expired and can not be displayed';
@@ -772,8 +772,8 @@ $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';
-$PMF_LANG['ad_categ_trans_2'] = 'Category';
-$PMF_LANG['ad_categ_translatecateg'] = 'Translate Category';
+$PMF_LANG['ad_categ_trans_2'] = 'Entity';
+$PMF_LANG['ad_categ_translatecateg'] = 'Translate Entity';
 $PMF_LANG['ad_categ_translate'] = 'Translate';
 $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
@@ -781,8 +781,8 @@ $PMF_LANG["ad_categ_deletethislang"] = 'Delete in this language only?';
 $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
-$PMF_LANG["ad_categ_show"] = "Category overview";
-$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
+$PMF_LANG["ad_categ_show"] = "Entity overview";
+$PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions:';
@@ -1072,7 +1072,7 @@ $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> d
 // added v2.7.0-alpha2 - 2010-01-12 by Gustavo Solt
 $PMF_LANG['ad_menu_reports'] = 'Reports';
 $PMF_LANG["ad_stat_report_fields"] = "Fields";
-$PMF_LANG["ad_stat_report_category"] = "Category";
+$PMF_LANG["ad_stat_report_category"] = "Entity";
 $PMF_LANG["ad_stat_report_sub_category"] = "Subcategory";
 $PMF_LANG["ad_stat_report_translations"] = "Translations";
 $PMF_LANG["ad_stat_report_language"] = "Language";
@@ -1267,7 +1267,7 @@ $LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymou
 $LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding<br>(default: deactivated)');
 $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap<br>(default: activated)');
-$PMF_LANG['ad_category_image'] = 'Category image';
+$PMF_LANG['ad_category_image'] = 'Entity image';
 $PMF_LANG["ad_user_show_home"] = "Show on startpage";
 
 // added v.2.10.0-alpha - 2017-11-9 by Brian Potter (BrianPotter)

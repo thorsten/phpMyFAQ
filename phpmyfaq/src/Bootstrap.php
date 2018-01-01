@@ -3,7 +3,7 @@
 /**
  * Bootstrap phpMyFAQ.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-07
@@ -104,26 +104,26 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
 require PMF_CONFIG_DIR.'/constants.php';
 
 /*
- * The include directory
+ * The /src directory
  */
-define('PMF_INCLUDE_DIR', __DIR__);
+define('PMF_SRC_DIR', __DIR__);
 
 /*
  * The directory where the translations reside
  */
-define('PMF_LANGUAGE_DIR', dirname(__DIR__).'/lang');
+define('Language_DIR', dirname(__DIR__).'/lang');
 
 //
 // Setting up PSR-0 autoloader
 //
-require PMF_INCLUDE_DIR.'/libs/autoload.php';
+require PMF_SRC_DIR.'/libs/autoload.php';
 
 $loader = new ClassLoader();
-$loader->add('PMF_', PMF_INCLUDE_DIR);
+$loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register();
 
-require PMF_INCLUDE_DIR.'/libs/parsedown/Parsedown.php';
-require PMF_INCLUDE_DIR.'/libs/parsedown/ParsedownExtra.php';
+require PMF_SRC_DIR.'/libs/parsedown/Parsedown.php';
+require PMF_SRC_DIR.'/libs/parsedown/ParsedownExtra.php';
 
 //
 // Set the error handler to our pmf_error_handler() function
@@ -134,18 +134,18 @@ set_error_handler('pmf_error_handler');
 // Create a database connection
 //
 try {
-    PMF_Db::setTablePrefix($DB['prefix']);
-    $db = PMF_Db::factory($DB['type']);
+    phpMyFAQ\Db::setTablePrefix($DB['prefix']);
+    $db = phpMyFAQ\Db::factory($DB['type']);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
-} catch (PMF_Exception $e) {
-    PMF_Db::errorPage($e->getMessage());
+} catch (phpMyFAQ\Exception $e) {
+    phpMyFAQ\Db::errorPage($e->getMessage());
     exit(-1);
 }
 
 //
 // Fetch the configuration and add the database connection
 //
-$faqConfig = new PMF_Configuration($db);
+$faqConfig = new phpMyFAQ\Configuration($db);
 $faqConfig->getAll();
 
 //
@@ -159,7 +159,7 @@ ini_set('url_rewriter.tags', '');
 //
 // Start the PHP session
 //
-PMF_Init::cleanRequest();
+phpMyFAQ\Init::cleanRequest();
 if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
     session_save_path(PMF_SESSION_SAVE_PATH);
 }
@@ -184,11 +184,11 @@ if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR.
     require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
 
     $psr4Loader = new ClassLoader();
-    $psr4Loader->addPsr4('Elasticsearch\\', PMF_INCLUDE_DIR.'/libs/elasticsearch/src/Elasticsearch');
-    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_INCLUDE_DIR.'/libs/guzzlehttp/ringphp/src');
-    $psr4Loader->addPsr4('Monolog\\', PMF_INCLUDE_DIR.'/libs/monolog/src/Monolog');
-    $psr4Loader->addPsr4('Psr\\', PMF_INCLUDE_DIR.'/libs/psr/log/Psr');
-    $psr4Loader->addPsr4('React\\Promise\\', PMF_INCLUDE_DIR.'/libs/react/promise/src');
+    $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR.'/libs/elasticsearch/src/Elasticsearch');
+    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR.'/libs/guzzlehttp/ringphp/src');
+    $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR.'/libs/monolog/src/Monolog');
+    $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR.'/libs/psr/log/Psr');
+    $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR.'/libs/react/promise/src');
     $psr4Loader->register();
 
     $esClient = ClientBuilder::create()

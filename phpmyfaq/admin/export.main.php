@@ -2,22 +2,26 @@
 /**
  * XML, XHTML and PDF export - main page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ 
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-04-17
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Db;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\HttpStreamer;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,14 +40,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmptyTable('faqdata')) {
-    if (!PMF_Db::checkOnEmptyTable('faqcategories')) {
-        $category = new PMF_Category($faqConfig, array(), false);
+if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTable('faqdata')) {
+    if (!Db::checkOnEmptyTable('faqcategories')) {
+        $category = new Category($faqConfig, array(), false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $category->buildTree();
 
-        $categoryHelper = new PMF_Helper_Category();
+        $categoryHelper = new CategoryHelper();
         $categoryHelper->setCategory($category);
         ?>
                 <form  action="?action=exportfile" method="post" accept-charset="utf-8">
@@ -105,15 +109,14 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                         <div class="col-lg-offset-2 col-lg-4 radio">
                             <p><?php echo $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
-                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
-                                       id="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT;
-    ?>" checked>
+                                <input type="radio" name="dispos" value="<?php echo HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
+                                       id="<?php echo HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked>
                                     <?php echo $PMF_LANG['ad_export_download'] ?>
                             </label>
                             <br>
                             <label>
-                                <input type="radio" name="dispos" value="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
-                                       id="<?php echo PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
+                                <input type="radio" name="dispos" value="<?php echo HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                                       id="<?php echo HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
                                 <?php echo $PMF_LANG['ad_export_view'] ?>
                             </label>
                         </div>
@@ -122,12 +125,10 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !PMF_Db::checkOnEmp
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submitExport">
-                                <?php echo $PMF_LANG['ad_menu_export'];
-    ?>
+                                <?php echo $PMF_LANG['ad_menu_export']; ?>
                             </button>
                             <button class="btn btn-info" type="reset" name="resetExport">
-                                <?php echo $PMF_LANG['ad_config_reset'];
-    ?>
+                                <?php echo $PMF_LANG['ad_config_reset']; ?>
                             </button>
                         </div>
                     </div>

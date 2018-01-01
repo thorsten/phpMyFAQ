@@ -15,11 +15,20 @@
  * @author    Meikel Katzengreis <meikel@katzengreis.com>
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
+use phpMyFAQ\Template;
+use phpMyFAQ\User\CurrentUser;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
@@ -33,13 +42,13 @@ define('IS_VALID_PHPMYFAQ', null);
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 // get language (default: english)
-$Language = new PMF_Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require PMF_ROOT_DIR.'/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
     if (!file_exists(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php')) {
         $LANGCODE = 'en';
@@ -52,17 +61,17 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 //
 // Set actual template set name
 //
-PMF_Template::setTplSetName($faqConfig->get('main.templateSet'));
+Template::setTplSetName($faqConfig->get('main.templateSet'));
 
 //
 // Initialize attachment factory
 //
-PMF_Attachment_Factory::init(
+Factory::init(
     $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')
@@ -71,12 +80,12 @@ PMF_Attachment_Factory::init(
 //
 // Create a new phpMyFAQ system object
 //
-$faqSystem = new PMF_System();
+$faqSystem = new System();
 
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($faqConfig);
+$faq = new Faq($faqConfig);
 
 //
 // use mbstring extension if available and when possible
@@ -91,17 +100,17 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Get user action
 //
-$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 if (is_null($action)) {
-    $action = PMF_Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    $action = phpMyFAQ\Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 }
 
 // authenticate current user
 $auth = null;
 $error = '';
-$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
-$faqremember = PMF_Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$faqusername = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqremember = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -111,20 +120,20 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new PMF_User_CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
         try {
-            $authLdap = new PMF_Auth_Ldap($faqConfig);
+            $authLdap = new Auth_Ldap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
-        } catch (PMF_Exception $e) {
+        } catch (Exception $e) {
             $error = $e->getMessage().'<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new PMF_Auth_Sso($faqConfig);
+        $authSso = new Auth_Sso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
@@ -136,21 +145,21 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
         }
     } else {
         // error
-        $logging = new PMF_Logging($faqConfig);
+        $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Loginerror\nLogin: '.$faqusername.'\nErrors: '.implode(', ', $user->errors));
         $error = $error.$PMF_LANG['ad_auth_fail'];
     }
 } else {
     // Try to authenticate with cookie information
-    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    $user = CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
-    if (!$user instanceof PMF_User_CurrentUser) {
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    if (!$user instanceof CurrentUser) {
+        $user = CurrentUser::getFromSession($faqConfig);
     }
-    if ($user instanceof PMF_User_CurrentUser) {
+    if ($user instanceof CurrentUser) {
         $auth = true;
     } else {
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new CurrentUser($faqConfig);
     }
 }
 
@@ -181,9 +190,9 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$ajax = PMF_Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+$ajax = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
 if (is_null($ajax)) {
-    $ajax = PMF_Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+    $ajax = phpMyFAQ\Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
 }
 
 // if performing AJAX operation, needs to branch before header.php

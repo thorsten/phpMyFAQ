@@ -3,7 +3,7 @@
 /**
  * Handle ajax requests for the interface translation tool.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  *
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Alexander Melnik <old@km.ua>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -28,10 +28,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$ajax_action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfToken  = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (is_null($csrfToken)) {
-    $csrfToken  = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken  = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 }
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -43,7 +43,7 @@ switch ($ajax_action) {
     case 'save_page_buffer':
         /*
          * Build language variable definitions
-         * @todo Change input handling using PMF_Filter
+         * @todo Change input handling using phpMyFAQ\Filter
          */
         foreach ((array) @$_POST['PMF_LANG'] as $key => $val) {
             if (is_string($val)) {
@@ -154,7 +154,7 @@ switch ($ajax_action) {
             exit;
         }
 
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+        $lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
 
         if (!is_writable(PMF_ROOT_DIR.'/lang')) {
             echo 0;
@@ -186,12 +186,12 @@ switch ($ajax_action) {
             exit;
         }
 
-        $langCode = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
+        $langCode = phpMyFAQ\Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
         $langName = @$languageCodes[$langCode];
         $langCharset = 'UTF-8';
-        $langDir = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
-        $langNPlurals = strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
-        $langDesc = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
+        $langDir = phpMyFAQ\Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+        $langNPlurals = strval(phpMyFAQ\Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
+        $langDesc = phpMyFAQ\Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
         $author = (array) @$_POST['author'];
 
         if (empty($langCode) || empty($langName) || empty($langCharset) ||
@@ -205,7 +205,7 @@ switch ($ajax_action) {
 /**
  * %s
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -240,7 +240,7 @@ FILE;
 
     case 'send_translated_file':
 
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+        $lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
         $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
 
         if (!file_exists($filename)) {
@@ -250,7 +250,7 @@ FILE;
 
         $letterTpl = '';
 
-        $mail = new PMF_Mail($faqConfig);
+        $mail = new phpMyFAQ\Mail($faqConfig);
         $mail->subject = 'New phpMyFAQ language file submitted';
         $mail->message = sprintf('The file below was sent by %s, which is using phpMyFAQ %s on %s',
             $user->userdata->get('email'),

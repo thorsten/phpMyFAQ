@@ -3,7 +3,7 @@
 /**
  * The French Canadian language file - try to be the best
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Jacqueline Gazaille Tétreault <gazaillegen@gmail.com>
- * @copyright 2013-2017 phpMyFAQ Team
+ * @copyright 2013-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2013-06-29
@@ -711,7 +711,7 @@ $PMF_LANG['msgUpdateFaqDate'] = 'mise à jour';
 $PMF_LANG['msgKeepFaqDate'] = 'conserver';
 $PMF_LANG['msgEditFaqDat'] = 'édition';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => "Nombre de termes trouvés");
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Trier par Faq les plus populaires");
+$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Trier par FaqHelper les plus populaires");
 $LANG_CONF['main.optionalMailAddress'] = array(0 => "checkbox", 1 => "Adresse courriel comme champ obligatoire (défaut : désactivé)");
 $PMF_LANG['ad_record_sticky'] = 'Épingler cette faq :';
 $PMF_LANG['ad_entry_sticky'] = 'Épingler cette faq ';

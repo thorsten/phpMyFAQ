@@ -4,7 +4,7 @@
  * Shows the page with the news record and - when available - the user
  * comments.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,12 +14,21 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2006-07-23
  */
+
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\Captcha as HelperCaptcha;
+use phpMyFAQ\News;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,8 +38,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($faqConfig);
-$comment = new PMF_Comment($faqConfig);
+$captcha = new Captcha($faqConfig);
+$comment = new Comment($faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -38,8 +47,8 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$oNews = new PMF_News($faqConfig);
-$newsId = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
+$oNews = new News($faqConfig);
+$newsId = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
@@ -48,7 +57,7 @@ if (is_null($newsId)) {
 
 try {
     $faqsession->userTracking('news_view', $newsId);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
@@ -67,7 +76,7 @@ $newsContent = $news['content'];
 $newsHeader = $news['header'];
 
 // Add Glossary entries
-$oGlossary = new PMF_Glossary($faqConfig);
+$oGlossary = new Glossary($faqConfig);
 $newsContent = $oGlossary->insertItemsIntoContent($newsContent);
 $newsHeader = $oGlossary->insertItemsIntoContent($newsHeader);
 
@@ -85,7 +94,7 @@ $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
                         '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
-                        PMF_Link::getSystemRelativeUri('index.php'),
+                        Link::getSystemRelativeUri('index.php'),
                         $newsId,
                         $PMF_LANG['ad_menu_news_edit']);
 }
@@ -103,7 +112,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
 
 // date of news entry
 if ($news['active'] && (!$expired)) {
-    $date = new PMF_Date($faqConfig);
+    $date = new Date($faqConfig);
     $newsDate = sprintf('%s<span id="newsLastUpd">%s</span>',
         $PMF_LANG['msgLastUpdateArticle'],
         $date->format($news['date'])
@@ -112,7 +121,7 @@ if ($news['active'] && (!$expired)) {
     $newsDate = '';
 }
 
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$captchaHelper = new HelperCaptcha($faqConfig);
 
 $tpl->parse(
     'writeContent',
@@ -132,12 +141,12 @@ $tpl->parse(
         'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'writeComments' => $comment->getComments($newsId, PMF_Comment::COMMENT_TYPE_NEWS),
+        'writeComments' => $comment->getComments($newsId, Comment::COMMENT_TYPE_NEWS),
     )
 );
 

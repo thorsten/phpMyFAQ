@@ -3,7 +3,7 @@
 /**
  * Bangla language file - try to be the best of Bangladeshi Bangla
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Md. Masum Billah <jewelurp@dhaka.net>
- * @copyright 2008-2017 phpMyFAQ Team
+ * @copyright 2008-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2008-04-01
@@ -163,8 +163,8 @@ $PMF_LANG["ad"] = "ADMIN SECTION";
 $PMF_LANG["ad_menu_user_administration"] = "Users";
 $PMF_LANG["ad_menu_entry_aprove"] = "Approve FAQs";
 $PMF_LANG["ad_menu_entry_edit"] = "Edit FAQs";
-$PMF_LANG["ad_menu_categ_add"] = "Add Category";
-$PMF_LANG["ad_menu_categ_edit"] = "Edit Category";
+$PMF_LANG["ad_menu_categ_add"] = "Add Entity";
+$PMF_LANG["ad_menu_categ_edit"] = "Edit Entity";
 $PMF_LANG["ad_menu_news_add"] = "Add News";
 $PMF_LANG["ad_menu_news_edit"] = "Edit News";
 $PMF_LANG["ad_menu_open"] = "Open questions";
@@ -226,7 +226,7 @@ $PMF_LANG["ad_entry_theme"] = "Question:";
 $PMF_LANG["ad_entry_content"] = "Answer:";
 $PMF_LANG["ad_entry_keywords"] = "Keywords:";
 $PMF_LANG["ad_entry_author"] = "Author:";
-$PMF_LANG["ad_entry_category"] = "Category:";
+$PMF_LANG["ad_entry_category"] = "Entity:";
 $PMF_LANG["ad_entry_active"] = "Active?";
 $PMF_LANG["ad_entry_date"] = "Date:";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
@@ -275,31 +275,31 @@ $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Add new category";
-$PMF_LANG["ad_categ_catnum"] = "Category Number:";
+$PMF_LANG["ad_categ_catnum"] = "Entity Number:";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number:";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Category Title:";
-$PMF_LANG["ad_categ_add"] = "Add Category";
+$PMF_LANG["ad_categ_titel"] = "Entity Title:";
+$PMF_LANG["ad_categ_add"] = "Add Entity";
 $PMF_LANG["ad_categ_existing"] = "Existing Categories";
 $PMF_LANG["ad_categ_id"] = "#";
-$PMF_LANG["ad_categ_categ"] = "Category";
+$PMF_LANG["ad_categ_categ"] = "Entity";
 $PMF_LANG["ad_categ_subcateg"] = "Subcategory";
-$PMF_LANG["ad_categ_titel"] = "Category title";
+$PMF_LANG["ad_categ_titel"] = "Entity title";
 $PMF_LANG["ad_categ_action"] = "Action";
 $PMF_LANG["ad_categ_update"] = "update";
 $PMF_LANG["ad_categ_delete"] = "delete";
-$PMF_LANG["ad_categ_updatecateg"] = "Update Category";
+$PMF_LANG["ad_categ_updatecateg"] = "Update Entity";
 $PMF_LANG["ad_categ_nodata"] = "No data found in database";
 $PMF_LANG["ad_categ_remark"] = "Please note that existing entries will not be visible anymore, if you delete the category. You must assign a new category for the article or delete the article.";
 $PMF_LANG["ad_categ_edit_1"] = "Edit";
-$PMF_LANG["ad_categ_edit_2"] = "Category";
-$PMF_LANG["ad_categ_add"] = "add Category";
+$PMF_LANG["ad_categ_edit_2"] = "Entity";
+$PMF_LANG["ad_categ_add"] = "add Entity";
 $PMF_LANG["ad_categ_added"] = "The category was added.";
 $PMF_LANG["ad_categ_updated"] = "The category was updated.";
 $PMF_LANG["ad_categ_del_yes"] = "yes, delete!";
 $PMF_LANG["ad_categ_del_no"] = "no!";
 $PMF_LANG["ad_categ_deletesure"] = "Are you sure to delete this category?";
-$PMF_LANG["ad_categ_deleted"] = "Category deleted.";
+$PMF_LANG["ad_categ_deleted"] = "Entity deleted.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc 	"] = "The Cookie was <strong>successfully</strong> set.";
@@ -351,7 +351,7 @@ $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
 $PMF_LANG["ad_sess_referer"] = "Referer:";
 $PMF_LANG["ad_sess_browser"] = "Browser:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Category:";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Entity:";
 $PMF_LANG["ad_sess_ai_artikel"] = "Record:";
 $PMF_LANG["ad_sess_ai_sb"] = "Search-Strings:";
 $PMF_LANG["ad_sess_ai_sid"] = "Session ID:";
@@ -431,7 +431,7 @@ $PMF_LANG["ad_sess_head"] = "View sessions";
 // Added v1.1 - 06.01.2002 - Bastian
 $PMF_LANG["ad_menu_categ_edit"] = "Categories";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
-$PMF_LANG["ad_kateg_add"] = "add main Category";
+$PMF_LANG["ad_kateg_add"] = "add main Entity";
 $PMF_LANG["ad_kateg_rename"] = "Rename";
 $PMF_LANG["ad_adminlog_date"] = "Date";
 $PMF_LANG["ad_adminlog_user"] = "User";
@@ -746,7 +746,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = 'Configuration';
 $PMF_LANG['admin_mainmenu_logout'] = 'Logout';
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = 'Category owner';
+$PMF_LANG["ad_categ_owner"] = 'Entity owner';
 $PMF_LANG['adminSection'] = 'প্রশাসক';
 $PMF_LANG['err_expiredArticle'] = 'প্রশ্নটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
 $PMF_LANG['err_expiredNews'] = 'খবরটির মেয়াদ উত্তীর্ণ হয়েছে তাই দেখানো সম্ভব না।';
@@ -774,8 +774,8 @@ $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';
-$PMF_LANG['ad_categ_trans_2'] = 'Category';
-$PMF_LANG['ad_categ_translatecateg'] = 'Translate Category';
+$PMF_LANG['ad_categ_trans_2'] = 'Entity';
+$PMF_LANG['ad_categ_translatecateg'] = 'Translate Entity';
 $PMF_LANG['ad_categ_translate'] = 'Translate';
 $PMF_LANG['ad_categ_transalready'] = 'Already translated in: ';
 $PMF_LANG["ad_categ_deletealllang"] = 'Delete in all languages?';
@@ -784,7 +784,7 @@ $PMF_LANG["ad_categ_translated"] = "The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi
 $PMF_LANG["ad_categ_show"] = "Overview";
-$PMF_LANG['ad_menu_categ_structure'] = "Category Overview including its languages";
+$PMF_LANG['ad_menu_categ_structure'] = "Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten
 $PMF_LANG['ad_entry_userpermission'] = 'User permissions:';

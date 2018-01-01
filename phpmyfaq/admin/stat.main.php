@@ -2,7 +2,7 @@
 /**
  * The main statistics page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,17 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Session;
+use phpMyFAQ\Visits;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -43,13 +49,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
-    $session = new PMF_Session($faqConfig);
-    $date = new PMF_Date($faqConfig);
-    $visits = new PMF_Visits($faqConfig);
-    $statdelete = PMF_Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
-    $month = PMF_Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
-    $csrfTokenFromPost = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-    $csrfTokenFromGet = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+    $session = new Session($faqConfig);
+    $date = new Date($faqConfig);
+    $visits = new Visits($faqConfig);
+    $statdelete = Filter::filterInput(INPUT_POST, 'statdelete', FILTER_SANITIZE_STRING);
+    $month = Filter::filterInput(INPUT_POST, 'month', FILTER_SANITIZE_STRING);
+    $csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
         $statdelete = null;
@@ -70,8 +76,8 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
             // The filename format is: trackingDDMMYYYY
             // e.g.: tracking02042006
             if (($trackingFile != '.') && ($trackingFile != '..') && (10 == strpos($trackingFile, $month))) {
-                $candidateFirst = PMF_Date::getTrackingFileDate($trackingFile);
-                $candidateLast = PMF_Date::getTrackingFileDate($trackingFile, true);
+                $candidateFirst = Date::getTrackingFileDate($trackingFile);
+                $candidateLast = Date::getTrackingFileDate($trackingFile, true);
                 if (($candidateLast > 0) && ($candidateLast > $last)) {
                     $last = $candidateLast;
                 }
@@ -123,11 +129,11 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         if ($dat != '.' && $dat != '..') {
             ++$danz;
         }
-        if (PMF_Date::getTrackingFileDate($dat) > $last) {
-            $last = PMF_Date::getTrackingFileDate($dat);
+        if (Date::getTrackingFileDate($dat) > $last) {
+            $last = Date::getTrackingFileDate($dat);
         }
-        if (PMF_Date::getTrackingFileDate($dat) < $first && PMF_Date::getTrackingFileDate($dat) > 0) {
-            $first = PMF_Date::getTrackingFileDate($dat);
+        if (Date::getTrackingFileDate($dat) < $first && Date::getTrackingFileDate($dat) > 0) {
+            $first = Date::getTrackingFileDate($dat);
         }
     }
     closedir($dir);
@@ -186,7 +192,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $trackingDates = [];
     while (false !== ($dat = readdir($dir))) {
         if ($dat != '.' && $dat != '..' && strlen($dat) == 16 && !is_dir($dat)) {
-            $trackingDates[] = PMF_Date::getTrackingFileDate($dat);
+            $trackingDates[] = Date::getTrackingFileDate($dat);
         }
     }
     closedir($dir);

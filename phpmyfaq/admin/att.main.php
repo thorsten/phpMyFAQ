@@ -10,12 +10,17 @@
  *
  * @category  phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2010-2017 phpMyFAQ Team
+ * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-13
  */
+
+use phpMyFAQ\Attachment\Collection;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Link;
+use phpMyFAQ\Pagination;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -25,19 +30,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
+$page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 $page = 1 > $page ? 1 : $page;
 
-$fa = new PMF_Attachment_Collection($faqConfig);
+$fa = new Collection($faqConfig);
 $itemsPerPage = 32;
 $allCrumbs = $fa->getBreadcrumbs();
 
 $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
-$pagination = new PMF_Pagination(
+$pagination = new Pagination(
     $faqConfig,
     array(
-        'baseUrl' => PMF_Link::getSystemRelativeUri().'?'.str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+        'baseUrl' => Link::getSystemRelativeUri().'?'.str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total' => count($allCrumbs),
         'perPage' => $itemsPerPage,
     )

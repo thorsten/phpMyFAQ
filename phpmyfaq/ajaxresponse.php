@@ -3,7 +3,7 @@
 /**
  * The Ajax driven response page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,24 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2017 phpMyFAQ Team
+ * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-27
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\Exception;
+use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\User\CurrentUser;
 
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -24,11 +37,11 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require 'src/Bootstrap.php';
 
-$searchString = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$ajaxLanguage = PMF_Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
-$categoryId = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+$searchString = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$ajaxLanguage = Filter::filterInput(INPUT_POST, 'ajaxlanguage', FILTER_SANITIZE_STRING, 'en');
+$categoryId = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
 
-$language = new PMF_Language($faqConfig);
+$language = new Language($faqConfig);
 $languageCode = $language->setLanguage(
     $faqConfig->get('main.languageDetection'),
     $faqConfig->get('main.language')
@@ -37,7 +50,7 @@ $faqConfig->setLanguage($language);
 
 require_once 'lang/language_en.php';
 
-if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
+if (Language::isASupportedLanguage($ajaxLanguage)) {
     $languageCode = trim($ajaxLanguage);
     require_once 'lang/language_'.$languageCode.'.php';
 } else {
@@ -46,23 +59,23 @@ if (PMF_Language::isASupportedLanguage($ajaxLanguage)) {
 }
 
 //Load plurals support for selected language
-$plr = new PMF_Language_Plurals($PMF_LANG);
+$plr = new Plurals($PMF_LANG);
 
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($languageCode);
+Strings::init($languageCode);
 
 //
 // Get current user and group id - default: -1
 //
-$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof PMF_User_CurrentUser) {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof CurrentUser) {
+    $user = CurrentUser::getFromSession($faqConfig);
 }
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_Medium) {
+    if ($user->perm instanceof Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
@@ -71,25 +84,25 @@ if (isset($user) && is_object($user)) {
         $current_groups = array(-1);
     }
 } else {
-    $user = new PMF_User_CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
     $current_user = -1;
     $current_groups = array(-1);
 }
 
-$category = new PMF_Category($faqConfig, $current_groups);
+$category = new Category($faqConfig, $current_groups);
 $category->setUser($current_user);
 $category->setGroups($current_groups);
 $category->transform(0);
 $category->buildTree();
 
-$faq = new PMF_Faq($faqConfig);
-$faqSearch = new PMF_Search($faqConfig);
-$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+$faq = new Faq($faqConfig);
+$faqSearch = new Search($faqConfig);
+$faqSearchResult = new Resultset($user, $faq, $faqConfig);
 
 //
 // Send headers
 //
-$http = new PMF_Helper_Http();
+$http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
@@ -102,11 +115,11 @@ if (!is_null($searchString)) {
     try {
         $searchResult = $faqSearch->autoComplete($searchString);
         $faqSearchResult->reviewResultset($searchResult);
-    } catch (PMF_Search_Exception $e) {
+    } catch (Exception $e) {
         // @todo handle the exception
     }
 
-    $faqSearchHelper = new PMF_Helper_Search($faqConfig);
+    $faqSearchHelper = new SearchHelper($faqConfig);
     $faqSearchHelper->setSearchterm($searchString);
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);

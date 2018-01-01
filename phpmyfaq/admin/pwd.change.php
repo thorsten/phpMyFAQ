@@ -2,7 +2,7 @@
 /**
  * Form to change password of the current user.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -36,8 +36,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 
     // If we have to save a new password, do that first
-    $save = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $save = phpMyFAQ\Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfCheck = false;
@@ -48,14 +48,14 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
     if (!is_null($save) && $csrfCheck) {
 
         // Define the (Local/Current) Authentication Source
-        $auth = new PMF_Auth($faqConfig);
+        $auth = new phpMyFAQ\Auth($faqConfig);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
-        $oldPassword = PMF_Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
-        $newPassword = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-        $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+        $oldPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
+        $newPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+        $retypedPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {

@@ -3,7 +3,7 @@
 /**
  * The main start page with the Top10 and the latest messages.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,15 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-23
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\News;
+use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -26,9 +30,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News($faqConfig);
+$news = new News($faqConfig);
 
-$archived = PMF_Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
+$archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 $writeNewsHeader = $faqConfig->get('main.titleFAQ');
 $writeNewsRSS = '';
 
@@ -147,6 +151,6 @@ $tpl->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => PMF_String::htmlspecialchars($faqConfig->get('main.titleFAQ'))
+        'breadcrumbHeadline' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ'))
     ]
 );

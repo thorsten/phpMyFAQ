@@ -12,7 +12,7 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,7 +20,7 @@
  *
  * @category  phpMyFAQ
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2006-06-26
@@ -56,7 +56,7 @@ require 'src/Bootstrap.php';
 //
 // Initalizing static string wrapper
 //
-PMF_String::init('en');
+Strings::init('en');
 
 if (false === $faqConfig->get('seo.enableXMLSitemap')) {
     exit();
@@ -66,14 +66,14 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
 {
     if (!isset($lastmod)) {
-        $lastmod = PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
+        $lastmod = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
     }
     $node =
          '<url>'
-        .'<loc>'.PMF_String::htmlspecialchars($location).'</loc>'
+        .'<loc>'.Strings::htmlspecialchars($location).'</loc>'
         .'<lastmod>'.$lastmod.'</lastmod>'
         .'<changefreq>'.$changeFreq.'</changefreq>'
         .(isset($priority) ? '<priority>'.$priority.'</priority>' : '')
@@ -91,7 +91,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 // including Sitemap URLs always produced by this same PHP code (see PMF_SITEMAP_GOOGLE_GET_INDEX)
 //
 
-$oFaq = new PMF_Faq($faqConfig);
+$oFaq = new phpMyFAQ\Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
@@ -111,7 +111,7 @@ $sitemap =
 // 1st entry: the faq server itself
 $sitemap .= buildSitemapNode(
     $faqConfig->getDefaultUrl(),
-    PMF_Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
+    Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
     PMF_SITEMAP_GOOGLE_PRIORITY_MAX
 );
@@ -127,14 +127,14 @@ foreach ($items as $item) {
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {
-            $oL = new PMF_Link($link, $faqConfig);
+            $oL = new phpMyFAQ\Link($link, $faqConfig);
             $oL->itemTitle = $item['thema'];
             $link = $oL->toString();
         }
     }
     $sitemap .= buildSitemapNode(
         $link,
-        PMF_Date::createIsoDate($item['date'], DATE_W3C),
+        Date::createIsoDate($item['date'], DATE_W3C),
         // @todo: manage changefreq node with the info provided by faqchanges,
         // if this will not add a big load to the server (+1 query/faq)
         PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
@@ -144,7 +144,7 @@ foreach ($items as $item) {
 
 $sitemap .= '</urlset>';
 
-$getgezip = PMF_Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
+$getgezip = phpMyFAQ\Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
 if (!is_null($getgezip) && (1 == $getgezip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($sitemap);
@@ -153,7 +153,7 @@ if (!is_null($getgezip) && (1 == $getgezip)) {
         header('Content-Length: '.strlen($sitemapGz));
         echo $sitemapGz;
     } else {
-        $http = new PMF_Helper_Http();
+        $http = new phpMyFAQ\Helper_Http();
         $http->sendStatus(404);
     }
 } else {

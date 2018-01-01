@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    A. Neufang <B_A_F_F@gmx.de>
  * @author    René-Roger Ziesack <rr-phpmyfaq.de@inf99.de>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19

@@ -6,7 +6,7 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,12 +17,34 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2001-2017 phpMyFAQ Team
+ * @copyright 2001-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2001-02-12
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Auth\Ldap as AuthLdap;
+use phpMyFAQ\Auth\Sso as AuthSso;
+use phpMyFAQ\Category;
+use phpMyFAQ\Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Helper\HttpHelper as HelperHttp;
+use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Link;
+use phpMyFAQ\Services;
+use phpMyFAQ\Session;
+use phpMyFAQ\Seo;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
+use phpMyFAQ\Tags;
+use phpMyFAQ\Template;
+use phpMyFAQ\User\CurrentUser;
 
 //
 // Define the named constant used as a check by any included PHP file
@@ -37,14 +59,14 @@ require 'src/Bootstrap.php';
 //
 // Get language (default: english)
 //
-$Language = new PMF_Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-$showCaptcha = PMF_Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
+$showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
     if (!file_exists('lang/language_'.$LANGCODE.'.php')) {
@@ -56,17 +78,17 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE) && is_null
 }
 
 //Load plurals support for selected language
-$plr = new PMF_Language_Plurals($PMF_LANG);
+$plr = new Plurals($PMF_LANG);
 
 //
 // Initializing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 /*
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init(
+Factory::init(
     $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')
@@ -75,7 +97,7 @@ PMF_Attachment_Factory::init(
 //
 // Get user action
 //
-$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, 'main');
 
 //
 // Authenticate current user
@@ -83,10 +105,10 @@ $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING, '
 $auth = $error = null;
 $loginVisibility = 'hidden';
 
-$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
-$faqaction = PMF_Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-$faqremember = PMF_Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
+$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -96,20 +118,20 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
-    $user = new PMF_User_CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
     if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
         try {
-            $authLdap = new PMF_Auth_Ldap($faqConfig);
+            $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
-        } catch (PMF_Exception $e) {
+        } catch (Exception $e) {
             $error = $e->getMessage().'<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new PMF_Auth_Sso($faqConfig);
+        $authSso = new AuthSso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {
@@ -131,15 +153,15 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
 } else {
     // Try to authenticate with cookie information
-    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    $user = CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
-    if (!$user instanceof PMF_User_CurrentUser) {
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    if (!$user instanceof CurrentUser) {
+        $user = CurrentUser::getFromSession($faqConfig);
     }
-    if ($user instanceof PMF_User_CurrentUser) {
+    if ($user instanceof CurrentUser) {
         $auth = true;
     } else {
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new CurrentUser($faqConfig);
     }
 }
 
@@ -161,9 +183,9 @@ if ('logout' === $action && isset($auth)) {
 //
 // Get current user and group id - default: -1
 //
-if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+if (!is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_Medium) {
+    if ($user->perm instanceof Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
@@ -190,9 +212,9 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 // Found a session ID in _GET or _COOKIE?
 //
 $sid = null;
-$sidGet = PMF_Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$sidCookie = PMF_Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$faqsession = new PMF_Session($faqConfig);
+$sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+$faqsession = new Session($faqConfig);
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -203,7 +225,7 @@ if (!$internal) {
         // Create a per-site unique SID
         try {
             $faqsession->userTracking('new_session', 0);
-        } catch (PMF_Exception $e) {
+        } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
     } else {
@@ -213,7 +235,7 @@ if (!$internal) {
             } else {
                 $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
             }
-        } catch (PMF_Exception $e) {
+        } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
     }
@@ -225,7 +247,7 @@ if (!$internal) {
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sid)) {
-        PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid);
+        Session::setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sid);
         if (is_null($sidCookie)) {
             $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
         }
@@ -237,7 +259,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!PMF_Session::setCookie(PMF_Session::PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    if (!Session::setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
@@ -245,10 +267,10 @@ if ($faqConfig->get('main.enableUserTracking')) {
 //
 // Found a article language?
 //
-$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
-if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang)) {
-    $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-    if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang)) {
+$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
+    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
         $lang = $LANGCODE;
     }
 }
@@ -256,32 +278,32 @@ if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang)) {
 //
 // Create a new FAQ object
 //
-$faq = new PMF_Faq($faqConfig);
+$faq = new Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
 //
-// Create a new Category object
+// Create a new CategoryHelper object
 //
-$category = new PMF_Category($faqConfig, $current_groups, true);
+$category = new Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
 
 //
 // Create a new Tags object
 //
-$oTag = new PMF_Tags($faqConfig);
+$oTag = new Tags($faqConfig);
 
 //
 // Create URL
 //
-$faqSystem = new PMF_System();
-$faqLink = new PMF_Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
+$faqSystem = new System();
+$faqLink = new Link($faqSystem->getSystemUri($faqConfig), $faqConfig);
 $currentPageUrl = $faqLink->getCurrentUrl();
 
 //
 // Found a record ID?
 //
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
     $faq->getRecord($id);
     $title = ' - '.$faq->faqRecord['title'];
@@ -295,7 +317,7 @@ if (!is_null($id)) {
         $id,
         $lang
     );
-    $faqLink = new PMF_Link($url, $faqConfig);
+    $faqLink = new Link($url, $faqConfig);
     $faqLink->itemTitle = $faq->faqRecord['title'];
     $currentPageUrl = $faqLink->toString();
 } else {
@@ -308,7 +330,7 @@ if (!is_null($id)) {
 //
 // found a solution ID?
 //
-$solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+$solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (!is_null($solutionId)) {
     $title = ' -  powered by phpMyFAQ '.$faqConfig->get('main.currentVersion');
     $keywords = '';
@@ -318,7 +340,7 @@ if (!is_null($solutionId)) {
         $lang = $faqData['lang'];
         $title = ' - '.$faq->getRecordTitle($id);
         $keywords = ','.$faq->getRecordKeywords($id);
-        $metaDescription = str_replace('"', '', PMF_Utils::makeShorterText(strip_tags($faqData['content']), 12));
+        $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
         $url = sprintf(
             '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
             $faqConfig->getDefaultUrl(),
@@ -327,7 +349,7 @@ if (!is_null($solutionId)) {
             $id,
             $lang
         );
-        $faqLink = new PMF_Link($url, $faqConfig);
+        $faqLink = new Link($url, $faqConfig);
         $faqLink->itemTitle = $faqData['question'];
         $currentPageUrl = $faqLink->toString();
     }
@@ -336,7 +358,7 @@ if (!is_null($solutionId)) {
 //
 // Handle the Tagging ID
 //
-$tag_id = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
+$tag_id = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 if (!is_null($tag_id)) {
     $title = ' - '.$oTag->getTagNameById($tag_id);
     $keywords = '';
@@ -345,8 +367,8 @@ if (!is_null($tag_id)) {
 //
 // Handle the SiteMap
 //
-$letter = PMF_Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
-if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
+$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $title = ' - '.$letter.'...';
     $keywords = $letter;
 }
@@ -354,7 +376,7 @@ if (!is_null($letter) && (1 == PMF_String::strlen($letter))) {
 //
 // Found a category ID?
 //
-$cat = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+$cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 $categoryFromId = -1;
 if (is_numeric($id) && $id > 0) {
     $categoryFromId = $category->getCategoryIdFromArticle($id);
@@ -441,7 +463,7 @@ if ($faqConfig->get('main.maintenanceMode')) {
 //
 // Load template files and set template variables
 //
-$tpl = new PMF_Template(
+$tpl = new Template(
     array(
         'index' => $indexSet,
         'writeContent' => $includeTemplate,
@@ -459,7 +481,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     $usersOnline = '';
 }
 
-$categoryHelper = new PMF_Helper_Category();
+$categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
 
@@ -474,17 +496,17 @@ if (!is_null($error)) {
     $loginMessage = '';
 }
 
-$faqSeo = new PMF_Seo($faqConfig);
+$faqSeo = new Seo($faqConfig);
 
 $tplMainPage = array(
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
-    'title' => PMF_String::htmlspecialchars($faqConfig->get('main.titleFAQ').$title),
+    'title' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ').$title),
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'version' => $faqConfig->get('main.currentVersion'),
-    'header' => PMF_String::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ'))),
-    'metaTitle' => PMF_String::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ').$title)),
-    'metaDescription' => PMF_String::htmlspecialchars($metaDescription),
-    'metaKeywords' => PMF_String::htmlspecialchars($keywords),
+    'header' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ'))),
+    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ').$title)),
+    'metaDescription' => Strings::htmlspecialchars($metaDescription),
+    'metaKeywords' => Strings::htmlspecialchars($keywords),
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
     'metaLanguage' => $PMF_LANG['metaLanguage'],
     'metaCharset' => 'utf-8', // backwards compability
@@ -497,7 +519,6 @@ $tplMainPage = array(
     'writeSendAdress' => '?'.$sids.'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
     'categoryId' => ($cat === 0) ? '%' : (int) $cat,
-    'showInstantResponse' => '', // @deprecated
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
     'showCategories' => $categoryHelper->renderNavigation($cat),
@@ -505,7 +526,7 @@ $tplMainPage = array(
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'writeLangAdress' => $writeLangAdress,
-    'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
+    'switchLanguages' => Language::selectLanguages($LANGCODE, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'userOnline' => $usersOnline,
     'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
@@ -516,7 +537,7 @@ $tplMainPage = array(
     'msgLoginName' => $user->getUserData('display_name'),
     'loginHeader' => $PMF_LANG['msgLoginUser'],
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig).'?'.PMF_Filter::getFilteredQueryString(),
+    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig).'?'.Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
     'login' => $PMF_LANG['ad_auth_ok'],
     'username' => $PMF_LANG['ad_auth_user'],
@@ -600,14 +621,14 @@ if (isset($auth)) {
     $userRights = $user->perm->getAllUserRights($user->getUserId());
     $minRights = ['37', '39', '40', '41'];
 
-    if (array_values(array_intersect($userRights, $minRights)) === $minRights) {
+    if (array_values(array_intersect($userRights, $minRights)) == $minRights) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
-        $adminSection = '';
+        $adminSection = 'xxx';
     }
 
     if ($faqConfig->get('ldap.ldapSupport')) {
@@ -648,13 +669,13 @@ if (isset($auth)) {
 if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
 
     // We need some Links from social networks
-    $faqServices = new PMF_Services($faqConfig);
+    $faqServices = new Services($faqConfig);
     $faqServices->setCategoryId($cat);
     $faqServices->setFaqId($id);
     $faqServices->setLanguage($lang);
     $faqServices->setQuestion($faq->getRecordTitle($id));
 
-    $faqHelper = new PMF_Helper_Faq($faqConfig);
+    $faqHelper = new HelperFaq($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
 
     $tpl->parseBlock(
@@ -718,7 +739,7 @@ $tpl->merge('writeContent', 'index');
 //
 // Send headers and print template
 //
-$httpHeader = new PMF_Helper_Http();
+$httpHeader = new HelperHttp();
 $httpHeader->setConfiguration($faqConfig);
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();

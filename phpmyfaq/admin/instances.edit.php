@@ -2,7 +2,7 @@
 /**
  * Frontend to edit an instance.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -36,9 +36,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
-    $instanceId = PMF_Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
+    $instanceId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
-    $instance = new PMF_Instance($faqConfig);
+    $instance = new phpMyFAQ\Instance($faqConfig);
     $instanceData = $instance->getInstanceById($instanceId);
 
     ?>

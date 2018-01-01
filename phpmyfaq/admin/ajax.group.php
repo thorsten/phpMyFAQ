@@ -3,7 +3,7 @@
 /**
  * AJAX: handling of Ajax group calls.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,8 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$groupId = PMF_Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
+$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$groupId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
@@ -40,7 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
     if ($faqConfig->config['main.enableCategoryRestrictions'] == false){
         // orig code
-        $user = new PMF_User($faqConfig);
+        $user = new phpMyFAQ\User($faqConfig);
         $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
     }
 

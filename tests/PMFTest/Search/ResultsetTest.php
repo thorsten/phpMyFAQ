@@ -2,7 +2,7 @@
 /**
  * Test case for PMF_Search_Resultset
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,8 +17,14 @@
  * @since     2010-07-24
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Strings;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Category test case
+ * CategoryHelper test case
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
@@ -28,11 +34,11 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-07-24
  */
-class PMFTest_Search_ResultsetTest extends PHPUnit_Framework_TestCase
+class ResultsetTest extends TestCase
 {
-    private $PMF_Search_Resultset;
+    private $resultset;
 
-    private $PMF_Configuration;
+    private $configuration;
 
     private $dbHandle;
 
@@ -43,15 +49,15 @@ class PMFTest_Search_ResultsetTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
         
-        PMF_String::init('en');
+        Strings::init('en');
 
-        $this->dbHandle          = new PMF_DB_Sqlite3();
-        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
+        $this->dbHandle          = new Sqlite3();
+        $this->configuration = new Configuration($this->dbHandle);
 
-        $userMock = $this->getMockBuilder('PMF_User')->disableOriginalConstructor()->getMock();
-        $faqMock  = $this->getMockBuilder('PMF_Faq')->disableOriginalConstructor()->getMock();
+        $userMock = $this->getMockBuilder('phpMyFAQ\User\CurrentUser')->disableOriginalConstructor()->getMock();
+        $faqMock  = $this->getMockBuilder('phpMyFAQ\Faq')->disableOriginalConstructor()->getMock();
         
-        $this->PMF_Search_Resultset = new PMF_Search_Resultset($userMock, $faqMock, $this->PMF_Configuration);
+        $this->resultset = new Resultset($userMock, $faqMock, $this->configuration);
     }
     
     /**
@@ -59,15 +65,15 @@ class PMFTest_Search_ResultsetTest extends PHPUnit_Framework_TestCase
      */
     protected function tearDown ()
     {
-        $this->PMF_Search_Resultset = null;
+        $this->resultset = null;
         parent::tearDown();
     }
 
     public function testSetAndGetNumberOfResults()
     {
-        $this->PMF_Search_Resultset->setNumberOfResults(array(1,2));
-        $this->assertEquals($this->PMF_Search_Resultset->getNumberOfResults(), 2);
-        $this->PMF_Search_Resultset->setNumberOfResults(array());
-        $this->assertEquals($this->PMF_Search_Resultset->getNumberOfResults(), 0);
+        $this->resultset->setNumberOfResults(array(1,2));
+        $this->assertEquals($this->resultset->getNumberOfResults(), 2);
+        $this->resultset->setNumberOfResults(array());
+        $this->assertEquals($this->resultset->getNumberOfResults(), 0);
     }
 }

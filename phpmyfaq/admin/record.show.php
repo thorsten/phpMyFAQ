@@ -2,7 +2,7 @@
 /**
  * Shows the list of records ordered by categories.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,24 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Minoru TODA <todam@netjapan.co.jp>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Date;
+use phpMyFAQ\Db;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Linkverifier;
+use phpMyFAQ\Search\SearchFactory;
+use phpMyFAQ\Visits;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,18 +49,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
 
-    // Set the Category for the helper class
-    $categoryHelper = new PMF_Helper_Category();
+    // Set the CategoryHelper for the helper class
+    $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
     $category->buildTree();
 
-    $linkverifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+    $linkverifier = new Linkverifier($faqConfig, $user->getLogin());
     if ($linkverifier->isReady()) {
         ?>
     <script>
@@ -131,33 +144,33 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     }
 
-    $comment = new PMF_Comment($faqConfig);
-    $faq = new PMF_Faq($faqConfig);
+    $comment = new Comment($faqConfig);
+    $faq = new Faq($faqConfig);
     $faq->setUser($currentAdminUser);
     $faq->setGroups($currentAdminGroups);
-    $date = new PMF_Date($faqConfig);
+    $date = new Date($faqConfig);
 
     $internalSearch = '';
-    $linkState = PMF_Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
-    $searchCat = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchTerm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $linkState = Filter::filterInput(INPUT_POST, 'linkstate', FILTER_SANITIZE_STRING);
+    $searchCat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     if (!is_null($linkState)) {
-        $cond[PMF_Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
+        $cond[Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
         $linkState = ' checked="checked" ';
         $internalSearch .= '&linkstate=linkbad';
     }
     if (!is_null($searchCat)) {
         $internalSearch .= '&searchcat='.$searchCat;
-        $cond[PMF_Db::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
+        $cond[Db::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
             [$searchCat],
             $category->getChildNodes($searchCat)
         );
     }
 
-    $selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT, 0);
-    $orderBy = PMF_Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
-    $sortBy = PMF_Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
+    $selectedCategory = Filter::filterInput(INPUT_GET, 'category', FILTER_VALIDATE_INT, 0);
+    $orderBy = Filter::filterInput(INPUT_GET, 'orderby', FILTER_SANITIZE_STRING, 1);
+    $sortBy = Filter::filterInput(INPUT_GET, 'sortby', FILTER_SANITIZE_STRING);
     if (1 !== $orderBy) {
         switch ($orderBy) {
             case 'id':
@@ -191,7 +204,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     if (is_null($searchTerm)) {
         // new code 10-02-17 added language in params.
         if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-            $Language = new PMF_Language($faqConfig);
+            $Language = new Language($faqConfig);
             $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
             $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
         }else{
@@ -206,9 +219,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
         }
     } else {
-        $fdTable = PMF_Db::getTablePrefix().'faqdata';
-        $fcrTable = PMF_Db::getTablePrefix().'faqcategoryrelations';
-        $search = PMF_Search_Factory::create($faqConfig, array('database' => PMF_Db::getType()));
+        $fdTable = Db::getTablePrefix().'faqdata';
+        $fcrTable = Db::getTablePrefix().'faqcategoryrelations';
+        $search = SearchFactory::create($faqConfig, array('database' => Db::getType()));
 
         $search->setTable($fdTable)
             ->setResultColumns(array(
@@ -257,7 +270,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 'sticky' => $row->sticky,
                 'title' => $row->thema,
                 'content' => $row->content,
-                'updated' => PMF_Date::createIsoDate($row->updated),
+                'updated' => Date::createIsoDate($row->updated),
             );
 
             if (!isset($numActiveByCat[$row->category_id])) {
@@ -282,7 +295,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         $old = 0;
         $faqIds = [];
 
-        $visits = new PMF_Visits($faqConfig);
+        $visits = new Visits($faqConfig);
         $numVisits = [];
         foreach ($visits->getAllData() as $visit) {
             $numVisits[$visit['id']] = $visit['lang'];

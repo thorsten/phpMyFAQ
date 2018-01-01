@@ -3,7 +3,7 @@
 /**
  * This is the page there a user can add a FAQ record translation.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ 
  *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($faqConfig);
+$captcha = new phpMyFAQ\Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -35,9 +35,9 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$translationLanguage = PMF_Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
+$translationLanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
 
-if (!PMF_Language::isASupportedLanguage($translationLanguage)) {
+if (!Language::isASupportedLanguage($translationLanguage)) {
     $translationLanguage = $LANGCODE;
 }
 
@@ -49,21 +49,21 @@ $faqSource['keywords'] = 'writeSourceKeywords';
 
 try {
     $faqsession->userTracking('new_translation_entry', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$srclang = PMF_Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
+$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$categoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$srclang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
 
-if (!is_null($id) && !is_null($srclang) && PMF_Language::isASupportedLanguage($srclang)) {
-    $oFaq = new PMF_Faq($faqConfig);
+if (!is_null($id) && !is_null($srclang) && Language::isASupportedLanguage($srclang)) {
+    $oFaq = new phpMyFAQ\Faq($faqConfig);
     $oFaq->getRecord($id);
     $faqSource = $oFaq->faqRecord;
 }
 
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
@@ -99,7 +99,7 @@ $tpl->parse(
         'writeTransFaqLanguage' => $translationLanguage,
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewTranslationSubmit' => $PMF_LANG['msgNewTranslationSubmit'],
-        'tinyMCELanguage' => (PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'),
+        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'),
     )
 );
 

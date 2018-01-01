@@ -3,7 +3,7 @@
 /**
  * Taiwan Traditional Chinese language file
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @author    Aaron Lin <devilkintw@gmail.com>
  * @author    Barlos Lee <barlos.lee@gmail.com>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-08-01
@@ -264,7 +264,7 @@ $PMF_LANG["ad_news_nodelete"] = "不要";
 $PMF_LANG["ad_news_delsuc"] = "新聞已經刪除成功。 (The news has been successfully deleted.)";
 $PMF_LANG["ad_news_updatenews"] = "新聞項目已更新。";
 
-// Kategorieverwaltung / Category Administration / 類別管理
+// Kategorieverwaltung / Entity Administration / 類別管理
 $PMF_LANG["ad_categ_new"] = "新增類別";
 $PMF_LANG["ad_categ_catnum"] = "類別編號:";
 $PMF_LANG["ad_categ_subcatnum"] = "子類別編號:";
@@ -716,7 +716,7 @@ $PMF_LANG['admin_mainmenu_configuration'] = "設定 Configuration";
 $PMF_LANG['admin_mainmenu_logout'] = "登出 Logout";
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo 開發者
-$PMF_LANG["ad_categ_owner"] = "類別擁有者 Category owner";
+$PMF_LANG["ad_categ_owner"] = "類別擁有者 CategoryHelper owner";
 $PMF_LANG['adminSection'] = "系統管理 Administration";
 $PMF_LANG['err_expiredArticle'] = "此 entry 已過期，與不能被顯示! This entry is expired and can not be displayed";
 $PMF_LANG['err_expiredNews'] = "這條新聞已過期，與不能被顯示。This news is expired and can not be displayed";
@@ -744,8 +744,8 @@ $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "相關
 
 // added v2.0.0 - 2006-09-09 by Rudi 開發者
 $PMF_LANG['ad_categ_trans_1'] = "翻譯 Translate";
-$PMF_LANG['ad_categ_trans_2'] = "類別 Category";
-$PMF_LANG['ad_categ_translatecateg'] = "翻譯類別 Translate Category";
+$PMF_LANG['ad_categ_trans_2'] = "類別 Entity";
+$PMF_LANG['ad_categ_translatecateg'] = "翻譯類別 Translate Entity";
 $PMF_LANG['ad_categ_translate'] = "翻譯 Translate";
 $PMF_LANG['ad_categ_transalready'] = "已經被翻譯於 Already translated in: ";
 $PMF_LANG["ad_categ_deletealllang"] = "刪除所有語言下的 Delete in all languages?";
@@ -753,8 +753,8 @@ $PMF_LANG["ad_categ_deletethislang"] = "只刪除在此語言下? Delete in this
 $PMF_LANG["ad_categ_translated"] = "此類別已被翻譯。 The category has been translated.";
 
 // added v2.0.0 - 2006-09-21 by Rudi 開發者
-$PMF_LANG["ad_categ_show"] = "類別概況 Category overview";
-$PMF_LANG['ad_menu_categ_structure'] = "類別概況包含它的語言 Category Overview including its languages";
+$PMF_LANG["ad_categ_show"] = "類別概況 CategoryHelper overview";
+$PMF_LANG['ad_menu_categ_structure'] = "類別概況包含它的語言 Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten 開發者
 $PMF_LANG['ad_entry_userpermission'] = "使用者權限 User permissions:";

@@ -2,7 +2,7 @@
 /**
  * Overview of actions in the admin section.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  *  http://www.mozilla.org/MPL/
  *
@@ -11,14 +11,19 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Link;
+use phpMyFAQ\Logging;
+use phpMyFAQ\Pagination;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$logging = new PMF_Logging($faqConfig);
-$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$logging = new Logging($faqConfig);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $deleteLog = false;
@@ -38,10 +43,10 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $action) {
-    $date = new PMF_Date($faqConfig);
+    $date = new Date($faqConfig);
     $perpage = 15;
-    $pages = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+    $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
     if (is_null($pages)) {
         $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
@@ -52,7 +57,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
 
     $baseUrl = sprintf(
         '%s?action=adminlog&amp;page=%d',
-        PMF_Link::getSystemRelativeUri(),
+        Link::getSystemRelativeUri(),
         $page
     );
 
@@ -63,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
         'perPage' => $perpage,
         'pageParamName' => 'page',
     );
-    $pagination = new PMF_Pagination($faqConfig, $options);
+    $pagination = new Pagination($faqConfig, $options);
 
     $loggingData = $logging->getAll();
     ?>

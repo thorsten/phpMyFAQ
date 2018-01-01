@@ -12,28 +12,32 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Melchinger <t.melchinger@uni.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2017 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
+use phpMyFAQ\Db;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Installer;
+use phpMyFAQ\System;
+
+define('COPYRIGHT', '&copy; 2001-2018 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    die('Sorry, but you need PHP 5.6.0 or later!'); // Die hard because of "use"
+    die('Sorry, but you need PHP 5.6.0 or later!');
 }
 
 set_time_limit(0);
 
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
-$step = PMF_Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
-$version = PMF_Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
+$step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
+$version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query = [];
-
 
 if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     header('Location: setup.php');
@@ -49,10 +53,10 @@ require PMF_ROOT_DIR.'/config/database.php';
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php echo PMF_System::getVersion(); ?> Update</title>
+    <title>phpMyFAQ <?php echo System::getVersion(); ?> Update</title>
 
     <meta name="viewport" content="width=device-width;">
-    <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion(); ?>">
+    <meta name="application-name" content="phpMyFAQ <?php echo System::getVersion(); ?>">
     <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
@@ -95,7 +99,7 @@ require PMF_ROOT_DIR.'/config/database.php';
   <div class="jumbotron">
     <div class="container">
       <h1 class="display-4 text-center">
-        phpMyFAQ <?php echo PMF_System::getVersion() ?> Update
+        phpMyFAQ <?php echo System::getVersion() ?> Update
       </h1>
     </div>
   </div>
@@ -104,7 +108,7 @@ require PMF_ROOT_DIR.'/config/database.php';
 <?php
 
 $version = $faqConfig->get('main.currentVersion');
-$installer = new PMF_Installer();
+$installer = new Installer();
 $installer->checkPreUpgrade($DB['type']);
 
 /**************************** STEP 1 OF 3 ***************************/
@@ -204,7 +208,7 @@ if ($step === 1) { ?>
       </div>
     </form>
 <?php
-    PMF_System::renderFooter();
+    System::renderFooter();
 }
 
 /**************************** STEP 2 OF 3 ***************************/
@@ -293,10 +297,10 @@ if ($step == 2) {
         </div>
         </form>
 <?php
-        PMF_System::renderFooter();
+        System::renderFooter();
     } else {
         echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
-        PMF_System::renderFooter();
+        System::renderFooter();
     }
 }
 
@@ -332,7 +336,7 @@ if ($step == 3) {
             <div class="col">
 <?php
     $images = [];
-    $prefix = PMF_Db::getTablePrefix();
+    $prefix = Db::getTablePrefix();
     $faqConfig->getAll();
 
     //
@@ -556,7 +560,7 @@ if ($step == 3) {
         $faqConfig->add('ldap.ldap_dynamic_login_attribute', 'uid');
         $faqConfig->add('seo.enableXMLSitemap', 'true');
         $faqConfig->add('main.enableCategoryRestrictions', 'true');
-        $faqConfig->update(['main.currentApiVersion' => PMF_System::getApiVersion()]);
+        $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
 
         $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'ldap.ldapSupport'
             WHERE config_name = 'security.ldapSupport'";
@@ -570,9 +574,17 @@ if ($step == 3) {
         }
     }
 
+
+    //
+    // UPDATES FROM 3.0.0-alpha
+    //
+    if (version_compare($version, '3.0.0-alpha', '<')) {
+    }
+
     // Always the last step: Update version number
-    if (version_compare($version, PMF_System::getVersion(), '<')) {
-        $faqConfig->update(array('main.currentVersion' => PMF_System::getVersion()));
+    if (version_compare($version, System::getVersion(), '<')) {
+        $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
+        $faqConfig->update(['main.currentVersion' => System::getVersion()]);
     }
 
     // optimize tables if possible
@@ -600,7 +612,7 @@ if ($step == 3) {
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
-                PMF_System::renderFooter();
+                System::renderFooter();
             }
             usleep(10000);
         }
@@ -637,5 +649,5 @@ if ($step == 3) {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
     }
 
-    PMF_System::renderFooter();
+    System::renderFooter();
 }

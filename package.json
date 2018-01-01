@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.10.0-alpha2",
+  "version": "3.0.0-alpha",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "scripts": {

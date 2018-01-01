@@ -2,22 +2,27 @@
 /**
  * The main administration file for the news.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Comment;
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
+use phpMyFAQ\News;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,9 +32,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$news = new PMF_News($faqConfig);
+$news = new News($faqConfig);
 
-$csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfCheck = false;
 } else {
@@ -135,7 +140,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
-                            <?php echo PMF_Language::selectLanguages($LANGCODE, false, [], 'langTo') ?>
+                            <?php echo Language::selectLanguages($LANGCODE, false, [], 'langTo') ?>
                         </div>
                     </div>
 
@@ -202,7 +207,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                 <tbody>
 <?php
         $newsHeader = $news->getNewsHeader();
-    $date = new PMF_Date($faqConfig);
+    $date = new Date($faqConfig);
     if (count($newsHeader)) {
         foreach ($newsHeader as $newsItem) {
             ?>
@@ -242,7 +247,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 <?php
 
 } elseif ('editnews' == $action && $user->perm->checkRight($user->getUserId(), 'editnews')) {
-    $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
     $newsData = $news->getNewsEntry($id, true);
     ?>
         <header class="row">
@@ -388,12 +393,12 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                         <label class="col-lg-2 form-control-label" for="langTo"><?php echo $PMF_LANG['ad_entry_locale'];
     ?>:</label>
                         <div class="col-lg-4">
-                        <?php echo PMF_Language::selectLanguages($newsData['lang'], false, [], 'langTo');
+                        <?php echo Language::selectLanguages($newsData['lang'], false, [], 'langTo');
     ?>
                     </div>
 <?php
-    $dateStart = ($newsData['dateStart'] != '00000000000000' ? PMF_Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
-    $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? PMF_Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
+    $dateStart = ($newsData['dateStart'] != '00000000000000' ? Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
+    $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
     ?>
 
                     <legend><?php echo $PMF_LANG['ad_news_expiration_window'];
@@ -431,9 +436,9 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                 </div>
                 </form>
 <?php
-    $newsId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $oComment = new PMF_Comment($faqConfig);
-    $comments = $oComment->getCommentsData($newsId, PMF_Comment::COMMENT_TYPE_NEWS);
+    $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $oComment = new Comment($faqConfig);
+    $comments = $oComment->getCommentsData($newsId, Comment::COMMENT_TYPE_NEWS);
     if (count($comments) > 0) {
         ?>
                 <div class="form-group row"><strong><?php echo $PMF_LANG['ad_entry_comment'] ?></strong></div>
@@ -451,11 +456,11 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                     </a>:<br>
                     <?php print($item['content']);
         ?><br>
-                    <?php print($PMF_LANG['newsCommentDate'].PMF_Date::createIsoDate($item['date'], 'Y-m-d H:i', false));
+                    <?php print($PMF_LANG['newsCommentDate'].Date::createIsoDate($item['date'], 'Y-m-d H:i', false));
         ?>
                     <a href="?action=delcomment&amp;artid=<?php print($newsId);
         ?>&amp;cmtid=<?php print($item['id']);
-        ?>&amp;type=<?php print(PMF_Comment::COMMENT_TYPE_NEWS);
+        ?>&amp;type=<?php print(Comment::COMMENT_TYPE_NEWS);
         ?>">
                         <i aria-hidden="true" class="fa fa-trash-o"></i>
                     </a>
@@ -478,18 +483,18 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         <div class="row">
             <div class="col-lg-12">
 <?php
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $header = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
-    $content = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
-    $email = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-    $comment = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $link = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
-    $newslang = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
-    $target = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linktitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
 
     $newsData = array(
         'lang' => $newslang,
@@ -530,18 +535,18 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         <div class="row">
             <div class="col-lg-12">
 <?php
-    $dateStart = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $header = PMF_Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
-    $content = PMF_Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
-    $author = PMF_Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
-    $email = PMF_Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
-    $active = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-    $comment = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $link = PMF_Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linktitle = PMF_Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
-    $newslang = PMF_Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
-    $target = PMF_Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $header = Filter::filterInput(INPUT_POST, 'newsheader', FILTER_SANITIZE_STRIPPED);
+    $content = Filter::filterInput(INPUT_POST, 'news', FILTER_SANITIZE_SPECIAL_CHARS);
+    $author = Filter::filterInput(INPUT_POST, 'authorName', FILTER_SANITIZE_STRIPPED);
+    $email = Filter::filterInput(INPUT_POST, 'authorEmail', FILTER_VALIDATE_EMAIL);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+    $linktitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newslang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
+    $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
 
     $newsData = array(
         'lang' => $newslang,
@@ -559,7 +564,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         'target' => (is_null($target)) ? '' : $target,
     );
 
-    $newsId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_updatesuc']);
     } else {
@@ -583,8 +588,8 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         <div class="row">
             <div class="col-lg-12">
 <?php
-    $precheck = PMF_Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
-    $deleteId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
+    $deleteId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     if ('no' == $precheck) {
         ?>
@@ -617,7 +622,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
 
     } else {
         if ($csrfCheck) {
-            $deleteId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+            $deleteId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
             $news->deleteNews($deleteId);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_news_delsuc']);
             printf('<div class="form-group row">&rarr; <a href="?action=news">%s</a></p>', $PMF_LANG['msgNews']);

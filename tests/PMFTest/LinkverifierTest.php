@@ -1,8 +1,8 @@
 <?php
 /**
- * Test case for PMF_Linkverifier
+ * Test case for Linkverifier
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,8 +17,13 @@
  * @since     2012-03-29
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Linkverifier;
+use phpMyFAQ\Strings;
+use PHPUnit\Framework\TestCase;
+
 /**
- * PMF_LinkverifierTest
+ * LinkverifierTest
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
@@ -28,12 +33,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
-class PMFTest_LinkverifierTest extends PHPUnit_Framework_TestCase
+class LinkverifierTest extends TestCase
 {
-    /** @var PMF_DB_Sqlite3  */
+    /** @var phpMyFAQ\Db_Sqlite3  */
     private $dbHandle;
 
-    /** @var  PMF_Linkverifier */
+    /** @var  Linkverifier */
     private $linkVerifier;
 
     /** @var  PMF_Configuration */
@@ -46,17 +51,17 @@ class PMFTest_LinkverifierTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        PMF_String::init('en');
+        Strings::init('en');
 
         $config = new stdClass();
         $config->config_name = 'foo';
         $config->config_value = '';
 
-        $this->dbHandle = $this->getMockBuilder('PMF_DB_Sqlite3')->disableOriginalConstructor()->getMock();
+        $this->dbHandle = $this->getMockBuilder('phpMyFAQ\Db\Sqlite3')->disableOriginalConstructor()->getMock();
         $this->dbHandle->method('fetchAll')->willReturn([$config]);
 
-        $this->config       = new PMF_Configuration($this->dbHandle);
-        $this->linkVerifier = new PMF_Linkverifier($this->config);
+        $this->config       = new Configuration($this->dbHandle);
+        $this->linkVerifier = new Linkverifier($this->config);
     }
 
     /**
@@ -81,7 +86,7 @@ class PMFTest_LinkverifierTest extends PHPUnit_Framework_TestCase
      */
     public function testAddIgnoreProtocol()
     {
-        $class  = new ReflectionClass('PMF_Linkverifier');
+        $class  = new ReflectionClass('phpMyFAQ\Linkverifier');
         $method = $class->getMethod('addIgnoreProtocol');
         $method->setAccessible(true);
 

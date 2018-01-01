@@ -2,22 +2,27 @@
 /**
  * Frontend for search log statistics.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-30
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Link;
+use phpMyFAQ\Pagination;
+use phpMyFAQ\Search;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -45,10 +50,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $perpage = 15;
-    $pages = PMF_Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
-    $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+    $pages = Filter::filterInput(INPUT_GET, 'pages', FILTER_VALIDATE_INT);
+    $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
-    $search = new PMF_Search($faqConfig);
+    $search = new Search($faqConfig);
 
     if ('truncatesearchterms' === $action) {
         if ($search->deleteAllSearchTerms()) {
@@ -70,7 +75,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     $baseUrl = sprintf(
         '%s?action=searchstats&amp;page=%d',
-        PMF_Link::getSystemRelativeUri(),
+        Link::getSystemRelativeUri(),
         $page
     );
 
@@ -81,7 +86,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         'perPage' => $perpage,
         'pageParamName' => 'page',
     );
-    $pagination = new PMF_Pagination($faqConfig, $options);
+    $pagination = new Pagination($faqConfig, $options);
     ?>
                 <div id="ajaxresponse"></div>
                 <table class="table table-striped">
@@ -121,10 +126,10 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
         ?>
                     <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
-                        <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);
+                        <td><?php echo Strings::htmlspecialchars($searchItem['searchterm']);
         ?></td>
                         <td><?php echo $searchItem['number'] ?></td>
-                        <td><?php echo $languageCodes[PMF_String::strtoupper($searchItem['lang'])] ?></td>
+                        <td><?php echo $languageCodes[Strings::strtoupper($searchItem['lang'])] ?></td>
                         <td><meter max="100" value="<?php echo $num;
         ?>"></td>
                         <td><?php echo $num;

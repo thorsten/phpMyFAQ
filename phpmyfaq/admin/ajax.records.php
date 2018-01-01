@@ -3,7 +3,7 @@
 /**
  * AJAX: handling of Ajax record calls.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -28,9 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfTokenPost = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-$csrfTokenGet = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajax_action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfTokenPost = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfTokenGet = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
@@ -51,10 +51,10 @@ switch ($ajax_action) {
     case 'save_active_records':
         if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
             if (!empty($items)) {
-                $faq = new PMF_Faq($faqConfig);
+                $faq = new phpMyFAQ\Faq($faqConfig);
 
                 foreach ($items as $item) {
-                    if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
                         echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'active');
                     }
                 }
@@ -68,10 +68,10 @@ switch ($ajax_action) {
     case 'save_sticky_records':
         if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             if (!empty($items)) {
-                $faq = new PMF_Faq($faqConfig);
+                $faq = new phpMyFAQ\Faq($faqConfig);
 
                 foreach ($items as $item) {
-                    if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
+                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
                         echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'sticky');
                     }
                 }
@@ -84,12 +84,12 @@ switch ($ajax_action) {
     // search FAQs for suggestions
     case 'search_records':
         if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
-            $faq = new PMF_Faq($faqConfig);
-            $faqSearch = new PMF_Search($faqConfig);
-            $faqSearch->setCategory(new PMF_Category($faqConfig));
-            $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+            $faq = new phpMyFAQ\Faq($faqConfig);
+            $faqSearch = new phpMyFAQ\Search($faqConfig);
+            $faqSearch->setCategory(new phpMyFAQ\Category($faqConfig));
+            $faqSearchResult = new phpMyFAQ\Search_Resultset($user, $faq, $faqConfig);
             $searchResult = '';
-            $searchString = PMF_Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+            $searchString = phpMyFAQ\Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
             if (!is_null($searchString)) {
 
@@ -97,7 +97,7 @@ switch ($ajax_action) {
 
                 $faqSearchResult->reviewResultset($searchResult);
 
-                $searchHelper = new PMF_Helper_Search($faqConfig);
+                $searchHelper = new phpMyFAQ\Helper_Search($faqConfig);
                 $searchHelper->setSearchterm($searchString);
 
                 echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
@@ -110,10 +110,10 @@ switch ($ajax_action) {
     // delete FAQs
     case 'delete_record':
         if ($user->perm->checkRight($user->getUserId(), 'delbt')) {
-            $recordId = PMF_Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-            $recordLang = PMF_Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+            $recordId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+            $recordLang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
-            $logging = new PMF_Logging($faqConfig);
+            $logging = new phpMyFAQ\Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID '.$recordId);
 
             $faq->deleteRecord($recordId, $recordLang);
@@ -130,7 +130,7 @@ switch ($ajax_action) {
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
             );
-            $questionIds = PMF_Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+            $questionIds = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
 
             if (!is_null($questionIds['questions'])) {
                 foreach ($questionIds['questions'] as $questionId) {

@@ -8,7 +8,7 @@
  *
  * Performs link verification when entries are shown in record.show.php
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -21,7 +21,7 @@
  *
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 NetJapan, Inc. and phpMyFAQ Team
+ * @copyright 2005-2018 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -36,11 +36,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new PMF_Helper_Http();
+$httpHeader = new phpMyFAQ\Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
@@ -49,8 +49,8 @@ if ($linkVerifier->isReady() === false) {
     exit();
 }
 
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
     header('HTTP/1.0 401 Unauthorized');

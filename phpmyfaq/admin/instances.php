@@ -2,7 +2,7 @@
 /**
  * The main multi-site instances frontend.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -47,8 +47,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
-    $instance = new PMF_Instance($faqConfig);
-    $instanceId = PMF_Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
+    $instance = new phpMyFAQ\Instance($faqConfig);
+    $instanceId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
     // Check, if /multisite is writeable
     if (!is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')) {
@@ -60,13 +60,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
     // Update client instance
     if ('updateinstance' === $action && is_integer($instanceId)) {
-        $system = new PMF_System();
-        $clientInstance = new PMF_Instance_Client($faqConfig);
+        $system = new phpMyFAQ\System();
+        $clientInstance = new phpMyFAQ\Instance_Client($faqConfig);
 
         // Collect data for database
         $data = [];
-        $data['instance'] = PMF_Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
-        $data['comment'] = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $data['instance'] = phpMyFAQ\Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
+        $data['comment'] = phpMyFAQ\Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 
         if ($clientInstance->updateInstance($instanceId, $data)) {
             printf(
@@ -96,7 +96,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         <tbody>
         <?php
         foreach ($instance->getAllInstances() as $site):
-            $currentInstance = new PMF_Instance($faqConfig);
+            $currentInstance = new phpMyFAQ\Instance($faqConfig);
             $currentInstance->getInstanceById($site->id);
             $currentInstance->setId($site->id);
             ?>

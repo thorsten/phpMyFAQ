@@ -3,7 +3,7 @@
 /**
  * This is the page there a user can add a FAQ record.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,12 +12,19 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
+
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -32,7 +39,7 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuest
     header('Location:'.$faqSystem->getSystemUri($faqConfig).'?action=login');
 }
 
-$captcha = new PMF_Captcha($faqConfig);
+$captcha = new Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -42,29 +49,29 @@ if (!is_null($showCaptcha)) {
 
 try {
     $faqsession->userTracking('new_entry', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
 // Get possible user input
-$selectedQuestion = PMF_Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
-$selectedCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedQuestion = Filter::filterInput(INPUT_GET, 'question', FILTER_VALIDATE_INT);
+$selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {
     $oQuestion = $faq->getQuestion($selectedQuestion);
     $question = $oQuestion['question'];
-    if (PMF_String::strlen($question)) {
+    if (Strings::strlen($question)) {
         $readonly = ' readonly';
     }
 }
 
 $category->buildTree();
 
-$categoryHelper = new PMF_Helper_Category();
+$categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$captchaHelper = new CaptchaHelper($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
@@ -85,8 +92,8 @@ $tpl->parse(
         'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],
         'lang' => $Language->getLanguage(),
         'openQuestionID' => $selectedQuestion,
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],

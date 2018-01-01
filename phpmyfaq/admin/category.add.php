@@ -3,7 +3,7 @@
  * Adds a new (sub-)category, a new sub-category inherits the permissions from
  * its parent category.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -41,10 +41,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new phpMyFAQ\Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $parentId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $parentId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
                 <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
                     <input type="hidden" id="lang" name="lang" value="<?php echo $LANGCODE ?>">
@@ -68,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
         printf(
             '<div class="col-lg-4"><p class="form-control-static">%s (%s)</p></div></div>',
             $category->categoryName[$parentId]['name'],
-            $languageCodes[PMF_String::strtoupper($category->categoryName[$parentId]['lang'])]
+            $languageCodes[Strings::strtoupper($category->categoryName[$parentId]['lang'])]
         );
     }
     ?>

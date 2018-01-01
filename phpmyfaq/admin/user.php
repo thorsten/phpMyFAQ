@@ -2,7 +2,7 @@
 /**
  * Displays the user management frontend.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,12 +14,16 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Sarah Hermann <sayh@gmx.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-15
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -43,8 +47,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
     // what shall we do?
     // actions defined by url: user_action=
-    $userAction = PMF_Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
-    $currentUser = new PMF_User_CurrentUser($faqConfig);
+    $userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
+    $currentUser = new CurrentUser($faqConfig);
 
     // actions defined by submit button
     if (isset($_POST['user_action_deleteConfirm'])) {
@@ -58,18 +62,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     if ($userAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $message = '';
         $userAction = $defaultUserAction;
-        $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
         if (0 === (int) $userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
-            $user = new PMF_User($faqConfig);
+            $user = new User($faqConfig);
             $perm = $user->perm;
-            // @todo: Add PMF_Filter::filterInput[]
+            // @todo: Add Filter::filterInput[]
             $userRights = isset($_POST['user_rights']) ? $_POST['user_rights'] : [];
             if (!$perm->refuseAllUserRights($userId)) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
@@ -83,7 +87,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $user->getLogin(),
                 $PMF_LANG['ad_msg_savedsuc_2']);
             $message .= '<script>updateUser('.$userId.');</script>';
-            $user = new PMF_User_CurrentUser($faqConfig);
+            $user = new CurrentUser($faqConfig);
         }
     }
 
@@ -91,17 +95,17 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     if ($userAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $message = '';
         $userAction = $defaultUserAction;
-        $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $userData = [];
-            $userData['display_name'] = PMF_Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
-            $userData['email'] = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
-            $userData['last_modified'] = PMF_Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
-            $userStatus = PMF_Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
+            $userData['display_name'] = Filter::filterInput(INPUT_POST, 'display_name', FILTER_SANITIZE_STRING, '');
+            $userData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL, '');
+            $userData['last_modified'] = Filter::filterInput(INPUT_POST, 'last_modified', FILTER_SANITIZE_STRING, '');
+            $userStatus = Filter::filterInput(INPUT_POST, 'user_status', FILTER_SANITIZE_STRING, $defaultUserStatus);
 
-            $user = new PMF_User($faqConfig);
+            $user = new User($faqConfig);
             $user->getUserById($userId, true);
 
             $stats = $user->getStatus();
@@ -127,9 +131,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     // delete user confirmation
     if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
         $message = '';
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new CurrentUser($faqConfig);
 
-        $userId = PMF_Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
             $message   .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
@@ -175,10 +179,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     // delete user
     if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
         $message = '';
-        $user = new PMF_User($faqConfig);
-        $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
+        $user = new User($faqConfig);
+        $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
         $csrfOkay = true;
-        $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
         $userAction = $defaultUserAction;
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -195,7 +199,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_delete']);
             } else {
                 // Move the categories ownership to admin (id == 1)
-                $oCat = new PMF_Category($faqConfig, [], false);
+                $oCat = new Category($faqConfig, [], false);
                 $oCat->setUser($currentAdminUser);
                 $oCat->setGroups($currentAdminGroups);
                 $oCat->moveOwnership($userId, 1);
@@ -217,16 +221,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
     // save new user
     if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
-        $user = new PMF_User($faqConfig);
+        $user = new User($faqConfig);
         $message = '';
         $messages = [];
-        $userName = PMF_Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
-        $userRealName = PMF_Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
-        $userPassword = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $userEmail = PMF_Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
-        $userPassword = PMF_Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
-        $userPasswordConfirm = PMF_Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
-        $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $userName = Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
+        $userRealName = Filter::filterInput(INPUT_POST, 'user_realname', FILTER_SANITIZE_STRING, '');
+        $userPassword = Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $userEmail = Filter::filterInput(INPUT_POST, 'user_email', FILTER_VALIDATE_EMAIL);
+        $userPassword = Filter::filterInput(INPUT_POST, 'user_password', FILTER_SANITIZE_STRING, '');
+        $userPasswordConfirm = Filter::filterInput(INPUT_POST, 'user_password_confirm', FILTER_SANITIZE_STRING, '');
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
         $csrfOkay = true;
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -283,10 +287,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $faqConfig->getDefaultUrl()
             );
 
-            $mail = new PMF_Mail($faqConfig);
+            $mail = new Mail($faqConfig);
             $mail->setFrom($faqConfig->get('main.administrationMail'));
             $mail->addTo($userEmail, $userName);
-            $mail->subject = PMF_Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
+            $mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
             $mail->message = $text;
             $result = $mail->send();
 
@@ -614,7 +618,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
         $allUsers = $user->getAllUsers();
         $numUsers = count($allUsers);
-        $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
+        $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
         $numPages = ceil($numUsers / $perPage);
         $lastPage = $page * $perPage;
@@ -622,7 +626,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
         $baseUrl = sprintf(
             '%s?action=user&amp;user_action=listallusers&amp;page=%d',
-            PMF_Link::getSystemRelativeUri(),
+            Link::getSystemRelativeUri(),
             $page
         );
 
@@ -634,7 +638,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             'useRewrite' => false,
             'pageParamName' => 'page',
         );
-        $pagination = new PMF_Pagination($faqConfig, $options);
+        $pagination = new Pagination($faqConfig, $options);
         ?>
         <header class="row">
             <div class="col-lg-12">
@@ -782,7 +786,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 <?php 
     }
     if (isset($_GET['user_id'])) {
-        $userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
         echo '        <script>updateUser('.$userId.');</script>';
     }
 } else {

@@ -23,27 +23,30 @@
  * @since     2014-08-31
  */
 
+use phpMyFAQ\Helper\Administration;
+use PHPUnit\Framework\TestCase;
+
 /**
  * PMF_Helper_AdministrationTest
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
  */
-class PMFTest_Helper_AdministrationTest extends PHPUnit_Framework_TestCase
+class AdministrationTest extends TestCase
 {
     /**
-     * @var PMF_Helper_Administration
+     * @var Administration
      */
     protected $instance;
 
     protected function setUp()
     {
-        $this->instance = new PMF_Helper_Administration();
+        $this->instance = new Administration();
     }
 
     public function testRenderMetaRobotsDropdown()

@@ -2,7 +2,7 @@
 /**
  * Image upload backend for TinyMCE v4
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,7 +10,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2017 phpMyFAQ Team
+ * @copyright 2015-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-18
@@ -20,21 +20,21 @@ define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
     require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof PMF_User_CurrentUser) {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof CurrentUser) {
+    $user = CurrentUser::getFromSession($faqConfig);
 }
 if ($user) {
     $auth = true;

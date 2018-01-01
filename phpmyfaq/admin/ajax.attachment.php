@@ -3,7 +3,7 @@
 /**
  * AJAX: handles an attachment with the given id.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
- * @copyright 2010-2017 phpMyFAQ Team
+ * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-20
@@ -25,9 +25,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$attId = PMF_Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
-$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$attId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
+$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $att = PMF_Attachment_Factory::create($attId);
 

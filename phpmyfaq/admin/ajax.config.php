@@ -3,7 +3,7 @@
 /**
  * AJAX: handling of Ajax configuration calls.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -24,15 +24,15 @@ if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId()
     exit();
 }
 
-$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$instanceId = PMF_Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
-$stopwordId = PMF_Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = PMF_Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
-$stopwordsLang = PMF_Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
-$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$instanceId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
+$stopwordId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
+$stopword = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
+$stopwordsLang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
+$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-$http = new PMF_Helper_Http();
-$stopwords = new PMF_Stopwords($faqConfig);
+$http = new phpMyFAQ\Helper_Http();
+$stopwords = new phpMyFAQ\Stopwords($faqConfig);
 
 switch ($ajaxAction) {
 
@@ -43,12 +43,12 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $url = PMF_Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
-        $instance = PMF_Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
-        $comment = PMF_Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $email = PMF_Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
-        $admin = PMF_Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
-        $password = PMF_Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
+        $url = phpMyFAQ\Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+        $instance = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
+        $comment = phpMyFAQ\Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
+        $email = phpMyFAQ\Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+        $admin = phpMyFAQ\Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
+        $password = phpMyFAQ\Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
         $data = array(
             'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
@@ -56,10 +56,10 @@ switch ($ajaxAction) {
             'comment' => $comment,
         );
 
-        $faqInstance = new PMF_Instance($faqConfig);
+        $faqInstance = new phpMyFAQ\Instance($faqConfig);
         $instanceId = $faqInstance->addInstance($data);
 
-        $faqInstanceClient = new PMF_Instance_Client($faqConfig);
+        $faqInstanceClient = new phpMyFAQ\Instance_Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
 
         $urlParts = parse_url($data['url']);
@@ -67,7 +67,7 @@ switch ($ajaxAction) {
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
             $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
-            $clientSetup = new PMF_Instance_Setup();
+            $clientSetup = new phpMyFAQ\Instance_Setup();
             $clientSetup->setRootDir($clientDir);
 
             $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
@@ -85,10 +85,10 @@ switch ($ajaxAction) {
             $faqInstanceClient->setClientUrl('http://'.$hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
-            PMF_Db::setTablePrefix($dbSetup['dbPrefix']);
+            phpMyFAQ\Db::setTablePrefix($dbSetup['dbPrefix']);
 
             // add admin account and rights
-            $instanceAdmin = new PMF_User($faqConfig);
+            $instanceAdmin = new phpMyFAQ\User($faqConfig);
             $instanceAdmin->createUser($admin, $password, 1);
             $instanceAdmin->setStatus('protected');
             $instanceAdminData = array(
@@ -100,7 +100,7 @@ switch ($ajaxAction) {
             // Add anonymous user account
             $clientSetup->createAnonymousUser($faqConfig);
 
-            PMF_Db::setTablePrefix($DB['prefix']);
+            phpMyFAQ\Db::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
             $payload = array('error' => 'Cannot create instance.');
@@ -122,7 +122,7 @@ switch ($ajaxAction) {
         }
 
         if (null !== $instanceId) {
-            $faqInstance = new PMF_Instance($faqConfig);
+            $faqInstance = new phpMyFAQ\Instance($faqConfig);
             if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {
@@ -134,7 +134,7 @@ switch ($ajaxAction) {
 
     case 'edit_instance':
         if (null !== $instanceId) {
-            $faqInstance = new PMF_Instance($faqConfig);
+            $faqInstance = new phpMyFAQ\Instance($faqConfig);
             if ($faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {
@@ -145,7 +145,7 @@ switch ($ajaxAction) {
         break;
 
     case 'load_stop_words_by_lang':
-        if (PMF_Language::isASupportedLanguage($stopwordsLang)) {
+        if (Language::isASupportedLanguage($stopwordsLang)) {
             $stopwordsList = $stopwords->getByLang($stopwordsLang);
 
             $payload = $stopwordsList;
@@ -154,7 +154,7 @@ switch ($ajaxAction) {
         break;
 
     case 'delete_stop_word':
-        if (null != $stopwordId && PMF_Language::isASupportedLanguage($stopwordsLang)) {
+        if (null != $stopwordId && Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
             $stopwords->remove($stopwordId);
         }
@@ -167,7 +167,7 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        if (null != $stopword && PMF_Language::isASupportedLanguage($stopwordsLang)) {
+        if (null != $stopword && Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
             if (null !== $stopwordId && -1 < $stopwordId) {
                 echo $stopwords->update($stopwordId, $stopword);

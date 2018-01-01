@@ -2,21 +2,26 @@
 /**
  * The page with the ratings of the votings.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Rating;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Utils;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,10 +32,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $ratings = new PMF_Rating($faqConfig);
+    $ratings = new Rating($faqConfig);
     $ratingdata = $ratings->getAllRatings();
     $numratings = count($ratingdata);
     $oldcategory = 0;
@@ -51,7 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         </header>
 
 <?php
-    $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $clearStatistics = false;
@@ -86,7 +91,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
         }
 
-        $question = PMF_String::htmlspecialchars(trim($data['question']));
+        $question = Strings::htmlspecialchars(trim($data['question']));
         $url = sprintf(
             '../index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
             $data['category_id'],
@@ -102,7 +107,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         <td>
                             <a href="<?php echo $url ?>" title="<?php echo $question;
         ?>">
-                                <?php echo PMF_Utils::makeShorterText($question, 14);
+                                <?php echo Utils::makeShorterText($question, 14);
         ?>
                             </a>
                         </td>

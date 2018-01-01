@@ -3,7 +3,7 @@
 /**
  * AJAX: handling of Ajax user calls.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,20 +27,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$userId = PMF_Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
-$usersearch = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
-$csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$userId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT);
+$usersearch = phpMyFAQ\Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRING);
+$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 // Send headers
-$http = new PMF_Helper_Http();
+$http = new phpMyFAQ\Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
     $user->perm->checkRight($user->getUserId(), 'deluser')) {
-    $user = new PMF_User($faqConfig);
+    $user = new phpMyFAQ\User($faqConfig);
 
     switch ($ajaxAction) {
 
@@ -90,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
                 } else {
-                    $category = new PMF_Category($faqConfig, [], false);
+                    $category = new phpMyFAQ\Category($faqConfig, [], false);
                     $category->moveOwnership($userId, 1);
 
                     // Remove the user from groups
@@ -107,10 +107,10 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
         case 'overwrite_password':
 
-            $userId = PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
-            $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-            $newPassword = PMF_Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-            $retypedPassword = PMF_Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+            $userId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+            $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+            $newPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+            $retypedPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
@@ -118,7 +118,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             }
 
             $user->getUserById($userId, true);
-            $auth = new PMF_Auth($faqConfig);
+            $auth = new phpMyFAQ\Auth($faqConfig);
             $authSource = $auth->selectAuth($user->getAuthSource('name'));
             $authSource->selectEncType($user->getAuthData('encType'));
 

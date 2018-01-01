@@ -3,7 +3,7 @@
 /**
  * Contact page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -29,11 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqsession->userTracking('contact', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
-$captcha = new PMF_Captcha($faqConfig);
+$captcha = new phpMyFAQ\Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -41,7 +41,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
 
 $tpl->parse(
     'writeContent',
@@ -52,8 +52,8 @@ $tpl->parse(
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'lang' => $Language->getLanguage(),
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgMessage' => $PMF_LANG['msgMessage'],
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
         'version' => $faqConfig->get('main.currentVersion'),

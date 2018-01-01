@@ -2,7 +2,7 @@
 /**
  * build table of all categories in all languages.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -33,25 +33,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new phpMyFAQ\Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $currentLink = $_SERVER['SCRIPT_NAME'];
     $currentLanguage = $languageCodes[strtoupper($LANGCODE)];
     $all_languages = [];
     $all_lang = [];
-    $showcat = PMF_Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
+    $showcat = phpMyFAQ\Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
 
     // translate an existing category
     if (!is_null($showcat) && $showcat == 'yes') {
-        $parent_id = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $parent_id = phpMyFAQ\Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
         $category_data = array(
-            'id' => PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang' => PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'id' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+            'lang' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
             'parent_id' => $parent_id,
-            'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
-            'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT), );
+            'name' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'description' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
+            'user_id' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT), );
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
@@ -122,7 +122,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             }
 
             if (array_key_exists($language, $id_languages)) {
-                $spokenLanguage = PMF_String::preg_replace('/\(.*\)/', '', $id_languages[$language]);
+                $spokenLanguage = Strings::preg_replace('/\(.*\)/', '', $id_languages[$language]);
                 printf('<td title="%s: %s">',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage

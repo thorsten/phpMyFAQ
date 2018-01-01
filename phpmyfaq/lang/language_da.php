@@ -4,7 +4,7 @@
  *
  * Danish language file
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  * @category  phpMyFAQ
  * @author    Max Andersen <max@militant.dk>
  * @author    Poul Melgaard <pcm@surfray.com>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -639,7 +639,7 @@ $PMF_LANG['ad_categ_deletealllang'] = 'Delete in all languages?';
 $PMF_LANG['ad_categ_deletethislang'] = 'Delete in this language only?';
 $PMF_LANG['ad_categ_translated'] = 'The category has been translated.';
 $PMF_LANG['ad_categ_show'] = 'Overblik';
-$PMF_LANG['ad_menu_categ_structure'] = 'Category Overview including its languages';
+$PMF_LANG['ad_menu_categ_structure'] = 'Entity Overview including its languages';
 $PMF_LANG['ad_entry_userpermission'] = 'Bruger-rettigheder:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Gruppe-rettigheder:';
 $PMF_LANG['ad_entry_all_users'] = 'Adgang for alle brugere';

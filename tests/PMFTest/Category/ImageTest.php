@@ -17,6 +17,11 @@
  * @since     2016-09-08
  */
 
+use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Category\Image;
+use phpMyFAQ\Configuration;
+use PHPUnit\Framework\TestCase;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -31,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2016-09-08
  */
-class PMFTest_Category_ImageTest extends PHPUnit_Framework_TestCase
+class ImageTest extends TestCase
 {
 
     /** @var PMF_Category_Image */
@@ -39,11 +44,11 @@ class PMFTest_Category_ImageTest extends PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $dbHandle  = new PMF_DB_Sqlite3();
+        $dbHandle  = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
-        $pmfConfig = new PMF_Configuration($dbHandle);
+        $pmfConfig = new Configuration($dbHandle);
         $pmfConfig->set('records.maxAttachmentSize', 1234567890);
-        $this->instance = new PMF_Category_Image($pmfConfig);
+        $this->instance = new Image($pmfConfig);
     }
 
     public function testNoUploadGetFileName()

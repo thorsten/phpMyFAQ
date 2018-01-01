@@ -3,7 +3,7 @@
 /**
  * Select an attachment and save it.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2002-2017 phpMyFAQ
+ * @copyright 2002-2018 phpMyFAQ
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
@@ -38,25 +38,25 @@ PMF_Attachment_Factory::init(
     $faqConfig->get('records.enableAttachmentEncryption')
 );
 
-$currentSave = PMF_Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-$currentAction = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$currentToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$currentSave = phpMyFAQ\Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+$currentAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$currentToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
     require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
     $LANGCODE = 'en';
 }
 
 $auth = false;
-$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof PMF_User_CurrentUser) {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof CurrentUser) {
+    $user = CurrentUser::getFromSession($faqConfig);
 }
 if ($user) {
     $auth = true;
@@ -88,7 +88,7 @@ if (is_null($currentAction) || !is_null($currentSave)) {
     <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
-    <link rel="shortcut icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName() ?>/favicon.ico">
+    <link rel="shortcut icon" href="../assets/themes/<?php echo Template::getTplSetName() ?>/favicon.ico">
 </head>
 <body class="attachments">
 

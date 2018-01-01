@@ -3,7 +3,7 @@
 /**
  * AJAX: deletes comments with the given id.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,10 +27,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = PMF_Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajax_action = phpMyFAQ\Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
-    $comment = new PMF_Comment($faqConfig);
+    $comment = new phpMyFAQ\Comment($faqConfig);
     $checkFaqs = array(
         'filter' => FILTER_VALIDATE_INT,
         'flags' => FILTER_REQUIRE_ARRAY,
@@ -41,8 +41,8 @@ if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'de
     );
     $ret = false;
 
-    $faqComments = PMF_Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
-    $newsComments = PMF_Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
+    $faqComments = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
+    $newsComments = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
 
     if (!is_null($faqComments['faq_comments'])) {
         foreach ($faqComments['faq_comments'] as $commentId => $recordId) {

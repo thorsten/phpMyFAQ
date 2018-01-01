@@ -10,11 +10,16 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Category;
+use phpMyFAQ\Category\Image;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -47,7 +52,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 //
 // CSRF Check
 //
-$csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if ('category' != $action && 'content' != $action &&
     (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken)) {
     $csrfCheck = false;
@@ -59,32 +64,32 @@ if ('category' != $action && 'content' != $action &&
 // Image upload
 //
 $uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
-$categoryImage = new PMF_Category_Image($faqConfig);
+$categoryImage = new Image($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Save a new category
     if ($action == 'savecategory') {
-        $category = new PMF_Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryId = $faqConfig->getDb()->nextId(PMF_Db::getTablePrefix().'faqcategories', 'id');
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $categoryId = $faqConfig->getDb()->nextId(Db::getTablePrefix().'faqcategories', 'id');
+        $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $categoryData = [
             'lang' => $categoryLang,
-            'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
-            'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
-            'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
-            'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
+            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
+            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
+            'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
             'image' => $categoryImage->getFileName($categoryId, $categoryLang),
-            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
+            'show_home' => Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT)
         ];
 
         $permissions = [];
-        if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_user' => array(
                     -1,
@@ -93,19 +98,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         } else {
             $permissions += array(
                 'restricted_user' => array(
-                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                    Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
                 ),
             );
         }
 
-        if ('all' === PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_groups' => array(
                     -1,
                 ),
             );
         } else {
-            $permissions += PMF_Filter::filterInputArray(
+            $permissions += Filter::filterInputArray(
                 INPUT_POST,
                 array(
                     'restricted_groups' => array(
@@ -125,7 +130,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $categoryImage->upload();
 
             // All the other translations
-            $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+            $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_added']);
         } else {
             printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());
@@ -134,29 +139,29 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Updates an existing category
     if ($action == 'updatecategory') {
-        $category = new PMF_Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $parentId = PMF_Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
-        $existingImage = PMF_Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_STRING);
+        $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $categoryLang = Filter::filterInput(INPUT_POST, 'catlang', FILTER_SANITIZE_STRING);
+        $existingImage = Filter::filterInput(INPUT_POST, 'existing_image', FILTER_SANITIZE_STRING);
         $image = count($uploadedFile) ? $categoryImage->getFileName($categoryId, $categoryLang) : $existingImage;
         $categoryData = [
             'id' => $categoryId,
             'lang' => $categoryLang,
             'parent_id' => $parentId,
-            'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
-            'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
-            'group_id' => PMF_Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
-            'active' => PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
+            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
+            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),
+            'group_id' => Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT),
+            'active' => Filter::filterInput(INPUT_POST, 'active', FILTER_VALIDATE_INT),
             'image' => $image,
-            'show_home' => PMF_Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT),
+            'show_home' => Filter::filterInput(INPUT_POST, 'show_home', FILTER_VALIDATE_INT),
         ];
 
         $permissions = [];
-        if ('all' === PMF_Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_user' => array(
                     -1,
@@ -165,19 +170,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         } else {
             $permissions += array(
                 'restricted_user' => array(
-                    PMF_Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                    Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
                 ),
             );
         }
 
-        if ('all' === PMF_Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
+        if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
             $permissions += array(
                 'restricted_groups' => array(
                     -1,
                 ),
             );
         } else {
-            $permissions += PMF_Filter::filterInputArray(
+            $permissions += Filter::filterInputArray(
                 INPUT_POST,
                 array(
                     'restricted_groups' => array(
@@ -212,22 +217,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         }
 
         // All the other translations
-        $languages = PMF_Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
+        $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
     }
 
     // Deletes an existing category
     if ($user->perm->checkRight($user->getUserId(), 'delcateg') && $action == 'removecategory') {
 
-        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $categoryLang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $deleteAll = PMF_Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
+        $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $deleteAll = Filter::filterInput(INPUT_POST, 'deleteall', FILTER_SANITIZE_STRING);
         $deleteAll = strtolower($deleteAll) == 'yes' ? true : false;
 
-        $category = new PMF_Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryImage = new PMF_Category_Image($faqConfig);
+        $categoryImage = new Category_Image($faqConfig);
         $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
         if ($category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
@@ -243,11 +248,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Moves a category
     if ($action == 'changecategory') {
-        $category = new PMF_Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $categoryId_1 = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $categoryId_2 = PMF_Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
+        $categoryId_1 = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $categoryId_2 = Filter::filterInput(INPUT_POST, 'change', FILTER_VALIDATE_INT);
 
         if ($category->swapCategories($categoryId_1, $categoryId_2)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
@@ -262,11 +267,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
     // Pastes a category
     if ($action == 'pastecategory') {
-        $category = new PMF_Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $categoryId = PMF_Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
-        $parentId = PMF_Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterInput(INPUT_POST, 'cat', FILTER_VALIDATE_INT);
+        $parentId = Filter::filterInput(INPUT_POST, 'after', FILTER_VALIDATE_INT);
         if ($category->updateParentCategory($categoryId, $parentId)) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
@@ -279,20 +284,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     }
 
     // Lists all categories
-    $lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
+    $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
 
     // If we changed the category tree, unset the object
     if (isset($category)) {
         unset($category);
     }
     // old code
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     //
 
     // new code
     if ($faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
         
-        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+        $category = new Category($faqConfig, $currentAdminGroups, true);
     }
     //
     
@@ -309,7 +314,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
 
-        // Category translated in this language?
+        // CategoryHelper translated in this language?
         if ($cat['lang'] == $lang) {
             $categoryName = $cat['name'];
         } else {

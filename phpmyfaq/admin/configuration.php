@@ -2,7 +2,7 @@
 /**
  * The main configuration frontend.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
@@ -27,8 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction = PMF_Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-    $csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $userAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
     $currentToken = $user->getCsrfTokenFromSession();
 
     // Save the configuration
@@ -37,7 +37,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             'filter' => FILTER_UNSAFE_RAW,
             'flags' => FILTER_REQUIRE_ARRAY,
         );
-        $editData = PMF_Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+        $editData = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
         $userAction = 'listConfig';
         $oldConfigValues = $faqConfig->config;
 
@@ -62,7 +62,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             $newConfigValues[$key] = str_replace($forbiddenValues, '', $value);
             // Escape some values
             if (isset($escapeValues[$key])) {
-                $newConfigValues[$key] = PMF_String::htmlspecialchars($value, ENT_QUOTES);
+                $newConfigValues[$key] = Strings::htmlspecialchars($value, ENT_QUOTES);
             }
             $keyArray = array_values(explode('.', $key));
             $newConfigClass = array_shift($keyArray);

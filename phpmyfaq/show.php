@@ -3,7 +3,7 @@
 /**
  * Frontend for categories or list of records.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,7 +11,7 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
@@ -25,13 +25,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$selectedCategoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedCategoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
         $faqsession->userTracking('show_category', $selectedCategoryId);
-    } catch (PMF_Exception $e) {
+    } catch (Exception $e) {
         // @todo handle the exception
     }
 
@@ -43,7 +43,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     );
 
     if (empty($records) || $category->getChildNodes($selectedCategoryId)) {
-        $subCategory = new PMF_Category($faqConfig, $current_groups, true);
+        $subCategory = new phpMyFAQ\Category($faqConfig, $current_groups, true);
         $subCategory->setUser($current_user);
         $subCategory->transform($selectedCategoryId);
         if (empty($records)) {
@@ -66,11 +66,11 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     if ($categoryData->getParentId() !== 0) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
-            PMF_Link::getSystemRelativeUri(),
+            Link::getSystemRelativeUri(),
             $sids,
             $categoryData->getParentId()
         );
-        $oLink = new PMF_Link($url, $faqConfig);
+        $oLink = new phpMyFAQ\Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$categoryData->getParentId()]['name'];
         $oLink->text = $PMF_LANG['msgCategoryUp'];
         $up = $oLink->toHtmlAnchor();
@@ -109,7 +109,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
 } else {
     try {
         $faqsession->userTracking('show_all_categories', 0);
-    } catch (PMF_Exception $e) {
+    } catch (Exception $e) {
         // @todo handle the exception
     }
 

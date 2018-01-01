@@ -3,7 +3,7 @@
 /**
  * The fulltext search page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,25 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-16
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Helper\TagsHelper;
+use phpMyFAQ\Link;
+use phpMyFAQ\Pagination;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,20 +41,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 try {
     $faqsession->userTracking('fulltext_search', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
 // Get possible user input
-$inputLanguage = PMF_Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
-$inputCategory = PMF_Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
-$inputSearchTerm = PMF_Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
-$inputTag = PMF_Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_STRING);
+$inputLanguage = Filter::filterInput(INPUT_GET, 'langs', FILTER_SANITIZE_STRING);
+$inputCategory = Filter::filterInput(INPUT_GET, 'searchcategory', FILTER_VALIDATE_INT, '%');
+$inputSearchTerm = Filter::filterInput(INPUT_GET, 'suchbegriff', FILTER_SANITIZE_STRIPPED);
+$inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_STRING);
 $inputTag = str_replace(' ', '', $inputTag);
 $inputTag = str_replace(',,', ',', $inputTag);
 
-$search = PMF_Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
-$page = PMF_Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
+$search = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
 if (!is_null($inputLanguage)) {
@@ -51,23 +65,23 @@ if (!is_null($inputLanguage)) {
     $languages = '';
 }
 
-// HACK: (re)evaluate the Category object w/o passing the user language
-//       so the result set of a Search will have the Category Path
-//       for any of the multilanguage faq records and the Category list
+// HACK: (re)evaluate the Entity object w/o passing the user language
+//       so the result set of a Search will have the Entity Path
+//       for any of the multilanguage faq records and the Entity list
 //       on the left pane will not be affected
 if ($allLanguages) {
-    $category = new PMF_Category($faqConfig);
+    $category = new Category($faqConfig);
     $category->transform(0);
 }
 
 if (is_null($user)) {
-    $user = new PMF_User_CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
 }
 
-$faqSearch = new PMF_Search($faqConfig);
-$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
-$tagging = new PMF_Tags($faqConfig);
-$tagHelper = new PMF_Helper_Tags();
+$faqSearch = new Search($faqConfig);
+$faqSearchResult = new Resultset($user, $faq, $faqConfig);
+$tagging = new Tags($faqConfig);
+$tagHelper = new TagsHelper();
 $tagSearch = false;
 
 //
@@ -161,7 +175,7 @@ $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 try {
     $faqsession->userTracking('fulltext_search', $inputSearchTerm);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
@@ -185,7 +199,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 // Set base URL scheme
 if ($faqConfig->get('main.enableRewriteRules')) {
     $baseUrl = sprintf('%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d',
-        PMF_Link::getSystemRelativeUri('index.php'),
+        Link::getSystemRelativeUri('index.php'),
         urlencode($inputSearchTerm),
         $page,
         $languages,
@@ -193,7 +207,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
     );
 } else {
     $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
-        PMF_Link::getSystemRelativeUri(),
+        Link::getSystemRelativeUri(),
         empty($sids) ? '' : 'sids='.$sids.'&amp;',
         urlencode($inputSearchTerm),
         $page,
@@ -211,11 +225,11 @@ $options = array(
     'layoutTpl' => '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>',
 );
 
-$faqPagination = new PMF_Pagination($faqConfig, $options);
-$categoryHelper = new PMF_Helper_Category();
+$faqPagination = new Pagination($faqConfig, $options);
+$categoryHelper = new CategoryHelper();
 $categoryHelper->setCategory($category);
 
-$searchHelper = new PMF_Helper_Search($faqConfig);
+$searchHelper = new SearchHelper($faqConfig);
 $searchHelper->setSearchterm($inputSearchTerm);
 $searchHelper->setCategory($category);
 $searchHelper->setPagination($faqPagination);
@@ -259,7 +273,7 @@ if ($tagSearch) {
         'searchBoxSection',
         [
             'writeSendAdress' => '?'.$sids.'action=search',
-            'searchString' => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
+            'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
             'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
             'checkedAllLanguages' => $allLanguages ? ' checked="checked"' : '',
             'selectCategories' => $PMF_LANG['msgSelectCategories'],
@@ -287,7 +301,7 @@ $tpl->parse(
         /* @deprecated, the following variables will be removed with v3.0 */
         'printResult' => $searchResult,
         'writeSendAdress' => '?'.$sids.'action=search',
-        'searchString' => PMF_String::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
+        'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
         'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
         'checkedAllLanguages' => $allLanguages ? ' checked="checked"' : '',
         'selectCategories' => $PMF_LANG['msgSelectCategories'],

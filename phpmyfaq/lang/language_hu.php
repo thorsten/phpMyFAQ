@@ -10,7 +10,7 @@
  *
  * @category  phpMyFAQ
  * @author    Tóth Balázs <tbalazs@uhulinux.hu>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-02-19
@@ -870,7 +870,7 @@ $PMF_LANG['ad_categ_deletealllang'] = 'Minden nyelv törlése?';
 $PMF_LANG['ad_categ_deletethislang'] = 'Csak ennek a nyelvnek a törlése?';
 $PMF_LANG['ad_categ_translated'] = 'A kategória lefordítva.';
 $PMF_LANG['ad_categ_show'] = 'Kategória áttekintése';
-$PMF_LANG['ad_menu_categ_structure'] = 'Category Overview including its languages';
+$PMF_LANG['ad_menu_categ_structure'] = 'Entity Overview including its languages';
 $PMF_LANG['ad_entry_userpermission'] = 'Felhasználó engedélyek:';
 $PMF_LANG['ad_entry_grouppermission'] = 'Csoport engedélyek:';
 $LANG_CONF['records.numberOfRelatedArticles'] = array(0 => 'input', 1 => 'Number of related entries');

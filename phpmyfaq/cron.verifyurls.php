@@ -7,7 +7,7 @@
  * a. using PHP CLI
  * b. using a Web Hit to this file
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,7 +17,7 @@
  *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -55,21 +55,21 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     // Preload English strings
     require_once PMF_ROOT_DIR.'/lang/language_en.php';
 
-    if ((LANGCODE != 'en') && PMF_Language::isASupportedLanguage(LANGCODE)) {
+    if ((LANGCODE != 'en') && Language::isASupportedLanguage(LANGCODE)) {
         // Overwrite English strings with the ones we have in the current language
         require_once PMF_ROOT_DIR.'/lang/language_'.LANGCODE.'.php';
     }
 
     //Load plurals support for selected language
-    $plr = new PMF_Language_Plurals($PMF_LANG);
+    $plr = new phpMyFAQ\Language_Plurals($PMF_LANG);
 
     //
     // Initalizing static string wrapper
     //
-    PMF_String::init(LANGCODE);
+    Strings::init(LANGCODE);
 
-    $oLnk = new PMF_Linkverifier($faqConfig);
-    $faq = new PMF_Faq($faqConfig);
+    $oLnk = new phpMyFAQ\Linkverifier($faqConfig);
+    $faq = new phpMyFAQ\Faq($faqConfig);
     $totStart = microtime(true);
 
     // Read the data directly from the faqdata table (all faq records in all languages)
@@ -93,7 +93,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     foreach ($_records as $_r) {
         ++$i;
         $output = '';
-        $output .= sprintf('%0'.strlen((string) $tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.PMF_Utils::makeShorterText(strip_tags($_r['title']), 8).'):';
+        $output .= sprintf('%0'.strlen((string) $tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.Utils::makeShorterText(strip_tags($_r['title']), 8).'):';
         $start = microtime(true);
         if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
             $output .= $oLnk->verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);

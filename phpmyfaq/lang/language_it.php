@@ -14,7 +14,7 @@
  * @auhtor    Rudy <webmaster@queenarena.com>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Amedeo Fragai <amedeo.fragai@scasrl.it>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
@@ -671,7 +671,7 @@ $PMF_LANG['ad_quick_user'] = 'Aggiungi un nuovo utente';
 $PMF_LANG['ad_quick_group'] = 'Aggiungi un nuovo gruppo';
 $PMF_LANG['msgNewTranslationHeader'] = 'Proposta per una traduzione';
 $PMF_LANG['msgNewTranslationAddon'] = 'La tua proposta non sarà pubblicata immediatamente ma sarà pubblicata dall\'amministratore dopo la sua validazione.<br />I campi richiesti sono il <strong>tuo Nome</strong>, il <strong>tuo indirizzo email</strong>, la <strong>categoria</strong>, la <strong>traduzione del titolo</strong> e la <strong>traduzione del testo</strong> della faq.<br />Ricordati di separare le parole chiave con lo spazio.';
-$PMF_LANG['msgNewTransSourcePane'] = 'Faq originale';
+$PMF_LANG['msgNewTransSourcePane'] = 'FaqHelper originale';
 $PMF_LANG['msgNewTranslationPane'] = 'La tua traduzione';
 $PMF_LANG['msgNewTranslationName'] = 'Il tuo nome:';
 $PMF_LANG['msgNewTranslationMail'] = 'Il tuo indirizzo email:';

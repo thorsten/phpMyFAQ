@@ -2,21 +2,24 @@
 /**
  * Show the session.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Session;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,13 +30,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
-    $sid = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $sid = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
     printf('<header><h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i> %s "<span style="color: Red;">%d</span>"</h2></header>',
         $PMF_LANG['ad_sess_session'],
         $sid);
 
-    $session = new PMF_Session($faqConfig);
+    $session = new Session($faqConfig);
     $time = $session->getTimeFromSessionId($sid);
 
     $trackingdata = explode("\n", file_get_contents(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $time)));
@@ -67,20 +70,20 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 <td><?php echo $PMF_LANG['ad_sess_referer'];
                     ?></td>
                 <td>
-                    <?php echo PMF_String::htmlentities(str_replace('?', '? ', $data[5]));
+                    <?php echo Strings::htmlentities(str_replace('?', '? ', $data[5]));
                     ?>
                 </td>
             </tr>
             <tr>
                 <td><?php echo $PMF_LANG['ad_sess_browser'];
                     ?></td>
-                <td><?php echo PMF_String::htmlentities($data[6]);
+                <td><?php echo Strings::htmlentities($data[6]);
                     ?></td>
             </tr>
             <tr>
                 <td><?php echo $PMF_LANG['ad_sess_ip'];
                     ?>:</td>
-                <td><?php echo PMF_String::htmlentities($data[3]);
+                <td><?php echo Strings::htmlentities($data[3]);
                     ?></td>
             </tr>
 <?php

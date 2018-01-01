@@ -3,7 +3,7 @@
 /**
  * XML, XHTML and PDF export - streamer page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,12 +13,20 @@
  *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2005-11-02
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\HttpStreamer;
+use phpMyFAQ\Tags;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,25 +37,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'export')) {
-    $categoryId = PMF_Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
-    $downwards = PMF_Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
-    $inlineDisposition = PMF_Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
-    $type = PMF_Filter::filterInput(INPUT_POST, 'export-type', FILTER_SANITIZE_STRING, 'none');
+    $categoryId = Filter::filterInput(INPUT_POST, 'catid', FILTER_VALIDATE_INT);
+    $downwards = Filter::filterInput(INPUT_POST, 'downwards', FILTER_VALIDATE_BOOLEAN, false);
+    $inlineDisposition = Filter::filterInput(INPUT_POST, 'dispos', FILTER_SANITIZE_STRING);
+    $type = Filter::filterInput(INPUT_POST, 'export-type', FILTER_SANITIZE_STRING, 'none');
 
-    $faq = new PMF_Faq($faqConfig);
-    $tags = new PMF_Tags($faqConfig);
-    $category = new PMF_Category($faqConfig);
+    $faq = new Faq($faqConfig);
+    $tags = new Tags($faqConfig);
+    $category = new Category($faqConfig);
     $category->buildTree($categoryId);
 
-    $export = PMF_Export::create($faq, $category, $faqConfig, $type);
+    $export = Export::create($faq, $category, $faqConfig, $type);
     $content = $export->generate($categoryId, $downwards);
 
     // Stream the file content
-    $oHttpStreamer = new PMF_HttpStreamer($type, $content);
+    $oHttpStreamer = new HttpStreamer($type, $content);
     if ('inline' === $inlineDisposition) {
-        $oHttpStreamer->send(PMF_HttpStreamer::EXPORT_DISPOSITION_INLINE);
+        $oHttpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
     } else {
-        $oHttpStreamer->send(PMF_HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
+        $oHttpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
     }
 } else {
     echo $PMF_LANG['err_noArticles'];

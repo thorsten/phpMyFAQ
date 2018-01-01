@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Search_Database
+ * Test case for phpMyFAQ\Attachment\Filesystem\File\Vanilla
  *
  * PHP Version 5.3
  *
@@ -17,13 +17,14 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
  */
 
-
+use PHPUnit\Framework\TestCase;
+use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
 
 /**
  * PMF_Attachment_File test case
@@ -31,17 +32,17 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-31
  */
-class PMFTest_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_TestCase
+class VanillaTest extends TestCase
 {
     /**
-     * @var PMF_Attachment_Filesystem_File
+     * @var Vanilla
      */
-    private $PMF_Attachment_Filesystem_File_Vanilla;
+    private $instance;
 
     /**
      * Prepares the environment before running a test.
@@ -55,7 +56,7 @@ class PMFTest_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_T
         }
         copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
 
-        $this->PMF_Attachment_Filesystem_File_Vanilla = new PMF_Attachment_Filesystem_File_Vanilla(
+        $this->instance = new Vanilla(
             PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz'
         );
     }
@@ -64,7 +65,7 @@ class PMFTest_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_T
     {
         copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
 
-        $this->assertTrue($this->PMF_Attachment_Filesystem_File_Vanilla->delete());
+        $this->assertTrue($this->instance->delete());
     }
 
     public function testDeleteDir()
@@ -72,7 +73,7 @@ class PMFTest_Attachment_Filesystem_File_VanillaTest extends PHPUnit_Framework_T
         copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar');
 
         $this->assertTrue(
-            $this->PMF_Attachment_Filesystem_File_Vanilla->deleteDir(
+            $this->instance->deleteDir(
                 PMF_TEST_DIR . '/fixtures/path-to-delete/'
             )
         );

@@ -3,7 +3,7 @@
 /**
  * The RSS feed with the top ten.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -30,13 +30,13 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 //
 // get language (default: english)
 //
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
     require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
@@ -49,7 +49,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new phpMyFAQ\CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -61,16 +61,16 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-    if (!$user instanceof PMF_User_CurrentUser) {
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user = CurrentUser::getFromCookie($faqConfig);
+    if (!$user instanceof CurrentUser) {
+        $user = CurrentUser::getFromSession($faqConfig);
     }
 }
 
 //
 // Get current user and group id - default: -1
 //
-if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
+if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
@@ -88,13 +88,13 @@ if (isset($user) && !is_null($user) && $user instanceof PMF_User_CurrentUser) {
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$faq = new PMF_Faq($faqConfig);
+$faq = new phpMyFAQ\Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
@@ -127,14 +127,14 @@ if ($num > 0) {
         $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
         if (PMF_RSS_USE_SEO) {
             if (isset($item['thema'])) {
-                $oLink = new PMF_Link($link, $faqConfig);
+                $oLink = new phpMyFAQ\Link($link, $faqConfig);
                 $oLink->itemTitle = html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8');
                 $link = html_entity_decode($oLink->toString(), ENT_COMPAT, 'UTF-8');
             }
         }
 
         $rss->startElement('item');
-        $rss->writeElement('title', PMF_Utils::makeShorterText(html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8'), 8).
+        $rss->writeElement('title', Utils::makeShorterText(html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8'), 8).
                                     ' ('.$item['visits'].' '.$PMF_LANG['msgViews'].')');
 
         $rss->startElement('description');
@@ -160,7 +160,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData),
 );
 
-$http = new PMF_Helper_Http();
+$http = new phpMyFAQ\Helper_Http();
 $http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();

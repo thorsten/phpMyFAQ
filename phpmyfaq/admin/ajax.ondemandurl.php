@@ -7,7 +7,7 @@
  *
  * Performs link verification at demand of the user.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -19,7 +19,7 @@
  * @category  phpMyFAQ
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 NetJapan, Inc.
+ * @copyright 2005-2018 NetJapan, Inc.
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
@@ -33,11 +33,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new PMF_Helper_Http();
+$httpHeader = new phpMyFAQ\Helper_Http();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
@@ -46,9 +46,9 @@ if ($linkVerifier->isReady() === false) {
     exit();
 }
 
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-$lookup = PMF_Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
+$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+$lookup = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
@@ -68,7 +68,7 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2017 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 

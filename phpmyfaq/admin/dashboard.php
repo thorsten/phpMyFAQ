@@ -2,7 +2,7 @@
 /**
  * The start page with some information about the FAQ.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alexander M. Turek <me@derrabus.de>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,9 +27,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqTableInfo = $faqConfig->getDb()->getTableStatus(PMF_Db::getTablePrefix());
-$faqSystem = new PMF_System();
-$faqSession = new PMF_Session($faqConfig);
+$faqTableInfo = $faqConfig->getDb()->getTableStatus(phpMyFAQ\Db::getTablePrefix());
+$faqSystem = new phpMyFAQ\System();
+$faqSession = new phpMyFAQ\Session($faqConfig);
 ?>
     <header class="row">
         <div class="col-lg-12">
@@ -57,7 +57,7 @@ $faqSession = new PMF_Session($faqConfig);
                 </div>
                 <div class="panel-body">
                 <?php
-                $session = new PMF_Session($faqConfig);
+                $session = new phpMyFAQ\Session($faqConfig);
                 $visits = $session->getLast30DaysVisits();
                 ?>
                 <script type="text/javascript" src="assets/js/plugins/jquery.sparkline.min.js"></script>
@@ -95,31 +95,31 @@ $faqSession = new PMF_Session($faqConfig);
                         <a href="?action=view" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqdata']; ?></em>
+                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqcomments']; ?></em>
+                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="?action=question" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqquestions']; ?></em>
+                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="?action=news" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faqnews']; ?></em>
+                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[PMF_Db::getTablePrefix().'faquser'] - 1; ?></em>
+                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
@@ -145,7 +145,7 @@ $faqSession = new PMF_Session($faqConfig);
                 </div>
                 <div class="panel-body">
                     <?php
-                    $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
+                    $version = phpMyFAQ\Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
                     if (!is_null($version) && $version == 'version') {
                         $json = file_get_contents('http://api.phpmyfaq.de/versions');
                         $result = json_decode($json);
@@ -187,7 +187,7 @@ $faqSession = new PMF_Session($faqConfig);
                 </div>
                 <div class="panel-body">
                     <?php
-                    $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
+                    $getJson = phpMyFAQ\Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
                     if (!is_null($getJson) && 'verify' === $getJson) {
                         set_error_handler(
                             function ($severity, $message, $file, $line) {
@@ -195,7 +195,7 @@ $faqSession = new PMF_Session($faqConfig);
                             }
                         );
 
-                        $faqSystem = new PMF_System();
+                        $faqSystem = new phpMyFAQ\System();
                         $localHashes = $faqSystem->createHashes();
                         $versionCheckError = true;
                         try {

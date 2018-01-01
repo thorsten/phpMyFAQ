@@ -2,21 +2,30 @@
 /**
  * The FAQ record editor.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Category;
+use phpMyFAQ\Date;
+use phpMyFAQ\Db;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,14 +38,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
-    $user->perm->checkRight($user->getUserId(), 'addbt')) && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+    $user->perm->checkRight($user->getUserId(), 'addbt')) && !Db::checkOnEmptyTable('faqcategories')) {
     // old code
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     //
 
     // new code
     if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-        $category = new PMF_Category($faqConfig, $currentAdminGroups, true);
+        $category = new Category($faqConfig, $currentAdminGroups, true);
     }
     //
     
@@ -44,7 +53,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
 
-    $categoryHelper = new PMF_Helper_Category();
+    $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
     $selectedCategory = '';
@@ -58,11 +67,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         'dateEnd' => '',
     );
 
-    $tagging = new PMF_Tags($faqConfig);
-    $date = new PMF_Date($faqConfig);
+    $tagging = new Tags($faqConfig);
+    $date = new Date($faqConfig);
 
     if ('takequestion' === $action) {
-        $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $question = $faq->getQuestion($questionId);
         $selectedCategory = $question['category_id'];
         $faqData['title'] = $question['question'];
@@ -79,15 +88,15 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     }
 
     if ('editpreview' === $action) {
-        $faqData['id'] = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $faqData['id'] = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
         if (!is_null($faqData['id'])) {
             $queryString = 'saveentry&id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
         }
 
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-        $selectedCategory = PMF_Filter::filterInputArray(
+        $faqData['lang'] = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+        $selectedCategory = Filter::filterInputArray(
             INPUT_POST,
             array(
                 'rubrik' => array(
@@ -101,26 +110,26 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
             }
         }
-        $faqData['active'] = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-        $faqData['keywords'] = PMF_Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-        $faqData['title'] = PMF_Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
-        $faqData['content'] = PMF_Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
-        $faqData['author'] = PMF_Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
-        $faqData['email'] = PMF_Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqData['comment'] = PMF_Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-        $faqData['solution_id'] = PMF_Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-        $faqData['revision_id'] = PMF_Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
-        $faqData['sticky'] = PMF_Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
-        $faqData['tags'] = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-        $faqData['changed'] = PMF_Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
-        $faqData['dateStart'] = PMF_Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-        $faqData['dateEnd'] = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+        $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+        $faqData['keywords'] = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+        $faqData['title'] = Filter::filterInput(INPUT_POST, 'thema', FILTER_SANITIZE_STRING);
+        $faqData['content'] = Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS);
+        $faqData['author'] = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+        $faqData['email'] = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $faqData['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+        $faqData['solution_id'] = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
+        $faqData['revision_id'] = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT, 0);
+        $faqData['sticky'] = Filter::filterInput(INPUT_POST, 'sticky', FILTER_VALIDATE_INT);
+        $faqData['tags'] = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+        $faqData['changed'] = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+        $faqData['dateStart'] = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+        $faqData['dateEnd'] = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
         $faqData['content'] = html_entity_decode($faqData['content']);
     } elseif ('editentry' === $action) {
-        $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
-            $logging = new PMF_Logging($faqConfig);
+            $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Beitragedit, '.$id);
 
             $categories = $category->getCategoryRelationsFromArticle($id, $lang);
@@ -133,8 +142,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $queryString = 'insertentry';
         }
     } elseif ('copyentry' === $action) {
-        $faqData['id'] = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $faqData['lang'] = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $faq->language = $faqData['lang'];
         $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
 
@@ -143,7 +152,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         $faqData = $faq->faqRecord;
         $queryString = 'insertentry';
     } else {
-        $logging = new PMF_Logging($faqConfig);
+        $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreate');
         $queryString = 'insertentry';
         if (!is_array($categories)) {
@@ -152,7 +161,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     }
 
     // Revisions
-    $selectedRevisionId = PMF_Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
+    $selectedRevisionId = Filter::filterInput(INPUT_POST, 'revisionid_selected', FILTER_VALIDATE_INT);
     if (is_null($selectedRevisionId)) {
         $selectedRevisionId = $faqData['revision_id'];
     }
@@ -180,12 +189,12 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     }
 
     // Set data for forms
-    $faqData['title'] = (isset($faqData['title']) ? PMF_String::htmlspecialchars($faqData['title']) : '');
-    $faqData['content'] = (isset($faqData['content']) ? trim(PMF_String::htmlentities($faqData['content'])) : '');
-    $faqData['tags'] = (isset($faqData['tags']) ? PMF_String::htmlspecialchars($faqData['tags']) : '');
-    $faqData['keywords'] = (isset($faqData['keywords']) ? PMF_String::htmlspecialchars($faqData['keywords']) : '');
-    $faqData['author'] = (isset($faqData['author']) ? PMF_String::htmlspecialchars($faqData['author']) : $user->getUserData('display_name'));
-    $faqData['email'] = (isset($faqData['email']) ? PMF_String::htmlspecialchars($faqData['email']) : $user->getUserData('email'));
+    $faqData['title'] = (isset($faqData['title']) ? Strings::htmlspecialchars($faqData['title']) : '');
+    $faqData['content'] = (isset($faqData['content']) ? trim(Strings::htmlentities($faqData['content'])) : '');
+    $faqData['tags'] = (isset($faqData['tags']) ? Strings::htmlspecialchars($faqData['tags']) : '');
+    $faqData['keywords'] = (isset($faqData['keywords']) ? Strings::htmlspecialchars($faqData['keywords']) : '');
+    $faqData['author'] = (isset($faqData['author']) ? Strings::htmlspecialchars($faqData['author']) : $user->getUserData('display_name'));
+    $faqData['email'] = (isset($faqData['email']) ? Strings::htmlspecialchars($faqData['email']) : $user->getUserData('email'));
     $faqData['isoDate'] = (isset($faqData['date']) ? $faqData['date'] : date('Y-m-d H:i'));
     $faqData['date'] = (isset($faqData['date']) ? $date->format($faqData['date']) : $date->format(date('Y-m-d H:i')));
     $faqData['changed'] = (isset($faqData['changed']) ? $faqData['changed'] : '');
@@ -244,7 +253,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                             '%s 1.%d: %s - %s',
                                             $PMF_LANG['ad_entry_revision'],
                                             $revisionData['revision_id'],
-                                            PMF_Date::createIsoDate($revisionData['updated']),
+                                            Date::createIsoDate($revisionData['updated']),
                                             $revisionData['author']
                                         );
     ?>
@@ -337,7 +346,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 <?php echo $PMF_LANG['ad_entry_locale'] ?>:
                             </label>
                             <div class="col-lg-8">
-                                <?php echo PMF_Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
+                                <?php echo Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
                             </div>
                         </div>
 
@@ -351,7 +360,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 <div class="col-lg-8">
                                     <ul class="form-control-static adminAttachments">
                                         <?php
-                                        $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $faqData['id']);
+                                        $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
                                         foreach ($attList as $att) {
                                             printf(
                                                 '<li><a href="../%s">%s</a> ',
@@ -373,7 +382,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     <?php
                                     if (0 === $faqData['id']) {
                                         $faqData['id'] = $faqConfig->getDb()->nextId(
-                                            PMF_Db::getTablePrefix().'faqdata',
+                                            Db::getTablePrefix().'faqdata',
                                             'id'
                                         );
                                     }
@@ -590,7 +599,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         $faqData['id'],
                         $faqData['lang']
                     );
-                    $link = new PMF_Link($url, $faqConfig);
+                    $link = new Link($url, $faqConfig);
                     $link->itemTitle = $faqData['title'];
                     ?>
                 <div class="panel panel-default">
@@ -907,8 +916,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     </script>
 <?php
 
-} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') !== 1 && !PMF_Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') !== 1 && !Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['err_NotAuth'];
-} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') && PMF_Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') && Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['no_cats'];
 }

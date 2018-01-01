@@ -1,6 +1,6 @@
 <?php
 /**
- * Test case for PMF_Link
+ * Test case for Link
  *
  * PHP Version 5.6
  *
@@ -11,24 +11,32 @@
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
 
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Filesystem;
+use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Client;
+use phpMyFAQ\Strings;
+use PHPUnit\Framework\TestCase;
+
 /**
- * PMF_LinkTest
+ * LinkTest
  *
  * @category  phpMyFAQ
  * @package   PMF_Tests
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2017 phpMyFAQ Team
+ * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2012-03-29
  */
-class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
+class ClientTest extends TestCase
 {
     private $dbHandle;
     private $PMF_Filesystem;
@@ -43,17 +51,17 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
     {
         parent::setUp();
 
-        PMF_String::init('en');
+        Strings::init('en');
 
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
-        $this->dbHandle = new PMF_DB_Sqlite3();
-        $this->PMF_Configuration = new PMF_Configuration($this->dbHandle);
+        $this->dbHandle = new Sqlite3();
+        $this->PMF_Configuration = new Configuration($this->dbHandle);
         $this->PMF_Configuration->config['security.useSslOnly'] = 'true';
-        $this->PMF_Filesystem = new PMF_Filesystem(PMF_ROOT_DIR);
+        $this->PMF_Filesystem = new Filesystem(PMF_ROOT_DIR);
 
-        $this->PMF_Instance = new PMF_Instance($this->PMF_Configuration);
-        $this->PMF_Instance_Client = new PMF_Instance_Client($this->PMF_Configuration);
+        $this->PMF_Instance = new Instance($this->PMF_Configuration);
+        $this->PMF_Instance_Client = new Client($this->PMF_Configuration);
 
         $this->PMF_Instance_Client->setFileSystem($this->PMF_Filesystem);
     }
@@ -67,9 +75,9 @@ class PMFTest_Instance_ClientTest extends PHPUnit_Framework_TestCase
         @unlink(PMF_TEST_DIR . '/constants.test.php');
 
         if (is_dir(PMF_TEST_DIR . '/assets/themes/default/')) {
-            $files = new RecursiveIteratorIterator(
-                new RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/themes/default/'),
-                RecursiveIteratorIterator::SELF_FIRST
+            $files = new \RecursiveIteratorIterator(
+                new \RecursiveDirectoryIterator(PMF_TEST_DIR . '/assets/themes/default/'),
+                \RecursiveIteratorIterator::SELF_FIRST
             );
             foreach ($files as $file) {
                 @unlink($file->getPathname());

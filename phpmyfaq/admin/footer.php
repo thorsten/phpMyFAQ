@@ -2,7 +2,7 @@
 /**
  * Footer of the admin area.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -70,7 +70,7 @@ if (isset($auth)) {
     tinyMCE.init({
         // General options
         mode     : 'exact',
-        language : '<?php echo(PMF_Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+        language : '<?php echo(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
         elements : '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
         theme    : 'modern',
         plugins: [
@@ -133,7 +133,7 @@ if (isset($auth)) {
         save_onsavecallback: "phpMyFAQSave",
 
         // phpMyFAQ CSS
-        content_css: '../assets/themes/<?php echo PMF_Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
+        content_css: '../assets/themes/<?php echo Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
 
         // Replace values for the template plugin
         template_replace_values : {

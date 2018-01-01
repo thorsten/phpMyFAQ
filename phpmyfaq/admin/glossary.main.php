@@ -2,7 +2,7 @@
 /**
  * The main glossary index file.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,11 +10,14 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
  */
+
+
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -41,8 +44,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 
-$csrfTokenFromPost = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-$csrfTokenFromGet = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$csrfTokenFromPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfTokenFromGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfTokenFromPost) {
     $csrfCheck = false;
 } else {
@@ -57,11 +60,11 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     $user->perm->checkRight($user->getUserId(), 'editglossary') ||
     $user->perm->checkRight($user->getUserId(), 'delglossary')) {
-    $glossary = new PMF_Glossary($faqConfig);
+    $glossary = new Glossary($faqConfig);
 
     if ('saveglossary' == $action && $user->perm->checkRight($user->getUserId(), 'addglossary') && $csrfCheck) {
-        $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
-        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
+        $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->addGlossaryItem($item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_save_success'].'</p>';
@@ -74,9 +77,9 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     }
 
     if ('updateglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary') && $csrfCheck) {
-        $id = PMF_Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $item = PMF_Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
-        $definition = PMF_Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
+        $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $item = Filter::filterInput(INPUT_POST, 'item', FILTER_SANITIZE_SPECIAL_CHARS);
+        $definition = Filter::filterInput(INPUT_POST, 'definition', FILTER_SANITIZE_SPECIAL_CHARS);
         if ($glossary->updateGlossaryItem($id, $item, $definition)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_update_success'].'</p>';
@@ -89,7 +92,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
     }
 
     if ('deleteglossary' == $action && $user->perm->checkRight($user->getUserId(), 'editglossary') && $csrfCheckDelete) {
-        $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($glossary->deleteGlossaryItem($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_glossary_delete_success'].'</p>';

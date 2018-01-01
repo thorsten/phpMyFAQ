@@ -11,11 +11,19 @@
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Thomas Zeithaml <tom@annatom.de>
- * @copyright 2005-2017 phpMyFAQ Team
+ * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
  */
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
+use phpMyFAQ\Perm;
+use phpMyFAQ\System;
+use phpMyFAQ\Utils;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -38,7 +46,7 @@ if (!empty($_SESSION['access_token'])) {
     $content = $connection->get('account/verify_credentials');
 }
 
-$configMode = PMF_Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
+$configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 
 /**
  * @param mixed  $key
@@ -93,9 +101,9 @@ function renderInputForm($key, $type)
             switch ($key) {
 
                 case 'main.language':
-                    $languages = PMF_Language::getAvailableLanguages();
+                    $languages = Language::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        echo PMF_Language::languageOptions(
+                        echo Language::languageOptions(
                             str_replace(
                                 array(
                                      'language_',
@@ -113,7 +121,7 @@ function renderInputForm($key, $type)
                    break;
 
                 case 'records.orderby':
-                    echo PMF_Configuration::sortingOptions($faqConfig->get($key));
+                    echo Configuration::sortingOptions($faqConfig->get($key));
                     break;
 
                 case 'records.sortby':
@@ -130,11 +138,11 @@ function renderInputForm($key, $type)
                     break;
 
                 case 'security.permLevel':
-                    echo PMF_Perm::permOptions($faqConfig->get($key));
+                    echo Perm::permOptions($faqConfig->get($key));
                     break;
 
                 case 'main.templateSet':
-                    $faqSystem = new PMF_System();
+                    $faqSystem = new System();
                     $templates = $faqSystem->getAvailableTemplates();
 
                     foreach ($templates as $template => $selected) {
@@ -204,7 +212,7 @@ function renderInputForm($key, $type)
                 case 'seo.metaTagsCategories':
                 case 'seo.metaTagsPages':
                 case 'seo.metaTagsAdmin':
-                    $adminHelper = new PMF_Helper_Administration();
+                    $adminHelper = new Helper_Administration();
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
             }
@@ -245,7 +253,7 @@ function renderInputForm($key, $type)
 
 header('Content-type: text/html; charset=utf-8');
 
-PMF_Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
+Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {

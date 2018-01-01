@@ -2,7 +2,7 @@
 /**
  * Shows all comments in the categories and provides a link to delete comments.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -10,11 +10,18 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2017 phpMyFAQ Team
+ * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-04
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Date;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -32,12 +39,12 @@ printf(
 echo '<div id="returnMessage"></div>';
 
 if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
-    $comment = new PMF_Comment($faqConfig);
-    $category = new PMF_Category($faqConfig, [], false);
+    $comment = new Comment($faqConfig);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $faq = new PMF_Faq($faqConfig);
-    $date = new PMF_Date($faqConfig);
+    $faq = new Faq($faqConfig);
+    $date = new Date($faqConfig);
 
     $category->buildTree();
     $faqcomments = $comment->getAllComments('faq');
@@ -77,7 +84,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                         <?php echo $faq->getRecordTitle($faqcomment['record_id']) ?>
                     </a>
                 </span><br/>
-                <?php echo PMF_String::htmlspecialchars($faqcomment['content']) ?>
+                <?php echo Strings::htmlspecialchars($faqcomment['content']) ?>
             </td>
         </tr>
 <?php
@@ -122,7 +129,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                         <?php echo $newscomment['username'] ?>
                     </a>
                 </span><br/>
-                <?php echo PMF_String::htmlspecialchars($newscomment['content']) ?>
+                <?php echo Strings::htmlspecialchars($newscomment['content']) ?>
             </td>
         </tr>
 <?php

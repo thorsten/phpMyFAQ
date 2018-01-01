@@ -3,7 +3,7 @@
 /**
  * Ukranian language file
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  * @author    Oleg P. Suvolokin
  * @author    Denis A. Barybin
- * @copyright 2008-2017 phpMyFAQ Team
+ * @copyright 2008-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2008-02-03
@@ -348,7 +348,7 @@ $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
 $PMF_LANG["ad_sess_referer"] = "Referer:";
 $PMF_LANG["ad_sess_browser"] = "Browser:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Category:";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Entity:";
 $PMF_LANG["ad_sess_ai_artikel"] = "Record:";
 $PMF_LANG["ad_sess_ai_sb"] = "Search-Strings:";
 $PMF_LANG["ad_sess_ai_sid"] = "Session ID:";
@@ -621,7 +621,7 @@ $PMF_LANG["ad_you_should_update"] = "Your phpMyFAQ installation is outdated. You
 $PMF_LANG["msgAdvancedSearch"] = "Докладний пошук"; 
 
 // added v2.0.0 - 2006-08-15 by Thorsten and Matteo
-$PMF_LANG["ad_categ_owner"] = "Category owner"; 
+$PMF_LANG["ad_categ_owner"] = "Entity owner"; 
 $PMF_LANG["adminSection"] = "Administration"; 
 $PMF_LANG["err_expiredArticle"] = "This entry is expired and can not be displayed"; 
 $PMF_LANG["err_expiredNews"] = "This news is expired and can not be displayed"; 

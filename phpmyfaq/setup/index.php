@@ -18,15 +18,20 @@
  * @author    Uwe Pries <uwe.pries@digartis.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-20
  */
 
-define('COPYRIGHT', '&copy; 2001-2017 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Instance\Setup;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
+
+define('COPYRIGHT', '&copy; 2001-2018 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/src');
+define('PMF_SRC_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
 
 if (version_compare(PHP_VERSION, '5.6.0') < 0) {
@@ -35,9 +40,6 @@ if (version_compare(PHP_VERSION, '5.6.0') < 0) {
 
 set_time_limit(0);
 
-use Symfony\Component\ClassLoader\UniversalClassLoader;
-use Symfony\Component\ClassLoader\Psr4ClassLoader;
-
 if (!defined('DEBUG')) {
     define('DEBUG', false);
 }
@@ -45,33 +47,23 @@ if (!defined('DEBUG')) {
 session_name('phpmyfaq-setup');
 session_start();
 
+require PMF_ROOT_DIR.'/src/libs/autoload.php';
 require PMF_ROOT_DIR.'/config/constants.php';
 require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
 
-//
-// Setting up Symfony PSR-0 and PSR-4 autoloader
-//
-require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/UniversalClassLoader.php';
-require PMF_INCLUDE_DIR.'/libs/symfony/class-loader/Psr4ClassLoader.php';
-
-$loader = new UniversalClassLoader();
-$loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
-$loader->register();
-
-$psr4Loader = new Psr4ClassLoader();
-$psr4Loader->addPrefix('Symfony', PMF_INCLUDE_DIR.'/libs/symfony/');
-$psr4Loader->register();
-
+$loader = new ClassLoader();
+$loader->add('phpMyFAQ', PMF_SRC_DIR);
+$loader->register()
 ?>
 <!doctype html>
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</title>
+  <title>phpMyFAQ <?php echo System::getVersion() ?> Setup</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="application-name" content="phpMyFAQ <?php echo PMF_System::getVersion() ?>">
+  <meta name="application-name" content="phpMyFAQ <?php echo System::getVersion() ?>">
   <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
 
   <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
@@ -115,7 +107,7 @@ $psr4Loader->register();
     <div class="jumbotron">
       <div class="container">
         <h1 class="display-4 text-center">
-          phpMyFAQ <?php echo PMF_System::getVersion() ?>
+          phpMyFAQ <?php echo System::getVersion() ?>
         </h1>
         <p class="text-center">
           Did you already read the
@@ -130,10 +122,10 @@ $psr4Loader->register();
 //
 // Initialize static string wrapper
 //
-PMF_String::init('en');
+Strings::init('en');
 
-$installer = new PMF_Installer();
-$system = new PMF_System();
+$installer = new phpMyFAQ\Installer();
+$system = new phpMyFAQ\System();
 
 $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
@@ -412,7 +404,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <div class="col-sm">
               <div class="form-group row">
                   <button class="btn btn-success btn-lg btn-block" type="submit">
-                         Click to install phpMyFAQ <?php echo PMF_System::getVersion() ?>
+                         Click to install phpMyFAQ <?php echo System::getVersion() ?>
                   </button>
               </div>
             </div>
@@ -429,7 +421,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
         </div>
         </form>
 <?php
-    PMF_System::renderFooter();
+    System::renderFooter();
 } else {
     $installer->startInstall();
     ?>
@@ -443,5 +435,5 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
          </p>
 <?php
     $installer->cleanUpFiles();
-    PMF_System::renderFooter();
+    System::renderFooter();
 }

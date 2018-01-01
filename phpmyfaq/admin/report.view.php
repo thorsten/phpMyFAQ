@@ -2,7 +2,7 @@
 /**
  * View a generated report.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  *
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2017 phpMyFAQ Team
+ * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -38,18 +38,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'reports')) {
-    $useCategory = PMF_Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
-    $useSubcategory = PMF_Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
-    $useTranslation = PMF_Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
-    $useLanguage = PMF_Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
-    $useId = PMF_Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
-    $useSticky = PMF_Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
-    $useTitle = PMF_Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
-    $useCreationDate = PMF_Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
-    $useOwner = PMF_Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
-    $useLastModified = PMF_Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
-    $useUrl = PMF_Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
-    $useVisits = PMF_Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
+    $useCategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
+    $useSubcategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
+    $useTranslation = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
+    $useLanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
+    $useId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
+    $useSticky = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
+    $useTitle = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
+    $useCreationDate = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
+    $useOwner = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
+    $useLastModified = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
+    $useUrl = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
+    $useVisits = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
     ?>
                 <table class="table table-striped">
                     <thead>
@@ -73,7 +73,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     <tbody>
 <?php
 
-    $report = new PMF_Report($faqConfig);
+    $report = new phpMyFAQ\Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';

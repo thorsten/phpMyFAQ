@@ -3,7 +3,7 @@
 /**
  * The RSS feed with the news.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,7 +13,7 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2004-2017 phpMyFAQ Team
+ * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -30,13 +30,13 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 //
 // get language (default: english)
 //
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
+if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
     // Overwrite English strings with the ones we have in the current language
     require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
 } else {
@@ -49,7 +49,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new PMF_User_CurrentUser($faqConfig);
+        $user = new phpMyFAQ\CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -61,22 +61,22 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         }
     }
 } else {
-    $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-    if (! $user instanceof PMF_User_CurrentUser) {
-        $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+    $user = CurrentUser::getFromCookie($faqConfig);
+    if (! $user instanceof CurrentUser) {
+        $user = CurrentUser::getFromSession($faqConfig);
     }
 }
 
 //
 // Initalizing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$oNews = new PMF_News($faqConfig);
+$oNews = new phpMyFAQ\News($faqConfig);
 $showArchive = false;
 $active = true;
 $forceConfLimit = true;
@@ -107,7 +107,7 @@ if ($num > 0) {
         $link = '/index.php?action=news&newsid='.$item['id'].'&newslang='.$item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oLink = new PMF_Link($link, $faqConfig);
+                $oLink = new phpMyFAQ\Link($link, $faqConfig);
                 $oLink->itemTitle = $item['header'];
                 $link = $oLink->toString();
             }
@@ -122,7 +122,7 @@ if ($num > 0) {
 
         $rss->writeElement('link', $link);
         $rss->writeElement('guid', $link);
-        $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['date'], true));
+        $rss->writeElement('pubDate', Date::createRFC822Date($item['date'], true));
         $rss->endElement();
     }
 }
@@ -136,7 +136,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData),
 );
 
-$http = new PMF_Helper_Http();
+$http = new phpMyFAQ\Helper_Http();
 $http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();

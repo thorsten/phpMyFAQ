@@ -1,12 +1,13 @@
-phpMyFAQ 2.10.0-alpha
+phpMyFAQ 3.0.0-alpha
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 2.10.0-alpha2 - 2017-12-
+Version 3.0.0-alpha2 - 2018-01-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
+- added PHP namespaces (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
@@ -19,7 +20,7 @@ Version 2.10.0-alpha2 - 2017-12-
 - template variable syntax compatible with Twig/Handlebars (Thorsten)
 - updated bundled SwiftMailer to version 5.4.8 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
-- updated bundled Bootstrap to version 4.0.0-beta.2 (Thorsten)
+- updated bundled Bootstrap to version 4.0.0-beta.3 (Thorsten)
 - updated bundled Font Awesome to version 4.7.0 (Thorsten)
 - updated bundled jQuery to version 3.2.1 (Thorsten)
 - updated bundled jQuery datePicker plugin to version 1.6.4 (Thorsten)
@@ -29,6 +30,8 @@ Version 2.10.0-alpha2 - 2017-12-
 - updated bundled Mermaid to version 6.0.0 (Thorsten)
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
 - updated bundled TinyMCE to version 4.6.4 (Thorsten)
+- removed translation admin frontend (Thorsten)
+- removed support for ext/mssql (Thorsten)
 - removed bundled Symfony ClassLoader (Thorsten)
 - removed Bower, now using NPM/Yarn only (Thorsten)
 

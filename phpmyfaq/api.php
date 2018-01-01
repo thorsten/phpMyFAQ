@@ -12,7 +12,7 @@
  * @category  phpMyFAQ 
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -28,7 +28,7 @@ require 'src/Bootstrap.php';
 //
 // Send headers
 //
-$http = new PMF_Helper_Http();
+$http = new phpMyFAQ\Helper_Http();
 $http->setContentType('application/json');
 $http->addHeader();
 
@@ -39,33 +39,33 @@ $currentUser = -1;
 $currentGroups = array(-1);
 $auth = false;
 
-$action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
-$categoryId = PMF_Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
-$recordId = PMF_Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
-$tagId = PMF_Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
+$action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$language = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
+$categoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
+$recordId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
+$tagId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
-$faqusername = PMF_Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = PMF_Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqusername = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 
 //
 // Get language (default: english)
 //
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 //
 // Set language
 //
-if (PMF_Language::isASupportedLanguage($language)) {
-    require PMF_LANGUAGE_DIR.'/language_'.$language.'.php';
+if (Language::isASupportedLanguage($language)) {
+    require Language_DIR.'/language_'.$language.'.php';
 } else {
-    require PMF_LANGUAGE_DIR.'/language_en.php';
+    require Language_DIR.'/language_en.php';
 }
 $faqConfig->setLanguage($Language);
 
-$plr = new PMF_Language_Plurals($PMF_LANG);
-PMF_String::init($language);
+$plr = new phpMyFAQ\Language_Plurals($PMF_LANG);
+Strings::init($language);
 
 //
 // Set empty result
@@ -76,15 +76,15 @@ $result = [];
 //
 if (is_null($faqusername) && is_null($faqpassword)) {
 
-    $currentUser = PMF_User_CurrentUser::getFromCookie($faqConfig);
+    $currentUser = CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
-    if (!$currentUser instanceof PMF_User_CurrentUser) {
-        $currentUser = PMF_User_CurrentUser::getFromSession($faqConfig);
+    if (!$currentUser instanceof CurrentUser) {
+        $currentUser = CurrentUser::getFromSession($faqConfig);
     }
-    if ($currentUser instanceof PMF_User_CurrentUser) {
+    if ($currentUser instanceof CurrentUser) {
         $auth = true;
     } else {
-        $currentUser = new PMF_User_CurrentUser($faqConfig);
+        $currentUser = new phpMyFAQ\CurrentUser($faqConfig);
     }
 }
 
@@ -102,7 +102,7 @@ switch ($action) {
         break;
 
     case 'getCount':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $result = ['faqCount' => $faq->getNumberOfRecords($language)];
         break;
 
@@ -111,51 +111,51 @@ switch ($action) {
         break;
 
     case 'search':
-        $faq = new PMF_Faq($faqConfig);
-        $user = new PMF_User($faqConfig);
-        $search = new PMF_Search($faqConfig);
-        $search->setCategory(new PMF_Category($faqConfig));
+        $faq = new phpMyFAQ\Faq($faqConfig);
+        $user = new phpMyFAQ\User($faqConfig);
+        $search = new phpMyFAQ\Search($faqConfig);
+        $search->setCategory(new phpMyFAQ\Category($faqConfig));
 
-        $faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+        $faqSearchResult = new phpMyFAQ\Search_Resultset($user, $faq, $faqConfig);
 
-        $searchString = PMF_Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $searchString = phpMyFAQ\Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
         $url = $faqConfig->getDefaultUrl().'index.php?action=faq&cat=%d&id=%d&artlang=%s';
 
         $faqSearchResult->reviewResultset($searchResults);
         foreach ($faqSearchResult->getResultset() as $data) {
             $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-            $data->answer = PMF_Utils::makeShorterText($data->answer, 12);
+            $data->answer = Utils::makeShorterText($data->answer, 12);
             $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
             $result[] = $data;
         }
         break;
 
     case 'getCategories':
-        $category = new PMF_Category($faqConfig, $currentGroups, true);
+        $category = new phpMyFAQ\Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $result = array_values($category->getAllCategories());
         break;
 
     case 'getFaqs':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
 
     case 'getFAQsByTag':
-        $tags = new PMF_Tags($faqConfig);
+        $tags = new phpMyFAQ\Tags($faqConfig);
         $recordIds = $tags->getRecordsByTagId($tagId);
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = $faq->getRecordsByIds($recordIds);
         break;
 
     case 'getFaq':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getRecord($recordId);
@@ -164,13 +164,13 @@ switch ($action) {
         break;
 
     case 'getComments':
-        $comment = new PMF_Comment($faqConfig);
+        $comment = new phpMyFAQ\Comment($faqConfig);
 
         $result = $comment->getCommentsData($recordId, 'faq');
         break;
 
     case 'getAllFaqs':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
@@ -179,7 +179,7 @@ switch ($action) {
         break;
 
     case 'getFaqAsPdf':
-        $service = new PMF_Services($faqConfig);
+        $service = new phpMyFAQ\Services($faqConfig);
         $service->setFaqId($recordId);
         $service->setLanguage($language);
         $service->setCategoryId($categoryId);
@@ -199,36 +199,36 @@ switch ($action) {
         break;
 
     case 'getPopular':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
         break;
 
     case 'getLatest':
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
         break;
 
     case 'getNews':
-        $news = new PMF_News($faqConfig);
+        $news = new phpMyFAQ\News($faqConfig);
         $result = $news->getLatestData(false, true, true);
         break;
 
     case 'getPopularSearches':
-        $search = new PMF_Search($faqConfig);
+        $search = new phpMyFAQ\Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
         break;
 
     case 'getPopularTags':
-        $tags = new PMF_Tags($faqConfig);
+        $tags = new phpMyFAQ\Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
         break;
 
     case 'login':
-        $currentUser = new PMF_User_CurrentUser($faqConfig);
+        $currentUser = new phpMyFAQ\CurrentUser($faqConfig);
         if ($currentUser->login($faqusername, $faqpassword)) {
             if ($currentUser->getStatus() != 'blocked') {
                 $auth = true;

@@ -3,7 +3,7 @@
 /**
  * The send2friend page.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,7 +12,7 @@
  * @category  phpMyFAQ
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($faqConfig);
+$captcha = new phpMyFAQ\Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -37,13 +37,13 @@ if (!is_null($showCaptcha)) {
 
 try {
     $faqsession->userTracking('send2friend', 0);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
-$cat = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
+$cat = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
 
 $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqConfig->getDefaultUrl(),
@@ -51,7 +51,7 @@ $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artl
     (int) $id,
     urlencode($artlang));
 
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
 
 $tpl->parse(
     'writeContent',
@@ -61,8 +61,8 @@ $tpl->parse(
         'msgS2FReferrer' => 'link',
         'msgS2FName' => $PMF_LANG['msgS2FName'],
         'msgS2FEMail' => $PMF_LANG['msgS2FEMail'],
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgS2FFriends' => $PMF_LANG['msgS2FFriends'],
         'msgS2FEMails' => $PMF_LANG['msgS2FEMails'],
         'msgS2FText' => $PMF_LANG['msgS2FText'],

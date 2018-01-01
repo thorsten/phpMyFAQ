@@ -1,22 +1,25 @@
 <?php
 /**
- * Frontend for Backup and Restore.
+ * Frontend for Tags.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -41,10 +44,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
-    $tags = new PMF_Tags($faqConfig);
+    $tags = new Tags($faqConfig);
 
     if ('deletetag' == $action) {
-        $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+        $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         if ($tags->deleteTag($id)) {
             echo '<p class="alert alert-success"><a href="#" class="close" data-dismiss="alert">×</a>';
             echo $PMF_LANG['ad_tag_delete_success'].'</p>';
@@ -63,7 +66,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     foreach ($tagData as $key => $tag) {
         echo '<tr>';
-        echo '<td><span data-tag-id="'.$key.'">'.PMF_String::htmlspecialchars($tag).'</span></td>';
+        echo '<td><span data-tag-id="'.$key.'">'.Strings::htmlspecialchars($tag).'</span></td>';
         printf(
             '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
             $key,

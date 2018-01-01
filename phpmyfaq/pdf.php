@@ -3,7 +3,7 @@
 /**
  * PDF export.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,7 +16,7 @@
  * @author    Olivier Plathey <olivier@fpdf.org>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
@@ -30,20 +30,20 @@ define('IS_VALID_PHPMYFAQ', null);
 require 'src/Bootstrap.php';
 
 // get language (default: english)
-$Language = new PMF_Language($faqConfig);
+$Language = new phpMyFAQ\Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
 // Found an article language?
-$lang = PMF_Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
-if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang)) {
-    $lang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-    if (is_null($lang) && !PMF_Language::isASupportedLanguage($lang)) {
+$lang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
+    $lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
         $lang = $LANGCODE;
     }
 }
 
-if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
+if (isset($lang) && Language::isASupportedLanguage($lang)) {
     require_once 'lang/language_'.$lang.'.php';
 } else {
     $lang = 'en';
@@ -52,21 +52,21 @@ if (isset($lang) && PMF_Language::isASupportedLanguage($lang)) {
 //
 // Initializing static string wrapper
 //
-PMF_String::init($LANGCODE);
+Strings::init($LANGCODE);
 
 // authenticate with session information
-$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof PMF_User_CurrentUser) {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof CurrentUser) {
+    $user = CurrentUser::getFromSession($faqConfig);
 }
-if ($user instanceof PMF_User_CurrentUser) {
+if ($user instanceof CurrentUser) {
     $auth = true;
 } else {
     $user = null;
 }
 
 // Get current user and group id - default: -1
-if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
+if (!is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
     if ($user->perm instanceof PMF_Perm_Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
@@ -81,24 +81,24 @@ if (!is_null($user) && $user instanceof PMF_User_CurrentUser) {
     $current_groups = array(-1);
 }
 
-$currentCategory = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$getAll = PMF_Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
+$currentCategory = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$getAll = phpMyFAQ\Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
 
-$faq = new PMF_Faq($faqConfig);
+$faq = new phpMyFAQ\Faq($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
-$category = new PMF_Category($faqConfig, $current_groups, true);
+$category = new phpMyFAQ\Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
 
-$pdf = new PMF_Export_Pdf($faq, $category, $faqConfig);
-$http = new PMF_Helper_Http();
+$pdf = new phpMyFAQ\Export_Pdf($faq, $category, $faqConfig);
+$http = new phpMyFAQ\Helper_Http();
 
 if (true === $getAll) {
     $category->buildTree();
 }
-$tags = new PMF_Tags($faqConfig);
+$tags = new phpMyFAQ\Tags($faqConfig);
 
 session_cache_limiter('private');
 

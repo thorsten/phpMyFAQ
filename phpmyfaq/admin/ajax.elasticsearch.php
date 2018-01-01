@@ -6,7 +6,7 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
 /**
  * Elasticsearch configuration backend
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,7 +14,7 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2017 phpMyFAQ Team
+ * @copyright 2015-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2015-12-26
@@ -29,8 +29,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$esInstance = new PMF_Instance_Elasticsearch($faqConfig);
+$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$esInstance = new phpMyFAQ\Instance_Elasticsearch($faqConfig);
 $result = [];
 
 switch ($ajaxAction) {
@@ -60,7 +60,7 @@ switch ($ajaxAction) {
 
     case 'import':
 
-        $faq = new PMF_Faq($faqConfig);
+        $faq = new phpMyFAQ\Faq($faqConfig);
         $faq->getAllRecords();
         $result = $esInstance->bulkIndex($faq->faqRecords);
 

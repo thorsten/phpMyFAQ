@@ -2,21 +2,24 @@
 /**
  * Delete open questions.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -38,13 +41,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $date = new PMF_Date($faqConfig);
-    $questionId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $date = new Date($faqConfig);
+    $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    $toggle = PMF_Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
+    $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
     if ($toggle == 'toggle') {
         $is_visible = $faq->getVisibilityOfQuestion($questionId);
         if (!is_null($is_visible)) {
@@ -82,7 +85,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
                             </label>
                         </td>
                         <td>
-                            <?php echo $date->format(PMF_Date::createIsoDate($question['created'])) ?>
+                            <?php echo $date->format(Date::createIsoDate($question['created'])) ?>
                             <br>
                             <a href="mailto:<?php echo $question['email'] ?>">
                                 <?php echo $question['username'] ?>

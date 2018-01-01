@@ -2,7 +2,7 @@
 /**
  * Abstract class for manage different databases.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,7 +25,7 @@
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @copyright 2009-2017 phpMyFAQ Team
+ * @copyright 2009-2018 phpMyFAQ Team
  * @since     2009-05-16
  */
 abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCase
@@ -33,7 +33,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
     /**
      * Contain the db connector used in phpMyFAQ.
      *
-     * @var PMF_Db
+     * @var phpMyFAQ\Db
      */
     public $db = null;
     
@@ -63,7 +63,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
         $this->data = $this->getDbData();
 
         // phpMyFAQ connection
-        $db = PMF_Db::factory($this->data["type"]);
+        $db = phpMyFAQ\Db::factory($this->data["type"]);
         $db->connect($this->data["server"], $this->data["user"], $this->data["password"], $this->data["db"]);
         $this->db = $db;
 

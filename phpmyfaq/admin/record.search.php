@@ -3,7 +3,7 @@
 /**
  * Shows the admin search frontend for FAQs.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,11 +11,17 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2017 phpMyFAQ Team
+ * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
  * @since     2011-09-29
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Linkverifier;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -38,21 +44,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
-    $searchcat = PMF_Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchterm = PMF_Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $searchcat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchterm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
-    $category = new PMF_Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
 
-    // Set the Category for the helper class
-    $categoryHelper = new PMF_Helper_Category();
+    // Set the CategoryHelper for the helper class
+    $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
     $category->buildTree();
 
-    $linkVerifier = new PMF_Linkverifier($faqConfig, $user->getLogin());
+    $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
     ?>
 
                 <form action="?action=view" method="post"  accept-charset="utf-8">

@@ -4,23 +4,26 @@
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Uwe Pries <uwe.pries@digartis.de>
- * @copyright 2006-2017 phpMyFAQ Team
+ * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-05-08
  */
+
+use phpMyFAQ\Language;
+use phpMyFAQ\Strings;
+use phpMyFAQ\User\CurrentUser;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
@@ -37,19 +40,19 @@ require PMF_ROOT_DIR.'/lang/language_en.php';
 //
 // Get language (default: english)
 //
-$language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-if (!is_null($language) && PMF_Language::isASupportedLanguage($language)) {
+$language = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+if (!is_null($language) && Language::isASupportedLanguage($language)) {
     require PMF_ROOT_DIR.'/lang/language_'.$language.'.php';
 }
 
 //
 // Initializing static string wrapper
 //
-PMF_String::init($language);
+Strings::init($language);
 
-$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
-if (!$user instanceof PMF_User_CurrentUser) {
-    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+$user = CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof CurrentUser) {
+    $user = CurrentUser::getFromSession($faqConfig);
 }
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
@@ -64,7 +67,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2017 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php if (isset($user) && ($refreshTime > 0)) {
     ?>

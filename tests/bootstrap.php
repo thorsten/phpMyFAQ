@@ -2,7 +2,7 @@
 /**
  * Bootstrap phpMyFAQ PHPUnit testing environment
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,6 +18,7 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Installer;
 
 date_default_timezone_set('Europe/Berlin');
 ini_set('display_errors', 1);
@@ -41,18 +42,18 @@ require PMF_CONFIG_DIR.'/constants.php';
 //
 // The include directory
 //
-define('PMF_INCLUDE_DIR', dirname(__DIR__) . '/phpmyfaq/src');
+define('PMF_SRC_DIR', dirname(__DIR__) . '/phpmyfaq/src');
 
 //
 // The directory where the translations reside
 //
-define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
+define('Language_DIR', dirname(__DIR__) . '/phpmyfaq/lang');
 
 //
 // Setting up PSR-0 autoloader
 //
 $loader = new ClassLoader();
-$loader->add('PMF_', PMF_INCLUDE_DIR);
+$loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->add('PMFTest_', PMF_TEST_DIR.'/PMFTest');
 $loader->register();
 
@@ -73,7 +74,7 @@ $setup = [
     'rootDir' => PMF_TEST_DIR
 ];
 
-$installer = new PMF_Installer();
+$installer = new Installer();
 $installer->startInstall($setup);
 
 require PMF_TEST_DIR.'/config/database.php';

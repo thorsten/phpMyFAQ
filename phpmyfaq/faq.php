@@ -3,7 +3,7 @@
 /**
  * Shows the page with the FAQ record and - when available - the user comments.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -13,12 +13,31 @@
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
- * @copyright 2002-2017 phpMyFAQ Team
+ * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      http://www.phpmyfaq.de
  * @since     2002-08-27
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Link;
+use phpMyFAQ\Rating;
+use phpMyFAQ\Relation;
+use phpMyFAQ\Search\Resultset as SearchResultSet;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+use phpMyFAQ\Utils;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,20 +47,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new PMF_Captcha($faqConfig);
-$oGlossary = new PMF_Glossary($faqConfig);
-$faqTagging = new PMF_Tags($faqConfig);
-$faqRelation = new PMF_Relation($faqConfig);
-$faqRating = new PMF_Rating($faqConfig);
-$faqComment = new PMF_Comment($faqConfig);
+$captcha = new Captcha($faqConfig);
+$oGlossary = new Glossary($faqConfig);
+$faqTagging = new Tags($faqConfig);
+$faqRelation = new Relation($faqConfig);
+$faqRating = new Rating($faqConfig);
+$faqComment = new Comment($faqConfig);
 $markDown = new ParsedownExtra();
-$faqHelper = new PMF_Helper_Faq($faqConfig);
+$faqHelper = new HelperFaq($faqConfig);
 
 if (is_null($user)) {
-    $user = new PMF_User_CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
 }
 
-$faqSearchResult = new PMF_Search_Resultset($user, $faq, $faqConfig);
+$faqSearchResult = new SearchResultset($user, $faq, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -51,8 +70,8 @@ if (!is_null($showCaptcha)) {
 
 $currentCategory = $cat;
 
-$recordId = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$solutionId = PMF_Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
+$recordId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 
 // Get all data from the FAQ record
 if (0 == $solutionId) {
@@ -64,11 +83,11 @@ $recordId = $faq->faqRecord['id'];
 
 try {
     $faqsession->userTracking('article_view', $recordId);
-} catch (PMF_Exception $e) {
+} catch (Exception $e) {
     // @todo handle the exception
 }
 
-$faqVisits = new PMF_Visits($faqConfig);
+$faqVisits = new phpMyFAQ\Visits($faqConfig);
 $faqVisits->logViews($recordId);
 
 // Add Glossary entries for answers only
@@ -83,28 +102,28 @@ $answer = $oGlossary->insertItemsIntoContent($answer);
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
-$highlight = PMF_Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
-if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && PMF_String::strlen($highlight) > 3) {
+$highlight = phpMyFAQ\Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen($highlight) > 3) {
     $highlight = str_replace("'", '´', $highlight);
     $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
 
     foreach ($searchItems as $item) {
-        if (PMF_String::strlen($item) > 2) {
-            $question = PMF_Utils::setHighlightedString($question, $item);
-            $answer = PMF_Utils::setHighlightedString($answer, $item);
+        if (Strings::strlen($item) > 2) {
+            $question = Utils::setHighlightedString($question, $item);
+            $answer = Utils::setHighlightedString($answer, $item);
         }
     }
 }
 
-$linkVerifier = new PMF_Linkverifier($faqConfig);
+$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig);
 $linkArray = $linkVerifier->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
         $xpos = strpos($_url, 'index.php?action=faq');
         if (!($xpos === false)) {
-            // Get the Faq link title
+            // Get the FaqHelper link title
             $matches = array();
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id = $matches[1];
@@ -113,7 +132,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new PMF_Link(PMF_Link::getSystemRelativeUri().$_link, $faqConfig);
+            $oLink = new phpMyFAQ\Link(Link::getSystemRelativeUri().$_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -123,7 +142,7 @@ if (isset($linkArray['href'])) {
 
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
-    $attList = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
+    $attList = Factory::fetchByRecordId($faqConfig, $recordId);
     $outstr = '';
 
     foreach ($attList as $att) {
@@ -132,7 +151,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
             $att->getFilename());
     }
     if (count($attList) > 0) {
-        $answer .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.PMF_String::substr($outstr, 0, -2).'</p>';
+        $answer .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.Strings::substr($outstr, 0, -2).'</p>';
     }
 }
 
@@ -158,7 +177,7 @@ $faqSearchResult->reviewResultset(
     )
 );
 
-$searchHelper = new PMF_Helper_Search($faqConfig);
+$searchHelper = new SearchHelper($faqConfig);
 $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 
 // Show link to edit the faq?
@@ -166,7 +185,7 @@ $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
         '<i aria-hidden="true" class="fa fa-edit"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
-        PMF_Link::getSystemRelativeUri('index.php'),
+        Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,
         $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
@@ -192,7 +211,7 @@ $translationUrl = sprintf(
     str_replace(
         '%',
         '%%',
-        PMF_Link::getSystemRelativeUri('index.php')
+        Link::getSystemRelativeUri('index.php')
     ).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,
@@ -265,8 +284,8 @@ if ('' !== $relatedFaqs) {
     );
 }
 
-$date = new PMF_Date($faqConfig);
-$captchaHelper = new PMF_Helper_Captcha($faqConfig);
+$date = new Date($faqConfig);
+$captchaHelper = new CaptchaHelper($faqConfig);
 
 $numComments = $faqComment->getNumberOfComments();
 
@@ -276,7 +295,7 @@ $tpl->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'writeRubrik' => $categoryName,
         'solution_id' => $faq->faqRecord['solution_id'],
-        'solution_id_link' => PMF_Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
+        'solution_id_link' => Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
         'writeThema' => $question,
         'writeContent' => $answer,
         'writeDateMsg' => $date->format($faq->faqRecord['date']),
@@ -288,13 +307,13 @@ $tpl->parse(
         ),
         'editThisEntry' => $editThisEntry,
         'translationUrl' => $translationUrl,
-        'languageSelection' => PMF_Language::selectLanguages($LANGCODE, false, $availableLanguages, 'translation'),
+        'languageSelection' => Language::selectLanguages($LANGCODE, false, $availableLanguages, 'translation'),
         'msgTranslateSubmit' => $PMF_LANG['msgTranslateSubmit'],
         'saveVotingPATH' => sprintf(
             str_replace(
                 '%',
                 '%%',
-                PMF_Link::getSystemRelativeUri('index.php')
+                Link::getSystemRelativeUri('index.php')
             ).'index.php?%saction=savevoting',
             $sids
         ),
@@ -315,12 +334,12 @@ $tpl->parse(
         'msgCommentHeader' => $PMF_LANG['msgCommentHeader'],
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
-        'defaultContentMail' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('email') : '',
-        'defaultContentName' => ($user instanceof PMF_User_CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
+        'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'writeComments' => $faqComment->getComments($recordId, PMF_Comment::COMMENT_TYPE_FAQ),
+        'writeComments' => $faqComment->getComments($recordId, Comment::COMMENT_TYPE_FAQ),
         'msg_about_faq' => $PMF_LANG['msg_about_faq'],
     )
 );

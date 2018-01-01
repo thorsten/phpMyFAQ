@@ -2,21 +2,26 @@
 /**
  * Header of the admin area.
  *
- * PHP Version 5.5
+ * PHP Version 5.6
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2017 phpMyFAQ Team
+ * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-26
  */
+
+use phpMyFAQ\Helper\Administration;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Template;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -26,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new PMF_Helper_Http();
+$httpHeader = new HttpHelper();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
@@ -40,7 +45,7 @@ $backupPage = false;
 $configurationPage = false;
 $edAutosave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
-$adminHelper = new PMF_Helper_Administration();
+$adminHelper = new Administration();
 $adminHelper->setUser($user);
 
 switch ($action) {
@@ -140,9 +145,6 @@ switch ($action) {
         break;
     case 'config':
     case 'stopwordsconfig':
-    case 'translist':
-    case 'transedit':
-    case 'transadd':
     case 'upgrade':
     case 'instances':
     case 'system':
@@ -152,7 +154,6 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $secLevelEntries .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('edittranslation+addtranslation+deltranslation', 'translist', 'ad_menu_translations', $action);
         if ($faqConfig->get('search.enableElasticsearch')) {
             $secLevelEntries .= $adminHelper->addMenuEntry(
                 'editconfig',
@@ -208,8 +209,8 @@ switch ($action) {
     <script src="../assets/js/autosave.js" async></script>
 <?php endif; ?>
 
-    <link rel="shortcut icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/themes/<?php echo PMF_Template::getTplSetName(); ?>/apple-touch-icon.png">
+    <link rel="shortcut icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/favicon.ico">
+    <link rel="apple-touch-icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body dir="<?php echo $PMF_LANG['dir']; ?>">
 
@@ -235,7 +236,7 @@ switch ($action) {
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
                     <?php
                     if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new PMF_Services_Gravatar($faqConfig);
+                        $avatar = new Gravatar($faqConfig);
                         echo $avatar->getImage($user->getUserData('email'), ['size' => 24]);
                     } else {
                         echo '<b class="fa fa-user"></b>';
@@ -267,7 +268,7 @@ switch ($action) {
             <li class="nav-item">
                 <form action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post"
                       class="navbar-form navbar-right" role="form" accept-charset="utf-8">
-                    <?php echo PMF_Language::selectLanguages($LANGCODE, true); ?> 
+                    <?php echo Language::selectLanguages($LANGCODE, true); ?> 
                 </form>
             </li>
         </ul>
