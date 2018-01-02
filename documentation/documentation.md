@@ -1,4 +1,4 @@
-# phpMyFAQ 2.10 Documentation
+# phpMyFAQ 3.0 Documentation
 
 1.  **[Introduction][1]**
     1.  [License][2]
@@ -25,8 +25,9 @@
 3.  **[Upgrading][22]**
     1.  [Upgrading from phpMyFAQ 2.8.x][23]
     2.  [Upgrading from phpMyFAQ 2.9.x][24]
-    3.  [Upgrading phpMyFAQ 2.10.x versions][26]
-    4.  [Modifying templates for phpMyFAQ 2.10.x][27]
+    3.  [Upgrading phpMyFAQ 2.10.0-alpha][26]
+    3.  [Upgrading phpMyFAQ 3.0.x versions][26]
+    4.  [Modifying templates for phpMyFAQ 3.0.x][27]
 4.  **[Frontend][28]**
     1.  [Change languages][29]
     2.  [RSS Feeds][30]
@@ -69,8 +70,8 @@
 
 **1. <a id="1"></a>Introduction**
 
-phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports  various databases to store all data, PHP 
-5.6.0+ or HHVM 3.4.2+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management
+phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports  various databases to store all data, 
+PHP 5.6.0+ or PHP 7.0+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user 
 support with user and group based permissions on categories and records, a wiki-like revision feature, a news system, 
 user-tracking, 40+ supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, 
@@ -115,8 +116,8 @@ into 140 characters. There is no free support by phone or email, please refrain 
 
 The phpMyFAQ team offers the following paid services:
 
-*   Customizing
-*   Support
+* Customizing
+* Support
 
 If you're interested, just take a look at our [support page](http://www.phpmyfaq.de/support.php).
 
@@ -192,7 +193,7 @@ You can install phpMyFAQ via one of the provided packages as .zip or .tar.gz or 
 download it and unzip the archive on your hard disk. If you want to use Git, please run the following commands on your 
 shell:
 
-	$ git clone git@github.com:thorsten/phpMyFAQ.git 2.10
+	$ git clone git@github.com:thorsten/phpMyFAQ.git 3.0
 	$ cd phpMyFAQ
 	$ curl -s https://getcomposer.org/installer | php
 	$ php composer.phar install
@@ -511,11 +512,12 @@ built.
 
 **3. <a id="3"></a>Upgrading**
 
-Upgrading to phpMyFAQ 2.10.x is possible from the following versions:
+Upgrading to phpMyFAQ 3.x is possible from the following versions:
 
-*   phpMyFAQ 2.8.x
-*   phpMyFAQ 2.9.x
-*   phpMyFAQ 2.10.x
+* phpMyFAQ 2.8.x
+* phpMyFAQ 2.9.x
+* phpMyFAQ 2.10.0-alpha
+* phpMyFAQ 3.0.x
 
 If you're running an older version of phpMyFAQ we recommend a new and fresh install. If you need support for updating 
 an old FAQ from the 1.x, 2.0.x, 2.5.x, 2.6.x or 2.7.x series, please send us an [e-mail][68].
@@ -580,7 +582,7 @@ If you use rewrite rules with an Apache Webserver, please rename the _.htaccess 
 
 * * *
 
-**3.3. <a id="3.4"></a>Upgrading phpMyFAQ 2.10.x**
+**3.3. <a id="3.4"></a>Upgrading phpMyFAQ 2.10.0-alpha**
 
 Updating an existing phpMyFAQ 2.10.x installation is fairly simple. First you have to delete all files **except**:
 
@@ -604,9 +606,33 @@ If you use rewrite rules with an Apache Webserver, please rename the _.htaccess 
 
 * * *
 
-**3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 2.10.x**
+**3.4. <a id="3.4"></a>Upgrading phpMyFAQ 3.0.x**
 
-Your current templates are **not** compatible with phpMyFAQ 2.10 because we changed the complete CSS framework to 
+Updating an existing phpMyFAQ 3.0.x installation is fairly simple. First you have to delete all files **except**:
+
+*   all files in the directory **config/**
+*   all files in the directory **assets/themes/**
+*   the directory **attachments/**
+*   the directory **data/**
+*   the directory **images/**
+
+Download the latest phpMyFAQ package and copy the contents into your existing FAQ directory, the open the following 
+URL in your browser:
+
+`http://www.example.com/faq/setup/update.php`
+
+Choose your installed phpMyFAQ version and click the button of the update script, your version will automatically be 
+updated.
+
+If you use rewrite rules with an Apache Webserver, please rename the _.htaccess file to .htaccess again.
+
+[back to top][64]
+
+* * *
+
+**3.5. <a id="3.5"></a>Modifying templates for phpMyFAQ 3.0.x**
+
+Your current templates are **not** compatible with phpMyFAQ 3.0 because we changed the complete CSS framework to 
 Bootstrap v4.
 
 We recommend you'll take a look at the main [Bootstrap documentation](http://getbootstrap.com/). Please don't forget that 
@@ -627,7 +653,7 @@ have to convert your templates to UTF-8 encoding. Please use UNIX file endings \
 
 **4. <a id="4"></a>Frontend**
 
-The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on [Bootstrap](http://getbootstrap.com/). 
+The public phpMyFAQ frontend has a simple, HTML5/CCS3 based default layout based on [Bootstrap v4](http://getbootstrap.com/). 
 The header has the main links for the all categories, instant response, add FAQs, add questions, open questions, sitemap 
 and contact. On the left side you only see the main categories. You can also change the current language at the bottom 
 of the FAQ, use the global search in the center of the FAQ or use the login box in the upper right if you have a valid 
@@ -1086,10 +1112,6 @@ To backup the whole data located on your web server you can run our simple backu
     We need stop words for the smart answering feature. If an user is adding a new question to your FAQ the words will 
     be checked against all FAQs in your database but without the stop words. Stop words are words with a very low 
     relevance like the English word "the".
-*   **Interface translation**
-    With this interface it is possible to edit all available translations of phpMyFAQ. You only can edit translations 
-    when the language file is writable. The interface checks that for you. If you like you can also send your improved 
-    translation to the phpMyFAQ Team. You cannot change the English translation because this is the main language file.
 *   **Elasticsearch configuration**
     Here you can create and drop the Elasticsearch index and you can run a full import of all data from your database 
     into the Elasticsearch index. You can also see some Elasticsearch relevant usage data.
@@ -1226,7 +1248,7 @@ You can call the resources with the following URIs:
 
     The result will be a string value like this:
 
-    <pre><code class="json">{"version":"2.10.0"}</code></pre>
+    <pre><code class="json">{"version":"3.0.0"}</code></pre>
     
 *   **getApiVersion()**
 
