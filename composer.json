@@ -54,7 +54,10 @@
     },
     "require-dev": {
         "phpunit/phpunit": "5.*",
-        "phpunit/dbunit": "1.3.*"
+        "phpunit/dbunit": "1.3.*",
+        "doctrine/instantiator": "1.0.*",
+        "symfony/yaml": "3.*"
+
     },
     "config": {
         "bin-dir": "bin",
