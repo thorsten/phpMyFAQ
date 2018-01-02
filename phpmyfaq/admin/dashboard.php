@@ -18,6 +18,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2013-02-05
  */
+
+use phpMyFAQ\Db;
+use phpMyFAQ\Filter;
+use phpMyFAQ\System;
+use phpMyFAQ\Session;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,9 +33,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqTableInfo = $faqConfig->getDb()->getTableStatus(phpMyFAQ\Db::getTablePrefix());
-$faqSystem = new phpMyFAQ\System();
-$faqSession = new phpMyFAQ\Session($faqConfig);
+$faqTableInfo = $faqConfig->getDb()->getTableStatus(Db::getTablePrefix());
+$faqSystem = new System();
+$faqSession = new Session($faqConfig);
 ?>
     <header class="row">
         <div class="col-lg-12">
@@ -37,9 +43,9 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                 <div class="float-right">
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                        <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
+                        <span class="label label-important"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></span>
                         <?php else: ?>
-                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                        <span class="label label-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></span>
                         <?php endif; ?>
                     </a>
                 </div>
@@ -57,7 +63,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                 </div>
                 <div class="panel-body">
                 <?php
-                $session = new phpMyFAQ\Session($faqConfig);
+                $session = new Session($faqConfig);
                 $visits = $session->getLast30DaysVisits();
                 ?>
                 <script type="text/javascript" src="assets/js/plugins/jquery.sparkline.min.js"></script>
@@ -95,31 +101,31 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                         <a href="?action=view" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqdata']; ?></em>
+                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqcomments']; ?></em>
+                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="?action=question" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqquestions']; ?></em>
+                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="?action=news" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faqnews']; ?></em>
+                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
                             <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[phpMyFAQ\Db::getTablePrefix().'faquser'] - 1; ?></em>
+                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
@@ -141,11 +147,11 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?php print $PMF_LANG['ad_online_info']; ?>
+                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?php echo $PMF_LANG['ad_online_info']; ?>
                 </div>
                 <div class="panel-body">
                     <?php
-                    $version = phpMyFAQ\Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
+                    $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
                     if (!is_null($version) && $version == 'version') {
                         $json = file_get_contents('http://api.phpmyfaq.de/versions');
                         $result = json_decode($json);
@@ -160,7 +166,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                             );
                             // Installed phpMyFAQ version is outdated
                             if (-1 == version_compare($installed, $available)) {
-                                print '<br />'.$PMF_LANG['ad_you_should_update'];
+                                echo '<br />'.$PMF_LANG['ad_you_should_update'];
                             }
                         }
                     } else {
@@ -168,12 +174,11 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?php print $PMF_LANG['ad_xmlrpc_button'];
+                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?php echo $PMF_LANG['ad_xmlrpc_button'];
                         ?>
                             </button>
                         </form>
                     <?php
-
                     }
                     ?>
                 </div>
@@ -183,11 +188,11 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?php print $PMF_LANG['ad_online_verification'] ?>
+                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?php echo $PMF_LANG['ad_online_verification'] ?>
                 </div>
                 <div class="panel-body">
                     <?php
-                    $getJson = phpMyFAQ\Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
+                    $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
                     if (!is_null($getJson) && 'verify' === $getJson) {
                         set_error_handler(
                             function ($severity, $message, $file, $line) {
@@ -195,7 +200,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                             }
                         );
 
-                        $faqSystem = new phpMyFAQ\System();
+                        $faqSystem = new System();
                         $localHashes = $faqSystem->createHashes();
                         $versionCheckError = true;
                         try {
@@ -223,7 +228,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
 
                             if (1 < count($diff)) {
                                 printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_verification_notokay']);
-                                print '<ul>';
+                                echo '<ul>';
                                 foreach ($diff as $file => $hash) {
                                     if ('created' === $file) {
                                         continue;
@@ -234,7 +239,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                                         $file
                                     );
                                 }
-                                print '</ul>';
+                                echo '</ul>';
                             } else {
                                 printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
                             }
@@ -244,7 +249,7 @@ $faqSession = new phpMyFAQ\Session($faqConfig);
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?php print $PMF_LANG['ad_verification_button'] ?>
+                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?php echo $PMF_LANG['ad_verification_button'] ?>
                             </button>
                         </form>
                     <?php

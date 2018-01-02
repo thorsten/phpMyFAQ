@@ -9,14 +9,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2004-04-29
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,9 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
-    $id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-    $parent_id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
-    $category = new phpMyFAQ\Category($faqConfig, [], false);
+    $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $parent_id = Filter::filterInput(INPUT_GET, 'parent_id', FILTER_VALIDATE_INT);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $categories = $category->getAllCategories();
@@ -46,43 +48,37 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php print $header ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php echo $header ?></h2>
             </div>
         </header>
 
         <div class="row">
             <div class="col-lg-12">
                 <form  action="?action=changecategory" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="cat" value="<?php print $id;
-    ?>" />
-                    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession();
-    ?>" />
+                    <input type="hidden" name="cat" value="<?php echo $id ?>" />
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>" />
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_change'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_change'] ?></label>
                         <div class="col-lg-4">
                            <select name="change" size="1" class="form-control">
-<?php
+                    <?php
                     foreach ($category->categories as $cat) {
                         if ($id != $cat['id']) {
                             printf('<option value="%s">%s</option>', $cat['id'], $cat['name']);
                         }
-                    }
-    ?>
+                    } ?>
                             </select>
                             <?php printf(
                                 '<p class="help-block"><i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> %s</p>',
                                 $PMF_LANG['ad_categ_remark_move']
-                            );
-    ?>
+                            ); ?>
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php print $PMF_LANG['ad_categ_updatecateg'];
-    ?>
+                                <?php echo $PMF_LANG['ad_categ_updatecateg'] ?>
                             </button>
                         </div>
                     </div>
@@ -92,5 +88,5 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 <?php
 
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

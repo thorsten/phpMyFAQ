@@ -15,6 +15,10 @@
  * @link      http://www.phpmyfaq.de
  * @since     2003-03-10
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,9 +31,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
-    $categoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 
-    $category = new phpMyFAQ\Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
 

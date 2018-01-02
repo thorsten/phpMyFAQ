@@ -232,7 +232,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryImage = new Category_Image($faqConfig);
+        $categoryImage = new Image($faqConfig);
         $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
         if ($category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&
@@ -290,16 +290,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     if (isset($category)) {
         unset($category);
     }
-    // old code
-    $category = new Category($faqConfig, [], false);
-    //
 
-    // new code
-    if ($faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-        
+    if ($faqConfig->config['main.enableCategoryRestrictions']){
         $category = new Category($faqConfig, $currentAdminGroups, true);
     }
-    //
     
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

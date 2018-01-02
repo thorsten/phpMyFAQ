@@ -10,14 +10,17 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-12-20
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -41,10 +44,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
-    $category = new phpMyFAQ\Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
-    $parentId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
+    $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
                 <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
                     <input type="hidden" id="lang" name="lang" value="<?php echo $LANGCODE ?>">

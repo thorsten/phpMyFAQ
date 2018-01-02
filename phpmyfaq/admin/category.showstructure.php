@@ -9,15 +9,18 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-09-18
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -33,28 +36,28 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
-    $category = new phpMyFAQ\Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $currentLink = $_SERVER['SCRIPT_NAME'];
     $currentLanguage = $languageCodes[strtoupper($LANGCODE)];
     $all_languages = [];
     $all_lang = [];
-    $showcat = phpMyFAQ\Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
+    $showcat = Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
 
     // translate an existing category
     if (!is_null($showcat) && $showcat == 'yes') {
-        $parent_id = phpMyFAQ\Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $category_data = array(
-            'id' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
-            'lang' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
-            'parent_id' => $parent_id,
-            'name' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
-            'description' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => phpMyFAQ\Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT), );
+        $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
+        $categoryData = array(
+            'id' => Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT),
+            'lang' => Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING),
+            'parent_id' => $parentId,
+            'name' => Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
+            'description' => Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
+            'user_id' => Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT), );
 
         // translate.category only returns non-existent languages to translate too
-        if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
+        if ($category->addCategory($categoryData, $parentId, $categoryData['id'])) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_translated']);
         } else {
             printf('<p class="alert alert-danger">%s</p>', $faqConfig->getDb()->error());

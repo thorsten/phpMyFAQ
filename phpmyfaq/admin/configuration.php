@@ -16,6 +16,10 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-12-26
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,17 +31,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     // actions defined by url: user_action=
-    $userAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
-    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $userAction = Filter::filterInput(INPUT_GET, 'config_action', FILTER_SANITIZE_STRING, 'listConfig');
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
     $currentToken = $user->getCsrfTokenFromSession();
 
     // Save the configuration
     if ('saveConfig' === $userAction && $currentToken === $csrfToken) {
-        $checks = array(
+        $checks = [
             'filter' => FILTER_UNSAFE_RAW,
             'flags' => FILTER_REQUIRE_ARRAY,
-        );
-        $editData = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('edit' => $checks));
+        ];
+        $editData = Filter::filterInputArray(INPUT_POST, ['edit' => $checks]);
         $userAction = 'listConfig';
         $oldConfigValues = $faqConfig->config;
 

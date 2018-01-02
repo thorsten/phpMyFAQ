@@ -9,15 +9,17 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2006-09-10
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,17 +30,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
-    $category = new phpMyFAQ\Category($faqConfig, [], false);
+    $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->getMissingCategories();
-    $id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+    $id = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
     $header = sprintf('%s %s: <em>%s</em>',
         $PMF_LANG['ad_categ_trans_1'],
         $PMF_LANG['ad_categ_trans_2'],
         $category->categoryName[$id]['name']);
 
-    $selectedLanguage = phpMyFAQ\Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
+    $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
     if ($selectedLanguage !== $LANGCODE) {
         $action = 'showcategory';
         $showcat = 'yes';
@@ -47,84 +49,70 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $showcat = 'no';
     }
 
-    $user_permission = $category->getPermissions('user', array($id));
-    $group_permission = $category->getPermissions('group', array($id));
+    $userPermission = $category->getPermissions('user', array($id));
+    $groupPermission = $category->getPermissions('group', array($id));
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php print $header ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list"></i> <?php echo $header ?></h2>
             </div>
         </header>
     
         <div class="row">
             <div class="col-lg-12">
                 <form  action="?action=updatecategory" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="id" value="<?php print $id;
-    ?>" />
-                    <input type="hidden" name="parent_id" value="<?php print $category->categoryName[$id]['parent_id'];
-    ?>" />
-                    <input type="hidden" name="showcat" value="<?php print $showcat;
-    ?>" />
+                    <input type="hidden" name="id" value="<?php echo $id ?>">
+                    <input type="hidden" name="parent_id" value="<?php echo $category->categoryName[$id]['parent_id'] ?>">
+                    <input type="hidden" name="showcat" value="<?php echo $showcat ?>">
                     <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
-                    <input type="hidden" name="restricted_groups" value="<?php print $group_permission[0];
-    ?>" />
+                    <input type="hidden" name="restricted_groups" value="<?php echo $groupPermission[0] ?>">
                     <?php else: ?>
-                    <input type="hidden" name="restricted_groups" value="-1" />
-                    <?php endif;
-    ?>
-                    <input type="hidden" name="restricted_users" value="<?php print $user_permission[0];
-    ?>" />
-                    <input type="hidden" name="csrf" value="<?php print $user->getCsrfTokenFromSession();
-    ?>" />
+                    <input type="hidden" name="restricted_groups" value="-1">
+                    <?php endif; ?>
+                    <input type="hidden" name="restricted_users" value="<?php echo $userPermission[0] ?>">
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_titel'];
-    ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_titel'] ?>:</label>
                         <div class="col-lg-4">
                             <input type="text" name="name" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_lang'];
-    ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_lang'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="catlang" size="1" class="form-control">
-                                <?php print $category->getCategoryLanguagesToTranslate($id, $selectedLanguage);
-    ?>
+                                <?php echo $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_desc'];
-    ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_desc'] ?>:</label>
                         <div class="col-lg-4">
                             <textarea name="description" rows="3" class="form-control"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_owner'];
-    ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_owner'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="user_id" size="1" class="form-control">
-                                <?php print $user->getAllUserOptions($category->categoryName[$id]['user_id']);
-    ?>
+                                <?php echo $user->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php print $PMF_LANG['ad_categ_transalready'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_transalready'] ?></label>
                         <div class="col-lg-4">
                             <ul class="form-control-static">
                                 <?php
                                 foreach ($category->getCategoryLanguagesTranslated($id) as $language => $namedesc) {
-                                    print '<li><strong>'.$language.'</strong>: '.$namedesc.'</li>';
+                                    echo '<li><strong>'.$language.'</strong>: '.$namedesc.'</li>';
                                 }
-    ?>
+                                ?>
                             </ul>
                         </div>
                     </div>
@@ -132,8 +120,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php print $PMF_LANG['ad_categ_translatecateg'];
-    ?>
+                                <?php echo $PMF_LANG['ad_categ_translatecateg'] ?>
                             </button>
                         </div>
                     </div>
@@ -144,5 +131,5 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 <?php
 
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }
