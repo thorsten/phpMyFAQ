@@ -5,6 +5,7 @@ php:
   - 7.0
   - 7.1
   - 7.2
+  - nightly
 
 sudo: required
 dist: trusty
@@ -34,4 +35,4 @@ install:
   - npm install
   - grunt build
 
-script: ./bin/phpunit --configuration phpunit.xml
+script: phpunit --configuration phpunit.xml
