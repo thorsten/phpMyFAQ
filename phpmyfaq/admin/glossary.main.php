@@ -16,7 +16,8 @@
  * @since     2005-09-15
  */
 
-
+use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';

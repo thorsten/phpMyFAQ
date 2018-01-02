@@ -17,6 +17,10 @@
  * @since     2005-12-15
  */
 
+use phpMyFAQ\Filter;
+use phpMyFAQ\User;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -41,7 +45,7 @@ $defaultGroupAction = 'list';
 
 // what shall we do?
 // actions defined by url: group_action=
-$groupAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_STRING, $defaultGroupAction);
+$groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_STRING, $defaultGroupAction);
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm'])) {
     $groupAction = 'delete_confirm';
@@ -54,13 +58,13 @@ if (isset($_POST['cancel'])) {
 if ($groupAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $groupMembers = isset($_POST['group_members']) ? $_POST['group_members'] : [];
 
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user = new phpMyFAQ\User($faqConfig);
+        $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->removeAllUsersFromGroup($groupId)) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
@@ -79,11 +83,11 @@ if ($groupAction == 'update_members' && $user->perm->checkRight($user->getUserId
 if ($groupAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
-        $user = new phpMyFAQ\User($faqConfig);
+        $user = new User($faqConfig);
         $perm = $user->perm;
         $groupRights = isset($_POST['group_rights']) ? $_POST['group_rights'] : [];
         if (!$perm->refuseAllGroupRights($groupId)) {
@@ -103,20 +107,20 @@ if ($groupAction == 'update_rights' && $user->perm->checkRight($user->getUserId(
 if ($groupAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     $message = '';
     $groupAction = $defaultGroupAction;
-    $groupId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     if ($groupId == 0) {
         $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
         $groupData = [];
         $dataFields = array('name', 'description', 'auto_join');
         foreach ($dataFields as $field) {
-            $groupData[$field] = phpMyFAQ\Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
+            $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
         }
-        $user = new phpMyFAQ\User($faqConfig);
+        $user = new User($faqConfig);
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
             $message .= sprintf(
-            '<p class="alert alert-danger">%s<br />%s</p>',
+            '<p class="alert alert-danger">%s<br>%s</p>',
             $PMF_LANG['ad_msg_mysqlerr'],
             $db->error()
             );
@@ -132,9 +136,9 @@ if ($groupAction == 'update_data' && $user->perm->checkRight($user->getUserId(),
 // delete group confirmation
 if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delgroup')) {
     $message = '';
-    $user = new phpMyFAQ\CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
     $perm = $user->perm;
-    $groupId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
         $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         $groupAction = $defaultGroupAction;
@@ -174,10 +178,10 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
 
 if ($groupAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delgroup')) {
     $message = '';
-    $user = new phpMyFAQ\User($faqConfig);
-    $groupId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
+    $user = new User($faqConfig);
+    $groupId = Filter::filterInput(INPUT_POST, 'group_id', FILTER_VALIDATE_INT, 0);
     $csrfOkay = true;
-    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;
     }
@@ -198,14 +202,14 @@ if ($groupAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'del
 }
 
 if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'addgroup')) {
-    $user = new phpMyFAQ\User($faqConfig);
+    $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $group_name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
-    $group_description = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
-    $group_auto_join = phpMyFAQ\Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
+    $group_name = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
+    $group_description = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
+    $group_auto_join = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
     $csrfOkay = true;
-    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfOkay = false;
@@ -236,7 +240,7 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
         $groupAction = 'add';
         $message = '<p class="alert alert-danger">';
         foreach ($messages as $err) {
-            $message .= $err.'<br />';
+            $message .= $err.'<br>';
         }
         $message .= '</p>';
     }
@@ -248,7 +252,7 @@ if (!isset($message)) {
 
 // show new group form
 if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgroup')) {
-    $user = new phpMyFAQ\CurrentUser($faqConfig);
+    $user = new CurrentUser($faqConfig);
     ?>
         <header class="row">
             <div class="col-lg-12">
@@ -258,44 +262,34 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
 
         <div class="row">
             <div class="col-lg-12">
-                <div id="user_message"><?php echo $message;
-    ?></div>
+                <div id="user_message"><?php echo $message ?></div>
                 <form  name="group_create" action="?action=group&amp;group_action=addsave" method="post">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
-    ?>" />
+                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_name"><?php echo $PMF_LANG['ad_group_name'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label" for="group_name"><?php echo $PMF_LANG['ad_group_name'] ?></label>
                         <div class="col-lg-3">
                             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
-                                   value="<?php echo(isset($group_name) ? $group_name : '');
-    ?>" tabindex="1">
+                                   value="<?php echo(isset($group_name) ? $group_name : '') ?>" tabindex="1">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_description"><?php echo $PMF_LANG['ad_group_description'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label" for="group_description"><?php echo $PMF_LANG['ad_group_description'] ?></label>
                         <div class="col-lg-3">
-                            <textarea name="group_description" id="group_description" cols="<?php echo $descriptionCols;
-    ?>"
-                                      rows="<?php echo $descriptionRows;
-    ?>" tabindex="2"  class="form-control"
-                                ><?php echo(isset($group_description) ? $group_description : '');
-    ?></textarea>
+                            <textarea name="group_description" id="group_description" cols="<?php echo $descriptionCols ?>"
+                                      rows="<?php echo $descriptionRows ?>" tabindex="2"  class="form-control"
+                                ><?php echo(isset($group_description) ? $group_description : '') ?></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_auto_join"><?php echo $PMF_LANG['ad_group_autoJoin'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label" for="group_auto_join"><?php echo $PMF_LANG['ad_group_autoJoin'] ?></label>
                         <div class="col-lg-3">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                                    <?php echo((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : '');
-    ?>>
+                                    <?php echo((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : '') ?>>
                                 </label>
                             </div>
                         </div>
@@ -304,12 +298,10 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
-                                <?php echo $PMF_LANG['ad_gen_save'];
-    ?>
+                                <?php echo $PMF_LANG['ad_gen_save'] ?>
                             </button>
                             <button class="btn btn-info" type="reset" name="cancel">
-                                <?php echo $PMF_LANG['ad_gen_cancel'];
-    ?>
+                                <?php echo $PMF_LANG['ad_gen_cancel'] ?>
                             </button>
                         </div>
                     </div>

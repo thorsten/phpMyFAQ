@@ -9,14 +9,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-15
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -38,44 +40,38 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
-    $id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $glossary = new phpMyFAQ\Glossary($faqConfig);
+    $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+    $glossary = new Glossary($faqConfig);
     $glossaryItem = $glossary->getGlossaryItem($id);
     ?>
                 <form  action="?action=updateglossary" method="post" accept-charset="utf-8">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
-                    <input type="hidden" name="id" value="<?php echo $glossaryItem['id'];
-    ?>" />
+                    <input type="hidden" name="id" value="<?php echo $glossaryItem['id'] ?>">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'];
-    ?>:</label>
+                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item"
-                                   value="<?php echo $glossaryItem['item'];
-    ?>" required>
+                                   value="<?php echo $glossaryItem['item'] ?>" required>
                         </div>
                     </div>
 
             <div class="control-group">
                 <label class="form-control-label" for="definition">
-                    <?php echo $PMF_LANG['ad_glossary_definition'];
-    ?>:
+                    <?php echo $PMF_LANG['ad_glossary_definition'] ?>:
                 </label>
                 <div class="controls">
-                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required><?php echo $glossaryItem['definition'];
-    ?></textarea>
+                    <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required
+                    ><?php echo $glossaryItem['definition'] ?></textarea>
                 </div>
             </div>
 
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
-                                <?php echo $PMF_LANG['ad_glossary_save'];
-    ?>
+                                <?php echo $PMF_LANG['ad_glossary_save'] ?>
                             </button>
                             <a class="btn btn-info" href="?action=glossary">
-                                <?php echo $PMF_LANG['ad_entry_back'];
-    ?>
+                                <?php echo $PMF_LANG['ad_entry_back'] ?>
                             </a>
                         </div>
                     </div>
