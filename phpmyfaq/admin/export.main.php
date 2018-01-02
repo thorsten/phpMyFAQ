@@ -54,14 +54,12 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                     <h4><?php echo $PMF_LANG['ad_export_which_cat'] ?></h4>
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="catid">
-                            <?php echo $PMF_LANG['ad_entry_category'];
-        ?>
+                            <?php echo $PMF_LANG['ad_entry_category'] ?>
                         </label>
                         <div class="col-lg-4">
                             <select name="catid" id="catid" size="1" class="form-control">
                                 <option value="0"><?php echo $PMF_LANG['msgShowAllCategories'] ?></option>
-                                <?php echo $categoryHelper->renderOptions(0);
-        ?>
+                                <?php echo $categoryHelper->renderOptions(0) ?>
                             </select>
                         </div>
                     </div>
@@ -76,7 +74,6 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                         </div>
                     </div>
 <?php
-
     }
     ?>
                     <h4><?php echo $PMF_LANG['ad_export_type'] ?></h4>
@@ -99,8 +96,8 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                             </label>
                             <br>
                             <label>
-                                <input type="radio" name="export-type" value="xhtml" id="xhtml">
-                                <?php echo $PMF_LANG['ad_export_gen_xhtml'] ?>
+                                <input type="radio" name="export-type" value="html5" id="xhtml">
+                                HTML5
                             </label>
                         </div>
                     </div>

@@ -22,8 +22,9 @@ namespace phpMyFAQ\Export;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Export;
+use phpMyFAQ\Export\Pdf\Wrapper;
+use phpMyFAQ\Faq;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();

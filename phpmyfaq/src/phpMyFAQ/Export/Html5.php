@@ -3,7 +3,7 @@
 namespace phpMyFAQ\Export;
 
 /**
- * XHTML Export class for phpMyFAQ.
+ * HTML5 Export class for phpMyFAQ.
  *
  * PHP Version 5.6
  *
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Export_Xhtml.
+ * HTML5
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2009-10-07
  */
-class Xhtml extends Export
+class Html5 extends Export
 {
     /**
      * XMLWriter object.
@@ -86,24 +86,19 @@ class Xhtml extends Export
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
-        $comment = sprintf('XHTML output by phpMyFAQ %s | Date: %s',
+        $comment = sprintf('HTML5 output by phpMyFAQ %s | Date: %s',
           $version,
           Date::createIsoDate(date('YmdHis')));
 
-        $this->xml->startDocument('1.0', 'utf-8');
-        $this->xml->writeDtd('html',
-                             '-//W3C//DTD XHTML 1.0 Transitional//EN',
-                             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
+        $this->xml->startDTD('html');
         $this->xml->startElement('html');
-        $this->xml->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
-        $this->xml->writeAttribute('xml:lang', $language);
+
         $this->xml->writeComment($comment);
 
         $this->xml->startElement('head');
         $this->xml->writeElement('title', $this->_config->get('main.titleFAQ'));
         $this->xml->startElement('meta');
-        $this->xml->writeAttribute('http-equiv', 'Content-Type');
-        $this->xml->writeAttribute('content', 'application/xhtml+xml; charset=utf-8');
+        $this->xml->writeAttribute('charset', 'utf-8');
         $this->xml->endElement();
         $this->xml->endElement(); // </head>
 

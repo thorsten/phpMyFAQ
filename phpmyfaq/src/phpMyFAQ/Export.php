@@ -21,9 +21,9 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Exception;
+use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
-use phpMyFAQ\Export\Xhtml;
 use phpMyFAQ\Export\Xml;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -97,8 +97,8 @@ class Export
             case 'xml':
                 return new Xml($faq, $category, $config);
                 break;
-            case 'xhtml':
-                return new Xhtml($faq, $category, $config);
+            case 'html5':
+                return new Html5($faq, $category, $config);
                 break;
             default:
                 throw new Exception('Export not implemented!');

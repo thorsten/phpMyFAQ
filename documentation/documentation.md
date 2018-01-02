@@ -25,7 +25,7 @@
 3.  **[Upgrading][22]**
     1.  [Upgrading from phpMyFAQ 2.8.x][23]
     2.  [Upgrading from phpMyFAQ 2.9.x][24]
-    3.  [Upgrading phpMyFAQ 2.10.0-alpha][26]
+    3.  [Upgrading from phpMyFAQ 2.10.0-alpha][26]
     3.  [Upgrading phpMyFAQ 3.0.x versions][26]
     4.  [Modifying templates for phpMyFAQ 3.0.x][27]
 4.  **[Frontend][28]**
@@ -1072,9 +1072,10 @@ installation. You can export the report then a CSV file.
 
 You can export your contents of your whole FAQ or just some selected categories into four formats:
 
-*   a XML file
-*   a plain XHTML file
-*   a PDF file with a table of contents
+* a JSON file
+* a XML file
+* a plain HTML5 file
+* a PDF file with a table of contents
 
 [back to top][64]
 
