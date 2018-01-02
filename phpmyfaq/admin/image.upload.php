@@ -15,12 +15,16 @@
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-18
  */
+
+use phpMyFAQ\Language;
+use phpMyFAQ\User\CurrentUser;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';

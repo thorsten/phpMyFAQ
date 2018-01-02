@@ -15,12 +15,16 @@
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-18
  */
+
+use phpMyFAQ\Language;
+use phpMyFAQ\User\CurrentUser;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 define('IS_VALID_PHPMYFAQ', null);
 
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -66,7 +70,7 @@ $allowedExtensions = ['png', 'gif', 'jpg', 'jpeg'];
 if (!is_dir(PMF_ROOT_DIR.'/images')) {
     echo '<p class="alert alert-danger">'.sprintf($PMF_LANG['ad_dir_missing'], '/images').'</p>';
 } else {
-    $files = new RecursiveIteratorIterator(new RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
+    $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator(PMF_ROOT_DIR . '/images/'));
     foreach ($files as $file) {
         if ($file->isDir() || !in_array($file->getExtension(), $allowedExtensions)) {
             continue;

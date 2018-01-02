@@ -35,4 +35,4 @@ install:
   - npm install
   - grunt build
 
-script: phpunit --configuration phpunit.xml
+script: ./bin/phpunit --configuration phpunit.xml

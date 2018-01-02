@@ -23,6 +23,7 @@
 
 use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
@@ -100,17 +101,17 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Get user action
 //
-$action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 if (is_null($action)) {
-    $action = phpMyFAQ\Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
+    $action = Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 }
 
 // authenticate current user
 $auth = null;
 $error = '';
-$faqusername = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
-$faqremember = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -190,9 +191,9 @@ if (isset($user) && is_object($user)) {
 
 //
 // Get action from _GET and _POST first
-$ajax = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
+$ajax = Filter::filterInput(INPUT_GET, 'ajax', FILTER_SANITIZE_STRING);
 if (is_null($ajax)) {
-    $ajax = phpMyFAQ\Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
+    $ajax = Filter::filterInput(INPUT_POST, 'ajax', FILTER_SANITIZE_STRING);
 }
 
 // if performing AJAX operation, needs to branch before header.php

@@ -9,14 +9,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-04-16
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Instance;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,9 +38,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
-    $instanceId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
+    $instanceId = Filter::filterInput(INPUT_GET, 'instance_id', FILTER_VALIDATE_INT);
 
-    $instance = new phpMyFAQ\Instance($faqConfig);
+    $instance = new Instance($faqConfig);
     $instanceData = $instance->getInstanceById($instanceId);
 
     ?>
