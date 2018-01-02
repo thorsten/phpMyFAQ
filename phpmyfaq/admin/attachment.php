@@ -17,6 +17,14 @@
  * @link      http://www.phpmyfaq.de
  * @since     2002-09-17
  */
+
+use phpMyFAQ\Attachment\Exception;
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Language;
+use phpMyFAQ\Template;
+use phpMyFAQ\User\CurrentUser;
+
 define('PMF_ROOT_DIR', dirname(__DIR__));
 
 //
@@ -32,17 +40,17 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 /*
  * Initialize attachment factory
  */
-PMF_Attachment_Factory::init(
+Factory::init(
     $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')
 );
 
-$currentSave = phpMyFAQ\Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-$currentAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$currentToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$currentSave = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+$currentAction = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$currentToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -145,7 +153,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth &&
         !($_FILES['userfile']['size'] > $faqConfig->get('records.maxAttachmentSize')) &&
         $_FILES['userfile']['type'] !== "text/html"
     ) {
-        $att = PMF_Attachment_Factory::create();
+        $att = Factory::create();
         $att->setRecordId($recordId);
         $att->setRecordLang($recordLang);
 

@@ -16,6 +16,9 @@
  * @link      http://www.phpmyfaq.de
  * @since     2015-10-10
  */
+
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -25,12 +28,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$upload = phpMyFAQ\Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$upload = Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
 $uploadedFile = isset($_FILES['upload']) ? $_FILES['upload'] : '';
 
 $csrfOkay = true;
-$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfOkay = false;
 }

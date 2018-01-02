@@ -16,6 +16,10 @@
  * @link      http://www.phpmyfaq.de
  * @since     2010-12-20
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -25,11 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$attId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
-$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-$att = PMF_Attachment_Factory::create($attId);
+$att = Factory::create($attId);
 
 if ($att) {
     switch ($ajaxAction) {

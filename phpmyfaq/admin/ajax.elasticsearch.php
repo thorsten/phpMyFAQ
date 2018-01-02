@@ -1,8 +1,5 @@
 <?php
 
-use Elasticsearch\Common\Exceptions\BadRequest400Exception;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
-
 /**
  * Elasticsearch configuration backend
  *
@@ -20,6 +17,12 @@ use Elasticsearch\Common\Exceptions\Missing404Exception;
  * @since     2015-12-26
  */
 
+use Elasticsearch\Common\Exceptions\BadRequest400Exception;
+use Elasticsearch\Common\Exceptions\Missing404Exception;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Instance\Elasticsearch;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,8 +32,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$esInstance = new phpMyFAQ\Instance_Elasticsearch($faqConfig);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$esInstance = new Elasticsearch($faqConfig);
 $result = [];
 
 switch ($ajaxAction) {
@@ -60,7 +63,7 @@ switch ($ajaxAction) {
 
     case 'import':
 
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->getAllRecords();
         $result = $esInstance->bulkIndex($faq->faqRecords);
 

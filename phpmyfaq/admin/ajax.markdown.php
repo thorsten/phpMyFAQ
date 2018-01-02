@@ -17,6 +17,9 @@
  * @link      http://www.phpmyfaq.de
  * @since     2015-03-30
  */
+
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -26,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$answer = phpMyFAQ\Filter::filterInput(INPUT_POST, 'text', FILTER_SANITIZE_STRING);
+$answer = Filter::filterInput(INPUT_POST, 'text', FILTER_SANITIZE_STRING);
 
 $parsedown = new ParsedownExtra();
 

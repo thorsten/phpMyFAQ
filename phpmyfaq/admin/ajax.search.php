@@ -10,14 +10,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-08-24
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Search;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,19 +29,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$searchTerm = phpMyFAQ\Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$searchTerm = Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
 
-$search = new phpMyFAQ\Search($faqConfig);
+$search = new Search($faqConfig);
 
 switch ($ajaxAction) {
 
     case 'delete_searchterm':
 
         if ($search->deleteSearchTerm($searchTerm)) {
-            print true;
+            echo true;
         } else {
-            print false;
+            echo false;
         }
 
         break;

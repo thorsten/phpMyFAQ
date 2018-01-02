@@ -10,15 +10,22 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-31
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Logging;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\Resultset;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,9 +35,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfTokenPost = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-$csrfTokenGet = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajax_action = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfTokenPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 $csrfToken = (is_null($csrfTokenPost) ? $csrfTokenGet : $csrfTokenPost);
 
@@ -51,7 +58,7 @@ switch ($ajax_action) {
     case 'save_active_records':
         if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
             if (!empty($items)) {
-                $faq = new phpMyFAQ\Faq($faqConfig);
+                $faq = new Faq($faqConfig);
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
@@ -68,7 +75,7 @@ switch ($ajax_action) {
     case 'save_sticky_records':
         if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             if (!empty($items)) {
-                $faq = new phpMyFAQ\Faq($faqConfig);
+                $faq = new Faq($faqConfig);
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
@@ -84,12 +91,12 @@ switch ($ajax_action) {
     // search FAQs for suggestions
     case 'search_records':
         if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
-            $faq = new phpMyFAQ\Faq($faqConfig);
-            $faqSearch = new phpMyFAQ\Search($faqConfig);
-            $faqSearch->setCategory(new phpMyFAQ\Category($faqConfig));
-            $faqSearchResult = new phpMyFAQ\Search_Resultset($user, $faq, $faqConfig);
+            $faq = new Faq($faqConfig);
+            $faqSearch = new Search($faqConfig);
+            $faqSearch->setCategory(new Category($faqConfig));
+            $faqSearchResult = new Resultset($user, $faq, $faqConfig);
             $searchResult = '';
-            $searchString = phpMyFAQ\Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+            $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
             if (!is_null($searchString)) {
 
@@ -97,7 +104,7 @@ switch ($ajax_action) {
 
                 $faqSearchResult->reviewResultset($searchResult);
 
-                $searchHelper = new phpMyFAQ\Helper_Search($faqConfig);
+                $searchHelper = new SearchHelper($faqConfig);
                 $searchHelper->setSearchterm($searchString);
 
                 echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
@@ -110,10 +117,10 @@ switch ($ajax_action) {
     // delete FAQs
     case 'delete_record':
         if ($user->perm->checkRight($user->getUserId(), 'delbt')) {
-            $recordId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-            $recordLang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+            $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+            $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 
-            $logging = new phpMyFAQ\Logging($faqConfig);
+            $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID '.$recordId);
 
             $faq->deleteRecord($recordId, $recordLang);
@@ -130,7 +137,7 @@ switch ($ajax_action) {
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
             );
-            $questionIds = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+            $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
 
             if (!is_null($questionIds['questions'])) {
                 foreach ($questionIds['questions'] as $questionId) {

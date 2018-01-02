@@ -10,14 +10,17 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\User;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,21 +30,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$groupId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$groupId = Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
 if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'edituser') ||
-    $user->perm->checkRight($user->getUserId(), 'deluser')) ||
+    $user->perm->checkRight($user->getUserId(), 'deluser') ||
     $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     
     // pass the user id of the current user so it'll check which group he belongs to
-    $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups($user->getUserId()) : [];
+    $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups($user->getUserId()) : [];
 
     if ($faqConfig->config['main.enableCategoryRestrictions'] == false){
         // orig code
-        $user = new phpMyFAQ\User($faqConfig);
-        $groupList = ($user->perm instanceof PMF_Perm_Medium) ? $user->perm->getAllGroups() : [];
+        $user = new User($faqConfig);
+        $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups() : [];
     }
 
     // Returns all groups

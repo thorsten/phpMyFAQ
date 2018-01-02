@@ -40,14 +40,14 @@ abstract class Helper
     /**
      * Entity class.
      *
-     * @var PMF_Category
+     * @var Category
      */
     protected $Category = null;
 
     /**
      * Tagging class.
      *
-     * @var PMF_Tags
+     * @var Tags
      */
     protected $Tags = null;
 
@@ -61,7 +61,7 @@ abstract class Helper
     /**
      * Plurals class.
      *
-     * @var Language_Plurals
+     * @var Plurals
      */
     protected $plurals = null;
 
@@ -80,14 +80,14 @@ abstract class Helper
     protected $translation = [];
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
     protected $_config;
 
     /**
      * Entity Setter.
      *
-     * @param PMF_Category $Category Entity object
+     * @param Category $Category Entity object
      */
     public function setCategory(Category $Category)
     {
@@ -97,7 +97,7 @@ abstract class Helper
     /**
      * Tagging Setter.
      *
-     * @param PMF_Tags $Tags PMF_Tags object
+     * @param Tags $Tags PMF_Tags object
      */
     public function setTags(Tags $Tags)
     {
@@ -119,7 +119,7 @@ abstract class Helper
     /**
      * Plurals setter.
      *
-     * @param Language_Plurals $plurals Language_Plurals object
+     * @param Plurals $plurals Language_Plurals object
      */
     public function setPlurals(Plurals $plurals)
     {
@@ -139,7 +139,7 @@ abstract class Helper
     /**
      * Sets configuration.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */
     public function setConfiguration(Configuration $config)
     {

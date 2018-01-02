@@ -10,29 +10,37 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Client;
+use phpMyFAQ\Instance\Setup;
+use phpMyFAQ\Instance\Database\Stopwords;
+use phpMyFAQ\Language;
+use phpMyFAQ\User;
+
 if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId(), 'editconfig')) {
     header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$instanceId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
-$stopwordId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
-$stopword = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
-$stopwordsLang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
-$csrfToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$instanceId = Filter::filterInput(INPUT_GET, 'instanceId', FILTER_VALIDATE_INT);
+$stopwordId = Filter::filterInput(INPUT_GET, 'stopword_id', FILTER_VALIDATE_INT);
+$stopword = Filter::filterInput(INPUT_GET, 'stopword', FILTER_SANITIZE_STRING);
+$stopwordsLang = Filter::filterInput(INPUT_GET, 'stopwords_lang', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-$http = new phpMyFAQ\Helper_Http();
-$stopwords = new phpMyFAQ\Stopwords($faqConfig);
+$http = new HttpHelper();
+$stopwords = new Stopwords($faqConfig);
 
 switch ($ajaxAction) {
 
@@ -43,12 +51,12 @@ switch ($ajaxAction) {
             exit(1);
         }
 
-        $url = phpMyFAQ\Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
-        $instance = phpMyFAQ\Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
-        $comment = phpMyFAQ\Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
-        $admin = phpMyFAQ\Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
-        $password = phpMyFAQ\Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
+        $url = Filter::filterInput(INPUT_GET, 'url', FILTER_SANITIZE_STRING);
+        $instance = Filter::filterInput(INPUT_GET, 'instance', FILTER_SANITIZE_STRING);
+        $comment = Filter::filterInput(INPUT_GET, 'comment', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_GET, 'email', FILTER_VALIDATE_EMAIL);
+        $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
+        $password = Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
         $data = array(
             'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
@@ -56,10 +64,10 @@ switch ($ajaxAction) {
             'comment' => $comment,
         );
 
-        $faqInstance = new phpMyFAQ\Instance($faqConfig);
+        $faqInstance = new Instance($faqConfig);
         $instanceId = $faqInstance->addInstance($data);
 
-        $faqInstanceClient = new phpMyFAQ\Instance_Client($faqConfig);
+        $faqInstanceClient = new Client($faqConfig);
         $faqInstanceClient->createClient($faqInstance);
 
         $urlParts = parse_url($data['url']);
@@ -67,7 +75,7 @@ switch ($ajaxAction) {
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
             $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
-            $clientSetup = new phpMyFAQ\Instance_Setup();
+            $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
 
             $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
@@ -85,10 +93,10 @@ switch ($ajaxAction) {
             $faqInstanceClient->setClientUrl('http://'.$hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
-            phpMyFAQ\Db::setTablePrefix($dbSetup['dbPrefix']);
+            Db::setTablePrefix($dbSetup['dbPrefix']);
 
             // add admin account and rights
-            $instanceAdmin = new phpMyFAQ\User($faqConfig);
+            $instanceAdmin = new User($faqConfig);
             $instanceAdmin->createUser($admin, $password, 1);
             $instanceAdmin->setStatus('protected');
             $instanceAdminData = array(
@@ -100,7 +108,7 @@ switch ($ajaxAction) {
             // Add anonymous user account
             $clientSetup->createAnonymousUser($faqConfig);
 
-            phpMyFAQ\Db::setTablePrefix($DB['prefix']);
+            Db::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
             $payload = array('error' => 'Cannot create instance.');
@@ -122,7 +130,7 @@ switch ($ajaxAction) {
         }
 
         if (null !== $instanceId) {
-            $faqInstance = new phpMyFAQ\Instance($faqConfig);
+            $faqInstance = new Instance($faqConfig);
             if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {
@@ -134,7 +142,7 @@ switch ($ajaxAction) {
 
     case 'edit_instance':
         if (null !== $instanceId) {
-            $faqInstance = new phpMyFAQ\Instance($faqConfig);
+            $faqInstance = new Instance($faqConfig);
             if ($faqInstance->removeInstance($instanceId)) {
                 $payload = array('deleted' => $instanceId);
             } else {

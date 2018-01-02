@@ -17,6 +17,11 @@
  * @since     2005-12-15
  */
 
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Tags;
+use phpMyFAQ\Entity\Tags as TagEntity;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,18 +32,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 // Send headers
-$http = new phpMyFAQ\Helper_Http();
+$http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
-$oTag = new phpMyFAQ\Tags($faqConfig);
+$oTag = new Tags($faqConfig);
 
 switch ($ajaxAction) {
 
     case 'list':
-        $autoCompleteValue = phpMyFAQ\Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        $autoCompleteValue = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
 
         if (!is_null($autoCompleteValue)) {
             if (strpos($autoCompleteValue, ',')) {
@@ -68,16 +73,16 @@ switch ($ajaxAction) {
 
     case 'update':
 
-        $id = phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-        $tag = phpMyFAQ\Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
-        $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+        $id = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+        $tag = Filter::filterInput(INPUT_POST, 'tag', FILTER_SANITIZE_STRING);
+        $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             echo json_encode($PMF_LANG['err_NotAuth']);
             exit(1);
         }
 
-        $entity = new phpMyFAQ\Entity_Tags();
+        $entity = new TagEntity();
         $entity->setId($id);
         $entity->setName($tag);
 

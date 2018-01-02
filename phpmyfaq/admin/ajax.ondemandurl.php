@@ -24,6 +24,11 @@
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Linkverifier;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -33,11 +38,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new phpMyFAQ\Helper_Http();
+$httpHeader = new HttpHelper();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
@@ -46,9 +51,9 @@ if ($linkVerifier->isReady() === false) {
     exit();
 }
 
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-$lookup = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$artlang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+$lookup = Filter::filterInput(INPUT_GET, 'lookup', FILTER_VALIDATE_INT);
 
 if (count(ob_list_handlers()) > 0) {
     ob_clean();
@@ -95,9 +100,7 @@ $faq->getRecord($id, null, true);
 
 if (!isset($faq->faqRecord['content'])) {
     ?>
-    Error: No entry for #<?php echo $id;
-    ?>(<?php echo $artlang;
-    ?>) available.
+    Error: No entry for #<?php echo $id ?>(<?php echo $artlang ?>) available.
 </body>
 </html>
 <?php
@@ -114,6 +117,6 @@ if (!is_null($lookup)) {
 }
 
 ?>
-<?php PMF_Helper_Linkverifier::linkOndemandJavascript($id, $artlang); ?>
+<?php Linkverifier::linkOndemandJavascript($id, $artlang); ?>
 </body>
 </html>

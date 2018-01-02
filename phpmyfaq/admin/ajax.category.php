@@ -10,14 +10,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-12-26
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,17 +29,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajaxAction = phpMyFAQ\Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 switch ($ajaxAction) {
 
     case 'getpermissions':
 
-        $category = new phpMyFAQ\Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $ajaxData = phpMyFAQ\Filter::filterInputArray(
+        $ajaxData = Filter::filterInputArray(
             INPUT_POST,
             array(
                 'categories' => array(

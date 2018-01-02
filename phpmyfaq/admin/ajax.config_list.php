@@ -19,6 +19,7 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\Administration;
 use phpMyFAQ\Language;
 use phpMyFAQ\Perm;
 use phpMyFAQ\System;
@@ -126,13 +127,13 @@ function renderInputForm($key, $type)
 
                 case 'records.sortby':
                     printf(
-                        '<option value="DESC"%s>%s</option>',
-                        ('DESC' == $faqConfig->get($key)) ? ' selected' : '',
+                        '<option value="DESC" %s>%s</option>',
+                        ('DESC' == $faqConfig->get($key)) ? 'selected' : '',
                         $PMF_LANG['ad_conf_desc']
                     );
                     printf(
-                        '<option value="ASC"%s>%s</option>',
-                        ('ASC' == $faqConfig->get($key)) ? ' selected' : '',
+                        '<option value="ASC" %s>%s</option>',
+                        ('ASC' == $faqConfig->get($key)) ? 'selected' : '',
                         $PMF_LANG['ad_conf_asc']
                     );
                     break;
@@ -212,7 +213,7 @@ function renderInputForm($key, $type)
                 case 'seo.metaTagsCategories':
                 case 'seo.metaTagsPages':
                 case 'seo.metaTagsAdmin':
-                    $adminHelper = new Helper_Administration();
+                    $adminHelper = new Administration();
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
             }

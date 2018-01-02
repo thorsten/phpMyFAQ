@@ -10,14 +10,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-03-20
  */
+
+use phpMyFAQ\Comment;
+use phpMyFAQ\Filter;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,10 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = phpMyFAQ\Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajax_action = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
 
 if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
-    $comment = new phpMyFAQ\Comment($faqConfig);
+    $comment = new Comment($faqConfig);
     $checkFaqs = array(
         'filter' => FILTER_VALIDATE_INT,
         'flags' => FILTER_REQUIRE_ARRAY,
@@ -41,8 +43,8 @@ if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'de
     );
     $ret = false;
 
-    $faqComments = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
-    $newsComments = phpMyFAQ\Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
+    $faqComments = Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
+    $newsComments = Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
 
     if (!is_null($faqComments['faq_comments'])) {
         foreach ($faqComments['faq_comments'] as $commentId => $recordId) {

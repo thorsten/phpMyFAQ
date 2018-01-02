@@ -18,15 +18,18 @@
  * with permission from NetJapan, Inc. IT Administration Group.
  *
  * @category  phpMyFAQ
- *
  * @author    Minoru TODA <todam@netjapan.co.jp>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2018 NetJapan, Inc. and phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-30
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Linkverifier;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,11 +39,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$httpHeader = new phpMyFAQ\Helper_Http();
+$httpHeader = new HttpHelper();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
@@ -49,8 +52,8 @@ if ($linkVerifier->isReady() === false) {
     exit();
 }
 
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
     header('HTTP/1.0 401 Unauthorized');
@@ -74,5 +77,5 @@ if (count(ob_list_handlers()) > 0) {
 $linkVerifier->parseString($faq->faqRecord['content']);
 $linkVerifier->verifyURLs($faqConfig->getDefaultUrl());
 $linkVerifier->markEntry($id, $lang);
-print $linkVerifier->getLinkStateString();
+echo $linkVerifier->getLinkStateString();
 exit();
