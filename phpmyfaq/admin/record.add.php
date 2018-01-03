@@ -16,6 +16,18 @@
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Instance\Elasticsearch;
+use phpMyFAQ\Helper\LinkverifierHelper;
+use phpMyFAQ\Link;
+use phpMyFAQ\Logging;
+use phpMyFAQ\Notification;
+use phpMyFAQ\Services\Twitter;
+use phpMyFAQ\Tags;
+use phpMyFAQ\Visits;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,10 +40,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'addbt')) {
 
     // FAQ data
-    $dateStart = phpMyFAQ\Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
-    $dateEnd = phpMyFAQ\Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
-    $question = phpMyFAQ\Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-    $categories = phpMyFAQ\Filter::filterInputArray(
+    $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
+    $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
+    $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
+    $categories = Filter::filterInputArray(
         INPUT_POST,
         array(
             'rubrik' => array(
@@ -40,29 +52,29 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             ),
         )
     );
-    $recordLang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-    $tags = phpMyFAQ\Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-    $active = phpMyFAQ\Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
-    $sticky = phpMyFAQ\Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
+    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+    $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
+    $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
+    $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
     if ($faqConfig->get('main.enableMarkdownEditor')) {
-        $content = phpMyFAQ\Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
+        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
     } else {
-        $content = phpMyFAQ\Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+        $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
     }
-    $keywords = phpMyFAQ\Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
-    $author = phpMyFAQ\Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
-    $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-    $comment = phpMyFAQ\Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $recordId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
-    $solutionId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-    $revisionId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-    $changed = phpMyFAQ\Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
-    $notes = phpMyFAQ\Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
+    $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRING);
+    $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
+    $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
+    $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
+    $solutionId = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
+    $revisionId = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
+    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+    $notes = Filter::filterInput(INPUT_POST, 'notes', FILTER_SANITIZE_STRING);
 
     // Permissions
 
     $permissions = [];
-    if ('all' === phpMyFAQ\Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
+    if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
         $permissions += array(
             'restricted_user' => array(
                 -1,
@@ -71,19 +83,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     } else {
         $permissions += array(
             'restricted_user' => array(
-                phpMyFAQ\Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
+                Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
             ),
         );
     }
 
-    if ('all' === phpMyFAQ\Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
+    if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
         $permissions += array(
             'restricted_groups' => array(
                 -1,
             ),
         );
     } else {
-        $permissions += phpMyFAQ\Filter::filterInputArray(
+        $permissions += Filter::filterInputArray(
             INPUT_POST,
             array(
                 'restricted_groups' => array(
@@ -100,24 +112,24 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
-        $logging = new phpMyFAQ\Logging($faqConfig);
+        $logging = new Logging($faqConfig);
         $logging->logAdmin($user, 'Beitragcreatesave');
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header">%s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']
         );
 
-        $category = new phpMyFAQ\Category($faqConfig, [], false);
+        $category = new Category($faqConfig, [], false);
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
-        $tagging = new phpMyFAQ\Tags($faqConfig);
+        $tagging = new Tags($faqConfig);
 
         $recordData = array(
             'lang' => $recordLang,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
-            'thema' => phpMyFAQ\Filter::removeAttributes(html_entity_decode($question)),
-            'content' => phpMyFAQ\Filter::removeAttributes(html_entity_decode($content)),
+            'thema' => Filter::removeAttributes(html_entity_decode($question)),
+            'content' => Filter::removeAttributes(html_entity_decode($content)),
             'keywords' => $keywords,
             'author' => $author,
             'email' => $email,
@@ -127,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
-            'notes' => phpMyFAQ\Filter::removeAttributes($notes)
+            'notes' => Filter::removeAttributes($notes)
         );
 
         // Add new record and get that ID
@@ -139,7 +151,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
 
-            $visits = new phpMyFAQ\Visits($faqConfig);
+            $visits = new Visits($faqConfig);
             $visits->logViews($recordId);
 
             // Insert the new category relations
@@ -159,7 +171,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
             // Open question answered
-            $openQuestionId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
+            $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
                     $faq->deleteQuestion($openQuestionId);
@@ -174,22 +186,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     $recordId,
                     $recordLang
                 );
-                $oLink = new phpMyFAQ\Link($url, $faqConfig);
+                $oLink = new Link($url, $faqConfig);
 
                 // notify the user who added the question
-                $notifyEmail = phpMyFAQ\Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
-                $notifyUser = phpMyFAQ\Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_STRING);
+                $notifyEmail = Filter::filterInput(INPUT_POST, 'notifyEmail', FILTER_SANITIZE_EMAIL);
+                $notifyUser = Filter::filterInput(INPUT_POST, 'notifyUser', FILTER_SANITIZE_STRING);
 
-                $notification = new phpMyFAQ\Notification($faqConfig);
+                $notification = new Notification($faqConfig);
                 $notification->sendOpenQuestionAnswered($notifyEmail, $notifyUser, $oLink->toString());
             }
 
             // Call Link Verification
-            PMF_Helper_Linkverifier::linkOndemandJavascript($recordId, $recordData['lang']);
+            LinkverifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);
 
             // If Elasticsearch is enabled, index new FAQ document
             if ($faqConfig->get('search.enableElasticsearch')) {
-                $esInstance = new phpMyFAQ\Instance_Elasticsearch($faqConfig);
+                $esInstance = new Elasticsearch($faqConfig);
                 $esInstance->index(
                     [
                         'id' => $recordId,
@@ -220,12 +232,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     $recordId,
                     $recordLang
                 );
-                $oLink = new phpMyFAQ\Link($faqConfig->getDefaultUrl().$link, $faqConfig);
+                $oLink = new Link($faqConfig->getDefaultUrl().$link, $faqConfig);
                 $oLink->itemTitle = $question;
                 $link = $oLink->toString();
 
                 if ($connection) {
-                    $twitter = new phpMyFAQ\Services_Twitter($connection);
+                    $twitter = new Twitter($connection);
                     $twitter->addPost($question, $tags, $link);
                 }
             }

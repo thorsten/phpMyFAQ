@@ -10,15 +10,18 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-01-12
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Report;
+use phpMyFAQ\HttpStreamer;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -29,18 +32,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'reports')) {
-    $useCategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
-    $useSubcategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
-    $useTranslation = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
-    $useLanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
-    $useId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
-    $useSticky = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
-    $useTitle = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
-    $useCreationDate = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
-    $useOwner = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
-    $useLastModified = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
-    $useUrl = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
-    $useVisits = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
+    $useCategory = Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
+    $useSubcategory = Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
+    $useTranslation = Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
+    $useLanguage = Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
+    $useId = Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
+    $useSticky = Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
+    $useTitle = Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
+    $useCreationDate = Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
+    $useOwner = Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
+    $useLastModified = Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
+    $useUrl = Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
+    $useVisits = Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
 
     $text = [];
     $text[0] = [];
@@ -57,7 +60,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
     ($useUrl)          ? $text[0][] = $PMF_LANG['ad_stat_report_url'] : '';
     ($useVisits)       ? $text[0][] = $PMF_LANG['ad_stat_report_visits'] : '';
 
-    $report = new phpMyFAQ\Report($faqConfig);
+    $report = new Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
         $i = $data['faq_id'];
@@ -120,8 +123,8 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         $content .= "\r\n";
     }
 
-    $oHttpStreamer = new phpMyFAQ\HttpStreamer('csv', $content);
-    $oHttpStreamer->send(PMF_HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
+    $oHttpStreamer = new HttpStreamer('csv', $content);
+    $oHttpStreamer->send(HttpStreamer::HTTP_CONTENT_DISPOSITION_ATTACHMENT);
 } else {
     echo $PMF_LANG['err_noArticles'];
 }

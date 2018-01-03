@@ -9,15 +9,17 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-01-12
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Report;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -38,18 +40,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'reports')) {
-    $useCategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
-    $useSubcategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
-    $useTranslation = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
-    $useLanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
-    $useId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
-    $useSticky = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
-    $useTitle = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
-    $useCreationDate = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
-    $useOwner = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
-    $useLastModified = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
-    $useUrl = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
-    $useVisits = phpMyFAQ\Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
+    $useCategory = Filter::filterInput(INPUT_POST, 'report_category', FILTER_VALIDATE_INT);
+    $useSubcategory = Filter::filterInput(INPUT_POST, 'report_sub_category', FILTER_VALIDATE_INT);
+    $useTranslation = Filter::filterInput(INPUT_POST, 'report_translations', FILTER_VALIDATE_INT);
+    $useLanguage = Filter::filterInput(INPUT_POST, 'report_language', FILTER_VALIDATE_INT);
+    $useId = Filter::filterInput(INPUT_POST, 'report_id', FILTER_VALIDATE_INT);
+    $useSticky = Filter::filterInput(INPUT_POST, 'report_sticky', FILTER_VALIDATE_INT);
+    $useTitle = Filter::filterInput(INPUT_POST, 'report_title', FILTER_VALIDATE_INT);
+    $useCreationDate = Filter::filterInput(INPUT_POST, 'report_creation_date', FILTER_VALIDATE_INT);
+    $useOwner = Filter::filterInput(INPUT_POST, 'report_owner', FILTER_VALIDATE_INT);
+    $useLastModified = Filter::filterInput(INPUT_POST, 'report_last_modified_person', FILTER_VALIDATE_INT);
+    $useUrl = Filter::filterInput(INPUT_POST, 'report_url', FILTER_VALIDATE_INT);
+    $useVisits = Filter::filterInput(INPUT_POST, 'report_visits', FILTER_VALIDATE_INT);
     ?>
                 <table class="table table-striped">
                     <thead>
@@ -73,7 +75,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     <tbody>
 <?php
 
-    $report = new phpMyFAQ\Report($faqConfig);
+    $report = new Report($faqConfig);
 
     foreach ($report->getReportingData() as $data) {
         echo '<tr>';
@@ -132,34 +134,21 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     </tbody>
                 </table>
                 <form action="?action=reportexport" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory;
-    ?>"></td>
-                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory;
-    ?>"></td>
-                    <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation;
-    ?>"></td>
-                    <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage;
-    ?>"></td>
-                    <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId;
-    ?>"></td>
-                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky;
-    ?>"></td>
-                    <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle;
-    ?>"></td>
-                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate;
-    ?>"></td>
-                    <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner;
-    ?>"></td>
-                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified;
-    ?>">
-                    <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl;
-    ?>"></td>
-                    <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits;
-    ?>"></td>
+                    <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory ?>"></td>
+                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory ?>"></td>
+                    <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation ?>"></td>
+                    <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage ?>"></td>
+                    <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId ?>"></td>
+                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky ?>"></td>
+                    <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle ?>"></td>
+                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate ?>"></td>
+                    <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner ?>"></td>
+                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified ?>">
+                    <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl ?>"></td>
+                    <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits ?>"></td>
                     <div class="form-group row">
                         <button class="btn btn-primary" type="submit">
-                            <?php echo $PMF_LANG['ad_stat_report_make_csv'];
-    ?>
+                            <?php echo $PMF_LANG['ad_stat_report_make_csv'] ?>
                         </button>
                     </div>
                 </form>

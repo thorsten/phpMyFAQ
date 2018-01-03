@@ -1,8 +1,5 @@
 <?php
 
-use Elasticsearch\Common\Exceptions\BadRequest400Exception;
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
-
 /**
  * phpMyFAQ system information.
  *
@@ -20,6 +17,12 @@ use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
  * @link      http://www.phpmyfaq.de
  * @since     2013-01-02
  */
+
+use Elasticsearch\Common\Exceptions\BadRequest400Exception;
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
+use phpMyFAQ\Db;
+use phpMyFAQ\System;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -30,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
-    $faqSystem = new phpMyFAQ\System();
+    $faqSystem = new System();
 
     $esConfig = $faqConfig->getElasticsearchConfig();
 
@@ -68,7 +71,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'Webserver Interface' => strtoupper(PHP_SAPI),
                     'PHP Extensions' => implode(', ', get_loaded_extensions()),
                     'PHP Session path' => session_save_path(),
-                    'Database Server' => phpMyFAQ\Db::getType(),
+                    'Database Server' => Db::getType(),
                     'Database Server Version' => $faqConfig->getDb()->serverVersion(),
                     'Database Client Version' => $faqConfig->getDb()->clientVersion(),
                     'Elasticsearch' => $esInformation

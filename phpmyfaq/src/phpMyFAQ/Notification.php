@@ -1,5 +1,7 @@
 <?php
 
+namespace phpMyFAQ;
+
 /**
  * The notification class for phpMyFAQ.
  *
@@ -10,14 +12,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-30
  */
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Mail;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -26,25 +30,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Notification.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-08-30
  */
 class Notification
 {
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
     private $config;
 
     /**
      * Mail object.
      *
-     * @var PMF_Mail
+     * @var Mail
      */
     private $mail;
 
@@ -58,9 +60,7 @@ class Notification
     /**
      * Constructor.
      *
-     * @param PMF_Configuration
-     *
-     * @return PMF_Notification
+     * @param Configuration
      */
     public function __construct(Configuration $config)
     {
@@ -68,7 +68,7 @@ class Notification
 
         $this->config = $config;
         $this->pmfStr = $PMF_LANG;
-        $this->mail = new phpMyFAQ\Mail($this->config);
+        $this->mail = new Mail($this->config);
         $this->mail->setReplyTo(
             $this->config->get('main.administrationMail'),
             $this->config->get('main.titleFAQ')

@@ -9,14 +9,16 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-23
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Auth;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -36,8 +38,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 
     // If we have to save a new password, do that first
-    $save = phpMyFAQ\Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
-    $csrfToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $save = Filter::filterInput(INPUT_POST, 'save', FILTER_SANITIZE_STRING);
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
     if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
         $csrfCheck = false;
@@ -48,14 +50,14 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
     if (!is_null($save) && $csrfCheck) {
 
         // Define the (Local/Current) Authentication Source
-        $auth = new phpMyFAQ\Auth($faqConfig);
+        $auth = new Auth($faqConfig);
         $authSource = $auth->selectAuth($user->getAuthSource('name'));
         $authSource->selectEncType($user->getAuthData('encType'));
         $authSource->setReadOnly($user->getAuthData('readOnly'));
 
-        $oldPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
-        $newPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
-        $retypedPassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
+        $oldPassword = Filter::filterInput(INPUT_POST, 'opass', FILTER_SANITIZE_STRING);
+        $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
+        $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
         if (($authSource->checkPassword($user->getLogin(), $oldPassword)) && ($newPassword == $retypedPassword)) {
             if (!$user->changePassword($newPassword)) {

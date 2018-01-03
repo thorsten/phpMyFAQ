@@ -20,6 +20,7 @@
  * @since     2006-05-08
  */
 
+use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
@@ -40,7 +41,7 @@ require PMF_ROOT_DIR.'/lang/language_en.php';
 //
 // Get language (default: english)
 //
-$language = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+$language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 if (!is_null($language) && Language::isASupportedLanguage($language)) {
     require PMF_ROOT_DIR.'/lang/language_'.$language.'.php';
 }
@@ -57,7 +58,7 @@ if (!$user instanceof CurrentUser) {
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>
-<html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js">
+<html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -66,7 +67,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php print $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php if (isset($user) && ($refreshTime > 0)) {
@@ -93,13 +94,11 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     }
 
     window.onload = function() {
-        var expire = new Date(2009, 0, 1);
-        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT;
-    ?> * 60);
+        var expire = new Date();
+        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
-        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime;
-    ?> * 1000);
+        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime ?> * 1000);
         window.setInterval(
             function() {
                 _PMFSessionTimeoutClock(topRef, expire);
@@ -108,8 +107,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
         );
     }
     </script>
-<?php 
-} ?>
+<?php } ?>
 </head>
 <body>
 

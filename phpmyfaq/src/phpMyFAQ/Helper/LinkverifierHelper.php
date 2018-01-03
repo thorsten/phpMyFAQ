@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
-class Linkverifier extends Helper
+class LinkverifierHelper extends Helper
 {
     /**
      * Prints JavaScript needed for AJAX verification on record add/save/clicked on listing.

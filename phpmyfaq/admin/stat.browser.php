@@ -9,14 +9,17 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Session;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -28,19 +31,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $perpage = 50;
-    $day = phpMyFAQ\Filter::filterInput(INPUT_POST, 'day', FILTER_VALIDATE_INT);
+    $day = Filter::filterInput(INPUT_POST, 'day', FILTER_VALIDATE_INT);
     $firstHour = mktime(0, 0, 0, date('m', $day), date('d', $day), date('Y', $day));
     $lastHour = mktime(23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
 
-    $session = new phpMyFAQ\Session($faqConfig);
+    $session = new Session($faqConfig);
     $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
-    $date = new phpMyFAQ\Date($faqConfig);
+    $date = new Date($faqConfig);
     ?>
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day);
-    ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
                 </h2>
             </div>
         </header>
@@ -50,31 +52,19 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><?php echo $PMF_LANG['ad_sess_ip'];
-    ?></th>
-                        <th><?php echo $PMF_LANG['ad_sess_s_date'];
-    ?></th>
-                        <th><?php echo $PMF_LANG['ad_sess_session'];
-    ?></th>
+                        <th><?php echo $PMF_LANG['ad_sess_ip'] ?></th>
+                        <th><?php echo $PMF_LANG['ad_sess_s_date'] ?></th>
+                        <th><?php echo $PMF_LANG['ad_sess_session'] ?></th>
                     </tr>
                 </thead>
                 <tbody>
-<?php
-    foreach ($sessiondata as $sid => $data) {
-        ?>
+<?php foreach ($sessiondata as $sid => $data) { ?>
                     <tr>
-                        <td><?php echo $data['ip'];
-        ?></td>
-                        <td><?php echo $date->format(date('Y-m-d H:i', $data['time']));
-        ?></td>
-                        <td><a href="?action=viewsession&amp;id=<?php echo $sid;
-        ?>"><?php echo $sid;
-        ?></a></td>
+                        <td><?php echo $data['ip'] ?></td>
+                        <td><?php echo $date->format(date('Y-m-d H:i', $data['time'])) ?></td>
+                        <td><a href="?action=viewsession&amp;id=<?php echo $sid ?>"><?php echo $sid ?></a></td>
                     </tr>
-<?php
-
-    }
-    ?>
+<?php } ?>
                 </tbody>
                 </table>
             </div>
