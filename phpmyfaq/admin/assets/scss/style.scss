@@ -25,42 +25,39 @@ html {
 }
 
 body {
+  padding-top: 4.5rem;
   margin-bottom: 3rem;
 }
 
-
-#wrapper {
-  background-color: #2f4354;
-  /*
-  margin-bottom: 0;
-  width: 100%;
-  */
-}
-
-#page-wrapper {
-  /*
-  padding: 0 15px;
-  */
-  min-height: 568px;
-  background-color: white;
-}
-@media (min-width: 768px) {
-  #page-wrapper {
-    position: inherit;
-    /*
-    margin: 0 0 0 250px;
-    padding: 0 30px;
-    height: 100%;
-    */
-    border-left: 1px solid #e7e7e7;
-  }
-}
-
-
-.footer {
-  position: absolute;
+//
+// Sidebar
+//
+.sidebar {
+  position: fixed;
+  top: 51px;
   bottom: 0;
-  width: 100%;
+  left: 0;
+  z-index: 1000;
+  padding: 20px 0;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+  border-right: 1px solid #eee;
+
+  .nav {
+    margin-bottom: 20px;
+  }
+
+  .nav-item {
+    width: 100%;
+
+    & + .nav-item {
+      margin-left: 0;
+    }
+  }
+
+  .nav-link {
+    border-radius: 0;
+  }
 }
 
 //

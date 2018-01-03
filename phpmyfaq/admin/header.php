@@ -178,104 +178,93 @@ switch ($action) {
 ?>
 <!DOCTYPE html>
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></title>
-    <base href="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/" />
+  <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></title>
+  <base href="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/" />
 
-    <meta name="description" content="Only Chuck Norris can divide by zero.">
-    <meta name="author" content="phpMyFAQ Team">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
-    <meta name="publisher" content="phpMyFAQ Team">
-    <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
-    <meta name="MSSmartTagsPreventParsing" content="true">
+  <meta name="description" content="Only Chuck Norris can divide by zero.">
+  <meta name="author" content="phpMyFAQ Team">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
+  <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
+  <meta name="publisher" content="phpMyFAQ Team">
+  <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
+  <meta name="MSSmartTagsPreventParsing" content="true">
 
-    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="assets/css/style.css?v=1">
 
-    <script src="../assets/js/modernizr.min.js"></script>
-    <script src="../assets/js/phpmyfaq.min.js"></script>
-    <script src="../assets/js/vendors.js"></script>
-    <script src="assets/js/sidebar.js"></script>
-    <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>"></script>
+  <script src="../assets/js/modernizr.min.js"></script>
+  <script src="../assets/js/phpmyfaq.min.js"></script>
+  <script src="../assets/js/vendors.js"></script>
+  <script src="assets/js/sidebar.js"></script>
+  <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>"></script>
 
-<?php if ($edAutosave): ?>
-    <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
-    <script src="../assets/js/autosave.js" async></script>
-<?php endif; ?>
+  <?php if ($edAutosave): ?>
+  <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
+  <script src="../assets/js/autosave.js" async></script>
+  <?php endif; ?>
 
-    <link rel="shortcut icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/favicon.ico">
-    <link rel="apple-touch-icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/apple-touch-icon.png">
+  <link rel="shortcut icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/favicon.ico">
+  <link rel="apple-touch-icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
 <body dir="<?php echo $PMF_LANG['dir']; ?>">
 
-<div id="wrapper">
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
+      <a class="navbar-brand" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
+        phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?>
+      </a>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="navbar-header mr-auto">
-        <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-        <!-- TODO: FIX VERTICAL NAV COLLAPSE
-            <button type="button" class="btn navbar-toggler-icon" data-toggle="collapse" data-target=".navbar-collapse">
-                <span class="sr-only">Toggle navigation</span>
-            </button>
-        -->
-        <?php endif; ?>
-            <a class="navbar-brand" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
-                phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?> 
+      <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
+      <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <?php
+                if ($faqConfig->get('main.enableGravatarSupport')) {
+                    $avatar = new Gravatar($faqConfig);
+                    echo $avatar->getImage($user->getUserData('email'), ['size' => 24]);
+                } else {
+                    echo '<b class="fa fa-user"></b>';
+                }
+                ?>
+              <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
+                          <?php echo $user->getUserData('display_name'); ?>
+              </span>
             </a>
-        </div>
-        <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-        <ul class="nav navbar-nav">
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#">
-                    <?php
-                    if ($faqConfig->get('main.enableGravatarSupport')) {
-                        $avatar = new Gravatar($faqConfig);
-                        echo $avatar->getImage($user->getUserData('email'), ['size' => 24]);
-                    } else {
-                        echo '<b class="fa fa-user"></b>';
-                    }
-                    ?> 
-                    <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
-                        <?php echo $user->getUserData('display_name'); ?> 
-                    </span>
-                    <b class="fa fa-caret-down"></b>
-                </a>
-                <ul class="dropdown-menu">
-                    <?php if (!$faqConfig->get('ldap.ldapSupport')) { ?> 
-                    <li>
-                        <a class="dropdown-item" href="index.php?action=passwd">
-                            <i aria-hidden="true" class="fa fa-lock"></i> <?php echo $PMF_LANG['ad_menu_passwd'] ?> 
-                        </a>
-                    </li>
-                    
-                    <li class="dropdown-divider"></li>
-                    <?php } ?> 
-                    <li>
-                        <a class="dropdown-item" href="index.php?action=logout">
-                            <i aria-hidden="true" class="fa fa-power-off"></i> <?php echo $PMF_LANG['admin_mainmenu_logout']; ?> 
-                        </a>
-                    </li>
-                    
-                </ul>
-            </li>
-            <li class="nav-item">
-                <form action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post"
-                      class="navbar-form navbar-right" role="form" accept-charset="utf-8">
-                    <?php echo Language::selectLanguages($LANGCODE, true); ?> 
-                </form>
-            </li>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <?php if (!$faqConfig->get('ldap.ldapSupport')) { ?>
+              <a class="dropdown-item" href="index.php?action=passwd">
+                <?php echo $PMF_LANG['ad_menu_passwd'] ?>
+              </a>
+              <?php } ?>
+              <a class="dropdown-item" href="index.php?action=logout">
+                <?php echo $PMF_LANG['admin_mainmenu_logout']; ?>
+              </a>
+            </div>
+          </li>
         </ul>
-    <?php endif; ?> 
+        <form class="form-inline" action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post">
+            <?php echo Language::selectLanguages($LANGCODE, true); ?>
+        </form>
+      </div>
+      <?php endif; ?>
     </nav>
-    
+  </header>
+
+  <div class="container-fluid">
     <div class="row">
-      <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?> 
-      <nav class="col-2 navbar-default navbar-nav flex-sm-column navbar-collapse navbar-dark" role="navigation" aria-orientation="vertical">
+      <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
+        <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
           <ul class="nav navbar-nav flex-sm-column" id="side-menu">
+            
               <li class="nav-item <?php echo($dashboardPage ? 'active' : ''); ?>">
                   <a class="nav-link" href="index.php">
                       <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?> 
@@ -364,4 +353,4 @@ switch ($action) {
       </nav>
       <?php endif; ?>
 
-      <div class="col-10" id="page-wrapper">
+      <main role="main" class="col-sm-9 ml-sm-auto col-md-10 pt-3">
