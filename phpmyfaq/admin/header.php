@@ -264,7 +264,7 @@ switch ($action) {
       <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
         <nav class="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
           <ul class="nav navbar-nav flex-sm-column" id="side-menu">
-            
+
               <li class="nav-item <?php echo($dashboardPage ? 'active' : ''); ?>">
                   <a class="nav-link" href="index.php">
                       <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?> 
