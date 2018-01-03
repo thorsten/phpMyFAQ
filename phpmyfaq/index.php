@@ -617,11 +617,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-
-    $userRights = $user->perm->getAllUserRights($user->getUserId());
-    $minRights = ['37', '39', '40', '41'];
-
-    if (array_values(array_intersect($userRights, $minRights)) == $minRights) {
+    if ($user->perm->checkRight($user->getUserId(), 'viewadminlink')) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',
