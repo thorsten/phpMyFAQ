@@ -23,15 +23,10 @@ namespace phpMyFAQ;
  * @since     2005-12-20
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Date;
-use phpMyFAQ\Db;
-use phpMyFAQ\Filter;
+use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Link;
-use phpMyFAQ\Mail;
-use phpMyFAQ\Pagination;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -1083,8 +1078,8 @@ class Faq
         }
 
         // Delete possible attachments
-        $attId = PMF_Attachment_Factory::fetchByRecordId($this->_config, $recordId);
-        $attachment = PMF_Attachment_Factory::create($attId);
+        $attId = Factory::fetchByRecordId($this->_config, $recordId);
+        $attachment = Factory::create($attId);
         $attachment->delete();
 
         // Delete possible Elasticsearch documents

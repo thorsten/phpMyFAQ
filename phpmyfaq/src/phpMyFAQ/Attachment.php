@@ -1,6 +1,6 @@
 <?php
 
-namespace Attachment;
+namespace phpMyFAQ;
 
 /**
  * Attachment handler class.

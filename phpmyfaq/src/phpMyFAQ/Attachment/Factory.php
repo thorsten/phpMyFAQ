@@ -19,6 +19,7 @@ namespace phpMyFAQ\Attachment;
  * @copyright 2009-2018 phpMyFAQ Team
  */
 
+use phpMyFAQ\Attachment;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
 use phpMyFAQ\Language;
