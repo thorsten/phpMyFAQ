@@ -68,30 +68,32 @@ require PMF_ROOT_DIR.'/config/database.php';
 </head>
 <body>
 
-  <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+  <header>
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
+      <div class="container">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
 
-      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
-        <ul class="navbar-nav mr-auto">
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
-          </li>
-        </ul>
+        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </nav>
+    </nav>
+  </header>
 
 <main role="main">
   <section id="content">
