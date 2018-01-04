@@ -120,6 +120,7 @@ require PMF_SRC_DIR.'/libs/autoload.php';
 
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
+$loader->addPsr4('Abraham\\TwitterOAuth\\', PMF_SRC_DIR.'/libs/abraham/twitteroauth/src');
 $loader->register();
 
 require PMF_SRC_DIR.'/libs/parsedown/Parsedown.php';

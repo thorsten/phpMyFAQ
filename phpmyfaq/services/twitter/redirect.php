@@ -20,6 +20,8 @@
  * @since     2010-09-18
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
+
 //
 // Prepend and start the PHP session
 //
@@ -30,7 +32,6 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
-require PMF_ROOT_DIR.'/src/libs/twitteroauth/twitteroauth.php';
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),

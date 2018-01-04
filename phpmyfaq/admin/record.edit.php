@@ -23,6 +23,7 @@ use phpMyFAQ\Db;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language;
+use phpMyFAQ\Logging;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 

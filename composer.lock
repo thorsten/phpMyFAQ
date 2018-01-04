@@ -4,8 +4,62 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "a1e2b95247e013fb8be17c8122f32695",
+    "content-hash": "b7a371b8d2b5afb2d14c3bf6a77d686c",
     "packages": [
+        {
+            "name": "abraham/twitteroauth",
+            "version": "0.7.4",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/abraham/twitteroauth.git",
+                "reference": "c6f9e692552dd037b2324ed0dfa28a4e60875acf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/c6f9e692552dd037b2324ed0dfa28a4e60875acf",
+                "reference": "c6f9e692552dd037b2324ed0dfa28a4e60875acf",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "php": "^5.6 || ^7.0"
+            },
+            "require-dev": {
+                "phpmd/phpmd": "~2.6",
+                "phpunit/phpunit": "~5.7",
+                "squizlabs/php_codesniffer": "~3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Abraham\\TwitterOAuth\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Abraham Williams",
+                    "email": "abraham@abrah.am",
+                    "homepage": "https://abrah.am",
+                    "role": "Developer"
+                }
+            ],
+            "description": "The most popular PHP library for use with the Twitter OAuth REST API.",
+            "homepage": "https://twitteroauth.com",
+            "keywords": [
+                "Twitter API",
+                "Twitter oAuth",
+                "api",
+                "oauth",
+                "rest",
+                "social",
+                "twitter"
+            ],
+            "time": "2017-06-30T22:02:01+00:00"
+        },
         {
             "name": "elasticsearch/elasticsearch",
             "version": "v2.3.2",
@@ -544,17 +598,6 @@
                 "qrcode"
             ],
             "time": "2017-04-26T08:14:48+00:00"
-        },
-        {
-            "name": "thorsten/twitteroauth",
-            "version": "master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/thorsten/twitteroauth.git",
-                "reference": "master"
-            },
-            "type": "library",
-            "time": "2014-07-13T09:50:45+00:00"
         }
     ],
     "packages-dev": [
@@ -1940,8 +1983,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpseclib": 20,
-        "thorsten/twitteroauth": 20
+        "phpseclib": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

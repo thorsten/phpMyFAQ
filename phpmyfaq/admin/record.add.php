@@ -17,6 +17,7 @@
  * @since     2003-02-23
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -217,7 +218,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             // Callback to Twitter if enabled
             if ($faqConfig->get('socialnetworks.enableTwitterSupport')) {
-                require '../src/libs/twitteroauth/twitteroauth.php';
 
                 $connection = new TwitterOAuth(
                     $faqConfig->get('socialnetworks.twitterConsumerKey'),

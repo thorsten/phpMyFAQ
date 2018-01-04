@@ -17,6 +17,7 @@
  * @since     2005-12-26
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\Administration;
@@ -33,8 +34,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-require PMF_ROOT_DIR.'/src/libs/twitteroauth/twitteroauth.php';
 
 if (!empty($_SESSION['access_token'])) {
     $connection = new TwitterOAuth(

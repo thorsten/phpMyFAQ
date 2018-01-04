@@ -20,6 +20,9 @@
  * @since     2010-09-18
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
+use phpMyFAQ\Filter;
+
 //
 // Prepend and start the PHP session
 //
@@ -30,10 +33,9 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
-require PMF_ROOT_DIR.'/src/libs/twitteroauth/twitteroauth.php';
 
-$oAuthToken = phpMyFAQ\Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_SANITIZE_STRING);
-$oAuthVerifier = phpMyFAQ\Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_SANITIZE_STRING);
+$oAuthToken = Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_SANITIZE_STRING);
+$oAuthVerifier = Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_SANITIZE_STRING);
 
 if (!is_null($oAuthToken) && $_SESSION['oauth_token'] !== $oAuthToken) {
     $_SESSION['oauth_status'] = 'oldtoken';

@@ -19,9 +19,9 @@ namespace phpMyFAQ\Services;
  * @since     2010-09-05
  */
 
+use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
-use TwitterOAuth;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
