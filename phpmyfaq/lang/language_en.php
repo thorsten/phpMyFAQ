@@ -1270,5 +1270,9 @@ $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap<br>(d
 $PMF_LANG['ad_category_image'] = 'Entity image';
 $PMF_LANG["ad_user_show_home"] = "Show on startpage";
 
-// added v.2.10.0-alpha - 2017-11-9 by Brian Potter (BrianPotter)
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
 $PMF_LANG['ad_view_faq'] = 'View FAQ';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Enable category restrictions<br>(default: activated)'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Enable send to friends<br>(default: activated)'];

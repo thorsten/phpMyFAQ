@@ -700,10 +700,10 @@ if ($faqConfig->get('main.enableRssFeeds')) {
 }
 
 $tplHeaders = [
-//    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-//    'rssFeedTopTen' => $rssFeedTopTen,
-//    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-//    'rssFeedLatest' => $rssFeedLatest,
+    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
+    'rssFeedTopTen' => $rssFeedTopTen,
+    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
+    'rssFeedLatest' => $rssFeedLatest,
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
     'writeTags' => $oTag->printHTMLTagsCloud(),
     'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],

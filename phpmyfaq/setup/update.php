@@ -579,12 +579,15 @@ if ($step == 3) {
     // UPDATES FROM 3.0.0-alpha
     //
     if (version_compare($version, '3.0.0-alpha', '<=')) {
+
         $query[] = 'DELETE FROM '.$prefix.'faqright WHERE right_id = 18';
         $query[] = 'DELETE FROM '.$prefix.'faquser_right WHERE right_id = 18';
         $query[] = 'DELETE FROM '.$prefix.'faqgroup_right WHERE right_id = 18';
         $query[] = 'INSERT INTO '.$prefix."faqright (right_id, name, description, for_users, for_groups) VALUES
             (18, 'viewadminlink', 'Right to see the link to the admin section', 1, 1)";
         $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 18)';
+
+        $faqConfig->add('main.enableSendToFriend', 'true');
     }
 
     // Always the last step: Update version number

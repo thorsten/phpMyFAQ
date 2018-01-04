@@ -1231,3 +1231,10 @@ $LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP
 $LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Aktiviere XML Sitemap<br>(Standard: aktiviert)');
 $PMF_LANG['ad_category_image'] = 'Kategorie-Bild';
 $PMF_LANG["ad_user_show_home"] = "Auf der Startseite anzeigen";
+
+// added v.2.10.0-alpha - 2017-11-09 by Brian Potter (BrianPotter)
+$PMF_LANG['ad_view_faq'] = 'FAQ ansehen';
+
+// added 3.0.0-alpha - 2018-01-04 by Thorsten
+$LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktiviere Kategoriebeschränkungen<br>(Standard: aktiviert)'];
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktiviere Weiterempfehlung<br>(Standard: aktiviert)'];
