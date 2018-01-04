@@ -140,7 +140,6 @@ class Installer
             'description' => 'Right to edit configuration',
         ],
         //18 => "viewadminlink",
-        18 => "viewadminlink",
         [
             'name' => 'viewadminlink',
             'description' => 'Right to see the link to the admin section'
