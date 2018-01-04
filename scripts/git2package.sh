@@ -44,18 +44,17 @@ if [ "x${PMF_PACKAGE_FOLDER}" = "x" ]; then
 fi
 
 cwd=`pwd`
+
 git checkout-index -f -a --prefix=$cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
 # Add missing directories
 mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}/
-mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/phpseclib/Crypt
-mkdir -p $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq/src/libs/swiftmailer
 
 cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 
-# add dependecies
+# add dependencies
 composer install --no-dev
-npm install
+yarn install
 grunt build
 
 # prepare packaging

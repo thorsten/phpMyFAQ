@@ -2,17 +2,19 @@
 
 cwd=`pwd`
 
-mkdir -p $cwd/phpmyfaq/src/libs/composer
-mkdir -p $cwd/phpmyfaq/src/libs/elasticsearch/src/Elasticsearch
-mkdir -p $cwd/phpmyfaq/src/libs/guzzlehttp/ringphp/src
-mkdir -p $cwd/phpmyfaq/src/libs/monolog/src/Monolog
-mkdir -p $cwd/phpmyfaq/src/libs/parsedown
-mkdir -p $cwd/phpmyfaq/src/libs/phpseclib/Crypt
-mkdir -p $cwd/phpmyfaq/src/libs/psr/log/Psr
-mkdir -p $cwd/phpmyfaq/src/libs/react/promise/src
-mkdir -p $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
-mkdir -p $cwd/phpmyfaq/src/libs/tcpdf
+mkdir -pv $cwd/phpmyfaq/src/libs/abraham/twitteroauth
+mkdir -pv $cwd/phpmyfaq/src/libs/composer
+mkdir -pv $cwd/phpmyfaq/src/libs/elasticsearch/src/Elasticsearch
+mkdir -pv $cwd/phpmyfaq/src/libs/guzzlehttp/ringphp/src
+mkdir -pv $cwd/phpmyfaq/src/libs/monolog/src/Monolog
+mkdir -pv $cwd/phpmyfaq/src/libs/parsedown
+mkdir -pv $cwd/phpmyfaq/src/libs/phpseclib/Crypt
+mkdir -pv $cwd/phpmyfaq/src/libs/psr/log/Psr
+mkdir -pv $cwd/phpmyfaq/src/libs/react/promise/src
+mkdir -pv $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
+mkdir -pv $cwd/phpmyfaq/src/libs/tcpdf
 
+cp -r $cwd/vendor/abraham/twitteroauth/* $cwd/phpmyfaq/src/libs/abraham/twitteroauth
 cp -r $cwd/vendor/autoload.php $cwd/phpmyfaq/src/libs/autoload.php
 cp -r $cwd/vendor/composer/* $cwd/phpmyfaq/src/libs/composer
 cp -r $cwd/vendor/elasticsearch/elasticsearch/src/Elasticsearch/* $cwd/phpmyfaq/src/libs/elasticsearch/src/Elasticsearch
@@ -24,7 +26,6 @@ cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/src/libs/phpseclib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/src/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/src/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
-cp -r $cwd/vendor/abraham/twitteroauth $cwd/phpmyfaq/src/libs/abraham/twitteroauth
 
 # TCPDF
 mkdir -p $cwd/phpmyfaq/src/libs/tcpdf
