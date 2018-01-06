@@ -177,44 +177,41 @@
 <footer class="pmf-footer">
   <div class="container">
     <div class="row">
-      <div class="col-sm">
-        <ul class="footer-menu">
-          <li>{{ faqOverview }}</li>
-          <li>{{ showSitemap }}</li>
-          <li>{{ msgGlossary }}</li>
-          <li>{{ msgContact }}</li>
-        </ul>
+      <div class="col-6">
+        <div class="pmf-footer-menu">
+          <ul >
+            <li>{{ faqOverview }}</li>
+            <li>{{ showSitemap }}</li>
+            <li>{{ msgGlossary }}</li>
+            <li>{{ msgContact }}</li>
+          </ul>
+        </div>
       </div>
       <div class="col-sm">
-        <form action="{{ writeLangAdress }}" method="post" class="float-right" accept-charset="utf-8">
-          {{ switchLanguages }}
-          <input type="hidden" name="action" value=""/>
-        </form>
+          <form action="{{ writeLangAdress }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
+            {{ switchLanguages }}
+            <input type="hidden" name="action" value=""/>
+          </form>
       </div>
-    </div>
-  </div>
-
-  <div class="copyright">
-    <div class="container">
-      <div class="float-right">
+      <div class="col-sm ml-auto">
         {{ copyright }}
       </div>
     </div>
   </div>
-
-  [debugMode]
-  <div class="debug-mode">
-    <h3>DEBUG INFORMATION</h3>
-    <hr>
-    <h4>EXCEPTIONS</h4>
-    {{ debugExceptions }}
-    <hr>
-    <h4>DATABASE QUERIES</h4>
-    {{ debugQueries }}
-  </div>
-  [/debugMode]
-
 </footer>
+
+[debugMode]
+<div class="debug-mode">
+  <h3>DEBUG INFORMATION</h3>
+  <hr>
+  <h4>EXCEPTIONS</h4>
+  {{ debugExceptions }}
+  <hr>
+  <h4>DATABASE QUERIES</h4>
+  {{ debugQueries }}
+</div>
+[/debugMode]
+
 
 <script>
   $('.topten').tooltip();
