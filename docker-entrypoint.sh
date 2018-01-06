@@ -10,7 +10,7 @@ mkdir -vp $folders
 chmod 775 $folders
 
 . "$APACHE_ENVVARS"
-chown "$APACHE_RUN_USER:$APACHE_RUN_GROUP" $folders
+chown -R "$APACHE_RUN_USER:$APACHE_RUN_GROUP" .
 
 #=== Enable htaccess for search engine optimisations ===
 if [ "x${DISABLE_HTACCESS}" = "x" ]; then
