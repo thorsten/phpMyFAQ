@@ -1,0 +1,105 @@
+#!/bin/sh
+#
+# This is the shell script for building a docker image tagged as:
+# 1. phpmyfaq/phpmyfaq:${PMF_VERSION}
+# 2. phpmyfaq/phpmyfaq:
+# of phpMyFAQ using tar.gz package build by ./git2package.sh
+#
+# For creating an image simply run:
+#
+#   ./git2package.sh
+#
+# Then:
+#
+#   ./package2docker.sh
+#
+#
+# This Source Code Form is subject to the terms of the Mozilla Public License,
+# v. 2.0. If a copy of the MPL was not distributed with this file, You can
+# obtain one at http://mozilla.org/MPL/2.0/.
+#
+# @package   phpMyFAQ
+# @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+# @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+# @author    Rene Treffer <treffer+phpmyfaq@measite.de>
+# @author    David Soria Parra <dsp@php.net>
+# @author    Florian Anderiasch <florian@phpmyfaq.de>
+# @author    Adrien Estanove <adrien.estanove@gmail.com>
+# @copyright 2008-2018 phpMyFAQ Team
+# @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+# @link      http://www.phpmyfaq.de
+# @version   2018-01-06
+
+# Exit on error
+
+# phpMyFAQ Version
+. scripts/version.sh
+
+if [ "x$DOCKERBIN" = "x" ]; then
+    DOCKERBIN="$(which docker)"
+fi
+
+# Package release
+if [ "x$PMF_PACKAGE_FOLDER" = "x" ]; then
+    PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
+fi
+
+cwd=`pwd`
+
+# TODO: Execute composer and yarn with docker
+# TODO: Replace with own management
+if [ ! -f ${PMF_PACKAGE_FOLDER}.tar.gz ]; then
+    >&2 echo "no package named \"${PMF_PACKAGE_FOLDER}.tar.gz\" found."
+    >&2 echo "run git2package.sh script before this one."
+    exit 1
+fi
+
+# Set docker options
+docker_opts=""
+[ "x$NO_CACHE" != "x" ] && docker_opts="$docker_opts --no-cache"
+
+docker_stdout=""
+[ "x$SILENT" = x ] && docker_stdout="1> /dev/null"
+
+# Set docker tags
+if [ "x$IMAGENAME" = "x" ]; then
+    IMAGENAME="phpmyfaq"
+fi
+
+# Building docker image
+$DOCKERBIN build $docker_opts -t $IMAGENAME:$PMF_VERSION . $docker_stdout
+
+# Copying release to docker image
+targetContainer=$( $DOCKERBIN create $IMAGENAME:$PMF_VERSION )
+$DOCKERBIN cp ${PMF_PACKAGE_FOLDER}.tar.gz $targetContainer:/tmp
+$DOCKERBIN exec $targetContainer bash -c " \
+    tar -xf /tmp/${PMF_PACKAGE_FOLDER}.tar.gz /var/www/html && \
+    rm /tmp/${PMF_PACKAGE_FOLDER}.tar.gz "
+$DOCKERBIN commit $targetContainer $IMAGENAME:$PMF_VERSION
+$DOCKERBIN rm $targetContainer
+
+echo "Docker image \"$IMAGENAME:$PMF_VERSION\" built succesfully."
+
+if [ "x$REGISTRY" != "x" ]; then
+    # docker login
+    if [[ "$REGISTRY" =~ "/" ]]; then
+        docker login $REGISTRY
+    else
+        # if no registry spefified pushing to docker.io
+        docker login
+    fi
+
+    docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:$PMF_VERSION
+    docker push $REGISTRY/$IMAGENAME:$PMF_VERSION
+
+    if [ "x$LATEST" != "x" ]; then
+        docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:latest
+        docker push $REGISTRY/$IMAGENAME:latest
+    fi
+    if [ "x$STABLE" != "x" ]; then
+        docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:stable
+        docker push $REGISTRY/$IMAGENAME:stable
+    fi
+fi
+
+echo "done.\n";
