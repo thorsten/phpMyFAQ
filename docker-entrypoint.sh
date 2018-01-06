@@ -13,7 +13,7 @@ chmod 775 $folders
 chown "$APACHE_RUN_USER:$APACHE_RUN_GROUP" $folders
 
 #=== Enable htaccess for search engine optimisations ===
-if [ "x${DISABLE_HTACCESS}" -eq "x" ]; then
+if [ "x${DISABLE_HTACCESS}" = "x" ]; then
     a2enmod rewrite headers
     [ ! -f /.htaccess ] && cp _.htaccess .htaccess
     sed -ri .htaccess \
@@ -28,23 +28,10 @@ else
       -e "s~(.*AllowOverride).*~\1 none~g"
 fi
 
-# Set utf8 locale
-if [ "x${CARACTER_SET}" -ne "x" ]; then
-    sed -ri /etc/locale.gen \
-      -e "s/#?\s*(${CARACTER_SET}.UTF-8 UTF-8)/\1/"
-    dpkg-reconfigure --frontend=noninteractive locales
-fi
-
 #=== Configure php ===
-if [ "x${TIMEZONE}" -eq "x" ]; then
+if [ "x${TIMEZONE}" = "x" ]; then
     TIMEZONE="Europe/Berlin"
 fi
-{
-    echo "date.timezone = ${TIMEZONE}"
-    echo "register_globals = off"
-    echo "safe_mode = off"
-    echo "memory_limit = 64M"
-    echo "file_upload = on"
-} | tee "$PHP_INI_DIR/php.ini"
+echo "date.timezone = ${TIMEZONE}" > "$PHP_INI_DIR/conf.d/timezone.ini"
 
 docker-php-entrypoint "$@"
