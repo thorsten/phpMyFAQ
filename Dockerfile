@@ -49,7 +49,6 @@ RUN set -x \
   \
   && docker-php-ext-configure intl \
   && docker-php-ext-install intl \
-  && docker-php-ext-enable intl \
   \
   && apt-get purge -y ${buildDeps} \
   && rm -rf /var/lib/apt/lists/*
