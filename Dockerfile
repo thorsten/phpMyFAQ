@@ -77,6 +77,13 @@ RUN set -x \
 RUN set -x \
   && docker-php-ext-install pdo_mysql
 
+#=== Configure php ===
+RUN { \
+    echo "register_globals = off"; \
+    echo "safe_mode = off"; \
+    echo "file_upload = on"; \
+  } | tee "$PHP_INI_DIR/php.ini"
+
 #=== Set custom entrypoint ===
 COPY docker-entrypoint.sh /entrypoint
 ENTRYPOINT [ "/entrypoint" ]
