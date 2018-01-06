@@ -34,4 +34,9 @@ if [ "x${TIMEZONE}" = "x" ]; then
 fi
 echo "date.timezone = ${TIMEZONE}" > "$PHP_INI_DIR/conf.d/timezone.ini"
 
+if [ "x${MEMORY_LIMIT}" = "x" ]; then
+    MEMORY_LIMIT="64M"
+fi
+echo "memory_limit = $MEMORY_LIMIT" > "$PHP_INI_DIR/conf.d/memory.ini"
+
 docker-php-entrypoint "$@"
