@@ -6,7 +6,7 @@ set -e
 #=== Set folder permissions ===
 folders="attachments data images config"
 
-mkdir $folders
+mkdir -vp $folders
 chmod 775 $folders
 
 . "$APACHE_ENVVARS"
