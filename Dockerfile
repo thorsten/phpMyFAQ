@@ -73,9 +73,9 @@ RUN set -x \
   && apt-get purge -y ${buildDeps} \
   && rm -rf /var/lib/apt/lists/*
 
-#=== Install pdo_mysql php dependencie ===
+#=== Install mysqli php dependencie ===
 RUN set -x \
-  && docker-php-ext-install pdo_mysql
+  && docker-php-ext-install mysqli
 
 #=== Configure php ===
 RUN { \
