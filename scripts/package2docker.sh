@@ -31,6 +31,7 @@
 # @version   2018-01-06
 
 # Exit on error
+set -e
 
 # phpMyFAQ Version
 . scripts/version.sh
@@ -59,7 +60,7 @@ docker_opts=""
 [ "x$NO_CACHE" != "x" ] && docker_opts="$docker_opts --no-cache"
 
 docker_stdout=""
-[ "x$SILENT" = x ] && docker_stdout="1> /dev/null"
+[ "x$SILENT" != x ] && docker_stdout="1> /dev/null"
 
 # Set docker tags
 if [ "x$IMAGENAME" = "x" ]; then
@@ -67,19 +68,30 @@ if [ "x$IMAGENAME" = "x" ]; then
 fi
 
 # Building docker image
-$DOCKERBIN build $docker_opts -t $IMAGENAME:$PMF_VERSION . $docker_stdout
+$DOCKERBIN build $docker_opts -t $IMAGENAME . $docker_stdout
 
-# Copying release to docker image
-targetContainer=$( $DOCKERBIN create $IMAGENAME:$PMF_VERSION )
-$DOCKERBIN cp ${PMF_PACKAGE_FOLDER}.tar.gz $targetContainer:/tmp
-$DOCKERBIN exec $targetContainer bash -c " \
-    tar -xf /tmp/${PMF_PACKAGE_FOLDER}.tar.gz /var/www/html && \
-    rm /tmp/${PMF_PACKAGE_FOLDER}.tar.gz "
+# Create a temp container from previous image
+targetContainer=$( $DOCKERBIN create $IMAGENAME )
+
+# Copying release to the temp container
+mkdir -p $cwd/build/package/${PMF_PACKAGE_FOLDER}
+tar -xf ${PMF_PACKAGE_FOLDER}.tar.gz -C $cwd/build/package/${PMF_PACKAGE_FOLDER}
+mv $cwd/build/package/${PMF_PACKAGE_FOLDER}/phpmyfaq $cwd/build/package/${PMF_PACKAGE_FOLDER}/html
+
+$DOCKERBIN cp $cwd/build/package/${PMF_PACKAGE_FOLDER}/html $targetContainer:/var/www
+
+rm -rf $cwd/build/package/${PMF_PACKAGE_FOLDER}
+
+# Commiting container changes to a new image
 $DOCKERBIN commit $targetContainer $IMAGENAME:$PMF_VERSION
 $DOCKERBIN rm $targetContainer
 
 echo "Docker image \"$IMAGENAME:$PMF_VERSION\" built succesfully."
 
+# Remote registry management.
+# $REGISTRY var must look like [REGSITRY[:PORT]/]NAMESPACE
+# If you only set a namespace it's meant your want to push to your docker
+# daemon default registry.
 if [ "x$REGISTRY" != "x" ]; then
     # docker login
     if [[ "$REGISTRY" =~ "/" ]]; then
@@ -102,4 +114,4 @@ if [ "x$REGISTRY" != "x" ]; then
     fi
 fi
 
-echo "done.\n";
+echo "done.";
