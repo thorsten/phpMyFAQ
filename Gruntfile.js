@@ -188,6 +188,7 @@ module.exports = function (grunt) {
           'phpmyfaq/assets/js/category.js',
           'phpmyfaq/assets/js/comments.js',
           'phpmyfaq/assets/js/editor.js',
+          'phpmyfaq/assets/js/faq.js',
           'phpmyfaq/assets/js/records.js',
           'phpmyfaq/assets/js/typeahead.js',
           'phpmyfaq/assets/js/functions.js',
