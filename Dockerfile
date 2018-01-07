@@ -86,6 +86,7 @@ RUN { \
 
 #=== Set custom entrypoint ===
 COPY docker-entrypoint.sh /entrypoint
+RUN chmod +x /entrypoint
 ENTRYPOINT [ "/entrypoint" ]
 
 #=== Re-Set CMD as we changed the default entrypoint ===
