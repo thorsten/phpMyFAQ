@@ -40,7 +40,7 @@ unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in yo
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
-    $ git checkout 2.10
+    $ git checkout 3.0
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
     $ curl -o- -L https://yarnpkg.com/install.sh | bash
