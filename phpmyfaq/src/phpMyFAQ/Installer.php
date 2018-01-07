@@ -19,9 +19,11 @@ namespace phpMyFAQ;
  * @since     2012-08-27
  */
 
+use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Instance\Database;
 use phpMyFAQ\Instance\Database\Stopwords;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Instance\Master;
 
@@ -755,14 +757,12 @@ class Installer
                 System::renderFooter(true);
             }
 
-            require_once PMF_SRC_DIR.'/libs/react/promise/src/functions.php';
-
-            $psr4Loader = new Psr4ClassLoader();
-            $psr4Loader->addPrefix('Elasticsearch', PMF_SRC_DIR.'/libs/elasticsearch/src/Elasticsearch');
-            $psr4Loader->addPrefix('GuzzleHttp\\Ring\\', PMF_SRC_DIR.'/libs/guzzlehttp/ringphp/src');
-            $psr4Loader->addPrefix('Monolog', PMF_SRC_DIR.'/libs/monolog/src/Monolog');
-            $psr4Loader->addPrefix('Psr', PMF_SRC_DIR.'/libs/psr/log/Psr');
-            $psr4Loader->addPrefix('React\\Promise\\', PMF_SRC_DIR.'/libs/react/promise/src');
+            $psr4Loader = new ClassLoader();
+            $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR.'/libs/elasticsearch/src/Elasticsearch');
+            $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR.'/libs/guzzlehttp/ringphp/src');
+            $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR.'/libs/monolog/src/Monolog');
+            $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR.'/libs/psr/log/Psr');
+            $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR.'/libs/react/promise/src');
             $psr4Loader->register();
 
             // check LDAP connection
