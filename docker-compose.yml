@@ -32,7 +32,7 @@ services:
   yarn:
     image: node:6-alpine
     restart: "no"
-    command: sh -c "cd app && yarn install"
+    command: sh -c "cd app && yarn install && yarn build"
     stdin_open: true
     tty: true
     volumes:
@@ -42,7 +42,7 @@ services:
   composer:
     image: composer:1.6.1
     restart: "no"
-    command: composer install
+    command: composer install --verbose --no-dev
     stdin_open: true
     tty: true
     volumes:
