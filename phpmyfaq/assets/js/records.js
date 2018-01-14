@@ -15,7 +15,7 @@
  * @since     2016-03-25
  */
 
-/*global $: false, hljs: false, saveFormValues: false, mermaid: false */
+/*global $: false, saveFormValues: false, mermaid: false */
 
 $(document).ready(function () {
     'use strict';

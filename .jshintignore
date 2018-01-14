@@ -3,6 +3,7 @@ node_modules/**
 phpmyfaq/admin/assets/editor/**
 phpmyfaq/admin/assets/plugins/**
 phpmyfaq/assets/js/libs/*.js
+phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js
 phpmyfaq/assets/js/phpmyfaq.min.js
-phpmyfaq/assets/js/vendor.js
+phpmyfaq/assets/js/vendors.js

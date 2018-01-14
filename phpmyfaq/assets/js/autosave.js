@@ -17,7 +17,7 @@
 /*global document: false, window: false, $: false */
 
 $(document).ready(function () {
-    'use script';
+    'use strict';
     $(window).on('unload', function () {
         if (typeof window.tinyMCE !== "undefined" && window.tinyMCE.activeEditor !== null) {
             if (window.tinyMCE.activeEditor.isDirty()) {
@@ -32,7 +32,6 @@ $(document).ready(function () {
 
     if (typeof window.tinyMCE !== "undefined" && typeof pmfAutosaveInterval !== "undefined") {
         setInterval(function () {
-            "use strict";
             pmfAutosave();
         },
         window.pmfAutosaveInterval * 1000);

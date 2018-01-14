@@ -14,9 +14,10 @@
  * @since     2017-08-02
  */
 
-/*global document: false, window: false, $: false */
+/*global document: false, $: false, tinyMCE: false, saveFormValues: false */
 
 $(document).ready(function() {
+  'use strict';
   $('#submitfaq').click(function() {
     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
       tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
