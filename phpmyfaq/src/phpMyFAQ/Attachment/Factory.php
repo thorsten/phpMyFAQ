@@ -105,22 +105,23 @@ class Factory
      * @param Configuration $config
      * @param int               $recordId ID of the record
      *
-     * @return integer|null
+     * @throws Exception
+     *
+     * @return array
      */
     public static function fetchByRecordId(Configuration $config, $recordId)
     {
         $retval = [];
 
         $sql = sprintf(
-            "
-                        SELECT
-                            id
-                        FROM
-                            %sfaqattachment
-                        WHERE
-                            record_id = %d
-                        AND
-                            record_lang = '%s'",
+            "SELECT
+                id
+            FROM
+                %sfaqattachment
+            WHERE
+                record_id = %d
+            AND
+                record_lang = '%s'",
             Db::getTablePrefix(),
             $recordId,
             Language::$language
@@ -138,7 +139,7 @@ class Factory
     }
 
     /**
-     * Initalizing factory with global attachment settings.
+     * Initializing factory with global attachment settings.
      *
      * @param int    $storageType       Storage type
      * @param string $defaultKey        Default key
@@ -157,5 +158,27 @@ class Factory
         if (null === self::$encryptionEnabled) {
             self::$encryptionEnabled = $encryptionEnabled;
         }
+    }
+
+    /**
+     * Re-arranges the $_FILES array for multiple file uploads.
+     *
+     * @param $filePost
+     *
+     * @return array
+     */
+    public static function rearrangeUploadedFiles(&$filePost) {
+
+        $filesArray = [];
+        $filesCount = count($filePost['name']);
+        $filesKeys = array_keys($filePost);
+
+        for ($i = 0; $i < $filesCount; $i++) {
+            foreach ($filesKeys as $key) {
+                $filesArray[$i][$key] = $filePost[$key][$i];
+            }
+        }
+
+        return $filesArray;
     }
 }
