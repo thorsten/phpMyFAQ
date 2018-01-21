@@ -221,14 +221,14 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $selectedRevisionId
         );
         printf(
-			'<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-info">%s</a>',
+            '<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-info">%s</a>',
             $PMF_LANG['ad_entry_edit_1'],
             (0 === $faqData['id'] ? '' : $faqData['id']),
             $PMF_LANG['ad_entry_edit_2'],
             $currentRevision,
-			$faqData['id'],
-			$faqData['lang'],
-			$PMF_LANG['ad_view_faq']
+            $faqData['id'],
+            $faqData['lang'],
+            $PMF_LANG['ad_view_faq']
         );
     } else {
         printf('<i aria-hidden="true" class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
@@ -283,7 +283,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             </div>
         </header>
 
-        <div class="row">
+        <div class="card-group">
 
             <form id="faqEditor" action="?action=<?php echo $queryString ?>" method="post" >
 
@@ -295,303 +295,297 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?php echo $notifyEmail ?>">
 
             <!-- main editor window -->
-            <div class="col-lg-8">
-                <div class="panel panel-default">
+            <div class="card">
+                <div class="card-body">
+                    <!-- Question -->
+                    <div class="form-group">
+                        <textarea name="question" id="question" class="form-control" rows="2"
+                                  placeholder="<?php echo $PMF_LANG['ad_entry_theme'] ?>"
+                        ><?php echo $faqData['title'] ?></textarea>
+                    </div>
 
-                    <div class="panel-body">
-                        <!-- Question -->
-                        <div class="form-group row">
-                            <div class="col-lg-12">
-                                <textarea name="question" id="question" class="form-control" rows="2"
-                                          placeholder="<?php echo $PMF_LANG['ad_entry_theme'] ?>"
-                                ><?php echo $faqData['title'] ?></textarea>
-                            </div>
+                    <!-- Answer -->
+                    <?php if ($faqConfig->get('main.enableWysiwygEditor')): ?>
+                    <div class="form-group row">
+                        <div class="col-lg-12">
+                            <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
+                            <textarea id="answer" name="answer" class="form-control" rows="7"
+                                      placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"
+                            ><?php echo $faqData['content'] ?></textarea>
                         </div>
-
-                        <!-- Answer -->
-                        <?php if ($faqConfig->get('main.enableWysiwygEditor')): ?>
-                        <div class="form-group row">
-                            <div class="col-lg-12">
-                                <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
-                                <textarea id="answer" name="answer" class="form-control" rows="7"
-                                          placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"
-                                ><?php echo $faqData['content'] ?></textarea>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-                        <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
-                        <ul class="nav nav-tabs markdown-tabs">
-                            <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
-                            <li><a data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a></li>
-                        </ul>
-                        <div class="tab-content">
-                            <div class="tab-pane active" id="text">
-                                <div class="form-group row">
-                                    <div class="col-lg-12">
-                                        <textarea id="answer" name="answer" class="form-control" rows="7"
-                                                  placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"><?php echo $faqData['content'] ?></textarea>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane" id="preview">
-                                <article class="markdown-preview">
-                                </article>
-                            </div>
-                        </div>
-                        <?php endif; ?>
-
-
-                        <!-- Language -->
-                        <div class="form-group row">
-                            <label class="col-lg-4 form-control-label" for="lang">
-                                <?php echo $PMF_LANG['ad_entry_locale'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <?php echo Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
-                            </div>
-                        </div>
-
-
-                        <!-- Attachments -->
-                        <?php if ($user->perm->checkRight($user->getUserId(), 'addattachment')): ?>
+                    </div>
+                    <?php endif; ?>
+                    <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
+                    <ul class="nav nav-tabs markdown-tabs">
+                        <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
+                        <li><a data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a></li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="text">
                             <div class="form-group row">
-                                <label class="col-lg-4 form-control-label">
-                                    <?php echo $PMF_LANG['ad_menu_attachments'] ?>:
-                                </label>
-                                <div class="col-lg-8">
-                                    <ul class="form-control-static adminAttachments">
-                                        <?php
-                                        $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
-                                        foreach ($attList as $att) {
-                                            printf(
-                                                '<li><a href="../%s">%s</a> ',
-                                                $att->buildUrl(),
-                                                $att->getFilename()
-                                            );
-                                            if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
-                                                printf(
-                                                    '<a class="label label-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
-                                                    $faqData['id'],
-                                                    $att->getId(),
-                                                    $faqData['lang']
-                                                );
-                                        }
-                                        echo "</li>\n";
-                                    }
-                                    ?>
-                                    </ul>
+                                <div class="col-lg-12">
+                                    <textarea id="answer" name="answer" class="form-control" rows="7"
+                                              placeholder="<?php echo $PMF_LANG['ad_entry_content'] ?>"><?php echo $faqData['content'] ?></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="preview">
+                            <article class="markdown-preview">
+                            </article>
+                        </div>
+                    </div>
+                    <?php endif; ?>
+
+
+                    <!-- Language -->
+                    <div class="form-group row">
+                        <label class="col-lg-4 form-control-label" for="lang">
+                            <?php echo $PMF_LANG['ad_entry_locale'] ?>:
+                        </label>
+                        <div class="col-lg-8">
+                            <?php echo Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
+                        </div>
+                    </div>
+
+
+                    <!-- Attachments -->
+                    <?php if ($user->perm->checkRight($user->getUserId(), 'addattachment')): ?>
+                        <div class="form-group row">
+                            <label class="col-lg-4 form-control-label">
+                                <?php echo $PMF_LANG['ad_menu_attachments'] ?>:
+                            </label>
+                            <div class="col-lg-8">
+                                <ul class="form-control-static adminAttachments">
                                     <?php
-                                    if (0 === $faqData['id']) {
-                                        $faqData['id'] = $faqConfig->getDb()->nextId(
-                                            Db::getTablePrefix().'faqdata',
-                                            'id'
+                                    $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
+                                    foreach ($attList as $att) {
+                                        printf(
+                                            '<li><a href="../%s">%s</a> ',
+                                            $att->buildUrl(),
+                                            $att->getFilename()
                                         );
-                                    }
-                                    printf(
-                                        '<a class="btn btn-success pmf-add-attachment" data-faq-id="%d" data-faq-language="%s">%s</a>',
-                                        $faqData['id'],
-                                        $faqData['lang'],
-                                        $PMF_LANG['ad_att_add']
-                                    );
-                                    ?>
-                                </div>
-                            </div>
-                        <?php endif; ?>
-
-                        <!-- Tags -->
-                        <div class="form-group row">
-                            <label class="col-lg-4 form-control-label" for="tags">
-                                <?php echo $PMF_LANG['ad_entry_tags'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
-                                    autocomplete="off" class="form-control pmf-tags-autocomplete"
-                                    data-tagList="<?php echo $faqData['tags'] ?>">
-                                <span id="tagsHelp" class="help-block hide">
-                                    <?php echo $PMF_LANG['msgShowHelp'] ?>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Keywords -->
-                        <div class="form-group row">
-                            <label class="col-lg-4 form-control-label" for="keywords">
-                                <?php echo $PMF_LANG['ad_entry_keywords'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="text" name="keywords" id="keywords"  maxlength="255" class="form-control"
-                                       value="<?php echo $faqData['keywords'] ?>">
-                                <span id="keywordsHelp" class="help-block hide">
-                                    <?php echo $PMF_LANG['msgShowHelp'] ?>
-                                </span>
-                            </div>
-                        </div>
-
-                        <!-- Author -->
-                        <div class="form-group row">
-                            <label class="col-lg-4 form-control-label" for="author">
-                                <?php echo $PMF_LANG['ad_entry_author'] ?>
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="text" name="author" id="author" value="<?php echo $faqData['author'] ?>"
-                                       class="form-control">
-                            </div>
-                        </div>
-
-                        <!-- E-Mail -->
-                        <div class="form-group row">
-                            <label class="col-lg-4 form-control-label" for="email">
-                                <?php echo $PMF_LANG['ad_entry_email'] ?>
-                            </label>
-                            <div class="col-lg-8">
-                                <input type="email" name="email" id="email" value="<?php echo $faqData['email'] ?>"
-                                       class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- optional -->
-                <div class="panel-group" id="accordion">
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseAdminNotes">
-                                <?php printf($PMF_LANG['ad_admin_notes_hint'], $PMF_LANG['ad_admin_notes']) ?>
-                            </a>
-                        </div>
-
-                        <div id="collapseAdminNotes" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div class="form-group row">
-                                    <textarea id="answer" name="notes" class="form-control" rows="7"
-                                              placeholder="<?php echo $PMF_LANG['ad_admin_notes'] ?>"
-                                    ><?php echo isset($faqData['notes']) ? $faqData['notes'] : '' ?></textarea>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
-                    <div class="panel panel-default">
-                        <?php
-                        if ('00000000000000' == $faqData['dateStart']) {
-                            $faqData['dateStart'] = '';
-                        } else {
-                            $faqData['dateStart'] = preg_replace(
-                                "/(\d{4})(\d{2})(\d{2}).*/",
-                                '$1-$2-$3',
-                                $faqData['dateStart']
-                            );
-                        }
-
-                        if ('99991231235959' == $faqData['dateEnd']) {
-                            $faqData['dateEnd'] = '';
-                        } else {
-                            $faqData['dateEnd'] = preg_replace(
-                                "/(\d{4})(\d{2})(\d{2}).*/",
-                                '$1-$2-$3',
-                                $faqData['dateEnd']
-                            );
-                        }
-                        ?>
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTimespan">
-                            <?php echo $PMF_LANG['ad_record_expiration_window'] ?>
-                            </a>
-                        </div>
-
-                        <div id="collapseTimespan" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div class="form-group row">
-                                    <label class="col-lg-4 form-control-label" for="dateStart">
-                                        <?php echo $PMF_LANG['ad_news_from'] ?>
-                                    </label>
-                                    <div class="col-lg-2">
-                                        <input name="dateStart" id="dateStart" class="date-pick form-control"
-                                               maxlength="10" value="<?php echo $faqData['dateStart'] ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 form-control-label" for="dateEnd">
-                                        <?php echo $PMF_LANG['ad_news_to'] ?>
-                                    </label>
-                                    <div class="col-lg-2">
-                                        <input name="dateEnd" id="dateEnd" class="date-pick form-control" maxlength="10"
-                                               value="<?php echo $faqData['dateEnd'] ?>">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseEditChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog'] ?>
-                            </a>
-                        </div>
-
-                        <div id="collapseEditChangelog" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div class="form-group row" id="editChangelog">
-                                    <label class="col-lg-4 form-control-label">
-                                        <?php echo $PMF_LANG['ad_entry_date'] ?>
-                                    </label>
-                                    <div class="col-lg-8">
-                                        <p class="form-control-static"><?php echo $faqData['date'] ?></p>
-                                    </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label class="col-lg-4 form-control-label" for="changed">
-                                        <?php echo $PMF_LANG['ad_entry_changed'] ?>
-                                    </label>
-                                    <div class="col-lg-8">
-                                        <textarea name="changed" id="changed" rows="3" class="form-control">
-                                            <?php echo $faqData['changed'] ?>
-                                        </textarea>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
-                                <?php echo $PMF_LANG['ad_entry_changelog_history'] ?>
-                            </a>
-                        </div>
-
-                        <div id="collapseViewChangelog" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <?php
-                                foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
-                                    $user->getUserById($entry['user']);
-                                    ?>
-                                    <p class="small">
-                                        <label>
-                                            <?php printf(
-                                                '%s  1.%d | %s | %s %s',
-                                                $PMF_LANG['ad_entry_revision'],
-                                                $entry['revision_id'],
-                                                $date->format(date('Y-m-d H:i', $entry['date'])),
-                                                $PMF_LANG['ad_entry_author'],
-                                                $user->getUserData('display_name')
+                                        if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
+                                            printf(
+                                                '<a class="label label-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
+                                                $faqData['id'],
+                                                $att->getId(),
+                                                $faqData['lang']
                                             );
-                                            ?>
-                                        </label>
-                                        <?php echo $entry['changelog'] ?>
-                                    </p>
-                                <?php } ?>
+                                    }
+                                    echo "</li>\n";
+                                }
+                                ?>
+                                </ul>
+                                <?php
+                                if (0 === $faqData['id']) {
+                                    $faqData['id'] = $faqConfig->getDb()->nextId(
+                                        Db::getTablePrefix().'faqdata',
+                                        'id'
+                                    );
+                                }
+                                printf(
+                                    '<a class="btn btn-success pmf-add-attachment" data-faq-id="%d" data-faq-language="%s">%s</a>',
+                                    $faqData['id'],
+                                    $faqData['lang'],
+                                    $PMF_LANG['ad_att_add']
+                                );
+                                ?>
                             </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <!-- Tags -->
+                    <div class="form-group row">
+                        <label class="col-lg-4 form-control-label" for="tags">
+                            <?php echo $PMF_LANG['ad_entry_tags'] ?>:
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" name="tags" id="tags" value="<?php echo $faqData['tags'] ?>"
+                                autocomplete="off" class="form-control pmf-tags-autocomplete"
+                                data-tagList="<?php echo $faqData['tags'] ?>">
+                            <span id="tagsHelp" class="help-block hide">
+                                <?php echo $PMF_LANG['msgShowHelp'] ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Keywords -->
+                    <div class="form-group row">
+                        <label class="col-lg-4 form-control-label" for="keywords">
+                            <?php echo $PMF_LANG['ad_entry_keywords'] ?>:
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" name="keywords" id="keywords"  maxlength="255" class="form-control"
+                                   value="<?php echo $faqData['keywords'] ?>">
+                            <span id="keywordsHelp" class="help-block hide">
+                                <?php echo $PMF_LANG['msgShowHelp'] ?>
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Author -->
+                    <div class="form-group row">
+                        <label class="col-lg-4 form-control-label" for="author">
+                            <?php echo $PMF_LANG['ad_entry_author'] ?>
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="text" name="author" id="author" value="<?php echo $faqData['author'] ?>"
+                                   class="form-control">
+                        </div>
+                    </div>
+
+                    <!-- E-Mail -->
+                    <div class="form-group row">
+                        <label class="col-lg-4 form-control-label" for="email">
+                            <?php echo $PMF_LANG['ad_entry_email'] ?>
+                        </label>
+                        <div class="col-lg-8">
+                            <input type="email" name="email" id="email" value="<?php echo $faqData['email'] ?>"
+                                   class="form-control">
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- sidebar -->
-            <div class="col-lg-4">
+            <!-- optional -->
+            <div id="accordion">
+
+                <div class="card">
+                    <div class="card-header">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseAdminNotes">
+                            <?php printf($PMF_LANG['ad_admin_notes_hint'], $PMF_LANG['ad_admin_notes']) ?>
+                        </a>
+                    </div>
+
+                    <div id="collapseAdminNotes" class="card-collapse collapse">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <textarea id="answer" name="notes" class="form-control" rows="7"
+                                          placeholder="<?php echo $PMF_LANG['ad_admin_notes'] ?>"
+                                ><?php echo isset($faqData['notes']) ? $faqData['notes'] : '' ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="card">
+                    <?php
+                    if ('00000000000000' == $faqData['dateStart']) {
+                        $faqData['dateStart'] = '';
+                    } else {
+                        $faqData['dateStart'] = preg_replace(
+                            "/(\d{4})(\d{2})(\d{2}).*/",
+                            '$1-$2-$3',
+                            $faqData['dateStart']
+                        );
+                    }
+
+                    if ('99991231235959' == $faqData['dateEnd']) {
+                        $faqData['dateEnd'] = '';
+                    } else {
+                        $faqData['dateEnd'] = preg_replace(
+                            "/(\d{4})(\d{2})(\d{2}).*/",
+                            '$1-$2-$3',
+                            $faqData['dateEnd']
+                        );
+                    }
+                    ?>
+                    <div class="card-header">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseTimespan">
+                        <?php echo $PMF_LANG['ad_record_expiration_window'] ?>
+                        </a>
+                    </div>
+
+                    <div id="collapseTimespan" class="card-collapse collapse">
+                        <div class="card-body">
+                            <div class="form-group row">
+                                <label class="col-lg-4 form-control-label" for="dateStart">
+                                    <?php echo $PMF_LANG['ad_news_from'] ?>
+                                </label>
+                                <div class="col-lg-2">
+                                    <input name="dateStart" id="dateStart" class="date-pick form-control"
+                                           maxlength="10" value="<?php echo $faqData['dateStart'] ?>">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-4 form-control-label" for="dateEnd">
+                                    <?php echo $PMF_LANG['ad_news_to'] ?>
+                                </label>
+                                <div class="col-lg-2">
+                                    <input name="dateEnd" id="dateEnd" class="date-pick form-control" maxlength="10"
+                                           value="<?php echo $faqData['dateEnd'] ?>">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseEditChangelog">
+                            <?php echo $PMF_LANG['ad_entry_changelog'] ?>
+                        </a>
+                    </div>
+
+                    <div id="collapseEditChangelog" class="card-collapse collapse">
+                        <div class="card-body">
+                            <div class="form-group row" id="editChangelog">
+                                <label class="col-lg-4 form-control-label">
+                                    <?php echo $PMF_LANG['ad_entry_date'] ?>
+                                </label>
+                                <div class="col-lg-8">
+                                    <p class="form-control-static"><?php echo $faqData['date'] ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-lg-4 form-control-label" for="changed">
+                                    <?php echo $PMF_LANG['ad_entry_changed'] ?>
+                                </label>
+                                <div class="col-lg-8">
+                                    <textarea name="changed" id="changed" rows="3" class="form-control">
+                                        <?php echo $faqData['changed'] ?>
+                                    </textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapseViewChangelog">
+                            <?php echo $PMF_LANG['ad_entry_changelog_history'] ?>
+                        </a>
+                    </div>
+
+                    <div id="collapseViewChangelog" class="card-collapse collapse">
+                        <div class="card-body">
+                            <?php
+                            foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
+                                $user->getUserById($entry['user']);
+                                ?>
+                                <p class="small">
+                                    <label>
+                                        <?php printf(
+                                            '%s  1.%d | %s | %s %s',
+                                            $PMF_LANG['ad_entry_revision'],
+                                            $entry['revision_id'],
+                                            $date->format(date('Y-m-d H:i', $entry['date'])),
+                                            $PMF_LANG['ad_entry_author'],
+                                            $user->getUserData('display_name')
+                                        );
+                                        ?>
+                                    </label>
+                                    <?php echo $entry['changelog'] ?>
+                                </p>
+                            <?php } ?>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+              <!-- sidebar -->
                 <?php if ('' !== $faqData['dateEnd'] && 'copyentry' !== $action) {
                     $url = sprintf(
                         '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
@@ -603,219 +597,217 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     $link = new Link($url, $faqConfig);
                     $link->itemTitle = $faqData['title'];
                     ?>
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <a class="btn btn-info" href="<?php echo $link->toString() ?>">
-                            <?php echo $PMF_LANG['msgSeeFAQinFrontend'] ?>
-                        </a>
+                  <div class="card">
+                    <div class="card-header">
+                      <a class="btn btn-info" href="<?php echo $link->toString() ?>">
+                          <?php echo $PMF_LANG['msgSeeFAQinFrontend'] ?>
+                      </a>
                     </div>
-                </div>
+                  </div>
                 <?php } ?>
 
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_date'] ?>
-                    </div>
-                    <div class="panel-body">
+              <div class="card">
+                <div class="card-header">
+                    <?php echo $PMF_LANG['ad_entry_date'] ?>
+                </div>
+                <div class="card-body">
 
-                        <div class="form-group row">
-                            <div class="col-lg-12 radio">
-                                <label>
-                                    <input type="radio" id="dateActualize" checked name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);">
-                                    <?php echo $PMF_LANG['msgUpdateFaqDate'] ?>
-                                    <br>
-                                    <input type="radio" id="dateKeep" name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);">
-                                    <?php echo $PMF_LANG['msgKeepFaqDate'] ?>
-                                    <br>
-                                    <input type="radio" id="dateCustomize" name="recordDateHandling"
-                                           onchange="setRecordDate(this.id);">
-                                    <?php echo $PMF_LANG['msgEditFaqDat'] ?>
-                                </label>
-                            </div>
-                        </div>
-                        <div id="recordDateInputContainer" class="form-group row hide">
-                            <div class="col-lg-12">
-                                <input type="text" name="date" id="date" class="form-control"
-                                       placeholder="<?php echo $faqData['date'] ?>">
-                            </div>
-                        </div>
+                  <div class="form-group row">
+                    <div class="col-lg-12 radio">
+                      <label>
+                        <input type="radio" id="dateActualize" checked name="recordDateHandling"
+                               onchange="setRecordDate(this.id);">
+                          <?php echo $PMF_LANG['msgUpdateFaqDate'] ?>
+                        <br>
+                        <input type="radio" id="dateKeep" name="recordDateHandling"
+                               onchange="setRecordDate(this.id);">
+                          <?php echo $PMF_LANG['msgKeepFaqDate'] ?>
+                        <br>
+                        <input type="radio" id="dateCustomize" name="recordDateHandling"
+                               onchange="setRecordDate(this.id);">
+                          <?php echo $PMF_LANG['msgEditFaqDat'] ?>
+                      </label>
                     </div>
+                  </div>
+                  <div id="recordDateInputContainer" class="form-group row hide">
+                    <div class="col-lg-12">
+                      <input type="text" name="date" id="date" class="form-control"
+                             placeholder="<?php echo $faqData['date'] ?>">
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <!-- Categories -->
+                <div class="card-header">
+                    <?php echo $PMF_LANG['ad_entry_category'] ?>
+                </div>
+                <div class="card-body">
+                  <div class="form-group row">
+                    <div class="col-lg-offset-1 col-lg-10">
+                      <select name="rubrik[]" id="phpmyfaq-categories" size="10" multiple
+                              class="form-control">
+                          <?php echo $categoryHelper->renderOptions($categories) ?>
+                      </select>
+                    </div>
+                  </div>
                 </div>
 
-                <div class="panel panel-default">
-                    <!-- Categories -->
-                    <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_category'] ?>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <div class="col-lg-offset-1 col-lg-10">
-                                <select name="rubrik[]" id="phpmyfaq-categories" size="10" multiple
-                                        class="form-control">
-                                    <?php echo $categoryHelper->renderOptions($categories) ?>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <!-- Activation -->
+                <div class="card-header">
+                    <?php echo $PMF_LANG['ad_entry_active'] ?>
+                </div>
+                <div class="card-body">
+                  <div class="form-group row">
+                    <div class="col-lg-offset-1 col-lg-10 radio">
+                        <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')):
+                        if (isset($faqData['active']) && $faqData['active'] == 'yes') {
+                            $suf = ' checked';
+                            $sul = null;
+                        } elseif ($faqConfig->get('records.defaultActivation')) {
+                            $suf = ' checked';
+                            $sul = null;
+                        } else {
+                            $suf = null;
+                            $sul = ' checked';
+                        }
+                        ?>
+                      <label>
+                        <input type="radio" id="active" name="active" value="yes"
+                            <?php if (isset($suf)) { echo $suf; } ?>>
+                          <?php echo $PMF_LANG['ad_gen_yes'] ?>
+                        <br>
+                        <input type="radio" name="active" value="no"
+                            <?php if (isset($sul)) { echo $sul; } ?>>
+                          <?php echo $PMF_LANG['ad_gen_no'] ?>
+                          <?php else: ?>
+                            <br>
+                            <input type="radio" name="active" value="no" checked>
+                              <?php echo $PMF_LANG['ad_gen_no'] ?>
 
-                    <!-- Activation -->
-                    <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_active'] ?>
+                          <?php endif; ?>
+                      </label>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <div class="col-lg-offset-1 col-lg-10 radio">
-                                <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')):
-                                    if (isset($faqData['active']) && $faqData['active'] == 'yes') {
-                                        $suf = ' checked';
-                                        $sul = null;
-                                    } elseif ($faqConfig->get('records.defaultActivation')) {
-                                        $suf = ' checked';
-                                        $sul = null;
-                                    } else {
-                                        $suf = null;
-                                        $sul = ' checked';
-                                    }
-                                ?>
-                                    <label>
-                                        <input type="radio" id="active" name="active" value="yes"
-                                            <?php if (isset($suf)) { echo $suf; } ?>>
-                                        <?php echo $PMF_LANG['ad_gen_yes'] ?>
-                                        <br>
-                                        <input type="radio" name="active" value="no"
-                                            <?php if (isset($sul)) { echo $sul; } ?>>
-                                        <?php echo $PMF_LANG['ad_gen_no'] ?>
-                                <?php else: ?>
-                                        <br>
-                                        <input type="radio" name="active" value="no" checked>
-                                        <?php echo $PMF_LANG['ad_gen_no'] ?>
+                  </div>
+                </div>
 
-                                <?php endif; ?>
-                                    </label>
-                            </div>
-                        </div>
+                <!-- Sticky FAQ -->
+                <div class="card-body">
+                  <div class="form-group row">
+                    <div class="col-lg-offset-1 col-lg-10">
+                      <label class="checkbox">
+                        <input type="checkbox" id="sticky" name="sticky"
+                            <?php echo(isset($faqData['sticky']) && $faqData['sticky'] ? 'checked' : '') ?>>
+                          <?php echo $PMF_LANG['ad_entry_sticky'] ?>
+                      </label>
+                      <label class="checkbox">
+                        <input type="checkbox" name="comment" id="comment" value="y"
+                            <?php echo $faqData['comment'] ?>>
+                          <?php echo $PMF_LANG['ad_entry_allowComments'] ?>
+                      </label>
                     </div>
+                  </div>
+                </div>
 
-                    <!-- Sticky FAQ -->
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <div class="col-lg-offset-1 col-lg-10">
-                                <label class="checkbox">
-                                    <input type="checkbox" id="sticky" name="sticky"
-                                        <?php echo(isset($faqData['sticky']) && $faqData['sticky'] ? 'checked' : '') ?>>
-                                    <?php echo $PMF_LANG['ad_entry_sticky'] ?>
-                                </label>
-                                <label class="checkbox">
-                                    <input type="checkbox" name="comment" id="comment" value="y"
-                                        <?php echo $faqData['comment'] ?>>
-                                    <?php echo $PMF_LANG['ad_entry_allowComments'] ?>
-                                </label>
-                            </div>
-                        </div>
+                <div class="card-body">
+                  <div class="form-group row">
+                    <label class="col-lg-6 form-control-label" for="solution_id">
+                        <?php echo $PMF_LANG['ad_entry_solution_id'] ?>:
+                    </label>
+                    <div class="col-lg-6">
+                      <input type="number" name="solution_id" id="solution_id" size="5"
+                             class="form-control-static" readonly
+                             value="<?php echo(isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>">
                     </div>
+                  </div>
+                </div>
 
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <label class="col-lg-6 form-control-label" for="solution_id">
-                                <?php echo $PMF_LANG['ad_entry_solution_id'] ?>:
-                            </label>
-                            <div class="col-lg-6">
-                                <input type="number" name="solution_id" id="solution_id" size="5"
-                                       class="form-control-static" readonly
-                                       value="<?php echo(isset($faqData['solution_id']) ? $faqData['solution_id'] : $faq->getSolutionId()); ?>">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Permissions -->
-                    <?php if ($faqConfig->get('security.permLevel') != 'basic'): ?>
-                    <div class="panel-heading">
+                <!-- Permissions -->
+                  <?php if ($faqConfig->get('security.permLevel') != 'basic'): ?>
+                    <div class="card-header">
                         <?php echo $PMF_LANG['ad_entry_grouppermission'] ?>
                     </div>
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <div class="col-lg-offset-1 col-lg-10">
-                                <label>
-                                    <input type="radio" id="allgroups" name="grouppermission" value="all"
-                                        <?php echo($allGroups ? 'checked' : ''); ?>>
-                                    <?php echo $PMF_LANG['ad_entry_all_groups'] ?>
-                                </label>
-                                <label>
-                                    <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted"
-                                        <?php echo($restrictedGroups ? 'checked' : ''); ?>>
-                                    <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
-                                    <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                                       <?php 
-                                            if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-                                                echo $user->perm->getAllGroupsOptions($groupPermission,$currentUserId);
-                                            }else{
-                                                echo $user->perm->getAllGroupsOptions($groupPermission);
-                                            }
-                                        ?>
-                                    </select>
-                                </label>
-                            </div>
+                    <div class="card-body">
+                      <div class="form-group row">
+                        <div class="col-lg-offset-1 col-lg-10">
+                          <label>
+                            <input type="radio" id="allgroups" name="grouppermission" value="all"
+                                <?php echo($allGroups ? 'checked' : ''); ?>>
+                              <?php echo $PMF_LANG['ad_entry_all_groups'] ?>
+                          </label>
+                          <label>
+                            <input type="radio" id="restrictedgroups" name="grouppermission" value="restricted"
+                                <?php echo($restrictedGroups ? 'checked' : ''); ?>>
+                              <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
+                            <select name="restricted_groups[]" size="3" class="form-control" multiple>
+                                <?php
+                                if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
+                                    echo $user->perm->getAllGroupsOptions($groupPermission,$currentUserId);
+                                }else{
+                                    echo $user->perm->getAllGroupsOptions($groupPermission);
+                                }
+                                ?>
+                            </select>
+                          </label>
                         </div>
+                      </div>
                     </div>
-                    <?php else: ?>
-                        <input type="hidden" name="grouppermission" value="all">
-                    <?php endif; ?>
-                    <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_entry_userpermission']; ?>
-                    </div>
-                    <div class="panel-body">
-                        <div class="form-group row">
-                            <div class="col-lg-offset-1 col-lg-10">
-                                <label>
-                                    <input type="radio" id="allusers" name="userpermission" value="all"
-                                        <?php echo($allUsers ? 'checked' : ''); ?>>
-                                    <?php echo $PMF_LANG['ad_entry_all_users'] ?>
-                                </label>
-                                <label>
-                                    <input type="radio" id="restrictedusers" name="userpermission" value="restricted"
-                                        <?php echo($restrictedUsers ? 'checked' : ''); ?>>
-                                    <?php echo $PMF_LANG['ad_entry_restricted_users'] ?>
-                                    <select name="restricted_users" size="1" class="form-control">
-                                        <?php echo $user->getAllUserOptions($userPermission[0], false) ?>
-                                    </select>
-                                </label>
-                            </div>
-                        </div>
-                        <?php if ($queryString != 'insertentry'): ?>
-                        <div class="form-group row">
-                            <label class="form-control-label" for="revision">
-                                <?php echo $PMF_LANG['ad_entry_new_revision'] ?>
-                            </label>
-                            <div class="controls">
-                                <label>
-                                    <input type="radio" name="revision" id="revision" value="yes">
-                                    <?php echo $PMF_LANG['ad_gen_yes'] ?>
-                                </label>
-                                <label>
-                                    <input type="radio" name="revision" value="no" checked>
-                                    <?php echo $PMF_LANG['ad_gen_no'] ?>
-                                </label>
-                            </div>
-                        </div>
-                        <?php endif ?>
-                    </div>
-                    <div class="panel-heading">
-                        <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
-                            <div class="text-center">
-                                <button class="btn btn-primary" type="submit">
-                                    <?php echo $PMF_LANG['ad_entry_save'] ?>
-                                </button>
-                                <button class="btn btn-info" type="reset">
-                                    <?php echo $PMF_LANG['ad_gen_reset'] ?>
-                                </button>
-                            </div>
-                        <?php endif ?>
-                    </div>
+                  <?php else: ?>
+                    <input type="hidden" name="grouppermission" value="all">
+                  <?php endif; ?>
+                <div class="card-header">
+                    <?php echo $PMF_LANG['ad_entry_userpermission']; ?>
                 </div>
-
-            </div>
+                <div class="card-body">
+                  <div class="form-group row">
+                    <div class="col-lg-offset-1 col-lg-10">
+                      <label>
+                        <input type="radio" id="allusers" name="userpermission" value="all"
+                            <?php echo($allUsers ? 'checked' : ''); ?>>
+                          <?php echo $PMF_LANG['ad_entry_all_users'] ?>
+                      </label>
+                      <label>
+                        <input type="radio" id="restrictedusers" name="userpermission" value="restricted"
+                            <?php echo($restrictedUsers ? 'checked' : ''); ?>>
+                          <?php echo $PMF_LANG['ad_entry_restricted_users'] ?>
+                        <select name="restricted_users" size="1" class="form-control">
+                            <?php echo $user->getAllUserOptions($userPermission[0], false) ?>
+                        </select>
+                      </label>
+                    </div>
+                  </div>
+                    <?php if ($queryString != 'insertentry'): ?>
+                      <div class="form-group row">
+                        <label class="form-control-label" for="revision">
+                            <?php echo $PMF_LANG['ad_entry_new_revision'] ?>
+                        </label>
+                        <div class="controls">
+                          <label>
+                            <input type="radio" name="revision" id="revision" value="yes">
+                              <?php echo $PMF_LANG['ad_gen_yes'] ?>
+                          </label>
+                          <label>
+                            <input type="radio" name="revision" value="no" checked>
+                              <?php echo $PMF_LANG['ad_gen_no'] ?>
+                          </label>
+                        </div>
+                      </div>
+                    <?php endif ?>
+                </div>
+                <div class="card-header">
+                    <?php if ($selectedRevisionId == $faqData['revision_id']): ?>
+                      <div class="text-center">
+                        <button class="btn btn-primary" type="submit">
+                            <?php echo $PMF_LANG['ad_entry_save'] ?>
+                        </button>
+                        <button class="btn btn-info" type="reset">
+                            <?php echo $PMF_LANG['ad_gen_reset'] ?>
+                        </button>
+                      </div>
+                    <?php endif ?>
+                </div>
+              </div>
             </form>
         </div>
 
