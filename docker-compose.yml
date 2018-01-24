@@ -16,7 +16,7 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - ./phpmyfaq:/var/www/html:z
+      - ./phpmyfaq:/var/www/html
     depends_on:
       - grunt
   grunt:
