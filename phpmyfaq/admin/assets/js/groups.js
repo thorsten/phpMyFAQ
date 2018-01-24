@@ -184,7 +184,7 @@ $(document).ready(function () {
         }
 
         // remove selected members from list
-        selected_user_list.each(function (i, option) {
+        selected_user_list.each(function () {
             $('#group_member_list option:selected').remove();
         });
     };

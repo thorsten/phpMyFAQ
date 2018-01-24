@@ -14,7 +14,7 @@
  * @since     2010-05-02
  */
 
-/*global $:false, Bloodhound: false, Handlebars: false */
+/*global $:false, Bloodhound: false, Handlebars: false, getUserData: false */
 
 /**
  * Fetches the user rights as JSON object and checks the checkboxes

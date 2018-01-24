@@ -14,7 +14,7 @@
  * @since     2015-10-18
  */
 
-/*global tinymce:false, $:false */
+/*global tinymce:false */
 
 tinymce.PluginManager.add('imageupload', function(editor, url) {
     'use strict';

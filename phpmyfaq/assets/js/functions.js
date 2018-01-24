@@ -17,7 +17,7 @@
  * @since     2003-11-13
  */
 
-/*global document: false, window: false, $: false, self: false */
+/*global document: false, window: false, $: false */
 
 var infoBox,
     selectSelectAll,
