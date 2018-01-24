@@ -30,26 +30,23 @@
 # @link      http://www.phpmyfaq.de
 # @version   2018-01-06
 
-# Exit on error
+# Exit on error and trace execution
 set -e
 
 # phpMyFAQ Version
 . scripts/version.sh
 
-if [ "x$DOCKERBIN" = "x" ]; then
-    DOCKERBIN="$(which docker)"
-fi
+# Does we use a specific docker binary ?
+[[ "x$DOCKERBIN" = "x" ]] && DOCKERBIN="$(which docker)"
 
 # Package release
-if [ "x$PMF_PACKAGE_FOLDER" = "x" ]; then
-    PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
-fi
+[[ "x$PMF_PACKAGE_FOLDER" = "x" ]] && PMF_PACKAGE_FOLDER="phpmyfaq-${PMF_VERSION}"
 
-cwd=`pwd`
+cwd=$( pwd )
 
 # TODO: Execute composer and yarn with docker
 # TODO: Replace with own management
-if [ ! -f ${PMF_PACKAGE_FOLDER}.tar.gz ]; then
+if [[ ! -f ${PMF_PACKAGE_FOLDER}.tar.gz ]]; then
     >&2 echo "no package named \"${PMF_PACKAGE_FOLDER}.tar.gz\" found."
     >&2 echo "run git2package.sh script before this one."
     exit 1
@@ -57,13 +54,13 @@ fi
 
 # Set docker options
 docker_opts=""
-[ "x$NO_CACHE" != "x" ] && docker_opts="$docker_opts --no-cache"
+[[ "x$NO_CACHE" != "x" ]] && docker_opts="$docker_opts --no-cache"
 
 docker_stdout=""
-[ "x$SILENT" != x ] && docker_stdout="1> /dev/null"
+[[ "x$SILENT" != x ]] && docker_stdout="1> /dev/null"
 
 # Set docker tags
-if [ "x$IMAGENAME" = "x" ]; then
+if [[ "x$IMAGENAME" = "x" ]]; then
     IMAGENAME="phpmyfaq"
 fi
 
@@ -92,25 +89,25 @@ echo "Docker image \"$IMAGENAME:$PMF_VERSION\" built succesfully."
 # $REGISTRY var must look like [REGSITRY[:PORT]/]NAMESPACE
 # If you only set a namespace it's meant your want to push to your docker
 # daemon default registry.
-if [ "x$REGISTRY" != "x" ]; then
+if [[ "x$REGISTRY" != "x" ]]; then
     # docker login
     if [[ "$REGISTRY" =~ "/" ]]; then
-        docker login $REGISTRY
+        $DOCKERBIN login $REGISTRY
     else
         # if no registry spefified pushing to docker.io
-        docker login
+        $DOCKERBIN login
     fi
 
-    docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:$PMF_VERSION
-    docker push $REGISTRY/$IMAGENAME:$PMF_VERSION
+    $DOCKERBIN tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:$PMF_VERSION
+    $DOCKERBIN push $REGISTRY/$IMAGENAME:$PMF_VERSION
 
-    if [ "x$LATEST" != "x" ]; then
-        docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:latest
-        docker push $REGISTRY/$IMAGENAME:latest
+    if [[ "x$LATEST" != "x" ]]; then
+        $DOCKERBIN tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:latest
+        $DOCKERBIN push $REGISTRY/$IMAGENAME:latest
     fi
-    if [ "x$STABLE" != "x" ]; then
-        docker tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:stable
-        docker push $REGISTRY/$IMAGENAME:stable
+    if [[ "x$STABLE" != "x" ]]; then
+        $DOCKERBIN tag $IMAGENAME:$PMF_VERSION $REGISTRY/$IMAGENAME:stable
+        $DOCKERBIN push $REGISTRY/$IMAGENAME:stable
     fi
 fi
 
