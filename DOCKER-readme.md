@@ -35,3 +35,34 @@ Then services will be available at following adresses:
 
 - PhpMyFAQ: (http://localhost:8080)
 - PhpMyAdmin: (http://localhost:8000)
+
+
+## Quote from ElasticSearch documentation
+
+The vm.max_map_count kernel setting needs to be set to at least 262144 for production use. Depending on your platform:
+
+### Linux
+
+The vm.max_map_count setting should be set permanently in _/etc/sysctl.conf_:
+
+    $ grep vm.max_map_count /etc/sysctl.conf
+    vm.max_map_count=262144
+
+To apply the setting on a live system type: `sysctl -w vm.max_map_count=262144`
+
+### macOS with Docker for Mac
+
+The vm.max_map_count setting must be set within the xhyve virtual machine:
+
+    $ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
+
+Log in with root and no password. Then configure the sysctl setting as you would for Linux:
+
+    sysctl -w vm.max_map_count=262144
+
+### Windows and macOS with Docker Toolbox
+
+The vm.max_map_count setting must be set via docker-machine:
+
+    docker-machine ssh
+    sudo sysctl -w vm.max_map_count=262144
