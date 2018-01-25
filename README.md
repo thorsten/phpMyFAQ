@@ -30,17 +30,18 @@ engine, you need Elasticsearch 2.x as well. Check our detailed requirements on
 
 ## Installation
 
-### Package for end-users
+### phpMyFAQ package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](http://www.phpmyfaq.de/download),
-unzip the package and open http://www.example.org/phpmyfaq/setup/index.php in your browser.
+unzip the package and open http://www.example.org/phpmyfaq/setup/index.php 
+in your browser.
 
-### Using PhpMyFAQ with docker
+### phpMyFAQ with Docker
 
 #### Dockerfile
 
-The Dockerfile provided in this repo only build an environment to run any
-release it's for devellopement purpose. It does not contain any code as the
+The Dockerfile provided in this repo only build an environment to run any 
+release it's for development purpose. It does not contain any code as the
 phpmyfaq folder is meant to be mount as the `/var/www/html` folder in the
 container.
 
@@ -68,15 +69,16 @@ _Running using named volumes:_
 _Running apache web server with php support:_
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
-Then services will be available at following adresses:
+Then services will be available at following addresses:
 
-- PhpMyFAQ: (http://localhost:8080)
-- PhpMyAdmin: (http://localhost:8000)
+- phpMyFAQ: (http://localhost:8080)
+- phpMyAdmin: (http://localhost:8000)
 
 
 #### Quote from ElasticSearch documentation
 
-The vm.max_map_count kernel setting needs to be set to at least 262144 for production use. Depending on your platform:
+The vm.max_map_count kernel setting needs to be set to at least 262144 for 
+production use. Depending on your platform:
 
 ##### Linux
 
@@ -93,7 +95,8 @@ The vm.max_map_count setting must be set within the xhyve virtual machine:
 
     $ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
 
-Log in with root and no password. Then configure the sysctl setting as you would for Linux:
+Log in with root and no password. Then configure the sysctl setting as you 
+would for Linux:
 
     sysctl -w vm.max_map_count=262144
 
@@ -120,7 +123,7 @@ Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser
 
 ## Testing
 
-To run our unittest via PHPUnit v5.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v5.x, just execute this command on your CLI
 
     $ ./bin/phpunit
 
@@ -163,69 +166,6 @@ You can find the full documentation on [phpmyfaq.de](http://www.phpmyfaq.de/docu
 ## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
-
-
-## Bundled libraries
-
-**[TinyMCE](http://tinymce.moxiecode.com/)**  
-
-Licensed under the terms of the GNU Lesser General Public License
-
-**[jQuery](http://jquery.com)**
-
-Licensed under the terms of the MIT License
-
-**[jQuery datePicker plugin](http://www.kelvinluck.com/)**
-
-Licensed under the terms of the MIT License
-
-**[jQuery Sparklines plugin](http://omnipotent.net/jquery.sparkline/)**
-
-Licensed under the terms of the New BSD License
-
-**[Modernizr](http://www.modernizr.com/)**
-
-Licensed under the terms of the MIT and BSD licenses
-
-**[Bootstrap](http://getbootstrap.com/)**
-
-Licensed under the terms of the Apache License v2.0
-
-**[phpseclib](http://phpseclib.sourceforge.net/)**
-
-Licensed under the terms of the GNU Lesser General Public License
-
-**[Symfony Components](http://www.symfony.com)**
-
-Licensed under the terms of the MIT License
-
-**[TCPDF](http://www.tcpdf.org)**
-
-Licensed under the terms of the GNU Lesser General Public License
-
-**[TwitterOAuth](http://github.com/abraham/twitteroauth)**
-
-Licensed under the terms of the MIT License
-
-**[Font Awesome](http://fontawesome.io/)**
-
-Licenced under the terms of the SIL Open Font License and MIT License
-
-**[highlight.js](https://highlightjs.org/)**
-
-Licensed under the terms of the BSD License
-
-**[Monolog](http://github.com/Seldaek/monolog)**
-
-Licensed under the terms of the MIT License
-
-**[PHP Client for Elasticsearch](http://elastic.co)**
-
-Licensed under the terms of the Apache License v2.0
-
-**[bootstrap-fileinput](http://plugins.krajee.com/file-input)**
-
-Licensed under the terms of the BSD 3-Clause License
 
 
 
