@@ -66,7 +66,7 @@ services:
     volumes:
       - mariadb:/var/lib/mysql
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.1.1
+    image: elasticsearch:2.4.6
     environment:
       - cluster.name=phpmyfaq-cluster
       - bootstrap.memory_lock=true
