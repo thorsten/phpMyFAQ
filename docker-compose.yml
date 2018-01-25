@@ -30,9 +30,9 @@ services:
     depends_on:
       - yarn
   yarn:
-    image: node:6-alpine
+    image: node:8-alpine
     restart: "no"
-    command: sh -c "cd app && yarn install && yarn build"
+    command: sh -c "cd app && npm install node-sass -g && yarn install && yarn build"
     stdin_open: true
     tty: true
     volumes:
