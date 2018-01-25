@@ -16,6 +16,7 @@
  * @since     2003-12-20
  */
 
+use phpMyFAQ\Db;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\Image;

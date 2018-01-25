@@ -20,6 +20,9 @@ namespace phpMyFAQ\Strings;
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
+
+use phpMyFAQ\Strings\StringsAbstract;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -36,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-06
  */
-class String_Basic extends String_Abstract
+class Basic extends StringsAbstract
 {
     /**
      * Instance.
