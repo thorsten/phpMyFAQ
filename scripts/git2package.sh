@@ -28,7 +28,7 @@
 # @version   2008-09-10
 
 # phpMyFAQ Version
-. scripts/version.sh
+. ./version.sh
 
 if [ "x${MD5BIN}" = "x" ]; then
     if which md5 > /dev/null; then
