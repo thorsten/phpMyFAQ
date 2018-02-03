@@ -30,7 +30,7 @@
     ],
     "require": {
         "php": ">=5.6.0",
-        "phpseclib": "master@dev",
+        "phpseclib": "2.0.*",
         "swiftmailer/swiftmailer": "5.4.8",
         "erusev/parsedown": "1.6.3",
         "erusev/parsedown-extra": "~0.7.0",
