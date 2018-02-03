@@ -8,6 +8,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 Version 2.9.10 - 2018-
 - updated Dutch translation (https://github.com/joskevos)
 - updated bundled SwiftMailer to version 5.4.9 (Thorsten)
+- updated bundled phpseclib to version 2.0.9 (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 2.9.9 - 2017-10-19
