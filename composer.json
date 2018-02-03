@@ -32,7 +32,7 @@
         "php": ">=5.5.0",
         "symfony/class-loader": "2.6.*",
         "phpseclib/phpseclib": "master@dev",
-        "abraham/twitteroauth": "^0.7.4",
+        "abraham/twitteroauth": "0.6.6",
         "swiftmailer/swiftmailer": "@stable",
         "erusev/parsedown": "~1.5.2",
         "erusev/parsedown-extra": "~0.7.0",

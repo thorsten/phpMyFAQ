@@ -4,30 +4,30 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "8e179c6d26707d8b898188cee7c945c5",
+    "content-hash": "4dddd8a750c5943d08ade0985c9732cd",
     "packages": [
         {
             "name": "abraham/twitteroauth",
-            "version": "0.7.4",
+            "version": "0.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/abraham/twitteroauth.git",
-                "reference": "c6f9e692552dd037b2324ed0dfa28a4e60875acf"
+                "reference": "fc0766220c79087ac8178625d34e88ca29160d5b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/c6f9e692552dd037b2324ed0dfa28a4e60875acf",
-                "reference": "c6f9e692552dd037b2324ed0dfa28a4e60875acf",
+                "url": "https://api.github.com/repos/abraham/twitteroauth/zipball/fc0766220c79087ac8178625d34e88ca29160d5b",
+                "reference": "fc0766220c79087ac8178625d34e88ca29160d5b",
                 "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
-                "php": "^5.6 || ^7.0"
+                "php": ">=5.5.0"
             },
             "require-dev": {
-                "phpmd/phpmd": "~2.6",
-                "phpunit/phpunit": "~5.7",
-                "squizlabs/php_codesniffer": "~3.0"
+                "phpmd/phpmd": "2.3.*",
+                "phpunit/phpunit": "4.8.*",
+                "squizlabs/php_codesniffer": "2.3.*"
             },
             "type": "library",
             "autoload": {
@@ -58,7 +58,7 @@
                 "social",
                 "twitter"
             ],
-            "time": "2017-06-30T22:02:01+00:00"
+            "time": "2016-10-10T14:20:30+00:00"
         },
         {
             "name": "doctrine/lexer",
