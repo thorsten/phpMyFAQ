@@ -31,7 +31,7 @@
     "require": {
         "php": ">=5.5.0",
         "symfony/class-loader": "2.6.*",
-        "phpseclib/phpseclib": "master@dev",
+        "phpseclib/phpseclib": "2.0.*",
         "abraham/twitteroauth": "0.6.6",
         "swiftmailer/swiftmailer": "5.4.9",
         "erusev/parsedown": "~1.5.2",
