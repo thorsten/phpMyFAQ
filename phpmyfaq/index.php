@@ -588,7 +588,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'allCategories' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
         'faqOverview' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'overview.html">'.$PMF_LANG['faqOverview'].'</a>',
         'showSitemap' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html', );
+        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html',
+        'msgUserRemoval' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>');
 } else {
     $tplNavigation = array(
         'msgSearch' => '<a class="nav-link" href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
@@ -602,7 +603,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'faqOverview' => '<a href="index.php?'.$sids.'action=overview">'.$PMF_LANG['faqOverview'].'</a>',
         'backToHome' => '<a href="index.php?'.$sids.'">'.$PMF_LANG['msgHome'].'</a>',
         'showSitemap' => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php', );
+        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php',
+        'msgUserRemoval' => '<a href="index.php?'.$sids.'action=request-removal">'.$PMF_LANG['msgUserRemoval'].'</a>',);
 }
 
 $tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();
@@ -640,6 +642,7 @@ if (isset($auth)) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'msgUserControlDropDown' => $userControlDropdown,
+            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">'.$PMF_LANG['ad_menu_RequestRemove'].'</a>',
             'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]

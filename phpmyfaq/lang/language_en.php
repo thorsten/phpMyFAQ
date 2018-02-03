@@ -1276,3 +1276,9 @@ $PMF_LANG['ad_view_faq'] = 'View FAQ';
 // added 3.0.0-alpha - 2018-01-04 by Thorsten
 $LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Enable category restrictions<br>(default: activated)'];
 $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Enable send to friends<br>(default: activated)'];
+$PMF_LANG['msgUserRemovalText'] = 'You can request the deletion of your account and personal data. An email will be sent to the admin team. The team will delete your account, comments and questions. Since this is a manual process, it can take up to 24 hours. After this you will receive a deletion confirmation  by email. ';
+$PMF_LANG["msgUserRemoval"] = "Request user removal";
+$PMF_LANG["ad_menu_RequestRemove"] = "Request user removal";
+$PMF_LANG["msgContactRemove"] = "Deletion request from admin team:";
+$PMF_LANG["msgContactPrivacyNote"] = "Please notice our";
+$PMF_LANG["msgPrivacyNote"] = "Privacy Statement";

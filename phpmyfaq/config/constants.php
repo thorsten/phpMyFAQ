@@ -199,6 +199,7 @@ $allowedVariables = [
     'overview' => 1,
     'password' => 1,
     'register' => 1,
+    'request-removal' => 1,
     'save' => 1,
     'savecomment' => 1,
     'savequestion' => 1,

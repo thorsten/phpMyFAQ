@@ -1,9 +1,9 @@
 <?php
 
 /**
- * Contact page.
+ * Request removal page.
  *
- * PHP Version 5.6
+ * PHP Version 5.5
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -11,14 +11,14 @@
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2002-2018 phpMyFAQ Team
+ * @copyright 2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      http://www.phpmyfaq.de
- * @since     2002-09-16
+ * @since     2018-02-03
  */
 
-use phpMyFAQ\Exception;
 use phpMyFAQ\Captcha;
+use phpMyFAQ\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\User\CurrentUser;
 
@@ -51,15 +51,17 @@ $tpl->parse(
     'writeContent',
     array(
         'msgContact' => $PMF_LANG['msgContact'],
-        'msgContactOwnText' => nl2br($faqConfig->get('main.contactInformations')),
-        'msgContactEMail' => $PMF_LANG['msgContactEMail'],
+        'msgUserRemovalText' => $PMF_LANG['msgUserRemovalText'],
+        'msgContactRemove' => $PMF_LANG['msgContactRemove'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
         'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
+        'ad_user_loginname' => $PMF_LANG['ad_user_loginname'],
         'lang' => $Language->getLanguage(),
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
+        'defaultLoginName' => ($user instanceof CurrentUser) ? $user->getLogin() : '',
         'msgMessage' => $PMF_LANG['msgMessage'],
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
         'version' => $faqConfig->get('main.currentVersion'),
@@ -71,6 +73,6 @@ $tpl->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $PMF_LANG['msgContact']
+        'breadcrumbHeadline' => $PMF_LANG['msgUserRemoval']
     ]
 );

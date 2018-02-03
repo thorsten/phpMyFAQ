@@ -10,33 +10,48 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2010-09-15
  */
+
 define('IS_VALID_PHPMYFAQ', null);
+
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Category;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Link;
+use phpMyFAQ\Mail;
+use phpMyFAQ\Network;
+use phpMyFAQ\Session;
+use phpMyFAQ\Stopwords;
+use phpMyFAQ\Strings;
+use phpMyFAQ\User\CurrentUser;
 
 //
 // Bootstrapping
 //
 require 'src/Bootstrap.php';
 
-$action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$ajaxlang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
-$code = phpMyFAQ\Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
-$currentToken = phpMyFAQ\Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$ajaxLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+$code = Filter::filterInput(INPUT_POST, 'captcha', FILTER_SANITIZE_STRING);
+$currentToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $languageCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (Language::isASupportedLanguage($ajaxlang)) {
-    $languageCode = trim($ajaxlang);
+if (Language::isASupportedLanguage($ajaxLang)) {
+    $languageCode = trim($ajaxLang);
     require_once 'lang/language_'.$languageCode.'.php';
 } else {
     $languageCode = 'en';
@@ -46,7 +61,7 @@ if (Language::isASupportedLanguage($ajaxlang)) {
 //
 // Load plurals support for selected language
 //
-$plr = new phpMyFAQ\Language_Plurals($PMF_LANG);
+$plr = new Plurals($PMF_LANG);
 
 //
 // Initalizing static string wrapper
@@ -56,24 +71,24 @@ Strings::init($languageCode);
 //
 // Check captcha
 //
-$captcha = new phpMyFAQ\Captcha($faqConfig);
+$captcha = new Captcha($faqConfig);
 $captcha->setSessionId(
-    phpMyFAQ\Filter::filterInput(INPUT_COOKIE, PMF_Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
+    Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
 );
 
 //
 // Send headers
 //
-$http = new phpMyFAQ\Helper_Http();
+$http = new HttpHelper();
 $http->setContentType('application/json');
 //$http->addHeader();
 
 //
 // Set session
 //
-$faqsession = new phpMyFAQ\Session($faqConfig);
-$network = new phpMyFAQ\Network($faqConfig);
-$stopwords = new phpMyFAQ\Stopwords($faqConfig);
+$faqsession = new Session($faqConfig);
+$network = new Network($faqConfig);
+$stopwords = new Stopwords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
@@ -122,15 +137,15 @@ switch ($action) {
             break;
         }
 
-        $faq = new phpMyFAQ\Faq($faqConfig);
-        $oComment = new phpMyFAQ\Comment($faqConfig);
-        $category = new phpMyFAQ\Category($faqConfig);
-        $type = phpMyFAQ\Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
-        $faqId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $newsId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
-        $username = phpMyFAQ\Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
-        $mail = phpMyFAQ\Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
-        $comment = phpMyFAQ\Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
+        $faq = new Faq($faqConfig);
+        $oComment = new Comment($faqConfig);
+        $category = new Category($faqConfig);
+        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
+        $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
+        $newsId = Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
+        $username = Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
+        $mail = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
+        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
             case 'news':
@@ -148,7 +163,7 @@ switch ($action) {
 
         // Check display name and e-mail address for not logged in users
         if (false === $isLoggedIn) {
-            $user = new phpMyFAQ\User($faqConfig);
+            $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mail)) {
                 echo json_encode(array('error' => $PMF_LANG['err_SaveComment']));
                 break;
@@ -189,11 +204,11 @@ switch ($action) {
                         $faq->faqRecord['lang']
                     );
 
-                    $oLink = new phpMyFAQ\Link($faqUrl, $faqConfig);
+                    $oLink = new Link($faqUrl, $faqConfig);
                     $oLink->itemTitle = $faq->faqRecord['title'];
                     $urlToContent = $oLink->toString();
                 } else {
-                    $oNews = new phpMyFAQ\News($faqConfig);
+                    $oNews = new News($faqConfig);
                     $news = $oNews->getNewsEntry($id);
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
@@ -203,7 +218,7 @@ switch ($action) {
                         $news['id'],
                         $news['lang']
                     );
-                    $oLink = new phpMyFAQ\Link($link, $faqConfig);
+                    $oLink = new Link($link, $faqConfig);
                     $oLink->itemTitle = $news['header'];
                     $urlToContent = $oLink->toString();
                 }
@@ -215,7 +230,7 @@ switch ($action) {
                     wordwrap($comment, 72);
 
                 $send = [];
-                $mail = new phpMyFAQ\Mail($faqConfig);
+                $mail = new Mail($faqConfig);
                 $mail->setReplyTo($commentData['usermail'], $commentData['username']);
                 $mail->addTo($emailTo);
 
@@ -223,11 +238,11 @@ switch ($action) {
                 $send[$faqConfig->get('main.administrationMail')] = 1;
 
                 // Let the category owner get a copy of the message
-                $category = new phpMyFAQ\Category($faqConfig);
+                $category = new Category($faqConfig);
                 $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getOwner($_category);
-                    $catUser = new phpMyFAQ\User($faqConfig);
+                    $catUser = new User($faqConfig);
                     $catUser->getUserById($userId);
                     $catOwnerEmail = $catUser->getUserData('email');
 
@@ -266,25 +281,25 @@ switch ($action) {
             break;
         }
 
-        $faq = new phpMyFAQ\Faq($faqConfig);
-        $category = new phpMyFAQ\Category($faqConfig);
-        $name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $faqId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
-        $faqlanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
-        $question = phpMyFAQ\Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $faq = new Faq($faqConfig);
+        $category = new Category($faqConfig);
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
+        $faqlanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
-            $answer = phpMyFAQ\Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
+            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
             $answer = html_entity_decode($answer);
         } else {
-            $answer = phpMyFAQ\Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
+            $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
             $answer = nl2br($answer);
         }
-        $translation = phpMyFAQ\Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
-        $contentLink = phpMyFAQ\Filter::filterInput(INPUT_POST, 'contentlink', FILTER_SANITIZE_STRING);
-        $contentLink = phpMyFAQ\Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
-        $keywords = phpMyFAQ\Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
-        $categories = phpMyFAQ\Filter::filterInputArray(
+        $translation = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
+        $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_SANITIZE_STRING);
+        $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
+        $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
+        $categories = Filter::filterInputArray(
             INPUT_POST,
             array(
                 'rubrik' => array(
@@ -366,7 +381,7 @@ switch ($action) {
 
             $faq->addCategoryRelations($categories, $recordId, $newData['lang']);
 
-            $openQuestionId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
+            $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) {
                     $faq->deleteQuestion($openQuestionId);
@@ -376,7 +391,7 @@ switch ($action) {
             }
 
             // Activate visits
-            $visits = new phpMyFAQ\Visits($faqConfig);
+            $visits = new Visits($faqConfig);
             $visits->logViews($recordId, $newData['lang']);
 
             // Set permissions
@@ -393,7 +408,7 @@ switch ($action) {
 
             // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry
             $send = [];
-            $mail = new phpMyFAQ\Mail($faqConfig);
+            $mail = new Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $send[$faqConfig->get('main.administrationMail')] = 1;
@@ -403,7 +418,7 @@ switch ($action) {
                 $groupId = $category->getModeratorGroupId($_category);
 
                 // @todo Move this code to Entityhp
-                $oUser = new phpMyFAQ\User($faqConfig);
+                $oUser = new User($faqConfig);
                 $oUser->getUserById($userId);
                 $catOwnerEmail = $oUser->getUserData('email');
 
@@ -455,14 +470,14 @@ switch ($action) {
             break;
         }
 
-        $faq = new phpMyFAQ\Faq($faqConfig);
-        $cat = new phpMyFAQ\Category($faqConfig);
+        $faq = new Faq($faqConfig);
+        $cat = new Category($faqConfig);
         $categories = $cat->getAllCategories();
-        $name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $ucategory = phpMyFAQ\Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
-        $question = phpMyFAQ\Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
-        $save = phpMyFAQ\Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $save = Filter::filterInput(INPUT_POST, 'save', FILTER_VALIDATE_INT, 0);
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
@@ -494,11 +509,11 @@ switch ($action) {
 
                 $cleanQuestion = $stopwords->clean($question);
 
-                $user = new phpMyFAQ\CurrentUser($faqConfig);
-                $faqSearch = new phpMyFAQ\Search($faqConfig);
-                $faqSearch->setCategory(new phpMyFAQ\Category($faqConfig));
+                $user = new CurrentUser($faqConfig);
+                $faqSearch = new Search($faqConfig);
+                $faqSearch->setCategory(new Category($faqConfig));
                 $faqSearch->setCategoryId($ucategory);
-                $faqSearchResult = new phpMyFAQ\Search_Resultset($user, $faq, $faqConfig);
+                $faqSearchResult = new Search_Resultset($user, $faq, $faqConfig);
                 $searchResult = [];
                 $mergedResult = [];
 
@@ -522,7 +537,7 @@ switch ($action) {
 
                     $response .= '<ul>';
 
-                    $faqHelper = new phpMyFAQ\Helper_Faq($faqConfig);
+                    $faqHelper = new Helper_Faq($faqConfig);
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
@@ -531,7 +546,7 @@ switch ($action) {
                             $result->id,
                             $result->lang
                         );
-                        $oLink = new phpMyFAQ\Link($url, $faqConfig);
+                        $oLink = new Link($url, $faqConfig);
                         $oLink->text = Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
 
@@ -555,13 +570,13 @@ switch ($action) {
                                 $faqConfig->getDefaultUrl().'admin/';
 
                     $userId = $cat->getOwner($questionData['category_id']);
-                    $oUser  = new phpMyFAQ\User($faqConfig);
+                    $oUser  = new User($faqConfig);
                     $oUser->getUserById($userId);
 
                     $userEmail = $oUser->getUserData('email');
                     $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                    $mail = new phpMyFAQ\Mail($faqConfig);
+                    $mail = new Mail($faqConfig);
                     $mail->setReplyTo($questionData['email'], $questionData['username']);
                     $mail->addTo($mainAdminEmail);
                     // Let the category owner get a copy of the message
@@ -585,13 +600,13 @@ switch ($action) {
                                 $faqConfig->getDefaultUrl().'admin/';
 
                 $userId = $cat->getOwner($questionData['category_id']);
-                $oUser  = new phpMyFAQ\User($faqConfig);
+                $oUser  = new User($faqConfig);
                 $oUser->getUserById($userId);
 
                 $userEmail = $oUser->getUserData('email');
                 $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                $mail = new phpMyFAQ\Mail($faqConfig);
+                $mail = new Mail($faqConfig);
                 $mail->setReplyTo($questionData['email'], $questionData['username']);
                 $mail->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
@@ -613,18 +628,18 @@ switch ($action) {
 
     case 'saveregistration':
 
-        $realname = phpMyFAQ\Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
-        $loginname = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $realname = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
+        $loginName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-        if (!is_null($loginname) && !empty($loginname) && !is_null($email) && !empty($email) &&
+        if (!is_null($loginName) && !empty($loginName) && !is_null($email) && !empty($email) &&
             !is_null($realname) && !empty($realname)) {
             $message = [];
-            $user = new phpMyFAQ\User($faqConfig);
+            $user = new User($faqConfig);
 
             // Create user account (login and password)
             // Note: password be automatically generated and sent by email as soon if admin switch user to "active"
-            if (!$user->createUser($loginname, '')) {
+            if (!$user->createUser($loginName, '')) {
                 $message = array('error' => $user->error());
             } else {
                 $user->userdata->set(
@@ -651,12 +666,12 @@ switch ($action) {
                     "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n".
                     '%s the administration interface at %s.',
                     $realname,
-                    $loginname,
+                    $loginName,
                     $adminMessage,
                     $faqConfig->getDefaultUrl()
                 );
 
-                $mail = new phpMyFAQ\Mail($faqConfig);
+                $mail = new Mail($faqConfig);
                 $mail->setReplyTo($email, $realname);
                 $mail->addTo($faqConfig->get('main.administrationMail'));
                 $mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
@@ -677,11 +692,11 @@ switch ($action) {
 
     case 'savevoting':
 
-        $faq = new phpMyFAQ\Faq($faqConfig);
-        $type = phpMyFAQ\Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
-        $recordId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $vote = phpMyFAQ\Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
-        $userIp = phpMyFAQ\Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
+        $faq = new Faq($faqConfig);
+        $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
+        $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
+        $vote = Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
+        $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
         if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
             try {
@@ -700,7 +715,7 @@ switch ($action) {
             } else {
                 $faq->updateVoting($votingData);
             }
-            $faqRating = new phpMyFAQ\Rating($faqConfig);
+            $faqRating = new Rating($faqConfig);
             $message = array(
                 'success' => $PMF_LANG['msgVoteThanks'],
                 'rating' => $faqRating->getVotingResult($recordId),
@@ -726,9 +741,9 @@ switch ($action) {
     // Send user generated mails
     case 'sendcontact':
 
-        $name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $question = phpMyFAQ\Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 
         // If e-mail address is set to optional
         if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
@@ -746,7 +761,7 @@ switch ($action) {
                 $question
             );
 
-            $mail = new phpMyFAQ\Mail($faqConfig);
+            $mail = new Mail($faqConfig);
             $mail->setReplyTo($email, $name);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';
@@ -763,11 +778,11 @@ switch ($action) {
     // Send mails to friends
     case 'sendtofriends':
 
-        $name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $link = phpMyFAQ\Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-        $attached = phpMyFAQ\Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
-        $mailto = phpMyFAQ\Filter::filterInputArray(INPUT_POST,
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
+        $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
+        $mailto = Filter::filterInputArray(INPUT_POST,
             array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL,
                       'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
                 ),
@@ -780,7 +795,7 @@ switch ($action) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
-                    $mail = new phpMyFAQ\Mail($faqConfig);
+                    $mail = new Mail($faqConfig);
                     $mail->setReplyTo($email, $name);
                     $mail->addTo($recipient);
                     $mail->subject = $PMF_LANG['msgS2FMailSubject'].$name;
@@ -811,11 +826,11 @@ switch ($action) {
             break;
         }
 
-        $userId = phpMyFAQ\Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $name = phpMyFAQ\Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-        $password = phpMyFAQ\Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
-        $confirm = phpMyFAQ\Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
+        $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+        $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
 
         $user = CurrentUser::getFromSession($faqConfig);
 
@@ -857,11 +872,11 @@ switch ($action) {
 
     case 'changepassword':
 
-        $username = phpMyFAQ\Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-        $email = phpMyFAQ\Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $username = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
         if (!is_null($username) && !is_null($email)) {
-            $user = new phpMyFAQ\CurrentUser($faqConfig);
+            $user = new CurrentUser($faqConfig);
             $loginExist = $user->getUserByLogin($username);
 
             if ($loginExist && ($email == $user->getUserData('email'))) {
@@ -880,7 +895,7 @@ switch ($action) {
                 $user->changePassword($newPassword);
                 $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG['lostpwd_text_2'];
 
-                $mail = new phpMyFAQ\Mail($faqConfig);
+                $mail = new Mail($faqConfig);
                 $mail->addTo($email);
                 $mail->subject = '[%sitename%] Username / password request';
                 $mail->message = $text;
@@ -893,6 +908,45 @@ switch ($action) {
             }
         } else {
             $message = array('error' => $PMF_LANG['lostpwd_err_2']);
+        }
+        break;
+
+    case 'request-removal':
+
+        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
+        $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
+
+        // If e-mail address is set to optional
+        if (!$faqConfig->get('main.optionalMailAddress') && is_null($email)) {
+            $email = $faqConfig->get('main.administrationMail');
+        }
+
+        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
+            !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
+            $question = sprintf(
+                "%s %s\n%s %s\n%s %s\n\n %s",
+                $PMF_LANG['ad_user_loginname'],
+                $loginName,
+                $PMF_LANG['msgNewContentName'],
+                $name,
+                $PMF_LANG['msgNewContentMail'],
+                $email,
+                $question
+            );
+
+            $mail = new Mail($faqConfig);
+            $mail->setReplyTo($email, $name);
+            $mail->addTo($faqConfig->get('main.administrationMail'));
+            $mail->subject = 'Remove User Request: %sitename%';
+            $mail->message = $question;
+            $result = $mail->send();
+            unset($mail);
+
+            $message = ['success' => $PMF_LANG['msgMailContact']];
+        } else {
+            $message = ['error' => $PMF_LANG['err_sendMail']];
         }
         break;
 }

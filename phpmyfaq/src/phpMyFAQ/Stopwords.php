@@ -1,5 +1,7 @@
 <?php
 
+namespace phpMyFAQ;
+
 /**
  * The main Stopwords class.
  *

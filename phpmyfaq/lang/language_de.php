@@ -1238,3 +1238,9 @@ $PMF_LANG['ad_view_faq'] = 'FAQ ansehen';
 // added 3.0.0-alpha - 2018-01-04 by Thorsten
 $LANG_CONF['main.enableCategoryRestrictions'] = ['checkbox', 'Aktiviere Kategoriebeschränkungen<br>(Standard: aktiviert)'];
 $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'Aktiviere Weiterempfehlung<br>(Standard: aktiviert)'];
+$PMF_LANG['msgUserRemovalText'] = 'Sie können die Löschung Ihres Accounts und Ihrer persönlichen Daten beantragen. Eine E-Mail wird an das Admin-Team gesendet. Das Team wird Ihren Account, Ihre Kommentare und Fragen löschen. Da es sich um einen manuellen Prozess handelt, kann es bis zu 24 Stunden dauern. Danach erhalten Sie eine Löschbestätigung per E-Mail.';
+$PMF_LANG["msgUserRemoval"] = "Antrag zur Löschung des Benutzers";
+$PMF_LANG["ad_menu_RequestRemove"] = "Benutzer löschen";
+$PMF_LANG["msgContactRemove"] = "Antrag auf Entfernung des Benutzers beim Admin Team";
+$PMF_LANG["msgContactPrivacyNote"] = "Bitte beachten sie unsere";
+$PMF_LANG["msgPrivacyNote"] = "Datenschutzerklärung";
