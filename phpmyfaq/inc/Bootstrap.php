@@ -26,7 +26,7 @@ use Elasticsearch\ClientBuilder;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', false);
+define('DEBUG', true);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -121,6 +121,9 @@ $loader = new UniversalClassLoader();
 $loader->registerNamespace('Symfony', PMF_INCLUDE_DIR.'/libs');
 $loader->registerPrefix('PMF_', PMF_INCLUDE_DIR);
 $loader->register();
+
+$psr4Loader = new Psr4ClassLoader();
+$psr4Loader->addPrefix('Abraham\\TwitterOAuth\\', PMF_INCLUDE_DIR.'/libs/abraham/twitteroauth/src');
 
 require PMF_INCLUDE_DIR.'/libs/parsedown/Parsedown.php';
 require PMF_INCLUDE_DIR.'/libs/parsedown/ParsedownExtra.php';

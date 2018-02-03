@@ -22,7 +22,7 @@ cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/inc/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/inc/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/inc/libs/swiftmailer
 cp -r $cwd/vendor/symfony/class-loader/* $cwd/phpmyfaq/inc/libs/
-cp -r $cwd/vendor/thorsten/twitteroauth/twitteroauth $cwd/phpmyfaq/inc/libs/twitteroauth
+cp -r $cwd/vendor/abraham/twitteroauth/src $cwd/phpmyfaq/inc/libs/twitteroauth
 
 # TCPDF
 mkdir -p $cwd/phpmyfaq/inc/libs/tcpdf

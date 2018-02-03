@@ -27,8 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_ROOT_DIR.'/inc/libs/twitteroauth/twitteroauth.php';
-
 if (!empty($_SESSION['access_token'])) {
     $connection = new TwitterOAuth(
         $faqConfig->get('socialnetworks.twitterConsumerKey'),

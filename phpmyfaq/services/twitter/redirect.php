@@ -30,7 +30,6 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require PMF_ROOT_DIR.'/inc/Bootstrap.php';
-require PMF_ROOT_DIR.'/inc/libs/twitteroauth/twitteroauth.php';
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),

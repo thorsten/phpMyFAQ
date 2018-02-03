@@ -27,25 +27,13 @@
                     "reference": "master"
                 }
             }
-        },
-        {
-            "type": "package",
-            "package": {
-                "name": "thorsten/twitteroauth",
-                "version": "master",
-                "source": {
-                    "url": "https://github.com/thorsten/twitteroauth.git",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
         }
     ],
     "require": {
         "php": ">=5.5.0",
         "symfony/class-loader": "2.6.*",
         "phpseclib/phpseclib": "master@dev",
-        "thorsten/twitteroauth": "master@dev",
+        "abraham/twitteroauth": "^0.7.4",
         "swiftmailer/swiftmailer": "@stable",
         "erusev/parsedown": "~1.5.2",
         "erusev/parsedown-extra": "~0.7.0",
