@@ -153,6 +153,16 @@ module.exports = function (grunt) {
             dest: 'phpmyfaq/assets/themes/default/css/images'
           }
         ]
+      },
+      cookieconsent: {
+        files: [
+          {
+            expand: true,
+            src: 'node_modules/cookieconsent/build/cookieconsent.min.css',
+            flatten: true,
+            dest: 'phpmyfaq/assets/js/libs'
+          }
+        ]
       }
     },
     concat: {
@@ -177,7 +187,8 @@ module.exports = function (grunt) {
           'node_modules/handlebars/dist/handlebars.js',
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
-          'node_modules/bxslider/dist/jquery.bxslider.js'
+          'node_modules/bxslider/dist/jquery.bxslider.js',
+          'node_modules/cookieconsent/src/cookieconsent.js'
         ],
         dest: 'phpmyfaq/assets/js/vendors.js'
       },
