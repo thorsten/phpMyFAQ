@@ -285,7 +285,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 
         <div class="card-group">
 
-            <form id="faqEditor" action="?action=<?php echo $queryString ?>" method="post" >
+            <form id="faqEditor" action="?action=<?php echo $queryString ?>" method="post" style="width: 100%;">
 
             <input type="hidden" name="revision_id" id="revision_id" value="<?php echo $faqData['revision_id'] ?>">
             <input type="hidden" name="record_id" id="record_id" value="<?php echo $faqData['id'] ?>">
