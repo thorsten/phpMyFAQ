@@ -10,14 +10,18 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2012-09-03
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Glossary;
+use phpMyFAQ\Link;
+use phpMyFAQ\Pagination;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -33,9 +37,9 @@ try {
     // @todo handle the exception
 }
 
-$page = phpMyFAQ\Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
+$page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
-$glossary = new phpMyFAQ\Glossary($faqConfig);
+$glossary = new Glossary($faqConfig);
 $glossaryItems = $glossary->getAllGlossaryItems();
 $numItems = count($glossaryItems);
 $itemsPerPage = 10;
@@ -53,7 +57,7 @@ $options = array(
     'perPage' => $itemsPerPage,
     'pageParamName' => 'page',
 );
-$pagination = new phpMyFAQ\Pagination($faqConfig, $options);
+$pagination = new Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
     $output = [];

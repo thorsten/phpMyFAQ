@@ -10,15 +10,18 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thomas Zeithaml <seo@annatom.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2005-08-21
  */
+
+use phpMyFAQ\Filter;
+use phpMyFAQ\Sitemap;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -34,14 +37,14 @@ try {
     // @todo handle the exception
 }
 
-$letter = phpMyFAQ\Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
+$letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $currentLetter = strtoupper(Strings::substr($letter, 0, 1));
 } else {
     $currentLetter = '';
 }
 
-$sitemap = new phpMyFAQ\Sitemap($faqConfig);
+$sitemap = new Sitemap($faqConfig);
 $sitemap->setUser($current_user);
 $sitemap->setGroups($current_groups);
 

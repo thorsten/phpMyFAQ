@@ -19,7 +19,9 @@ namespace phpMyFAQ\Helper;
  * @since     2010-11-12
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;

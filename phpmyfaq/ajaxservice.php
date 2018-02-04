@@ -33,6 +33,7 @@ use phpMyFAQ\Network;
 use phpMyFAQ\Session;
 use phpMyFAQ\Stopwords;
 use phpMyFAQ\Strings;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
 //

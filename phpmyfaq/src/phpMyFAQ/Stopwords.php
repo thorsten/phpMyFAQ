@@ -12,15 +12,16 @@ namespace phpMyFAQ;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
+
+use phpMyFAQ\Db;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -29,12 +30,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Stopwords.
  *
  * @category  phpMyFAQ
- *
  * @author    Anatoliy Belsky
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-04-01
  */
@@ -67,7 +66,7 @@ class Stopwords
     public function __construct(Configuration $config)
     {
         $this->_config = $config;
-        $this->table_name = phpMyFAQ\Db::getTablePrefix().'faqstopwords';
+        $this->table_name = Db::getTablePrefix().'faqstopwords';
     }
 
     /**

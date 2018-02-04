@@ -1,5 +1,7 @@
 <?php
 
+namespace phpMyFAQ;
+
 /**
  * The main Sitemap class.
  *
@@ -10,14 +12,15 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
+
+use phpMyFAQ\Db\Sqlite3;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -26,11 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Sitemap.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2007-03-30
  */
@@ -128,7 +129,7 @@ class Sitemap
 
         $writeLetters = '<ul class="nav navbar-nav">';
 
-        if ($this->_config->getDb() instanceof phpMyFAQ\Db_Sqlite3) {
+        if ($this->_config->getDb() instanceof Sqlite3) {
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
@@ -150,9 +151,9 @@ class Sitemap
                         %s
                     ORDER BY
                         letters",
-                phpMyFAQ\Db::getTablePrefix(),
-                phpMyFAQ\Db::getTablePrefix(),
-                phpMyFAQ\Db::getTablePrefix(),
+                Db::getTablePrefix(),
+                Db::getTablePrefix(),
+                Db::getTablePrefix(),
                 $this->_config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -178,9 +179,9 @@ class Sitemap
                         %s
                     ORDER BY
                         letters",
-                phpMyFAQ\Db::getTablePrefix(),
-                phpMyFAQ\Db::getTablePrefix(),
-                phpMyFAQ\Db::getTablePrefix(),
+                Db::getTablePrefix(),
+                Db::getTablePrefix(),
+                Db::getTablePrefix(),
                 $this->_config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -197,7 +198,7 @@ class Sitemap
                     $letters,
                     $this->_config->getLanguage()->getLanguage()
                 );
-                $oLink = new phpMyFAQ\Link($url, $this->_config);
+                $oLink = new Link($url, $this->_config);
                 $oLink->text = (string)$letters;
                 $writeLetters .= '<li>'.$oLink->toHtmlAnchor().'</li>';
             }
@@ -238,7 +239,7 @@ class Sitemap
 
         $writeMap = '';
 
-        switch (phpMyFAQ\Db::getType()) {
+        switch (Db::getType()) {
             case 'sqlite3':
                 $query = sprintf("
                     SELECT
@@ -268,10 +269,10 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
                     $letter,
                     $this->_config->getLanguage()->getLanguage(),
                     $permPart);
@@ -306,10 +307,10 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
-                    phpMyFAQ\Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
+                    Db::getTablePrefix(),
                     $letter,
                     $this->_config->getLanguage()->getLanguage(),
                     $permPart);
@@ -318,7 +319,7 @@ class Sitemap
 
         $result = $this->_config->getDb()->query($query);
         $oldId = 0;
-        $parsedown = new ParsedownExtra();
+        $parsedown = new \ParsedownExtra();
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
@@ -331,7 +332,7 @@ class Sitemap
                     $row->lang
                 );
 
-                $oLink = new phpMyFAQ\Link($url, $this->_config);
+                $oLink = new Link($url, $this->_config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;

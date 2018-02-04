@@ -53,7 +53,7 @@ $faqTagging = new Tags($faqConfig);
 $faqRelation = new Relation($faqConfig);
 $faqRating = new Rating($faqConfig);
 $faqComment = new Comment($faqConfig);
-$markDown = new ParsedownExtra();
+$markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
 
 if (is_null($user)) {

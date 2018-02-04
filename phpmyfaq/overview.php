@@ -17,6 +17,8 @@
  * @since     2015-09-27
  */
 
+use phpMyFAQ\Helper\FaqHelper;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -32,7 +34,7 @@ try {
     // @todo handle the exception
 }
 
-$faqHelper = new phpMyFAQ\Helper_Faq($faqConfig);
+$faqHelper = new FaqHelper($faqConfig);
 
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
