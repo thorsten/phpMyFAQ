@@ -942,3 +942,4 @@ $LANG_CONF['records.enableDeleteQuestion'] = array(0 => 'checkbox', 1 => 'Suppri
 $LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activer la sauvegarde automatique de la FAQ');
 $LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Intervalle de sauvegarde automatique en secondes, défaut 180');
 $LANG_CONF['main.maintenanceMode'] = array(0 => 'checkbox', 1 => 'Placer la FAQ en mode de maintenance');
+$PMF_LANG['msgSeeFAQinFrontend'] = 'Voir cette FAQ sur le Frontend';
