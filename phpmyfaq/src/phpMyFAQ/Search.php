@@ -24,7 +24,7 @@ namespace phpMyFAQ;
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\Exception;
-use phpMyFAQ\Search\Search_Factory;
+use phpMyFAQ\Search\SearchFactory;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -166,7 +166,7 @@ class Search
         $fdTable = Db::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Db::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
-        $search = Search_Factory::create($this->_config, ['database' => Db::getType()]);
+        $search = SearchFactory::create($this->_config, ['database' => Db::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
