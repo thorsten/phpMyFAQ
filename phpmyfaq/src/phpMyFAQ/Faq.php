@@ -1869,7 +1869,7 @@ class Faq
                 $output['url'][] = $row['url'];
                 $output['title'][] = Utils::makeShorterText($row['question'], 8);
                 $output['preview'][] = $row['question'];
-                $output['date'][] = $date->format(Date::createIsoDate($row['date']));
+                $output['date'][] = $date->format($row['date']);
             }
         } else {
             $output['error'] = $this->pmf_lang['err_noArticles'];
@@ -2283,7 +2283,7 @@ class Faq
                 }
             }
         }
-        
+
         return $latest;
     }
 
