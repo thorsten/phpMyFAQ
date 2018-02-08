@@ -193,16 +193,16 @@ class Utils
      * Resolves the PMF markers like e.g. %sitename%.
      *
      * @param string            $text   Text contains PMF markers
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      *
      * @return string
      */
-    public static function resolveMarkers($text, PMF_Configuration $config)
+    public static function resolveMarkers($text, Configuration $config)
     {
         // Available markers: key and resolving value
-        $markers = array(
+        $markers = [
             '%sitename%' => $config->get('main.titleFAQ'),
-        );
+        ];
 
         // Resolve any known pattern
         return str_replace(

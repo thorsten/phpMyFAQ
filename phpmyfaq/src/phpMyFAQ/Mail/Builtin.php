@@ -1,5 +1,7 @@
 <?php
 
+namespace phpMyFAQ\Mail;
+
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -10,11 +12,9 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
  */
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2009-09-11
  */
-class Mail_Builtin implements PMF_Mail_IMUA
+class Builtin implements IMUA
 {
     /**
      * Send the message using an e-mail through the PHP built-in mail() function.

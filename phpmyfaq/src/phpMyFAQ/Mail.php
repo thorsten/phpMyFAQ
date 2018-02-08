@@ -20,6 +20,9 @@ namespace phpMyFAQ;
  * @since     2009-09-11
  */
 
+use phpMyFAQ\Mail\Builtin;
+use phpMyFAQ\Mail\SwiftSMTP;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -710,7 +713,7 @@ class Mail
                 $mua
             )
         );
-        $class = 'PMF_Mail_'.$impl;
+        $class = $impl;
 
         return new $class();
     }

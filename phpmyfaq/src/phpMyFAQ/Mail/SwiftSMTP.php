@@ -1,5 +1,7 @@
 <?php
 
+namespace phpMyFAQ\Mail;
+
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -23,7 +25,7 @@ require __DIR__ . '/../../libs/swiftmailer/swift_required.php';
 /**
  * class Mail_SwiftSMTP
  */
-class Mail_SwiftSMTP implements PMF_Mail_IMUA
+class SwiftSMTP implements IMUA
 {
     private $user;
     private $mailer;
