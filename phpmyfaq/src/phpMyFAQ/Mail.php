@@ -713,7 +713,7 @@ class Mail
                 $mua
             )
         );
-        $class = $impl;
+        $class = 'phpMyFAQ\Mail\\'.$impl;
 
         return new $class();
     }
