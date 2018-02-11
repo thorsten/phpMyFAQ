@@ -54,6 +54,7 @@ $tpl->parse(
         'msgContactOwnText' => nl2br($faqConfig->get('main.contactInformations')),
         'msgContactEMail' => $PMF_LANG['msgContactEMail'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
+        'privacyURL' => $faqConfig->get('main.privacyURL'),
         'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],

@@ -590,6 +590,7 @@ if ($step == 3) {
         $query[] = 'INSERT INTO '.$prefix.'faquser_right (user_id, right_id) VALUES (1, 18)';
 
         $faqConfig->add('main.enableSendToFriend', 'true');
+        $faqConfig->add('main.privacyURL', '');
     }
 
     // Always the last step: Update version number

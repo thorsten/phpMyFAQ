@@ -322,6 +322,7 @@ class Installer
         'main.enableSmartAnswering' => 'true',
         'main.enableCategoryRestrictions' => 'true',
         'main.enableSendToFriend' => 'true',
+        'main.privacyURL' => '',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',

@@ -55,6 +55,7 @@ $tpl->parse(
         'msgContactRemove' => $PMF_LANG['msgContactRemove'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
         'msgPrivacyNote' => $PMF_LANG['msgPrivacyNote'],
+        'privacyURL' => $faqConfig->get('main.privacyURL'),
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'ad_user_loginname' => $PMF_LANG['ad_user_loginname'],
