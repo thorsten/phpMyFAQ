@@ -50,7 +50,7 @@ provided on [docker.io](https://hub.docker.com/phpmyfaq).
 
 #### docker-compose.yml
 
-For devellopment pupose you can start a full stack to run your current PhpMyFAQ
+For development purposes you can start a full stack to run your current PhpMyFAQ
 source code from your local repo.
 
     docker-compose up
@@ -63,10 +63,10 @@ _Specific images started once to prepare the project:_
 
 _Running using named volumes:_
 - **mariadb**: image with xtrabackup support
-- **elasticsearch**: oss image (it means it does not have XPack installed)
-- **phpmyadmin**: a php tool to have a look on your database.
+- **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
+- **phpmyadmin**: a PHP tool to have a look on your database.
 
-_Running apache web server with php support:_
+_Running apache web server with PHP support:_
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
 Then services will be available at following addresses:
