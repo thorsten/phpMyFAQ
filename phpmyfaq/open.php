@@ -33,7 +33,7 @@ try {
 }
 
 if ($faqConfig->get('main.enableRssFeeds')) {
-    $rssFeedOpenQuestions = ' <a href="feed/openquestions/rss.php" target="_blank"><i aria-hidden="true" class="fa fa-rss"></i></a>';
+    $rssFeedOpenQuestions = ' <a href="feed/openquestions/rss.php" target="_blank"><img src="./assets/svg/rss-alt.svg"></a>';
 } else {
     $rssFeedOpenQuestions = '';
 }
