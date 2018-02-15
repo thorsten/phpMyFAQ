@@ -462,7 +462,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         ?>&amp;cmtid=<?php print($item['id']);
         ?>&amp;type=<?php print(Comment::COMMENT_TYPE_NEWS);
         ?>">
-                        <i aria-hidden="true" class="fa fa-trash-o"></i>
+                        <img src="../assets/svg/trash.svg">
                     </a>
                 </div>
             </div>

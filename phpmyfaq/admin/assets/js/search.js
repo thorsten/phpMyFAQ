@@ -32,7 +32,7 @@ $(document).ready(function () {
             var result = $('.result'),
                 indicator = $('#saving_data_indicator');
 
-            indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
+            indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
             result.empty();
             if (message.error) {
                 result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');

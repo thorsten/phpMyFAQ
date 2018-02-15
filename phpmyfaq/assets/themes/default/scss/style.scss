@@ -35,6 +35,13 @@ body {
   }
 }
 
+// Adjust all SVG icons
+img[src*=".svg"] {
+  width: 1em;
+  height: 1em;
+  margin-bottom: 12px;
+}
+
 //
 // TYPEAHEAD SEARCH
 //

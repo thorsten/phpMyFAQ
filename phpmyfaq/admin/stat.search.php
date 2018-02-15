@@ -138,7 +138,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                             <a class="btn btn-danger" href="javascript:;" title="<?php echo $PMF_LANG['ad_news_delete'];
         ?>"
                                onclick="deleteSearchTerm('<?php echo $searchItem['searchterm'] ?>', <?php echo $searchItem['id'] ?>); return false;">
-                                <i aria-hidden="true" class="fa fa-trash-o"></i>
+                                <img src="../assets/svg/trash.svg">
                             </a>
                         </td>
                     </tr>

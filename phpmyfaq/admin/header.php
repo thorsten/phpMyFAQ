@@ -346,7 +346,7 @@ switch ($action) {
               <li class="sidebar-sessioninfo">
                   <div>
                       <b class="fa fa-clock-o fa-fw"></b> <?php echo $PMF_LANG['ad_session_expiration']; ?>:
-                      <span id="sessioncounter"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
+                      <span id="sessioncounter"><img src="../assets/svg/spinning-circles.svg"> Loading...</span>
                   </div>
               </li>
           </ul>

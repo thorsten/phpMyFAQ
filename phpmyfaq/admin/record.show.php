@@ -473,7 +473,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                         <a class="btn btn-danger" href="javascript:void(0);"
                                            onclick="javascript:deleteRecord(<?php echo $record['id'] ?>, '<?php echo $record['lang'] ?>', '<?php echo $user->getCsrfTokenFromSession() ?>'); return false;"
                                            title="<?php echo $PMF_LANG['ad_user_delete'] ?>">
-                                        <i aria-hidden="true" class="fa fa-trash-o"></i>
+                                        <img src="../assets/svg/trash.svg">
                                         </a>
                                     </td>
                                 </tr>
@@ -543,7 +543,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 csrf: csrf
             };
 
-        indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...');
+        indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
 
         for (var i = 0; i < ids.length; i++) {
             var statusId = '#' + type + '_record_' + cid + '_' + ids[i];
@@ -599,7 +599,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
     {
         if (confirm('<?php echo addslashes($PMF_LANG['ad_entry_del_1'].' '.$PMF_LANG['ad_entry_del_3']);
         ?>')) {
-            $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
+            $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
             $.ajax({
                 type:    "POST",
                 url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",

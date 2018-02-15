@@ -51,7 +51,7 @@ $pagination = new Pagination(
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-file"></i> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
+                    <img src="../assets/svg/file.svg"> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
                 </h2>
             </div>
         </header>
@@ -79,13 +79,13 @@ $pagination = new Pagination(
                             <td>
                                 <a href="javascript:deleteAttachment(<?php echo $item->id ?>, '<?php echo $user->getCsrfTokenFromSession() ?>'); void(0);"
                                    class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
-                                    <i aria-hidden="true" class="fa fa-trash-o"></i>
+                                    <img src="../assets/svg/trash.svg">
                                 </a>
                             </td>
                             <td>
                                 <a title="<?php echo $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
                                    href="../index.php?action=faq&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
-                                  <i aria-hidden="true" class="fa fa-external-link"></i>
+                                  <img src="../assets/svg/external-link.svg">
                                 </a>
                             </td>
                         </tr>
@@ -110,7 +110,7 @@ $pagination = new Pagination(
         function deleteAttachment(att_id, csrf)
         {
             if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-                $('#saving_data_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
+                $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
                 $.ajax({
                     type:    "GET",
                     url:     "index.php?action=ajax&ajax=att&ajaxaction=delete",

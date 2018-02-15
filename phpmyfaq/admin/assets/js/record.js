@@ -49,7 +49,7 @@ $(document).ready(function () {
             url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
             data: questions,
             success: function (msg) {
-                indicator.html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Deleting ...');
+                indicator.html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
                 $('tr td input:checked').parent().parent().parent().fadeOut('slow');
                 indicator.fadeOut('slow');
                 $('#returnMessage').

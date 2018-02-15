@@ -49,7 +49,7 @@ $(document).ready(function () {
             dataType: 'json',
             beforeSend: function () {
                 $('#saving_data_indicator').html(
-                    '<i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Saving ...'
+                    '<img src="../assets/svg/spinning-circles.svg"> Saving ...'
                 );
             },
             success: function (message) {

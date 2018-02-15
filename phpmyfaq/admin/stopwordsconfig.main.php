@@ -82,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 return;
             }
 
-            $('#stopwords_loading_indicator').html('<i aria-hidden="true" class="fa fa-spinner fa-spin"></i>');
+            $('#stopwords_loading_indicator').html('<img src="../assets/svg/spinning-circles.svg">');
 
             $.get("index.php",
                   {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},
