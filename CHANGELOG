@@ -38,7 +38,7 @@ Version 3.0.0-alpha.2 - 2018-03-
 - removed support for ext/mssql (Thorsten)
 - removed bundled Symfony ClassLoader (Thorsten)
 - updated bundled Font Awesome (Thorsten)
-- removed Bower, now using NPM/Yarn only (Thorsten)
+- removed Bower, now using Yarn only (Thorsten)
 
 Version 2.9.9 - 2017-10-19
 - fixed multiple XSS and CSRF vulnerabilities (Thorsten)

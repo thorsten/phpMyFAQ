@@ -78,35 +78,13 @@ module.exports = function (grunt) {
           }
         ]
       },
-      fontawesome: {
+      openiconic: {
         files: [
           {
             expand: true,
-            cwd: 'node_modules/font-awesome/fonts/',
+            cwd: 'node_modules/open-iconic/svg/',
             src: '**',
-            dest: 'phpmyfaq/admin/assets/fonts/'
-          },
-          {
-            expand: true,
-            cwd: 'node_modules/font-awesome/fonts/',
-            src: '**',
-            dest: 'phpmyfaq/assets/themes/default/fonts/'
-          }
-        ]
-      },
-      glyphicons: {
-        files: [
-          {
-            expand: true,
-            cwd: 'node_modules/bootstrap/fonts/',
-            src: '**',
-            dest: 'phpmyfaq/admin/assets/fonts/'
-          },
-          {
-            expand: true,
-            cwd: 'node_modules/bootstrap/fonts/',
-            src: '**',
-            dest: 'phpmyfaq/assets/themes/default/fonts/'
+            dest: 'phpmyfaq/assets/svg/'
           }
         ]
       },
