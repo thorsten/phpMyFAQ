@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "3.0.0-alpha",
+  "version": "3.0.0-alpha.2",
   "description": "phpMyFAQ",
   "main": "Gruntfile.js",
   "scripts": {
@@ -13,12 +13,12 @@
     "bxslider": "^4.2.13",
     "cookieconsent": "^3.0.4",
     "corejs-typeahead": "^1.2.1",
-    "font-awesome": "^4.7.0",
     "handlebars": "^4.0.11",
     "highlightjs": "^9.10.0",
     "jquery": "^3.2.1",
     "jquery-sparkline": "^2.3.2",
     "mermaid": "^7.1.0",
+    "open-iconic": "^1.1.1",
     "popper.js": "^1.12.6",
     "tinymce": "^4.7.1"
   },

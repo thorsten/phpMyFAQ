@@ -20,7 +20,7 @@
 
 define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
 
-require PMF_ROOT_DIR . '/src/PMF/System.php';
+require PMF_ROOT_DIR . '/src/phpMyFAQ/System.php';
 
 $system = new phpMyFAQ\System();
 
