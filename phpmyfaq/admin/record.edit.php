@@ -108,6 +108,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     } elseif ('editentry' === $action) {
         $id = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new PMF_Logging($faqConfig);
             $logging->logAdmin($user, 'Beitragedit, '.$id);
@@ -120,6 +121,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
+            if(isset($categoryId)){ 
+                $categories = $categoryId;
+            } 
         }
     } elseif ('copyentry' === $action) {
         $faqData['id'] = PMF_Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

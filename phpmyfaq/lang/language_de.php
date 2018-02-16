@@ -238,7 +238,7 @@ $PMF_LANG["ad_entry_savedfail"] = "Ein <strong>Datenbankfehler</strong> ist aufg
 $PMF_LANG["ad_entry_del_1"] = "Bist du sicher, dass die FAQ";
 $PMF_LANG["ad_entry_del_2"] = "des Benutzers";
 $PMF_LANG["ad_entry_del_3"] = "gelöscht werden soll?";
-$PMF_LANG["ad_entry_delsuc"] = "Der FAQ-Eintrag <strong>erfolgreich</strong> gelöscht.";
+$PMF_LANG["ad_entry_delsuc"] = "Der FAQ-Eintrag wurde <strong>erfolgreich</strong> gelöscht.";
 $PMF_LANG["ad_entry_delfail"] = "Die FAQ-Eintrag wurde <strong>nicht gelöscht</strong>!";
 $PMF_LANG["ad_entry_back"] = "Zurück";
 
@@ -1108,7 +1108,7 @@ $PMF_LANG["rightsLanguage"]["reports"] = "Reports erstellen";
 $PMF_LANG["rightsLanguage"]["addfaq"] = "FAQs im Frontend hinzufügen";
 $PMF_LANG["rightsLanguage"]["addquestion"] = "Fragen im Frontend hinzufügen";
 $PMF_LANG["rightsLanguage"]["addcomment"] = "Kommentare im Frontend hinzufügen";
-$PMF_LANG["rightsLanguage"]["editinstances"] = "Mulit-Sites bearbeiten";
+$PMF_LANG["rightsLanguage"]["editinstances"] = "Multi-Sites bearbeiten";
 $PMF_LANG["rightsLanguage"]["addinstances"] = "Multi-Sites hinzufügen";
 $PMF_LANG["rightsLanguage"]["delinstances"] = "Multi-Sites löschen";
 $PMF_LANG["rightsLanguage"]["export"] = "FAQs exportieren";

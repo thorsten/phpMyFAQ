@@ -319,10 +319,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             printf('<h4>%s</h4> ', $categoryName);
         }
 
+        // add faq to category (always)
+        printf('
+           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-file-text-o fa-fw"></span></a> ',
+           $cat['id'],
+           $cat['lang'],
+           $PMF_LANG['ad_quick_entry']
+        );
+
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
            printf('
-            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-plus fa-fw"></span></a> ',
+               <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-plus fa-fw"></span></a> ',
                $cat['id'],
                $cat['lang'],
                $PMF_LANG['ad_quick_category']
