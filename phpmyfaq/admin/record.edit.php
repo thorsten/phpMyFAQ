@@ -129,7 +129,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     } elseif ('editentry' === $action) {
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        $categoryId = PMF_Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+        $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Beitragedit, '.$id);
