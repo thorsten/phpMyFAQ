@@ -1250,3 +1250,6 @@ $PMF_LANG['ad_image_name_search'] = 'Search for image name';
 // added v2.9.0-RC - 2016-02-19 by Thorsten
 $PMF_LANG['ad_admin_notes'] = 'Private Notes';
 $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
+
+// added v2.9.10 - 2018-02-17 by Thorsten
+$PMF_LANG['ad_quick_entry'] = 'Add new FAQ in this category';
