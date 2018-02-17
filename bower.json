@@ -11,7 +11,7 @@
     "bootstrap": "~3.3.7",
     "font-awesome": "~4.7",
     "sparkline": "~2.1.2",
-    "tinymce": "~4.5",
+    "tinymce": "~4.6",
     "jquery": "~1.11.2",
     "bootstrap-datepicker": "~1.2.0",
     "typeahead.js": "~0.11",
