@@ -87,7 +87,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         );
         if (is_array($selectedCategory)) {
             foreach ($selectedCategory as $cats) {
-                $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
+                $categories[] = ['category_id' => $cats, 'category_lang' => $faqData['lang']];
             }
         }
         $faqData['active'] = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -121,8 +121,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
-            if(isset($categoryId)){ 
-                $categories = $categoryId;
+            if (isset($categoryId)){
+                $categories = ['category_id' => $categoryId, 'category_lang' => $lang];
             } 
         }
     } elseif ('copyentry' === $action) {
