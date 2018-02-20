@@ -1,9 +1,13 @@
-phpMyFAQ 2.9.10
+phpMyFAQ 2.9.11
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.11 - 2018-03
+- updated bundled jQuery to version 1.12.4 (Thorsten)
+- updated bundled Handlebars to version 4.0.11 (Thorsten)
 
 Version 2.9.10 - 2018-02-17
 - updated Dutch translation (https://github.com/joskevos)

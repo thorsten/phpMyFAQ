@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.10",
+  "version": "2.9.11",
   "main": "phpmyfaq.js",
   "ignore": [
     "**/.*",
@@ -12,10 +12,10 @@
     "font-awesome": "~4.7",
     "sparkline": "~2.1.2",
     "tinymce": "~4.6",
-    "jquery": "~1.11.2",
+    "jquery": "~1.12.4",
     "bootstrap-datepicker": "~1.2.0",
     "typeahead.js": "~0.11",
-    "handlebars": "~2.0.0",
+    "handlebars": "~4.0.11",
     "highlightjs": "9.*",
     "mermaid": "~0.5.8"
   },
