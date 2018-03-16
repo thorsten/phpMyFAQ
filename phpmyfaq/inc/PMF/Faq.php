@@ -2591,7 +2591,7 @@ class PMF_Faq
                 %sfaqchanges
             WHERE
                 beitrag = %d
-            ORDER BY revision_id DESC',
+            ORDER BY revision_id, datum DESC',
             PMF_Db::getTablePrefix(),
             $recordId
         );
