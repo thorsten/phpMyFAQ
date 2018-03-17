@@ -1422,7 +1422,6 @@ class PMF_Faq
      */
     public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, Array $condition = null, $sortOrder = 'ASC')
     {
-        $solutionIds = [];
         $where = '';
         if (!is_null($condition)) {
             $num = count($condition);
@@ -1539,6 +1538,7 @@ class PMF_Faq
         $result = $this->_config->getDb()->query($query);
 
         while ($row = $this->_config->getDb()->fetchObject($result)) {
+
             $content = $row->content;
             $active = ('yes' == $row->active);
             $expired = (date('YmdHis') > $row->date_end);
@@ -1550,30 +1550,26 @@ class PMF_Faq
                 $content = $this->pmf_lang['err_expiredArticle'];
             }
 
-            if (!in_array($row->solution_id, $solutionIds)) {
-                array_push($solutionIds, $row->solution_id);
-
-                $this->faqRecords[] = [
-                    'id' => $row->id,
-                    'category_id' => $row->category_id,
-                    'lang' => $row->lang,
-                    'solution_id' => $row->solution_id,
-                    'revision_id' => $row->revision_id,
-                    'active' => $row->active,
-                    'sticky' => $row->sticky,
-                    'keywords' => $row->keywords,
-                    'title' => $row->thema,
-                    'content' => $content,
-                    'author' => $row->author,
-                    'email' => $row->email,
-                    'comment' => $row->comment,
-                    'updated' => PMF_Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
-                    'dateStart' => $row->date_start,
-                    'dateEnd' => $row->date_end,
-                    'created' => $row->created,
-                    'notes' => $row->notes
-                ];
-            }
+            $this->faqRecords[] = [
+                'id' => $row->id,
+                'category_id' => $row->category_id,
+                'lang' => $row->lang,
+                'solution_id' => $row->solution_id,
+                'revision_id' => $row->revision_id,
+                'active' => $row->active,
+                'sticky' => $row->sticky,
+                'keywords' => $row->keywords,
+                'title' => $row->thema,
+                'content' => $content,
+                'author' => $row->author,
+                'email' => $row->email,
+                'comment' => $row->comment,
+                'updated' => PMF_Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
+                'dateStart' => $row->date_start,
+                'dateEnd' => $row->date_end,
+                'created' => $row->created,
+                'notes' => $row->notes
+            ];
         }
     }
 

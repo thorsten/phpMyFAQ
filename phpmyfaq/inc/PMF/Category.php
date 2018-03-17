@@ -1630,7 +1630,7 @@ class PMF_Category
         $query = sprintf('
             SELECT
                 fcr.category_id AS category_id,
-                COUNT(fcr.record_id) AS number
+                COUNT(fcr.record_id) AS num_records
             FROM
                 %sfaqcategoryrelations fcr, %sfaqdata fd
             WHERE
@@ -1645,7 +1645,7 @@ class PMF_Category
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $numRecordsByCat[$row->category_id] = $row->number;
+                $numRecordsByCat[$row->category_id] = (int) $row->num_records;
             }
         }
 

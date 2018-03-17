@@ -125,7 +125,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
         }
-        //-->
     </script>
 <?php
 
@@ -173,15 +172,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
+    $numActiveByCat = [];
+    $numCommentsByCat = [];
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numRecordsByCat = $category->getNumberOfRecordsOfCategory();
 
     $matrix = $category->getCategoryRecordsMatrix();
-    foreach ($matrix as $catkey => $value) {
-        $numCommentsByCat[$catkey] = 0;
-        foreach ($value as $faqkey => $value) {
-            if (isset($numCommentsByFaq[$faqkey])) {
-                $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
+    foreach ($matrix as $matCategoryId => $matFaqIds) {
+        $numCommentsByCat[$matCategoryId] = 0;
+        foreach ($matFaqIds as $matFaqId => $value) {
+            if (isset($numCommentsByFaq[$matFaqId])) {
+                $numCommentsByCat[$matCategoryId] += $numCommentsByFaq[$matFaqId];
             }
         }
     }
@@ -192,7 +193,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             if (!isset($numActiveByCat[$record['category_id']])) {
                 $numActiveByCat[$record['category_id']] = 0;
             }
-            $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
+            $numActiveByCat[$record['category_id']] += $record['active'] === 'yes' ? 1 : 0;
         }
     } else {
         $fdTable = PMF_Db::getTablePrefix().'faqdata';
@@ -225,8 +226,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         $laction = 'view';
         $internalSearch = '&search='.$searchTerm;
         $wasSearch = true;
-        $idsFound = array();
-        $faqsFound = array();
+        $idsFound = [];
+        $faqsFound = [];
 
         while ($row = $faqConfig->getDb()->fetchObject($result)) {
             if ($searchCat != 0 && $searchCat != (int) $row->category_id) {
@@ -234,10 +235,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
             if (in_array($row->id, $idsFound)) {
-                continue; // only show one entry if FAQ is in mulitple categories
+                continue; // only show one entry if FAQ is in multiple categories
             }
 
-            $faqsFound[$row->category_id][$row->id] = array(
+            $faqsFound[$row->category_id][$row->id] = [
                 'id' => $row->id,
                 'category_id' => $row->category_id,
                 'solution_id' => $row->solution_id,
@@ -247,7 +248,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 'title' => $row->thema,
                 'content' => $row->content,
                 'updated' => PMF_Date::createIsoDate($row->updated),
-            );
+            ];
 
             if (!isset($numActiveByCat[$row->category_id])) {
                 $numActiveByCat[$row->category_id] = 0;
@@ -281,7 +282,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             $catInfo = '';
             $cid = $record['category_id'];
 
-            if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
+            if (isset($numRecordsByCat[$cid])) {
                 $catInfo .= sprintf(
                     '<span class="label label-info" id="category_%d_item_count">%d %s</span> ',
                     $cid,
@@ -318,10 +319,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <div class="panel-heading" role="tab" id="category-heading-<?php echo $cid ?>">
                     <h4 class="panel-title">
                         <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?php echo $cid ?>"
-                        aria-expanded="true" aria-controls="collapseOne">
+                            aria-expanded="true" aria-controls="collapseOne">
                             <i class="icon fa fa-chevron-circle-right "></i>
-                            <strong><?php echo $category->getPath($cid) ?></strong> <?php echo $catInfo ?>
+                            <strong><?php echo $category->getPath($cid) ?></strong>
                         </a>
+                        <?php echo $catInfo ?>
                     </h4>
                 </div>
                 <div id="category-<?php echo $cid ?>" class="panel-collapse collapse" role="tabpanel"
@@ -407,7 +409,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                         </label>
                                     </td>
                                     <td>
-                                        <?php if ($user->perm->checkRight($user->getUserId(), 'approverec') && isset($numVisits[$record['id']])) { ?>
+                                        <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                                         <label>
                                             <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                                                onclick="saveStatus(<?php echo $cid.', ['.$record['id'].']' ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>');"

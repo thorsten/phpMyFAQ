@@ -280,7 +280,7 @@ class PMF_Comment
 
         $query = sprintf("
             SELECT
-                COUNT(id) AS anz,
+                COUNT(id) AS num_comments,
                 id
             FROM
                 %sfaqcomments
@@ -295,7 +295,7 @@ class PMF_Comment
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $num[$row->id] = $row->anz;
+                $num[$row->id] = (int) $row->num_comments;
             }
         }
 
