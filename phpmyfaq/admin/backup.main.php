@@ -29,7 +29,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['ad_csv_backup'] ?>
+                    <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_backup'] ?>
                 </h2>
             </div>
         </header>
@@ -45,12 +45,12 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                         <p><?php echo $PMF_LANG['ad_csv_make'] ?></p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                                <i aria-hidden="true" class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
+                                <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
                             </a>
                         </p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                                <i aria-hidden="true" class="fa fa-download fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
+                                <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
                             </a>
                         </p>
                     </div>
@@ -77,7 +77,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                             <div class="form-group row">
                                 <p class="text-right">
                                     <button class="btn btn-primary" type="submit">
-                                        <i aria-hidden="true" class="fa fa-upload fa fa-white"></i> <?php echo $PMF_LANG['ad_csv_ok'] ?>
+                                        <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_ok'] ?>
                                     </button>
                                 </p>
                             </div>

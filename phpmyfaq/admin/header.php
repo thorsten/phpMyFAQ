@@ -315,7 +315,7 @@ switch ($action) {
               
               <li class="nav-item <?php echo($backupPage ? 'active' : ''); ?>">
                   <a class="nav-link" href="index.php?action=backup">
-                      <i aria-hidden="true" class="fa fa-download fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+                      <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                   </a>
                   <?php if ($backupPage) { ?> 
                   <ul class="navbar-nav navbar-dark ml-3 <?php echo($backupPage ? 'in' : '') ?>">

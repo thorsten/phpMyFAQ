@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addglossary">
-                            <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                            <img src="../assets/svg/plus.svg"> <?php echo $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>
                 </h2>

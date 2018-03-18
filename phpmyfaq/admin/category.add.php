@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-list fa-fw"></i> <?php echo $PMF_LANG['ad_categ_new'] ?></h2>
+                <h2 class="page-header"><img src="../assets/svg/list.svg"> <?php echo $PMF_LANG['ad_categ_new'] ?></h2>
             </div>
         </header>
 

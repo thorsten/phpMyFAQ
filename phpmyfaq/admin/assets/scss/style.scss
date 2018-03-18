@@ -16,7 +16,7 @@
 
 // phpMyFAQ colors and mixins
 @import 'colors';
-@import "../../../../node_modules/bootstrap/scss/bootstrap";
+@import '../../../../node_modules/bootstrap/scss/bootstrap';
 @import 'mixins';
 
 html {
@@ -27,6 +27,13 @@ html {
 body {
   padding-top: 4.5rem;
   margin-bottom: 3rem;
+}
+
+// Adjust all SVG icons
+img[src*=".svg"] {
+  width: 1em;
+  height: 1em;
+  margin-bottom: 12px;
 }
 
 //

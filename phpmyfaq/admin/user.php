@@ -410,7 +410,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                         </a>
                         <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
                         <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i aria-hidden="true" class="fa fa-list"></i> <?= $PMF_LANG['list_all_users'] ?>
+                            <img src="../assets/svg/list.svg"> <?= $PMF_LANG['list_all_users'] ?>
                         </a>
                         <?php endif ?>
                     </div>
