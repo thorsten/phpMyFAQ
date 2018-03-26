@@ -576,7 +576,6 @@ if ($step == 3) {
         }
     }
 
-
     //
     // UPDATES FROM 3.0.0-alpha
     //

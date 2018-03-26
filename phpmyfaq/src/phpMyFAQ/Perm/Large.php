@@ -19,8 +19,6 @@ namespace phpMyFAQ\Perm;
  * @since     2005-09-17
  */
 
-use phpMyFAQ\Medium;
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -35,6 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Perm_Large extends Perm_Medium
+class Large extends Medium
 {
+
 }

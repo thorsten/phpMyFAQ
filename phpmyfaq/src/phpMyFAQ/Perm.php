@@ -108,14 +108,16 @@ class Perm
      */
     public static function permOptions($current)
     {
-        $options = array('basic', 'medium');
+        $options = ['basic', 'medium', 'large'];
         $output = '';
 
         foreach ($options as $value) {
-            $output .= sprintf('<option value="%s"%s>%s</option>',
+            $output .= sprintf(
+                '<option value="%s"%s>%s</option>',
                 $value,
                 ($value == $current) ? ' selected="selected"' : '',
-                $value);
+                $value
+            );
         }
 
         return $output;
