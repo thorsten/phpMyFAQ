@@ -592,6 +592,13 @@ if ($step == 3) {
         $faqConfig->add('main.privacyURL', '');
     }
 
+    //
+    // UPDATES FROM 3.0.0-alpha2
+    //
+    if (version_compare($version, '3.0.0-alpha2', '<=')) {
+        $faqConfig->add('main.enableAutoUpdateHint', 'true');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);

@@ -323,6 +323,7 @@ class Installer
         'main.enableCategoryRestrictions' => 'true',
         'main.enableSendToFriend' => 'true',
         'main.privacyURL' => '',
+        'main.enableAutoUpdateHint' => 'true',
 
         'records.numberOfRecordsPerPage' => '10',
         'records.numberOfShownNewsEntries' => '3',
