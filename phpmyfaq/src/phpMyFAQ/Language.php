@@ -349,7 +349,7 @@ class Language
     public static function isASupportedTinyMCELanguage($langcode)
     {
         return file_exists(
-            ROOT_DIR.'/admin/assets/js/editor/langs/'.$langcode.'.js'
+            PMF_ROOT_DIR.'/admin/assets/js/editor/langs/'.$langcode.'.js'
         );
     }
 

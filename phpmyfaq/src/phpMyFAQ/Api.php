@@ -33,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      http://www.phpmyfaq.de
  * @since     2018-03-27
  */
-class Api {
-
+class Api
+{
     /**
      * @var string
      */
@@ -61,7 +61,8 @@ class Api {
      * @param Configuration $config
      * @param System $system
      */
-    public function __construct(Configuration $config, System $system) {
+    public function __construct(Configuration $config, System $system)
+    {
         $this->config = $config;
         $this->system = $system;
     }
@@ -73,8 +74,9 @@ class Api {
      * @return array
      * @throws Exception
      */
-    public function getVersions() {
-        $json = file_get_contents($this->apiUrl.'/versions');
+    public function getVersions()
+    {
+        $json = file_get_contents($this->apiUrl . '/versions');
         $result = json_decode($json);
         if ($result instanceof \stdClass) {
             return [
@@ -93,8 +95,9 @@ class Api {
      * @return bool
      * @throws Exception
      */
-    public function isVerified() {
-        $this->remoteHashes = file_get_contents($this->apiUrl.'/verify/'.$this->config->get('main.currentVersion'));
+    public function isVerified()
+    {
+        $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->get('main.currentVersion'));
 
         if (json_decode($this->remoteHashes) instanceof \stdClass) {
             if (!is_array(json_decode($this->remoteHashes, true))) {
@@ -110,7 +113,8 @@ class Api {
     /**
      * @return array
      */
-    public function getVerificationIssues() {
+    public function getVerificationIssues()
+    {
         return array_diff(
             json_decode($this->system->createHashes(), true),
             json_decode($this->remoteHashes, true)
