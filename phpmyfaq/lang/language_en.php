@@ -41,15 +41,6 @@ $PMF_LANG["language"] = "english";
 $PMF_LANG["dir"] = "ltr";
 
 $PMF_LANG["nplurals"] = "2";
-/**
- * This parameter is used with the function 'plural' from inc/Language/Plurals.php
- * If this parameter and function are not in sync plural form support will be broken.
- *
- * If you add a translation for a new language, correct plural form support will be missing
- * (English plural messages will be used) until you add a correct expression to the function
- * 'plural' mentioned above.
- * If you need any help, please contact phpMyFAQ team.
- */
 
 // Navigation
 $PMF_LANG["msgCategory"] = "Categories";
@@ -1282,3 +1273,6 @@ $PMF_LANG["ad_menu_RequestRemove"] = "Request user removal";
 $PMF_LANG["msgContactRemove"] = "Deletion request from admin team:";
 $PMF_LANG["msgContactPrivacyNote"] = "Please notice our";
 $PMF_LANG["msgPrivacyNote"] = "Privacy Statement";
+
+// added 3.0.0-alpha2 - 2018-03-27 by Thorsten
+$LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatic check for new versions<br>(default: activated)'];

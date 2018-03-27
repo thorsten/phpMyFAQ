@@ -19,7 +19,9 @@
  * @since     2013-02-05
  */
 
+use phpMyFAQ\Api;
 use phpMyFAQ\Db;
+use phpMyFAQ\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\System;
 use phpMyFAQ\Session;
@@ -152,22 +154,22 @@ $faqSession = new Session($faqConfig);
                 <div class="panel-body">
                     <?php
                     $version = Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
-                    if (!is_null($version) && $version == 'version') {
-                        $json = file_get_contents('http://api.phpmyfaq.de/versions');
-                        $result = json_decode($json);
-                        if ($result instanceof stdClass) {
-                            $installed = $faqConfig->get('main.currentVersion');
-                            $available = $result->stable;
+                    if ($faqConfig->get('main.enableAutoUpdateHint') || (!is_null($version) && $version == 'version')) {
+                        $api = new Api($faqConfig, new System());
+                        try {
+                            $versions = $api->getVersions();
                             printf(
-                                '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>:<br/><strong>phpMyFAQ %s</strong>',
-                                (-1 == version_compare($installed, $available)) ? 'danger' : 'info',
+                                '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                                (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
                                 $PMF_LANG['ad_xmlrpc_latest'],
-                                $available
+                                $versions['current']
                             );
                             // Installed phpMyFAQ version is outdated
-                            if (-1 == version_compare($installed, $available)) {
+                            if (-1 == version_compare($versions['installed'], $versions['current'])) {
                                 echo '<br />'.$PMF_LANG['ad_you_should_update'];
                             }
+                        } catch (Exception $e) {
+                            printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                         }
                     } else {
                         ?>
@@ -194,55 +196,32 @@ $faqSession = new Session($faqConfig);
                     <?php
                     $getJson = Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
                     if (!is_null($getJson) && 'verify' === $getJson) {
-                        set_error_handler(
-                            function ($severity, $message, $file, $line) {
-                                throw new ErrorException($message, $severity, $severity, $file, $line);
-                            }
-                        );
-
-                        $faqSystem = new System();
-                        $localHashes = $faqSystem->createHashes();
-                        $versionCheckError = true;
+                        $api = new Api($faqConfig, new System());
                         try {
-                            $remoteHashes = file_get_contents(
-                                'http://api.phpmyfaq.de/verify/'.$faqConfig->get('main.currentVersion')
-                            );
-                            if (!is_array(json_decode($remoteHashes, true))) {
-                                $versionCheckError = true;
+                            if (!$api->isVerified()) {
+                                echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
                             } else {
-                                $versionCheckError = false;
-                            }
-                        } catch (ErrorException $e) {
-                            echo '<p class="alert alert-danger">phpMyFAQ version could not be checked.</p>';
-                        }
-
-                        restore_error_handler();
-
-                        if ($versionCheckError) {
-                            echo '<p class="alert alert-danger">phpMyFAQ version mismatch - no verification possible.</p>';
-                        } else {
-                            $diff = array_diff(
-                                json_decode($localHashes, true),
-                                json_decode($remoteHashes, true)
-                            );
-
-                            if (1 < count($diff)) {
-                                printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_verification_notokay']);
-                                echo '<ul>';
-                                foreach ($diff as $file => $hash) {
-                                    if ('created' === $file) {
-                                        continue;
+                                $issues = $api->getVerificationIssues();
+                                if (1 < count($issues)) {
+                                    printf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_verification_notokay']);
+                                    echo '<ul>';
+                                    foreach ($issues as $file => $hash) {
+                                        if ('created' === $file) {
+                                            continue;
+                                        }
+                                        printf(
+                                            '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
+                                            $hash,
+                                            $file
+                                        );
                                     }
-                                    printf(
-                                        '<li><span class="pmf-popover" data-original-title="SHA-1" data-content="%s">%s</span></li>',
-                                        $hash,
-                                        $file
-                                    );
+                                    echo '</ul>';
+                                } else {
+                                    printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
                                 }
-                                echo '</ul>';
-                            } else {
-                                printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
                             }
+                        } catch (Exception $e) {
+                            printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                         }
                     } else {
                         ?>
@@ -253,7 +232,6 @@ $faqSession = new Session($faqConfig);
                             </button>
                         </form>
                     <?php
-
                     }
                     ?>
                     <script>$(function(){ $('span[class="pmf-popover"]').popover();});</script>
