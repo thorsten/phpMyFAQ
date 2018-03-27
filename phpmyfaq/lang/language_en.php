@@ -1276,3 +1276,4 @@ $PMF_LANG["msgPrivacyNote"] = "Privacy Statement";
 
 // added 3.0.0-alpha2 - 2018-03-27 by Thorsten
 $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatic check for new versions<br>(default: activated)'];
+$PMF_LANG['ad_quick_entry'] = 'Add FAQ in this category';
