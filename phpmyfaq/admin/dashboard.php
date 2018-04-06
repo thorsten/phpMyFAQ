@@ -61,7 +61,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-8">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
+                  <i class="material-icons">insert_chart</i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
                 </div>
                 <div class="panel-body">
                 <?php
@@ -90,48 +90,48 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-4">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-bell fa-fw"></i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
+                  <i class="material-icons">info</i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
                 </div>
                 <div class="panel-body">
                     <div class="list-group">
                         <a href="?action=viewsessions" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-bar-chart-o fa-fw"></i> <?php echo $PMF_LANG['ad_start_visits'] ?>
+                            <i class="material-icons">insert_chart</i>  <?php echo $PMF_LANG['ad_start_visits'] ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqSession->getNumberOfSessions() ?></em>
                             </span>
                         </a>
                         <a href="?action=view" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
+                            <i class="material-icons">question_answer</i> <?php echo $PMF_LANG['ad_start_articles']; ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-comment fa-fw"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
+                            <i class="material-icons">comment</i> <?php echo $PMF_LANG['ad_start_comments']; ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="?action=question" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-question fa-fw"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
+                          <i class="material-icons">feedback</i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="?action=news" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-list-alt fa-fw"></i> <?php echo $PMF_LANG['msgNews']; ?>
+                          <i class="material-icons">message</i> <?php echo $PMF_LANG['msgNews']; ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                            <i class="material-icons">person</i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
-                            <i aria-hidden="true" class="fa fa-apple fa-fw"></i> Available on the App Store
+                           Available on the App Store
                             <span class="float-right text-muted small">
                                 <i aria-hidden="true" class="fa fa-heart"></i>
                             </span>

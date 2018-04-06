@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addglossary">
-                            <img src="../assets/svg/plus.svg"> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                            <i class="material-icons">add</i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>
                 </h2>
@@ -135,7 +135,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
             $user->getCsrfTokenFromSession()
         );
         printf(
-            '<span title="%s"><img src="../assets/svg/trash.svg"></span></a></td>',
+            '<span title="%s"><i class="material-icons">delete</i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';

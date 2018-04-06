@@ -17,8 +17,8 @@
     "highlightjs": "^9.10.0",
     "jquery": "^3.2.1",
     "jquery-sparkline": "^2.3.2",
+    "material-design-icons": "^3.0.1",
     "mermaid": "^7.1.0",
-    "open-iconic": "^1.1.1",
     "popper.js": "^1.12.6",
     "tinymce": "^4.7.1"
   },

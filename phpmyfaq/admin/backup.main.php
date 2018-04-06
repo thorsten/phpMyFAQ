@@ -29,7 +29,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_backup'] ?>
+                    <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_backup'] ?>
                 </h2>
             </div>
         </header>
@@ -45,12 +45,12 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                         <p><?php echo $PMF_LANG['ad_csv_make'] ?></p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                                <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
+                                <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
                             </a>
                         </p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                                <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
+                                <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
                             </a>
                         </p>
                     </div>
@@ -77,7 +77,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                             <div class="form-group row">
                                 <p class="text-right">
                                     <button class="btn btn-primary" type="submit">
-                                        <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_ok'] ?>
+                                        <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_ok'] ?>
                                     </button>
                                 </p>
                             </div>

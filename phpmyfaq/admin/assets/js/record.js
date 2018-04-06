@@ -86,7 +86,7 @@ $(document).ready(function () {
             '<a href="../index.php?action=attachment&id=' + attachment.attachmentId + '">' + attachment.fileName + '</a>' +
             '<a class="label label-danger" href="?action=delatt&amp;record_id=' + attachment.faqId +
             '&amp;id=' + attachment.attachmentId + '&amp;lang=' + attachment.faqLanguage + '">' +
-            '<img src="../assets/svg/trash.svg"></a>' +
+            '<i class="material-icons">delete</i></a>' +
             '</li>'
           )
         });

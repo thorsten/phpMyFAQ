@@ -51,7 +51,7 @@ $pagination = new Pagination(
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <img src="../assets/svg/file.svg"> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
+                    <i class="material-icons">attachment</i> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
                 </h2>
             </div>
         </header>
@@ -79,7 +79,7 @@ $pagination = new Pagination(
                             <td>
                                 <a href="javascript:deleteAttachment(<?php echo $item->id ?>, '<?php echo $user->getCsrfTokenFromSession() ?>'); void(0);"
                                    class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
-                                    <img src="../assets/svg/trash.svg">
+                                    <i class="material-icons">delete</i>
                                 </a>
                             </td>
                             <td>

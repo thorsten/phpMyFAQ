@@ -64,7 +64,7 @@ try {
 // Define the header of the page
 $newsMainHeader = $faqConfig->get('main.titleFAQ').$PMF_LANG['msgNews'];
 if ($faqConfig->get('main.enableRssFeeds')) {
-    $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><img src="./assets/svg/rss-alt.svg"></a>';
+    $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><i class="material-icons">rss_feed</i></a>';
 } else {
     $newsFeed = '';
 }

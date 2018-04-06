@@ -78,14 +78,21 @@ module.exports = function (grunt) {
           }
         ]
       },
-      openiconic: {
+      mdi: {
         files: [
           {
             expand: true,
-            cwd: 'node_modules/open-iconic/svg/',
-            src: '**',
-            dest: 'phpmyfaq/assets/svg/'
+            cwd: 'node_modules/material-design-icons/iconfont/',
+            src: 'MaterialIcons-Regular.*',
+            dest: 'phpmyfaq/assets/fonts/'
+          },
+          {
+            expand: true,
+            cwd: 'node_modules/material-design-icons/iconfont/',
+            src: 'MaterialIcons-Regular.*',
+            dest: 'phpmyfaq/admin/assets/fonts/'
           }
+
         ]
       },
       highlightjs: {

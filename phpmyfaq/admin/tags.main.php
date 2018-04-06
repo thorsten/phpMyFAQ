@@ -80,7 +80,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
             $key
         );
         printf(
-            '<span title="%s"><img src="../assets/svg/trash.svg"></span></a></td>',
+            '<span title="%s"><i class="material-icons">delete</i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
 

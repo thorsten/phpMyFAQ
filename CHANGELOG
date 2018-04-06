@@ -25,7 +25,7 @@ Version 3.0.0-alpha.2 - 2018-04-
 - updated bundled SwiftMailer to version 5.4.8 (Thorsten)
 - updated bundled Elasticsearch client to version 2.2.1 (Thorsten)
 - updated bundled Bootstrap to version 4.0.0 (Thorsten)
-- updated bundled Open Ionic to version 1.1.0 (Thorsten)
+- updated bundled Material Design Icons to version 3.0.1 (Thorsten)
 - updated bundled jQuery to version 3.2.1 (Thorsten)
 - updated bundled jQuery datePicker plugin to version 1.6.4 (Thorsten)
 - updated bundled Typeahead.js to version CoreJS Typeahead 1.2.1 (Thorsten)
@@ -38,7 +38,7 @@ Version 3.0.0-alpha.2 - 2018-04-
 - removed XHTML export (Thorsten)
 - removed support for ext/mssql (Thorsten)
 - removed bundled Symfony ClassLoader (Thorsten)
-- updated bundled Font Awesome (Thorsten)
+- removed bundled Font Awesome icons (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
 
 Version 2.9.9 - 2017-10-19

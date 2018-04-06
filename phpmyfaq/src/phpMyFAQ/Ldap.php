@@ -79,9 +79,7 @@ class Ldap
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
-     *
-     * @return PMF_Ldap
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {

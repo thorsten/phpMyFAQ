@@ -469,7 +469,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                         <a class="btn btn-danger" href="javascript:void(0);"
                                            onclick="javascript:deleteRecord(<?php echo $record['id'] ?>, '<?php echo $record['lang'] ?>', '<?php echo $user->getCsrfTokenFromSession() ?>'); return false;"
                                            title="<?php echo $PMF_LANG['ad_user_delete'] ?>">
-                                        <img src="../assets/svg/trash.svg">
+                                        <i class="material-icons">delete</i>
                                         </a>
                                     </td>
                                 </tr>

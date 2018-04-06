@@ -462,7 +462,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         ?>&amp;cmtid=<?php print($item['id']);
         ?>&amp;type=<?php print(Comment::COMMENT_TYPE_NEWS);
         ?>">
-                        <img src="../assets/svg/trash.svg">
+                        <i class="material-icons">delete</i>
                     </a>
                 </div>
             </div>

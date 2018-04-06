@@ -34,13 +34,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <img src="../assets/svg/list.svg"> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
+                    <i class="material-icons">list</i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addcategory">
-                            <img src="../assets/svg/plus.svg"> <?php echo $PMF_LANG['ad_kateg_add']; ?>
+                            <i class="material-icons">add</i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
                         </a>
                         <a class="btn btn-info" href="?action=showcategory">
-                            <img src="../assets/svg/spreadheet.svg"> <?php echo $PMF_LANG['ad_categ_show'];?>
+                            <i class="material-icons">view_list</i> <?php echo $PMF_LANG['ad_categ_show'];?>
                         </a>
                     </div>
                 </h2>
@@ -360,7 +360,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         // add faq to category (always)
         printf('
-           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><img src="../assets/svg/plus.svg" title="%s"></a></a> ',
+           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">add</i></a></a> ',
            $cat['id'],
            $cat['lang'],
            $PMF_LANG['ad_quick_entry']
@@ -369,7 +369,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
            printf('
-            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><img src="../assets/svg/plus.svg" title="%s"></a> ',
+            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">add</i></a> ',
                $cat['id'],
                $cat['lang'],
                $PMF_LANG['ad_quick_category']
@@ -399,7 +399,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 $PMF_LANG['ad_categ_delete']
             );
         } else {
-            echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><img src="../assets/svg/trash.svg">';
+            echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i class="material-icons">delete</i>';
         }
 
         if ($cat['lang'] == $lang) {

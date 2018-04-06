@@ -184,7 +184,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $editThisEntry = sprintf(
-        '<img src="./assets/svg/pencil.svg"> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
+        '<i class="material-icons">mode_edit</i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,

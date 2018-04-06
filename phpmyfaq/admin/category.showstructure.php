@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2 class="page-header"><img src="../assets/svg/list.svg"> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+            <h2 class="page-header"><i class="material-icons">list</i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {

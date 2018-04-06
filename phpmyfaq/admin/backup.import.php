@@ -39,7 +39,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 ?>
     <header>
         <h2 class="page-header">
-            <img src="../assets/svg/cloud-download.svg"> <?php echo $PMF_LANG['ad_csv_rest'] ?>
+            <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
         </h2>
     </header>
 <?php
