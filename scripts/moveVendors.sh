@@ -13,6 +13,7 @@ mkdir -pv $cwd/phpmyfaq/src/libs/psr/log/Psr
 mkdir -pv $cwd/phpmyfaq/src/libs/react/promise/src
 mkdir -pv $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
 mkdir -pv $cwd/phpmyfaq/src/libs/tcpdf
+mkdir -pv $cwd/phpmyfaq/src/libs/myclabs/deep-copy/src
 
 cp -r $cwd/vendor/abraham/twitteroauth/* $cwd/phpmyfaq/src/libs/abraham/twitteroauth
 cp -r $cwd/vendor/autoload.php $cwd/phpmyfaq/src/libs/autoload.php
@@ -26,6 +27,7 @@ cp -r $cwd/vendor/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/src/libs/phpseclib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/src/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/src/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
+cp -r $cwd/vendor/myclabs/deep-copy/src/* $cwd/phpmyfaq/src/libs/myclabs/deep-copy/src
 
 # TCPDF
 mkdir -p $cwd/phpmyfaq/src/libs/tcpdf
