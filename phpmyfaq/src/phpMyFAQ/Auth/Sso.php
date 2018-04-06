@@ -12,19 +12,15 @@ namespace phpMyFAQ\Auth;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-06-22
  */
 
 use phpMyFAQ\Auth;
-use phpMyFAQ\Auth\Driver;
-use phpMyFAQ\Auth\Ldap;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -34,16 +30,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Auth_Sso.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      http://www.phpmyfaq.de
  * @since     2011-06-22
  */
-class Auth_Sso extends Auth implements Driver
+class Sso extends Auth implements Driver
 {
     /**
      * Always returns true because of SSO.
@@ -57,7 +51,7 @@ class Auth_Sso extends Auth implements Driver
     {
         if ($this->_config->get('ldap.ldapSupport')) {
             // LDAP + SSO
-            $authLdap = new Auth_Ldap($this->_config);
+            $authLdap = new Ldap($this->_config);
             $result = $authLdap->add($login, $pass);
 
             return $result;

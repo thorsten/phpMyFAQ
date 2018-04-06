@@ -22,7 +22,6 @@ namespace phpMyFAQ\Auth;
  */
 
 use phpMyFAQ\Auth;
-use phpMyFAQ\Auth\Driver;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Ldap as LdapCore;

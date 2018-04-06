@@ -414,7 +414,6 @@ class Installer
     /**
      * Constructor.
      *
-     * @return PMF_Installer
      */
     public function __construct()
     {
