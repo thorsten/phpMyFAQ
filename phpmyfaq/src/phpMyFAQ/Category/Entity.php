@@ -88,7 +88,7 @@ class Entity
     /**
      * @param bool $active
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setActive($active)
     {
@@ -108,7 +108,7 @@ class Entity
     /**
      * @param string $description
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setDescription($description)
     {
@@ -136,7 +136,7 @@ class Entity
     /**
      * @param int $groupId
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setGroupId($groupId)
     {
@@ -148,7 +148,7 @@ class Entity
     /**
      * @param int $id
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setId($id)
     {
@@ -168,7 +168,7 @@ class Entity
     /**
      * @param string $lang
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setLang($lang)
     {
@@ -188,7 +188,7 @@ class Entity
     /**
      * @param string $name
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setName($name)
     {
@@ -208,7 +208,7 @@ class Entity
     /**
      * @param int $parentId
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setParentId($parentId)
     {
@@ -228,7 +228,7 @@ class Entity
     /**
      * @param string $userId
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setUserId($userId)
     {
@@ -256,7 +256,7 @@ class Entity
     /**
      * @param string $image
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setImage($image)
     {
@@ -268,7 +268,7 @@ class Entity
     /**
      * @param $showHome $active
      *
-     * @return PMF_Entity_Category
+     * @return Entity
      */
     public function setShowHome($showHome)
     {
