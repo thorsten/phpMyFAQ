@@ -60,8 +60,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     $category->buildTree();
 
-    $linkverifier = new Linkverifier($faqConfig, $user->getLogin());
-    if ($linkverifier->isReady()) {
+    $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
+    if ($linkVerifier->isReady()) {
         ?>
     <script>
         function getImageElement(id, lang) {
@@ -96,8 +96,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             //target.src = "images/url-checking.png";
             getDivElement(id, lang).className = "url-checking";
-            target.innerHTML = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']);
-        ?>";
+            target.innerHTML = "<?= $PMF_LANG['ad_linkcheck_feedback_url-checking'] ?>";
 
             var url = 'index.php';
             var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
@@ -110,17 +109,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             function verifyEntryURL_success(XmlRequest)
             {
                 var allResponses = new [];
-                allResponses['batch1'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch1']) ?>";
-                allResponses['batch2'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch2']) ?>";
-                allResponses['batch3'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-batch3']) ?>";
-                allResponses['checking'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-checking']) ?>";
-                allResponses['disabled'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-disabled']) ?>";
-                allResponses['linkbad'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkbad']) ?>";
-                allResponses['linkok'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-linkok']) ?>";
-                allResponses['noaccess'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']) ?>";
-                allResponses['noajax'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noajax']) ?>";
-                allResponses['nolinks'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-nolinks']) ?>";
-                allResponses['noscript'] = "<?php print($PMF_LANG['ad_linkcheck_feedback_url-noscript']) ?>";
+                allResponses['batch1'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch1'] ?>";
+                allResponses['batch2'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch2'] ?>";
+                allResponses['batch3'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch3'] ?>";
+                allResponses['checking'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-checking'] ?>";
+                allResponses['disabled'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-disabled'] ?>";
+                allResponses['linkbad'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-linkbad'] ?>";
+                allResponses['linkok'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-linkok'] ?>";
+                allResponses['noaccess'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] ?>";
+                allResponses['noajax'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noajax'] ?>";
+                allResponses['nolinks'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] ?>";
+                allResponses['noscript'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noscript'] ?>";
                 getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
                 if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
                     getDivElement(id, lang).className = "url-noajax ";
@@ -133,8 +132,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             function verifyEntryURL_failure(XmlRequest)
             {
                 getDivElement(id, lang).className = "url-noaccess";
-                target.html("<?php print($PMF_LANG['ad_linkcheck_feedback_url-noaccess']);
-        ?>");
+                target.html("<?= $PMF_LANG['ad_linkcheck_feedback_url-noaccess'] ?>");
             }
 
         }
@@ -202,16 +200,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     }
 
     if (is_null($searchTerm)) {
-        // new code 10-02-17 added language in params.
-        if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
+        if ($faqConfig->config['main.enableCategoryRestrictions']) {
             $Language = new Language($faqConfig);
             $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
             $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
         }else{
             $faq->getAllRecords($orderBy, null, $sortBy);
         }
-        //
-        
+
         foreach ($faq->faqRecords as $record) {
             if (!isset($numActiveByCat[$record['category_id']])) {
                 $numActiveByCat[$record['category_id']] = 0;
@@ -351,7 +347,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 <div id="category-<?php echo $cid ?>" class="panel-collapse collapse" role="tabpanel"
                     aria-labelledby="category-heading-<?php echo $cid ?>">
                     <div class="panel-body">
-                        <table class="table table-sm">
+                        <table class="table table-sm table-striped">
                             <thead>
                                 <tr>
                                     <th colspan="2" style="width: 24px;">
@@ -377,7 +373,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                         <label>
                                             <input type="checkbox" id="active_category_block_<?php echo $cid ?>"
                                                onclick="saveStatusForCategory(<?php echo $cid ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>')"
-                                               <?php echo($numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '') ?>>
+                                               <?php echo $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '' ?>>
                                             <?php echo $PMF_LANG['ad_record_active'] ?>
                                         </label>
                                         <?php } ?>
@@ -390,7 +386,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             &darr;
                                         </a>
                                     </th>
-                                    <th>
+                                    <th style="width: 60px;">
                                         <a href="?action=view&category=<?php echo $cid ?>&orderby=date&sortby=desc">
                                             &uarr;
                                         </a>
@@ -427,7 +423,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                                                onclick="saveStatus(<?php echo $cid.', ['.$record['id'].']' ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                                                id="sticky_record_<?php echo $cid.'_'.$record['id'] ?>"
-                                            <?php echo($record['sticky'] ? 'checked' :  '    ') ?>>
+                                            <?php echo $record['sticky'] ? 'checked' :  '    ' ?>>
                                         </label>
                                     </td>
                                     <td>
@@ -436,7 +432,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                                                onclick="saveStatus(<?php echo $cid.', ['.$record['id'].']' ?>, 'active', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                                                id="active_record_<?php echo $cid.'_'.$record['id'] ?>"
-                                            <?php echo('yes' == $record['active'] ? 'checked' : '    ') ?>>
+                                            <?php echo 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                                         </label>
                                         <?php } else { ?>
                                         <span class="label label-important"><i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i></span>
@@ -457,16 +453,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 );
         }
             ?></td>
-                                    <td style="width: 48px;">
+                                    <td>
                                         <?php echo $date->format($record['updated']) ?>
                                     </td>
                                     <td style="width: 96px;">
-                                        <?php echo $linkverifier->getEntryStateHTML($record['id'], $record['lang']) ?>
+                                        <?php echo $linkVerifier->getEntryStateHTML($record['id'], $record['lang']) ?>
                                     </td>
                                     <td style="width: 16px;">
                                         <a class="btn btn-info" href="?action=copyentry&id=<?php echo $record['id'] ?>&lang=<?php echo $record['lang']; ?>"
                                            title="<?php echo $PMF_LANG['ad_categ_copy'] ?>">
-                                            <i aria-hidden="true" class="fa fa-share"></i>
+                                          <img src="../assets/svg/share.svg">
                                         </a>
                                     </td>
                                     <td style="width: 16px;">
