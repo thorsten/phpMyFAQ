@@ -1777,14 +1777,14 @@ class Category
     /**
      * Returns the number of records in each category.
      *
+     * @param bool $categoryRestriction
+     *
      * @return array
      */
     public function getNumberOfRecordsOfCategory($categoryRestriction = false)
     {
         $numRecordsByCat = [];
-
-        if ( $categoryRestriction == 'true'){
-            // when category restriction is enabled.
+        if ($categoryRestriction) {
             $query = sprintf('
                 SELECT
                     fcr.category_id AS category_id,
@@ -1803,9 +1803,8 @@ class Category
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
-                $this->groups[1]);
-        }else{
-            // orignal query
+                $this->groups[0]);
+        } else {
             $query = sprintf('
                 SELECT
                     fcr.category_id AS category_id,
