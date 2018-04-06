@@ -713,6 +713,13 @@ class Installer
             $ldapSetup['ldapUser'] = Filter::filterInput(INPUT_POST, 'ldap_user', FILTER_SANITIZE_STRING, '');
             $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
+            // set LDAP Config to prevent DB query
+            foreach($this->_mainConfig as $configKey => $configValue){
+                if (strpos($configKey, 'ldap.') !== false) {
+                    $configuration->config[$configKey] =  $configValue;
+                }
+            }
+
             // check LDAP connection
             $ldap = new Ldap($configuration);
             $ldap->connect(
