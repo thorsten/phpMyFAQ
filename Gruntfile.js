@@ -166,7 +166,7 @@ module.exports = function (grunt) {
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
           'node_modules/bxslider/dist/jquery.bxslider.js',
-          'node_modules/cookieconsent/src/cookieconsent.js'
+          'node_modules/cookieconsent/src/cookieconsent.js',
         ],
         dest: 'phpmyfaq/assets/js/vendors.js'
       },

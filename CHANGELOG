@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-alpha.2 - 2018-03-
+Version 3.0.0-alpha.2 - 2018-04-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
@@ -17,6 +17,7 @@ Version 3.0.0-alpha.2 - 2018-03-
 - added improved attachment overview (Thorsten)
 - added HTML5 export (Thorsten)
 - added support for EU General Data Protection Regulation (Jochen Steinhilber)
+- added multiple attachment upload (Thorsten)
 - improved REST API including login (Thorsten)
 - improved sticky records (Thorsten)
 - switched CSS development from LESS to SCSS (Thorsten)

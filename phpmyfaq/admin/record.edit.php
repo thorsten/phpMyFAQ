@@ -381,16 +381,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                 ?>
                                 </ul>
                                 <?php
-                                if (0 === $faqData['id']) {
-                                    $faqData['id'] = $faqConfig->getDb()->nextId(
-                                        Db::getTablePrefix().'faqdata',
-                                        'id'
-                                    );
-                                }
                                 printf(
-                                    '<a class="btn btn-success pmf-add-attachment" data-faq-id="%d" data-faq-language="%s">%s</a>',
-                                    $faqData['id'],
-                                    $faqData['lang'],
+                                    '<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#attachmentModal">%s</button>',
                                     $PMF_LANG['ad_att_add']
                                 );
                                 ?>
@@ -813,6 +805,65 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 </div>
               </div>
             </form>
+        </div>
+
+        <!-- Attachment Upload Dialog -->
+        <?php
+        if (0 === $faqData['id']) {
+          $faqData['id'] = $faqConfig->getDb()->nextId(
+            Db::getTablePrefix().'faqdata',
+            'id'
+          );
+        }
+        ?>
+        <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="attachmentModalLabel">
+                    <?= $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?>
+                  (max <?= round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form action="attachment.php?action=save" enctype="multipart/form-data" method="post" id="attachmentForm">
+                  <fieldset>
+                    <input type="hidden" name="MAX_FILE_SIZE" value="<?= $faqConfig->get('records.maxAttachmentSize') ?>">
+                    <input type="hidden" name="record_id" id="attachment_record_id" value="<?= $faqData['id'] ?>">
+                    <input type="hidden" name="record_lang" id="attachment_record_lang" value="<?= $faqData['lang'] ?>">
+                    <input type="hidden" name="save" value="true">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+
+                    <div class="custom-file">
+                      <input type="file" class="custom-file-input" name="filesToUpload[]"  id="filesToUpload" multiple>
+                      <label class="custom-file-label" for="filesToUpload">
+                        <?= $PMF_LANG['ad_att_att'] ?>
+                      </label>
+                    </div>
+
+                    <div class="form-group pmf-attachment-upload-files invisible">
+                    <?= $PMF_LANG['msgAttachmentsFilesize'] ?>: <output id="filesize"></output>
+                    </div>
+                    <div class="progress invisible">
+                      <div class="progress-bar progress-bar-striped bg-success progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+
+                  </fieldset>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="reset" class="btn btn-secondary" data-dismiss="modal" id="pmf-attachment-modal-close">
+                  <?= $PMF_LANG['ad_att_close'] ?>
+                </button>
+                <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">
+                    <?= $PMF_LANG['ad_att_butt'] ?>
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
 
     <script src="assets/js/record.js"></script>

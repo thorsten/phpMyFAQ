@@ -18,6 +18,8 @@
  */
 
 use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\Exception;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Filter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,13 +31,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$http = new HttpHelper();
+
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
+$recordId = Filter::filterInput(INPUT_POST, 'record_id',   FILTER_SANITIZE_STRING);
+$recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
-$att = Factory::create($attId);
+try {
+    $attachment = Factory::create($attId);
 
-if ($att) {
     switch ($ajaxAction) {
         case 'delete':
 
@@ -44,11 +50,56 @@ if ($att) {
                 exit(1);
             }
 
-            if ($att->delete()) {
+            if ($attachment->delete()) {
                 echo $PMF_LANG['msgAttachmentsDeleted'];
             } else {
                 echo $PMF_LANG['ad_att_delfail'];
             }
             break;
+
+        case 'upload':
+
+            if (!isset($_FILES['filesToUpload'])) {
+                $http->sendStatus(400);
+                return;
+            }
+
+            $files = Factory::rearrangeUploadedFiles($_FILES['filesToUpload']);
+            $uploadedFiles = [];
+
+            foreach ($files as $file) {
+                if (
+                    is_uploaded_file($file['tmp_name']) &&
+                    !($file['size'] > $faqConfig->get('records.maxAttachmentSize')) &&
+                    $file['type'] !== "text/html"
+                ) {
+                    $attachment = Factory::create();
+                    $attachment->setRecordId($recordId);
+                    $attachment->setRecordLang($recordLang);
+                    try {
+                        if (!$attachment->save($file['tmp_name'], $file['name'])) {
+                            throw new Exception();
+                        }
+                    } catch (Exception $e) {
+                        $attachment->delete();
+                    }
+                    $uploadedFiles[] = [
+                        'attachmentId' => $attachment->getId(),
+                        'fileName' => $attachment->getFilename(),
+                        'faqId' => $recordId,
+                        'faqLanguage' => $recordLang
+                    ];
+                } else {
+                    $http->sendStatus(400);
+                    $http->sendJsonWithHeaders('image too large');
+                    return;
+                }
+            }
+
+            $http->sendJsonWithHeaders($uploadedFiles);
+
+            break;
     }
+} catch (Exception $e) {
+    // handle exception
 }

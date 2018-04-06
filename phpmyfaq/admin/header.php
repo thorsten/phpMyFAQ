@@ -196,9 +196,9 @@ switch ($action) {
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="assets/css/style.css?v=1">
 
+  <script src="../assets/js/vendors.js"></script>
   <script src="../assets/js/modernizr.min.js"></script>
   <script src="../assets/js/phpmyfaq.min.js"></script>
-  <script src="../assets/js/vendors.js"></script>
   <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>"></script>
 

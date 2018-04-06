@@ -91,6 +91,9 @@ class HttpHelper extends Helper
             case 301:
                 header('HTTP/1.1 301 Moved Permanently');
                 break;
+            case 400:
+                header('HTTP/1.1 400 Bad Request');
+                break;
             case 403:
                 header('HTTP/1.1 403 Forbidden');
                 break;
@@ -153,9 +156,9 @@ class HttpHelper extends Helper
         }
         if ($isJson) {
             header('Content-Type: application/json');
-            print json_encode($payload);
+            echo json_encode($payload);
         } else {
-            print $payload;
+            echo $payload;
         }
     }
 }

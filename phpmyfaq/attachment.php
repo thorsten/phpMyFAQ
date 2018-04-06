@@ -16,6 +16,12 @@
  * @link      http://www.phpmyfaq.de
  * @since     2009-06-23
  */
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -39,17 +45,17 @@ if (!$user instanceof CurrentUser) {
     $user = CurrentUser::getFromSession($faqConfig);
 }
 if (!$user instanceof CurrentUser) {
-    $user = new phpMyFAQ\CurrentUser($faqConfig); // user not logged in -> empty user object
+    $user = new CurrentUser($faqConfig); // user not logged in -> empty user object
 }
 
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$attachment = PMF_Attachment_Factory::create($id);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$attachment = Factory::create($id);
 
 $userPermission = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
-if ($user->perm instanceof PMF_Perm_Medium) {
+if ($user->perm instanceof Medium) {
     if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
         $groupPermission = true;
     } else {
