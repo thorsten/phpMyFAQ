@@ -46,7 +46,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export')) {
     $category->buildTree($categoryId);
 
     $export = Export::create($faq, $category, $faqConfig, $type);
-    $content = $export->generate($categoryId, $downwards);
+    $content = $export->generate($categoryId, $downwards, $faqConfig->getLanguage()->getLanguage());
 
     // Stream the file content
     $oHttpStreamer = new HttpStreamer($type, $content);
