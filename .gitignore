@@ -13,6 +13,9 @@
 # Builds
 build/*
 
+# Docker persistent data
+volumes/*
+
 # phpMyFAQ generated folders
 phpmyfaq/config/database.php
 phpmyfaq/config/database.php.bak
