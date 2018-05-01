@@ -235,14 +235,15 @@ class PMF_Session
 
         $query = sprintf('
             SELECT
-                sid
+                COUNT(sid) as num_sessions
             FROM
                 %sfaqsessions',
             PMF_Db::getTablePrefix());
 
         $result = $this->config->getDb()->query($query);
         if ($result) {
-            $num = $this->config->getDb()->numRows($result);
+            $row = $this->config->getDb()->fetchObject($result);
+            $num = $row->num_sessions;
         }
 
         return $num;
