@@ -12,7 +12,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2003-12-20
  */
 
@@ -360,7 +360,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         // add faq to category (always)
         printf('
-           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">add</i></a></a> ',
+           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">low_priority</i></a></a> ',
            $cat['id'],
            $cat['lang'],
            $PMF_LANG['ad_quick_entry']
@@ -377,7 +377,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
            // rename (sub) category (if current language)
            printf('
-               <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><img src="../assets/svg/pencil.svg" title="%s"></a> ',
+               <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><i class="material-icons" title="%s">mode_edit</i></a> ',
                $cat['id'],
                $PMF_LANG['ad_kateg_rename']
            );
@@ -385,7 +385,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         // translate category (always)
         printf(
-            '<a class="btn btn-info btn-sm" href="?action=translatecategory&amp;cat=%s"><img src="../assets/svg/share.svg" title="%s"></a> ',
+            '<a class="btn btn-info btn-sm" href="?action=translatecategory&amp;cat=%s"><i class="material-icons" title="%s">share</i></a> ',
             $cat['id'],
             $PMF_LANG['ad_categ_translate']
         );
@@ -393,7 +393,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         // delete (sub) category (if current language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat['lang'] == $lang) {
             printf(
-                '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><img src="../assets/svg/trash.svg" title="%s"></a> ',
+                '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i class="material-icons" title="%s">delete</i></a> ',
                 $cat['id'],
                 $cat['lang'],
                 $PMF_LANG['ad_categ_delete']
@@ -405,7 +405,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ($cat['lang'] == $lang) {
             // cut category (if current language)
            printf(
-               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><img src="../assets/svg/crop.svg" title="%s"></a>  ',
+               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i class="material-icons" title="%s">content_cut</i></a>  ',
                $cat['id'],
                $PMF_LANG['ad_categ_cut']
            );
@@ -413,7 +413,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             if ($category->numParent($cat['parent_id']) > 1) {
                 // move category (if current language) AND more than 1 category at the same level)
               printf(
-                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><img src="../assets/svg/loop-circular.svg" title="%s"></a> ',
+                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i class="material-icons" title="%s">content_copy</i></a> ',
                   $cat['id'],
                   $cat['parent_id'],
                   $PMF_LANG['ad_categ_move']

@@ -16,7 +16,7 @@ namespace phpMyFAQ\Helper;
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2010-01-19
  */
 
@@ -30,7 +30,7 @@ use phpMyFAQ\User;
  * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2010-01-19
  */
 class Administration

@@ -19,7 +19,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-12-31
  */
 
@@ -34,7 +34,7 @@ use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-12-31
  */
 class VanillaTest extends TestCase

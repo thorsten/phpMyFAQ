@@ -12,7 +12,7 @@
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2010-12-13
  */
 
@@ -85,7 +85,7 @@ $pagination = new Pagination(
                             <td>
                                 <a title="<?php echo $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
                                    href="../index.php?action=faq&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
-                                  <img src="../assets/svg/external-link.svg">
+                                  <i class="material-icons">link</i>
                                 </a>
                             </td>
                         </tr>

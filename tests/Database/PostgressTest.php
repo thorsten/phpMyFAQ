@@ -13,7 +13,7 @@
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2010 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2010-01-03
  */
 
@@ -24,7 +24,7 @@
  * @package   PMF_Tests
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @copyright 2009-2018 phpMyFAQ Team
  * @since     2009-05-16
  */

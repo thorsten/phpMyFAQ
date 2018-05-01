@@ -15,7 +15,7 @@
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2013-02-05
  */
 
@@ -159,7 +159,7 @@ $faqSession = new Session($faqConfig);
                         try {
                             $versions = $api->getVersions();
                             printf(
-                                '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
+                                '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
                                 (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
                                 $PMF_LANG['ad_xmlrpc_latest'],
                                 $versions['current']

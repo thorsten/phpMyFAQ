@@ -15,7 +15,7 @@ namespace phpMyFAQ;
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2018-03-27
  */
 
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2018-03-27
  */
 class Api
@@ -38,7 +38,7 @@ class Api
     /**
      * @var string
      */
-    private $apiUrl = 'http://api.phpmyfaq.de';
+    private $apiUrl = 'https://api.phpmyfaq.de';
 
     /**
      * @var Configuration

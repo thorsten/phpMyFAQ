@@ -17,7 +17,7 @@ namespace phpMyFAQ\Db;
  * @author    David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  */
 
 use phpMyFAQ\Db;
@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  */
 class Mysqli implements Driver
 {
