@@ -18,7 +18,7 @@ use GuzzleHttp\Ring\Client\CurlHandler;
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-08-27
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-08-27
  */
 class PMF_Installer
@@ -849,7 +849,7 @@ class PMF_Installer
             $result = @$db->query($executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-            us a <a href=\"http://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+            us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->_system->dropTables($uninst);

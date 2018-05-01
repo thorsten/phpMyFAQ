@@ -13,7 +13,7 @@
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2013-12-30
  */
 
@@ -27,7 +27,7 @@ require_once dirname(dirname(__DIR__)) . '/phpmyfaq/config/constants_ldap.php';
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2013-12-30
  */
 class PMFTest_ConfigurationTest extends PHPUnit_Framework_TestCase

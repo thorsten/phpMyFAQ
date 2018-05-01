@@ -20,11 +20,11 @@
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2002-08-20
  */
 
-define('COPYRIGHT', '&copy; 2001-2018 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2018 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_INCLUDE_DIR', PMF_ROOT_DIR.'/inc');
 define('IS_VALID_PHPMYFAQ', null);
@@ -93,8 +93,8 @@ $loader->register();
         </div>
         <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
-                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
+                <li><a target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a></li>
+                <li><a target="_blank" href="https://www.phpmyfaq.de/support">Support</a></li>
                 <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
                 <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
             </ul>
@@ -109,7 +109,7 @@ $loader->register();
                 <h1>phpMyFAQ <?php echo PMF_System::getVersion() ?> Setup</h1>
                 <p>
                     Did you already read the
-                    <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
+                    <a target="_blank" href="https://www.phpmyfaq.de/documentation">documentation</a>
                     carefully before starting the phpMyFAQ setup?
                 </p>
             </div>

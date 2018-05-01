@@ -15,7 +15,7 @@
  * @copyright 2003-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2003-02-26
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -38,11 +38,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="col-lg-12">
             <p class="copyright text-right">
                 Proudly powered by <strong>phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></strong> |
-                <a href="http://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
+                <a href="https://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
                 Follow us on <a href="http://twitter.com/phpMyFAQ"><i aria-hidden="true" class="fa fa-twitter"></i></a> |
                 <i aria-hidden="true" class="fa fa-apple"></i> Available on the
                 <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957">App Store</a> |
-                &copy; 2001-<?php echo date('Y') ?> <a href="http://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
+                &copy; 2001-<?php echo date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
             </p>
         </div>
     </div>

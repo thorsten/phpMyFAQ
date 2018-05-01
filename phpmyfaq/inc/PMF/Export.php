@@ -14,7 +14,7 @@
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2018 phpMyFAQ Team
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -38,7 +38,7 @@ require_once PMF_CONFIG_DIR.'/constants.php';
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2018 phpMyFAQ Team
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
 class PMF_Export

@@ -15,7 +15,7 @@
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-02-15
  */
 
@@ -28,7 +28,7 @@
  * @copyright 2012-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2012-02-15
  */
 class PMF_Helper_Setup
@@ -36,7 +36,7 @@ class PMF_Helper_Setup
     /**
      * Copyright.
      */
-    const COPYRIGHT = '&copy; 2001-%d <a href="http://www.phpmyfaq.de">phpMyFAQ Team</a>';
+    const COPYRIGHT = '&copy; 2001-%d <a href="https://www.phpmyfaq.de">phpMyFAQ Team</a>';
 
     /**
      * Twitter.

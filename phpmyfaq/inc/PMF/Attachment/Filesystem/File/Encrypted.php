@@ -15,7 +15,7 @@
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,7 +33,7 @@ require PMF_ROOT_DIR.'/inc/libs/phpseclib/Crypt/AES.php';
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
 class PMF_Attachment_Filesystem_File_Encrypted extends PMF_Attachment_Filesystem_File

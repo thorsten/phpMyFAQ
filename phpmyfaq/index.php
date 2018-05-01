@@ -20,7 +20,7 @@
  * @copyright 2001-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2001-02-12
  */
 
@@ -508,7 +508,7 @@ $tplMainPage = array(
     'writeLangAdress' => $writeLangAdress,
     'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
     'userOnline' => $usersOnline,
-    'copyright' => 'powered by <a href="http://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
+    'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
                               $faqConfig->get('main.currentVersion'),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
     'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',

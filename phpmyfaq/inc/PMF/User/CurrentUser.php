@@ -22,7 +22,7 @@
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -43,7 +43,7 @@ define('PMF_SESSION_ID_TIMESTAMP', 'PMF_SESSION_TIMESTAMP');
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
  */
 class PMF_User_CurrentUser extends PMF_User

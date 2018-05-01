@@ -14,11 +14,11 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2002-01-10
  */
 
-define('COPYRIGHT', '&copy; 2001-2018 <a target="_blank" href="http://www.phpmyfaq.de/">phpMyFAQ Team</a>');
+define('COPYRIGHT', '&copy; 2001-2018 <a target="_blank" href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
@@ -78,8 +78,8 @@ if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
         </div>
         <div class="collapse navbar-collapse" id="phpmyfaq-navbar-collapse">
             <ul class="nav navbar-nav">
-                <li><a target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a></li>
-                <li><a target="_blank" href="http://www.phpmyfaq.de/support">Support</a></li>
+                <li><a target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a></li>
+                <li><a target="_blank" href="https://www.phpmyfaq.de/support">Support</a></li>
                 <li><a target="_blank" href="http://forum.phpmyfaq.de/">Forums</a></li>
                 <li><a target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a></li>
                 <li class="divider-vertical"></li>

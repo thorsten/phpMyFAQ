@@ -13,7 +13,7 @@
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2002-2018 phpMyFAQ
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2002-09-17
  */
 define('PMF_ROOT_DIR', dirname(__DIR__));

@@ -120,7 +120,7 @@ The phpMyFAQ team offers the following paid services:
 *   Customizing
 *   Support
 
-If you're interested, just take a look at our [support page](http://www.phpmyfaq.de/support.php).
+If you're interested, just take a look at our [support page](https://www.phpmyfaq.de/support.php).
 
 [back to top][64]
 
@@ -659,7 +659,7 @@ the style sheets are written with [LESS](http://lesscss.org/). You have to compi
 compiler with Node.js or a tool like [CodeKit](http://incident57.com/codekit/).
 
 If you need help with theming phpMyFAQ please don't hesitate to ask in our [forum](http://forum.phpmyfaq.de/) or visit 
-our [new theme page](http://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
+our [new theme page](https://www.phpmyfaq.de/themes). We will also release new themes from time to time on our homepage 
 and release them as open source on our [Github page](https://github.com/phpMyFAQ/).
 
 The 2.8.x default template is mostly compatible with 2.9.x, you have to remove the occurrances of SyntaxHighlighting

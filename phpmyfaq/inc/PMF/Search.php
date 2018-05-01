@@ -17,7 +17,7 @@ use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2008-01-26
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2008-01-26
  */
 class PMF_Search

@@ -15,7 +15,7 @@
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2013-02-05
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -147,13 +147,13 @@ $faqSession = new PMF_Session($faqConfig);
                     <?php
                     $version = PMF_Filter::filterInput(INPUT_POST, 'param', FILTER_SANITIZE_STRING);
                     if (!is_null($version) && $version == 'version') {
-                        $json = file_get_contents('http://api.phpmyfaq.de/versions');
+                        $json = file_get_contents('https://api.phpmyfaq.de/versions');
                         $result = json_decode($json);
                         if ($result instanceof stdClass) {
                             $installed = $faqConfig->get('main.currentVersion');
                             $available = $result->stable;
                             printf(
-                                '<p class="alert alert-%s">%s <a href="http://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>:<br/><strong>phpMyFAQ %s</strong>',
+                                '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>:<br/><strong>phpMyFAQ %s</strong>',
                                 (-1 == version_compare($installed, $available)) ? 'danger' : 'info',
                                 $PMF_LANG['ad_xmlrpc_latest'],
                                 $available
@@ -200,7 +200,7 @@ $faqSession = new PMF_Session($faqConfig);
                         $versionCheckError = true;
                         try {
                             $remoteHashes = file_get_contents(
-                                'http://api.phpmyfaq.de/verify/'.$faqConfig->get('main.currentVersion')
+                                'https://api.phpmyfaq.de/verify/'.$faqConfig->get('main.currentVersion')
                             );
                             if (!is_array(json_decode($remoteHashes, true))) {
                                 $versionCheckError = true;
