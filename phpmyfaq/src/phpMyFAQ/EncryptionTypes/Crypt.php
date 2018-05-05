@@ -46,6 +46,6 @@ class Crypt extends Encryption
      */
     public function encrypt($str)
     {
-        return crypt($str);
+        return crypt($str, $this->salt);
     }
 }
