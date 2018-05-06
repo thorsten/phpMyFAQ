@@ -401,7 +401,7 @@ currently-unhandled@^0.4.1:
 
 "customizr@https://github.com/doctyper/customizr/tarball/develop":
   version "1.0.0-alpha"
-  resolved "https://github.com/doctyper/customizr/tarball/develop#75b0a85e5de99918bb6219227b283002f87546f1"
+  resolved "https://github.com/doctyper/customizr/tarball/develop#845ddb7443eae671efcf5352feaec57d7e6e5f0f"
   dependencies:
     colors "~0.6.2"
     deep-equal "~0.1.2"
