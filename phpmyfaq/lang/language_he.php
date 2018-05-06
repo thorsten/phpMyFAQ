@@ -15,7 +15,7 @@
  * @author    Roy Ronen <royroy15@gmail.com>
  * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2004-08-27
  */
 

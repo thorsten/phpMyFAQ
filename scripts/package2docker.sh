@@ -27,7 +27,7 @@
 # @author    Adrien Estanove <adrien.estanove@gmail.com>
 # @copyright 2008-2018 phpMyFAQ Team
 # @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
-# @link      http://www.phpmyfaq.de
+# @link      https://www.phpmyfaq.de
 # @version   2018-01-06
 
 # Exit on error and trace execution

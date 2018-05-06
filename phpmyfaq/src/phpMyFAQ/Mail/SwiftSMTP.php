@@ -13,7 +13,7 @@ namespace phpMyFAQ\Mail;
  * @author    Christopher Andrews <http://arduino.land>
  * @copyright 2009-2018 Christopher Andrews, phpMyFAQ Team
  * @license   http://opensource.org/licenses/MIT MIT Public License
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2014-10-10
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {

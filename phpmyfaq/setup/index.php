@@ -20,7 +20,7 @@
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2002-08-20
  */
 
@@ -28,7 +28,7 @@ use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2018 <a href="http://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+define('COPYRIGHT', '&copy; 2001-2018 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
@@ -85,10 +85,10 @@ $loader->register()
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
             </li>
             <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+            <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/support">Support</a>
             </li>
             <li class="nav-item">
             <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
@@ -112,7 +112,7 @@ $loader->register()
         </h1>
         <p class="text-center">
           Did you already read the
-          <a target="_blank" href="http://www.phpmyfaq.de/documentation">documentation</a>
+          <a target="_blank" href="https://www.phpmyfaq.de/documentation">documentation</a>
           carefully before starting the phpMyFAQ setup?</p>
       </div>
     </div>

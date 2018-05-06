@@ -16,7 +16,7 @@ namespace phpMyFAQ\Helper;
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-09-13
  */
 
@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-09-13
  */
 class HttpHelper extends Helper

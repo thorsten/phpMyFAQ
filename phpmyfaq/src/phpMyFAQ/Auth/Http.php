@@ -16,7 +16,7 @@ namespace phpMyFAQ\Auth;
  * @author    Alberto Cabello <alberto@unex.es>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
  */
 
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
  */
 class Http extends Auth implements Driver

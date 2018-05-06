@@ -17,7 +17,7 @@ namespace phpMyFAQ\Strings;
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-04-06
  */
 
@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2009-04-06
  */
 class Basic extends StringsAbstract

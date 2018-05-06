@@ -17,7 +17,7 @@ namespace phpMyFAQ;
  * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2007-03-31
  */
 
@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @copyright 2007-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2007-03-31
  */
 class Session

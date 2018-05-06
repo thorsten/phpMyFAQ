@@ -14,7 +14,7 @@
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2002-01-10
  */
 
@@ -78,10 +78,10 @@ require PMF_ROOT_DIR.'/config/database.php';
         <div class="collapse navbar-collapse" id="navbarsExampleDefault">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/documentation">Documentation</a>
+              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" target="_blank" href="http://www.phpmyfaq.de/support">Support</a>
+              <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/support">Support</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>

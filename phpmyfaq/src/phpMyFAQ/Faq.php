@@ -19,7 +19,7 @@ namespace phpMyFAQ;
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-12-20
  */
 
@@ -68,7 +68,7 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
  * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      http://www.phpmyfaq.de
+ * @link      https://www.phpmyfaq.de
  * @since     2005-12-20
  */
 class Faq
