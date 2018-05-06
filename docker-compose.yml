@@ -5,12 +5,11 @@ services:
     build: .
     stdin_open: true
     links:
-      - mariadb
+      - mariadb:db
       - elasticsearch
     ports:
       - "8080:80"
     volumes:
-      - ./phpmyfaq:/var/www/html
     depends_on:
       - grunt
   grunt:
@@ -41,6 +40,10 @@ services:
     tty: true
     volumes:
       - .:/app
+      - ./volumes/phpmyfaq/attachments:/var/www/html/attachments
+      - ./volumes/phpmyfaq/config:/var/www/html/config
+      - ./volumes/phpmyfaq/data:/var/www/html/data
+      - ./volumes/phpmyfaq/images:/var/www/html/images
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
     stdin_open: true
