@@ -1,60 +1,11 @@
-version: "2.2"
+version: "2.3"
+
+# Use this file for dev
 
 services:
-  phpmyfaq:
-    build: .
-    stdin_open: true
-    links:
-      - mariadb:db
-      - elasticsearch
-    ports:
-      - "8080:80"
-    volumes:
-    depends_on:
-      - grunt
-  grunt:
-    image: digitallyseamless/nodejs-bower-grunt
-    restart: "no"
-    command: grunt build
-    stdin_open: true
-    tty: true
-    volumes:
-      - .:/data
-    depends_on:
-      - yarn
-  yarn:
-    image: node:8-alpine
-    restart: "no"
-    command: sh -c "cd app && npm install node-sass -g && yarn install && yarn build"
-    stdin_open: true
-    tty: true
-    volumes:
-      - .:/app
-    depends_on:
-      - composer
-  composer:
-    image: composer:1.6.1
-    restart: "no"
-    command: composer install --verbose --no-dev
-    stdin_open: true
-    tty: true
-    volumes:
-      - .:/app
-      - ./volumes/phpmyfaq/attachments:/var/www/html/attachments
-      - ./volumes/phpmyfaq/config:/var/www/html/config
-      - ./volumes/phpmyfaq/data:/var/www/html/data
-      - ./volumes/phpmyfaq/images:/var/www/html/images
-  phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    stdin_open: true
-    links:
-      - mariadb:db
-    ports:
-      - "8000:80"
-    volumes:
-      - ./volumes/sessions:/sessions
   mariadb:
-    image: mariadb:10.2.11
+    image: mariadb:10.2.14
+    restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=iop
       - MYSQL_DATABASE=phpmyfaq
@@ -62,8 +13,62 @@ services:
       - MYSQL_PASSWORD=phpmyfaq
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
+  phpmyfaq:
+    build: .
+    restart: always
+    stdin_open: true
+    environment:
+      - PMF_DB_HOST=db
+      - PMF_DB_NAME=phpmyfaq
+      - PMF_DB_USER=phpmyfaq
+      - PMF_DB_PASS=phpmyfaq
+      - PMF_DISABLE_HTACCESS=""
+      - PMF_TIMEZONE="Europe/Berlin"
+      - PMF_ENABLE_UPLOADS="On"
+      - PMF_MEMORY_LIMIT="64M"
+      - PHP_LOG_ERRORS="On"
+      - PHP_ERROR_REPORTING="E_ALL" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+    links:
+      - mariadb:db
+      - elasticsearch
+    ports:
+      - "8080:80"
+    volumes:
+      - ./phpmyfaq:/var/www/html
+    depends_on:
+      - yarn
+  yarn:
+    image: node:latest
+    restart: "no"
+    command: sh -c "npm install node-sass bower grunt-cli -g --unsafe-perm && yarn install && yarn build"
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+    depends_on:
+      - composer
+  composer:
+    image: composer:latest
+    restart: "no"
+    command: composer install --verbose --no-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    stdin_open: true
+    links:
+      - mariadb:db
+    ports:
+      - "8000:80"
+    volumes:
+      - ./volumes/sessions:/sessions
   elasticsearch:
     image: elasticsearch:2.4.6
+    restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
       - bootstrap.memory_lock=true
