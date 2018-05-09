@@ -38,7 +38,6 @@ RUN set -x \
  && docker-php-ext-configure intl \
  && docker-php-ext-install intl \
  && docker-php-ext-install zip \
- && docker-php-ext-install soap \
  && docker-php-ext-install opcache \
  \
  && apt-get purge -y ${buildDeps} \
