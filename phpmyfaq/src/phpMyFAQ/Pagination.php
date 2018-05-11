@@ -81,49 +81,49 @@ class Pagination
      *
      * @var string
      */
-    protected $linkTpl = '<li><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
+    protected $linkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Current page link template.
      *
      * @var string
      */
-    protected $currentPageLinkTpl = '<li class="active"><a href="{LINK_URL}">{LINK_TEXT}</a></li>';
+    protected $currentPageLinkTpl = '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Next page link template.
      *
      * @var string
      */
-    protected $nextPageLinkTpl = '<li><a href="{LINK_URL}">&rarr;</a></li>';
+    protected $nextPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&rarr;</a></li>';
 
     /**
      * Previous page link template.
      *
      * @var string
      */
-    protected $prevPageLinkTpl = '<li><a href="{LINK_URL}">&larr;</a></li>';
+    protected $prevPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&larr;</a></li>';
 
     /**
      * First page link template.
      *
      * @var string
      */
-    protected $firstPageLinkTpl = '<li><a href="{LINK_URL}">&#8676;</a></li>';
+    protected $firstPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8676;</a></li>';
 
     /**
      * Last page link template.
      *
      * @var string
      */
-    protected $lastPageLinkTpl = '<li><a href="{LINK_URL}">&#8677;</a></li>';
+    protected $lastPageLinkTpl = '<li class="page-item"><a class="page-link" href="{LINK_URL}">&#8677;</a></li>';
 
     /**
      * Layout template.
      *
      * @var string
      */
-    protected $layoutTpl = '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>';
+    protected $layoutTpl = '<nav class="pmf-pagination"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></nav>';
 
     /**
      * Current page index.

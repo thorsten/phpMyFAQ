@@ -145,13 +145,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 $userAction = $defaultUserAction;
             } else {
                 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
-                </h2>
-            </div>
-        </header>
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i class="material-icons md-36">people</i>
+              <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
+          </h1>
+        </div>
+
         <p class="alert alert-danger"><?= $PMF_LANG['ad_user_del_3'].' '.$PMF_LANG['ad_user_del_1'].' '.$PMF_LANG['ad_user_del_2'];
                 ?></p>
         <form action ="?action=user&amp;user_action=delete" method="post" accept-charset="utf-8">
@@ -314,11 +315,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     // show new user form
     if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
         ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-users fa-fw"></i> <?= $PMF_LANG['ad_adus_adduser'] ?></h2>
-            </div>
-        </header>
+
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          <i class="material-icons md-36">people</i>
+            <?= $PMF_LANG['ad_adus_adduser'] ?>
+        </h1>
+      </div>
 
         <div id="user_message"><?= $message;
         ?></div>
@@ -398,25 +401,26 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // show list of users
-    if ($userAction == 'list') {
-        ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users fa-fw"></i> <?= $PMF_LANG['ad_user'] ?>
-                    <div class="float-right">
-                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_user_add'] ?>
-                        </a>
-                        <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
-                        <a class="btn btn-info" href="?action=user&amp;user_action=listallusers">
-                            <i class="material-icons">list</i> <?= $PMF_LANG['list_all_users'] ?>
-                        </a>
-                        <?php endif ?>
-                    </div>
-                </h2>
-            </div>
-        </header>
+    if ($userAction == 'list') { ?>
+
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          <i class="material-icons md-36">person</i>
+            <?= $PMF_LANG['ad_user'] ?>
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+          <div class="btn-group mr-2">
+            <a class="btn btn-sm btn-outline-success" href="?action=user&amp;user_action=add">
+              <?= $PMF_LANG['ad_user_add'] ?>
+            </a>
+            <?php if ($user->perm->checkRight($user->getUserId(), 'edituser')): ?>
+              <a class="btn btn-sm btn-outline-info" href="?action=user&amp;user_action=listallusers">
+                <?= $PMF_LANG['list_all_users'] ?>
+              </a>
+            <?php endif ?>
+          </div>
+        </div>
+      </div>
 
         <script>
         /* <![CDATA[ */
@@ -470,17 +474,17 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                     <input type="hidden" id="user_list_select" name="user_list_select" value="">
                     <div class="card">
                         <div class="card-header">
-                            <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['msgSearch'] ?>
+                            <i aria-hidden="true" class="material-icons">person</i> <?= $PMF_LANG['msgSearch'] ?>
                         </div>
                         <div class="card-body">
                             <div class="input-group">
-                                <span class="input-group-addon"><i aria-hidden="true" class="fa fa-user"></i></span>
+                                <span class="input-group-addon"><i aria-hidden="true" class="material-icons">search</i></span>
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
                                        class="form-control pmf-user-autocomplete"
                                        placeholder="<?= $PMF_LANG['ad_auth_user'] ?>">
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">
-                                        <i aria-hidden="true" class="fa fa-trash"></i>
+                                        <i aria-hidden="true" class="material-icons">delete</i>
                                     </button>
                                 </span>
                             </div>
@@ -490,7 +494,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                 <div class="card">
                     <div class="card-header" id="user_data_legend">
-                        <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
+                        <i aria-hidden="true" class="material-icons">person</i> <?= $PMF_LANG['ad_user_profou'] ?>
                     </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
                           >
@@ -636,24 +640,25 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         );
         $pagination = new Pagination($faqConfig, $options);
         ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_user'];
-        ?>
-                    <div class="float-right">
-                        <a class="btn btn-success" href="?action=user&amp;user_action=add">
-                            <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_user_add'];
-        ?>
-                        </a>
-                    </div>
-                </h2>
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i class="material-icons md-36">people</i>
+              <?= $PMF_LANG['ad_user'] ?>
+          </h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+              <a class="btn btn-sm btn-outline-success" href="?action=user&amp;user_action=add">
+                  <?= $PMF_LANG['ad_user_add'] ?>
+              </a>
             </div>
-        </header>
+          </div>
+        </div>
+
         <div id="user_message"><?= $message;
         ?></div>
         <table class="table table-striped">
-        <thead>
+          <thead class="thead-dark">
             <tr>
                 <th><?= $PMF_LANG['ad_entry_id'] ?></th>
                 <th><?= $PMF_LANG['ad_user_status'] ?></th>

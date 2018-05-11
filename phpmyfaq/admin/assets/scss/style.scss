@@ -58,6 +58,7 @@
   font-feature-settings: 'liga';
 
   /* Rules for sizing the icon. */
+  &.md-12 { font-size: 12px; }
   &.md-16 { font-size: 16px; }
   &.md-18 { font-size: 18px; }
   &.md-24 { font-size: 24px; }
