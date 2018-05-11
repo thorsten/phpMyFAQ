@@ -45,9 +45,9 @@ $faqSession = new Session($faqConfig);
                 <div class="float-right">
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                        <span class="label label-important"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></span>
+                        <span class="badge badge-important"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></span>
                         <?php else: ?>
-                        <span class="label label-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></span>
+                        <span class="badge badge-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></span>
                         <?php endif; ?>
                     </a>
                 </div>

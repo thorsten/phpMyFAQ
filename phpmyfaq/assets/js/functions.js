@@ -85,7 +85,7 @@ $(document).ready(function () {
             append(
                 '<li>' +
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
-                '<a class="label label-danger" href="?action=delatt&amp;record_id=' + recordId +
+                '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
                 '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
                 '</li>'

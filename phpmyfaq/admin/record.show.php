@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header>
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?php echo $PMF_LANG['ad_entry_aor'] ?>
+                <h2 class="page-header"><i class="material-icons">edit</i> <?php echo $PMF_LANG['ad_entry_aor'] ?>
                 </h2>
             </div>
         <header>
@@ -303,7 +303,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             if (isset($numRecordsByCat[$cid]) && ($numRecordsByCat[$cid] > 0)) {
                 $catInfo .= sprintf(
-                    '<span class="label label-info" id="category_%d_item_count">%d %s</span> ',
+                    '<span class="badge badge-info" id="category_%d_item_count">%d %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid],
                     $PMF_LANG['msgEntries']
@@ -312,7 +312,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             if (isset($numRecordsByCat[$cid]) && $numRecordsByCat[$cid] > $numActiveByCat[$cid]) {
                 $catInfo .= sprintf(
-                    '<span class="label label-danger"><span id="js-active-records-%d">%d</span> %s</span> ',
+                    '<span class="badge badge-danger"><span id="js-active-records-%d">%d</span> %s</span> ',
                     $cid,
                     $numRecordsByCat[$cid] - $numActiveByCat[$cid],
                     $PMF_LANG['ad_record_inactive']
@@ -320,7 +320,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
             if (isset($numCommentsByCat[$cid]) && ($numCommentsByCat[$cid] > 0)) {
-                $catInfo .= sprintf('<span class="label label-info">%d %s</span>',
+                $catInfo .= sprintf('<span class="badge badge-info">%d %s</span>',
                     $numCommentsByCat[$cid],
                     $PMF_LANG['ad_start_comments']
                 );
@@ -337,11 +337,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             <div class="panel panel-default">
                 <div class="panel-heading" role="tab" id="category-heading-<?php echo $cid ?>">
                     <h4 class="panel-title">
-                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?php echo $cid ?>"
-                        aria-expanded="true" aria-controls="collapseOne">
-                            <i class="icon fa fa-chevron-circle-right "></i>
-                            <strong><?php echo $category->getPath($cid) ?></strong> <?php echo $catInfo ?>
-                        </a>
+                      <a role="button" data-toggle="collapse" data-parent="#accordion" href="#category-<?php echo $cid ?>"
+                         aria-expanded="true" aria-controls="collapseOne">
+                        <i class="icon fa fa-chevron-circle-right "></i>
+                        <strong><?php echo $category->getPath($cid) ?></strong>
+                      </a>
+                        <?php echo $catInfo ?>
                     </h4>
                 </div>
                 <div id="category-<?php echo $cid ?>" class="panel-collapse collapse" role="tabpanel"
@@ -435,7 +436,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <?php echo 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                                         </label>
                                         <?php } else { ?>
-                                        <span class="label label-important"><i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i></span>
+                                        <span class="badge badge-important"><i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i></span>
                                         <?php } ?>
                                     </td>
                                     <td>
@@ -446,7 +447,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 <?php
         if (isset($numCommentsByFaq[$record['id']])) {
             printf(
-                '<br><a class="label label-primary" href="?action=comments#record_id_%d">%d %s</a>',
+                '<br><a class="badge badge-primary" href="?action=comments#record_id_%d">%d %s</a>',
                 $record['id'],
                 $numCommentsByFaq[$record['id']],
                 $PMF_LANG['ad_start_comments']
@@ -462,14 +463,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                     <td style="width: 16px;">
                                         <a class="btn btn-info" href="?action=copyentry&id=<?php echo $record['id'] ?>&lang=<?php echo $record['lang']; ?>"
                                            title="<?php echo $PMF_LANG['ad_categ_copy'] ?>">
-                                          <img src="../assets/svg/share.svg">
+                                          <i class="material-icons">share</i>
                                         </a>
                                     </td>
                                     <td style="width: 16px;">
                                         <a class="btn btn-danger" href="javascript:void(0);"
                                            onclick="javascript:deleteRecord(<?php echo $record['id'] ?>, '<?php echo $record['lang'] ?>', '<?php echo $user->getCsrfTokenFromSession() ?>'); return false;"
                                            title="<?php echo $PMF_LANG['ad_user_delete'] ?>">
-                                        <i class="material-icons">delete</i>
+                                          <i class="material-icons">delete</i>
                                         </a>
                                     </td>
                                 </tr>
