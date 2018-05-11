@@ -67,137 +67,144 @@ if (isset($auth)) {
             ?>
 <script>
 
-    $().tooltip({placement: 'bottom'});
+  // Bootstrap tooltips
+  $().tooltip({placement: 'bottom'});
 
-    tinyMCE.init({
-        // General options
-        mode     : 'exact',
-        language : '<?php echo(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
-        elements : '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
-        theme    : 'modern',
-        plugins: [
-            'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-            'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
-            'insertdatetime media nonbreaking save table contextmenu directionality',
-            'emoticons template paste textcolor autosave phpmyfaq imageupload'
-        ],
-        relative_urls: false,
-        convert_urls: false,
-        remove_linebreaks: false,
-        use_native_selects: true,
-        paste_remove_spans: true,
-        entities : '10',
-        entity_encoding: 'raw',
-        toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
-        toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
-        image_advtab: true,
-        image_class_list: [
-            { title: 'None', value: '' },
-            { title: 'Responsive', value: 'img-fluid' }
-        ],
-        image_dimensions: true,
+  // TinyMCE
+  tinyMCE.init({
+    // General options
+    mode: 'exact',
+    language: '<?php echo(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+    elements: '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
+    theme: 'modern',
+    plugins: [
+      'advlist autolink lists link image charmap print preview hr anchor pagebreak',
+      'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
+      'insertdatetime media nonbreaking save table contextmenu directionality',
+      'emoticons template paste textcolor autosave phpmyfaq imageupload'
+    ],
+    relative_urls: false,
+    convert_urls: false,
+    remove_linebreaks: false,
+    use_native_selects: true,
+    paste_remove_spans: true,
+    entities: '10',
+    entity_encoding: 'raw',
+    toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
+    toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
+    image_advtab: true,
+    image_class_list: [
+      {title: 'None', value: ''},
+      {title: 'Responsive', value: 'img-fluid'}
+    ],
+    image_dimensions: true,
 
-        // Formatting
-        style_formats: [
-            { title: 'Headers', items: [
-                { title: 'h1', block: 'h1' },
-                { title: 'h2', block: 'h2' },
-                { title: 'h3', block: 'h3' },
-                { title: 'h4', block: 'h4' },
-                { title: 'h5', block: 'h5' },
-                { title: 'h6', block: 'h6' }
-            ]},
+    // Formatting
+    style_formats: [
+      {
+        title: 'Headers', items: [
+          {title: 'h1', block: 'h1'},
+          {title: 'h2', block: 'h2'},
+          {title: 'h3', block: 'h3'},
+          {title: 'h4', block: 'h4'},
+          {title: 'h5', block: 'h5'},
+          {title: 'h6', block: 'h6'}
+        ]
+      },
 
-            { title: 'Blocks', items: [
-                { title: 'p', block: 'p' },
-                { title: 'div', block: 'div' },
-                { title: 'pre', block: 'pre' },
-                { title: 'code', block: 'code' }
-            ]},
+      {
+        title: 'Blocks', items: [
+          {title: 'p', block: 'p'},
+          {title: 'div', block: 'div'},
+          {title: 'pre', block: 'pre'},
+          {title: 'code', block: 'code'}
+        ]
+      },
 
-            { title: 'Containers', items: [
-                { title: 'blockquote', block: 'blockquote', wrapper: true },
-                { title: 'figure', block: 'figure', wrapper: true }
-            ]}
-        ],
+      {
+        title: 'Containers', items: [
+          {title: 'blockquote', block: 'blockquote', wrapper: true},
+          {title: 'figure', block: 'figure', wrapper: true}
+        ]
+      }
+    ],
 
-        paste_word_valid_elements: "b,strong,i,em,h1,h2,h3,h4,h5,h6",
-        paste_data_images: true,
-        visualblocks_default_state: true,
-        end_container_on_empty_block: true,
-        extended_valid_elements : "code[class],video[*],audio[*],source[*]",
-        removeformat : [
-            { selector : '*', attributes : ['style'], split : false, expand : false, deep : true }
-        ],
-        importcss_append: true,
+    paste_word_valid_elements: "b,strong,i,em,h1,h2,h3,h4,h5,h6",
+    paste_data_images: true,
+    visualblocks_default_state: true,
+    end_container_on_empty_block: true,
+    extended_valid_elements: "code[class],video[*],audio[*],source[*]",
+    removeformat: [
+      {selector: '*', attributes: ['style'], split: false, expand: false, deep: true}
+    ],
+    importcss_append: true,
 
-        // Save function
-        save_onsavecallback: "phpMyFAQSave",
+    // Save function
+    save_onsavecallback: "phpMyFAQSave",
 
-        // phpMyFAQ CSS
-        content_css: '../assets/themes/<?php echo Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
+    // phpMyFAQ CSS
+    content_css: '../assets/themes/<?php echo Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
 
-        // Replace values for the template plugin
-        template_replace_values : {
-            username: '<?php echo addslashes($user->userdata->get('display_name')) ?>',
-            user_id: '<?php echo $user->userdata->get('user_id') ?>'
-        },
+    // Replace values for the template plugin
+    template_replace_values: {
+      username: '<?php echo addslashes($user->userdata->get('display_name')) ?>',
+      user_id: '<?php echo $user->userdata->get('user_id') ?>'
+    },
 
-        templates: [
-            { title: 'Slider', description: 'phpMyFAQ Image Slider', url: 'assets/templates/image-slider.html' }
-        ],
+    templates: [
+      {title: 'Slider', description: 'phpMyFAQ Image Slider', url: 'assets/templates/image-slider.html'}
+    ],
 
-        // File browser
-        file_browser_callback: function(fieldName, url, type, win){
-            var fileBrowser = 'image.browser.php';
-            fileBrowser += (fileBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
-            tinymce.activeEditor.windowManager.open({
-                title: 'Select an image',
-                url: fileBrowser,
-                width: 640,
-                height: 480
-            }, {
-                window: win,
-                input: fieldName
-            });
+    // File browser
+    file_browser_callback: function (fieldName, url, type, win) {
+      var fileBrowser = 'image.browser.php';
+      fileBrowser += (fileBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
+      tinymce.activeEditor.windowManager.open({
+        title: 'Select an image',
+        url: fileBrowser,
+        width: 640,
+        height: 480
+      }, {
+        window: win,
+        input: fieldName
+      });
 
-            return false;
-        },
+      return false;
+    },
 
-        // Custom params
-        csrf: $('#csrf').val()
+    // Custom params
+    csrf: $('#csrf').val()
+  });
+
+  function phpMyFAQSave() {
+    var indicator = $('#saving_data_indicator'),
+      input = document.createElement('input');
+    indicator.html('<img src="images/indicator.gif"> Saving ...');
+    input.setAttribute('name', $('button:submit')[0].name);
+    input.setAttribute('id', 'temporarySaveButton');
+    $('#answer')[0].parentNode.appendChild(input);
+    // Submit the form by an ajax request
+      <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
+    var data = {
+      action: 'ajax',
+      ajax: 'recordAdd'
+    };
+      <?php else: ?>
+    var data = {
+      action: 'ajax',
+      ajax: 'recordSave'
+    };
+      <?php endif; ?>
+
+    $.each($('#faqEditor').serializeArray(), function (i, field) {
+      data[field.name] = field.value;
     });
 
-    function phpMyFAQSave()
-    {
-        var indicator = $('#saving_data_indicator'),
-            input = document.createElement('input');
-        indicator.html('<img src="images/indicator.gif"> Saving ...');
-        input.setAttribute('name', $('button:submit')[0].name);
-        input.setAttribute('id', 'temporarySaveButton');
-        $('#answer')[0].parentNode.appendChild(input);
-        // Submit the form by an ajax request
-        <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
-        var data = {
-            action: 'ajax',
-            ajax: 'recordAdd'
-        };
-        <?php else: ?>
-        var data = {
-            action: 'ajax',
-            ajax: 'recordSave'
-        };
-        <?php endif; ?>
-
-        $.each($('#faqEditor').serializeArray(), function(i, field) {
-            data[field.name] = field.value;
-        });
-
-        $.post('index.php', data, null);
-        indicator.html('<?php echo $PMF_LANG['ad_entry_savedsuc'] ?>');
-        $('#temporarySaveButton').remove();
-        indicator.fadeOut(5000);
-    }
+    $.post('index.php', data, null);
+    indicator.html('<?php echo $PMF_LANG['ad_entry_savedsuc'] ?>');
+    $('#temporarySaveButton').remove();
+    indicator.fadeOut(5000);
+  }
 </script>
 <?php
 

@@ -39,22 +39,23 @@ $faqTableInfo = $faqConfig->getDb()->getTableStatus(Db::getTablePrefix());
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">
-                <div class="float-right">
-                    <a href="?action=config">
-                        <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                        <span class="badge badge-important"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></span>
-                        <?php else: ?>
-                        <span class="badge badge-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></span>
-                        <?php endif; ?>
-                    </a>
-                </div>
-                <i aria-hidden="true" class="fa fa-dashboard fa-fw"></i> <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
-            </h2>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i class="material-icons md-36">dashboard</i>
+          <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
+      </h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <a href="?action=config">
+              <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                <button class="btn btn-sm btn-outline-danger"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></button>
+              <?php else: ?>
+                <button class="btn btn-sm btn-outline-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></button>
+              <?php endif; ?>
+          </a>
         </div>
-    </header>
+      </div>
+    </div>
 
     <?php if ($faqConfig->get('main.enableUserTracking')): ?>
     <section class="row">
