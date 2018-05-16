@@ -546,6 +546,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <div id="collapseViewChangelog" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <?php
+								$currentUserId = $user->getUserId();
                                 foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
                                     $user->getUserById($entry['user']);
                                     ?>
@@ -563,7 +564,10 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         </label>
                                         <?php echo $entry['changelog'] ?>
                                     </p>
-                                <?php } ?>
+                                <?php 
+								} 
+								$user->getUserById($currentUserId);
+								?>
                             </div>
                         </div>
                     </div>
