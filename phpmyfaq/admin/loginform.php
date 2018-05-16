@@ -9,30 +9,20 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alexander M. Turek <me@derrabus.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2013-02-05
  */
-?>
-        <div class="row">
-            <div class="col-md-4 col-md-offset-4">
-                <div class="login-panel panel panel-default">
-                    <div class="panel-heading">
-                        <header>
-                            <h3 class="panel-title">phpMyFAQ Login</h3>
-                        </header>
-                    </div>
-                    <div class="panel-body">
-<?php
+
 if (isset($error) && 0 < strlen($error)) {
     $message = sprintf(
-        '<p class="alert alert-danger">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+        '<p class="alert alert-danger alert-dismissible fade show">%s%s</p>',
+        '<button type="button" class="close" data-dismiss="alert">'.
+        '<span aria-hidden="true">&times;</span>'.
+        '</button>',
         $error
     );
 } else {
@@ -40,8 +30,10 @@ if (isset($error) && 0 < strlen($error)) {
 }
 if ($action == 'logout') {
     $message = sprintf(
-        '<p class="alert alert-success">%s%s</p>',
-        '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+        '<p class="alert alert-success alert-dismissible fade show">%s%s</p>',
+        '<button type="button" class="close" data-dismiss="alert">'.
+        '<span aria-hidden="true">&times;</span>'.
+        '</button>',
         $PMF_LANG['ad_logout']
     );
 }
@@ -49,38 +41,29 @@ if ($action == 'logout') {
 if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
     ?>
 
-                        <?php echo $message ?>
+
 
                         <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
-                              accept-charset="utf-8" role="form">
-                            <fieldset>
+                              accept-charset="utf-8" role="form" class="pmf-form-login">
+                          <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
+                            <?php echo $message ?>
+                          <label for="faqusername" class="sr-only"><?= $PMF_LANG['ad_auth_user'] ?></label>
+                          <input type="text" id="faqusername" name="faqusername" class="form-control" placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" required autofocus>
+                          <label for="faqpassword" class="sr-only"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
+                          <input type="password" id="faqpassword" name="faqpassword" class="form-control" placeholder="<?= $PMF_LANG['ad_auth_passwd'] ?>" required>
+                          <div class="checkbox mb-3">
+                            <label>
+                              <input type="checkbox"id="faqrememberme" name="faqrememberme" value="rememberMe"> <?= $PMF_LANG['rememberMe'] ?>
+                            </label>
+                          </div>
+                          <button class="btn btn-lg btn-primary btn-block" type="submit">
+                              <?= $PMF_LANG['msgLoginUser'] ?>
+                          </button>
 
-                                <div class="form-group row">
-                                    <input type="text" name="faqusername" id="faqusername" class="form-control form-control-lg"
-                                           placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>" required>
-                                </div>
 
-                                <div class="form-group row">
-                                    <input type="password" name="faqpassword" id="faqpassword"
-                                           class="form-control form-control-lg" placeholder="<?php echo $PMF_LANG['ad_auth_passwd'] ?>"
-                                           required>
-                                </div>
 
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe">
-                                        <?php echo $PMF_LANG['rememberMe'] ?>
-                                    </label>
-                                </div>
-
-                                <div class="form-group row">
-                                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                        <?php echo $PMF_LANG['msgLoginUser'] ?>
-                                    </button>
-                                </div>
-
-                                <div class="form-group row">
-                                    <p class="float-right">
+                                <div class="form-group mb-3">
+                                    <p>
                                         <a href="../?action=password">
                                             <?php echo $PMF_LANG['lostPassword'] ?>
                                         </a>
@@ -92,7 +75,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                         <?php } ?>
                                     </p>
                                 </div>
-                            </fieldset>
+                          </div>
 <?php
 
 } else {
@@ -104,5 +87,3 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
 }
 ?>
                         </form>
-                    </div>
-                </div>
