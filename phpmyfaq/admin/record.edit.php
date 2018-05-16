@@ -40,15 +40,11 @@ $currentUserId = $user->getUserId();
 
 if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     $user->perm->checkRight($user->getUserId(), 'addbt')) && !Db::checkOnEmptyTable('faqcategories')) {
-    // old code
     $category = new Category($faqConfig, [], false);
-    //
 
-    // new code
-    if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
+    if ($faqConfig->get('main.enableCategoryRestrictions')) {
         $category = new Category($faqConfig, $currentAdminGroups, true);
     }
-    //
     
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -738,9 +734,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                               <?php echo $PMF_LANG['ad_entry_restricted_groups'] ?>
                             <select name="restricted_groups[]" size="3" class="form-control" multiple>
                                 <?php
-                                if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-                                    echo $user->perm->getAllGroupsOptions($groupPermission,$currentUserId);
-                                }else{
+                                if ( $faqConfig->get('main.enableCategoryRestrictions')) {
+                                    echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
+                                } else {
                                     echo $user->perm->getAllGroupsOptions($groupPermission);
                                 }
                                 ?>

@@ -292,7 +292,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         unset($category);
     }
 
-    if ($faqConfig->config['main.enableCategoryRestrictions']){
+    if ($faqConfig->get('main.enableCategoryRestrictions')) {
         $category = new Category($faqConfig, $currentAdminGroups, true);
     }
     

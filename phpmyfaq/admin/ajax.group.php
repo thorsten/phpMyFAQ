@@ -41,8 +41,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     // pass the user id of the current user so it'll check which group he belongs to
     $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups($user->getUserId()) : [];
 
-    if ($faqConfig->config['main.enableCategoryRestrictions'] == false){
-        // orig code
+    if (!$faqConfig->get('main.enableCategoryRestrictions')){
         $user = new User($faqConfig);
         $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups() : [];
     }

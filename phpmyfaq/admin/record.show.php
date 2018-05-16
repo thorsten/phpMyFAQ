@@ -186,7 +186,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
-    $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->config['main.enableCategoryRestrictions']);
+    $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->get('main.enableCategoryRestrictions'));
 
     $matrix = $category->getCategoryRecordsMatrix();
     foreach ($matrix as $catkey => $value) {
@@ -199,11 +199,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     }
 
     if (is_null($searchTerm)) {
-        if ($faqConfig->config['main.enableCategoryRestrictions']) {
+        if ($faqConfig->get('main.enableCategoryRestrictions')) {
             $Language = new Language($faqConfig);
             $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
             $faq->getAllRecords($orderBy, ['lang' => $language], $sortBy);  
-        }else{
+        } else {
             $faq->getAllRecords($orderBy, null, $sortBy);
         }
 
@@ -297,6 +297,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
 
         foreach ($faq->faqRecords as $record) {
+
             $catInfo = '';
             $cid = $record['category_id'];
 

@@ -152,8 +152,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <div class="col-lg-4">
                     <select name="group_id" id="group_id" size="1" class="form-control">
                         <?php 
-                            if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-                                echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()],$currentUserId);
+                            if ($faqConfig->get('main.enableCategoryRestrictions')) {
+                                echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $currentUserId);
                             } else {
                                 echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()]); 
                             }
@@ -179,9 +179,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </label>
                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
                         <?php 
-                            if ( $faqConfig->config['main.enableCategoryRestrictions'] == 'true'){
-                                echo $user->perm->getAllGroupsOptions($groupPermission,$currentUserId);
-                            }else{
+                            if ($faqConfig->get('main.enableCategoryRestrictions')) {
+                                echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
+                            } else {
                                 echo $user->perm->getAllGroupsOptions($groupPermission);
                             }
                         ?>
