@@ -49,24 +49,20 @@
 </head>
 <body dir="{{ dir }}">
 
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
   <div class="container">
-    <a class="navbar-brand" id="logo" title="{{ header }}" href="{{ faqHome }}">
+    <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
       <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmfNavbar"
-            aria-controls="pmfNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle" aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
-
-    <div class="collapse navbar-collapse" id="pmfNavbar">
-      <ul class="navbar-nav mr-auto">
-
+    <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
+      <ul class="navbar-nav mr-md-12">
         <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
         <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
         <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
         <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
-
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
              aria-expanded="false">
@@ -80,16 +76,13 @@
             [userloggedIn]
             {{ msgUserControlDropDown }}
             {{ msgUserControl }}
-            {{ msgUserRemoval }}
             {{ msgLogoutUser }}
+            <div class="dropdown-divider"></div>
+            {{ msgUserRemoval }}
             [/userloggedIn]
           </div>
         </li>
-
       </ul>
-
-
-      </form>
     </div>
   </div>
 </nav>

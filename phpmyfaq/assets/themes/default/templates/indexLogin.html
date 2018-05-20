@@ -46,24 +46,13 @@
 </head>
 <body dir="{{ dir }}">
 
-<header>
-    <div class="pmf-wrapper pmf-masthead">
-        <div class="container">
-            <a id="logo" title="{{ header }}" href="{{ faqHome }}">
-                <img src="{{ baseHref }}assets/template/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-            </a>
-        </div>
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+        </a>
     </div>
-
-    <div class="pmf-wrapper pmf-subheader">
-        <div class="container">
-            <div class="pmf-breadcrumb">
-                [breadcrumb]
-                {{ breadcrumbHeadline }}
-                [/breadcrumb]
-            </div>
-    </div>
-</header>
+</nav>
 
 <div class="pmf-wrapper pmf-main">
     <div class="container">

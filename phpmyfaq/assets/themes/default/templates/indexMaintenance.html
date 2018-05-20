@@ -35,37 +35,35 @@
 </head>
 <body dir="{{ dir }}">
 
-<header>
-    <div class="pmf-wrapper pmf-masthead">
-        <div class="container">
-            <a id="logo" title="{{ header }}" href="{{ faqHome }}">
-                <img src="{{ baseHref }}assets/template/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-            </a>
-
-            <div id="mobile-nav-toggle" class="float-right">
-                <a href="#" data-toggle="collapse" data-target=".pmf-nav .navbar-collapse">
-                    <i aria-hidden="true" class="fa fa-bars"></i>
-                </a>
-            </div>
-
-            <nav class="float-right pmf-nav">
-                <div class="collapse navbar-collapse">
-                    <ul class="nav nav-pills navbar-nav">
-                        <li>{{ msgLoginUser }}</li>
-                    </ul>
-                </div>
-            </nav>
-
+<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
+    <div class="container">
+        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle" aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
+            <ul class="navbar-nav mr-md-12">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">
+                        {{ msgLoginUser }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdown">
+                        [notLoggedIn]
+                        {{ msgLoginUser }}
+                        [/notLoggedIn]
+                        [userloggedIn]
+                        {{ msgUserControl }}
+                        {{ msgLogoutUser }}
+                        [/userloggedIn]
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
-
-    <div class="pmf-wrapper pmf-subheader">
-        <div class="container">
-            <div class="pmf-breadcrumb">
-            </div>
-        </div>
-    </div>
-</header>
+</nav>
 
 <div class="pmf-wrapper pmf-main">
     <div class="container">
