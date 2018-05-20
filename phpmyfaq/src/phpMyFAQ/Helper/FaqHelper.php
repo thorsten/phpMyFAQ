@@ -24,6 +24,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Utils;
 
@@ -215,11 +216,11 @@ class FaqHelper extends Helper
     /**
      * Creates an overview with all categories with their FAQs.
      *
-     * @param PMF_Category $category
-     * @param PMF_Faq      $faq
+     * @param Category $category
+     * @param Faq      $faq
      * @param string       $language
      *
-     * @return array
+     * @return string
      */
     public function createOverview(Category $category, Faq $faq, $language = '')
     {
@@ -252,6 +253,31 @@ class FaqHelper extends Helper
 
                 $lastCategory = $data['category_id'];
             }
+        }
+
+        return $output;
+    }
+
+    /**
+     * Creates a list of links with available languages to edit a FAQ
+     * in the admin backend.
+     * 
+     * @param $faqId
+     * @return string
+     */
+    public function createFaqTranslationLinkList($faqId)
+    {
+        $output = '';
+
+        $languages = Language::getAvailableLanguages();
+        foreach ($languages as $code => $language) {
+            $output .= sprintf(
+                '<a class="dropdown-item" href="?action=editentry&id=%d&translateTo=%s">%s %s</a>',
+                $faqId,
+                $code,
+                'Translate to',
+                $language
+            );
         }
 
         return $output;

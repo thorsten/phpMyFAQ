@@ -24,6 +24,7 @@ use phpMyFAQ\Db;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Linkverifier;
 use phpMyFAQ\Search\SearchFactory;
@@ -56,6 +57,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     // Set the CategoryHelper for the helper class
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
+
+    $faqHelper = new FaqHelper($faqConfig);
 
     $category->buildTree();
 
@@ -395,7 +398,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             &darr;
                                         </a>
                                     </th>
-                                    <th colspan="3">
+                                    <th colspan="4">
                                         &nbsp;
                                     </th>
                                 </tr>
@@ -459,6 +462,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                     </td>
                                     <td style="width: 96px;">
                                         <?php echo $linkVerifier->getEntryStateHTML($record['id'], $record['lang']) ?>
+                                    </td>
+                                    <td>
+                                      <div class="dropdown">
+                                        <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                          <i class="material-icons">translate</i>
+                                        </a>
+                                        <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
+                                          <?= $faqHelper->createFaqTranslationLinkList($record['id']) ?>
+                                        </div>
+                                      </div>
                                     </td>
                                     <td style="width: 16px;">
                                         <a class="btn btn-info" href="?action=copyentry&id=<?php echo $record['id'] ?>&lang=<?php echo $record['lang']; ?>"

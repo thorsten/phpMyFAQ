@@ -125,6 +125,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     } elseif ('editentry' === $action) {
         $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_SANITIZE_STRING);
         $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new Logging($faqConfig);
@@ -141,6 +142,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             if(isset($categoryId)){ 
                 $categories = $categoryId;
             } 
+        }
+        if (!is_null($translateTo)) {
+          $faqData['lang'] = $translateTo;
         }
     } elseif ('copyentry' === $action) {
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
