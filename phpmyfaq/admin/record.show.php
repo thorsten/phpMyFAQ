@@ -469,7 +469,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                           <i class="material-icons">translate</i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
-                                          <?= $faqHelper->createFaqTranslationLinkList($record['id']) ?>
+                                          <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
                                         </div>
                                       </div>
                                     </td>
