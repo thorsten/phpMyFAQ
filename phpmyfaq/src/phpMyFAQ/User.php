@@ -27,6 +27,8 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Auth\Driver;
+use phpMyFAQ\Perm\Basic;
+use phpMyFAQ\Perm\Medium;
 use phpMyFAQ\User\UserData;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -85,7 +87,7 @@ class User
     /**
      * Permission container.
      *
-     * @var PMF_Perm_Basic|PMF_Perm_Medium
+     * @var Basic|Medium
      */
     public $perm = null;
 
@@ -101,14 +103,14 @@ class User
      *
      * @var array
      */
-    private $authData = array(
-        'authSource' => array(
+    private $authData = [
+        'authSource' => [
             'name' => 'database',
             'type' => 'local',
-        ),
+        ],
         'encType' => PMF_ENCRYPTION_TYPE,
         'readOnly' => false,
-    );
+    ];
 
     /**
      * Public array that contains error messages.

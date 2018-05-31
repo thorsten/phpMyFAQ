@@ -16,6 +16,7 @@
  * @since     2003-02-24
  */
 
+use phpMyFAQ\Db;
 use phpMyFAQ\Db\Helper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
@@ -55,6 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
         $dat = fgets($handle, 65536);
         $versionFound = Strings::substr($dat, 0, 9);
         $versionExpected = '-- pmf'.substr($faqConfig->get('main.currentVersion'), 0, 3);
+        $mquery = [];
 
         if ($versionFound !== $versionExpected) {
             printf('%s (Version check failure: "%s" found, "%s" expected)',
@@ -69,7 +71,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $tbl = explode(' ', $dat);
             $num = count($tbl);
             for ($h = 0; $h < $num; ++$h) {
-                $mquery[] = 'DELETE FROM '.$tbl[$h];
+                $mquery[] = sprintf('DELETE FROM %s', $tbl[$h]);
             }
             $ok = 1;
         }
@@ -100,7 +102,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 if (!$kg) {
                     printf(
                     '<div style="alert alert-danger"><strong>Query</strong>: "%s" failed (Reason: %s)</div>%s',
-                        Strings::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
+                        Strings::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         $faqConfig->getDb()->error(),
                         "\n"
                     );
@@ -108,7 +110,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 } else {
                     printf(
                         '<!-- <div class="alert alert-success"><strong>Query</strong>: "%s" okay</div> -->%s',
-                        Strings::htmlspecialchars($query, ENT_QUOTES, 'utf-8'),
+                        Strings::htmlspecialchars($mquery[$i], ENT_QUOTES, 'utf-8'),
                         "\n"
                     );
                     ++$g;
