@@ -19,10 +19,15 @@
  * @since     2005-12-15
  */
 
+use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Link;
+use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
+use phpMyFAQ\Perm;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -207,7 +212,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                 // Remove the user from groups
                 if ('medium' == $faqConfig->get('security.permLevel')) {
-                    $oPerm = PMF_Perm::selectPerm('medium', $faqConfig);
+                    $oPerm = Perm::selectPerm('medium', $faqConfig);
                     $oPerm->removeFromAllGroups($userId);
                 }
 
@@ -723,7 +728,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 <td>
                     <?php if ($user->getStatus() === 'blocked'): ?>
                         <a onclick="activateUser(<?= $user->getUserData('user_id') ?>); return false;"
-                           href="javascript:;" class="btn btn-success btn_user_id_<?= $user->getUserId() ?>"">
+                           href="#" class="btn btn-success btn_user_id_<?= $user->getUserId() ?>"">
                             <?= $PMF_LANG['ad_news_set_active'] ?>
                         </a>
                     <?php endif;
@@ -731,7 +736,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </td>
                 <td>
                     <?php if ($user->getStatus() !== 'protected'): ?>
-                    <a href="javascript:;" onclick="deleteUser(this); return false;" class="btn btn-danger"
+                    <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
                        data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                        data-user-id="<?= $user->getUserData('user_id') ?>">
                         <?php print $PMF_LANG['ad_user_delete'] ?>
