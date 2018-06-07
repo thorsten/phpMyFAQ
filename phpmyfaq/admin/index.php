@@ -25,6 +25,7 @@ use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
+use phpMyFAQ\Logging;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;

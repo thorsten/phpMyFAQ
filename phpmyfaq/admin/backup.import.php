@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
     $csrfCheck = false;
@@ -44,8 +44,9 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
         </h2>
     </header>
 <?php
+
 if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
-    if (isset($_FILES['userfile']) && 0 == $_FILES['userfile']['error']) {
+    if (isset($_FILES['userfile']) && 0 === $_FILES['userfile']['error']) {
         $ok = 1;
         $finfo = new finfo(FILEINFO_MIME_ENCODING);
         if ('utf-8' == $finfo->file($_FILES['userfile']['tmp_name'])) {

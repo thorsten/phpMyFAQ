@@ -59,9 +59,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             </div>
 
             <div class="col-lg-6">
-                <form method="post" action="?action=restore" enctype="multipart/form-data" accept-charset="utf-8"
-                    >
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>" enctype="multipart/form-data">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
                             <?php echo $PMF_LANG['ad_csv_head2'] ?>

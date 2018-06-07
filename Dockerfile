@@ -64,7 +64,9 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_MEMORY_LIMIT=64M \
     PMF_DISABLE_HTACCESS="" \
     PHP_LOG_ERRORS=On \
-    PHP_ERROR_REPORTING=E_ALL
+    PHP_ERROR_REPORTING=E_ALL \
+    PHP_POST_MAX_SIZE=64M \
+    PHP_UPLOAD_MAX_FILESIZE=64M
 
 #=== Set custom entrypoint ===
 COPY docker-entrypoint.sh /entrypoint
