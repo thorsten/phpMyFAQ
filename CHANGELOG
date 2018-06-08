@@ -33,7 +33,7 @@ Version 3.0.0-alpha.2 - 2018-04-
 - updated bundled HighlightJS to version 9.10.0 (Thorsten)
 - updated bundled Mermaid to version 6.0.0 (Thorsten)
 - updated bundled jQuery Sparklines to version 2.3.2 (Thorsten)
-- updated bundled TinyMCE to version 4.7.11 (Thorsten)
+- updated bundled TinyMCE to version 4.7.13 (Thorsten)
 - updated bundled CookieConsent to version 3.0.6 (Thorsten)
 - removed translation admin frontend (Thorsten)
 - removed XHTML export (Thorsten)
