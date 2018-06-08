@@ -1,11 +1,11 @@
-phpMyFAQ 3.0.0-alpha.2
+phpMyFAQ 3.0.0-alpha.3
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-alpha.2 - 2018-06-08
+Version 3.0.0-alpha.3 - 2018-
 - changed PHP requirement to PHP 5.6+ and PHP 7+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
