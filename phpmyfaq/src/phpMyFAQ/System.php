@@ -62,7 +62,7 @@ class System
     /**     
      * Minimum required PHP version.
      */
-    const VERSION_MINIMUM_PHP = '5.6.0';
+    const VERSION_MINIMUM_PHP = '5.6.6';
 
     /**
      * Array of required PHP extensions.

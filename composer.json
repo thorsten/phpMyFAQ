@@ -29,13 +29,13 @@
         }
     ],
     "require": {
-        "php": ">=5.6.0",
-        "phpseclib": "2.0.*",
+        "php": ">=5.6.6",
+        "phpseclib/phpseclib": "~2.0",
         "swiftmailer/swiftmailer": "5.4.8",
         "erusev/parsedown": "1.6.3",
         "erusev/parsedown-extra": "~0.7.0",
         "tecnickcom/tcpdf": "6.2.13",
-        "elasticsearch/elasticsearch": "~2.0",
+        "elasticsearch/elasticsearch": "~5.0",
         "monolog/monolog": "1.23.0",
         "abraham/twitteroauth": "^0.7.4"
     },
@@ -49,7 +49,7 @@
     },
     "config": {
         "bin-dir": "bin",
-        "secure-http": false
+        "secure-http": true
     },
     "minimum-stability": "stable",
     "scripts": {

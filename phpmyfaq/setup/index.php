@@ -33,8 +33,8 @@ define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '5.6.0') < 0) {
-    die('Sorry, but you need PHP 5.6.0 or later!');
+if (version_compare(PHP_VERSION, '5.6.6') < 0) {
+    die('Sorry, but you need PHP 5.6.6 or later!');
 }
 
 set_time_limit(0);

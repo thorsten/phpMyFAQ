@@ -21,7 +21,7 @@ script.
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 5.6.0 and up, you need a database as well. 
+phpMyFAQ is only supported on PHP 5.6.6 and up, you need a database as well. 
 Supported databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL 
 Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search 
 engine, you need Elasticsearch 2.x as well. Check our detailed requirements on 
