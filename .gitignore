@@ -32,19 +32,7 @@ phpmyfaq/attachments/*
 phpmyfaq/.htaccess
 
 # Third party PHP libraries
-phpmyfaq/src/libs/abraham
-phpmyfaq/src/libs/elasticsearch
-phpmyfaq/src/libs/guzzlehttp/ringphp
-phpmyfaq/src/libs/monolog
-phpmyfaq/src/libs/parsedown
-phpmyfaq/src/libs/phpseclib
-phpmyfaq/src/libs/psr
-phpmyfaq/src/libs/react
-phpmyfaq/src/libs/swiftmailer
-phpmyfaq/src/libs/symfony
-phpmyfaq/src/libs/tcpdf/config
-phpmyfaq/src/libs/tcpdf/include
-phpmyfaq/src/libs/tcpdf/*.php
+phpmyfaq/src/libs/*
 
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css
@@ -57,7 +45,6 @@ phpmyfaq/admin/assets/js/editor/themes/
 phpmyfaq/assets/fonts
 phpmyfaq/assets/icons
 phpmyfaq/assets/js/libs
-phpmyfaq/assets/js/modernizr.min.js
 phpmyfaq/assets/js/phpmyfaq.js
 phpmyfaq/assets/js/phpmyfaq.js.map
 phpmyfaq/assets/js/phpmyfaq.min.js

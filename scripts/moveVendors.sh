@@ -8,7 +8,7 @@ mkdir -pv $cwd/phpmyfaq/src/libs/elasticsearch/src/Elasticsearch
 mkdir -pv $cwd/phpmyfaq/src/libs/guzzlehttp/ringphp/src
 mkdir -pv $cwd/phpmyfaq/src/libs/monolog/src/Monolog
 mkdir -pv $cwd/phpmyfaq/src/libs/parsedown
-mkdir -pv $cwd/phpmyfaq/src/libs/phpseclib/Crypt
+mkdir -pv $cwd/phpmyfaq/src/libs/phpseclib/phpseclib/phpseclib/Crypt
 mkdir -pv $cwd/phpmyfaq/src/libs/psr/log/Psr
 mkdir -pv $cwd/phpmyfaq/src/libs/react/promise/src
 mkdir -pv $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
@@ -23,7 +23,8 @@ cp -r $cwd/vendor/guzzlehttp/ringphp/src/* $cwd/phpmyfaq/src/libs/guzzlehttp/rin
 cp -r $cwd/vendor/monolog/monolog/src/Monolog/* $cwd/phpmyfaq/src/libs/monolog/src/Monolog
 cp -r $cwd/vendor/erusev/parsedown/Parsedown.php $cwd/phpmyfaq/src/libs/parsedown/Parsedown.php
 cp -r $cwd/vendor/erusev/parsedown-extra/ParsedownExtra.php $cwd/phpmyfaq/src/libs/parsedown/ParsedownExtra.php
-cp -r $cwd/vendor/phpseclib/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/src/libs/phpseclib
+cp -r $cwd/vendor/phpseclib/phpseclib/phpseclib/bootstrap.php $cwd/phpmyfaq/src/libs/phpseclib/phpseclib/phpseclib/bootstrap.php
+cp -r $cwd/vendor/phpseclib/phpseclib/phpseclib/Crypt $cwd/phpmyfaq/src/libs/phpseclib/phpseclib/phpseclib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/src/libs/psr/log/Psr
 cp -R $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/src/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib

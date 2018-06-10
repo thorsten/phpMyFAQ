@@ -41,6 +41,7 @@ Version 3.0.0-alpha.3 - 2018-
 - removed bundled Symfony ClassLoader (Thorsten)
 - removed bundled Font Awesome icons (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
+- removed Modernizr (Thorsten)
 
 Version 2.9.9 - 2017-10-19
 - fixed multiple XSS and CSRF vulnerabilities (Thorsten)

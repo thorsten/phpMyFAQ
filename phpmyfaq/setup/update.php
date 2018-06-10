@@ -61,7 +61,6 @@ require PMF_ROOT_DIR.'/config/database.php';
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
-    <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
     <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">

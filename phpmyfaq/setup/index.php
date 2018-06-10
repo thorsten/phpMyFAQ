@@ -67,7 +67,6 @@ $loader->register()
 
   <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
-  <script src="../assets/js/modernizr.min.js"></script>
   <script src="../assets/js/vendors.js"></script>
   <script src="../assets/js/phpmyfaq.min.js"></script>
 

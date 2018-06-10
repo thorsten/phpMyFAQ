@@ -79,7 +79,6 @@ if (count(ob_list_handlers()) > 0) {
 
     <link rel="stylesheet" href="assets/css/style.min.css?v=1">
 
-    <script src="../assets/js/modernizr.min.js"></script>
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
 </head>

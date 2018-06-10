@@ -612,11 +612,9 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     </div>
     
     <script type="text/javascript">
-    if (!Modernizr.inputtypes.date) {
-        $(function() {
-            $('.date-pick').datePicker();
-        });
-    }
+    $(function() {
+      $('.date-pick').datePicker();
+    });
     </script>
 <?php
 

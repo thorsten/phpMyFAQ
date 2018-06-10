@@ -21,8 +21,8 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @since     2009-08-21
  */
 
+use phpseclib\Crypt\AES;
 use phpMyFAQ\Attachment\File;
-use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -65,7 +65,7 @@ class Encrypted extends File
      */
     public function __construct($filepath, $mode, $key)
     {
-        $this->aes = new Crypt_AES();
+        $this->aes = new AES();
         $this->aes->setKey($key);
 
         parent::__construct($filepath, $mode);
