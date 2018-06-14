@@ -599,7 +599,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgHelp' => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG['msgHelp'].'</a>',
         'msgContact' => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG['msgContact'].'</a>',
         'msgGlossary' => '<a href="index.php?'.$sids.'action=glossary">'.$PMF_LANG['ad_menu_glossary'].'</a>',
-        'allCategories' => '<a href="index.php?'.$sids.'action=show">'.$PMF_LANG['msgShowAllCategories'].'</a>',
+        'allCategories' => '<a class="nav-link" href="index.php?'.$sids.'action=show">'.$PMF_LANG['msgShowAllCategories'].'</a>',
         'faqOverview' => '<a href="index.php?'.$sids.'action=overview">'.$PMF_LANG['faqOverview'].'</a>',
         'backToHome' => '<a href="index.php?'.$sids.'">'.$PMF_LANG['msgHome'].'</a>',
         'showSitemap' => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
