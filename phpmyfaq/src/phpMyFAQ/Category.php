@@ -634,8 +634,7 @@ class Category
     /**
      * List in array the root, super-root, ... of the $id.
      *
-     * @param int $id Entity id
-     *
+     * @param $id
      * @return array
      */
     private function getNodes($id)
@@ -650,6 +649,8 @@ class Category
 
             return $temp;
         }
+
+        return [];
     }
 
     /**

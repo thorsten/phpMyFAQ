@@ -16,6 +16,11 @@
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-27
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Link;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -25,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$selectedCategoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$selectedCategoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $subCategoryContent = '';
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
@@ -43,7 +48,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     );
 
     if (empty($records) || $category->getChildNodes($selectedCategoryId)) {
-        $subCategory = new phpMyFAQ\Category($faqConfig, $current_groups, true);
+        $subCategory = new Category($faqConfig, $current_groups, true);
         $subCategory->setUser($current_user);
         $subCategory->transform($selectedCategoryId);
         if (empty($records)) {
@@ -70,7 +75,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             $sids,
             $categoryData->getParentId()
         );
-        $oLink = new phpMyFAQ\Link($url, $faqConfig);
+        $oLink = new Link($url, $faqConfig);
         $oLink->itemTitle = $category->categoryName[$categoryData->getParentId()]['name'];
         $oLink->text = $PMF_LANG['msgCategoryUp'];
         $up = $oLink->toHtmlAnchor();
