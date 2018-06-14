@@ -450,7 +450,7 @@ class Faq
             }
 
             $output .= implode("\n", $renderedItems);
-            $output .= '</ul><span class="totalFaqRecords hide">'.$num.'</span>';
+            $output .= '</ul>';
         } else {
             return false;
         }
