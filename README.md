@@ -45,8 +45,8 @@ release it's for development purpose. It does not contain any code as the
 phpmyfaq folder is meant to be mount as the `/var/www/html` folder in the
 container.
 
-To build a production release please use the git2docker.sh script or use images
-provided on [docker.io](https://hub.docker.com/phpmyfaq).
+To build a production release please use the [docker-hub](https://github.com/phpMyFAQ/docker-hub)
+repository or use images provided on [docker.io](https://hub.docker.com/r/phpmyfaq/phpmyfaq/).
 
 #### docker-compose.yml
 
