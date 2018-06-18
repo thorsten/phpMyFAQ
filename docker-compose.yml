@@ -67,15 +67,19 @@ services:
     volumes:
       - ./volumes/sessions:/sessions
   elasticsearch:
-    image: elasticsearch:5.6.9
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
+    container_name: elasticsearch
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
     ulimits:
       memlock:
         soft: -1
         hard: -1
     volumes:
       - ./volumes/esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200

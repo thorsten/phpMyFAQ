@@ -19,6 +19,7 @@
 
 use Elasticsearch\Common\Exceptions\Forbidden403Exception;
 use Elasticsearch\Common\Exceptions\Missing404Exception;
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Instance\Elasticsearch as ElasticsearchInstance;
 
@@ -39,6 +40,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     try {
         $esConfig = $faqConfig->getElasticsearchConfig();
         $esInformation = $faqConfig->getElasticsearch()->indices()->stats(['index' => 'phpmyfaq']);
+    } catch (NoNodesAvailableException $e) {
+        $esInformation = $e->getMessage();
     } catch (Forbidden403Exception $e) {
         $esInformation = $e->getMessage();
     } catch (Missing404Exception $e) {
