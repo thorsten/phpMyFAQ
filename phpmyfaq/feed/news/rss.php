@@ -19,8 +19,17 @@
  * @link      https://www.phpmyfaq.de
  * @since     2004-11-05
  */
+
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Link;
+use phpMyFAQ\News;
+use phpMyFAQ\Strings;
+use phpMyFAQ\User\CurrentUser;
 
 //
 // Bootstrapping
@@ -30,7 +39,7 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 //
 // get language (default: english)
 //
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -49,7 +58,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new phpMyFAQ\CurrentUser($faqConfig);
+        $user = new CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -76,14 +85,14 @@ if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$oNews = new phpMyFAQ\News($faqConfig);
+$oNews = new News($faqConfig);
 $showArchive = false;
 $active = true;
 $forceConfLimit = true;
 $rssData = $oNews->getLatestData($showArchive, $active, $forceConfLimit);
 $num = count($rssData);
 
-$rss = new XMLWriter();
+$rss = new \XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
@@ -107,7 +116,7 @@ if ($num > 0) {
         $link = '/index.php?action=news&newsid='.$item['id'].'&newslang='.$item['lang'];
         if (PMF_RSS_USE_SEO) {
             if (isset($item['header'])) {
-                $oLink = new phpMyFAQ\Link($link, $faqConfig);
+                $oLink = new Link($link, $faqConfig);
                 $oLink->itemTitle = $item['header'];
                 $link = $oLink->toString();
             }
@@ -136,7 +145,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData),
 );
 
-$http = new phpMyFAQ\Helper_Http();
+$http = new HttpHelper();
 $http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();

@@ -19,8 +19,18 @@
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-17
  */
+
 define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\Strings;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 
 //
 // Bootstrapping
@@ -30,7 +40,7 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 //
 // get language (default: english)
 //
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -54,7 +64,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         header('HTTP/1.0 401 Unauthorized');
         exit;
     } else {
-        $user = new phpMyFAQ\CurrentUser($faqConfig);
+        $user = new CurrentUser($faqConfig);
         if ($user->login($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW'])) {
             if ($user->getStatus() != 'blocked') {
                 $auth = true;
@@ -77,7 +87,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 //
 if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_Medium) {
+    if ($user->perm instanceof Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
@@ -94,11 +104,11 @@ if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$faq = new phpMyFAQ\Faq($faqConfig);
+$faq = new Faq($faqConfig);
 $rssData = $faq->getAllOpenQuestions(false);
 $num = count($rssData);
 
-$rss = new XMLWriter();
+$rss = new \XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
@@ -148,7 +158,7 @@ $headers = array(
     'Content-Length: '.strlen($rssData),
 );
 
-$http = new phpMyFAQ\Helper_Http();
+$http = new HttpHelper();
 $http->sendWithHeaders($rssData, $headers);
 
 $faqConfig->getDb()->close();
