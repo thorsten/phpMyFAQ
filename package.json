@@ -20,7 +20,8 @@
     "material-design-icons": "^3.0.1",
     "mermaid": "^7.1.0",
     "popper.js": "^1.12.6",
-    "tinymce": "^4.7.1"
+    "tinymce": "^4.7.1",
+    "wordcloud": "^1.1.0"
   },
   "devDependencies": {
     "grunt": "^1.0.1",

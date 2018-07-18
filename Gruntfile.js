@@ -42,6 +42,7 @@ module.exports = function (grunt) {
       build: {
         src: [
           'phpmyfaq/assets/js/vendor.js',
+          'phpmyfaq/assets/js/vendor.min.js',
           'phpmyfaq/assets/js/phpmyfaq.js',
           'phpmyfaq/assets/js/phpmyfaq.js.map',
           'phpmyfaq/assets/js/phpmyfaq.min.js',
@@ -173,6 +174,7 @@ module.exports = function (grunt) {
           'node_modules/bootstrap-fileinput/js/fileinput.js',
           'node_modules/bxslider/dist/jquery.bxslider.js',
           'node_modules/cookieconsent/src/cookieconsent.js',
+          'node_modules/wordcloud/src/wordcloud2.js'
         ],
         dest: 'phpmyfaq/assets/js/vendors.js'
       },
