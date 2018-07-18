@@ -19,7 +19,7 @@
 
 use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Permission\Medium;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -55,7 +55,7 @@ $userPermission = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
-if ($user->perm instanceof Medium) {
+if ($user->perm instanceof MediumPermission) {
     if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
         $groupPermission = true;
     } else {

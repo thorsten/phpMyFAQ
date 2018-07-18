@@ -27,8 +27,8 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Auth\Driver;
-use phpMyFAQ\Permission\Basic;
-use phpMyFAQ\Permission\Medium;
+use phpMyFAQ\Permission\BasicPermission;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -87,7 +87,7 @@ class User
     /**
      * Permission container.
      *
-     * @var Basic|Medium
+     * @var BasicPermission|MediumPermission
      */
     public $perm = null;
 

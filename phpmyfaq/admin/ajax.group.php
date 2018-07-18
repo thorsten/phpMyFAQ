@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Permission\Medium;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -39,11 +39,11 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
     $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     
     // pass the user id of the current user so it'll check which group he belongs to
-    $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups($user->getUserId()) : [];
+    $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user->getUserId()) : [];
 
     if (!$faqConfig->get('main.enableCategoryRestrictions')){
         $user = new User($faqConfig);
-        $groupList = ($user->perm instanceof Medium) ? $user->perm->getAllGroups() : [];
+        $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups() : [];
     }
 
     // Returns all groups

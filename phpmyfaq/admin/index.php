@@ -26,6 +26,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Template;
@@ -180,7 +181,7 @@ if ($action == 'logout' && $auth) {
 //
 if (isset($user) && is_object($user)) {
     $currentAdminUser = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_Medium) {
+    if ($user->perm instanceof MediumPermission) {
         $currentAdminGroups = $user->perm->getUserGroups($currentAdminUser);
     } else {
         $currentAdminGroups = array(-1);

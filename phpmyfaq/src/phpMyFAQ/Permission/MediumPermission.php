@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Medium extends Basic
+class MediumPermission extends BasicPermission
 {
     /**
      * Default data for new groups.

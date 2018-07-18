@@ -29,7 +29,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
-use phpMyFAQ\Permission\Medium;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
@@ -82,7 +82,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 //
 if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof Medium) {
+    if ($user->perm instanceof MediumPermission) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);

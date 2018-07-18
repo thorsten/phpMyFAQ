@@ -35,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Large extends Medium
+class LargePermission extends MediumPermission
 {
 
     /**

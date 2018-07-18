@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Perm_Basic.
+ * BasicPermission.
  *
  * @category  phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Basic extends Permission
+class BasicPermission extends Permission
 {
     // --- ATTRIBUTES ---
 
