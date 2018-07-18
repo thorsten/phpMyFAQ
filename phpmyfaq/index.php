@@ -188,20 +188,20 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     if ($user->perm instanceof Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
-        $current_groups = array(-1);
+        $current_groups = [-1];
     }
     if (0 == count($current_groups)) {
-        $current_groups = array(-1);
+        $current_groups = [-1];
     }
 } else {
     $current_user = -1;
-    $current_groups = array(-1);
+    $current_groups = [-1];
 }
 
 //
 // Use mbstring extension if available and when possible
 //
-$validMbStrings = array('ja', 'en', 'uni');
+$validMbStrings = ['ja', 'en', 'uni'];
 $mbLanguage = ($PMF_LANG['metaLanguage'] != 'ja') ? 'uni' : $PMF_LANG['metaLanguage'];
 if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
     mb_language($mbLanguage);
@@ -283,10 +283,11 @@ $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
 //
-// Create a new CategoryHelper object
+// Create a new Category object
 //
 $category = new Category($faqConfig, $current_groups, true);
 $category->setUser($current_user);
+$category->setGroups($current_groups);
 
 //
 // Create a new Tags object
@@ -423,8 +424,8 @@ if ($action !== 'main') {
 //
 // Set right column
 //
-if (($action == 'artikel') || ($action == 'show')) {
-    $rightSidebarTemplate = $action == 'artikel' ? 'catandtag.html' : 'tagcloud.html';
+if (($action === 'faq') || ($action === 'show')) {
+    $rightSidebarTemplate = $action === 'faq' ? 'catandtag.html' : 'tagcloud.html';
 } else {
     $rightSidebarTemplate = 'startpage.html';
 }
@@ -470,16 +471,6 @@ $tpl = new Template(
     ),
     $faqConfig->get('main.templateSet')
 );
-
-if ($faqConfig->get('main.enableUserTracking')) {
-    $users = $faqsession->getUsersOnline();
-    $totUsers = $users[0] + $users[1];
-    $usersOnline = $plr->getMsg('plmsgUserOnline', $totUsers).' | '.
-                   $plr->getMsg('plmsgGuestOnline', $users[0]).
-                   $plr->getMsg('plmsgRegisteredOnline', $users[1]);
-} else {
-    $usersOnline = '';
-}
 
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
@@ -528,7 +519,6 @@ $tplMainPage = array(
     'writeLangAdress' => $writeLangAdress,
     'switchLanguages' => Language::selectLanguages($LANGCODE, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-    'userOnline' => $usersOnline,
     'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
                               $faqConfig->get('main.currentVersion'),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
@@ -577,26 +567,24 @@ if ('main' == $action || 'show' == $action) {
 
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = array(
-        'msgSearch' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
+        'msgSearch' => '<a class="nav-link" href="./search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
         'msgAddContent' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'addcontent.html">'.$PMF_LANG['msgAddContent'].'</a>',
-        'msgQuestion' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'open.html">'.$PMF_LANG['msgOpenQuestions'].'</a>',
-        'msgHelp' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'help.html">'.$PMF_LANG['msgHelp'].'</a>',
-        'msgContact' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'contact.html">'.$PMF_LANG['msgContact'].'</a>',
-        'msgGlossary' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'glossary.html">'.$PMF_LANG['ad_menu_glossary'].'</a>',
-        'backToHome' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'index.html">'.$PMF_LANG['msgHome'].'</a>',
-        'allCategories' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
-        'faqOverview' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'overview.html">'.$PMF_LANG['faqOverview'].'</a>',
-        'showSitemap' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html',
-        'msgUserRemoval' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>');
+        'msgQuestion' => '<a class="nav-link" href="./ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="./open.html">'.$PMF_LANG['msgOpenQuestions'].'</a>',
+        'msgContact' => '<a href="./contact.html">'.$PMF_LANG['msgContact'].'</a>',
+        'msgGlossary' => '<a href="./glossary.html">'.$PMF_LANG['ad_menu_glossary'].'</a>',
+        'backToHome' => '<a href="./index.html">'.$PMF_LANG['msgHome'].'</a>',
+        'allCategories' => '<a class="nav-link" href="./showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
+        'faqOverview' => '<a href="./overview.html">'.$PMF_LANG['faqOverview'].'</a>',
+        'showSitemap' => '<a href="./sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
+        'opensearch' => './opensearch.xml',
+        'msgUserRemoval' => '<a href="./request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>');
 } else {
     $tplNavigation = array(
         'msgSearch' => '<a class="nav-link" href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
         'msgAddContent' => '<a class="nav-link" href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG['msgAddContent'].'</a>',
         'msgQuestion' => '<a class="nav-link" href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG['msgQuestion'].'</a>',
         'msgOpenQuestions' => '<a class="nav-link" href="index.php?'.$sids.'action=open">'.$PMF_LANG['msgOpenQuestions'].'</a>',
-        'msgHelp' => '<a href="index.php?'.$sids.'action=help">'.$PMF_LANG['msgHelp'].'</a>',
         'msgContact' => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG['msgContact'].'</a>',
         'msgGlossary' => '<a href="index.php?'.$sids.'action=glossary">'.$PMF_LANG['ad_menu_glossary'].'</a>',
         'allCategories' => '<a class="nav-link" href="index.php?'.$sids.'action=show">'.$PMF_LANG['msgShowAllCategories'].'</a>',
@@ -665,7 +653,7 @@ if (isset($auth)) {
     );
 }
 
-if ('artikel' == $action || 'show' == $action || is_numeric($solutionId)) {
+if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
 
     // We need some Links from social networks
     $faqServices = new Services($faqConfig);

@@ -68,8 +68,6 @@ class Language
      * Constructor.
      *
      * @param Configuration $config
-     *
-     * @return Language
      */
     public function __construct(Configuration $config)
     {

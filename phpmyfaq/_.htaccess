@@ -49,7 +49,7 @@ RewriteCond %{REQUEST_URI}          /search\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=search [L,QSA]
 
 # opensearch
-RewriteCond %{REQUEST_URI}          /opensearch\.html$ [NC]
+RewriteCond %{REQUEST_URI}          /opensearch\.xml [NC]
 RewriteRule ^(.*)$                  opensearch.php [L,QSA]
 
 # the add content page
