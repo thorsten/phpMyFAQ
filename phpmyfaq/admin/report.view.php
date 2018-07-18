@@ -109,7 +109,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
             printf('<td>%s</td>', $data['faq_question']);
         }
         if ($useCreationDate) {
-            printf('<td>%s</td>', $data['faq_creation']);
+            printf('<td>%s</td>', $data['faq_updated']);
         }
         if ($useOwner) {
             printf('<td>%s</td>', $data['faq_org_author']);
