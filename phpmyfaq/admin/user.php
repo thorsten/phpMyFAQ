@@ -621,7 +621,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
     // show list of all users
     if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
-        $allUsers = $user->getAllUsers();
+        $allUsers = $user->getAllUsers(false);
         $numUsers = count($allUsers);
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
