@@ -372,7 +372,7 @@ class Search
     /**
      * Sets the Entity object.
      *
-     * @param PMF_Category $category
+     * @param Category $category
      */
     public function setCategory($category)
     {

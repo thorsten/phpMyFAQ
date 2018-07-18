@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The rest/json application interface.
+ * The REST API.
  *
  * PHP Version 5.6
  *
@@ -9,16 +9,32 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-03
  */
+
 define('IS_VALID_PHPMYFAQ', null);
+
+use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Category;
+use phpMyFAQ\Comment;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\News;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Services;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 
 //
 // Bootstrapping
@@ -28,7 +44,7 @@ require 'src/Bootstrap.php';
 //
 // Send headers
 //
-$http = new phpMyFAQ\Helper_Http();
+$http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
@@ -39,19 +55,19 @@ $currentUser = -1;
 $currentGroups = array(-1);
 $auth = false;
 
-$action = phpMyFAQ\Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$language = phpMyFAQ\Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
-$categoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
-$recordId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
-$tagId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
+$action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+$language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
+$categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
+$recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
+$tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
-$faqusername = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = phpMyFAQ\Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 
 //
 // Get language (default: english)
 //
-$Language = new phpMyFAQ\Language($faqConfig);
+$Language = new Language($faqConfig);
 $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 //
@@ -64,7 +80,7 @@ if (Language::isASupportedLanguage($language)) {
 }
 $faqConfig->setLanguage($Language);
 
-$plr = new phpMyFAQ\Language_Plurals($PMF_LANG);
+$plr = new Plurals($PMF_LANG);
 Strings::init($language);
 
 //
@@ -84,7 +100,7 @@ if (is_null($faqusername) && is_null($faqpassword)) {
     if ($currentUser instanceof CurrentUser) {
         $auth = true;
     } else {
-        $currentUser = new phpMyFAQ\CurrentUser($faqConfig);
+        $currentUser = new CurrentUser($faqConfig);
     }
 }
 
@@ -102,7 +118,9 @@ switch ($action) {
         break;
 
     case 'getCount':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
         $result = ['faqCount' => $faq->getNumberOfRecords($language)];
         break;
 
@@ -111,75 +129,76 @@ switch ($action) {
         break;
 
     case 'search':
-        $faq = new phpMyFAQ\Faq($faqConfig);
-        $user = new phpMyFAQ\User($faqConfig);
-        $search = new phpMyFAQ\Search($faqConfig);
-        $search->setCategory(new phpMyFAQ\Category($faqConfig));
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $user = new CurrentUser($faqConfig);
+        $search = new Search($faqConfig);
+        $search->setCategory(new Category($faqConfig));
 
-        $faqSearchResult = new phpMyFAQ\Search_Resultset($user, $faq, $faqConfig);
-
-        $searchString = phpMyFAQ\Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
-        $searchResults = $search->search($searchString, false);
-        $url = $faqConfig->getDefaultUrl().'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-
-        $faqSearchResult->reviewResultset($searchResults);
-        foreach ($faqSearchResult->getResultset() as $data) {
-            $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-            $data->answer = Utils::makeShorterText($data->answer, 12);
-            $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-            $result[] = $data;
+        $faqSearchResult = new Resultset($user, $faq, $faqConfig);
+        $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
+        try {
+            $searchResults = $search->search($searchString, false);
+            $url = $faqConfig->getDefaultUrl().'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+            $faqSearchResult->reviewResultset($searchResults);
+            foreach ($faqSearchResult->getResultset() as $data) {
+                $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+                $data->answer = Utils::makeShorterText($data->answer, 12);
+                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                $result[] = $data;
+            }
+        } catch (Search\Exception $e) {
+            $result = [ 'error' => $e->getMessage() ];
         }
         break;
 
     case 'getCategories':
-        $category = new phpMyFAQ\Category($faqConfig, $currentGroups, true);
+        $category = new Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
         $result = array_values($category->getAllCategories());
         break;
 
     case 'getFaqs':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = $faq->getAllRecordPerCategory($categoryId);
         break;
 
     case 'getFAQsByTag':
-        $tags = new phpMyFAQ\Tags($faqConfig);
+        $tags = new Tags($faqConfig);
         $recordIds = $tags->getRecordsByTagId($tagId);
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = $faq->getRecordsByIds($recordIds);
         break;
 
     case 'getFaq':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getRecord($recordId);
-        
         $result = $faq->faqRecord;
         break;
 
     case 'getComments':
-        $comment = new phpMyFAQ\Comment($faqConfig);
-
+        $comment = new Comment($faqConfig);
         $result = $comment->getCommentsData($recordId, 'faq');
         break;
 
     case 'getAllFaqs':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
-
         $result = $faq->faqRecords;
         break;
 
     case 'getFaqAsPdf':
-        $service = new phpMyFAQ\Services($faqConfig);
+        $service = new Services($faqConfig);
         $service->setFaqId($recordId);
         $service->setLanguage($language);
         $service->setCategoryId($categoryId);
@@ -188,8 +207,12 @@ switch ($action) {
         break;
 
     case 'getAttachmentsFromFaq':
-        $attachments = PMF_Attachment_Factory::fetchByRecordId($faqConfig, $recordId);
-        $result = [];
+        $attachments = $result = [];
+        try {
+            $attachments = Factory::fetchByRecordId($faqConfig, $recordId);
+        } catch (\phpMyFAQ\Attachment\Exception $e) {
+            $result = [ 'error' => $e->getMessage() ];
+        }
         foreach ($attachments as $attachment) {
             $result[] = [
                 'filename' => $attachment->getFilename(),
@@ -199,36 +222,36 @@ switch ($action) {
         break;
 
     case 'getPopular':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
         break;
 
     case 'getLatest':
-        $faq = new phpMyFAQ\Faq($faqConfig);
+        $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
         $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
         break;
 
     case 'getNews':
-        $news = new phpMyFAQ\News($faqConfig);
+        $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);
         break;
 
     case 'getPopularSearches':
-        $search = new phpMyFAQ\Search($faqConfig);
+        $search = new Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
         break;
 
     case 'getPopularTags':
-        $tags = new phpMyFAQ\Tags($faqConfig);
+        $tags = new Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
         break;
 
     case 'login':
-        $currentUser = new phpMyFAQ\CurrentUser($faqConfig);
+        $currentUser = new CurrentUser($faqConfig);
         if ($currentUser->login($faqusername, $faqpassword)) {
             if ($currentUser->getStatus() != 'blocked') {
                 $auth = true;
@@ -254,7 +277,7 @@ switch ($action) {
 // Check if FAQ should be secured
 //
 if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
-    echo json_encode(
+    $http->sendJsonWithHeaders(
         [
             'error' => 'You are not allowed to view this content.'
         ]
@@ -262,5 +285,4 @@ if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
     $http->sendStatus(403);
 }
 
-// print result as JSON
-echo json_encode($result);
+$http->sendJsonWithHeaders($result);
