@@ -74,6 +74,13 @@ Then services will be available at following addresses:
 - phpMyFAQ: (http://localhost:8080)
 - phpMyAdmin: (http://localhost:8000)
 
+#### Running tests
+
+To run the test using Docker you have to install the Composer development dependencies
+
+    $ curl -s https://getcomposer.org/installer | php
+    $ php composer.phar install
+
 
 #### Quote from ElasticSearch documentation
 
