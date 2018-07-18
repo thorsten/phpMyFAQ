@@ -21,7 +21,7 @@
 define('IS_VALID_PHPMYFAQ', null);
 
 require __DIR__.'/src/Bootstrap.php';
-require Language_DIR.'/'.$faqConfig->get('main.language');
+require LANGUAGE_DIR.'/'.$faqConfig->get('main.language');
 
 $baseUrl = $faqConfig->getDefaultUrl();
 $searchUrl = $baseUrl.'index.php?action=search';

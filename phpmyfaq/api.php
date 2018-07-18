@@ -58,9 +58,9 @@ $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $f
 // Set language
 //
 if (Language::isASupportedLanguage($language)) {
-    require Language_DIR.'/language_'.$language.'.php';
+    require LANGUAGE_DIR.'/language_'.$language.'.php';
 } else {
-    require Language_DIR.'/language_en.php';
+    require LANGUAGE_DIR.'/language_en.php';
 }
 $faqConfig->setLanguage($Language);
 

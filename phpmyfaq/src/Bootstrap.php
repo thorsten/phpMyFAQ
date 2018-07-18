@@ -19,6 +19,10 @@
 
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Db;
+use phpMyFAQ\Init;
+use phpMyFAQ\Exception;
 
 //
 // Debug mode:
@@ -37,8 +41,6 @@ if (DEBUG) {
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
-
-$pmfExceptions = [];
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
@@ -91,16 +93,12 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR.'/database.php') && !file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
+if (!file_exists(PMF_CONFIG_DIR.'/database.php')) {
     header('Location: setup/index.php');
     exit();
 }
 
-if (file_exists(PMF_ROOT_DIR.'/inc/data.php')) {
-    require PMF_ROOT_DIR.'/inc/data.php';
-} else {
-    require PMF_CONFIG_DIR.'/database.php';
-}
+require PMF_CONFIG_DIR.'/database.php';
 require PMF_CONFIG_DIR.'/constants.php';
 
 /*
@@ -111,7 +109,7 @@ define('PMF_SRC_DIR', __DIR__);
 /*
  * The directory where the translations reside
  */
-define('Language_DIR', dirname(__DIR__).'/lang');
+define('LANGUAGE_DIR', dirname(__DIR__).'/lang');
 
 //
 // Setting up PSR-0 autoloader
@@ -135,18 +133,18 @@ set_error_handler('pmf_error_handler');
 // Create a database connection
 //
 try {
-    phpMyFAQ\Db::setTablePrefix($DB['prefix']);
-    $db = phpMyFAQ\Db::factory($DB['type']);
+    Db::setTablePrefix($DB['prefix']);
+    $db = Db::factory($DB['type']);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
-} catch (phpMyFAQ\Exception $e) {
-    phpMyFAQ\Db::errorPage($e->getMessage());
+} catch (Exception $e) {
+    Db::errorPage($e->getMessage());
     exit(-1);
 }
 
 //
 // Fetch the configuration and add the database connection
 //
-$faqConfig = new phpMyFAQ\Configuration($db);
+$faqConfig = new Configuration($db);
 $faqConfig->getAll();
 
 //
@@ -160,7 +158,7 @@ ini_set('url_rewriter.tags', '');
 //
 // Start the PHP session
 //
-phpMyFAQ\Init::cleanRequest();
+Init::cleanRequest();
 if (defined('PMF_SESSION_SAVE_PATH') && !empty(PMF_SESSION_SAVE_PATH)) {
     session_save_path(PMF_SESSION_SAVE_PATH);
 }
@@ -248,7 +246,7 @@ if (!isset($_SERVER['SCRIPT_NAME'])) {
 //
 // phpMyFAQ exception log
 //
-$pmfExeptions = [];
+$pmfExceptions = [];
 
 /**
  * phpMyFAQ custom error handler function, also to prevent the disclosure of

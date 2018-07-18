@@ -218,7 +218,7 @@ class Language
         $search = array('language_' , '.php');
         $languages = $languageFiles = [];
 
-        $dir = new \DirectoryIterator(Language_DIR);
+        $dir = new \DirectoryIterator(LANGUAGE_DIR);
         foreach ($dir as $fileinfo) {
             if (!$fileinfo->isDot()) {
                 $languageFiles[] = strtoupper(
