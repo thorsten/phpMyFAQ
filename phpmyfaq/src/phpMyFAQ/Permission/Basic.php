@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Perm;
+namespace phpMyFAQ\Permission;
 
 /**
  * The basic permission class provides user rights.
@@ -11,19 +11,17 @@ namespace phpMyFAQ\Perm;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
-use phpMyFAQ\Perm;
+use phpMyFAQ\Permission;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -32,16 +30,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Perm_Basic.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Basic extends Perm
+class Basic extends Permission
 {
     // --- ATTRIBUTES ---
 
@@ -62,9 +58,7 @@ class Basic extends Perm
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
-     *
-     * @return PMF_Perm_Basic
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -244,8 +238,6 @@ class Basic extends Perm
      * database for the specified right. The keys of the returned
      * array are the fieldnames.
      *
-     * @author Lars Tiedemann, <php@larstiedemann.de>
-     *
      * @param int
      *
      * @return array
@@ -269,7 +261,7 @@ class Basic extends Perm
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return false;
+            return [];
         }
 
         // process right data
@@ -301,10 +293,10 @@ class Basic extends Perm
      *
      * @return bool
      */
-    public function autoJoin($user_id)
-    {
-        return true;
-    }
+//    public function autoJoin($user_id)
+//    {
+//        return true;
+//    }
 
     /**
      * Adds a new right into the database. Returns the ID of the

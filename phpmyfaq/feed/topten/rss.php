@@ -27,7 +27,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
-use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\Permission\Medium;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;

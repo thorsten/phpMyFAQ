@@ -24,7 +24,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Pagination;
-use phpMyFAQ\Perm;
+use phpMyFAQ\Permission;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
@@ -212,7 +212,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
 
                 // Remove the user from groups
                 if ('medium' == $faqConfig->get('security.permLevel')) {
-                    $oPerm = Perm::selectPerm('medium', $faqConfig);
+                    $oPerm = Permission::selectPerm('medium', $faqConfig);
                     $oPerm->removeFromAllGroups($userId);
                 }
 

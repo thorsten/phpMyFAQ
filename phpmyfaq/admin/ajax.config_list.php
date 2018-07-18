@@ -22,7 +22,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\Administration;
 use phpMyFAQ\Language;
-use phpMyFAQ\Perm;
+use phpMyFAQ\Permission;
 use phpMyFAQ\System;
 use phpMyFAQ\Utils;
 
@@ -138,7 +138,7 @@ function renderInputForm($key, $type)
                     break;
 
                 case 'security.permLevel':
-                    echo Perm::permOptions($faqConfig->get($key));
+                    echo Permission::permOptions($faqConfig->get($key));
                     break;
 
                 case 'main.templateSet':

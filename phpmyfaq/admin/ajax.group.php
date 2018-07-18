@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\Permission\Medium;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

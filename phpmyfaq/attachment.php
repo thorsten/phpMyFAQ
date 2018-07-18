@@ -19,7 +19,7 @@
 
 use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\Permission\Medium;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

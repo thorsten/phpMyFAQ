@@ -68,7 +68,7 @@ if ($user instanceof CurrentUser) {
 // Get current user and group id - default: -1
 if (!is_null($user) && $user instanceof CurrentUser) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof PMF_Perm_Medium) {
+    if ($user->perm instanceof Medium) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);

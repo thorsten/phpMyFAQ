@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Perm;
+namespace phpMyFAQ\Permission;
 
 /**
  * The medium permission class provides group rights.
@@ -439,7 +439,7 @@ class Medium extends Basic
     public function getGroupMembers($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
-            return false;
+            return [];
         }
 
         $select = sprintf('
@@ -581,7 +581,7 @@ class Medium extends Basic
     public function getGroupData($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
-            return false;
+            return [];
         }
 
         $select = sprintf('

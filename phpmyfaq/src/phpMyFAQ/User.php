@@ -27,8 +27,8 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Auth\Driver;
-use phpMyFAQ\Perm\Basic;
-use phpMyFAQ\Perm\Medium;
+use phpMyFAQ\Permission\Basic;
+use phpMyFAQ\Permission\Medium;
 use phpMyFAQ\User\UserData;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -189,7 +189,7 @@ class User
     {
         $this->config = $config;
 
-        $perm = Perm::selectPerm($this->config->get('security.permLevel'), $this->config);
+        $perm = Permission::selectPerm($this->config->get('security.permLevel'), $this->config);
         if (!$this->addPerm($perm)) {
             return;
         }
@@ -222,19 +222,18 @@ class User
     /**
      * adds a permission object to the user.
      *
-     * @param Perm $perm Permission object
+     * @param Permission $perm Permission object
      *
      * @return bool
      */
-    public function addPerm(Perm $perm)
+    public function addPerm(Permission $perm)
     {
         if ($this->checkPerm($perm)) {
             $this->perm = $perm;
-
             return true;
         }
-        $this->perm = null;
 
+        $this->perm = null;
         return false;
     }
 
@@ -867,20 +866,20 @@ class User
         if (isset($this->authData[$key])) {
             return $this->authData[$key];
         } else {
-            return;
+            return null;
         }
     }
 
     /**
      * returns true if perm is a valid permission object.
      *
-     * @param Perm $perm Perm object
+     * @param Permission $perm Permission object
      *
      * @return bool
      */
     private function checkPerm($perm)
     {
-        if ($perm instanceof Perm) {
+        if ($perm instanceof Permission) {
             return true;
         }
         $this->errors[] = self::ERROR_USER_NO_PERM;

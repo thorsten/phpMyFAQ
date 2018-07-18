@@ -10,8 +10,8 @@ namespace phpMyFAQ;
  * to allow for scalability. This means that PMF_PermMedium is an extend of
  * and PMF_PermLarge is an extend of PMF_PermMedium.
  *
- * The permission type can be selected by calling $perm = Perm(perm_type) or
- * static method $perm = Perm::selectPerm(perm_type) where perm_type is
+ * The permission type can be selected by calling $perm = Permission(perm_type) or
+ * static method $perm = Permission::selectPerm(perm_type) where perm_type is
  * 'medium' or 'large'. Both ways, a PMF_PermBasic, PMF_PermMedium or
  * is returned.
  *
@@ -49,17 +49,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Perm.
+ * Permission.
  *
  * @category  phpMyFAQ
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
-class Perm
+class Permission
 {
     /**
      * Configuration object.
@@ -79,18 +78,17 @@ class Perm
     }
 
     /**
-     * selectPerm() returns an instance of a subclass of Perm. $permLevel
+     * selectPerm() returns an instance of a subclass of Permission. $permLevel
      * which subclass is returned.
      *
-     * @param string            $permLevel Permission level
+     * @param $permLevel
      * @param Configuration $config
-     *
-     * @return Perm
+     * @return Permission
      */
     public static function selectPerm($permLevel, Configuration $config)
     {
         if (isset($permLevel)) {
-            $permclass = '\phpMyFAQ\Perm\\'.ucfirst(strtolower($permLevel));
+            $permclass = '\phpMyFAQ\Permission\\'.ucfirst(strtolower($permLevel));
             if (class_exists($permclass)) {
                 return new $permclass($config);
             }
@@ -101,6 +99,8 @@ class Perm
 
     /**
      * Renders a select box for permission types.
+     *
+     * @todo Move into a PermissionHelper class
      *
      * @param string $current Selected option
      *
@@ -115,7 +115,7 @@ class Perm
             $output .= sprintf(
                 '<option value="%s"%s>%s</option>',
                 $value,
-                ($value == $current) ? ' selected="selected"' : '',
+                ($value == $current) ? ' selected' : '',
                 $value
             );
         }

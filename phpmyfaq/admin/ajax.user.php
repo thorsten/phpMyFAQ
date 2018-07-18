@@ -21,7 +21,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
-use phpMyFAQ\Perm;
+use phpMyFAQ\Permission;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -101,7 +101,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
                     // Remove the user from groups
                     if ('medium' == $faqConfig->get('security.permLevel')) {
-                        $permissions = Perm::selectPerm('medium', $faqConfig);
+                        $permissions = Permission::selectPerm('medium', $faqConfig);
                         $permissions->removeFromAllGroups($userId);
                     }
 

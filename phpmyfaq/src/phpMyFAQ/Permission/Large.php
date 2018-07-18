@@ -1,6 +1,6 @@
 <?php
 
-namespace phpMyFAQ\Perm;
+namespace phpMyFAQ\Permission;
 
 /**
  * The large permission class is not yet implemented in phpMyFAQ.
@@ -19,6 +19,8 @@ namespace phpMyFAQ\Perm;
  * @since     2005-09-17
  */
 
+use phpMyFAQ\Configuration;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -35,5 +37,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class Large extends Medium
 {
+
+    /**
+     * Constructor.
+     *
+     * @param Configuration $config
+     */
+    public function __construct(Configuration $config)
+    {
+        parent::__construct($config);
+    }
 
 }
