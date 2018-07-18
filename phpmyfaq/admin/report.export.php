@@ -94,7 +94,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
             $text[$i][] = $report->convertEncoding($data['faq_question']);
         }
         if ($useCreationDate) {
-            $text[$i][] = $data['faq_creation'];
+            $text[$i][] = $data['faq_updated'];
         }
         if ($useOwner) {
             $text[$i][] = $report->convertEncoding($data['faq_org_author']);
