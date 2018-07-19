@@ -512,8 +512,8 @@ $PMF_LANG["ad_export_latest"] = "५ नए  RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-सभी रिकॉर्ड निर्यात करें";
 $PMF_LANG["ad_export_generate"] = "RSS-Feed बनाएं";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "प्रयोगकर्ता जोडें";
-$PMF_LANG["rightsLanguage"]['edituser'] = "प्रयोगकर्ता का सम्पादन करेंr";
+$PMF_LANG["rightsLanguage"]['add_user'] = "प्रयोगकर्ता जोडें";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "प्रयोगकर्ता का सम्पादन करेंr";
 $PMF_LANG["rightsLanguage"]['deluser'] = "प्रयोगकर्ता को मिटायें";
 $PMF_LANG["rightsLanguage"]['addbt'] = "नया रिकॉर्ड जोडें";
 $PMF_LANG["rightsLanguage"]['editbt'] = "रिकॉर्ड का सम्पादन करें";

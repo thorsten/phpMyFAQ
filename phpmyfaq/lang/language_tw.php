@@ -486,8 +486,8 @@ $PMF_LANG["msgLanguageSubmit"] = "變更語言";
 $PMF_LANG["ad_attach_4"] = "上傳附加檔案必須小於 %s Bytes。 (The attached file must be smaller than %s Bytes.)";
 $PMF_LANG["ad_menu_export"] = "匯出您的 FAQ ";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "新增使用者";
-$PMF_LANG["rightsLanguage"]['edituser'] = "編輯使用者";
+$PMF_LANG["rightsLanguage"]['add_user'] = "新增使用者";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "編輯使用者";
 $PMF_LANG["rightsLanguage"]['deluser'] = "刪除使用者";
 $PMF_LANG["rightsLanguage"]['addbt'] = "新增記錄";
 $PMF_LANG["rightsLanguage"]['editbt'] = "編輯記錄";

@@ -511,8 +511,8 @@ $PMF_LANG["ad_export_latest"] = "5 paskutinių įrašų sklaidos kanalas";
 $PMF_LANG["ad_export_pdf"] = "Visų įrašų PDF eksportas";
 $PMF_LANG["ad_export_generate"] = "sukurti sklaidos kanalą";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "pridėti naudotoją";
-$PMF_LANG["rightsLanguage"]['edituser'] = "redaguoti naudotoją";
+$PMF_LANG["rightsLanguage"]['add_user'] = "pridėti naudotoją";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "redaguoti naudotoją";
 $PMF_LANG["rightsLanguage"]['deluser'] = "šalinti naudotoją";
 $PMF_LANG["rightsLanguage"]['addbt'] = "pridėti įrašą";
 $PMF_LANG["rightsLanguage"]['editbt'] = "redaguoti įrašą";

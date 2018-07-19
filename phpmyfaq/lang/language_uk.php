@@ -514,8 +514,8 @@ $PMF_LANG["ad_export_latest"] = "5 останніх записів у форма
 $PMF_LANG["ad_export_pdf"] = "Експорт всіх записів в PDF формат"; 
 $PMF_LANG["ad_export_generate"] = "створити RSS файл"; 
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "Додавання користувачів";
-$PMF_LANG["rightsLanguage"]['edituser'] = "Редагування користувачів";
+$PMF_LANG["rightsLanguage"]['add_user'] = "Додавання користувачів";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "Редагування користувачів";
 $PMF_LANG["rightsLanguage"]['deluser'] = "Видалення користувачів";
 $PMF_LANG["rightsLanguage"]['addbt'] = "Додавання нових записів";
 $PMF_LANG["rightsLanguage"]['editbt'] = "Редагування записів";

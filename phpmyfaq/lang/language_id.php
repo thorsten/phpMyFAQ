@@ -505,8 +505,8 @@ $PMF_LANG["ad_export_latest"] = "Pasokan-RSS 5 data terbaru";
 $PMF_LANG["ad_export_pdf"] = "Ekspor semua data ke PDF";
 $PMF_LANG["ad_export_generate"] = "bangun Pasokan-RSS";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "tambah pengguna";
-$PMF_LANG["rightsLanguage"]['edituser'] = "edit pengguna";
+$PMF_LANG["rightsLanguage"]['add_user'] = "tambah pengguna";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "edit pengguna";
 $PMF_LANG["rightsLanguage"]['deluser'] = "hapus pengguna";
 $PMF_LANG["rightsLanguage"]['addbt'] = "tambah data";
 $PMF_LANG["rightsLanguage"]['editbt'] = "edit data";

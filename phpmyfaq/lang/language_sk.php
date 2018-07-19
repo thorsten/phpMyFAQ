@@ -505,8 +505,8 @@ $PMF_LANG["ad_export_latest"] = "5 posledných záznamov RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Exportovať všetky záznamy";
 $PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "pridať užívateľa";
-$PMF_LANG["rightsLanguage"]['edituser'] = "upraviť užívateľa";
+$PMF_LANG["rightsLanguage"]['add_user'] = "pridať užívateľa";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "upraviť užívateľa";
 $PMF_LANG["rightsLanguage"]['deluser'] = "vymazať užívateľa";
 $PMF_LANG["rightsLanguage"]['addbt'] = "pridať záznam";
 $PMF_LANG["rightsLanguage"]['editbt'] = "upraviť záznam";

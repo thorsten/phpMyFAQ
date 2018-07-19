@@ -583,7 +583,7 @@ class User
         if ($this->perm instanceof MediumPermission) {
             $this->perm->autoJoin($this->userId);
         }
-        
+
         return $this->getUserByLogin($login, false);
     }
 

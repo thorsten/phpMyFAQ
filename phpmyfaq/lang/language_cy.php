@@ -509,8 +509,8 @@ $PMF_LANG["ad_export_latest"] = "5 cofnod diweddaraf RSS-Bwydo";
 $PMF_LANG["ad_export_pdf"] = "PDF-Allforio pob cofnod";
 $PMF_LANG["ad_export_generate"] = "Adeiladu RSS-Bwydo";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "ychwanegu defnyddiwr";
-$PMF_LANG["rightsLanguage"]['edituser'] = "golygu defnyddiwr";
+$PMF_LANG["rightsLanguage"]['add_user'] = "ychwanegu defnyddiwr";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "golygu defnyddiwr";
 $PMF_LANG["rightsLanguage"]['deluser'] = "dileu defnyddiwr";
 $PMF_LANG["rightsLanguage"]['addbt'] = "ychwanegu cofnod";
 $PMF_LANG["rightsLanguage"]['editbt'] = "golygu cofnod";

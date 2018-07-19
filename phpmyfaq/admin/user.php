@@ -38,9 +38,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
+if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     $user->perm->checkRight($user->getUserId(), 'deluser') ||
-    $user->perm->checkRight($user->getUserId(), 'adduser')) {
+    $user->perm->checkRight($user->getUserId(), 'add_user')) {
 ?>
     <script src="assets/js/user.js"></script>
 <?php
@@ -64,7 +64,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // update user rights
-    if ($userAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
+    if ($userAction == 'update_rights' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -97,7 +97,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // update user data
-    if ($userAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
+    if ($userAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
         $message = '';
         $userAction = $defaultUserAction;
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
@@ -228,7 +228,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // save new user
-    if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
+    if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_user')) {
         $user = new User($faqConfig);
         $message = '';
         $messages = [];
@@ -321,7 +321,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // show new user form
-    if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'adduser')) {
+    if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_user')) {
         ?>
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -416,7 +416,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             <a class="btn btn-sm btn-outline-success" href="?action=user&amp;user_action=add">
               <?= $PMF_LANG['ad_user_add'] ?>
             </a>
-            <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edituser')): ?>
+            <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')): ?>
               <a class="btn btn-sm btn-outline-info" href="?action=user&amp;user_action=listallusers">
                 <?= $PMF_LANG['list_all_users'] ?>
               </a>
@@ -624,7 +624,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
     }
 
     // show list of all users
-    if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edituser')) {
+    if ($userAction == 'listallusers' && $user->perm->checkRight($user->getUserId(), 'edit_user')) {
         $allUsers = $user->getAllUsers(false);
         $numUsers = count($allUsers);
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);

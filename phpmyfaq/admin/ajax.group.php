@@ -33,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $groupId = Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
-if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
-    $user->perm->checkRight($user->getUserId(), 'edituser') ||
+if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
+    $user->perm->checkRight($user->getUserId(), 'edit_user') ||
     $user->perm->checkRight($user->getUserId(), 'deluser') ||
     $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     

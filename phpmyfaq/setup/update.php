@@ -21,6 +21,7 @@
 use phpMyFAQ\Db;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Installer;
+use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
 define('COPYRIGHT', '&copy; 2001-2018 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
@@ -339,6 +340,7 @@ if ($step == 3) {
     $images = [];
     $prefix = Db::getTablePrefix();
     $faqConfig->getAll();
+    $perm = new BasicPermission($faqConfig);
 
     //
     // Enable maintenance mode
@@ -602,13 +604,36 @@ if ($step == 3) {
     // UPDATES FROM 3.0.0-alpha.3
     //
     if (version_compare($version, '3.0.0-alpha.3', '<=')) {
+        $faqConfig->add('records.enableAutoRevisions', false);
+        // Add superadmin flag
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INT(1) DEFAULT 0';
         }
         $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
-        $faqConfig->add('records.enableAutoRevisions', false);
+
+        // Update section flag for faqright table
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD for_sections INT(11) DEFAULT 0';
+        }
+
+        // Add new rights
+        $perm->addRight(['name' => 'view_faqs', 'description' => 'Right to view FAQs']);
+        $perm->addRight(['name' => 'view_categories', 'description' => 'Right to view categories']);
+        $perm->addRight(['name' => 'view_sections', 'description' => 'Right to view sections']);
+        $perm->addRight(['name' => 'view_news', 'description' => 'Right to view news']);
+        $perm->addRight(['name' => 'add_section', 'description' => 'Right to add sections']);
+        $perm->addRight(['name' => 'edit_section', 'description' => 'Right to edit sections']);
+        $perm->addRight(['name' => 'delete_section', 'description' => 'Right to delete sections']);
+        $perm->addRight(['name' => 'administrate_sections', 'description' => 'Right to administrate sections']);
+        $perm->addRight(['name' => 'administrate_groups', 'description' => 'Right to administrate groups']);
+
+        // Rename rights
+        $perm->renameRight('adduser', 'add_user');
+        $perm->renameRight('edituser', 'edit_user');
     }
 
     // Always the last step: Update version number

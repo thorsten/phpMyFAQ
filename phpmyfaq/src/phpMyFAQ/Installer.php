@@ -56,17 +56,14 @@ class Installer
      * @var array
      */
     protected $_mainRights = [
-        //1 => "adduser",
         [
-            'name' => 'adduser',
+            'name' => 'add_user',
             'description' => 'Right to add user accounts',
         ],
-        //2 => "edituser",
         [
-            'name' => 'edituser',
+            'name' => 'edit_user',
             'description' => 'Right to edit user accounts',
         ],
-        //3 => "deluser",
         [
             'name' => 'deluser',
             'description' => 'Right to delete user accounts',
@@ -276,11 +273,54 @@ class Installer
             'name' => 'delinstances',
             'description' => 'Right to delete multi-site instances',
         ],
-        // 45 => 'export'
         [
             'name' => 'export',
             'description' => 'Right to export the complete FAQ',
-        ]
+        ],
+        [
+            'name' => 'view_faqs',
+            'description' => 'Right to view FAQs'
+        ],
+        [
+            'name' => 'view_categories',
+            'description' => 'Right to view categories'
+
+        ],
+        [
+            'name' => 'view_sections',
+            'description' => 'Right to view sections'
+
+        ],
+        [
+            'name' => 'view_news',
+            'description' => 'Right to view news'
+
+        ],
+        [
+            'name' => 'add_section',
+            'description' => 'Right to add sections'
+
+        ],
+        [
+            'name' => 'edit_section',
+            'description' => 'Right to edit sections'
+
+        ],
+        [
+            'name' => 'delete_section',
+            'description' => 'Right to delete sections'
+
+        ],
+        [
+            'name' => 'administrate_sections',
+            'description' => 'Right to administrate sections'
+
+        ],
+        [
+            'name' => 'administrate_groups',
+            'description' => 'Right to administrate groups'
+
+        ],
     ];
 
     /**

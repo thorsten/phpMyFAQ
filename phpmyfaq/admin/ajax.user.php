@@ -43,8 +43,8 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
-    $user->perm->checkRight($user->getUserId(), 'edituser') ||
+if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
+    $user->perm->checkRight($user->getUserId(), 'edit_user') ||
     $user->perm->checkRight($user->getUserId(), 'deluser')) {
     $user = new User($faqConfig);
 

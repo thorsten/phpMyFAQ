@@ -514,8 +514,8 @@ $PMF_LANG["ad_export_latest"] = "Azken 5 RSS-Feed-ak";
 $PMF_LANG["ad_export_pdf"] = "PDF-Erregistro guztiak esportatu";
 $PMF_LANG["ad_export_generate"] = "RSSF-Feed sortu";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "erabiltzailea gehitu";
-$PMF_LANG["rightsLanguage"]['edituser'] = "erabiltzailea editatu";
+$PMF_LANG["rightsLanguage"]['add_user'] = "erabiltzailea gehitu";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "erabiltzailea editatu";
 $PMF_LANG["rightsLanguage"]['deluser'] = "erabiltzailea ezabatu";
 $PMF_LANG["rightsLanguage"]['addbt'] = "erregistroa gehitu";
 $PMF_LANG["rightsLanguage"]['editbt'] = "erregistroa editatu";

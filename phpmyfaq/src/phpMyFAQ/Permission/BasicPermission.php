@@ -39,25 +39,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class BasicPermission extends Permission
 {
-    // --- ATTRIBUTES ---
-
     /**
-     * default_right_data.
-     *
-     * default right data stored when a new right is created.
+     * Default right data stored when a new right is created.
      *
      * @var array
      */
-    public $default_right_data = array(
+    public $defaultRightData = [
         'name' => 'DEFAULT_RIGHT',
         'description' => 'Short description.',
         'for_users' => true,
         'for_groups' => true,
-    );
+        'for_sections' => true
+    ];
 
     /**
      * Constructor.
-     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -65,21 +61,19 @@ class BasicPermission extends Permission
         parent::__construct($config);
     }
 
-    // --- OPERATIONS ---
-
     /**
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @param int $user_id  User ID
-     * @param int $right_id Right ID
+     * @param int $userId  User ID
+     * @param int $rightId Right ID
      *
      * @return bool
      */
-    public function checkUserRight($user_id, $right_id)
+    public function checkUserRight($userId, $rightId)
     {
         // check right id
-        if ($right_id <= 0) {
+        if ($rightId <= 0) {
             return false;
         }
 
@@ -99,8 +93,8 @@ class BasicPermission extends Permission
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             Db::getTablePrefix(),
-            $right_id,
-            $user_id);
+            $rightId,
+            $userId);
 
         $res = $this->config->getDb()->query($select);
         // return result
@@ -116,11 +110,11 @@ class BasicPermission extends Permission
      * specified by user_id owns. Group rights are not taken into
      * account.
      *
-     * @param int $user_id User ID
+     * @param int $userId User ID
      *
      * @return array
      */
-    public function getUserRights($user_id)
+    public function getUserRights($userId)
     {
         // get user rights
         $select = sprintf('
@@ -137,7 +131,7 @@ class BasicPermission extends Permission
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             Db::getTablePrefix(),
-            $user_id);
+            $userId);
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -152,15 +146,15 @@ class BasicPermission extends Permission
      * Gives the user a new user-right.
      * Returns true on success, otherwise false.
      *
-     * @param int $user_id  User ID
-     * @param int $right_id Right ID
+     * @param int $userId  User ID
+     * @param int $rightId Right ID
      *
      * @return bool
      */
-    public function grantUserRight($user_id, $right_id)
+    public function grantUserRight($userId, $rightId)
     {
         // is right for users?
-        $right_data = $this->getRightData($right_id);
+        $right_data = $this->getRightData($rightId);
 
         if (!$right_data['for_users']) {
             return false;
@@ -173,8 +167,8 @@ class BasicPermission extends Permission
                 VALUES
             (%d, %d)',
             Db::getTablePrefix(),
-            $user_id,
-            $right_id);
+            $userId,
+            $rightId);
 
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
@@ -188,12 +182,12 @@ class BasicPermission extends Permission
      * Refuses the user a user-right.
      * Returns true on succes, otherwise false.
      *
-     * @param int $user_id  User ID
-     * @param int $right_id Right ID
+     * @param int $userId  User ID
+     * @param int $rightId Right ID
      *
      * @return bool
      */
-    public function refuseUserRight($user_id, $right_id)
+    public function refuseUserRight($userId, $rightId)
     {
         $delete = sprintf('
             DELETE FROM
@@ -202,8 +196,8 @@ class BasicPermission extends Permission
                 user_id  = %d AND
                 right_id = %d',
             Db::getTablePrefix(),
-            $user_id,
-            $right_id);
+            $userId,
+            $rightId);
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -219,18 +213,18 @@ class BasicPermission extends Permission
      * right-ID or a right-name. Another difference is, that also
      * group-rights are taken into account.
      *
-     * @param int   $user_id User ID
+     * @param int   $userId User ID
      * @param mixed $right   Right ID or right name
      *
      * @return bool
      */
-    public function checkRight($user_id, $right)
+    public function checkRight($userId, $right)
     {
         if (!is_numeric($right) and is_string($right)) {
             $right = $this->getRightId($right);
         }
 
-        return $this->checkUserRight($user_id, $right);
+        return $this->checkUserRight($userId, $right);
     }
 
     /**
@@ -242,7 +236,7 @@ class BasicPermission extends Permission
      *
      * @return array
      */
-    public function getRightData($right_id)
+    public function getRightData($rightId)
     {
         // get right data
         $select = sprintf('
@@ -257,7 +251,7 @@ class BasicPermission extends Permission
             WHERE
                 right_id = %d',
             Db::getTablePrefix(),
-            $right_id);
+            $rightId);
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
@@ -276,13 +270,13 @@ class BasicPermission extends Permission
      * Returns an array that contains the IDs of all user-rights
      * the user owns.
      *
-     * @param int $user_id User ID
+     * @param int $userId User ID
      *
      * @return array
      */
-    public function getAllUserRights($user_id)
+    public function getAllUserRights($userId)
     {
-        return $this->getUserRights($user_id);
+        return $this->getUserRights($userId);
     }
 
     /**
@@ -303,23 +297,23 @@ class BasicPermission extends Permission
      * new right. The associative array right_data contains the right 
      * data stored in the rights table. 
      *
-     * @param array $right_data Array if rights
+     * @param array $rightData Array if rights
      *
      * @return int
      */
-    public function addRight(Array $right_data)
+    public function addRight(Array $rightData)
     {
-        if ($this->getRightId($right_data['name']) > 0) {
+        if ($this->getRightId($rightData['name']) > 0) {
             return 0;
         }
 
         $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqright', 'right_id');
-        $rightData = $this->checkRightData($right_data);
+        $rightData = $this->checkRightData($rightData);
 
         $insert = sprintf("
             INSERT INTO
                 %sfaqright
-            (right_id, name, description, for_users, for_groups)
+            (right_id, name, description, for_users, for_groups, for_sections)
                 VALUES
             (%d, '%s', '%s', %d, %d)",
             Db::getTablePrefix(),
@@ -327,7 +321,8 @@ class BasicPermission extends Permission
             $rightData['name'],
             $rightData['description'],
             isset($rightData['for_users']) ? (int) $rightData['for_users'] : 1,
-            isset($rightData['for_groups']) ? (int) $rightData['for_groups'] : 1
+            isset($rightData['for_groups']) ? (int) $rightData['for_groups'] : 1,
+            isset($rightData['for_sections']) ? (int) $rightData['for_sections'] : 1
         );
 
         if (!$this->config->getDb()->query($insert)) {
@@ -340,17 +335,17 @@ class BasicPermission extends Permission
     /**
      * Changes the right data. Returns true on success, otherwise false.
      *
-     * @param int   $right_id   Right ID
-     * @param array $right_data Array of rights
+     * @param int   $rightId   Right ID
+     * @param array $rightData Array of rights
      *
      * @return bool
      */
-    public function changeRight($right_id, Array $right_data)
+    public function changeRight($rightId, Array $rightData)
     {
-        $checked_data = $this->checkRightData($right_data);
+        $checked_data = $this->checkRightData($rightData);
         $set = '';
         $comma = '';
-        foreach ($right_data as $key => $val) {
+        foreach ($rightData as $key => $val) {
             $set .= $comma.$key." = '".$checked_data[$key]."'";
             $comma = ",\n                ";
         }
@@ -364,10 +359,42 @@ class BasicPermission extends Permission
                 right_id = %d',
             Db::getTablePrefix(),
             $set,
-            $right_id);
+            $rightId);
 
-        $res = $this->config->getDb()->query($update);
-        if (!$res) {
+        if (!$this->config->getDb()->query($update)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Renames rights, only used for updates.
+     *
+     * @param $oldName
+     * @param $newName
+     * @return bool
+     */
+    public function renameRight($oldName, $newName)
+    {
+        $rightId = $this->getRightId($oldName);
+        if ($rightId === 0) {
+            return false;
+        }
+
+        $update = sprintf('
+            UPDATE
+                %sfaqright
+            SET
+                name = \'%s\'
+            WHERE
+                right_id = %d',
+            Db::getTablePrefix(),
+            $newName,
+            $rightId
+        );
+
+        if (!$this->config->getDb()->query($update)) {
             return false;
         }
 
@@ -378,11 +405,11 @@ class BasicPermission extends Permission
      * Deletes the right from the database.
      * Returns true on success, otherwise false.
      *
-     * @param int $right_id Right ID
+     * @param int $rightId Right ID
      *
      * @return bool
      */
-    public function deleteRight($right_id)
+    public function deleteRight($rightId)
     {
         // delete right
         $delete = sprintf('
@@ -391,7 +418,7 @@ class BasicPermission extends Permission
             WHERE
                 right_id = %d',
             Db::getTablePrefix(),
-            $right_id);
+            $rightId);
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -405,7 +432,7 @@ class BasicPermission extends Permission
             WHERE
                 right_id = %d',
             Db::getTablePrefix(),
-            $right_id);
+            $rightId);
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -419,7 +446,7 @@ class BasicPermission extends Permission
             WHERE
                 right_id = %d',
             Db::getTablePrefix(),
-            $right_id);
+            $rightId);
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -506,7 +533,8 @@ class BasicPermission extends Permission
                 name,
                 description,
                 for_users,
-                for_groups
+                for_groups,
+                for_sections
             FROM
                 %sfaqright
             ORDER BY
@@ -532,40 +560,44 @@ class BasicPermission extends Permission
      * by the default values in $this->default_right_data.
      * Returns the corrected $right_data associative array.
      *
-     * @param array $right_data Array of rights
+     * @param array $rightData Array of rights
      *
      * @return array
      */
-    public function checkRightData(Array $right_data)
+    public function checkRightData(Array $rightData)
     {
-        if (!isset($right_data['name']) || !is_string($right_data['name'])) {
-            $right_data['name'] = $this->default_right_data['name'];
+        if (!isset($rightData['name']) || !is_string($rightData['name'])) {
+            $rightData['name'] = $this->defaultRightData['name'];
         }
-        if (!isset($right_data['description']) || !is_string($right_data['description'])) {
-            $right_data['description'] = $this->default_right_data['description'];
+        if (!isset($rightData['description']) || !is_string($rightData['description'])) {
+            $rightData['description'] = $this->defaultRightData['description'];
         }
-        if (!isset($right_data['for_users'])) {
-            $right_data['for_users'] = $this->default_right_data['for_users'];
+        if (!isset($rightData['for_users'])) {
+            $rightData['for_users'] = $this->defaultRightData['for_users'];
         }
-        if (!isset($right_data['for_groups'])) {
-            $right_data['for_groups'] = $this->default_right_data['for_groups'];
+        if (!isset($rightData['for_groups'])) {
+            $rightData['for_groups'] = $this->defaultRightData['for_groups'];
+        }
+        if (!isset($rightData['for_sections'])) {
+            $rightData['for_sections'] = $this->defaultRightData['for_sections'];
         }
 
-        $right_data['for_users'] = (int) $right_data['for_users'];
-        $right_data['for_groups'] = (int) $right_data['for_groups'];
+        $rightData['for_users'] = (int) $rightData['for_users'];
+        $rightData['for_groups'] = (int) $rightData['for_groups'];
+        $rightData['for_sections'] = (int) $rightData['for_sections'];
 
-        return $right_data;
+        return $rightData;
     }
 
     /**
      * Refuses all user rights.
      * Returns true on success, otherwise false.
      *
-     * @param int $user_id User ID
+     * @param int $userId User ID
      *
      * @return bool
      */
-    public function refuseAllUserRights($user_id)
+    public function refuseAllUserRights($userId)
     {
         $delete = sprintf('
             DELETE FROM
@@ -573,7 +605,7 @@ class BasicPermission extends Permission
             WHERE
                 user_id  = %d',
             Db::getTablePrefix(),
-            $user_id);
+            $userId);
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {

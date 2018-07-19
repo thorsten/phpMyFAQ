@@ -511,8 +511,8 @@ $PMF_LANG["ad_export_latest"] = "5 latest records RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export of all records";
 $PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "ব্যবহারকারী যোগ";
-$PMF_LANG["rightsLanguage"]['edituser'] = "ব্যবহারকারী সম্পাদনা";
+$PMF_LANG["rightsLanguage"]['add_user'] = "ব্যবহারকারী যোগ";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "ব্যবহারকারী সম্পাদনা";
 $PMF_LANG["rightsLanguage"]['deluser'] = "ব্যবহারকারী মোছা";
 $PMF_LANG["rightsLanguage"]['addbt'] = "add record";
 $PMF_LANG["rightsLanguage"]['editbt'] = "edit record";

@@ -508,8 +508,8 @@ $PMF_LANG["ad_export_latest"] = "5 zadnjih unosa RSS-Feed";
 $PMF_LANG["ad_export_pdf"] = "PDF-Export za sve unose";
 $PMF_LANG["ad_export_generate"] = "kreiraj RSS-Feed";
 
-$PMF_LANG["rightsLanguage"]['adduser'] = "dodavanja korisnika";
-$PMF_LANG["rightsLanguage"]['edituser'] = "izmena korisnika";
+$PMF_LANG["rightsLanguage"]['add_user'] = "dodavanja korisnika";
+$PMF_LANG["rightsLanguage"]['edit_user'] = "izmena korisnika";
 $PMF_LANG["rightsLanguage"]['deluser'] = "brisanje korisnika";
 $PMF_LANG["rightsLanguage"]['addbt'] = "dodavanje unosa";
 $PMF_LANG["rightsLanguage"]['editbt'] = "izmena unosa";
