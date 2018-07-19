@@ -303,6 +303,7 @@ class Sqlsrv extends Database implements Driver
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
             success INTEGER NULL DEFAULT 1,
+            is_superadmin INTEGER NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (

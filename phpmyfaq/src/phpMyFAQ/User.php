@@ -163,6 +163,12 @@ class User
     private $status = '';
 
     /**
+     * IS the user a super admin?
+     * @var bool
+     */
+    private $isSuperAdmin = false;
+
+    /**
      * array of allowed values for status.
      *
      * @var array
@@ -268,7 +274,8 @@ class User
             SELECT
                 user_id,
                 login,
-                account_status
+                account_status,
+                is_superadmin
             FROM
                 %sfaquser
             WHERE
@@ -287,6 +294,7 @@ class User
         $this->userId = (int) $user['user_id'];
         $this->login = (string) $user['login'];
         $this->status = (string) $user['account_status'];
+        $this->isSuperAdmin = (bool) $user['is_superadmin'];
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
@@ -1153,4 +1161,14 @@ class User
 
         return false;
     }
+
+    /**
+     * Returns true, if a user is a super admin.
+     * @return bool
+     */
+    public function isSuperAdmin()
+    {
+        return $this->isSuperAdmin;
+    }
+
 }

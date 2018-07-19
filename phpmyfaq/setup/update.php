@@ -592,10 +592,22 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 3.0.0-alpha2
+    // UPDATES FROM 3.0.0-alpha.2
     //
-    if (version_compare($version, '3.0.0-alpha2', '<=')) {
+    if (version_compare($version, '3.0.0-alpha.2', '<=')) {
         $faqConfig->add('main.enableAutoUpdateHint', 'true');
+    }
+
+    //
+    // UPDATES FROM 3.0.0-alpha.3
+    //
+    if (version_compare($version, '3.0.0-alpha.3', '<=')) {
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INT(1) DEFAULT 0';
+        }
+        $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
     }
 
     // Always the last step: Update version number

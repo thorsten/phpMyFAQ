@@ -302,6 +302,7 @@ class Mysqli extends Database implements Driver
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
             success INT(1) NULL DEFAULT 1,
+            is_superadmin INT(1) NULL DEFAULT 0,
             PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (

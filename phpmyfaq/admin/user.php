@@ -667,6 +667,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             <tr>
                 <th><?= $PMF_LANG['ad_entry_id'] ?></th>
                 <th><?= $PMF_LANG['ad_user_status'] ?></th>
+                <th><?= $PMF_LANG['ad_user_is_superadmin'] ?></th>
                 <th><?= $PMF_LANG['msgNewContentName'] ?></th>
                 <th><?= $PMF_LANG['ad_auth_user'] ?></th>
                 <th><?= $PMF_LANG['msgNewContentMail'] ?></th>
@@ -700,19 +701,20 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             ?>
             <tr class="row_user_id_<?= $user->getUserId() ?>">
                 <td><?= $user->getUserId() ?></td>
-                <td><i class="<?php
+                <td><i class="material-icons icon_user_id_<?= $user->getUserId() ?>"><?php
                 switch ($user->getStatus()) {
                     case 'active':
-                        echo 'fa fa-check';
+                        echo 'check_circle';
                         break;
                     case 'blocked':
-                        echo 'fa fa-lock';
+                        echo 'block';
                         break;
                     case 'protected':
-                        echo 'fa fa-thumb-tack';
+                        echo 'star';
                         break;
                 }
-            ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+            ?></i></td>
+                <td><?= $user->isSuperAdmin() ?></td>
                 <td><?= $user->getUserData('display_name') ?></td>
                 <td><?= $user->getLogin() ?></td>
                 <td>

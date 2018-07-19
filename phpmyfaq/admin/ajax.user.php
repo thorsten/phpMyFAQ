@@ -67,6 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             $userdata = $user->userdata->get('*');
             $userdata['status'] = $user->getStatus();
             $userdata['login'] = $user->getLogin();
+            $userdata['is_superadmin'] = $user->isSuperAdmin();
             echo json_encode($userdata);
             break;
 

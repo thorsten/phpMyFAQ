@@ -304,6 +304,7 @@ class Pgsql extends Database implements Driver
             member_since VARCHAR(14) NULL,
             remember_me VARCHAR(150) NULL,
             success SMALLINT NULL DEFAULT 1,
+            is_superadmin SMALLINT NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
