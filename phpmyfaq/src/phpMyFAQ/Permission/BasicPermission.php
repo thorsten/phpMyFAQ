@@ -94,10 +94,10 @@ class BasicPermission extends Permission
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             $rightId,
-            $userId);
+            $userId
+        );
 
         $res = $this->config->getDb()->query($select);
-        // return result
         if ($this->config->getDb()->numRows($res) == 1) {
             return true;
         }
@@ -154,9 +154,9 @@ class BasicPermission extends Permission
     public function grantUserRight($userId, $rightId)
     {
         // is right for users?
-        $right_data = $this->getRightData($rightId);
+        $rightData = $this->getRightData($rightId);
 
-        if (!$right_data['for_users']) {
+        if (isset($rightData['for_users'])) {
             return false;
         }
 
@@ -168,7 +168,8 @@ class BasicPermission extends Permission
             (%d, %d)',
             Db::getTablePrefix(),
             $userId,
-            $rightId);
+            $rightId
+        );
 
         $res = $this->config->getDb()->query($insert);
         if (!$res) {
@@ -245,7 +246,8 @@ class BasicPermission extends Permission
                 name,
                 description,
                 for_users,
-                for_groups
+                for_groups,
+                for_sections
             FROM
                 %sfaqright
             WHERE
@@ -259,11 +261,12 @@ class BasicPermission extends Permission
         }
 
         // process right data
-        $right_data = $this->config->getDb()->fetchArray($res);
-        $right_data['for_users'] = (bool) $right_data['for_users'];
-        $right_data['for_groups'] = (bool) $right_data['for_groups'];
+        $rightData = $this->config->getDb()->fetchArray($res);
+        $rightData['for_users'] = (bool) $rightData['for_users'];
+        $rightData['for_groups'] = (bool) $rightData['for_groups'];
+        $rightData['for_sections'] = (bool) $rightData['for_sections'];
 
-        return $right_data;
+        return $rightData;
     }
 
     /**
@@ -278,19 +281,6 @@ class BasicPermission extends Permission
     {
         return $this->getUserRights($userId);
     }
-
-    /**
-     * Dummy function; this function is only relevant when the
-     * permission mode is set to Medium.
-     *
-     * @param int $user_id User ID
-     *
-     * @return bool
-     */
-//    public function autoJoin($user_id)
-//    {
-//        return true;
-//    }
 
     /**
      * Adds a new right into the database. Returns the ID of the
@@ -315,7 +305,7 @@ class BasicPermission extends Permission
                 %sfaqright
             (right_id, name, description, for_users, for_groups, for_sections)
                 VALUES
-            (%d, '%s', '%s', %d, %d)",
+            (%d, '%s', '%s', %d, %d, %d)",
             Db::getTablePrefix(),
             $nextId,
             $rightData['name'],

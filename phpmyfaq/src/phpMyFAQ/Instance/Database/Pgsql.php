@@ -104,6 +104,11 @@ class Pgsql extends Database implements Driver
             group_id INT4 NOT NULL,
             PRIMARY KEY (category_id, group_id))',
 
+        'faqcategory_news' => 'CREATE TABLE %sfaqcategory_news (
+            category_id INT4 NOT NULL,
+            news_id INT4 NOT NULL,
+            PRIMARY KEY (category_id, news_id))',
+
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INT4 NOT NULL,
             user_id INT4 NOT NULL,
@@ -263,6 +268,7 @@ class Pgsql extends Database implements Driver
             description text NULL,
             for_users INT4 NULL DEFAULT 1,
             for_groups INT4 NULL DEFAULT 1,
+            for_sections INT4 NULL DEFAULT 1,
             PRIMARY KEY (right_id))',
 
         'faqsearches' => 'CREATE TABLE %sfaqsearches (
@@ -271,6 +277,37 @@ class Pgsql extends Database implements Driver
             searchterm VARCHAR(255) NOT NULL ,
             searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang))',
+
+        'faqsections' => 'CREATE TABLE %sfaqsections (
+            id INT4 NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            description VARCHAR(255) DEFAULT NULL,
+            PRIMARY KEY (id))',
+
+        'faqsection_category' => 'CREATE TABLE %sfaqsection_category (
+            section_id INT4 NOT NULL,
+            category_id INT4 NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, category_id))',
+
+        'faqsection_user' => 'CREATE TABLE %sfaqsection_user (
+            section_id INT4 NOT NULL,
+            user_id INT4 NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, user_id))',
+
+        'faqsection_group' => 'CREATE TABLE %sfaqsection_group (
+            section_id INT4 NOT NULL,
+            group_id INT4 NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, group_id))',
+
+        'faqsection_right' => 'CREATE TABLE %sfaqsection_right (
+            section_id INT4 NOT NULL,
+            right_id INT4 NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, right_id))',
+
+        'faqsection_news' => 'CREATE TABLE %sfaqsection_news (
+            section_id INT4 NOT NULL,
+            news_id INT4 NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, news_id))',
 
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid SERIAL NOT NULL,
