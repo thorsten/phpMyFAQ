@@ -266,6 +266,7 @@ class Mysqli extends Database implements Driver
             description text NULL,
             for_users INT(11) NULL DEFAULT 1,
             for_groups INT(11) NULL DEFAULT 1,
+            for_sections INT(11) NULL DEFAULT 1,
             PRIMARY KEY (right_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqsearches' => 'CREATE TABLE %sfaqsearches (
