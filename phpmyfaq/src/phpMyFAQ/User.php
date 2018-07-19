@@ -711,10 +711,9 @@ class User
     }
 
     /**
-     * sets the user's status and updates the database entry.
+     * Sets the user's status and updates the database entry.
      *
      * @param string $status Status
-     *
      * @return bool
      */
     public function setStatus($status)
@@ -1142,6 +1141,7 @@ class User
     public function activateUser()
     {
         if ($this->getStatus() == 'blocked') {
+
             // Generate and change user password.
             $newPassword = $this->createPassword();
             $this->changePassword($newPassword);
@@ -1157,6 +1157,7 @@ class User
             if ($this->mailUser($subject, $message)) {
                 return $this->setStatus('active');
             }
+            return true;
         }
 
         return false;
@@ -1171,4 +1172,32 @@ class User
         return $this->isSuperAdmin;
     }
 
+    /**
+     * Sets the users "is_superadmin" flag and updates the database entry.
+     * @param $isSuperAdmin
+     * @return bool
+     */
+    public function setSuperAdmin($isSuperAdmin)
+    {
+        $this->isSuperAdmin = $isSuperAdmin;
+        $update = sprintf("
+            UPDATE
+                %sfaquser
+            SET
+                is_superadmin = %d
+            WHERE
+                user_id = %d",
+            Db::getTablePrefix(),
+            (int) $this->isSuperAdmin,
+            $this->userId
+        );
+
+        $res = $this->config->getDb()->query($update);
+
+        if ($res) {
+            return true;
+        }
+
+        return false;
+    }
 }

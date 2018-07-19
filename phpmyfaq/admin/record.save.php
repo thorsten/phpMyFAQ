@@ -132,7 +132,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
         $tagging = new Tags($faqConfig);
 
-        if ('yes' == $revision) {
+        if ('yes' === $revision || $faqConfig->get('records.enableAutoRevisions')) {
             // Add current version into revision table
             $faq->addNewRevision($recordId, $recordLang);
             ++$revisionId;

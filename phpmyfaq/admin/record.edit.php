@@ -773,7 +773,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                       </label>
                     </div>
                   </div>
-                    <?php if ($queryString != 'insertentry'): ?>
+                    <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')): ?>
                       <div class="form-group row">
                         <label class="form-control-label" for="revision">
                             <?php echo $PMF_LANG['ad_entry_new_revision'] ?>
