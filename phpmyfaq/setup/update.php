@@ -608,6 +608,7 @@ if ($step == 3) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INT(1) DEFAULT 0';
         }
         $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
+        $faqConfig->add('records.enableAutoRevisions', false);
     }
 
     // Always the last step: Update version number

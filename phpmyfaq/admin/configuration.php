@@ -95,76 +95,78 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
               action="?action=config&amp;config_action=saveConfig">
             <input type="hidden" name="csrf" value="<?php echo $currentToken ?>">
 
-            <header class="row">
-                <div class="col-lg-12">
-                    <h2 class="page-header">
-                        <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_config_edit'] ?>
-                        <div class="float-right">
-                            <button class="btn btn-success" type="submit">
-                                <?php echo $PMF_LANG['ad_config_save'] ?>
-                            </button>
-                            <button class="btn btn-warning" type="reset">
-                                <?php echo $PMF_LANG['ad_config_reset'] ?>
-                            </button>
-                        </div>
-                    </h2>
+
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                <h1 class="h2">
+                    <i class="material-icons md-36">settings</i>
+                    <?= $PMF_LANG['ad_config_edit'] ?>
+                </h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                        <button class="btn btn-sm btn-outline-warning" type="reset">
+                            <?php echo $PMF_LANG['ad_config_reset'] ?>
+                        </button>
+                        <button class="btn btn-sm btn-outline-success" type="submit">
+                            <?php echo $PMF_LANG['ad_config_save'] ?>
+                        </button>
+                    </div>
                 </div>
-            </header>
+            </div>
 
             <div class="row">
                 <div class="col-lg-12">
 
                     <ul class="nav nav-tabs" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="nav-link active">
                                 <i aria-hidden="true" class="fa fa-home"></i>
                                 <?php echo $PMF_LANG['mainControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-th-list"></i>
                                 <?php echo $PMF_LANG['recordsControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-search"></i>
                                 <?php echo $PMF_LANG['searchControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-warning"></i>
                                 <?php echo $PMF_LANG['securityControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-thumbs-down"></i>
                                 <?php echo $PMF_LANG['spamControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-search"></i>
                                 <?php echo $PMF_LANG['seoCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-retweet"></i>
                                 <?php echo $PMF_LANG['socialNetworksControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-inbox"></i>
                                 <?php echo $PMF_LANG['mailControlCenter'] ?>
                             </a>
                         </li>
-                        <li role="presentation">
-                            <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="toggleConfig">
+                        <li role="presentation" class="nav-item">
+                            <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-sitemap"></i>
                                 <?php echo 'LDAP' ?>
                             </a>
@@ -172,7 +174,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     </ul>
 
                     <div class="tab-content" style="margin-top: 20px;">
-                        <div role="tabpanel" class="tab-pane fade in active" id="main"></div>
+                        <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
                         <div role="tabpanel" class="tab-pane fade" id="records"></div>
                         <div role="tabpanel" class="tab-pane fade" id="search"></div>
                         <div role="tabpanel" class="tab-pane fade" id="security"></div>

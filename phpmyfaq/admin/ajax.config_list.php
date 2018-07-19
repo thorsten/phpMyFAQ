@@ -281,7 +281,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
         ?>
             <div class="form-group row">
-                <label class="form-control-label col-lg-3">
+                <label class="col-lg-4 col-form-label">
 <?php
         switch ($key) {
 
@@ -303,7 +303,7 @@ foreach ($LANG_CONF as $key => $value) {
         }
         ?>
                 </label>
-                <div class="col-lg-6">
+                <div class="col-lg-8">
                     <?php renderInputForm($key, $value[0]) ?>
                 </div>
 <?php
