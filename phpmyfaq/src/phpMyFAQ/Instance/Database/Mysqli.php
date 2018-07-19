@@ -87,6 +87,11 @@ class Mysqli extends Database implements Driver
             show_home INT(1) DEFAULT NULL,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
+        'faqcategory_news' => 'CREATE TABLE %sfaqcategory_news (
+            category_id INT(11) NOT NULL,
+            news_id INT(11) NOT NULL,
+            PRIMARY KEY (category_id, news_id))',
+
         'faqcategoryrelations' => 'CREATE TABLE %sfaqcategoryrelations (
             category_id INT(11) NOT NULL,
             category_lang VARCHAR(5) NOT NULL,
@@ -269,6 +274,37 @@ class Mysqli extends Database implements Driver
             searchterm VARCHAR(255) NOT NULL ,
             searchdate TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
             PRIMARY KEY (id, lang)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+
+        'faqsections' => 'CREATE TABLE %sfaqsections (
+            id INT(11) NOT NULL,
+            name VARCHAR(255) NOT NULL,
+            description VARCHAR(255) DEFAULT NULL,
+            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+            
+        'faqsection_category' => 'CREATE TABLE %sfaqsection_category (
+            section_id INT(11) NOT NULL,
+            category_id INT(11) NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, category_id))',
+
+        'faqsection_user' => 'CREATE TABLE %sfaqsection_user (
+            section_id INT(11) NOT NULL,
+            user_id INT(11) NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, user_id))',
+
+        'faqsection_group' => 'CREATE TABLE %sfaqsection_group (
+            section_id INT(11) NOT NULL,
+            group_id INT(11) NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, group_id))',
+
+        'faqsection_right' => 'CREATE TABLE %sfaqsection_right (
+            section_id INT(11) NOT NULL,
+            right_id INT(11) NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, right_id))',
+
+        'faqsection_news' => 'CREATE TABLE %sfaqsection_news (
+            section_id INT(11) NOT NULL,
+            news_id INT(11) NOT NULL DEFAULT -1,
+            PRIMARY KEY (section_id, news_id))',
 
         'faqsessions' => 'CREATE TABLE %sfaqsessions (
             sid INT(11) NOT NULL,
