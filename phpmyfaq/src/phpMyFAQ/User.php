@@ -580,8 +580,10 @@ class User
             return false;
         }
 
-        $this->perm->autoJoin($this->userId);
-
+        if ($this->perm instanceof MediumPermission) {
+            $this->perm->autoJoin($this->userId);
+        }
+        
         return $this->getUserByLogin($login, false);
     }
 
