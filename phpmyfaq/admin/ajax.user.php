@@ -58,7 +58,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                 $users->name = $singleUser['login'];
                 $allUsers['results'][] = $users;
             }
-            echo json_encode($allUsers);
+            $http->sendJsonWithHeaders($allUsers);
             break;
 
         case 'get_user_data':
@@ -68,23 +68,22 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             $userdata['status'] = $user->getStatus();
             $userdata['login'] = $user->getLogin();
             $userdata['is_superadmin'] = $user->isSuperAdmin();
-            echo json_encode($userdata);
+            $http->sendJsonWithHeaders($userdata);
             break;
 
         case 'get_user_rights':
             $user->getUserById($userId, true);
-            echo json_encode($user->perm->getUserRights($userId));
+            $http->sendJsonWithHeaders($user->perm->getUserRights($userId));
             break;
 
         case 'activate_user':
             $user->getUserById($userId, true);
-            $user->setStatus('blocked');
+            $user->setStatus('active');
             $user->activateUser();
-            echo json_encode($user->getStatus());
+            $http->sendJsonWithHeaders($user->getStatus());
             break;
 
         case 'delete_user':
-
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
                 exit(1);
@@ -109,11 +108,10 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
                     $message = '<p class="success">'.$PMF_LANG['ad_user_deleted'].'</p>';
                 }
             }
-            echo json_encode($message);
+            $http->sendJsonWithHeaders($message);
             break;
 
         case 'overwrite_password':
-
             $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
             $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
             $newPassword = Filter::filterInput(INPUT_POST, 'npass', FILTER_SANITIZE_STRING);
@@ -131,11 +129,11 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
 
             if ($newPassword === $retypedPassword) {
                 if (!$user->changePassword($newPassword)) {
-                    echo json_encode(['error' => $PMF_LANG['ad_passwd_fail']]);
+                    echo $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
                 }
-                echo json_encode(['success' => $PMF_LANG['ad_passwdsuc']]);
+                $http->sendJsonWithHeaders(['success' => $PMF_LANG['ad_passwdsuc']]);
             } else {
-                echo json_encode(['error' => $PMF_LANG['ad_passwd_fail']]);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
             }
 
             break;

@@ -307,9 +307,9 @@ $PMF_LANG["ad_adminlog"] = "AdminLog";
 
 // Passwd
 $PMF_LANG["ad_passwd_cop"] = "Passwort ändern";
-$PMF_LANG["ad_passwd_old"] = "Altes Passwort:";
-$PMF_LANG["ad_passwd_new"] = "Neues Passwort:";
-$PMF_LANG["ad_passwd_con"] = "Bestätigung:";
+$PMF_LANG["ad_passwd_old"] = "Altes Passwort";
+$PMF_LANG["ad_passwd_new"] = "Neues Passwort";
+$PMF_LANG["ad_passwd_con"] = "Bestätigung Passwort";
 $PMF_LANG["ad_passwd_change"] = "Änderung speichern";
 $PMF_LANG["ad_passwd_suc"] = "Passwort erfolgreich geändert.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>ACHTUNG:</strong><br />Das Cookie muß neu gesetzt werden!";
@@ -317,8 +317,8 @@ $PMF_LANG["ad_passwd_fail"] = "Das alte Passwort muss <strong>korrekt</strong> e
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Benutzer hinzufügen";
-$PMF_LANG["ad_adus_name"] = "Name:";
-$PMF_LANG["ad_adus_password"] = "Passwort:";
+$PMF_LANG["ad_adus_name"] = "Loginname";
+$PMF_LANG["ad_adus_password"] = "Passwort";
 $PMF_LANG["ad_adus_add"] = "Hinzufügen";
 $PMF_LANG["ad_adus_suc"] = "Der Benutzer wurde <strong>erfolgreich</strong> hinzugefügt.";
 $PMF_LANG["ad_adus_edit"] = "Profil bearbeiten";
@@ -516,7 +516,7 @@ $PMF_LANG["ad_user_action"] = "Aktion";
 $PMF_LANG["ad_entry_email"] = "E-Mail";
 $PMF_LANG["ad_entry_allowComments"] = "Kommentare zulassen";
 $PMF_LANG["msgWriteNoComment"] = "Kommentieren nicht möglich";
-$PMF_LANG["ad_user_realname"] = "Name";
+$PMF_LANG["ad_user_realname"] = "Echter Name";
 $PMF_LANG["ad_export_generate_pdf"] = "Als PDF-Datei exportieren";
 $PMF_LANG["ad_export_full_faq"] = "Die FAQ als PDF-Datei: ";
 $PMF_LANG["err_bannedIP"] = "Diese IP ist gesperrt.";
@@ -1248,3 +1248,4 @@ $PMF_LANG["msgPrivacyNote"] = "Datenschutzerklärung";
 $LANG_CONF['main.enableAutoUpdateHint'] = ['checkbox', 'Automatischer Check neuer Versionen<br>(Standard: aktiviert)'];
 $PMF_LANG['ad_quick_entry'] = 'Neue FAQ in dieser Kategorie';
 $PMF_LANG['ad_user_is_superadmin'] = 'Super-Admin';
+$PMF_LANG['ad_user_override_passwd'] = 'Überschreibe Passwort';
