@@ -199,7 +199,7 @@ if (is_null($ajax)) {
 }
 
 // if performing AJAX operation, needs to branch before header.php
-if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0) {
+if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())) {
     if (isset($action) && isset($ajax)) {
         if ('ajax' === $action) {
             switch ($ajax) {
@@ -258,7 +258,7 @@ require 'header.php';
 $numRights = count($user->perm->getAllUserRights($user->getUserId()));
 
 // User is authenticated
-if (isset($auth) && $numRights > 0) {
+if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
     if (!is_null($action)) {
         // the various sections of the admin area
         switch ($action) {

@@ -22,6 +22,7 @@ namespace phpMyFAQ\Permission;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
 use phpMyFAQ\Permission;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -156,7 +157,7 @@ class BasicPermission extends Permission
         // is right for users?
         $rightData = $this->getRightData($rightId);
 
-        if (isset($rightData['for_users'])) {
+        if (!isset($rightData['for_users'])) {
             return false;
         }
 
@@ -221,11 +222,18 @@ class BasicPermission extends Permission
      */
     public function checkRight($userId, $right)
     {
+        $user = new CurrentUser($this->config);
+        $user->getUserById($userId);
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
         if (!is_numeric($right) and is_string($right)) {
             $right = $this->getRightId($right);
         }
 
-        return $this->checkUserRight($userId, $right);
+        return $this->checkUserRight($user->getUserId(), $right);
     }
 
     /**

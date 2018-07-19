@@ -554,7 +554,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                               <div class="form-check">
                                 <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
                                        name="user_rights[]" value="<?= $right['right_id'] ?>"
-                                       class="form-check-input">
+                                       class="form-check-input permission">
                                 <label class="form-check-label">
                                     <?php
                                     if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {

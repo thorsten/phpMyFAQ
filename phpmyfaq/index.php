@@ -607,14 +607,14 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 // Show login box or logged-in user information
 //
 if (isset($auth)) {
-    if ($user->perm->checkRight($user->getUserId(), 'viewadminlink')) {
+    if ($user->perm->checkRight($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
             '<a class="dropdown-item" href="%s">%s</a>',
             $faqSystem->getSystemUri($faqConfig).'admin/index.php',
             $PMF_LANG['adminSection']
         );
     } else {
-        $adminSection = 'xxx';
+        $adminSection = '';
     }
 
     if ($faqConfig->get('ldap.ldapSupport')) {

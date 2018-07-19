@@ -49,12 +49,12 @@ function updateUser(userId) {
 $(document).ready(function() {
     'use strict';
 
-    var button   = $('#checkAll');
-    var buttonOverridePassword = $('.pmf-user-password-override-action');
+    const button   = $('#checkAll');
+    const buttonOverridePassword = $('.pmf-user-password-override-action');
 
     button.data('type', 'check');
     button.on('click', function (event) {
-        var checkbox = $('.permission');
+        const checkbox = $('.permission');
         event.preventDefault();
         if (button.data('type') === 'check') {
             checkbox.prop('checked', true);
