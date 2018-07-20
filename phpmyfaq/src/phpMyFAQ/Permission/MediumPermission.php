@@ -115,7 +115,7 @@ class MediumPermission extends BasicPermission
     public function getGroupRights($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
-            return false;
+            return [];
         }
         // check right
         $select = sprintf('
@@ -697,8 +697,9 @@ class MediumPermission extends BasicPermission
     /**
      * Get all groups in <option> tags.
      *
-     * @param array $groups Selected groups
+     * @todo Move into the Helper class
      *
+     * @param array $groups Selected groups
      * @return string
      */
     public function getAllGroupsOptions(Array $groups, $userID = 1)
@@ -979,7 +980,7 @@ class MediumPermission extends BasicPermission
     public function getGroupName($groupId)
     {
         if ($groupId <= 0 || !is_numeric($groupId)) {
-            return false;
+            return '-';
         }
 
         $select = sprintf('
@@ -995,7 +996,7 @@ class MediumPermission extends BasicPermission
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return [];
+            return '-';
         }
         $row = $this->config->getDb()->fetchArray($res);
 
