@@ -391,6 +391,7 @@ class Installer
         'records.hideEmptyCategories' => 'false',
         'records.allowDownloadsForGuests' => 'false',
         'records.numberMaxStoredRevisions' => '10',
+        'records.enableAutoRevisions' => 'false',
 
         'search.numberSearchTerms' => '10',
         'search.relevance' => 'thema,content,keywords',
