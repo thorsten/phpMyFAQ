@@ -21,6 +21,7 @@ namespace phpMyFAQ\Permission;
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -73,7 +74,26 @@ class LargePermission extends MediumPermission
      */
     public function checkRight($userId, $right)
     {
-        // @todo implement me
+        $user = new CurrentUser($this->config);
+        $user->getUserById($userId);
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        // get right id
+        if (!is_numeric($right) && is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        // check user right, group right and section right
+        if (
+            $this->checkUserSectionRight($userId, $right) ||
+            $this->checkUserGroupRight($userId, $right) ||
+            $this->checkUserRight($userId, $right)
+        ) {
+            return true;
+        }
         return false;
     }
 

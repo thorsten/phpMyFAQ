@@ -171,7 +171,10 @@ class MediumPermission extends BasicPermission
         }
 
         // check user right and group right
-        if ($this->checkUserGroupRight($userId, $right) || $this->checkUserRight($userId, $right)) {
+        if (
+            $this->checkUserGroupRight($userId, $right) ||
+            $this->checkUserRight($userId, $right)
+        ) {
             return true;
         }
 
@@ -721,8 +724,6 @@ class MediumPermission extends BasicPermission
     }
 
     /**
-     * checkUserGroupRight.
-     *
      * Returns true if the user $userId owns the right $rightId
      * because of a group-membership, otherwise false.
      *
