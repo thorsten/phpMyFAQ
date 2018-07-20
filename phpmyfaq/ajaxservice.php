@@ -25,16 +25,20 @@ use phpMyFAQ\Comment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Network;
+use phpMyFAQ\Search;
+use phpMyFAQ\Search\Resultset;
 use phpMyFAQ\Session;
 use phpMyFAQ\Stopwords;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 
 //
 // Bootstrapping
@@ -514,7 +518,7 @@ switch ($action) {
                 $faqSearch = new Search($faqConfig);
                 $faqSearch->setCategory(new Category($faqConfig));
                 $faqSearch->setCategoryId($ucategory);
-                $faqSearchResult = new Search_Resultset($user, $faq, $faqConfig);
+                $faqSearchResult = new Resultset($user, $faq, $faqConfig);
                 $searchResult = [];
                 $mergedResult = [];
 
@@ -538,7 +542,7 @@ switch ($action) {
 
                     $response .= '<ul>';
 
-                    $faqHelper = new Helper_Faq($faqConfig);
+                    $faqHelper = new FaqHelper($faqConfig);
                     foreach ($faqSearchResult->getResultset() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
