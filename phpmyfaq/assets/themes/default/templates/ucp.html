@@ -1,73 +1,72 @@
 <section>
-            <div class="row">
+  <div class="row">
 
-                <div class="col-md-3 pmf-personal-gravatar">
-                    <div class="text-center">
-                        {{ ucpGravatarImage }}
-                    </div>
-                </div>
-                <div class="col-md-9 pmf-personal-info">
+    <div class="col-md-3 pmf-personal-gravatar">
+      <div class="text-center">
+        {{ ucpGravatarImage }}
+      </div>
+    </div>
+    <div class="col-md-9 pmf-personal-info">
 
-                    <div id="ucpReturnedMessage"></div>
+      <div id="userdatas"></div>
 
-                    <form  id="formValues" action="#" method="post">
-                        <input type="hidden" name="userid" value="{{ userid }}">
-                        <input type="hidden" name="csrf" value="{{ csrf }}">
+      <form id="formValues" action="#" method="post">
+        <input type="hidden" name="userid" value="{{ userid }}">
+        <input type="hidden" name="csrf" value="{{ csrf }}">
 
-                        <div class="form-group row">
-                            <label class="col-sm-4 form-control-label" for="name">{{ msgRealName }}:</label>
-                            <div class="col-sm-8 controls">
-                                <input type="text" name="name" id="name" tabindex="1" value="{{ realname }}"
-                                       class="form-control form-control-lg" required>
-                            </div>
-                        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 form-control-label" for="name">{{ msgRealName }}:</label>
+          <div class="col-sm-8 controls">
+            <input type="text" name="name" id="name" tabindex="1" value="{{ realname }}"
+                   class="form-control form-control-lg" required>
+          </div>
+        </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-4 form-control-label" for="email">{{ msgEmail }}:</label>
-                            <div class="col-sm-8 controls">
-                                <input type="email" name="email" id="email" tabindex="2" value="{{ email }}"
-                                       class="form-control form-control-lg" required>
-                            </div>
-                        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 form-control-label" for="email">{{ msgEmail }}:</label>
+          <div class="col-sm-8 controls">
+            <input type="email" name="email" id="email" tabindex="2" value="{{ email }}"
+                   class="form-control form-control-lg" required>
+          </div>
+        </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-4 form-control-label" for="password">{{ msgPassword }}:</label>
-                            <div class="col-sm-8 controls">
-                                <input type="password" name="password" id="password" tabindex="3"
-                                       class="form-control form-control-lg">
-                            </div>
-                        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 form-control-label" for="password">{{ msgPassword }}:</label>
+          <div class="col-sm-8 controls">
+            <input type="password" name="password" id="password" tabindex="3"
+                   class="form-control form-control-lg">
+          </div>
+        </div>
 
-                        <div class="form-group row">
-                            <label class="col-sm-4 form-control-label" for="password_confirm">{{ msgConfirm }}:</label>
-                            <div class="col-sm-8 controls">
-                                <input type="password" name="password_confirm" id="password_confirm" tabindex="4"
-                                       class="form-control form-control-lg">
-                            </div>
-                        </div>
+        <div class="form-group row">
+          <label class="col-sm-4 form-control-label" for="password_confirm">{{ msgConfirm }}:</label>
+          <div class="col-sm-8 controls">
+            <input type="password" name="password_confirm" id="password_confirm" tabindex="4"
+                   class="form-control form-control-lg">
+          </div>
+        </div>
 
-                        <div class="form-actions">
-                            <div class="text-right">
-                                <button class="btn btn-primary btn-lg" type="submit" id="submituserdata">
-                                    {{ msgSave }}
-                                </button>
-                            </div>
-                        </div>
+        <div class="form-actions">
+          <div class="text-right">
+            <button class="btn btn-primary btn-lg" type="submit" id="submituserdata">
+              {{ msgSave }}
+            </button>
+          </div>
+        </div>
 
-                    </form>
+      </form>
 
-                    <div id="loader"></div>
-                    <div id="userdatas"></div>
+      <div id="loader"></div>
 
-                </div>
-            </div>
-        </section>
+    </div>
+  </div>
+</section>
 
-        <script>
-            $(function() {{
-                $('#submituserdata').on('click', function() {{
-                    saveFormValues('saveuserdata', 'userdata');
-                 }});
-                $('form#formValues').submit(function() {{  return false;  }});
-             }});
-        </script>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    $('#submituserdata').on('click', () => {
+      saveFormValues('saveuserdata', 'userdata');
+    });
+    $('form#formValues').submit(() => false);
+  });
+</script>
