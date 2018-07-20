@@ -289,20 +289,10 @@ class Pgsql extends Database implements Driver
             category_id INT4 NOT NULL DEFAULT -1,
             PRIMARY KEY (section_id, category_id))',
 
-        'faqsection_user' => 'CREATE TABLE %sfaqsection_user (
-            section_id INT4 NOT NULL,
-            user_id INT4 NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, user_id))',
-
         'faqsection_group' => 'CREATE TABLE %sfaqsection_group (
             section_id INT4 NOT NULL,
             group_id INT4 NOT NULL DEFAULT -1,
             PRIMARY KEY (section_id, group_id))',
-
-        'faqsection_right' => 'CREATE TABLE %sfaqsection_right (
-            section_id INT4 NOT NULL,
-            right_id INT4 NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, right_id))',
 
         'faqsection_news' => 'CREATE TABLE %sfaqsection_news (
             section_id INT4 NOT NULL,
