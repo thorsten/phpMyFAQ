@@ -16,7 +16,7 @@
 
 /*global document: false, $: false, tinyMCE: false, saveFormValues: false */
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', (event) => {
   'use strict';
   $('#submitfaq').click(function() {
     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
