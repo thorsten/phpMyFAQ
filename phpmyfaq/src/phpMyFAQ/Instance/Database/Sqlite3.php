@@ -288,20 +288,10 @@ class Sqlite3 extends Database implements Driver
             category_id INTEGER NOT NULL DEFAULT -1,
             PRIMARY KEY (section_id, category_id))',
 
-        'faqsection_user' => 'CREATE TABLE %sfaqsection_user (
-            section_id INTEGER NOT NULL,
-            user_id INTEGER NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, user_id))',
-
         'faqsection_group' => 'CREATE TABLE %sfaqsection_group (
             section_id INTEGER NOT NULL,
             group_id INTEGER NOT NULL DEFAULT -1,
             PRIMARY KEY (section_id, group_id))',
-
-        'faqsection_right' => 'CREATE TABLE %sfaqsection_right (
-            section_id INTEGER NOT NULL,
-            right_id INTEGER NOT NULL DEFAULT -1,
-            PRIMARY KEY (section_id, right_id))',
 
         'faqsection_news' => 'CREATE TABLE %sfaqsection_news (
             section_id INTEGER NOT NULL,
