@@ -110,15 +110,15 @@ class Ldap extends Auth implements Driver
      * Adds a new user account to the authentication table.
      * Returns true on success, otherwise false.
      *
-     * @param string $login    Login name
-     * @param string $password Password
-     *
+     * @param string $login
+     * @param string $password
+     * @param string $domain
      * @return bool
      */
-    public function add($login, $password)
+    public function add($login, $password, $domain = '')
     {
         $user = new User($this->_config);
-        $result = $user->createUser($login, null);
+        $result = $user->createUser($login, null, $domain);
 
         $this->ldap->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
@@ -134,7 +134,7 @@ class Ldap extends Auth implements Driver
 
         $user->setStatus('active');
 
-        // Update user information from LDAP
+        // Set user information from LDAP
         $user->setUserData(
             array(
                 'display_name' => $this->ldap->getCompleteName($login),
@@ -246,13 +246,11 @@ class Ldap extends Auth implements Driver
             htmlspecialchars_decode($password)
         );
 
-        if (! $this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
+        if (!$this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
             $this->errors[] = $this->ldap->error;
-
             return false;
         } else {
             $this->add($login, htmlspecialchars_decode($password));
-
             return true;
         }
     }

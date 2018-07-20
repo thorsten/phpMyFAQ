@@ -644,7 +644,7 @@ switch ($action) {
 
             // Create user account (login and password)
             // Note: password be automatically generated and sent by email as soon if admin switch user to "active"
-            if (!$user->createUser($loginName, '')) {
+            if (!$user->createUser($loginName, null)) {
                 $message = array('error' => $user->error());
             } else {
                 $user->userdata->set(

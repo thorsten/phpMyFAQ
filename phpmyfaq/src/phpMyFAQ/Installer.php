@@ -958,7 +958,7 @@ class Installer
 
         // add admin account and rights
         $admin = new User($configuration);
-        if (!$admin->createUser($loginname, $password, 1)) {
+        if (!$admin->createUser($loginname, $password, null, 1)) {
             printf(
                 '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>'.
                 "Couldn't create the admin user: %s</p>\n",

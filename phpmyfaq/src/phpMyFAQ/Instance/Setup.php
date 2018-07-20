@@ -69,7 +69,7 @@ class Setup
     public function createAnonymousUser(Configuration $faqConfig)
     {
         $anonymous = new User($faqConfig);
-        $anonymous->createUser('anonymous', null, -1);
+        $anonymous->createUser('anonymous', null, null, -1);
         $anonymous->setStatus('protected');
         $anonymousData = array(
             'display_name' => 'Anonymous User',

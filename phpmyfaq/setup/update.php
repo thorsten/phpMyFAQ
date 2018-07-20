@@ -613,6 +613,13 @@ if ($step == 3) {
         }
         $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
 
+        // Add domain flag
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
+        }
+
         // Update section flag for faqright table
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';

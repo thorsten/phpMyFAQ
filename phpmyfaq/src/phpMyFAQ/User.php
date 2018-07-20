@@ -497,15 +497,16 @@ class User
     }
 
     /**
-     * creates a new user and stores basic data in the database.
+     * Creates a new user and stores basic data in the database.
      *
-     * @param string $login  Login name
-     * @param string $pass   Password
-     * @param int    $userId User ID
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
+     * @param int $userId
      *
      * @return boolean
      */
-    public function createUser($login, $pass = '', $userId = 0)
+    public function createUser($login, $pass = '', $domain = '', $userId = 0)
     {
         foreach ($this->authContainer as $auth) {
             if (!$this->checkAuth($auth)) {
@@ -570,7 +571,7 @@ class User
             if ($auth->setReadOnly()) {
                 continue;
             }
-            if (!$auth->add($login, $pass)) {
+            if (!$auth->add($login, $pass, $domain)) {
                 $this->errors[] = self::ERROR_USER_CANNOT_CREATE_USER.'in Auth '.$name;
             } else {
                 $success = true;

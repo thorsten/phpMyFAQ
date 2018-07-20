@@ -97,7 +97,7 @@ switch ($ajaxAction) {
 
             // add admin account and rights
             $instanceAdmin = new User($faqConfig);
-            $instanceAdmin->createUser($admin, $password, 1);
+            $instanceAdmin->createUser($admin, $password, null, 1);
             $instanceAdmin->setStatus('protected');
             $instanceAdminData = array(
                 'display_name' => '',
