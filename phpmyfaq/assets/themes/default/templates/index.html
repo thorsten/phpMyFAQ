@@ -190,14 +190,21 @@
 </footer>
 
 [debugMode]
-<div class="debug-mode">
-  <h3>DEBUG INFORMATION</h3>
+<div class="container debug-mode">
   <hr>
-  <h4>EXCEPTIONS</h4>
-  {{ debugExceptions }}
-  <hr>
-  <h4>DATABASE QUERIES</h4>
-  {{ debugQueries }}
+  <h4>DEBUG INFORMATION</h4>
+  <div class="row">
+    <div class="col-12">
+      <h5>EXCEPTIONS</h5>
+      {{ debugExceptions }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h5>DATABASE QUERIES</h5>
+      {{ debugQueries }}
+    </div>
+  </div>
 </div>
 [/debugMode]
 

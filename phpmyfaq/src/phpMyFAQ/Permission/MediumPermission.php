@@ -21,6 +21,7 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -157,6 +158,13 @@ class MediumPermission extends BasicPermission
      */
     public function checkRight($userId, $right)
     {
+        $user = new CurrentUser($this->config);
+        $user->getUserById($userId);
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
         // get right id
         if (!is_numeric($right) && is_string($right)) {
             $right = $this->getRightId($right);

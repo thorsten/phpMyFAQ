@@ -41,16 +41,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 interface Driver
 {
     /**
-     * Adds a new user account to the authentication table.
+     * Adds a new user account to the authentication table. The domain
+     * is only used in LDAP/AD environments. Returns true on success,
+     * otherwise false.
      *
-     * Returns true on success, otherwise false.
-     *
-     * @param string $login Loginname
-     * @param string $pass  Password
-     *
-     * @return bool
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
+     * @return mixed
      */
-    public function add($login, $pass);
+    public function add($login, $pass, $domain = '');
 
     /**
      * Changes the password for the account specified by login.

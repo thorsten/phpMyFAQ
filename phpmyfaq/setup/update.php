@@ -604,7 +604,7 @@ if ($step == 3) {
     // UPDATES FROM 3.0.0-alpha.3
     //
     if (version_compare($version, '3.0.0-alpha.3', '<=')) {
-        $faqConfig->add('records.enableAutoRevisions', false);
+        $faqConfig->add('records.enableAutoRevisions', 'false');
         // Add superadmin flag
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
@@ -612,6 +612,13 @@ if ($step == 3) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INT(1) DEFAULT 0';
         }
         $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
+
+        // Add domain flag
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
+        }
 
         // Update section flag for faqright table
         if ('sqlite3' === $DB['type']) {
@@ -663,7 +670,7 @@ if ($step == 3) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again '.
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ once again '.
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));

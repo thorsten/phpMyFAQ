@@ -42,29 +42,30 @@ class Sso extends Auth implements Driver
     /**
      * Always returns true because of SSO.
      *
-     * @param string $login Loginname
-     * @param string $pass  Password
-     *
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
+     * @throws
      * @return bool
      */
-    public function add($login, $pass)
+    public function add($login, $pass, $domain = '')
     {
         if ($this->_config->get('ldap.ldapSupport')) {
-            // LDAP + SSO
+            // LDAP/AD + SSO
             $authLdap = new Ldap($this->_config);
-            $result = $authLdap->add($login, $pass);
+            $result = $authLdap->add($login, null, $domain);
 
             return $result;
         } else {
-            // LDAP disabled
+            // SSO without LDAP/AD
             $user = new User($this->_config);
-            $result = $user->createUser($login, null);
+            $result = $user->createUser($login, null, $domain);
 
             if ($result) {
                 $user->setStatus('active');
             }
 
-            // Update user information
+            // Set user information
             $user->setUserData(
                 array(
                     'display_name' => $login,

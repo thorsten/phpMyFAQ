@@ -248,7 +248,7 @@ switch ($action) {
 
 <div class="container-fluid">
   <div class="row">
-      <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
+      <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())): ?>
         <nav class="col-md-2 d-none d-md-block bg-light sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column">

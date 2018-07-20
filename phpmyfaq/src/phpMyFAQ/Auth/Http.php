@@ -47,12 +47,12 @@ class Http extends Auth implements Driver
      *
      * Returns true on success, otherwise false.
      *
-     * @param string $login Loginname
-     * @param string $pass  Password
-     *
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
      * @return bool
      */
-    public function add($login, $pass)
+    public function add($login, $pass, $domain = '')
     {
         $user = new User($this->_config);
         $result = $user->createUser($login, null);

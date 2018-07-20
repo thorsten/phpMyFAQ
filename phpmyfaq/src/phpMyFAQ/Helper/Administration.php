@@ -152,6 +152,12 @@ class Administration
                 }
             }
         }
+        // If user is super admin, give all rights
+        if ($user->isSuperAdmin()) {
+            foreach ($allRights as $right) {
+                $this->permission[$right['name']] = true;
+            }
+        }
     }
 
     /**

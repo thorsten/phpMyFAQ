@@ -66,12 +66,12 @@ class Database extends Auth implements Driver
      * Adds a new user account to the faquserlogin table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
-     * @param string $login Loginname
-     * @param string $pass  Password
-     *
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
      * @return bool
      */
-    public function add($login, $pass)
+    public function add($login, $pass, $domain = '')
     {
         if ($this->checkLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD.User::ERROR_USER_LOGIN_NOT_UNIQUE;
@@ -82,12 +82,15 @@ class Database extends Auth implements Driver
         $add = sprintf("
             INSERT INTO
                 %sfaquserlogin
-            (login, pass)
+            (login, pass, domain)
                 VALUES
-            ('%s', '%s')",
+            ('%s', '%s', '%s')",
             Db::getTablePrefix(),
             $this->db->escape($login),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)));
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
+            $this->db->escape($domain)
+        );
+
 
         $add = $this->db->query($add);
         $error = $this->db->error();

@@ -121,6 +121,12 @@ class Resultset
 
         foreach ($this->rawResultset as $result) {
             $permission = false;
+            // check permission for sections
+            if ('large' === $this->_config->get('security.permLevel')) {
+                // @todo Add code for section permissions
+                $permission = true;
+            }
+
             // check permissions for groups
             if ('medium' === $this->_config->get('security.permLevel')) {
                 $groupPermission = $this->faq->getPermission('group', $result->id);

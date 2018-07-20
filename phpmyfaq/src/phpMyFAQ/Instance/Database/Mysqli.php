@@ -341,6 +341,7 @@ class Mysqli extends Database implements Driver
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
             pass VARCHAR(80) NULL,
+            domain VARCHAR(255) NULL,
             PRIMARY KEY (login)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faquser_group' => 'CREATE TABLE %sfaquser_group (

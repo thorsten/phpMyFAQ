@@ -352,6 +352,7 @@ class Sqlite3 extends Database implements Driver
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
             pass VARCHAR(80) NULL,
+            domain VARCHAR(255) NULL,
             PRIMARY KEY (login))',
 
         'faquser_group' => 'CREATE TABLE %sfaquser_group (

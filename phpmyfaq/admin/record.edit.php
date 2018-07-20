@@ -212,30 +212,35 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         $faqData['comment'] = '';
     }
 
-    // Start header
-?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-<?php
+    // Header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
-        $currentRevision = sprintf(
-            ' <span class="badge badge-important">%s 1.%d</span> ',
-            $PMF_LANG['ad_entry_revision'],
-            $selectedRevisionId
-        );
-        printf(
-            '<i aria-hidden="true" class="fa fa-pencil"></i> %s <span class="text-error">%s</span> %s %s <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-info">%s</a>',
-            $PMF_LANG['ad_entry_edit_1'],
-            (0 === $faqData['id'] ? '' : $faqData['id']),
-            $PMF_LANG['ad_entry_edit_2'],
-            $currentRevision,
-            $faqData['id'],
-            $faqData['lang'],
-            $PMF_LANG['ad_view_faq']
-        );
-    } else {
-        printf('<i aria-hidden="true" class="fa fa-pencil"></i> %s', $PMF_LANG['ad_entry_add']);
+        $currentRevision = sprintf('%s 1.%d', $PMF_LANG['ad_entry_revision'], $selectedRevisionId);
+?>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="material-icons md-36">edit</i>
+            <?= $PMF_LANG['ad_entry_edit_1'] ?>
+            <?= $PMF_LANG['ad_entry_edit_2'] ?>
+        </h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+                <span class="btn btn-sm btn-outline-info">
+                    <?= $currentRevision ?>
+                </span>
+                <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-sm btn-outline-success">
+                    <?= $PMF_LANG['ad_view_faq'] ?>
+                </a>
+            </div>
+        </div>
+    </div>
+<?php } else { ?>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+            <i aria-hidden="true" class="material-icons md-36">edit</i>
+            <?= $PMF_LANG['ad_entry_add'] ?>
+        </h1>
+    </div>
+ <?php
     }
 
     // Revisions
