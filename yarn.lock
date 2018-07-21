@@ -328,10 +328,6 @@ commander@^2.9.0:
   version "2.15.1"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.15.1.tgz#df46e867d0fc2aec66a34662b406a9ccafff5b0f"
 
-commander@~2.12.1:
-  version "2.12.2"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-2.12.2.tgz#0f5946c427ed9ec0d91a46bb9def53e54650e555"
-
 commander@~2.13.0:
   version "2.13.0"
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.13.0.tgz#6964bca67685df7c1f1430c584f07d7597885b9c"
@@ -810,15 +806,6 @@ grunt-contrib-uglify-es@^3.3.0:
     chalk "^1.0.0"
     maxmin "^1.1.0"
     uglify-es "~3.3.0"
-    uri-path "^1.0.0"
-
-grunt-contrib-uglify@^3.1.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/grunt-contrib-uglify/-/grunt-contrib-uglify-3.3.0.tgz#dcc29bee1dd4768698930e46fb8bff8e8d37fb08"
-  dependencies:
-    chalk "^1.0.0"
-    maxmin "^1.1.0"
-    uglify-js "~3.3.0"
     uri-path "^1.0.0"
 
 grunt-contrib-watch@^1.0.0:
@@ -2042,13 +2029,6 @@ uglify-js@^2.6:
     yargs "~3.10.0"
   optionalDependencies:
     uglify-to-browserify "~1.0.0"
-
-uglify-js@~3.3.0:
-  version "3.3.0"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.3.0.tgz#5d36460ccdb144a7aedb13f0dcdb7a76909e6682"
-  dependencies:
-    commander "~2.12.1"
-    source-map "~0.6.1"
 
 uglify-to-browserify@~1.0.0:
   version "1.0.2"
