@@ -544,9 +544,11 @@ class BasicPermission extends Permission
         $result = [];
         $i = 0;
 
-        while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[$i] = $row;
-            ++$i;
+        if ($res) {
+            while ($row = $this->config->getDb()->fetchArray($res)) {
+                $result[$i] = $row;
+                ++$i;
+            }
         }
 
         return $result;
