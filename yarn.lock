@@ -178,9 +178,13 @@ bootstrap-fileinput@^4.4.5:
     bootstrap ">= 3.0.0"
     jquery ">= 1.9.0"
 
-"bootstrap@>= 3.0.0", bootstrap@^4.0.0:
+"bootstrap@>= 3.0.0":
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.1.tgz#3aec85000fa619085da8d2e4983dfd67cf2114cb"
+
+bootstrap@^4.0.0:
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.2.tgz#aee2a93472e61c471fc79fb475531dcbc87de326"
 
 brace-expansion@^1.1.7:
   version "1.1.11"
@@ -1977,8 +1981,8 @@ tiny-lr@^1.1.1:
     qs "^6.4.0"
 
 tinymce@^4.7.1:
-  version "4.7.13"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.7.13.tgz#3b139fd95c0b78e3959b2064f043ccb7459bebcb"
+  version "4.8.0"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.8.0.tgz#3c4c88701d0526374efb45bafbb820c7715e2356"
 
 tough-cookie@~2.3.0, tough-cookie@~2.3.3:
   version "2.3.4"

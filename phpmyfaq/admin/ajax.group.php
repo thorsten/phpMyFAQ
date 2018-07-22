@@ -40,6 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
     
     // pass the user id of the current user so it'll check which group he belongs to
     $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user->getUserId()) : [];
+    $userList = $user->getAllUsers(false, false);
 
     if (!$faqConfig->get('main.enableCategoryRestrictions')){
         $user = new User($faqConfig);

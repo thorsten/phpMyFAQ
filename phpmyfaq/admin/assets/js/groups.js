@@ -16,7 +16,7 @@
 
 /*global $:false, alert:false */
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     /**

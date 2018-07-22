@@ -408,7 +408,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i class="material-icons md-3">person</i>
+          <i class="material-icons md-36">person</i>
             <?= $PMF_LANG['ad_user'] ?>
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">

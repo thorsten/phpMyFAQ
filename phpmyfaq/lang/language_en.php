@@ -1289,3 +1289,4 @@ $PMF_LANG['rightsLanguage']['edit_section'] = 'Edit sections';
 $PMF_LANG['rightsLanguage']['delete_section'] = 'Delete sections';
 $PMF_LANG['rightsLanguage']['administrate_sections'] = 'Administrate sections';
 $PMF_LANG['rightsLanguage']['administrate_groups'] = 'Administrate groups';
+$PMF_LANG['ad_group_rights'] = 'Group permissions';
