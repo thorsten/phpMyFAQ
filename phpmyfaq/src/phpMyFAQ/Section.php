@@ -13,7 +13,7 @@ namespace phpMyFAQ;
  *
  * @category  phpMyFAQ
  * @author    Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2005-2018 phpMyFAQ Team
+ * @copyright 2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-19
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @category  phpMyFAQ
  * @author    Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2005-2018 phpMyFAQ Team
+ * @copyright 2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-19
@@ -65,7 +65,7 @@ class Section
      */
     public function addSection($name, $description)
     {
-        $id = $this->_config->getDb()->nextId(Db::getTablePrefix() . 'faqsections', 'id');
+        $id = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqsections', 'id');
 
         $query = sprintf("
             INSERT INTO
@@ -86,49 +86,43 @@ class Section
     /**
      * Gets one section by id.
      *
-     * @param string $name Name of the section
-     * @param string $description Description of the category
-     *
+     * @param int $sectionId
      * @return array
      */
-    public function getSection($id)
+    public function getSection($sectionId)
     {
         $query = sprintf("
             SELECT * 
             FROM %sfaqsections
             WHERE id = %d",
             Db::getTablePrefix(),
-            $id
+            $sectionId
         );
 
         $res = $this->config->getDb()->query($query);
 
-        $row = $this->config->getDb()->fetchArray($res);
-        
-        return $row;
+        if ($res) {
+            return $this->config->getDb()->fetchArray($res);
+        }
+
+        return [];
     }
 
     /**
      * Get all sections.
      *
-     * @param string $name Name of the section
-     * @param string $description Description of the category
-     *
      * @return array
      */
     public function getAllSections()
     {
-        $query = sprintf("
-            SELECT * 
-            FROM %sfaqsections",
-            Db::getTablePrefix(),
-        );
-        
+        $query = sprintf('SELECT id, name, description FROM %sfaqsections', Db::getTablePrefix());
         $res = $this->config->getDb()->query($query);
-        
-        $result = $this->config->getDb()->fetchAll($res);
 
-        return $result;
+        if ($res) {
+            return $this->config->getDb()->fetchAll($res);
+        }
+
+        return [];
     }
 
     /**
@@ -142,7 +136,6 @@ class Section
      */
     public function updateSection($id, $name, $description)
     {
-
         $update = sprintf("
             UPDATE
                 %sfaqsections
@@ -174,7 +167,6 @@ class Section
      */
     public function deleteSection($id)
     {
-
         $delete = sprintf("
             DELETE FROM
                 %sfaqsections
@@ -184,7 +176,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -198,7 +190,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -212,7 +204,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -226,7 +218,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -240,7 +232,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -254,7 +246,7 @@ class Section
             $id
         );
 
-        $res = $this->config->getDb()->query($update);
+        $res = $this->config->getDb()->query($delete);
         if (!$res) {
             return false;
         }
@@ -272,7 +264,6 @@ class Section
      */
     public function addSectionCategory($sectionId, $categoryId)
     {
-
         $insert = sprintf("
             INSERT INTO
                 %sfaqsection_category
@@ -303,7 +294,6 @@ class Section
      */
     public function removeSectionCategory($sectionId, $categoryId)
     {
-
         $delete = sprintf("
             DELETE FROM
                 %sfaqsection_category
@@ -333,7 +323,6 @@ class Section
      */
     public function addSectionuser($sectionId, $userId)
     {
-
         $insert = sprintf("
             INSERT INTO
                 %sfaqsection_user
@@ -364,7 +353,6 @@ class Section
      */
     public function removeSectionUser($sectionId, $userId)
     {
-
         $delete = sprintf("
             DELETE FROM
                 %sfaqsection_user
@@ -392,9 +380,8 @@ class Section
      *
      * @return bool
      */
-    public function addSectionCategory($sectionId, $groupId)
+    public function addSectionGroup($sectionId, $groupId)
     {
-
         $insert = sprintf("
             INSERT INTO
                 %sfaqsection_group
@@ -423,9 +410,8 @@ class Section
      *
      * @return bool
      */
-    public function removeSectionCategory($sectionId, $groupId)
+    public function removeSectionGroup($sectionId, $groupId)
     {
-
         $delete = sprintf("
             DELETE FROM
                 %sfaqsection_group
@@ -444,67 +430,6 @@ class Section
 
         return true;
     }
-    
-    /**
-     * adds a section - right relation
-     *
-     * @param int $sectionId Id of the section
-     * @param int $rightId Id of the right
-     *
-     * @return bool
-     */
-    public function addSectionCategory($sectionId, $rightId)
-    {
-
-        $insert = sprintf("
-            INSERT INTO
-                %sfaqsection_right
-            (sectionId, rightId)
-                VALUES
-            (%d, %d)
-            ",
-            Db::getTablePrefix(),
-            $sectionId,
-            $rightId
-        );
-
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * removes a section - right relation
-     *
-     * @param int $sectionId Id of the section
-     * @param int $rightId Id of the right
-     *
-     * @return bool
-     */
-    public function removeSectionCategory($sectionId, $rightId)
-    {
-
-        $delete = sprintf("
-            DELETE FROM
-                %sfaqsection_right
-            WHERE 
-                sectionId = %d AND rightId = %d
-            ",
-            Db::getTablePrefix(),
-            $sectionId,
-            $rightId
-        );
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
 
     /**
      * adds a section - news relation
@@ -514,9 +439,8 @@ class Section
      *
      * @return bool
      */
-    public function addSectionCategory($sectionId, $newsId)
+    public function addSectionNews($sectionId, $newsId)
     {
-
         $insert = sprintf("
             INSERT INTO
                 %sfaqsection_news
@@ -545,9 +469,8 @@ class Section
      *
      * @return bool
      */
-    public function removeSectionCategory($sectionId, $newsId)
+    public function removeSectionNews($sectionId, $newsId)
     {
-
         $delete = sprintf("
             DELETE FROM
                 %sfaqsection_news

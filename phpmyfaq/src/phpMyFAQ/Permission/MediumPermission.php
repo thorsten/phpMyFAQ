@@ -895,8 +895,6 @@ class MediumPermission extends BasicPermission
     }
 
     /**
-     * getUserGroupRights.
-     *
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a group-membership.
      *

@@ -88,7 +88,7 @@ $(document).ready(function () {
             '&amp;id=' + attachment.attachmentId + '&amp;lang=' + attachment.faqLanguage + '">' +
             '<i class="material-icons">delete</i></a>' +
             '</li>'
-          )
+          );
         });
         progress.addClass('invisible');
         $('#filesize').html('');

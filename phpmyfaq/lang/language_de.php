@@ -1259,3 +1259,4 @@ $PMF_LANG['rightsLanguage']['edit_section'] = 'Bereiche bearbeiten';
 $PMF_LANG['rightsLanguage']['delete_section'] = 'Bereiche löschen';
 $PMF_LANG['rightsLanguage']['administrate_sections'] = 'Bereiche administrieren';
 $PMF_LANG['rightsLanguage']['administrate_groups'] = 'Gruppen administrieren';
+$PMF_LANG['ad_group_rights'] = 'Rechte der Gruppe';

@@ -627,6 +627,13 @@ if ($step == 3) {
             $query[] = 'ALTER TABLE '.$prefix.'faqright ADD for_sections INT(11) DEFAULT 0';
         }
 
+        // Add new tables
+        $query[] = 'CREATE TABLE '.$prefix.'faqcategory_news (category_id INT(11) NOT NULL, news_id INT(11) NOT NULL, PRIMARY KEY (category_id, news_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsections (id INT(11) NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_category (section_id INT(11) NOT NULL, category_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_group (section_id INT(11) NOT NULL, group_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_news (section_id INT(11) NOT NULL, news_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
+
         // Add new rights
         $perm->addRight(['name' => 'view_faqs', 'description' => 'Right to view FAQs']);
         $perm->addRight(['name' => 'view_categories', 'description' => 'Right to view categories']);
