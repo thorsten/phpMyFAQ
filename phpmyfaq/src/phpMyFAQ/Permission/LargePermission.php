@@ -98,29 +98,6 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Adds a new section to the database and returns the ID of the
-     * new section. The associative array $sectionData contains the
-     * data for the new section.
-     *
-     * @param array $sectionData
-     *
-     * @return int
-     */
-    public function addSection(Array $sectionData)
-    {
-        // check if section already exists
-        if ($this->getSectionId($sectionData['name']) > 0) {
-            return 0;
-        }
-
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqsection', 'section_id');
-
-        // @todo implement me
-
-        return $nextId;
-    }
-
-    /**
      * Changes the section data of the given section.
      *
      * @param int $sectionId
