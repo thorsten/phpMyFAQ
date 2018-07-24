@@ -26,7 +26,8 @@ use phpMyFAQ\Comment;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
-use phpMyFAQ\Helper\Captcha as HelperCaptcha;
+use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Link;
 use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -121,7 +122,7 @@ if ($news['active'] && (!$expired)) {
     $newsDate = '';
 }
 
-$captchaHelper = new HelperCaptcha($faqConfig);
+$captchaHelper = new CaptchaHelper($faqConfig);
 
 $tpl->parse(
     'writeContent',
