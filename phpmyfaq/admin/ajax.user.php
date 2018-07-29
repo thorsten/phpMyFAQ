@@ -70,6 +70,11 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'activate_user':
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                exit(1);
+            }
+
             $user->getUserById($userId, true);
             $user->setStatus('blocked');
             $user->activateUser();
@@ -77,7 +82,6 @@ if ($user->perm->checkRight($user->getUserId(), 'adduser') ||
             break;
 
         case 'delete_user':
-
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
                 exit(1);

@@ -717,8 +717,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                 </td>
                 <td>
                     <?php if ($user->getStatus() === 'blocked'): ?>
-                        <a onclick="activateUser(<?php echo $user->getUserData('user_id') ?>); return false;"
-                           href="javascript:;" class="btn btn-success btn_user_id_<?php echo $user->getUserId() ?>"">
+                        <a onclick="activateUser(this); return false;"
+                           href="javascript:;" class="btn btn-success btn_user_id_<?php echo $user->getUserData('user_id') ?>"
+                           data-csrf-token="<?php echo $currentUser->getCsrfTokenFromSession() ?>"
+                           data-user-id="<?php echo $user->getUserData('user_id') ?>">
                             <?php echo $PMF_LANG['ad_news_set_active'] ?>
                         </a>
                     <?php endif;
@@ -746,7 +748,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         /**
          * Ajax call to delete user
          *
-         * @param userId
+         * @param identifier
          */
         function deleteUser(identifier) {
             if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
@@ -764,16 +766,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         /**
          * Ajax call to delete user
          *
-         * @param userId
+         * @param identifier
          */
-        function activateUser(userId) {
+        function activateUser(identifier) {
             if (confirm('<?php echo $PMF_LANG['ad_user_del_3'] ?>')) {
-                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId,
+                var csrf   = $(identifier).data('csrf-token');
+                var userId = $(identifier).data('user-id');
+
+                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId + "&csrf=" + csrf,
                     function() {
                         var icon = $('.icon_user_id_' + userId);
                         icon.toggleClass('fa-lock fa-check');
                         $('.btn_user_id_' + userId).remove();
-                        console.log($(this));
                     });
             }
         }
