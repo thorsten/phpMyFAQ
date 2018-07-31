@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
  */
@@ -27,12 +25,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Report.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
  * @copyright 2011-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
  */
@@ -45,10 +41,7 @@ class PMF_Report
 
     /**
      * Constructor.
-     *
      * @param PMF_Configuration
-     *
-     * @return PMF_Report
      */
     public function __construct(PMF_Configuration $config)
     {
@@ -57,7 +50,6 @@ class PMF_Report
 
     /**
      * Generates a huge array for the report.
-     *
      * @return array
      */
     public function getReportingData()
@@ -139,10 +131,9 @@ class PMF_Report
     }
 
     /**
-     * Convert string to the correct encoding.
-     *
+     * Convert string to the correct encoding and removes possible
+     * bad strings to avoid formula injection attacks.
      * @param string $outputString String to encode.
-     *
      * @return string Encoded string.
      */
     public function convertEncoding($outputString)
@@ -157,6 +148,9 @@ class PMF_Report
                 $outputString = mb_convert_encoding($outputString, 'UTF-16', $detected);
             }
         }
+
+        $toBeRemoved = [ '=', '+', '-', 'HYPERLINK'];
+        $outputString = str_replace($toBeRemoved, '', $outputString);
 
         return $outputString;
     }
