@@ -1063,10 +1063,8 @@ class PMF_User
         $newPassword = '';
         $skipped = false;
 
-        srand((double) microtime() * 1000000);
-
         while (strlen($newPassword) < $minimumLength) {
-            if (rand(0, 1)) {
+            if (PMF_Utils::createRandomNumber(0, 1)) {
                 $caseFunc = 'strtoupper';
             } else {
                 $caseFunc = 'strtolower';

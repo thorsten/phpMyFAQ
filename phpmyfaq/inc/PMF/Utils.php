@@ -404,4 +404,26 @@ class PMF_Utils
         unset($array[$key]);
         $array = $temp + $array;
     }
+
+    /**
+     * Creates a seed with microseconds.
+     * @return float|int
+     */
+    private static function makeSeed()
+    {
+        list($usec, $sec) = explode(' ', microtime());
+        return $sec + $usec * 1000000;
+    }
+
+    /**
+     * Returns a random number.
+     * @param $min
+     * @param $max
+     * @return int
+     */
+    public static function createRandomNumber($min, $max)
+    {
+        mt_srand(PMF_Utils::makeSeed());
+        return mt_rand($min, $max);
+    }
 }

@@ -873,10 +873,9 @@ switch ($action) {
                     'a','e','i','o','u',
                 );
                 $newPassword = '';
-                srand((double) microtime() * 1000000);
                 for ($i = 1; $i <= 4; ++$i) {
-                    $newPassword .= $consonants[rand(0, 19)];
-                    $newPassword .= $vowels[rand(0, 4)];
+                    $newPassword .= $consonants[PMF_Utils::createRandomNumber(0, 19)];
+                    $newPassword .= $vowels[PMF_Utils::createRandomNumber(0, 4)];
                 }
                 $user->changePassword($newPassword);
                 $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG['lostpwd_text_2'];
