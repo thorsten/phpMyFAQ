@@ -44,7 +44,7 @@ class Mysqli extends Database implements Driver
             id INT(11) NOT NULL,
             time INT(11) NOT NULL,
             usr INT(11) NOT NULL,
-            `text` TEXT NOT NULL,
+            text TEXT NOT NULL,
             ip VARCHAR(64) NOT NULL,
             PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
@@ -230,6 +230,14 @@ class Mysqli extends Database implements Driver
             config_name VARCHAR(255) NOT NULL default \'\',
             config_value VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (instance_id, config_name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+
+        'faqmeta' => 'CREATE TABLE %sfaqmeta (
+            id INT(11) unsigned NOT NULL,
+            lang VARCHAR(5) DEFAULT NULL,
+            page_id VARCHAR(48) DEFAULT NULL,
+            type VARCHAR(48) DEFAULT NULL,
+            content TEXT NULL,
+            PRIMARY KEY (id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faqnews' => 'CREATE TABLE %sfaqnews (
             id INT(11) NOT NULL,
