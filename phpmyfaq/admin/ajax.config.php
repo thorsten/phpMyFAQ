@@ -62,7 +62,7 @@ switch ($ajaxAction) {
         $password = Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
         $data = array(
-            'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
+            'url' => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
             'instance' => $instance,
             'comment' => $comment,
         );
@@ -77,11 +77,11 @@ switch ($ajaxAction) {
         $hostname = $urlParts['host'];
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
-            $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
+            $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
             $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
 
-            $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
+            $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
 
             $dbSetup = array(
                 'dbServer' => $DB['server'],
@@ -93,7 +93,7 @@ switch ($ajaxAction) {
             );
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl('http://'.$hostname);
+            $faqInstanceClient->setClientUrl('http://' . $hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
             Db::setTablePrefix($dbSetup['dbPrefix']);
@@ -210,6 +210,26 @@ switch ($ajaxAction) {
         } else {
             $payload = array('error' => $metaId);
         }
+        $http->sendJsonWithHeaders($payload);
+        break;
+
+
+    case 'delete_meta':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            exit(1);
+        }
+
+        $meta = new Meta($faqConfig);
+        $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_SANITIZE_STRING);
+
+        if ($meta->delete($metaId)) {
+            $payload = array('deleted' => $metaId);
+        } else {
+            $payload = array('error' => $metaId);
+        }
+
         $http->sendJsonWithHeaders($payload);
         break;
 }

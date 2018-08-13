@@ -81,13 +81,42 @@ class Meta
     }
 
     /**
+     * @param $metaId
+     * @return MetaEntity
+     */
+    public function getById($metaId)
+    {
+        $entity = new MetaEntity();
+        $query = sprintf(
+            "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE id = %d AND lang = '%s'",
+            Db::getTablePrefix(),
+            $metaId,
+            $this->config->getLanguage()->getLanguage()
+        );
+
+        $result = $this->config->getDb()->query($query);
+
+        if ($result) {
+            $row = $this->config->getDb()->fetchObject($result);
+            return $entity
+                ->setId($row->id)
+                ->setLang($row->lang)
+                ->setPageId($row->page_id)
+                ->setType($row->type)
+                ->setContent($row->content);
+        }
+
+        return $entity;
+    }
+
+    /**
      * @param $pageId
      * @return array
      */
     public function getByPageId($pageId)
     {
         $query = sprintf(
-            "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE id = %d AND lang = '%s'",
+            "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE page_id = %d AND lang = '%s'",
             Db::getTablePrefix(),
             $pageId,
             $this->config->getLanguage()->getLanguage()
@@ -133,19 +162,39 @@ class Meta
     }
 
     /**
-     * @param $id
+     * @param $metaId
      * @param MetaEntity $data
+     * @return bool
      */
-    public function update($id, MetaEntity $data)
+    public function update($metaId, MetaEntity $data)
     {
+        $query = sprintf(
+            "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
+            Db::getTablePrefix(),
+            $data->getPageId(),
+            $data->getType(),
+            $data->getContent(),
+            $metaId,
+            $this->config->getLanguage()->getLanguage()
+        );
 
+        return (boolean) $this->config->getDb()->query($query);
     }
 
     /**
      * @param $id
+     * @return bool
      */
     public function delete($id)
     {
+        $query = sprintf(
+            "DELETE FROM %sfaqmeta WHERE lang = '%s' AND id = %d",
+            Db::getTablePrefix(),
+            $this->config->getLanguage()->getLanguage(),
+            $id
+        );
+
+        return (boolean) $this->config->getDb()->query($query);
 
     }
 }

@@ -28,7 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
             '<td>' + type + '</td>' +
             '<td>' + content +'</td>' +
             '<td>' +
-            '<a href="javascript:;" id="delete-META-' + data.added +
+            '<a href="?action=meta.edit&id='+ data.added + '" class="btn btn-success">' +
+            '<i class="material-icons">edit</i>' +
+            '</a>' +
+            '<a href="javascript:;" id="delete-meta-' + data.added +
             '" class="btn btn-danger pmf-meta-delete"><i class="material-icons">delete</i></a>' +
             '</td>' +
             '</tr>'
@@ -44,11 +47,11 @@ document.addEventListener('DOMContentLoaded', () => {
     event.preventDefault();
     const targetId = event.target.id.split('-');
     const id = targetId[2];
-    const csrf = this.getAttribute('data-csrf-token');
+    const csrf = event.target.dataset.csrf;
 
     if (confirm('Are you sure?')) {
       $.get('index.php',
-        { action: 'ajax', ajax: 'config', ajaxaction: 'delete_meta', meta_id: id, csrf: csrf },
+        { action: 'ajax', ajax: 'config', ajaxaction: 'delete_meta', 'meta_id': id, csrf: csrf },
         function(data) {
           if (typeof(data.deleted) === 'undefined') {
             $('.table').after(

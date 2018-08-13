@@ -18,6 +18,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Meta;
+use phpMyFAQ\Entity\Meta as MetaEntity;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -31,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $defaultMetaAction = 'list';
 $metaAction = Filter::filterInput(INPUT_GET, 'meta_action', FILTER_SANITIZE_STRING, $defaultMetaAction);
 $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-
+$metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 ?>
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -56,6 +57,37 @@ if (!$user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
 $meta = new Meta($faqConfig);
 
+// Update meta data
+if ('meta.update' === $action && is_integer($metaId)) {
+
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        echo $PMF_LANG['err_NotAuth'];
+    } else {
+
+        $entity = new MetaEntity();
+        $entity
+            ->setPageId(Filter::filterInput(INPUT_POST, 'page_id', FILTER_SANITIZE_STRING))
+            ->setType(Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING))
+            ->setContent(Filter::filterInput(INPUT_POST, 'content', FILTER_SANITIZE_SPECIAL_CHARS));
+
+        if ($meta->update($metaId, $entity)) {
+            printf(
+                '<p class="alert alert-success">%s%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_config_saved']
+            );
+        } else {
+            printf(
+                '<p class="alert alert-danger">%s%s<br/>%s</p>',
+                '<a class="close" data-dismiss="alert" href="#">&times;</a>',
+                $PMF_LANG['ad_entryins_fail'],
+                $faqConfig->getDb()->error()
+            );
+        }
+    }
+
+}
+
 $metaData = $meta->getAll();
 ?>
 <table class="table table-striped">
@@ -69,13 +101,17 @@ $metaData = $meta->getAll();
     </thead>
     <tbody>
     <?php foreach ($metaData as $data): ?>
-        <tr>
+        <tr id="row-meta-<?= $data->getId() ?>">
             <td><?= $data->getId() ?></td>
             <td><?= $data->getPageId() ?></td>
             <td><?= $data->getType() ?></td>
             <td><?= $data->getContent() ?></td>
             <td>
-                <a href="#" id="delete-meta-<?= $data->getId() ?>" class="btn btn-danger pmf-meta-delete">
+                <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-success">
+                    <i class="material-icons">edit</i>
+                </a>
+                <a href="#" id="delete-meta-<?= $data->getId() ?>" class="btn btn-danger pmf-meta-delete"
+                   data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
                     <i class="material-icons">delete</i>
                 </a>
             </td>
@@ -109,8 +145,8 @@ $metaData = $meta->getAll();
                         <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
                         <div class="col-sm-10">
                             <select class="form-control" id="type" required>
-                                <option>Text</option>
-                                <option>HTML</option>
+                                <option value="text">Text</option>
+                                <option value="html">HTML</option>
                             </select>
                         </div>
                     </div>
