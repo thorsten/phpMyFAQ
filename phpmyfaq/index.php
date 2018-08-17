@@ -44,6 +44,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Template;
+use phpMyFAQ\Template\TemplateHelper;
 use phpMyFAQ\User\CurrentUser;
 
 //
@@ -465,10 +466,11 @@ if ($faqConfig->get('main.maintenanceMode')) {
 // Load template files and set template variables
 //
 $tpl = new Template(
-    array(
+    [
         'index' => $indexSet,
         'writeContent' => $includeTemplate,
-    ),
+    ],
+    new TemplateHelper($faqConfig),
     $faqConfig->get('main.templateSet')
 );
 

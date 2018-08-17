@@ -111,24 +111,31 @@ class Meta
 
     /**
      * @param $pageId
-     * @return array
+     * @return MetaEntity
      */
     public function getByPageId($pageId)
     {
+        $entity = new MetaEntity();
         $query = sprintf(
-            "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE page_id = %d AND lang = '%s'",
+            "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE page_id = '%s' AND lang = '%s'",
             Db::getTablePrefix(),
             $pageId,
             $this->config->getLanguage()->getLanguage()
         );
 
         $result = $this->config->getDb()->query($query);
-
         if ($result) {
-            return $this->config->getDb()->fetchAll($result);
+            if ($row = $this->config->getDb()->fetchObject($result)) {
+                $entity
+                    ->setId($row->id)
+                    ->setLang($row->lang)
+                    ->setPageId($row->page_id)
+                    ->setType($row->type)
+                    ->setContent($row->content);
+            }
         }
 
-        return [];
+        return $entity;
     }
 
     /**

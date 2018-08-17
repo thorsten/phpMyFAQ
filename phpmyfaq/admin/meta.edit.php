@@ -69,8 +69,8 @@ $metaData = $meta->getById($metaId);
     <label for="type" class="col-sm-2 col-form-label"><?= $PMF_LANG['ad_meta_type'] ?></label>
     <div class="col-sm-10">
       <select class="form-control" name="type" required>
-        <option <?= $metaData->getType() === 'text' ? 'selected' : '' ?>>Text</option>
-        <option <?= $metaData->getType() === 'html' ? 'selected' : '' ?>>HTML</option>
+        <option value="text" <?= $metaData->getType() === 'text' ? 'selected' : '' ?>>Text</option>
+        <option value="html" <?= $metaData->getType() === 'html' ? 'selected' : '' ?>>HTML</option>
       </select>
     </div>
   </div>

@@ -336,7 +336,7 @@ class Strings
      *
      * @return string
      */
-    public static function htmlspecialchars($string, $quoteStyle = ENT_COMPAT, $charset = 'utf-8', $doubleEncode = false)
+    public static function htmlspecialchars($string, $quoteStyle = ENT_HTML5, $charset = 'utf-8', $doubleEncode = false)
     {
         return htmlspecialchars(
             $string,
@@ -356,7 +356,7 @@ class Strings
      *
      * @return string
      */
-    public static function htmlentities($string, $quoteStyle = ENT_COMPAT, $charset = 'utf-8', $doubleEncode = true)
+    public static function htmlentities($string, $quoteStyle = ENT_HTML5, $charset = 'utf-8', $doubleEncode = true)
     {
         return htmlentities(
             $string,
