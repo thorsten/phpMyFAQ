@@ -14,6 +14,7 @@ Version 3.0.0-alpha.3 - 2018-
 - added configuration for enable/disable XML sitemap (Thorsten)
 - added support for category images (Thorsten)
 - added support for categories on homepage (Thorsten)
+- added filter functionality in templates (Thorsten)
 - added image slider template (Thorsten)
 - added improved attachment overview (Thorsten)
 - added HTML5 export (Thorsten)
