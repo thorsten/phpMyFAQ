@@ -3016,7 +3016,7 @@ class PMF_Faq
      *
      * @return string
      */
-    public function printOpenQuestions()
+    public function printOpenQuestions($user)
     {
         global $sids, $category;
 
@@ -3089,6 +3089,12 @@ class PMF_Faq
                         $row->category_id,
                         $row->answer_id,
                         $this->pmf_lang['msg2answerFAQ']
+                    );
+                } else if(!$this->_config->get('records.allowNewFaqsForGuests') &&
+                          !$user->perm->checkRight($user->getUserId(), 'addfaq')) {
+                    $output .= sprintf(
+                        '<td>%s</td>',
+                        $this->pmf_lang['msg2unanswerFAQ']
                     );
                 } else {
                     $output .= sprintf(

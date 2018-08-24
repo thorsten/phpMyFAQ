@@ -1,3 +1,12 @@
+[DisallowAsk]
+<section>
+            <p class="alert alert-danger">
+                {msgErrNotAuth}
+            </p>
+        </section>
+[/DisallowAsk]
+
+[AllowAsk]
 <section>
 
             <div id="questionForm">
@@ -72,3 +81,4 @@
                 });
             });
         </script>
+[/AllowAsk]

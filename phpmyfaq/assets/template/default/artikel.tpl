@@ -120,6 +120,7 @@
 
             <p class="hidden-print">{writeCommentMsg}</p>
 
+[AllowComments]
             <aside class="pmf-create-comment hide" id="pmf-create-comment">
 
                 <hr>
@@ -156,6 +157,7 @@
                     </div>
                 </form>
             </aside>
+[/AllowComments]
 
             <aside class="pmf-comments" id="comments">
                 <hr>

@@ -55,8 +55,19 @@ $categoryHelper->setCategory($category);
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);
 
-$tpl->parse(
+if(!$faqConfig->get('records.allowNewFaqsForGuests') &&
+   !$user->perm->checkRight($user->getUserId(), 'addquestion')) {
+    $tpl->parseBlock(
     'writeContent',
+        'DisallowAsk',
+        [
+            'msgErrNotAuth' => $PMF_LANG['err_NotAuth'],
+        ]
+    );
+} else {
+    $tpl->parseBlock(
+        'writeContent',
+        'AllowAsk',
     [
         'msgQuestion' => $PMF_LANG['msgQuestion'],
         'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
@@ -73,6 +84,12 @@ $tpl->parse(
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
     ]
+    );
+}
+
+$tpl->parse(
+    'writeContent',
+    []
 );
 
 $tpl->parseBlock(
