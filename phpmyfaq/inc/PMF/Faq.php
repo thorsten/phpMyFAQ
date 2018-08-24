@@ -2962,6 +2962,7 @@ class PMF_Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
+                %s
             GROUP BY
                 fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
             ORDER BY
@@ -2975,6 +2976,7 @@ class PMF_Faq
             $now,
             $category,
             $this->_config->getLanguage()->getLanguage(),
+            $this->queryPermission($this->groupSupport),
             $this->_config->get('records.orderby'),
             $this->_config->get('records.sortby')
         );
