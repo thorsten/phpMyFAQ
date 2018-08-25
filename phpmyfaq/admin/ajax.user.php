@@ -77,6 +77,11 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
             break;
 
         case 'activate_user':
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                exit(1);
+            }
+
             $user->getUserById($userId, true);
             $user->setStatus('active');
             $user->activateUser();

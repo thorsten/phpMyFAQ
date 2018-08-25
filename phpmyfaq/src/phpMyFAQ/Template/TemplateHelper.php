@@ -68,7 +68,7 @@ class TemplateHelper
         if ($metaData->getType() === 'html') {
             return html_entity_decode($metaData->getContent());
         } else {
-            $metaData->getContent();
+            return $metaData->getContent();
         }
     }
 }

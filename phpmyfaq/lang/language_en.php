@@ -1292,3 +1292,6 @@ $PMF_LANG['rightsLanguage']['administrate_groups'] = 'Administrate groups';
 $PMF_LANG['ad_group_rights'] = 'Group permissions';
 $PMF_LANG['ad_menu_meta'] = 'Meta data';
 $PMF_LANG['ad_meta_add'] = 'Add meta data';
+$PMF_LANG['ad_meta_page_id'] = 'Page type';
+$PMF_LANG['ad_meta_type'] = 'Content type';
+$PMF_LANG['ad_meta_content'] = 'Content';

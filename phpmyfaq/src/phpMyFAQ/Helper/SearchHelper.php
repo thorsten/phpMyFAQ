@@ -136,11 +136,12 @@ class SearchHelper extends Helper
                     urlencode($this->searchterm)
                 );
 
+                $question = html_entity_decode($result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
                 $link = new Link($currentUrl, $this->_config);
                 $link->itemTitle = $result->question;
                 $faq = new \stdClass();
                 $faq->categoryName = $this->Category->getPath($result->category_id);
-                $faq->faqQuestion = Utils::chopString($result->question, 15);
+                $faq->faqQuestion = Utils::chopString($question, 15);
                 $faq->faqLink = $link->toString();
 
                 $results['results'][] = $faq;

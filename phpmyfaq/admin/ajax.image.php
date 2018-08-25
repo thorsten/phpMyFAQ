@@ -53,7 +53,7 @@ switch ($ajaxAction) {
             ) {
 
                 $fileInfo = getimagesize($uploadedFile['tmp_name']);
-                $fileExtension = pathinfo($uploadFile, PATHINFO_EXTENSION);;
+                $fileExtension = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
 
                 if (false === $fileInfo) {
                     $isUploaded = false;

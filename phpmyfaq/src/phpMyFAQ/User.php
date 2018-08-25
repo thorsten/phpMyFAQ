@@ -1075,16 +1075,14 @@ class User
         $newPassword = '';
         $skipped = false;
 
-        srand((double) microtime() * 1000000);
-
         while (strlen($newPassword) < $minimumLength) {
-            if (rand(0, 1)) {
+            if (Utils::createRandomNumber(0, 1)) {
                 $caseFunc = 'strtoupper';
             } else {
                 $caseFunc = 'strtolower';
             }
 
-            switch (rand(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
+            switch (Utils::createRandomNumber(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
                 case 0:
                 case 1:
                     $nextChar = $caseFunc($consonants[rand(0, 18)]);

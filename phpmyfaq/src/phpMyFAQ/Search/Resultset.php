@@ -129,9 +129,13 @@ class Resultset
 
             // check permissions for groups
             if ('medium' === $this->_config->get('security.permLevel')) {
-                $groupPermission = $this->faq->getPermission('group', $result->id);
-                if (count($groupPermission) && in_array($groupPermission[0], $currentGroupIds)) {
-                    $permission = true;
+                $groupPermissions = $this->faq->getPermission('group', $result->id);
+                if (is_array($groupPermissions)) {
+                    foreach ($groupPermissions as $groupPermission) {
+                        if (in_array($groupPermission, $currentGroupIds)) {
+                            $permission = true;
+                        }
+                    }
                 }
             }
             // check permission for user
