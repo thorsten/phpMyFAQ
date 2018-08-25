@@ -212,7 +212,7 @@ class CurrentUser extends User
                 Session::setCookie(
                     Session::PMF_COOKIE_NAME_REMEMBERME,
                     $rememberMe,
-                    $_SERVER['REQUEST_TIME'] + REMEMBERME_EXPIRED_TIME
+                    $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
                 );
             }
 

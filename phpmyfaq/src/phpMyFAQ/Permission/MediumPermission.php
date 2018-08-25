@@ -811,7 +811,7 @@ class MediumPermission extends BasicPermission
     public function getAllUserRights($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
-            return false;
+            return [];
         }
         $userRights = $this->getUserRights($userId);
         $groupRights = $this->getUserGroupRights($userId);
