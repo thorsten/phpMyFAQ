@@ -2900,7 +2900,7 @@ class Faq
         $permissions = [];
 
         if (!($mode == 'user' || $mode == 'group')) {
-            return false;
+            return $permissions;
         }
 
         $query = sprintf('
@@ -2937,6 +2937,7 @@ class Faq
     {
         global $sids;
 
+        $output = '';
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -2998,30 +2999,29 @@ class Faq
 
         $result = $this->_config->getDb()->query($query);
 
-        $output = '<ul class="phpmyfaq_ul">';
+        if ($result) {
+            $output = '<ul>';
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                $title = $row->thema;
+                $url = sprintf(
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
 
-        while (($row = $this->_config->getDb()->fetchObject($result))) {
-            $title = $row->thema;
-            $url = sprintf(
-                '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                Link::getSystemRelativeUri(),
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
+                $oLink = new Link($url, $this->_config);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
-            $oLink = new Link($url, $this->_config);
-            $oLink->itemTitle = $row->thema;
-            $oLink->text = $title;
-            $oLink->tooltip = $title;
-            $listItem = sprintf('<li>%s</li>', $oLink->toHtmlAnchor(), $this->pmf_lang['msgViews']);
-            $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
-
-            $output .= $listItem;
+                $output .= $listItem;
+            }
+            $output .= '</ul>';
         }
-
-        $output .= '</ul>';
 
         return $output;
     }

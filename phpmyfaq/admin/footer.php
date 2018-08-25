@@ -38,12 +38,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="row">
         <div class="col-lg-12">
             <p class="copyright text-right">
-                Proudly powered by <strong>phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></strong> |
+                Proudly powered by <strong>phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></strong> |
                 <a href="https://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
                 Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
                 <i aria-hidden="true" class="fa fa-apple"></i> Available on the
                 <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957">App Store</a> |
-                &copy; 2001-<?php echo date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
+                &copy; 2001-<?= date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
             </p>
         </div>
     </div>
@@ -57,14 +57,14 @@ printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getD
 
 <?php
 if (isset($auth)) {
-    ?>
-<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?php echo $LANGCODE ?>" width="0" height="0"
+?>
+<iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $LANGCODE ?>" width="0" height="0"
         style="display: none;"></iframe>
 <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview'  == $action) ||
                          ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
-            ?>
+?>
 <script>
 
   // Bootstrap tooltips
@@ -74,17 +74,18 @@ if (isset($auth)) {
   tinyMCE.init({
     // General options
     mode: 'exact',
-    language: '<?php echo(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
-    elements: '<?php echo ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
+    language: '<?=(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+    elements: '<?= ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
     theme: 'modern',
     plugins: [
       'advlist autolink lists link image charmap print preview hr anchor pagebreak',
       'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
       'insertdatetime media nonbreaking save table contextmenu directionality',
-      'emoticons template paste textcolor autosave phpmyfaq imageupload'
+      'emoticons template paste textcolor autosave phpmyfaq imageupload save'
     ],
     relative_urls: false,
     convert_urls: false,
+    document_base_url: '<?= $faqConfig->getDefaultUrl() ?>',
     remove_linebreaks: false,
     use_native_selects: true,
     paste_remove_spans: true,
@@ -140,15 +141,15 @@ if (isset($auth)) {
     importcss_append: true,
 
     // Save function
-    save_onsavecallback: "phpMyFAQSave",
+    save_onsavecallback: () => { phpMyFAQSave(); },
 
     // phpMyFAQ CSS
-    content_css: '../assets/themes/<?php echo Template::getTplSetName() ?>/css/style.min.css?<?php echo time(); ?>',
+    content_css: '../assets/themes/<?= Template::getTplSetName() ?>/css/style.min.css?<?= time(); ?>',
 
     // Replace values for the template plugin
     template_replace_values: {
-      username: '<?php echo addslashes($user->userdata->get('display_name')) ?>',
-      user_id: '<?php echo $user->userdata->get('user_id') ?>'
+      username: '<?= addslashes($user->userdata->get('display_name')) ?>',
+      user_id: '<?= $user->userdata->get('user_id') ?>'
     },
 
     templates: [
@@ -201,7 +202,7 @@ if (isset($auth)) {
     });
 
     $.post('index.php', data, null);
-    indicator.html('<?php echo $PMF_LANG['ad_entry_savedsuc'] ?>');
+    indicator.html('<?= $PMF_LANG['ad_entry_savedsuc'] ?>');
     $('#temporarySaveButton').remove();
     indicator.fadeOut(5000);
   }

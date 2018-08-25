@@ -65,9 +65,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <input type="hidden" name="parent_id" value="<?php echo $category->categoryName[$id]['parent_id'] ?>">
                     <input type="hidden" name="showcat" value="<?php echo $showcat ?>">
                     <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
-                    <input type="hidden" name="restricted_groups" value="<?php echo $groupPermission[0] ?>">
+                    <input type="hidden" name="restricted_groups[]" value="<?php echo $groupPermission[0] ?>">
                     <?php else: ?>
-                    <input type="hidden" name="restricted_groups" value="-1">
+                    <input type="hidden" name="restricted_groups[]" value="-1">
                     <?php endif; ?>
                     <input type="hidden" name="restricted_users" value="<?php echo $userPermission[0] ?>">
                     <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">

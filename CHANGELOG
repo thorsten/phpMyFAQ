@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-alpha.3 - 2018-
+Version 3.0.0-alpha.3 - 2018-08-
 - changed PHP requirement to PHP 5.6.6 and PHP 7+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
@@ -44,6 +44,18 @@ Version 3.0.0-alpha.3 - 2018-
 - removed bundled Font Awesome icons (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
 - removed Modernizr (Thorsten)
+
+Version 2.9.11 - 2018-08-
+- fixed multiple vulnerabilities (Thorsten)
+- updated bundled jQuery to version 1.12.4 (Thorsten)
+- updated bundled Handlebars to version 4.0.11 (Thorsten)
+
+Version 2.9.10 - 2018-02-17
+- updated Dutch translation (https://github.com/joskevos)
+- updated bundled SwiftMailer to version 5.4.9 (Thorsten)
+- updated bundled phpseclib to version 2.0.9 (Thorsten)
+- updated bundled TinyMCE to version 4.6.7 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.9 - 2017-10-19
 - fixed multiple XSS and CSRF vulnerabilities (Thorsten)

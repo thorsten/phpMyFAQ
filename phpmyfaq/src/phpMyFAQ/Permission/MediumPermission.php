@@ -44,11 +44,11 @@ class MediumPermission extends BasicPermission
      *
      * @var array
      */
-    public $defaultGroupData = array(
+    public $defaultGroupData = [
         'name' => 'DEFAULT_GROUP',
         'description' => 'Short group description.',
         'auto_join' => false,
-    );
+    ];
 
     /**
      * Constructor.
@@ -703,18 +703,19 @@ class MediumPermission extends BasicPermission
      * @todo Move into the Helper class
      *
      * @param array $groups Selected groups
+     * @param integer $userId
      * @return string
      */
-    public function getAllGroupsOptions(Array $groups, $userID = 1)
+    public function getAllGroupsOptions(Array $groups, $userId = 1)
     {
         $options = '';
-        $allGroups = $this->getAllGroups($userID);
+        $allGroups = $this->getAllGroups($userId);
 
         foreach ($allGroups as $groupId) {
             if (-1 != $groupId) {
                 $options .= sprintf('<option value="%d"%s>%s</option>',
                     $groupId,
-                    (in_array($groupId, $groups) ? ' selected="selected"' : ''),
+                    (in_array($groupId, $groups) ? ' selected' : ''),
                     $this->getGroupName($groupId)
                 );
             }

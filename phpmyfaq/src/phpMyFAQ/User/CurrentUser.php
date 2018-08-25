@@ -103,6 +103,10 @@ class CurrentUser extends User
      */
     private $loginState = 1;
 
+    /**
+     * Lockout time in seconds
+     * @var integer
+     */
     private $lockoutTime = 600;
 
     /**
@@ -647,7 +651,7 @@ class CurrentUser extends User
             WHERE
                 user_id = %d",
             Db::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] + $this->lockoutTime,
+            $_SERVER['REQUEST_TIME'],
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
