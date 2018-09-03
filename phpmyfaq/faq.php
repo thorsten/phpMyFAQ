@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <larstiedemann@yahoo.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-27
  */
@@ -37,6 +35,7 @@ use phpMyFAQ\Search\Resultset as SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Utils;
+use phpMyFAQ\Visits;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -87,7 +86,7 @@ try {
     // @todo handle the exception
 }
 
-$faqVisits = new phpMyFAQ\Visits($faqConfig);
+$faqVisits = new Visits($faqConfig);
 $faqVisits->logViews($recordId);
 
 // Add Glossary entries for answers only
@@ -231,7 +230,8 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     );
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'addtranslation')) {
+if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
+    !empty($availableLanguages) && count($availableLanguages) > 1) {
     $tpl->parseBlock(
         'writeContent',
         'addTranslation',

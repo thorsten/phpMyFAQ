@@ -250,6 +250,14 @@ class Pgsql extends Database implements Driver
             target VARCHAR(255) NOT NULL,
             PRIMARY KEY (id))',
 
+        'faqmeta' => 'CREATE TABLE %sfaqmeta (
+            id SERIAL NOT NULL,
+            lang VARCHAR(5) DEFAULT NULL,
+            page_id VARCHAR(48) DEFAULT NULL,
+            type VARCHAR(48) DEFAULT NULL,
+            content TEXT NULL,
+            PRIMARY KEY (id))',
+
         'faqquestions' => 'CREATE TABLE %sfaqquestions (
             id SERIAL NOT NULL,
             lang VARCHAR(5) NOT NULL,

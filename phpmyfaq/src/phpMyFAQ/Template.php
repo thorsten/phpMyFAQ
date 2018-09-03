@@ -13,29 +13,27 @@ namespace phpMyFAQ;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-22
  */
+
+use phpMyFAQ\Template\TemplateHelper;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Template.
- *
- * @category  phpMyFAQ
- *
+ * Class Template
+ * @package phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-22
  */
@@ -43,31 +41,32 @@ class Template
 {
     /**
      * The template array.
-     *
      * @var array
      */
     public $templates = [];
 
     /**
      * The output array.
-     *
      * @var array
      */
     private $outputs = [];
 
     /**
      * The blocks array.
-     *
      * @var array
      */
     private $blocks = [];
 
     /**
      * array containing the touched blocks.
-     *
      * @var array
      */
     private $blocksTouched = [];
+
+    /**
+     * @var TemplateHelper
+     */
+    private $tplHelper;
 
     /**
      * Name of active template set.
@@ -77,22 +76,20 @@ class Template
     private static $tplSetName;
 
     /**
-     * Constructor.
-     *
      * Combine all template files into the main templates array
      *
-     * @param array  $myTemplate Templates
-     * @param string $tplSetName active template set name
-     *
-     * @return Template
+     * @param array $myTemplate Templates
+     * @param TemplateHelper $tplHelper
+     * @param string $tplSetName Active template name
      */
-    public function __construct(Array $myTemplate, $tplSetName = 'default')
+    public function __construct(Array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
     {
+        $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
 
         foreach ($myTemplate as $templateName => $filename) {
-            $this->templates[$templateName] = $this->_include(
-                'assets/themes/'.$tplSetName.'/templates/'.$filename,
+            $this->templates[$templateName] = $this->include(
+                'assets/themes/' . $tplSetName . '/templates/' . $filename,
                 $templateName
             );
         }
@@ -106,39 +103,40 @@ class Template
      */
     public function merge($from, $into)
     {
-        $this->outputs[$into] = str_replace('{{ '.$from.' }}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$into] = str_replace('{{ ' . $from . ' }}', $this->outputs[$from], $this->outputs[$into]);
         $this->outputs[$from] = null;
     }
 
     /**
      * Parses the template.
      *
-     * @param string $templateName    Name of the template
-     * @param array  $templateContent Content of the template
+     * @param string $templateName Name of the template
+     * @param array $templateContent Content of the template
      */
     public function parse($templateName, Array $templateContent)
     {
         $tmp = $this->templates[$templateName];
-        $rawBlocks = $this->_readBlocks($tmp);
+        $rawBlocks = $this->readBlocks($tmp);
+        $filters[$templateName] = $this->readFilters($tmp);
 
         // process blocked content
         if (isset($this->blocks[$templateName])) {
             foreach ($rawBlocks as $key => $rawBlock) {
-                if (in_array($key, $this->blocksTouched) && $key != 'unblocked') {
+                if (in_array($key, $this->blocksTouched) && $key !== 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = str_replace('['.$key.']', '', $tmp);
-                    $tmp = str_replace('[/'.$key.']', '', $tmp);
-                } elseif ($key != 'unblocked') {
+                    $tmp = str_replace('[' . $key . ']', '', $tmp);
+                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
+                } elseif ($key !== 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = str_replace('['.$key.']', '', $tmp);
-                    $tmp = str_replace('[/'.$key.']', '', $tmp);
+                    $tmp = str_replace('[' . $key . ']', '', $tmp);
+                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
                 }
             }
         }
 
         // process unblocked content
         if (isset($this->blocks[$templateName]['unblocked'])) {
-            $templateContent = $this->_checkContent($templateContent);
+            $templateContent = $this->checkContent($templateContent);
             foreach ($this->blocks[$templateName]['unblocked'] as $tplVar) {
                 $varName = trim(Strings::preg_replace('/[\{\{\}\}]/', '', $tplVar));
                 if (isset($templateContent[$varName])) {
@@ -146,6 +144,18 @@ class Template
                 }
             }
         }
+
+        // process filters
+        if (isset($filters[$templateName])) {
+            if (count($filters[$templateName])) {
+                foreach ($filters[$templateName] as $filter) {
+                    $filterMethod = 'render' . ucfirst(key($filter)) . 'Filter';
+                    $filteredVar = $this->tplHelper->$filterMethod(current($filter));
+                    $tmp = str_replace('{{ ' . current($filter) . ' | ' . key($filter) . ' }}', $filteredVar, $tmp);
+                }
+            }
+        }
+
 
         // add magic variables for each template
         $tmp = str_replace('{{ tplSetName }}', self::$tplSetName, $tmp);
@@ -188,8 +198,8 @@ class Template
      * This function processes the block.
      *
      * @param string $templateName Name of the template
-     * @param string $blockName    Block name
-     * @param array  $blockContent Content of the block
+     * @param string $blockName Block name
+     * @param array $blockContent Content of the block
      */
     public function parseBlock($templateName, $blockName, Array $blockContent)
     {
@@ -197,14 +207,14 @@ class Template
             $block = $this->blocks[$templateName][$blockName];
 
             // security check
-            $blockContent = $this->_checkContent($blockContent);
+            $blockContent = $this->checkContent($blockContent);
             foreach ($blockContent as $var => $val) {
                 // if array given, multiply block
                 if (is_array($val)) {
-                    $block = $this->_multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
+                    $block = $this->multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
                     break;
                 } else {
-                    $block = str_replace('{{ '.$var.' }}', $val, $block);
+                    $block = str_replace('{{ ' . $var . ' }}', $val, $block);
                 }
             }
 
@@ -234,45 +244,41 @@ class Template
         return self::$tplSetName;
     }
 
-    //
-    // Protected and private methods
-    //
-
     /**
      * This function reads a template file.
      *
      * @param string $filename Filename
-     * @param string $tplName  Name of the template
+     * @param string $tplName Name of the template
      *
      * @return string
      */
-    protected function _include($filename, $tplName)
+    protected function include($filename, $tplName)
     {
         if (file_exists($filename)) {
             $tplContent = file_get_contents($filename);
-            $this->blocks[$tplName] = $this->_readBlocks($tplContent);
+            $this->blocks[$tplName] = $this->readBlocks($tplContent);
 
             return $tplContent;
         } else {
-            return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
+            return '<p><span style="color: red;">Error:</span> Cannot open the file ' . $filename . '.</p>';
         }
     }
 
     /**
      * This function multiplies blocks.
      *
-     * @param string $block        Blockname
-     * @param array  $blockContent Content of block
+     * @param string $block Blockname
+     * @param array $blockContent Content of block
      *
      * @return string implode('', $tmpBlock)
      */
-    private function _multiplyBlock($block, $blockContent)
+    private function multiplyBlock($block, $blockContent)
     {
         $multiplyTimes = 0;
         $replace = [];
         $tmpBlock = [];
 
-        //create the replacement array
+        // create the replacement array
         foreach ($blockContent as $var => $val) {
             if (is_array($val) && !$multiplyTimes) {
                 // the first array in $blockContent defines $multiplyTimes
@@ -297,7 +303,7 @@ class Template
         for ($i = 0; $i < $multiplyTimes; ++$i) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
-                $tmpBlock[$i] = str_replace('{{ '.$var.' }}', $val[$i], $tmpBlock[$i]);
+                $tmpBlock[$i] = str_replace('{{ ' . $var . ' }}', $val[$i], $tmpBlock[$i]);
             }
         }
 
@@ -307,18 +313,18 @@ class Template
     /**
      * This function reads the block.
      *
-     * @param string $tpl Block to read
+     * @param string $block Block to read
      *
      * @return array
      */
-    private function _readBlocks($tpl)
+    private function readBlocks($block)
     {
-        $tmpBlocks = [];
+        $tmpBlocks = $tplBlocks = [];
 
         // read all blocks into $tmpBlocks
-        Strings::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\{\}\}\<\>\=\"\/]*?\s*\[\/\1\]/', $tpl, $tmpBlocks);
+        Strings::preg_match_all('/\[([[:alpha:]]+)\]\s*[\W\w\s\{\{\}\}\<\>\=\"\/]*?\s*\[\/\1\]/', $block, $tmpBlocks);
 
-        $unblocked = $tpl;
+        $unblocked = $block;
         if (isset($tmpBlocks)) {
             $blockCount = count($tmpBlocks[0]);
             for ($i = 0; $i < $blockCount; ++$i) {
@@ -327,14 +333,14 @@ class Template
                 Strings::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
                 $name = Strings::preg_replace('/[\[\[\/\]]/', '', $name);
                 // remove block tags from block
-                $res = str_replace('['.$name[0].']', '', $tmpBlocks[0][$i]);
-                $res = str_replace('[/'.$name[0].']', '', $res);
+                $res = str_replace('[' . $name[0] . ']', '', $tmpBlocks[0][$i]);
+                $res = str_replace('[/' . $name[0] . ']', '', $res);
                 $tplBlocks[$name[0]] = $res;
 
                 // unblocked content
                 $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
-                $unblocked = str_replace('['.$name[0].']', '', $unblocked);
-                $unblocked = str_replace('[/'.$name[0].']', '', $unblocked);
+                $unblocked = str_replace('[' . $name[0] . ']', '', $unblocked);
+                $unblocked = str_replace('[/' . $name[0] . ']', '', $unblocked);
             }
 
             $hits = [];
@@ -342,26 +348,50 @@ class Template
             $tplBlocks['unblocked'] = $hits[0];
         } else {
             // no blocks defined
-            $tplBlocks = $tpl;
+            $tplBlocks = $block;
         }
 
         return $tplBlocks;
     }
 
     /**
+     * @param $template
+     * @return array
+     */
+    private function readFilters($template)
+    {
+        $tmpFilter = $tplFilter = [];
+        Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
+
+        if (isset($tmpFilter)) {
+
+            $filterCount = count($tmpFilter[0]);
+            for ($i = 0; $i < $filterCount; ++$i) {
+                if (false !== strpos($tmpFilter[0][$i], ' | meta ')) {
+                    $rawFilter = str_replace(['{{', '}}'], '', $tmpFilter[0][$i]);
+                    list($identifier, $filter) = explode('|', $rawFilter);
+                    $tplFilter[] = [trim($filter) => trim($identifier)];
+                }
+            }
+        }
+
+        return $tplFilter;
+    }
+
+    /**
      * This function checks the content.
      *
-     * @param string $content Content to check
+     * @param array $content Content to check
      *
      * @return array
      */
-    private function _checkContent($content)
+    private function checkContent(Array $content)
     {
         // Security measure: avoid the injection of php/shell-code
-        $search = array('#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi');
-        $phppattern1 = '&lt;?php';
-        $phppattern2 = '&lt;?';
-        $replace = array($phppattern1, '', $phppattern2, '', '');
+        $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
+        $phpPattern1 = '&lt;?php';
+        $phpPattern2 = '&lt;?';
+        $replace = [$phpPattern1, '', $phpPattern2, '', ''];
 
         // Hack: Backtick Fix
         $content = str_replace('`', '&acute;', $content);

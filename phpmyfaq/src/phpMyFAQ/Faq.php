@@ -1428,6 +1428,7 @@ class Faq
      */
     public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, Array $condition = null, $sortOrder = 'ASC')
     {
+        $solutionIds = [];
         $where = '';
         if (!is_null($condition)) {
             $num = count($condition);
@@ -1558,27 +1559,30 @@ class Faq
             if ($expired) {
                 $content = $this->pmf_lang['err_expiredArticle'];
             }
+            if (!in_array($row->solution_id, $solutionIds)) {
+                array_push($solutionIds, $row->solution_id);
 
-            $this->faqRecords[] = [
-                'id' => $row->id,
-                'category_id' => $row->category_id,
-                'lang' => $row->lang,
-                'solution_id' => $row->solution_id,
-                'revision_id' => $row->revision_id,
-                'active' => $row->active,
-                'sticky' => $row->sticky,
-                'keywords' => $row->keywords,
-                'title' => $row->thema,
-                'content' => $content,
-                'author' => $row->author,
-                'email' => $row->email,
-                'comment' => $row->comment,
-                'updated' => Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
-                'dateStart' => $row->date_start,
-                'dateEnd' => $row->date_end,
-                'created' => $row->created,
-                'notes' => $row->notes
-            ];
+                $this->faqRecords[] = [
+                    'id' => $row->id,
+                    'category_id' => $row->category_id,
+                    'lang' => $row->lang,
+                    'solution_id' => $row->solution_id,
+                    'revision_id' => $row->revision_id,
+                    'active' => $row->active,
+                    'sticky' => $row->sticky,
+                    'keywords' => $row->keywords,
+                    'title' => $row->thema,
+                    'content' => $content,
+                    'author' => $row->author,
+                    'email' => $row->email,
+                    'comment' => $row->comment,
+                    'updated' => Date::createIsoDate($row->updated, 'Y-m-d H:i:s'),
+                    'dateStart' => $row->date_start,
+                    'dateEnd' => $row->date_end,
+                    'created' => $row->created,
+                    'notes' => $row->notes
+                ];
+            }
         }
     }
 
@@ -2598,7 +2602,7 @@ class Faq
                 %sfaqchanges
             WHERE
                 beitrag = %d
-            ORDER BY revision_id DESC',
+            ORDER BY revision_id, datum DESC',
             Db::getTablePrefix(),
             $recordId
         );
@@ -2896,7 +2900,7 @@ class Faq
         $permissions = [];
 
         if (!($mode == 'user' || $mode == 'group')) {
-            return false;
+            return $permissions;
         }
 
         $query = sprintf('
@@ -2933,6 +2937,7 @@ class Faq
     {
         global $sids;
 
+        $output = '';
         $now = date('YmdHis');
         $query = sprintf("
             SELECT
@@ -2973,6 +2978,7 @@ class Faq
                 fcr.category_id = %d
             AND
                 fd.lang = '%s'
+                %s
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits
             ORDER BY
@@ -2986,36 +2992,36 @@ class Faq
             $now,
             $category,
             $this->_config->getLanguage()->getLanguage(),
+            $this->queryPermission($this->groupSupport),
             $this->_config->get('records.orderby'),
             $this->_config->get('records.sortby')
         );
 
         $result = $this->_config->getDb()->query($query);
 
-        $output = '<ul class="phpmyfaq_ul">';
+        if ($result) {
+            $output = '<ul>';
+            while (($row = $this->_config->getDb()->fetchObject($result))) {
+                $title = $row->thema;
+                $url = sprintf(
+                    '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
+                    Link::getSystemRelativeUri(),
+                    $sids,
+                    $row->category_id,
+                    $row->id,
+                    $row->lang
+                );
 
-        while (($row = $this->_config->getDb()->fetchObject($result))) {
-            $title = $row->thema;
-            $url = sprintf(
-                '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                Link::getSystemRelativeUri(),
-                $sids,
-                $row->category_id,
-                $row->id,
-                $row->lang
-            );
+                $oLink = new Link($url, $this->_config);
+                $oLink->itemTitle = $row->thema;
+                $oLink->text = $title;
+                $oLink->tooltip = $title;
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
-            $oLink = new Link($url, $this->_config);
-            $oLink->itemTitle = $row->thema;
-            $oLink->text = $title;
-            $oLink->tooltip = $title;
-            $listItem = sprintf('<li>%s</li>', $oLink->toHtmlAnchor(), $this->pmf_lang['msgViews']);
-            $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
-
-            $output .= $listItem;
+                $output .= $listItem;
+            }
+            $output .= '</ul>';
         }
-
-        $output .= '</ul>';
 
         return $output;
     }

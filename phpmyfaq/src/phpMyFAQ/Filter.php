@@ -118,7 +118,7 @@ class Filter
     {
         $keep = [
             'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'size', 'dir', 'rel', 'rev', 'target', 'width', 'height'
+            'size', 'dir', 'rel', 'rev', 'target', 'width', 'height', 'controls'
         ];
 
         preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);

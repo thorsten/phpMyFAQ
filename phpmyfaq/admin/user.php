@@ -733,8 +733,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 </td>
                 <td>
                     <?php if ($user->getStatus() === 'blocked'): ?>
-                        <a onclick="activateUser(<?= $user->getUserData('user_id') ?>); return false;"
-                           href="#" class="btn btn-success btn_user_id_<?= $user->getUserId() ?>"">
+                      <a onclick="activateUser(this); return false;"
+                         href="#" class="btn btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
+                         data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
+                         data-user-id="<?= $user->getUserData('user_id') ?>">
                             <?= $PMF_LANG['ad_news_set_active'] ?>
                         </a>
                     <?php endif;
@@ -762,36 +764,37 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         /**
          * Ajax call to delete user
          *
-         * @param userId
+         * @param identifier
          */
         function deleteUser(identifier) {
-            if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
-                var csrf   = $(identifier).data('csrf-token');
-                var userId = $(identifier).data('user-id');
+          if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
+            const csrf = $(identifier).data('csrf-token');
+            const userId = $(identifier).data('user-id');
 
-                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId + "&csrf=" + csrf,
-                    function(response) {
-                        $('#user_message').html(response);
-                        $('.row_user_id_' + userId).fadeOut('slow');
-                    });
-            }
+            $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=" + userId + "&csrf=" + csrf,
+              (response) => {
+                $('#user_message').html(response);
+                $('.row_user_id_' + userId).fadeOut('slow');
+              });
+          }
         }
 
         /**
          * Ajax call to delete user
          *
-         * @param userId
+         * @param identifier
          */
-        function activateUser(userId) {
-            if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
-                $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId,
-                    function() {
-                        var icon = $('.icon_user_id_' + userId);
-                        icon.toggleClass('fa-lock fa-check');
-                        $('.btn_user_id_' + userId).remove();
-                        console.log($(this));
-                    });
-            }
+        function activateUser(identifier) {
+          if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
+            const csrf = $(identifier).data('csrf-token');
+            const userId = $(identifier).data('user-id');
+            $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId + "&csrf=" + csrf,
+              () => {
+                const icon = $('.icon_user_id_' + userId);
+                icon.toggleClass('fa-lock fa-check');
+                $('.btn_user_id_' + userId).remove();
+              });
+          }
         }
 
         </script>

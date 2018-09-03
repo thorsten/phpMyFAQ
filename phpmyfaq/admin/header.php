@@ -154,6 +154,7 @@ switch ($action) {
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $secLevelEntries .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances', 'ad_menu_instances', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'meta', 'ad_menu_meta', $action);
         if ($faqConfig->get('search.enableElasticsearch')) {
             $secLevelEntries .= $adminHelper->addMenuEntry(
                 'editconfig',

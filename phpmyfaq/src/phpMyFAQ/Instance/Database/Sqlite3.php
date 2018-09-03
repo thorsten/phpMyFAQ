@@ -232,6 +232,14 @@ class Sqlite3 extends Database implements Driver
             config_value VARCHAR(255) DEFAULT NULL,
             PRIMARY KEY (instance_id, config_name))',
 
+        'faqmeta' => 'CREATE TABLE %sfaqmeta (
+            id INT NOT NULL,
+            lang VARCHAR(5) DEFAULT NULL,
+            page_id VARCHAR(48) DEFAULT NULL,
+            type VARCHAR(48) DEFAULT NULL,
+            content TEXT NULL,
+            PRIMARY KEY (id))',
+
         'faqnews' => 'CREATE TABLE %sfaqnews (
             id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,

@@ -139,10 +139,10 @@ class Report
     }
 
     /**
-     * Convert string to the correct encoding.
+     * Convert string to the correct encoding and removes possible
+     * bad strings to avoid formula injection attacks.
      *
      * @param string $outputString String to encode.
-     *
      * @return string Encoded string.
      */
     public function convertEncoding($outputString)
@@ -157,6 +157,9 @@ class Report
                 $outputString = mb_convert_encoding($outputString, 'UTF-16', $detected);
             }
         }
+
+        $toBeRemoved = [ '=', '+', '-', 'HYPERLINK'];
+        $outputString = str_replace($toBeRemoved, '', $outputString);
 
         return $outputString;
     }

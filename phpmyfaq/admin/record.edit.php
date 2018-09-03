@@ -104,7 +104,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         );
         if (is_array($selectedCategory)) {
             foreach ($selectedCategory as $cats) {
-                $categories[] = array('category_id' => $cats, 'category_lang' => $faqData['lang']);
+                $categories[] = ['category_id' => $cats, 'category_lang' => $faqData['lang']];
             }
         }
         $faqData['active'] = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -139,8 +139,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
-            if(isset($categoryId)){ 
-                $categories = $categoryId;
+            if (isset($categoryId)){
+                $categories = ['category_id' => $categoryId, 'category_lang' => $lang];
             } 
         }
         if (!is_null($translateTo)) {
@@ -563,6 +563,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                     <div id="collapseViewChangelog" class="card-collapse collapse">
                         <div class="card-body">
                             <?php
+                            $currentUserId = $user->getUserId();
                             foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
                                 $user->getUserById($entry['user']);
                                 ?>
@@ -580,7 +581,10 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                     </label>
                                     <?php echo $entry['changelog'] ?>
                                 </p>
-                            <?php } ?>
+                            <?php
+                            }
+                            $user->getUserById($currentUserId);
+                            ?>
                         </div>
                     </div>
                 </div>

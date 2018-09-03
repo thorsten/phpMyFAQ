@@ -44,7 +44,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     $instanceData = $instance->getInstanceById($instanceId);
 
     ?>
-    <form  action="?action=updateinstance" method="post" accept-charset="utf-8">
+    <form action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
         <div class="form-group row">
             <label for="url" class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>

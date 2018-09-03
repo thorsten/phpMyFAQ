@@ -92,6 +92,10 @@ body {
   }
 }
 
+mark, .mark {
+  padding: 0 !important; // override Bootstrap default
+}
+
 //
 // TYPEAHEAD SEARCH
 //
