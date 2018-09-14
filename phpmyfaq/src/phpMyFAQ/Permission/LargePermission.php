@@ -106,12 +106,12 @@ class LargePermission extends MediumPermission
      */
     public function changeGroup($sectionId, Array $sectionData)
     {
-        $checked_data = $this->checkSectionData($sectionData);
+        $checkedData = $this->checkSectionData($sectionData);
         $set = '';
         $comma = '';
 
         foreach ($sectionData as $key => $val) {
-            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checkedData[$key])."'";
             $comma = ",\n                ";
         }
 
