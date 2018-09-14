@@ -308,12 +308,12 @@ class MediumPermission extends BasicPermission
      */
     public function changeGroup($groupId, Array $groupData)
     {
-        $checked_data = $this->checkGroupData($groupData);
+        $checkedData = $this->checkGroupData($groupData);
         $set = '';
         $comma = '';
 
         foreach ($groupData as $key => $val) {
-            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checked_data[$key])."'";
+            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checkedData[$key])."'";
             $comma = ",\n                ";
         }
 
@@ -628,7 +628,7 @@ class MediumPermission extends BasicPermission
     public function getUserGroups($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
-            return array(-1);
+            return [-1];
         }
 
         $select = sprintf('

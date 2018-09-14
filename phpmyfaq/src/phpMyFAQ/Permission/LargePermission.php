@@ -98,29 +98,6 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Adds a new section to the database and returns the ID of the
-     * new section. The associative array $sectionData contains the
-     * data for the new section.
-     *
-     * @param array $sectionData
-     *
-     * @return int
-     */
-    public function addSection(Array $sectionData)
-    {
-        // check if section already exists
-        if ($this->getSectionId($sectionData['name']) > 0) {
-            return 0;
-        }
-
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqsection', 'section_id');
-
-        // @todo implement me
-
-        return $nextId;
-    }
-
-    /**
      * Changes the section data of the given section.
      *
      * @param int $sectionId
@@ -129,8 +106,34 @@ class LargePermission extends MediumPermission
      */
     public function changeGroup($sectionId, Array $sectionData)
     {
-        // @todo implement me
-        return false;
+        $checkedData = $this->checkSectionData($sectionData);
+        $set = '';
+        $comma = '';
+
+        foreach ($sectionData as $key => $val) {
+            $set  .= $comma.$key." = '".$this->config->getDb()->escape($checkedData[$key])."'";
+            $comma = ",\n                ";
+        }
+
+        $update = sprintf('
+            UPDATE
+                %sfaqsection
+            SET
+                %s
+            WHERE
+                group_id = %d',
+            Db::getTablePrefix(),
+            $set,
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($update);
+
+        if (!$res) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -142,8 +145,53 @@ class LargePermission extends MediumPermission
      */
     public function deleteSection($sectionId)
     {
-        // @todo implement me
-        return false;
+        if ($sectionId <= 0 || !is_numeric($sectionId)) {
+            return false;
+        }
+
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection
+            WHERE
+                section_id = %d',
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if (!$res) {
+            return false;
+        }
+
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_group
+            WHERE
+                section_id = %d',
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if (!$res) {
+            return false;
+        }
+
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_news
+            WHERE
+                section_id = %d',
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if (!$res) {
+            return false;
+        }
+
+        return true;
     }
 
 
@@ -157,7 +205,35 @@ class LargePermission extends MediumPermission
      */
     public function isSectionMember($userId, $sectionId)
     {
-        // @todo implement me
+        if ($sectionId <= 0 || !is_numeric($sectionId) || $userId <= 0 || !is_numeric($userId)) {
+            return false;
+        }
+
+        $select = sprintf('
+            SELECT 
+                fsg.user_id
+            FROM
+                %sfaqsection_group fsg
+            LEFT JOIN 
+                %sfaquser_group fug
+            ON 
+                fug.group_id = fsg.group_id
+            WHERE 
+                fug.user_id = %d
+            AND fsg.section_id = %d
+            ',
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            $sectionId,
+            $userId
+        );
+
+        $res = $this->config->getDb()->query($select);
+        
+        if($this->config->getDb()->numRows($res) > 0){
+            return true;
+        }
+
         return false;
     }
 
@@ -170,8 +246,35 @@ class LargePermission extends MediumPermission
      */
     public function getSectionMembers($sectionId)
     {
-        // @todo implement me
-        return [];
+        if ($sectionId <= 0 || !is_numeric($sectionId)) {
+            return [];
+        }
+
+        $select = sprintf('
+            SELECT 
+                fsg.user_id
+            FROM
+                %sfaqsection_group fsg
+            LEFT JOIN 
+                %sfaquser_group fug
+            ON 
+                fug.group_id = fsg.group_id
+            WHERE 
+                fsg.section_id = %d
+            ',
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($select);
+
+        $result = [];
+        while ($row = $this->config->getDb()->fetchArray($res)) {
+            $result[] = $row['user_id'];
+        }
+
+        return $result;
     }
 
     /**
@@ -183,8 +286,32 @@ class LargePermission extends MediumPermission
      */
     public function getSectionGroups($sectionId)
     {
-        // @todo implement me
-        return [];
+        if ($sectionId <= 0 || !is_numeric($sectionId)) {
+            return [];
+        }
+
+        $select = sprintf('
+            SELECT 
+                %sfaquser_group.group_id
+            FROM
+                %sfaqsection_group
+            WHERE 
+                %sfaqsection_group.section_id = %d
+            ',
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($select);
+
+        $result = [];
+        while ($row = $this->config->getDb()->fetchArray($res)) {
+            $result[] = $row['group_id'];
+        }
+
+        return $result;
     }
 
     /**
@@ -197,8 +324,50 @@ class LargePermission extends MediumPermission
      */
     public function addGroupToSection($groupId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if ($sectionId <= 0 || !is_numeric($sectionId) | $groupId <= 0 || !is_numeric($groupId)) {
+            return false;
+        }
+
+        $select = sprintf('
+            SELECT 
+                %sfaquser_group.group_id
+            FROM
+                %sfaqsection_group
+            WHERE 
+                %sfaqsection_group.section_id = %d
+            AND 
+                %sfaqsection_group.group_id = %d
+            ',
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            $sectionId,
+            $groupId
+        );
+
+        $res = $this->config->getDb()->query($select);
+
+        if($this->config->getDb()->numRows($res) > 0) {
+            return false;
+        }
+
+        $insert = sprintf('
+            INSERT INTO
+                %sfaqsection_group
+            (section_id, group_id)
+               VALUES
+            (%d, %d)',
+            Db::getTablePrefix(),
+            $sectionId,
+            $groupId
+        );
+
+        $res = $this->config->getDb()->query($insert);
+        if (!$res) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -211,8 +380,29 @@ class LargePermission extends MediumPermission
      */
     public function removeGroupFromSection($groupId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if ($sectionId <= 0 || !is_numeric($sectionId) | $groupId <= 0 || !is_numeric($groupId)) {
+            return false;
+        }
+
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_group
+            WHERE
+                group_id = %d
+            AND
+                section_id = %d
+            ',
+            Db::getTablePrefix(),
+            $sectionId,
+            $groupId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if (!$res) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -224,8 +414,25 @@ class LargePermission extends MediumPermission
      */
     public function getSectionId($name)
     {
-        // @todo implement me
-        return 0;
+        $select = sprintf('
+            SELECT 
+                    section_id
+            FROM 
+                %sfaqsections
+            WHERE 
+                name = %s
+            ',
+            Db::getTablePrefix(),
+            $name
+        );
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return 0;
+        }
+        $row = $this->config->getDb()->fetchArray($res);
+
+        return $row['section_id'];
     }
 
     /**
@@ -237,8 +444,25 @@ class LargePermission extends MediumPermission
      */
     public function getSectionData($sectionId)
     {
-        // @todo implement me
-        return [];
+        $select = sprintf('
+            SELECT 
+                    *
+            FROM 
+                %sfaqsections
+            WHERE 
+                section_id = %d
+            ',
+            Db::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return 0;
+        }
+        $row = $this->config->getDb()->fetchArray($res);
+
+        return $row;
     }
 
     /**
@@ -254,8 +478,34 @@ class LargePermission extends MediumPermission
             return [-1];
         }
 
-        // @todo implement me
-        return [];
+        $select = sprintf('
+            SELECT 
+                fsg.section_id
+            FROM 
+                %sfaqsection_group fsg
+            LEFT JOIN 
+                %sfaquser_group fug
+            ON
+                fug.group_id = fsg.group_id
+            WHERE 
+                fug.user_id = %d
+            ',
+            Db::getTablePrefix(),
+            Db::getTablePrefix(),
+            $userId
+        );
+
+        $res = $this->config->getDb()->query($select);
+
+        if($this->config->getDb()->numRows($res) < 1){
+            return [-1];
+        }
+        $result = [];
+        while($row = $this->config->getDb()->fetchArray($res)){
+            $result += $row["section_id"]
+        }
+
+        return $result;
     }
 
     /**
@@ -266,8 +516,27 @@ class LargePermission extends MediumPermission
      */
     public function getAllSections($userId = 1)
     {
-        // @todo implement me
-        return [];
+        $select = sprintf('
+            SELECT 
+                *
+            FROM 
+                %sfaqsections
+        ');
+
+        if($userId != 1){
+            return $this->getUserSections($userId);
+        }
+
+        $res = $this->config->getDb()->query($select);
+        if(!$res || $this->config->getDb()->numRows($res) < 1){
+            return [];
+        }
+        $result = [];
+        while($row = $this->config->getDb()->fetchArray($result)){
+            $result += $row;
+        }
+
+        return $result;
     }
 
     /**
@@ -281,7 +550,36 @@ class LargePermission extends MediumPermission
      */
     public function checkUserSectionRight($userId, $rightId)
     {
-        // @todo implement me
+        if($userId < 0 || !is_numeric($userId) || $rightId < 0 || !is_numeric($rightId)){
+            return false;
+        }
+        $select = sprintf('
+            SELECT
+                fgr.right_id
+            FROM 
+                %sfaquser_group fug
+            LEFT JOIN
+                %sfaqgroup_right fgr
+            ON
+                fgr.group_id = fug.group_id
+            WHERE 
+                fug.user_id = %d
+            AND
+                fgr.right_id = %d
+            ',
+            DB::getTablePrefix(),
+            DB::getTablePrefix(),
+            $userId,
+            $rightId
+        );
+        
+        $res = $this->config->getDb()->query($result);
+        if(!$res){
+            return false;
+        }
+        if($this->config->getDb()->numRows($res) > 0){
+            return true;
+        }
         return false;
     }
 
@@ -316,8 +614,14 @@ class LargePermission extends MediumPermission
      */
     public function getAllUserRights($userId)
     {
-        // @todo implement me
-        return [];
+        if ($userId <= 0 || !is_numeric($userId)) {
+            return [];
+        }
+        $userRights = $this->getUserRights($userId);
+        $groupRights = $this->getUserGroupRights($userId);
+        $sectionRighs = $this->getSectionGroupRights($userId);
+
+        return array_unique(array_merge($userRights, $groupRights));
     }
 
     /**
@@ -329,8 +633,25 @@ class LargePermission extends MediumPermission
      */
     public function removeGroupFromAllSections($groupId)
     {
-        // @todo implement me
-        return false;
+        if($groupId < 1 || !is_numeric($groupId)){
+            return false;
+        }
+
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_group
+            WHERE 
+                group_id = %s
+            '
+            DB::getTablePrefix(),
+            $groupId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -342,8 +663,35 @@ class LargePermission extends MediumPermission
      */
     public function getUserSectionRights($userId)
     {
-        // @todo implement me
-        return [];
+        if($userId < 1 || !is_numeric($userId)){
+            return [];
+        }
+        $select = sprintf('
+            SELECT
+                right_id
+            FROM 
+                %sfaquser_group fug
+            LEFT JOIN
+                %sfaqgroup_right fgr
+            ON
+                fgr.group_id = fug.group_id
+            WHERE 
+                fug.user_id = %d
+            ',
+            DB::getTablePrefix(),
+            DB::getTablePrefix(),
+            $userId,
+        );
+
+        $res = $this->config->getDb()->query($select);
+        if(!$res){
+            return [];
+        }
+        $result = [];
+        while($row = $this->config->getDb()->fetchArray($res)){
+            $result += $row["right_id"];
+        }
+        return $result;
     }
 
     /**
@@ -354,8 +702,26 @@ class LargePermission extends MediumPermission
      */
     public function getSectionName($sectionId)
     {
-        // @todo implement me
-        return '-';
+        if(!is_numeric($sectionId) || $sectionId < 1){
+            return "-";
+        }
+        $select = sprintf('
+            SELECT 
+                name
+            FROM 
+                %sfaqsections
+            WHERE
+                section_id = %d
+            ',
+            DB::getTablePrefix(),
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($res);
+        if(!$res || $this->config->getDb()->numRows($res) < 1){
+            return "-";
+        }
+        $row = $this->config->getDb()->fetchRow($res);
+        return $row["name"];
     }
 
     /**
@@ -368,8 +734,25 @@ class LargePermission extends MediumPermission
      */
     public function addCategoryToSection($categoryId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1){
+            return false;
+        }
+        $insert = sprintf('
+            INSERT INTO
+                %sfaqsection_category
+            (category_id, section_id)
+                VALUES
+            (%s,%s)
+            ',
+            DB::getTablePrefix(),
+            $categoryId,
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($insert);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -382,8 +765,26 @@ class LargePermission extends MediumPermission
      */
     public function removeCategoryFromSection($categoryId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1){
+            return false;
+        }
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_category
+            WHERE 
+                category_id = %d
+            AND
+                section_id = %d
+            ',
+            DB::getTablePrefix(),
+            $categoryId,
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($delete);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -395,8 +796,26 @@ class LargePermission extends MediumPermission
      */
     public function getSectionCategories($sectionId)
     {
-        // @todo implement me
-        return [];
+        if(!is_numeric($sectionId) || $sectionId < 1){
+            return [];
+        }
+        $select = sprintf('
+            SELECT
+                category_id
+            FROM
+                %sfaqsection_category
+            WHERE 
+                section_id = %d
+            ',
+            DB::getTablePrefix(),
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($select);
+        $result = [];
+        while($row = $this->config->getDb()->fetchArray($res)){
+            $result += $row["category_id"];
+        }
+        return $result;
     }
 
     /**
@@ -408,8 +827,23 @@ class LargePermission extends MediumPermission
      */
     public function removeCategoryFromAllSections($categoryId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($categoryId) || $categoryId < 1){
+            return false;
+        }
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_category
+            WHERE 
+                category_id = %d
+            ',
+            DB::getTablePrefix(),
+            $categoryId
+        );
+        $res = $this->config->getDb()->query($delete);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -422,12 +856,29 @@ class LargePermission extends MediumPermission
      */
     public function addNewsToSection($newsId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1){
+            return false;
+        }
+        $insert = sprintf('
+            INSERT INTO
+                %sfaqsection_news
+            (news_id, section_id)
+                VALUES
+            (%s,%s)
+            ',
+            DB::getTablePrefix(),
+            $newsId,
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($insert);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
-     * Removes a news $newsId to the section $sectionId.
+     * Removes a news $newsId from the section $sectionId.
      * Returns true on success, otherwise false.
      *
      * @param int $newsId
@@ -436,8 +887,26 @@ class LargePermission extends MediumPermission
      */
     public function removeNewsFromSection($newsId, $sectionId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1){
+            return false;
+        }
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_news
+            WHERE 
+                news_id = %d
+            AND
+                section_id = %d
+            ',
+            DB::getTablePrefix(),
+            $newsId,
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($delete);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -449,8 +918,26 @@ class LargePermission extends MediumPermission
      */
     public function getSectionNews($sectionId)
     {
-        // @todo implement me
-        return [];
+        if(!is_numeric($sectionId) || $sectionId < 1){
+            return [];
+        }
+        $select = sprintf('
+            SELECT
+                news_id
+            FROM
+                %sfaqsection_news
+            WHERE 
+                section_id = %d
+            ',
+            DB::getTablePrefix(),
+            $sectionId
+        );
+        $res = $this->config->getDb()->query($select);
+        $result = [];
+        while($row = $this->config->getDb()->fetchArray($res)){
+            $result += $row["news_id"];
+        }
+        return $result;
     }
 
     /**
@@ -462,8 +949,23 @@ class LargePermission extends MediumPermission
      */
     public function removeNewsFromAllSections($newsId)
     {
-        // @todo implement me
-        return false;
+        if(!is_numeric($newsId) || $newsId < 1){
+            return false;
+        }
+        $delete = sprintf('
+            DELETE FROM
+                %sfaqsection_news
+            WHERE 
+                news_id = %d
+            ',
+            DB::getTablePrefix(),
+            $categoryId
+        );
+        $res = $this->config->getDb()->query($delete);
+        if(!$res){
+            return false;
+        }
+        return true;
     }
 
 }
