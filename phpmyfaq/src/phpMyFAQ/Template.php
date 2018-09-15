@@ -88,7 +88,7 @@ class Template
         self::$tplSetName = $tplSetName;
 
         foreach ($myTemplate as $templateName => $filename) {
-            $this->templates[$templateName] = $this->include(
+            $this->templates[$templateName] = $this->readTemplateFile(
                 'assets/themes/' . $tplSetName . '/templates/' . $filename,
                 $templateName
             );
@@ -252,7 +252,7 @@ class Template
      *
      * @return string
      */
-    protected function include($filename, $tplName)
+    protected function readTemplateFile($filename, $tplName)
     {
         if (file_exists($filename)) {
             $tplContent = file_get_contents($filename);

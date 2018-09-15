@@ -906,7 +906,7 @@ class MediumPermission extends BasicPermission
     public function getUserGroupRights($userId)
     {
         if ($userId <= 0 || !is_numeric($userId)) {
-            return false;
+            return [];
         }
 
         $select = sprintf('
