@@ -58,6 +58,9 @@ switch ($action) {
         if ($faqConfig->get('security.permLevel') !== 'basic') {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
+        if ($faqConfig->get('security.permLevel' == 'large')) {
+            $secLevelEntries .= $adminHelper->addMenuEntry('addsection+editsection+delsection', 'section', 'ad_menu_section_administration', $action);
+        }
         if (!$faqConfig->get('ldap.ldapSupport')) {
             $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
         }

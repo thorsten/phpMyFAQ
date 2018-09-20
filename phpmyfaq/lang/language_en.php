@@ -677,7 +677,6 @@ $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'Logged in as ';
-
 $PMF_LANG['ad_group_details'] = "Group Details";
 $PMF_LANG['ad_group_add'] = "Add Group";
 $PMF_LANG['ad_group_add_link'] = "Add Group";
@@ -695,6 +694,9 @@ $PMF_LANG['ad_group_membership'] = "Group Membership";
 $PMF_LANG['ad_group_members'] = "Members";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
+
+// added v3.0.0-alpha.3 - 2018-09-20 by EldoBam
+$PMF_LANG["ad_menu_section_administration"] = "Groups";
 
 // added v2.0.0 - 2006-07-20 by Matteo
 $PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';

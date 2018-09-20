@@ -672,6 +672,9 @@ $PMF_LANG["ad_group_members"] = "Mitglieder";
 $PMF_LANG["ad_group_addMember"] = "+";
 $PMF_LANG["ad_group_removeMember"] = "-";
 
+// added v3.0.0-alpha.3 - 2018-09-20 by EldoBam
+$PMF_LANG["ad_menu_section_administration"] = "Bereichsverwaltung";
+
 // added v2.0.0 - 2006-07-20 by Matteo
 $PMF_LANG["ad_export_which_cat"] = "Begrenzung der exportierten FAQ-Inhalte (optional)";
 $PMF_LANG["ad_export_cat_downwards"] = "Inklusive Unterkategorien?";
