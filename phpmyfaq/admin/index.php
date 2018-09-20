@@ -265,6 +265,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             // functions for user administration
             case 'user':              require 'user.php'; break;
             case 'group':             require 'group.php'; break;
+            case 'section':           require 'section.php'; break;
             // functions for content administration
             case 'viewinactive':
             case 'viewactive':
