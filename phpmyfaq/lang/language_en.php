@@ -1296,4 +1296,4 @@ $PMF_LANG['ad_meta_type'] = 'Content type';
 $PMF_LANG['ad_meta_content'] = 'Content';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
-$PMF_LANG['ad_menu_section_administration'] = "Groups";
+$PMF_LANG['ad_menu_section_administration'] = "Sections";
