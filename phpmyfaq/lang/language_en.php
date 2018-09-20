@@ -695,9 +695,6 @@ $PMF_LANG['ad_group_members'] = "Members";
 $PMF_LANG['ad_group_addMember'] = "+";
 $PMF_LANG['ad_group_removeMember'] = "-";
 
-// added v3.0.0-alpha.3 - 2018-09-20 by EldoBam
-$PMF_LANG['ad_menu_section_administration'] = "Groups";
-
 // added v2.0.0 - 2006-07-20 by Matteo
 $PMF_LANG['ad_export_which_cat'] = 'Limit the FAQ data to be exported (optional)';
 $PMF_LANG['ad_export_cat_downwards'] = 'Include child categories?';
@@ -1297,3 +1294,6 @@ $PMF_LANG['ad_meta_add'] = 'Add meta data';
 $PMF_LANG['ad_meta_page_id'] = 'Page type';
 $PMF_LANG['ad_meta_type'] = 'Content type';
 $PMF_LANG['ad_meta_content'] = 'Content';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['ad_menu_section_administration'] = "Groups";
