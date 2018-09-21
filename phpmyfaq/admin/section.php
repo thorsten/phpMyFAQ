@@ -41,6 +41,9 @@ $memberSelectSize = 7;
 $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultSectionAction = 'list';
+$sectionActionList = [
+    'list'
+];
 
 // what shall we do?
 // actions defined by url: section_action=
@@ -51,6 +54,11 @@ if (isset($_POST['section_action_deleteConfirm'])) {
 }
 if (isset($_POST['cancel'])) {
     $sectionAction = $defaultGroupAction;
+}
+
+// validate sectionAction
+if (!in_array($sectionAction, $sectionActionList)){
+    // @Todo: implement Error message
 }
 
 if (!isset($message)) {

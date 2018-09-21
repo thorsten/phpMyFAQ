@@ -230,6 +230,8 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                 case 'user':          require 'ajax.user.php'; break;
                 // Groups
                 case 'group':         require 'ajax.group.php'; break;
+                // Sections
+                case 'section':       require 'ajax.section.php'; break;
                 // Interface translation
                 case 'trans':         require 'ajax.trans.php'; break;
                 // Image upload

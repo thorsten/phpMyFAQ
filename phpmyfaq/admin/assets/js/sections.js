@@ -138,8 +138,8 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const processSectionList = function () {
       clearSectionData();
-      clearGroupList();
-      getGroupList();
+      clearSectionList();
+      getSectionList();
       clearSectionMemberList();
     };
   

@@ -149,7 +149,7 @@ class LargePermission extends MediumPermission
      * @param array $sectionData
      * @return bool
      */
-    public function changeGroup($sectionId, Array $sectionData)
+    public function changeSection($sectionId, Array $sectionData)
     {
         $checkedData = $this->checkSectionData($sectionData);
         $set = '';
@@ -500,7 +500,7 @@ class LargePermission extends MediumPermission
 
     /**
      * Returns an associative array with the section data of the section
-     * $groupId.
+     * $sectionId.
      *
      * @param int $sectionId
      * @return array

@@ -42,16 +42,31 @@ $memberSelectSize = 7;
 $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultGroupAction = 'list';
+$groupActionList = [
+    'update_members',
+    'update_rights',
+    'update_data',
+    'delete_confirm',
+    'delete',
+    'addsave',
+    'add',
+    'list'
+];
 
 // what shall we do?
 // actions defined by url: group_action=
 $groupAction = Filter::filterInput(INPUT_GET, 'group_action', FILTER_SANITIZE_STRING, $defaultGroupAction);
+
 // actions defined by submit button
 if (isset($_POST['group_action_deleteConfirm'])) {
     $groupAction = 'delete_confirm';
 }
 if (isset($_POST['cancel'])) {
     $groupAction = $defaultGroupAction;
+}
+
+if (!in_array($groupAction, $groupActionList)){
+    // @Todo: implement Error message
 }
 
 // update group members
