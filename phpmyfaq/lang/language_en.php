@@ -1297,3 +1297,12 @@ $PMF_LANG['ad_meta_content'] = 'Content';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Sections";
+$PMF_LANG['ad_section_add_link'] = "Add section";
+$PMF_LANG['ad_sections'] = 'Sections';
+$PMF_LANG['ad_section_details'] = "Section Details";
+$PMF_LANG['ad_section_name'] = "Name";
+$PMF_LANG['ad_section_description'] = "Description";
+$PMF_LANG['ad_section_membership'] = "Section Assignment";
+$PMF_LANG['ad_section_members'] = "Assignments";
+$PMF_LANG['ad_section_addMember'] = "+";
+$PMF_LANG['ad_section_removeMember'] = "-";

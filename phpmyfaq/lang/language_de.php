@@ -1268,3 +1268,12 @@ $PMF_LANG['ad_meta_content'] = 'Inhalt';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Bereichsverwaltung";
+$PMF_LANG['ad_section_add_link'] = "Bereich hinzufügen";
+$PMF_LANG['ad_sections'] = 'Bereiche';
+$PMF_LANG['ad_section_details'] = "Details des Bereichs";
+$PMF_LANG['ad_section_name'] = "Name";
+$PMF_LANG['ad_section_description'] = "Beschreibung";
+$PMF_LANG['ad_section_membership'] = "Bereichszuordnung";
+$PMF_LANG['ad_section_members'] = "Zuordnungen";
+$PMF_LANG['ad_section_addMember'] = "+";
+$PMF_LANG['ad_section_removeMember'] = "-";
