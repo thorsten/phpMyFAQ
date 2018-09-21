@@ -139,13 +139,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const processSectionList = function () {
       clearSectionData();
       clearSectionList();
-      getSectionList();
       clearSectionMemberList();
+      getSectionMemberList();
     };
   
     getSectionList();
   
-    $('#group_list_select').on('change', function (event) {
+    $('#section_list_select').on('change', function (event) {
       sectionSelect(event);
     });
   
