@@ -66,7 +66,7 @@ if ('list' === $sectionAction) {
               <?= $PMF_LANG['ad_menu_section_administration'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-section mr-2">
+            <div class="btn-group mr-2">
               <a class="btn btn-sm btn-outline-success" href="?action=section&amp;section_action=add">
                   <?= $PMF_LANG['ad_section_add_link'] ?>
               </a>
