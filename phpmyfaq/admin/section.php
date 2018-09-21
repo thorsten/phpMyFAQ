@@ -109,10 +109,10 @@ if ('list' === $sectionAction) {
             <?= $PMF_LANG['ad_section_details'] ?>
         </div>
         <form action="?action=section&section_action=update_data" method="post">
-          <input id="update_section_id" type="hidden" name="group_id" value="0">
+          <input id="update_section_id" type="hidden" name="section_id" value="0">
           <div class="card-body">
             <div class="form-group row">
-              <label class="col-lg-3 form-control-label" for="update_group_name">
+              <label class="col-lg-3 form-control-label" for="update_section_name">
                   <?= $PMF_LANG['ad_section_name'] ?>
               </label>
               <div class="col-lg-9">
