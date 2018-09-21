@@ -227,7 +227,15 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 <span class="btn btn-sm btn-outline-info">
                     <?= $currentRevision ?>
                 </span>
-                <a href="/index.php?action=artikel&id=%s&artlang=%s" class="btn btn-sm btn-outline-success">
+                <a href="<?=
+                    sprintf(
+                        '%s/index.php?action=artikel&id=%d&artlang=%s',
+                        $faqConfig->get('main.referenceURL'),
+                        $faqData['id'],
+                        $faqData['lang']
+                    );
+                ?>" class="btn btn-sm btn-outline-success">
+
                     <?= $PMF_LANG['ad_view_faq'] ?>
                 </a>
             </div>
