@@ -229,8 +229,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                 </span>
                 <a href="<?=
                     sprintf(
-                        '%s/index.php?action=artikel&id=%d&artlang=%s',
-                        $faqConfig->get('main.referenceURL'),
+                        '%sindex.php?action=faq&id=%d&artlang=%s',
+                        $faqConfig->getDefaultUrl(),
                         $faqData['id'],
                         $faqData['lang']
                     );
