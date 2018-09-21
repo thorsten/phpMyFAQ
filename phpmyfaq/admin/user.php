@@ -60,10 +60,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         'listallusers'
     ];
 
-    if (!in_array($userAction, $userActionList)){
-        // @Todo: implement Error message
-    }
-
     // what shall we do?
     // actions defined by url: user_action=
     $userAction = Filter::filterInput(INPUT_GET, 'user_action', FILTER_SANITIZE_STRING, $defaultUserAction);
