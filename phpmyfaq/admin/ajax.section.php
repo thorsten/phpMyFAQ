@@ -1,7 +1,7 @@
 <?php
 
 /**
- * AJAX: handling of Ajax group calls.
+ * AJAX: handling of Ajax section calls.
  *
  * PHP Version 5.6
  *
@@ -10,11 +10,11 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Timo Wolf <amna.wolf@gmail.com>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
- * @since     2009-04-06
+ * @since     2018-09-21
  */
 
 use phpMyFAQ\Filter;
