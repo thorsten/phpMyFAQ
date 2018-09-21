@@ -45,17 +45,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
   
-    var clearSectionList = function () {
+    const clearSectionList = function () {
       $('#section_list_select').empty();
     };
   
-    var clearSectionData = function () {
+    const clearSectionData = function () {
       $('#update_section_id').empty();
       $('#update_section_name').empty();
       $('#update_section_description').empty();
     };
   
-    var sectionSelect = function (event) {
+    const sectionSelect = function (event) {
       event = (event) ? event : ((window.event) ? window.event : null);
       if (event) {
         var select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
@@ -105,7 +105,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $('#section_member_list').empty();
     };
   
-    var getSectionMemberList = function (section_id) {
+    const getSectionMemberList = function (section_id) {
       if (0 === section_id) {
         clearSectionMemberList();
         return;
@@ -122,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
   
-    var removeSectionMembers = function () {
+    const removeSectionMembers = function () {
       // make sure that a group is selected
       var selected_group_list = $('#section_member_list option:selected');
       if (selected_group_list.size() === 0) {
@@ -136,7 +136,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     };
   
-    var processSectionList = function () {
+    const processSectionList = function () {
       clearSectionData();
       clearGroupList();
       getGroupList();

@@ -50,11 +50,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  var clearGroupList = function () {
+  const clearGroupList = function () {
     $('#group_list_select').empty();
   };
 
-  var clearGroupData = function () {
+  const clearGroupData = function () {
     var updateGroupAutoJoin = $('update_group_auto_join');
     $('#update_group_id').empty();
     $('#update_group_name').empty();
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   };
 
-  var getGroupRights = function (group_id) {
+  const getGroupRights = function (group_id) {
     $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_group_rights&group_id=' + group_id,
       function (data) {
         $.each(data, function (i, val) {
@@ -74,11 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  var clearGroupRights = function () {
+  const clearGroupRights = function () {
     $('.pmf-user-permissions input[type=checkbox]').prop('checked', false);
   };
 
-  var groupSelect = function (event) {
+  const groupSelect = function (event) {
     event = (event) ? event : ((window.event) ? window.event : null);
     if (event) {
       var select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
@@ -99,11 +99,11 @@ document.addEventListener('DOMContentLoaded', () => {
    * User related functions
    *
    */
-  var clearUserList = function () {
+  const clearUserList = function () {
     $('#group_user_list option').empty();
   };
 
-  var getUserList = function () {
+  const getUserList = function () {
     $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_users',
       function (data) {
         $('#group_user_list').empty();
@@ -149,7 +149,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#group_member_list').empty();
   };
 
-  var getMemberList = function (group_id) {
+  const getMemberList = function (group_id) {
     if (0 === group_id) {
       clearMemberList();
       return;
@@ -166,7 +166,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  var removeGroupMembers = function () {
+  const removeGroupMembers = function () {
     // make sure that a group is selected
     var selected_user_list = $('#group_member_list option:selected');
     if (selected_user_list.size() === 0) {
@@ -180,7 +180,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   };
 
-  var processGroupList = function () {
+  const processGroupList = function () {
     clearGroupData();
     clearGroupRights();
     clearUserList();
