@@ -78,8 +78,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
 
     // validate userAction
-    if(){
-
+    if (!in_array($userAction, $userActionList)){
+        // @Todo: Implement Error message
     }
 
     // update user rights
