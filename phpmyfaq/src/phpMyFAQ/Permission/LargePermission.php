@@ -547,7 +547,7 @@ class LargePermission extends MediumPermission
         }
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $result += $row['section_id'];
+            $result[] = $row['section_id'];
         }
 
         return $result;
@@ -589,7 +589,7 @@ class LargePermission extends MediumPermission
         }
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result += $row['section_id'];
+            $result[] = $row['section_id'];
         }
 
         return $result;
@@ -678,7 +678,7 @@ class LargePermission extends MediumPermission
         }
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result += $row['right_id'];
+            $result[] = $row['right_id'];
         }
         return $result;
     }
@@ -798,7 +798,7 @@ class LargePermission extends MediumPermission
         $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result += $row['category_id'];
+            $result[] = $row['category_id'];
         }
         return $result;
     }
@@ -916,7 +916,7 @@ class LargePermission extends MediumPermission
         $res = $this->config->getDb()->query($select);
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result += $row['news_id'];
+            $result[] = $row['news_id'];
         }
         return $result;
     }
