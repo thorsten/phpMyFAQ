@@ -98,15 +98,15 @@ document.addEventListener('DOMContentLoaded', () => {
       // make sure that a group is selected
       const selectedSection = $('#section_list_select option:checked');
       if (0 === selectedSection.length) {
-        alert('Please choose a group.');
+        alert('Please choose a section.');
         return;
       }
   
       // get selected users from list
-      const selectedGroups = $('#section_group_list option:selected');
+      const selectedGroups = $('#group_list_select option:selected');
       if (selectedGroups.length > 0) {
         selectedGroups.each(function () {
-          const members = $('#section_group_list option');
+          const members = $('#section_member_list option');
           const group = $(this);
           let isMember = false;
           members.each((member) => {
