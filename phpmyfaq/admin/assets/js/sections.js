@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const group = $(this);
           let isMember = false;
           members.each((member) => {
-            isMember = (member.val() === member);
+            isMember = (group.val() === member);
           });
           if (isMember === false) {
             $('#section_member_list').append(
@@ -143,15 +143,15 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   
     const removeSectionMembers = function () {
-      // make sure that a group is selected
-      var selected_group_list = $('#section_member_list option:selected');
-      if (selected_group_list.size() === 0) {
+      // make sure that a section is selected
+      var selected_member_list = $('#section_member_list option:selected');
+      if (selected_member_list.size() === 0) {
         alert('Please choose a group. ');
         return;
       }
   
       // remove selected members from list
-      selected_user_list.each(function () {
+      selected_member_list.each(function () {
         $('#section_member_list option:selected').remove();
       });
     };
@@ -169,11 +169,11 @@ document.addEventListener('DOMContentLoaded', () => {
       sectionSelect(event);
     });
   
-    $('.pmf-add-member').on('click', function () {
+    $('.pmf-add-section-member').on('click', function () {
       addSectionMembers();
     });
   
-    $('.pmf-remove-member').on('click', function () {
+    $('.pmf-remove-section-member').on('click', function () {
       removeSectionMembers();
     });
   

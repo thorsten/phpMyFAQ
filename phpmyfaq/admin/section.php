@@ -186,9 +186,9 @@ if ('list' === $sectionAction) {
 
             <div class="form-group row">
               <div class="text-center">
-                <input class="btn btn-success pmf-add-member" type="button"
+                <input class="btn btn-success pmf-add-section-member" type="button"
                        value="<?= $PMF_LANG['ad_section_addMember'] ?>">
-                <input class="btn btn-danger pmf-remove-member" type="button"
+                <input class="btn btn-danger pmf-remove-section-member" type="button"
                        value="<?= $PMF_LANG['ad_section_removeMember'] ?>">
               </div>
             </div>
