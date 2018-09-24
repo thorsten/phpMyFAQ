@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const group = $(this);
           let isMember = false;
           members.each((member) => {
-            isMember = (group.val() === member);
+            isMember = (member.val() === member);
           });
           if (isMember === false) {
             $('#section_member_list').append(
