@@ -145,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const removeSectionMembers = function () {
       // make sure that a section is selected
       var selected_member_list = $('#section_member_list option:selected');
-      if (selected_member_list.size() === 0) {
+      if (selected_member_list.length === 0) {
         alert('Please choose a group. ');
         return;
       }

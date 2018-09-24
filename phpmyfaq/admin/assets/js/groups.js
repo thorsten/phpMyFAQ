@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const removeGroupMembers = function () {
     // make sure that a group is selected
     var selected_user_list = $('#group_member_list option:selected');
-    if (selected_user_list.size() === 0) {
+    if (selected_user_list.length === 0) {
       alert('Please choose a user. ');
       return;
     }
