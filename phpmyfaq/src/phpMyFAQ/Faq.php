@@ -724,6 +724,8 @@ class Faq
             ];
         } else {
             $this->faqRecord = [
+                'http' => header('Status: 404 Not Found'),
+                'http' => header('HTTP/1.0 404 Not Found'),
                 'id' => $faqId,
                 'lang' => $currentLanguage,
                 'solution_id' => 42,
