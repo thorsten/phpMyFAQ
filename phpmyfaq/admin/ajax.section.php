@@ -59,12 +59,12 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
 
     // Returns all section members
     if ('get_all_members' == $ajaxAction) {
-        $memberList = $user->perm->getSectionGroups($groupId);
+        $memberList = $user->perm->getSectionGroups($sectionId);
         $members = [];
         foreach ($memberList as $single_member) {
             $group = $user->perm->getGroupData($single_member);
             $members[] = array('group_id' => $group['group_id'],
-                               'login' => $group['name'] );
+                               'name' => $group['name'] );
         }
         echo json_encode($members);
     }

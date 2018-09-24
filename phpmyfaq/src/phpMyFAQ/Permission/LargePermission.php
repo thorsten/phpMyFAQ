@@ -357,7 +357,7 @@ class LargePermission extends MediumPermission
 
         $select = sprintf('
             SELECT 
-                %sfaquser_group.group_id
+                %sfaqsection_group.group_id
             FROM
                 %sfaqsection_group
             WHERE 
