@@ -71,6 +71,27 @@ document.addEventListener('DOMContentLoaded', () => {
     };
   
     /**
+   * Group related functions
+   *
+   */
+  const getGroupList = () => {
+    clearGroupList();
+    $.getJSON('index.php?action=ajax&ajax=group&ajaxaction=get_all_groups',
+      (data) => {
+        $.each(data, (i, val) => {
+          $('#group_list_select').append(
+            '<option value="' + val.group_id + '">' + val.name + '</option>'
+          );
+        });
+      });
+    processGroupList();
+  };
+
+  const clearGroupList = function () {
+    $('#group_list_select').empty();
+  };
+
+    /**
      * Member related functions
      *
      */

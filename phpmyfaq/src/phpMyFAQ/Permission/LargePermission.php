@@ -539,14 +539,14 @@ class LargePermission extends MediumPermission
             return $this->getUserSections($userId);
         }
 
-        $select = sprintf('SELECT * FROM %sfaqsections');
+        $select = sprintf('SELECT * FROM %sfaqsections', Db::getTablePrefix());
 
         $res = $this->config->getDb()->query($select);
         if (!$res || $this->config->getDb()->numRows($res) < 1) {
             return [];
         }
         $result = [];
-        while ($row = $this->config->getDb()->fetchArray($result)) {
+        while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['id'];
         }
 

@@ -164,13 +164,13 @@ if ('list' === $sectionAction) {
               <div class="text-right">
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectSelectAll('section_group_list')">
+                                       href="javascript:selectSelectAll('group_list_select')">
                                         <i aria-hidden="true" class="material-icons">people</i>
                                     </a>
                                 </span>
                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectUnselectAll('section_group_list')">
+                                       href="javascript:selectUnselectAll('group_list_select')">
                                         <i aria-hidden="true" class="material-icons">people_outline</i>
                                     </a>
                                 </span>
@@ -178,7 +178,7 @@ if ('list' === $sectionAction) {
             </div>
 
             <div class="form-group row">
-              <select id="section_group_list" class="form-control" size="<?= $memberSelectSize ?>"
+              <select id="group_list_select" class="form-control" size="<?= $memberSelectSize ?>"
                       multiple>
                 <option value="0">...group list...</option>
               </select>
