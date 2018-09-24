@@ -162,11 +162,11 @@ class LargePermission extends MediumPermission
 
         $update = sprintf('
             UPDATE
-                %sfaqsection
+                %sfaqsections
             SET
                 %s
             WHERE
-                group_id = %d',
+                section_id = %d',
             Db::getTablePrefix(),
             $set,
             $sectionId
@@ -480,7 +480,7 @@ class LargePermission extends MediumPermission
     {
         $select = sprintf('
             SELECT 
-                    section_id
+                    id
             FROM 
                 %sfaqsections
             WHERE 
@@ -495,7 +495,7 @@ class LargePermission extends MediumPermission
         }
         $row = $this->config->getDb()->fetchArray($res);
 
-        return $row['section_id'];
+        return $row['id'];
     }
 
     /**
@@ -513,7 +513,7 @@ class LargePermission extends MediumPermission
             FROM 
                 %sfaqsections
             WHERE 
-                section_id = %d',
+                id = %d',
             Db::getTablePrefix(),
             $sectionId
         );
@@ -547,7 +547,7 @@ class LargePermission extends MediumPermission
         }
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $result[] = $row['section_id'];
+            $result[] = $row['id'];
         }
 
         return $result;
@@ -700,7 +700,7 @@ class LargePermission extends MediumPermission
             FROM 
                 %sfaqsections
             WHERE
-                section_id = %d',
+                id = %d',
             DB::getTablePrefix(),
             $sectionId
         );

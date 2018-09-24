@@ -38,13 +38,13 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
     $user->perm->checkRight($user->getUserId(), 'del_section')) {
 
     $sectionList = $groupList = ($user->perm instanceof LargePermission) ? $user->perm->getAllSections() : [];
-    // Returns all groups
+    // Returns all sections
     if ('get_all_sections' == $ajaxAction) {
         $sections = [];
         foreach ($groupList as $sectionId) {
             $data = $user->perm->getSectionData($sectionId);
             $sections[] = array(
-                'section_id' => $data['section_id'],
+                'section_id' => $data['id'],
                 'name' => $data['name'],
             );
         }
