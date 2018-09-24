@@ -434,9 +434,39 @@ class LargePermission extends MediumPermission
 
         return true;
     }
+    
+    /**
+     * Removes all groups from the section $sectionId.
+     * Returns true on success, otherwise false.
+     *
+     * @param int $sectionId
+     * @return bool
+     */
+    public function removeAllGroupsFromSection($sectionId)
+    {
+        if ($sectionId <= 0 || !is_numeric($sectionId)) {
+            return false;
+        }
+
+        $delete =  sprintf('
+            DELETE FROM
+                %sfaqsection_group
+            WHERE
+                section_id = %d',
+            DB::getTablePrefix(),
+            $sectionId
+        );
+
+        $res = $this->config->getDb()->query($delete);
+        if (!$res) {
+            return false;
+        }
+
+        return true;
+    }
 
     /**
-     * Removes a group $groupId to the section $sectionId.
+     * Removes a group $groupId from the section $sectionId.
      * Returns true on success, otherwise false.
      *
      * @param int $groupId

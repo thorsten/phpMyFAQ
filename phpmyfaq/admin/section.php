@@ -61,6 +61,31 @@ if (!in_array($sectionAction, $sectionActionList)){
     // @Todo: implement Error message
 }
 
+// update group members
+if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
+  $message = '';
+  $groupAction = $defaultGroupAction;
+  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+  $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
+
+  if ($sectionId == 0) {
+      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+  } else {
+      $user = new User($faqConfig);
+      $perm = $user->perm;
+      if (!$perm->removeAllGroupsFromSection($groupId)) {
+          $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+      }
+      foreach ($sectionMembers as $memberId) {
+          $perm->addToGroup((int) $memberId, $sectionId);
+      }
+      $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+          $PMF_LANG['ad_msg_savedsuc_1'],
+          $perm->getSectionName($sectionId),
+          $PMF_LANG['ad_msg_savedsuc_2']);
+  }
+}
+
 if (!isset($message)) {
   $message = '';
 }
