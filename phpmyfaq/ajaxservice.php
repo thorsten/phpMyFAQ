@@ -204,7 +204,7 @@ switch ($action) {
                     $faqUrl = sprintf(
                         '%s?action=faq&cat=%d&id=%d&artlang=%s',
                         $faqConfig->getDefaultUrl(),
-                        $category->getCategoryIdFromArticle($faq->faqRecord['id']),
+                        $category->getCategoryIdFromFaq($faq->faqRecord['id']),
                         $faq->faqRecord['id'],
                         $faq->faqRecord['lang']
                     );
@@ -244,7 +244,7 @@ switch ($action) {
 
                 // Let the category owner get a copy of the message
                 $category = new Category($faqConfig);
-                $categories = $category->getCategoryIdsFromArticle($faq->faqRecord['id']);
+                $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
                 foreach ($categories as $_category) {
                     $userId = $category->getOwner($_category);
                     $catUser = new User($faqConfig);
@@ -379,7 +379,7 @@ switch ($action) {
                 $categories = $categories['rubrik'];
             } else {
                 $newData['id'] = $faqId;
-                $categories = $category->getCategoryIdsFromArticle($newData['id']);
+                $categories = $category->getCategoryIdsFromFaq($newData['id']);
             }
 
             $recordId = $faq->addRecord($newData, $isNew);

@@ -315,7 +315,7 @@ if (!is_null($id)) {
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
         $faqConfig->getDefaultUrl(),
         $sids,
-        $category->getCategoryIdFromArticle($id),
+        $category->getCategoryIdFromFaq($id),
         $id,
         $lang
     );
@@ -381,7 +381,7 @@ if (!is_null($letter) && (1 == Strings::strlen($letter))) {
 $cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
 $categoryFromId = -1;
 if (is_numeric($id) && $id > 0) {
-    $categoryFromId = $category->getCategoryIdFromArticle($id);
+    $categoryFromId = $category->getCategoryIdFromFaq($id);
 }
 if ($categoryFromId != -1 && $cat == 0) {
     $cat = $categoryFromId;

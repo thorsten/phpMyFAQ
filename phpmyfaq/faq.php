@@ -26,6 +26,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
@@ -34,6 +35,7 @@ use phpMyFAQ\Relation;
 use phpMyFAQ\Search\Resultset as SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
+use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
 use phpMyFAQ\Visits;
 
@@ -42,7 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -54,6 +56,7 @@ $faqRating = new Rating($faqConfig);
 $faqComment = new Comment($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
+$httpHelper = new HttpHelper();
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
@@ -73,7 +76,7 @@ $recordId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 
 // Get all data from the FAQ record
-if (0 == $solutionId) {
+if (0 === (int)$solutionId) {
     $faq->getRecord($recordId);
 } else {
     $faq->getRecordBySolutionId($solutionId);
@@ -101,7 +104,7 @@ $answer = $oGlossary->insertItemsIntoContent($answer);
 // Set the path of the current category
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true);
 
-$highlight = phpMyFAQ\Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
+$highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
 if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen($highlight) > 3) {
     $highlight = str_replace("'", '´', $highlight);
     $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
@@ -131,7 +134,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new phpMyFAQ\Link(Link::getSystemRelativeUri().$_link, $faqConfig);
+            $oLink = new phpMyFAQ\Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -150,13 +153,13 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
             $att->getFilename());
     }
     if (count($attList) > 0) {
-        $answer .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.Strings::substr($outstr, 0, -2).'</p>';
+        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ' ' . Strings::substr($outstr, 0, -2) . '</p>';
     }
 }
 
 // List all categories for this faq
 $htmlAllCategories = '';
-$multiCategories = $category->getCategoriesFromArticle($recordId);
+$multiCategories = $category->getCategoriesFromFaq($recordId);
 if (count($multiCategories) > 1) {
     foreach ($multiCategories as $multiCat) {
         $path = $category->getPath($multiCat['id'], ' &raquo; ', true, 'breadcrumb-related-categories');
@@ -187,7 +190,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,
-        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
+        $PMF_LANG['ad_entry_edit_1'] . ' ' . $PMF_LANG['ad_entry_edit_2']
     );
 }
 
@@ -211,7 +214,7 @@ $translationUrl = sprintf(
         '%',
         '%%',
         Link::getSystemRelativeUri('index.php')
-    ).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
+    ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,
     $recordId,
@@ -224,9 +227,9 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     $tpl->parseBlock(
         'writeContent',
         'switchLanguage',
-        array(
+        [
             'msgChangeLanguage' => $PMF_LANG['msgLanguageSubmit'],
-        )
+        ]
     );
 }
 
@@ -235,9 +238,9 @@ if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
     $tpl->parseBlock(
         'writeContent',
         'addTranslation',
-        array(
+        [
             'msgTranslate' => $PMF_LANG['msgTranslate'],
-        )
+        ]
     );
 }
 
@@ -256,9 +259,9 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
     $tpl->parseBlock(
         'writeContent',
         'tagsAvailable',
-        array(
-            'renderTags' => $PMF_LANG['msg_tags'].': '.$faqTagging->getAllLinkTagsById($recordId),
-        )
+        [
+            'renderTags' => $PMF_LANG['msg_tags'] . ': ' . $faqTagging->getAllLinkTagsById($recordId),
+        ]
     );
 }
 
@@ -266,10 +269,10 @@ if ('' !== $htmlAllCategories) {
     $tpl->parseBlock(
         'writeContent',
         'relatedCategories',
-        array(
+        [
             'renderRelatedCategoriesHeader' => $PMF_LANG['msgArticleCategories'],
             'renderRelatedCategories' => $htmlAllCategories,
-        )
+        ]
     );
 }
 
@@ -277,10 +280,10 @@ if ('' !== $relatedFaqs) {
     $tpl->parseBlock(
         'writeContent',
         'relatedFaqs',
-        array(
+        [
             'renderRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'],
             'renderRelatedArticles' => $relatedFaqs,
-        )
+        ]
     );
 }
 
@@ -289,13 +292,20 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $numComments = $faqComment->getNumberOfComments();
 
+// Check if category ID and FAQ ID are linked together
+$isLinkedFAQ = $category->categoryHasLinkToFaq($recordId, $currentCategory);
+
+if (!$isLinkedFAQ) {
+    $httpHelper->sendStatus(404);
+}
+
 $tpl->parse(
     'writeContent',
     array(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'writeRubrik' => $categoryName,
         'solution_id' => $faq->faqRecord['solution_id'],
-        'solution_id_link' => Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
+        'solution_id_link' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
         'writeThema' => $question,
         'writeContent' => $answer,
         'writeDateMsg' => $date->format($faq->faqRecord['date']),
@@ -314,7 +324,7 @@ $tpl->parse(
                 '%',
                 '%%',
                 Link::getSystemRelativeUri('index.php')
-            ).'index.php?%saction=savevoting',
+            ) . 'index.php?%saction=savevoting',
             $sids
         ),
         'saveVotingID' => $recordId,
