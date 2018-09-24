@@ -73,7 +73,7 @@ if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUser
   } else {
       $user = new User($faqConfig);
       $perm = $user->perm;
-      if (!$perm->removeAllGroupsFromSection($groupId)) {
+      if (!$perm->removeAllGroupsFromSection($sectionId)) {
           $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
       }
       foreach ($sectionMembers as $memberId) {
