@@ -96,13 +96,13 @@ document.addEventListener('DOMContentLoaded', () => {
      */
     const addSectionMembers = () => {
       // make sure that a group is selected
-      const selectedSection = $('#section_list_select option:checked');
+      const selectedSection = $('#section_list_select option:selected');
       if (0 === selectedSection.length) {
         alert('Please choose a section.');
         return;
       }
   
-      // get selected users from list
+      // get selected groups from list
       const selectedGroups = $('#group_list_select option:selected');
       if (selectedGroups.length > 0) {
         selectedGroups.each(function () {
@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const group = $(this);
           let isMember = false;
           members.each((member) => {
-            isMember = (group.val() === member);
+            isMember = (group.val() === members[member].value);
           });
           if (isMember === false) {
             $('#section_member_list').append(

@@ -134,7 +134,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const user = $(this);
         let isMember = false;
         members.each((member) => {
-          isMember = (user.val() === member);
+          isMember = (user.val() === members[member].value);
         });
         if (isMember === false) {
           $('#group_member_list').append(
