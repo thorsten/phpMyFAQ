@@ -735,10 +735,11 @@ class LargePermission extends MediumPermission
             $sectionId
         );
         $res = $this->config->getDb()->query($select);
-        if (!$res || $this->config->getDb()->numRows($res) < 1) {
+        if ($this->config->getDb()->numRows($res) != 1) {
             return '-';
         }
-        $row = $this->config->getDb()->fetchRow($res);
+        $row = $this->config->getDb()->fetchArray($res);
+
         return $row['name'];
     }
 

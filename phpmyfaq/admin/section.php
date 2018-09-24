@@ -64,7 +64,7 @@ if (!in_array($sectionAction, $sectionActionList)){
 // update group members
 if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
   $message = '';
-  $groupAction = $defaultGroupAction;
+  $sectionAction = $defaultSectionAction;
   $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
   $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
 
