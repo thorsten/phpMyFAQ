@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Permission\LargePermission;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -38,6 +38,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
     $user->perm->checkRight($user->getUserId(), 'del_section')) {
 
     $sectionList = ($user->perm instanceof LargePermission) ? $user->perm->getAllSections() : [];
+
     // Returns all sections
     if ('get_all_sections' == $ajaxAction) {
         $sections = [];
@@ -51,4 +52,20 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
         echo json_encode($sections);
     }
 
+    // Return the section data
+    if ('get_section_data' == $ajaxAction) {
+        echo json_encode($user->perm->getSectionData($sectionId));
+    }
+
+    // Returns all section members
+    if ('get_all_members' == $ajaxAction) {
+        $memberList = $user->perm->getSectionGroups($groupId);
+        $members = [];
+        foreach ($memberList as $single_member) {
+            $group = $user->perm->getGroupData($single_member);
+            $members[] = array('group_id' => $group['group_id'],
+                               'login' => $group['name'] );
+        }
+        echo json_encode($members);
+    }
 }

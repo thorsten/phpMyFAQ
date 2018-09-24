@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
         (data) => {
           $.each(data, (i, val) => {
             $('#section_list_select').append(
-              '<option value="' + val.group_id + '">' + val.name + '</option>'
+              '<option value="' + val.section_id + '">' + val.name + '</option>'
             );
           });
         });
@@ -84,7 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
           );
         });
       });
-    processGroupList();
   };
 
   const clearGroupList = function () {
