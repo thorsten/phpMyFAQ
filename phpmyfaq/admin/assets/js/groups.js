@@ -137,7 +137,7 @@ $(document).ready(function () {
 
                 members.each(function(member) {
 
-                    if (user.val() === member) {
+                    if (user.val() === members[member].value) {
                         isMember = true;
                     } else {
                         isMember = false;
