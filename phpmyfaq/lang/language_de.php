@@ -1283,3 +1283,4 @@ $PMF_LANG['ad_section_deleteQuestion'] = "Sind Sie sicher, dass Sie diesen Berei
 $PMF_LANG['ad_section_error_delete'] = "Der Bereich konnte nicht gelöscht werden.";
 $PMF_LANG['ad_section_error_noName'] = "Bitte geben Sie einen Namen für den Bereich ein.";
 $PMF_LANG['ad_section_suc'] = "Der Bereich wurde <strong>erfolgreich</strong> hinzugefügt.";
+$PMF_LANG['ad_section_deleted'] = "Der Bereich wurde erfolgreich gelöscht.";

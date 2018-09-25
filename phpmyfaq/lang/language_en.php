@@ -1312,3 +1312,4 @@ $PMF_LANG['ad_section_deleteQuestion'] = "Are you sure you want to delete this s
 $PMF_LANG['ad_section_error_delete'] = "Section could not be deleted. ";
 $PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
 $PMF_LANG['ad_section_suc'] = "Section <strong>successfully</strong> added.";
+$PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
