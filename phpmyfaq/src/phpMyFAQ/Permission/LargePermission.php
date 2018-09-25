@@ -158,12 +158,12 @@ class LargePermission extends MediumPermission
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'section_id');
+        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'id');
         $sectionData = $this->checkSectionData($sectionData);
         $insert = sprintf("
             INSERT INTO
                 %sfaqsections
-            (section_id, name, description)
+            (id, name, description)
                 VALUES
             (%d, '%s', '%s')",
             Db::getTablePrefix(),
@@ -204,7 +204,7 @@ class LargePermission extends MediumPermission
             SET
                 %s
             WHERE
-                section_id = %d',
+                id = %d',
             Db::getTablePrefix(),
             $set,
             $sectionId
@@ -257,7 +257,7 @@ class LargePermission extends MediumPermission
             DELETE FROM
                 %sfaqsection
             WHERE
-                section_id = %d',
+                id = %d',
             Db::getTablePrefix(),
             $sectionId
         );
