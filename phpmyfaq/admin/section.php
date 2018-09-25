@@ -154,7 +154,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
                           <?= $PMF_LANG['ad_gen_cancel'] ?>
                       </button>
                       <button class="btn btn-primary" type="submit">
-                          <?= $PMF_LANG['ad_gen_save'] ?>
+                          <?= $PMF_LANG['ad_gen_delete'] ?>
                       </button>
                   </p>
               </form>
