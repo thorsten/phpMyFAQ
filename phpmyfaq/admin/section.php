@@ -238,7 +238,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i class="material-icons md-36">people</i>
+          <i class="material-icons md-36">domain</i>
             <?= $PMF_LANG['ad_section_add'] ?>
         </h1>
       </div>
@@ -288,7 +288,7 @@ if ('list' === $sectionAction) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">people</i>
+            <i class="material-icons md-36">domain</i>
               <?= $PMF_LANG['ad_menu_section_administration'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
@@ -383,7 +383,7 @@ if ('list' === $sectionAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectSelectAll('group_list_select')">
-                                        <i aria-hidden="true" class="material-icons">people</i>
+                                        <i aria-hidden="true" class="material-icons">domain</i>
                                     </a>
                                 </span>
                 <span class="unselect_all">
@@ -417,7 +417,7 @@ if ('list' === $sectionAction) {
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('section_member_list')">
-                        <i aria-hidden="true" class="material-icons">people</i>
+                        <i aria-hidden="true" class="material-icons">domain</i>
                     </a>
                 </span>
                 <span class="unselect_all">
