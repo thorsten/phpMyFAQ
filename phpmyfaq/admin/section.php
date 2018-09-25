@@ -123,7 +123,7 @@ if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(
 }
 
 // delete section confirmation
-if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'del_section')) {
+if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
   $message = '';
   $user = new CurrentUser($faqConfig);
   $perm = $user->perm;
@@ -165,7 +165,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
   }
 }
 
-if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'del_section')) {
+if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
   $message = '';
   $user = new User($faqConfig);
   $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
