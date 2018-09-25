@@ -143,6 +143,44 @@ class LargePermission extends MediumPermission
     }
 
     /**
+     * Adds a new section to the database and returns the ID of the
+     * new section. The associative array $sectionData contains the
+     * data for the new section.
+     *
+     * @param array $sectionData Array of section data
+     *
+     * @return int
+     */
+    public function addSection(Array $sectionData)
+    {
+        // check if section already exists
+        if ($this->getSectionId($sectionData['name']) > 0) {
+            return 0;
+        }
+
+        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'section_id');
+        $sectionData = $this->checkSectionData($sectionData);
+        $insert = sprintf("
+            INSERT INTO
+                %sfaqsections
+            (section_id, name, description)
+                VALUES
+            (%d, '%s', '%s')",
+            Db::getTablePrefix(),
+            $nextId,
+            $sectionData['name'],
+            $sectionData['description'],
+        );
+
+        $res = $this->config->getDb()->query($insert);
+        if (!$res) {
+            return 0;
+        }
+
+        return $nextId;
+    }
+
+    /**
      * Changes the section data of the given section.
      *
      * @param int $sectionId
