@@ -296,9 +296,6 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
         }
     }
     ?>
-                </h2>
-            </div>
-        </header>
 
         <div class="card-group">
 
