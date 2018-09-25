@@ -53,7 +53,7 @@ if (isset($_POST['section_action_deleteConfirm'])) {
     $sectionAction = 'delete_confirm';
 }
 if (isset($_POST['cancel'])) {
-    $sectionAction = $defaultGroupAction;
+    $sectionAction = $defaultSectionAction;
 }
 
 // validate sectionAction
@@ -73,11 +73,11 @@ if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUser
   } else {
       $user = new User($faqConfig);
       $perm = $user->perm;
-      if (!$perm->removeAllGroupsFromSection($sectionId)) {
+      if (!$perm->removeAllSectionsFromSection($sectionId)) {
           $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
       }
       foreach ($sectionMembers as $memberId) {
-          $perm->addGroupToSection((int) $memberId, $sectionId);
+          $perm->addSectionToSection((int) $memberId, $sectionId);
       }
       $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
           $PMF_LANG['ad_msg_savedsuc_1'],
@@ -116,9 +116,172 @@ if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(
   }
 }
 
+// delete section confirmation
+if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'del_section')) {
+  $message = '';
+  $user = new CurrentUser($faqConfig);
+  $perm = $user->perm;
+  $sectionId = Filter::filterInput(INPUT_POST, 'section_list_select', FILTER_VALIDATE_INT, 0);
+  if ($sectionId <= 0) {
+      $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+      $sectionAction = $defaultSectionAction;
+  } else {
+      $section_data = $perm->getSectionData($sectionId);
+      ?>
+      <header class="row">
+          <div class="col-lg-12">
+              <h2 class="page-header">
+                  <i aria-hidden="true" class="fa fa-users fa-fw"></i>
+                  <?= $PMF_LANG['ad_section_deleteSection'] ?> "<?= $section_data['name'] ?>"
+              </h2>
+          </div>
+      </header>
+
+      <div class="row">
+          <div class="col-lg-12">
+              <p><?= $PMF_LANG['ad_section_deleteQuestion'] ?></p>
+              <form action ="?action=section&amp;section_action=delete" method="post">
+                  <input type="hidden" name="section_id" value="<?= $sectionId ?>">
+                  <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession()?>">
+                  <p>
+                      <button class="btn btn-inverse" type="submit" name="cancel">
+                          <?= $PMF_LANG['ad_gen_cancel'] ?>
+                      </button>
+                      <button class="btn btn-primary" type="submit">
+                          <?= $PMF_LANG['ad_gen_save'] ?>
+                      </button>
+                  </p>
+              </form>
+          </div>
+      </div>
+<?php
+
+  }
+}
+
+if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'del_section')) {
+  $message = '';
+  $user = new User($faqConfig);
+  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+  $csrfOkay = true;
+  $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+  if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+      $csrfOkay = false;
+  }
+  $sectionAction = $defaultSectionAction;
+  if ($sectionId <= 0) {
+      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+  } else {
+      if (!$user->perm->deleteSection($sectionId) && !$csrfOkay) {
+          $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_section_error_delete']);
+      } else {
+          $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_deleted']);
+      }
+      $userError = $user->error();
+      if ($userError != '') {
+          $message .= sprintf('<p class="alert alert-danger">%s</p>', $userError);
+      }
+  }
+}
+
+if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
+  $user = new User($faqConfig);
+  $message = '';
+  $messages = [];
+  $section_name = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
+  $section_description = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
+  $csrfOkay = true;
+  $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+
+  if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+      $csrfOkay = false;
+  }
+  // check section name
+  if ($section_name == '') {
+      $messages[] = $PMF_LANG['ad_section_error_noName'];
+  }
+  // ok, let's go
+  if (count($messages) == 0 && $csrfOkay) {
+      // create section
+      $section_data = array(
+          'name' => $section_name,
+          'description' => $section_description
+      );
+
+      if ($user->perm->addSection($section_data) <= 0) {
+          $messages[] = $PMF_LANG['ad_adus_dberr'];
+      }
+  }
+  // no errors, show list
+  if (count($messages) == 0) {
+      $sectionAction = $defaultSectionAction;
+      $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_suc']);
+  // display error messages and show form again
+  } else {
+      $sectionAction = 'add';
+      $message = '<p class="alert alert-danger">';
+      foreach ($messages as $err) {
+          $message .= $err.'<br>';
+      }
+      $message .= '</p>';
+  }
+}
+
 if (!isset($message)) {
   $message = '';
 }
+
+// show new section form
+if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
+  $user = new CurrentUser($faqConfig);
+  ?>
+
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          <i class="material-icons md-36">people</i>
+            <?= $PMF_LANG['ad_section_add'] ?>
+        </h1>
+      </div>
+
+      <div class="row">
+          <div class="col-lg-12">
+              <div id="user_message"><?= $message ?></div>
+              <form  name="section_create" action="?action=section&amp;section_action=addsave" method="post">
+                  <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+
+                  <div class="form-group row">
+                      <label class="col-lg-2 form-control-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
+                      <div class="col-lg-3">
+                          <input type="text" name="section_name" id="section_name" autofocus class="form-control"
+                                 value="<?=(isset($section_name) ? $section_name : '') ?>" tabindex="1">
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <label class="col-lg-2 form-control-label" for="section_description"><?= $PMF_LANG['ad_section_description'] ?></label>
+                      <div class="col-lg-3">
+                          <textarea name="section_description" id="section_description" cols="<?= $descriptionCols ?>"
+                                    rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
+                              ><?=(isset($section_description) ? $section_description : '') ?></textarea>
+                      </div>
+                  </div>
+
+                  <div class="form-group row">
+                      <div class="col-lg-offset-2 col-lg-3">
+                          <button class="btn btn-primary" type="submit">
+                              <?= $PMF_LANG['ad_gen_save'] ?>
+                          </button>
+                          <button class="btn btn-info" type="reset" name="cancel">
+                              <?= $PMF_LANG['ad_gen_cancel'] ?>
+                          </button>
+                      </div>
+                  </div>
+              </form>
+          </div>
+      </div>
+<?php
+
+} // end if ($sectionAction == 'add')
 
 // show list of sections
 if ('list' === $sectionAction) {
