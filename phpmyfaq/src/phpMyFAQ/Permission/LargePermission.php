@@ -169,7 +169,7 @@ class LargePermission extends MediumPermission
             Db::getTablePrefix(),
             $nextId,
             $sectionData['name'],
-            $sectionData['description'],
+            $sectionData['description'];
         );
 
         $res = $this->config->getDb()->query($insert);
