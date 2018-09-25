@@ -86,6 +86,36 @@ if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUser
   }
 }
 
+// update section data
+if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
+  $message = '';
+  $sectionAction = $defaultSectionAction;
+  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+  if ($sectionId == 0) {
+      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+  } else {
+      $sectionData = [];
+      $dataFields = array('name', 'description');
+      foreach ($dataFields as $field) {
+          $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
+      }
+      $user = new User($faqConfig);
+      $perm = $user->perm;
+      if (!$perm->changeSection($sectionId, $sectionData)) {
+          $message .= sprintf(
+          '<p class="alert alert-danger">%s<br>%s</p>',
+          $PMF_LANG['ad_msg_mysqlerr'],
+          $db->error()
+          );
+      } else {
+          $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+              $PMF_LANG['ad_msg_savedsuc_1'],
+              $perm->getSectionName($sectionId),
+              $PMF_LANG['ad_msg_savedsuc_2']);
+      }
+  }
+}
+
 if (!isset($message)) {
   $message = '';
 }
