@@ -770,7 +770,7 @@ class User
         }
         $this->errors = [];
 
-        return $message.'<br>'.implode('<br>', debug_backtrace());
+        return $message;
     }
 
     /**
