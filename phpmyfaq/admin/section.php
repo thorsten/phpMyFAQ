@@ -42,7 +42,13 @@ $descriptionRows = 3;
 $descriptionCols = 15;
 $defaultSectionAction = 'list';
 $sectionActionList = [
-    'list'
+    'list',
+    'update_members',
+    'update_data',
+    'delete_confirm',
+    'delete',
+    'addsave',
+    'add'
 ];
 
 // what shall we do?
