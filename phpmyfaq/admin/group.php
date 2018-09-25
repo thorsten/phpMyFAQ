@@ -467,9 +467,14 @@ if ('list' === $groupAction) {
                        value="<?= $PMF_LANG['ad_group_removeMember'] ?>">
               </div>
             </div>
+        </div>
 
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item bg-light"><?= $PMF_LANG['ad_group_members']; ?></li>
+        </ul>
+
+        <div class="card-body">
             <div class="form-group row">
-                <?= $PMF_LANG['ad_group_members'] ?>
               <div class="float-right">
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
