@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const getSectionData = (section_id) => {
       $.getJSON('index.php?action=ajax&ajax=section&ajaxaction=get_section_data&section_id=' + section_id,
         (data) => {
-          $('#update_section_id').val(data.section_id);
+          $('#update_section_id').val(data.id);
           $('#update_section_name').val(data.name);
           $('#update_section_description').val(data.description);
         });

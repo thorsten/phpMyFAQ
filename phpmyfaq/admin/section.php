@@ -336,7 +336,7 @@ if ('list' === $sectionAction) {
         </form>
       </div>
 
-      <div id="group_data" class="card">
+      <div id="section_data" class="card">
         <div class="card-header">
             <?= $PMF_LANG['ad_section_details'] ?>
         </div>
