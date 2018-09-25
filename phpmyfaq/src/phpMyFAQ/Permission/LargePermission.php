@@ -395,16 +395,14 @@ class LargePermission extends MediumPermission
 
         $select = sprintf('
             SELECT 
-                %sfaquser_group.group_id
+                group_id
             FROM
                 %sfaqsection_group
             WHERE 
-                %sfaqsection_group.section_id = %d
+                section_id = %d
             AND 
-                %sfaqsection_group.group_id = %d
+                group_id = %d
             ',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
             Db::getTablePrefix(),
             $sectionId,
             $groupId

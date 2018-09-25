@@ -61,7 +61,7 @@ if (!in_array($sectionAction, $sectionActionList)){
     // @Todo: implement Error message
 }
 
-// update group members
+// update section members
 if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
   $message = '';
   $sectionAction = $defaultSectionAction;
@@ -77,7 +77,7 @@ if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUser
           $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
       }
       foreach ($sectionMembers as $memberId) {
-          $perm->addToGroup((int) $memberId, $sectionId);
+          $perm->addGroupToSection((int) $memberId, $sectionId);
       }
       $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
           $PMF_LANG['ad_msg_savedsuc_1'],
