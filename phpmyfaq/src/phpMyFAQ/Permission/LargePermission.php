@@ -255,7 +255,7 @@ class LargePermission extends MediumPermission
 
         $delete = sprintf('
             DELETE FROM
-                %sfaqsection
+                %sfaqsections
             WHERE
                 id = %d',
             Db::getTablePrefix(),
