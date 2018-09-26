@@ -158,13 +158,13 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
         $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         $groupAction = $defaultGroupAction;
     } else {
-        $group_data = $perm->getGroupData($groupId);
+        $groupData = $perm->getGroupData($groupId);
         ?>
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-                    <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $group_data['name'] ?>"
+                    <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
                 </h2>
             </div>
         </header>
@@ -220,9 +220,9 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
     $user = new User($faqConfig);
     $message = '';
     $messages = [];
-    $group_name = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
-    $group_description = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
-    $group_auto_join = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
+    $groupName = Filter::filterInput(INPUT_POST, 'group_name', FILTER_SANITIZE_STRING, '');
+    $groupDescription = Filter::filterInput(INPUT_POST, 'group_description', FILTER_SANITIZE_STRING, '');
+    $groupAutoJoin = Filter::filterInput(INPUT_POST, 'group_auto_join', FILTER_SANITIZE_STRING, '');
     $csrfOkay = true;
     $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
@@ -230,19 +230,19 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
         $csrfOkay = false;
     }
     // check group name
-    if ($group_name == '') {
+    if ($groupName == '') {
         $messages[] = $PMF_LANG['ad_group_error_noName'];
     }
     // ok, let's go
     if (count($messages) == 0 && $csrfOkay) {
         // create group
-        $group_data = array(
-            'name' => $group_name,
-            'description' => $group_description,
-            'auto_join' => $group_auto_join,
+        $groupData = array(
+            'name' => $groupName,
+            'description' => $groupDescription,
+            'auto_join' => $groupAutoJoin,
         );
 
-        if ($user->perm->addGroup($group_data) <= 0) {
+        if ($user->perm->addGroup($groupData) <= 0) {
             $messages[] = $PMF_LANG['ad_adus_dberr'];
         }
     }
@@ -287,7 +287,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         <label class="col-lg-2 form-control-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
                         <div class="col-lg-3">
                             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
-                                   value="<?=(isset($group_name) ? $group_name : '') ?>" tabindex="1">
+                                   value="<?=(isset($groupName) ? $groupName : '') ?>" tabindex="1">
                         </div>
                     </div>
 
@@ -296,7 +296,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                         <div class="col-lg-3">
                             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
                                       rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
-                                ><?=(isset($group_description) ? $group_description : '') ?></textarea>
+                                ><?=(isset($groupDescription) ? $groupDescription : '') ?></textarea>
                         </div>
                     </div>
 
@@ -306,7 +306,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                                    <?=((isset($group_auto_join) && $group_auto_join) ? ' checked="checked"' : '') ?>>
+                                    <?=((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked="checked"' : '') ?>>
                                 </label>
                             </div>
                         </div>
@@ -388,7 +388,7 @@ if ('list' === $groupAction) {
               </label>
               <div class="col-lg-9">
                 <input id="update_group_name" type="text" name="name" class="form-control"
-                       tabindex="1" value="<?= (isset($group_name) ? $group_name : '') ?>">
+                       tabindex="1" value="<?= (isset($groupName) ? $groupName : '') ?>">
               </div>
             </div>
             <div class="form-group row">
@@ -399,7 +399,7 @@ if ('list' === $groupAction) {
                                     <textarea id="update_group_description" name="description" class="form-control"
                                               rows="<?= $descriptionRows ?>"
                                               tabindex="2"><?php
-                                        echo(isset($group_description) ? $group_description : '') ?></textarea>
+                                        echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -408,7 +408,7 @@ if ('list' === $groupAction) {
                   <label>
                     <input id="update_group_auto_join" type="checkbox" name="auto_join" value="1"
                            tabindex="3"<?php
-                    echo((isset($group_auto_join) && $group_auto_join) ? ' checked' : '') ?>>
+                    echo((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
                       <?= $PMF_LANG['ad_group_autoJoin'] ?>
                   </label>
                 </div>

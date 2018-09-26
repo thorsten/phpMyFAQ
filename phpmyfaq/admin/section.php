@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if (!$user->perm->checkRight($user->getUserId(), 'edit_section') &&
-    !$user->perm->checkRight($user->getUserId(), 'del_section') &&
+    !$user->perm->checkRight($user->getUserId(), 'delete_section') &&
     !$user->perm->checkRight($user->getUserId(), 'add_section')) {
     exit();
 }
@@ -132,13 +132,13 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
       $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
       $sectionAction = $defaultSectionAction;
   } else {
-      $section_data = $perm->getSectionData($sectionId);
+      $sectionData = $perm->getSectionData($sectionId);
       ?>
       <header class="row">
           <div class="col-lg-12">
               <h2 class="page-header">
                   <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-                  <?= $PMF_LANG['ad_section_deleteSection'] ?> "<?= $section_data['name'] ?>"
+                  <?= $PMF_LANG['ad_section_deleteSection'] ?> "<?= $sectionData['name'] ?>"
               </h2>
           </div>
       </header>
@@ -194,8 +194,8 @@ if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), '
   $user = new User($faqConfig);
   $message = '';
   $messages = [];
-  $section_name = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
-  $section_description = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
+  $sectionName = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
+  $sectionDescription = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
   $csrfOkay = true;
   $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
@@ -203,18 +203,18 @@ if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), '
       $csrfOkay = false;
   }
   // check section name
-  if ($section_name == '') {
+  if ($sectionName == '') {
       $messages[] = $PMF_LANG['ad_section_error_noName'];
   }
   // ok, let's go
   if (count($messages) == 0 && $csrfOkay) {
       // create section
-      $section_data = array(
-          'name' => $section_name,
-          'description' => $section_description
+      $sectionData = array(
+          'name' => $sectionName,
+          'description' => $sectionDescription
       );
 
-      if ($user->perm->addSection($section_data) <= 0) {
+      if ($user->perm->addSection($sectionData) <= 0) {
           $messages[] = $PMF_LANG['ad_adus_dberr'];
       }
   }
@@ -259,7 +259,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
                       <label class="col-lg-2 form-control-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
                       <div class="col-lg-3">
                           <input type="text" name="section_name" id="section_name" autofocus class="form-control"
-                                 value="<?=(isset($section_name) ? $section_name : '') ?>" tabindex="1">
+                                 value="<?=(isset($sectionName) ? $sectionName : '') ?>" tabindex="1">
                       </div>
                   </div>
 
@@ -268,7 +268,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
                       <div class="col-lg-3">
                           <textarea name="section_description" id="section_description" cols="<?= $descriptionCols ?>"
                                     rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
-                              ><?=(isset($section_description) ? $section_description : '') ?></textarea>
+                              ><?=(isset($sectionDescription) ? $sectionDescription : '') ?></textarea>
                       </div>
                   </div>
 
@@ -349,7 +349,7 @@ if ('list' === $sectionAction) {
               </label>
               <div class="col-lg-9">
                 <input id="update_section_name" type="text" name="name" class="form-control"
-                       tabindex="1" value="<?= (isset($section_name) ? $section_name : '') ?>">
+                       tabindex="1" value="<?= (isset($sectionName) ? $sectionName : '') ?>">
               </div>
             </div>
             <div class="form-group row">
@@ -360,7 +360,7 @@ if ('list' === $sectionAction) {
                                     <textarea id="update_section_description" name="description" class="form-control"
                                               rows="<?= $descriptionRows ?>"
                                               tabindex="2"><?php
-                                        echo(isset($section_description) ? $section_description : '') ?></textarea>
+                                        echo(isset($sectionDescription) ? $sectionDescription : '') ?></textarea>
               </div>
             </div>
           </div>
