@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sectionSelect = function (event) {
       event = (event) ? event : ((window.event) ? window.event : null);
       if (event) {
-        var select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
+        const select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
         if (select && select.value > 0) {
           clearSectionData();
           getSectionData(select.value);
@@ -144,14 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
   
     const removeSectionMembers = function () {
       // make sure that a section is selected
-      var selected_member_list = $('#section_member_list option:selected');
-      if (selected_member_list.length === 0) {
+      const selectedMemberList = $('#section_member_list option:selected');
+      if (selectedMemberList.length === 0) {
         alert('Please choose a group. ');
         return;
       }
   
       // remove selected members from list
-      selected_member_list.each(function () {
+      selectedMemberList.each(function () {
         $('#section_member_list option:selected').remove();
       });
     };

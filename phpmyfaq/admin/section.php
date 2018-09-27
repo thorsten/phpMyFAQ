@@ -101,7 +101,7 @@ if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(
       $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
   } else {
       $sectionData = [];
-      $dataFields = array('name', 'description');
+      $dataFields = ['name', 'description'];
       foreach ($dataFields as $field) {
           $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
       }
@@ -357,10 +357,9 @@ if ('list' === $sectionAction) {
                   <?= $PMF_LANG['ad_section_description'] ?>
               </label>
               <div class="col-lg-9">
-                                    <textarea id="update_section_description" name="description" class="form-control"
-                                              rows="<?= $descriptionRows ?>"
-                                              tabindex="2"><?php
-                                        echo(isset($sectionDescription) ? $sectionDescription : '') ?></textarea>
+                <textarea name="description" id="update_section_description" cols="<?= $descriptionCols ?>"
+                          rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
+                ><?= isset($sectionDescription) ? $sectionDescription : '' ?></textarea>
               </div>
             </div>
           </div>
