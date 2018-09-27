@@ -677,7 +677,6 @@ $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
 $PMF_LANG["rightsLanguage"]['delglossary'] = "delete glossary item";
 $PMF_LANG["ad_menu_group_administration"] = "Groups";
 $PMF_LANG['ad_user_loggedin'] = 'Logged in as ';
-
 $PMF_LANG['ad_group_details'] = "Group Details";
 $PMF_LANG['ad_group_add'] = "Add Group";
 $PMF_LANG['ad_group_add_link'] = "Add Group";
@@ -1295,3 +1294,22 @@ $PMF_LANG['ad_meta_add'] = 'Add meta data';
 $PMF_LANG['ad_meta_page_id'] = 'Page type';
 $PMF_LANG['ad_meta_type'] = 'Content type';
 $PMF_LANG['ad_meta_content'] = 'Content';
+
+// added v3.0.0-alpha.3 - 2018-09-20 by Timo
+$PMF_LANG['ad_menu_section_administration'] = "Sections";
+$PMF_LANG['ad_section_add'] = "Add Section";
+$PMF_LANG['ad_section_add_link'] = "Add Section";
+$PMF_LANG['ad_sections'] = 'Sections';
+$PMF_LANG['ad_section_details'] = "Section Details";
+$PMF_LANG['ad_section_name'] = "Name";
+$PMF_LANG['ad_section_description'] = "Description";
+$PMF_LANG['ad_section_membership'] = "Section Assignment";
+$PMF_LANG['ad_section_members'] = "Assignments";
+$PMF_LANG['ad_section_addMember'] = "+";
+$PMF_LANG['ad_section_removeMember'] = "-";
+$PMF_LANG['ad_section_deleteSection'] = "Delete Section";
+$PMF_LANG['ad_section_deleteQuestion'] = "Are you sure you want to delete this section?";
+$PMF_LANG['ad_section_error_delete'] = "Section could not be deleted. ";
+$PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
+$PMF_LANG['ad_section_suc'] = "Section <strong>successfully</strong> added.";
+$PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";

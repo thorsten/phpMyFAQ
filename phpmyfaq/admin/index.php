@@ -230,6 +230,8 @@ if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 
                 case 'user':          require 'ajax.user.php'; break;
                 // Groups
                 case 'group':         require 'ajax.group.php'; break;
+                // Sections
+                case 'section':       require 'ajax.section.php'; break;
                 // Interface translation
                 case 'trans':         require 'ajax.trans.php'; break;
                 // Image upload
@@ -265,6 +267,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             // functions for user administration
             case 'user':              require 'user.php'; break;
             case 'group':             require 'group.php'; break;
+            case 'section':           require 'section.php'; break;
             // functions for content administration
             case 'viewinactive':
             case 'viewactive':

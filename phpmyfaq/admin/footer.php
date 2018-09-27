@@ -30,9 +30,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        </div> <!-- row -->
-    </div> <!-- page-wrapper -->
-</div> <!-- wrapper -->
+        </main> <!-- main -->
+    </div> <!-- row -->
+</div> <!-- page-wrapper (container-fluid) -->
 
 <footer class="page-footer container-fluid">
     <div class="row">

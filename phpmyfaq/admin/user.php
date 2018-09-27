@@ -49,6 +49,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     $selectSize = 10;
     $defaultUserAction = 'list';
     $defaultUserStatus = 'active';
+    $userActionList = [
+        'udpate_rights',
+        'update_data',
+        'delete_confirm',
+        'delete',
+        'addsave',
+        'add',
+        'list',
+        'listallusers'
+    ];
 
     // what shall we do?
     // actions defined by url: user_action=
@@ -61,6 +71,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
     if (isset($_POST['cancel'])) {
         $userAction = $defaultUserAction;
+    }
+
+    // validate userAction
+    if (!in_array($userAction, $userActionList)){
+        // @Todo: Implement Error message
     }
 
     // update user rights
