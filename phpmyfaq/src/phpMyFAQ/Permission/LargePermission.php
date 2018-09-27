@@ -744,7 +744,7 @@ class LargePermission extends MediumPermission
         }
         $result = [];
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[] = $row['right_id'];
+            array_push($result, $row['right_id']);
         }
         return $result;
     }

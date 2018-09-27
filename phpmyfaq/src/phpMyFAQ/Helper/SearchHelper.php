@@ -253,7 +253,7 @@ class SearchHelper extends Helper
                 // Set language for current category to fetch the correct category name
                 $this->Category->setLanguage($result->lang);
 
-                $categoryInfo = $this->Category->getCategoriesFromArticle($result->id);
+                $categoryInfo = $this->Category->getCategoriesFromFaq($result->id);
                 $categoryInfo = array_values($categoryInfo); //Reset the array keys
                 $question = Utils::chopString($result->question, 15);
                 $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 25);

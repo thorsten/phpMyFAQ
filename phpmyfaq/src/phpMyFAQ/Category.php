@@ -44,25 +44,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class Category
 {
     /**
-     * @var Configuration
-     */
-    private $_config = null;
-
-    /**
-     * User ID.
-     *
-     * @var int
-     */
-    private $user = -1;
-
-    /**
-     * Groupd.
-     *
-     * @var array
-     */
-    private $groups = [-1];
-
-    /**
      * The categories as an array.
      *
      * @var array
@@ -91,12 +72,37 @@ class Category
     public $catTree = [];
 
     /**
+     * The tree with the tabs.
+     *
+     * @var array
+     */
+    public $treeTab = [];
+
+    /**
+     * @var Configuration
+     */
+    private $_config = null;
+
+    /**
+     * User ID.
+     *
+     * @var int
+     */
+    private $user = -1;
+
+    /**
+     * Groupd.
+     *
+     * @var array
+     */
+    private $groups = [-1];
+
+    /**
      * The children nodes.
      *
      * @var array
      */
     private $children = [];
-
     /**
      * The current language.
      *
@@ -110,13 +116,6 @@ class Category
      * @var array
      */
     private $lineTab = [];
-
-    /**
-     * The tree with the tabs.
-     *
-     * @var array
-     */
-    public $treeTab = [];
 
     /**
      * Entity owners
@@ -168,14 +167,6 @@ class Category
     }
 
     /**
-     * @param int $userId
-     */
-    public function setUser($userId = -1)
-    {
-        $this->user = $userId;
-    }
-
-    /**
      * @param array $groups
      */
     public function setGroups(Array $groups)
@@ -184,6 +175,16 @@ class Category
             $groups = array(-1);
         }
         $this->groups = $groups;
+    }
+
+    /**
+     * Sets language.
+     *
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 
     /**
@@ -266,6 +267,39 @@ class Category
         }
 
         return $this->categories;
+    }
+
+    /**
+     * Get the level of the item id.
+     *
+     * @param int $id Entity id
+     *
+     * @return int
+     */
+    private function levelOf($id)
+    {
+        $alreadies = array($id);
+        $ret = 0;
+        while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
+            ++$ret;
+            $id = $this->categoryName[$id]['parent_id'];
+
+            if (in_array($id, $alreadies)) {
+                break;
+            } else {
+                array_push($alreadies, $id);
+            }
+        }
+
+        return $ret;
+    }
+
+    /**
+     * @param int $userId
+     */
+    public function setUser($userId = -1)
+    {
+        $this->user = $userId;
     }
 
     /**
@@ -490,31 +524,6 @@ class Category
     }
 
     /**
-     * Get the level of the item id.
-     *
-     * @param int $id Entity id
-     *
-     * @return int
-     */
-    private function levelOf($id)
-    {
-        $alreadies = array($id);
-        $ret = 0;
-        while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
-            ++$ret;
-            $id = $this->categoryName[$id]['parent_id'];
-
-            if (in_array($id, $alreadies)) {
-                break;
-            } else {
-                array_push($alreadies, $id);
-            }
-        }
-
-        return $ret;
-    }
-
-    /**
      * Transforms the linear array in a 1D array in the order of the tree, with
      * the info.
      *
@@ -580,24 +589,42 @@ class Category
         }
     }
 
+    //
+
     /**
-     * Get the line number where to find the node $id in the category tree.
+     * List in array the root, super-root, ... of the $id.
      *
-     * @param int $id Entity id
-     *
-     * @return int
+     * @param $id
+     * @return array
      */
-    private function getLineCategory($id)
+    private function getNodes($id)
     {
-        $num = count($this->treeTab);
-        for ($i = 0; $i < $num; ++$i) {
-            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
-                return $i;
+        if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
+            $thisLevel = $this->categoryName[$id]['level'];
+            $temp = [];
+            for ($i = $thisLevel; $i > 0; --$i) {
+                $id = $this->categoryName[$id]['parent_id'];
+                array_unshift($temp, $id);
             }
+
+            return $temp;
         }
+
+        return [];
     }
 
-    //
+    /**
+     * Gets the list of the brothers of $id (include $id).
+     *
+     * @param int $id Brothers
+     *
+     * @return array
+     */
+    private function getBrothers($id)
+    {
+        return $this->getChildren($this->categoryName[$id]['parent_id']);
+    }
+
     /**
      * List in a array of the $id of the child.
      *
@@ -632,51 +659,6 @@ class Category
     }
 
     /**
-     * List in array the root, super-root, ... of the $id.
-     *
-     * @param $id
-     * @return array
-     */
-    private function getNodes($id)
-    {
-        if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
-            $thisLevel = $this->categoryName[$id]['level'];
-            $temp = [];
-            for ($i = $thisLevel; $i > 0; --$i) {
-                $id = $this->categoryName[$id]['parent_id'];
-                array_unshift($temp, $id);
-            }
-
-            return $temp;
-        }
-
-        return [];
-    }
-
-    /**
-     * Collapse the complete category tree.
-     */
-    public function collapseAll()
-    {
-        $numTreeTab = count($this->treeTab);
-        for ($i = 0; $i < $numTreeTab; ++$i) {
-            if ($this->treeTab[$i]['symbol'] == 'minus') {
-                $this->treeTab[$i]['symbol'] = 'plus';
-            }
-        }
-    }
-
-    /**
-     * expand the node $id.
-     *
-     * @param int $id Entity id
-     */
-    public function expand($id)
-    {
-        $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
-    }
-
-    /**
      * Try to expand from the parent_id to the node $id
      *
      * @param int $id
@@ -702,28 +684,43 @@ class Category
     }
 
     /**
-     * Expand the entire tree
-     *
-     * @return void
+     * Collapse the complete category tree.
      */
-    public function expandAll()
+    public function collapseAll()
     {
         $numTreeTab = count($this->treeTab);
         for ($i = 0; $i < $numTreeTab; ++$i) {
-            if ($this->treeTab[$i]['symbol'] == 'plus') {
-                $this->treeTab[$i]['symbol'] = 'minus';
+            if ($this->treeTab[$i]['symbol'] == 'minus') {
+                $this->treeTab[$i]['symbol'] = 'plus';
             }
         }
     }
 
     /**
-     * Total height of the expanded tree.
+     * Get the line number where to find the node $id in the category tree.
+     *
+     * @param int $id Entity id
      *
      * @return int
      */
-    public function height()
+    private function getLineCategory($id)
     {
-        return count($this->treeTab);
+        $num = count($this->treeTab);
+        for ($i = 0; $i < $num; ++$i) {
+            if (isset($this->treeTab[$i]['id']) && $this->treeTab[$i]['id'] == $id) {
+                return $i;
+            }
+        }
+    }
+
+    /**
+     * expand the node $id.
+     *
+     * @param int $id Entity id
+     */
+    public function expand($id)
+    {
+        $this->treeTab[$this->getLineCategory($id)]['symbol'] = 'minus';
     }
 
     /**
@@ -855,23 +852,28 @@ class Category
     }
 
     /**
-     * Returns the four parts of a line to display: category name, the ID of
-     * the root node, the description and if the category is active
+     * Expand the entire tree
      *
-     * @param integer $node
-     *
-     * @return array
+     * @return void
      */
-    public function getLineDisplay($node)
+    public function expandAll()
     {
-        return [
-            $this->symbols[$this->treeTab[$node]['symbol']],
-            $this->treeTab[$node]['name'],
-            $this->treeTab[$node]['id'],
-            $this->treeTab[$node]['description'],
-            $this->treeTab[$node]['active'],
-            $this->treeTab[$node]['image']
-        ];
+        $numTreeTab = count($this->treeTab);
+        for ($i = 0; $i < $numTreeTab; ++$i) {
+            if ($this->treeTab[$i]['symbol'] == 'plus') {
+                $this->treeTab[$i]['symbol'] = 'minus';
+            }
+        }
+    }
+
+    /**
+     * Total height of the expanded tree.
+     *
+     * @return int
+     */
+    public function height()
+    {
+        return count($this->treeTab);
     }
 
     /**
@@ -898,15 +900,23 @@ class Category
     }
 
     /**
-     * Gets the list of the brothers of $id (include $id).
+     * Returns the four parts of a line to display: category name, the ID of
+     * the root node, the description and if the category is active
      *
-     * @param int $id Brothers
+     * @param integer $node
      *
      * @return array
      */
-    private function getBrothers($id)
+    public function getLineDisplay($node)
     {
-        return $this->getChildren($this->categoryName[$id]['parent_id']);
+        return [
+            $this->symbols[$this->treeTab[$node]['symbol']],
+            $this->treeTab[$node]['name'],
+            $this->treeTab[$node]['id'],
+            $this->treeTab[$node]['description'],
+            $this->treeTab[$node]['active'],
+            $this->treeTab[$node]['image']
+        ];
     }
 
     /**
@@ -956,6 +966,14 @@ class Category
         return $oLink->toHtmlAnchor();
     }
 
+    /*
+     * Generate HTML for Categories each level
+     *
+     * @param array $categories
+     * @param integer $level
+     * @return string
+     */
+
     /**
      * Get Entity Data for the next level
      *
@@ -977,13 +995,43 @@ class Category
         return $result;
     }
 
-    /*
-     * Generate HTML for Categories each level
+    /**
+     * Returns the data of the given category.
      *
-     * @param array $categories
-     * @param integer $level
-     * @return string
+     * @param int $categoryId
+     *
+     * @return Entity
      */
+    public function getCategoryData($categoryId)
+    {
+        $entity = new Entity();
+
+        $query = sprintf(
+            "SELECT * FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
+            Db::getTablePrefix(),
+            $categoryId,
+            $this->language
+        );
+
+        $result = $this->_config->getDb()->query($query);
+
+        if ($row = $this->_config->getDb()->fetchObject($result)) {
+            $entity
+                ->setId($row->id)
+                ->setLang($row->lang)
+                ->setParentId($row->parent_id)
+                ->setName($row->name)
+                ->setDescription($row->description)
+                ->setUserId($row->user_id)
+                ->setGroupId($row->group_id)
+                ->setActive($row->active)
+                ->setShowHome($row->show_home)
+                ->setImage($row->image);
+        }
+
+        return $entity;
+    }
+
     public function generateCategoriesList(array $categories, $level)
     {
         $output = '<div class="pmf-categories pmf-slider-categories-' . $level . '" ><ul id="categories_' . $level . '">';
@@ -1109,16 +1157,52 @@ class Category
     }
 
     /**
+     * Returns the ID of a category that associated with the given article.
+     *
+     * @param int $faqId FAQ id
+     *
+     * @return int
+     */
+    public function getCategoryIdFromFaq($faqId)
+    {
+        $cats = $this->getCategoryIdsFromFaq($faqId);
+        if (isset($cats[0])) {
+            return $cats[0];
+        } else {
+            return 0;
+        }
+    }
+
+    /**
+     * Returns an array with the IDs of all categories that are associated with
+     * the given article.
+     *
+     * @param int $faqId Record id
+     *
+     * @return array
+     */
+    public function getCategoryIdsFromFaq($faqId)
+    {
+        $categories = $this->getCategoriesFromFaq($faqId);
+        $result = [];
+        foreach ($categories as $category) {
+            $result[] = $category['id'];
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns all categories that are related to the given article-id and
      * the current language $this->language in an unsorted array which consists
      * of associative arrays with the keys 'name', 'id', 'lang',
      * 'parent_id' and 'description'.
      *
-     * @param int $articleId Record id
+     * @param int $faqId Record id
      *
      * @return array
      */
-    public function getCategoriesFromArticle($articleId)
+    public function getCategoriesFromFaq($faqId)
     {
         $query = sprintf("
             SELECT
@@ -1140,7 +1224,7 @@ class Category
                 fc.lang = '%s'",
             Db::getTablePrefix(),
             Db::getTablePrefix(),
-            $articleId,
+            $faqId,
             $this->language,
             $this->language
         );
@@ -1158,39 +1242,21 @@ class Category
     }
 
     /**
-     * Returns the ID of a category that associated with the given article.
-     *
-     * @param int $article_id Record id
-     *
-     * @return int
+     * Given FAQ ID and category ID are connected or not.
+     * @param $faqId
+     * @param $categoryId
+     * @return bool
      */
-    public function getCategoryIdFromArticle($article_id)
+    public function categoryHasLinkToFaq($faqId, $categoryId)
     {
-        $cats = $this->getCategoryIdsFromArticle($article_id);
-        if (isset($cats[0])) {
-            return $cats[0];
-        } else {
-            return 0;
-        }
-    }
-
-    /**
-     * Returns an array with the IDs of all categories that are associated with
-     * the given article.
-     *
-     * @param int $article_id Record id
-     *
-     * @return array
-     */
-    public function getCategoryIdsFromArticle($article_id)
-    {
-        $cats = $this->getCategoriesFromArticle($article_id);
-        $arr = [];
-        foreach ($cats as $cat) {
-            $arr[] = $cat['id'];
+        $categories = $this->getCategoriesFromFaq($faqId);
+        foreach ($categories as $category) {
+            if ((int)$category === (int)$categoryId) {
+                return true;
+            }
         }
 
-        return $arr;
+        return false;
     }
 
     /**
@@ -1297,43 +1363,6 @@ class Category
         );
 
         return $this->_config->getDb()->query($query);
-    }
-
-    /**
-     * Returns the data of the given category.
-     *
-     * @param int $categoryId
-     *
-     * @return Entity
-     */
-    public function getCategoryData($categoryId)
-    {
-        $entity = new Entity();
-
-        $query = sprintf(
-            "SELECT * FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
-            $categoryId,
-            $this->language
-        );
-
-        $result = $this->_config->getDb()->query($query);
-
-        if ($row = $this->_config->getDb()->fetchObject($result)) {
-            $entity
-                ->setId($row->id)
-                ->setLang($row->lang)
-                ->setParentId($row->parent_id)
-                ->setName($row->name)
-                ->setDescription($row->description)
-                ->setUserId($row->user_id)
-                ->setGroupId($row->group_id)
-                ->setActive($row->active)
-                ->setShowHome($row->show_home)
-                ->setImage($row->image);
-        }
-
-        return $entity;
     }
 
     /**
@@ -1865,16 +1894,6 @@ class Category
         }
 
         return $matrix;
-    }
-
-    /**
-     * Sets language.
-     *
-     * @param string $language
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
     }
 
     /**
