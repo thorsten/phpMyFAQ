@@ -526,8 +526,8 @@ if ('list' === $groupAction) {
           <div class="card-body">
             <?php foreach ($user->perm->getAllRightsData() as $right): ?>
               <div class="form-check">
-                <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
-                       name="user_rights[]" value="<?= $right['right_id'] ?>"
+                <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
+                       name="group_rights[]" value="<?= $right['right_id'] ?>"
                        class="form-check-input permission">
                 <label class="form-check-label">
                     <?php
