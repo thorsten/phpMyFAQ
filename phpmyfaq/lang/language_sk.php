@@ -68,7 +68,7 @@ $PMF_LANG["msgShowCategory"] = "Content Overview: ";
 $PMF_LANG["msgCommentBy"] = "Comment of ";
 $PMF_LANG["msgCommentHeader"] = "Comment this FAQ";
 $PMF_LANG["msgYourComment"] = "Váš komentár:";
-$PMF_LANG["msgCommentThanks"] = "Thanks a lot for your comment!";
+$PMF_LANG["msgCommentThanks"] = "Ďakujeme veľmi pekne za váš komentár!";
 $PMF_LANG["msgSeeXMLFile"] = "otvoriť XML-Súbor";
 $PMF_LANG["msgSend2Friend"] = "Poslať FAQ známemu";
 $PMF_LANG["msgS2FName"] = "Vaše meno:";
@@ -206,7 +206,7 @@ $PMF_LANG["ad_user_rights"] = "Práva";
 $PMF_LANG["ad_user_del_1"] = "Užívateľ";
 $PMF_LANG["ad_user_del_2"] = "môže byť vymazaný?";
 $PMF_LANG["ad_user_del_3"] = "Ste si istý?";
-$PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
+$PMF_LANG["ad_user_deleted"] = "Užívateľ bol úspešne vymazaný.";
 $PMF_LANG["ad_user_checkall"] = "Vyberte všetkých";
 
 // Beitragsverwaltung
