@@ -10,13 +10,11 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2006-08-10
  */
@@ -28,13 +26,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * PMF_Tags.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2006-08-10
  */
@@ -46,11 +42,14 @@ class PMF_Tags
     private $_config;
 
     /**
+     * @var array
+     */
+    private $recordsByTagName = [];
+
+    /**
      * Constructor.
      *
      * @param PMF_Configuration $config
-     *
-     * @return PMF_Tags
      */
     public function __construct(PMF_Configuration $config)
     {
@@ -540,7 +539,11 @@ class PMF_Tags
     public function getRecordsByTagName($tagName)
     {
         if (!is_string($tagName)) {
-            return false;
+            return [];
+        }
+
+        if (count($this->recordsByTagName)) {
+            return $this->recordsByTagName;
         }
 
         $query = sprintf("
@@ -561,13 +564,13 @@ class PMF_Tags
             PMF_Db::getTablePrefix(),
             $this->_config->getDb()->escape($tagName));
 
-        $records = [];
+        $this->recordsByTagName = [];
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
-            $records[] = $row->record_id;
+            $this->recordsByTagName[] = $row->record_id;
         }
 
-        return $records;
+        return $this->recordsByTagName;
     }
 
     /**
@@ -580,7 +583,7 @@ class PMF_Tags
     public function getRecordsByTagId($tagId)
     {
         if (!is_integer($tagId)) {
-            return false;
+            return [];
         }
 
         $query = sprintf('
