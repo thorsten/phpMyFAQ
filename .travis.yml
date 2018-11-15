@@ -7,6 +7,9 @@ php:
   - 7.2
   - nightly
 
+node_js:
+  - '8'
+
 sudo: required
 dist: trusty
 group: edge
