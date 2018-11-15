@@ -8,6 +8,9 @@ php:
   - 7.2
   - hhvm
 
+node_js:
+  - '8'
+
 matrix:
   allow_failures:
     - php: hhvm
