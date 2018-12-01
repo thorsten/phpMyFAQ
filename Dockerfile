@@ -6,7 +6,7 @@
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:7.1-apache
+FROM php:7.2-apache
 
 #=== Install gd php dependencie ===
 RUN set -x \
@@ -64,7 +64,7 @@ ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_MEMORY_LIMIT=64M \
     PMF_DISABLE_HTACCESS="" \
     PHP_LOG_ERRORS=On \
-    PHP_ERROR_REPORTING=E_ALL \
+    PHP_ERROR_REPORTING=E_ALL|E_STRICT \
     PHP_POST_MAX_SIZE=64M \
     PHP_UPLOAD_MAX_FILESIZE=64M
 
