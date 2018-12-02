@@ -310,6 +310,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                 <select id="permLevel" name="permLevel" size="1" class="form-control">
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
+                                    <option value="large">Large (with sections support)</option>
                             </select>
                             <p class="form-text text-muted">
                                 Complexity of rights and permissions.

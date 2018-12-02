@@ -9,6 +9,7 @@ Version 3.0.0-alpha.3 - 2018-08-
 - changed PHP requirement to PHP 7.1+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
+- added large permissions support with sections (Timo Wolf, Thorsten)
 - added support for Elasticsearch v5+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
