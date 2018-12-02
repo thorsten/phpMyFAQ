@@ -900,15 +900,28 @@ class Installer
 
         // connect to the database using config/database.php
         require $rootDir.'/config/database.php';
-        $db = Db::factory($dbSetup['dbType']);
+        try {
+            $db = Db::factory($dbSetup['dbType']);
+        } catch (Exception $exception) {
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
+            $this->_system->cleanInstallation();
+            System::renderFooter(true);
+        }
+
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->_system->cleanInstallation();
             System::renderFooter(true);
         }
+        try {
+            $databaseInstaller = Database::factory($configuration, $dbSetup['dbType']);
+        } catch (Exception $exception) {
+            printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
+            $this->_system->cleanInstallation();
+            System::renderFooter(true);
+        }
 
-        $databaseInstaller = Database::factory($configuration, $dbSetup['dbType']);
         $databaseInstaller->createTables($dbSetup['dbPrefix']);
 
         $stopwords = new Stopwords($configuration);

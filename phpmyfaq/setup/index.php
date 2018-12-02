@@ -40,7 +40,7 @@ if (version_compare(PHP_VERSION, '5.6.6') < 0) {
 set_time_limit(0);
 
 if (!defined('DEBUG')) {
-    define('DEBUG', false);
+    define('DEBUG', true);
 }
 
 session_name('phpmyfaq-setup');
@@ -59,11 +59,11 @@ $loader->register()
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title>phpMyFAQ <?php echo System::getVersion() ?> Setup</title>
+  <title>phpMyFAQ <?= System::getVersion() ?> Setup</title>
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="application-name" content="phpMyFAQ <?php echo System::getVersion() ?>">
-  <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
+  <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
+  <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
 
   <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
@@ -107,7 +107,7 @@ $loader->register()
     <div class="jumbotron">
       <div class="container">
         <h1 class="display-4 text-center">
-          phpMyFAQ <?php echo System::getVersion() ?>
+          phpMyFAQ <?= System::getVersion() ?>
         </h1>
         <p class="text-center">
           Did you already read the
@@ -145,7 +145,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <label class="col-sm-3 col-form-label"class="col-sm-3 col-form-label" for="sql_type">Server:</label>
                         <div class="col-sm-9">
                             <select name="sql_type" id="sql_type" size="1" class="form-control">
-                                <?php echo implode('', $system->getSupportedSafeDatabases(true)) ?>
+                                <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
                             <p class="form-text text-muted">Please select your preferred database type.</p>
                         </div>
@@ -188,7 +188,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <label class="col-sm-3 col-form-label"for="sql_sqlitefile">SQLite database file:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
-                                       value="<?php echo dirname(__DIR__) ?>">
+                                       value="<?= dirname(__DIR__) ?>">
                                 <p class="form-text text-muted">
                                     Please enter the full path to your SQLite datafile which should be outside your
                                     docroot.
@@ -360,7 +360,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <legend>Elasticsearch setup</legend>
                     <div class="form-group">
                         <div class="form-check">
-                          <input id="ldap_enabled" class="form-check-input" type="checkbox" name="elasticsearch_enabled" value="yes">
+                          <input id="elasticsearch_enabled" class="form-check-input" type="checkbox" name="elasticsearch_enabled" value="yes">
                           <label class="form-check-label" for="elasticsearch_enabled">
                             Enable Elasticsearch support?
                           </label>
@@ -399,7 +399,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <div class="col-sm">
               <div class="form-group row">
                   <button class="btn btn-success btn-lg btn-block" type="submit">
-                         Click to install phpMyFAQ <?php echo System::getVersion() ?>
+                         Click to install phpMyFAQ <?= System::getVersion() ?>
                   </button>
               </div>
             </div>
@@ -409,7 +409,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
           <div class="col-sm">
             <p class="alert alert-info text-center">
                 <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i>
-                Your password will be saved with a <strong>salted <?php echo PMF_ENCRYPTION_TYPE ?></strong>. You can
+                Your password will be saved with a <strong>salted <?= PMF_ENCRYPTION_TYPE ?></strong>. You can
                 change the encryption type for passwords in <em>config/constants.php</em>.
             </p>
             </div>

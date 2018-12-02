@@ -21,8 +21,10 @@ namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
+use phpMyFAQ\Exception;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
+use phpMyFAQ\Instance\Database as Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -99,43 +101,47 @@ class Client extends Instance
      *
      * @param string $prefix SQL table prefix
      *
-     * @return boolean|null
+     * @return void
      */
     public function createClientTables($prefix)
     {
-        // First, create the client tables
-        $instanceDatabase = PMF_Instance_Database::factory($this->config, Db::getType());
-        $instanceDatabase->createTables($prefix);
+        try {
+            // First, create the client tables
+            $instanceDatabase = Database::factory($this->config, Db::getType());
+            $instanceDatabase->createTables($prefix);
 
-        // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
-        $this->config->getDb()->query(
-            sprintf(
-                'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
-                $prefix,
-                Db::getTablePrefix()
-            )
-        );
-        $this->config->getDb()->query(
-            sprintf(
-                "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
-                $prefix,
-                $this->clientUrl
-            )
-        );
-        $this->config->getDb()->query(
-            sprintf(
-                'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
-                $prefix,
-                Db::getTablePrefix()
-            )
-        );
-        $this->config->getDb()->query(
-            sprintf(
-                'INSERT INTO %sfaquser_right SELECT * FROM %sfaquserright WHERE user_id = 1',
-                $prefix,
-                Db::getTablePrefix()
-            )
-        );
+            // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
+            $this->config->getDb()->query(
+                sprintf(
+                    'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
+                    $prefix,
+                    Db::getTablePrefix()
+                )
+            );
+            $this->config->getDb()->query(
+                sprintf(
+                    "UPDATE %sfaqconfig SET config_value = '%s' WHERE config_name = 'main.referenceURL'",
+                    $prefix,
+                    $this->clientUrl
+                )
+            );
+            $this->config->getDb()->query(
+                sprintf(
+                    'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
+                    $prefix,
+                    Db::getTablePrefix()
+                )
+            );
+            $this->config->getDb()->query(
+                sprintf(
+                    'INSERT INTO %sfaquser_right SELECT * FROM %sfaquserright WHERE user_id = 1',
+                    $prefix,
+                    Db::getTablePrefix()
+                )
+            );
+        } catch (Exception $exception) {
+
+        }
     }
 
     /**
@@ -152,8 +158,8 @@ class Client extends Instance
      * Copies the config/constants.php file to a new client instance.
      *
      * @param string $dest Destination file
-     *
      * @return bool
+     * @throws Exception
      */
     public function copyConstantsFile($dest)
     {
@@ -170,7 +176,7 @@ class Client extends Instance
      * @param string $dest        Destination folder
      * @param string $templateDir Template folder
      *
-     * @return boolean|null
+     * @return void
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {

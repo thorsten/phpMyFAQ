@@ -21,6 +21,7 @@ namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Exception;
+use phpMyFAQ\Instance\Database\Driver;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -118,7 +119,7 @@ class Database
      *
      * @throws Exception
      *
-     * @return Database
+     * @return Driver
      */
     public static function factory(Configuration $config, $type)
     {

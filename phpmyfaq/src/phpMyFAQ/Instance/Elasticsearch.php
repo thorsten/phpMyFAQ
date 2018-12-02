@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class Elasticsearch
 {
-    /** @var PMF_Configuration */
+    /** @var Configuration */
     protected $config;
 
     /** @var Client */
@@ -84,10 +84,10 @@ class Elasticsearch
             ]
         ]
     ];
+
     /**
-     * Constructor.
-     *
-     * @param PMF_Configuration $config
+     * Elasticsearch constructor.
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -104,7 +104,7 @@ class Elasticsearch
     public function createIndex()
     {
         $this->client->indices()->create($this->getParams());
-        return $this->putMapping();;
+        return $this->putMapping();
     }
 
     /**

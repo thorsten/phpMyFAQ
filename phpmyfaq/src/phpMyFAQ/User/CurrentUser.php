@@ -474,7 +474,7 @@ class CurrentUser extends User
     {
         // there is no valid user object in session
         if (!isset($_SESSION[SESSION_CURRENT_USER]) || !isset($_SESSION[SESSION_ID_TIMESTAMP])) {
-            return;
+            return null;
         }
 
         // create a new CurrentUser object
@@ -486,18 +486,18 @@ class CurrentUser extends User
             $user->deleteFromSession();
             $user->errors[] = 'Session timed out.';
 
-            return;
+            return null;
         }
         // session-id not found in user table
         $session_info = $user->getSessionInfo();
         $session_id = (isset($session_info['session_id']) ? $session_info['session_id'] : '');
         if ($session_id == '' || $session_id != session_id()) {
-            return false;
+            return null;
         }
         // check ip
         if ($config->get('security.ipCheck') &&
             $session_info['ip'] != $_SERVER['REMOTE_ADDR']) {
-            return false;
+            return null;
         }
         // session-id needs to be updated
         if ($user->sessionIdIsTimedOut()) {
@@ -529,7 +529,7 @@ class CurrentUser extends User
     public static function getFromCookie(Configuration $config)
     {
         if (!isset($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME])) {
-            return;
+            return null;
         }
 
         // create a new CurrentUser object
@@ -537,7 +537,7 @@ class CurrentUser extends User
         $user->getUserByCookie($_COOKIE[Session::PMF_COOKIE_NAME_REMEMBERME]);
 
         if (-1 === $user->getUserId()) {
-            return;
+            return null;
         }
 
         // sessionId needs to be updated

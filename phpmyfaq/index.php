@@ -155,10 +155,12 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
 } else {
     // Try to authenticate with cookie information
     $user = CurrentUser::getFromCookie($faqConfig);
+
     // authenticate with session information
     if (!$user instanceof CurrentUser) {
         $user = CurrentUser::getFromSession($faqConfig);
     }
+
     if ($user instanceof CurrentUser) {
         $auth = true;
     } else {
