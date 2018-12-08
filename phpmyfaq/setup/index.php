@@ -305,7 +305,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="permLevel">Permission level:</label>
+                        <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
                         <div class="col-sm-9">
                                 <select id="permLevel" name="permLevel" size="1" class="form-control">
                                     <option value="basic">Basic (no group support)</option>

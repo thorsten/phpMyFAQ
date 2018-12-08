@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 3.0 default layout mixins
+ * phpMyFAQ 3.0 admin layout mixins
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -14,24 +14,103 @@
  * @since     2013-12-22
  */
 
-$web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic" !default;
-@import url($web-font-path);
+// Variables ===================================================================
 
-// Navbar =======================================================================
+@mixin btn-shadow($color){
+  @include gradient-y-three-colors(lighten($color, 6%), $color, 60%, darken($color, 4%));
+  filter: none;
+}
 
-.bg-primary {
-  .navbar-nav .active > .nav-link {
-    color: $success !important;
+@mixin btn-shadow-inverse($color){
+  @include gradient-y-three-colors(darken($color, 18%), darken($color, 15%), 40%, darken($color, 13%));
+  filter: none;
+}
+
+// Navbar ======================================================================
+
+.navbar {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+
+  .container {
+    padding: 0;
+  }
+
+  .navbar-toggler {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+
+  &-fixed-top {
+    border-width: 0 0 1px 0;
+  }
+
+  &-fixed-bottom {
+    border-width: 1px 0 0 0;
+  }
+
+  .nav-link {
+    padding: 1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+    &:hover,
+    &:focus {
+      @include btn-shadow-inverse($gray-800);
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+    }
+  }
+
+  &-brand {
+    padding: 0.75rem 1rem calc(54px - 0.75rem - 30px);
+    margin-right: 0;
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  .nav-item.active .nav-link {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+  }
+
+  &-nav .nav-item + .nav-item {
+    margin-left: 0;
+  }
+
+  &.bg-light {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+
+    .nav-link {
+      &:hover,
+      &:focus {
+        @include btn-shadow-inverse($gray-600);
+        border-left: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
   }
 }
 
-.bg-dark {
-  background-color: $success !important;
-  &.navbar-dark .navbar-nav {
-    .nav-link:focus,
-    .nav-link:hover,
-    .active > .nav-link {
-      color: $primary !important;
+@media (max-width: 576px) {
+  .navbar-expand-sm {
+    .navbar-brand,
+    .nav-link {
+      border: none !important;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-expand-md {
+    .navbar-brand,
+    .nav-link {
+      border: none !important;
+    }
+  }
+}
+
+@media (max-width: 992px) {
+  .navbar-expand-lg {
+    .navbar-brand,
+    .nav-link {
+      border: none !important;
     }
   }
 }
@@ -39,29 +118,127 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 // Buttons =====================================================================
 
 .btn {
-  &-secondary,
-  &-secondary:hover,
-  &-warning,
-  &-warning:hover {
-    color: #fff;
+  border-color: rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+
+  &:not([disabled]):not(.disabled).active,
+  &.disabled {
+    border-color: rgba(0, 0, 0, 0.6);
+    box-shadow: none;
+  }
+
+  &:hover,
+  &:focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled):active:hover,
+  &:not([disabled]):not(.disabled).active:hover {
+    border-color: rgba(0, 0, 0, 0.6);
+  }
+}
+
+.btn-primary {
+  @include btn-shadow($primary);
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active:hover,
+  &:not([disabled]):not(.disabled).active:hover {
+    @include btn-shadow-inverse($primary);
+  }
+}
+
+.btn-secondary {
+  @include btn-shadow($secondary);
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    @include btn-shadow-inverse($secondary);
+  }
+}
+
+.btn-success {
+  @include btn-shadow($success);
+  color: $white;
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    @include btn-shadow-inverse($success);
+  }
+}
+
+.btn-info {
+  @include btn-shadow($info);
+  color: $white;
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    @include btn-shadow-inverse($info);
+  }
+}
+
+.btn-warning {
+  @include btn-shadow($warning);
+  color: $white;
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    @include btn-shadow-inverse($warning);
+  }
+}
+
+.btn-danger {
+  @include btn-shadow($danger);
+
+  &:not([disabled]):not(.disabled):hover,
+  &:not([disabled]):not(.disabled):focus,
+  &:not([disabled]):not(.disabled):active,
+  &:not([disabled]):not(.disabled).active {
+    @include btn-shadow-inverse($danger);
+  }
+}
+
+.btn-link,
+.btn-link:hover {
+  border-color: transparent;
+}
+
+.btn-group,
+.btn-group-vertical {
+
+  .btn.active {
+    border-color: rgba(0, 0, 0, 0.6);
   }
 }
 
 // Typography ==================================================================
 
+h1, h2, h3, h4, h5, h6 {
+  text-shadow: -1px -1px 0 rgba(0, 0, 0, 0.3);
+}
+
 // Tables ======================================================================
 
 .table {
-
-  .thead-dark th {
-    background-color: $primary;
-  }
-
   &-success,
   &-info,
   &-warning,
   &-danger {
     color: #fff;
+  }
+}
+
+.table {
+
+  .thead-dark th {
+    color: $white;
   }
 
   &-success {
@@ -119,44 +296,96 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
 
 // Forms =======================================================================
 
+legend {
+  color: #fff;
+}
+
+.input-group-addon {
+  @include btn-shadow($secondary);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  color: $white;
+}
+
 // Navs ========================================================================
 
 .nav-tabs {
+
+  .nav-link,
+  .nav-link:hover {
+    color: #fff;
+  }
+}
+
+.nav-pills {
+
+  .nav-link {
+    @include btn-shadow($gray-800);
+    border: 1px solid rgba(0, 0, 0, 0.6);
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    color: #fff;
+
+    &:hover {
+      @include btn-shadow-inverse($gray-800);
+      border: 1px solid rgba(0, 0, 0, 0.6);
+    }
+  }
+
   .nav-link.active,
-  .nav-link.active:focus,
-  .nav-link.active:hover,
-  .nav-item.open .nav-link,
-  .nav-item.open .nav-link:focus,
-  .nav-item.open .nav-link:hover {
-    color: $primary;
+  .nav-link:hover {
+    background-color: transparent;
+    @include btn-shadow-inverse($gray-800);
+    border: 1px solid rgba(0, 0, 0, 0.6);
+  }
+
+  .nav-link.disabled,
+  .nav-link.disabled:hover {
+    @include btn-shadow($gray-800);
+    color: $nav-link-disabled-color;
   }
 }
 
 .pagination {
+
+  .page-link {
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    @include btn-shadow($gray-800);
+
+    &:hover {
+      @include btn-shadow-inverse($gray-800);
+      text-decoration: none;
+    }
+  }
+
+  .page-item.active .page-link {
+    @include btn-shadow-inverse($gray-800);
+  }
+
+  .page-item.disabled .page-link {
+    @include btn-shadow($gray-800);
+  }
+}
+
+.breadcrumb {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+  background-color: transparent;
+  @include btn-shadow($gray-800);
+
+  a,
   a:hover {
-    text-decoration: none;
+    color: #fff;
   }
 }
 
 // Indicators ==================================================================
 
-.close {
-  text-decoration: none;
-  opacity: 0.4;
+.alert {
 
-  &:hover,
-  &:focus {
-    opacity: 1;
+  .close {
+    color: $close-color;
+    text-decoration: none;
   }
 }
-
-.badge {
-  &-secondary,
-  &-warning {
-    color: #fff;
-  }
-}
-
 
 .alert {
   border: none;
@@ -173,11 +402,36 @@ $web-font-path: "https://fonts.googleapis.com/css?family=Lato:400,700,400italic"
       background-color: $value;
     }
   }
+
+  &-light {
+    &,
+    & a:not(.btn),
+    & .alert-link {
+      color: $body-bg;
+    }
+  }
+}
+
+.badge {
+
+  &-success,
+  &-warning,
+  &-info {
+    color: $white;
+  }
 }
 
 // Progress bars ===============================================================
 
 // Containers ==================================================================
-.modal .close{
-  color: $black;
+
+.jumbotron {
+  border: 1px solid rgba(0, 0, 0, 0.6);
+}
+
+.list-group {
+
+  &-item:hover {
+    background-color: darken($gray-900, 5%);
+  }
 }

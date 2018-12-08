@@ -580,7 +580,7 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.0.0-alpha
     //
-    if (version_compare($version, '3.0.0-alpha', '<=')) {
+    if (version_compare($version, '3.0.0-alpha', '<')) {
 
         $query[] = 'DELETE FROM '.$prefix.'faqright WHERE right_id = 18';
         $query[] = 'DELETE FROM '.$prefix.'faquser_right WHERE right_id = 18';
@@ -596,14 +596,14 @@ if ($step == 3) {
     //
     // UPDATES FROM 3.0.0-alpha.2
     //
-    if (version_compare($version, '3.0.0-alpha.2', '<=')) {
+    if (version_compare($version, '3.0.0-alpha.2', '<')) {
         $faqConfig->add('main.enableAutoUpdateHint', 'true');
     }
 
     //
     // UPDATES FROM 3.0.0-alpha.3
     //
-    if (version_compare($version, '3.0.0-alpha.3', '<=')) {
+    if (version_compare($version, '3.0.0-alpha.3', '<')) {
         $faqConfig->add('records.enableAutoRevisions', 'false');
         // Add superadmin flag
         if ('sqlite3' === $DB['type']) {

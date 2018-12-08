@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@fortawesome/fontawesome-free@^5.5.0":
+  version "5.5.0"
+  resolved "https://registry.yarnpkg.com/@fortawesome/fontawesome-free/-/fontawesome-free-5.5.0.tgz#0c6c53823d04457ae669cd19567b8a21dbb4fcfd"
+  integrity sha512-p4lu0jfj5QN013ddArh99r3OXZ/fp9rbovs62LfaO70OMBsAXxtNd0lAq/97fitrscR0fqfd+/a5KNcp6Sh/0A==
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/abbrev/-/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
