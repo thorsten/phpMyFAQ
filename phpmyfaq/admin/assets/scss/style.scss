@@ -19,19 +19,12 @@
 @import '../../../../node_modules/bootstrap/scss/bootstrap';
 @import 'mixins';
 
-//
-// Material Design Icons
-//
-@font-face {
-  font-family: 'Material Icons';
-  font-style: normal;
-  font-weight: 400;
-  src: local('Material Icons'),
-  local('MaterialIcons-Regular'),
-  url(../fonts/MaterialIcons-Regular.woff2) format('woff2'),
-  url(../fonts/MaterialIcons-Regular.woff) format('woff'),
-  url(../fonts/MaterialIcons-Regular.ttf) format('truetype');
-}
+// Font Awesome
+$fa-font-path: '../fonts';
+
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 
 html {
   position: relative;

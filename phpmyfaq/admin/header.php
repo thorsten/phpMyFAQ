@@ -233,7 +233,7 @@ switch ($action) {
           $avatar = new Gravatar($faqConfig);
           echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
       } else {
-          echo '<i class="material-icons md-16">person</i>';
+          echo '<i aria-hidden="true" class="fas fa-user"></i>';
       }
       ?>
       <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
@@ -243,6 +243,7 @@ switch ($action) {
     <ul class="navbar-nav px-3">
       <li class="nav-item">
         <a class="nav-link" href="index.php?action=logout">
+          <i aria-hidden="true" class="fas fa-sign-out-alt"></i>
           <?= $PMF_LANG['admin_mainmenu_logout']; ?>
         </a>
       </li>
@@ -259,15 +260,13 @@ switch ($action) {
             <ul class="nav flex-column">
               <li class="nav-item <?php echo($dashboardPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php">
-                  <i aria-hidden="true"
-                     class="material-icons md-16">dashboard</i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
+                  <i aria-hidden="true" class="fas fa-tachometer-alt"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?php echo($userPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=user">
-                  <i aria-hidden="true"
-                     class="material-icons md-16">people</i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                  <i aria-hidden="true" class="fas fa-user"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($userPage) { ?>
@@ -279,8 +278,7 @@ switch ($action) {
 
               <li class="nav-item <?php echo($contentPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=content">
-                  <i aria-hidden="true"
-                     class="material-icons md-16">edit</i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
+                  <i aria-hidden="true" class="fas fa-edit"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($contentPage) { ?>
@@ -292,8 +290,7 @@ switch ($action) {
 
               <li class="nav-item <?php echo($statisticsPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=statistics">
-                  <i aria-hidden="true"
-                     class="material-icons md-16">show_chart</i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
+                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($statisticsPage) { ?>
@@ -305,14 +302,13 @@ switch ($action) {
 
               <li class="nav-item <?php echo($exportsPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=export">
-                  <i aria-hidden="true"
-                     class="material-icons md-16">import_export</i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
+                  <i aria-hidden="true" class="fas fa-file-export"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?php echo($backupPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=backup">
-                  <i class="material-icons md-16">file_download</i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+                  <i aria-hidden="true" class="fas fa-download"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
                 </a>
                   <?php if ($backupPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($backupPage ? 'in' : '') ?>">
@@ -323,7 +319,7 @@ switch ($action) {
 
               <li class="nav-item <?php echo($configurationPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=config">
-                  <i aria-hidden="true" class="material-icons md-16">settings</i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
+                  <i aria-hidden="true" class="fas fa-wrench"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($configurationPage) { ?>
@@ -345,7 +341,7 @@ switch ($action) {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <i class="material-icons md-16">watch_later</i>
+                  <i aria-hidden="true" class="fas fa-user-clock"></i>
                   <?php echo $PMF_LANG['ad_session_expiration']; ?>:
                   <span id="sessioncounter">Loading...</span>
                 </a>

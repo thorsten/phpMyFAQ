@@ -41,7 +41,7 @@ $faqSession = new Session($faqConfig);
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">
-        <i class="material-icons md-36">dashboard</i>
+        <i aria-hidden="true" class="fas fa-tachometer-alt"></i>
           <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
       </h1>
       <div class="btn-toolbar mb-2 mb-md-0">
@@ -60,19 +60,19 @@ $faqSession = new Session($faqConfig);
     <?php if ($faqConfig->get('main.enableUserTracking')): ?>
     <section class="row">
         <div class="col-lg-8">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                  <i class="material-icons">insert_chart</i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
+            <div class="card ">
+                <div class="card-header">
+                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
                 </div>
-                <div class="panel-body">
+                <div class="card-body">
                 <?php
                 $session = new Session($faqConfig);
                 $visits = $session->getLast30DaysVisits();
                 ?>
-                <script type="text/javascript" src="assets/js/plugins/jquery.sparkline.min.js"></script>
-                <script type="text/javascript">
+                <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
+                <script>
                     $(function() {
-                        var visits = [<?php echo implode(',', $visits) ?>];
+                        const visits = [<?php echo implode(',', $visits) ?>];
                         $('.visits').sparkline(
                             visits, {
                                 type: 'bar',
@@ -89,14 +89,14 @@ $faqSession = new Session($faqConfig);
         </div>
 
         <div class="col-lg-4">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                  <i class="material-icons">info</i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
+          <div class="card">
+            <div class="card-header">
+                  <i aria-hidden="true" class="fas fa-info-circle"></i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
                 </div>
-                <div class="panel-body">
-                    <div class="list-group">
+                <div class="card-body">
+                    <div class="list-group-flush">
                         <a href="?action=viewsessions" class="list-group-item">
-                            <i class="material-icons">insert_chart</i>  <?php echo $PMF_LANG['ad_start_visits'] ?>
+                          <i aria-hidden="true" class="fas fa-chart-bar"></i>  <?php echo $PMF_LANG['ad_start_visits'] ?>
                             <span class="float-right text-muted small">
                                 <em><?php echo $faqSession->getNumberOfSessions() ?></em>
                             </span>
