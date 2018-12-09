@@ -2,7 +2,7 @@
 /**
  * The login form.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -43,10 +43,10 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
 
 
 
-                        <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+                        <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
                               accept-charset="utf-8" role="form" class="pmf-form-login">
                           <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
-                            <?php echo $message ?>
+                            <?= $message ?>
                           <label for="faqusername" class="sr-only"><?= $PMF_LANG['ad_auth_user'] ?></label>
                           <input type="text" id="faqusername" name="faqusername" class="form-control" placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" required autofocus>
                           <label for="faqpassword" class="sr-only"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
@@ -65,12 +65,12 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                                 <div class="form-group mb-3">
                                     <p>
                                         <a href="../?action=password">
-                                            <?php echo $PMF_LANG['lostPassword'] ?>
+                                            <?= $PMF_LANG['lostPassword'] ?>
                                         </a>
                                         <?php if ($faqConfig->get('security.enableRegistration')) { ?>
                                         <br>
                                         <a href="../?action=register">
-                                            <?php echo $PMF_LANG['msgRegistration'] ?>
+                                            <?= $PMF_LANG['msgRegistration'] ?>
                                         </a>
                                         <?php } ?>
                                     </p>

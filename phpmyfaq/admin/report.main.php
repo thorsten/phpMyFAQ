@@ -2,7 +2,7 @@
 /**
  * The reporting page.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -30,7 +30,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                  <i aria-hidden="true" class="fa fa-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports'] ?>
+                  <i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports'] ?>
                 </h2>
             </div>
         </header>
@@ -38,62 +38,62 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         <div class="row">
             <div class="col-lg-12">
             <form action="?action=reportview" method="post" accept-charset="utf-8">
-                <h4><?php echo $PMF_LANG['ad_stat_report_fields'] ?></h4>
+                <h4><?= $PMF_LANG['ad_stat_report_fields'] ?></h4>
 
                 <div class="form-group row">
                     <label class="checkbox" for="report_category">
                         <input type="checkbox" name="report_category" id="report_category" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_category'] ?>
+                        <?= $PMF_LANG['ad_stat_report_category'] ?>
                     </label>
                     <label class="checkbox" for="report_sub_category">
                         <input type="checkbox" name="report_sub_category" id="report_sub_category" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_sub_category'] ?>
+                        <?= $PMF_LANG['ad_stat_report_sub_category'] ?>
                     </label>
                     <label class="checkbox" for="report_translations">
                         <input type="checkbox" name="report_translations" id="report_translations" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_translations'] ?>
+                        <?= $PMF_LANG['ad_stat_report_translations'] ?>
                     </label>
                     <label class="checkbox" for="report_translations">
                         <input type="checkbox" name="report_language" id="report_language" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_language'] ?>
+                        <?= $PMF_LANG['ad_stat_report_language'] ?>
                     </label>
                     <label class="checkbox" for="report_id">
                         <input type="checkbox" name="report_id" id="report_id" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_id'] ?>:
+                        <?= $PMF_LANG['ad_stat_report_id'] ?>:
                     </label>
                     <label class="checkbox" for="report_sticky">
                         <input type="checkbox" name="report_sticky" id="report_sticky" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_sticky'] ?>
+                        <?= $PMF_LANG['ad_stat_report_sticky'] ?>
                     </label>
                     <label class="checkbox" for="report_title">
                         <input type="checkbox" name="report_title" id="report_title" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_title'] ?>
+                        <?= $PMF_LANG['ad_stat_report_title'] ?>
                     </label>
                     <label class="checkbox" for="report_creation_date">
                         <input type="checkbox" name="report_creation_date" id="report_creation_date" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_creation_date'] ?>
+                        <?= $PMF_LANG['ad_stat_report_creation_date'] ?>
                     </label>
                     <label class="checkbox" for="report_owner">
                         <input type="checkbox" name="report_owner" id="report_owner" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_owner'] ?>
+                        <?= $PMF_LANG['ad_stat_report_owner'] ?>
                     </label>
                     <label class="checkbox" for="report_last_modified_person">
                         <input type="checkbox" name="report_last_modified_person" id="report_last_modified_person" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_last_modified_person'] ?>
+                        <?= $PMF_LANG['ad_stat_report_last_modified_person'] ?>
                     </label>
                     <label class="checkbox" for="report_url">
                         <input type="checkbox" name="report_url" id="report_url" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_url'] ?>
+                        <?= $PMF_LANG['ad_stat_report_url'] ?>
                     </label>
                     <label class="checkbox" for="report_visits">
                         <input type="checkbox" name="report_visits" id="report_visits" checked value="1">
-                        <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
+                        <?= $PMF_LANG['ad_stat_report_visits'] ?>
                     </label>
                 </div>
 
                 <div class="form-group row">
                     <button class="btn btn-primary" type="submit">
-                        <?php echo $PMF_LANG['ad_stat_report_make_report'] ?>
+                        <?= $PMF_LANG['ad_stat_report_make_report'] ?>
                     </button>
                 </div>
 

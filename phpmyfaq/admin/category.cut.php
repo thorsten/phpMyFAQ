@@ -2,8 +2,6 @@
 /**
  * Cuts out a category.
  *
- * PHP Version 5.6
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -38,26 +36,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $parent_id = $category->categoryName[$id]['parent_id'];
     $header = sprintf('%s: <em>%s</em>', $PMF_LANG['ad_categ_move'], $category->categoryName[$id]['name']);
     ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header"><i class="material-icons">list</i> <?php echo $header ?></h2>
-            </div>
-        </header>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-cut"></i> <?= $header ?>
+          </h1>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
                 <form  action="?action=pastecategory" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="cat" value="<?php echo $id;
-    ?>">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
-    ?>">
+                    <input type="hidden" name="cat" value="<?= $id ?>">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_paste2'];
-    ?></label>
+                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
                         <div class="col-lg-4">
                             <select name="after" size="1" class="form-control">
 <?php
-
     foreach ($category->catTree as $cat) {
         $indent = '';
         for ($j = 0; $j < $cat['indent']; ++$j) {
@@ -71,7 +65,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     if ($parent_id != 0) {
         printf('<option value="0">%s</option>', $PMF_LANG['ad_categ_new_main_cat']);
     }
-
     ?>
                             </select>
                         </div>
@@ -79,8 +72,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
-                                <?php echo $PMF_LANG['ad_categ_updatecateg'];
-    ?>
+                                <?= $PMF_LANG['ad_categ_updatecateg'] ?>
                             </button>
                         </div>
                     </div>

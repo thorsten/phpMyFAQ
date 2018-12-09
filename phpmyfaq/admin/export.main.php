@@ -2,7 +2,7 @@
 /**
  * XML, XHTML and PDF export - main page.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header>
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-book fa-fw"></i> <?php echo $PMF_LANG['ad_menu_export'] ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-book fa-fw"></i> <?= $PMF_LANG['ad_menu_export'] ?></h2>
             </div>
         </header>
 
@@ -51,15 +51,15 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
         $categoryHelper->setCategory($category);
         ?>
                 <form  action="?action=exportfile" method="post" accept-charset="utf-8">
-                    <h4><?php echo $PMF_LANG['ad_export_which_cat'] ?></h4>
+                    <h4><?= $PMF_LANG['ad_export_which_cat'] ?></h4>
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="catid">
-                            <?php echo $PMF_LANG['ad_entry_category'] ?>
+                            <?= $PMF_LANG['ad_entry_category'] ?>
                         </label>
                         <div class="col-lg-4">
                             <select name="catid" id="catid" size="1" class="form-control">
-                                <option value="0"><?php echo $PMF_LANG['msgShowAllCategories'] ?></option>
-                                <?php echo $categoryHelper->renderOptions(0) ?>
+                                <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
+                                <?= $categoryHelper->renderOptions(0) ?>
                             </select>
                         </div>
                     </div>
@@ -68,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                             <div class="checkbox">
                                 <label for="downwards">
                                     <input type="checkbox" name="downwards" id="downwards" value="1" checked>
-                                    <?php echo $PMF_LANG['ad_export_cat_downwards'] ?>
+                                    <?= $PMF_LANG['ad_export_cat_downwards'] ?>
                                 </label>
                             </div>
                         </div>
@@ -76,23 +76,23 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
 <?php
     }
     ?>
-                    <h4><?php echo $PMF_LANG['ad_export_type'] ?></h4>
+                    <h4><?= $PMF_LANG['ad_export_type'] ?></h4>
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-8 radio">
-                            <p><?php echo $PMF_LANG['ad_export_type_choose'] ?></p>
+                            <p><?= $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
                                 <input type="radio" name="export-type" value="json" id="json" checked>
-                                <?php echo $PMF_LANG['ad_export_generate_json'] ?>
+                                <?= $PMF_LANG['ad_export_generate_json'] ?>
                             </label>
                             <br>
                             <label>
                                 <input type="radio" name="export-type" value="pdf" id="pdf">
-                                <?php echo $PMF_LANG['ad_export_generate_pdf'] ?>
+                                <?= $PMF_LANG['ad_export_generate_pdf'] ?>
                             </label>
                             <br>
                             <label>
                                 <input type="radio" name="export-type" value="xml" id="xml">
-                                <?php echo $PMF_LANG['ad_xml_gen'] ?>
+                                <?= $PMF_LANG['ad_xml_gen'] ?>
                             </label>
                             <br>
                             <label>
@@ -104,17 +104,17 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
 
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4 radio">
-                            <p><?php echo $PMF_LANG['ad_export_download_view'] ?></p>
+                            <p><?= $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
-                                <input type="radio" name="dispos" value="<?php echo HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
-                                       id="<?php echo HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked>
-                                    <?php echo $PMF_LANG['ad_export_download'] ?>
+                                <input type="radio" name="dispos" value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
+                                       id="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT; ?>" checked>
+                                    <?= $PMF_LANG['ad_export_download'] ?>
                             </label>
                             <br>
                             <label>
-                                <input type="radio" name="dispos" value="<?php echo HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
-                                       id="<?php echo HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
-                                <?php echo $PMF_LANG['ad_export_view'] ?>
+                                <input type="radio" name="dispos" value="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>"
+                                       id="<?= HttpStreamer::EXPORT_DISPOSITION_INLINE ?>">
+                                <?= $PMF_LANG['ad_export_view'] ?>
                             </label>
                         </div>
                     </div>
@@ -122,10 +122,10 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submitExport">
-                                <?php echo $PMF_LANG['ad_menu_export']; ?>
+                                <?= $PMF_LANG['ad_menu_export']; ?>
                             </button>
                             <button class="btn btn-info" type="reset" name="resetExport">
-                                <?php echo $PMF_LANG['ad_config_reset']; ?>
+                                <?= $PMF_LANG['ad_config_reset']; ?>
                             </button>
                         </div>
                     </div>

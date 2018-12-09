@@ -6,7 +6,7 @@ namespace phpMyFAQ\Template;
  * The template helper class provides methods for extended template parsing
  * like filters
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

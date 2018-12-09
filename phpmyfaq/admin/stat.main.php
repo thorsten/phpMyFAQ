@@ -2,7 +2,7 @@
 /**
  * The main statistics page.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -34,11 +34,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_stat_sess'] ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_stat_sess'] ?>
                     <div class="float-right">
                         <a class="btn btn-danger"
-                           href="?action=clear-visits&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
-                            <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_clear_all_visits'] ?>
+                           href="?action=clear-visits&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                            <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_clear_all_visits'] ?>
                         </a>
                     </div>
                 </h2>
@@ -117,7 +117,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                 <table class="table table-striped">
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_days'];
+                        <td><?= $PMF_LANG['ad_stat_days'];
     ?>:</td>
                         <td>
 <?php
@@ -143,15 +143,15 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_vis']; ?>:</td>
-                        <td><?php echo $vanz = $session->getNumberOfSessions() ?></td>
+                        <td><?= $PMF_LANG['ad_stat_vis']; ?>:</td>
+                        <td><?= $vanz = $session->getNumberOfSessions() ?></td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_vpd'] ?>:</td>
-                        <td><?php echo ($danz != 0) ? round(($vanz / $danz), 2) : 0 ?></td>
+                        <td><?= $PMF_LANG['ad_stat_vpd'] ?>:</td>
+                        <td><?= ($danz != 0) ? round(($vanz / $danz), 2) : 0 ?></td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_fien'] ?>:</td>
+                        <td><?= $PMF_LANG['ad_stat_fien'] ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $first))) {
@@ -168,7 +168,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_laen'] ?>:</td>
+                        <td><?= $PMF_LANG['ad_stat_laen'] ?>:</td>
                         <td>
 <?php
     if (is_file(PMF_ROOT_DIR.'/data/tracking'.date('dmY', $last))) {
@@ -201,7 +201,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         </td>
                     </tr>
                     <tr>
-                        <td><?php echo $PMF_LANG['ad_stat_browse'];
+                        <td><?= $PMF_LANG['ad_stat_browse'];
     ?>:</td>
                         <td class="col-lg-2"><select name="day" size="1">
 <?php
@@ -217,7 +217,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     ?>
                         </select>
                             <button class="btn btn-primary" type="submit" name="statbrowse">
-                                <?php echo $PMF_LANG['ad_stat_ok'];
+                                <?= $PMF_LANG['ad_stat_ok'];
     ?>
                             </button>
                         </td>
@@ -227,13 +227,13 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                 <form action="?action=viewsessions" method="post" >
                 <fieldset>
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession();
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession();
     ?>">
-                    <legend><?php echo $PMF_LANG['ad_stat_management'];
+                    <legend><?= $PMF_LANG['ad_stat_management'];
     ?></legend>
 
                     <div class="control-group">
-                        <label class="form-control-label" for="month"><?php echo $PMF_LANG['ad_stat_choose'];
+                        <label class="form-control-label" for="month"><?= $PMF_LANG['ad_stat_choose'];
     ?>:</label>
                         <div class="controls">
                             <select name="month" id="month" size="1">
@@ -263,7 +263,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
                     <div class="form-group row">
                         <button class="btn btn-primary" type="submit" name="statdelete">
-                            <?php echo $PMF_LANG['ad_stat_delete'];
+                            <?= $PMF_LANG['ad_stat_delete'];
     ?>
                         </button>
                     </div>

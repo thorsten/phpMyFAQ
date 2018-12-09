@@ -2,7 +2,7 @@
 /**
  * Displays the user management frontend.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -762,7 +762,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                     <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
                        data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                        data-user-id="<?= $user->getUserData('user_id') ?>">
-                        <?php print $PMF_LANG['ad_user_delete'] ?>
+                        <?= $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif;
             ?>

@@ -2,7 +2,7 @@
 /**
  * Image browser backend for TinyMCE v4
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -56,10 +56,10 @@ if ($user) {
 <form action="" class="form-inline" method="post">
     <div class="input-group">
         <label class="sr-only" for="filter">
-            <?php echo $PMF_LANG['ad_image_name_search'] ?>
+            <?= $PMF_LANG['ad_image_name_search'] ?>
         </label>
         <input type="text" class="form-control" id="filter" value=""
-               placeholder="<?php echo $PMF_LANG['ad_image_name_search'] ?>">
+               placeholder="<?= $PMF_LANG['ad_image_name_search'] ?>">
         <span class="input-group-addon"><i aria-hidden="true" class="fa fa-search"></i></span>
     </div>
 </form>

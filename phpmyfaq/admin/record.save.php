@@ -3,7 +3,7 @@
 /**
  * Save an existing FAQ record.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -236,7 +236,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     <script>
         (function() {
             setTimeout(function() {
-                window.location = "index.php?action=editentry&id=<?php echo $recordId ?>&lang=<?php echo $recordData['lang'] ?>";
+                window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $recordData['lang'] ?>";
             }, 5000);
         })();
     </script>

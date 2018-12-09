@@ -2,7 +2,7 @@
 /**
  * AJAX: lists the complete configuration items as text/html.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

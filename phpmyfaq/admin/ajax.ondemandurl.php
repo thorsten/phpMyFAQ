@@ -7,7 +7,7 @@
  *
  * Performs link verification at demand of the user.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -60,19 +60,19 @@ if (count(ob_list_handlers()) > 0) {
 }
 ?>
 <!DOCTYPE html>
-<!--[if IE 9 ]> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
+<!--[if IE 9 ]> <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
-    <base href="<?php echo $faqConfig->getDefaultUrl(); ?>">
+    <title><?= $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ</title>
+    <base href="<?= $faqConfig->getDefaultUrl(); ?>">
 
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
-    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
@@ -82,7 +82,7 @@ if (count(ob_list_handlers()) > 0) {
     <script src="../assets/js/phpmyfaq.min.js"></script>
 
 </head>
-<body dir="<?php echo $PMF_LANG['dir']; ?>">
+<body dir="<?= $PMF_LANG['dir']; ?>">
 <?php
 
 if (!(isset($id) && isset($artlang))) {
@@ -99,7 +99,7 @@ $faq->getRecord($id, null, true);
 
 if (!isset($faq->faqRecord['content'])) {
     ?>
-    Error: No entry for #<?php echo $id ?>(<?php echo $artlang ?>) available.
+    Error: No entry for #<?= $id ?>(<?= $artlang ?>) available.
 </body>
 </html>
 <?php

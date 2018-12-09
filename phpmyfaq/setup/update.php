@@ -2,7 +2,7 @@
 /**
  * Main update script.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -54,11 +54,11 @@ require PMF_ROOT_DIR.'/config/database.php';
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-    <title>phpMyFAQ <?php echo System::getVersion(); ?> Update</title>
+    <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
 
     <meta name="viewport" content="width=device-width;">
-    <meta name="application-name" content="phpMyFAQ <?php echo System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-<?php echo date('Y'); ?> phpMyFAQ Team">
+    <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
+    <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
 
     <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
 
@@ -101,7 +101,7 @@ require PMF_ROOT_DIR.'/config/database.php';
   <div class="jumbotron">
     <div class="container">
       <h1 class="display-4 text-center">
-        phpMyFAQ <?php echo System::getVersion() ?> Update
+        phpMyFAQ <?= System::getVersion() ?> Update
       </h1>
     </div>
   </div>
@@ -117,7 +117,7 @@ $installer->checkPreUpgrade($DB['type']);
 if ($step === 1) { ?>
 
     <form action="update.php?step=2" method="post">
-      <input name="version" type="hidden" value="<?php echo $version ?>">
+      <input name="version" type="hidden" value="<?= $version ?>">
       <div class="row">
         <div class="col">
           <ul class="nav nav-pills nav-fill">
@@ -259,7 +259,7 @@ if ($step == 2) {
     if ($checkDatabaseSetupFile && $checkLdapSetupFile && $checkElasticsearchSetupFile) {
         ?>
         <form action="update.php?step=3" method="post">
-        <input type="hidden" name="version" value="<?php echo $version ?>">
+        <input type="hidden" name="version" value="<?= $version ?>">
         <div class="row form-group row">
             <div class="col">
               <ul class="nav nav-pills nav-fill">

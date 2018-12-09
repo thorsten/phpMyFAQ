@@ -2,7 +2,7 @@
 /**
  * Frontend to edit an instance.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench"></i> <?php echo $PMF_LANG['ad_menu_instances']; ?>
+                <i aria-hidden="true" class="fa fa-wrench"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
             </h2>
         </div>
     </header>
@@ -45,29 +45,29 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
     ?>
     <form action="?action=updateinstance" method="post" accept-charset="utf-8">
-        <input type="hidden" name="instance_id" value="<?php echo $instanceData->id ?>" />
+        <input type="hidden" name="instance_id" value="<?= $instanceData->id ?>" />
         <div class="form-group row">
-            <label for="url" class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_url'] ?>:</label>
+            <label for="url" class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_url'] ?>:</label>
             <div class="col-lg-8">
-                <input type="url" name="url" id="url" class="form-control" value="<?php echo $instanceData->url ?>" required>
+                <input type="url" name="url" id="url" class="form-control" value="<?= $instanceData->url ?>" required>
             </div>
         </div>
         <div class="form-group row">
-            <label for="instance"  class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_path'] ?>:</label>
+            <label for="instance"  class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_path'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="instance" id="instance" class="form-control" required
-                       value="<?php echo $instanceData->instance ?>">
+                       value="<?= $instanceData->instance ?>">
             </div>
         </div>
         <div class="form-group row">
-            <label for="comment" class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_name'] ?>:</label>
+            <label for="comment" class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_name'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="comment" id="comment" class="form-control" required
-                       value="<?php echo $instanceData->comment ?>">
+                       value="<?= $instanceData->comment ?>">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_instance_config'] ?>:</label>
+            <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
             <div class="col-lg-8">
                 <p class="form-control-static">
             <?php
@@ -81,10 +81,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         <div class="form-group row">
             <div class="col-lg-offset-2 col-lg-4">
                 <button class="btn btn-primary" type="submit">
-                    <?php echo $PMF_LANG['ad_instance_button'] ?>
+                    <?= $PMF_LANG['ad_instance_button'] ?>
                 </button>
                 <a class="btn btn-info" href="?action=instances">
-                    <?php echo $PMF_LANG['ad_entry_back'] ?>
+                    <?= $PMF_LANG['ad_entry_back'] ?>
                 </a>
             </div>
         </div>

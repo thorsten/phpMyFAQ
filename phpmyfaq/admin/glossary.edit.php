@@ -2,7 +2,7 @@
 /**
  * Displays a form to edit an existing glossary item.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_glossary_edit'] ?>
+                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_glossary_edit'] ?>
                 </h2>
             </div>
         </header>
@@ -45,33 +45,33 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
     $glossaryItem = $glossary->getGlossaryItem($id);
     ?>
                 <form  action="?action=updateglossary" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
-                    <input type="hidden" name="id" value="<?php echo $glossaryItem['id'] ?>">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="id" value="<?= $glossaryItem['id'] ?>">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'] ?>:</label>
+                        <label class="col-lg-2 form-control-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item"
-                                   value="<?php echo $glossaryItem['item'] ?>" required>
+                                   value="<?= $glossaryItem['item'] ?>" required>
                         </div>
                     </div>
 
             <div class="control-group">
                 <label class="form-control-label" for="definition">
-                    <?php echo $PMF_LANG['ad_glossary_definition'] ?>:
+                    <?= $PMF_LANG['ad_glossary_definition'] ?>:
                 </label>
                 <div class="controls">
                     <textarea  class="input-xxlarge" name="definition" id="definition" cols="50" rows="3" required
-                    ><?php echo $glossaryItem['definition'] ?></textarea>
+                    ><?= $glossaryItem['definition'] ?></textarea>
                 </div>
             </div>
 
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
-                                <?php echo $PMF_LANG['ad_glossary_save'] ?>
+                                <?= $PMF_LANG['ad_glossary_save'] ?>
                             </button>
                             <a class="btn btn-info" href="?action=glossary">
-                                <?php echo $PMF_LANG['ad_entry_back'] ?>
+                                <?= $PMF_LANG['ad_entry_back'] ?>
                             </a>
                         </div>
                     </div>

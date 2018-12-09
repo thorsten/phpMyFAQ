@@ -3,7 +3,7 @@
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -247,8 +247,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
     <script>
         (function() {
             setTimeout(function() {
-                window.location = "index.php?action=editentry&id=<?php echo $recordId;
-            ?>&lang=<?php echo $recordData['lang'] ?>";
+                window.location = "index.php?action=editentry&id=<?= $recordId;
+            ?>&lang=<?= $recordData['lang'] ?>";
             }, 5000);
         })();
     </script>
@@ -271,13 +271,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         );
         ?>
     <form action="?action=editpreview" method="post">
-    <input type="hidden" name="question"            value="<?php echo Strings::htmlspecialchars($question) ?>">
-    <input type="hidden" name="content" class="mceNoEditor" value="<?php echo Strings::htmlspecialchars($content) ?>">
-    <input type="hidden" name="lang"                value="<?php echo $recordLang ?>">
-    <input type="hidden" name="keywords"            value="<?php echo $keywords ?>">
-    <input type="hidden" name="tags"                value="<?php echo $tags ?>">
-    <input type="hidden" name="author"              value="<?php echo $author ?>">
-    <input type="hidden" name="email"               value="<?php echo $email ?>">
+    <input type="hidden" name="question"            value="<?= Strings::htmlspecialchars($question) ?>">
+    <input type="hidden" name="content" class="mceNoEditor" value="<?= Strings::htmlspecialchars($content) ?>">
+    <input type="hidden" name="lang"                value="<?= $recordLang ?>">
+    <input type="hidden" name="keywords"            value="<?= $keywords ?>">
+    <input type="hidden" name="tags"                value="<?= $tags ?>">
+    <input type="hidden" name="author"              value="<?= $author ?>">
+    <input type="hidden" name="email"               value="<?= $email ?>">
     <?php
         if (is_array($categories['rubrik'])) {
             foreach ($categories['rubrik'] as $key => $_categories) {
@@ -285,21 +285,21 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
         }
     ?>
-    <input type="hidden" name="solution_id"         value="<?php echo $solutionId ?>">
-    <input type="hidden" name="revision"            value="<?php echo $revisionId ?>">
-    <input type="hidden" name="active"              value="<?php echo $active ?>">
-    <input type="hidden" name="changed"             value="<?php echo $changed ?>">
-    <input type="hidden" name="comment"             value="<?php echo $comment ?>">
-    <input type="hidden" name="dateStart"           value="<?php echo $dateStart ?>">
-    <input type="hidden" name="dateEnd"             value="<?php echo $dateEnd ?>">
-    <input type="hidden" name="userpermission"      value="<?php echo $user_permission ?>">
-    <input type="hidden" name="restricted_users"    value="<?php echo $permissions['restricted_user'] ?>">
-    <input type="hidden" name="grouppermission"     value="<?php echo $group_permission ?>">
-    <input type="hidden" name="restricted_group"    value="<?php echo $permissions['restricted_groups'] ?>">
-    <input type="hidden" name="notes"               value="<?php echo $notes ?>">
+    <input type="hidden" name="solution_id"         value="<?= $solutionId ?>">
+    <input type="hidden" name="revision"            value="<?= $revisionId ?>">
+    <input type="hidden" name="active"              value="<?= $active ?>">
+    <input type="hidden" name="changed"             value="<?= $changed ?>">
+    <input type="hidden" name="comment"             value="<?= $comment ?>">
+    <input type="hidden" name="dateStart"           value="<?= $dateStart ?>">
+    <input type="hidden" name="dateEnd"             value="<?= $dateEnd ?>">
+    <input type="hidden" name="userpermission"      value="<?= $user_permission ?>">
+    <input type="hidden" name="restricted_users"    value="<?= $permissions['restricted_user'] ?>">
+    <input type="hidden" name="grouppermission"     value="<?= $group_permission ?>">
+    <input type="hidden" name="restricted_group"    value="<?= $permissions['restricted_groups'] ?>">
+    <input type="hidden" name="notes"               value="<?= $notes ?>">
     <p class="text-center">
         <button class="btn btn-primary" type="submit" name="submit">
-            <?php echo $PMF_LANG['ad_entry_back'] ?>
+            <?= $PMF_LANG['ad_entry_back'] ?>
         </button>
     </p>
     </form>

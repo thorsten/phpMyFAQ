@@ -2,7 +2,7 @@
 /**
  * The page with the ratings of the votings.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -43,12 +43,12 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_rs'] ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_rs'] ?>
 
                     <div class="float-right">
                         <a class="btn btn-danger" 
-                           href="?action=clear-statistics&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
-                            <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_delete_all_votings'] ?>
+                           href="?action=clear-statistics&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                            <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_delete_all_votings'] ?>
                         </a>
                     </div>
                 </h2>
@@ -83,7 +83,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
             ?>
                     <tr>
                         <th colspan="6" style="text-align: left;">
-                            <h4><?php echo $category->categoryName[$data['category_id']]['name'];
+                            <h4><?= $category->categoryName[$data['category_id']]['name'];
             ?></h4>
                         </th>
                     </tr>
@@ -100,18 +100,18 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         );
         ?>
                     <tr>
-                        <td><?php echo $data['id'];
+                        <td><?= $data['id'];
         ?></td>
-                        <td><?php echo $data['lang'];
+                        <td><?= $data['lang'];
         ?></td>
                         <td>
-                            <a href="<?php echo $url ?>" title="<?php echo $question;
+                            <a href="<?= $url ?>" title="<?= $question;
         ?>">
-                                <?php echo Utils::makeShorterText($question, 14);
+                                <?= Utils::makeShorterText($question, 14);
         ?>
                             </a>
                         </td>
-                        <td><?php echo $data['usr'];
+                        <td><?= $data['usr'];
         ?></td>
                         <td>
                             <?php
@@ -123,10 +123,10 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                                 $progressBar = 'info';
                             }
         ?>
-                            <meter value="<?php echo round($data['num'] * 20);
+                            <meter value="<?= round($data['num'] * 20);
         ?>" max="100" min="0" low="25" optimum="75"></meter>
                         </td>
-                        <td><?php echo round($data['num'] * 20);
+                        <td><?= round($data['num'] * 20);
         ?>%</td>
                     </tr>
 <?php
@@ -141,13 +141,13 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                             <td colspan="6">
                                 <small>
                                 <span style="color: green; font-weight: bold;">
-                                    <?php echo $PMF_LANG['ad_rs_green'] ?>
+                                    <?= $PMF_LANG['ad_rs_green'] ?>
                                 </span>
-                                <?php echo $PMF_LANG['ad_rs_ahtf'] ?>,
+                                <?= $PMF_LANG['ad_rs_ahtf'] ?>,
                                 <span style="color: red; font-weight: bold;">
-                                    <?php echo $PMF_LANG['ad_rs_red'] ?>
+                                    <?= $PMF_LANG['ad_rs_red'] ?>
                                 </span>
-                                <?php echo $PMF_LANG['ad_rs_altt'] ?>
+                                <?= $PMF_LANG['ad_rs_altt'] ?>
                                 </small>
                             </td>
                         </tr>
@@ -157,7 +157,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     ?>
                     <tfoot>
                         <tr>
-                            <td colspan="6"><?php echo $PMF_LANG['ad_rs_no'] ?></td>
+                            <td colspan="6"><?= $PMF_LANG['ad_rs_no'] ?></td>
                         </tr>
                     </tfoot>
 <?php 

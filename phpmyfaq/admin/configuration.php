@@ -2,7 +2,7 @@
 /**
  * The main configuration frontend.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -93,7 +93,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     ?>
         <form  id="config_list" name="config_list" method="post"
               action="?action=config&amp;config_action=saveConfig">
-            <input type="hidden" name="csrf" value="<?php echo $currentToken ?>">
+            <input type="hidden" name="csrf" value="<?= $currentToken ?>">
 
 
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -104,10 +104,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
                         <button class="btn btn-sm btn-outline-warning" type="reset">
-                            <?php echo $PMF_LANG['ad_config_reset'] ?>
+                            <?= $PMF_LANG['ad_config_reset'] ?>
                         </button>
                         <button class="btn btn-sm btn-outline-success" type="submit">
-                            <?php echo $PMF_LANG['ad_config_save'] ?>
+                            <?= $PMF_LANG['ad_config_save'] ?>
                         </button>
                     </div>
                 </div>
@@ -120,55 +120,55 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         <li role="presentation" class="nav-item">
                             <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="nav-link active">
                                 <i aria-hidden="true" class="fa fa-home"></i>
-                                <?php echo $PMF_LANG['mainControlCenter'] ?>
+                                <?= $PMF_LANG['mainControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-th-list"></i>
-                                <?php echo $PMF_LANG['recordsControlCenter'] ?>
+                                <?= $PMF_LANG['recordsControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-search"></i>
-                                <?php echo $PMF_LANG['searchControlCenter'] ?>
+                                <?= $PMF_LANG['searchControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-warning"></i>
-                                <?php echo $PMF_LANG['securityControlCenter'] ?>
+                                <?= $PMF_LANG['securityControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-thumbs-down"></i>
-                                <?php echo $PMF_LANG['spamControlCenter'] ?>
+                                <?= $PMF_LANG['spamControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-search"></i>
-                                <?php echo $PMF_LANG['seoCenter'] ?>
+                                <?= $PMF_LANG['seoCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-retweet"></i>
-                                <?php echo $PMF_LANG['socialNetworksControlCenter'] ?>
+                                <?= $PMF_LANG['socialNetworksControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-inbox"></i>
-                                <?php echo $PMF_LANG['mailControlCenter'] ?>
+                                <?= $PMF_LANG['mailControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="nav-link">
                                 <i aria-hidden="true" class="fa fa-sitemap"></i>
-                                <?php echo 'LDAP' ?>
+                                <?= 'LDAP' ?>
                             </a>
                         </li>
                     </ul>

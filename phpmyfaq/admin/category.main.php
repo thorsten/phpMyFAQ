@@ -2,7 +2,7 @@
 /**
  * List all categories in the admin section.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -34,13 +34,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="material-icons">list</i> <?php echo $PMF_LANG['ad_menu_categ_edit'] ?>
+                    <i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_edit'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addcategory">
-                            <i class="material-icons">add</i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
+                            <i aria-hidden="true" class="fas fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
                         </a>
                         <a class="btn btn-info" href="?action=showcategory">
-                            <i class="material-icons">view_list</i> <?php echo $PMF_LANG['ad_categ_show'];?>
+                          <i aria-hidden="true" class="fas fa-list"></i> <?= $PMF_LANG['ad_categ_show'];?>
                         </a>
                     </div>
                 </h2>
@@ -349,18 +349,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if (count($category->getChildren($cat['id'])) != 0) {
             // Show name and icon for expand the sub-categories
             printf(
-                '<h4 class="category-header" data-category-id="%d">%s</h4> ',
+                '<h5 class="category-header" data-category-id="%d">%s <i aria-hidden="true" class="fas fa-folder-open"></i></h5> ',
                 $cat['id'],
                 $categoryName
             );
         } else {
             // Show just the name
-            printf('<h4>%s</h4> ', $categoryName);
+            printf('<h5>%s</h5> ', $categoryName);
         }
 
         // add faq to category (always)
         printf('
-           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">low_priority</i></a></a> ',
+           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fas fa-file-medical" title="%s"></i></a></a> ',
            $cat['id'],
            $cat['lang'],
            $PMF_LANG['ad_quick_entry']
@@ -369,7 +369,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
            printf('
-            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i class="material-icons" title="%s">add</i></a> ',
+            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fas fa-folder-plus" title="%s"></i></a> ',
                $cat['id'],
                $cat['lang'],
                $PMF_LANG['ad_quick_category']
@@ -377,7 +377,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
            // rename (sub) category (if current language)
            printf('
-               <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><i class="material-icons" title="%s">mode_edit</i></a> ',
+               <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-edit" title="%s"></i></a> ',
                $cat['id'],
                $PMF_LANG['ad_kateg_rename']
            );
@@ -385,7 +385,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         // translate category (always)
         printf(
-            '<a class="btn btn-info btn-sm" href="?action=translatecategory&amp;cat=%s"><i class="material-icons" title="%s">share</i></a> ',
+            '<a class="btn btn-info btn-sm" href="?action=translatecategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-globe" title="%s"></i></a> ',
             $cat['id'],
             $PMF_LANG['ad_categ_translate']
         );
@@ -393,19 +393,19 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         // delete (sub) category (if current language)
         if (count($category->getChildren($cat['id'])) == 0 && $cat['lang'] == $lang) {
             printf(
-                '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i class="material-icons" title="%s">delete</i></a> ',
+                '<a class="btn btn-danger btn-sm" href="?action=deletecategory&amp;cat=%s&amp;catlang=%s"><i aria-hidden="true" class="fas fa-trash" title="%s"></i></a> ',
                 $cat['id'],
                 $cat['lang'],
                 $PMF_LANG['ad_categ_delete']
             );
         } else {
-            echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i class="material-icons">delete</i>';
+            echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fas fa-trash"></i>';
         }
 
         if ($cat['lang'] == $lang) {
             // cut category (if current language)
            printf(
-               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i class="material-icons" title="%s">content_cut</i></a>  ',
+               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-cut" title="%s"></i></a>  ',
                $cat['id'],
                $PMF_LANG['ad_categ_cut']
            );
@@ -413,7 +413,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             if ($category->numParent($cat['parent_id']) > 1) {
                 // move category (if current language) AND more than 1 category at the same level)
               printf(
-                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i class="material-icons" title="%s">content_copy</i></a> ',
+                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fas fa-copy" title="%s"></i></a> ',
                   $cat['id'],
                   $cat['parent_id'],
                   $PMF_LANG['ad_categ_move']
@@ -432,7 +432,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                     </li>
                 </ul>
 
-                <p class="alert alert-info"><?php echo $PMF_LANG['ad_categ_remark'] ?></p>
+                <p class="alert alert-info"><?= $PMF_LANG['ad_categ_remark'] ?></p>
             </div>
         </div>
     <script src="assets/js/category.js"></script>

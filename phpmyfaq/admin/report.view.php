@@ -2,7 +2,7 @@
 /**
  * View a generated report.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i>  <?php echo $PMF_LANG['ad_menu_reports']; ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports']; ?></h2>
             </div>
         </header>
 
@@ -134,21 +134,21 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     </tbody>
                 </table>
                 <form action="?action=reportexport" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="report_category" id="report_category" value="<?php echo $useCategory ?>"></td>
-                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?php echo $useSubcategory ?>"></td>
-                    <input type="hidden" name="report_translations" id="report_translations" value="<?php echo $useTranslation ?>"></td>
-                    <input type="hidden" name="report_language" id="report_language" value="<?php echo $useLanguage ?>"></td>
-                    <input type="hidden" name="report_id" id="report_id" value="<?php echo $useId ?>"></td>
-                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?php echo $useSticky ?>"></td>
-                    <input type="hidden" name="report_title" id="report_title" value="<?php echo $useTitle ?>"></td>
-                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?php echo $useCreationDate ?>"></td>
-                    <input type="hidden" name="report_owner" id="report_owner" value="<?php echo $useOwner ?>"></td>
-                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?php echo $useLastModified ?>">
-                    <input type="hidden" name="report_url" id="report_url" value="<?php echo $useUrl ?>"></td>
-                    <input type="hidden" name="report_visits" id="report_visits" value="<?php echo $useVisits ?>"></td>
+                    <input type="hidden" name="report_category" id="report_category" value="<?= $useCategory ?>"></td>
+                    <input type="hidden" name="report_sub_category" id="report_sub_category" value="<?= $useSubcategory ?>"></td>
+                    <input type="hidden" name="report_translations" id="report_translations" value="<?= $useTranslation ?>"></td>
+                    <input type="hidden" name="report_language" id="report_language" value="<?= $useLanguage ?>"></td>
+                    <input type="hidden" name="report_id" id="report_id" value="<?= $useId ?>"></td>
+                    <input type="hidden" name="report_sticky" id="report_sticky" value="<?= $useSticky ?>"></td>
+                    <input type="hidden" name="report_title" id="report_title" value="<?= $useTitle ?>"></td>
+                    <input type="hidden" name="report_creation_date" id="report_creation_date" value="<?= $useCreationDate ?>"></td>
+                    <input type="hidden" name="report_owner" id="report_owner" value="<?= $useOwner ?>"></td>
+                    <input type="hidden" name="report_last_modified_person" id="report_last_modified_person" class="radio" value="<?= $useLastModified ?>">
+                    <input type="hidden" name="report_url" id="report_url" value="<?= $useUrl ?>"></td>
+                    <input type="hidden" name="report_visits" id="report_visits" value="<?= $useVisits ?>"></td>
                     <div class="form-group row">
                         <button class="btn btn-primary" type="submit">
-                            <?php echo $PMF_LANG['ad_stat_report_make_csv'] ?>
+                            <?= $PMF_LANG['ad_stat_report_make_csv'] ?>
                         </button>
                     </div>
                 </form>

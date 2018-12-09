@@ -2,7 +2,7 @@
 /**
  * Sessionbrowser.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -42,7 +42,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
+                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
                 </h2>
             </div>
         </header>
@@ -52,17 +52,17 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                 <table class="table table-striped">
                 <thead>
                     <tr>
-                        <th><?php echo $PMF_LANG['ad_sess_ip'] ?></th>
-                        <th><?php echo $PMF_LANG['ad_sess_s_date'] ?></th>
-                        <th><?php echo $PMF_LANG['ad_sess_session'] ?></th>
+                        <th><?= $PMF_LANG['ad_sess_ip'] ?></th>
+                        <th><?= $PMF_LANG['ad_sess_s_date'] ?></th>
+                        <th><?= $PMF_LANG['ad_sess_session'] ?></th>
                     </tr>
                 </thead>
                 <tbody>
 <?php foreach ($sessiondata as $sid => $data) { ?>
                     <tr>
-                        <td><?php echo $data['ip'] ?></td>
-                        <td><?php echo $date->format(date('Y-m-d H:i', $data['time'])) ?></td>
-                        <td><a href="?action=viewsession&amp;id=<?php echo $sid ?>"><?php echo $sid ?></a></td>
+                        <td><?= $data['ip'] ?></td>
+                        <td><?= $date->format(date('Y-m-d H:i', $data['time'])) ?></td>
+                        <td><a href="?action=viewsession&amp;id=<?= $sid ?>"><?= $sid ?></a></td>
                     </tr>
 <?php } ?>
                 </tbody>

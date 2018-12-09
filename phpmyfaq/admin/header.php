@@ -2,7 +2,7 @@
 /**
  * Header of the admin area.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -186,16 +186,16 @@ switch ($action) {
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title><?php echo $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?></title>
-  <base href="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/" />
+  <title><?= $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></title>
+  <base href="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/" />
 
   <meta name="description" content="Only Chuck Norris can divide by zero.">
   <meta name="author" content="phpMyFAQ Team">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
-  <meta name="copyright" content="(c) 2001-<?php echo date('Y') ?> phpMyFAQ Team">
+  <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
+  <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
   <meta name="publisher" content="phpMyFAQ Team">
-  <meta name="robots" content="<?php echo $faqConfig->get('seo.metaTagsAdmin') ?>">
+  <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
   <meta name="MSSmartTagsPreventParsing" content="true">
 
   <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
@@ -204,27 +204,27 @@ switch ($action) {
   <script src="../assets/js/vendors.js"></script>
   <script src="../assets/js/phpmyfaq.min.js"></script>
   <script src="assets/js/sidebar.js"></script>
-  <script src="assets/js/editor/tinymce.min.js?<?php echo time(); ?>"></script>
+  <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
 
   <?php if ($edAutosave): ?>
-  <script>var pmfAutosaveInterval = <?php echo $faqConfig->get('records.autosaveSecs') ?>;</script>
+  <script>var pmfAutosaveInterval = <?= $faqConfig->get('records.autosaveSecs') ?>;</script>
   <script src="../assets/js/autosave.js" async></script>
   <?php endif; ?>
 
-  <link rel="shortcut icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/favicon.ico">
-  <link rel="apple-touch-icon" href="../assets/themes/<?php echo Template::getTplSetName(); ?>/apple-touch-icon.png">
+  <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/favicon.ico">
+  <link rel="apple-touch-icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/apple-touch-icon.png">
 </head>
-<body dir="<?php echo $PMF_LANG['dir']; ?>">
+<body dir="<?= $PMF_LANG['dir']; ?>">
 
 <header>
   <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" title="<?php echo $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
-      phpMyFAQ <?php echo $faqConfig->get('main.currentVersion') ?>
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" title="<?= $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
+      phpMyFAQ <?= $faqConfig->get('main.currentVersion') ?>
     </a>
     <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
     <!--
     <form class="form-control form-control-dark w-50" action="index.php<?php echo(isset($action) ? '?action='.$action : ''); ?>" method="post">
-        <?php echo Language::selectLanguages($LANGCODE, true); ?>
+        <?= Language::selectLanguages($LANGCODE, true); ?>
     </form>
     -->
     <div class="navbar-text">
@@ -236,8 +236,8 @@ switch ($action) {
           echo '<i aria-hidden="true" class="fas fa-user"></i>';
       }
       ?>
-      <span title="<?php echo $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
-        <?php echo $user->getUserData('display_name'); ?>
+      <span title="<?= $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
+        <?= $user->getUserData('display_name'); ?>
       </span>
     </div>
     <ul class="navbar-nav px-3">
@@ -260,71 +260,71 @@ switch ($action) {
             <ul class="nav flex-column">
               <li class="nav-item <?php echo($dashboardPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php">
-                  <i aria-hidden="true" class="fas fa-tachometer-alt"></i> <?php echo $PMF_LANG['admin_mainmenu_home']; ?>
+                  <i aria-hidden="true" class="fas fa-tachometer-alt"></i> <?= $PMF_LANG['admin_mainmenu_home']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?php echo($userPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=user">
-                  <i aria-hidden="true" class="fas fa-user"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                  <i aria-hidden="true" class="fas fa-user"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($userPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($userPage ? 'in' : '') ?>" id="user-menu">
-                        <?php echo $secLevelEntries; ?>
+                        <?= $secLevelEntries; ?>
                     </ul>
                   <?php } ?>
               </li>
 
               <li class="nav-item <?php echo($contentPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=content">
-                  <i aria-hidden="true" class="fas fa-edit"></i> <?php echo $PMF_LANG['admin_mainmenu_content']; ?>
+                  <i aria-hidden="true" class="fas fa-edit"></i> <?= $PMF_LANG['admin_mainmenu_content']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($contentPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($contentPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
+                        <?= $secLevelEntries; ?>
                     </ul>
                   <?php } ?>
               </li>
 
               <li class="nav-item <?php echo($statisticsPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=statistics">
-                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?php echo $PMF_LANG['admin_mainmenu_statistics']; ?>
+                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($statisticsPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($statisticsPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
+                        <?= $secLevelEntries; ?>
                     </ul>
                   <?php } ?>
               </li>
 
               <li class="nav-item <?php echo($exportsPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=export">
-                  <i aria-hidden="true" class="fas fa-file-export"></i> <?php echo $PMF_LANG['admin_mainmenu_exports']; ?>
+                  <i aria-hidden="true" class="fas fa-file-export"></i> <?= $PMF_LANG['admin_mainmenu_exports']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?php echo($backupPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=backup">
-                  <i aria-hidden="true" class="fas fa-download"></i> <?php echo $PMF_LANG['admin_mainmenu_backup']; ?>
+                  <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['admin_mainmenu_backup']; ?>
                 </a>
                   <?php if ($backupPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($backupPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
+                        <?= $secLevelEntries; ?>
                     </ul>
                   <?php } ?>
               </li>
 
               <li class="nav-item <?php echo($configurationPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=config">
-                  <i aria-hidden="true" class="fas fa-wrench"></i> <?php echo $PMF_LANG['admin_mainmenu_configuration']; ?>
+                  <i aria-hidden="true" class="fas fa-wrench"></i> <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
                   <span class="fa arrow"></span>
                 </a>
                   <?php if ($configurationPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($configurationPage ? 'in' : '') ?>">
-                        <?php echo $secLevelEntries; ?>
+                        <?= $secLevelEntries; ?>
                     </ul>
                   <?php } ?>
               </li>
@@ -342,7 +342,7 @@ switch ($action) {
               <li class="nav-item">
                 <a class="nav-link" href="#">
                   <i aria-hidden="true" class="fas fa-user-clock"></i>
-                  <?php echo $PMF_LANG['ad_session_expiration']; ?>:
+                  <?= $PMF_LANG['ad_session_expiration']; ?>:
                   <span id="sessioncounter">Loading...</span>
                 </a>
               </li>

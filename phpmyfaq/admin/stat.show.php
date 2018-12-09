@@ -2,7 +2,7 @@
 /**
  * Show the session.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -44,7 +44,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         <table class="table table-striped">
         <tfoot>
             <tr>
-                <td colspan="2"><a href="?action=viewsessions"><?php echo $PMF_LANG['ad_sess_back'];
+                <td colspan="2"><a href="?action=viewsessions"><?= $PMF_LANG['ad_sess_back'];
     ?></a></td>
             </tr>
         </tfoot>
@@ -57,33 +57,33 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
             ++$num;
             ?>
             <tr>
-                <td><?php echo date('Y-m-d H:i:s', $data[7]);
+                <td><?= date('Y-m-d H:i:s', $data[7]);
             ?></td>
-                <td><?php echo $data[1];
-            ?> (<?php echo $data[2];
+                <td><?= $data[1];
+            ?> (<?= $data[2];
             ?>)</td>
             </tr>
 <?php
                 if ($num == 1) {
                     ?>
             <tr>
-                <td><?php echo $PMF_LANG['ad_sess_referer'];
+                <td><?= $PMF_LANG['ad_sess_referer'];
                     ?></td>
                 <td>
-                    <?php echo Strings::htmlentities(str_replace('?', '? ', $data[5]));
+                    <?= Strings::htmlentities(str_replace('?', '? ', $data[5]));
                     ?>
                 </td>
             </tr>
             <tr>
-                <td><?php echo $PMF_LANG['ad_sess_browser'];
+                <td><?= $PMF_LANG['ad_sess_browser'];
                     ?></td>
-                <td><?php echo Strings::htmlentities($data[6]);
+                <td><?= Strings::htmlentities($data[6]);
                     ?></td>
             </tr>
             <tr>
-                <td><?php echo $PMF_LANG['ad_sess_ip'];
+                <td><?= $PMF_LANG['ad_sess_ip'];
                     ?>:</td>
-                <td><?php echo Strings::htmlentities($data[3]);
+                <td><?= Strings::htmlentities($data[3]);
                     ?></td>
             </tr>
 <?php

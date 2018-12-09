@@ -3,7 +3,7 @@
 /**
  * phpMyFAQ Elasticsearch information.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -52,18 +52,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_menu_elasticsearch'] ?>
+                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_elasticsearch'] ?>
                 <div class="float-right">
                     <button class="btn btn-secondary pmf-elasticsearch" data-action="create">
-                        <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?php echo $PMF_LANG['ad_es_create_index'] ?>
+                        <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
                     </button>
 
                     <button class="btn btn-secondary pmf-elasticsearch" data-action="import">
-                        <i aria-hidden="true" class="fa fa-plus-square"></i> <?php echo $PMF_LANG['ad_es_bulk_index'] ?>
+                        <i aria-hidden="true" class="fa fa-plus-square"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
                     </button>
 
                     <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
-                        <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_es_drop_index'] ?>
+                        <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_es_drop_index'] ?>
                     </button>
                 </div>
             </h2>
@@ -77,17 +77,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
 
             </div>
             <h3>
-                <?php echo $PMF_LANG['ad_menu_searchstats'] ?>
+                <?= $PMF_LANG['ad_menu_searchstats'] ?>
             </h3>
 
             <?php if (is_array($esInformation)) { ?>
             <dl class="dl-horizontal">
 
                 <dt>Documents</dt>
-                <dd><?php echo $esInformation['indices']['phpmyfaq']['total']['docs']['count'] ?></dd>
+                <dd><?= $esInformation['indices']['phpmyfaq']['total']['docs']['count'] ?></dd>
 
                 <dt>Storage size</dt>
-                <dd><?php echo $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
+                <dd><?= $esInformation['indices']['phpmyfaq']['total']['store']['size_in_bytes'] ?> Bytes</dd>
 
             </dl>
             <?php
@@ -95,7 +95,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
                 $error = json_decode($esInformation);
             ?>
             <p class="alert alert-warning">
-                Elasticsearch: <?php echo ucfirst($error->error->reason) ?>
+                Elasticsearch: <?= ucfirst($error->error->reason) ?>
             </p>
             <?php } ?>
 

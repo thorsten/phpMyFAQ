@@ -2,7 +2,7 @@
 /**
  * Overview of actions in the admin section.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -73,12 +73,12 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tasks"></i> <?php echo $PMF_LANG['ad_menu_adminlog'];
+                <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'];
     ?>
                 <div class="float-right">
                     <a class="btn btn-danger"
-                       href="?action=deleteadminlog&csrf=<?php echo $user->getCsrfTokenFromSession() ?>">
-                        <i aria-hidden="true" class="fa fa-trash"></i> <?php echo $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+                       href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
+                        <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_adminlog_del_older_30d'] ?>
                     </a>
                 </div>
             </h2>
@@ -88,19 +88,19 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     <table class="table table-striped">
     <thead>
         <tr>
-            <th><?php echo $PMF_LANG['ad_categ_id'];
+            <th><?= $PMF_LANG['ad_categ_id'];
     ?></th>
-            <th><?php echo $PMF_LANG['ad_adminlog_date'];
+            <th><?= $PMF_LANG['ad_adminlog_date'];
     ?></th>
-            <th><?php echo $PMF_LANG['ad_adminlog_user'];
+            <th><?= $PMF_LANG['ad_adminlog_user'];
     ?></th>
-            <th colspan="2"><?php echo $PMF_LANG['ad_adminlog_ip'];
+            <th colspan="2"><?= $PMF_LANG['ad_adminlog_ip'];
     ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="5"><?php echo $pagination->render();
+            <td colspan="5"><?= $pagination->render();
     ?></td>
         </tr>
     </tfoot>
@@ -123,13 +123,13 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
         $user->getUserById($logging_value['usr'], true);
         ?>
         <tr>
-            <td><?php echo $logging_id;
+            <td><?= $logging_id;
         ?></td>
-            <td><?php echo $date->format(date('Y-m-d H:i', $logging_value['time']));
+            <td><?= $date->format(date('Y-m-d H:i', $logging_value['time']));
         ?></td>
-            <td><?php echo $user->getLogin();
+            <td><?= $user->getLogin();
         ?></td>
-            <td><?php echo $logging_value['ip'];
+            <td><?= $logging_value['ip'];
         ?></td>
             <td><small><?php
             $text = $logging_value['text'];

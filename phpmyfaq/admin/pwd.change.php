@@ -2,7 +2,7 @@
 /**
  * Form to change password of the current user.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-lock fa-fw"></i> <?php echo $PMF_LANG['ad_passwd_cop']; ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fa fa-lock fa-fw"></i> <?= $PMF_LANG['ad_passwd_cop']; ?></h2>
             </div>
         </header>
 <?php
@@ -81,11 +81,11 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
         <div class="row">
             <div class="col-lg-12">
                 <form  action="?action=passwd" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="save" value="newpassword">
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="opass">
-                            <?php echo $PMF_LANG['ad_passwd_old'];
+                            <?= $PMF_LANG['ad_passwd_old'];
     ?>
                         </label>
                         <div class="col-lg-3">
@@ -95,7 +95,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="npass">
-                            <?php echo $PMF_LANG['ad_passwd_new'];
+                            <?= $PMF_LANG['ad_passwd_new'];
     ?>
                         </label>
                         <div class="col-lg-3">
@@ -105,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
 
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="bpass">
-                            <?php echo $PMF_LANG['ad_passwd_con'];
+                            <?= $PMF_LANG['ad_passwd_con'];
     ?>
                         </label>
                         <div class="col-lg-3">
@@ -116,7 +116,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
-                                <?php echo $PMF_LANG['ad_passwd_change'];
+                                <?= $PMF_LANG['ad_passwd_change'];
     ?>
                             </button>
                         </div>

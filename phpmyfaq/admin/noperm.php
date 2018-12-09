@@ -2,7 +2,7 @@
 /**
  * An error page that is displayed if the user has no admin permissions.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,7 +20,7 @@
  */
 ?>
     <header>
-        <h2 class="page-header"><?php print $PMF_LANG['ad_pmf_info']; ?></h2>
+        <h2 class="page-header"><?= $PMF_LANG['ad_pmf_info']; ?></h2>
     </header>
 
-    <p class="error"><?php print $PMF_LANG['err_NotAuth'] ?></p>
+    <p class="error"><?= $PMF_LANG['err_NotAuth'] ?></p>

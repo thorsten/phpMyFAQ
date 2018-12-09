@@ -2,7 +2,7 @@
 /**
  * Ajax interface for attachments.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -51,7 +51,7 @@ $pagination = new Pagination(
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="material-icons">attachment</i> <?php echo $PMF_LANG['ad_menu_attachment_admin'] ?>
+                    <i class="material-icons">attachment</i> <?= $PMF_LANG['ad_menu_attachment_admin'] ?>
                 </h2>
             </div>
         </header>
@@ -62,29 +62,29 @@ $pagination = new Pagination(
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th><?php echo $PMF_LANG['msgAttachmentsFilename'] ?></th>
-                        <th><?php echo $PMF_LANG['msgTransToolLanguage'] ?></th>
-                        <th><?php echo $PMF_LANG['msgAttachmentsFilesize'] ?></th>
-                        <th colspan="3"><?php echo $PMF_LANG['msgAttachmentsMimeType'] ?></th>
+                        <th><?= $PMF_LANG['msgAttachmentsFilename'] ?></th>
+                        <th><?= $PMF_LANG['msgTransToolLanguage'] ?></th>
+                        <th><?= $PMF_LANG['msgAttachmentsFilesize'] ?></th>
+                        <th colspan="3"><?= $PMF_LANG['msgAttachmentsMimeType'] ?></th>
                     </tr>
                     </thead>
                     <tbody>
                     <?php foreach ($crumbs as $item): ?>
-                        <tr class="att_<?php echo $item->id ?>" title="<?php echo $item->thema ?>">
-                            <td><?php echo $item->id ?></td>
-                            <td><?php echo $item->filename ?></td>
-                            <td><?php echo $item->record_lang ?></td>
-                            <td><?php echo $item->filesize ?></td>
-                            <td><?php echo $item->mime_type ?></td>
+                        <tr class="att_<?= $item->id ?>" title="<?= $item->thema ?>">
+                            <td><?= $item->id ?></td>
+                            <td><?= $item->filename ?></td>
+                            <td><?= $item->record_lang ?></td>
+                            <td><?= $item->filesize ?></td>
+                            <td><?= $item->mime_type ?></td>
                             <td>
-                                <a href="javascript:deleteAttachment(<?php echo $item->id ?>, '<?php echo $user->getCsrfTokenFromSession() ?>'); void(0);"
-                                   class="btn btn-danger" title="<?php echo $PMF_LANG['ad_gen_delete'] ?>">
+                                <a href="javascript:deleteAttachment(<?= $item->id ?>, '<?= $user->getCsrfTokenFromSession() ?>'); void(0);"
+                                   class="btn btn-danger" title="<?= $PMF_LANG['ad_gen_delete'] ?>">
                                     <i class="material-icons">delete</i>
                                 </a>
                             </td>
                             <td>
-                                <a title="<?php echo $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
-                                   href="../index.php?action=faq&id=<?php echo $item->record_id ?>&lang=<?php echo $item->record_lang ?>">
+                                <a title="<?= $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
+                                   href="../index.php?action=faq&id=<?= $item->record_id ?>&lang=<?= $item->record_lang ?>">
                                   <i class="material-icons">link</i>
                                 </a>
                             </td>
@@ -93,7 +93,7 @@ $pagination = new Pagination(
                     </tbody>
                     <tfoot>
                     <tr>
-                        <td colspan="5"><?php echo $pagination->render(); ?></td>
+                        <td colspan="5"><?= $pagination->render(); ?></td>
                     </tr>
                     </tfoot>
                 </table>
@@ -109,7 +109,7 @@ $pagination = new Pagination(
          */
         function deleteAttachment(att_id, csrf)
         {
-            if (confirm('<?php echo $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
+            if (confirm('<?= $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
                 $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
                 $.ajax({
                     type:    "GET",

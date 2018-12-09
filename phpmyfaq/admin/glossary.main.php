@@ -2,7 +2,7 @@
 /**
  * The main glossary index file.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -31,10 +31,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_menu_glossary'] ?>
+                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addglossary">
-                            <i class="material-icons">add</i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                            <i class="material-icons">add</i> <?= $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>
                 </h2>

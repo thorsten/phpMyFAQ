@@ -2,7 +2,7 @@
 /**
  * Frontend for Backup and Restore.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -29,7 +29,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_backup'] ?>
+                    <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_backup'] ?>
                 </h2>
             </div>
         </header>
@@ -39,18 +39,18 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
                 <div class="panel panel-primary">
                     <div class="panel-heading">
-                        <?php echo $PMF_LANG['ad_csv_head'] ?>
+                        <?= $PMF_LANG['ad_csv_head'] ?>
                     </div>
                     <div class="panel-body">
-                        <p><?php echo $PMF_LANG['ad_csv_make'] ?></p>
+                        <p><?= $PMF_LANG['ad_csv_make'] ?></p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                                <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_linkdat'] ?>
+                                <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
                             </a>
                         </p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                                <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_linklog'] ?>
+                                <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_linklog'] ?>
                             </a>
                         </p>
                     </div>
@@ -62,12 +62,12 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                 <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>" enctype="multipart/form-data">
                     <div class="panel panel-primary">
                         <div class="panel-heading">
-                            <?php echo $PMF_LANG['ad_csv_head2'] ?>
+                            <?= $PMF_LANG['ad_csv_head2'] ?>
                         </div>
                         <div class="panel-body">
-                            <p><?php echo $PMF_LANG['ad_csv_restore'] ?></p>
+                            <p><?= $PMF_LANG['ad_csv_restore'] ?></p>
                             <div class="form-group row">
-                                <label class="col-lg-4 form-control-label"><?php echo $PMF_LANG['ad_csv_file'] ?>:</label>
+                                <label class="col-lg-4 form-control-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
                                 <div class="col-lg-8">
                                     <input type="file" name="userfile">
                                 </div>
@@ -75,7 +75,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                             <div class="form-group row">
                                 <p class="text-right">
                                     <button class="btn btn-primary" type="submit">
-                                        <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_ok'] ?>
+                                        <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_ok'] ?>
                                     </button>
                                 </p>
                             </div>

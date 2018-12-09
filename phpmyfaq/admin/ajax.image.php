@@ -3,7 +3,7 @@
 /**
  * AJAX: handles an image upload from TinyMCE.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -82,11 +82,11 @@ switch ($ajaxAction) {
                 ?>
                 <script>
                     window.parent.window.pmfImageUpload.uploadFinished({
-                        filename: '<?php echo $faqConfig->getDefaultUrl() . 'images/' . $uploadFile ?>',
-                        result: '<?php echo $isUploaded ? 'file_uploaded' : 'error' ?>',
-                        resultCode: '<?php echo $isUploaded ? 'success' : 'failed' ?>',
-                        height: <?php echo $height ?>,
-                        width: <?php echo $width ?>
+                        filename: '<?= $faqConfig->getDefaultUrl() . 'images/' . $uploadFile ?>',
+                        result: '<?= $isUploaded ? 'file_uploaded' : 'error' ?>',
+                        resultCode: '<?= $isUploaded ? 'success' : 'failed' ?>',
+                        height: <?= $height ?>,
+                        width: <?= $width ?>
                     });
                 </script>
                 <?php

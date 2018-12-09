@@ -2,7 +2,7 @@
 /**
  * The import function to import the phpMyFAQ backups.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -40,7 +40,7 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 ?>
     <header>
         <h2 class="page-header">
-            <i class="material-icons">file_download</i> <?php echo $PMF_LANG['ad_csv_rest'] ?>
+            <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_rest'] ?>
         </h2>
     </header>
 <?php

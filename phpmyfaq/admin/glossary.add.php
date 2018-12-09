@@ -2,7 +2,7 @@
 /**
  * Displays a form to add a glossary item.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?php echo $PMF_LANG['ad_glossary_add'] ?>
+                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
                 </h2>
             </div>
         </header>
@@ -40,10 +40,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
     ?>
                 <form  action="?action=saveglossary" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="item"><?php echo $PMF_LANG['ad_glossary_item'] ?>:</label>
+                        <label class="col-lg-2 form-control-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item" required>
                         </div>
@@ -51,7 +51,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
 
                     <div class="form-group row">
                         <label class="col-lg-2 form-control-label" for="definition">
-                            <?php echo $PMF_LANG['ad_glossary_definition'] ?>:
+                            <?= $PMF_LANG['ad_glossary_definition'] ?>:
                         </label>
                         <div class="col-lg-4">
                             <textarea class="form-control" name="definition" id="definition" cols="50" rows="5" required></textarea>
@@ -61,10 +61,10 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary')) {
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
-                                <?php echo $PMF_LANG['ad_glossary_save'] ?>
+                                <?= $PMF_LANG['ad_glossary_save'] ?>
                             </button>
                             <a class="btn btn-info" href="?action=glossary">
-                                <?php echo $PMF_LANG['ad_entry_back'] ?>
+                                <?= $PMF_LANG['ad_entry_back'] ?>
                             </a>
                         </div>
                     </div>

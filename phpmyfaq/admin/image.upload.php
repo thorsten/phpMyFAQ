@@ -2,7 +2,7 @@
 /**
  * Image upload backend for TinyMCE v4
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -56,7 +56,7 @@ if ($user) {
 
 <form class="form-inline" name="upload" action="index.php?action=ajax&ajax=image&ajaxaction=upload"
       method="post" enctype="multipart/form-data" target="pmf-upload-iframe" onsubmit="pmfImageUpload.inProgress();">
-    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
     <div id="pmf-upload-progress" class="hidden">
         <i aria-hidden="true" class="fa fa-cog fa-spin"></i> Upload in progress&hellip;

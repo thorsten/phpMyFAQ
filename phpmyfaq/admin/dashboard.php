@@ -2,7 +2,7 @@
 /**
  * The start page with some information about the FAQ.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -42,15 +42,15 @@ $faqSession = new Session($faqConfig);
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">
         <i aria-hidden="true" class="fas fa-tachometer-alt"></i>
-          <?php echo $PMF_LANG['admin_mainmenu_home'] ?>
+          <?= $PMF_LANG['admin_mainmenu_home'] ?>
       </h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
           <a href="?action=config">
               <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                <button class="btn btn-sm btn-outline-danger"><?php echo $PMF_LANG['msgMaintenanceMode'] ?></button>
+                <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
               <?php else: ?>
-                <button class="btn btn-sm btn-outline-success"><?php echo $PMF_LANG['msgOnlineMode'] ?></button>
+                <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
               <?php endif; ?>
           </a>
         </div>
@@ -62,7 +62,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-8">
             <div class="card ">
                 <div class="card-header">
-                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?php echo $PMF_LANG['ad_stat_report_visits'] ?>
+                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
                 </div>
                 <div class="card-body">
                 <?php
@@ -72,14 +72,14 @@ $faqSession = new Session($faqConfig);
                 <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
                 <script>
                     $(function() {
-                        const visits = [<?php echo implode(',', $visits) ?>];
+                        const visits = [<?= implode(',', $visits) ?>];
                         $('.visits').sparkline(
                             visits, {
                                 type: 'bar',
                                 barColor: '#7797b2',
                                 barWidth: window.innerWidth / 66,
                                 height: 268,
-                                tooltipSuffix: ' <?php echo $PMF_LANG['ad_visits_per_day'] ?>'
+                                tooltipSuffix: ' <?= $PMF_LANG['ad_visits_per_day'] ?>'
                             });
                     });
                 </script>
@@ -91,44 +91,44 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-4">
           <div class="card">
             <div class="card-header">
-                  <i aria-hidden="true" class="fas fa-info-circle"></i> <?php echo $PMF_LANG['ad_pmf_info'] ?>
+                  <i aria-hidden="true" class="fas fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
                 </div>
                 <div class="card-body">
                     <div class="list-group-flush">
                         <a href="?action=viewsessions" class="list-group-item">
-                          <i aria-hidden="true" class="fas fa-chart-bar"></i>  <?php echo $PMF_LANG['ad_start_visits'] ?>
+                          <i aria-hidden="true" class="fas fa-chart-bar"></i>  <?= $PMF_LANG['ad_start_visits'] ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqSession->getNumberOfSessions() ?></em>
+                                <em><?= $faqSession->getNumberOfSessions() ?></em>
                             </span>
                         </a>
                         <a href="?action=view" class="list-group-item">
-                            <i aria-hidden="true" class="fas fa-list-alt"></i> <?php echo $PMF_LANG['ad_start_articles']; ?>
+                            <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
+                                <em><?= $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
                             </span>
                         </a>
                         <a href="?action=comments" class="list-group-item">
-                          <i aria-hidden="true" class="fas fa-comments"></i> <?php echo $PMF_LANG['ad_start_comments']; ?>
+                          <i aria-hidden="true" class="fas fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
+                                <em><?= $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
                             </span>
                         </a>
                         <a href="?action=question" class="list-group-item">
-                          <i aria-hidden="true" class="fas fa-question-circle"></i> <?php echo $PMF_LANG['msgOpenQuestions']; ?>
+                          <i aria-hidden="true" class="fas fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
+                                <em><?= $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
                             </span>
                         </a>
                         <a href="?action=news" class="list-group-item">
-                          <i aria-hidden="true" class="fas fa-list-alt"></i> <?php echo $PMF_LANG['msgNews']; ?>
+                          <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
+                                <em><?= $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
                             </span>
                         </a>
                         <a href="?action=user&user_action=listallusers" class="list-group-item">
-                          <i aria-hidden="true" class="fas fa-users"></i> <?php echo $PMF_LANG['admin_mainmenu_users']; ?>
+                          <i aria-hidden="true" class="fas fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
                             <span class="float-right text-muted small">
-                                <em><?php echo $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
+                                <em><?= $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
                             </span>
                         </a>
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
@@ -150,7 +150,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?php echo $PMF_LANG['ad_online_info']; ?>
+                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?= $PMF_LANG['ad_online_info']; ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -174,10 +174,10 @@ $faqSession = new Session($faqConfig);
                         }
                     } else {
                         ?>
-                        <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
+                        <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?php echo $PMF_LANG['ad_xmlrpc_button'];
+                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
                         ?>
                             </button>
                         </form>
@@ -191,7 +191,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?php echo $PMF_LANG['ad_online_verification'] ?>
+                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -226,10 +226,10 @@ $faqSession = new Session($faqConfig);
                         }
                     } else {
                         ?>
-                        <form action="<?php echo $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
+                        <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?php echo $PMF_LANG['ad_verification_button'] ?>
+                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
                             </button>
                         </form>
                     <?php

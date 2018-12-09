@@ -2,7 +2,7 @@
 /**
  * The main stop words configuration frontend.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -40,7 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         <div class="col-lg-12">
 
             <p>
-                <?php echo $PMF_LANG['ad_stopwords_desc'] ?>
+                <?= $PMF_LANG['ad_stopwords_desc'] ?>
             </p>
             <p>
                 <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)"
@@ -48,8 +48,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 <option value="none">---</option>
     <?php foreach ($sortedLanguageCodes as $key => $value) {
     ?>
-        <option value="<?php echo strtolower($key);
-    ?>"><?php echo $value;
+        <option value="<?= strtolower($key);
+    ?>"><?= $value;
     ?></option>
     <?php 
 }
@@ -131,7 +131,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             }
 
             html += '</table>';
-            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-add fa fa-white"></i> <?php echo $PMF_LANG['ad_config_stopword_input'] ?></a>';
+            html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-add fa fa-white"></i> <?= $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
             return html;
         }
@@ -229,7 +229,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     stopword_id: info.id,
                     stopword: $('#' + elem_id).val(),
                     stopwords_lang: info.lang,
-                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+                    csrf: '<?= $user->getCsrfTokenFromSession();
     ?>'
                     }
                 );
@@ -274,7 +274,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     ajaxaction: "delete_stop_word",
                     stopword_id: info.id,
                     stopwords_lang: info.lang,
-                    csrf: '<?php echo $user->getCsrfTokenFromSession();
+                    csrf: '<?= $user->getCsrfTokenFromSession();
     ?>'
                 },
                 function () {
@@ -290,7 +290,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          */
         function addStopWordInputElem()
         {
-            var word = prompt('<?php echo $PMF_LANG['ad_config_stopword_input']?>', '');
+            var word = prompt('<?= $PMF_LANG['ad_config_stopword_input']?>', '');
             var lang = $('#stopwords_lang_selector').val();
 
             if (!!word) {
@@ -300,7 +300,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         ajaxaction: "save_stop_word",
                         stopword: word,
                         stopwords_lang: lang,
-                        csrf: '<?php echo $user->getCsrfTokenFromSession();
+                        csrf: '<?= $user->getCsrfTokenFromSession();
     ?>'
                 },
                 function () {

@@ -2,7 +2,7 @@
 /**
  * Shows all comments in the categories and provides a link to delete comments.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -63,28 +63,28 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                 continue;
             }
             ?>
-        <tr id="comments_<?php echo $faqcomment['comment_id'] ?>">
+        <tr id="comments_<?= $faqcomment['comment_id'] ?>">
             <td width="20">
                 <label>
-                <input id="faq_comments[<?php echo $faqcomment['comment_id'] ?>]"
-                       name="faq_comments[<?php echo $faqcomment['comment_id'] ?>]"
-                       value="<?php echo $faqcomment['record_id'] ?>" type="checkbox">
+                <input id="faq_comments[<?= $faqcomment['comment_id'] ?>]"
+                       name="faq_comments[<?= $faqcomment['comment_id'] ?>]"
+                       value="<?= $faqcomment['record_id'] ?>" type="checkbox">
                 </label>
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php echo $faqcomment['email'] ?>">
-                        <?php echo $faqcomment['username'] ?>
+                    <a href="mailto:<?= $faqcomment['email'] ?>">
+                        <?= $faqcomment['username'] ?>
                     </a> |
-                    <?php echo $date->format(date('Y-m-d H:i', $faqcomment['date'])) ?> |
+                    <?= $date->format(date('Y-m-d H:i', $faqcomment['date'])) ?> |
                     <a href="<?php printf('../?action=faq&cat=%d&id=%d&artlang=%s',
                        $faqcomment['category_id'],
                        $faqcomment['record_id'],
                        $LANGCODE) ?>">
-                        <?php echo $faq->getRecordTitle($faqcomment['record_id']) ?>
+                        <?= $faq->getRecordTitle($faqcomment['record_id']) ?>
                     </a>
                 </span><br/>
-                <?php echo Strings::htmlspecialchars($faqcomment['content']) ?>
+                <?= Strings::htmlspecialchars($faqcomment['content']) ?>
             </td>
         </tr>
 <?php
@@ -94,7 +94,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
         </table>
         <p>
             <button class="btn btn-danger" id="submitFaqComments" type="submit" name="submit">
-                <?php echo $PMF_LANG['ad_entry_delete'] ?>
+                <?= $PMF_LANG['ad_entry_delete'] ?>
             </button>
         </p>
         </form>
@@ -115,21 +115,21 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
         <table class="table table-striped">
 <?php
         foreach ($newscomments as $newscomment) { ?>
-        <tr id="comments_<?php echo $newscomment['comment_id'] ?>">
+        <tr id="comments_<?= $newscomment['comment_id'] ?>">
             <td width="20">
                 <label>
-                <input id="news_comments[<?php echo $newscomment['comment_id'] ?>]"
-                       name="news_comments[<?php echo $newscomment['comment_id'] ?>]"
-                       value="<?php echo $newscomment['record_id'] ?>" type="checkbox">
+                <input id="news_comments[<?= $newscomment['comment_id'] ?>]"
+                       name="news_comments[<?= $newscomment['comment_id'] ?>]"
+                       value="<?= $newscomment['record_id'] ?>" type="checkbox">
                 </label>
             </td>
             <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?php echo $newscomment['email'] ?>">
-                        <?php echo $newscomment['username'] ?>
+                    <a href="mailto:<?= $newscomment['email'] ?>">
+                        <?= $newscomment['username'] ?>
                     </a>
                 </span><br/>
-                <?php echo Strings::htmlspecialchars($newscomment['content']) ?>
+                <?= Strings::htmlspecialchars($newscomment['content']) ?>
             </td>
         </tr>
 <?php
@@ -139,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
         </table>
         <p>
             <button class="btn btn-danger" id="submitNewsComments" type="submit" name="submit">
-                <?php echo $PMF_LANG['ad_entry_delete'] ?>
+                <?= $PMF_LANG['ad_entry_delete'] ?>
             </button>
         </p>
         </form>
@@ -172,11 +172,11 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                         $('tr td input:checked').parent().parent().parent().fadeOut('slow');
                         $('#saving_data_indicator').fadeOut('slow');
                         $('#returnMessage').
-                            html('<p class="alert alert-success"><?php echo $PMF_LANG['ad_entry_commentdelsuc'];
+                            html('<p class="alert alert-success"><?= $PMF_LANG['ad_entry_commentdelsuc'];
     ?></p>');
                     } else {
                         $('#returnMessage').
-                            html('<p class="alert alert-danger"><?php echo $PMF_LANG['ad_entry_commentdelfail'] ?></p>');
+                            html('<p class="alert alert-danger"><?= $PMF_LANG['ad_entry_commentdelfail'] ?></p>');
                     }
                 }
             });

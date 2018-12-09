@@ -3,7 +3,7 @@
 /**
  * phpMyFAQ system information.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -52,7 +52,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     ?>
     <header class="row">
         <div class="col-lg-12">
-            <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?php echo $PMF_LANG['ad_system_info'] ?></h2>
+            <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_system_info'] ?></h2>
         </div>
     </header>
 
@@ -78,8 +78,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 ];
                 foreach ($systemInformation as $name => $info): ?>
                     <tr>
-                        <td class="col-lg-2"><strong><?php echo $name ?></strong></td>
-                        <td><?php echo $info ?></td>
+                        <td class="col-lg-2"><strong><?= $name ?></strong></td>
+                        <td><?= $info ?></td>
                     </tr>
                 <?php endforeach;
                 ?>

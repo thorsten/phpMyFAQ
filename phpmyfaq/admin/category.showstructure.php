@@ -2,7 +2,7 @@
 /**
  * build table of all categories in all languages.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 ?>
         <header>
-            <h2 class="page-header"><i class="material-icons">list</i> <?php print $PMF_LANG['ad_menu_categ_structure'] ?></h2>
+            <h2 class="page-header"><i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?></h2>
         </header>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         <table class="table table-striped">
         <thead>
             <tr>
-                <th><?php print $currentLanguage ?></th>
+                <th><?= $currentLanguage ?></th>
                 <?php
                 // get languages in use for all categories
                 $all_languages = $faqConfig->getLanguage()->languageAvailable(0, $table = 'faqcategories');

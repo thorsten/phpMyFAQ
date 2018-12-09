@@ -5,7 +5,7 @@ namespace phpMyFAQ\Mail;
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
- * PHP Version 5.6
+ * 
  *
  * This document is distributed under the MIT licence.
  *

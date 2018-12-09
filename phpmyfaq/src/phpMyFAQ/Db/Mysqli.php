@@ -6,7 +6,7 @@ namespace phpMyFAQ\Db;
  * The phpMyFAQ\Db\Mysqli class provides methods and functions for MySQL 5.x and
  * MariaDB 5.x databases.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

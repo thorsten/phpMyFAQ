@@ -4,7 +4,7 @@
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>.
  *
- * PHP Version 5.6
+ * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -58,7 +58,7 @@ if (!$user instanceof CurrentUser) {
 $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 ?>
 <!DOCTYPE html>
-<html lang="<?php echo $PMF_LANG['metaLanguage']; ?>" class="no-js">
+<html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -67,7 +67,7 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
     <meta name="description" content="Only Chuck Norris can divide by zero.">
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ <?php echo $faqConfig->get('main.currentVersion'); ?>">
+    <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2018 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
 <?php if (isset($user) && ($refreshTime > 0)) {
@@ -95,10 +95,10 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
 
     window.onload = function() {
         var expire = new Date();
-        expire.setSeconds(<?php echo PMF_AUTH_TIMEOUT ?> * 60);
+        expire.setSeconds(<?= PMF_AUTH_TIMEOUT ?> * 60);
         var topRef = top.document.getElementById('sessioncounter');
 
-        window.setTimeout(_PMFSessionTimeoutWarning, <?php echo $refreshTime ?> * 1000);
+        window.setTimeout(_PMFSessionTimeoutWarning, <?= $refreshTime ?> * 1000);
         window.setInterval(
             function() {
                 _PMFSessionTimeoutClock(topRef, expire);

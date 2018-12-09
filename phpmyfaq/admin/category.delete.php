@@ -2,7 +2,7 @@
 /**
  * Deletes a category.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -29,11 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header"><i class="material-icons">list</i> <?php echo $PMF_LANG['ad_categ_deletesure'] ?></h2>
-            </div>
-        </header>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_categ_deletesure'] ?>
+      </h1>
+    </div>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
     $category = new Category($faqConfig, [], false);
@@ -45,28 +45,28 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
         <div class="row">
             <div class="col-lg-12">
                 <form  action="?action=removecategory" method="post" accept-charset="utf-8">
-                    <input type="hidden" name="cat" value="<?php echo $id ?>">
-                    <input type="hidden" name="lang" value="<?php echo $LANGCODE ?>">
-                    <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                    <input type="hidden" name="cat" value="<?= $id ?>">
+                    <input type="hidden" name="lang" value="<?= $LANGCODE ?>">
+                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_titel'] ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                         <div class="col-lg-4">
-                            <p class="form-control-static"><?php echo $categories[$id]['name'] ?></p>
+                            <p class="form-control-static"><?= $categories[$id]['name'] ?></p>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?php echo $PMF_LANG['ad_categ_desc'] ?>:</label>
+                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
                         <div class="col-lg-4">
-                            <?php echo $categories[$id]['description'] ?>
+                            <?= $categories[$id]['description'] ?>
                             <label class="radio">
                                 <input type="radio" checked name="deleteall" value="yes">
-                                <?php echo $PMF_LANG['ad_categ_deletealllang'] ?>
+                                <?= $PMF_LANG['ad_categ_deletealllang'] ?>
                             </label>
                             <label class="radio">
                                 <input type="radio" name="deleteall" value="no">
-                                <?php echo $PMF_LANG['ad_categ_deletethislang'] ?>
+                                <?= $PMF_LANG['ad_categ_deletethislang'] ?>
                             </label>
                         </div>
                     </div>
@@ -74,10 +74,10 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                     <div class="form-group row">
                         <div class="col-lg-offset-2 col-lg-4">
                             <button class="btn btn-danger" type="submit" name="submit">
-                                <?php echo $PMF_LANG['ad_categ_del_yes'] ?>
+                                <?= $PMF_LANG['ad_categ_del_yes'] ?>
                             </button>
                             <a class="btn btn-success" onclick="javascript:history.back();">
-                                <?php echo $PMF_LANG['ad_categ_del_no'] ?>
+                                <?= $PMF_LANG['ad_categ_del_no'] ?>
                             </a>
                         </div>
                     </div>

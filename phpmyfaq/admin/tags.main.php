@@ -2,7 +2,7 @@
 /**
  * Frontend for Tags.
  *
- * PHP Version 5.6
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tags"></i> <?php echo $PMF_LANG['ad_entry_tags'] ?>
+                <i aria-hidden="true" class="fa fa-tags"></i> <?= $PMF_LANG['ad_entry_tags'] ?>
             </h2>
         </div>
     </header>
@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <div class="row">
         <div class="col-lg-12">
             <form action="" method="post" class="tag-form">
-                <input type="hidden" name="csrf" value="<?php echo $user->getCsrfTokenFromSession() ?>">
+                <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
     $tags = new Tags($faqConfig);

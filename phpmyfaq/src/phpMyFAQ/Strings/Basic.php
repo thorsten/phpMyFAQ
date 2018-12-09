@@ -5,7 +5,7 @@ namespace phpMyFAQ\Strings;
 /**
  * The string wrapper class using single byte string functions.
  *
- * PHP Version 5.6.0
+ * .0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can

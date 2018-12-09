@@ -19,8 +19,8 @@
 $(document).ready(function () {
     'use strict';
 
-    $('h4.category-header').click(function () {
-        var div = $('#div_' + $(this).data('category-id'));
+    $('h5.category-header').on('click', () => {
+        const div = $('#div_' + $(this).data('category-id'));
         if (div.css('display') === 'none') {
             div.fadeIn('fast');
         } else {
