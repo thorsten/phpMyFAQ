@@ -272,7 +272,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">people</i>
+            <i aria-hidden="true" class="fas fa-users"></i>
               <?= $PMF_LANG['ad_group_add'] ?>
           </h1>
         </div>
@@ -334,7 +334,7 @@ if ('list' === $groupAction) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">people</i>
+            <i aria-hidden="true" class="fas fa-users"></i>
               <?= $PMF_LANG['ad_menu_group_administration'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
@@ -440,13 +440,13 @@ if ('list' === $groupAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectSelectAll('group_user_list')">
-                                        <i aria-hidden="true" class="material-icons">people</i>
+                                        <i aria-hidden="true" class="fas fa-user-plus"></i>
                                     </a>
                                 </span>
                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectUnselectAll('group_user_list')">
-                                        <i aria-hidden="true" class="material-icons">people_outline</i>
+                                        <i aria-hidden="true" class="fas fa-user-minus"></i>
                                     </a>
                                 </span>
               </div>
@@ -479,13 +479,13 @@ if ('list' === $groupAction) {
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('group_member_list')">
-                        <i aria-hidden="true" class="material-icons">people</i>
+                        <i aria-hidden="true" class="fas fa-user-plus"></i>
                     </a>
                 </span>
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('group_member_list')">
-                      <i aria-hidden="true" class="material-icons">people_outline</i>
+                      <i aria-hidden="true" class="fas fa-user-minus"></i>
                   </a>
                 </span>
               </div>

@@ -173,7 +173,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">people</i>
+            <i aria-hidden="" class="fas fa-user"></i>
               <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
           </h1>
         </div>
@@ -341,7 +341,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i class="material-icons md-36">people</i>
+          <i aria-hidden="" class="fas fa-user"></i>
             <?= $PMF_LANG['ad_adus_adduser'] ?>
         </h1>
       </div>
@@ -423,7 +423,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i class="material-icons md-36">person</i>
+          <i aria-hidden="" class="fas fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -498,15 +498,15 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                     <input type="hidden" id="user_list_select" name="user_list_select" value="">
                     <div class="card">
                         <div class="card-header">
-                            <i aria-hidden="true" class="material-icons">search</i> <?= $PMF_LANG['msgSearch'] ?>
+                            <i aria-hidden="true" class="fas fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
                         </div>
                         <div class="card-body">
                             <div class="input-group">
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
                                        class="form-control pmf-user-autocomplete"
                                        placeholder="<?= $PMF_LANG['ad_auth_user'] ?>">
-                                <button class="btn btn-primary" type="submit">
-                                    <i aria-hidden="true" class="material-icons">delete</i>
+                                <button class="btn btn-danger" type="submit">
+                                    <i aria-hidden="true" class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
@@ -517,7 +517,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header" id="user_data_legend">
-                        <i aria-hidden="true" class="material-icons">person</i> <?= $PMF_LANG['ad_user_profou'] ?>
+                      <i aria-hidden="true" class="fas fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
                     </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
                           >
@@ -555,7 +555,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
                     <div class="card">
                         <div class="card-header" id="user_rights_legend">
-                            <i aria-hidden="true" class="material-icons">lock</i> <?= $PMF_LANG['ad_user_rights'] ?>
+                            <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
                             <span class="float-right">
                                 <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                                     <?= $PMF_LANG['ad_user_checkall'] ?>
@@ -667,7 +667,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">people</i>
+            <i aria-hidden="" class="fas fa-user"></i>
               <?= $PMF_LANG['ad_user'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
@@ -720,20 +720,20 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             ?>
             <tr class="row_user_id_<?= $user->getUserId() ?>">
                 <td><?= $user->getUserId() ?></td>
-                <td><i class="material-icons icon_user_id_<?= $user->getUserId() ?>"><?php
+                <td><i class="fas <?php
                 switch ($user->getStatus()) {
                     case 'active':
-                        echo 'check_circle';
+                        echo 'fa-user-check';
                         break;
                     case 'blocked':
-                        echo 'block';
+                        echo 'fa-ban';
                         break;
                     case 'protected':
-                        echo 'security';
+                        echo 'fa-user-lock';
                         break;
                 }
-            ?></i></td>
-                <td><i class="material-icons"><?= $user->isSuperAdmin() ? 'check_circle' : 'not_interested' ?></i></td>
+            ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+                <td><i class="fas <?= $user->isSuperAdmin() ? 'fa-user-tie' : 'fa-user-minus' ?>"></i></td>
                 <td><?= $user->getUserData('display_name') ?></td>
                 <td><?= $user->getLogin() ?></td>
                 <td>

@@ -244,7 +244,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i class="material-icons md-36">domain</i>
+          <i aria-hidden="true" class="fas fa-layer-group"></i>
             <?= $PMF_LANG['ad_section_add'] ?>
         </h1>
       </div>
@@ -294,7 +294,7 @@ if ('list' === $sectionAction) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i class="material-icons md-36">domain</i>
+            <i aria-hidden="true" class="fas fa-layer-group"></i>
               <?= $PMF_LANG['ad_menu_section_administration'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
@@ -388,13 +388,13 @@ if ('list' === $sectionAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectSelectAll('group_list_select')">
-                                        <i aria-hidden="true" class="material-icons">domain</i>
+                                        <i aria-hidden="true" class="fas fa-layer-group"></i>
                                     </a>
                                 </span>
                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectUnselectAll('group_list_select')">
-                                        <i aria-hidden="true" class="material-icons">people_outline</i>
+                                        <i aria-hidden="true" class="fas fa-user-minus"></i>
                                     </a>
                                 </span>
               </div>
@@ -427,13 +427,13 @@ if ('list' === $sectionAction) {
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('section_member_list')">
-                        <i aria-hidden="true" class="material-icons">domain</i>
+                        <i aria-hidden="true" class="fas fa-layer-group"></i>
                     </a>
                 </span>
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('section_member_list')">
-                      <i aria-hidden="true" class="material-icons">people_outline</i>
+                       <i aria-hidden="true" class="fas fa-user-minus"></i>
                   </a>
                 </span>
               </div>
