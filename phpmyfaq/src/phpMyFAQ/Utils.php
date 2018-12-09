@@ -178,7 +178,7 @@ class Utils
         $num = count($arrStr);
 
         if ($num > $char) {
-            for ($j = 0; $j <= $char; ++$j) {
+            for ($j = 0; $j < $char; ++$j) {
                 $shortStr .= $arrStr[$j].' ';
             }
             $shortStr .= '...';
