@@ -39,12 +39,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-  <h1 class="h2">
-    <i class="material-icons md-36">edit</i>
-      <?= $PMF_LANG['ad_entry_aor'] ?>
-  </h1>
-</div>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-list-alt"></i>
+              <?= $PMF_LANG['ad_entry_aor'] ?>
+          </h1>
+        </div>
+
         <div class="row">
             <div class="col-lg-12">
 <?php

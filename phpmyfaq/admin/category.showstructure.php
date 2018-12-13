@@ -31,9 +31,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        <header>
-            <h2 class="page-header"><i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?></h2>
-        </header>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_structure'] ?>
+          </h1>
+        </div>
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category = new Category($faqConfig, [], false);

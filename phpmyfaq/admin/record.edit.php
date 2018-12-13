@@ -218,7 +218,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="material-icons md-36">edit</i>
+            <i aria-hidden="true" class="fas fa-edit"></i>
             <?= $PMF_LANG['ad_entry_edit_1'] ?>
             <?= $PMF_LANG['ad_entry_edit_2'] ?>
         </h1>
@@ -243,7 +243,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
 <?php } else { ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="material-icons md-36">edit</i>
+          <i aria-hidden="true" class="fas fa-edit"></i>
             <?= $PMF_LANG['ad_entry_add'] ?>
         </h1>
     </div>

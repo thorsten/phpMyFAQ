@@ -31,21 +31,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_edit'] ?>
-                    <div class="float-right">
-                        <a class="btn btn-success" href="?action=addcategory">
-                            <i aria-hidden="true" class="fas fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
-                        </a>
-                        <a class="btn btn-info" href="?action=showcategory">
-                          <i aria-hidden="true" class="fas fa-list"></i> <?= $PMF_LANG['ad_categ_show'];?>
-                        </a>
-                    </div>
-                </h2>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-folder"></i> <?= $PMF_LANG['ad_menu_categ_edit'] ?>
+          </h1>
+          <div class="btn-toolbar mb-2 mb-md-0">
+            <div class="btn-group mr-2">
+              <a class="btn btn-sm btn-outline-success" href="?action=addcategory">
+                  <i aria-hidden="true" class="fas fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
+              </a>
+              <a class="btn btn-sm btn-outline-info" href="?action=showcategory">
+                <i aria-hidden="true" class="fas fa-list"></i> <?= $PMF_LANG['ad_categ_show'];?>
+              </a>
             </div>
-        </header>
+          </div>
+        </div>
+
 
         <div class="row">
             <div class="col-lg-12">

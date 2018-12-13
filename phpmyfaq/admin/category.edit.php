@@ -60,13 +60,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $header = $PMF_LANG['ad_categ_edit_1'].' "'.$categoryData->getName().'" '.$PMF_LANG['ad_categ_edit_2'];
     ?>
 
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i class="material-icons">list</i> <?= $header ?>
-                </h2>
-            </div>
-        </header>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-folder"></i> <?= $header ?>
+          </h1>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
