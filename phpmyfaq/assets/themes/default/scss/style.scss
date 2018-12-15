@@ -19,6 +19,18 @@
 @import '../../../../../node_modules/bootstrap/scss/bootstrap';
 @import 'mixins';
 
+// Font Awesome
+$fa-font-path: '../fonts';
+
+@import '../../../../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
+@import '../../../../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
+@import '../../../../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
+
+// RSS Icon
+.fas.fa-rss-square {
+  color: orange;
+}
+
 //
 // MAIN LAYOUT
 //
