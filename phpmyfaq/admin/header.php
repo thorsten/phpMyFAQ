@@ -55,7 +55,7 @@ switch ($action) {
     case 'passwd':
     case 'cookies':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_users'];
-        $secLevelEntries .= $adminHelper->addMenuEntry('adduser+edituser+deluser', 'user', 'ad_menu_user_administration', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('add_user+edit_user+delete_user', 'user', 'ad_menu_user_administration', $action);
         if ($faqConfig->get('security.permLevel') !== 'basic') {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }

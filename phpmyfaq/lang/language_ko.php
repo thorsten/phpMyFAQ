@@ -508,7 +508,7 @@ $PMF_LANG["ad_export_generate"] = "RSS-Feed 만들기";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "사용자 추가";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "사용자 수정";
-$PMF_LANG["rightsLanguage"]['deluser'] = "사용자 삭제";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "사용자 삭제";
 $PMF_LANG["rightsLanguage"]['addbt'] = "내용 추가";
 $PMF_LANG["rightsLanguage"]['editbt'] = "내용 수정";
 $PMF_LANG["rightsLanguage"]['delbt'] = "내용 삭제";

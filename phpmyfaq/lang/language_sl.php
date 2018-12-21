@@ -508,7 +508,7 @@ $PMF_LANG["ad_export_generate"] = "ustvari RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "dodaj uporabnika";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "uredi uporabnika";
-$PMF_LANG["rightsLanguage"]['deluser'] = "odstrani uporabnika";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "odstrani uporabnika";
 $PMF_LANG["rightsLanguage"]['addbt'] = "dodaj zapis";
 $PMF_LANG["rightsLanguage"]['editbt'] = "uredi zapis";
 $PMF_LANG["rightsLanguage"]['delbt'] = "odstrani zapis";

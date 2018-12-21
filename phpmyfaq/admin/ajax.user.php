@@ -45,7 +45,7 @@ $http->addHeader();
 
 if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
     $user->perm->checkRight($user->getUserId(), 'edit_user') ||
-    $user->perm->checkRight($user->getUserId(), 'deluser')) {
+    $user->perm->checkRight($user->getUserId(), 'delete_user')) {
     $user = new User($faqConfig);
 
     switch ($ajaxAction) {

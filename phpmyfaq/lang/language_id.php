@@ -507,7 +507,7 @@ $PMF_LANG["ad_export_generate"] = "bangun Pasokan-RSS";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "tambah pengguna";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "edit pengguna";
-$PMF_LANG["rightsLanguage"]['deluser'] = "hapus pengguna";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "hapus pengguna";
 $PMF_LANG["rightsLanguage"]['addbt'] = "tambah data";
 $PMF_LANG["rightsLanguage"]['editbt'] = "edit data";
 $PMF_LANG["rightsLanguage"]['delbt'] = "hapus data";

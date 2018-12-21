@@ -510,7 +510,7 @@ $PMF_LANG["ad_export_generate"] = "kreiraj RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "dodavanja korisnika";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "izmena korisnika";
-$PMF_LANG["rightsLanguage"]['deluser'] = "brisanje korisnika";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "brisanje korisnika";
 $PMF_LANG["rightsLanguage"]['addbt'] = "dodavanje unosa";
 $PMF_LANG["rightsLanguage"]['editbt'] = "izmena unosa";
 $PMF_LANG["rightsLanguage"]['delbt'] = "brisanje unosa";

@@ -649,6 +649,7 @@ if ($step == 3) {
         // Rename rights
         $perm->renameRight('adduser', 'add_user');
         $perm->renameRight('edituser', 'edit_user');
+        $perm->renameRight('delete_user', 'delete_user');
     }
 
     // Always the last step: Update version number

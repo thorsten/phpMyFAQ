@@ -35,7 +35,7 @@ $groupId = Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
 
 if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
     $user->perm->checkRight($user->getUserId(), 'edit_user') ||
-    $user->perm->checkRight($user->getUserId(), 'deluser') ||
+    $user->perm->checkRight($user->getUserId(), 'delete_user') ||
     $user->perm->checkRight($user->getUserId(), 'editgroup')) {
     
     // pass the user id of the current user so it'll check which group he belongs to

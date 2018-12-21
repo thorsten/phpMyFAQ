@@ -507,7 +507,7 @@ $PMF_LANG["ad_export_generate"] = "build RSS-Feed";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "pridať užívateľa";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "upraviť užívateľa";
-$PMF_LANG["rightsLanguage"]['deluser'] = "vymazať užívateľa";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "vymazať užívateľa";
 $PMF_LANG["rightsLanguage"]['addbt'] = "pridať záznam";
 $PMF_LANG["rightsLanguage"]['editbt'] = "upraviť záznam";
 $PMF_LANG["rightsLanguage"]['delbt'] = "vymazať záznam";

@@ -488,7 +488,7 @@ $PMF_LANG["ad_menu_export"] = "匯出您的 FAQ ";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "新增使用者";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "編輯使用者";
-$PMF_LANG["rightsLanguage"]['deluser'] = "刪除使用者";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "刪除使用者";
 $PMF_LANG["rightsLanguage"]['addbt'] = "新增記錄";
 $PMF_LANG["rightsLanguage"]['editbt'] = "編輯記錄";
 $PMF_LANG["rightsLanguage"]['delbt'] = "刪除記錄";

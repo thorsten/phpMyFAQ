@@ -506,7 +506,7 @@ $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "Add user";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "Edit user";
-$PMF_LANG["rightsLanguage"]['deluser'] = "Delete user";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "Delete user";
 $PMF_LANG["rightsLanguage"]['addbt'] = "Add record";
 $PMF_LANG["rightsLanguage"]['editbt'] = "Edit record";
 $PMF_LANG["rightsLanguage"]['delbt'] = "Delete record";
@@ -1313,3 +1313,4 @@ $PMF_LANG['ad_section_error_delete'] = "Section could not be deleted. ";
 $PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
 $PMF_LANG['ad_section_suc'] = "Section <strong>successfully</strong> added.";
 $PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
+$PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';

@@ -65,7 +65,7 @@ class Installer
             'description' => 'Right to edit user accounts',
         ],
         [
-            'name' => 'deluser',
+            'name' => 'delete_user',
             'description' => 'Right to delete user accounts',
         ],
         //4 => "addbt",

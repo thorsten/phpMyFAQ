@@ -516,7 +516,7 @@ $PMF_LANG["ad_export_generate"] = "RSSF-Feed sortu";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "erabiltzailea gehitu";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "erabiltzailea editatu";
-$PMF_LANG["rightsLanguage"]['deluser'] = "erabiltzailea ezabatu";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "erabiltzailea ezabatu";
 $PMF_LANG["rightsLanguage"]['addbt'] = "erregistroa gehitu";
 $PMF_LANG["rightsLanguage"]['editbt'] = "erregistroa editatu";
 $PMF_LANG["rightsLanguage"]['delbt'] = "erregistroa ezabatu";

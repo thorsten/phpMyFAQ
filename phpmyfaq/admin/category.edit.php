@@ -102,7 +102,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <div class="checkbox">
                         <label>
                             <input type="checkbox" name="active" value="1"
-                                   <?php echo(1 === (int)$categoryData->getActive() ? 'checked' : '') ?>>
+                                   <?= (1 === (int)$categoryData->getActive() ? 'checked' : '') ?>>
                             <?= $PMF_LANG['ad_user_active'] ?>
                         </label>
                     </div>
@@ -114,7 +114,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <div class="checkbox">
                 <label>
                   <input type="checkbox" name="show_home" value="1"
-                      <?php echo(1 === (int)$categoryData->getShowHome() ? 'checked' : '') ?>>
+                      <?= (1 === (int)$categoryData->getShowHome() ? 'checked' : '') ?>>
                   <?= $PMF_LANG['ad_user_show_home'] ?>
                 </label>
               </div>
@@ -202,12 +202,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <div class="col-lg-4">
                     <label class="radio">
                         <input type="radio" name="userpermission" value="all"
-                            <?php echo($allUsers ? 'checked' : '') ?>>
+                            <?= ($allUsers ? 'checked' : '') ?>>
                         <?= $PMF_LANG['ad_entry_all_users'] ?>
                     </label>
                     <label class="radio">
                         <input type="radio" name="userpermission" value="restricted"
-                            <?php echo($restrictedUsers ? 'checked' : '') ?>>
+                            <?= ($restrictedUsers ? 'checked' : '') ?>>
                         <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                     </label>
                     <select name="restricted_users" class="form-control" size="1">

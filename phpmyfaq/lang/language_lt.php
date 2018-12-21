@@ -513,7 +513,7 @@ $PMF_LANG["ad_export_generate"] = "sukurti sklaidos kanalą";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "pridėti naudotoją";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "redaguoti naudotoją";
-$PMF_LANG["rightsLanguage"]['deluser'] = "šalinti naudotoją";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "šalinti naudotoją";
 $PMF_LANG["rightsLanguage"]['addbt'] = "pridėti įrašą";
 $PMF_LANG["rightsLanguage"]['editbt'] = "redaguoti įrašą";
 $PMF_LANG["rightsLanguage"]['delbt'] = "šalinti įrašą";

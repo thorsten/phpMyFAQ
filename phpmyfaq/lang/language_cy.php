@@ -511,7 +511,7 @@ $PMF_LANG["ad_export_generate"] = "Adeiladu RSS-Bwydo";
 
 $PMF_LANG["rightsLanguage"]['add_user'] = "ychwanegu defnyddiwr";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "golygu defnyddiwr";
-$PMF_LANG["rightsLanguage"]['deluser'] = "dileu defnyddiwr";
+$PMF_LANG["rightsLanguage"]['delete_user'] = "dileu defnyddiwr";
 $PMF_LANG["rightsLanguage"]['addbt'] = "ychwanegu cofnod";
 $PMF_LANG["rightsLanguage"]['editbt'] = "golygu cofnod";
 $PMF_LANG["rightsLanguage"]['delbt'] = "dileu cofnod";

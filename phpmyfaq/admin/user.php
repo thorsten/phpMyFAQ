@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
-    $user->perm->checkRight($user->getUserId(), 'deluser') ||
+    $user->perm->checkRight($user->getUserId(), 'delete_user') ||
     $user->perm->checkRight($user->getUserId(), 'add_user')) {
 ?>
     <script src="assets/js/user.js"></script>
@@ -154,7 +154,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
 
     // delete user confirmation
-    if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
+    if ($userAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delete_user')) {
         $message = '';
         $user = new CurrentUser($faqConfig);
 
@@ -200,7 +200,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
 
     // delete user
-    if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'deluser')) {
+    if ($userAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delete_user')) {
         $message = '';
         $user = new User($faqConfig);
         $userId = Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT, 0);
