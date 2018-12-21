@@ -5,11 +5,11 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-alpha.3 - 2018-08-
+Version 3.0.0-alpha.3 - 2018-12-21
 - changed PHP requirement to PHP 7.1+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
-- added large permissions support with sections (Timo Wolf, Thorsten)
+- added experimental large permissions support with sections (Timo Wolf, Thorsten)
 - added support for Elasticsearch v5+ (Thorsten)
 - added LDAP configuration frontend (Thorsten)
 - added configuration for enable/disable XML sitemap (Thorsten)
@@ -46,7 +46,7 @@ Version 3.0.0-alpha.3 - 2018-08-
 - removed Bower, now using Yarn only (Thorsten)
 - removed Modernizr (Thorsten)
 
-Version 2.9.11 - 2018-08-
+Version 2.9.11 - 2018-09-02
 - fixed multiple vulnerabilities (Thorsten)
 - updated bundled jQuery to version 1.12.4 (Thorsten)
 - updated bundled Handlebars to version 4.0.11 (Thorsten)
