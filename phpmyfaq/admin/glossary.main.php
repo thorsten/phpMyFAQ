@@ -31,10 +31,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_menu_glossary'] ?>
+                    <i aria-hidden="true" class="fas fa-list-ul"></i> <?= $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="float-right">
-                        <a class="btn btn-success" href="?action=addglossary">
-                            <i class="material-icons">add</i> <?= $PMF_LANG['ad_glossary_add'] ?>
+                        <a class="btn btn-sm btn-outline-success" href="?action=addglossary">
+                            <i aria-hidden="true" class="fas fa-plus"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>
                 </h2>

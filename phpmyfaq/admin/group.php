@@ -163,7 +163,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users fa-fw"></i>
+                    <i aria-hidden="true" class="fas fa-users fa-fw"></i>
                     <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
                 </h2>
             </div>
@@ -515,7 +515,7 @@ if ('list' === $groupAction) {
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <div class="card-header" id="user_rights_legend">
-            <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
+            <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
             <span class="float-right">
               <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
                 <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>

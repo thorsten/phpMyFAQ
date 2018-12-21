@@ -87,7 +87,7 @@ $(document).ready(function () {
                 '<a href="../index.php?action=attachment&id=' + attachmentId + '">' + fileName + '</a>' +
                 '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' + recordId +
                 '&amp;id=' + attachmentId + '&amp;lang=' + recordLang + '">' +
-                '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
+                '<i aria-hidden="true" class="fas fa-trash"></i></a>' +
                 '</li>'
             );
         window.close();

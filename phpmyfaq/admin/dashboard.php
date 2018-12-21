@@ -134,7 +134,7 @@ $faqSession = new Session($faqConfig);
                         <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
                            Available on the App Store
                             <span class="float-right text-muted small">
-                                <i aria-hidden="true" class="fa fa-heart"></i>
+                                <i aria-hidden="true" class="fas fa-heart"></i>
                             </span>
                         </a>
                     </div>
@@ -150,7 +150,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> <?= $PMF_LANG['ad_online_info']; ?>
+                    <i aria-hidden="true" class="fas fa-info-circle fa-fw"></i> <?= $PMF_LANG['ad_online_info']; ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -177,7 +177,7 @@ $faqSession = new Session($faqConfig);
                         <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="param" value="version" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
+                                <i aria-hidden="true" class="fas fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
                         ?>
                             </button>
                         </form>
@@ -191,7 +191,7 @@ $faqSession = new Session($faqConfig);
         <div class="col-lg-6">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
+                    <i aria-hidden="true" class="fas fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
                 </div>
                 <div class="panel-body">
                     <?php
@@ -229,7 +229,7 @@ $faqSession = new Session($faqConfig);
                         <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post" accept-charset="utf-8">
                             <input type="hidden" name="getJson" value="verify" />
                             <button class="btn btn-primary" type="submit">
-                                <i aria-hidden="true" class="fa fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
+                                <i aria-hidden="true" class="fas fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
                             </button>
                         </form>
                     <?php

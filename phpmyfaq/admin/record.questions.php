@@ -29,13 +29,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['msgOpenQuestions'] ?>
-                </h2>
-            </div>
-        </header>
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">
+            <i aria-hidden="true" class="fas fa-pen"></i>
+              <?= $PMF_LANG['msgOpenQuestions'] ?>
+          </h1>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">

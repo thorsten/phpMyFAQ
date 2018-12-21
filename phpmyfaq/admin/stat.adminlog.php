@@ -73,12 +73,12 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'];
+                <i aria-hidden="true" class="fas fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'];
     ?>
                 <div class="float-right">
                     <a class="btn btn-danger"
                        href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                        <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_adminlog_del_older_30d'] ?>
+                        <i aria-hidden="true" class="fas fa-trash"></i> <?= $PMF_LANG['ad_adminlog_del_older_30d'] ?>
                     </a>
                 </div>
             </h2>

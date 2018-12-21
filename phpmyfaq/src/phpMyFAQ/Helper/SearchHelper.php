@@ -394,13 +394,13 @@ class SearchHelper extends Helper
         $html = sprintf('<span title="%01.2f%%">', $relevance);
 
         if (0 === (int)$relevance) {
-            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fas fa-star-o"></i><i aria-hidden="true" class="fas fa-star-o"></i><i aria-hidden="true" class="fas fa-star-o"></i>';
         } elseif ($relevance < 33) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fas fa-star"></i><i aria-hidden="true" class="fas fa-star-o"></i><i aria-hidden="true" class="fas fa-star-o"></i>';
         } elseif ($relevance < 66) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fas fa-star"></i><i aria-hidden="true" class="fas fa-star"></i><i aria-hidden="true" class="fas fa-star-o"></i>';
         } else {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>';
+            $html .= '<i aria-hidden="true" class="fas fa-star"></i><i aria-hidden="true" class="fas fa-star"></i><i aria-hidden="true" class="fas fa-star"></i>';
         }
 
         return $html.'</span>';

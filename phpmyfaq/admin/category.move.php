@@ -69,7 +69,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     } ?>
                             </select>
                             <?php printf(
-                                '<p class="help-block"><i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> %s</p>',
+                                '<p class="help-block"><i aria-hidden="true" class="fas fa-info-circle fa-fw"></i> %s</p>',
                                 $PMF_LANG['ad_categ_remark_move']
                             ); ?>
                         </div>

@@ -39,7 +39,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
     if ($faqConfig->get('search.enableElasticsearch')) {
         try {
-            $esInformation = $faqConfig->getElasticsearch()->cat()->master([$esConfig['index']]);
+            $esFullInformation = $faqConfig->getElasticsearch()->info();
+            $esInformation = $esFullInformation['version']['number'];
         } catch (BadRequest400Exception $e) {
             $esInformation = $e->getMessage();
         } catch (NoNodesAvailableException $e) {
@@ -48,13 +49,13 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     } else {
         $esInformation = 'n/a';
     }
-
     ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_system_info'] ?></h2>
-        </div>
-    </header>
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">
+          <i aria-hidden="true" class="fas fa-wrench"></i>
+            <?= $PMF_LANG['ad_system_info'] ?>
+        </h1>
+      </div>
 
     <div class="row">
         <div class="col-lg-12">
@@ -74,7 +75,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     'Database Server' => Db::getType(),
                     'Database Server Version' => $faqConfig->getDb()->serverVersion(),
                     'Database Client Version' => $faqConfig->getDb()->clientVersion(),
-                    'Elasticsearch' => $esInformation
+                    'Elasticsearch Version' => $esInformation
                 ];
                 foreach ($systemInformation as $name => $info): ?>
                     <tr>

@@ -176,7 +176,7 @@ class News
             }
 
             $output .= sprintf(
-                '<header><h3><a name="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h3></header>',
+                '<header><h3><a name="news_%d" href="%s">%s <i aria-hidden="true" class="fas fa-caret-right"></i></a></h3></header>',
                 $item['id'],
                 $oLink->toString(),
                 $item['header'],

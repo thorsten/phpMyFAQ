@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header>
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-book fa-fw"></i> <?= $PMF_LANG['ad_menu_export'] ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-book fa-fw"></i> <?= $PMF_LANG['ad_menu_export'] ?></h2>
             </div>
         </header>
 

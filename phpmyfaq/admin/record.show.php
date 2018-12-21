@@ -440,7 +440,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                                         </label>
                                         <?php } else { ?>
-                                        <span class="badge badge-important"><i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i></span>
+                                        <span class="badge badge-important"><i aria-hidden="true" class="fas fa-white fa fa-ban-circle"></i></span>
                                         <?php } ?>
                                     </td>
                                     <td>

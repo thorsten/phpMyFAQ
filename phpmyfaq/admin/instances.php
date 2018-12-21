@@ -34,12 +34,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
+                <i aria-hidden="true" class="fas fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
                           is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')): ?>
                     <div class="float-right">
-                        <a class="btn btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                            <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
+                        <a class="btn btn-sm btn-outline-success" data-toggle="modal" href="#pmf-modal-add-instance">
+                            <i aria-hidden="true" class="fas fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
                         </a>
                     </div>
                 <?php endif; ?>
@@ -111,7 +111,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             <td><?= $site->comment ?></td>
             <td>
                 <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
-                    <i aria-hidden="true" class="fa fa-pencil"></i>
+                    <i aria-hidden="true" class="fas fa-pencil"></i>
                 </a>
             </td>
             <td>
@@ -119,7 +119,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                 <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
                    class="btn btn-danger pmf-instance-delete"
                    data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
-                    <i aria-hidden="true" class="fa fa-trash"></i>
+                    <i aria-hidden="true" class="fas fa-trash"></i>
                 </a>
                 <?php endif; ?>
             </td>
@@ -236,11 +236,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                                 '<td>' + comment + '</td>' +
                                 '<td>' +
                                 '<a href="?action=editinstance&instance_id=' + data.added +
-                                '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
+                                '" class="btn btn-info"><i aria-hidden="true" class="fas fa-pencil"></i></a>' +
                                 '</td>' +
                                 '<td>' +
                                 '<a href="javascript:;" id="delete-instance-' + data.added +
-                                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
+                                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fas fa-trash"></i></a>' +
                                 '</td>' +
                                 '</tr>'
                             );

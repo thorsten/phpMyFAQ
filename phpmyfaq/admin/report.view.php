@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports']; ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports']; ?></h2>
             </div>
         </header>
 

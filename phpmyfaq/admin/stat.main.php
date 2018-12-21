@@ -34,11 +34,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_stat_sess'] ?>
+                    <i aria-hidden="true" class="fas fa-tasks"></i> <?= $PMF_LANG['ad_stat_sess'] ?>
                     <div class="float-right">
                         <a class="btn btn-danger"
                            href="?action=clear-visits&csrf=<?= $user->getCsrfTokenFromSession() ?>">
-                            <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_clear_all_visits'] ?>
+                            <i aria-hidden="true" class="fas fa-trash"></i> <?= $PMF_LANG['ad_clear_all_visits'] ?>
                         </a>
                     </div>
                 </h2>

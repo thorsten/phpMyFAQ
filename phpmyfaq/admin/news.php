@@ -45,7 +45,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['ad_news_add'] ?></h2>
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['ad_news_add'] ?></h2>
             </div>
         </header>
 
@@ -183,10 +183,10 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['msgNews'] ?>
+                    <i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['msgNews'] ?>
                     <div class="float-right">
                         <a class="btn btn-success" href="?action=addnews">
-                            <i aria-hidden="true" class="fa fa-plus fa fa-white"></i> <?= $PMF_LANG['ad_menu_news_add'] ?>
+                            <i aria-hidden="true" class="fas fa-plus fa fa-white"></i> <?= $PMF_LANG['ad_menu_news_add'] ?>
                         </a>
                     </div>
                 </h2>
@@ -220,13 +220,13 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
                             <a class="btn btn-primary" href="?action=editnews&amp;id=<?= $newsItem['id'];
             ?>">
                                 <span title="<?= $PMF_LANG['ad_news_update'];
-            ?>" class="fa fa-edit"></span>
+            ?>" class="fas fa-edit"></span>
                             </a>
                             &nbsp;&nbsp;
                             <a class="btn btn-danger" href="?action=deletenews&amp;id=<?= $newsItem['id'];
             ?>">
                                 <span title="<?= $PMF_LANG['ad_news_delete'];
-            ?>" class="fa fa-trash-o"></span>
+            ?>" class="fas fa-trash-o"></span>
                             </a>
                         </td>
                     </tr>
@@ -252,7 +252,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['ad_news_edit'];
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['ad_news_edit'];
     ?></h2>
             </div>
         </header>
@@ -474,7 +474,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
     ?></h2>
             </div>
         </header>
@@ -527,7 +527,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
     ?></h2>
             </div>
         </header>
@@ -580,7 +580,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
     ?>
         <header class="row">
             <div class="col-lg-12">
-                <h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
+                <h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> <?= $PMF_LANG['ad_news_data'];
     ?></h2>
             </div>
         </header>

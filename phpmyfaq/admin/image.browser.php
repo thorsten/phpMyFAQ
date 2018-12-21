@@ -60,7 +60,7 @@ if ($user) {
         </label>
         <input type="text" class="form-control" id="filter" value=""
                placeholder="<?= $PMF_LANG['ad_image_name_search'] ?>">
-        <span class="input-group-addon"><i aria-hidden="true" class="fa fa-search"></i></span>
+        <span class="input-group-addon"><i aria-hidden="true" class="fas fa-search"></i></span>
     </div>
 </form>
 

@@ -35,10 +35,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_searchstats'] ?>
+                    <i aria-hidden="true" class="fas fa-tasks"></i> <?= $PMF_LANG['ad_menu_searchstats'] ?>
                     <div class="float-right">
                         <a class="btn btn-danger" href="?action=truncatesearchterms">
-                            <i aria-hidden="true" class="fa fa-trash-o fa-fw"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
+                            <i aria-hidden="true" class="fas fa-trash-o fa-fw"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
                         </a>
                     </div>
                 </h2>

@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
+                <i aria-hidden="true" class="fas fa-wrench"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
             </h2>
         </div>
     </header>

@@ -80,7 +80,7 @@ class CaptchaHelper extends Helper
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(
-                '<a class="btn btn-primary" id="%s" data-action="%s"><i aria-hidden="true" class="fa fa-refresh"></i></a>',
+                '<a class="btn btn-primary" id="%s" data-action="%s"><i aria-hidden="true" class="fas fa-refresh"></i></a>',
                 self::FORM_BUTTON,
                 $action
             );

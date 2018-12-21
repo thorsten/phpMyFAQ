@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
+                    <i aria-hidden="true" class="fas fa-list-ul"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
                 </h2>
             </div>
         </header>

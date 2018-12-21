@@ -126,7 +126,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         $logging->logAdmin($user, 'Beitragsave '.$recordId);
 
         printf(
-            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
+            '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> %s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']
         );
 

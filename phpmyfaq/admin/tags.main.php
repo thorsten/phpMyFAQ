@@ -30,13 +30,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tags"></i> <?= $PMF_LANG['ad_entry_tags'] ?>
-            </h2>
-        </div>
-    </header>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i aria-hidden="true" class="fas fa-tags"></i>
+          <?= $PMF_LANG['ad_entry_tags'] ?>
+      </h1>
+    </div>
 
     <div class="row">
         <div class="col-lg-12">
@@ -68,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
         echo '<tr>';
         echo '<td><span data-tag-id="'.$key.'">'.Strings::htmlspecialchars($tag).'</span></td>';
         printf(
-            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
+            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fas fa-edit"></i></a></td>',
             $key,
             $PMF_LANG['ad_user_edit']
         );

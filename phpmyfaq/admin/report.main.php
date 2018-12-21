@@ -30,7 +30,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                  <i aria-hidden="true" class="fa fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports'] ?>
+                  <i aria-hidden="true" class="fas fa-tasks"></i>  <?= $PMF_LANG['ad_menu_reports'] ?>
                 </h2>
             </div>
         </header>

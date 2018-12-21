@@ -59,7 +59,7 @@ if ($user) {
     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
     <div id="pmf-upload-progress" class="hidden">
-        <i aria-hidden="true" class="fa fa-cog fa-spin"></i> Upload in progress&hellip;
+        <i aria-hidden="true" class="fas fa-cog fa-spin"></i> Upload in progress&hellip;
         <div id="pmf-upload-more-info"></div>
     </div>
     <div id="pmf-upload-info"></div>
@@ -99,7 +99,7 @@ if ($user) {
                 $('#pmf-upload-form').show();
             } else {
                 $('#pmf-upload-progress').hide();
-                $('#pmf-upload-info').show().append('<i aria-hidden="true" class="fa fa-check"></i> Upload successfully completed.');
+                $('#pmf-upload-info').show().append('<i aria-hidden="true" class="fas fa-check"></i> Upload successfully completed.');
 
                 this.getWIndow().tinymce.EditorManager.activeEditor.insertContent(
                     '<img src="' + result.filename +'" height="' + result.height + '" width="' + result.width + '">'

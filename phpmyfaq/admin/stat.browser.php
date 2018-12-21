@@ -42,7 +42,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
+                    <i aria-hidden="true" class="fas fa-tasks"></i> <?= $PMF_LANG['ad_sess_session'].' '.date('Y-m-d', $day) ?>
                 </h2>
             </div>
         </header>

@@ -105,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         if ($cat['lang'] != $LANGCODE) {
             // translate category
            printf(
-               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
+               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fas fa-share"></span></a></a>',
                $currentLink,
                $cat['id'],
                $LANGCODE,
@@ -133,7 +133,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     $spokenLanguage
                 );
                 printf(
-                    '<span title="%s: %s" class="badge badge-success"><i aria-hidden="true" class="fa fa-check fa fa-white"></i></span></td>',
+                    '<span title="%s: %s" class="badge badge-success"><i aria-hidden="true" class="fas fa-check fa fa-white"></i></span></td>',
                     $PMF_LANG['ad_categ_titel'],
                     $spokenLanguage
                 );
@@ -144,7 +144,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     $lang,
                     $PMF_LANG['ad_categ_translate']);
                 printf(
-                    '<span title="%s" class="badge badge-inverse"><i aria-hidden="true" class="fa fa-share fa fa-white"></i></span></a>',
+                    '<span title="%s" class="badge badge-inverse"><i aria-hidden="true" class="fas fa-share fa fa-white"></i></span></a>',
                     $PMF_LANG['ad_categ_translate']
                 );
             }

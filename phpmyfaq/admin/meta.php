@@ -37,12 +37,13 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-        <i class="material-icons md-36">code</i>
+      <i aria-hidden="true" class="fas fa-code"></i>
         <?= $PMF_LANG['ad_menu_meta'] ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#addMetaModal">
+              <i aria-hidden="true" class="fas fa-plus"></i>
                 <?= $PMF_LANG['ad_meta_add'] ?>
             </button>
         </div>

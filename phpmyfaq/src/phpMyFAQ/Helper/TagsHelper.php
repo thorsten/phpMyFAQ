@@ -76,13 +76,13 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a></li> ',
+                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a></li> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a></li> ',
+                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a></li> ',
                 $tagName
             );
     }
@@ -101,7 +101,7 @@ class TagsHelper extends Helper
         return sprintf(
             '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge">%d</span></a></li>',
             implode(',', $this->getTaggingIds()).','.$tagId,
-            '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
+            '<i aria-hidden="true" class="fas fa-plus-square"></i> ',
             $tagName,
             $relevance
         );

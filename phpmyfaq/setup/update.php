@@ -147,7 +147,7 @@ if ($step === 1) { ?>
         <div class="col">
           <div class="alert alert-warning text-center" role="alert">
             <strong>
-              <i aria-hidden="true" class="fa fa-info-circle"></i>
+              <i aria-hidden="true" class="fas fa-info-circle"></i>
               Please create a full backup of your database, your templates,
               attachments and uploaded images before running this update.
             </strong>
@@ -185,7 +185,7 @@ if ($step === 1) { ?>
                 printf(
                     '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
                     $version,
-                    '<i aria-hidden="true" class="fa fa-check"></i>'
+                    '<i aria-hidden="true" class="fas fa-check"></i>'
                 );
             } else {
                 printf(
@@ -287,7 +287,7 @@ if ($step == 2) {
         <div class="row setup-content" id="step2">
             <div class="col">
                 <?php foreach ($updateMessages as $updateMessage) {
-                    printf('<p><i aria-hidden="true" class="fa fa-check-circle"></i> %s</p>', $updateMessage);
+                    printf('<p><i aria-hidden="true" class="fas fa-check-circle"></i> %s</p>', $updateMessage);
                 } ?>
                 <p>Your phpMyFAQ configuration will be updated after the next step.</p>
                 <p style="text-align: center;">
@@ -676,7 +676,7 @@ if ($step == 3) {
         echo '<div class="center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
-            printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
+            printf('<span title="%s"><i aria-hidden="true" class="fas fa-circle"></i></span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ once again '.
                       'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';

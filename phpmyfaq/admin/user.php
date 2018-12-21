@@ -541,7 +541,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         <div class="card-footer">
                             <div class="card-button text-right">
                                 <button class="btn btn-success" type="submit">
-                                    <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_gen_save'] ?>
+                                    <i aria-hidden="true" class="fas fa-check"></i> <?= $PMF_LANG['ad_gen_save'] ?>
                                 </button>
                             </div>
                         </div>

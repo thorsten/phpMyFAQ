@@ -25,9 +25,9 @@ $(document).ready(function () {
         if ($(this).children('ul').length > 0) {
             $(this).addClass('pmf-main-category');
             if ($(this).data('category-level') === 0) {
-                $(this).prepend('<i class="fa fa-arrow-circle-o-right"></i> ');
+                $(this).prepend('<i class="fas fa-arrow-circle-o-right"></i> ');
             } else {
-                $(this).prepend('<i class="fa fa-circle-o"></i> ');
+                $(this).prepend('<i class="fas fa-circle-o"></i> ');
             }
             var subCat = $(this).find('a:first');
             subCat.addClass('pmf-sub-category');
@@ -39,7 +39,7 @@ $(document).ready(function () {
                 ++menuCounter;
             }
         } else {
-            $(this).prepend('<i class="fa fa-circle-o"></i> ');
+            $(this).prepend('<i class="fas fa-circle-o"></i> ');
         }
     });
 

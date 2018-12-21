@@ -637,7 +637,7 @@ class Linkverifier
         // Check if feature is disabled.
         if ($this->isReady() == false) {
             return sprintf(
-                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
+                '<span class="fa-stack" aria-hidden="true"><i class="fas fa-link fa-stack-1x"></i><i class="fas fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
                 $PMF_LANG['ad_linkcheck_feedback_url-disabled']
             );
         }
@@ -646,7 +646,7 @@ class Linkverifier
         $src = $this->getEntryState($id, $artlang, false);
         if ($src === false) {
             return sprintf(
-                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
+                '<span class="fa-stack" aria-hidden="true"><i class="fas fa-link fa-stack-1x"></i><i class="fas fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
                 $PMF_LANG['ad_linkcheck_feedback_url-disabled']
             );
         }

@@ -98,7 +98,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
 
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">
-                    <i class="material-icons md-36">settings</i>
+                    <i aria-hidden="true" class="fas fa-wrench"></i>
                     <?= $PMF_LANG['ad_config_edit'] ?>
                 </h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
@@ -119,55 +119,55 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                     <ul class="nav nav-tabs" role="tablist">
                         <li role="presentation" class="nav-item">
                             <a href="#main" aria-controls="main" role="tab" data-toggle="tab" class="nav-link active">
-                                <i aria-hidden="true" class="fa fa-home"></i>
+                                <i aria-hidden="true" class="fas fa-home"></i>
                                 <?= $PMF_LANG['mainControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#records" aria-controls="records" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-th-list"></i>
+                                <i aria-hidden="true" class="fas fa-th-list"></i>
                                 <?= $PMF_LANG['recordsControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#search" aria-controls="search" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-search"></i>
+                                <i aria-hidden="true" class="fas fa-search"></i>
                                 <?= $PMF_LANG['searchControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#security" aria-controls="security" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-warning"></i>
+                                <i aria-hidden="true" class="fas fa-warning"></i>
                                 <?= $PMF_LANG['securityControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#spam" aria-controls="spam" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-thumbs-down"></i>
+                                <i aria-hidden="true" class="fas fa-thumbs-down"></i>
                                 <?= $PMF_LANG['spamControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#seo" aria-controls="seo" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-search"></i>
+                                <i aria-hidden="true" class="fas fa-search"></i>
                                 <?= $PMF_LANG['seoCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#social" aria-controls="social" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-retweet"></i>
+                                <i aria-hidden="true" class="fas fa-retweet"></i>
                                 <?= $PMF_LANG['socialNetworksControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#mail" aria-controls="mail" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-inbox"></i>
+                                <i aria-hidden="true" class="fas fa-inbox"></i>
                                 <?= $PMF_LANG['mailControlCenter'] ?>
                             </a>
                         </li>
                         <li role="presentation" class="nav-item">
                             <a href="#ldap" aria-controls="ldap" role="tab" data-toggle="tab" class="nav-link">
-                                <i aria-hidden="true" class="fa fa-sitemap"></i>
+                                <i aria-hidden="true" class="fas fa-sitemap"></i>
                                 <?= 'LDAP' ?>
                             </a>
                         </li>

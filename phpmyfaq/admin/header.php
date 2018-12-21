@@ -267,7 +267,7 @@ switch ($action) {
               <li class="nav-item <?php echo($userPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=user">
                   <i aria-hidden="true" class="fas fa-user"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
-                  <span class="fa arrow"></span>
+                  <span class="fas arrow"></span>
                 </a>
                   <?php if ($userPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($userPage ? 'in' : '') ?>" id="user-menu">
@@ -279,7 +279,7 @@ switch ($action) {
               <li class="nav-item <?php echo($contentPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=content">
                   <i aria-hidden="true" class="fas fa-edit"></i> <?= $PMF_LANG['admin_mainmenu_content']; ?>
-                  <span class="fa arrow"></span>
+                  <span class="fas arrow"></span>
                 </a>
                   <?php if ($contentPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($contentPage ? 'in' : '') ?>">
@@ -291,7 +291,7 @@ switch ($action) {
               <li class="nav-item <?php echo($statisticsPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=statistics">
                   <i aria-hidden="true" class="fas fa-chart-line"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
-                  <span class="fa arrow"></span>
+                  <span class="fas arrow"></span>
                 </a>
                   <?php if ($statisticsPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($statisticsPage ? 'in' : '') ?>">
@@ -320,7 +320,7 @@ switch ($action) {
               <li class="nav-item <?php echo($configurationPage ? 'active' : ''); ?>">
                 <a class="nav-link" href="index.php?action=config">
                   <i aria-hidden="true" class="fas fa-wrench"></i> <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
-                  <span class="fa arrow"></span>
+                  <span class="fas arrow"></span>
                 </a>
                   <?php if ($configurationPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?php echo($configurationPage ? 'in' : '') ?>">

@@ -49,27 +49,28 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     }
 
     ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_elasticsearch'] ?>
-                <div class="float-right">
-                    <button class="btn btn-secondary pmf-elasticsearch" data-action="create">
-                        <i aria-hidden="true" class="fa fa-plus-square-o"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
-                    </button>
 
-                    <button class="btn btn-secondary pmf-elasticsearch" data-action="import">
-                        <i aria-hidden="true" class="fa fa-plus-square"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
-                    </button>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i aria-hidden="true" class="fas fa-wrench"></i>
+          <?= $PMF_LANG['ad_menu_elasticsearch'] ?>
+      </h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <button class="btn btn-sm btn-outline-secondary pmf-elasticsearch" data-action="create">
+            <i aria-hidden="true" class="fas fa-searchengine"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
+          </button>
 
-                    <button class="btn btn-danger pmf-elasticsearch" data-action="drop">
-                        <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_es_drop_index'] ?>
-                    </button>
-                </div>
-            </h2>
+          <button class="btn btn-sm btn-outline-secondary pmf-elasticsearch" data-action="import">
+            <i aria-hidden="true" class="fas fa-search-plus"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
+          </button>
 
+          <button class="btn btn-sm btn-outline-danger pmf-elasticsearch" data-action="drop">
+            <i aria-hidden="true" class="fas fa-trash"></i> <?= $PMF_LANG['ad_es_drop_index'] ?>
+          </button>
         </div>
-    </header>
+      </div>
+    </div>
 
     <div class="row">
         <div class="col-lg-12">

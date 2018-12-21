@@ -137,7 +137,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
       <header class="row">
           <div class="col-lg-12">
               <h2 class="page-header">
-                  <i aria-hidden="true" class="fa fa-users fa-fw"></i>
+                  <i aria-hidden="true" class="fas fa-users fa-fw"></i>
                   <?= $PMF_LANG['ad_section_deleteSection'] ?> "<?= $sectionData['name'] ?>"
               </h2>
           </div>
