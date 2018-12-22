@@ -39,6 +39,7 @@ use phpMyFAQ\Strings;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
+use phpMyFAQ\Visits;
 
 //
 // Bootstrapping
@@ -288,10 +289,10 @@ switch ($action) {
 
         $faq = new Faq($faqConfig);
         $category = new Category($faqConfig);
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
-        $faqlanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
+        $faqLanguage = Filter::filterInput(INPUT_POST, 'faqlanguage', FILTER_SANITIZE_STRING);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
         if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -300,7 +301,7 @@ switch ($action) {
             $answer = Filter::filterInput(INPUT_POST, 'answer', FILTER_SANITIZE_STRIPPED);
             $answer = nl2br($answer);
         }
-        $translation = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
+        $translatedAnswer = Filter::filterInput(INPUT_POST, 'translated_answer', FILTER_SANITIZE_STRING);
         $contentLink = Filter::filterInput(INPUT_POST, 'contentlink', FILTER_SANITIZE_STRING);
         $contentLink = Filter::filterVar($contentLink, FILTER_VALIDATE_URL);
         $keywords = Filter::filterInput(INPUT_POST, 'keywords', FILTER_SANITIZE_STRIPPED);
@@ -315,15 +316,15 @@ switch ($action) {
         );
 
         // Check on translation
-        if (empty($answer) && !is_null($translation)) {
-            $answer = $translation;
+        if (empty($answer) && !is_null($translatedAnswer)) {
+            $answer = $translatedAnswer;
         }
 
-        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
             !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
-            ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqlanguage) &&
-            Language::isASupportedLanguage($faqlanguage)))) {
+            ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
+            Language::isASupportedLanguage($faqLanguage)))) {
             $isNew = true;
             if (!is_null($faqId)) {
                 $isNew = false;
@@ -341,18 +342,18 @@ switch ($action) {
             }
 
             $isTranslation = false;
-            if (!is_null($faqlanguage)) {
+            if (!is_null($faqLanguage)) {
                 $isTranslation = true;
-                $newLanguage = $faqlanguage;
+                $newLanguage = $faqLanguage;
             }
 
-            if (Strings::substr($contentlink, 7) != '') {
+            if (Strings::substr($contentLink, 7) != '') {
                 $answer = sprintf(
                     '%s<br /><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
                     $answer,
                     $PMF_LANG['msgInfo'],
-                    Strings::substr($contentlink, 7),
-                    $contentlink
+                    Strings::substr($contentLink, 7),
+                    $contentLink
                 );
             }
 
@@ -365,7 +366,7 @@ switch ($action) {
                 'sticky' => 0,
                 'content' => $answer,
                 'keywords' => $keywords,
-                'author' => $name,
+                'author' => $author,
                 'email' => $email,
                 'comment' => 'y',
                 'date' => date('YmdHis'),
@@ -397,7 +398,7 @@ switch ($action) {
 
             // Activate visits
             $visits = new Visits($faqConfig);
-            $visits->logViews($recordId, $newData['lang']);
+            $visits->logViews($recordId);
 
             // Set permissions
             $userPermissions = $category->getPermissions('user', $categories);
@@ -414,7 +415,7 @@ switch ($action) {
             // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry
             $send = [];
             $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $name);
+            $mail->setReplyTo($email, $author);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $send[$faqConfig->get('main.administrationMail')] = 1;
 
@@ -454,15 +455,17 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId;
+                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId . '&lang=' . $faqLanguage;
             $result = $mail->send();
             unset($mail);
 
-            $message = array(
+            $message = [
                 'success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']),
-            );
+            ];
         } else {
-            $message = array('error' => $PMF_LANG['err_SaveEntries']);
+            $message = [
+                'error' => $PMF_LANG['err_SaveEntries']
+            ];
         }
 
         break;
@@ -478,7 +481,7 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $cat = new Category($faqConfig);
         $categories = $cat->getAllCategories();
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $ucategory = Filter::filterInput(INPUT_POST, 'category', FILTER_VALIDATE_INT);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
@@ -494,7 +497,7 @@ switch ($action) {
             $save = true;
         }
 
-        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
             !is_null($question) && !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'N';
@@ -503,7 +506,7 @@ switch ($action) {
             }
 
             $questionData = [
-                'username' => $name,
+                'username' => $author,
                 'email' => $email,
                 'category_id' => $ucategory,
                 'question' => $question,
@@ -746,7 +749,7 @@ switch ($action) {
     // Send user generated mails
     case 'sendcontact':
 
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
 
@@ -755,19 +758,19 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
-        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
+        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
             !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
                 $PMF_LANG['msgNewContentName'],
-                $name,
+                $author,
                 $PMF_LANG['msgNewContentMail'],
                 $email,
                 $question
             );
 
             $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $name);
+            $mail->setReplyTo($email, $author);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Feedback: %sitename%';
             $mail->message = $question;
@@ -783,7 +786,7 @@ switch ($action) {
     // Send mails to friends
     case 'sendtofriends':
 
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
         $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
@@ -794,16 +797,16 @@ switch ($action) {
             )
         );
 
-        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) &&
+        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
             is_array($mailto) && !empty($mailto['mailto'][0]) &&
                 $stopwords->checkBannedWord(Strings::htmlspecialchars($attached))) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
                     $mail = new Mail($faqConfig);
-                    $mail->setReplyTo($email, $name);
+                    $mail->setReplyTo($email, $author);
                     $mail->addTo($recipient);
-                    $mail->subject = $PMF_LANG['msgS2FMailSubject'].$name;
+                    $mail->subject = $PMF_LANG['msgS2FMailSubject'].$author;
                     $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
                         $faqConfig->get('main.send2friendText'),
                         $PMF_LANG['msgS2FText2'],
@@ -832,7 +835,7 @@ switch ($action) {
         }
 
         $userId = Filter::filterInput(INPUT_POST, 'userid', FILTER_VALIDATE_INT);
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
         $confirm = Filter::filterInput(INPUT_POST, 'password_confirm', FILTER_SANITIZE_STRING);
@@ -850,12 +853,12 @@ switch ($action) {
         }
 
         $userData = array(
-            'display_name' => $name,
+            'display_name' => $author,
             'email' => $email, );
         $success = $user->setUserData($userData);
 
         if (0 !== strlen($password) && 0 !== strlen($confirm)) {
-            foreach ($user->getAuthContainer() as $name => $auth) {
+            foreach ($user->getAuthContainer() as $author => $auth) {
                 if ($auth->setReadOnly()) {
                     continue;
                 }
@@ -917,7 +920,7 @@ switch ($action) {
 
     case 'request-removal':
 
-        $name = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
+        $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $loginName = Filter::filterInput(INPUT_POST, 'loginname', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRIPPED);
@@ -927,21 +930,21 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
-        if (!is_null($name) && !empty($name) && !is_null($email) && !empty($email) && !is_null($question) &&
+        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
             !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
                 $PMF_LANG['ad_user_loginname'],
                 $loginName,
                 $PMF_LANG['msgNewContentName'],
-                $name,
+                $author,
                 $PMF_LANG['msgNewContentMail'],
                 $email,
                 $question
             );
 
             $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $name);
+            $mail->setReplyTo($email, $author);
             $mail->addTo($faqConfig->get('main.administrationMail'));
             $mail->subject = 'Remove User Request: %sitename%';
             $mail->message = $question;
