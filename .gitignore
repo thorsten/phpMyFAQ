@@ -28,9 +28,6 @@ phpmyfaq/data/*
 phpmyfaq/images/*
 phpmyfaq/attachments/*
 
-# .htaccess, if used
-phpmyfaq/.htaccess
-
 # Third party PHP libraries
 phpmyfaq/src/libs/*
 
