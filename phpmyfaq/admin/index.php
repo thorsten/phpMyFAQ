@@ -22,6 +22,8 @@
  */
 
 use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Auth\Ldap;
+use phpMyFAQ\Auth\Sso;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Language;
@@ -108,6 +110,14 @@ if (is_null($action)) {
     $action = Filter::filterInput(INPUT_POST, 'action', FILTER_SANITIZE_STRING);
 }
 
+//
+// Get possible redirect action
+//
+$redirectAction = Filter::filterInput(INPUT_POST, 'redirect-action', FILTER_SANITIZE_STRING);
+if (is_null($action) && '' !== $redirectAction && 'logout' !== $redirectAction) {
+    $action = $redirectAction;
+}
+
 // authenticate current user
 $auth = null;
 $error = '';
@@ -129,14 +139,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
         try {
-            $authLdap = new Auth_Ldap($faqConfig);
+            $authLdap = new Ldap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
         } catch (Exception $e) {
             $error = $e->getMessage().'<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new Auth_Sso($faqConfig);
+        $authSso = new Sso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {

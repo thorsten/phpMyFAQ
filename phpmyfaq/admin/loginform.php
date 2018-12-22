@@ -2,8 +2,6 @@
 /**
  * The login form.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -37,45 +35,41 @@ if ($action == 'logout') {
         $PMF_LANG['ad_logout']
     );
 }
-
 if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$faqConfig->get('security.useSslForLogins')) {
-    ?>
+?>
+      <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
+            accept-charset="utf-8" role="form" class="pmf-form-login">
+        <input type="hidden" name="redirect-action" value="<?= $action ?>">
+        <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
+          <?= $message ?>
+        <label for="faqusername" class="sr-only"><?= $PMF_LANG['ad_auth_user'] ?></label>
+        <input type="text" id="faqusername" name="faqusername" class="form-control"
+               placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" required autofocus>
+        <label for="faqpassword" class="sr-only"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
+        <input type="password" id="faqpassword" name="faqpassword" class="form-control"
+               placeholder="<?= $PMF_LANG['ad_auth_passwd'] ?>" required>
+        <div class="checkbox mb-3">
+          <label>
+            <input type="checkbox" id="faqrememberme" name="faqrememberme" value="rememberMe"> <?= $PMF_LANG['rememberMe'] ?>
+          </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">
+            <?= $PMF_LANG['msgLoginUser'] ?>
+        </button>
 
-
-
-                        <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
-                              accept-charset="utf-8" role="form" class="pmf-form-login">
-                          <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
-                            <?= $message ?>
-                          <label for="faqusername" class="sr-only"><?= $PMF_LANG['ad_auth_user'] ?></label>
-                          <input type="text" id="faqusername" name="faqusername" class="form-control" placeholder="<?= $PMF_LANG['ad_auth_user'] ?>" required autofocus>
-                          <label for="faqpassword" class="sr-only"><?= $PMF_LANG['ad_auth_passwd'] ?></label>
-                          <input type="password" id="faqpassword" name="faqpassword" class="form-control" placeholder="<?= $PMF_LANG['ad_auth_passwd'] ?>" required>
-                          <div class="checkbox mb-3">
-                            <label>
-                              <input type="checkbox"id="faqrememberme" name="faqrememberme" value="rememberMe"> <?= $PMF_LANG['rememberMe'] ?>
-                            </label>
-                          </div>
-                          <button class="btn btn-lg btn-primary btn-block" type="submit">
-                              <?= $PMF_LANG['msgLoginUser'] ?>
-                          </button>
-
-
-
-                                <div class="form-group mb-3">
-                                    <p>
-                                        <a href="../?action=password">
-                                            <?= $PMF_LANG['lostPassword'] ?>
-                                        </a>
-                                        <?php if ($faqConfig->get('security.enableRegistration')) { ?>
-                                        <br>
-                                        <a href="../?action=register">
-                                            <?= $PMF_LANG['msgRegistration'] ?>
-                                        </a>
-                                        <?php } ?>
-                                    </p>
-                                </div>
-                          </div>
+        <div class="form-group mb-3">
+          <p>
+            <a href="../?action=password">
+                <?= $PMF_LANG['lostPassword'] ?>
+            </a>
+              <?php if ($faqConfig->get('security.enableRegistration')) { ?>
+                <br>
+                <a href="../?action=register">
+                    <?= $PMF_LANG['msgRegistration'] ?>
+                </a>
+              <?php } ?>
+          </p>
+        </div>
 <?php
 
 } else {
@@ -86,4 +80,4 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
         $PMF_LANG['msgSecureSwitch']);
 }
 ?>
-                        </form>
+      </form>
