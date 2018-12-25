@@ -5,23 +5,25 @@ namespace phpMyFAQ\Export\Pdf;
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Peter Beauvain <pbeauvain@web.de>
  * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @copyright 2004-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2004-11-21
  */
+
+use phpMyFAQ\Configuration;
+use phpMyFAQ\Date;
+use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -245,7 +247,7 @@ class Wrapper extends \TCPDF
     /**
      * Configuration.
      *
-     * @var PMF_Configuration
+     * @var Configuration
      */
     protected $_config = null;
 
@@ -286,8 +288,6 @@ class Wrapper extends \TCPDF
 
     /**
      * Constructor.
-     *
-     * @return PMF_Export_Pdf_Wrapper
      */
     public function __construct()
     {
@@ -342,9 +342,9 @@ class Wrapper extends \TCPDF
     }
 
     /**
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */
-    public function setConfig(PMF_Configuration $config)
+    public function setConfig(Configuration $config)
     {
         $this->_config = $config;
     }
@@ -402,7 +402,7 @@ class Wrapper extends \TCPDF
         // Set custom footer
         $this->setCustomFooter();
 
-        $date = new phpMyFAQ\Date($this->_config);
+        $date = new Date($this->_config);
 
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
@@ -439,7 +439,7 @@ class Wrapper extends \TCPDF
                 $baseUrl .= '&amp;artlang='.$this->faq['lang'];
             }
             $url = $this->_config->getDefaultUrl().$baseUrl;
-            $urlObj = new phpMyFAQ\Link($url, $this->_config);
+            $urlObj = new Link($url, $this->_config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
             $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);
@@ -539,7 +539,7 @@ class Wrapper extends \TCPDF
      *                          an integer representing the image ID (the value returned by the Image method) and a
      *                          boolean value to indicate if the image is the default for printing.
      *
-     * @return image information
+     * @return
      */
     public function Image($file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false, $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false, $hidden = false, $fitonpage = false, $alt = false, $altimgs = [])
     {
