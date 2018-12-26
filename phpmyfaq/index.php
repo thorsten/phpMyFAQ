@@ -1,8 +1,10 @@
 <?php
 
+error_reporting(-1);
+
 /**
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
- * language, gets and sets all cookie, post and get informations and includes
+ * language, gets and sets all cookie, post and get information and includes
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
@@ -13,13 +15,11 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2001-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2001-02-12
  */
@@ -55,7 +55,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require 'src/Bootstrap.php';
+require __DIR__.'/src/Bootstrap.php';
 
 //
 // Get language (default: english)

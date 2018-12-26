@@ -23,7 +23,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
 use phpMyFAQ\Init;
 use phpMyFAQ\Exception;
-
 //
 // Debug mode:
 // - false      debug mode disabled
@@ -66,13 +65,6 @@ ini_set('pcre.backtrack_limit', 100000000);
 ini_set('pcre.recursion_limit', 100000000);
 
 //
-// Check if multisite/multisite.php exist for Multisite support
-//
-if (file_exists(__DIR__.'/../multisite/multisite.php') && 'cli' !== PHP_SAPI) {
-    require __DIR__.'/../multisite/multisite.php';
-}
-
-//
 // The root directory
 //
 if (!defined('PMF_ROOT_DIR')) {
@@ -80,14 +72,19 @@ if (!defined('PMF_ROOT_DIR')) {
 }
 
 //
+// Check if multisite/multisite.php exist for Multisite support
+//
+if (file_exists(PMF_ROOT_DIR.'/multisite/multisite.php') && 'cli' !== PHP_SAPI) {
+    require PMF_ROOT_DIR.'/multisite/multisite.php';
+}
+
+//
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    // Single instance configuration
-    define('PMF_CONFIG_DIR', dirname(__DIR__).'/config');
+    define('PMF_CONFIG_DIR', PMF_ROOT_DIR.'/config'); // Single instance configuration
 } else {
-    // Multi instance configuration
-    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR);
+    define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR); // Multi instance configuration
 }
 
 //
@@ -173,7 +170,6 @@ if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap.php
 } else {
     $ldap = null;
 }
-
 //
 // Connect to Elasticsearch if enabled
 //
