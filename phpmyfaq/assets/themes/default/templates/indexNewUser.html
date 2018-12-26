@@ -91,41 +91,60 @@
     </div>
 </div>
 
-<footer>
-    <div class="pmf-wrapper pmf-footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 col-md-offset-9">
-                    <form action="{{ writeLangAdress }}" method="post" class="float-right" accept-charset="utf-8">
-                        {{ switchLanguages }}
-                        <input type="hidden" name="action" value="" />
-                    </form>
-                </div>
-            </div>
-        </div>
+<footer class="pmf-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12">
+        <form action="{{ writeLangAdress }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
+          {{ switchLanguages }}
+          <input type="hidden" name="action" value=""/>
+        </form>
+      </div>
     </div>
-
-    <div class="pmf-wrapper copyright">
-        <div class="container">
-            <div class="float-right">
-                {{ copyright }}
-            </div>
-        </div>
+    <div class="row">
+      <div class="col-sm">
+        <p class="float-right">
+          {{ copyright }}
+        </p>
+      </div>
     </div>
-
-    [debugMode]
-    <div class="container debug-mode">
-        <h3>DEBUG INFORMATION</h3>
-        <hr>
-        <h4>EXCEPTIONS</h4>
-        {{ debugExceptions }}
-        <hr>
-        <h4>DATABASE QUERIES</h4>
-        {{ debugQueries }}
-    </div>
-    [/debugMode]
-
+  </div>
 </footer>
+
+[debugMode]
+<div class="container debug-mode">
+  <hr>
+  <h4>DEBUG INFORMATION</h4>
+  <div class="row">
+    <div class="col-12">
+      <h5>EXCEPTIONS</h5>
+      {{ debugExceptions }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h5>DATABASE QUERIES</h5>
+      {{ debugQueries }}
+    </div>
+  </div>
+</div>
+[/debugMode]
+
+<script src="{{ baseHref }}assets/js/vendors.js"></script>
+<script src="{{ baseHref }}assets/js/phpmyfaq.min.js"></script>
+<script>
+  window.addEventListener('load', function(){
+    window.cookieconsent.initialise({
+      'palette': {
+        'popup': {
+          'background': '#252e39'
+        },
+        'button': {
+          'background': '#14a7d0'
+        }
+      }
+    })});
+</script>
 
 </body>
 </html>

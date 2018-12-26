@@ -162,28 +162,40 @@
   </div>
 </div>
 
-
 <footer class="pmf-footer">
   <div class="container">
     <div class="row">
-      <div class="col-6">
-        <div class="pmf-footer-menu">
-          <ul >
-            <li>{{ faqOverview }}</li>
-            <li>{{ showSitemap }}</li>
-            <li>{{ msgGlossary }}</li>
-            <li>{{ msgContact }}</li>
-          </ul>
-        </div>
+      <div class="col-sm-10">
+        <ul class="pmf-footer-menu">
+          <li class="foot-menu-item mbr-fonts-style display-7">
+            {{ faqOverview }}
+          </li>
+          <li class="foot-menu-item mbr-fonts-style display-7">
+            {{ showSitemap }}
+          </li>
+          <li class="foot-menu-item mbr-fonts-style display-7">
+            {{ msgGlossary }}
+          </li>
+          <li class="foot-menu-item mbr-fonts-style display-7">
+            {{ msgContact }}
+          </li>
+          <li class="foot-menu-item mbr-fonts-style display-7">
+
+          </li>
+        </ul>
       </div>
+      <div class="col-sm-2">
+        <form action="{{ writeLangAdress }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
+          {{ switchLanguages }}
+          <input type="hidden" name="action" value=""/>
+        </form>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-sm">
-          <form action="{{ writeLangAdress }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-            {{ switchLanguages }}
-            <input type="hidden" name="action" value=""/>
-          </form>
-      </div>
-      <div class="col-sm ml-auto">
-        {{ copyright }}
+        <p class="float-right">
+          {{ copyright }}
+        </p>
       </div>
     </div>
   </div>
