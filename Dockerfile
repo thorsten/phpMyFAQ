@@ -1,12 +1,12 @@
 #
-# This image uses a php:7.1-apache base image and do not have any PMF code with it.
-# It's for dev only, it's meant to be run with docker-compose
+# This image uses a php:7.3-apache base image and do not have any phpMyFAQ code with it.
+# It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:7.2-apache
+FROM php:7.3-apache
 
 #=== Install gd php dependencie ===
 RUN set -x \
@@ -32,7 +32,7 @@ RUN set -x \
 
 #=== Install intl, soap opcache, and zip php dependencie ===
 RUN set -x \
- && buildDeps="libicu-dev zlib1g-dev libxml2-dev" \
+ && buildDeps="libicu-dev zlib1g-dev libxml2-dev libzip-dev"  \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
  \
  && docker-php-ext-configure intl \

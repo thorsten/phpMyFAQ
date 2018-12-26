@@ -27,7 +27,7 @@ services:
       - PMF_ENABLE_UPLOADS="On"
       - PMF_MEMORY_LIMIT="64M"
       - PHP_LOG_ERRORS="On"
-      - PHP_ERROR_REPORTING="E_ALL" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+      - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED & E_STRICT" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
     links:
       - mariadb:db
       - elasticsearch

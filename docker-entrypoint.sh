@@ -54,7 +54,6 @@ if [ -f "$APACHE_ENVVARS" ]; then
   #=== Enable htaccess for search engine optimisations ===
   if [ "x${DISABLE_HTACCESS}" = "x" ]; then
       a2enmod rewrite headers
-      [ ! -f /.htaccess ] && cp _.htaccess .htaccess
       sed -ri .htaccess \
         -e "s~RewriteBase /phpmyfaq/~RewriteBase /~"
       # Enabling permissions override
