@@ -56,7 +56,7 @@ repository or use images provided on [docker.io](https://hub.docker.com/r/phpmyf
 For development purposes you can start a full stack to run your current PhpMyFAQ
 source code from your local repo.
 
-    docker-compose up
+    $ docker-compose up
 
 The command above starts 5 containers as following.
 
@@ -69,7 +69,7 @@ _Running using named volumes:_
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **phpmyadmin**: a PHP tool to have a look on your database.
 
-_Running apache web server with PHP 7.2 support:_
+_Running apache web server with PHP 7.3 support:_
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
 Then services will be available at following addresses:
@@ -108,14 +108,14 @@ The vm.max_map_count setting must be set within the xhyve virtual machine:
 Log in with root and no password. Then configure the sysctl setting as you 
 would for Linux:
 
-    sysctl -w vm.max_map_count=262144
+    $ sysctl -w vm.max_map_count=262144
 
 ##### Windows and macOS with Docker Toolbox
 
 The vm.max_map_count setting must be set via docker-machine:
 
-    docker-machine ssh
-    sudo sysctl -w vm.max_map_count=262144
+    $ docker-machine ssh
+    $ sudo sysctl -w vm.max_map_count=262144
 
 ### Git for developers
 
@@ -130,7 +130,6 @@ The vm.max_map_count setting must be set via docker-machine:
 
 Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
 
-
 ## Testing
 
 To run our unit tests via PHPUnit v5.x, just execute this command on your CLI
@@ -138,7 +137,6 @@ To run our unit tests via PHPUnit v5.x, just execute this command on your CLI
     $ ./bin/phpunit
 
 Please note that phpMyFAQ needs to be installed via Composer.
-
 
 ## Versioning
 
@@ -157,12 +155,10 @@ And constructed with the following guidelines:
 
 For more information on SemVer, please visit http://semver.org/.
 
-
 ## Bug tracker
 
 Have a bug or a feature request? [Please open a new issue](https://github.com/thorsten/phpMyFAQ/issues).
 Before opening any issue, please search for existing issues.
-
 
 ## Contributing
 
@@ -177,6 +173,4 @@ You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/doc
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-
-
-Copyright (c) 2001-2018 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2019 Thorsten Rinne and the phpMyFAQ Team
