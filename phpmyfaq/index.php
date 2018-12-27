@@ -1,7 +1,5 @@
 <?php
 
-error_reporting(-1);
-
 /**
  * This is the main public frontend page of phpMyFAQ. It detects the browser's
  * language, gets and sets all cookie, post and get information and includes
