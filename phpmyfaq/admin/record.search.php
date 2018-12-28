@@ -3,8 +3,6 @@
 /**
  * Shows the admin search frontend for FAQs.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -42,8 +40,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
-    $searchcat = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
-    $searchterm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
+    $searchCategory = Filter::filterInput(INPUT_POST, 'searchcat', FILTER_VALIDATE_INT);
+    $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
@@ -65,7 +63,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                         <label class="col-lg-2 form-control-label"><?= $PMF_LANG['msgSearchWord'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
-                                   value="<?= $searchterm ?>">
+                                   value="<?= $searchTerm ?>">
 
                         </div>
                     </div>
@@ -86,7 +84,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
                                 <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
-                                <?= $categoryHelper->renderOptions($searchcat) ?>
+                                <?= $categoryHelper->renderOptions($searchCategory) ?>
                             </select>
                         </div>
                     </div>
