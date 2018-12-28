@@ -3,8 +3,6 @@
 /**
  * AJAX: handling of Ajax record calls.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -22,6 +20,7 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
+use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\Resultset;
@@ -99,15 +98,18 @@ switch ($ajax_action) {
             $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
             if (!is_null($searchString)) {
+                try {
+                    $searchResult = $faqSearch->search($searchString, false);
 
-                $searchResult = $faqSearch->search($searchString, false);
+                    $faqSearchResult->reviewResultset($searchResult);
 
-                $faqSearchResult->reviewResultset($searchResult);
+                    $searchHelper = new SearchHelper($faqConfig);
+                    $searchHelper->setSearchterm($searchString);
 
-                $searchHelper = new SearchHelper($faqConfig);
-                $searchHelper->setSearchterm($searchString);
-
-                echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                    echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                } catch (Search\Exception $e) {
+                    //
+                }
             }
         } else {
             echo $PMF_LANG['err_NotAuth'];

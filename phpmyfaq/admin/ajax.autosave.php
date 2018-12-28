@@ -3,8 +3,6 @@
 /**
  * Autosave handler.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -157,7 +155,7 @@ if ('insertentry' === $do &&
         }
 
         $out = array(
-            'msg' => sprintf('Item autosaved at revision %d', $revision_id),
+            'msg' => sprintf('Item auto-saved at revision %d', $revision_id),
             'revision_id' => $revision_id,
             'record_id' => $record_id,
         );
@@ -165,5 +163,5 @@ if ('insertentry' === $do &&
         print json_encode($out);
     }
 } else {
-    print json_encode(array('msg' => 'Unsuficcient article rights'));
+    print json_encode(array('msg' => 'Missing article rights'));
 }

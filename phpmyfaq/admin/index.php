@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(-1);
+
 /**
  * The main admin backend index file.
  *

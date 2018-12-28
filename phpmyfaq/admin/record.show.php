@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
     $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
     if ($linkVerifier->isReady()) {
-        ?>
+?>
     <script>
         function getImageElement(id, lang) {
             return $('#imgurl_' + lang + '_' + id);
@@ -92,7 +92,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         }
 
         function verifyEntryURL(id, lang) {
-            var target = getSpanElement(id, lang);
+            const target = getSpanElement(id, lang);
 
             // !!IMPORTANT!! DISABLE ONLOAD. If you do not do this, you will get infinite loop!
             getImageElement(id, lang).onload = '';
@@ -101,9 +101,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             getDivElement(id, lang).className = "url-checking";
             target.innerHTML = "<?= $PMF_LANG['ad_linkcheck_feedback_url-checking'] ?>";
 
-            var url = 'index.php';
-            var pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
-            var myAjax = new jQuery.ajax({url: url,
+            const url = 'index.php';
+            const pars = 'action=ajax&ajax=verifyURL&id=' + id + '&artlang=' + lang;
+            const myAjax = new jQuery.ajax({url: url,
                 type: 'get',
                 data: pars,
                 complete: verifyEntryURL_success,
@@ -111,7 +111,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
 
             function verifyEntryURL_success(XmlRequest)
             {
-                var allResponses = new [];
+                let allResponses = new [];
                 allResponses['batch1'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch1'] ?>";
                 allResponses['batch2'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch2'] ?>";
                 allResponses['batch3'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-batch3'] ?>";
@@ -124,7 +124,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 allResponses['nolinks'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-nolinks'] ?>";
                 allResponses['noscript'] = "<?= $PMF_LANG['ad_linkcheck_feedback_url-noscript'] ?>";
                 getDivElement(id, lang).className = "url-" + XmlRequest.responseText;
-                if (typeof(allResponses[XmlRequest.responseText]) == "undefined") {
+                if (typeof(allResponses[XmlRequest.responseText]) === "undefined") {
                     getDivElement(id, lang).className = "url-noajax ";
                     target.html(allResponses['noajax']);
                 } else {
@@ -139,7 +139,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
         }
-        //-->
     </script>
 <?php
 
@@ -190,14 +189,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
+    $numCommentsByCat = [];
     $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->get('main.enableCategoryRestrictions'));
+    $numActiveByCat = [];
 
     $matrix = $category->getCategoryRecordsMatrix();
-    foreach ($matrix as $catkey => $value) {
-        $numCommentsByCat[$catkey] = 0;
-        foreach ($value as $faqkey => $value) {
-            if (isset($numCommentsByFaq[$faqkey])) {
-                $numCommentsByCat[$catkey] += $numCommentsByFaq[$faqkey];
+    foreach ($matrix as $categoryKey => $value) {
+        $numCommentsByCat[$categoryKey] = 0;
+        foreach ($value as $faqKey => $value) {
+            if (isset($numCommentsByFaq[$faqKey])) {
+                $numCommentsByCat[$categoryKey] += $numCommentsByFaq[$faqKey];
             }
         }
     }
@@ -257,10 +258,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
             }
 
             if (in_array($row->id, $idsFound)) {
-                continue; // only show one entry if FAQ is in mulitple categories
+                continue; // only show one entry if FAQ is in multiple categories
             }
 
-            $faqsFound[$row->category_id][$row->id] = array(
+            $faqsFound[$row->category_id][$row->id] = [
                 'id' => $row->id,
                 'category_id' => $row->category_id,
                 'solution_id' => $row->solution_id,
@@ -270,7 +271,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                 'title' => $row->thema,
                 'content' => $row->content,
                 'updated' => Date::createIsoDate($row->updated),
-            );
+            ];
 
             if (!isset($numActiveByCat[$row->category_id])) {
                 $numActiveByCat[$row->category_id] = 0;
@@ -467,7 +468,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                     <td>
                                       <div class="dropdown">
                                         <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                          <i class="material-icons">translate</i>
+                                          <i aria-hidden="true" class="fas fa-globe"></i>
                                         </a>
                                         <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
                                           <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
@@ -477,14 +478,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                     <td style="width: 16px;">
                                         <a class="btn btn-info" href="?action=copyentry&id=<?= $record['id'] ?>&lang=<?= $record['lang']; ?>"
                                            title="<?= $PMF_LANG['ad_categ_copy'] ?>">
-                                          <i class="material-icons">share</i>
+                                          <i aria-hidden="true" class="fas fa-copy"></i>
                                         </a>
                                     </td>
                                     <td style="width: 16px;">
                                         <a class="btn btn-danger" href="javascript:void(0);"
                                            onclick="javascript:deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $user->getCsrfTokenFromSession() ?>'); return false;"
                                            title="<?= $PMF_LANG['ad_user_delete'] ?>">
-                                          <i class="material-icons">delete</i>
+                                          <i aria-hidden="true" class="fas fa-trash"></i>
                                         </a>
                                     </td>
                                 </tr>
@@ -546,7 +547,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
      */
     function saveStatus(cid, ids, type, csrf)
     {
-        var indicator = $('#saving_data_indicator'),
+        const indicator = $('#saving_data_indicator'),
             data = {
                 action: 'ajax',
                 ajax: 'records',
@@ -554,7 +555,7 @@ foreach ($faqIds as $categoryId => $recordIds) {
                 csrf: csrf
             };
 
-        indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+        indicator.html('<i class="fas fa-cog fa-spin"></i> Saving ...');
 
         for (var i = 0; i < ids.length; i++) {
             var statusId = '#' + type + '_record_' + cid + '_' + ids[i];

@@ -8,8 +8,6 @@
  *
  * Performs link verification when entries are shown in record.show.php
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -56,8 +54,7 @@ $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
-    header('HTTP/1.0 401 Unauthorized');
-    header('Status: 401 Unauthorized');
+    $httpHeader->sendStatus(401);
     exit();
 }
 
@@ -65,8 +62,7 @@ $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
-    header('HTTP/1.0 401 Unauthorized');
-    header('Status: 401 Unauthorized');
+    $httpHeader->sendStatus(401);
     exit();
 }
 
@@ -77,5 +73,7 @@ if (count(ob_list_handlers()) > 0) {
 $linkVerifier->parseString($faq->faqRecord['content']);
 $linkVerifier->verifyURLs($faqConfig->getDefaultUrl());
 $linkVerifier->markEntry($id, $lang);
-echo $linkVerifier->getLinkStateString();
+
+$httpHeader->sendWithHeaders($linkVerifier->getLinkStateString());
+
 exit();
