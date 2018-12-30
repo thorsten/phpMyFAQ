@@ -2,8 +2,6 @@
 /**
  * Frontend for Tags.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -60,7 +58,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
 
     $tagData = $tags->getAllTags();
 
-    echo '<table class="table table-striped">';
+    echo '<table class="table table-hover">';
     echo '<tbody>';
 
     foreach ($tagData as $key => $tag) {
