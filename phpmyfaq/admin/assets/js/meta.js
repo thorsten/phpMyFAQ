@@ -46,10 +46,10 @@ document.addEventListener('DOMContentLoaded', () => {
             '<td>' + content +'</td>' +
             '<td>' +
             '<a href="?action=meta.edit&id='+ data.added + '" class="btn btn-success">' +
-            '<i class="material-icons">edit</i>' +
+            '<i aria-hidden="true" class="fas fa-pencil"></i>' +
             '</a>' +
             '<a href="javascript:;" id="delete-meta-' + data.added +
-            '" class="btn btn-danger pmf-meta-delete"><i class="material-icons">delete</i></a>' +
+            '" class="btn btn-danger pmf-meta-delete"><i aria-hidden="true" class="fas fa-trash"></i></a>' +
             '</td>' +
             '</tr>'
           );

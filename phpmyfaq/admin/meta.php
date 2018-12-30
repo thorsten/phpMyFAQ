@@ -109,11 +109,11 @@ $metaData = $meta->getAll();
             <td><?= $data->getContent() ?></td>
             <td>
                 <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-success">
-                    <i class="material-icons">edit</i>
+                  <i aria-hidden="true" class="fas fa-pencil"></i>
                 </a>
                 <a href="#" id="delete-meta-<?= $data->getId() ?>" class="btn btn-danger pmf-meta-delete"
                    data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
-                    <i class="material-icons">delete</i>
+                  <i aria-hidden="true" class="fas fa-trash"></i>
                 </a>
             </td>
         </tr>

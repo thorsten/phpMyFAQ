@@ -29,7 +29,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_backup'] ?>
+                    <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_backup'] ?>
                 </h2>
             </div>
         </header>
@@ -45,12 +45,12 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                         <p><?= $PMF_LANG['ad_csv_make'] ?></p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-                                <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
+                              <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
                             </a>
                         </p>
                         <p class="text-right">
                             <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-                                <i class="material-icons">file_download</i> <?= $PMF_LANG['ad_csv_linklog'] ?>
+                              <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_linklog'] ?>
                             </a>
                         </p>
                     </div>

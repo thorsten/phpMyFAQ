@@ -135,7 +135,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addglossary') ||
             $user->getCsrfTokenFromSession()
         );
         printf(
-            '<span title="%s"><i class="material-icons">delete</i></span></a></td>',
+            '<span title="%s"><i aria-hidden="true" class="fas fa-trash"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
         echo '</tr>';

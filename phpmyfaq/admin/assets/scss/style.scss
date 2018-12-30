@@ -80,18 +80,8 @@ body {
     color: #333;
     border-bottom: 1px solid rgba(0, 0, 0, .1);
 
-    i.material-icons {
-      margin-right: 4px;
-      color: #999;
-    }
-
     &.active {
       color: #007bff;
-    }
-
-    &:hover i.material-icons,
-    &.active i.material-icons {
-      color: inherit;
     }
   }
 }

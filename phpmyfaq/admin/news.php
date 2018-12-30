@@ -462,7 +462,7 @@ if ('addnews' == $action && $user->perm->checkRight($user->getUserId(), 'addnews
         ?>&amp;cmtid=<?php print($item['id']);
         ?>&amp;type=<?php print(Comment::COMMENT_TYPE_NEWS);
         ?>">
-                        <i class="material-icons">delete</i>
+                        <i aria-hidden="true" class="fas fa-trash"></i>
                     </a>
                 </div>
             </div>

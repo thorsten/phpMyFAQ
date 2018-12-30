@@ -76,15 +76,15 @@ $pagination = new Pagination(
                             <td><?= $item->filesize ?></td>
                             <td><?= $item->mime_type ?></td>
                             <td>
-                                <a href="javascript:deleteAttachment(<?= $item->id ?>, '<?= $user->getCsrfTokenFromSession() ?>'); void(0);"
+                                <a href="deleteAttachment(<?= $item->id ?>, '<?= $user->getCsrfTokenFromSession() ?>'); void(0);"
                                    class="btn btn-danger" title="<?= $PMF_LANG['ad_gen_delete'] ?>">
-                                    <i class="material-icons">delete</i>
+                                    <i aria-hidden="true" class="fas fa-trash"></i>
                                 </a>
                             </td>
                             <td>
                                 <a title="<?= $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
                                    href="../index.php?action=faq&id=<?= $item->record_id ?>&lang=<?= $item->record_lang ?>">
-                                  <i class="material-icons">link</i>
+                                  <i aria-hidden="true" class="fas fa-link"></i>
                                 </a>
                             </td>
                         </tr>
