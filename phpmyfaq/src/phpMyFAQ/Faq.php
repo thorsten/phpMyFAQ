@@ -3351,6 +3351,54 @@ class Faq
     }
 
     /**
+     * Returns the inactive records with admin URL to edit the FAQ and title.
+     *
+     * @return array
+     */
+    public function getInactiveFaqsData()
+    {
+        $query = sprintf("
+            SELECT
+                fd.id AS id,
+                fd.lang AS lang,
+                fd.thema AS thema
+            FROM
+                %sfaqdata fd
+            WHERE
+                fd.lang = '%s'
+            AND 
+                fd.active = 'no'
+            GROUP BY
+                fd.id, fd.lang, fd.thema
+            ORDER BY
+                fd.id DESC",
+            Db::getTablePrefix(),
+            $this->_config->getLanguage()->getLanguage()
+        );
+
+        $result = $this->_config->getDb()->query($query);
+        $inactive = [];
+        $data = [];
+
+        $oldId = 0;
+        while (($row = $this->_config->getDb()->fetchObject($result))) {
+            if ($oldId != $row->id) {
+                $data['question'] = $row->thema;
+                $data['url'] = sprintf(
+                    '%s?action=editentry&id=%d&lang=%s',
+                    Link::getSystemRelativeUri(),
+                    $row->id,
+                    $row->lang
+                );
+                $inactive[] = $data;
+            }
+            $oldId = $row->id;
+        }
+
+        return $inactive;
+    }
+
+    /**
      * Updates field answer_id in faqquestion.
      *
      * @param int $openQuestionId

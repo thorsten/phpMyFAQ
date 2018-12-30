@@ -479,8 +479,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                             </label>
                           <?php } else { ?>
-                            <span class="badge badge-important"><i aria-hidden="true"
-                                                                   class="fas fa-white fa fa-ban-circle"></i></span>
+                            <span class="badge badge-important">
+                              <i aria-hidden="true" class="fas fa-white fa fa-ban-circle"></i>
+                            </span>
                           <?php } ?>
                       </td>
                       <td style="width: 16px;">
@@ -492,7 +493,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                       </td>
                       <td style="width: 16px;">
                         <a class="btn btn-danger" href="javascript:void(0);"
-                           onclick="javascript:deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $user->getCsrfTokenFromSession() ?>'); return false;"
+                           onclick="deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $user->getCsrfTokenFromSession() ?>');"
                            title="<?= $PMF_LANG['ad_user_delete'] ?>">
                           <i aria-hidden="true" class="fas fa-trash"></i>
                         </a>

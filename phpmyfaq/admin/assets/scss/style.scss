@@ -164,6 +164,11 @@ body {
 .jqstooltip {
   box-sizing: content-box;
 }
+.card-columns, .card-deck {
+  .card {
+    margin-bottom: .75rem;
+  }
+}
 
 //
 // GROUP ADMIN
