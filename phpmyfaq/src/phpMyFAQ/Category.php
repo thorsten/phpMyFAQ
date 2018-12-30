@@ -1251,7 +1251,7 @@ class Category
     {
         $categories = $this->getCategoriesFromFaq($faqId);
         foreach ($categories as $category) {
-            if ((int)$category === (int)$categoryId) {
+            if ((int)$category['id'] === (int)$categoryId) {
                 return true;
             }
         }

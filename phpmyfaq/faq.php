@@ -30,6 +30,7 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
+use phpMyFAQ\Linkverifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\Resultset as SearchResultSet;
@@ -119,7 +120,7 @@ if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight
     }
 }
 
-$linkVerifier = new phpMyFAQ\Linkverifier($faqConfig);
+$linkVerifier = new Linkverifier($faqConfig);
 $linkArray = $linkVerifier->getUrlpool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
@@ -134,7 +135,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new phpMyFAQ\Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
+            $oLink = new Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -294,7 +295,6 @@ $numComments = $faqComment->getNumberOfComments();
 
 // Check if category ID and FAQ ID are linked together
 $isLinkedFAQ = $category->categoryHasLinkToFaq($recordId, $currentCategory);
-
 if (!$isLinkedFAQ) {
     $httpHelper->sendStatus(404);
 }
