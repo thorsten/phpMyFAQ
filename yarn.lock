@@ -164,15 +164,17 @@ body@^5.1.0:
     raw-body "~1.1.0"
     safe-json-parse "~1.0.1"
 
-bootstrap-datepicker@^1.7.1:
+bootstrap-datepicker@^1.8.0:
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/bootstrap-datepicker/-/bootstrap-datepicker-1.8.0.tgz#c63513931e6f09f16ae9f11b62f32d950df3958e"
+  integrity sha512-213St/G8KT3mjs4qu4qwww74KWysMaIeqgq5OhrboZjIjemIpyuxlSo9FNNI5+KzpkkxkRRba+oewiRGV42B1A==
   dependencies:
     jquery ">=1.7.1 <4.0.0"
 
-bootstrap-fileinput@^4.4.5:
+bootstrap-fileinput@^4.5.1:
   version "4.5.1"
   resolved "https://registry.yarnpkg.com/bootstrap-fileinput/-/bootstrap-fileinput-4.5.1.tgz#88b380cecb46ece5611d94685cdedc40ea4e2f78"
+  integrity sha512-rBvpcf995e3pMAsq7NO3KnwjQNgA6fGT5wRu2Y76YAX6yUm6FzAuCX09YTWDv4I07Mrfpj6bgobE8FtDGe6eLQ==
   dependencies:
     bootstrap ">= 3.0.0"
     jquery ">= 1.9.0"
@@ -181,7 +183,7 @@ bootstrap-fileinput@^4.4.5:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.1.3.tgz#0eb371af2c8448e8c210411d0cb824a6409a12be"
 
-bootstrap@^4.0.0:
+bootstrap@^4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.2.1.tgz#8f8bdca024dbf0e8644da32e918c8a03a90a5757"
   integrity sha512-tt/7vIv3Gm2mnd/WeDx36nfGGHleil0Wg8IeB7eMrVkY0fZ5iTaBisSh8oNANc2IBsCc6vCgCNTIM/IEN0+50Q==
@@ -209,9 +211,10 @@ builtin-modules@^1.0.0:
   resolved "https://registry.yarnpkg.com/builtin-modules/-/builtin-modules-1.1.1.tgz#270f076c5a72c02f5b65a47df94c5fe3a278892f"
   integrity sha1-Jw8HbFpywC9bZaR9+Uxf46J4iS8=
 
-bxslider@^4.2.13:
+bxslider@^4.2.14:
   version "4.2.14"
   resolved "https://registry.yarnpkg.com/bxslider/-/bxslider-4.2.14.tgz#5318b78b28a984fc10f3a2e6b04836c6b4b712a2"
+  integrity sha512-7/OV7Jxe8yBS/7tOcxg2hYTPmACFMU1rRs3xqoljjFX/rSgMFVX0dzFqxZHWvUgl0+9TryNy5vhufB/499heFQ==
 
 bytes@1:
   version "1.0.0"
@@ -368,9 +371,10 @@ continuable-cache@^0.3.1:
   version "0.3.1"
   resolved "https://registry.yarnpkg.com/continuable-cache/-/continuable-cache-0.3.1.tgz#bd727a7faed77e71ff3985ac93351a912733ad0f"
 
-cookieconsent@^3.0.4:
+cookieconsent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/cookieconsent/-/cookieconsent-3.1.0.tgz#2c718b304d0e71a6e0d159cac8adf4205fdca152"
+  integrity sha512-FhkOAzZdIVqg7UfPjymgJBA7ZeEjrMgO8RWh+1Z130K7TlJDNnIORMulvqmt66SPyfrUnFB3SYJ55/7EvEcSEA==
 
 core-util-is@1.0.2, core-util-is@~1.0.0:
   version "1.0.2"
@@ -380,6 +384,7 @@ core-util-is@1.0.2, core-util-is@~1.0.0:
 corejs-typeahead@^1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/corejs-typeahead/-/corejs-typeahead-1.2.1.tgz#345a8afe664cc494075b59b64777807f0b3f132b"
+  integrity sha1-NFqK/mZMxJQHW1m2R3eAfws/Eys=
   dependencies:
     jquery ">=1.11"
 
@@ -1033,9 +1038,10 @@ graphlibrary@^2.2.0:
   dependencies:
     lodash "^4.17.5"
 
-grunt-bumpup@^0.6.2:
+grunt-bumpup@^0.6.3:
   version "0.6.3"
   resolved "https://registry.yarnpkg.com/grunt-bumpup/-/grunt-bumpup-0.6.3.tgz#754e96bb6a5337d0b95489e5dc4996bafc8bb414"
+  integrity sha1-dU6Wu2pTN9C5VInl3EmWuvyLtBQ=
   dependencies:
     moment "^2.8.3"
     semver "^4.0.3"
@@ -1052,6 +1058,7 @@ grunt-cli@~1.2.0:
 grunt-contrib-clean@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-clean/-/grunt-contrib-clean-2.0.0.tgz#3be7ca480da4b740aa5e9d863e2f7e8b24f8a68b"
+  integrity sha512-g5ZD3ORk6gMa5ugZosLDQl3dZO7cI3R14U75hTM+dVLVxdMNJCPVmwf9OUt4v4eWgpKKWWoVK9DZc1amJp4nQw==
   dependencies:
     async "^2.6.1"
     rimraf "^2.6.2"
@@ -1059,6 +1066,7 @@ grunt-contrib-clean@^2.0.0:
 grunt-contrib-concat@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/grunt-contrib-concat/-/grunt-contrib-concat-1.0.1.tgz#61509863084e871d7e86de48c015259ed97745bd"
+  integrity sha1-YVCYYwhOhx1+ht5IwBUlntl3Rb0=
   dependencies:
     chalk "^1.0.0"
     source-map "^0.5.3"
@@ -1066,6 +1074,7 @@ grunt-contrib-concat@^1.0.1:
 grunt-contrib-copy@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-copy/-/grunt-contrib-copy-1.0.0.tgz#7060c6581e904b8ab0d00f076e0a8f6e3e7c3573"
+  integrity sha1-cGDGWB6QS4qw0A8HbgqPbj58NXM=
   dependencies:
     chalk "^1.1.1"
     file-sync-cmp "^0.1.0"
@@ -1098,15 +1107,17 @@ grunt-contrib-jshint@^2.0.0:
 grunt-contrib-uglify-es@^3.3.0:
   version "3.3.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-uglify-es/-/grunt-contrib-uglify-es-3.3.0.tgz#c15f7b11fd413203d4e0c9137f5d3faf55a8df80"
+  integrity sha1-wV97Ef1BMgPU4MkTf10/r1Wo34A=
   dependencies:
     chalk "^1.0.0"
     maxmin "^1.1.0"
     uglify-es "~3.3.0"
     uri-path "^1.0.0"
 
-grunt-contrib-watch@^1.0.0:
+grunt-contrib-watch@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/grunt-contrib-watch/-/grunt-contrib-watch-1.1.0.tgz#c143ca5b824b288a024b856639a5345aedb78ed4"
+  integrity sha512-yGweN+0DW5yM+oo58fRu/XIRrPcn3r4tQx+nL7eMRwjpvk+rQY6R8o94BPK0i2UhTg9FN21hS+m8vR8v9vXfeg==
   dependencies:
     async "^2.6.0"
     gaze "^1.1.0"
@@ -1153,9 +1164,10 @@ grunt-sass@^3.0.1:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/grunt-sass/-/grunt-sass-3.0.2.tgz#b4f01567ce3df4460fcc788e9e5e4c65263425ed"
 
-grunt@^1.0.1:
+grunt@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/grunt/-/grunt-1.0.3.tgz#b3c99260c51d1b42835766e796527b60f7bba374"
+  integrity sha512-/JzmZNPfKorlCrrmxWqQO4JVodO+DVd5XX4DkocL/1WlLlKVLE9+SdEIempOAxDhWPysLle6afvn/hg7Ck2k9g==
   dependencies:
     coffeescript "~1.10.0"
     dateformat "~1.0.12"
@@ -1188,9 +1200,10 @@ gzip-size@^3.0.0:
   dependencies:
     duplexer "^0.1.1"
 
-handlebars@^4.0.11:
+handlebars@^4.0.12:
   version "4.0.12"
   resolved "https://registry.yarnpkg.com/handlebars/-/handlebars-4.0.12.tgz#2c15c8a96d46da5e266700518ba8cb8d919d5bc5"
+  integrity sha512-RhmTekP+FZL+XNhwS1Wf+bTTZpdLougwt5pcgA1tuz6Jcx0fpH/7z0qd71RKnZHBCxIRBHfBOnio4gViPemNzA==
   dependencies:
     async "^2.5.0"
     optimist "^0.6.1"
@@ -1239,9 +1252,10 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-highlightjs@^9.10.0:
+highlightjs@^9.12.0:
   version "9.12.0"
   resolved "https://registry.yarnpkg.com/highlightjs/-/highlightjs-9.12.0.tgz#9b84eb42a7aa8488eb69ac79fec44cf495bf72a1"
+  integrity sha512-eAhWMtDZaOZIQdxIP4UEB1vNp/CVXQPdMSihTSuaExhFIRC0BVpXbtP3mTP1hDoGOyh7nbB3cuC3sOPhG5wGDA==
 
 hooker@^0.2.3, hooker@~0.2.3:
   version "0.2.3"
@@ -1386,11 +1400,12 @@ isstream@0.1.x, isstream@~0.1.2:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/isstream/-/isstream-0.1.2.tgz#47e63f7af55afa6f92e1500e690eb8b8529c099a"
 
-jquery-sparkline@^2.3.2:
+jquery-sparkline@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/jquery-sparkline/-/jquery-sparkline-2.4.0.tgz#1be8b7b704dd3857152708aefb1d4a4b3a69fb33"
+  integrity sha1-G+i3twTdOFcVJwiu+x1KSzpp+zM=
 
-"jquery@>= 1.9.0", "jquery@>=1.7.1 <4.0.0", jquery@^3.2.1:
+"jquery@>= 1.9.0", "jquery@>=1.7.1 <4.0.0", jquery@^3.3.1:
   version "3.3.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.3.1.tgz#958ce29e81c9790f31be7792df5d4d95fc57fbca"
 
@@ -1560,10 +1575,6 @@ map-obj@^1.0.0, map-obj@^1.0.1:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-1.0.1.tgz#d933ceb9205d82bdcf4886f6742bdc2b4dea146d"
   integrity sha1-2TPOuSBdgr3PSIb2dCvcK03qFG0=
 
-material-design-icons@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/material-design-icons/-/material-design-icons-3.0.1.tgz#9a71c48747218ebca51e51a66da682038cdcb7bf"
-
 maxmin@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/maxmin/-/maxmin-1.1.0.tgz#71365e84a99dd8f8b3f7d5fde2f00d1e7f73be61"
@@ -1694,7 +1705,7 @@ node-gyp@^3.8.0:
     tar "^2.0.0"
     which "1"
 
-node-sass@^4.10.0:
+node-sass@^4.11.0:
   version "4.11.0"
   resolved "https://registry.yarnpkg.com/node-sass/-/node-sass-4.11.0.tgz#183faec398e9cbe93ba43362e2768ca988a6369a"
   integrity sha512-bHUdHTphgQJZaF1LASx0kAviPH7sGlcyNhWade4eVIpFp6tsn7SV8xNMTbsQFpEV9VXpnwTTnNYlfsZXgGgmkA==
@@ -1908,7 +1919,7 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-popper.js@^1.12.6:
+popper.js@^1.14.6:
   version "1.14.6"
   resolved "https://registry.yarnpkg.com/popper.js/-/popper.js-1.14.6.tgz#ab20dd4edf9288b8b3b6531c47c361107b60b4b0"
   integrity sha512-AGwHGQBKumlk/MDfrSOf0JHhJCImdDMcGNoqKmKkU+68GFazv3CQ6q9r7Ja1sKDZmYWTckY/uLyEznheTDycnA==
@@ -2381,7 +2392,7 @@ tiny-lr@^1.1.1:
     object-assign "^4.1.0"
     qs "^6.4.0"
 
-tinymce@^4.9.0:
+tinymce@^4.9.2:
   version "4.9.2"
   resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.9.2.tgz#c20ba7aa082125f16e0372fbc2f844c83236b75e"
   integrity sha512-ZRoTGG4GAsOI73QPSNkabO7nkoYw9H6cglRB44W2mMkxSiqxYi8WJlgkUphk0fDqo6ZD6r3E+NSP4UHxF2lySg==
@@ -2527,6 +2538,7 @@ winston@^2.4.0:
 wordcloud@^1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/wordcloud/-/wordcloud-1.1.0.tgz#3a1c52f7d088d43ee5ee855d4f86280de57f0758"
+  integrity sha512-2PHPdgYYt6jxu7EIQIY3YAs1/3ONZpVn4hwgpWISdypbwqTByJAE7r9bsRDFG0WKL82i0Y28xRZ0wF00lqZzWg==
 
 wordwrap@~0.0.2:
   version "0.0.3"
