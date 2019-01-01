@@ -8,7 +8,7 @@
  * @category  phpMyFAQ
  * @package   Administration
  * @author    Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2018 phpMyFAQ Team
+ * @copyright 2018-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-09-21

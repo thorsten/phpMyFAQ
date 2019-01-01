@@ -2535,11 +2535,6 @@ winston@^2.4.0:
     isstream "0.1.x"
     stack-trace "0.0.x"
 
-wordcloud@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/wordcloud/-/wordcloud-1.1.0.tgz#3a1c52f7d088d43ee5ee855d4f86280de57f0758"
-  integrity sha512-2PHPdgYYt6jxu7EIQIY3YAs1/3ONZpVn4hwgpWISdypbwqTByJAE7r9bsRDFG0WKL82i0Y28xRZ0wF00lqZzWg==
-
 wordwrap@~0.0.2:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/wordwrap/-/wordwrap-0.0.3.tgz#a3d5da6cd5c0bc0008d37234bbaf1bed63059107"

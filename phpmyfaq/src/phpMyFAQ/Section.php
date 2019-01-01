@@ -13,7 +13,7 @@ namespace phpMyFAQ;
  *
  * @category  phpMyFAQ
  * @author    Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2018 phpMyFAQ Team
+ * @copyright 2018-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-19
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @category  phpMyFAQ
  * @author    Timo Wolf <amna.wolf@gmail.com>
- * @copyright 2018 phpMyFAQ Team
+ * @copyright 2018-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-19

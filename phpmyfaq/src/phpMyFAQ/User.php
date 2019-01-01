@@ -20,7 +20,7 @@ namespace phpMyFAQ;
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2018 phpMyFAQ Team
+ * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
@@ -46,7 +46,7 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Sarah Hermann <sayh@gmx.de>
- * @copyright 2005-2018 phpMyFAQ Team
+ * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17

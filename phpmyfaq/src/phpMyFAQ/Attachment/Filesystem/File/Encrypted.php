@@ -14,7 +14,7 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @category  phpMyFAQ
  *
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2018 phpMyFAQ Team
+ * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      https://www.phpmyfaq.de
@@ -36,7 +36,7 @@ require PMF_ROOT_DIR.'/src/libs/phpseclib/Crypt/AES.php';
  * @category  phpMyFAQ
  *
  * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2018 phpMyFAQ Team
+ * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      https://www.phpmyfaq.de

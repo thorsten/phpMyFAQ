@@ -15,7 +15,7 @@ namespace phpMyFAQ;
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
- * @copyright 2011-2018 phpMyFAQ Team
+ * @copyright 2011-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      https://www.phpmyfaq.de
@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Gustavo Solt <gustavo.solt@mayflower.de>
- * @copyright 2011-2018 phpMyFAQ Team
+ * @copyright 2011-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
  * @link      https://www.phpmyfaq.de

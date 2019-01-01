@@ -15,7 +15,7 @@
  * @author    Ronald <ronald@proudsites.com>
  * @author    Almar van Pel <almar@makeweb.nl>
  * @author    Lieven De Samblanx
- * @copyright 2004-2018 phpMyFAQ Team
+ * @copyright 2004-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2004-07-09

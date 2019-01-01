@@ -14,7 +14,7 @@ namespace phpMyFAQ\Template;
  *
  * @package phpMyFAQ\Template
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018 phpMyFAQ Team
+ * @copyright 2018-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-08-17
@@ -27,7 +27,7 @@ use phpMyFAQ\Meta;
  * Class TemplateHelper
  * @package phpMyFAQ\Template
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018 phpMyFAQ Team
+ * @copyright 2018-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-08-17

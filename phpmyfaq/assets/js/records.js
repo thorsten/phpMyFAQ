@@ -9,7 +9,7 @@
  * @package   JavaScript
  * @author    Hamed Ayari <hamed.ayari@maxdome.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2016 phpMyFAQ Team
+ * @copyright 2016-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  * @since     2016-03-25
@@ -23,7 +23,7 @@ $(document).ready(function () {
     //
     // Show rating
     //
-    var rating = $('#rating span').data('rating');
+    let rating = $('#rating span').data('rating');
     if (0 < rating) {
         rating = Math.floor(rating);
         $('.pmf-star-rating').children('span').each(function () {
@@ -50,7 +50,7 @@ $(document).ready(function () {
     //
     // Initialize Mermaid
     //
-    var config = {
+    const config = {
         startOnLoad:true,
         arrowMarkerAbsolute:true
     };
