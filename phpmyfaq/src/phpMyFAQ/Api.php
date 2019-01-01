@@ -72,7 +72,7 @@ class Api
      * @return array
      * @throws Exception
      */
-    public function getVersions()
+    public function getVersions(): array
     {
         $json = file_get_contents($this->apiUrl . '/versions');
         $result = json_decode($json);
@@ -93,7 +93,7 @@ class Api
      * @return bool
      * @throws Exception
      */
-    public function isVerified()
+    public function isVerified(): bool
     {
         $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->get('main.currentVersion'));
 
@@ -111,7 +111,7 @@ class Api
     /**
      * @return array
      */
-    public function getVerificationIssues()
+    public function getVerificationIssues(): array
     {
         return array_diff(
             json_decode($this->system->createHashes(), true),

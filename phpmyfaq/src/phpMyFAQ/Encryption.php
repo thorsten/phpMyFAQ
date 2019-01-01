@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * Provides methods for password encryption.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -66,18 +64,6 @@ class Encryption
     protected $salt = '';
 
     /**
-     * Encrypts the string str and returns the result.
-     *
-     * @param string $str String
-     *
-     * @return string
-     */
-    public function encrypt($str)
-    {
-        return $str;
-    }
-
-    /**
      * Constructor.
      *
      * @param Configuration $config
@@ -88,9 +74,21 @@ class Encryption
     }
 
     /**
-     * This method is called statically. The parameter enctype specifies the
+     * Encrypts the string str and returns the result.
+     *
+     * @param string $str String
+     *
+     * @return string
+     */
+    public function encrypt($str): string
+    {
+        return $str;
+    }
+
+    /**
+     * This method is called statically. The parameter encType specifies the
      * of encryption method for the encryption object. Supported
-     * are 'crypt', 'md5', 'sha' and 'none'.
+     * are 'crypt', 'md5', 'sha' 'bcrypt', and 'none'.
      *
      * $enc = EncryptionTypes::selectEnc('md5');
      *
@@ -133,7 +131,7 @@ class Encryption
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         if (!is_array($this->errors)) {
             $this->errors = array((string) $this->errors);

@@ -5,8 +5,6 @@ namespace phpMyFAQ\EncryptionTypes;
 /**
  * Provides methods for password encryption using hash().
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Enc_Hash.
+ * Class Hash
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -44,7 +42,7 @@ class Hash extends Encryption
      *
      * @return string
      */
-    public function encrypt($str)
+    public function encrypt($str): string
     {
         return hash('sha256', $str.$this->salt);
     }

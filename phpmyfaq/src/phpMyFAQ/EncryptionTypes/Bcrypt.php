@@ -5,8 +5,6 @@ namespace phpMyFAQ\EncryptionTypes;
 /**
  * Provides methods for password encryption using PHP 5.5+ password_hash().
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Enc_Bcrypt.
+ * Class Bcrypt
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -44,7 +42,7 @@ class Bcrypt extends Encryption
      *
      * @return string
      */
-    public function encrypt($password)
+    public function encrypt($password): string
     {
         return password_hash($password, PASSWORD_BCRYPT);
     }

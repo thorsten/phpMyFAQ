@@ -17,8 +17,6 @@ namespace phpMyFAQ;
  * and security, a password encryption method may be chosen. See documentation
  * EncryptionTypes class for further details.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -44,12 +42,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * Auth.
  *
  * @category  phpMyFAQ
- *
  * @author    Lars Tiedemann <php@larstiedemann.de>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-30
  */
@@ -65,7 +61,7 @@ class Auth
     /**
      * p container that stores the encryption object.
      *
-     * @var PMF_Enc
+     * @var Encryption
      */
     protected $encContainer = null;
 
@@ -101,20 +97,16 @@ class Auth
     }
 
     /**
-     * instantiates a new encryption object, stores it in a private container
-     * returns it.
-     *
      * This method instantiates a new EncryptionTypes object by calling the static
-     * method. The specified encryption method enctype is passed to
-     * The result is stored in the private container variable encContainer and
+     * method.
      *
-     * @param string $enctype encryption type
+     * @param string $encType encryption type
      *
      * @return Encryption
      */
-    public function selectEncType($enctype)
+    public function selectEncType($encType)
     {
-        $this->encContainer = Encryption::selectEnc($enctype, $this->_config);
+        $this->encContainer = Encryption::selectEnc($encType, $this->_config);
 
         return $this->encContainer;
     }
@@ -127,7 +119,7 @@ class Auth
      *
      * @return string
      */
-    public function error()
+    public function error(): string
     {
         $message = '';
 
@@ -155,7 +147,7 @@ class Auth
      *
      * @param string $method Authentication access methods
      *
-     * @return Driver
+     * @return Auth
      */
     public function selectAuth($method)
     {
@@ -186,16 +178,16 @@ class Auth
      *
      * @return bool
      */
-    public function setReadOnly($readOnly = null)
+    public function setReadOnly($readOnly = null): bool 
     {
         if ($readOnly === null) {
             return $this->readOnly;
         }
 
-        $oldreadOnly = $this->readOnly;
+        $oldReadOnly = $this->readOnly;
         $this->readOnly = (bool) $readOnly;
 
-        return $oldreadOnly;
+        return $oldReadOnly;
     }
 
     /**
@@ -205,7 +197,7 @@ class Auth
      *
      * @return string
      */
-    public function encrypt($str)
+    public function encrypt($str): string
     {
         return $this->encContainer->encrypt($str);
     }
@@ -222,9 +214,9 @@ class Auth
      *
      * @return bool
      */
-    public function checkEncryptedPassword($encryptedPassword, $clearPassword)
+    public function checkEncryptedPassword($encryptedPassword, $clearPassword): bool
     {
-        $encTypes = array('crypt', 'md5', 'sha');
+        $encTypes = ['crypt', 'md5', 'sha'];
 
         foreach ($encTypes as $encType) {
             if ($encryptedPassword === Encryption::selectEnc($encType, $this->_config)->encrypt($clearPassword)) {
