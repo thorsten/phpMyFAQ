@@ -5,18 +5,16 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for phpMyFAQ tags.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ\Helper
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2013-12-26
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2013-12-26
  */
 
 use phpMyFAQ\Helper;
@@ -26,14 +24,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Helper_Tags.
+ * Class TagsHelper
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ\Helper
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2013-12-26
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2013-12-26
  */
 class TagsHelper extends Helper
 {
@@ -53,7 +51,7 @@ class TagsHelper extends Helper
     {
         $tagList = '';
         foreach ($tags as $tagId => $tagName) {
-            $tagList .= $this->renderSearchTag($tagId, $tagName, $tags);
+            $tagList .= $this->renderSearchTag($tagId, $tagName);
         }
 
         return $tagList;

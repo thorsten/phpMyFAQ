@@ -5,20 +5,18 @@ namespace phpMyFAQ;
 /**
  * The main Tags class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Georgi Korchev <korchev@yahoo.com>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2006-08-10
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2006-08-10
  */
 
 use phpMyFAQ\Entity\Tags as EntityTags;
@@ -28,23 +26,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Tags.
+ * Class Tags
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Georgi Korchev <korchev@yahoo.com>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2006-08-10
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2006-08-10
  */
 class Tags
 {
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor.
@@ -53,7 +51,7 @@ class Tags
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -107,11 +105,11 @@ class Tags
             (isset($search) && ($search != '') ? 'AND tagging_name '.$like." '".$search."%'" : '')
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
         if ($result) {
             $i = 0;
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 if ($i < $limit) {
                     $allTags[$row->tagging_id] = $row->tagging_name;
                 } else {
@@ -152,9 +150,9 @@ class Tags
             $recordId
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
         if ($result) {
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->tagging_name;
             }
         }
@@ -180,7 +178,7 @@ class Tags
                 Link::getSystemRelativeUri(),
                 $taggingId
             );
-            $oLink = new Link($url, $this->_config);
+            $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $taggingName;
             $oLink->text = $taggingName;
             $oLink->tooltip = $title;
@@ -214,7 +212,7 @@ class Tags
                 if (!in_array(Strings::strtolower($tagName),
                               array_map(array('String', 'strtolower'), $currentTags))) {
                     // Create the new tag
-                    $newTagId = $this->_config->getDb()->nextId(Db::getTablePrefix().'faqtags', 'tagging_id');
+                    $newTagId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
@@ -225,7 +223,7 @@ class Tags
                         $newTagId,
                         $tagName
                     );
-                    $this->_config->getDb()->query($query);
+                    $this->config->getDb()->query($query);
 
                     // Add the tag reference for the faq record
                     $query = sprintf('
@@ -238,7 +236,7 @@ class Tags
                         $recordId,
                         $newTagId
                     );
-                    $this->_config->getDb()->query($query);
+                    $this->config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
                     $query = sprintf('
@@ -254,7 +252,7 @@ class Tags
                             array_map(array('String', 'strtolower'), $currentTags)
                         )
                     );
-                    $this->_config->getDb()->query($query);
+                    $this->config->getDb()->query($query);
                 }
             }
         }
@@ -283,7 +281,7 @@ class Tags
             $entity->getId()
         );
 
-        return $this->_config->getDb()->query($query);
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -308,7 +306,7 @@ class Tags
             $recordId
         );
 
-        $this->_config->getDb()->query($query);
+        $this->config->getDb()->query($query);
 
         return true;
     }
@@ -336,7 +334,7 @@ class Tags
                 $tagId
             );
 
-            $this->_config->getDb()->query($query);
+            $this->config->getDb()->query($query);
         } catch (Exception $e) {
             // @todo Handle exception!
         }
@@ -351,7 +349,7 @@ class Tags
                 $tagId
             );
 
-            $this->_config->getDb()->query($query);
+            $this->config->getDb()->query($query);
         } catch (Exception $e) {
             // @todo Handle exception!
         }
@@ -393,13 +391,13 @@ class Tags
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             implode("', '", $arrayOfTags),
-            $this->_config->getLanguage()->getLanguage(),
+            $this->config->getLanguage()->getLanguage(),
             count($arrayOfTags)
         );
 
         $records = [];
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -436,8 +434,8 @@ class Tags
         );
 
         $records = [];
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -468,8 +466,8 @@ class Tags
             $tagId
         );
 
-        $result = $this->_config->getDb()->query($query);
-        if ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        if ($row = $this->config->getDb()->fetchObject($result)) {
             return $row->tagging_name;
         }
     }
@@ -518,7 +516,7 @@ class Tags
                 Link::getSystemRelativeUri(),
                 $tag['id']
             );
-            $oLink = new Link($url, $this->_config);
+            $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
@@ -558,11 +556,11 @@ class Tags
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             Db::getTablePrefix(),
-            $this->_config->getDb()->escape($tagName));
+            $this->config->getDb()->escape($tagName));
 
         $records = [];
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -598,8 +596,8 @@ class Tags
             $tagId);
 
         $records = [];
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $records[] = $row->record_id;
         }
 
@@ -621,8 +619,8 @@ class Tags
             Db::getTablePrefix()
         );
 
-        $result = $this->_config->getDb()->query($query);
-        if ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        if ($row = $this->config->getDb()->fetchObject($result)) {
             return ($row->n > 0);
         }
 
@@ -651,12 +649,12 @@ class Tags
             ORDER BY freq DESC",
             Db::getTablePrefix(),
             Db::getTablePrefix(),
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
         if ($result) {
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->freq;
                 if (--$limit === 0) {
                     break;
@@ -672,15 +670,13 @@ class Tags
      *
      * @return string
      */
-    public function renderPopularTags($limit = 0)
+    public function renderPopularTags(int $limit = 0): string
     {
         $html = '';
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
-            $direction = $this->isEnglish($tagName[0]) ? 'ltr' : 'rtl';
             $html .= sprintf(
-                '<li><a style="direction:%s;" href="?action=search&tagging_id=%d">%s <span class="badge">%d</span></a></li>',
-                $direction,
+                '<a href="?action=search&tagging_id=%d">%s <span class="badge badge-primary">%d</span></a>',
                 $tagId,
                 $tagName,
                 $tagFreq

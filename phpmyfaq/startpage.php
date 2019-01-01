@@ -126,6 +126,7 @@ $tpl->parseBlock(
 $tpl->parse(
     'writeContent',
     [
+        'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
         'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
         'rssFeedTopTen' => $rssFeedTopTen,
