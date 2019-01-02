@@ -297,13 +297,13 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             // functions for tags
             case 'tags':              require 'tags.main.php'; break;
             case 'deletetag':         require 'tags.main.php'; break;
-            // news administraion
+            // news administration
             case 'news':
-            case 'addnews':
-            case 'editnews':
-            case 'savenews':
-            case 'updatenews':
-            case 'deletenews':        require 'news.php'; break;
+            case 'add-news':
+            case 'edit-news':
+            case 'save-news':
+            case 'update-news':
+            case 'delete-news':       require 'news.php'; break;
             // category administration
             case 'content':
             case 'category':
