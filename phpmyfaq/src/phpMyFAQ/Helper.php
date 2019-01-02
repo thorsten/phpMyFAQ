@@ -148,11 +148,13 @@ abstract class Helper
 
     /**
      * Loads all translation strings.
+     *
+     * @return array
      */
-    public function getTranslations()
+    public function getTranslations(): array
     {
         global $PMF_LANG;
 
-        $this->translation = $PMF_LANG;
+        return $this->translation = $PMF_LANG;
     }
 }

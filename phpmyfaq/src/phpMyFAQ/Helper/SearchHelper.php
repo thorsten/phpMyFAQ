@@ -5,21 +5,20 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for phpMyFAQ search.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ\Helper
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-09-07
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-09-07
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
@@ -33,14 +32,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Helper.
+ * Class SearchHelper
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ\Helper
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-09-07
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-09-07
  */
 class SearchHelper extends Helper
 {
@@ -101,7 +100,7 @@ class SearchHelper extends Helper
      *
      * @param string $searchterm Searchterm
      */
-    public function setSearchterm($searchterm)
+    public function setSearchterm(string $searchterm)
     {
         $this->searchterm = $searchterm;
     }
@@ -109,11 +108,11 @@ class SearchHelper extends Helper
     /**
      * Renders the results for Typehead.
      *
-     * @param Resultset $resultSet PMF_Search_Resultset object
+     * @param Resultset $resultSet Resultset object
      *
      * @return string
      */
-    public function renderInstantResponseResult(Resultset $resultSet)
+    public function renderInstantResponseResult(Resultset $resultSet): string
     {
         $results = [];
         $maxResults = $this->_config->get('records.numberOfRecordsPerPage');
@@ -144,7 +143,7 @@ class SearchHelper extends Helper
                 $faq->faqQuestion = Utils::chopString($question, 15);
                 $faq->faqLink = $link->toString();
 
-                $results['results'][] = $faq;
+                $results[] = $faq;
             }
         } else {
             $results[] = $this->translation['err_noArticles'];
@@ -160,7 +159,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderAdminSuggestionResult(Resultset $resultSet)
+    public function renderAdminSuggestionResult(Resultset $resultSet): string
     {
         $html = '';
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
@@ -174,7 +173,7 @@ class SearchHelper extends Helper
                 }
 
                 if (!isset($result->solution_id)) {
-                    $faq = new FaqHelper($this->_config);
+                    $faq = new Faq($this->_config);
                     $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
                 } else {
                     $solutionId = $result->solution_id;
@@ -207,7 +206,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderSearchResult(Resultset $resultSet, $currentPage)
+    public function renderSearchResult(Resultset $resultSet, int $currentPage): string
     {
         $html = '';
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
@@ -216,9 +215,6 @@ class SearchHelper extends Helper
         $totalPages = ceil($numOfResults / $confPerPage);
         $lastPage = $currentPage * $confPerPage;
         $firstPage = $lastPage - $confPerPage;
-        if ($lastPage > $numOfResults) {
-            $lastPage = $numOfResults;
-        }
 
         if (0 < $numOfResults) {
             $html .= sprintf(
@@ -258,13 +254,13 @@ class SearchHelper extends Helper
                 $question = Utils::chopString($result->question, 15);
                 $answerPreview = $faqHelper->renderAnswerPreview($result->answer, 25);
 
-                $searchterm = str_replace(
+                $searchTerm = str_replace(
                     ['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']', '"'],
                     '',
                     $this->searchterm
                 );
-                $searchterm = preg_quote($searchterm, '/');
-                $searchItems = explode(' ', $searchterm);
+                $searchTerm = preg_quote($searchTerm, '/');
+                $searchItems = explode(' ', $searchTerm);
 
                 if ($this->_config->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $item) {
@@ -283,7 +279,7 @@ class SearchHelper extends Helper
                     $result->category_id,
                     $result->id,
                     $result->lang,
-                    urlencode($searchterm)
+                    urlencode($searchTerm)
                 );
 
                 $oLink = new Link($currentUrl, $this->_config);
@@ -322,7 +318,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderRelatedFaqs(Resultset $resultSet, $recordId)
+    public function renderRelatedFaqs(Resultset $resultSet, int $recordId)
     {
         $html = '';
         $numOfResults = $resultSet->getNumberOfResults();
@@ -373,7 +369,7 @@ class SearchHelper extends Helper
             if (Strings::strlen($searchItem['searchterm']) > 0) {
 
                 $html .= sprintf(
-                    '<li><a class="pmf tag" href="?search=%s&submit=Search&action=search">%s <span class="badge">%dx</span> </a></li>',
+                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s <span class="badge">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']
@@ -389,7 +385,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    private function renderScore($relevance = 0)
+    private function renderScore(int $relevance = 0): string
     {
         $html = sprintf('<span title="%01.2f%%">', $relevance);
 

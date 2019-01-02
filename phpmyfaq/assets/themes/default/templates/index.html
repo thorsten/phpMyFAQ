@@ -85,21 +85,33 @@
   </div>
 </nav>
 
-<!-- SEARCH -->
-<div class="jumbotron">
-  <div class="container">
-    <div class="row">
-      <div class="col">
-        <h3 class="display-5 text-center">How can we help you?</h3>
-        <div class="text-center">
-          <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
-            <input type="hidden" name="action" value="search">
-            <input class="form-control searchfield typeahead" type="text" placeholder="{{ searchBox }} ..."
-                   aria-label="Search" autocomplete="off">
-          </form>
+<!-- Main Search -->
+<div class="container">
+  <br/>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <form class="card card-sm" role="search" id="search" action="{{ writeSendAdress }}" method="get">
+        <input type="hidden" name="action" value="search">
+        <div class="card-body row no-gutters align-items-center">
+          <div class="col-auto">
+            <i class="fas fa-search h4 text-body"></i>
+          </div>
+          <!--end of col-->
+          <div class="col">
+            <input
+              class="typeahead form-control form-control-lg form-control-borderless" autocomplete="off"
+              data-provide="typeahead" type="search" placeholder="{{ searchBox }} ..."
+            >
+          </div>
+          <!--end of col-->
+          <div class="col-auto">
+            <button class="btn btn-lg btn-success" type="submit">{{ searchBox }}</button>
+          </div>
+          <!--end of col-->
         </div>
-      </div>
+      </form>
     </div>
+    <!--end of col-->
   </div>
 </div>
 

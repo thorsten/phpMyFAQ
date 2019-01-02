@@ -9,11 +9,11 @@
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.5.0",
     "bootstrap": "^4.2.1",
+    "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.8.0",
     "bootstrap-fileinput": "^4.5.1",
     "bxslider": "^4.2.14",
     "cookieconsent": "^3.1.0",
-    "corejs-typeahead": "^1.2.1",
     "handlebars": "^4.0.12",
     "highlightjs": "^9.12.0",
     "jquery": "^3.3.1",

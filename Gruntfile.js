@@ -169,7 +169,7 @@ module.exports = function (grunt) {
           'node_modules/bootstrap/js/dist/modal.js',
           'node_modules/bootstrap/js/dist/popover.js',
           'node_modules/bootstrap/js/dist/tab.js',
-          'node_modules/corejs-typeahead/dist/typeahead.bundle.js',
+          'node_modules/bootstrap-3-typeahead/bootstrap3-typeahead.js',
           'node_modules/handlebars/dist/handlebars.js',
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bootstrap-fileinput/js/fileinput.js',
