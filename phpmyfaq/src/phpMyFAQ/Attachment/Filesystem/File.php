@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment\Filesystem;
 /**
  * File handler class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Attachment_Filesystem_File.
+ * Class File.
  * 
  * @category  phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
@@ -87,7 +85,7 @@ abstract class File extends Entry
      *
      * @return bool
      */
-    public function eof()
+    public function eof(): bool
     {
         return feof($this->handle);
     }
@@ -115,7 +113,7 @@ abstract class File extends Entry
      *
      * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         $retval = true;
 
@@ -135,7 +133,7 @@ abstract class File extends Entry
      *
      * @return string
      */
-    public function getMode()
+    public function getMode(): string
     {
         return $this->mode;
     }
@@ -147,7 +145,7 @@ abstract class File extends Entry
      *
      * @return bool
      */
-    public function setMode($mode)
+    public function setMode($mode): bool
     {
         $retval = false;
 
@@ -168,7 +166,7 @@ abstract class File extends Entry
      *
      * @return bool
      */
-    public function copyToSimple($target)
+    public function copyToSimple($target): bool
     {
         if (is_uploaded_file($this->path)) {
             $retval = move_uploaded_file($this->path, $target);
@@ -194,11 +192,11 @@ abstract class File extends Entry
      *
      * @param string $path
      *
-     * @throws PMF_Attachment_Filesystem_File_Exception
+     * @throws Exception
      *
      * @return bool
      */
-    public function deleteDir($path)
+    public function deleteDir($path): bool
     {
         if (!file_exists($path)) {
             throw new Exception("Directory $path doesn't exist.");

@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment;
 /**
  * Abstract attachment class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -20,7 +18,7 @@ namespace phpMyFAQ\Attachment;
  */
 
 use phpMyFAQ\Db;
-use phpMyFAQ\Attachment\Exception;
+use phpMyFAQ\Db\Driver;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -201,7 +199,7 @@ abstract class AttachmentAbstract
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
@@ -221,7 +219,7 @@ abstract class AttachmentAbstract
      *
      * @return int
      */
-    public function getRecordId()
+    public function getRecordId(): int
     {
         return $this->recordId;
     }
@@ -231,7 +229,7 @@ abstract class AttachmentAbstract
      *
      * @return bool
      */
-    protected function getMeta()
+    protected function getMeta(): bool
     {
         $retval = false;
 
@@ -275,7 +273,7 @@ abstract class AttachmentAbstract
      *
      * @todo implement update case
      */
-    public function saveMeta()
+    public function saveMeta(): int
     {
         $faqattTableName = sprintf('%sfaqattachment', Db::getTablePrefix());
 
@@ -333,9 +331,8 @@ abstract class AttachmentAbstract
      * type.
      *
      * @return string
-     *                TODO implement this
      */
-    protected function readMimeType()
+    protected function readMimeType(): string
     {
         $ext = pathinfo($this->filename, PATHINFO_EXTENSION);
         $this->mimeType = MimeType::guessByExt($ext);
@@ -359,7 +356,7 @@ abstract class AttachmentAbstract
      *
      * @return string
      */
-    protected function mkVirtualHash()
+    protected function mkVirtualHash(): string
     {
         if ($this->encrypted) {
             if (null === $this->id || null === $this->recordId ||
@@ -387,7 +384,7 @@ abstract class AttachmentAbstract
      *  
      * @return bool
      */
-    protected function linkedRecords()
+    protected function linkedRecords(): bool
     {
         $assoc = [];
 
@@ -425,7 +422,7 @@ abstract class AttachmentAbstract
      *
      * @return bool
      */
-    public function validate()
+    public function validate(): bool
     {
         // TODO implement this
     }
@@ -435,7 +432,7 @@ abstract class AttachmentAbstract
      *
      * @return string
      */
-    public function getFilename()
+    public function getFilename(): string
     {
         return $this->filename;
     }

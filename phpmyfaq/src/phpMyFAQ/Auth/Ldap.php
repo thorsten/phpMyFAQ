@@ -5,8 +5,6 @@ namespace phpMyFAQ\Auth;
 /**
  * Manages user authentication with LDAP server.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -32,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_Ldap.
+ * Ldap
  *
  * @category  phpMyFAQ
  * @author    Alberto Cabello <alberto@unex.es>
@@ -115,7 +113,7 @@ class Ldap extends Auth implements Driver
      * @param string $domain
      * @return bool
      */
-    public function add($login, $password, $domain = '')
+    public function add($login, $password, $domain = ''): bool
     {
         $user = new User($this->_config);
         $result = $user->createUser($login, null, $domain);
@@ -153,7 +151,7 @@ class Ldap extends Auth implements Driver
      *
      * @return bool
      */
-    public function changePassword($login, $password)
+    public function changePassword($login, $password): bool
     {
         return true;
     }
@@ -165,7 +163,7 @@ class Ldap extends Auth implements Driver
      *
      * @return bool
      */
-    public function delete($login)
+    public function delete($login): bool
     {
         return true;
     }
@@ -186,7 +184,7 @@ class Ldap extends Auth implements Driver
      *
      * @return bool
      */
-    public function checkPassword($login, $password, Array $optionalData = null)
+    public function checkPassword($login, $password, Array $optionalData = null): bool
     {
         if ('' === trim($password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
@@ -263,7 +261,7 @@ class Ldap extends Auth implements Driver
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null)
+    public function checkLogin($login, Array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

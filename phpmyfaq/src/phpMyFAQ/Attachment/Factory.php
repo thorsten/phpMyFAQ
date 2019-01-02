@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment;
 /**
  * Attachment handler class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -71,7 +69,7 @@ class Factory
      *
      * @return File
      */
-    public static function create($id = null, $key = null)
+    public static function create($id = null, $key = null): File
     {
         $retval = null;
 
@@ -109,7 +107,7 @@ class Factory
      *
      * @return array
      */
-    public static function fetchByRecordId(Configuration $config, $recordId)
+    public static function fetchByRecordId(Configuration $config, $recordId): array
     {
         $retval = [];
 
@@ -167,8 +165,8 @@ class Factory
      *
      * @return array
      */
-    public static function rearrangeUploadedFiles(&$filePost) {
-
+    public static function rearrangeUploadedFiles(&$filePost): array
+    {
         $filesArray = [];
         $filesCount = count($filePost['name']);
         $filesKeys = array_keys($filePost);

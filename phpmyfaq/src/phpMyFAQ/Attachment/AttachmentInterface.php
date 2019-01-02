@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment;
 /**
  * Interface to create new attachment types.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -37,11 +35,11 @@ interface AttachmentInterface
     /**
      * Save current attachment to the appropriate storage.
      *
-     * @param string $filepath full path to the attachment file
+     * @param string $filePath full path to the attachment file
      *
      * @return bool
      */
-    public function save($filepath);
+    public function save($filePath);
 
     /**
      * Delete attachment.
@@ -61,7 +59,7 @@ interface AttachmentInterface
      * Output current file to stdout.
      *
      * @param bool   $headers     if headers must be sent
-     * @param string $disposition diposition type (ignored if $headers false)
+     * @param string $disposition disposition type (ignored if $headers false)
      */
     public function rawOut($headers = true, $disposition = 'attachment');
 }

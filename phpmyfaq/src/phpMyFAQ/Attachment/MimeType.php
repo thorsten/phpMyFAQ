@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment;
 /**
  * Mime type class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,7 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Atachment_Abstract.
+ * Class MimeType
  *
  * @category  phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
@@ -36,11 +34,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 abstract class MimeType
 {
     /**
-     * Simple file extensien to mime type mapping.
+     * Simple file extension to mime type mapping.
      *
      * @var array
      */
-    protected static $list = array(
+    protected static $list = [
         'ez' => 'application/andrew-inset',
         'hqx' => 'application/mac-binhex40',
         'cpt' => 'application/mac-compactpro',
@@ -184,17 +182,17 @@ abstract class MimeType
         'odp' => 'application/vnd.oasis.opendocument.presentation ',
         'sxc' => 'application/vnd.sun.xml.calc',
         'odt' => 'application/vnd.oasis.opendocument.text',
-        'log' => 'text/plain',
-    );
+        'log' => 'text/plain'
+    ];
 
     /**
      * Read mime type mapped to extension.
      *
      * @param string $ext file extension
      *
-     * @return string|null
+     * @return string
      */
-    public static function guessByExt($ext)
+    public static function guessByExt($ext): string
     {
         return isset(self::$list[$ext]) ? self::$list[$ext] : 'application/octet-stream';
     }

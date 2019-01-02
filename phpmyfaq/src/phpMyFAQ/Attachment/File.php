@@ -4,8 +4,6 @@ namespace phpMyFAQ\Attachment;
 /**
  * Attachment handler class for files stored in filesystem.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -18,8 +16,6 @@ namespace phpMyFAQ\Attachment;
  * @since     2009-08-21
  */
 
-use phpMyFAQ\Attachment\AttachmentAbstract;
-use phpMyFAQ\Attachment\AttachmentInterface;
 use phpMyFAQ\Attachment\Filesystem\File as FilesystemFile;
 use phpMyFAQ\Attachment\Filesystem\File\Encrypted;
 use phpMyFAQ\Attachment\Filesystem\File\Exception;
@@ -42,13 +38,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class File extends AttachmentAbstract implements AttachmentInterface
 {
     /**
-     * Build file path under which the attachment.
+     * Build file path under which the attachment, file is accessible in filesystem
      *
-     * file is accessible in filesystem
-     *
+     * @throws
      * @return string
      */
-    protected function buildFilePath()
+    protected function buildFilePath(): string
     {
         $retval = PMF_ATTACHMENTS_DIR;
         $fsHash = $this->mkVirtualHash();
@@ -71,14 +66,12 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @return bool success
      */
-    public function createSubDirs($filepath)
+    public function createSubDirs($filepath): bool
     {
         clearstatcache();
-
         $attDir = dirname($filepath);
 
-        return file_exists($attDir) && is_dir($attDir) ||
-               mkdir($attDir, 0777, true);
+        return file_exists($attDir) && is_dir($attDir) || mkdir($attDir, 0777, true);
     }
 
     /**
@@ -86,10 +79,9 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @return bool
      */
-    public function isStorageOk()
+    public function isStorageOk(): bool
     {
         clearstatcache();
-
         $attachmentDir = dirname($this->buildFilePath());
 
         return false !== PMF_ATTACHMENTS_DIR &&
@@ -104,21 +96,23 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * filepath given will be processed and moved to appropriate
      * location.
      *
-     * @param string $filepath full path to the attachment file
+     * @todo rollback if something went wrong
+     *
+     * @param string $filePath full path to the attachment file
      * @param string $filename filename to force
      *
-     * @return bool
+     * @throws
      *
-     * TODO rollback if something went wrong
+     * @return bool
      */
-    public function save($filepath, $filename = null)
+    public function save($filePath, $filename = null): bool
     {
         $retval = false;
 
-        if (file_exists($filepath)) {
-            $this->realHash = md5_file($filepath);
-            $this->filesize = filesize($filepath);
-            $this->filename = null == $filename ? basename($filepath) : $filename;
+        if (file_exists($filePath)) {
+            $this->realHash = md5_file($filePath);
+            $this->filesize = filesize($filePath);
+            $this->filename = null == $filename ? basename($filePath) : $filename;
 
             $this->saveMeta();
 
@@ -130,7 +124,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
                  * overwrite existing unencrypted file duplicates.
                  */
                 if (!$this->linkedRecords()) {
-                    $source = new Vanilla($filepath);
+                    $source = new Vanilla($filePath);
                     $target = $this->getFile(FilesystemFile::MODE_WRITE);
 
                     $retval = $source->moveTo($target);
@@ -158,7 +152,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * 
      * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         $retval = true;
 
@@ -181,7 +175,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @return string
      */
-    public function get()
+    public function get(): string
     {
     }
 
@@ -193,7 +187,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * 
      * @return string
      */
-    public function rawOut($headers = true, $disposition = 'attachment')
+    public function rawOut($headers = true, $disposition = 'attachment'): string
     {
         $file = $this->getFile();
 
@@ -214,8 +208,8 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * Factory method to initialise the corresponding file object.
      * 
      * @param string $mode File mode for file open
-     * 
-     * @return PMF_Attachment_Filesystem_File_Vanilla|PMF_Attachment_Filesystem_File_Encrypted
+     * @throws
+     * @return Vanilla|Encrypted
      */
     private function getFile($mode = FilesystemFile::MODE_READ)
     {

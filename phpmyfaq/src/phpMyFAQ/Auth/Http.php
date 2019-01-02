@@ -5,8 +5,6 @@ namespace phpMyFAQ\Auth;
 /**
  * Manages user authentication with Apache's HTTP authentication.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -28,15 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_Http.
+ * Class Http
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Alberto Cabello <alberto@unex.es>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2009-03-01
  */
@@ -52,7 +48,7 @@ class Http extends Auth implements Driver
      * @param string $domain
      * @return bool
      */
-    public function add($login, $pass, $domain = '')
+    public function add($login, $pass, $domain = ''): bool
     {
         $user = new User($this->_config);
         $result = $user->createUser($login, null);
@@ -72,7 +68,7 @@ class Http extends Auth implements Driver
      *
      * @return bool
      */
-    public function changePassword($login, $pass)
+    public function changePassword($login, $pass): bool
     {
         return true;
     }
@@ -85,7 +81,7 @@ class Http extends Auth implements Driver
      *
      * @return bool
      */
-    public function delete($login)
+    public function delete($login): bool
     {
         return true;
     }
@@ -106,7 +102,7 @@ class Http extends Auth implements Driver
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, Array $optionalData = null)
+    public function checkPassword($login, $pass, Array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
@@ -127,7 +123,7 @@ class Http extends Auth implements Driver
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null)
+    public function checkLogin($login, Array $optionalData = null): int
     {
         return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }

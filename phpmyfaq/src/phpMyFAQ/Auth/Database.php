@@ -5,8 +5,6 @@ namespace phpMyFAQ\Auth;
 /**
  * Manages user authentication with databases.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,7 +19,6 @@ namespace phpMyFAQ\Auth;
  */
 
 use phpMyFAQ\Auth;
-use phpMyFAQ\Auth\Driver;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db;
 use phpMyFAQ\User;
@@ -71,7 +68,7 @@ class Database extends Auth implements Driver
      * @param string $domain
      * @return bool
      */
-    public function add($login, $pass, $domain = '')
+    public function add($login, $pass, $domain = ''): bool
     {
         if ($this->checkLogin($login) > 0) {
             $this->errors[] = User::ERROR_USER_ADD.User::ERROR_USER_LOGIN_NOT_UNIQUE;
@@ -121,7 +118,7 @@ class Database extends Auth implements Driver
      *
      * @return bool
      */
-    public function changePassword($login, $pass)
+    public function changePassword($login, $pass): bool
     {
         $change = sprintf("
             UPDATE
@@ -163,7 +160,7 @@ class Database extends Auth implements Driver
      *
      * @return bool
      */
-    public function delete($login)
+    public function delete($login): bool
     {
         $delete = sprintf("
             DELETE FROM
@@ -203,7 +200,7 @@ class Database extends Auth implements Driver
      *
      * @return bool
      */
-    public function checkPassword($login, $password, Array $optionalData = null)
+    public function checkPassword($login, $password, Array $optionalData = null): bool
     {
         $check = sprintf("
             SELECT
@@ -266,7 +263,7 @@ class Database extends Auth implements Driver
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null)
+    public function checkLogin($login, Array $optionalData = null): int
     {
         $check = sprintf("
             SELECT

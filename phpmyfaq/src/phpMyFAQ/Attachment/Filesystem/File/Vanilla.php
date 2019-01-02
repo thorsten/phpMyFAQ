@@ -5,8 +5,6 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 /**
  * Unencrypted file handler class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -46,36 +44,31 @@ class Vanilla extends File
     const chunkSize = 512;
 
     /**
-     * @see PMF_Attachment_Filesystem_File#getChunk()
+     * @inheritdoc
      */
-    public function getChunk()
+    public function getChunk(): string
     {
         return fread($this->handle, self::chunkSize);
     }
 
     /**
-     * @see PMF_Attachment_Filesystem_File#putChunk($chunk)
+     * @inheritdoc
      */
-    public function putChunk($chunk)
+    public function putChunk($chunk): bool
     {
         return fwrite($this->handle, $chunk);
     }
 
     /**
-     * @see inc/Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#copyTo($entry)
+     * @inheritdoc
      */
-    public function copyTo($target)
+    public function copyTo($target): bool
     {
-        $retval = false;
-
-        $doSimple = is_string($target) ||
-                    $target instanceof self;
+        $doSimple = is_string($target) || $target instanceof self;
 
         if ($doSimple) {
-            /*
-         * If the target is a string or vanilla object, just move
-         * it the simplest way we can. 
-         */
+            // If the target is a string or vanilla object, just move
+            // it the simplest way we can.
             $retval = $this->copyToSimple((string) $target);
         } else {
             $target->setMode(self::MODE_WRITE);

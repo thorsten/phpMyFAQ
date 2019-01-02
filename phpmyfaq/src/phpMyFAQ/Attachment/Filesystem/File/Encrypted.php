@@ -5,18 +5,14 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 /**
  * Encrypted file handler class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- *
+ * @package phpMyFAQ\Attachment\Filesystem\File
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -31,14 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 require PMF_ROOT_DIR.'/src/libs/phpseclib/Crypt/AES.php';
 
 /**
- * PMF_Attachment_Abstract.
+ * Class Encrypted
  *
- * @category  phpMyFAQ
- *
+ * @package phpMyFAQ\Attachment\Filesystem\File
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
@@ -72,12 +66,9 @@ class Encrypted extends File
     }
 
     /**
-     * Chunk here is an encrypted piece of file
-     * until delimiter.
-     *
-     * @see PMF_Attachment_Filesystem_File#getChunk()
+     * @inheritdoc
      */
-    public function getChunk()
+    public function getChunk(): string
     {
         $readEnd = false;
         $chunk = '';
@@ -98,13 +89,13 @@ class Encrypted extends File
      *
      * @return bool
      */
-    public function isEncrypted()
+    public function isEncrypted(): bool
     {
         return true;
     }
 
     /**
-     * @see PMF_Attachment_Filesystem_File#putChunk()
+     * @inheritdoc
      */
     public function putChunk($chunk)
     {
@@ -114,13 +105,9 @@ class Encrypted extends File
     }
 
     /**
-     * @param string $target
-     *
-     * @see src/phpMyFAQ/Attachment/Filesystem/Entry#copyTo($entry)
-     *
-     * @return string
+     * @inheritdoc
      */
-    public function copyTo($target)
+    public function copyTo($target): bool
     {
         $retval = false;
 
