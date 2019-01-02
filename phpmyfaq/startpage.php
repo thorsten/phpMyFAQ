@@ -33,15 +33,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $news = new News($faqConfig);
 
 $archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
-$writeNewsHeader = $faqConfig->get('main.titleFAQ');
 $writeNewsRSS = '';
 
 if (!is_null($archived)) {
-    $writeNewsHeader .= $PMF_LANG['newsArchive'];
+    $writeNewsHeader = $PMF_LANG['newsArchive'];
     $showAllNews = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
     $archived = true;
 } else {
-    $writeNewsHeader .= ' '.$PMF_LANG['msgNews'];
+    $writeNewsHeader = ' '.$PMF_LANG['msgNews'];
     if ($faqConfig->get('main.enableRssFeeds')) {
         $writeNewsRSS = '&nbsp;<a href="feed/news/rss.php" target="_blank">'.
             '<i class="fas fa-rss-square"></i></a>';

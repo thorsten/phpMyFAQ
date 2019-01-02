@@ -176,7 +176,7 @@ class News
             }
 
             $output .= sprintf(
-                '<header><h3><a name="news_%d" href="%s">%s <i aria-hidden="true" class="fas fa-caret-right"></i></a></h3></header>',
+                '<h6><a name="news_%d" href="%s">%s <i aria-hidden="true" class="fas fa-caret-right"></i></a></h6>',
                 $item['id'],
                 $oLink->toString(),
                 $item['header'],
@@ -195,7 +195,7 @@ class News
             }
 
             $output .= sprintf(
-                '<div class="date">%s</div>',
+                '<small class="text-muted">%s</small>',
                 $date->format($item['date'])
             );
         }
