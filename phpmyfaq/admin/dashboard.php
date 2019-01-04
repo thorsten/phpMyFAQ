@@ -39,24 +39,37 @@ $faqTableInfo = $faqConfig->getDb()->getTableStatus(Db::getTablePrefix());
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 ?>
-  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-    <h1 class="h2">
-      <i aria-hidden="true" class="fas fa-tachometer-alt"></i>
-        <?= $PMF_LANG['admin_mainmenu_home'] ?>
-    </h1>
-    <div class="btn-toolbar mb-2 mb-md-0">
-      <div class="btn-group mr-2">
-        <a href="?action=config">
-            <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-              <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
-            <?php else: ?>
-              <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
-            <?php endif; ?>
-        </a>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <h1 class="h2">
+        <i aria-hidden="true" class="fas fa-tachometer-alt"></i>
+          <?= $PMF_LANG['admin_mainmenu_home'] ?>
+      </h1>
+      <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group mr-2">
+          <a href="?action=config">
+              <?php if ($faqConfig->get('main.maintenanceMode')): ?>
+                <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
+              <?php else: ?>
+                <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
+              <?php endif; ?>
+          </a>
+        </div>
       </div>
     </div>
-  </div>
 
+<?php if (version_compare($faqConfig->getCurrentVersion(), System::getVersion(), '<')): ?>
+  <div class="alert alert-danger" role="alert">
+    <h4 class="alert-heading">Well done!</h4>
+    <p>
+      The version number stored in your database is lower than your installed version.
+    </p>
+    <hr>
+    <p>
+      Please update your installation <a href="../setup/update.php" class="alert-link">here</a> as this can cause
+      unintended behaviour.
+    </p>
+  </div>
+<?php endif; ?>
 
     <section class="row">
       <div class="col-lg-12">

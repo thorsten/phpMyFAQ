@@ -107,8 +107,8 @@ class System
 
     /**
      * Sets the database handler.
-     *
      * @param Driver $database
+     * @return $this
      */
     public function setDatabase(Driver $database)
     {

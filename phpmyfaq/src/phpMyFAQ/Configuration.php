@@ -6,8 +6,6 @@ namespace phpMyFAQ;
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -28,9 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Configuration.
- *
- * @category  phpMyFAQ
+ * Class Configuration
+ * @package phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -42,7 +39,7 @@ class Configuration
     /**
      * @var string
      */
-    protected $_tableName = 'faqconfig';
+    protected $tableName = 'faqconfig';
 
     /**
      * @var array
@@ -71,7 +68,7 @@ class Configuration
             FROM
                 %s%s',
             Db::getTablePrefix(),
-            $this->_tableName
+            $this->tableName
         );
 
         $result = $this->getDb()->query($query);
@@ -124,11 +121,11 @@ class Configuration
      *
      * @return bool
      */
-    public function set($key, $value)
+    public function set($key, $value): bool
     {
         $query = sprintf("UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
             Db::getTablePrefix(),
-            $this->_tableName,
+            $this->tableName,
             $this->getDb()->escape(trim($value)),
             $this->getDb()->escape(trim($key))
         );
@@ -151,7 +148,7 @@ class Configuration
      *
      * @return Driver
      */
-    public function getDb()
+    public function getDb(): Driver
     {
         return $this->config['core.database'];
     }
@@ -171,7 +168,7 @@ class Configuration
      *
      * @return Instance
      */
-    public function getInstance()
+    public function getInstance(): Instance
     {
         return $this->config['core.instance'];
     }
@@ -188,22 +185,29 @@ class Configuration
 
     /**
      * Returns the Language object.
-     *
      * @return Language
      */
-    public function getLanguage()
+    public function getLanguage(): Language
     {
         return $this->config['core.language'];
     }
 
     /**
      * Returns the default language.
-     *
      * @return string
      */
-    public function getDefaultLanguage()
+    public function getDefaultLanguage(): string
     {
         return str_replace(['language_', '.php'], '', $this->config['main.language']);
+    }
+
+    /**
+     * Returns the current version
+     * @return string
+     */
+    public function getCurrentVersion(): string
+    {
+        return $this->config['main.currentVersion'];
     }
 
     /**
@@ -211,7 +215,7 @@ class Configuration
      *
      * @return string
      */
-    public function getDefaultUrl()
+    public function getDefaultUrl(): string
     {
         $defaultUrl = $this->get('main.referenceURL');
 
@@ -237,7 +241,7 @@ class Configuration
      *
      * @return Ldap
      */
-    public function getLdap()
+    public function getLdap(): Ldap
     {
         return $this->config['core.ldap'];
     }
@@ -288,7 +292,7 @@ class Configuration
      *
      * @return array
      */
-    public function getLdapConfig()
+    public function getLdapConfig(): array
     {
         return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
     }
@@ -298,7 +302,7 @@ class Configuration
      *
      * @return array
      */
-    public function getLdapMapping()
+    public function getLdapMapping(): array
     {
         return [
             'name' => $this->get('ldap.ldap_mapping.name'),
@@ -313,7 +317,7 @@ class Configuration
      * 
      * @return array
      */
-    public function getLdapOptions()
+    public function getLdapOptions(): array
     {
         return [
             'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
@@ -326,7 +330,7 @@ class Configuration
      *
      * @return array
      */
-    public function getLdapServer()
+    public function getLdapServer(): array
     {
         return isset($this->config['core.ldapServer']) ? $this->config['core.ldapServer'] : [];
     }
@@ -346,7 +350,7 @@ class Configuration
      *
      * @return Client
      */
-    public function getElasticsearch()
+    public function getElasticsearch(): Client
     {
         return $this->config['core.elasticsearch'];
     }
@@ -366,7 +370,7 @@ class Configuration
      *
      * @return array
      */
-    public function getElasticsearchConfig()
+    public function getElasticsearchConfig(): array
     {
         return isset($this->config['core.elasticsearchConfig']) ? $this->config['core.elasticsearchConfig'] : [];
     }
@@ -379,7 +383,7 @@ class Configuration
      *
      * @return bool
      */
-    public function add($name, $value)
+    public function add($name, $value): bool
     {
         $insert = sprintf(
             "INSERT INTO
@@ -387,7 +391,7 @@ class Configuration
             VALUES
                 ('%s', '%s')",
             Db::getTablePrefix(),
-            $this->_tableName,
+            $this->tableName,
             $this->getDb()->escape(trim($name)),
             $this->getDb()->escape(trim($value))
         );
@@ -402,7 +406,7 @@ class Configuration
      *
      * @return bool
      */
-    public function delete($name)
+    public function delete($name): bool
     {
         $delete = sprintf(
             "DELETE FROM
@@ -410,7 +414,7 @@ class Configuration
             WHERE
               config_name = '%s'",
             Db::getTablePrefix(),
-            $this->_tableName,
+            $this->tableName,
             $this->getDb()->escape(trim($name))
         );
 
@@ -424,7 +428,7 @@ class Configuration
      *
      * @return bool
      */
-    public function update(Array $newConfigs)
+    public function update(Array $newConfigs): bool
     {
         $runtimeConfigs = [
             'core.database',           // phpMyFAQ\Db_Driver
@@ -449,7 +453,7 @@ class Configuration
                         WHERE
                             config_name = '%s'",
                         Db::getTablePrefix(),
-                        $this->_tableName,
+                        $this->tableName,
                         $this->getDb()->escape(trim($value)),
                         $name
                     );
@@ -474,7 +478,7 @@ class Configuration
      *
      * @return string
      */
-    public static function sortingOptions($current)
+    public static function sortingOptions($current): string
     {
         global $LANG;
 
