@@ -676,7 +676,7 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $html .= sprintf(
-                '<a href="?action=search&tagging_id=%d">%s <span class="badge badge-primary">%d</span></a>',
+                '<a class="btn btn-outline-primary pmf-btn-tag-cloud" href="?action=search&tagging_id=%d">%s <span class="badge badge-dark">%d</span></a>',
                 $tagId,
                 $tagName,
                 $tagFreq

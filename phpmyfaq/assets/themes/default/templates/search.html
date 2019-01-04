@@ -1,27 +1,21 @@
 <section>
             [searchTagsSection]
-            <div class="clearfix">
-                <ul class="pmf-tags">
-                    {{ searchTags }}
-                </ul>
+            <div class="pmf-tag-cloud">
+              {{ searchTags }}
             </div>
             [/searchTagsSection]
 
             [tagListSection]
             <h3>{{ msgTags }}</h3>
             <div class="clearfix">
-                <ul class="pmf-tags">
-                {{ tagList }}
-                </ul>
+              {{ tagList }}
             </div>
             [/tagListSection]
 
             [relatedTags]
             <h4>{{ relatedTagsHeader }}</h4>
-            <div class="clearfix">
-                <ul class="pmf-tags">
-                    {{ relatedTags }}
-                </ul>
+            <div class="pmf-tag-cloud">
+              {{ relatedTags }}
             </div>
             [/relatedTags]
 

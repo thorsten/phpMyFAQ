@@ -230,7 +230,9 @@ $categoryHelper = new CategoryHelper();
 $categoryHelper->setCategory($category);
 
 $searchHelper = new SearchHelper($faqConfig);
-$searchHelper->setSearchterm($inputSearchTerm);
+if (!is_null($inputSearchTerm)) {
+    $searchHelper->setSearchterm($inputSearchTerm);
+}
 $searchHelper->setCategory($category);
 $searchHelper->setPagination($faqPagination);
 $searchHelper->setPlurals($plr);

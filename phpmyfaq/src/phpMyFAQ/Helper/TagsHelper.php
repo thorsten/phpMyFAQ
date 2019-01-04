@@ -47,7 +47,7 @@ class TagsHelper extends Helper
      *
      * @return string
      */
-    public function renderTagList(Array $tags)
+    public function renderTagList(Array $tags): string
     {
         $tagList = '';
         foreach ($tags as $tagId => $tagName) {
@@ -65,7 +65,7 @@ class TagsHelper extends Helper
      *
      * @return string
      */
-    public function renderSearchTag($tagId, $tagName)
+    public function renderSearchTag($tagId, $tagName): string
     {
         $taggingIds = str_replace($tagId, '', $this->getTaggingIds());
         $taggingIds = str_replace(' ', '', $taggingIds);
@@ -74,13 +74,13 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a></li> ',
+                '<a class="btn btn-outline-primary" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<li><a class="btn tag" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a></li> ',
+                '<a class="btn btn-outline-primary" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fas fa-minus-square"></i></a> ',
                 $tagName
             );
     }
@@ -94,10 +94,10 @@ class TagsHelper extends Helper
      *
      * @return string
      */
-    public function renderRelatedTag($tagId, $tagName, $relevance)
+    public function renderRelatedTag($tagId, $tagName, $relevance): string
     {
         return sprintf(
-            '<li><a class="btn tag" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge">%d</span></a></li>',
+            '<a class="btn btn-outline-primary" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge badge-dark">%d</span></a>',
             implode(',', $this->getTaggingIds()).','.$tagId,
             '<i aria-hidden="true" class="fas fa-plus-square"></i> ',
             $tagName,
