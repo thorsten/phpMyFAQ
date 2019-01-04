@@ -121,7 +121,7 @@ class Configuration
      *
      * @return bool
      */
-    public function set($key, $value): bool
+    public function set($key, $value)
     {
         $query = sprintf("UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
             Db::getTablePrefix(),
@@ -381,9 +381,9 @@ class Configuration
      * @param string $name
      * @param mixed  $value
      *
-     * @return bool
+     * @return bool|object
      */
-    public function add($name, $value): bool
+    public function add($name, $value)
     {
         $insert = sprintf(
             "INSERT INTO
