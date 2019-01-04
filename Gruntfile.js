@@ -177,7 +177,7 @@ module.exports = function (grunt) {
           'node_modules/cookieconsent/src/cookieconsent.js',
           'node_modules/wordcloud/src/wordcloud2.js'
         ],
-        dest: 'phpmyfaq/assets/js/vendors.js'
+        dest: 'phpmyfaq/assets/themes/default/js/vendors.js'
       },
       dist: {
         src: [
@@ -192,17 +192,18 @@ module.exports = function (grunt) {
           'phpmyfaq/assets/js/functions.js',
           'phpmyfaq/assets/js/setup.js'
         ],
-        dest: 'phpmyfaq/assets/js/phpmyfaq.js'
+        dest: 'phpmyfaq/assets/themes/default/js/phpmyfaq.js'
       }
     },
     uglify: {
       options: {
         banner: '<%= banner %>',
-        preserveComments: 'some'
+        preserveComments: /(?:^!|@(?:license|preserve|cc_on))/
       },
       frontend: {
         files: {
-          'phpmyfaq/assets/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ]
+          'phpmyfaq/assets/themes/default/js/phpmyfaq.min.js': [ '<%= concat.dist.dest %>' ],
+          'phpmyfaq/assets/themes/default/js/vendors.min.js': [ '<%= concat.vendors.dest %>' ]
         }
       },
       phpmyfaq_tinymce_plugin: {

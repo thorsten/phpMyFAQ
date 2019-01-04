@@ -34,23 +34,18 @@ phpmyfaq/src/libs/*
 # Third party frontend libraries and generated JS/CSS
 phpmyfaq/admin/assets/css
 phpmyfaq/admin/assets/fonts
-phpmyfaq/admin/assets/icons
 phpmyfaq/admin/assets/js/editor/tinymce.min.js
 phpmyfaq/admin/assets/js/editor/plugins/
 phpmyfaq/admin/assets/js/editor/skins/
 phpmyfaq/admin/assets/js/editor/themes/
 phpmyfaq/assets/fonts
-phpmyfaq/assets/icons
 phpmyfaq/assets/js/libs
-phpmyfaq/assets/js/phpmyfaq.js
-phpmyfaq/assets/js/phpmyfaq.js.map
-phpmyfaq/assets/js/phpmyfaq.min.js
 phpmyfaq/assets/js/vendors.js
-phpmyfaq/assets/js/vendors.js.map
 phpmyfaq/assets/svg/*.svg
 phpmyfaq/assets/themes/default/css/*.css
 phpmyfaq/assets/themes/default/css/*.map
 phpmyfaq/assets/themes/default/fonts/*
+phpmyfaq/assets/themes/default/js/*
 
 # Composer related stuff
 bin/*
