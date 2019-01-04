@@ -2,8 +2,6 @@
 /**
  * Frontend for Backup and Restore.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -15,6 +13,7 @@
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -32,7 +31,6 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <?= $PMF_LANG['ad_csv_backup'] ?>
     </h1>
   </div>
-
 
   <div class="card-deck">
     <div class="card">
