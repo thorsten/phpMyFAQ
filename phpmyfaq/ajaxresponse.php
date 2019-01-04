@@ -3,8 +3,6 @@
 /**
  * The Ajax driven response page.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,6 +22,7 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\Exception;
@@ -62,7 +61,7 @@ if (Language::isASupportedLanguage($ajaxLanguage)) {
 $plr = new Plurals($PMF_LANG);
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init($languageCode);
 
@@ -75,7 +74,7 @@ if (!$user instanceof CurrentUser) {
 }
 if (isset($user) && is_object($user)) {
     $current_user = $user->getUserId();
-    if ($user->perm instanceof Medium) {
+    if ($user->perm instanceof MediumPermission) {
         $current_groups = $user->perm->getUserGroups($current_user);
     } else {
         $current_groups = array(-1);
@@ -116,7 +115,7 @@ if (!is_null($searchString)) {
         $searchResult = $faqSearch->autoComplete($searchString);
         $faqSearchResult->reviewResultset($searchResult);
     } catch (Exception $e) {
-        // @todo handle the exception
+        $http->sendWithHeaders($e->getMessage());
     }
 
     $faqSearchHelper = new SearchHelper($faqConfig);
@@ -124,5 +123,5 @@ if (!is_null($searchString)) {
     $faqSearchHelper->setCategory($category);
     $faqSearchHelper->setPlurals($plr);
 
-    echo $faqSearchHelper->renderInstantResponseResult($faqSearchResult);
+    $http->sendWithHeaders($faqSearchHelper->renderInstantResponseResult($faqSearchResult));
 }

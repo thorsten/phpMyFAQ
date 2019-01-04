@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The phpMyFAQ Search class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -59,7 +57,7 @@ class Search
     /**
      * Entity object.
      *
-     * @var PMF_Category
+     * @var Category
      */
     private $category = null;
 
@@ -116,7 +114,7 @@ class Search
         if ($this->_config->get('search.enableElasticsearch')) {
             try {
                 return $this->searchElasticsearch($searchTerm, $allLanguages);
-            } catch (NoNodesAvailableException $e) {
+            } catch (Exception $e) {
                 throw new Exception($e->getMessage());
             }
         } else {
@@ -222,6 +220,7 @@ class Search
      *
      * @param string $searchTerm   Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
+     * @throws
      *
      * @return array
      */
@@ -374,7 +373,7 @@ class Search
      *
      * @param Category $category
      */
-    public function setCategory($category)
+    public function setCategory(Category $category)
     {
         $this->category = $category;
     }
@@ -382,9 +381,9 @@ class Search
     /**
      * Returns the CategoryHelper object.
      *
-     * @return PMF_Category
+     * @return Category
      */
-    public function getCategory()
+    public function getCategory(): Category
     {
         return $this->category;
     }

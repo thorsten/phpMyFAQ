@@ -145,8 +145,6 @@ class SearchHelper extends Helper
 
                 $results[] = $faq;
             }
-        } else {
-            $results[] = $this->translation['err_noArticles'];
         }
 
         return json_encode($results);

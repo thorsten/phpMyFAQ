@@ -13,7 +13,6 @@
  */
 
 /*global $: false */
-
 $(window).on('load', () => {
   'use strict';
   $('.typeahead').typeahead({
@@ -27,7 +26,7 @@ $(window).on('load', () => {
         dataType: 'JSON',
         data: 'search=' + request,
         success: (data) => {
-          response($.map(data, (item) => {
+          response(data.map((item) => {
             return {
               url: item.faqLink,
               question: item.faqQuestion
