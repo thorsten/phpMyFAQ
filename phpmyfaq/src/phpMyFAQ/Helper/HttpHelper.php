@@ -83,7 +83,7 @@ class HttpHelper extends Helper
      *
      * @param int $code HTTP status code
      */
-    public function sendStatus($code)
+    public function sendStatus(int $code)
     {
         switch ($code) {
             case 301:
@@ -103,7 +103,6 @@ class HttpHelper extends Helper
                 }
                 break;
         }
-
         exit();
     }
 

@@ -3,22 +3,21 @@
 /**
  * Frontend for categories or list of records.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2002-08-27
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-08-27
  */
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Link;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,8 +29,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$http = new HttpHelper();
+
 $selectedCategoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $subCategoryContent = '';
+
+if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
+    $http->sendStatus(404);
+}
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
