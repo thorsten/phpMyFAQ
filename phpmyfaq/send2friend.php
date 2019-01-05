@@ -3,21 +3,24 @@
 /**
  * The send2friend page.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2002-09-16
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-09-16
  */
+
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\User\CurrentUser;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,7 +30,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new phpMyFAQ\Captcha($faqConfig);
+$http = new HttpHelper();
+$captcha = new Captcha($faqConfig);
+$captchaHelper = new CaptchaHelper($faqConfig);
+
+if (!$faqConfig->get('main.enableSendToFriend')) {
+    $http->redirect('/');
+}
+
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -41,22 +51,21 @@ try {
     // @todo handle the exception
 }
 
-$cat = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$artlang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
+$cat = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPED);
 
 $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqConfig->getDefaultUrl(),
     (int) $cat,
     (int) $id,
-    urlencode($artlang));
+    urlencode($faqLanguage));
 
-$captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
 
 $tpl->parse(
     'writeContent',
-    array(
-        'lang' => $artlang,
+    [
+        'lang' => $faqLanguage,
         'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],
         'msgS2FReferrer' => 'link',
         'msgS2FName' => $PMF_LANG['msgS2FName'],
@@ -72,7 +81,7 @@ $tpl->parse(
         'msgS2FMessage' => $PMF_LANG['msgS2FMessage'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'send2friend', $PMF_LANG['msgCaptcha'], $auth),
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
-    )
+    ]
 );
 
 $tpl->parseBlock(

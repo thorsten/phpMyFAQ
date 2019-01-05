@@ -5,18 +5,16 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for phpMyFAQ FAQs.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ\Helper
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2010-11-12
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2010-11-12
  */
 
 use phpMyFAQ\Category;
@@ -33,14 +31,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Helper_Faq.
- *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * Class FaqHelper
+ * @package phpMyFAQ\Helper
+ * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2010-11-12
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2010-11-12
  */
 class FaqHelper extends Helper
 {
@@ -76,7 +73,7 @@ class FaqHelper extends Helper
      *
      * @return bool
      */
-    public function getSsl()
+    public function getSsl(): bool
     {
         return $this->ssl;
     }
@@ -88,7 +85,7 @@ class FaqHelper extends Helper
      *
      * @return string
      */
-    public function renderFacebookLikeButton($url)
+    public function renderFacebookLikeButton(string $url): string
     {
         if (empty($url) || $this->_config->get('socialnetworks.enableFacebookSupport') == false) {
             return '';
@@ -114,7 +111,7 @@ class FaqHelper extends Helper
      *
      * @return string
      */
-    public function renderFacebookShareLink($url)
+    public function renderFacebookShareLink(string $url): string
     {
         if (empty($url) || $this->_config->get('socialnetworks.disableAll') === true) {
             return '';
@@ -122,11 +119,11 @@ class FaqHelper extends Helper
 
         $icon = '<span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fas fa-facebook fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fab fa-facebook fa-stack-1x"></i>
                     </span>';
 
         return sprintf(
-            '<a href="%s" target="_blank">%s</a>',
+            '<a rel="nofollow" href="%s" target="_blank">%s</a>',
             $url,
             $icon
         );
@@ -139,23 +136,47 @@ class FaqHelper extends Helper
      *
      * @return string
      */
-    public function renderTwitterShareLink($url)
+    public function renderTwitterShareLink(string $url): string
     {
-        if (empty($url) || $this->_config->get('socialnetworks.disableAll') === true) {
+        if (empty($url) || $this->_config->get('socialnetworks.disableAll')) {
             return '';
         }
 
         $icon = '<span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fas fa-twitter fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fab fa-twitter fa-stack-1x"></i>
                     </span>';
 
         return sprintf(
-            '<a href="%s" target="_blank">%s</a>',
+            '<a rel="nofollow" href="%s" target="_blank">%s</a>',
             $url,
             $icon
         );
     }
+
+    /**
+     * Renders a "Send to friend" HTML snippet.
+     * @param string $url
+     * @return string
+     */
+    public function renderSendToFriend(string $url): string
+    {
+        if (empty($url) || !$this->_config->get('main.enableSendToFriend')) {
+            return '';
+        }
+
+        $icon = '<span class="fa-stack fa-lg">
+                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fas fa-envelope fa-stack-1x"></i>
+                    </span>';
+
+        return sprintf(
+            '<a rel="nofollow" href="%s">%s</a>',
+            $url,
+            $icon
+        );
+    }
+
 
     /**
      * Renders a select box with all translations of a FAQ.
@@ -206,7 +227,7 @@ class FaqHelper extends Helper
     public function renderAnswerPreview($answer, $numWords)
     {
         if ($this->_config->get('main.enableMarkdownEditor')) {
-            $parseDown = new ParsedownExtra();
+            $parseDown = new \ParsedownExtra();
             return Utils::chopString(strip_tags($parseDown->text($answer)), $numWords);
         } else {
             return Utils::chopString(strip_tags($answer), $numWords);
