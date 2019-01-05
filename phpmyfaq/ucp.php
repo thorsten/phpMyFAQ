@@ -46,7 +46,7 @@ if ($user instanceof CurrentUser) {
         $gravatarImg = '';
     }
 
-    $tpl->parse(
+    $template->parse(
         'writeContent',
         array(
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
@@ -64,7 +64,7 @@ if ($user instanceof CurrentUser) {
         )
     );
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'breadcrumb',
         [

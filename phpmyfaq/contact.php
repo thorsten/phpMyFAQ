@@ -47,7 +47,7 @@ if (!is_null($showCaptcha)) {
 
 $captchaHelper = new CaptchaHelper($faqConfig);
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'msgContact' => $PMF_LANG['msgContact'],
@@ -68,7 +68,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

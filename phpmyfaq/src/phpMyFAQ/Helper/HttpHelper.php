@@ -38,11 +38,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 class HttpHelper extends Helper
 {
     /**
-     * Content type.
-     *
+     * Content type
      * @var string
      */
     private $contentType = '';
+
+    /**
+     * HTTP status code
+     * @var int
+     */
+    private $statusCode;
 
     /**
      * Setter for content type.
@@ -85,6 +90,7 @@ class HttpHelper extends Helper
      */
     public function sendStatus(int $code)
     {
+        $this->statusCode = $code;
         switch ($code) {
             case 301:
                 header('HTTP/1.1 301 Moved Permanently');
@@ -103,7 +109,15 @@ class HttpHelper extends Helper
                 }
                 break;
         }
-        exit();
+    }
+
+    /**
+     * Returns the HTTP status code
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
     }
 
     /**
@@ -111,6 +125,7 @@ class HttpHelper extends Helper
      */
     public function redirect($url)
     {
+        $this->sendStatus(301);
         header('Location: ' . $url);
     }
 

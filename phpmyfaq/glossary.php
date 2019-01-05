@@ -69,7 +69,7 @@ if (0 < $numItems) {
         ++$i;
     }
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'glossaryItems',
         array(
@@ -79,7 +79,7 @@ if (0 < $numItems) {
     );
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'msgGlossary' => $PMF_LANG['ad_menu_glossary'],
@@ -90,7 +90,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

@@ -48,7 +48,7 @@ $sitemap = new Sitemap($faqConfig);
 $sitemap->setUser($current_user);
 $sitemap->setGroups($current_groups);
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'writeLetters' => $sitemap->getAllFirstLetters(),
@@ -57,7 +57,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

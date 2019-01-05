@@ -124,7 +124,7 @@ if ($news['active'] && (!$expired)) {
 
 $captchaHelper = new CaptchaHelper($faqConfig);
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'writeNewsHeader' => $newsMainHeader,
@@ -151,7 +151,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

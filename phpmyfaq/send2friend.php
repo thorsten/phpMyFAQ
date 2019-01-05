@@ -35,7 +35,8 @@ $captcha = new Captcha($faqConfig);
 $captchaHelper = new CaptchaHelper($faqConfig);
 
 if (!$faqConfig->get('main.enableSendToFriend')) {
-    $http->redirect('/');
+    $http->sendStatus(403);
+    $http->redirect($faqConfig->getDefaultUrl());
 }
 
 $captcha->setSessionId($sids);
@@ -62,7 +63,7 @@ $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artl
     urlencode($faqLanguage));
 
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'lang' => $faqLanguage,
@@ -84,7 +85,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

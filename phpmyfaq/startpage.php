@@ -51,7 +51,7 @@ if (!is_null($archived)) {
 
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'stickyRecordsList',
         [
@@ -71,7 +71,7 @@ if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
 
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'toptenList',
         array(
@@ -82,7 +82,7 @@ if (!isset($toptenParams['error'])) {
         )
     );
 } else {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'toptenListError',
         array(
@@ -93,7 +93,7 @@ if (!isset($toptenParams['error'])) {
 
 $latestEntriesParams = $faq->getLatest();
 if (!isset($latestEntriesParams['error'])) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'latestEntriesList',
         array(
@@ -104,7 +104,7 @@ if (!isset($latestEntriesParams['error'])) {
         )
     );
 } else {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'latestEntriesListError',
         [
@@ -113,7 +113,7 @@ if (!isset($latestEntriesParams['error'])) {
     );
 }
 
-$tpl->parseBlock(
+$template->parseBlock(
     'writeContent',
     'tagListSection',
     [
@@ -122,7 +122,7 @@ $tpl->parseBlock(
     ]
 );
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -147,7 +147,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

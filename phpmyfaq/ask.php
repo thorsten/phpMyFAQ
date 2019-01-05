@@ -59,7 +59,7 @@ $categoryHelper->setCategory($category);
 
 $captchaHelper = new CaptchaHelper($faqConfig);
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'msgQuestion' => $PMF_LANG['msgQuestion'],
@@ -79,7 +79,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

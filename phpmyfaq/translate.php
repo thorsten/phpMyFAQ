@@ -67,7 +67,7 @@ $captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'enableWysiwygEditor',
         array(
@@ -76,7 +76,7 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     );
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'writeSourceFaqId' => $faqSource['id'],
@@ -103,7 +103,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

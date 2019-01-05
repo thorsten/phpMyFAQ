@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Link;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,8 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
-$http = new HttpHelper();
 
 $selectedCategoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 $subCategoryContent = '';
@@ -62,7 +59,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         if (count($category->getChildNodes($selectedCategoryId))) {
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
             $subCategoryContent = $subCategory->viewTree();
-            $tpl->parseBlock(
+            $template->parseBlock(
                 'writeContent',
                 'subCategories',
                 [
@@ -87,7 +84,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     if (!is_null($categoryData->getImage())) {
-        $tpl->parseBlock(
+        $template->parseBlock(
             'writeContent',
             'categoryImage',
             [
@@ -96,7 +93,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         );
     }
 
-    $tpl->parse(
+    $template->parse(
         'writeContent',
         [
             'categoryHeader' => $PMF_LANG['msgEntriesIn'].$categoryData->getName(),
@@ -108,7 +105,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ]
     );
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'breadcrumb',
         [
@@ -123,7 +120,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         // @todo handle the exception
     }
 
-    $tpl->parse(
+    $template->parse(
         'writeContent',
         [
             'categoryHeader' => $PMF_LANG['msgFullCategories'],
@@ -135,7 +132,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ]
     );
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'breadcrumb',
         [

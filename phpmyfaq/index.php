@@ -6,20 +6,18 @@
  * the templates we need and set all internal variables to the template
  * variables. That's all.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Lars Tiedemann <php@larstiedemann.de>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2001-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2001-02-12
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2001-02-12
  */
 
 use phpMyFAQ\Attachment\Factory;
@@ -54,6 +52,11 @@ define('IS_VALID_PHPMYFAQ', null);
 // Bootstrapping
 //
 require __DIR__.'/src/Bootstrap.php';
+
+//
+// HTTP Helper
+//
+$http = new HelperHttp();
 
 //
 // Get language (default: english)
@@ -465,7 +468,7 @@ if ($faqConfig->get('main.maintenanceMode')) {
 //
 // Load template files and set template variables
 //
-$tpl = new Template(
+$template = new Template(
     [
         'index' => $indexSet,
         'writeContent' => $includeTemplate,
@@ -541,7 +544,7 @@ $tplMainPage = array(
     'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'categoryListSection',
     array(
@@ -551,7 +554,7 @@ $tpl->parseBlock(
 );
 
 if ('main' == $action || 'show' == $action) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'globalSearchBox',
         array(
@@ -625,7 +628,7 @@ if (isset($auth)) {
         $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>';
     }
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'userloggedIn',
         [
@@ -643,7 +646,7 @@ if (isset($auth)) {
     } else {
         $msgLoginUser = '<a class="dropdown-item" href="?action=login">%s</a>';
     }
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'notLoggedIn',
         array(
@@ -667,7 +670,7 @@ if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
     $faqHelper = new HelperFaq($faqConfig);
     $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'socialLinks',
         [
@@ -703,7 +706,7 @@ $tplHeaders = [
 ];
 
 if (DEBUG) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'index',
         'debugMode',
         array(
@@ -721,18 +724,31 @@ require $includePhp;
 //
 // Get main template, set main variables
 //
-$tpl->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
-$tpl->merge('writeContent', 'index');
+$template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+$template->merge('writeContent', 'index');
 
 //
 // Send headers and print template
 //
-$httpHeader = new HelperHttp();
-$httpHeader->setConfiguration($faqConfig);
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
-$httpHeader->startCompression();
+$http->setConfiguration($faqConfig);
+$http->setContentType('text/html');
+$http->addHeader();
+$http->startCompression();
 
-echo $tpl->render();
+//
+// Check for 404 HTTP status code
+//
+if ($http->getStatusCode() === 404) {
+    $template = new Template(
+        [
+            'index' => '404.html'
+        ],
+        new TemplateHelper($faqConfig),
+        $faqConfig->get('main.templateSet')
+    );
+    $template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+}
+
+echo $template->render();
 
 $faqConfig->getDb()->close();

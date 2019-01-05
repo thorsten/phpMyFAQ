@@ -38,7 +38,7 @@ if ($faqConfig->get('main.enableRssFeeds')) {
     $rssFeedOpenQuestions = '';
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
@@ -49,7 +49,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

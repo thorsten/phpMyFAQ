@@ -225,7 +225,7 @@ $translationUrl = sprintf(
 $availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
 if (!empty($availableLanguages) && count($availableLanguages) > 1) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'switchLanguage',
         [
@@ -236,7 +236,7 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
 
 if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
     !empty($availableLanguages) && count($availableLanguages) > 1) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'addTranslation',
         [
@@ -246,7 +246,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'edit_faq') && !empty($faq->faqRecord['notes'])) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'privateNotes',
         [
@@ -257,7 +257,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') && !empty($faq->faqR
 }
 
 if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'tagsAvailable',
         [
@@ -267,7 +267,7 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
 }
 
 if ('' !== $htmlAllCategories) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'relatedCategories',
         [
@@ -278,7 +278,7 @@ if ('' !== $htmlAllCategories) {
 }
 
 if ('' !== $relatedFaqs) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'relatedFaqs',
         [
@@ -299,7 +299,7 @@ if (!$isLinkedFAQ) {
     $httpHelper->sendStatus(404);
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -354,7 +354,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

@@ -38,7 +38,7 @@ try {
     // @todo handle the exception
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
@@ -54,7 +54,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

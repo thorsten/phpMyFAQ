@@ -75,7 +75,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'enableWysiwygEditor',
         array(
@@ -84,7 +84,7 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     );
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -109,7 +109,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

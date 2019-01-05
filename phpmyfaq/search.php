@@ -243,14 +243,14 @@ if ('' == $searchResult && !is_null($inputSearchTerm)) {
 }
 
 if ($tagSearch) {
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'searchTagsSection',
         [
             'searchTags' => $tagHelper->renderTagList($tags),
         ]
     );
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'relatedTags',
         [
@@ -260,7 +260,7 @@ if ($tagSearch) {
     );
 } else {
     if ('' === $search) {
-        $tpl->parseBlock(
+        $template->parseBlock(
             'writeContent',
             'tagListSection',
             [
@@ -270,7 +270,7 @@ if ($tagSearch) {
         );
     }
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'searchBoxSection',
         [
@@ -285,7 +285,7 @@ if ($tagSearch) {
         ]
     );
 
-    $tpl->parseBlock(
+    $template->parseBlock(
         'writeContent',
         'popularSearchesSection',
         [
@@ -295,7 +295,7 @@ if ($tagSearch) {
     );
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
@@ -315,7 +315,7 @@ $tpl->parse(
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

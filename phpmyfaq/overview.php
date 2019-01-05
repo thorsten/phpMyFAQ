@@ -39,14 +39,14 @@ $faqHelper = new FaqHelper($faqConfig);
 $faq->setUser($current_user);
 $faq->setGroups($current_groups);
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     [
         'overview' => $faqHelper->createOverview($category, $faq, $LANGCODE),
     ]
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

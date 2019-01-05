@@ -33,7 +33,7 @@ try {
     // @todo handle the exception
 }
 
-$tpl->parse(
+$template->parse(
     'writeContent',
     array(
         'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
@@ -43,7 +43,7 @@ $tpl->parse(
     )
 );
 
-$tpl->parseBlock(
+$template->parseBlock(
     'index',
     'breadcrumb',
     [

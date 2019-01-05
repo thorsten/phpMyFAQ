@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="{{ metaLanguage }}">
+<head>
+  <meta charset="utf-8">
+
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}">
+
+  <meta name="description" content="{{ metaDescription }}">
+  <meta name="keywords" content="{{ metaKeywords }}">
+  <meta name="author" content="{{ metaPublisher }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+  <meta name="robots" content="{{ metaRobots }}">
+  <meta name="revisit-after" content="7 days">
+  <meta name="apple-itunes-app" content="app-id=977896957">
+
+  <!-- Share on Facebook -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ metaDescription }}">
+  <meta property="og:image" content="">
+
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
+  <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
+  <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
+  <link rel="canonical" href="{{ currentPageUrl }}">
+
+  <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
+  <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
+  <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/latest/rss.php">
+  <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/openquestions/rss.php">
+  <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
+
+  <script>
+    if (self === top) {
+      document.documentElement.style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <style> html {
+    display: none;
+  }</style>
+</head>
+<body dir="{{ dir }}">
+
+<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+  <div class="container">
+    <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+      <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle" aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
+      <ul class="navbar-nav mr-md-12">
+        <li class="nav-item {{ activeAllCategories }}">{{ allCategories }}</li>
+        <li class="nav-item {{ activeAddContent }}">{{ msgAddContent }}</li>
+        <li class="nav-item {{ activeAddQuestion }}">{{ msgQuestion }}</li>
+        <li class="nav-item {{ activeOpenQuestions }}">{{ msgOpenQuestions }}</li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false">
+            {{ msgLoginUser }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown">
+            [notLoggedIn]
+            {{ msgRegisterUser }}
+            {{ msgLoginUser }}
+            [/notLoggedIn]
+            [userloggedIn]
+            {{ msgUserControlDropDown }}
+            {{ msgUserControl }}
+            {{ msgLogoutUser }}
+            <div class="dropdown-divider"></div>
+            {{ msgUserRemoval }}
+            [/userloggedIn]
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Main Search -->
+<div class="container">
+  <br/>
+  <div class="row justify-content-center">
+    <div class="col-12 col-md-10 col-lg-8">
+      <form class="card card-sm" role="search" id="search" action="{{ writeSendAdress }}" method="get">
+        <input type="hidden" name="action" value="search">
+        <div class="card-body row no-gutters align-items-center">
+          <div class="col-auto">
+            <i class="fas fa-search h4 text-body"></i>
+          </div>
+          <!--end of col-->
+          <div class="col">
+            <input
+              class="typeahead form-control form-control-lg form-control-borderless" autocomplete="off"
+              data-provide="typeahead" type="search" placeholder="{{ searchBox }} ..."
+            >
+          </div>
+          <!--end of col-->
+          <div class="col-auto">
+            <button class="btn btn-lg btn-success" type="submit">{{ searchBox }}</button>
+          </div>
+          <!--end of col-->
+        </div>
+      </form>
+    </div>
+    <!--end of col-->
+  </div>
+</div>
+
+<!--
+<header>
+  <div class="container">
+    <div class="pmf-breadcrumb">
+      [breadcrumb]
+      {{ breadcrumbHeadline }}
+      [/breadcrumb]
+    </div>
+  </div>
+</header>
+-->
+
+<div class="container">
+
+  <h1>Page not found!</h1>
+
+</div>
+
+
+<div class="pmf-wrapper pmf-main">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 pmf-maincontent">
+      </div>
+      <aside class="col-md-4 pmf-aside">
+
+        [socialLinks]
+        <section class="pmf-aside-widget">
+          <div class="pmf-aside-widget-body pmf-social-links">
+            <a target="_blank" href="{{ link_pdf }}" rel="nofollow" title="{{ writePDFTag }}">
+                    <span class="fa-stack fa-lg">
+                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fas fa-file-pdf-o fa-stack-1x"></i>
+                    </span>
+            </a>
+            <a href="window.print();" rel="nofollow" title="{{ writePrintMsgTag }}">
+                    <span class="fa-stack fa-lg">
+                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fas fa-print fa-stack-1x"></i>
+                    </span>
+            </a>
+            {{ sendToFriend }}
+            {{ shareOnFacebook }}
+            {{ shareOnTwitter }}
+            {{ facebookLikeButton }}
+          </div>
+        </section>
+        [/socialLinks]
+
+      </aside>
+    </div>
+  </div>
+</div>
+
+<footer class="pmf-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-10">
+        <ul class="pmf-footer-menu">
+          <li class="foot-menu-item">
+            {{ faqOverview }}
+          </li>
+          <li class="foot-menu-item">
+            {{ showSitemap }}
+          </li>
+          <li class="foot-menu-item">
+            {{ msgGlossary }}
+          </li>
+          <li class="foot-menu-item">
+            {{ msgContact }}
+          </li>
+          <li class="foot-menu-item">
+
+          </li>
+        </ul>
+      </div>
+      <div class="col-sm-2">
+        <form action="{{ writeLangAdress }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
+          {{ switchLanguages }}
+          <input type="hidden" name="action" value=""/>
+        </form>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm">
+        <p class="float-right">
+          {{ copyright }}
+        </p>
+      </div>
+    </div>
+  </div>
+</footer>
+
+[debugMode]
+<div class="container debug-mode">
+  <hr>
+  <h4>DEBUG INFORMATION</h4>
+  <div class="row">
+    <div class="col-12">
+      <h5>EXCEPTIONS</h5>
+      {{ debugExceptions }}
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      <h5>DATABASE QUERIES</h5>
+      {{ debugQueries }}
+    </div>
+  </div>
+</div>
+[/debugMode]
+
+
+<script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
+<script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
+<script>
+  $('.topten').tooltip();
+  $('.latest-entries').tooltip();
+  $('.sticky-faqs').tooltip();
+</script>
+<script>
+  window.addEventListener('load', function(){
+    window.cookieconsent.initialise({
+      'palette': {
+        'popup': {
+          'background': '#252e39'
+        },
+        'button': {
+          'background': '#14a7d0'
+        }
+      }
+    })});
+</script>
+
+</body>
+</html>
