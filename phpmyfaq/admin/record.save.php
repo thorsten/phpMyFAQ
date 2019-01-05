@@ -39,7 +39,7 @@ $category = new Category($faqConfig, [], false);
 $category->setUser($currentAdminUser);
 $category->setGroups($currentAdminGroups);
 
-if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
 
     // Get submit action
     $submit = Filter::filterInputArray(

@@ -3,8 +3,6 @@
 /**
  * German language file
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -488,9 +486,9 @@ $PMF_LANG['ad_menu_export'] = "FAQ exportieren";
 $PMF_LANG['rightsLanguage']['add_user'] = "Benutzer hinzufügen";
 $PMF_LANG['rightsLanguage']['edit_user'] = "Benutzer bearbeiten";
 $PMF_LANG['rightsLanguage']['delete_user'] = "Benutzer löschen";
-$PMF_LANG['rightsLanguage']['addbt'] = "FAQ hinzufügen";
-$PMF_LANG['rightsLanguage']['editbt'] = "FAQ bearbeiten";
-$PMF_LANG['rightsLanguage']['delbt'] = "FAQ löschen";
+$PMF_LANG['rightsLanguage']['add_faq'] = "FAQ hinzufügen";
+$PMF_LANG['rightsLanguage']['edit_faq'] = "FAQ bearbeiten";
+$PMF_LANG['rightsLanguage']['delete_faq'] = "FAQ löschen";
 $PMF_LANG['rightsLanguage']['viewlog'] = "Protokoll ansehen";
 $PMF_LANG['rightsLanguage']['adminlog'] = "Admin-Protokoll einsehen";
 $PMF_LANG['rightsLanguage']['delcomment'] = "Kommentar löschen";
@@ -1285,3 +1283,6 @@ $PMF_LANG['ad_section_error_noName'] = "Bitte geben Sie einen Namen für den Ber
 $PMF_LANG['ad_section_suc'] = "Der Bereich wurde <strong>erfolgreich</strong> hinzugefügt.";
 $PMF_LANG['ad_section_deleted'] = "Der Bereich wurde erfolgreich gelöscht.";
 $PMF_LANG['rightsLanguage']['viewadminlink'] = 'Link zur Administration sichtbar';
+
+// added v3.0.0-alpha.4 - 2019-01-05 by Thorsten
+$LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'An Freunde senden aktivieren'];

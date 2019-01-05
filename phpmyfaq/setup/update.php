@@ -652,6 +652,15 @@ if ($step == 3) {
         $perm->renameRight('delete_user', 'delete_user');
     }
 
+    //
+    // UPDATES FROM 3.0.0-alpha.4
+    //
+    if (version_compare($version, '3.0.0-alpha.4', '<')) {
+        $perm->renameRight('addbt', 'add_faq');
+        $perm->renameRight('editbt', 'edit_faq');
+        $perm->renameRight('delbt', 'delete_faq');
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);

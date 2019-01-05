@@ -3,8 +3,6 @@
 /**
  * The English language file - try to be the best of British and American English
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -507,9 +505,9 @@ $PMF_LANG["ad_menu_export"] = "Export your FAQ";
 $PMF_LANG["rightsLanguage"]['add_user'] = "Add user";
 $PMF_LANG["rightsLanguage"]['edit_user'] = "Edit user";
 $PMF_LANG["rightsLanguage"]['delete_user'] = "Delete user";
-$PMF_LANG["rightsLanguage"]['addbt'] = "Add record";
-$PMF_LANG["rightsLanguage"]['editbt'] = "Edit record";
-$PMF_LANG["rightsLanguage"]['delbt'] = "Delete record";
+$PMF_LANG["rightsLanguage"]['add_faq'] = "Add record";
+$PMF_LANG["rightsLanguage"]['edit_faq'] = "Edit record";
+$PMF_LANG["rightsLanguage"]['delete_faq'] = "Delete record";
 $PMF_LANG["rightsLanguage"]['viewlog'] = "View logs";
 $PMF_LANG["rightsLanguage"]['adminlog'] = "View admin log";
 $PMF_LANG["rightsLanguage"]['delcomment'] = "Delete comment";

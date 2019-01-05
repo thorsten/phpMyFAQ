@@ -49,7 +49,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
         <div class="row">
             <div class="col-lg-12">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'delbt')) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(), 'delete_faq')) {
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);

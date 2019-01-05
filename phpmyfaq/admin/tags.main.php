@@ -40,7 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             <form action="" method="post" class="tag-form">
                 <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 <?php
-if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $tags = new Tags($faqConfig);
 
     if ('deletetag' == $action) {

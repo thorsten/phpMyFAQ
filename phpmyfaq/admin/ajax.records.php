@@ -72,7 +72,7 @@ switch ($ajax_action) {
 
     // save sticky FAQs
     case 'save_sticky_records':
-        if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
+        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             if (!empty($items)) {
                 $faq = new Faq($faqConfig);
 
@@ -89,7 +89,7 @@ switch ($ajax_action) {
 
     // search FAQs for suggestions
     case 'search_records':
-        if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
+        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             $faq = new Faq($faqConfig);
             $faqSearch = new Search($faqConfig);
             $faqSearch->setCategory(new Category($faqConfig));
@@ -118,7 +118,7 @@ switch ($ajax_action) {
 
     // delete FAQs
     case 'delete_record':
-        if ($user->perm->checkRight($user->getUserId(), 'delbt')) {
+        if ($user->perm->checkRight($user->getUserId(), 'delete_faq')) {
             $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
             $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 

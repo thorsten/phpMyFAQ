@@ -33,8 +33,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $do = Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
 if ('insertentry' === $do &&
-    ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkRight($user->getUserId(), 'addbt')) ||
-    'saveentry' === $do && $user->perm->checkRight($user->getUserId(), 'editbt')) {
+    ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(), 'add_faq')) ||
+    'saveentry' === $do && $user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $user = CurrentUser::getFromCookie($faqConfig);
     if (!$user instanceof CurrentUser) {
         $user = CurrentUser::getFromSession($faqConfig);

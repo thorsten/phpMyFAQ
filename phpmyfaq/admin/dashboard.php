@@ -59,14 +59,10 @@ $faqSession = new Session($faqConfig);
 
 <?php if (version_compare($faqConfig->getCurrentVersion(), System::getVersion(), '<')): ?>
   <div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">Well done!</h4>
+    <h4 class="alert-heading">Attention!</h4>
     <p>
-      The version number stored in your database is lower than your installed version.
-    </p>
-    <hr>
-    <p>
-      Please update your installation <a href="../setup/update.php" class="alert-link">here</a> as this can cause
-      unintended behaviour.
+      The version number stored in your database is lower than your installed version, please update your installation
+      <a href="../setup/update.php" class="alert-link">here</a> to avoid an unintended behaviour.
     </p>
   </div>
 <?php endif; ?>

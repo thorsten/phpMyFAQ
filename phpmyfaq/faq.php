@@ -185,7 +185,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 
 // Show link to edit the faq?
 $editThisEntry = '';
-if ($user->perm->checkRight($user->getUserId(), 'editbt')) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
         '<i aria-hidden="true" class="fas fa-pencil"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         Link::getSystemRelativeUri('index.php'),
@@ -245,7 +245,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
     );
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'editbt') && !empty($faq->faqRecord['notes'])) {
+if ($user->perm->checkRight($user->getUserId(), 'edit_faq') && !empty($faq->faqRecord['notes'])) {
     $tpl->parseBlock(
         'writeContent',
         'privateNotes',

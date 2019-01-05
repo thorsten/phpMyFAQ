@@ -38,8 +38,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $currentUserId = $user->getUserId();
 
-if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
-    $user->perm->checkRight($user->getUserId(), 'addbt')) && !Db::checkOnEmptyTable('faqcategories')) {
+if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
+    $user->perm->checkRight($user->getUserId(), 'add_faq')) && !Db::checkOnEmptyTable('faqcategories')) {
     $category = new Category($faqConfig, [], false);
 
     if ($faqConfig->get('main.enableCategoryRestrictions')) {
@@ -977,8 +977,8 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
     </script>
 <?php
 
-} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') !== 1 && !Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'edit_faq') !== 1 && !Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['err_NotAuth'];
-} elseif ($user->perm->checkRight($user->getUserId(), 'editbt') && Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($user->getUserId(), 'edit_faq') && Db::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['no_cats'];
 }

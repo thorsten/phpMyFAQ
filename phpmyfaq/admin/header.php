@@ -106,15 +106,15 @@ switch ($action) {
     case 'tags':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_content'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_entry_add', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'searchfaqs', 'ad_menu_searchfaqs', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'searchfaqs', 'ad_menu_searchfaqs', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary', 'ad_menu_glossary', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments', 'ad_menu_attachments', $action);
-        $secLevelEntries .= $adminHelper->addMenuEntry('editbt', 'tags', 'ad_entry_tags', $action);
+        $secLevelEntries .= $adminHelper->addMenuEntry('edit_faq', 'tags', 'ad_entry_tags', $action);
         $dashboardPage = false;
         $contentPage = true;
         break;
@@ -173,8 +173,8 @@ switch ($action) {
     default:
         $secLevelHeader = $PMF_LANG['admin_mainmenu_home'];
         $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-        $secLevelEntries .= $adminHelper->addMenuEntry('addbt', 'editentry', 'ad_quick_record');
-        $secLevelEntries .= $adminHelper->addMenuEntry('editbt+delbt', 'view', 'ad_menu_entry_edit');
+        $secLevelEntries .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_quick_record');
+        $secLevelEntries .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit');
         $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $dashboardPage = true;
