@@ -47,7 +47,7 @@ class HttpHelper extends Helper
      * HTTP status code
      * @var int
      */
-    private $statusCode;
+    private $statusCode = 200;
 
     /**
      * Setter for content type.
