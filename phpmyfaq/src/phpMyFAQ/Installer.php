@@ -1038,12 +1038,6 @@ class Installer
             } else {
                 echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
             }
-            // Remove 'update.php' file
-            if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/update.php')) {
-                echo "<p class=\"alert alert-success\">The file <em>./setup/update.php</em> was deleted automatically.</p>\n";
-            } else {
-                echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/update.php</em> manually.</p>\n";
-            }
         }
 
     }
