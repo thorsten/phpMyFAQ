@@ -57,7 +57,7 @@ if (is_null($newsId)) {
 }
 
 try {
-    $faqsession->userTracking('news_view', $newsId);
+    $faqSession->userTracking('news_view', $newsId);
 } catch (Exception $e) {
     // @todo handle the exception
 }

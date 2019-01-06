@@ -58,10 +58,11 @@
 </section>
 
 <script>
-  $(function() {
-    $('#submitcontact').on('click', function () {
-      saveFormValues('sendremoval', 'contact');
+  document.addEventListener('DOMContentLoaded', () => {
+    'use strict';
+    $('#submitcontact').on('click', () => {
+      saveFormValues('request-removal', 'contact');
      });
-    $('form#formValues').submit(function() {  return false;  });
+    $('form#formValues').submit(() => {  return false;  });
    });
 </script>

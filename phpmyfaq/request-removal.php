@@ -3,8 +3,6 @@
 /**
  * Request removal page.
  *
- * PHP Version 5.5
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -32,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 try {
-    $faqsession->userTracking('contact', 0);
+    $faqSession->userTracking('request_removal', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

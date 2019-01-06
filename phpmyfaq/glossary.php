@@ -32,7 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 try {
-    $faqsession->userTracking('glossary', 0);
+    $faqSession->userTracking('glossary', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

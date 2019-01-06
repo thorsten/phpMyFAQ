@@ -85,7 +85,7 @@ if (0 === (int)$solutionId) {
 $recordId = $faq->faqRecord['id'];
 
 try {
-    $faqsession->userTracking('article_view', $recordId);
+    $faqSession->userTracking('article_view', $recordId);
 } catch (Exception $e) {
     // @todo handle the exception
 }

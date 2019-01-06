@@ -34,7 +34,7 @@ if (!$faqConfig->get('security.enableRegistration')) {
 }
 
 try {
-    $faqsession->userTracking('registration', 0);
+    $faqSession->userTracking('registration', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

@@ -40,12 +40,13 @@
                 </div>
             </form>
             <script type="text/javascript" >
-            $(function() {{
-                $('#submitregistration').click(function() {{
+              document.addEventListener('DOMContentLoaded', () => {
+                'use strict';
+                $('#submitregistration').on('click', () => {
                     saveFormValues('saveregistration', 'registration');
-                 }});
-                $('form#formValues').submit(function() {{  return false;  }});
-             }});
+                 });
+                $('form#formValues').submit(() => { return false; });
+             });
             </script>
 
         </section>

@@ -3,8 +3,6 @@
 /**
  * The Ajax Service Layer.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -87,14 +85,13 @@ $captcha->setSessionId(
 //
 $http = new HttpHelper();
 $http->setContentType('application/json');
-//$http->addHeader();
 
 //
 // Set session
 //
-$faqsession = new Session($faqConfig);
+$faqSession = new Session($faqConfig);
 $network = new Network($faqConfig);
-$stopwords = new Stopwords($faqConfig);
+$stopWords = new Stopwords($faqConfig);
 
 if (!$network->checkIp($_SERVER['REMOTE_ADDR'])) {
     $message = array('error' => $PMF_LANG['err_bannedIP']);
@@ -115,7 +112,7 @@ if ($user instanceof CurrentUser) {
 
 if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
     !$captcha->checkCaptchaCode($code) && !$isLoggedIn) {
-    $message = array('error' => $PMF_LANG['msgCaptcha']);
+    $message = ['error' => $PMF_LANG['msgCaptcha']];
 }
 
 //
@@ -123,11 +120,11 @@ if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !
 //
 if (false === $isLoggedIn && $faqConfig->get('security.enableLoginOnly') &&
     'changepassword' !== $action && 'saveregistration' !== $action) {
-    $message = array('error' => $PMF_LANG['ad_msg_noauth']);
+    $message = ['error' => $PMF_LANG['ad_msg_noauth']];
 }
 
 if (isset($message['error'])) {
-    print json_encode($message);
+    $http->sendJsonWithHeaders($message);
     exit();
 }
 
@@ -177,9 +174,9 @@ switch ($action) {
         }
 
         if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
-            !empty($comment) && $stopwords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
+            !empty($comment) && $stopWords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
             try {
-                $faqsession->userTracking('save_comment', $id);
+                $faqSession->userTracking('save_comment', $id);
             } catch (Exception $e) {
                 // @todo handle the exception
             }
@@ -268,7 +265,7 @@ switch ($action) {
                 $message = array('success' => $PMF_LANG['msgCommentThanks']);
             } else {
                 try {
-                    $faqsession->userTracking('error_save_comment', $id);
+                    $faqSession->userTracking('error_save_comment', $id);
                 } catch (Exception $e) {
                     // @todo handle the exception
                 }
@@ -321,21 +318,21 @@ switch ($action) {
         }
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(strip_tags($question)) &&
-            !is_null($answer) && !empty($answer) && $stopwords->checkBannedWord(strip_tags($answer)) &&
+            !is_null($question) && !empty($question) && $stopWords->checkBannedWord(strip_tags($question)) &&
+            !is_null($answer) && !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
             Language::isASupportedLanguage($faqLanguage)))) {
             $isNew = true;
             if (!is_null($faqId)) {
                 $isNew = false;
                 try {
-                    $faqsession->userTracking('save_new_translation_entry', 0);
+                    $faqSession->userTracking('save_new_translation_entry', 0);
                 } catch (Exception $e) {
                     // @todo handle the exception
                 }
             } else {
                 try {
-                    $faqsession->userTracking('save_new_entry', 0);
+                    $faqSession->userTracking('save_new_entry', 0);
                 } catch (Exception $e) {
                     // @todo handle the exception
                 }
@@ -498,7 +495,7 @@ switch ($action) {
         }
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
+            !is_null($question) && !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
                 $visibility = 'N';
             } else {
@@ -515,7 +512,7 @@ switch ($action) {
 
             if (false === (boolean)$save) {
 
-                $cleanQuestion = $stopwords->clean($question);
+                $cleanQuestion = $stopWords->clean($question);
 
                 $user = new CurrentUser($faqConfig);
                 $faqSearch = new Search($faqConfig);
@@ -708,7 +705,7 @@ switch ($action) {
 
         if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
             try {
-                $faqsession->userTracking('save_voting', $recordId);
+                $faqSession->userTracking('save_voting', $recordId);
             } catch (Exception $e) {
                 // @todo handle the exception
             }
@@ -730,14 +727,14 @@ switch ($action) {
             );
         } elseif (!$faq->votingCheck($recordId, $userIp)) {
             try {
-                $faqsession->userTracking('error_save_voting', $recordId);
+                $faqSession->userTracking('error_save_voting', $recordId);
             } catch (Exception $e) {
                 // @todo handle the exception
             }
             $message = array('error' => $PMF_LANG['err_VoteTooMuch']);
         } else {
             try {
-                $faqsession->userTracking('error_save_voting', $recordId);
+                $faqSession->userTracking('error_save_voting', $recordId);
             } catch (Exception $e) {
                 // @todo handle the exception
             }
@@ -759,7 +756,7 @@ switch ($action) {
         }
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
-            !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
+            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
                 $PMF_LANG['msgNewContentName'],
@@ -799,7 +796,7 @@ switch ($action) {
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
             is_array($mailto) && !empty($mailto['mailto'][0]) &&
-                $stopwords->checkBannedWord(Strings::htmlspecialchars($attached))) {
+                $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
@@ -931,7 +928,7 @@ switch ($action) {
         }
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
-            !empty($question) && $stopwords->checkBannedWord(Strings::htmlspecialchars($question))) {
+            !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
                 $PMF_LANG['ad_user_loginname'],
@@ -958,4 +955,4 @@ switch ($action) {
         break;
 }
 
-echo json_encode($message);
+$http->sendJsonWithHeaders($message);

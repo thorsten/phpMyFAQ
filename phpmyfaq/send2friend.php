@@ -47,7 +47,7 @@ if (!is_null($showCaptcha)) {
 }
 
 try {
-    $faqsession->userTracking('send2friend', 0);
+    $faqSession->userTracking('send2friend', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 if ($user instanceof CurrentUser) {
     try {
-        $faqsession->userTracking('user_control_panel', $user->getUserData('display_name'));
+        $faqSession->userTracking('user_control_panel', $user->getUserData('display_name'));
     } catch (Exception $e) {
         // @todo handle the exception
     }

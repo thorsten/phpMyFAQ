@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 try {
-    $faqsession->userTracking('fulltext_search', 0);
+    $faqSession->userTracking('fulltext_search', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }
@@ -172,7 +172,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
 $inputCategory = ('%' == $inputCategory) ? 0 : $inputCategory;
 
 try {
-    $faqsession->userTracking('fulltext_search', $inputSearchTerm);
+    $faqSession->userTracking('fulltext_search', $inputSearchTerm);
 } catch (Exception $e) {
     // @todo handle the exception
 }

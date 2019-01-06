@@ -33,7 +33,7 @@ if (!is_null($error)) {
 }
 
 try {
-    $faqsession->userTracking('login', 0);
+    $faqSession->userTracking('login', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

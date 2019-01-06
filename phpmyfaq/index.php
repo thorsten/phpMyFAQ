@@ -218,7 +218,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 $sid = null;
 $sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
-$faqsession = new Session($faqConfig);
+$faqSession = new Session($faqConfig);
 // Note: do not track internal calls
 $internal = false;
 if (isset($_SERVER['HTTP_USER_AGENT'])) {
@@ -228,16 +228,16 @@ if (!$internal) {
     if (is_null($sidGet) && is_null($sidCookie)) {
         // Create a per-site unique SID
         try {
-            $faqsession->userTracking('new_session', 0);
+            $faqSession->userTracking('new_session', 0);
         } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
     } else {
         try {
             if (!is_null($sidCookie)) {
-                $faqsession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
+                $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
             } else {
-                $faqsession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
+                $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
             }
         } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();

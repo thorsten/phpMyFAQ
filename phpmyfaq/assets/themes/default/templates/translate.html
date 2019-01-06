@@ -73,7 +73,7 @@
         [enableWysiwygEditor]
         <script src="admin/editor/tiny_mce.js?{{ currentTimestamp }}"></script>
         <script>
-            tinyMCE.init({{
+            tinyMCE.init({
                 mode : "exact",
                 language : "en",
                 elements : "translated_answer",
@@ -88,6 +88,6 @@
                 use_native_selects : true,
                 entity_encoding : "raw",
                 extended_valid_elements : "code"
-             }});
+             });
         </script>
         [/enableWysiwygEditor]

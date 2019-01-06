@@ -81,12 +81,13 @@
                 </div>
             </form>
             <script>
-            $(function() {{
-                $('#submitfriends').click(function() {{
+              document.addEventListener('DOMContentLoaded', () => {
+                'use strict';
+                $('#submitfriends').on('click', () => {
                     saveFormValues('sendtofriends', 'send2friend');
-                 }});
-                $('form#formValues').submit(function() {{  return false;  }});
-             }});
+                 });
+                $('form#formValues').submit(() => {  return false;  });
+             });
             </script>
     
         </section>

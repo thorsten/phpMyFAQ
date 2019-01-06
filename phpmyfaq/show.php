@@ -37,7 +37,7 @@ if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCat
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {
     try {
-        $faqsession->userTracking('show_category', $selectedCategoryId);
+        $faqSession->userTracking('show_category', $selectedCategoryId);
     } catch (Exception $e) {
         // @todo handle the exception
     }
@@ -115,7 +115,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
 
 } else {
     try {
-        $faqsession->userTracking('show_all_categories', 0);
+        $faqSession->userTracking('show_all_categories', 0);
     } catch (Exception $e) {
         // @todo handle the exception
     }

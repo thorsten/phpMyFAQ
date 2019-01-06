@@ -48,7 +48,7 @@ $faqSource['content'] = 'writeSourceContent';
 $faqSource['keywords'] = 'writeSourceKeywords';
 
 try {
-    $faqsession->userTracking('new_translation_entry', 0);
+    $faqSession->userTracking('new_translation_entry', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }

@@ -63,10 +63,11 @@
         </section>
 
         <script>
-            $(function() {
-                $('#submitcontact').on('click', function () {
-                    saveFormValues('sendcontact', 'contact');
-                 });
-                $('form#formValues').submit(function() { return false; });
+          document.addEventListener('DOMContentLoaded', () => {
+            'use strict';
+            $('#submitcontact').on('click', () => {
+                saveFormValues('sendcontact', 'contact');
              });
+            $('form#formValues').submit(() => { return false; });
+         });
         </script>

@@ -28,7 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 try {
-    $faqsession->userTracking('forgot_password', 0);
+    $faqSession->userTracking('forgot_password', 0);
 } catch (Exception $e) {
     // @todo handle the exception
 }
