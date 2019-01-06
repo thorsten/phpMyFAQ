@@ -280,6 +280,11 @@ if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
 }
 
 //
+// Found a search string?
+//
+$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+
+//
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
@@ -514,6 +519,7 @@ $tplMainPage = array(
     'dir' => $PMF_LANG['dir'],
     'writeSendAdress' => '?'.$sids.'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
+    'searchTerm' => $searchTerm,
     'categoryId' => ($cat === 0) ? '%' : (int) $cat,
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],

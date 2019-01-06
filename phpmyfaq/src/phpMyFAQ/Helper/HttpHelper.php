@@ -121,10 +121,14 @@ class HttpHelper extends Helper
     }
 
     /**
-     * @param string $url URL to redirect
+     * URL to redirect
+     * @param string $url
      */
-    public function redirect($url)
+    public function redirect(string $url)
     {
+        // Before a redirection we must force the PHP session update
+        // for preventing data loss
+        session_write_close();
         $this->sendStatus(301);
         header('Location: ' . $url);
     }

@@ -3,8 +3,6 @@
 /**
  * The fulltext search page.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -53,7 +51,7 @@ $inputTag = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_SANITIZE_STRING)
 $inputTag = str_replace(' ', '', $inputTag);
 $inputTag = str_replace(',,', ',', $inputTag);
 
-$search = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
+$searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED);
 $page = Filter::filterInput(INPUT_GET, 'seite', FILTER_VALIDATE_INT, 1);
 
 // Search only on current language (default)
@@ -145,12 +143,12 @@ if (!is_null($inputTag) && '' !== $inputTag) {
 //
 // Handle the full text search stuff
 //
-if (!is_null($inputSearchTerm) || !is_null($search)) {
+if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     if (!is_null($inputSearchTerm)) {
         $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($inputSearchTerm));
     }
-    if (!is_null($search)) {
-        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($search));
+    if (!is_null($searchTerm)) {
+        $inputSearchTerm = $faqConfig->getDb()->escape(strip_tags($searchTerm));
     }
 
     $faqSearch->setCategory($category);
@@ -182,12 +180,10 @@ try {
 if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchTerm &&
     0 < $faqSearchResult->getNumberOfResults() && $faqConfig->get('search.searchForSolutionId')) {
 
-    // Before a redirection we must force the PHP session update for preventing data loss
-    session_write_close();
     if ($faqConfig->get('main.enableRewriteRules')) {
-        header('Location: '.$faqConfig->getDefaultUrl().'solution_id_'.$inputSearchTerm.'.html');
+        $http->redirect($faqConfig->getDefaultUrl().'solution_id_'.$inputSearchTerm.'.html');
     } else {
-        header('Location: '.$faqConfig->getDefaultUrl().'index.php?solution_id='.$inputSearchTerm);
+        $http->redirect($faqConfig->getDefaultUrl().'index.php?solution_id='.$inputSearchTerm);
     }
     exit();
 }
@@ -259,7 +255,7 @@ if ($tagSearch) {
         ]
     );
 } else {
-    if ('' === $search) {
+    if ('' === $searchTerm) {
         $template->parseBlock(
             'writeContent',
             'tagListSection',
