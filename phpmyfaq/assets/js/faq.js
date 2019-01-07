@@ -14,21 +14,7 @@
  * @since     2018-01-06
  */
 
-/*global document: false, $: false, saveVoting: false, hljs: false */
-
-/*
- * Voting
- *
- */
-$(document).ready(function() {
-  'use strict';
-  $(function () {
-    $('div.pmf-stars > div.pmf-star-rating > span').on('click', function (e) {
-      var numStars = $(e.target).data('stars');
-      saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
-    });
-  });
-});
+/*global $: false, hljs: false */
 
 /**
  * HighlightJS

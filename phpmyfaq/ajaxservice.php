@@ -29,6 +29,8 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Network;
+use phpMyFAQ\News;
+use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\Resultset;
 use phpMyFAQ\Session;
@@ -655,14 +657,14 @@ switch ($action) {
                 $user->setStatus('blocked');
 
                 if (!$faqConfig->get('spam.manualActivation')) {
-                    $isNowActive = $user->activateUser($faqConfig);
+                    $isNowActive = $user->activateUser();
                 } else {
                     $isNowActive = false;
                 }
 
                 if ($isNowActive) {
                     $adminMessage = 'This user has been automatically activated, you can still'.
-                                    ' modify the users permissions or decline membership by visiting';
+                                    ' modify the users permissions or decline membership by visiting the admin section';
                 } else {
                     $adminMessage = 'To activate this user please use';
                 }
@@ -698,12 +700,13 @@ switch ($action) {
     case 'savevoting':
 
         $faq = new Faq($faqConfig);
+        $rating = new Rating($faqConfig);
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING, 'faq');
         $recordId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $vote = Filter::filterInput(INPUT_POST, 'vote', FILTER_VALIDATE_INT);
         $userIp = Filter::filterVar($_SERVER['REMOTE_ADDR'], FILTER_VALIDATE_IP);
 
-        if (isset($vote) && $faq->votingCheck($recordId, $userIp) && $vote > 0 && $vote < 6) {
+        if (isset($vote) && $rating->check($recordId, $userIp) && $vote > 0 && $vote < 6) {
             try {
                 $faqSession->userTracking('save_voting', $recordId);
             } catch (Exception $e) {
@@ -715,17 +718,16 @@ switch ($action) {
                 'vote' => $vote,
                 'user_ip' => $userIp, );
 
-            if (!$faq->getNumberOfVotings($recordId)) {
-                $faq->addVoting($votingData);
+            if (!$rating->getNumberOfVotings($recordId)) {
+                $rating->addVoting($votingData);
             } else {
-                $faq->updateVoting($votingData);
+                $rating->update($votingData);
             }
-            $faqRating = new Rating($faqConfig);
             $message = array(
                 'success' => $PMF_LANG['msgVoteThanks'],
-                'rating' => $faqRating->getVotingResult($recordId),
+                'rating' => $rating->getVotingResult($recordId),
             );
-        } elseif (!$faq->votingCheck($recordId, $userIp)) {
+        } elseif (!$rating->check($recordId, $userIp)) {
             try {
                 $faqSession->userTracking('error_save_voting', $recordId);
             } catch (Exception $e) {

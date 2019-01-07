@@ -44,7 +44,7 @@ class Rating
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Language strings.
@@ -69,7 +69,7 @@ class Rating
     {
         global $PMF_LANG, $plr;
 
-        $this->_config = $config;
+        $this->config = $config;
         $this->pmf_lang = $PMF_LANG;
         $this->plr = $plr;
     }
@@ -164,8 +164,8 @@ class Rating
                 break;
         }
 
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $ratings[] = array(
                'id' => $row->id,
                'lang' => $row->lang,
@@ -198,9 +198,9 @@ class Rating
             Db::getTablePrefix(),
             $id
         );
-        $result = $this->_config->getDb()->query($query);
-        if ($this->_config->getDb()->numRows($result) > 0) {
-            $row = $this->_config->getDb()->fetchObject($result);
+        $result = $this->config->getDb()->query($query);
+        if ($this->config->getDb()->numRows($result) > 0) {
+            $row = $this->config->getDb()->fetchObject($result);
 
             return sprintf(
                 ' <span data-rating="%s">%s</span> ('.$this->plr->GetMsg('plmsgVotes', $row->usr).')',
@@ -213,13 +213,127 @@ class Rating
     }
 
     /**
+     * Reload locking for user votings.
+     *
+     * @param int $id FAQ record id
+     * @param string $ip IP
+     *
+     * @return bool
+     */
+    public function check(int $id, string $ip): bool
+    {
+        $check = $_SERVER['REQUEST_TIME'] - 300;
+        $query = sprintf(
+            "SELECT
+                id
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d AND (ip = '%s' AND datum > '%s')",
+            Db::getTablePrefix(),
+            $id,
+            $ip,
+            $check
+        );
+
+        if ($this->config->getDb()->numRows($this->config->getDb()->query($query))) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns the number of users from the table faqvotings.
+     *
+     * @param integer $recordId
+     *
+     * @return integer
+     */
+    public function getNumberOfVotings(int $recordId): int
+    {
+        $query = sprintf(
+            'SELECT
+                usr
+            FROM
+                %sfaqvoting
+            WHERE
+                artikel = %d',
+            Db::getTablePrefix(),
+            $recordId);
+        if ($result = $this->config->getDb()->query($query)) {
+            if ($row = $this->config->getDb()->fetchObject($result)) {
+                return $row->usr;
+            }
+        }
+
+        return 0;
+    }
+
+    /**
+     * Adds a new voting record.
+     *
+     * @param array $votingData
+     *
+     * @return bool
+     */
+    public function addVoting(array $votingData): bool
+    {
+        $query = sprintf(
+            "INSERT INTO
+                %sfaqvoting
+            VALUES
+                (%d, %d, %d, 1, %d, '%s')",
+            Db::getTablePrefix(),
+            $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqvoting', 'id'),
+            $votingData['record_id'],
+            $votingData['vote'],
+            $_SERVER['REQUEST_TIME'],
+            $votingData['user_ip']
+        );
+        $this->config->getDb()->query($query);
+
+        return true;
+    }
+
+    /**
+     * Updates an existing voting record.
+     *
+     * @param array $votingData
+     *
+     * @return bool
+     */
+    public function update(array $votingData): bool
+    {
+        $query = sprintf(
+            "UPDATE
+                %sfaqvoting
+            SET
+                vote = vote + %d,
+                usr = usr + 1,
+                datum = %d,
+                ip = '%s'
+            WHERE
+                artikel = %d",
+            Db::getTablePrefix(),
+            $votingData['vote'],
+            $_SERVER['REQUEST_TIME'],
+            $votingData['user_ip'],
+            $votingData['record_id']
+        );
+        $this->config->getDb()->query($query);
+
+        return true;
+    }
+
+    /**
      * Deletes all votes.
      *
      * @return bool
      */
     public function deleteAll()
     {
-        return $this->_config->getDb()->query(
+        return $this->config->getDb()->query(
             sprintf('DELETE FROM %sfaqvoting', Db::getTablePrefix())
         );
     }

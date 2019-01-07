@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The main FAQ class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -2330,90 +2328,6 @@ class Faq
         return true;
     }
 
-    /**
-     * Reload locking for user votings.
-     *
-     * @param int $id FAQ record id
-     * @param string $ip IP
-     *
-     * @return bool
-     */
-    public function votingCheck($id, $ip)
-    {
-        $check = $_SERVER['REQUEST_TIME'] - 300;
-        $query = sprintf(
-            "SELECT
-                id
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d AND (ip = '%s' AND datum > '%s')",
-            Db::getTablePrefix(),
-            $id,
-            $ip,
-            $check);
-        if ($this->_config->getDb()->numRows($this->_config->getDb()->query($query))) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns the number of users from the table faqvotings.
-     *
-     * @param integer $record_id
-     *
-     * @return integer
-     */
-    public function getNumberOfVotings($record_id)
-    {
-        $query = sprintf(
-            'SELECT
-                usr
-            FROM
-                %sfaqvoting
-            WHERE
-                artikel = %d',
-            Db::getTablePrefix(),
-            $record_id);
-        if ($result = $this->_config->getDb()->query($query)) {
-            if ($row = $this->_config->getDb()->fetchObject($result)) {
-                return $row->usr;
-            }
-        }
-
-        return 0;
-    }
-
-    /**
-     * Adds a new voting record.
-     *
-     * @param array $votingData
-     *
-     * @return bool
-     */
-    public function addVoting($votingData)
-    {
-        if (!is_array($votingData)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqvoting
-            VALUES
-                (%d, %d, %d, 1, %d, '%s')",
-            Db::getTablePrefix(),
-            $this->_config->getDb()->nextId(Db::getTablePrefix() . 'faqvoting', 'id'),
-            $votingData['record_id'],
-            $votingData['vote'],
-            $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip']);
-        $this->_config->getDb()->query($query);
-
-        return true;
-    }
 
     /**
      * Adds a new question.
@@ -2548,39 +2462,6 @@ class Faq
         }
 
         return $questions;
-    }
-
-    /**
-     * Updates an existing voting record.
-     *
-     * @param array $votingData
-     *
-     * @return bool
-     */
-    public function updateVoting($votingData)
-    {
-        if (!is_array($votingData)) {
-            return false;
-        }
-
-        $query = sprintf(
-            "UPDATE
-                %sfaqvoting
-            SET
-                vote    = vote + %d,
-                usr     = usr + 1,
-                datum   = %d,
-                ip      = '%s'
-            WHERE
-                artikel = %d",
-            Db::getTablePrefix(),
-            $votingData['vote'],
-            $_SERVER['REQUEST_TIME'],
-            $votingData['user_ip'],
-            $votingData['record_id']);
-        $this->_config->getDb()->query($query);
-
-        return true;
     }
 
     /**

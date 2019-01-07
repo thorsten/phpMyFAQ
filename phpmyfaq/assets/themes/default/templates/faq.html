@@ -164,5 +164,16 @@
 
         </section>
 
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            'use strict';
+            $(() => {
+              $('div.pmf-stars > div.pmf-star-rating > span').on('click', (event) => {
+                const numStars = $(event.target).data('stars');
+                saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
+              });
+            });
+          });
+        </script>
         <script src="assets/js/libs/highlight.pack.js"></script>
         <link rel="stylesheet" href="assets/js/libs/default.css">
