@@ -153,6 +153,7 @@ switch ($action) {
     case 'instances':
     case 'system':
     case 'elasticsearch':
+    case 'meta':
         $secLevelHeader = $PMF_LANG['admin_mainmenu_configuration'];
         $secLevelEntries .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
         $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
