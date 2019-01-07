@@ -22,15 +22,15 @@
  * @param userId User ID
  */
 function getUserRights(userId) {
-    'use strict';
+  'use strict';
 
-    $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId,
-        function(data) {
-            $.each(data, function(i, val) {
-                $('#user_right_' + val).attr('checked', true);
-            });
-            $('#rights_user_id').val(userId);
-        });
+  $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId,
+    (data) => {
+      $.each(data, (i, val) => {
+        $('#user_right_' + val).attr('checked', true);
+      });
+      $('#rights_user_id').val(userId);
+    });
 }
 
 /**
@@ -39,93 +39,80 @@ function getUserRights(userId) {
  * @param userId User ID
  */
 function updateUser(userId) {
-    'use strict';
+  'use strict';
 
-    getUserData(userId);
-    getUserRights(userId);
+  getUserData(userId);
+  getUserRights(userId);
 }
 
 
-$(document).ready(function() {
-    'use strict';
+$(document).ready(function () {
+  'use strict';
 
-    const button   = $('#checkAll');
-    const buttonOverridePassword = $('.pmf-user-password-override-action');
+  const button = $('#checkAll');
+  const buttonOverridePassword = $('.pmf-user-password-override-action');
 
-    button.data('type', 'check');
-    button.on('click', function (event) {
-        const checkbox = $('.permission');
-        event.preventDefault();
-        if (button.data('type') === 'check') {
-            checkbox.prop('checked', true);
-            button.data('type', 'uncheck');
-        } else {
-            checkbox.prop('checked', false);
-            button.data('type', 'check');
+  button.data('type', 'check');
+  button.on('click', (event) => {
+    const checkbox = $('.permission');
+    event.preventDefault();
+    if (button.data('type') === 'check') {
+      checkbox.prop('checked', true);
+      button.data('type', 'uncheck');
+    } else {
+      checkbox.prop('checked', false);
+      button.data('type', 'check');
+    }
+  });
+
+  buttonOverridePassword.on('click', (event) => {
+    event.preventDefault();
+
+    // Fetch data
+    $.ajax({
+      url: 'index.php?action=ajax&ajax=user&ajaxaction=overwrite_password',
+      type: 'POST',
+      data: $('#pmf-modal-user-password-override form').serialize(),
+      dataType: 'json',
+      beforeSend: function () {
+        $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+      },
+      success: function (message) {
+        $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
+        $('#pmf-modal-user-password-override').modal('hide');
+        $('#saving_data_indicator').fadeOut();
+      }
+    });
+    return false;
+  });
+
+  $('.pmf-user-autocomplete').typeahead({
+    autoSelect: true,
+    delay: 300,
+    minLength: 1,
+    source: (request, response) => {
+      $.ajax({
+        url: 'index.php?action=ajax&ajax=user&ajaxaction=get_user_list',
+        type: 'GET',
+        dataType: 'JSON',
+        data: 'q=' + request,
+        success: (data) => {
+          response(data.map((item) => {
+            return {
+              user_id: item.user_id,
+              name: item.name
+            };
+          }));
         }
-    });
+      });
+    },
+    displayText: (item) => {
+      return typeof item !== 'undefined' && typeof item.name !== 'undefined' ? item.name : item;
+    },
+    afterSelect: (user) => {
+      $('#user_list_select').val(user.user_id);
+      updateUser(user.user_id);
+    }
+  });
 
-    buttonOverridePassword.on('click', function(event) {
-        event.preventDefault();
-
-        // Fetch data
-        $.ajax({
-            url:      'index.php?action=ajax&ajax=user&ajaxaction=overwrite_password',
-            type:     'POST',
-            data:     $('#pmf-modal-user-password-override form').serialize(),
-            dataType: 'json',
-            beforeSend: function() {
-                $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
-            },
-            success: function(message) {
-                $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
-                $('#pmf-modal-user-password-override').modal('hide');
-                $('#saving_data_indicator').fadeOut();
-            }
-        });
-        return false;
-    });
-
-    // Instantiate the bloodhound suggestion engine
-    var users = new Bloodhound({
-        datumTokenizer: function (d) {
-            return Bloodhound.tokenizers.whitespace(d.value);
-        },
-        queryTokenizer: Bloodhound.tokenizers.whitespace,
-        remote: {
-            url: 'index.php?action=ajax&ajax=user&ajaxaction=get_user_list&q=%QUERY',
-            wildcard: '%QUERY',
-            filter: function (users) {
-                return $.map(users.results, function (users) {
-                    return {
-                        userId: users.user_id,
-                        userName: users.name
-                    };
-                });
-            }
-        }
-    });
-
-    // Initialize the bBloodhound suggestion engine
-    users.initialize();
-
-    // Instantiate the Typeahead UI
-    $('.pmf-user-autocomplete').typeahead(null, {
-        source: users.ttAdapter(),
-        displayKey: 'users',
-        name: 'users',
-        minLength: 1,
-        templates: {
-            empty: [
-                '<div class="empty-message">',
-                'unable to find any Best Picture winners that match the current query',
-                '</div>'
-            ].join('\n'),
-            suggestion: Handlebars.compile('<div data-userId="{{userId}}">{{userName}}</div>')
-        }
-    }).on('typeahead:selected typeahead:autocompleted', function (event, user) {
-        $('.pmf-user-autocomplete').typeahead('val', user.userName);
-        $('#user_list_select').val(user.userId);
-        updateUser(user.userId);
-    });
 });

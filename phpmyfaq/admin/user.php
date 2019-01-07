@@ -2,8 +2,6 @@
 /**
  * Displays the user management frontend.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -158,7 +156,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         $message = '';
         $user = new CurrentUser($faqConfig);
 
-        $userId = Filter::filterInput(INPUT_POST, 'user_list_select', FILTER_VALIDATE_INT, 0);
+        $userId = Filter::filterInput(INPUT_GET, 'user_delete_id', FILTER_VALIDATE_INT, 0);
         if ($userId == 0) {
             $message   .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
             $userAction = $defaultUserAction;
@@ -495,7 +493,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             <div class="col-lg-4">
                 <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                        method="post" role="form" class="form_inline">
-                    <input type="hidden" id="user_list_select" name="user_list_select" value="">
                     <div class="card">
                         <div class="card-header">
                             <i aria-hidden="true" class="fas fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
@@ -505,9 +502,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
                                        class="form-control pmf-user-autocomplete"
                                        placeholder="<?= $PMF_LANG['ad_auth_user'] ?>">
-                                <button class="btn btn-danger" type="submit">
-                                    <i aria-hidden="true" class="fas fa-trash"></i>
-                                </button>
                             </div>
                         </div>
                     </div>

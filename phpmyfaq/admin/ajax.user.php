@@ -54,7 +54,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
                 $users = new \stdClass();
                 $users->user_id = (int)$singleUser['user_id'];
                 $users->name = $singleUser['login'];
-                $allUsers['results'][] = $users;
+                $allUsers[] = $users;
             }
             $http->sendJsonWithHeaders($allUsers);
             break;
