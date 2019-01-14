@@ -17,16 +17,17 @@
 
 /*global $: false, saveFormValues: false, mermaid: false */
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     //
     // Show rating
     //
-    let rating = $('#rating span').data('rating');
+    let rating = parseInt(document.querySelector('#rating span').dataset.rating);
     if (0 < rating) {
         rating = Math.floor(rating);
-        $('.pmf-star-rating').children('span').each(function () {
+
+        $('.pmf-star-rating').children('span').each(function() {
             if ($(this).data('stars') <= rating) {
                 $(this).text('★');
             }
