@@ -42,6 +42,7 @@ use phpMyFAQ\Tags;
 use phpMyFAQ\Template;
 use phpMyFAQ\Template\TemplateHelper;
 use phpMyFAQ\User\CurrentUser;
+use phpMyFAQ\Utils;
 
 //
 // Define the named constant used as a check by any included PHP file
