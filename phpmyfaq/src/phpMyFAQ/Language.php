@@ -5,43 +5,34 @@ namespace phpMyFAQ;
 /**
  * Manages all language stuff.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2009-05-14
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-05-14
  */
-
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Language.
- *
- * @category  phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * Class Language
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2009-05-14
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-05-14
  */
 class Language
 {
@@ -83,7 +74,7 @@ class Language
      *
      * @return array
      */
-    public function languageAvailable($id, $table = 'faqdata')
+    public function languageAvailable(int $id, string $table = 'faqdata'): array
     {
         $output = [];
 
@@ -130,63 +121,63 @@ class Language
      *
      * @return string
      */
-    public function setLanguage($configDetection, $configLanguage)
+    public function setLanguage(bool $configDetection, string $configLanguage): string
     {
-        $_lang = [];
-        self::_getUserAgentLanguage();
+        $detectedLang = [];
+        self::getUserAgentLanguage();
 
         // Get language from: _POST, _GET, _COOKIE, phpMyFAQ configuration and the automatic language detection
-        $_lang['post'] = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['post']) && !self::isASupportedLanguage($_lang['post'])) {
-            $_lang['post'] = null;
+        $detectedLang['post'] = Filter::filterInput(INPUT_POST, 'language', FILTER_SANITIZE_STRING);
+        if (!is_null($detectedLang['post']) && !self::isASupportedLanguage($detectedLang['post'])) {
+            $detectedLang['post'] = null;
         }
         // Get the user language
-        $_lang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['get']) && !self::isASupportedLanguage($_lang['get'])) {
-            $_lang['get'] = null;
+        $detectedLang['get'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
+        if (!is_null($detectedLang['get']) && !self::isASupportedLanguage($detectedLang['get'])) {
+            $detectedLang['get'] = null;
         }
         // Get the faq record language
-        $_lang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
-        if (!is_null($_lang['artget']) && !self::isASupportedLanguage($_lang['artget'])) {
-            $_lang['artget'] = null;
+        $detectedLang['artget'] = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+        if (!is_null($detectedLang['artget']) && !self::isASupportedLanguage($detectedLang['artget'])) {
+            $detectedLang['artget'] = null;
         }
         // Get the language from the session
         if (isset($_SESSION['lang']) && self::isASupportedLanguage($_SESSION['lang'])) {
-            $_lang['session'] = trim($_SESSION['lang']);
+            $detectedLang['session'] = trim($_SESSION['lang']);
         }
 
         // Get the language from the config
         if (isset($configLanguage)) {
             $confLangCode = str_replace(array('language_', '.php'), '', $configLanguage);
             if (self::isASupportedLanguage($confLangCode)) {
-                $_lang['config'] = $confLangCode;
+                $detectedLang['config'] = $confLangCode;
             }
         }
         // Detect the browser's language
         if ((true === $configDetection) && self::isASupportedLanguage($this->acceptedLanguage)) {
-            $_lang['detection'] = strtolower($this->acceptedLanguage);
+            $detectedLang['detection'] = strtolower($this->acceptedLanguage);
         }
         // Select the language
-        if (isset($_lang['post'])) {
-            self::$language = $_lang['post'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['get'])) {
-            self::$language = $_lang['get'];
-        } elseif (isset($_lang['artget'])) {
-            self::$language = $_lang['artget'];
-        } elseif (isset($_lang['session'])) {
-            self::$language = $_lang['session'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['detection'])) {
-            self::$language = $_lang['detection'];
-            $_lang = null;
-            unset($_lang);
-        } elseif (isset($_lang['config'])) {
-            self::$language = $_lang['config'];
-            $_lang = null;
-            unset($_lang);
+        if (isset($detectedLang['post'])) {
+            self::$language = $detectedLang['post'];
+            $detectedLang = null;
+            unset($detectedLang);
+        } elseif (isset($detectedLang['get'])) {
+            self::$language = $detectedLang['get'];
+        } elseif (isset($detectedLang['artget'])) {
+            self::$language = $detectedLang['artget'];
+        } elseif (isset($detectedLang['session'])) {
+            self::$language = $detectedLang['session'];
+            $detectedLang = null;
+            unset($detectedLang);
+        } elseif (isset($detectedLang['detection'])) {
+            self::$language = $detectedLang['detection'];
+            $detectedLang = null;
+            unset($detectedLang);
+        } elseif (isset($detectedLang['config'])) {
+            self::$language = $detectedLang['config'];
+            $detectedLang = null;
+            unset($detectedLang);
         } else {
             self::$language = 'en'; // just a fallback
         }
@@ -199,7 +190,7 @@ class Language
      *
      * @return string
      */
-    public function getLanguage()
+    public function getLanguage(): string
     {
         return self::$language;
     }
@@ -209,7 +200,7 @@ class Language
      *
      * @return array
      */
-    public static function getAvailableLanguages()
+    public static function getAvailableLanguages(): array
     {
         global $languageCodes;
 
@@ -250,12 +241,16 @@ class Language
      *
      * @return string
      */
-    public static function selectLanguages($default, $submitOnChange = false, Array $excludedLanguages = [], $id = 'language')
+    public static function selectLanguages(
+        string $default,
+        bool $submitOnChange = false,
+        array $excludedLanguages = [],
+        string $id = 'language'): string
     {
         global $languageCodes;
 
         $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
-        $output = '<select class="form-control" name="'.$id.'" id="'.$id.'" size="1"'.$onChange.">\n";
+        $output = '<select class="custom-select" name="'.$id.'" id="'.$id.'" size="1"'.$onChange.">\n";
         $languages = self::getAvailableLanguages();
 
         if (count($languages) > 0) {
@@ -263,7 +258,7 @@ class Language
                 if (!in_array($lang, $excludedLanguages)) {
                     $output .= "\t".'<option value="'.$lang.'"';
                     if ($lang == $default) {
-                        $output .= ' selected="selected"';
+                        $output .= ' selected';
                     }
                     $output .= '>'.$value."</option>\n";
                 }
@@ -285,7 +280,10 @@ class Language
      *
      * @return string
      */
-    public static function languageOptions($lang = '', $onlyThisLang = false, $fileLanguageValue = false)
+    public static function languageOptions(
+        string $lang = '',
+        bool $onlyThisLang = false,
+        bool $fileLanguageValue = false): string
     {
         $output = '';
         foreach (self::getAvailableLanguages() as $key => $value) {
@@ -319,15 +317,15 @@ class Language
     /**
      * True if the language is supported by the current phpMyFAQ installation.
      *
-     * @param string $langcode Language code
+     * @param string|null $langCode Language code
      *
      * @return bool
      */
-    public static function isASupportedLanguage($langcode)
+    public static function isASupportedLanguage($langCode): bool
     {
         global $languageCodes;
 
-        return isset($languageCodes[strtoupper($langcode)]);
+        return isset($languageCodes[strtoupper($langCode)]);
     }
 
     /**
@@ -340,14 +338,14 @@ class Language
      * http://tinymce.moxiecode.com/download_i18n.php
      * and extracted to ROOT/admin/editor
      *
-     * @param string $langcode Language code
+     * @param string|null $langCode Language code
      *
      * @return bool
      */
-    public static function isASupportedTinyMCELanguage($langcode)
+    public static function isASupportedTinyMCELanguage($langCode): bool
     {
         return file_exists(
-            PMF_ROOT_DIR.'/admin/assets/js/editor/langs/'.$langcode.'.js'
+            PMF_ROOT_DIR.'/admin/assets/js/editor/langs/'.$langCode.'.js'
         );
     }
 
@@ -357,7 +355,7 @@ class Language
      * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
      * it,pt-br;q=0.8,en-us;q=0.5,en;q=0.3
      */
-    private function _getUserAgentLanguage()
+    private function getUserAgentLanguage()
     {
         $matches = $languages = [];
 

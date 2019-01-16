@@ -2,18 +2,16 @@
 /**
  * Header of the admin area.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2003-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2003-02-26
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2003-02-26
  */
 
 use phpMyFAQ\Helper\Administration;
@@ -43,7 +41,7 @@ $statisticsPage = false;
 $exportsPage = false;
 $backupPage = false;
 $configurationPage = false;
-$edAutosave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
+$edAutoSave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new Administration();
 $adminHelper->setUser($user);
@@ -206,7 +204,7 @@ switch ($action) {
   <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
 
-  <?php if ($edAutosave): ?>
+  <?php if ($edAutoSave): ?>
   <script>let pmfAutosaveInterval = <?= $faqConfig->get('records.autosaveSecs') ?>;</script>
   <script src="../assets/js/autosave.js" async></script>
   <?php endif; ?>
@@ -216,38 +214,50 @@ switch ($action) {
 <body dir="<?= $PMF_LANG['dir']; ?>">
 
 <header>
-  <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
+  <nav class="navbar navbar-expand-sm navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
     <a class="navbar-brand col-sm-3 col-md-2 mr-0" title="<?= $faqConfig->get('main.titleFAQ') ?>" href="../index.php">
       phpMyFAQ <?= $faqConfig->get('main.currentVersion') ?>
     </a>
     <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
-    <!--
-    <form class="form-control form-control-dark w-50" action="index.php<?= (isset($action) ? '?action='.$action : ''); ?>" method="post">
-        <?= Language::selectLanguages($LANGCODE, true); ?>
-    </form>
-    -->
-    <div class="navbar-text">
-      <?php
-      if ($faqConfig->get('main.enableGravatarSupport')) {
-          $avatar = new Gravatar($faqConfig);
-          echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
-      } else {
-          echo '<i aria-hidden="true" class="fas fa-user"></i>';
-      }
-      ?>
-      <span title="<?= $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
-        <?= $user->getUserData('display_name'); ?>
-      </span>
-    </div>
-    <ul class="navbar-nav px-3">
-      <li class="nav-item">
-        <a class="nav-link" href="index.php?action=logout">
-          <i aria-hidden="true" class="fas fa-sign-out-alt"></i>
-          <?= $PMF_LANG['admin_mainmenu_logout']; ?>
-        </a>
-      </li>
-    </ul>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-admin-navbar" aria-controls="pmf-admin-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
     <?php endif; ?>
+
+    <div class="collapse navbar-collapse" id="pmf-admin-navbar">
+      <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="pmf-admin-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <?php
+              if ($faqConfig->get('main.enableGravatarSupport')) {
+                  $avatar = new Gravatar($faqConfig);
+                  echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
+              } else {
+                  echo '<i aria-hidden="true" class="fas fa-user"></i>';
+              }
+              ?>
+            <span title="<?= $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
+              <?= $user->getUserData('display_name'); ?>
+            </span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="pmf-admin-dropdown">
+            <a class="dropdown-item" href="index.php?action=passwd">
+              <i aria-hidden="true" class="fas fa-key"></i>
+                <?= $PMF_LANG['ad_menu_passwd'] ?>
+            </a>
+            <a class="dropdown-item" href="index.php?action=logout">
+              <i aria-hidden="true" class="fas fa-sign-out-alt"></i>
+                <?= $PMF_LANG['admin_mainmenu_logout']; ?>
+            </a>
+          </div>
+        </li>
+      </ul>
+      <?php endif; ?>
+      <form class="form-inline mr-0" action="index.php<?= (isset($action) ? '?action='.$action : ''); ?>" method="post">
+          <?= Language::selectLanguages($LANGCODE, true); ?>
+      </form>
+    </div>
   </nav>
 </header>
 
