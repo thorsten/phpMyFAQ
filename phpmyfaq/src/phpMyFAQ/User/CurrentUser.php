@@ -11,19 +11,17 @@ namespace phpMyFAQ\User;
  * getFromCookie() or manually. login(), getFromSession() and getFromCookie() may
  * be combined.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Lars Tiedemann <php@larstiedemann.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-09-28
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-09-28
  */
 
 use phpMyFAQ\Configuration;
@@ -40,23 +38,20 @@ define('SESSION_CURRENT_USER', 'CURRENT_USER');
 define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
 
 /**
- * CurrentUser.
+ * Class CurrentUser
  *
- * @category  phpMyFAQ
- *
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Lars Tiedemann <php@larstiedemann.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2005-09-28
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-09-28
  */
 class CurrentUser extends User
 {
     /**
      * true if CurrentUser is logged in, otherwise false.
-     *
      * @var bool
      */
     private $loggedIn = false;
@@ -65,31 +60,33 @@ class CurrentUser extends User
      * Specifies the timeout for the session in minutes. If the session ID was
      * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
-     *
      * @var int
      */
     private $sessionTimeout = PMF_AUTH_TIMEOUT;
+
+    /**
+     * The Session class object
+     * @var Session
+     */
+    private $session;
 
     /**
      * Specifies the timeout for the session-ID in minutes. If the session ID
      * was not updated for the last $this->_sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
      * The session ID timeout must not be greater than Session timeout.
-     *
      * @var int
      */
     private $sessionIdTimeout = 1;
 
     /**
      * LDAP configuration if available.
-     *
      * @var array
      */
     private $ldapConfig = [];
 
     /**
      * Remember me activated or deactivated.
-     *
      * @var bool
      */
     private $rememberMe = false;
@@ -98,7 +95,6 @@ class CurrentUser extends User
      * Login successful or auth failure:
      * 1 -> success
      * 0 -> failure.
-     *
      * @var int
      */
     private $loginState = 1;
@@ -117,13 +113,13 @@ class CurrentUser extends User
 
     /**
      * Constructor.
-     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
         parent::__construct($config);
         $this->ldapConfig = $config->getLdapConfig();
+        $this->session = new Session($config);
     }
 
     /**
@@ -140,7 +136,7 @@ class CurrentUser extends User
      *
      * @return bool
      */
-    public function login($login, $password)
+    public function login(string $login, string $password): bool
     {
         $optData = [];
         $loginError = $passwordError = $count = 0;
@@ -215,7 +211,7 @@ class CurrentUser extends User
             if (true === $this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
-                Session::setCookie(
+                $this->session->setCookie(
                     Session::PMF_COOKIE_NAME_REMEMBERME,
                     $rememberMe,
                     $_SERVER['REQUEST_TIME'] + PMF_REMEMBERME_EXPIRED_TIME
@@ -261,10 +257,9 @@ class CurrentUser extends User
 
     /**
      * Returns true if CurrentUser is logged in, otherwise false.
-     *
      * @return bool
      */
-    public function isLoggedIn()
+    public function isLoggedIn(): bool
     {
         return $this->loggedIn;
     }
@@ -274,15 +269,13 @@ class CurrentUser extends User
      * session is valid and not timed out. There are two
      * parameters for session timeouts: $this->_sessionTimeout
      * and $this->_sessionIdTimeout.
-     *
      * @return bool
      */
-    public function sessionIsTimedOut()
+    public function sessionIsTimedOut(): bool
     {
         if ($this->sessionTimeout <= $this->sessionAge()) {
             return true;
         }
-
         return false;
     }
 
@@ -291,12 +284,11 @@ class CurrentUser extends User
      *
      * @return bool
      */
-    public function sessionIdIsTimedOut()
+    public function sessionIdIsTimedOut(): bool
     {
         if ($this->sessionIdTimeout <= $this->sessionAge()) {
             return true;
         }
-
         return false;
     }
 
@@ -305,12 +297,11 @@ class CurrentUser extends User
      *
      * @return float
      */
-    public function sessionAge()
+    public function sessionAge(): float
     {
         if (!isset($_SESSION[SESSION_ID_TIMESTAMP])) {
             return 0;
         }
-
         return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
     }
 
@@ -318,10 +309,9 @@ class CurrentUser extends User
      * Returns an associative array with session information stored
      * in the user table. The array has the following keys:
      * session_id, session_timestamp and ip.
-     *
      * @return array
      */
-    public function getSessionInfo()
+    public function getSessionInfo(): array
     {
         $select = sprintf('
             SELECT
@@ -352,11 +342,11 @@ class CurrentUser extends User
      * Optionally it should update the 'last login' time.
      * Returns true on success, otherwise false.
      *
-     * @param bool $updateLastlogin Update the last login time?
+     * @param bool $updateLastLogin Update the last login time?
      *
      * @return bool
      */
-    public function updateSessionId($updateLastlogin = false)
+    public function updateSessionId(bool $updateLastLogin = false): bool
     {
         // renew the session-ID
         $oldSessionId = session_id();
@@ -386,7 +376,7 @@ class CurrentUser extends User
             Db::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
-            $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
+            $updateLastLogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
@@ -404,6 +394,7 @@ class CurrentUser extends User
     /**
      * Saves the CurrentUser into the session. This method
      * may be called after a successful login.
+     * @return void
      */
     public function saveToSession()
     {
@@ -413,12 +404,10 @@ class CurrentUser extends User
     /**
      * Deletes the CurrentUser from the session. The user
      * will be logged out. Return true on success, otherwise false.
-     *
      * @param bool $deleteCookie
-     *
      * @return bool
      */
-    public function deleteFromSession($deleteCookie = false)
+    public function deleteFromSession(bool $deleteCookie = false): bool
     {
         // delete CSRF Token
         $this->deleteCsrfTokenFromSession();
@@ -453,7 +442,7 @@ class CurrentUser extends User
         }
 
         if ($deleteCookie) {
-            Session::setCookie(Session::PMF_COOKIE_NAME_REMEMBERME);
+            $this->session->setCookie(Session::PMF_COOKIE_NAME_REMEMBERME);
         }
 
         session_destroy();
@@ -469,11 +458,8 @@ class CurrentUser extends User
      * session is timed out, null will be returned. If the session data is
      * correct, but there is no user found in the user table, false will be
      * returned. On success, a valid CurrentUser object is returned.
-     *
      * @static
-     *
      * @param Configuration $config
-     *
      * @return null|CurrentUser
      */
     public static function getFromSession(Configuration $config)

@@ -3,22 +3,18 @@
 namespace phpMyFAQ;
 
 /**
- * The main User session class.
- *
- *
+ * The main Session class.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-31
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2007-03-31
  */
 
 use phpMyFAQ\Configuration;
@@ -32,29 +28,23 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Session.
+ * Class Session.
  *
- * @category  phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-31
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2007-03-31
  */
 class Session
 {
-    /**
-     * Constants.
-     */
+    /** Constants. */
     const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
     const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
     const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
-    /**
-     * @var PMF_Configuration
-     */
+    /** @var Configuration */
     private $config;
 
     /**
@@ -75,22 +65,22 @@ class Session
      *
      * @throws Exception
      */
-    public function userTracking($action, $id = 0)
+    public function userTracking(string $action, int $id = 0)
     {
-        global $sid, $user, $botBlacklist;
+        global $sessionId, $user, $botBlacklist;
 
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
             $banned = false;
             $agent = $_SERVER['HTTP_USER_AGENT'];
-            $sid = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
-            $sidc = Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $sessionId = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
+            $cookieId = Filter::filterInput(INPUT_COOKIE, self::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 
-            if (!is_null($sidc)) {
-                $sid = $sidc;
+            if (!is_null($cookieId)) {
+                $sessionId = $cookieId;
             }
             if ($action == 'old_session') {
-                $sid = null;
+                $sessionId = null;
             }
 
             foreach ($botBlacklist as $bot) {
@@ -102,25 +92,25 @@ class Session
             $network = new Network($this->config);
 
             // if we're running behind a reverse proxy like nginx/varnish, fix the client IP
-            $remoteAddr = $_SERVER['REMOTE_ADDR'];
+            $remoteAddress = $_SERVER['REMOTE_ADDR'];
             $localAddresses = ['127.0.0.1', '::1'];
 
-            if (in_array($remoteAddr, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-                $remoteAddr = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            if (in_array($remoteAddress, $localAddresses) && isset($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+                $remoteAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
             }
             // clean up as well
-            $remoteAddr = preg_replace('([^0-9a-z:\.]+)i', '', $remoteAddr);
+            $remoteAddress = preg_replace('([^0-9a-z:\.]+)i', '', $remoteAddress);
 
-            if (!$network->checkIp($remoteAddr)) {
+            if (!$network->checkIp($remoteAddress)) {
                 $banned = true;
             }
 
             if (0 === $bots && false === $banned) {
-                if (!isset($sid)) {
-                    $sid = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsessions', 'sid');
+                if (!isset($sessionId)) {
+                    $sessionId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
-                    if (!is_null($sidc) && (!$sidc != $sid)) {
-                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sid);
+                    if (!is_null($cookieId) && (!$cookieId != $sessionId)) {
+                        self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sessionId);
                     }
 
                     $query = sprintf("
@@ -130,18 +120,18 @@ class Session
                             VALUES
                         (%d, %d, '%s', %d)",
                         Db::getTablePrefix(),
-                        $sid,
+                        $sessionId,
                         ($user ? $user->getUserId() : -1),
-                        $remoteAddr,
+                        $remoteAddress,
                         $_SERVER['REQUEST_TIME']
                     );
                     $this->config->getDb()->query($query);
                 }
 
-                $data = $sid.';'.
+                $data = $sessionId.';'.
                         str_replace(';', ',', $action).';'.
                         $id.';'.
-                        $remoteAddr.';'.
+                        $remoteAddress.';'.
                         str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '').';'.
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '').';'.
                         str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])).';'.
@@ -168,7 +158,7 @@ class Session
      *
      * @return int
      */
-    public function getTimeFromSessionId($sid)
+    public function getTimeFromSessionId(int $sid)
     {
         $timestamp = 0;
 
@@ -200,7 +190,7 @@ class Session
      *
      * @return array
      */
-    public function getSessionsbyDate($firstHour, $lastHour)
+    public function getSessionsByDate(int $firstHour, int $lastHour): array
     {
         $sessions = [];
 
@@ -236,7 +226,7 @@ class Session
      *
      * @return int
      */
-    public function getNumberOfSessions()
+    public function getNumberOfSessions(): int
     {
         $num = 0;
 
@@ -264,7 +254,7 @@ class Session
      *
      * @return bool
      */
-    public function deleteSessions($first, $last)
+    public function deleteSessions(int $first, int $last): bool
     {
         $query = sprintf('
             DELETE FROM
@@ -297,12 +287,13 @@ class Session
     /**
      * Checks the Session ID.
      *
-     * @param int    $sessionId Session ID
-     * @param string $ip        IP
+     * @param int $sessionIdToCheck Session ID
+     * @param string $ip IP
+     * @throws
      */
-    public function checkSessionId($sessionId, $ip)
+    public function checkSessionId(int $sessionIdToCheck, string $ip)
     {
-        global $sid, $user;
+        global $sessionId, $user;
 
         $query = sprintf("
             SELECT
@@ -316,17 +307,17 @@ class Session
             AND
                 time > %d",
             Db::getTablePrefix(),
-            $sessionId,
+            $sessionIdToCheck,
             $ip,
             $_SERVER['REQUEST_TIME'] - 86400
         );
         $result = $this->config->getDb()->query($query);
 
         if ($this->config->getDb()->numRows($result) == 0) {
-            $this->userTracking('old_session', $sessionId);
+            $this->userTracking('old_session', $sessionIdToCheck);
         } else {
             // Update global session id
-            $sid = $sessionId;
+            $sessionId = $sessionIdToCheck;
             // Update db tracking
             $query = sprintf("
                 UPDATE
@@ -340,7 +331,7 @@ class Session
                 Db::getTablePrefix(),
                 $_SERVER['REQUEST_TIME'],
                 ($user ? $user->getUserId() : '-1'),
-                $sessionId,
+                $sessionIdToCheck,
                 $ip
             );
             $this->config->getDb()->query($query);
@@ -356,7 +347,7 @@ class Session
      *
      * @return array
      */
-    public function getUsersOnline($activityTimeWindow = 300)
+    public function getUsersOnline(int $activityTimeWindow = 300): array
     {
         $users = array(0, 0);
 
@@ -365,7 +356,6 @@ class Session
 
             if (!$this->config->get('security.enableLoginOnly')) {
                 // Count all sids within the time window for public installations
-                // @todo add a new field in faqsessions in order to find out only sids of anonymous users
                 $query = sprintf('
                     SELECT
                         count(sid) AS anonymous_users
@@ -415,7 +405,7 @@ class Session
      *
      * @returns array
      */
-    public function getLast30DaysVisits()
+    public function getLast30DaysVisits(): array
     {
         $stats = $visits = [];
 
@@ -456,13 +446,13 @@ class Session
      * Store the Session ID into a persistent cookie expiring
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
-     * @param string $name      Cookie name
+     * @param string $name Cookie name
      * @param string $sessionId Session ID
-     * @param int    $timeout   Cookie timeout
+     * @param int $timeout Cookie timeout
      *
      * @return bool
      */
-    public static function setCookie($name, $sessionId = '', $timeout = PMF_SESSION_EXPIRED_TIME)
+    public function setCookie(string $name, string $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
     {
         $protocol = 'http';
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -473,7 +463,7 @@ class Session
             $sessionId,
             $_SERVER['REQUEST_TIME'] + $timeout,
             dirname($_SERVER['SCRIPT_NAME']),
-            $protocol.'://'.$_SERVER['HTTP_HOST'],
+            $this->config->getDefaultUrl(),
             ('https' === $protocol) ? true : false,
             true
         );

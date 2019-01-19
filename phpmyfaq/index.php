@@ -216,7 +216,7 @@ if (function_exists('mb_language') && in_array($mbLanguage, $validMbStrings)) {
 //
 // Found a session ID in _GET or _COOKIE?
 //
-$sid = null;
+$sessionId = null;
 $sidGet = Filter::filterInput(INPUT_GET, PMF_GET_KEY_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $sidCookie = Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT);
 $faqSession = new Session($faqConfig);
@@ -251,10 +251,10 @@ if (!$internal) {
 //
 $sids = '';
 if ($faqConfig->get('main.enableUserTracking')) {
-    if (isset($sid)) {
-        Session::setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sid);
+    if (isset($sessionId)) {
+        $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId);
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sid, $LANGCODE);
+            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sessionId, $LANGCODE);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie)) {
@@ -264,7 +264,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
         }
     }
 } else {
-    if (!Session::setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sid, $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
+    if (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId, $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $LANGCODE);
     }
 }
@@ -418,7 +418,7 @@ if (!isset($allowedVariables[$action])) {
 if ($action !== 'main') {
     $includeTemplate = $action.'.html';
     $includePhp = $action.'.php';
-    $writeLangAdress = '?sid='.$sid;
+    $writeLangAdress = '?sid='.$sessionId;
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
@@ -428,7 +428,7 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
-    $writeLangAdress = '?sid='.$sid;
+    $writeLangAdress = '?sid='.$sessionId;
 }
 
 //

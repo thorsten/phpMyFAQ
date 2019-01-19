@@ -36,7 +36,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $lastHour = mktime(23, 59, 59, date('m', $day), date('d', $day), date('Y', $day));
 
     $session = new Session($faqConfig);
-    $sessiondata = $session->getSessionsbyDate($firstHour, $lastHour);
+    $sessiondata = $session->getSessionsByDate($firstHour, $lastHour);
     $date = new Date($faqConfig);
     ?>
         <header class="row">
