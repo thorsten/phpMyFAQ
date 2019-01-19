@@ -22,14 +22,14 @@
  * Please consider following while defining new vars:
  * - one variable definition per line !!!
  * - the perfect case is to define a scalar string value
- * - if some dynamic content is needed, use sprintf syntax
+ * - if some dynamic content is needed, use sprintf() syntax
  * - arrays are allowed but not recommended
  * - no comments at the end of line after the var definition
  * - do not use '=' char in the array keys
  *   (eq. $PMF_LANG["a=b"] is not allowed)
  *
  *  Please be consistent with this format as we need it for
- *  the translation tool to work propertly
+ *  the translation tool to work properly
  */
 
 $PMF_LANG["metaCharset"] = "UTF-8";
