@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance\Database;
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MySQL.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
@@ -338,6 +336,7 @@ class Mysqli extends Database implements Driver
             remember_me VARCHAR(150) NULL,
             success INT(1) NULL DEFAULT 1,
             is_superadmin INT(1) NULL DEFAULT 0,
+            login_attempts INT(1) NULL DEFAULT 0,
             PRIMARY KEY (user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
@@ -382,7 +381,7 @@ class Mysqli extends Database implements Driver
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -396,7 +395,7 @@ class Mysqli extends Database implements Driver
      *
      * @return bool
      */
-    public function createTables($prefix = '')
+    public function createTables(string $prefix = ''): bool
     {
         foreach ($this->createTableStatements as $stmt) {
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));

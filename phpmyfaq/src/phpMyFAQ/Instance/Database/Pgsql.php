@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance\Database;
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for PostgreSQL.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
@@ -340,6 +338,7 @@ class Pgsql extends Database implements Driver
             remember_me VARCHAR(150) NULL,
             success SMALLINT NULL DEFAULT 1,
             is_superadmin SMALLINT NULL DEFAULT 0,
+            login_attempts SMALLINT NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
@@ -398,7 +397,7 @@ class Pgsql extends Database implements Driver
      *
      * @return bool
      */
-    public function createTables($prefix = '')
+    public function createTables(string $prefix = '')
     {
         foreach ($this->createTableStatements as $key => $stmt) {
             if ($key == 'idx_records' || $key == 'faqsessions_idx') {

@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance\Database;
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for SQLite3.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
@@ -339,6 +337,7 @@ class Sqlite3 extends Database implements Driver
             remember_me VARCHAR(150) NULL,
             success INT(1) NULL DEFAULT 1,
             is_superadmin INT(1) NULL DEFAULT 0,
+            login_attempts INT(1) NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (
@@ -397,7 +396,7 @@ class Sqlite3 extends Database implements Driver
      *
      * @return bool
      */
-    public function createTables($prefix = '')
+    public function createTables(string $prefix = '')
     {
         foreach ($this->createTableStatements as $stmt) {
             $result = $this->config->getDb()->query(sprintf($stmt, $prefix));

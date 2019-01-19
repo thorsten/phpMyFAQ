@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance\Database;
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for MS SQL.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
@@ -27,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance_Database_Sqlsrv.
+ * Class Sqlsrv.
  *
  * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -339,6 +337,7 @@ class Sqlsrv extends Database implements Driver
             remember_me VARCHAR(150) NULL,
             success INTEGER NULL DEFAULT 1,
             is_superadmin INTEGER NULL DEFAULT 0,
+            login_attempts INTEGER NULL DEFAULT 0,
             PRIMARY KEY (user_id))',
 
         'faquserdata' => 'CREATE TABLE %sfaquserdata (

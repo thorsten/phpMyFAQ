@@ -2,8 +2,6 @@
 /**
  * Main update script.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -659,6 +657,13 @@ if ($step == 3) {
         $perm->renameRight('addbt', 'add_faq');
         $perm->renameRight('editbt', 'edit_faq');
         $perm->renameRight('delbt', 'delete_faq');
+
+        // Add login attempts flag
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD login_attempts INT(1) DEFAULT 0';
+        }
     }
 
     // Always the last step: Update version number

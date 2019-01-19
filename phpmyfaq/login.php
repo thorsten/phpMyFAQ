@@ -3,18 +3,14 @@
 /**
  * This is the page there a user can login.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2012-02-12
  */
@@ -29,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $loginMessage = '';
 if (!is_null($error)) {
-    $loginMessage = '<p class="alert alert-danger">'.$error.'<br>('.implode($user->errors, ' ').')</p>';
+    $loginMessage = '<div class="alert alert-danger" role="alert">'.$error.'</div>';
 }
 
 try {

@@ -97,7 +97,7 @@ class Database
     ];
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
     protected $config;
 

@@ -104,6 +104,12 @@ class CurrentUser extends User
     private $loginState = 1;
 
     /**
+     * Number of failed login attempts
+     * @var int
+     */
+    private $loginAttempts = 0;
+
+    /**
      * Lockout time in seconds
      * @var integer
      */
@@ -617,16 +623,19 @@ class CurrentUser extends User
     protected function setSuccess($success)
     {
         $this->loginState = (int) $success;
+        $this->loginAttempts = 0;
 
         $update = sprintf('
             UPDATE
                 %sfaquser
             SET
-                success = %d
+                success = %d,
+                login_attempts = %d
             WHERE
                 user_id = %d',
             Db::getTablePrefix(),
             $this->loginState,
+            $this->loginAttempts,
             $this->getUserId()
         );
 
@@ -641,13 +650,16 @@ class CurrentUser extends User
      */
     protected function setLoginAttempt()
     {
+        $this->loginAttempts++;
+
         $update = sprintf("
             UPDATE
                 %sfaquser
             SET
                 session_timestamp ='%s',
                 ip = '%s',
-                success = 0
+                success = 0,
+                login_attempts = login_attempts + 1
             WHERE
                 user_id = %d",
             Db::getTablePrefix(),
@@ -670,7 +682,8 @@ class CurrentUser extends User
             SELECT
                 session_timestamp,
                 ip,
-                success
+                success,
+                login_attempts
             FROM
                 %sfaquser
             WHERE
@@ -680,7 +693,9 @@ class CurrentUser extends User
             AND
                 ip = '%s'
             AND
-                success = 0",
+                success = 0
+            AND
+                login_attempts > 5",
             Db::getTablePrefix(),
             $this->getUserId(),
             $_SERVER['REQUEST_TIME'],
