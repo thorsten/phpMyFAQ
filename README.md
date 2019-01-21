@@ -128,7 +128,7 @@ The vm.max_map_count setting must be set via docker-machine:
     $ yarn install
     $ yarn build
 
-Then just open http://www.example.org/phpmyfaq/install/setup.php in your browser.
+Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
