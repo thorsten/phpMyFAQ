@@ -216,3 +216,23 @@ body {
 .category-header {
   cursor: pointer;
 }
+
+//
+// TinyMCE
+//
+label.mce-label {
+  max-width: none;
+}
+.mce-file {
+  cursor: pointer;
+  line-height: 36px;
+  &:hover {
+    text-decoration: underline;
+  }
+}
+.mce-file-preview {
+  border: 1px solid $gray-900;
+  margin-right: 16px;
+  max-height: 32px;
+  max-width: 32px;
+}

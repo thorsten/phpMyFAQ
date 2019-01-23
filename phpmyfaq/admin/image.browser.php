@@ -85,7 +85,7 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
     }
 }
 ?>
-<script src="../assets/js/phpmyfaq.min.js"></script>
+<script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
     $('#filter').on('keyup', function () {

@@ -81,7 +81,7 @@ if (isset($auth)) {
       'advlist autolink lists link image charmap print preview hr anchor pagebreak',
       'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
       'insertdatetime media nonbreaking save table contextmenu directionality',
-      'emoticons template paste textcolor autosave phpmyfaq imageupload save'
+      'emoticons template paste textcolor autosave phpmyfaq save'
     ],
     relative_urls: false,
     convert_urls: false,
@@ -92,7 +92,7 @@ if (isset($auth)) {
     entities: '10',
     entity_encoding: 'raw',
     toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
-    toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print",
+    toolbar2: "link image preview media | forecolor backcolor emoticons | phpmyfaq print",
     image_advtab: true,
     image_class_list: [
       {title: 'None', value: ''},
@@ -171,6 +171,41 @@ if (isset($auth)) {
       });
 
       return false;
+    },
+
+    // without images_upload_url set, Upload tab won't show up
+    images_upload_url: 'index.php?action=ajax&ajax=image&ajaxaction=upload',
+
+    // override default upload handler to simulate successful upload
+    images_upload_handler: (blobInfo, success, failure) => {
+      let xhr, formData;
+
+      xhr = new XMLHttpRequest();
+      xhr.withCredentials = false;
+      xhr.open('POST', 'index.php?action=ajax&ajax=image&ajaxaction=upload&csrf=<?= $user->getCsrfTokenFromSession() ?>');
+
+      xhr.onload = () => {
+        let json;
+
+        if (xhr.status !== 200) {
+          failure('HTTP Error: ' + xhr.status);
+          return;
+        }
+
+        json = JSON.parse(xhr.responseText);
+
+        if (!json || typeof json.location !== 'string') {
+          failure('Invalid JSON: ' + xhr.responseText);
+          return;
+        }
+
+        success(json.location);
+      };
+
+      formData = new FormData();
+      formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+      xhr.send(formData);
     },
 
     // Custom params
