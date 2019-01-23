@@ -18,42 +18,45 @@
 /*global $: false, saveFormValues: false, mermaid: false */
 
 document.addEventListener('DOMContentLoaded', () => {
-    'use strict';
+  'use strict';
 
-    //
-    // Show rating
-    //
+  //
+  // Show rating
+  //
+  if (document.querySelector('#rating span')) {
+
     let rating = parseInt(document.querySelector('#rating span').dataset.rating);
     if (0 < rating) {
-        rating = Math.floor(rating);
+      rating = Math.floor(rating);
 
-        $('.pmf-star-rating').children('span').each(function() {
-            if ($(this).data('stars') <= rating) {
-                $(this).text('★');
-            }
-        });
+      $('.pmf-star-rating').children('span').each(function () {
+        if ($(this).data('stars') <= rating) {
+          $(this).text('★');
+        }
+      });
     }
+  }
 
-    //
-    // Save comments
-    //
-    $('form#formValues').on('submit', function (e) {
-        e.preventDefault();
-        saveFormValues('savecomment', 'comment');
-        return false;
-    });
+  //
+  // Save comments
+  //
+  $('form#formValues').on('submit', function (e) {
+    e.preventDefault();
+    saveFormValues('savecomment', 'comment');
+    return false;
+  });
 
-    //
-    // Tooltips
-    //
-    $('[data-toggle="tooltip"]').tooltip();
+  //
+  // Tooltips
+  //
+  $('[data-toggle="tooltip"]').tooltip();
 
-    //
-    // Initialize Mermaid
-    //
-    const config = {
-        startOnLoad:true,
-        arrowMarkerAbsolute:true
-    };
-    mermaid.initialize(config);
+  //
+  // Initialize Mermaid
+  //
+  const config = {
+    startOnLoad: true,
+    arrowMarkerAbsolute: true
+  };
+  mermaid.initialize(config);
 });
