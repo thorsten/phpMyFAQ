@@ -14,7 +14,7 @@
  * @since     2013-11-17
  */
 
-/*global $:false, Bloodhound: false, Handlebars: false */
+/*global $:false */
 
 $(document).ready(function () {
   'use strict';
@@ -157,29 +157,8 @@ $(document).ready(function () {
     });
   });
 
-  // Instantiate the bloodhound suggestion engine
-  const tags = new Bloodhound({
-    datumTokenizer: function (d) {
-      return Bloodhound.tokenizers.whitespace(d.value);
-    },
-    queryTokenizer: Bloodhound.tokenizers.whitespace,
-    remote: {
-      url: 'index.php?action=ajax&ajax=tags&ajaxaction=list&q=%QUERY',
-      wildcard: '%QUERY',
-      filter: function (tags) {
-        return $.map(tags.results, function (tags) {
-          return {
-            tagName: tags.tagName
-          };
-        });
-      }
-    }
-  });
-
-  // Initialize the bBloodhound suggestion engine
-  tags.initialize();
-
   // Instantiate the Typeahead UI
+  /*
   $('.pmf-tags-autocomplete').typeahead(null, {
     source: tags.ttAdapter(),
     displayKey: 'tags',
@@ -206,4 +185,5 @@ $(document).ready(function () {
     tags.data('tagList', currentTags);
     $('.pmf-tags-autocomplete').typeahead('val', currentTags);
   });
+  */
 });
