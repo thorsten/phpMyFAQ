@@ -49,27 +49,24 @@ require PMF_ROOT_DIR.'/config/database.php';
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
-    <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
-
-    <meta name="viewport" content="width=device-width;">
-    <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
-    <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
-
-    <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
-
-    <script src="../assets/js/phpmyfaq.min.js"></script>
-
-    <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>phpMyFAQ <?= System::getVersion(); ?> Update</title>
+  <meta name="viewport" content="width=device-width;">
+  <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
+  <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
+  <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
+  <script src="../assets/themes/default/js/vendors.min.js"></script>
+  <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
+  <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
 </head>
 <body>
 
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
       <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
@@ -110,6 +107,7 @@ require PMF_ROOT_DIR.'/config/database.php';
 $version = $faqConfig->get('main.currentVersion');
 $installer = new Installer();
 $installer->checkPreUpgrade($DB['type']);
+$installer->checkAvailableDatabaseTables($db);
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>

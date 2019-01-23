@@ -5,22 +5,21 @@ namespace phpMyFAQ;
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Florian Anderiasch <florian@phpmyfaq.net>
+ * @package phpMyFAQ
+ * @author Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-08-27
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-08-27
  */
 
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
+use phpMyFAQ\Db\Driver;
 use phpMyFAQ\Instance\Database;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -32,14 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Installer.
+ * Class Installer.
  *
- * @category  phpMyFAQ
- * @author    Florian Anderiasch <florian@phpmyfaq.net>
+ * @package phpMyFAQ
+ * @author Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-08-27
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-08-27
  */
 class Installer
 {
@@ -48,14 +47,14 @@ class Installer
      *
      * @var System
      */
-    protected $_system;
+    protected $system;
 
     /**
      * Array with user rights.
      *
      * @var array
      */
-    protected $_mainRights = [
+    protected $mainRights = [
         [
             'name' => 'add_user',
             'description' => 'Right to add user accounts',
@@ -458,7 +457,7 @@ class Installer
      */
     public function __construct()
     {
-        $this->_system = new System();
+        $this->system = new System();
         $dynMainConfig = [
             'main.currentVersion' => System::getVersion(),
             'main.currentApiVersion' => System::getApiVersion(),
@@ -486,31 +485,32 @@ class Installer
             System::renderFooter();
         }
 
-        if (!$this->_system->checkDatabase()) {
+        if (!$this->system->checkDatabase()) {
             echo '<p class="alert alert-danger">No supported database detected! Please install one of the following'.
                 ' database systems and enable the corresponding PHP extension in php.ini:</p>';
             echo '<ul>';
-            foreach ($this->_system->getSupportedDatabases() as $database) {
+            foreach ($this->system->getSupportedDatabases() as $database) {
                 printf('    <li>%s</li>', $database[1]);
             }
             echo '</ul>';
             System::renderFooter();
         }
 
-        if (!$this->_system->checkRequiredExtensions()) {
+        if (!$this->system->checkRequiredExtensions()) {
             echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in '.
                 'php.ini.</p>';
             echo '<ul>';
-            foreach ($this->_system->getMissingExtensions() as $extension) {
+            foreach ($this->system->getMissingExtensions() as $extension) {
                 printf('    <li>ext/%s</li>', $extension);
             }
             echo '</ul>';
             System::renderFooter();
         }
 
-        if (!$this->_system->checkphpMyFAQInstallation()) {
-            echo '<p class="alert alert-danger">It seems you\'re already running a version of phpMyFAQ. Please use the '.
-                '<a href="update.php">update script</a>.</p>';
+        if (!$this->system->checkphpMyFAQInstallation()) {
+            echo '<p class="alert alert-danger">The file <code>config/database.php</code> was detected. It seems'.
+                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script</a>.'.
+                '</p>';
             System::renderFooter();
         }
     }
@@ -518,11 +518,11 @@ class Installer
     /**
      * Checks for the minimum PHP requirement and if the database credentials file is readable.
      *
-     * @param string $type
+     * @param string $databaseType
      *
      * @return void
      */
-    public function checkPreUpgrade($type = '')
+    public function checkPreUpgrade(string $databaseType)
     {
         if (!$this->checkMinimumPhpVersion()) {
             printf(
@@ -538,10 +538,10 @@ class Installer
             System::renderFooter();
         }
 
-        if ('' !== $type) {
+        if ('' !== $databaseType) {
             $databaseFound = false;
-            foreach ($this->_system->getSupportedDatabases() as $database => $values) {
-                if ($database === $type) {
+            foreach ($this->system->getSupportedDatabases() as $database => $values) {
+                if ($database === $databaseType) {
                     $databaseFound = true;
                     break;
                 }
@@ -549,7 +549,7 @@ class Installer
             if (!$databaseFound) {
                 echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>'.
                     'We found '.ucfirst($database).'<br>'.
-                    'Please use the change the database type in config/database.php.</p>';
+                    'Please use the change the database type in <code>config/database.php</code>.</p>';
                 System::renderFooter();
             }
         }
@@ -643,11 +643,31 @@ class Installer
     }
 
     /**
+     * Checks if phpMyFAQ database tables are available
+     * @param Driver $database
+     * @throws
+     */
+    public function checkAvailableDatabaseTables(Driver $database)
+    {
+        $query = sprintf(
+            'SELECT 1 FROM %s%s LIMIT 1',
+            Db::getTablePrefix(),
+            'faqconfig'
+        );
+        $result = $database->query($query);
+        if ($database->numRows($result) === 0) {
+            echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Table faqconfig not found.</p>\n";
+            System::renderFooter(true);
+        }
+    }
+
+    /**
      * Starts the installation.
      *
      * @param array $setup
+     * @throws
      */
-    public function startInstall(Array $setup = null)
+    public function startInstall(array $setup = null)
     {
         $query = $uninst = $dbSetup = [];
 
@@ -876,7 +896,7 @@ class Installer
         // Write the DB variables in database.php
         if (!$instanceSetup->createDatabaseFile($dbSetup)) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>';
-            $this->_system->cleanInstallation();
+            $this->system->cleanInstallation();
             System::renderFooter(true);
         }
 
@@ -884,7 +904,7 @@ class Installer
         if (extension_loaded('ldap') && !is_null($ldapEnabled) && count($ldapSetup)) {
             if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
-                $this->_system->cleanInstallation();
+                $this->system->cleanInstallation();
                 System::renderFooter(true);
             }
         }
@@ -893,7 +913,7 @@ class Installer
         if (!is_null($esEnabled) && count($esSetup)) {
             if (!$instanceSetup->createElasticsearchFile($esSetup, '')) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/elasticsearch.php.</p>';
-                $this->_system->cleanInstallation();
+                $this->system->cleanInstallation();
                 System::renderFooter(true);
             }
         }
@@ -904,21 +924,21 @@ class Installer
             $db = Db::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->_system->cleanInstallation();
+            $this->system->cleanInstallation();
             System::renderFooter(true);
         }
 
         $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
-            $this->_system->cleanInstallation();
+            $this->system->cleanInstallation();
             System::renderFooter(true);
         }
         try {
             $databaseInstaller = Database::factory($configuration, $dbSetup['dbType']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
-            $this->_system->cleanInstallation();
+            $this->system->cleanInstallation();
             System::renderFooter(true);
         }
 
@@ -927,11 +947,11 @@ class Installer
         $stopwords = new Stopwords($configuration);
         $stopwords->executeInsertQueries($dbSetup['dbPrefix']);
 
-        $this->_system->setDatabase($db);
+        $this->system->setDatabase($db);
 
         // Erase any table before starting creating the required ones
         if (!System::isSqlite($dbSetup['dbType'])) {
-            $this->_system->dropTables($uninst);
+            $this->system->dropTables($uninst);
         }
 
         // Start creating the required tables
@@ -943,8 +963,8 @@ class Installer
             us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
-                $this->_system->dropTables($uninst);
-                $this->_system->cleanInstallation();
+                $this->system->dropTables($uninst);
+                $this->system->cleanInstallation();
                 System::renderFooter(true);
             }
             usleep(1000);
@@ -977,7 +997,7 @@ class Installer
                 "Couldn't create the admin user: %s</p>\n",
                 $admin->error()
             );
-            $this->_system->cleanInstallation();
+            $this->system->cleanInstallation();
             System::renderFooter(true);
         }
         $admin->setStatus('protected');
@@ -988,7 +1008,7 @@ class Installer
         $admin->setUserData($adminData);
 
         // add default rights
-        foreach ($this->_mainRights as $right) {
+        foreach ($this->mainRights as $right) {
             $admin->perm->grantUserRight(1, $admin->perm->addRight($right));
         }
 

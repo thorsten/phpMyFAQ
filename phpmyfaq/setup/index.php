@@ -25,6 +25,7 @@
  */
 
 use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 
@@ -58,18 +59,13 @@ $loader->register()
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-
   <title>phpMyFAQ <?= System::getVersion() ?> Setup</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
   <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
-
   <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
-
-  <script src="../assets/js/vendors.js"></script>
-  <script src="../assets/js/phpmyfaq.min.js"></script>
-
+  <script src="../assets/themes/default/js/vendors.min.js"></script>
+  <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
 <body>
@@ -124,8 +120,8 @@ $loader->register()
 //
 Strings::init('en');
 
-$installer = new phpMyFAQ\Installer();
-$system = new phpMyFAQ\System();
+$installer = new Installer();
+$system = new System();
 
 $installer->checkBasicStuff();
 $installer->checkFilesystemPermissions();
