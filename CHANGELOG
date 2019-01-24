@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-alpha.4 - 2019-01-
+Version 3.0.0-alpha.4 - 2019-01-24
 - changed PHP requirement to PHP 7.1+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
