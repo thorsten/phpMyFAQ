@@ -664,6 +664,13 @@ if ($step == 3) {
         }
     }
 
+    //
+    // UPDATES FROM 3.0.0-beta
+    //
+    if (version_compare($version, '3.0.0-beta', '<')) {
+
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
