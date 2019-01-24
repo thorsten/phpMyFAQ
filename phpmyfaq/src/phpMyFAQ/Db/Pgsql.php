@@ -328,7 +328,6 @@ class Pgsql implements Driver
             $prefix.'faqright',
             $prefix.'faqsearches',
             $prefix.'faqsections',
-            $prefix.'faqsection',
             $prefix.'faqsection_group',
             $prefix.'faqsection_news',
             $prefix.'faqsessions',
