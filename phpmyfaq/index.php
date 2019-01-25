@@ -745,7 +745,7 @@ $http->startCompression();
 //
 // Check for 404 HTTP status code
 //
-if ($http->getStatusCode() === 404) {
+if ($http->getStatusCode() === 404 || $action === '404') {
     $template = new Template(
         [
             'index' => '404.html'

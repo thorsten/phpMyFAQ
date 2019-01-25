@@ -30,6 +30,9 @@ RewriteEngine On
 # the path to your phpMyFAQ installation
 RewriteBase /
 
+# Error pages
+ErrorDocument 404 /index.php?action=404
+
 # show all categories
 RewriteCond %{REQUEST_URI}          /showcat\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=show [L,QSA]

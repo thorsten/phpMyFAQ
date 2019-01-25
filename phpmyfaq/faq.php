@@ -26,7 +26,6 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
@@ -57,7 +56,6 @@ $faqRating = new Rating($faqConfig);
 $faqComment = new Comment($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
-$httpHelper = new HttpHelper();
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
@@ -296,7 +294,7 @@ $numComments = $faqComment->getNumberOfComments();
 // Check if category ID and FAQ ID are linked together
 $isLinkedFAQ = $category->categoryHasLinkToFaq($recordId, $currentCategory);
 if (!$isLinkedFAQ) {
-    $httpHelper->sendStatus(404);
+    $http->sendStatus(404);
 }
 
 $template->parse(
