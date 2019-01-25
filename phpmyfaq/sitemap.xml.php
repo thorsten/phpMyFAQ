@@ -12,8 +12,6 @@
  * The Google Sitemap protocol is described here:
  * http://www.google.com/webmasters/sitemaps/docs/en/protocol.html
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -25,6 +23,14 @@
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-26
  */
+
+use phpMyFAQ\Date;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Link;
+use phpMyFAQ\Strings;
+
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
 define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
@@ -51,7 +57,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require 'src/Bootstrap.php';
+require __DIR__.'/src/Bootstrap.php';
 
 //
 // Initalizing static string wrapper
@@ -63,10 +69,10 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 }
 
 // {{{ Functions
-function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $priority = null)
+function buildSiteMapNode($location, $lastModified = null, $changeFreq = null, $priority = null)
 {
-    if (!isset($lastmod)) {
-        $lastmod = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
+    if (!isset($lastModified)) {
+        $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
     if (!isset($changeFreq)) {
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
@@ -74,7 +80,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
     $node =
          '<url>'
         .'<loc>'.Strings::htmlspecialchars($location).'</loc>'
-        .'<lastmod>'.$lastmod.'</lastmod>'
+        .'<lastmod>'.$lastModified.'</lastmod>'
         .'<changefreq>'.$changeFreq.'</changefreq>'
         .(isset($priority) ? '<priority>'.$priority.'</priority>' : '')
         .'</url>';
@@ -91,7 +97,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
 // including Sitemap URLs always produced by this same PHP code (see PMF_SITEMAP_GOOGLE_GET_INDEX)
 //
 
-$oFaq = new phpMyFAQ\Faq($faqConfig);
+$oFaq = new Faq($faqConfig);
 // Load the faq
 $items = $oFaq->getTopTenData(PMF_SITEMAP_GOOGLE_MAX_URLS - 1);
 $visitsMax = 0;
@@ -102,14 +108,14 @@ if (count($items) > 0) {
 }
 
 // Sitemap header
-$sitemap =
+$siteMap =
      '<?xml version="1.0" encoding="UTF-8"?>'
     .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
     .' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
     .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
     .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
-$sitemap .= buildSitemapNode(
+$siteMap .= buildSiteMapNode(
     $faqConfig->getDefaultUrl(),
     Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
     PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
@@ -127,12 +133,12 @@ foreach ($items as $item) {
     // b. We use SEO PMF urls
     if (PMF_SITEMAP_GOOGLE_USE_SEO) {
         if (isset($item['thema'])) {
-            $oL = new phpMyFAQ\Link($link, $faqConfig);
+            $oL = new Link($link, $faqConfig);
             $oL->itemTitle = $item['thema'];
             $link = $oL->toString();
         }
     }
-    $sitemap .= buildSitemapNode(
+    $siteMap .= buildSiteMapNode(
         $link,
         Date::createIsoDate($item['date'], DATE_W3C),
         // @todo: manage changefreq node with the info provided by faqchanges,
@@ -142,25 +148,25 @@ foreach ($items as $item) {
     );
 }
 
-$sitemap .= '</urlset>';
+$siteMap .= '</urlset>';
 
-$getgezip = phpMyFAQ\Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
-if (!is_null($getgezip) && (1 == $getgezip)) {
+$getGzip = Filter::filterInput(INPUT_GET, PMF_SITEMAP_GOOGLE_GET_GZIP, FILTER_VALIDATE_INT);
+if (!is_null($getGzip) && (1 == $getGzip)) {
     if (function_exists('gzencode')) {
-        $sitemapGz = gzencode($sitemap);
+        $sitemapGz = gzencode($siteMap);
         header('Content-Type: application/x-gzip');
         header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
         header('Content-Length: '.strlen($sitemapGz));
         echo $sitemapGz;
     } else {
-        $http = new phpMyFAQ\Helper_Http();
+        $http = new HttpHelper();
         $http->sendStatus(404);
     }
 } else {
     header('Content-Type: text/xml');
     header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
-    header('Content-Length: '.strlen($sitemap));
-    echo $sitemap;
+    header('Content-Length: '.strlen($siteMap));
+    echo $siteMap;
 }
 
 $faqConfig->getDb()->close();
