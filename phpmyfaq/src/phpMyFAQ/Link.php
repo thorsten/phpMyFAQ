@@ -3,26 +3,24 @@
 namespace phpMyFAQ;
 
 /**
- * Link management - Functions and Classes.
+ * Link management
  *
- * 
+ * This class wrap the needs for managing an HTML anchor
+ * taking into account also the HTML anchor creation
+ * with specific handling for mod_rewrite PMF native support
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
-
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -31,17 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Link Class.
  *
- * This class wrap the needs for managing an HTML anchor
- * taking into account also the HTML anchor creation
- * with specific handling for mod_rewrite PMF native support
- *
  * @category  phpMyFAQ
- *
  * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
@@ -50,71 +42,71 @@ class Link
     /**
      * class constants.
      */
-    const Link_AMPERSAND = '&amp;';
-    const Link_CATEGORY = 'category/';
-    const Link_CONTENT = 'content/';
-    const Link_EQUAL = '=';
-    const Link_FRAGMENT_SEPARATOR = '#';
-    const Link_HTML_MINUS = '-';
-    const Link_HTML_UNDERSCORE = '_';
-    const Link_HTML_SLASH = '/';
-    const Link_HTML_TARGET_BLANK = '_blank';
-    const Link_HTML_TARGET_PARENT = '_parent';
-    const Link_HTML_TARGET_SELF = '_self';
-    const Link_HTML_TARGET_TOP = '_top';
-    const Link_NEWS = 'news/';
-    const Link_SITEMAP = 'sitemap/';
-    const Link_SLASH = '/';
-    const Link_SEARCHPART_SEPARATOR = '?';
-    const Link_TAGS = 'tags/';
+    const LINK_AMPERSAND = '&amp;';
+    const LINK_CATEGORY = 'category/';
+    const LINK_CONTENT = 'content/';
+    const LINK_EQUAL = '=';
+    const LINK_FRAGMENT_SEPARATOR = '#';
+    const LINK_HTML_MINUS = '-';
+    const LINK_HTML_UNDERSCORE = '_';
+    const LINK_HTML_SLASH = '/';
+    const LINK_HTML_TARGET_BLANK = '_blank';
+    const LINK_HTML_TARGET_PARENT = '_parent';
+    const LINK_HTML_TARGET_SELF = '_self';
+    const LINK_HTML_TARGET_TOP = '_top';
+    const LINK_NEWS = 'news/';
+    const LINK_SITEMAP = 'sitemap/';
+    const LINK_SLASH = '/';
+    const LINK_SEARCHPART_SEPARATOR = '?';
+    const LINK_TAGS = 'tags/';
 
-    const Link_INDEX_ADMIN = '/admin/index.php';
-    const Link_INDEX_HOME = '/index.php';
+    const LINK_INDEX_ADMIN = '/admin/index.php';
+    const LINK_INDEX_HOME = '/index.php';
 
-    const Link_GET_ACTION = 'action';
-    const Link_GET_ARTLANG = 'artlang';
-    const Link_GET_CATEGORY = 'cat';
-    const Link_GET_HIGHLIGHT = 'highlight';
-    const Link_GET_ID = 'id';
-    const Link_GET_LANG = 'lang';
-    const Link_GET_LETTER = 'letter';
-    const Link_GET_NEWS_ID = 'newsid';
-    const Link_GET_NEWS_LANG = 'newslang';
-    const Link_GET_PAGE = 'seite';
-    const Link_GET_SIDS = 'SIDS';
-    const Link_GET_TAGGING_ID = 'tagging_id';
-    const Link_GET_LANGS = 'langs';
+    const LINK_GET_ACTION = 'action';
+    const LINK_GET_ARTLANG = 'artlang';
+    const LINK_GET_CATEGORY = 'cat';
+    const LINK_GET_HIGHLIGHT = 'highlight';
+    const LINK_GET_ID = 'id';
+    const LINK_GET_LANG = 'lang';
+    const LINK_GET_LETTER = 'letter';
+    const LINK_GET_NEWS_ID = 'newsid';
+    const LINK_GET_NEWS_LANG = 'newslang';
+    const LINK_GET_PAGE = 'seite';
+    const LINK_GET_SIDS = 'SIDS';
+    const LINK_GET_TAGGING_ID = 'tagging_id';
+    const LINK_GET_LANGS = 'langs';
 
-    const Link_GET_ACTION_ADD = 'add';
-    const Link_GET_ACTION_FAQ = 'faq';
-    const Link_GET_ACTION_ASK = 'ask';
-    const Link_GET_ACTION_CONTACT = 'contact';
-    const Link_GET_ACTION_GLOSSARY = 'glossary';
-    const Link_GET_ACTION_HELP = 'help';
-    const Link_GET_ACTION_LOGIN = 'login';
-    const Link_GET_ACTION_NEWS = 'news';
-    const Link_GET_ACTION_OPEN = 'open';
-    const Link_GET_ACTION_PASSWORD = 'password';
-    const Link_GET_ACTION_REGISTER = 'register';
-    const Link_GET_ACTION_SEARCH = 'search';
-    const Link_GET_ACTION_SITEMAP = 'sitemap';
-    const Link_GET_ACTION_SHOW = 'show';
+    const LINK_GET_ACTION_ADD = 'add';
+    const LINK_GET_ACTION_FAQ = 'faq';
+    const LINK_GET_ACTION_ASK = 'ask';
+    const LINK_GET_ACTION_CONTACT = 'contact';
+    const LINK_GET_ACTION_GLOSSARY = 'glossary';
+    const LINK_GET_ACTION_HELP = 'help';
+    const LINK_GET_ACTION_LOGIN = 'login';
+    const LINK_GET_ACTION_NEWS = 'news';
+    const LINK_GET_ACTION_OPEN = 'open';
+    const LINK_GET_ACTION_PASSWORD = 'password';
+    const LINK_GET_ACTION_REGISTER = 'register';
+    const LINK_GET_ACTION_SEARCH = 'search';
+    const LINK_GET_ACTION_SITEMAP = 'sitemap';
+    const LINK_GET_ACTION_SHOW = 'show';
 
-    const Link_HTML_CATEGORY = 'category';
-    const Link_HTML_EXTENSION = '.html';
-    const Link_HTML_SITEMAP = 'sitemap';
+    const LINK_HTML_CATEGORY = 'category';
+    const LINK_HTML_EXTENSION = '.html';
+    const LINK_HTML_SITEMAP = 'sitemap';
 
-    const Link_HTML_ADDCONTENT = 'addcontent.html';
-    const Link_HTML_ASK = 'ask.html';
-    const Link_HTML_CONTACT = 'contact.html';
-    const Link_HTML_GLOSSARY = 'glossary.html';
-    const Link_HTML_HELP = 'help.html';
-    const Link_HTML_LOGIN = 'login.html';
-    const Link_HTML_OPEN = 'open.html';
-    const Link_HTML_PASSWORD = 'password.html';
-    const Link_HTML_REGISTER = 'register.html';
-    const Link_HTML_SEARCH = 'search.html';
-    const Link_HTML_SHOWCAT = 'showcat.html';
+    const LINK_HTML_ADDCONTENT = 'addcontent.html';
+    const LINK_HTML_ASK = 'ask.html';
+    const LINK_HTML_CONTACT = 'contact.html';
+    const LINK_HTML_GLOSSARY = 'glossary.html';
+    const LINK_HTML_HELP = 'help.html';
+    const LINK_HTML_LOGIN = 'login.html';
+    const LINK_HTML_OPEN = 'open.html';
+    const LINK_HTML_PASSWORD = 'password.html';
+    const LINK_HTML_REGISTER = 'register.html';
+    const LINK_HTML_SEARCH = 'search.html';
+    const LINK_HTML_SHOWCAT = 'showcat.html';
 
     /**
      * URL.
@@ -187,9 +179,9 @@ class Link
     public $id = '';
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
-    private $_config = null;
+    private $config = null;
 
     /**
      * Constructor.
@@ -200,7 +192,7 @@ class Link
     public function __construct($url, Configuration $config)
     {
         $this->url = $url;
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -224,7 +216,7 @@ class Link
             return false;
         }
 
-        return !(false === strpos($this->url, self::Link_INDEX_HOME));
+        return !(false === strpos($this->url, self::LINK_INDEX_HOME));
     }
 
     /**
@@ -251,7 +243,7 @@ class Link
      */
     protected function isRelativeSystemLink()
     {
-        $slashIdx = strpos($this->url, self::Link_SLASH);
+        $slashIdx = strpos($this->url, self::LINK_SLASH);
         if (false === $slashIdx) {
             return false;
         }
@@ -352,10 +344,9 @@ class Link
 
     /**
      * Returns the HTTP GET parameters.
-     *
-     * @return string
+     * @return array
      */
-    protected function getHttpGetParameters()
+    protected function getHttpGetParameters(): array
     {
         $query = $this->getQuery();
         $parameters = [];
@@ -363,17 +354,19 @@ class Link
         if (!empty($query)) {
             // Check fragment
             if (isset($query['fragment'])) {
-                $parameters[self::Link_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
+                $parameters[self::LINK_FRAGMENT_SEPARATOR] = urldecode($query['fragment']);
             }
+
             // Check if query string contains &amp;
-            if (!strpos($query['main'], '&amp;')) {
+            if (strpos($query['main'], '&')) {
                 $query['main'] = str_replace('&', '&amp;', $query['main']);
             }
 
-            $params = explode(self::Link_AMPERSAND, $query['main']);
+            $params = explode(self::LINK_AMPERSAND, $query['main']);
+
             foreach ($params as $param) {
                 if (!empty($param)) {
-                    $couple = explode(self::Link_EQUAL, $param);
+                    $couple = explode(self::LINK_EQUAL, $param);
                     list($key, $val) = $couple;
                     $parameters[$key] = urldecode($val);
                 }
@@ -385,10 +378,9 @@ class Link
 
     /**
      * Returns the query of an URL.
-     *
      * @return array
      */
-    protected function getQuery()
+    protected function getQuery(): array
     {
         $query = [];
 
@@ -408,10 +400,9 @@ class Link
 
     /**
      * Returns the default scheme.
-     *
      * @return string
      */
-    protected function getDefaultScheme()
+    protected function getDefaultScheme(): string
     {
         $scheme = 'http://';
         if ($this->isSystemLink()) {
@@ -423,12 +414,11 @@ class Link
 
     /**
      * Returns the system scheme, http or https.
-     *
      * @return string
      */
-    public function getSystemScheme()
+    public function getSystemScheme(): string
     {
-        if ($this->_config->get('security.useSslOnly')) {
+        if ($this->config->get('security.useSslOnly')) {
             return 'https://';
         }
 
@@ -451,12 +441,10 @@ class Link
 
     /**
      * Returns the relative URI.
-     *
      * @param string $path
-     *
      * @return string
      */
-    public static function getSystemRelativeUri($path = null)
+    public static function getSystemRelativeUri(string $path = null): string
     {
         if (isset($path)) {
             return str_replace($path, '', $_SERVER['SCRIPT_NAME']);
@@ -468,17 +456,16 @@ class Link
     /**
      * Returns the system URI.
      *
-     * @param string $path
+     * $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
+     * Precisely, it contains what the user has written in the Host request-header, see below.
+     * RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
+     *           being requested, as obtained from the original URI given by the user or referring resource
      *
+     * @param string $path
      * @return string
      */
-    public function getSystemUri($path = null)
+    public function getSystemUri($path = null): string
     {
-        // $_SERVER['HTTP_HOST'] is the name of the website or virtual host name (HTTP/1.1)
-        // Precisely, it contains what the user has written in the Host request-header, see below.
-        // RFC 2616: The Host request-header field specifies the Internet host and port number of the resource
-        //           being requested, as obtained from the original URI given by the user or referring resource
-
         // Remove any ref to standard ports 80 and 443.
         $pattern[0] = '/:80$/'; // HTTP: port 80
         $pattern[1] = '/:443$/'; // HTTPS: port 443
@@ -489,10 +476,9 @@ class Link
 
     /**
      * Builds a HTML anchor.
-     *
      * @return string
      */
-    public function toHtmlAnchor()
+    public function toHtmlAnchor():string
     {
         // Sanitize the provided url
         $url = $this->toString();
@@ -540,166 +526,164 @@ class Link
 
     /**
      * Appends the session id.
-     *
      * @param string $url  URL
      * @param int    $sids Session Id
-     *
      * @return string
      */
-    protected function appendSids($url, $sids)
+    protected function appendSids(string $url, int $sids): string
     {
-        $separator = (false === strpos($url, self::Link_SEARCHPART_SEPARATOR))
+        $separator = (false === strpos($url, self::LINK_SEARCHPART_SEPARATOR))
                      ?
-                     self::Link_SEARCHPART_SEPARATOR
+                     self::LINK_SEARCHPART_SEPARATOR
                      :
-                     self::Link_AMPERSAND;
+                     self::LINK_AMPERSAND;
 
-        return $url.$separator.self::Link_GET_SIDS.self::Link_EQUAL.$sids;
+        return $url.$separator.self::LINK_GET_SIDS.self::LINK_EQUAL.$sids;
     }
 
     /**
      * Rewrites a URL string.
-     *
-     * @param bool $forceNoModrewriteSupport Force no rewrite support
-     *
+     * @param bool $forceNoModRewriteSupport Force no rewrite support
      * @return string
      */
-    public function toString($forceNoModrewriteSupport = false)
+    public function toString(bool $forceNoModRewriteSupport = false): string
     {
         $url = $this->toUri();
         // Check mod_rewrite support and 'rewrite' the passed (system) uri
         // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModrewriteSupport) && ($this->_config->get('main.enableRewriteRules'))) {
+        if ((!$forceNoModRewriteSupport) && ($this->config->get('main.enableRewriteRules'))) {
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
-                if (isset($getParams[self::Link_GET_ACTION])) {
+                if (isset($getParams[self::LINK_GET_ACTION])) {
                     // Get the part of the url 'till the '/' just before the pattern
-                    $url = substr($url, 0, strpos($url, self::Link_INDEX_HOME) + 1);
+                    $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1);
                     // Build the Url according to .htaccess rules
-                    switch ($getParams[self::Link_GET_ACTION]) {
+                    switch ($getParams[self::LINK_GET_ACTION]) {
 
-                        case self::Link_GET_ACTION_ADD:
-                            $url .= self::Link_HTML_ADDCONTENT;
+                        case self::LINK_GET_ACTION_ADD:
+                            $url .= self::LINK_HTML_ADDCONTENT;
                             break;
 
-                        case self::Link_GET_ACTION_FAQ:
-                            $url .= self::Link_CONTENT.
-                                    $getParams[self::Link_GET_CATEGORY].
-                                    self::Link_HTML_SLASH.
-                                    $getParams[self::Link_GET_ID].
-                                    self::Link_HTML_SLASH.
-                                    $getParams[self::Link_GET_ARTLANG].
-                                    self::Link_SLASH.
+                        case self::LINK_GET_ACTION_FAQ:
+                            $url .= self::LINK_CONTENT.
+                                    $getParams[self::LINK_GET_CATEGORY].
+                                    self::LINK_HTML_SLASH.
+                                    $getParams[self::LINK_GET_ID].
+                                    self::LINK_HTML_SLASH.
+                                    $getParams[self::LINK_GET_ARTLANG].
+                                    self::LINK_SLASH.
                                     $this->getSEOItemTitle().
-                                    self::Link_HTML_EXTENSION;
-                            if (isset($getParams[self::Link_GET_HIGHLIGHT])) {
-                                $url .= self::Link_SEARCHPART_SEPARATOR.
-                                        self::Link_GET_HIGHLIGHT.'='.
-                                        $getParams[self::Link_GET_HIGHLIGHT];
+                                    self::LINK_HTML_EXTENSION;
+                            if (isset($getParams[self::LINK_GET_HIGHLIGHT])) {
+                                $url .= self::LINK_SEARCHPART_SEPARATOR.
+                                        self::LINK_GET_HIGHLIGHT.'='.
+                                        $getParams[self::LINK_GET_HIGHLIGHT];
                             }
-                            if (isset($getParams[self::Link_FRAGMENT_SEPARATOR])) {
-                                $url .= self::Link_FRAGMENT_SEPARATOR.
-                                        $getParams[self::Link_FRAGMENT_SEPARATOR];
+                            if (isset($getParams[self::LINK_FRAGMENT_SEPARATOR])) {
+                                $url .= self::LINK_FRAGMENT_SEPARATOR.
+                                        $getParams[self::LINK_FRAGMENT_SEPARATOR];
                             }
+                            var_dump($url);
+                            die();
                             break;
 
-                        case self::Link_GET_ACTION_ASK:
-                            $url .= self::Link_HTML_ASK;
+                        case self::LINK_GET_ACTION_ASK:
+                            $url .= self::LINK_HTML_ASK;
                             break;
 
-                        case self::Link_GET_ACTION_CONTACT:
-                            $url .= self::Link_HTML_CONTACT;
+                        case self::LINK_GET_ACTION_CONTACT:
+                            $url .= self::LINK_HTML_CONTACT;
                             break;
 
-                        case self::Link_GET_ACTION_GLOSSARY:
-                            $url .= self::Link_HTML_GLOSSARY;
+                        case self::LINK_GET_ACTION_GLOSSARY:
+                            $url .= self::LINK_HTML_GLOSSARY;
                             break;
 
-                        case self::Link_GET_ACTION_HELP:
-                            $url .= self::Link_HTML_HELP;
+                        case self::LINK_GET_ACTION_HELP:
+                            $url .= self::LINK_HTML_HELP;
                             break;
 
-                        case self::Link_GET_ACTION_OPEN:
-                            $url .= self::Link_HTML_OPEN;
+                        case self::LINK_GET_ACTION_OPEN:
+                            $url .= self::LINK_HTML_OPEN;
                             break;
 
-                        case self::Link_GET_ACTION_SEARCH:
-                            if (!isset($getParams[self::Link_GET_ACTION_SEARCH]) &&
-                                isset($getParams[self::Link_GET_TAGGING_ID])) {
-                                $url .= self::Link_TAGS.$getParams[self::Link_GET_TAGGING_ID];
-                                if (isset($getParams[self::Link_GET_PAGE])) {
-                                    $url .= self::Link_HTML_SLASH.$getParams[self::Link_GET_PAGE];
+                        case self::LINK_GET_ACTION_SEARCH:
+                            if (!isset($getParams[self::LINK_GET_ACTION_SEARCH]) &&
+                                isset($getParams[self::LINK_GET_TAGGING_ID])) {
+                                $url .= self::LINK_TAGS.$getParams[self::LINK_GET_TAGGING_ID];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_HTML_SLASH.$getParams[self::LINK_GET_PAGE];
                                 }
-                                $url .= self::Link_SLASH.
+                                $url .= self::LINK_SLASH.
                                         $this->getSEOItemTitle().
-                                        self::Link_HTML_EXTENSION;
-                            } elseif (isset($getParams[self::Link_GET_ACTION_SEARCH])) {
-                                $url .= self::Link_HTML_SEARCH;
-                                $url .= self::Link_SEARCHPART_SEPARATOR.
-                                        self::Link_GET_ACTION_SEARCH.'='.
-                                        $getParams[self::Link_GET_ACTION_SEARCH];
-                                if (isset($getParams[self::Link_GET_PAGE])) {
-                                    $url .= self::Link_AMPERSAND.self::Link_GET_PAGE.'='.
-                                            $getParams[self::Link_GET_PAGE];
+                                        self::LINK_HTML_EXTENSION;
+                            } elseif (isset($getParams[self::LINK_GET_ACTION_SEARCH])) {
+                                $url .= self::LINK_HTML_SEARCH;
+                                $url .= self::LINK_SEARCHPART_SEPARATOR.
+                                        self::LINK_GET_ACTION_SEARCH.'='.
+                                        $getParams[self::LINK_GET_ACTION_SEARCH];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_AMPERSAND.self::LINK_GET_PAGE.'='.
+                                            $getParams[self::LINK_GET_PAGE];
                                 }
                             }
-                            if (isset($getParams[self::Link_GET_LANGS])) {
-                                $url .= self::Link_AMPERSAND.
-                                        self::Link_GET_LANGS.'='.
-                                        $getParams[self::Link_GET_LANGS];
+                            if (isset($getParams[self::LINK_GET_LANGS])) {
+                                $url .= self::LINK_AMPERSAND.
+                                        self::LINK_GET_LANGS.'='.
+                                        $getParams[self::LINK_GET_LANGS];
                             }
                             break;
 
-                        case self::Link_GET_ACTION_SITEMAP:
-                            if (isset($getParams[self::Link_GET_LETTER])) {
-                                $url .= self::Link_SITEMAP.
-                                        $getParams[self::Link_GET_LETTER].
-                                        self::Link_HTML_SLASH.
-                                        $getParams[self::Link_GET_LANG].
-                                        self::Link_HTML_EXTENSION;
+                        case self::LINK_GET_ACTION_SITEMAP:
+                            if (isset($getParams[self::LINK_GET_LETTER])) {
+                                $url .= self::LINK_SITEMAP.
+                                        $getParams[self::LINK_GET_LETTER].
+                                        self::LINK_HTML_SLASH.
+                                        $getParams[self::LINK_GET_LANG].
+                                        self::LINK_HTML_EXTENSION;
                             } else {
-                                $url .= self::Link_SITEMAP.'A'.
-                                        self::Link_HTML_SLASH.
-                                        $getParams[self::Link_GET_LANG].
-                                        self::Link_HTML_EXTENSION;
+                                $url .= self::LINK_SITEMAP.'A'.
+                                        self::LINK_HTML_SLASH.
+                                        $getParams[self::LINK_GET_LANG].
+                                        self::LINK_HTML_EXTENSION;
                             }
                             break;
 
-                        case self::Link_GET_ACTION_SHOW:
-                            if (!isset($getParams[self::Link_GET_CATEGORY]) ||
-                                (isset($getParams[self::Link_GET_CATEGORY]) &&
-                                (0 == $getParams[self::Link_GET_CATEGORY]))) {
-                                $url .= self::Link_HTML_SHOWCAT;
+                        case self::LINK_GET_ACTION_SHOW:
+                            if (!isset($getParams[self::LINK_GET_CATEGORY]) ||
+                                (isset($getParams[self::LINK_GET_CATEGORY]) &&
+                                (0 == $getParams[self::LINK_GET_CATEGORY]))) {
+                                $url .= self::LINK_HTML_SHOWCAT;
                             } else {
-                                $url .= self::Link_CATEGORY.
-                                        $getParams[self::Link_GET_CATEGORY];
-                                if (isset($getParams[self::Link_GET_PAGE])) {
-                                    $url .= self::Link_HTML_SLASH.
-                                            $getParams[self::Link_GET_PAGE];
+                                $url .= self::LINK_CATEGORY.
+                                        $getParams[self::LINK_GET_CATEGORY];
+                                if (isset($getParams[self::LINK_GET_PAGE])) {
+                                    $url .= self::LINK_HTML_SLASH.
+                                            $getParams[self::LINK_GET_PAGE];
                                 }
-                                $url .= self::Link_HTML_SLASH.
+                                $url .= self::LINK_HTML_SLASH.
                                         $this->getSEOItemTitle().
-                                        self::Link_HTML_EXTENSION;
+                                        self::LINK_HTML_EXTENSION;
                             }
                             break;
 
-                        case self::Link_GET_ACTION_NEWS:
-                            $url .= self::Link_NEWS.
-                                    $getParams[self::Link_GET_NEWS_ID].
-                                    self::Link_HTML_SLASH.
-                                    $getParams[self::Link_GET_NEWS_LANG].
-                                    self::Link_SLASH.
+                        case self::LINK_GET_ACTION_NEWS:
+                            $url .= self::LINK_NEWS.
+                                    $getParams[self::LINK_GET_NEWS_ID].
+                                    self::LINK_HTML_SLASH.
+                                    $getParams[self::LINK_GET_NEWS_LANG].
+                                    self::LINK_SLASH.
                                     $this->getSEOItemTitle().
-                                    self::Link_HTML_EXTENSION;
+                                    self::LINK_HTML_EXTENSION;
                             break;
                     }
 
-                    if (isset($getParams[self::Link_GET_SIDS])) {
-                        $url = $this->appendSids($url, $getParams[self::Link_GET_SIDS]);
+                    if (isset($getParams[self::LINK_GET_SIDS])) {
+                        $url = $this->appendSids($url, $getParams[self::LINK_GET_SIDS]);
                     }
 
                     if (isset($getParams['fragment'])) {
-                        $url .= self::Link_FRAGMENT_SEPARATOR.$getParams['fragment'];
+                        $url .= self::LINK_FRAGMENT_SEPARATOR.$getParams['fragment'];
                     }
                 }
             }
@@ -710,10 +694,9 @@ class Link
 
     /**
      * Transforms a URI.
-     *
      * @return string
      */
-    public function toUri()
+    public function toUri(): string 
     {
         $url = $this->url;
         if (!empty($this->url)) {
@@ -727,30 +710,22 @@ class Link
 
     /**
      * Returns the current URL.
-     *
      * @return string
      */
-    public function getCurrentUrl()
+    public function getCurrentUrl(): string
     {
-        if (!empty($_SERVER['HTTPS'])) {
-            return 'https://'.$_SERVER['SERVER_NAME'].Strings::htmlentities($_SERVER['REQUEST_URI']);
-        } else {
-            return 'http://'.$_SERVER['SERVER_NAME'].Strings::htmlentities($_SERVER['REQUEST_URI']);
-        }
+        return $this->config->getDefaultUrl().Strings::htmlentities(substr($_SERVER['REQUEST_URI'], 1));
     }
 
     /**
      * Static method to generate simple HTML anchors.
-     *
      * @static
-     *
      * @param string $url    URL
      * @param string $text   Text
      * @param bool   $active Add CSS class named "active"?
-     *
-     * @return integer
+     * @return string
      */
-    public static function renderNavigationLink($url, $text, $active = false)
+    public static function renderNavigationLink(string $url, string $text, bool $active = false): string
     {
         return printf(
             '<a %s href="%s">%s</a>',
