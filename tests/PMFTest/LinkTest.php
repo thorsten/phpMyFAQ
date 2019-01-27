@@ -287,8 +287,8 @@ class LinkTest extends TestCase
         $method->setAccessible(true);
 
         $this->link = new phpMyFAQ\Link('http://faq.example.org/my-test-faq/', $this->config);
-        $actual     = $method->invokeArgs($this->link,array('http://faq.example.org/my-test-faq/', 'foo'));
-        $expected   = 'http://faq.example.org/my-test-faq/?SIDS=foo';
+        $actual     = $method->invokeArgs($this->link,array('http://faq.example.org/my-test-faq/', 4711));
+        $expected   = 'http://faq.example.org/my-test-faq/?SIDS=4711';
 
         $this->assertEquals($expected,  $actual);
     }

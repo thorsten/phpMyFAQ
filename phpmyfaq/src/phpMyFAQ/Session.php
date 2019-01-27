@@ -447,12 +447,12 @@ class Session
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
      * @param string $name Cookie name
-     * @param string $sessionId Session ID
+     * @param string|null $sessionId Session ID
      * @param int $timeout Cookie timeout
      *
      * @return bool
      */
-    public function setCookie(string $name, string $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
+    public function setCookie(string $name, $sessionId = '', int $timeout = PMF_SESSION_EXPIRED_TIME): bool
     {
         $protocol = 'http';
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {

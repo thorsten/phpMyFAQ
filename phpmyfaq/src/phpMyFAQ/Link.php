@@ -358,7 +358,7 @@ class Link
             }
 
             // Check if query string contains &amp;
-            if (strpos($query['main'], '&')) {
+            if (!strpos($query['main'], '&amp;')) {
                 $query['main'] = str_replace('&', '&amp;', $query['main']);
             }
 
