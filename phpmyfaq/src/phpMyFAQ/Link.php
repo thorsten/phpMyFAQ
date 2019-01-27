@@ -583,8 +583,6 @@ class Link
                                 $url .= self::LINK_FRAGMENT_SEPARATOR.
                                         $getParams[self::LINK_FRAGMENT_SEPARATOR];
                             }
-                            var_dump($url);
-                            die();
                             break;
 
                         case self::LINK_GET_ACTION_ASK:
