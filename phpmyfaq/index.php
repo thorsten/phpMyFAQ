@@ -330,7 +330,7 @@ if (!is_null($id)) {
     );
     $faqLink = new Link($url, $faqConfig);
     $faqLink->itemTitle = $faq->faqRecord['title'];
-    $currentPageUrl = $faqLink->toString();
+    $currentPageUrl = $faqLink->toString(true);
 } else {
     $id = '';
     $title = ' -  powered by phpMyFAQ '.$faqConfig->get('main.currentVersion');
@@ -362,7 +362,7 @@ if (!is_null($solutionId)) {
         );
         $faqLink = new Link($url, $faqConfig);
         $faqLink->itemTitle = $faqData['question'];
-        $currentPageUrl = $faqLink->toString();
+        $currentPageUrl = $faqLink->toString(true);
     }
 }
 

@@ -2,8 +2,6 @@
 /**
  * Test case for Link
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -36,19 +34,19 @@ use PHPUnit\Framework\TestCase;
  */
 class LinkTest extends TestCase
 {
-    /** @var phpMyFAQ\Db_Sqlite3 */
+    /** @var Sqlite3 */
     private $dbHandle;
 
     /** @var Link */
     private $link;
 
-    /** @var PMF_Configuration */
+    /** @var Configuration */
     private $config;
 
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp()
     {
         parent::setUp();
 
@@ -57,14 +55,14 @@ class LinkTest extends TestCase
         $_SERVER['HTTP_HOST'] = 'faq.example.org';
 
         $this->dbHandle = new Sqlite3();
-        $this->config   = new Configuration($this->dbHandle);
+        $this->config = new Configuration($this->dbHandle);
         $this->config->config['security.useSslOnly'] = 'true';
     }
 
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown()
     {
         $this->link = null;
         parent::tearDown();
@@ -75,14 +73,14 @@ class LinkTest extends TestCase
      */
     public function testisHomeIndex()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isHomeIndex');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/index.php', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/index.php', $this->config);
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
@@ -91,17 +89,17 @@ class LinkTest extends TestCase
      */
     public function testisInternalReference()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isInternalReference');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/index.php#foobar', $this->config);
         $this->assertFalse($method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('#foobar', $this->config);
+        $this->link = new Link('#foobar', $this->config);
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
@@ -110,11 +108,11 @@ class LinkTest extends TestCase
      */
     public function testIsSystemLink()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('isSystemLink');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertTrue($method->invokeArgs($this->link, array()));
     }
 
@@ -123,14 +121,14 @@ class LinkTest extends TestCase
      */
     public function testHasScheme()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('hasScheme');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertTrue($method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('faq.example.org/my-test-faq/', $this->config);
         $this->assertFalse($method->invokeArgs($this->link, array()));
     }
 
@@ -139,7 +137,7 @@ class LinkTest extends TestCase
      */
     public function testGetSEOItemTitle()
     {
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
 
         $this->assertEquals(
             'hd-ready', $this->link->getSEOItemTitle('HD Ready')
@@ -166,17 +164,18 @@ class LinkTest extends TestCase
      */
     public function testGetHttpGetParameters()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getHttpGetParameters');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
         $this->assertEquals(array('foo' => 'bar'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar&amp;action=noaction',
+            $this->config);
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/?foo=bar&action=noaction', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar&action=noaction', $this->config);
         $this->assertEquals(array('foo' => 'bar', 'action' => 'noaction'), $method->invokeArgs($this->link, array()));
     }
 
@@ -185,14 +184,14 @@ class LinkTest extends TestCase
      */
     public function testgetQuery()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getQuery');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar', $this->config);
         $this->assertEquals(array('main' => 'foo=bar'), $method->invokeArgs($this->link, array()));
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/?foo=bar#baz', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/?foo=bar#baz', $this->config);
         $this->assertEquals(array('main' => 'foo=bar', 'fragment' => 'baz'), $method->invokeArgs($this->link, array()));
     }
 
@@ -201,16 +200,16 @@ class LinkTest extends TestCase
      */
     public function testGetDefaultScheme()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('getDefaultScheme');
         $method->setAccessible(true);
 
         $this->config->config['security.useSslOnly'] = 'false';
-        $this->link = new phpMyFAQ\Link('http://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('http://faq.example.org/my-test-faq/', $this->config);
         $this->assertEquals('http://', $method->invokeArgs($this->link, array()));
 
         $this->config->config['security.useSslOnly'] = 'true';
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertEquals('https://', $method->invokeArgs($this->link, array()));
     }
 
@@ -219,7 +218,7 @@ class LinkTest extends TestCase
      */
     public function testGetSystemScheme()
     {
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->assertEquals('https://', $this->link->getSystemScheme());
     }
 
@@ -228,7 +227,7 @@ class LinkTest extends TestCase
      */
     public function testGetSystemRelativeUri()
     {
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
 
         $_SERVER['SCRIPT_NAME'] = '/my-test-faq/src/Link.php';
         $this->assertEquals('/my-test-faq', $this->link->getSystemRelativeUri());
@@ -242,10 +241,10 @@ class LinkTest extends TestCase
      */
     public function testGetSystemUri()
     {
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
 
         $_SERVER['SCRIPT_NAME'] = '/my-test-faq/index.php';
-        $_SERVER['HTTP_HOST']   = 'faq.example.org';
+        $_SERVER['HTTP_HOST'] = 'faq.example.org';
         $this->assertEquals('https://faq.example.org/my-test-faq/index.php', $this->link->getSystemUri());
         $this->assertEquals('https://faq.example.org/my-test-faq/', $this->link->getSystemUri('index.php'));
     }
@@ -257,7 +256,7 @@ class LinkTest extends TestCase
     {
         $this->config->config['main.enableRewriteRules'] = true;
 
-        $this->link = new phpMyFAQ\Link('https://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('https://faq.example.org/my-test-faq/', $this->config);
         $this->link->class = 'pmf-foo';
         $this->assertEquals(
             '<a class="pmf-foo" href="https://faq.example.org/my-test-faq/">https://faq.example.org/my-test-faq/</a>',
@@ -282,37 +281,38 @@ class LinkTest extends TestCase
      */
     public function testAppendSids()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Link');
+        $class = new ReflectionClass('phpMyFAQ\Link');
         $method = $class->getMethod('appendSids');
         $method->setAccessible(true);
 
-        $this->link = new phpMyFAQ\Link('http://faq.example.org/my-test-faq/', $this->config);
-        $actual     = $method->invokeArgs($this->link,array('http://faq.example.org/my-test-faq/', 4711));
-        $expected   = 'http://faq.example.org/my-test-faq/?SIDS=4711';
+        $this->link = new Link('http://faq.example.org/my-test-faq/', $this->config);
+        $actual = $method->invokeArgs($this->link, array('http://faq.example.org/my-test-faq/', 4711));
+        $expected = 'http://faq.example.org/my-test-faq/?sid=4711';
 
-        $this->assertEquals($expected,  $actual);
+        $this->assertEquals($expected, $actual);
     }
 
     /**
      * Tests toString()
+     * Rewrite rules enabled.
      */
-    public function testToString()
+    public function testToStringWithEnabledRewriteRules()
     {
         $this->config->config['main.enableRewriteRules'] = true;
 
-        $this->link = new phpMyFAQ\Link('http://faq.example.org/my-test-faq/', $this->config);
+        $this->link = new Link('http://faq.example.org/my-test-faq/', $this->config);
         $this->assertEquals(
             'http://faq.example.org/my-test-faq/',
             $this->link->toString()
         );
 
-        $this->link = new phpMyFAQ\Link('http://faq.example.org/my-test-faq/index.php?action=add', $this->config);
+        $this->link = new Link('http://faq.example.org/my-test-faq/index.php?action=add', $this->config);
         $this->assertEquals(
             'http://faq.example.org/my-test-faq/addcontent.html',
             $this->link->toString()
         );
 
-        $this->link = new phpMyFAQ\Link(
+        $this->link = new Link(
             'http://faq.example.org/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
             $this->config
         );
@@ -320,6 +320,30 @@ class LinkTest extends TestCase
         $this->assertEquals(
             'http://faq.example.org/my-test-faq/content/1/36/de/hd-ready.html',
             $this->link->toString()
+        );
+    }
+
+    /**
+     * Tests toString()
+     * Rewrite rules disabled.
+     */
+    public function testToStringWithDisabledRewriteRules()
+    {
+        $this->config->config['main.enableRewriteRules'] = false;
+
+        $url = 'http://faq.example.org/my-test-faq/';
+        $this->link = new Link($url, $this->config);
+        $this->assertEquals($url, $this->link->toString(true));
+
+        $url = 'http://faq.example.org/my-test-faq/index.php?action=add';
+        $this->link = new Link($url, $this->config);
+        $this->assertEquals($url, $this->link->toString(true));
+        
+        $url = 'http://faq.example.org/my-test-faq/index.php?sid=4711&action=faq&cat=1&id=36&artlang=de';
+        $this->link = new Link($url, $this->config);
+        $this->assertEquals(
+            'http://faq.example.org/my-test-faq/index.php?action=faq&cat=1&id=36&artlang=de',
+            $this->link->toString(true)
         );
     }
 }

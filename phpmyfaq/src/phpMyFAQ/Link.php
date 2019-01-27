@@ -73,7 +73,7 @@ class Link
     const LINK_GET_NEWS_ID = 'newsid';
     const LINK_GET_NEWS_LANG = 'newslang';
     const LINK_GET_PAGE = 'seite';
-    const LINK_GET_SIDS = 'SIDS';
+    const LINK_GET_SIDS = 'sid';
     const LINK_GET_TAGGING_ID = 'tagging_id';
     const LINK_GET_LANGS = 'langs';
 
@@ -358,12 +358,9 @@ class Link
             }
 
             // Check if query string contains &amp;
-            if (!strpos($query['main'], '&amp;')) {
-                $query['main'] = str_replace('&', '&amp;', $query['main']);
-            }
+            $query['main'] = str_replace('&amp;', '&', $query['main']);
 
-            $params = explode(self::LINK_AMPERSAND, $query['main']);
-
+            $params = explode('&', $query['main']);
             foreach ($params as $param) {
                 if (!empty($param)) {
                     $couple = explode(self::LINK_EQUAL, $param);
@@ -542,21 +539,23 @@ class Link
     }
 
     /**
-     * Rewrites a URL string.
-     * @param bool $forceNoModRewriteSupport Force no rewrite support
+     * Rewrites a URL string. Checks mod_rewrite support and 'rewrite'
+     * the passed (system) uri according to the rewrite rules written
+     * in .htaccess
+     * @param bool $removeSessionFromUrl Remove session from URL
      * @return string
      */
-    public function toString(bool $forceNoModRewriteSupport = false): string
+    public function toString(bool $removeSessionFromUrl = false): string
     {
         $url = $this->toUri();
-        // Check mod_rewrite support and 'rewrite' the passed (system) uri
-        // according to the rewrite rules written in .htaccess
-        if ((!$forceNoModRewriteSupport) && ($this->config->get('main.enableRewriteRules'))) {
+        if ($this->config->get('main.enableRewriteRules')) {
             if ($this->isHomeIndex()) {
                 $getParams = $this->getHttpGetParameters();
                 if (isset($getParams[self::LINK_GET_ACTION])) {
+
                     // Get the part of the url 'till the '/' just before the pattern
                     $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1);
+
                     // Build the Url according to .htaccess rules
                     switch ($getParams[self::LINK_GET_ACTION]) {
 
@@ -684,6 +683,19 @@ class Link
                         $url .= self::LINK_FRAGMENT_SEPARATOR.$getParams['fragment'];
                     }
                 }
+            }
+        }
+
+        if ($removeSessionFromUrl) {
+            $getParams = $this->getHttpGetParameters();
+            if (isset($getParams[self::LINK_GET_ACTION])) {
+                $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1).'index.php?';
+                foreach ($getParams as $key => $value) {
+                    if ($key !== self::LINK_GET_SIDS) {
+                        $url .= sprintf('%s=%s&', $key, $value);
+                    }
+                }
+                $url = substr($url, 0, -1); // Remove last &
             }
         }
 
