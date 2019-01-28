@@ -2,8 +2,6 @@
 /**
  * Select a category to move.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -60,7 +58,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_change'] ?></label>
                         <div class="col-lg-4">
-                           <select name="change" size="1" class="form-control">
+                           <select name="change" size="1" class="custom-select">
                     <?php
                     foreach ($category->categories as $cat) {
                         if ($id != $cat['id']) {
@@ -69,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     } ?>
                             </select>
                             <?php printf(
-                                '<p class="help-block"><i aria-hidden="true" class="fas fa-info-circle fa-fw"></i> %s</p>',
+                                '<span class="form-text text-muted"><i aria-hidden="true" class="fas fa-info-circle fa-fw"></i> %s</span>',
                                 $PMF_LANG['ad_categ_remark_move']
                             ); ?>
                         </div>
