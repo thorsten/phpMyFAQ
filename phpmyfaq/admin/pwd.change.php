@@ -85,7 +85,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="save" value="newpassword">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="opass">
+                        <label class="col-lg-2 col-form-label" for="opass">
                             <?= $PMF_LANG['ad_passwd_old'];
     ?>
                         </label>
@@ -95,7 +95,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="npass">
+                        <label class="col-lg-2 col-form-label" for="npass">
                             <?= $PMF_LANG['ad_passwd_new'];
     ?>
                         </label>
@@ -105,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="bpass">
+                        <label class="col-lg-2 col-form-label" for="bpass">
                             <?= $PMF_LANG['ad_passwd_con'];
     ?>
                         </label>
@@ -115,7 +115,7 @@ if ($user->perm->checkRight($user->getUserId(), 'passwd')) {
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-3">
+                        <div class="offset-lg-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
                                 <?= $PMF_LANG['ad_passwd_change'];
     ?>

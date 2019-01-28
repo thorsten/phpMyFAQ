@@ -50,14 +50,14 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                         <div class="col-lg-4">
                             <p class="form-control-static"><?= $categories[$id]['name'] ?></p>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
                         <div class="col-lg-4">
                             <?= $categories[$id]['description'] ?>
                             <label class="radio">
@@ -72,7 +72,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-danger" type="submit" name="submit">
                                 <?= $PMF_LANG['ad_categ_del_yes'] ?>
                             </button>

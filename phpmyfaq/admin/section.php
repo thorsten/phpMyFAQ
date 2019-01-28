@@ -256,7 +256,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
                   <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                   <div class="form-group row">
-                      <label class="col-lg-2 form-control-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
+                      <label class="col-lg-2 col-form-label" for="section_name"><?= $PMF_LANG['ad_section_name'] ?></label>
                       <div class="col-lg-3">
                           <input type="text" name="section_name" id="section_name" autofocus class="form-control"
                                  value="<?=(isset($sectionName) ? $sectionName : '') ?>" tabindex="1">
@@ -264,7 +264,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
                   </div>
 
                   <div class="form-group row">
-                      <label class="col-lg-2 form-control-label" for="section_description"><?= $PMF_LANG['ad_section_description'] ?></label>
+                      <label class="col-lg-2 col-form-label" for="section_description"><?= $PMF_LANG['ad_section_description'] ?></label>
                       <div class="col-lg-3">
                           <textarea name="section_description" id="section_description" cols="<?= $descriptionCols ?>"
                                     rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
@@ -273,7 +273,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
                   </div>
 
                   <div class="form-group row">
-                      <div class="col-lg-offset-2 col-lg-3">
+                      <div class="offset-lg-2 col-lg-3">
                           <button class="btn btn-primary" type="submit">
                               <?= $PMF_LANG['ad_gen_save'] ?>
                           </button>
@@ -344,7 +344,7 @@ if ('list' === $sectionAction) {
           <input id="update_section_id" type="hidden" name="section_id" value="0">
           <div class="card-body">
             <div class="form-group row">
-              <label class="col-lg-3 form-control-label" for="update_section_name">
+              <label class="col-lg-3 col-form-label" for="update_section_name">
                   <?= $PMF_LANG['ad_section_name'] ?>
               </label>
               <div class="col-lg-9">
@@ -353,7 +353,7 @@ if ('list' === $sectionAction) {
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-lg-3 form-control-label" for="update_section_description">
+              <label class="col-lg-3 col-form-label" for="update_section_description">
                   <?= $PMF_LANG['ad_section_description'] ?>
               </label>
               <div class="col-lg-9">

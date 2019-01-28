@@ -352,7 +352,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                     <!-- Language -->
                     <div class="form-group row">
-                        <label class="col-lg-4 form-control-label" for="lang">
+                        <label class="col-lg-4 col-form-label" for="lang">
                             <?= $PMF_LANG['ad_entry_locale'] ?>:
                         </label>
                         <div class="col-lg-8">
@@ -364,7 +364,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                     <!-- Attachments -->
                     <?php if ($user->perm->checkRight($user->getUserId(), 'addattachment')): ?>
                         <div class="form-group row">
-                            <label class="col-lg-4 form-control-label">
+                            <label class="col-lg-4 col-form-label">
                                 <?= $PMF_LANG['ad_menu_attachments'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -401,7 +401,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                     <!-- Tags -->
                     <div class="form-group row">
-                        <label class="col-lg-4 form-control-label" for="tags">
+                        <label class="col-lg-4 col-form-label" for="tags">
                             <?= $PMF_LANG['ad_entry_tags'] ?>:
                         </label>
                         <div class="col-lg-8">
@@ -416,7 +416,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                     <!-- Keywords -->
                     <div class="form-group row">
-                        <label class="col-lg-4 form-control-label" for="keywords">
+                        <label class="col-lg-4 col-form-label" for="keywords">
                             <?= $PMF_LANG['ad_entry_keywords'] ?>:
                         </label>
                         <div class="col-lg-8">
@@ -430,7 +430,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                     <!-- Author -->
                     <div class="form-group row">
-                        <label class="col-lg-4 form-control-label" for="author">
+                        <label class="col-lg-4 col-form-label" for="author">
                             <?= $PMF_LANG['ad_entry_author'] ?>
                         </label>
                         <div class="col-lg-8">
@@ -441,7 +441,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                     <!-- E-Mail -->
                     <div class="form-group row">
-                        <label class="col-lg-4 form-control-label" for="email">
+                        <label class="col-lg-4 col-form-label" for="email">
                             <?= $PMF_LANG['ad_entry_email'] ?>
                         </label>
                         <div class="col-lg-8">
@@ -505,7 +505,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                     <div id="collapseTimespan" class="card-collapse collapse">
                         <div class="card-body">
                             <div class="form-group row">
-                                <label class="col-lg-4 form-control-label" for="dateStart">
+                                <label class="col-lg-4 col-form-label" for="dateStart">
                                     <?= $PMF_LANG['ad_news_from'] ?>
                                 </label>
                                 <div class="col-lg-2">
@@ -514,7 +514,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 form-control-label" for="dateEnd">
+                                <label class="col-lg-4 col-form-label" for="dateEnd">
                                     <?= $PMF_LANG['ad_news_to'] ?>
                                 </label>
                                 <div class="col-lg-2">
@@ -536,7 +536,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                     <div id="collapseEditChangelog" class="card-collapse collapse">
                         <div class="card-body">
                             <div class="form-group row" id="editChangelog">
-                                <label class="col-lg-4 form-control-label">
+                                <label class="col-lg-4 col-form-label">
                                     <?= $PMF_LANG['ad_entry_date'] ?>
                                 </label>
                                 <div class="col-lg-8">
@@ -544,7 +544,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-lg-4 form-control-label" for="changed">
+                                <label class="col-lg-4 col-form-label" for="changed">
                                     <?= $PMF_LANG['ad_entry_changed'] ?>
                                 </label>
                                 <div class="col-lg-8">
@@ -721,7 +721,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
 
                 <div class="card-body">
                   <div class="form-group row">
-                    <label class="col-lg-6 form-control-label" for="solution_id">
+                    <label class="col-lg-6 col-form-label" for="solution_id">
                         <?= $PMF_LANG['ad_entry_solution_id'] ?>:
                     </label>
                     <div class="col-lg-6">
@@ -788,7 +788,7 @@ if (($user->perm->checkRight($user->getUserId(), 'edit_faq') ||
                   </div>
                     <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')): ?>
                       <div class="form-group row">
-                        <label class="form-control-label" for="revision">
+                        <label class="col-form-label" for="revision">
                             <?= $PMF_LANG['ad_entry_new_revision'] ?>
                         </label>
                         <div class="controls">

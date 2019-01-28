@@ -284,7 +284,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
+                        <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
                         <div class="col-lg-3">
                             <input type="text" name="group_name" id="group_name" autofocus class="form-control"
                                    value="<?=(isset($groupName) ? $groupName : '') ?>" tabindex="1">
@@ -292,7 +292,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
+                        <label class="col-lg-2 col-form-label" for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
                         <div class="col-lg-3">
                             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
                                       rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
@@ -301,19 +301,19 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
+                        <label class="col-lg-2 col-form-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
                         <div class="col-lg-3">
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                                    <?=((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked="checked"' : '') ?>>
+                                    <?=((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
                                 </label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-3">
+                        <div class="offset-lg-2 col-lg-3">
                             <button class="btn btn-primary" type="submit">
                                 <?= $PMF_LANG['ad_gen_save'] ?>
                             </button>
@@ -383,7 +383,7 @@ if ('list' === $groupAction) {
           <input id="update_group_id" type="hidden" name="group_id" value="0">
           <div class="card-body">
             <div class="form-group row">
-              <label class="col-lg-3 form-control-label" for="update_group_name">
+              <label class="col-lg-3 col-form-label" for="update_group_name">
                   <?= $PMF_LANG['ad_group_name'] ?>
               </label>
               <div class="col-lg-9">
@@ -392,7 +392,7 @@ if ('list' === $groupAction) {
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-lg-3 form-control-label" for="update_group_description">
+              <label class="col-lg-3 col-form-label" for="update_group_description">
                   <?= $PMF_LANG['ad_group_description'] ?>
               </label>
               <div class="col-lg-9">

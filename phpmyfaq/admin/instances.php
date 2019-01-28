@@ -139,7 +139,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                     <form  action="#" method="post" accept-charset="utf-8">
                         <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4">
+                            <label class="col-form-label col-lg-4">
                                 <?= $PMF_LANG['ad_instance_url'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -151,7 +151,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4">
+                            <label class="col-form-label col-lg-4">
                                 <?= $PMF_LANG['ad_instance_path'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -159,7 +159,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4">
+                            <label class="col-form-label col-lg-4">
                                 <?= $PMF_LANG['ad_instance_name'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -167,7 +167,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4" for="email">
+                            <label class="col-form-label col-lg-4" for="email">
                                 <?= $PMF_LANG['ad_instance_email'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -175,7 +175,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4">
+                            <label class="col-form-label col-lg-4">
                                 <?= $PMF_LANG['ad_instance_admin'] ?>:
                             </label>
                             <div class="col-lg-8">
@@ -183,7 +183,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="form-control-label col-lg-4" for="password">
+                            <label class="col-form-label col-lg-4" for="password">
                                 <?= $PMF_LANG['ad_instance_password'] ?>:
                             </label>
                             <div class="col-lg-8">

@@ -47,27 +47,27 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     <form action="?action=updateinstance" method="post" accept-charset="utf-8">
         <input type="hidden" name="instance_id" value="<?= $instanceData->id ?>" />
         <div class="form-group row">
-            <label for="url" class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_url'] ?>:</label>
+            <label for="url" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_url'] ?>:</label>
             <div class="col-lg-8">
                 <input type="url" name="url" id="url" class="form-control" value="<?= $instanceData->url ?>" required>
             </div>
         </div>
         <div class="form-group row">
-            <label for="instance"  class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_path'] ?>:</label>
+            <label for="instance"  class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_path'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="instance" id="instance" class="form-control" required
                        value="<?= $instanceData->instance ?>">
             </div>
         </div>
         <div class="form-group row">
-            <label for="comment" class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_name'] ?>:</label>
+            <label for="comment" class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_name'] ?>:</label>
             <div class="col-lg-8">
                 <input type="text" name="comment" id="comment" class="form-control" required
                        value="<?= $instanceData->comment ?>">
             </div>
         </div>
         <div class="form-group row">
-            <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
+            <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_instance_config'] ?>:</label>
             <div class="col-lg-8">
                 <p class="form-control-static">
             <?php
@@ -79,7 +79,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-lg-offset-2 col-lg-4">
+            <div class="offset-lg-2 col-lg-4">
                 <button class="btn btn-primary" type="submit">
                     <?= $PMF_LANG['ad_instance_button'] ?>
                 </button>

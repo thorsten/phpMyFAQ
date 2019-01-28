@@ -48,7 +48,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                     <input type="hidden" name="id" value="<?= $glossaryItem['id'] ?>">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
+                        <label class="col-lg-2 col-form-label" for="item"><?= $PMF_LANG['ad_glossary_item'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="text" name="item" id="item"
                                    value="<?= $glossaryItem['item'] ?>" required>
@@ -56,7 +56,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
                     </div>
 
             <div class="control-group">
-                <label class="form-control-label" for="definition">
+                <label class="col-form-label" for="definition">
                     <?= $PMF_LANG['ad_glossary_definition'] ?>:
                 </label>
                 <div class="controls">
@@ -66,7 +66,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editglossary')) {
             </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit">
                                 <?= $PMF_LANG['ad_glossary_save'] ?>
                             </button>

@@ -233,7 +233,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     ?></legend>
 
                     <div class="control-group">
-                        <label class="form-control-label" for="month"><?= $PMF_LANG['ad_stat_choose'];
+                        <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'];
     ?>:</label>
                         <div class="controls">
                             <select name="month" id="month" size="1">

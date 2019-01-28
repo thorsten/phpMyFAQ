@@ -73,14 +73,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                         <div class="col-lg-4">
                             <input type="text" name="name" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="catlang" size="1" class="form-control">
                                 <?= $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
@@ -89,14 +89,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_desc'] ?>:</label>
                         <div class="col-lg-4">
                             <textarea name="description" rows="3" class="form-control"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_owner'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_owner'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="user_id" size="1" class="form-control">
                                 <?= $user->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
@@ -105,7 +105,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_transalready'] ?></label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_transalready'] ?></label>
                         <div class="col-lg-4">
                             <ul class="form-control-static">
                                 <?php
@@ -118,7 +118,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= $PMF_LANG['ad_categ_translatecateg'] ?>
                             </button>

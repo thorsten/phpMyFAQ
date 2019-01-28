@@ -53,7 +53,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                 <form  action="?action=exportfile" method="post" accept-charset="utf-8">
                     <h4><?= $PMF_LANG['ad_export_which_cat'] ?></h4>
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label" for="catid">
+                        <label class="col-lg-2 col-form-label" for="catid">
                             <?= $PMF_LANG['ad_entry_category'] ?>
                         </label>
                         <div class="col-lg-4">
@@ -64,7 +64,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <div class="checkbox">
                                 <label for="downwards">
                                     <input type="checkbox" name="downwards" id="downwards" value="1" checked>
@@ -78,7 +78,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
     ?>
                     <h4><?= $PMF_LANG['ad_export_type'] ?></h4>
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-8 radio">
+                        <div class="offset-lg-2 col-lg-8 radio">
                             <p><?= $PMF_LANG['ad_export_type_choose'] ?></p>
                             <label>
                                 <input type="radio" name="export-type" value="json" id="json" checked>
@@ -103,7 +103,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4 radio">
+                        <div class="offset-lg-2 col-lg-4 radio">
                             <p><?= $PMF_LANG['ad_export_download_view'] ?></p>
                             <label>
                                 <input type="radio" name="dispos" value="<?= HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT ?>"
@@ -120,7 +120,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submitExport">
                                 <?= $PMF_LANG['ad_menu_export']; ?>
                             </button>

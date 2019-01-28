@@ -60,7 +60,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                 <form action="?action=view" method="post"  accept-charset="utf-8">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['msgSearchWord'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgSearchWord'] ?>:</label>
                         <div class="col-lg-4">
                             <input class="form-control" type="search" name="searchterm" autofocus
                                    value="<?= $searchTerm ?>">
@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
                     <?php if ($linkVerifier->isReady() === true): ?>
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4 checkbox">
+                        <div class="offset-lg-2 col-lg-4 checkbox">
                             <label>
                                 <input type="checkbox" name="linkstate" value="linkbad">
                                 <?= $PMF_LANG['ad_linkcheck_searchbadonly'] ?>
@@ -80,7 +80,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     <?php endif; ?>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['msgCategory'] ?>:</label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['msgCategory'] ?>:</label>
                         <div class="col-lg-4">
                             <select name="searchcat" class="form-control">
                                 <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
@@ -90,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     </div>
 
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= $PMF_LANG['msgSearch'] ?>
                             </button>

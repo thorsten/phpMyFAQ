@@ -48,7 +48,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <input type="hidden" name="cat" value="<?= $id ?>">
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
                     <div class="form-group row">
-                        <label class="col-lg-2 form-control-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
+                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
                         <div class="col-lg-4">
                             <select name="after" size="1" class="form-control">
 <?php
@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                         </div>
                     </div>
                     <div class="form-group row">
-                        <div class="col-lg-offset-2 col-lg-4">
+                        <div class="offset-lg-2 col-lg-4">
                             <button class="btn btn-primary" type="submit" name="submit">
                                 <?= $PMF_LANG['ad_categ_updatecateg'] ?>
                             </button>

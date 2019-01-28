@@ -60,7 +60,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
           <div class="card-body">
             <p><?= $PMF_LANG['ad_csv_restore'] ?></p>
             <div class="form-group row">
-              <label class="col-lg-4 form-control-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
+              <label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
               <div class="col-lg-8">
                 <input type="file" name="userfile">
               </div>

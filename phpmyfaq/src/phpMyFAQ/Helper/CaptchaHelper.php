@@ -64,7 +64,7 @@ class CaptchaHelper extends Helper
 
         if (true === $this->_config->get('spam.enableCaptchaCode') && is_null($auth)) {
             $html .= '<div class="form-group row">';
-            $html .= sprintf('<label class="col-sm-3 form-control-label">%s</label>', $legend);
+            $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
             $html .= '    <div class="col-sm-4">';
             $html .= '        <p class="form-control-static">';
             $html .= $captcha->printCaptcha($action);

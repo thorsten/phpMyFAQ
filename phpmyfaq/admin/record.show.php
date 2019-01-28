@@ -157,7 +157,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
     if (!is_null($linkState)) {
         $cond[Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
-        $linkState = ' checked="checked" ';
+        $linkState = ' checked ';
         $internalSearch .= '&linkstate=linkbad';
     }
     if (!is_null($searchCat)) {
@@ -399,7 +399,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                           <label>
                             <input type="checkbox" id="active_category_block_<?= $cid ?>"
                                    onclick="saveStatusForCategory(<?= $cid ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>')"
-                                <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked="checked"' : '' ?>>
+                                <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked' : '' ?>>
                               <?= $PMF_LANG['ad_record_active'] ?>
                           </label>
                         <?php } ?>

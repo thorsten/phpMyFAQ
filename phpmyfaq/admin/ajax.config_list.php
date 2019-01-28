@@ -256,7 +256,7 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="form-group row"><label class="form-control-label col-lg-3"></label>';
+            echo '<div class="form-group row"><label class="col-form-label col-lg-3"></label>';
             echo '<div class="col-lg-9">';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {

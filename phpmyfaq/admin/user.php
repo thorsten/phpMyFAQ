@@ -401,7 +401,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             </div>
 
             <div class="form-group row">
-                <div class="col-lg-offset-2 col-lg-10">
+                <div class="offset-lg-2 col-lg-10">
                     <button class="btn btn-success" type="submit">
                         <?= $PMF_LANG['ad_gen_save'] ?>
                     </button>
