@@ -52,7 +52,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                         <div class="col-lg-4">
                             <select name="after" size="1" class="form-control">
 <?php
-    foreach ($category->catTree as $cat) {
+    foreach ($category->getCategoryTree() as $cat) {
         $indent = '';
         for ($j = 0; $j < $cat['indent']; ++$j) {
             $indent .= '...';

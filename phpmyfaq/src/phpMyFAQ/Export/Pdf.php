@@ -115,7 +115,7 @@ class Pdf extends Export
         );
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
-        $categories = $this->category->catTree;
+        $categories = $this->category->getCategoryTree();
 
         $categoryGroup = '';
         $this->pdf->AddPage();

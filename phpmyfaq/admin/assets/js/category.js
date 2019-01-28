@@ -18,13 +18,11 @@
 
 $(document).ready(function () {
     'use strict';
-
-    $('h5.category-header').on('click', function() {
-        let div = $('#div_' + $(this).data('category-id'));
-        if (div.css('display') === 'none') {
-            div.fadeIn('fast');
-        } else {
-            div.fadeOut('fast');
-        }
+  $(function() {
+    $('.list-group-item').on('click', function() {
+      $('.fas', this)
+        .toggleClass('fa-caret-right')
+        .toggleClass('fa-caret-down');
     });
+  });
 });

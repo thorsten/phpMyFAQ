@@ -90,7 +90,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         </thead>
         <tbody>
 <?php
-    foreach ($category->catTree as $cat) {
+    foreach ($category->getCategoryTree() as $cat) {
         print "<tr>\n";
 
         $indent = '';

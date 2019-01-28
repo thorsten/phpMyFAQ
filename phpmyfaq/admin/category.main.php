@@ -2,8 +2,6 @@
 /**
  * List all categories in the admin section.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -303,13 +301,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     $category->buildTree();
 
     $open = $lastCatId = $openDiv = 0;
-    echo '<ul>';
-    foreach ($category->catTree as $id => $cat) {
-        $indent = '';
-        for ($i = 0; $i < $cat['indent']; ++$i) {
-            $indent .= '&nbsp;&nbsp;&nbsp;';
-        }
 
+    echo '<div class="list-group list-group-root">';
+    foreach ($category->getCategoryTree() as $id => $cat) {
         // CategoryHelper translated in this language?
         if ($cat['lang'] == $lang) {
             $categoryName = $cat['name'];
@@ -317,71 +311,58 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $categoryName = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
         }
 
-        if (isset($cat['active']) && 0 === $cat['active']) {
-            $categoryName = '<em style="color: gray">'.$categoryName.'</em>';
-        }
-
+        // Level of the category
         $level = $cat['indent'];
-        $leveldiff = $open - $level;
 
-        if ($leveldiff > 1) {
-            echo '</li>';
-            for ($i = $leveldiff; $i > 1; --$i) {
-                echo '</ul></div></li>';
-            }
-        }
+        // Any sub-categories?
+        $subCategories = $category->getChildren($cat['id']);
+        $numSubCategories = count($subCategories);
 
-        if ($level < $open) {
-            if (($level - $open) == -1) {
-                echo '</li>';
-            }
-            echo '</ul></li>';
-        } elseif ($level == $open) {
-            echo '</li>';
-        }
+        $hasParent = (bool) $cat['parent_id'];
 
-        if ($level > $open) {
-            printf('<div id="div_%d" style="display: none; filter: inherit;">', $lastCatId);
-            echo '<ul><li>';
-        } else {
-            echo '<li>';
-        }
-
-        if (count($category->getChildren($cat['id'])) != 0) {
-            // Show name and icon for expand the sub-categories
+        if ($hasParent) {
             printf(
-                '<h5 class="category-header" data-category-id="%d">%s <i aria-hidden="true" class="fas fa-folder-open"></i></h5> ',
-                $cat['id'],
-                $categoryName
+                '<div class="list-group collapse" id="category-id-%d">',
+                $cat['parent_id']
             );
-        } else {
-            // Show just the name
-            printf('<h5>%s</h5> ', $categoryName);
         }
 
-        // add faq to category (always)
+        printf(
+            '<div href="#category-id-%d" class="list-group-item list-group-item-action border-left-0 border-right-0 d-flex justify-content-between align-items-center" %s>',
+            $cat['id'],
+            $numSubCategories > 0 ? 'data-toggle="collapse"' : ''
+        );
+        printf(
+            '<span>%s %s</span>',
+            $numSubCategories > 0 ? '<i class="fas fa-caret-right"></i>' : '',
+            $categoryName
+        );
+
+        // Buttons:
+        echo '<span>';
+        // Add FAQ to category (always)
         printf('
            <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fas fa-file-medical" title="%s"></i></a></a> ',
-           $cat['id'],
-           $cat['lang'],
-           $PMF_LANG['ad_quick_entry']
-       );
+            $cat['id'],
+            $cat['lang'],
+            $PMF_LANG['ad_quick_entry']
+        );
 
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
-           printf('
+            printf('
             <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fas fa-folder-plus" title="%s"></i></a> ',
-               $cat['id'],
-               $cat['lang'],
-               $PMF_LANG['ad_quick_category']
-           );
+                $cat['id'],
+                $cat['lang'],
+                $PMF_LANG['ad_quick_category']
+            );
 
-           // rename (sub) category (if current language)
-           printf('
+            // rename (sub) category (if current language)
+            printf('
                <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-edit" title="%s"></i></a> ',
-               $cat['id'],
-               $PMF_LANG['ad_kateg_rename']
-           );
+                $cat['id'],
+                $PMF_LANG['ad_kateg_rename']
+            );
         }
 
         // translate category (always)
@@ -400,40 +381,39 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
                 $PMF_LANG['ad_categ_delete']
             );
         } else {
-            echo  '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fas fa-trash"></i>';
+            echo '<a class="btn btn-inverse btn-sm" style="cursor: not-allowed;"><i aria-hidden="true" class="fas fa-trash"></i></a>';
         }
 
         if ($cat['lang'] == $lang) {
             // cut category (if current language)
-           printf(
-               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-cut" title="%s"></i></a>  ',
-               $cat['id'],
-               $PMF_LANG['ad_categ_cut']
-           );
+            printf(
+                '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><i aria-hidden="true" class="fas fa-cut" title="%s"></i></a>  ',
+                $cat['id'],
+                $PMF_LANG['ad_categ_cut']
+            );
 
             if ($category->numParent($cat['parent_id']) > 1) {
                 // move category (if current language) AND more than 1 category at the same level)
-              printf(
-                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fas fa-copy" title="%s"></i></a> ',
-                  $cat['id'],
-                  $cat['parent_id'],
-                  $PMF_LANG['ad_categ_move']
-              );
+                printf(
+                    '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fas fa-copy" title="%s"></i></a> ',
+                    $cat['id'],
+                    $cat['parent_id'],
+                    $PMF_LANG['ad_categ_move']
+                );
             }
         }
+        echo '</span>';
+        echo '</div>';
 
-        $open = $level;
+        if ($hasParent) {
+            echo '</div>';
+        }
+
         $lastCatId = $cat['id'];
     }
-
-    if ($open > 0) {
-        echo str_repeat("</li>\n\t</ul>\n\t", $open);
-    }
+    echo '</div>';
     ?>
-                    </li>
-                </ul>
-
-                <p class="alert alert-info"><?= $PMF_LANG['ad_categ_remark'] ?></p>
+                <p class="alert alert-info mt-4"><?= $PMF_LANG['ad_categ_remark'] ?></p>
             </div>
         </div>
     <script src="assets/js/category.js"></script>

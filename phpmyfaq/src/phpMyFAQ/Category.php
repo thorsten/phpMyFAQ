@@ -66,10 +66,9 @@ class Category
 
     /**
      * The category tree.
-     *
      * @var array
      */
-    public $catTree = [];
+    private $catTree = [];
 
     /**
      * The tree with the tabs.
@@ -1273,6 +1272,15 @@ class Category
         } else {
             return 1;
         }
+    }
+
+    /**
+     * Returns the category tree as array.
+     * @return array
+     */
+    public function getCategoryTree(): array
+    {
+        return $this->catTree;
     }
 
     /**
