@@ -2,8 +2,6 @@
 /**
  * Footer of the admin area.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -93,6 +91,7 @@ if (isset($auth)) {
     entity_encoding: 'raw',
     toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
     toolbar2: "link image preview media | forecolor backcolor emoticons | phpmyfaq print",
+    height: "50vh",
     image_advtab: true,
     image_class_list: [
       {title: 'None', value: ''},
@@ -158,7 +157,7 @@ if (isset($auth)) {
 
     // File browser
     file_browser_callback: function (fieldName, url, type, win) {
-      var fileBrowser = 'image.browser.php';
+      let fileBrowser = 'image.browser.php';
       fileBrowser += (fileBrowser.indexOf('?') < 0) ? '?type=' + type : '&type=' + type;
       tinymce.activeEditor.windowManager.open({
         title: 'Select an image',

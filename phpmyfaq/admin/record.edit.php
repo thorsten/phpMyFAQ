@@ -223,6 +223,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
             $faqData['lang']
         );
         $link = new Link($faqUrl, $faqConfig);
+        $link->itemTitle = $faqData['title'];
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
@@ -233,9 +234,11 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <span class="btn btn-sm btn-outline-info">
+                <i class="fas fa-hashtag" aria-hidden="true"></i>
                 <?= $currentRevision ?>
               </span>
               <a href="<?= $link->toString() ?>" class="btn btn-sm btn-outline-success">
+                <i class="fas fa-arrow-alt-circle-right" aria-hidden="true"></i>
                   <?= $PMF_LANG['ad_view_faq'] ?>
               </a>
             </div>
