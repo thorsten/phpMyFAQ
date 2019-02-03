@@ -60,8 +60,8 @@ $PMF_LANG["msgAuthor"] = "Autorius: ";
 $PMF_LANG["msgPrinterFriendly"] = "Versija spausdinimui";
 $PMF_LANG["msgPrintArticle"] = "Spausdinti šį įrašą";
 $PMF_LANG["msgMakeXMLExport"] = "Eksportuoti kaip XML failą";
-$PMF_LANG["msgAverageVote"] = "Vidutinis įvertis:";
-$PMF_LANG["msgVoteUseability"] = "Įvertinti šį DUK:";
+$PMF_LANG["msgAverageVote"] = "Vidutinis įvertis";
+$PMF_LANG["msgVoteUseability"] = "Įvertinti šį DUK";
 $PMF_LANG["msgVoteFrom"] = "iš";
 $PMF_LANG["msgVoteBad"] = "visiškai nenaudingas";
 $PMF_LANG["msgVoteGood"] = "labai vertingas";
@@ -73,17 +73,17 @@ $PMF_LANG["msgWriteComment"] = "komentuoti šį DUK";
 $PMF_LANG["msgShowCategory"] = "Turinio apžvalga: ";
 $PMF_LANG["msgCommentBy"] = "Komentavo ";
 $PMF_LANG["msgCommentHeader"] = "Komentuoti šį DUK";
-$PMF_LANG["msgYourComment"] = "Jūsų komentaras:";
+$PMF_LANG["msgYourComment"] = "Jūsų komentaras";
 $PMF_LANG["msgCommentThanks"] = "Labai ačiū už jūsų komentarą!";
 $PMF_LANG["msgSeeXMLFile"] = "atverti XML failą";
 $PMF_LANG["msgSend2Friend"] = "Siųsti DUK draugui";
-$PMF_LANG["msgS2FName"] = "Jūsų vardas:";
-$PMF_LANG["msgS2FEMail"] = "Jūsų el. pašto adresas:";
-$PMF_LANG["msgS2FFriends"] = "Jūsų draugai:";
-$PMF_LANG["msgS2FEMails"] = ". el. pašto adresas:";
-$PMF_LANG["msgS2FText"] = "Bus išsiųstas šis tekstas:";
-$PMF_LANG["msgS2FText2"] = "Jūs rasite DUK šiuo adresu:";
-$PMF_LANG["msgS2FMessage"] = "Papildomas pranešimas jūsų draugui:";
+$PMF_LANG["msgS2FName"] = "Jūsų vardas";
+$PMF_LANG["msgS2FEMail"] = "Jūsų el. pašto adresas";
+$PMF_LANG["msgS2FFriends"] = "Jūsų draugai";
+$PMF_LANG["msgS2FEMails"] = ". el. pašto adresas";
+$PMF_LANG["msgS2FText"] = "Bus išsiųstas šis tekstas";
+$PMF_LANG["msgS2FText2"] = "Jūs rasite DUK šiuo adresu";
+$PMF_LANG["msgS2FMessage"] = "Papildomas pranešimas jūsų draugui";
 $PMF_LANG["msgS2FButton"] = "siųsti el. laišką";
 $PMF_LANG["msgS2FThx"] = "Ačiū už jūsų rekomendaciją!";
 $PMF_LANG["msgS2FMailSubject"] = "Rekomendacija nuo ";
@@ -99,22 +99,22 @@ $PMF_LANG["msgSearchContent"] = "Atsakymas: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "Naujo DUK pasiūlymas";
 $PMF_LANG["msgNewContentAddon"] = "Jūsų pasiūlymas nebus iš karto paskelbtas. Jis bus paskelbtas tik gavus administratoriaus sutikimą. Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>grupė</strong>, <strong>antraštė</strong> ir <strong>jūsų įrašas</strong>. Prašome atskirti raktažodžius tik tarpais.";
-$PMF_LANG["msgNewContentName"] = "Jūsų vardas:";
-$PMF_LANG["msgNewContentMail"] = "Jūsų el. pašto adresas:";
-$PMF_LANG["msgNewContentCategory"] = "Grupė:";
-$PMF_LANG["msgNewContentTheme"] = "Klausimas:";
-$PMF_LANG["msgNewContentArticle"] = "Atsakymas:";
-$PMF_LANG["msgNewContentKeywords"] = "Raktažodžiai:";
-$PMF_LANG["msgNewContentLink"] = "Saitas šiam įrašui:";
+$PMF_LANG["msgNewContentName"] = "Jūsų vardas";
+$PMF_LANG["msgNewContentMail"] = "Jūsų el. pašto adresas";
+$PMF_LANG["msgNewContentCategory"] = "Grupė";
+$PMF_LANG["msgNewContentTheme"] = "Klausimas";
+$PMF_LANG["msgNewContentArticle"] = "Atsakymas";
+$PMF_LANG["msgNewContentKeywords"] = "Raktažodžiai";
+$PMF_LANG["msgNewContentLink"] = "Saitas šiam įrašui";
 $PMF_LANG["msgNewContentSubmit"] = "išsiųsti";
 $PMF_LANG["msgInfo"] = "Daugiau informacijos: ";
 $PMF_LANG["msgNewContentThanks"] = "Ačiū už jūsų pasiūlymą!";
 $PMF_LANG["msgNoQuestionsAvailable"] = "Šiuo metu nėra klausimų laukiančių sprendimo.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "Užduokite savo klausimą žemiau:";
-$PMF_LANG["msgAskCategory"] = "Grupė:";
-$PMF_LANG["msgAskYourQuestion"] = "Klausimas:";
+$PMF_LANG["msgNewQuestion"] = "Užduokite savo klausimą žemiau";
+$PMF_LANG["msgAskCategory"] = "Grupė";
+$PMF_LANG["msgAskYourQuestion"] = "Klausimas";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>Ačiū už jūsų klausimą!</h2>";
 $PMF_LANG["msgDate_User"] = "Data / naudotojas";
 $PMF_LANG["msgQuestion2"] = "Klausimas";
@@ -125,8 +125,8 @@ $PMF_LANG["msgQuestionText"] = "Čia jūs matote kitų naudotojų užduotus klau
 $PMF_LANG["msgHelpText"] = "DUK (<strong>D</strong>ažniausiai <strong>U</strong>žduodami <strong>K</strong>lausimai) struktūra yra gana paprasta. Jūs arba galite ieškoti <strong><a href=\"?action=show\">grupėse</a></strong>, arba naudoti <strong><a href=\"?action=search\">DUK paieškos sistemą</a></strong> raktažodžių paieškai.";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "Siųsti pranešimą svetainės administratoriui:";
-$PMF_LANG["msgMessage"] = "Jūsų pranešimas:";
+$PMF_LANG["msgContactEMail"] = "Siųsti pranešimą svetainės administratoriui";
+$PMF_LANG["msgMessage"] = "Jūsų pranešimas";
 
 // Startseite
 $PMF_LANG["msgNews"] = " – naujienos";
@@ -222,17 +222,17 @@ $PMF_LANG["ad_entry_topic"] = "Tema";
 $PMF_LANG["ad_entry_action"] = "Veiksmas";
 $PMF_LANG["ad_entry_edit_1"] = "Redaguoti įrašą";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Klausimas:";
-$PMF_LANG["ad_entry_content"] = "Atsakymas:";
-$PMF_LANG["ad_entry_keywords"] = "Raktažodžiai:";
-$PMF_LANG["ad_entry_author"] = "Autorius:";
-$PMF_LANG["ad_entry_category"] = "Grupė:";
+$PMF_LANG["ad_entry_theme"] = "Klausimas";
+$PMF_LANG["ad_entry_content"] = "Atsakymas";
+$PMF_LANG["ad_entry_keywords"] = "Raktažodžiai";
+$PMF_LANG["ad_entry_author"] = "Autorius";
+$PMF_LANG["ad_entry_category"] = "Grupė";
 $PMF_LANG["ad_entry_active"] = "Aktyvus?";
-$PMF_LANG["ad_entry_date"] = "Data:";
+$PMF_LANG["ad_entry_date"] = "Data";
 $PMF_LANG["ad_entry_changed"] = "Pakeistas?";
-$PMF_LANG["ad_entry_changelog"] = "Keitimų žurnalas:";
+$PMF_LANG["ad_entry_changelog"] = "Keitimų žurnalas";
 $PMF_LANG["ad_entry_commentby"] = "Komentavo";
-$PMF_LANG["ad_entry_comment"] = "Komentarai:";
+$PMF_LANG["ad_entry_comment"] = "Komentarai";
 $PMF_LANG["ad_entry_save"] = "Išsaugoti";
 $PMF_LANG["ad_entry_delete"] = "šalinti";
 $PMF_LANG["ad_entry_delcom_1"] = "Ar tikrai norite pašalinti naudotojo";
@@ -251,11 +251,11 @@ $PMF_LANG["ad_entry_back"] = "Atgal";
 
 
 // Newsverwaltung
-$PMF_LANG["ad_news_header"] = "Naujienos antraštė:";
-$PMF_LANG["ad_news_text"] = "Įrašo tekstas:";
-$PMF_LANG["ad_news_link_url"] = "Saitas (<strong>be http://</strong>):";
-$PMF_LANG["ad_news_link_title"] = "Saito pavadinimas:";
-$PMF_LANG["ad_news_link_target"] = "Saito paskirtis:";
+$PMF_LANG["ad_news_header"] = "Naujienos antraštė";
+$PMF_LANG["ad_news_text"] = "Įrašo tekstas";
+$PMF_LANG["ad_news_link_url"] = "Saitas (<strong>be http://</strong>)";
+$PMF_LANG["ad_news_link_title"] = "Saito pavadinimas";
+$PMF_LANG["ad_news_link_target"] = "Saito paskirtis";
 $PMF_LANG["ad_news_link_window"] = "Saitas atveria naują langą";
 $PMF_LANG["ad_news_link_faq"] = "Saitas DUK viduje";
 $PMF_LANG["ad_news_add"] = "Pridėti naujiną";
@@ -275,10 +275,10 @@ $PMF_LANG["ad_news_updatenews"] = "Naujienų elementas atnaujintas.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Pridėti naują grupę";
-$PMF_LANG["ad_categ_catnum"] = "Grupės numeris:";
-$PMF_LANG["ad_categ_subcatnum"] = "Pogrupio numeris:";
+$PMF_LANG["ad_categ_catnum"] = "Grupės numeris";
+$PMF_LANG["ad_categ_subcatnum"] = "Pogrupio numeris";
 $PMF_LANG["ad_categ_nya"] = "<em>dar neprieinama!</em>";
-$PMF_LANG["ad_categ_titel"] = "Grupės pavadinimas:";
+$PMF_LANG["ad_categ_titel"] = "Grupės pavadinimas";
 $PMF_LANG["ad_categ_add"] = "Pridėti grupę";
 $PMF_LANG["ad_categ_existing"] = "Egzistuojančios grupės";
 $PMF_LANG["ad_categ_id"] = "nr.";
@@ -303,10 +303,10 @@ $PMF_LANG["ad_categ_deleted"] = "Grupė pašalinta.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "Slapukas <strong>sėkmingai</strong> nustatytas.";
-$PMF_LANG["ad_cookie_already"] = "Slapukas jau buvo nustatytas. Jūs dabar turite tokias parinktis:";
+$PMF_LANG["ad_cookie_already"] = "Slapukas jau buvo nustatytas. Jūs dabar turite tokias parinktis";
 $PMF_LANG["ad_cookie_again"] = "Nustatyti slapuką iš naujo";
 $PMF_LANG["ad_cookie_delete"] = "Pašalinti slapuką";
-$PMF_LANG["ad_cookie_no"] = "Slapukas dar nėra išsaugotas. Su slapuku jūs galite išsaugoti savo prisijungimo duomenis, tokiu būdu jums nebereikės prisiminti savo prisijungimo duomenų. Jūs dabar turite tokias parinktis:";
+$PMF_LANG["ad_cookie_no"] = "Slapukas dar nėra išsaugotas. Su slapuku jūs galite išsaugoti savo prisijungimo duomenis, tokiu būdu jums nebereikės prisiminti savo prisijungimo duomenų. Jūs dabar turite tokias parinktis";
 $PMF_LANG["ad_cookie_set"] = "Nustatyti slapuką";
 $PMF_LANG["ad_cookie_deleted"] = "Slapukas sėkmingai pašalintas.";
 
@@ -315,9 +315,9 @@ $PMF_LANG["ad_adminlog"] = "Administravimo žurnalas";
 
 // Passwd
 $PMF_LANG["ad_passwd_cop"] = "Pakeisti savo slaptažodį";
-$PMF_LANG["ad_passwd_old"] = "Senas slaptažodis:";
-$PMF_LANG["ad_passwd_new"] = "Naujas slaptažodis:";
-$PMF_LANG["ad_passwd_con"] = "Patvirtinti:";
+$PMF_LANG["ad_passwd_old"] = "Senas slaptažodis";
+$PMF_LANG["ad_passwd_new"] = "Naujas slaptažodis";
+$PMF_LANG["ad_passwd_con"] = "Patvirtinti";
 $PMF_LANG["ad_passwd_change"] = "Keisti slaptažodį";
 $PMF_LANG["ad_passwd_suc"] = "Slaptažodis sėkmingai pakeistas.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>DĖMESIO:</strong><br />Slapukas turi būti nustatytas iš naujo!";
@@ -325,8 +325,8 @@ $PMF_LANG["ad_passwd_fail"] = "Senas slaptažodis <strong>privalo</strong> būti
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Pridėti naudotoją";
-$PMF_LANG["ad_adus_name"] = "Vardas:";
-$PMF_LANG["ad_adus_password"] = "Slaptažodis:";
+$PMF_LANG["ad_adus_name"] = "Vardas";
+$PMF_LANG["ad_adus_password"] = "Slaptažodis";
 $PMF_LANG["ad_adus_add"] = "Pridėti naudotoją";
 $PMF_LANG["ad_adus_suc"] = "Naudotojas <strong>sėkmingai</strong> pridėtas.";
 $PMF_LANG["ad_adus_edit"] = "Redaguoti profilį";
@@ -341,26 +341,26 @@ $PMF_LANG["ad_sess_time"] = "Laikas";
 $PMF_LANG["ad_sess_pageviews"] = "Tinklalapio peržiūros";
 $PMF_LANG["ad_sess_search"] = "Paieška";
 $PMF_LANG["ad_sess_sfs"] = "Ieškoti seansų";
-$PMF_LANG["ad_sess_s_ip"] = "IP adresas:";
-$PMF_LANG["ad_sess_s_minct"] = "min. veiksmai:";
+$PMF_LANG["ad_sess_s_ip"] = "IP adresas";
+$PMF_LANG["ad_sess_s_minct"] = "min. veiksmai";
 $PMF_LANG["ad_sess_s_date"] = "Data";
 $PMF_LANG["ad_sess_s_after"] = "po";
 $PMF_LANG["ad_sess_s_before"] = "prieš";
 $PMF_LANG["ad_sess_s_search"] = "Ieškoti";
 $PMF_LANG["ad_sess_session"] = "Seansas";
 $PMF_LANG["ad_sess_r"] = "Paieškos rezultatai";
-$PMF_LANG["ad_sess_referer"] = "Referalai:";
-$PMF_LANG["ad_sess_browser"] = "Naršyklė:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Grupė:";
-$PMF_LANG["ad_sess_ai_artikel"] = "Įrašas:";
-$PMF_LANG["ad_sess_ai_sb"] = "Paieškos eilutės:";
-$PMF_LANG["ad_sess_ai_sid"] = "Seanso identifikatorius:";
+$PMF_LANG["ad_sess_referer"] = "Referalai";
+$PMF_LANG["ad_sess_browser"] = "Naršyklė";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Grupė";
+$PMF_LANG["ad_sess_ai_artikel"] = "Įrašas";
+$PMF_LANG["ad_sess_ai_sb"] = "Paieškos eilutės";
+$PMF_LANG["ad_sess_ai_sid"] = "Seanso identifikatorius";
 $PMF_LANG["ad_sess_back"] = "Atgal";
 
 // Statistik
 $PMF_LANG["ad_rs"] = "Įverčių statistika";
 $PMF_LANG["ad_rs_rating_1"] = "Įverčiai iš";
-$PMF_LANG["ad_rs_rating_2"] = "naudotojų rodo:";
+$PMF_LANG["ad_rs_rating_2"] = "naudotojų rodo";
 $PMF_LANG["ad_rs_red"] = "Raudona";
 $PMF_LANG["ad_rs_green"] = "Žalia";
 $PMF_LANG["ad_rs_altt"] = "vidurkis mažesnis už 20%";
@@ -369,8 +369,8 @@ $PMF_LANG["ad_rs_no"] = "Nėra įverčių";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "Prašome įvesti savo naudotojo vardą ir slaptažodį.";
-$PMF_LANG["ad_auth_user"] = "Naudotojo vardas:";
-$PMF_LANG["ad_auth_passwd"] = "Slaptažodis:";
+$PMF_LANG["ad_auth_user"] = "Naudotojo vardas";
+$PMF_LANG["ad_auth_passwd"] = "Slaptažodis";
 $PMF_LANG["ad_auth_ok"] = "Gerai";
 $PMF_LANG["ad_auth_reset"] = "Atkurti";
 $PMF_LANG["ad_auth_fail"] = "Naudotojas arba slaptažodis neteisingas.";
@@ -493,7 +493,7 @@ $PMF_LANG["ad_xml_head"] = "XML atsarginė kopija";
 $PMF_LANG["ad_xml_hint"] = "Išsaugoti visus jūsų DUK įrašus viename XML faile.";
 $PMF_LANG["ad_xml_gen"] = "sukurti XML failą";
 $PMF_LANG["ad_entry_locale"] = "Kalba";
-$PMF_LANG["msgLanguageSubmit"] = "Parinkti kalbą:";
+$PMF_LANG["msgLanguageSubmit"] = "Parinkti kalbą";
 
 // Added v1.3.1 - 29.04.2003 - Thorsten
 $PMF_LANG["ad_entry_preview"] = "Peržiūra";
@@ -535,14 +535,14 @@ $PMF_LANG["rightsLanguage"]['restore'] = "atkurti iš atsarginės kopijos";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "šalinti atvirus klausimus";
 $PMF_LANG["rightsLanguage"]['changebtrevs'] = "redaguoti pataisas";
 
-$PMF_LANG["msgAttachedFiles"] = "pridėti failai:";
+$PMF_LANG["msgAttachedFiles"] = "pridėti failai";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "veiksmas";
-$PMF_LANG["ad_entry_email"] = "El. pašto adresas:";
-$PMF_LANG["ad_entry_allowComments"] = "Leisti komentarus:";
+$PMF_LANG["ad_entry_email"] = "El. pašto adresas";
+$PMF_LANG["ad_entry_allowComments"] = "Leisti komentarus";
 $PMF_LANG["msgWriteNoComment"] = "Jūs negalite komentuoti šio įrašo";
-$PMF_LANG["ad_user_realname"] = "tikras vardas:";
+$PMF_LANG["ad_user_realname"] = "tikras vardas";
 $PMF_LANG["ad_export_generate_pdf"] = "generuoti PDF failą";
 $PMF_LANG["ad_export_full_faq"] = "Jūsų DUK kaip PDF failas: ";
 $PMF_LANG["err_bannedIP"] = "Jūsų IP adresas buvo uždraustas.";
@@ -679,8 +679,8 @@ $PMF_LANG['ad_user_error_delete'] =  "Naudotojų paskyros nepašalintos. ";
 $PMF_LANG['ad_user_error_noId'] =  "Nenurodytas identifikatorius. ";
 $PMF_LANG['ad_user_error_protectedAccount'] =  "Naudotojo paskyra apsaugota. ";
 $PMF_LANG['ad_user_deleteUser'] = "Šalinti naudotoją";
-$PMF_LANG['ad_user_status'] = "Būsena:";
-$PMF_LANG['ad_user_lastModified'] = "paskutinių keitimų data:";
+$PMF_LANG['ad_user_status'] = "Būsena";
+$PMF_LANG['ad_user_lastModified'] = "paskutinių keitimų data";
 $PMF_LANG['ad_gen_cancel'] = "Atsisakyti";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "pridėti specialių terminų žodyno įrašą";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "redaguoti specialių terminų žodyno įrašą";
@@ -691,9 +691,9 @@ $PMF_LANG['ad_user_loggedin'] = 'Prisijungęs kaip ';
 $PMF_LANG['ad_group_details'] = "Išsami grupės informacija";
 $PMF_LANG['ad_group_add'] = "Pridėti grupę";
 $PMF_LANG['ad_group_add_link'] = "Pridėti grupę";
-$PMF_LANG['ad_group_name'] = "Pavadinimas:";
-$PMF_LANG['ad_group_description'] = "Aprašas:";
-$PMF_LANG['ad_group_autoJoin'] = "Automatiškai prijungti:";
+$PMF_LANG['ad_group_name'] = "Pavadinimas";
+$PMF_LANG['ad_group_description'] = "Aprašas";
+$PMF_LANG['ad_group_autoJoin'] = "Automatiškai prijungti";
 $PMF_LANG['ad_group_suc'] = "Grupė <strong>sėkmingai</strong> pridėta.";
 $PMF_LANG['ad_group_error_noName'] = "Įveskite grupės pavadinimą. ";
 $PMF_LANG['ad_group_error_delete'] = "Nepavyko pašalinti grupės. ";
@@ -825,9 +825,9 @@ $PMF_LANG['msgNewTranslationHeader'] = 'Vertimo pasiūlymas';
 $PMF_LANG['msgNewTranslationAddon'] = 'Jūsų pasiūlymas nebus iš karto paskelbtas. Jis bus paskelbtas tik gavus administratoriaus sutikimą. Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų vertimo antraštė</strong> ir <strong>jūsų DUK vertimas</strong>. Prašome atskirti raktažodžius tik tarpais.';
 $PMF_LANG['msgNewTransSourcePane'] = 'Šaltinio polangis';
 $PMF_LANG['msgNewTranslationPane'] = 'Vertimo polangis';
-$PMF_LANG['msgNewTranslationName'] = "Jūsų vardas:";
-$PMF_LANG['msgNewTranslationMail'] = "Jūsų el. pašto adresas:";
-$PMF_LANG['msgNewTranslationKeywords'] = "Raktažodžiai:";
+$PMF_LANG['msgNewTranslationName'] = "Jūsų vardas";
+$PMF_LANG['msgNewTranslationMail'] = "Jūsų el. pašto adresas";
+$PMF_LANG['msgNewTranslationKeywords'] = "Raktažodžiai";
 $PMF_LANG['msgNewTranslationSubmit'] = 'Išsiųsti pasiūlymą';
 $PMF_LANG['msgTranslate'] = 'Pasiūlyti vertimą į';
 $PMF_LANG['msgTranslateSubmit'] = 'Pradėti vertimą...';

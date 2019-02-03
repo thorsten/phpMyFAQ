@@ -114,7 +114,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     if (!is_null($question) && !is_null($categories['rubrik'])) {
         // new entry
         $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'Beitragcreatesave');
+        $logging->logAdmin($user, 'admin-save-new-faq');
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header">%s</h2></div></header>',
             $PMF_LANG['ad_entry_aor']

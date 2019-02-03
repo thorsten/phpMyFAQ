@@ -123,7 +123,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     if (!is_null($question) && !is_null($categories)) {
         // Save entry
         $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'Beitragsave '.$recordId);
+        $logging->logAdmin($user, 'admin-save-existing-faq '.$recordId);
 
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fas fa-pencil"></i> %s</h2></div></header>',

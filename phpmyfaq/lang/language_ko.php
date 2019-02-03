@@ -55,8 +55,8 @@ $PMF_LANG["msgAuthor"] = "작성자: ";
 $PMF_LANG["msgPrinterFriendly"] = "인쇄용 페이지";
 $PMF_LANG["msgPrintArticle"] = "이 내용을 인쇄";
 $PMF_LANG["msgMakeXMLExport"] = "XML형식으로 내보내기";
-$PMF_LANG["msgAverageVote"] = "평점:";
-$PMF_LANG["msgVoteUseability"] = "이 내용을 평가해 주세요:";
+$PMF_LANG["msgAverageVote"] = "평점";
+$PMF_LANG["msgVoteUseability"] = "이 내용을 평가해 주세요";
 $PMF_LANG["msgVoteFrom"] = " - ";
 $PMF_LANG["msgVoteBad"] = "전혀 도움 안됨";
 $PMF_LANG["msgVoteGood"] = "매우 유익함";
@@ -68,17 +68,17 @@ $PMF_LANG["msgWriteComment"] = "코멘트 달기";
 $PMF_LANG["msgShowCategory"] = "카테고리: ";
 $PMF_LANG["msgCommentBy"] = "작성자 -  ";
 $PMF_LANG["msgCommentHeader"] = "이 내용에 대해 코멘트 달기";
-$PMF_LANG["msgYourComment "] = "당신의 코멘트:";
+$PMF_LANG["msgYourComment "] = "당신의 코멘트";
 $PMF_LANG["msgCommentThanks"] = "코멘트를 해 주셔서 감사합니다.";
 $PMF_LANG["msgSeeXMLFile"] = "XML파일 열기";
 $PMF_LANG["msgSend2Friend"] = "친구에게 보내기";
-$PMF_LANG["msgS2FName"] = "이름:";
-$PMF_LANG["msgS2FEMail"] = "메일주소:";
-$PMF_LANG["msgS2FFriends"] = "친구 주소:";
-$PMF_LANG["msgS2FEMails"] = ". 메일주소:";
-$PMF_LANG["msgS2FText"] = "아래에 추가해서 보낼 내용을 입력해 주세요:";
-$PMF_LANG["msgS2FText2"] = "다음 주소에서 아래 내용을 보실 수 있습니다:";
-$PMF_LANG["msgS2FMessage"] = "추가 메시지:";
+$PMF_LANG["msgS2FName"] = "이름";
+$PMF_LANG["msgS2FEMail"] = "메일주소";
+$PMF_LANG["msgS2FFriends"] = "친구 주소";
+$PMF_LANG["msgS2FEMails"] = ". 메일주소";
+$PMF_LANG["msgS2FText"] = "아래에 추가해서 보낼 내용을 입력해 주세요";
+$PMF_LANG["msgS2FText2"] = "다음 주소에서 아래 내용을 보실 수 있습니다";
+$PMF_LANG["msgS2FMessage"] = "추가 메시지";
 $PMF_LANG["msgS2FButton"] = "메일 보내기";
 $PMF_LANG["msgS2FThx"] = "추천해 주셔서 감사합니다.";
 $PMF_LANG["msgS2FMailSubject"] = "Recommendation from ";
@@ -94,12 +94,12 @@ $PMF_LANG["msgSearchContent"] = "내용: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "FAQ 추가(제안)";
 $PMF_LANG["msgNewContentAddon"] = "제안하신 내용은 곧바로 추가되지는 않습니다. 관리자가 검토한 후에 추가될 것입니다. <strong>이름</strong>, <strong>메일주소</strong>, <strong>카테고리</strong>, <strong>제목</strong>, <strong>FAQ 내용</strong>은 필수 입력 항목입니다. 키워드에는 '스페이스(Space)'키로 분리해서 입력하십시오.";
-$PMF_LANG["msgNewContentName"] = "이름:";
-$PMF_LANG["msgNewContentMail"] = "메일주소:";
+$PMF_LANG["msgNewContentName"] = "이름";
+$PMF_LANG["msgNewContentMail"] = "메일주소";
 $PMF_LANG["msgNewContentCategory"] = "카테고리 선택";
-$PMF_LANG["msgNewContentTheme"] = "제목:";
-$PMF_LANG["msgNewContentArticle"] = "FAQ 내용:";
-$PMF_LANG["msgNewContentKeywords"] = "키워드:";
+$PMF_LANG["msgNewContentTheme"] = "제목";
+$PMF_LANG["msgNewContentArticle"] = "FAQ 내용";
+$PMF_LANG["msgNewContentKeywords"] = "키워드";
 $PMF_LANG["msgNewContentLink"] = "관련 URL";
 $PMF_LANG["msgNewContentSubmit"] = "전송";
 $PMF_LANG["msgInfo"] = "추가 정보: ";
@@ -107,9 +107,9 @@ $PMF_LANG["msgNewContentThanks"] = "제안해 주셔서 감사합니다.";
 $PMF_LANG["msgNoQuestionsAvailable"] = "현재 처리해야 할 질문이 없습니다.";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "질문하고 싶은 내용을 입력해 주세요:";
+$PMF_LANG["msgNewQuestion"] = "질문하고 싶은 내용을 입력해 주세요";
 $PMF_LANG["msgAskCategory"] = "카테고리 선택";
-$PMF_LANG["msgAskYourQuestion"] = "질문 내용:";
+$PMF_LANG["msgAskYourQuestion"] = "질문 내용";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>질문해 주셔서 감사합니다.</h2>";
 $PMF_LANG["msgDate_User"] = "날짜 / 사용자";
 $PMF_LANG["msgQuestion2"] = "질문";
@@ -120,8 +120,8 @@ $PMF_LANG["msgQuestionText"] = "다른 사용자가 질문한 내용을 보실 �
 $PMF_LANG["msgHelpText"] = "FAQ (<strong>F</strong>requently <strong>A</strong>sked <strong>Q</strong>uestions) 의 사용 방법은 간단합니다. <strong><a href=\"?action=show\">카테고리</a></strong> 에서 궁금한 내용을 항목별로 찾거나 <strong><a href=\"?action=search\">검색</a></strong> 에서 검색어를 입력하여 찾으실 수 있습니다.";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "관리자에게 메일 보내기:";
-$PMF_LANG["msgMessage"] = "메시지 내용:";
+$PMF_LANG["msgContactEMail"] = "관리자에게 메일 보내기";
+$PMF_LANG["msgMessage"] = "메시지 내용";
 
 // Startseite
 $PMF_LANG["msgNews"] = " 공지사항";
@@ -129,7 +129,7 @@ $PMF_LANG["msgTopTen"] = "TOP 10";
 $PMF_LANG["msgHomeThereAre"] = "총 ";
 $PMF_LANG["msgHomeArticlesOnline"] = " 개의 FAQ가 있습니다.";
 $PMF_LANG["msgNoNews"] = "새로운 소식이 없습니다.";
-$PMF_LANG["msgLatestArticles"] = "최근에 작성된 5개의 질문:";
+$PMF_LANG["msgLatestArticles"] = "최근에 작성된 5개의 질문";
 
 // E-Mailbenachrichtigung
 $PMF_LANG["msgMailThanks"] = "FAQ에 제안을 해 주셔서 대단히 감사합니다.";
@@ -217,17 +217,17 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "동작";
 $PMF_LANG["ad_entry_edit_1"] = "FAQ 추가(수정)";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "제목:";
-$PMF_LANG["ad_entry_content"] = "내용:";
-$PMF_LANG["ad_entry_keywords"] = "키워드:";
-$PMF_LANG["ad_entry_author"] = "작성자:";
-$PMF_LANG["ad_entry_category"] = "카테고리:";
+$PMF_LANG["ad_entry_theme"] = "제목";
+$PMF_LANG["ad_entry_content"] = "내용";
+$PMF_LANG["ad_entry_keywords"] = "키워드";
+$PMF_LANG["ad_entry_author"] = "작성자";
+$PMF_LANG["ad_entry_category"] = "카테고리";
 $PMF_LANG["ad_entry_active"] = "사용";
-$PMF_LANG["ad_entry_date"] = "날짜:";
+$PMF_LANG["ad_entry_date"] = "날짜";
 $PMF_LANG["ad_entry_changed"] = "변경?";
-$PMF_LANG["ad_entry_changelog"] = "변경이력:";
-$PMF_LANG["ad_entry_commentby 	"] = "코멘트 작성자:";
-$PMF_LANG["ad_entry_comment"] = "코멘트:";
+$PMF_LANG["ad_entry_changelog"] = "변경이력";
+$PMF_LANG["ad_entry_commentby 	"] = "코멘트 작성자";
+$PMF_LANG["ad_entry_comment"] = "코멘트";
 $PMF_LANG["ad_entry_save"] = "저장";
 $PMF_LANG["ad_entry_delete"] = "삭제";
 $PMF_LANG["ad_entry_delcom_1"] = " ";
@@ -249,7 +249,7 @@ $PMF_LANG["ad_entry_back"] = "뒤로";
 $PMF_LANG["ad_news_header"] = "공지 제목";
 $PMF_LANG["ad_news_text"] = "내용";
 $PMF_LANG["ad_news_link_url"] = "관련 Link: (<strong>http:// 없이 입력</strong>)!";
-$PMF_LANG["ad_news_link_title"] = "Link의 간략 설명(타이틀):";
+$PMF_LANG["ad_news_link_title"] = "Link의 간략 설명(타이틀)";
 $PMF_LANG["ad_news_link_target"] = "Link 보이기";
 $PMF_LANG["ad_news_link_window"] = "새창에서 보이기";
 $PMF_LANG["ad_news_link_faq"] = "현재창(FAQ)에서 보이기";
@@ -270,10 +270,10 @@ $PMF_LANG["ad_news_updatenews"] = "공지 수정";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "카테고리 추가";
-$PMF_LANG["ad_categ_catnum"] = "카테고리 번호:";
-$PMF_LANG["ad_categ_subcatnum"] = "하위 카테고리 번호:";
+$PMF_LANG["ad_categ_catnum"] = "카테고리 번호";
+$PMF_LANG["ad_categ_subcatnum"] = "하위 카테고리 번호";
 $PMF_LANG["ad_categ_nya"] = "<em>사용할 수 없습니다.</em>";
-$PMF_LANG["ad_categ_titel"] = "카테고리명:";
+$PMF_LANG["ad_categ_titel"] = "카테고리명";
 $PMF_LANG["ad_categ_add"] = "카테고리 추가";
 $PMF_LANG["ad_categ_existing"] = "등록된 카테고리";
 $PMF_LANG["ad_categ_id"] = "#";
@@ -298,10 +298,10 @@ $PMF_LANG["ad_categ_deleted"] = "카테고리가 삭제되었습니다.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc 	"] = "쿠키가 <strong>성공적으로</strong> 설정되었습니다.";
-$PMF_LANG["ad_cookie_already"] = "쿠키가 이미 설정되어 있습니다. 다음과 같은 옵션이 있습니다.:";
+$PMF_LANG["ad_cookie_already"] = "쿠키가 이미 설정되어 있습니다. 다음과 같은 옵션이 있습니다.";
 $PMF_LANG["ad_cookie_again"] = "쿠키 다시 설정";
 $PMF_LANG["ad_cookie_delete"] = "쿠키 삭제";
-$PMF_LANG["ad_cookie_no"] = "저장된 쿠키가 없습니다. 쿠키를 가지고 로그인 스크립트를 저장할 수 있게됩니다. 아래와 같은 옵션이 있습니다.:";
+$PMF_LANG["ad_cookie_no"] = "저장된 쿠키가 없습니다. 쿠키를 가지고 로그인 스크립트를 저장할 수 있게됩니다. 아래와 같은 옵션이 있습니다.";
 $PMF_LANG["ad_cookie_set"] = "쿠키 설정";
 $PMF_LANG["ad_cookie_deleted"] = "쿠키가 성공적으로 삭제되었습니다.";
 
@@ -310,9 +310,9 @@ $PMF_LANG["ad_adminlog"] = "관리 로그";
 
 // Passwd
 $PMF_LANG["ad_passwd_cop"] = "비밀번호 변경";
-$PMF_LANG["ad_passwd_old"] = "현재 비밀번호:";
-$PMF_LANG["ad_passwd_new"] = "새로운 비밀번호:";
-$PMF_LANG["ad_passwd_con"] = "새로운 비밀번호 재확인:";
+$PMF_LANG["ad_passwd_old"] = "현재 비밀번호";
+$PMF_LANG["ad_passwd_new"] = "새로운 비밀번호";
+$PMF_LANG["ad_passwd_con"] = "새로운 비밀번호 재확인";
 $PMF_LANG["ad_passwd_change"] = "비밀번호 변경";
 $PMF_LANG["ad_passwd_suc"] = "비밀번호가 성공적으로 변경되었습니다.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>주의:</strong><br />쿠키를 다시 설정하여 주십시오.";
@@ -320,8 +320,8 @@ $PMF_LANG["ad_passwd_fail"] = "'현재 비밀번호'를 <strong>정확하게</st
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "사용자 추가";
-$PMF_LANG["ad_adus_name"] = "ID:";
-$PMF_LANG["ad_adus_password"] = "비밀번호:";
+$PMF_LANG["ad_adus_name"] = "ID";
+$PMF_LANG["ad_adus_password"] = "비밀번호";
 $PMF_LANG["ad_adus_add"] = "사용자 추가";
 $PMF_LANG["ad_adus_suc"] = "사용자가 <strong>성공적으로</strong> 추가되었습니다.";
 $PMF_LANG["ad_adus_edit"] = "프로필 수정";
@@ -336,36 +336,36 @@ $PMF_LANG["ad_sess_time"] = "시간";
 $PMF_LANG["ad_sess_pageviews"] = "페이지뷰";
 $PMF_LANG["ad_sess_search"] = "검색";
 $PMF_LANG["ad_sess_sfs"] = "세션 검색";
-$PMF_LANG["ad_sess_s_ip"] = "IP:";
-$PMF_LANG["ad_sess_s_minct"] = "min. actions:";
+$PMF_LANG["ad_sess_s_ip"] = "IP";
+$PMF_LANG["ad_sess_s_minct"] = "min. actions";
 $PMF_LANG["ad_sess_s_date"] = "날짜";
 $PMF_LANG["ad_sess_s_after"] = "시작";
 $PMF_LANG["ad_sess_s_before"] = "종료";
 $PMF_LANG["ad_sess_s_search"] = "검색";
 $PMF_LANG["ad_sess_session"] = "세션";
 $PMF_LANG["ad_sess_r"] = "검색 결과 - ";
-$PMF_LANG["ad_sess_referer"] = "참조 페이지:";
-$PMF_LANG["ad_sess_browser"] = "브라우저:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "카테고리:";
-$PMF_LANG["ad_sess_ai_artikel"] = "내용:";
-$PMF_LANG["ad_sess_ai_sb"] = "검색어:";
-$PMF_LANG["ad_sess_ai_sid"] = "세션 ID:";
+$PMF_LANG["ad_sess_referer"] = "참조 페이지";
+$PMF_LANG["ad_sess_browser"] = "브라우저";
+$PMF_LANG["ad_sess_ai_rubrik"] = "카테고리";
+$PMF_LANG["ad_sess_ai_artikel"] = "내용";
+$PMF_LANG["ad_sess_ai_sb"] = "검색어";
+$PMF_LANG["ad_sess_ai_sid"] = "세션 ID";
 $PMF_LANG["ad_sess_back"] = "뒤로";
 
 // Statistik
 $PMF_LANG["ad_rs"] = "평점 통계";
 $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
-$PMF_LANG["ad_rs_rating_2"] = "users shows:";
-$PMF_LANG["ad_rs_red"] = "빨강:";
-$PMF_LANG["ad_rs_green"] = "초록:";
+$PMF_LANG["ad_rs_rating_2"] = "users shows";
+$PMF_LANG["ad_rs_red"] = "빨강";
+$PMF_LANG["ad_rs_green"] = "초록";
 $PMF_LANG["ad_rs_altt"] = "평균 2보다 낮음";
 $PMF_LANG["ad_rs_ahtf"] = "평균 4보다 높음";
 $PMF_LANG["ad_rs_no"] = "등록된 데이터가 없습니다.";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "ID와 비밀번호를 입력하세요.";
-$PMF_LANG["ad_auth_user"] = "ID:";
-$PMF_LANG["ad_auth_passwd"] = "비밀번호:";
+$PMF_LANG["ad_auth_user"] = "ID";
+$PMF_LANG["ad_auth_passwd"] = "비밀번호";
 $PMF_LANG["ad_auth_ok"] = "로그인";
 $PMF_LANG["ad_auth_reset"] = "리셋";
 $PMF_LANG["ad_auth_fail"] = "ID 또는 비밀번호가 바르지 않습니다.";
@@ -529,14 +529,14 @@ $PMF_LANG["rightsLanguage"]['backup'] = "백업 하기";
 $PMF_LANG["rightsLanguage"]['restore'] = "복구 하기";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "질문 삭제";
 
-$PMF_LANG["msgAttachedFiles"] = "첨부 파일:";
+$PMF_LANG["msgAttachedFiles"] = "첨부 파일";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "동작";
-$PMF_LANG["ad_entry_email"] = "메일주소:";
+$PMF_LANG["ad_entry_email"] = "메일주소";
 $PMF_LANG["ad_entry_allowComments"] = "코멘트 가능";
 $PMF_LANG["msgWriteNoComment"] = "이 항목에는 코멘트 할 수 없습니다.";
-$PMF_LANG["ad_user_realname"] = "성명:";
+$PMF_LANG["ad_user_realname"] = "성명";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF 파일 생성";
 $PMF_LANG["ad_export_full_faq"] = "PDF 파일로 FAQ 내보내기: ";
 $PMF_LANG["err_bannedIP"] = "당신의 IP는 접근 금지되었습니다.";

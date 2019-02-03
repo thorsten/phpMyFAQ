@@ -136,11 +136,11 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
             $text = str_replace('Loginerror', $PMF_LANG['ad_log_lger'], $text);
             $text = str_replace('Session expired', $PMF_LANG['ad_log_sess'], $text);
             $text = str_replace('Useredit, ', $PMF_LANG['ad_log_edit'], $text);
-            $text = str_replace('Beitragcreatesave', $PMF_LANG['ad_log_crsa'], $text);
-            $text = str_replace('Beitragcreate', $PMF_LANG['ad_log_crea'], $text);
+            $text = str_replace('admin-save-new-faq', $PMF_LANG['ad_log_crsa'], $text);
+            $text = str_replace('admin-add-faq', $PMF_LANG['ad_log_crea'], $text);
             $text = str_replace('Usersave, ', $PMF_LANG['ad_log_ussa'], $text);
             $text = str_replace('Userdel, ', $PMF_LANG['ad_log_usde'], $text);
-            $text = str_replace('Beitragedit, ', $PMF_LANG['ad_log_beed'], $text);
+            $text = str_replace('admin-edit-faq, ', $PMF_LANG['ad_log_beed'], $text);
             $text = str_replace('Beitragdel, ', $PMF_LANG['ad_log_bede'], $text);
             echo $text;
             ?></small>

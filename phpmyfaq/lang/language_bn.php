@@ -61,8 +61,8 @@ $PMF_LANG["msgAuthor"] = "লেখক: ";
 $PMF_LANG["msgPrinterFriendly"] = "মুদ্রণ উপযোগি";
 $PMF_LANG["msgPrintArticle"] = "প্রশ্নটি মুদ্রণ করুন";
 $PMF_LANG["msgMakeXMLExport"] = "এক্স এম এল হিসাবে সংরক্ষন করুন";
-$PMF_LANG["msgAverageVote"] = "মোট নম্বর:";
-$PMF_LANG["msgVoteUseability"] = "নম্বর দিন:";
+$PMF_LANG["msgAverageVote"] = "মোট নম্বর";
+$PMF_LANG["msgVoteUseability"] = "নম্বর দিন";
 $PMF_LANG["msgVoteFrom"] = "মধ্যে";
 $PMF_LANG["msgVoteBad"] = "ব্যবহার যোগ্য নয়";
 $PMF_LANG["msgVoteGood"] = "মুল্যবান";
@@ -74,17 +74,17 @@ $PMF_LANG["msgWriteComment"] = "প্রশ্নটি সম্পর্ক�
 $PMF_LANG["msgShowCategory"] = "বিভাগ সংক্ষেপ: ";
 $PMF_LANG["msgCommentBy"] = "মতামত প্রদানকারি ";
 $PMF_LANG["msgCommentHeader"] = "মতামত দিন";
-$PMF_LANG["msgYourComment"] = "আপনার মতামত:";
+$PMF_LANG["msgYourComment"] = "আপনার মতামত";
 $PMF_LANG["msgCommentThanks"] = "মতামত দেয়ার জন্য ধন্যবাদ!";
 $PMF_LANG["msgSeeXMLFile"] = "এক্স এম এল ফাইল দেখুন";
 $PMF_LANG["msgSend2Friend"] = "বন্ধুকে পাঠান";
-$PMF_LANG["msgS2FName"] = "আপনার নাম:";
-$PMF_LANG["msgS2FEMail"] = "আপনার ই-মেইল ঠিকানা:";
-$PMF_LANG["msgS2FFriends"] = "আপনার বন্ধুরা:";
-$PMF_LANG["msgS2FEMails"] = ". ই-মেইল ঠিকানা:";
-$PMF_LANG["msgS2FText"] = "এই লেখাটি পাঠানো হবে:";
-$PMF_LANG["msgS2FText2"] = "লেখাটি যে ঠিকানায় পাওয়া যাবে:";
-$PMF_LANG["msgS2FMessage"] = "আপনার বন্ধুর জন্য বাড়তি তথ্য:";
+$PMF_LANG["msgS2FName"] = "আপনার নাম";
+$PMF_LANG["msgS2FEMail"] = "আপনার ই-মেইল ঠিকানা";
+$PMF_LANG["msgS2FFriends"] = "আপনার বন্ধুরা";
+$PMF_LANG["msgS2FEMails"] = ". ই-মেইল ঠিকানা";
+$PMF_LANG["msgS2FText"] = "এই লেখাটি পাঠানো হবে";
+$PMF_LANG["msgS2FText2"] = "লেখাটি যে ঠিকানায় পাওয়া যাবে";
+$PMF_LANG["msgS2FMessage"] = "আপনার বন্ধুর জন্য বাড়তি তথ্য";
 $PMF_LANG["msgS2FButton"] = "ই-মেইল পাঠান";
 $PMF_LANG["msgS2FThx"] = "পরার্মশের জন্য ধন্যবাদ!";
 $PMF_LANG["msgS2FMailSubject"] = "পরার্মশদাতা ";
@@ -100,12 +100,12 @@ $PMF_LANG["msgSearchContent"] = "প্রশ্ন: ";
 // new Content
 $PMF_LANG["msgNewContentHeader"] = "প্রশ্ন উত্তর সম্পর্কে মতামত";
 $PMF_LANG["msgNewContentAddon"] = "আপনার মতামত প্রশাসকের অনুমোদনের পর প্রকাশিত হবে। বাধ্যতামূলকঃ <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরোনাম</strong> এবং <strong>আপনার প্রশ্ন</strong>। চাবি-শব্দগুলি space দিয়ে আলাদা করুন।";
-$PMF_LANG["msgNewContentName"] = "আপনার নাম:";
-$PMF_LANG["msgNewContentMail"] = "আপনার ই-মেইল ঠিকানা:";
+$PMF_LANG["msgNewContentName"] = "আপনার নাম";
+$PMF_LANG["msgNewContentMail"] = "আপনার ই-মেইল ঠিকানা";
 $PMF_LANG["msgNewContentCategory"] = "বিভাগ";
-$PMF_LANG["msgNewContentTheme"] = "হেল্পলাইন:";
-$PMF_LANG["msgNewContentArticle"] = "আপনার উত্তর:";
-$PMF_LANG["msgNewContentKeywords"] = "চাবিশব্দ:";
+$PMF_LANG["msgNewContentTheme"] = "হেল্পলাইন";
+$PMF_LANG["msgNewContentArticle"] = "আপনার উত্তর";
+$PMF_LANG["msgNewContentKeywords"] = "চাবিশব্দ";
 $PMF_LANG["msgNewContentLink"] = "প্রশ্নটির সাথে সর্ম্পকিত লিংক";
 $PMF_LANG["msgNewContentSubmit"] = "জমা দিন";
 $PMF_LANG["msgInfo"] = "আরো তথ্য: ";
@@ -113,9 +113,9 @@ $PMF_LANG["msgNewContentThanks"] = "পরার্মশের জন্য ধ
 $PMF_LANG["msgNoQuestionsAvailable"] = "র্বতমানে উত্তরের অপেক্ষায় কোন প্রশ্ন নেই।";
 
 // ask Question
-$PMF_LANG["msgNewQuestion"] = "নীচে আপনার প্রশ্ন লিখুন:";
+$PMF_LANG["msgNewQuestion"] = "নীচে আপনার প্রশ্ন লিখুন";
 $PMF_LANG["msgAskCategory"] = "বিভাগ";
-$PMF_LANG["msgAskYourQuestion"] = "আপনার প্রশ্ন:";
+$PMF_LANG["msgAskYourQuestion"] = "আপনার প্রশ্ন";
 $PMF_LANG["msgAskThx4Mail"] = "<h2>প্রশ্নের জন্য ধন্যবাদ!</h2>";
 $PMF_LANG["msgDate_User"] = "তারিখ / ব্যবহারকারী";
 $PMF_LANG["msgQuestion2"] = "প্রশ্ন";
@@ -126,8 +126,8 @@ $PMF_LANG["msgQuestionText"] = "এখানে আপনি অন্য ব্
 $PMF_LANG["msgHelpText"] = "প্রশ্ন-উত্তর তালিকার কাঠামো খুবই সরল। আপনি <strong><a href=\"?action=show\">বিভাগ</a></strong> অনুসারে খুঁজতে পারেন অথবা প্রশ্ন-উত্তর তালিকা <strong><a href=\"?action=search\">অনুসন্ধান ব্যবস্থা</a></strong> ব্যবহার করে আপনার ইচ্ছা মত শব্দ দিয়ে খুঁজতে পারেন।";
 
 // Contact
-$PMF_LANG["msgContactEMail"] = "ওয়েবমাস্টারকে ই-মেইল করুন:";
-$PMF_LANG["msgMessage"] = "আপনার তথ্য:";
+$PMF_LANG["msgContactEMail"] = "ওয়েবমাস্টারকে ই-মেইল করুন";
+$PMF_LANG["msgMessage"] = "আপনার তথ্য";
 
 // Startseite
 $PMF_LANG["msgNews"] = " খবর";
@@ -222,17 +222,17 @@ $PMF_LANG["ad_entry_topic"] = "Topic";
 $PMF_LANG["ad_entry_action"] = "Action";
 $PMF_LANG["ad_entry_edit_1"] = "Edit Record";
 $PMF_LANG["ad_entry_edit_2"] = "";
-$PMF_LANG["ad_entry_theme"] = "Question:";
-$PMF_LANG["ad_entry_content"] = "Answer:";
-$PMF_LANG["ad_entry_keywords"] = "Keywords:";
-$PMF_LANG["ad_entry_author"] = "Author:";
-$PMF_LANG["ad_entry_category"] = "Entity:";
+$PMF_LANG["ad_entry_theme"] = "Question";
+$PMF_LANG["ad_entry_content"] = "Answer";
+$PMF_LANG["ad_entry_keywords"] = "Keywords";
+$PMF_LANG["ad_entry_author"] = "Author";
+$PMF_LANG["ad_entry_category"] = "Entity";
 $PMF_LANG["ad_entry_active"] = "Active?";
-$PMF_LANG["ad_entry_date"] = "Date:";
+$PMF_LANG["ad_entry_date"] = "Date";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
-$PMF_LANG["ad_entry_changelog"] = "Changelog:";
+$PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Comment by";
-$PMF_LANG["ad_entry_comment"] = "Comments:";
+$PMF_LANG["ad_entry_comment"] = "Comments";
 $PMF_LANG["ad_entry_save"] = "Save";
 $PMF_LANG["ad_entry_delete"] = "delete";
 $PMF_LANG["ad_entry_delcom_1"] = "Are you sure that the comment of the user";
@@ -251,11 +251,11 @@ $PMF_LANG["ad_entry_back"] = "Back";
 
 
 // Newsverwaltung
-$PMF_LANG["ad_news_header"] = "Article header:";
-$PMF_LANG["ad_news_text"] = "Text of the Record:";
-$PMF_LANG["ad_news_link_url"] = "Link (<strong>without http://</strong>):";
-$PMF_LANG["ad_news_link_title"] = "Title of the link:";
-$PMF_LANG["ad_news_link_target"] = "Target of the link:";
+$PMF_LANG["ad_news_header"] = "Article header";
+$PMF_LANG["ad_news_text"] = "Text of the Record";
+$PMF_LANG["ad_news_link_url"] = "Link (<strong>without http://</strong>)";
+$PMF_LANG["ad_news_link_title"] = "Title of the link";
+$PMF_LANG["ad_news_link_target"] = "Target of the link";
 $PMF_LANG["ad_news_link_window"] = "Link opens new window";
 $PMF_LANG["ad_news_link_faq"] = "Link within the FAQ";
 $PMF_LANG["ad_news_add"] = "Add News";
@@ -275,10 +275,10 @@ $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
 // Kategorieverwaltung
 $PMF_LANG["ad_categ_new"] = "Add new category";
-$PMF_LANG["ad_categ_catnum"] = "Entity Number:";
-$PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number:";
+$PMF_LANG["ad_categ_catnum"] = "Entity Number";
+$PMF_LANG["ad_categ_subcatnum"] = "Subcategory Number";
 $PMF_LANG["ad_categ_nya"] = "<em>not yet available!</em>";
-$PMF_LANG["ad_categ_titel"] = "Entity Title:";
+$PMF_LANG["ad_categ_titel"] = "Entity Title";
 $PMF_LANG["ad_categ_add"] = "Add Entity";
 $PMF_LANG["ad_categ_existing"] = "Existing Categories";
 $PMF_LANG["ad_categ_id"] = "#";
@@ -303,10 +303,10 @@ $PMF_LANG["ad_categ_deleted"] = "Entity deleted.";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc 	"] = "The Cookie was <strong>successfully</strong> set.";
-$PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options:";
+$PMF_LANG["ad_cookie_already"] = "A cookie was set already. You now have following options";
 $PMF_LANG["ad_cookie_again"] = "Set cookie again";
 $PMF_LANG["ad_cookie_delete"] = "delete cookie";
-$PMF_LANG["ad_cookie_no"] = "There is no cookie saved yet. With a cookie you could save your login script, thus no need to remember your login details again. You now have following options:";
+$PMF_LANG["ad_cookie_no"] = "There is no cookie saved yet. With a cookie you could save your login script, thus no need to remember your login details again. You now have following options";
 $PMF_LANG["ad_cookie_set"] = "Set cookie";
 $PMF_LANG["ad_cookie_deleted"] = "Cookie deleted successfully.";
 
@@ -315,9 +315,9 @@ $PMF_LANG["ad_adminlog"] = "AdminLog";
 
 // Passwd
 $PMF_LANG["ad_passwd_cop"] = "Change your Password";
-$PMF_LANG["ad_passwd_old"] = "Old password:";
-$PMF_LANG["ad_passwd_new"] = "New password:";
-$PMF_LANG["ad_passwd_con"] = "Confirm:";
+$PMF_LANG["ad_passwd_old"] = "Old password";
+$PMF_LANG["ad_passwd_new"] = "New password";
+$PMF_LANG["ad_passwd_con"] = "Confirm";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
 $PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
@@ -325,8 +325,8 @@ $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered
 
 // Adduser
 $PMF_LANG["ad_adus_adduser"] = "Add user";
-$PMF_LANG["ad_adus_name"] = "Name:";
-$PMF_LANG["ad_adus_password"] = "Password:";
+$PMF_LANG["ad_adus_name"] = "Name";
+$PMF_LANG["ad_adus_password"] = "Password";
 $PMF_LANG["ad_adus_add"] = "Add user";
 $PMF_LANG["ad_adus_suc"] = "User <strong>successfully</strong> added.";
 $PMF_LANG["ad_adus_edit"] = "Edit profile";
@@ -341,26 +341,26 @@ $PMF_LANG["ad_sess_time"] = "Time";
 $PMF_LANG["ad_sess_pageviews"] = "PageViews";
 $PMF_LANG["ad_sess_search"] = "Search";
 $PMF_LANG["ad_sess_sfs"] = "Search for sessions";
-$PMF_LANG["ad_sess_s_ip"] = "IP:";
-$PMF_LANG["ad_sess_s_minct"] = "min. actions:";
+$PMF_LANG["ad_sess_s_ip"] = "IP";
+$PMF_LANG["ad_sess_s_minct"] = "min. actions";
 $PMF_LANG["ad_sess_s_date"] = "Date";
 $PMF_LANG["ad_sess_s_after"] = "after";
 $PMF_LANG["ad_sess_s_before"] = "before";
 $PMF_LANG["ad_sess_s_search"] = "Search";
 $PMF_LANG["ad_sess_session"] = "Session";
 $PMF_LANG["ad_sess_r"] = "Search results for";
-$PMF_LANG["ad_sess_referer"] = "Referer:";
-$PMF_LANG["ad_sess_browser"] = "Browser:";
-$PMF_LANG["ad_sess_ai_rubrik"] = "Entity:";
-$PMF_LANG["ad_sess_ai_artikel"] = "Record:";
-$PMF_LANG["ad_sess_ai_sb"] = "Search-Strings:";
-$PMF_LANG["ad_sess_ai_sid"] = "Session ID:";
+$PMF_LANG["ad_sess_referer"] = "Referer";
+$PMF_LANG["ad_sess_browser"] = "Browser";
+$PMF_LANG["ad_sess_ai_rubrik"] = "Entity";
+$PMF_LANG["ad_sess_ai_artikel"] = "Record";
+$PMF_LANG["ad_sess_ai_sb"] = "Search-Strings";
+$PMF_LANG["ad_sess_ai_sid"] = "Session ID";
 $PMF_LANG["ad_sess_back"] = "Back";
 
 // Statistik
 $PMF_LANG["ad_rs"] = "Rating Statistics";
 $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
-$PMF_LANG["ad_rs_rating_2"] = "users shows:";
+$PMF_LANG["ad_rs_rating_2"] = "users shows";
 $PMF_LANG["ad_rs_red"] = "Red";
 $PMF_LANG["ad_rs_green"] = "Green";
 $PMF_LANG["ad_rs_altt"] = "with an average lower than 20%";
@@ -369,8 +369,8 @@ $PMF_LANG["ad_rs_no"] = "No ranking available";
 
 // Auth
 $PMF_LANG["ad_auth_insert"] = "আপনার পরিচয় ও গোপন সংকেত দিন।";
-$PMF_LANG["ad_auth_user"] = "পরিচয়:";
-$PMF_LANG["ad_auth_passwd"] = "গোপন সংকেত:";
+$PMF_LANG["ad_auth_user"] = "পরিচয়";
+$PMF_LANG["ad_auth_passwd"] = "গোপন সংকেত";
 $PMF_LANG["ad_auth_ok"] = "জমা দিন";
 $PMF_LANG["ad_auth_reset"] = "রিসেট করুন";
 $PMF_LANG["ad_auth_fail"] = "পরিচয় অথবা চাবিশব্দ ঠিক নেই।";
@@ -535,14 +535,14 @@ $PMF_LANG["rightsLanguage"]['restore'] = "restore backup";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "delete open questions";
 $PMF_LANG["rightsLanguage"]['changebtrevs'] = "edit revisions";
 
-$PMF_LANG["msgAttachedFiles"] = "ফাইল যোগ করুন:";
+$PMF_LANG["msgAttachedFiles"] = "ফাইল যোগ করুন";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG["ad_user_action"] = "action";
-$PMF_LANG["ad_entry_email"] = "Email address:";
-$PMF_LANG["ad_entry_allowComments"] = "Allow comments:";
+$PMF_LANG["ad_entry_email"] = "Email address";
+$PMF_LANG["ad_entry_allowComments"] = "Allow comments";
 $PMF_LANG["msgWriteNoComment"] = "আপনি এখানে মতামত দিতে পারবেন না";
-$PMF_LANG["ad_user_realname"] = "real name:";
+$PMF_LANG["ad_user_realname"] = "real name";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "আপনার IP নিষিদ্ধ করা হয়েছে।";
@@ -679,8 +679,8 @@ $PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
 $PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
 $PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Delete User";
-$PMF_LANG['ad_user_status'] = "Status:";
-$PMF_LANG['ad_user_lastModified'] = "last modified:";
+$PMF_LANG['ad_user_status'] = "Status";
+$PMF_LANG['ad_user_lastModified'] = "last modified";
 $PMF_LANG['ad_gen_cancel'] = "Cancel";
 $PMF_LANG["rightsLanguage"]['addglossary'] = "add glossary item";
 $PMF_LANG["rightsLanguage"]['editglossary'] = "edit glossary item";
@@ -691,9 +691,9 @@ $PMF_LANG['ad_user_loggedin'] = 'লগইন করেছেন ';
 $PMF_LANG['ad_group_details'] = "Group Details";
 $PMF_LANG['ad_group_add'] = "Add Group";
 $PMF_LANG['ad_group_add_link'] = "Add Group";
-$PMF_LANG['ad_group_name'] = "Name:";
-$PMF_LANG['ad_group_description'] = "Description:";
-$PMF_LANG['ad_group_autoJoin'] = "Auto-join:";
+$PMF_LANG['ad_group_name'] = "Name";
+$PMF_LANG['ad_group_description'] = "Description";
+$PMF_LANG['ad_group_autoJoin'] = "Auto-join";
 $PMF_LANG['ad_group_suc'] = "Group <strong>successfully</strong> added.";
 $PMF_LANG['ad_group_error_noName'] = "Please enter a group name. ";
 $PMF_LANG['ad_group_error_delete'] = "Group could not be deleted. ";
@@ -825,9 +825,9 @@ $PMF_LANG['msgNewTranslationHeader'] = 'অনুবাদ প্রস্তা
 $PMF_LANG['msgNewTranslationAddon'] = 'আপনার মতামত প্রশাসকের অনুমোদনের পর প্রকাশিত হবে। বাধ্যতামূলকঃ <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>শিরোনাম অনুবাদ</strong> এবং<strong>আপনার প্রশ্ন-উত্তর অনুবাদ</strong>। চাবি-শব্দগুলো space দিয়ে আলাদা করুন।';
 $PMF_LANG['msgNewTransSourcePane'] = 'মূল লেখা';
 $PMF_LANG['msgNewTranslationPane'] = 'অনুবাদ';
-$PMF_LANG['msgNewTranslationName'] = "Your Name:";
-$PMF_LANG['msgNewTranslationMail'] = "Your email address:";
-$PMF_LANG['msgNewTranslationKeywords'] = "Keywords:";
+$PMF_LANG['msgNewTranslationName'] = "Your Name";
+$PMF_LANG['msgNewTranslationMail'] = "Your email address";
+$PMF_LANG['msgNewTranslationKeywords'] = "Keywords";
 $PMF_LANG['msgNewTranslationSubmit'] = 'আপনার প্রস্তাবনা জমা দিন';
 $PMF_LANG['msgTranslate'] = 'অনুবাদের প্রস্তাব';
 $PMF_LANG['msgTranslateSubmit'] = 'অনুবাদ শুরু...';

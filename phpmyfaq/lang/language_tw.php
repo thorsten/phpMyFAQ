@@ -55,7 +55,7 @@ $PMF_LANG["msgAuthor"] = "作者: ";
 $PMF_LANG["msgPrinterFriendly"] = "友善列印版本";
 $PMF_LANG["msgPrintArticle"] = "列印此記錄";
 $PMF_LANG["msgMakeXMLExport"] = "輸出為 XML 檔案格式";
-$PMF_LANG["msgAverageVote"] = "平均評分:";
+$PMF_LANG["msgAverageVote"] = "平均評分";
 $PMF_LANG["msgVoteUseability"] = "評分此 FAQ";
 $PMF_LANG["msgVoteFrom"] = "來自(out of)";
 $PMF_LANG["msgVoteBad"] = "完全沒有價值";
@@ -68,17 +68,17 @@ $PMF_LANG["msgWriteComment"] = "對此 FAQ 發表評論";
 $PMF_LANG["msgShowCategory"] = "內容總覽: ";
 $PMF_LANG["msgCommentBy"] = "評價來自(Comment of) ";
 $PMF_LANG["msgCommentHeader"] = "評論此 FAQ";
-$PMF_LANG["msgYourComment"] = "您的評論:";
+$PMF_LANG["msgYourComment"] = "您的評論";
 $PMF_LANG["msgCommentThanks"] = "非常感謝您的評論!";
 $PMF_LANG["msgSeeXMLFile"] = "開啟 XML 檔案";
 $PMF_LANG["msgSend2Friend"] = "寄送 FAQ 給一個朋友";
-$PMF_LANG["msgS2FName"] = "您的姓名:";
-$PMF_LANG["msgS2FEMail"] = "您的 e-mail:";
-$PMF_LANG["msgS2FFriends"] = "您的朋友:";
-$PMF_LANG["msgS2FEMails"] = ". e-mail:";
-$PMF_LANG["msgS2FText"] = "以下文字將會被傳送:";
-$PMF_LANG["msgS2FText2"] = "您會在下列的位置找到此 FAQ:";
-$PMF_LANG["msgS2FMessage"] = "給您朋友的附加訊息:";
+$PMF_LANG["msgS2FName"] = "您的姓名";
+$PMF_LANG["msgS2FEMail"] = "您的 e-mail";
+$PMF_LANG["msgS2FFriends"] = "您的朋友";
+$PMF_LANG["msgS2FEMails"] = ". e-mail";
+$PMF_LANG["msgS2FText"] = "以下文字將會被傳送";
+$PMF_LANG["msgS2FText2"] = "您會在下列的位置找到此 FAQ";
+$PMF_LANG["msgS2FMessage"] = "給您朋友的附加訊息";
 $PMF_LANG["msgS2FButton"] = "寄送 e-mail";
 $PMF_LANG["msgS2FThx"] = "感謝您的推薦!";
 $PMF_LANG["msgS2FMailSubject"] = "推薦來自 ";
@@ -94,22 +94,22 @@ $PMF_LANG["msgSearchContent"] = "答案: ";
 // new Content 新內容
 $PMF_LANG["msgNewContentHeader"] = "提出一筆新的 FAQ";
 $PMF_LANG["msgNewContentAddon"] = "您的新增問題不會被馬上發表，需要管理員審核後才能發佈。必填欄位包括 <strong>您的姓名</strong>，<strong>您的 e-mail</strong>，<strong>類別</strong>，<strong>問題</strong> 和 <strong>答案</strong>。請使用逗號（,）隔開多個關鍵字。";
-$PMF_LANG["msgNewContentName"] = "您的姓名:";
+$PMF_LANG["msgNewContentName"] = "您的姓名";
 $PMF_LANG["msgNewContentMail"] = "Email";
-$PMF_LANG["msgNewContentCategory"] = "類別:";
-$PMF_LANG["msgNewContentTheme"] = "您的問題:";
-$PMF_LANG["msgNewContentArticle"] = "您的答案:";
-$PMF_LANG["msgNewContentKeywords"] = "關鍵字:";
-$PMF_LANG["msgNewContentLink"] = "此 FAQ 的連結:";
+$PMF_LANG["msgNewContentCategory"] = "類別";
+$PMF_LANG["msgNewContentTheme"] = "您的問題";
+$PMF_LANG["msgNewContentArticle"] = "您的答案";
+$PMF_LANG["msgNewContentKeywords"] = "關鍵字";
+$PMF_LANG["msgNewContentLink"] = "此 FAQ 的連結";
 $PMF_LANG["msgNewContentSubmit"] = "送出";
 $PMF_LANG["msgInfo"] = "更多資訊: ";
 $PMF_LANG["msgNewContentThanks"] = "感謝您的建議!";
 $PMF_LANG["msgNoQuestionsAvailable"] = "目前沒有等待回答的問題.";
 
 // ask Question 提問題
-$PMF_LANG["msgNewQuestion"] = "請於下方提問:";
-$PMF_LANG["msgAskCategory"] = "類別:";
-$PMF_LANG["msgAskYourQuestion"] = "您的問題:";
+$PMF_LANG["msgNewQuestion"] = "請於下方提問";
+$PMF_LANG["msgAskCategory"] = "類別";
+$PMF_LANG["msgAskYourQuestion"] = "您的問題";
 $PMF_LANG["msgAskThx4Mail"] = "感謝您的提問!";
 $PMF_LANG["msgDate_User"] = "日期 / 使用者";
 $PMF_LANG["msgQuestion2"] = "問題";
@@ -117,8 +117,8 @@ $PMF_LANG["msg2answer"] = "回答";
 $PMF_LANG["msgQuestionText"] = "您可以在這邊查看其他使用者已提過的問題，如果您回答這些問題，您的答案可能會被引用。";
 
 // Contact 聯絡
-$PMF_LANG["msgContactEMail"] = "Email FAQ 所有者:";
-$PMF_LANG["msgMessage"] = "您的訊息:";
+$PMF_LANG["msgContactEMail"] = "Email FAQ 所有者";
+$PMF_LANG["msgMessage"] = "您的訊息";
 
 // Startseite 初始網站頁面
 $PMF_LANG["msgTopTen"] = "最熱門的 FAQs";
@@ -214,16 +214,16 @@ $PMF_LANG["ad_entry_action"] = "動作";
 $PMF_LANG["ad_entry_edit_1"] = "編輯記錄";
 $PMF_LANG["ad_entry_edit_2"] = "";
 $PMF_LANG["ad_entry_theme"] = "問題";
-$PMF_LANG["ad_entry_content"] = "答案:";
-$PMF_LANG["ad_entry_keywords"] = "關鍵字:";
-$PMF_LANG["ad_entry_author"] = "作者:";
-$PMF_LANG["ad_entry_category"] = "類別:";
-$PMF_LANG["ad_entry_active"] = "可被看到:";
-$PMF_LANG["ad_entry_date"] = "日期:";
+$PMF_LANG["ad_entry_content"] = "答案";
+$PMF_LANG["ad_entry_keywords"] = "關鍵字";
+$PMF_LANG["ad_entry_author"] = "作者";
+$PMF_LANG["ad_entry_category"] = "類別";
+$PMF_LANG["ad_entry_active"] = "可被看到";
+$PMF_LANG["ad_entry_date"] = "日期";
 $PMF_LANG["ad_entry_changed"] = "已變更?";
-$PMF_LANG["ad_entry_changelog"] = "異動日誌 Changelog:";
+$PMF_LANG["ad_entry_changelog"] = "異動日誌 Changelog";
 $PMF_LANG["ad_entry_commentby"] = "評論來自 ";
-$PMF_LANG["ad_entry_comment"] = "評論:";
+$PMF_LANG["ad_entry_comment"] = "評論";
 $PMF_LANG["ad_entry_save"] = "儲存";
 $PMF_LANG["ad_entry_delete"] = "刪除";
 $PMF_LANG["ad_entry_delcom_1"] = "您確定這條評論來自該使用者 (Are you sure that the comment of the user)";
@@ -242,11 +242,11 @@ $PMF_LANG["ad_entry_back"] = "返回";
 
 
 // Newsverwaltung / News Administration / 新聞管理
-$PMF_LANG["ad_news_header"] = "文章標題:";
-$PMF_LANG["ad_news_text"] = "記錄內容:";
-$PMF_LANG["ad_news_link_url"] = "連結:";
-$PMF_LANG["ad_news_link_title"] = "超連結標題:";
-$PMF_LANG["ad_news_link_target"] = "超連結目標:";
+$PMF_LANG["ad_news_header"] = "文章標題";
+$PMF_LANG["ad_news_text"] = "記錄內容";
+$PMF_LANG["ad_news_link_url"] = "連結";
+$PMF_LANG["ad_news_link_title"] = "超連結標題";
+$PMF_LANG["ad_news_link_target"] = "超連結目標";
 $PMF_LANG["ad_news_link_window"] = "超連結以新視窗開啟";
 $PMF_LANG["ad_news_link_faq"] = "超連結為內部的 FAQ";
 $PMF_LANG["ad_news_add"] = "新增一筆新聞項目";
@@ -266,10 +266,10 @@ $PMF_LANG["ad_news_updatenews"] = "新聞項目已更新。";
 
 // Kategorieverwaltung / Entity Administration / 類別管理
 $PMF_LANG["ad_categ_new"] = "新增類別";
-$PMF_LANG["ad_categ_catnum"] = "類別編號:";
-$PMF_LANG["ad_categ_subcatnum"] = "子類別編號:";
+$PMF_LANG["ad_categ_catnum"] = "類別編號";
+$PMF_LANG["ad_categ_subcatnum"] = "子類別編號";
 $PMF_LANG["ad_categ_nya"] = "<em>尚未可以使用!</em>";
-$PMF_LANG["ad_categ_titel"] = "類別標題:";
+$PMF_LANG["ad_categ_titel"] = "類別標題";
 $PMF_LANG["ad_categ_add"] = "新增類別";
 $PMF_LANG["ad_categ_existing"] = "已存在類別";
 $PMF_LANG["ad_categ_id"] = "#";
@@ -293,7 +293,7 @@ $PMF_LANG["ad_categ_deleted"] = "類別已刪除。";
 
 // Cookies
 $PMF_LANG["ad_cookie_cookiesuc"] = "網頁瀏覽器的 Cookie <strong>設定成功</strong>。";
-$PMF_LANG["ad_cookie_already"] = "一個網頁瀏覽器的  Cookie 早已設定成功. 您目前有下列的選項:";
+$PMF_LANG["ad_cookie_already"] = "一個網頁瀏覽器的  Cookie 早已設定成功. 您目前有下列的選項";
 $PMF_LANG["ad_cookie_again"] = "重新設定網頁瀏覽器的  Cookie";
 $PMF_LANG["ad_cookie_delete"] = "刪除網頁瀏覽器的  Cookie";
 $PMF_LANG["ad_cookie_no"] = "目前尚未設定網頁瀏覽器的  Cookie。 Cookie 可以在此電腦上儲存您的登錄訊息，因此您以後可以不用記登入的資訊了。您有下面的選項:<br>(There is no cookie saved yet. With a cookie you could save your login script, thus no need to remember your login details again. You now have following options:)";
@@ -305,9 +305,9 @@ $PMF_LANG["ad_adminlog"] = "管理員日誌 (AdminLog)";
 
 // Passwd 密碼
 $PMF_LANG["ad_passwd_cop"] = "修改您的密碼";
-$PMF_LANG["ad_passwd_old"] = "請輸入舊的密碼:";
-$PMF_LANG["ad_passwd_new"] = "請輸入新的密碼:";
-$PMF_LANG["ad_passwd_con"] = "請再次輸入新的密碼以供確認:";
+$PMF_LANG["ad_passwd_old"] = "請輸入舊的密碼";
+$PMF_LANG["ad_passwd_new"] = "請輸入新的密碼";
+$PMF_LANG["ad_passwd_con"] = "請再次輸入新的密碼以供確認";
 $PMF_LANG["ad_passwd_change"] = "修改密碼";
 $PMF_LANG["ad_passwd_suc"] = "密碼修改成功。";
 $PMF_LANG["ad_passwd_remark"] = "<strong>注意:</strong><br />必須重新設置 Cookie，新密碼才能生效。";
@@ -315,8 +315,8 @@ $PMF_LANG["ad_passwd_fail"] = "舊密碼<strong>必須</strong> 正確地輸入�
 
 // Adduser 新增使用者
 $PMF_LANG["ad_adus_adduser"] = "新增使用者帳號";
-$PMF_LANG["ad_adus_name"] = "使用者姓名:";
-$PMF_LANG["ad_adus_password"] = "密碼:";
+$PMF_LANG["ad_adus_name"] = "使用者姓名";
+$PMF_LANG["ad_adus_password"] = "密碼";
 $PMF_LANG["ad_adus_add"] = "新增使用者";
 $PMF_LANG["ad_adus_suc"] = "使用者<strong>新增成功</strong>。";
 $PMF_LANG["ad_adus_edit"] = "編輯使用者資料";
@@ -331,7 +331,7 @@ $PMF_LANG["ad_sess_time"] = "時間";
 $PMF_LANG["ad_sess_pageviews"] = "頁面檢視次數";
 $PMF_LANG["ad_sess_search"] = "搜尋";
 $PMF_LANG["ad_sess_sfs"] = "搜尋連線 (Search for sessions)";
-$PMF_LANG["ad_sess_s_ip"] = "IP 位置:";
+$PMF_LANG["ad_sess_s_ip"] = "IP 位置";
 $PMF_LANG["ad_sess_s_minct"] = "分鐘. 動作: (min. actions:)";
 $PMF_LANG["ad_sess_s_date"] = "日期";
 $PMF_LANG["ad_sess_s_after"] = "此日期之後 (after)";
@@ -339,12 +339,12 @@ $PMF_LANG["ad_sess_s_before"] = "此日期之前 (before)";
 $PMF_LANG["ad_sess_s_search"] = "搜尋";
 $PMF_LANG["ad_sess_session"] = "連線 Session";
 $PMF_LANG["ad_sess_r"] = "搜尋符合以下條件的結果 (Search results for)";
-$PMF_LANG["ad_sess_referer"] = "引用: (Referer):";
+$PMF_LANG["ad_sess_referer"] = "引用: (Referer)";
 $PMF_LANG["ad_sess_browser"] = "網頁瀏覽器 (Browser:)";
-$PMF_LANG["ad_sess_ai_rubrik"] = "類別:";
-$PMF_LANG["ad_sess_ai_artikel"] = "記錄:";
-$PMF_LANG["ad_sess_ai_sb"] = "搜尋字串:";
-$PMF_LANG["ad_sess_ai_sid"] = "連線 Session ID:";
+$PMF_LANG["ad_sess_ai_rubrik"] = "類別";
+$PMF_LANG["ad_sess_ai_artikel"] = "記錄";
+$PMF_LANG["ad_sess_ai_sb"] = "搜尋字串";
+$PMF_LANG["ad_sess_ai_sid"] = "連線 Session ID";
 $PMF_LANG["ad_sess_back"] = "返回";
 
 // Statistik / statistic / 統計
@@ -510,14 +510,14 @@ $PMF_LANG["rightsLanguage"]['restore'] = "還原備份";
 $PMF_LANG["rightsLanguage"]['delquestion'] = "刪除已開啟的問題 (delete opened question)";
 $PMF_LANG["rightsLanguage"]['changebtrevs'] = "編輯版次 (Edit revisions)";
 
-$PMF_LANG["msgAttachedFiles"] = "附加檔案:";
+$PMF_LANG["msgAttachedFiles"] = "附加檔案";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten 開發者
 $PMF_LANG["ad_user_action"] = "動作";
-$PMF_LANG["ad_entry_email"] = "Email:";
-$PMF_LANG["ad_entry_allowComments"] = "允許評論:";
+$PMF_LANG["ad_entry_email"] = "Email";
+$PMF_LANG["ad_entry_allowComments"] = "允許評論";
 $PMF_LANG["msgWriteNoComment"] = "您不能在此留下評論";
-$PMF_LANG["ad_user_realname"] = "真實姓名:";
+$PMF_LANG["ad_user_realname"] = "真實姓名";
 $PMF_LANG["ad_export_generate_pdf"] = "建立 PDF 檔案";
 $PMF_LANG["ad_export_full_faq"] = "您的 FAQ 以輸出為一個 PDF 檔案: ";
 $PMF_LANG["err_bannedIP"] = "您的 IP 來源位置已被禁止訪視。";
@@ -681,7 +681,7 @@ $PMF_LANG['ad_group_removeMember'] = "-";
 $PMF_LANG['ad_export_which_cat'] = "限制 FAQ 資料被輸出 (非必要選項) <br>Limit the FAQ data to be exported (optional)";
 $PMF_LANG['ad_export_cat_downwards'] = "包含子類別? Include child categories?";
 $PMF_LANG['ad_export_type'] = "輸出的格式 Format of the export";
-$PMF_LANG['ad_export_type_choose'] = "支援格式 Supported formats:";
+$PMF_LANG['ad_export_type_choose'] = "支援格式 Supported formats";
 $PMF_LANG['ad_export_download_view'] = '下載或是檢視? Download or view inline?';
 $PMF_LANG['ad_export_download'] = "下載 download";
 $PMF_LANG['ad_export_view'] = "檢視 view in-line";
@@ -689,13 +689,13 @@ $PMF_LANG['ad_export_gen_xhtml'] = "建立 XHTML 檔案 create XHTML file";
 
 // added v2.0.0 - 2006-07-22 by Matteo 開發者
 $PMF_LANG['ad_news_data'] = "FAQ 新聞 News";
-$PMF_LANG['ad_news_author_name'] = "作者姓名 Author name:";
-$PMF_LANG['ad_news_author_email'] = "作者 Author email:";
-$PMF_LANG['ad_news_set_active'] = "啟用 Activate:";
-$PMF_LANG['ad_news_allowComments'] = "允許評論 Allow comments:";
+$PMF_LANG['ad_news_author_name'] = "作者姓名 Author name";
+$PMF_LANG['ad_news_author_email'] = "作者 Author email";
+$PMF_LANG['ad_news_set_active'] = "啟用 Activate";
+$PMF_LANG['ad_news_allowComments'] = "允許評論 Allow comments";
 $PMF_LANG['ad_news_expiration_window'] = "新聞即將過期時間視窗 (非必要) News expiration time window (optional)";
-$PMF_LANG['ad_news_from'] = "來自 From:";
-$PMF_LANG['ad_news_to'] = "至 To:";
+$PMF_LANG['ad_news_from'] = "來自 From";
+$PMF_LANG['ad_news_to'] = "至 To";
 $PMF_LANG['ad_news_insertfail'] = "插入新聞項目至資料庫，發生錯誤。An error occurred inserting the news item into the database.";
 $PMF_LANG['ad_news_updatefail'] = "更新新聞項目至資料庫，發生錯誤。An error occurred updating the news item into the database.";
 $PMF_LANG['newsShowCurrent'] = "顯示目前新聞。Show current news.";
@@ -757,8 +757,8 @@ $PMF_LANG["ad_categ_show"] = "類別概況 CategoryHelper overview";
 $PMF_LANG['ad_menu_categ_structure'] = "類別概況包含它的語言 Entity Overview including its languages";
 
 // added v2.0.0 - 2006-09-26 by Thorsten 開發者
-$PMF_LANG['ad_entry_userpermission'] = "使用者權限 User permissions:";
-$PMF_LANG['ad_entry_grouppermission'] = "群組權限 Group permissions:";
+$PMF_LANG['ad_entry_userpermission'] = "使用者權限 User permissions";
+$PMF_LANG['ad_entry_grouppermission'] = "群組權限 Group permissions";
 $PMF_LANG['ad_entry_all_users'] = "全部使用者的存取 Access for all users";
 $PMF_LANG['ad_entry_restricted_users'] = "限制存取 Restricted access to";
 $PMF_LANG['ad_entry_all_groups'] = "全部群組的存取 Access for all groups";
@@ -795,9 +795,9 @@ $PMF_LANG['msgNewTranslationHeader'] = "翻譯建議 Translation proposal";
 $PMF_LANG['msgNewTranslationAddon'] = "您的建議尚不能直接發佈，但是當管理員收到，必填欄位是 <strong>您的姓名</strong>，<strong>您的 email</strong>，<strong>您的問題翻譯</strong> 與 <strong>您的答案翻譯</strong>。請用逗號(,)來分隔關鍵字。<br>Your proposal will not be published right away, but will be released by the administrator upon receipt. Required  fields are <strong>your Name</strong>, <strong>your email address</strong>, <strong>your question translation</strong> and <strong>your answer translation</strong>. Please separate the keywords with commas only.";
 $PMF_LANG['msgNewTransSourcePane'] = "原始程式碼區 Source pane";
 $PMF_LANG['msgNewTranslationPane'] = "翻譯區 Translation pane";
-$PMF_LANG['msgNewTranslationName'] = "您的姓名 Your Name:";
-$PMF_LANG['msgNewTranslationMail'] = "您的 email : <br>Your email address:";
-$PMF_LANG['msgNewTranslationKeywords'] = "關鍵字 Keywords:";
+$PMF_LANG['msgNewTranslationName'] = "您的姓名 Your Name";
+$PMF_LANG['msgNewTranslationMail'] = "您的 email : <br>Your email address";
+$PMF_LANG['msgNewTranslationKeywords'] = "關鍵字 Keywords";
 $PMF_LANG['msgNewTranslationSubmit'] = "送出您的提議 Submit your proposal";
 $PMF_LANG['msgTranslate'] = "翻譯此 FAQTranslate this FAQ";
 $PMF_LANG['msgTranslateSubmit'] = "開始翻譯工作...<br>Start translation...";
@@ -814,8 +814,8 @@ $PMF_LANG['ad_news_link_parent'] = "連結以現有視窗開啟 Link opens in pa
 // added v2.0.0 - 2007-03-04 by Thorsten 開發者
 $PMF_LANG['ad_menu_comments'] = "評論 Comments";
 $PMF_LANG['ad_comment_administration'] = "評論管理 Comments administration";
-$PMF_LANG['ad_comment_faqs'] = "FAQ 記錄下的評論 Comments in FAQ records:";
-$PMF_LANG['ad_comment_news'] = "新聞記錄下的評論 Comments in News records:";
+$PMF_LANG['ad_comment_faqs'] = "FAQ 記錄下的評論 Comments in FAQ records";
+$PMF_LANG['ad_comment_news'] = "新聞記錄下的評論 Comments in News records";
 $PMF_LANG['msgPDF'] = "PDF 版本 version";
 $PMF_LANG['ad_groups'] = "群組 Groups";
 
@@ -845,18 +845,18 @@ $PMF_LANG['ad_system_info'] = "系統資訊 System Information";
 
 // added 2.5.0-alpha - 2008-01-25 by Elger 開發者
 $PMF_LANG['msgRegisterUser'] = "註冊 Sign up";
-$PMF_LANG["ad_user_loginname"] = "登入名稱 Login name:";
+$PMF_LANG["ad_user_loginname"] = "登入名稱 Login name";
 $PMF_LANG['errorRegistration'] = "此欄位是必需的! This field is required!";
 $PMF_LANG['submitRegister'] = "建立 Create";
 $PMF_LANG['msgUserData'] = "註冊需要提供使用者資訊 User information required for registration";
 $PMF_LANG['captchaError'] = "請輸入正確的 captcha 驗證碼 ! Please enter the right captcha code!";
-$PMF_LANG['msgRegError'] = "下列錯誤發生，請修正: <br>Following errors occured. Please correct them:";
+$PMF_LANG['msgRegError'] = "下列錯誤發生，請修正: <br>Following errors occured. Please correct them";
 $PMF_LANG['successMessage'] = "您的註冊成功，您很快會收到一封確認郵件，內有您的登入資訊。<br>Your registration was successful. You will soon receive a confirmation mail with your login data!";
 $PMF_LANG['msgRegThankYou'] = "感謝您的註冊! Thank you for your registration!";
 $PMF_LANG['emailRegSubject'] = "[%sitename%] 註冊 Registration: 新使用者 new user";
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten 開發者
-$PMF_LANG['msgMostPopularSearches'] = "熱門搜尋是: The most popular searches are:";
+$PMF_LANG['msgMostPopularSearches'] = "熱門搜尋是: The most popular searches are";
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "啟用內建的所見即得的文字編輯器 (WYSIWYG editor) <br> Enable bundled WYSIWYG editor (default: enabled)");
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy 開發者
@@ -1119,7 +1119,7 @@ $PMF_LANG['msgOnlineMode'] = "FAQ 在線上 (is online)";
 // added v2.8.0-alpha3 - 2012-08-30 by Thorsten 開發者
 $PMF_LANG['msgShowMore'] = " 顯示更多 (show more)";
 $PMF_LANG['msgQuestionAnswered'] = "問題已被回答 (Question answered)";
-$PMF_LANG['msgMessageQuestionAnswered'] = "您的問題 %s 已被回答，請Your question at %s was answered. Please check it here:";
+$PMF_LANG['msgMessageQuestionAnswered'] = "您的問題 %s 已被回答，請Your question at %s was answered. Please check it here";
 
 // added v2.8.0-alpha3 - 2012-11-03 by Thorsten
 $PMF_LANG["rightsLanguage"]["addattachment"] = "權限 - 新增附加檔案 Right to add attachments";
