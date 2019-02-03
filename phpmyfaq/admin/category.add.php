@@ -125,7 +125,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         <?= $PMF_LANG['ad_categ_owner'] ?>:
                     </label>
                     <div class="col-lg-4">
-                      <select name="user_id" id="user_id" size="1" class="custom-select">
+                      <select name="user_id" id="user_id" class="form-control">
                           <?= $user->getAllUserOptions() ?>
                       </select>
                     </div>
@@ -135,7 +135,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                         <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>
                           :</label>
                         <div class="col-lg-4">
-                          <select name="group_id" id="group_id" size="1" class="custom-select">
+                          <select name="group_id" id="group_id" class="form-control">
                               <?php
                               if ($faqConfig->get('main.enableCategoryRestrictions')) {
                                   echo $user->perm->getAllGroupsOptions([], $currentUserId);
@@ -163,7 +163,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                                 <input type="radio" name="grouppermission" value="restricted">
                                   <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
                               </label>
-                              <select name="restricted_groups[]" size="3" class="custom-select" multiple>
+                              <select name="restricted_groups[]" size="3" class="form-control" multiple>
                                   <?php
                                   if ($faqConfig->get('main.enableCategoryRestrictions')) {
                                       echo $user->perm->getAllGroupsOptions([], $currentUserId);
@@ -188,7 +188,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                             <input type="radio" name="userpermission" value="restricted">
                               <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                           </label>
-                          <select name="restricted_users" size="1" class="custom-select">
+                          <select name="restricted_users" class="form-control">
                               <?= $user->getAllUserOptions(1) ?>
                           </select>
                         </div>

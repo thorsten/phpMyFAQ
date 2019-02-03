@@ -5,8 +5,6 @@
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -138,9 +136,9 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <fieldset>
                 <legend>Database setup</legend>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"class="col-sm-3 col-form-label" for="sql_type">Server:</label>
+                        <label class="col-sm-3 col-form-label" for="sql_type">Server:</label>
                         <div class="col-sm-9">
-                            <select name="sql_type" id="sql_type" size="1" class="form-control">
+                            <select name="sql_type" id="sql_type" class="form-control">
                                 <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
                             <p class="form-text text-muted">Please select your preferred database type.</p>
@@ -149,7 +147,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                     <div id="dbdatafull" style="display: block;">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_server">Host/Socket:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="e.g. 127.0.0.1">
@@ -194,7 +192,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="sqltblpre">Table prefix:</label>
+                        <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
                         <div class="col-sm-9">
                             <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
                             <p class="form-text text-muted">
@@ -273,7 +271,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="language">Default language:</label>
                         <div class="col-sm-9">
-                            <select name="language" size="1" id="language" class="form-control">
+                            <select name="language" id="language" class="form-control">
                             <?php
                                 if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
                                     $options = array();
@@ -303,7 +301,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
                         <div class="col-sm-9">
-                                <select id="permLevel" name="permLevel" size="1" class="form-control">
+                                <select id="permLevel" name="permLevel" class="form-control">
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                                     <option value="large">Large (with sections support)</option>

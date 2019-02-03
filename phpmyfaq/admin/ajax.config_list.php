@@ -94,7 +94,7 @@ function renderInputForm($key, $type)
             break;
 
         case 'select':
-            printf('<select name="edit[%s]" size="1" class="form-control">', $key);
+            printf('<select name="edit[%s]" class="form-control">', $key);
 
             switch ($key) {
 

@@ -136,7 +136,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                   <?= $PMF_LANG['ad_categ_owner'] ?>:
               </label>
               <div class="col-lg-4">
-                <select name="user_id" size="1" class="custom-select">
+                <select name="user_id" class="form-control">
                     <?= $user->getAllUserOptions($categoryData->getUserId()) ?>
                 </select>
               </div>
@@ -146,7 +146,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <div class="form-group row">
                   <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
                   <div class="col-lg-4">
-                    <select name="group_id" id="group_id" size="1" class="custom-select">
+                    <select name="group_id" id="group_id" class="form-control">
                         <?php
                         if ($faqConfig->get('main.enableCategoryRestrictions')) {
                             echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $currentUserId);
@@ -173,7 +173,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                           <?php echo($restrictedGroups ? 'checked' : '') ?>>
                         <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
-                    <select name="restricted_groups[]" size="3" class="custom-select" multiple>
+                    <select name="restricted_groups[]" size="3" class="form-control" multiple>
                         <?php
                         if ($faqConfig->get('main.enableCategoryRestrictions')) {
                             echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
@@ -203,7 +203,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                       <?= ($restrictedUsers ? 'checked' : '') ?>>
                     <?= $PMF_LANG['ad_entry_restricted_users'] ?>
                 </label>
-                <select name="restricted_users" class="custom-select" size="1">
+                <select name="restricted_users" class="form-control">
                     <?= $user->getAllUserOptions($userPermission[0]) ?>
                 </select>
               </div>

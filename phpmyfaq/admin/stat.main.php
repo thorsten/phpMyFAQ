@@ -203,7 +203,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                     <tr>
                         <td><?= $PMF_LANG['ad_stat_browse'];
     ?>:</td>
-                        <td class="col-lg-2"><select name="day" size="1">
+                        <td class="col-lg-2"><select name="day" class="form-control">
 <?php
     foreach ($trackingDates as $trackingDate) {
         printf('<option value="%d"', $trackingDate);
@@ -236,7 +236,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                         <label class="col-form-label" for="month"><?= $PMF_LANG['ad_stat_choose'];
     ?>:</label>
                         <div class="controls">
-                            <select name="month" id="month" size="1">
+                            <select name="month" id="month" class="form-control">
 <?php
     $oldValue = mktime(0, 0, 0, 1, 1, 1970);
     $isFirstDate = true;

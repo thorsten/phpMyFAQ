@@ -80,7 +80,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <div class="form-group row">
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
                 <div class="col-lg-4">
-                  <select name="catlang" size="1" class="custom-select">
+                  <select name="catlang" class="form-control">
                       <?= $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
                   </select>
                 </div>
@@ -96,7 +96,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <div class="form-group row">
                 <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_owner'] ?>:</label>
                 <div class="col-lg-4">
-                  <select name="user_id" size="1" class="custom-select">
+                  <select name="user_id" class="form-control">
                       <?= $user->getAllUserOptions($category->categoryName[$id]['user_id']) ?>
                   </select>
                 </div>

@@ -158,6 +158,34 @@ $(document).ready(function () {
   });
 
   // Instantiate the Typeahead UI
+  $('.pmf-tags-autocomplete').typeahead({
+    autoSelect: true,
+    delay: 300,
+    minLength: 1,
+    source: (request, response) => {
+      $.ajax({
+        url: 'ajaxresponse.php',
+        type: 'GET',
+        dataType: 'JSON',
+        data: 'search=' + request,
+        success: (data) => {
+          response(data.map((item) => {
+            return {
+              url: item.faqLink,
+              question: item.faqQuestion
+            };
+          }));
+        }
+      });
+    },
+    displayText: (item) => {
+      return typeof item !== 'undefined' && typeof item.question !== 'undefined' ? item.question : item;
+    },
+    afterSelect: (event) => {
+      window.location.href = event.url;
+    }
+  });
+
   /*
   $('.pmf-tags-autocomplete').typeahead(null, {
     source: tags.ttAdapter(),

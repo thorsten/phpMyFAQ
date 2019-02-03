@@ -56,9 +56,9 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <input type="hidden" name="cat" value="<?= $id ?>" />
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>" />
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_change'] ?></label>
+                        <label class="col-lg-2 col-form-label" for="change"><?= $PMF_LANG['ad_categ_change'] ?></label>
                         <div class="col-lg-4">
-                           <select name="change" size="1" class="custom-select">
+                           <select id="change" name="change" class="form-control">
                     <?php
                     foreach ($category->categories as $cat) {
                         if ($id != $cat['id']) {

@@ -57,7 +57,7 @@ if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTa
                             <?= $PMF_LANG['ad_entry_category'] ?>
                         </label>
                         <div class="col-lg-4">
-                            <select name="catid" id="catid" size="1" class="form-control">
+                            <select name="catid" id="catid" class="form-control">
                                 <option value="0"><?= $PMF_LANG['msgShowAllCategories'] ?></option>
                                 <?= $categoryHelper->renderOptions(0) ?>
                             </select>

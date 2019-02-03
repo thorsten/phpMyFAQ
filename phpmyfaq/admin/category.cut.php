@@ -50,7 +50,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_paste2'] ?></label>
                         <div class="col-lg-4">
-                            <select name="after" size="1" class="custom-select">
+                            <select name="after" class="form-control">
 <?php
     foreach ($category->getCategoryTree() as $cat) {
         $indent = '';
