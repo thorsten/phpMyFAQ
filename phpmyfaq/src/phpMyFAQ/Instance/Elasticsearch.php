@@ -62,22 +62,22 @@ class Elasticsearch
                     'type' => 'integer'
                 ],
                 'question' => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'autocomplete',
                     'search_analyzer' => 'standard'
                 ],
                 'answer' => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'autocomplete',
                     'search_analyzer' => 'standard'
                 ],
                 'keywords' => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'autocomplete',
                     'search_analyzer' => 'standard'
                 ],
                 'categories' => [
-                    'type' => 'string',
+                    'type' => 'text',
                     'analyzer' => 'autocomplete',
                     'search_analyzer' => 'standard'
                 ]
