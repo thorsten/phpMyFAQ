@@ -472,7 +472,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
                             <div class="input-group">
                                 <span class="input-group-addon"><i aria-hidden="true" class="fa fa-user"></i></span>
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
-                                       class="form-control pmf-user-autocomplete"
+                                       class="form-control pmf-user-autocomplete" autocomplete="off"
                                        placeholder="<?php echo $PMF_LANG['ad_auth_user'] ?>">
                                 <span class="input-group-btn">
                                     <button class="btn btn-primary" type="submit">

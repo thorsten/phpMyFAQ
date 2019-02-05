@@ -9,12 +9,10 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2018 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-03
  */
@@ -35,8 +33,22 @@ $http->addHeader();
 //
 // Set user permissions
 //
-$currentUser = -1;
-$currentGroups = array(-1);
+$user = PMF_User_CurrentUser::getFromCookie($faqConfig);
+if (!$user instanceof PMF_User_CurrentUser) {
+    $user = PMF_User_CurrentUser::getFromSession($faqConfig);
+}
+
+if ($user instanceof PMF_User_CurrentUser) {
+    $currentUser = $user->getUserId();
+    if ($user->perm instanceof PMF_Perm_Medium) {
+        $currentGroups = $user->perm->getUserGroups($currentUser);
+    } else {
+        $currentGroups = array(-1);
+    }
+    if (0 === count($currentGroups)) {
+        $currentGroups = array(-1);
+    }
+}
 
 $action = PMF_Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 $language = PMF_Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
