@@ -500,7 +500,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         <div class="card-body">
                             <div class="input-group">
                                 <input type="text" id="user_list_autocomplete" name="user_list_search"
-                                       class="form-control pmf-user-autocomplete"
+                                       class="form-control pmf-user-autocomplete" autocomplete="off"
                                        placeholder="<?= $PMF_LANG['ad_auth_user'] ?>">
                             </div>
                         </div>
