@@ -3,8 +3,6 @@
 /**
  * The main start page with the Top10 and the latest messages.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -48,6 +46,19 @@ if (!is_null($archived)) {
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
+$startPageCategories = $category->getHomeCategories();
+if (count($startPageCategories) > 0) {
+    $template->parseBlock(
+        'writeContent',
+        'startPageCategories',
+        [
+            'categoryUrl' => $startPageCategories['url'],
+            'categoryName' => $startPageCategories['name'],
+            'categoryDescription' => $startPageCategories['description'],
+            'categoryImage' => $startPageCategories['image']
+        ]
+    );
+}
 
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {

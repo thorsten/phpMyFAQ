@@ -1,4 +1,23 @@
 <!-- Start page -->
+<div class="row mb-3">
+  <div class="col-12">
+    <div class="card-deck">
+      [startPageCategories]
+      <div class="card">
+        <a href="{{ categoryUrl }}">
+          <img class="card-img-top" width="200" height="200" src="images/{{ categoryImage }}" alt="{{ categoryName }}">
+        </a>
+        <div class="card-body">
+          <h5 class="card-title text-center">
+            <a href="{{ categoryUrl }}">{{ categoryName }}</a>
+          </h5>
+          <p class="card-text">{{ categoryDescription }}</p>
+        </div>
+      </div>
+      [/startPageCategories]
+    </div>
+  </div>
+</div>
 <div class="row">
   <div class="col-12">
     <div class="card-columns">
