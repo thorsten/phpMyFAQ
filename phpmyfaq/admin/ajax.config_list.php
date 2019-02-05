@@ -220,7 +220,7 @@ function renderInputForm($key, $type)
 
         case 'checkbox':
             printf(
-                '<div class="checkbox"><label><input type="checkbox" name="edit[%s]" value="true"',
+                '<div class="form-check"><input class="form-check-input" type="checkbox" name="edit[%s]" value="true"',
                 $key
             );
             if ($faqConfig->get($key)) {
@@ -229,18 +229,21 @@ function renderInputForm($key, $type)
             if ('ldap.ldapSupport' === $key && !extension_loaded('ldap')) {
                 echo ' disabled';
             }
+            if ('security.useSslForLogins' === $key && empty($_SERVER['HTTPS'])) {
+                echo ' disabled';
+            }
             if ('security.useSslOnly' === $key && empty($_SERVER['HTTPS'])) {
                 echo ' disabled';
             }
             if ('security.ssoSupport' === $key && empty($_SERVER['REMOTE_USER'])) {
                 echo ' disabled';
             }
-            echo '>&nbsp;</label></div></div>';
+            echo '></div></div>';
             break;
 
         case 'print':
             printf(
-                '<input type="text" readonly name="edit[%s]" class="form-control" value="%s"></div>',
+                '<input type="text" readonly name="edit[%s]" class="form-control-plaintext" value="%s"></div>',
                 $key,
                 str_replace('"', '&quot;', $faqConfig->get($key)),
                 $faqConfig->get($key)
@@ -256,8 +259,8 @@ Utils::moveToTop($LANG_CONF, 'main.maintenanceMode');
 foreach ($LANG_CONF as $key => $value) {
     if (strpos($key, $configMode) === 0) {
         if ('socialnetworks.twitterConsumerKey' == $key) {
-            echo '<div class="form-group row"><label class="col-form-label col-lg-3"></label>';
-            echo '<div class="col-lg-9">';
+            echo '<div class="form-group row"><label class="col-form-label col-lg-4"></label>';
+            echo '<div class="col-lg-8">';
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
@@ -277,16 +280,16 @@ foreach ($LANG_CONF as $key => $value) {
             }
             echo '</div></div>';
         }
-        ?>
-            <div class="form-group row">
-                <label class="col-lg-4 col-form-label">
-<?php
-        switch ($key) {
 
+        printf(
+            '<div class="form-group row"><label class="col-lg-4 col-form-label %s">',
+            $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
+            );
+
+        switch ($key) {
             case 'records.maxAttachmentSize':
                 printf($value[1], ini_get('upload_max_filesize'));
                 break;
-
             case 'main.dateFormat':
                 printf(
                     '<a target="_blank" href="http://www.php.net/manual/%s/function.date.php">%s</a>',
@@ -294,12 +297,11 @@ foreach ($LANG_CONF as $key => $value) {
                     $value[1]
                 );
                 break;
-
             default:
                 echo $value[1];
                 break;
         }
-        ?>
+?>
                 </label>
                 <div class="col-lg-8">
                     <?php renderInputForm($key, $value[0]) ?>
