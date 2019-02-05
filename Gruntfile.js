@@ -174,7 +174,7 @@ module.exports = function (grunt) {
           'node_modules/mermaid/dist/mermaid.js',
           'node_modules/bxslider/dist/jquery.bxslider.js',
           'node_modules/cookieconsent/src/cookieconsent.js',
-          'node_modules/wordcloud/src/wordcloud2.js'
+          'node_modules/bs-custom-file-input/dist/bs-custom-file-input.js'
         ],
         dest: 'phpmyfaq/assets/themes/default/js/vendors.js'
       },

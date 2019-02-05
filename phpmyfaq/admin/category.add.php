@@ -204,6 +204,11 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
                 </form>
               </div>
             </div>
+            <script>
+              document.addEventListener('DOMContentLoaded', () => {
+                bsCustomFileInput.init()
+              });
+            </script>
 <?php
 
 } else {

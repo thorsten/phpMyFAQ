@@ -913,24 +913,11 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
     <script src="assets/js/record.js"></script>
     <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        bsCustomFileInput.init()
+      });
 
     $(function() {
-        /*
-        // DatePicker
-        $('.date-pick').datePicker();
-        $('#date').datePicker({startDate: '1900-01-01'});
-        $('#date').bind('dateSelected', function (e, date, $td, status) {
-            if (status) {
-                var dt = new Date();
-                var hours   = dt.getHours();
-                var minutes = dt.getMinutes();
-                
-                $('#date').val(
-                    date.asString() + ' ' + (hours < 10 ? '0' : '') + hours + ':' + (minutes < 10 ? '0' : '') + minutes
-                );
-            }
-        });
-        */
 
         // Show help for keywords and users
         $('#keywords').on('focus', () => { showHelp('keywords'); });

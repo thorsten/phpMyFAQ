@@ -11,6 +11,7 @@
     "bootstrap": "^4.2.1",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.8.0",
+    "bs-custom-file-input": "^1.3.1",
     "bxslider": "^4.2.14",
     "cookieconsent": "^3.1.0",
     "handlebars": "^4.0.12",

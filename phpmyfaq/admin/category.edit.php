@@ -219,6 +219,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
           </form>
           </div>
         </div>
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            bsCustomFileInput.init()
+          });
+        </script>
 <?php
 } else {
     echo $PMF_LANG['err_NotAuth'];
