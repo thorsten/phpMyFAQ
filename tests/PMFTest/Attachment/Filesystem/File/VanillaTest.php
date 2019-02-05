@@ -14,13 +14,13 @@
  * License for the specific language governing rights and limitations
  * under the License.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
- * @link      https://www.phpmyfaq.de
- * @since     2012-12-31
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link https://www.phpmyfaq.de
+ * @since 2012-12-31
  */
 
 use PHPUnit\Framework\TestCase;
@@ -29,13 +29,13 @@ use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
 /**
  * PMF_Attachment_File test case
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
- * @link      https://www.phpmyfaq.de
- * @since     2012-12-31
+ * @license http://www.mozilla.org/MPL/MPL-1.1.html Mozilla Public License Version 1.1
+ * @link https://www.phpmyfaq.de
+ * @since 2012-12-31
  */
 class VanillaTest extends TestCase
 {

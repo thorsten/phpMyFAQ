@@ -11,14 +11,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Anatoliy Belsky <ab@php.net>
+ * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2009-04-06
+ * @link https://www.phpmyfaq.de
+ * @since 2009-04-06
  */
 
 use phpMyFAQ\Strings\Mbstring;
@@ -36,14 +36,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * the string methods behaviour is identical to that of the same named 
  * single byte string functions.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Anatoliy Belsky <ab@php.net>
+ * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2009-04-06
+ * @link https://www.phpmyfaq.de
+ * @since 2009-04-06
  */
 class Strings
 {

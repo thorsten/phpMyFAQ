@@ -3,19 +3,17 @@
 /**
  * Sitemap frontend.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thomas Zeithaml <seo@annatom.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thomas Zeithaml <seo@annatom.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-08-21
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-08-21
  */
 
 use phpMyFAQ\Filter;
@@ -44,17 +42,17 @@ if (!is_null($letter) && (1 == Strings::strlen($letter))) {
     $currentLetter = '';
 }
 
-$sitemap = new Sitemap($faqConfig);
-$sitemap->setUser($current_user);
-$sitemap->setGroups($current_groups);
+$siteMap = new Sitemap($faqConfig);
+$siteMap->setUser($current_user);
+$siteMap->setGroups($current_groups);
 
 $template->parse(
     'writeContent',
-    array(
-        'writeLetters' => $sitemap->getAllFirstLetters(),
-        'writeMap' => $sitemap->getRecordsFromLetter($currentLetter),
+    [
+        'renderLetters' => $siteMap->getAllFirstLetters(),
+        'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),
         'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
-    )
+    ]
 );
 
 $template->parseBlock(

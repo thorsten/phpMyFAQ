@@ -9,11 +9,11 @@ namespace phpMyFAQ\Attachment;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Anatoliy Belsky <ab@php.net>
- * @since     2009-08-21
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
+ * @package phpMyFAQ
+ * @author Anatoliy Belsky <ab@php.net>
+ * @since 2009-08-21
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
  * @copyright 2009-2019 phpMyFAQ Team
  */
 
@@ -29,11 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Attachment_Factory.
  *
- * @category  phpMyFAQ
- * @author    Anatoliy Belsky <ab@php.net>
- * @since     2009-08-21
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
+ * @package phpMyFAQ
+ * @author Anatoliy Belsky <ab@php.net>
+ * @since 2009-08-21
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
  * @copyright 2009-2019 phpMyFAQ Team
  */
 class Factory

@@ -5,13 +5,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   JavaScript
- * @author    Anatoliy Belsky <ab@php.net>
+ * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-07-07
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-07-07
  */
 
 /*global document: false, window: false, $: false */

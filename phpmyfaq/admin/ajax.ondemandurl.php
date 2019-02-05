@@ -14,13 +14,13 @@
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
  *
- * @category  phpMyFAQ
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Minoru TODA <todam@netjapan.co.jp>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc.
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-09-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-09-30
  */
 
 use phpMyFAQ\Filter;

@@ -3,18 +3,16 @@
 /**
  * User Control Panel.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-01-12
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-01-12
  */
 
 use phpMyFAQ\User\CurrentUser;
@@ -40,7 +38,7 @@ if ($user instanceof CurrentUser) {
         $gravatar = new Gravatar($faqConfig);
         $gravatarImg = sprintf(
             '<a target="_blank" href="http://www.gravatar.com">%s</a>',
-            $gravatar->getImage($user->getUserData('email'), ['class' => 'img-circle', 'size' => 125])
+            $gravatar->getImage($user->getUserData('email'), ['class' => 'rounded-circle', 'size' => 125])
         );
     } else {
         $gravatarImg = '';

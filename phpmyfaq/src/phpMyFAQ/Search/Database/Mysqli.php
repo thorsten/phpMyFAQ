@@ -11,14 +11,14 @@ namespace phpMyFAQ\Search\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2010-06-06
+ * @link https://www.phpmyfaq.de
+ * @since 2010-06-06
  */
 
 use phpMyFAQ\Configuration;
@@ -31,14 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Search_Database_Mysqli.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2010-06-06
+ * @link https://www.phpmyfaq.de
+ * @since 2010-06-06
  */
 class Mysqli extends SearchDatabase
 {

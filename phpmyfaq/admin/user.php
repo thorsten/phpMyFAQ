@@ -6,15 +6,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Lars Tiedemann <php@larstiedemann.de>
- * @author    Uwe Pries <uwe.pries@digartis.de>
- * @author    Sarah Hermann <sayh@gmx.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Lars Tiedemann <php@larstiedemann.de>
+ * @author Uwe Pries <uwe.pries@digartis.de>
+ * @author Sarah Hermann <sayh@gmx.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-12-15
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-12-15
  */
 
 use phpMyFAQ\Category;

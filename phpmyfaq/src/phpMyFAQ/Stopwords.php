@@ -11,13 +11,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Anatoliy Belsky
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Anatoliy Belsky
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-04-01
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-04-01
  */
 
 use phpMyFAQ\Db;
@@ -29,13 +29,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Stopwords.
  *
- * @category  phpMyFAQ
- * @author    Anatoliy Belsky
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Anatoliy Belsky
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-04-01
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-04-01
  */
 class Stopwords
 {

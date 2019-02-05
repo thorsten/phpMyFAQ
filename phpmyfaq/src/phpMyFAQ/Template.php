@@ -12,13 +12,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Jan Mergler <jan.mergler@gmx.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2002-08-22
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-08-22
  */
 
 use phpMyFAQ\Template\TemplateHelper;
@@ -30,12 +30,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Template
  * @package phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Jan Mergler <jan.mergler@gmx.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2002-08-22
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-08-22
  */
 class Template
 {

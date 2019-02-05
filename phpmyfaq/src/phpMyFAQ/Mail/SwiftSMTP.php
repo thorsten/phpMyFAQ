@@ -9,12 +9,12 @@ namespace phpMyFAQ\Mail;
  *
  * This document is distributed under the MIT licence.
  *
- * @category  phpMyFAQ
- * @author    Christopher Andrews <http://arduino.land>
+ * @package phpMyFAQ
+ * @author Christopher Andrews <http://arduino.land>
  * @copyright 2009-2019 Christopher Andrews, phpMyFAQ Team
- * @license   http://opensource.org/licenses/MIT MIT Public License
- * @link      https://www.phpmyfaq.de
- * @since     2014-10-10
+ * @license http://opensource.org/licenses/MIT MIT Public License
+ * @link https://www.phpmyfaq.de
+ * @since 2014-10-10
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();

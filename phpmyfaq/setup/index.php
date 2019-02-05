@@ -9,17 +9,17 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Tom Rochester <tom.rochester@gmail.com>
- * @author    Johannes Schlüter <johannes@php.net>
- * @author    Uwe Pries <uwe.pries@digartis.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Florian Anderiasch <florian@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Tom Rochester <tom.rochester@gmail.com>
+ * @author Johannes Schlüter <johannes@php.net>
+ * @author Uwe Pries <uwe.pries@digartis.de>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2002-08-20
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-08-20
  */
 
 use Composer\Autoload\ClassLoader;

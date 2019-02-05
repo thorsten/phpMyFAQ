@@ -9,15 +9,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Sylvain Corvaisier <cocky@cocky.fr>
- * @author    Thomas Bassetto <tbassetto@gmail.com>
- * @author    Laurent J.V. Dubois <laurent.dubois@ljvd.com>
- * @author    Cédric Frayssinet
+ * @package phpMyFAQ
+ * @author Sylvain Corvaisier <cocky@cocky.fr>
+ * @author Thomas Bassetto <tbassetto@gmail.com>
+ * @author Laurent J.V. Dubois <laurent.dubois@ljvd.com>
+ * @author Cédric Frayssinet
  * @copyright 2004-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2004-02-19
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2004-02-19
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';

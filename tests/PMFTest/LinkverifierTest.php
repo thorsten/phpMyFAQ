@@ -8,13 +8,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-03-29
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-03-29
  */
 
 use phpMyFAQ\Configuration;
@@ -25,13 +25,13 @@ use PHPUnit\Framework\TestCase;
 /**
  * LinkverifierTest
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   PMF_Tests
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-03-29
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-03-29
  */
 class LinkverifierTest extends TestCase
 {

@@ -9,15 +9,15 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Juha Tuomala <tuomala@iki.fi>
- * @author    Matti Kröger <matti.kroger@hotmail.com>
- * @author    Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
- * @author    Niklas Lampén <niklas.lampen@eventusmedia.fi>
+ * @package phpMyFAQ
+ * @author Juha Tuomala <tuomala@iki.fi>
+ * @author Matti Kröger <matti.kroger@hotmail.com>
+ * @author Petteri Hirvonen <petteri.hirvonen@eventusmedia.fi>
+ * @author Niklas Lampén <niklas.lampen@eventusmedia.fi>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2004-02-19
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2004-02-19
  */
 
 $PMF_LANG['metaCharset'] = 'UTF-8';

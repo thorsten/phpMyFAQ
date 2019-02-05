@@ -11,12 +11,12 @@ namespace phpMyFAQ\Language;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @package phpMyFAQ
+ * @author Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 Aurimas Fišeras and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-07-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-07-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,12 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Language_Plurals
  *
- * @category  phpMyFAQ
- * @author    Aurimas Fišeras <aurimas@gmail.com>
+ * @package phpMyFAQ
+ * @author Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 Aurimas Fišeras and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-07-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-07-30
  */
 class Plurals
 {
@@ -151,7 +151,7 @@ class Plurals
      *
      * @return int
      *
-     * @link   http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
+     * @link  http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
      */
     private function plural($lang, $n)
     {

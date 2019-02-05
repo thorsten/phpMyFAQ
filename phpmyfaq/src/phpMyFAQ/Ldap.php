@@ -11,15 +11,15 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Alberto Cabello Sanchez <alberto@unex.es>
- * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
+ * @package phpMyFAQ
+ * @author Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Alberto Cabello Sanchez <alberto@unex.es>
+ * @author Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2004-12-16
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2004-12-16
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -28,15 +28,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Ldap.
  *
- * @category  phpMyFAQ
- * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Alberto Cabello Sanchez <alberto@unex.es>
- * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
+ * @package phpMyFAQ
+ * @author Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Alberto Cabello Sanchez <alberto@unex.es>
+ * @author Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2004-12-16
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2004-12-16
  */
 class Ldap
 {

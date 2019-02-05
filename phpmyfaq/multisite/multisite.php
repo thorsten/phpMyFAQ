@@ -17,13 +17,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  * @package   Multisite
- * @author    Florian Anderiasch <florian@phpmyfaq.de>
+ * @author Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-04-14
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2012-04-14
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {

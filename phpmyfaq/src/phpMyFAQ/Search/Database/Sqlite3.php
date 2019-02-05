@@ -11,14 +11,14 @@ namespace phpMyFAQ\Search\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2012-12-26
+ * @link https://www.phpmyfaq.de
+ * @since 2012-12-26
  */
 
 use phpMyFAQ\Configuration;
@@ -31,14 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Search_Database_Sqlite3.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2012-12-26
+ * @link https://www.phpmyfaq.de
+ * @since 2012-12-26
  */
 class Sqlite3 extends SearchDatabase
 {

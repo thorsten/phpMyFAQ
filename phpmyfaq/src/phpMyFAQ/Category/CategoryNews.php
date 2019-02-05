@@ -12,11 +12,11 @@ namespace phpMyFAQ\Category;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2018-07-20
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2018-07-20
  */
 
 use phpMyFAQ\Configuration;
@@ -29,11 +29,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * CategoryNews
  *
  * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2018-07-20
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2018-07-20
  */
 class CategoryNews
 {

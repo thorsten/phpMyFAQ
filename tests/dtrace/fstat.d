@@ -4,9 +4,9 @@
  *
  * @package    phpMyFAQ
  * @subpackage Tests
- * @author     David Soria Parra <dsp@php.net>
- * @since      2009-04-20
- * @license    New BSD License
+ * @author  David Soria Parra <dsp@php.net>
+ * @since  2009-04-20
+ * @license  New BSD License
  * @version    SVN: $Id$
  * @copyright  2009 David Soria Parra
  *

@@ -10,11 +10,11 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ\Attachment\Filesystem\File
- * @author    Anatoliy Belsky <ab@php.net>
+ * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-08-21
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-08-21
  */
 
 use phpseclib\Crypt\AES;
@@ -30,11 +30,11 @@ require PMF_ROOT_DIR.'/src/libs/phpseclib/Crypt/AES.php';
  * Class Encrypted
  *
  * @package phpMyFAQ\Attachment\Filesystem\File
- * @author    Anatoliy Belsky <ab@php.net>
+ * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-08-21
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2009-08-21
  */
 class Encrypted extends File
 {

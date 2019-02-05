@@ -9,14 +9,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2008-01-26
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2008-01-26
  */
 
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
@@ -31,14 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Search.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2008-01-26
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2008-01-26
  */
 class Search
 {

@@ -14,16 +14,16 @@ namespace phpMyFAQ;
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Minoru TODA <todam@netjapan.co.jp>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc. and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2005-08-01
+ * @link https://www.phpmyfaq.de
+ * @since 2005-08-01
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -32,16 +32,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * LinkVerifier.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Minoru TODA <todam@netjapan.co.jp>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc. and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2005-08-01
+ * @link https://www.phpmyfaq.de
+ * @since 2005-08-01
  */
 class Linkverifier
 {

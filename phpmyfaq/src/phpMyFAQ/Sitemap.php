@@ -5,18 +5,16 @@ namespace phpMyFAQ;
 /**
  * The main Sitemap class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2007-03-30
  */
 
 use phpMyFAQ\Db\Sqlite3;
@@ -26,62 +24,49 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Sitemap.
+ * Class Sitemap.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2007-03-30
  */
 class Sitemap
 {
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
-     * Database type.
-     *
-     * @var string
-     */
-    private $type = '';
-
-    /**
-     * Users.
-     *
+     * User
      * @var int
      */
     private $user = -1;
 
     /**
      * Groups.
-     *
      * @var array
      */
     private $groups = [];
 
     /**
      * Flag for Group support.
-     *
      * @var bool
      */
     private $groupSupport = false;
 
     /**
      * Constructor.
-     *
-     * @param PMF_Configuration $config
-     *
-     * @return PMF_Sitemap
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
 
-        if ($this->_config->get('security.permLevel') == 'medium') {
+        if ($this->config->get('security.permLevel') == 'medium') {
             $this->groupSupport = true;
         }
     }
@@ -89,7 +74,7 @@ class Sitemap
     /**
      * @param int $userId
      */
-    public function setUser($userId = -1)
+    public function setUser(int $userId = -1)
     {
         $this->user = $userId;
     }
@@ -97,21 +82,16 @@ class Sitemap
     /**
      * @param array $groups
      */
-    public function setGroups(Array $groups)
+    public function setGroups(array $groups)
     {
         $this->groups = $groups;
     }
 
     /**
      * Returns all available first letters.
-     *
-     * @return array
-     *
-     * @since  2007-03-30
-     *
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return string
      */
-    public function getAllFirstLetters()
+    public function getAllFirstLetters(): string
     {
         global $sids;
 
@@ -127,9 +107,9 @@ class Sitemap
                 $this->user);
         }
 
-        $writeLetters = '<ul class="nav navbar-nav">';
+        $renderLetters = '<ul class="nav">';
 
-        if ($this->_config->getDb() instanceof Sqlite3) {
+        if ($this->config->getDb() instanceof Sqlite3) {
             $query = sprintf("
                     SELECT
                         DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
@@ -154,7 +134,7 @@ class Sitemap
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
-                $this->_config->getLanguage()->getLanguage(),
+                $this->config->getLanguage()->getLanguage(),
                 $permPart
             );
         } else {
@@ -182,13 +162,13 @@ class Sitemap
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
                 Db::getTablePrefix(),
-                $this->_config->getLanguage()->getLanguage(),
+                $this->config->getLanguage()->getLanguage(),
                 $permPart
             );
         }
 
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $letters = Strings::strtoupper($row->letters);
             if (Strings::preg_match("/^\w+/iu", $letters)) {
                 $url = sprintf(
@@ -196,32 +176,27 @@ class Sitemap
                     Link::getSystemRelativeUri(),
                     $sids,
                     $letters,
-                    $this->_config->getLanguage()->getLanguage()
+                    $this->config->getLanguage()->getLanguage()
                 );
-                $oLink = new Link($url, $this->_config);
+                $oLink = new Link($url, $this->config);
                 $oLink->text = (string)$letters;
-                $writeLetters .= '<li>'.$oLink->toHtmlAnchor().'</li>';
+                $oLink->class = 'nav-link';
+                $renderLetters .= '<li class="nav-item">'.$oLink->toHtmlAnchor().'</li>';
             }
         }
-        $writeLetters .= '</ul>';
+        $renderLetters .= '</ul>';
 
-        return $writeLetters;
+        return $renderLetters;
     }
 
     /**
      * Returns all records from the current first letter.
-     *
      * @param string $letter Letter
-     *
-     * @return array
-     *
-     * @since  2007-03-30
-     *
-     * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+     * @return string
      */
-    public function getRecordsFromLetter($letter = 'A')
+    public function getRecordsFromLetter($letter = 'A'): string
     {
-        global $sids, $PMF_LANG;
+        global $sids;
 
         if ($this->groupSupport) {
             $permPart = sprintf('( fdg.group_id IN (%s)
@@ -235,9 +210,9 @@ class Sitemap
                 $this->user);
         }
 
-        $letter = Strings::strtoupper($this->_config->getDb()->escape(Strings::substr($letter, 0, 1)));
+        $letter = Strings::strtoupper($this->config->getDb()->escape(Strings::substr($letter, 0, 1)));
 
-        $writeMap = '';
+        $renderSiteMap = '';
 
         switch (Db::getType()) {
             case 'sqlite3':
@@ -274,7 +249,7 @@ class Sitemap
                     Db::getTablePrefix(),
                     Db::getTablePrefix(),
                     $letter,
-                    $this->_config->getLanguage()->getLanguage(),
+                    $this->config->getLanguage()->getLanguage(),
                     $permPart);
                 break;
 
@@ -312,15 +287,15 @@ class Sitemap
                     Db::getTablePrefix(),
                     Db::getTablePrefix(),
                     $letter,
-                    $this->_config->getLanguage()->getLanguage(),
+                    $this->config->getLanguage()->getLanguage(),
                     $permPart);
                 break;
         }
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
         $oldId = 0;
         $parsedown = new \ParsedownExtra();
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             if ($oldId != $row->id) {
                 $title = Strings::htmlspecialchars($row->thema, ENT_QUOTES, 'utf-8');
                 $url = sprintf(
@@ -332,24 +307,24 @@ class Sitemap
                     $row->lang
                 );
 
-                $oLink = new Link($url, $this->_config);
+                $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
-                $writeMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
+                $renderSiteMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
 
-                if ($this->_config->get('main.enableMarkdownEditor')) {
-                    $writeMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25)." ...</li>\n";
+                if ($this->config->get('main.enableMarkdownEditor')) {
+                    $renderSiteMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25)." ...</li>\n";
                 } else {
-                    $writeMap .= Utils::chopString(strip_tags($row->snap), 25)." ...</li>\n";
+                    $renderSiteMap .= Utils::chopString(strip_tags($row->snap), 25)." ...</li>\n";
                 }
             }
             $oldId = $row->id;
         }
 
-        $writeMap = empty($writeMap) ? '' : '<ul>'.$writeMap.'</ul>';
+        $renderSiteMap = empty($renderSiteMap) ? '' : '<ul>'.$renderSiteMap.'</ul>';
 
-        return $writeMap;
+        return $renderSiteMap;
     }
 }

@@ -14,16 +14,16 @@ namespace phpMyFAQ;
  * Portions created by Christian Stocker are Copyright (c) 2001-2008 Liip AG.
  * All Rights Reserved.
  *
- * @category  phpMyFAQ
- * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Stefan Esser <sesser@php.net>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Christian Stocker <chregu@bitflux.ch>
+ * @package phpMyFAQ
+ * @author Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Stefan Esser <sesser@php.net>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-09-24
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-09-24
  */
 
 use phpMyFAQ\Strings\Basic;
@@ -39,16 +39,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * variables, unescaped slashes and XSS in the request string. It also detects
  * and sets the current language.
  *
- * @category  phpMyFAQ
- * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Stefan Esser <sesser@php.net>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author    Christian Stocker <chregu@bitflux.ch>
+ * @package phpMyFAQ
+ * @author Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Stefan Esser <sesser@php.net>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-09-24
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-09-24
  */
 class Init
 {

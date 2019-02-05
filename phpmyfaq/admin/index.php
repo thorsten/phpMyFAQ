@@ -11,16 +11,16 @@ error_reporting(-1);
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Bastian Poettner <bastian@poettner.net>
- * @author    Meikel Katzengreis <meikel@katzengreis.com>
- * @author    Minoru TODA <todam@netjapan.co.jp>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Bastian Poettner <bastian@poettner.net>
+ * @author Meikel Katzengreis <meikel@katzengreis.com>
+ * @author Minoru TODA <todam@netjapan.co.jp>
+ * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2002-09-16
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2002-09-16
  */
 
 use phpMyFAQ\Attachment\Factory;

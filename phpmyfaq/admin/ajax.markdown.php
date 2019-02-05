@@ -7,13 +7,13 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Jerry van Kooten <jerry@jvkooten.info>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Jerry van Kooten <jerry@jvkooten.info>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2015-03-30
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2015-03-30
  */
 
 use phpMyFAQ\Filter;

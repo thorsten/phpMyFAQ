@@ -9,16 +9,16 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Georgi Korchev <korchev@yahoo.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @author    Peter Caesar <p.caesar@osmaco.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Georgi Korchev <korchev@yahoo.com>
+ * @author Adrianna Musiol <musiol@imageaccess.de>
+ * @author Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-12-20
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-12-20
  */
 
 use phpMyFAQ\Attachment\Factory;
@@ -58,16 +58,16 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
 /**
  * The main FAQ class - 3K LOC of funny things for phpMyFAQ.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Georgi Korchev <korchev@yahoo.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @author    Peter Caesar <p.caesar@osmaco.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author Georgi Korchev <korchev@yahoo.com>
+ * @author Adrianna Musiol <musiol@imageaccess.de>
+ * @author Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2005-12-20
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2005-12-20
  */
 class Faq
 {

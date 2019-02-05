@@ -11,12 +11,12 @@ namespace phpMyFAQ\Category;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package phpMyFAQ
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2014-08-14
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2014-08-14
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,14 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * class Entity_Category.
  *
- * @category  phpMyFAQ
+ * @package phpMyFAQ
  *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2014-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link      https://www.phpmyfaq.de
- * @since     2014-08-14
+ * @link https://www.phpmyfaq.de
+ * @since 2014-08-14
  */
 class Entity
 {
