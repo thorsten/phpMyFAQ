@@ -20,16 +20,14 @@ $(document).ready(function () {
     'use strict';
 
     $('button.pmf-elasticsearch').on('click', function () {
-
-        var action = $(this).data('action');
-
+        const action = $(this).data('action');
         $.ajax({
             url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
             type: 'POST',
             dataType: 'json'
         })
-        .done(function(message) {
-            var result = $('.result'),
+        .done((message) => {
+            const result = $('.result'),
                 indicator = $('#saving_data_indicator');
 
             indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
