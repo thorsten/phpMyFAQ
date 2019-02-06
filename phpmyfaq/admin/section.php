@@ -292,23 +292,23 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
 // show list of sections
 if ('list' === $sectionAction) {
     ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-layer-group"></i>
-              <?= $PMF_LANG['ad_menu_section_administration'] ?>
-          </h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-              <a class="btn btn-sm btn-outline-success" href="?action=section&amp;section_action=add">
-                  <?= $PMF_LANG['ad_section_add_link'] ?>
-              </a>
-            </div>
-          </div>
-        </div>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="fas fa-layer-group"></i>
+        <?= $PMF_LANG['ad_menu_section_administration'] ?> (beta)
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-sm btn-outline-success" href="?action=section&amp;section_action=add">
+            <?= $PMF_LANG['ad_section_add_link'] ?>
+        </a>
+      </div>
+    </div>
+  </div>
 
-        <script src="assets/js/user.js"></script>
-        <script src="assets/js/groups.js"></script>
-        <script src="assets/js/sections.js"></script>
+  <script src="assets/js/user.js"></script>
+  <script src="assets/js/groups.js"></script>
+  <script src="assets/js/sections.js"></script>
 
   <div id="user_message"><?= $message ?></div>
 
@@ -358,7 +358,7 @@ if ('list' === $sectionAction) {
               </label>
               <div class="col-lg-9">
                 <textarea name="description" id="update_section_description" cols="<?= $descriptionCols ?>"
-                          rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
+                          rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
                 ><?= isset($sectionDescription) ? $sectionDescription : '' ?></textarea>
               </div>
             </div>
@@ -385,18 +385,18 @@ if ('list' === $sectionAction) {
           <div class="card-body">
             <div class="form-group row">
               <div class="text-right">
-                                <span class="select_all">
-                                    <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectSelectAll('group_list_select')">
-                                        <i aria-hidden="true" class="fas fa-layer-group"></i>
-                                    </a>
-                                </span>
+                <span class="select_all">
+                  <a class="btn btn-primary btn-sm"
+                     href="javascript:selectSelectAll('group_list_select')">
+                      <i aria-hidden="true" class="fas fa-layer-group"></i>
+                  </a>
+                </span>
                 <span class="unselect_all">
-                                    <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectUnselectAll('group_list_select')">
-                                        <i aria-hidden="true" class="fas fa-user-minus"></i>
-                                    </a>
-                                </span>
+                  <a class="btn btn-primary btn-sm"
+                     href="javascript:selectUnselectAll('group_list_select')">
+                      <i aria-hidden="true" class="fas fa-user-minus"></i>
+                  </a>
+              </span>
               </div>
             </div>
 
@@ -418,7 +418,7 @@ if ('list' === $sectionAction) {
           </div>
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-light"><?= $PMF_LANG['ad_section_members']; ?></li>
+            <li class="list-group-item"><?= $PMF_LANG['ad_section_members']; ?></li>
           </ul>
 
           <div class="card-body">

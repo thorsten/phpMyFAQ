@@ -551,7 +551,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         <div class="card-header" id="user_rights_legend">
                             <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
                             <span class="float-right">
-                                <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
+                                <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                                     <?= $PMF_LANG['ad_user_checkall'] ?>
                                     /
                                     <?= $PMF_LANG['ad_user_uncheckall'] ?>

@@ -82,7 +82,7 @@ $metaData = $meta->getById($metaId);
 
   <div class="form-group row">
     <div class="col-sm-12 text-right">
-      <a class="btn btn-secondary" href="?action=meta">
+      <a class="btn btn-primary" href="?action=meta">
         <?= $PMF_LANG['msgCancel'] ?>
       </a>
       <button class="btn btn-primary" type="submit">
