@@ -96,7 +96,7 @@ $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
 } else {
-    $answer = $faq->faqRecord['content'];
+    $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }
 $answer = $oGlossary->insertItemsIntoContent($answer);
 
