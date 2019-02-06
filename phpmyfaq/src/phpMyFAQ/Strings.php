@@ -5,30 +5,27 @@ namespace phpMyFAQ;
 /**
  * The main string wrapper class. 
  *
- * .0
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
 
 use phpMyFAQ\Strings\Mbstring;
+use phpMyFAQ\Strings\Basic;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * String.
+ * Class Strings.
  *
  * The class uses mbstring extension if available. It's strongly recommended
  * to use and extend this class instead of using direct string functions. Doing so
@@ -37,11 +34,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * single byte string functions.
  *
  * @package phpMyFAQ
- *
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
@@ -323,7 +318,7 @@ class Strings
      */
     public static function isUTF8($str)
     {
-        return String_Basic::isUTF8($str);
+        return Basic::isUTF8($str);
     }
 
     /**
