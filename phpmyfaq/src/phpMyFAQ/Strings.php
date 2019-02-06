@@ -29,7 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * The class uses mbstring extension if available. It's strongly recommended
  * to use and extend this class instead of using direct string functions. Doing so
- * you garantee your code is upwards compatible with UTF-8 improvements. All
+ * you guarantees your code is upwards compatible with UTF-8 improvements. All
  * the string methods behaviour is identical to that of the same named 
  * single byte string functions.
  *
