@@ -22,6 +22,7 @@
 
     <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
+    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/floating-labels.css?v=1">
     <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
     <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
     <link rel="canonical" href="{{ currentPageUrl }}">
@@ -32,152 +33,103 @@
     <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/openquestions/rss.php">
     <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
 
+    <style>
+        .bd-placeholder-img {
+            font-size: 1.125rem;
+            text-anchor: middle;
+        }
+
+        @media (min-width: 768px) {
+            .bd-placeholder-img-lg {
+                font-size: 3.5rem;
+            }
+        }
+    </style>
+
     <script>
         if (self === top) {{
             document.documentElement.style.display = 'block';
-         }} else {{
+        }} else {{
             top.location = self.location;
-         }}
+        }}
     </script>
     <style> html{{ display:none; }} </style>
 </head>
 <body dir="{{ dir }}">
+<form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
 
-<nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-        </a>
+<div class="text-center mb-4">
+        <img class="mb-4" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+        <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
+            [useSslForLogins]
+            <p>
+                <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+            </p>
+            [/useSslForLogins]
+
+        <p> {{ loginMessage }}</p>
     </div>
-</nav>
 
-<div class="pmf-wrapper pmf-main">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <section>
-
-                        [useSslForLogins]
-                        <p>
-                            <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
-                        </p>
-                        [/useSslForLogins]
-
-                        {{ loginMessage }}
-
-                        <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
-                                <div class="login-panel panel panel-default">
-                                    <div class="panel-heading">
-                                        <header>
-                                            <h3 class="panel-title text-center">phpMyFAQ Login</h3>
-                                        </header>
-                                    </div>
-                                    <div class="panel-body">
-                                        <form action="{{ writeLoginPath }}" method="post" role="form">
-                                            <fieldset>
-
-                                                <div class="form-group row">
-                                                    <input type="text" name="faqusername" id="faqusername"
-                                                           class="form-control form-control-lg" placeholder="{{ username }}"
-                                                           required>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <input type="password" name="faqpassword" id="faqpassword"
-                                                           class="form-control form-control-lg" placeholder="{{ password }}"
-                                                           required>
-                                                </div>
-
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox" id="faqrememberme" name="faqrememberme"
-                                                               value="rememberMe">
-                                                        {{ rememberMe }}
-                                                    </label>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <button class="btn btn-lg btn-primary btn-block" type="submit">
-                                                        {{ loginHeader }}
-                                                    </button>
-                                                </div>
-
-                                                <div class="form-group row">
-                                                    <p class="float-right">
-                                                        {{ sendPassword }}
-                                                        <br>
-                                                        {{ registerUser }}
-                                                    </p>
-                                                </div>
-                                            </fieldset>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
+    <div class="form-label-group">
+        <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
+        <label for="faqusername">Benutzername</label>
     </div>
-</div>
 
-<footer class="pmf-footer">
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12">
-        <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-          {{ switchLanguages }}
-          <input type="hidden" name="action" value=""/>
-        </form>
-      </div>
+    <div class="form-label-group">
+        <input type="password" name="faqpassword"  id="faqpassword" class="form-control" placeholder="{{ password }}" required>
+        <label for="faqpassword">Password</label>
     </div>
-    <div class="row">
-      <div class="col-sm">
-        <p class="float-right">
-          {{ copyright }}
-        </p>
-      </div>
+
+    <div class="checkbox mb-3">
+        <label>
+            <input type="checkbox"  name="faqrememberme" value="rememberMe" id="faqrememberme"> {{ rememberMe }}
+        </label>
     </div>
-  </div>
-</footer>
+    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
+    <p class="mt-5 mb-3 text-center">{{ sendPassword }} <br> {{ registerUser }}</p>
+<br>
+<p>
+    <form action="{{ renderUri }}" method="post" accept-charset="utf-8">
+        {{ switchLanguages }}
+        <input type="hidden" name="action" value=""/>
+    </form>
+</p>
+
+</form>
 
 [debugMode]
 <div class="container debug-mode">
-  <hr>
-  <h4>DEBUG INFORMATION</h4>
-  <div class="row">
-    <div class="col-12">
-      <h5>EXCEPTIONS</h5>
-      {{ debugExceptions }}
+    <hr>
+    <h4>DEBUG INFORMATION</h4>
+    <div class="row">
+        <div class="col-12">
+            <h5>EXCEPTIONS</h5>
+            {{ debugExceptions }}
+        </div>
     </div>
-  </div>
-  <div class="row">
-    <div class="col-12">
-      <h5>DATABASE QUERIES</h5>
-      {{ debugQueries }}
+    <div class="row">
+        <div class="col-12">
+            <h5>DATABASE QUERIES</h5>
+            {{ debugQueries }}
+        </div>
     </div>
-  </div>
 </div>
 [/debugMode]
 
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
 <script>
-  window.addEventListener('load', function(){
-    window.cookieconsent.initialise({
-      'palette': {
-        'popup': {
-          'background': '#252e39'
-        },
-        'button': {
-          'background': '#14a7d0'
-        }
-      }
-    })});
+    window.addEventListener('load', function(){
+        window.cookieconsent.initialise({
+            'palette': {
+                'popup': {
+                    'background': '#252e39'
+                },
+                'button': {
+                    'background': '#14a7d0'
+                }
+            }
+        })});
 </script>
-
 </body>
 </html>

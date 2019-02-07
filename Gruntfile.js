@@ -233,7 +233,8 @@ module.exports = function (grunt) {
         files: {
           'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
-          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss'
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss',
+          'phpmyfaq/assets/themes/default/css/floating-labels.css': 'phpmyfaq/assets/scss/themes/default/floating-labels.scss'
           //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
         }
       },
@@ -241,7 +242,8 @@ module.exports = function (grunt) {
         files: {
           'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
-          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss'
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss',
+          'phpmyfaq/assets/themes/default/css/floating-labels.css': 'phpmyfaq/assets/themes/default/scss/floating-labels.scss'
           //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
         },
         compress: true
