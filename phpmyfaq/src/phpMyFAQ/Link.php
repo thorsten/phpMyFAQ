@@ -693,7 +693,6 @@ class Link
                 $getParams = $this->getHttpGetParameters();
                 if (isset($getParams[self::LINK_GET_ACTION])) {
                     $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1).'index.php?';
-                    var_dump('sid-weg->'.$url);
                     foreach ($getParams as $key => $value) {
                         if ($key !== self::LINK_GET_SIDS) {
                             $url .= sprintf('%s=%s&', $key, $value);
