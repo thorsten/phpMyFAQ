@@ -1,7 +1,7 @@
 <section>
             <article class="pmf-faq">
                 <header>
-                    <div class="float-right hidden-print" id="solution_id">
+                    <div class="float-right d-print-none" id="solution_id">
                         <a class="badge badge-info" href="{{ solution_id_link }}">
                             ID #{{ solution_id }}
                         </a>
@@ -43,7 +43,7 @@
                     </div>
                     [/privateNotes]
                     [relatedFaqs]
-                    <aside id="faqAccordion" class="accordion related-faqs hidden-print">
+                    <aside id="faqAccordion" class="accordion related-faqs d-print-none">
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
@@ -57,7 +57,7 @@
                     </aside>
                     [/relatedFaqs]
                     [relatedCategories]
-                    <aside id="faqAccordion" class="accordion related-categories hidden-print">
+                    <aside id="faqAccordion" class="accordion related-categories d-print-none">
                         <div class="accordion-group">
                             <div class="accordion-heading">
                                 <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion" data-toggle="collapse">
@@ -75,7 +75,7 @@
 
             </article>
 
-            <ul id="tab" class="nav nav-tabs hidden-print">
+            <ul id="tab" class="nav nav-tabs d-print-none">
                 <li class="active"><a href="#votingForm" data-toggle="tab">{{ msgVoteUseability }}</a></li>
                 [switchLanguage]
                 <li><a href="#switchAvailableLanguage" data-toggle="tab">{{ msgChangeLanguage }}</a></li>
@@ -85,8 +85,8 @@
                 [/addTranslation]
             </ul>
 
-            <div class="tab-content pmf-faq-info">
-                <div class="tab-pane active hidden-print" id="votingForm">
+            <div class="tab-content pmf-faq-info d-print-none">
+                <div class="tab-pane active d-print-none" id="votingForm">
                     <form action="#" method="post" class="form-inline">
                         <input type="hidden" name="artikel" value="{{ saveVotingID }}">
                         <div id="votings"></div>
@@ -105,10 +105,10 @@
                         </div>
                     </form>
                 </div>
-                <div class="tab-pane hidden-print" id="switchAvailableLanguage">
+                <div class="tab-pane d-print-none" id="switchAvailableLanguage">
                     {{ switchLanguage }}
                 </div>
-                <div class="tab-pane hidden-print" id="addTranslation">
+                <div class="tab-pane d-print-none" id="addTranslation">
                     <form action="{{ translationUrl }}" method="post" class="form-inline" accept-charset="utf-8">
                         {{ languageSelection }}
                         <button class="btn btn-primary" type="submit" name="submit">
@@ -118,9 +118,9 @@
                 </div>
             </div>
 
-            <p class="hidden-print">{{ writeCommentMsg }}</p>
+            <p class="d-print-none">{{ writeCommentMsg }}</p>
 
-            <aside class="pmf-create-comment hide" id="pmf-create-comment">
+            <aside class="pmf-create-comment d-print-none hide" id="pmf-create-comment">
 
                 <hr>
 
@@ -157,7 +157,7 @@
                 </form>
             </aside>
 
-            <aside class="pmf-comments" id="comments">
+            <aside class="pmf-comments d-print-none" id="comments">
                 <hr>
                 {{ writeComments }}
             </aside>

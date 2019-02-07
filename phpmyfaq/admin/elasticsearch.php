@@ -3,8 +3,6 @@
 /**
  * phpMyFAQ Elasticsearch information.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -47,7 +45,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
     } catch (Missing404Exception $e) {
         $esInformation = $e->getMessage();
     }
-
     ?>
 
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -57,11 +54,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
       </h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <button class="btn btn-sm btn-outline-secondary pmf-elasticsearch" data-action="create">
+          <button class="btn btn-sm btn-outline-primary pmf-elasticsearch" data-action="create">
             <i aria-hidden="true" class="fas fa-searchengine"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
           </button>
 
-          <button class="btn btn-sm btn-outline-secondary pmf-elasticsearch" data-action="import">
+          <button class="btn btn-sm btn-outline-primary pmf-elasticsearch" data-action="import">
             <i aria-hidden="true" class="fas fa-search-plus"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
           </button>
 
@@ -74,12 +71,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
 
     <div class="row">
         <div class="col-lg-12">
-            <div class="result">
-
-            </div>
-            <h3>
+            <div class="result"></div>
+            <h5>
                 <?= $PMF_LANG['ad_menu_searchstats'] ?>
-            </h3>
+            </h5>
 
             <?php if (is_array($esInformation)) { ?>
             <dl class="dl-horizontal">

@@ -254,7 +254,7 @@ switch ($action) {
         </li>
       </ul>
       <?php endif; ?>
-      <form class="form-inline mr-0" action="index.php<?= (isset($action) ? '?action='.$action : ''); ?>" method="post">
+      <form class="form-inline mr-1" action="index.php<?= (isset($action) ? '?action='.$action : ''); ?>" method="post">
           <?= Language::selectLanguages($LANGCODE, true); ?>
       </form>
     </div>
@@ -264,7 +264,7 @@ switch ($action) {
 <div class="container-fluid">
   <div class="row">
       <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())): ?>
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+        <nav class="col-md-2 d-none d-md-block bg-dark sidebar">
           <div class="sidebar-sticky">
             <ul class="nav flex-column">
               <li class="nav-item <?= $dashboardPage ? 'active' : ''; ?>">

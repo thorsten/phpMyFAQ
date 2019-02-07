@@ -451,7 +451,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                       </td>
                       <td>
                         <div class="dropdown">
-                          <a class="btn btn-secondary dropdown-toggle" href="#" role="button"
+                          <a class="btn btn-primary dropdown-toggle" href="#" role="button"
                              id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true"
                              aria-expanded="false">
                             <i aria-hidden="true" class="fas fa-globe"></i>

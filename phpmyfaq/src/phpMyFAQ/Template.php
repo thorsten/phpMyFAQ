@@ -6,8 +6,6 @@ namespace phpMyFAQ;
  * The Template class provides methods and functions for the
  * template parser.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -70,7 +68,6 @@ class Template
 
     /**
      * Name of active template set.
-     *
      * @var string
      */
     private static $tplSetName;
@@ -155,7 +152,6 @@ class Template
                 }
             }
         }
-
 
         // add magic variables for each template
         $tmp = str_replace('{{ tplSetName }}', self::$tplSetName, $tmp);

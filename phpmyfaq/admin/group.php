@@ -470,7 +470,7 @@ if ('list' === $groupAction) {
         </div>
 
         <ul class="list-group list-group-flush">
-            <li class="list-group-item bg-light"><?= $PMF_LANG['ad_group_members']; ?></li>
+            <li class="list-group-item"><?= $PMF_LANG['ad_group_members']; ?></li>
         </ul>
 
         <div class="card-body">
@@ -517,7 +517,7 @@ if ('list' === $groupAction) {
           <div class="card-header" id="user_rights_legend">
             <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
             <span class="float-right">
-              <a class="btn btn-secondary btn-sm" href="#" id="checkAll">
+              <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                 <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>
               </a>
             </span>

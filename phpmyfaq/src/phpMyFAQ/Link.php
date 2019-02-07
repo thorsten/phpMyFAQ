@@ -682,20 +682,25 @@ class Link
                     if (isset($getParams['fragment'])) {
                         $url .= self::LINK_FRAGMENT_SEPARATOR.$getParams['fragment'];
                     }
-                }
-            }
-        }
 
-        if ($removeSessionFromUrl) {
-            $getParams = $this->getHttpGetParameters();
-            if (isset($getParams[self::LINK_GET_ACTION])) {
-                $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1).'index.php?';
-                foreach ($getParams as $key => $value) {
-                    if ($key !== self::LINK_GET_SIDS) {
-                        $url .= sprintf('%s=%s&', $key, $value);
+                    if ($removeSessionFromUrl) {
+                        $url = strtok($url, '?');
                     }
                 }
-                $url = substr($url, 0, -1); // Remove last &
+            }
+        } else {
+            if ($removeSessionFromUrl) {
+                $getParams = $this->getHttpGetParameters();
+                if (isset($getParams[self::LINK_GET_ACTION])) {
+                    $url = substr($url, 0, strpos($url, self::LINK_INDEX_HOME) + 1).'index.php?';
+                    var_dump('sid-weg->'.$url);
+                    foreach ($getParams as $key => $value) {
+                        if ($key !== self::LINK_GET_SIDS) {
+                            $url .= sprintf('%s=%s&', $key, $value);
+                        }
+                    }
+                    $url = substr($url, 0, -1); // Remove last &
+                }
             }
         }
 
@@ -724,7 +729,7 @@ class Link
      */
     public function getCurrentUrl(): string
     {
-        return $this->config->getDefaultUrl().Strings::htmlentities(substr($_SERVER['REQUEST_URI'], 1));
+        return $this->config->getDefaultUrl().Strings::htmlspecialchars(substr($_SERVER['REQUEST_URI'], 1));
     }
 
     /**

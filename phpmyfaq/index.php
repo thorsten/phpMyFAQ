@@ -418,7 +418,7 @@ if (!isset($allowedVariables[$action])) {
 if ($action !== 'main') {
     $includeTemplate = $action.'.html';
     $includePhp = $action.'.php';
-    $writeLangAdress = '?sid='.$sessionId;
+    $renderUri = '?sid='.$sessionId;
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
@@ -428,7 +428,7 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
-    $writeLangAdress = '?sid='.$sessionId;
+    $renderUri = '?sid='.$sessionId;
 }
 
 //
@@ -500,7 +500,7 @@ if (!is_null($error)) {
 
 $faqSeo = new Seo($faqConfig);
 
-$tplMainPage = array(
+$tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
     'title' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ').$title),
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
@@ -511,7 +511,6 @@ $tplMainPage = array(
     'metaKeywords' => Strings::htmlspecialchars($keywords),
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
     'metaLanguage' => $PMF_LANG['metaLanguage'],
-    'metaCharset' => 'utf-8', // backwards compability
     'metaRobots' => $faqSeo->getMetaRobots($action),
     'phpmyfaqversion' => $faqConfig->get('main.currentVersion'),
     'stylesheet' => $PMF_LANG['dir'] == 'rtl' ? 'style.rtl' : 'style',
@@ -528,7 +527,7 @@ $tplMainPage = array(
     'topCategories' => $categoryHelper->renderMainCategories(),
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
-    'writeLangAdress' => $writeLangAdress,
+    'renderUri' => $renderUri,
     'switchLanguages' => Language::selectLanguages($LANGCODE, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
@@ -549,22 +548,22 @@ $tplMainPage = array(
     'msgUsername' => $PMF_LANG['ad_auth_user'],
     'msgEmail' => $PMF_LANG['ad_entry_email'],
     'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
-);
+];
 
 $template->parseBlock(
     'index',
     'categoryListSection',
-    array(
+    [
         'showCategories' => $categoryHelper->renderNavigation($cat),
         'categoryDropDown' => $categoryHelper->renderCategoryDropDown(),
-    )
+    ]
 );
 
 if ('main' == $action || 'show' == $action) {
     $template->parseBlock(
         'index',
         'globalSearchBox',
-        array(
+        [
             'writeSendAdress' => '?'.$sids.'action=search',
             'searchBox' => $PMF_LANG['msgSearch'],
             'categoryId' => ($cat === 0) ? '%' : (int) $cat,
@@ -573,12 +572,12 @@ if ('main' == $action || 'show' == $action) {
                 $faqSystem->getSystemUri($faqConfig),
                 $PMF_LANG['msgAdvancedSearch']
             ),
-        )
+        ]
     );
 }
 
 if ($faqConfig->get('main.enableRewriteRules')) {
-    $tplNavigation = array(
+    $tplNavigation = [
         'msgSearch' => '<a class="nav-link" href="./search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
         'msgAddContent' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'addcontent.html">'.$PMF_LANG['msgAddContent'].'</a>',
         'msgQuestion' => '<a class="nav-link" href="./ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
@@ -590,9 +589,10 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'faqOverview' => '<a href="./overview.html">'.$PMF_LANG['faqOverview'].'</a>',
         'showSitemap' => '<a href="./sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch' => './opensearch.xml',
-        'msgUserRemoval' => '<a href="./request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>');
+        'msgUserRemoval' => '<a href="./request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>'
+    ];
 } else {
-    $tplNavigation = array(
+    $tplNavigation = [
         'msgSearch' => '<a class="nav-link" href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
         'msgAddContent' => '<a class="nav-link" href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG['msgAddContent'].'</a>',
         'msgQuestion' => '<a class="nav-link" href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG['msgQuestion'].'</a>',
@@ -604,7 +604,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'backToHome' => '<a href="index.php?'.$sids.'">'.$PMF_LANG['msgHome'].'</a>',
         'showSitemap' => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
         'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php',
-        'msgUserRemoval' => '<a href="index.php?'.$sids.'action=request-removal">'.$PMF_LANG['msgUserRemoval'].'</a>',);
+        'msgUserRemoval' => '<a href="index.php?'.$sids.'action=request-removal">'.$PMF_LANG['msgUserRemoval'].'</a>',
+    ];
 }
 
 $tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();

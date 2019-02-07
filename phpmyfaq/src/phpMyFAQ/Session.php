@@ -61,11 +61,11 @@ class Session
      * Tracks the user and log what he did.
      *
      * @param string $action Action string
-     * @param int    $id     Current ID
+     * @param string $data
      *
      * @throws Exception
      */
-    public function userTracking(string $action, int $id = 0)
+    public function userTracking(string $action, $data = null)
     {
         global $sessionId, $user, $botBlacklist;
 
@@ -130,7 +130,7 @@ class Session
 
                 $data = $sessionId.';'.
                         str_replace(';', ',', $action).';'.
-                        $id.';'.
+                        $data.';'.
                         $remoteAddress.';'.
                         str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '').';'.
                         str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '').';'.

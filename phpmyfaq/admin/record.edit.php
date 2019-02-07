@@ -900,7 +900,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 </form>
               </div>
               <div class="modal-footer">
-                <button type="reset" class="btn btn-secondary" data-dismiss="modal" id="pmf-attachment-modal-close">
+                <button type="reset" class="btn btn-primary" data-dismiss="modal" id="pmf-attachment-modal-close">
                   <?= $PMF_LANG['ad_att_close'] ?>
                 </button>
                 <button type="button" class="btn btn-primary" id="pmf-attachment-modal-upload">

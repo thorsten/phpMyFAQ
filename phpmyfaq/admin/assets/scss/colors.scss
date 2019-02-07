@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 3.0 default color scheme for admin and setup
+ * phpMyFAQ 3.0 default color scheme for admin and setup based on Sandstone from Bootswatch
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -12,48 +12,115 @@
  * @since 2010-01-17
  */
 
-$white: #fff;
-$gray-100: #f8f9fa;
-$gray-200: #e9ecef;
-$gray-300: #dee2e6;
-$gray-400: #ced4da;
-$gray-500: #adb5bd;
-$gray-600: #868e96;
-$gray-700: #495057;
-$gray-800: #343a40;
-$gray-900: #212529;
-$black: #000;
+//
+// Color system
+//
 
-$blue: #033C73;
-$indigo: #6610f2;
-$purple: #6f42c1;
-$pink: #e83e8c;
-$red: #C71C22;
-$orange: #fd7e14;
-$yellow: #DD5600;
-$green: #73A839;
-$teal: #20c997;
-$cyan: #2FA4E7;
+$white:    #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #F8F5F0 !default;
+$gray-300: #DFD7CA !default;
+$gray-400: #ced4da !default;
+$gray-500: #98978B !default;
+$gray-600: #8E8C84 !default;
+$gray-700: #495057 !default;
+$gray-800: #3E3F3A !default;
+$gray-900: #212529 !default;
+$black:    #000 !default;
 
-$primary: $cyan;
-$secondary: $gray-200;
-$success: $green;
-$info: $blue;
-$warning: $yellow;
-$danger: $red;
-$light: $gray-100;
-$dark: $gray-800;
+$blue:    #325D88 !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #d9534f !default;
+$orange:  #F47C3C !default;
+$yellow:  #ffc107 !default;
+$green:   #93C54B !default;
+$teal:    #20c997 !default;
+$cyan:    #29ABE0 !default;
 
-$body-color: $gray-700;
+$primary:       $blue !default;
+$secondary:     $gray-600 !default;
+$success:       $green !default;
+$info:          $cyan !default;
+$warning:       $orange !default;
+$danger:        $red !default;
+$light:         $gray-200 !default;
+$dark:          $gray-800 !default;
 
-$headings-color: $blue;
+$yiq-contrasted-threshold:  170 !default;
 
-$dropdown-link-color: $body-color;
+// Body
+$body-color:                $gray-800 !default;
 
-$dropdown-link-hover-color: $white;
+// Links
+$link-color:                $success !default;
 
-$dropdown-link-hover-bg: $primary;
+// Fonts
+$font-family-sans-serif:      "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol" !default;
+$font-size-base:              0.875rem !default;
+$headings-font-weight:        400 !default;
 
-$navbar-dark-color: rgba($white,.8);
+// Dropdowns
+$dropdown-link-color:               $gray-600 !default;
+$dropdown-link-hover-color:         $dropdown-link-color !default;
+$dropdown-link-hover-bg:            $gray-200 !default;
+$dropdown-link-active-color:        $dropdown-link-color !default;
+$dropdown-link-active-bg:           $dropdown-link-hover-bg !default;
 
-$navbar-dark-hover-color: $white;
+// Navs
+$nav-link-padding-x:                0.9rem !default;
+$nav-link-disabled-color:           $gray-300 !default;
+$nav-tabs-border-color:             $gray-300 !default;
+$nav-tabs-link-hover-border-color:  $gray-300 !default;
+$nav-tabs-link-active-bg:           $white !default;
+$nav-pills-link-active-color:       $gray-600 !default;
+$nav-pills-link-active-bg:          $gray-200 !default;
+
+// Navbar
+$navbar-dark-hover-color:           $white !default;
+$navbar-light-hover-color:          $black !default;
+$navbar-light-active-color:         $black !default;
+
+// Pagination
+$pagination-color:                  $gray-600 !default;
+$pagination-bg:                     $gray-200 !default;
+$pagination-border-color:           $gray-300 !default;
+$pagination-hover-color:            $pagination-color !default;
+$pagination-active-color:           $pagination-color !default;
+$pagination-active-bg:              $gray-300 !default;
+$pagination-active-border-color:    $gray-300 !default;
+$pagination-disabled-color:         $gray-300 !default;
+$pagination-disabled-bg:            $gray-200 !default;
+$pagination-disabled-border-color:  $pagination-border-color !default;
+
+// Cards
+$card-border-color:                 rgba($gray-300, .75) !default;
+$card-cap-bg:                       rgba($gray-200, .25) !default;
+
+// Popovers
+$popover-header-bg:                 $gray-200 !default;
+
+// Modals
+$modal-content-border-color:        $gray-300 !default;
+$modal-header-border-color:         $modal-content-border-color !default;
+
+// Progress bars
+$progress-bg:                       $gray-300 !default;
+$progress-border-radius:            10px !default;
+$progress-bar-color:                $primary !default;
+
+// List group
+$list-group-border-color:           $gray-300 !default;
+$list-group-hover-bg:               $gray-200 !default;
+$list-group-active-color:           $body-color !default;
+$list-group-active-bg:              $gray-200 !default;
+$list-group-active-border-color:    $gray-300 !default;
+$list-group-disabled-color:         $gray-500 !default;
+$list-group-disabled-bg:            $white !default;
+$list-group-action-color:           $list-group-active-color !default;
+$list-group-action-active-color:    $list-group-active-color !default;
+$list-group-action-active-bg:       $gray-300 !default;
+
+// Close
+$close-text-shadow:                 none !default;
