@@ -56,46 +56,46 @@
     <style> html{{ display:none; }} </style>
 </head>
 <body dir="{{ dir }}">
-<form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
+    <form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
 
-<div class="text-center mb-4">
-        <img class="mb-4" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-        <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
+        <div class="text-center mb-4">
+            <img class="mb-4" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+            <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
             [useSslForLogins]
             <p>
                 <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
             </p>
             [/useSslForLogins]
 
-        <p> {{ loginMessage }}</p>
-    </div>
+            <p> {{ loginMessage }}</p>
+        </div>
 
-    <div class="form-label-group">
-        <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
-        <label for="faqusername">Benutzername</label>
-    </div>
+        <div class="form-label-group">
+            <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required autofocus>
+            <label for="faqusername">Benutzername</label>
+        </div>
 
-    <div class="form-label-group">
-        <input type="password" name="faqpassword"  id="faqpassword" class="form-control" placeholder="{{ password }}" required>
-        <label for="faqpassword">Password</label>
-    </div>
+        <div class="form-label-group">
+            <input type="password" name="faqpassword"  id="faqpassword" class="form-control" placeholder="{{ password }}" required>
+            <label for="faqpassword">Password</label>
+        </div>
 
-    <div class="checkbox mb-3">
-        <label>
-            <input type="checkbox"  name="faqrememberme" value="rememberMe" id="faqrememberme"> {{ rememberMe }}
-        </label>
-    </div>
-    <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
-    <p class="mt-5 mb-3 text-center">{{ sendPassword }} <br> {{ registerUser }}</p>
-<br>
-<p>
-    <form action="{{ renderUri }}" method="post" accept-charset="utf-8">
-        {{ switchLanguages }}
-        <input type="hidden" name="action" value=""/>
+        <div class="checkbox mb-3">
+            <label>
+                <input type="checkbox"  name="faqrememberme" value="rememberMe" id="faqrememberme"> {{ rememberMe }}
+            </label>
+        </div>
+        <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
+        <p class="mt-5 mb-3 text-center">{{ sendPassword }} <br> {{ registerUser }}</p>
+        <br>
+        <p>
+        <form action="{{ renderUri }}" method="post" accept-charset="utf-8">
+            {{ switchLanguages }}
+            <input type="hidden" name="action" value=""/>
+        </form>
+        </p>
+
     </form>
-</p>
-
-</form>
 
 [debugMode]
 <div class="container debug-mode">
