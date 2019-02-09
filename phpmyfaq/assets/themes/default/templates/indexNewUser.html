@@ -1,92 +1,97 @@
 <!doctype html>
-<!--[if IE 9 ]> <html lang="{{ metaLanguage }}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{{ metaLanguage }}" class="no-js"> <!--<![endif]-->
+<html lang="{{ metaLanguage }}">
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>{{ title }}</title>
-    <base href="{{ baseHref }}">
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}">
 
-    <meta name="description" content="{{ metaDescription }}">
-    <meta name="keywords" content="{{ metaKeywords }}">
-    <meta name="author" content="{{ metaPublisher }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
-    <meta name="robots" content="{{ metaRobots }}">
-    <meta name="revisit-after" content="7 days">
+  <meta name="description" content="{{ metaDescription }}">
+  <meta name="keywords" content="{{ metaKeywords }}">
+  <meta name="author" content="{{ metaPublisher }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+  <meta name="robots" content="{{ metaRobots }}">
+  <meta name="revisit-after" content="7 days">
 
-    <!-- Share on Facebook -->
-    <meta property="og:title" content="{{ title }}">
-    <meta property="og:description" content="{{ metaDescription }}">
-    <meta property="og:image" content="">
+  <!-- Share on Facebook -->
+  <meta property="og:title" content="{{ title }}">
+  <meta property="og:description" content="{{ metaDescription }}">
+  <meta property="og:image" content="">
 
-    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
-    <link rel="canonical" href="{{ currentPageUrl }}">
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
+  <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
+  <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
+  <link rel="canonical" href="{{ currentPageUrl }}">
 
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
-    <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/latest/rss.php">
-    <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/openquestions/rss.php">
-    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
+  <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
+  <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
+  <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/latest/rss.php">
+  <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml"
+        href="{{ baseHref }}feed/openquestions/rss.php">
+  <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
 
-    <script>
-        if (self === top) {{
-            document.documentElement.style.display = 'block';
-         }} else {{
-            top.location = self.location;
-         }}
-    </script>
-    <style> html{{ display:none; }} </style>
+  <script>
+    if (self === top) {
+        document.documentElement.style.display = 'block';
+    } else {
+        top.location = self.location;
+    }
+  </script>
+  <style> html {
+    display: none;
+  }
+  </style>
 </head>
 <body dir="{{ dir }}">
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle" aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-            <ul class="navbar-nav mr-md-12">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        {{ msgLoginUser }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown">
-                        [notLoggedIn]
-                        {{ msgLoginUser }}
-                        [/notLoggedIn]
-                        [userloggedIn]
-                        {{ msgUserControl }}
-                        {{ msgLogoutUser }}
-                        [/userloggedIn]
-                    </div>
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+      <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle"
+            aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
+      <ul class="navbar-nav mr-md-12">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false">
+            {{ msgLoginUser }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown">
+            [notLoggedIn]
+            {{ msgLoginUser }}
+            [/notLoggedIn]
+            [userloggedIn]
+            {{ msgUserControl }}
+            {{ msgLogoutUser }}
+            [/userloggedIn]
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
 <div class="pmf-wrapper pmf-main">
-    <div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3">
         <div class="row">
-            <div class="col-md-6 col-md-offset-3">
-                <div class="row">
-                    <section>
+          <section>
 
-                        {{ writeContent }}
+            {{ writeContent }}
 
-                    </section>
-                </div>
-            </div>
+          </section>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <footer class="pmf-footer">
@@ -131,7 +136,7 @@
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
 <script>
-  window.addEventListener('load', function(){
+  window.addEventListener('load', function () {
     window.cookieconsent.initialise({
       'palette': {
         'popup': {
@@ -141,7 +146,8 @@
           'background': '#14a7d0'
         }
       }
-    })});
+    })
+  });
 </script>
 
 </body>

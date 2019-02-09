@@ -1,79 +1,82 @@
 <!doctype html>
-<!--[if IE 9 ]> <html lang="{{ metaLanguage }}" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="{{ metaLanguage }}" class="no-js"> <!--<![endif]-->
+<html lang="{{ metaLanguage }}">
 <head>
-    <meta charset="utf-8">
+  <meta charset="utf-8">
 
-    <title>{{ title }}</title>
-    <base href="{{ baseHref }}">
+  <title>{{ title }}</title>
+  <base href="{{ baseHref }}">
 
-    <meta name="description" content="{{ metaDescription }}">
-    <meta name="keywords" content="{{ metaKeywords }}">
-    <meta name="author" content="{{ metaPublisher }}">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
-    <meta name="robots" content="noindex,nofollow">
-    <meta name="revisit-after" content="7 days">
+  <meta name="description" content="{{ metaDescription }}">
+  <meta name="keywords" content="{{ metaKeywords }}">
+  <meta name="author" content="{{ metaPublisher }}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="revisit-after" content="7 days">
 
-    <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
-    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
-    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
-    <link rel="canonical" href="{{ currentPageUrl }}">
+  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
+  <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
+  <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
+  <link rel="canonical" href="{{ currentPageUrl }}">
 
-    <script>
-        if (self === top) {{
-            document.documentElement.style.display = 'block';
-         }} else {{
-            top.location = self.location;
-         }}
-    </script>
-    <style> html{{ display:none; }} </style>
+  <script>
+    if (self === top) {
+      document.documentElement.style.display = 'block';
+    } else {
+      top.location = self.location;
+    }
+  </script>
+  <style> html {
+    display: none;
+  }
+  </style>
 </head>
 <body dir="{{ dir }}">
 
 <nav class="navbar navbar-expand-sm navbar-dark bg-primary">
-    <div class="container">
-        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
-            <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-        </a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle" aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
-            <ul class="navbar-nav mr-md-12">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">
-                        {{ msgLoginUser }}
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="dropdown">
-                        [notLoggedIn]
-                        {{ msgLoginUser }}
-                        [/notLoggedIn]
-                        [userloggedIn]
-                        {{ msgUserControl }}
-                        {{ msgLogoutUser }}
-                        [/userloggedIn]
-                    </div>
-                </li>
-            </ul>
-        </div>
+  <div class="container">
+    <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+      <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#pmf-navbar-toggle"
+            aria-controls="pmf-navbar-toggle" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
+      <ul class="navbar-nav mr-md-12">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="dropdown" data-toggle="dropdown" aria-haspopup="true"
+             aria-expanded="false">
+            {{ msgLoginUser }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="dropdown">
+            [notLoggedIn]
+            {{ msgLoginUser }}
+            [/notLoggedIn]
+            [userloggedIn]
+            {{ msgUserControl }}
+            {{ msgLogoutUser }}
+            [/userloggedIn]
+          </div>
+        </li>
+      </ul>
     </div>
+  </div>
 </nav>
 
 <div class="pmf-wrapper pmf-main">
-    <div class="container">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
         <div class="row">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="jumbotron text-center">
-                        <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
-                    </div>
-                </div>
-            </div>
+          <div class="jumbotron text-center">
+            <h3>We are performing scheduled maintenance operations. Please visit us later.</h3>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <footer class="pmf-footer">
@@ -118,7 +121,7 @@
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
 <script>
-  window.addEventListener('load', function(){
+  window.addEventListener('load', () => {
     window.cookieconsent.initialise({
       'palette': {
         'popup': {
@@ -128,7 +131,8 @@
           'background': '#14a7d0'
         }
       }
-    })});
+    })
+  });
 </script>
 
 </body>
