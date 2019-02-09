@@ -69,6 +69,7 @@ if ((isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') || !$fa
                     <label class="form-check-label" for="faqrememberme">
                         <?= $PMF_LANG['rememberMe'] ?>
                     </label>
+                  </div>
                 </div>
                   <div class="form-group">
                   <p>
