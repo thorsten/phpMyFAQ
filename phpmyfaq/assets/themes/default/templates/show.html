@@ -1,26 +1,30 @@
 <section>
-            <ul class="nav nav-tabs">
-                <li><a href="#faqs" data-toggle="tab">{{ categoryFaqsHeader }}</a></li>
-                [subCategories]
-                <li><a href="#subcategories" data-toggle="tab">{{ categorySubsHeader }}</a></li>
-                [/subCategories]
-            </ul>
+  <ul class="nav nav-tabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active" href="#faqs" data-toggle="tab" role="tab">{{ categoryFaqsHeader }}</a>
+    </li>
+    [subCategories]
+    <li class="nav-item">
+      <a class="nav-link" href="#subcategories" data-toggle="tab" role="tab">{{ categorySubsHeader }}</a>
+    </li>
+    [/subCategories]
+  </ul>
 
-            <div class="tab-content">
-                <div class="tab-pane active" id="faqs">
-                    <p>
-                        {{ categoryDescription }}
-                        [categoryImage]
-                        <img src="{{ categoryImage }}" alt="{{ categoryFaqsHeader }}" width="140" height="140"
-                             class="img-rounded img-fluid float-right">
-                        [/categoryImage]
-                    </p>
-                    {{ categoryContent }}
-                    <p>{{ categoryLevelUp }}</p>
-                </div>
-                <div class="tab-pane" id="subcategories">
-                    <p>{{ categoryDescription }}</p>
-                    {{ subCategoryContent }}
-                </div>
-            </div>
-        </section>
+  <div class="tab-content mt-3">
+    <div class="tab-pane fade show active" id="faqs">
+      <p>
+        {{ categoryDescription }}
+        [categoryImage]
+        <img src="{{ categoryImage }}" alt="{{ categoryFaqsHeader }}" width="140" height="140"
+             class="rounded img-fluid float-right">
+        [/categoryImage]
+      </p>
+      {{ categoryContent }}
+      <p>{{ categoryLevelUp }}</p>
+    </div>
+    <div class="tab-pane fade" id="subcategories">
+      <p>{{ categoryDescription }}</p>
+      {{ subCategoryContent }}
+    </div>
+  </div>
+</section>
