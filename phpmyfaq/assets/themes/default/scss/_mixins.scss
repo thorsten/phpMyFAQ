@@ -1,0 +1,222 @@
+/**
+ * phpMyFAQ 3.0 default layout mixins
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @package phpMyFAQ
+ * @package   Layout
+ * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @copyright 2013-2019 phpMyFAQ Team
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2013-12-22
+ */
+
+$web-font-path: "https://fonts.googleapis.com/css?family=Roboto:400,500,700" !default;
+@import url($web-font-path);
+
+.bg-primary {
+  background-color: $dark !important;
+}
+.bg-dark {
+  background-color: $secondary !important;
+}
+.bg-light {
+  background-color: $gray-200 !important;
+}
+
+.phpmyfaq-default {
+  line-height: 22px;
+  font-weight: 500;
+}
+
+.navbar {
+  .nav-link {
+    @extend .phpmyfaq-default;
+  }
+
+  &-form input,
+  &-form .form-control {
+    border: none;
+  }
+}
+
+.btn {
+  @extend .phpmyfaq-default;
+
+  &:hover {
+    border-color: transparent;
+  }
+
+  &-success,
+  &-warning {
+    color: $white;
+  }
+}
+
+.table {
+  .thead-dark th {
+    background-color: $dark;
+  }
+}
+
+input,
+.form-control {
+  @include box-shadow(none);
+
+  &:focus {
+    @include box-shadow(none);
+  }
+}
+
+.nav-tabs {
+  .nav-link {
+    @extend .phpmyfaq-default;
+    background-color: $gray-200;
+    border-color: $gray-300;
+  }
+
+  .nav-link,
+  .nav-link:hover,
+  .nav-link:focus {
+    color: $gray-600;
+  }
+
+  .nav-link.disabled,
+  .nav-link.disabled:hover,
+  .nav-link.disabled:focus {
+    background-color: $gray-200;
+    border-color: $gray-300;
+    color: $nav-link-disabled-color;
+  }
+}
+
+.nav-pills {
+  .nav-link {
+    @extend .phpmyfaq-default;
+    border: 1px solid transparent;
+    color: $gray-600;
+  }
+
+  .nav-link.active,
+  .nav-link:hover,
+  .nav-link:focus {
+    background-color: $gray-200;
+    border-color: $gray-300;
+  }
+
+  .nav-link.disabled,
+  .nav-link.disabled:hover {
+    background-color: transparent;
+    border-color: transparent;
+    color: $gray-300;
+  }
+}
+
+.breadcrumb {
+  @extend .phpmyfaq-default;
+  border: 1px solid $gray-300;
+}
+
+.pagination {
+  @extend .phpmyfaq-default;
+
+  a:hover {
+    text-decoration: none;
+  }
+}
+
+.dropdown-menu {
+  .dropdown-item {
+    @extend .phpmyfaq-default;
+  }
+}
+
+.alert {
+  color: #fff;
+
+  a,
+  .alert-link {
+    color: #fff;
+    text-decoration: underline;
+  }
+
+  &-primary {
+    &, > th, > td {
+      background-color: $primary;
+    }
+  }
+
+  &-secondary {
+    &, > th, > td {
+      background-color: $secondary;
+    }
+  }
+
+  &-success {
+    &, > th, > td {
+      background-color: $success;
+    }
+  }
+
+  &-info {
+    &, > th, > td {
+      background-color: $info;
+    }
+  }
+
+  &-danger {
+    &, > th, > td {
+      background-color: $danger;
+    }
+  }
+
+  &-warning {
+    &, > th, > td {
+      background-color: $warning;
+    }
+  }
+
+  &-dark {
+    &, > th, > td {
+      background-color: $dark;
+    }
+  }
+
+  &-light {
+    &, > th, > td {
+      background-color: $light;
+    }
+  }
+
+  &-light {
+    &,
+    & a:not(.btn),
+    & .alert-link {
+      color: $body-color;
+    }
+  }
+}
+
+.badge {
+
+  &-success,
+  &-warning {
+    color: $white;
+  }
+}
+
+.tooltip {
+  @extend .phpmyfaq-default;
+}
+
+.close {
+  color: $gray-300;
+  opacity: 1;
+
+  &:hover {
+    color: darken($gray-300, 20%);
+  }
+}

@@ -43,11 +43,13 @@ module.exports = function (grunt) {
     clean: {
       build: {
         src: [
-          'phpmyfaq/assets/js/vendor.js',
-          'phpmyfaq/assets/js/vendor.min.js',
-          'phpmyfaq/assets/js/phpmyfaq.js',
-          'phpmyfaq/assets/js/phpmyfaq.js.map',
-          'phpmyfaq/assets/js/phpmyfaq.min.js',
+          'phpmyfaq/admin/assets/css/*.css',
+          'phpmyfaq/assets/themes/default/js/vendors.js',
+          'phpmyfaq/assets/themes/default/js/vendors.min.js',
+          'phpmyfaq/assets/themes/default/js/phpmyfaq.js',
+          'phpmyfaq/assets/themes/default/js/phpmyfaq.js.map',
+          'phpmyfaq/assets/themes/default/js/phpmyfaq.min.js',
+          'phpmyfaq/assets/themes/default/css/*.css'
         ]
       }
     },
