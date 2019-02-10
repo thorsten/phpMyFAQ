@@ -1,6 +1,6 @@
 {
   "name": "phpMyFAQ",
-  "version": "2.9.11",
+  "version": "2.9.12",
   "main": "phpmyfaq.js",
   "ignore": [
     "**/.*",
@@ -8,7 +8,7 @@
     "components"
   ],
   "dependencies": {
-    "bootstrap": "~3.3.7",
+    "bootstrap": "~3.4.0",
     "font-awesome": "~4.7",
     "sparkline": "~2.1.2",
     "tinymce": "~4.6",
