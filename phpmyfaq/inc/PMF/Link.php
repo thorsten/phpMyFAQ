@@ -728,11 +728,7 @@ class PMF_Link
      */
     public function getCurrentUrl()
     {
-        if (!empty($_SERVER['HTTPS'])) {
-            return 'https://'.$_SERVER['SERVER_NAME'].PMF_String::htmlentities($_SERVER['REQUEST_URI']);
-        } else {
-            return 'http://'.$_SERVER['SERVER_NAME'].PMF_String::htmlentities($_SERVER['REQUEST_URI']);
-        }
+        return $this->_config->getDefaultUrl().PMF_String::htmlspecialchars(substr($_SERVER['REQUEST_URI'], 1));
     }
 
     /**
