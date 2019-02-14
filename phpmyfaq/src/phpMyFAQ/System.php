@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * Class for checking system requirements.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -23,8 +21,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Db\Driver;
 
 /**
- * System.
- *
+ * Class System.
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
@@ -52,7 +49,7 @@ class System
     /**
      * Pre-release version.
      */
-    const VERSION_PRERELEASE = 'beta';
+    const VERSION_PRERELEASE = 'beta.2';
 
     /**
      * API version.
@@ -62,7 +59,7 @@ class System
     /**     
      * Minimum required PHP version.
      */
-    const VERSION_MINIMUM_PHP = '5.6.6';
+    const VERSION_MINIMUM_PHP = '7.1.0';
 
     /**
      * Array of required PHP extensions.
@@ -100,7 +97,6 @@ class System
 
     /**
      * Database handle.
-     *
      * @var Driver
      */
     private $database = null;

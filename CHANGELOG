@@ -1,11 +1,12 @@
-phpMyFAQ 3.0.0-beta
+phpMyFAQ 3.0.0-beta.2
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-beta - 2019-02-12
+Version 3.0.0-beta.2 - 2019-02-14
+- fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
 - changed PHP requirement to PHP 7.1+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
@@ -35,6 +36,13 @@ Version 3.0.0-beta - 2019-02-12
 - removed bundled Symfony ClassLoader (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
 - removed Modernizr (Thorsten)
+
+Version 2.9.13 - 2019-02-14
+- fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
+
+Version 2.9.12 - 2019-02-12
+- updated bundled Bootstrap to version 3.4.0 (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 2.9.11 - 2018-09-02
 - fixed multiple vulnerabilities (Thorsten)
