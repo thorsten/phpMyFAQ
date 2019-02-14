@@ -1,9 +1,12 @@
-phpMyFAQ 2.9.12
+phpMyFAQ 2.9.13
 Codename "Proteus"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 2.9.13 - 2019-02-12
+- fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
 
 Version 2.9.12 - 2019-02-12
 - updated bundled Bootstrap to version 3.4.0 (Thorsten)
