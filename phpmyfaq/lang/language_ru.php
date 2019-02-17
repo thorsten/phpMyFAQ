@@ -924,7 +924,7 @@ $PMF_LANG['ad_searchterm_del'] = 'Delete all logged search terms';
 $PMF_LANG['ad_searchterm_del_suc'] = 'Deleted successfully all search terms.';
 $PMF_LANG['ad_searchterm_del_err'] = 'Couldn\'t delete all search terms.';
 $PMF_LANG['ad_tag_delete_success'] = 'The tag was deleted successfully.';
-$PMF_LANG['ad_tag_delete_error'] = 'The tag was not deleted because an error occured.';
+$PMF_LANG['ad_tag_delete_error'] = 'The tag was not deleted because an error occurred.';
 $PMF_LANG['seoCenter'] = 'SEO';
 $LANG_CONF['search.enableHighlighting'] = array(0 => 'checkbox', 1 => 'Highlight search terms');
 $LANG_CONF['main.enableRssFeeds'] = array(0 => 'checkbox', 1 => 'RSS Feeds<br>(default: enabled)');

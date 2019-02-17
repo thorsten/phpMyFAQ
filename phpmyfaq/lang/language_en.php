@@ -866,7 +866,7 @@ $PMF_LANG['errorRegistration'] = 'This field is required!';
 $PMF_LANG['submitRegister'] = 'Create';
 $PMF_LANG['msgUserData'] = 'User information required for registration';
 $PMF_LANG['captchaError'] = 'Please enter the right captcha code!';
-$PMF_LANG['msgRegError'] = 'Following errors occured. Please correct them:';
+$PMF_LANG['msgRegError'] = 'Following errors occurred. Please correct them:';
 $PMF_LANG['successMessage'] = 'Your registration was successful. You will soon receive a confirmation mail with your login data!';
 $PMF_LANG['msgRegThankYou'] = 'Thank you for your registration!';
 $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
@@ -1017,7 +1017,7 @@ $PMF_LANG['records.orderingPopularFaqs.visits'] = "list most visited entries";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "list most voted entries";
 
 // added 2.6.0-alpha - 2009-11-05 by Thorsten
-$PMF_LANG['msgShowHelp'] = 'Please seperate words by comma.';
+$PMF_LANG['msgShowHelp'] = 'Please separate words by comma.';
 
 // added 2.6.0-RC - 2009-11-30 by Thorsten
 $PMF_LANG['msgUpdateFaqDate'] = 'update';
@@ -1052,7 +1052,7 @@ $LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 =>
 $PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";
 $PMF_LANG["ad_menu_attachment_admin"] = "Attachment administration";
 $PMF_LANG['msgAttachmentsFilename'] = 'Filename';
-$PMF_LANG['msgAttachmentsFilesize'] = 'Filesize';
+$PMF_LANG['msgAttachmentsFilesize'] = 'File size';
 $PMF_LANG['msgAttachmentsMimeType'] = 'MIME Type';
 $PMF_LANG['msgAttachmentsWannaDelete'] = 'Are you sure you want to delete this attachment?';
 $PMF_LANG['msgAttachmentsDeleted'] = 'Attachment <strong>successfully</strong> deleted.';
@@ -1077,7 +1077,7 @@ $PMF_LANG["ad_stat_report_make_csv"] = "Export to CSV";
 
 // added v2.7.0-alpha2 - 2010-02-05 by Thorsten Rinne
 $PMF_LANG['msgRegistration'] = 'Registration';
-$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your loginname and a valid email address!';
+$PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, your login name and a valid email address!';
 $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will receive an answer soon after Administration has authorized your registration.';
 
 // added v2.7.0-beta - 2011-06-13 by Thorsten
@@ -1122,8 +1122,8 @@ $PMF_LANG["rememberMe"] = 'Log me on automatically next time';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
 
 // added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ autosaving');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for autosaving in seconds, default 180');
+$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ auto-saving');
+$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for auto-saving in seconds, default 180');
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
@@ -1145,7 +1145,7 @@ $LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => "checkbox", 1 => "En
 $LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar Support");
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
-$PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stopwords.";
+$PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stop words.";
 $PMF_LANG["ad_visits_per_day"] = "Visits per day";
 
 // added v2.8.0-RC2 - 2013-02-17 by Thorsten
@@ -1189,7 +1189,7 @@ $LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Enable G
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
-$PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occured.";
+$PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occurred.";
 $PMF_LANG["seoCenter"] = "SEO";
 $LANG_CONF["seo.metaTagsHome"] = array(0 => "select", 1 => "Meta Tags start page");
 $LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
