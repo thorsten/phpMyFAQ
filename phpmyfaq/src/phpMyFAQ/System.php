@@ -17,7 +17,6 @@ namespace phpMyFAQ;
  * @since 2010-01-13
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Db\Driver;
 
 /**
@@ -42,14 +41,14 @@ class System
     const VERSION_MINOR = 0;
 
     /**
-     * Patchlevel.
+     * Patch level.
      */
-    const VERSION_PATCHLEVEL = 0;
+    const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    const VERSION_PRERELEASE = 'beta.2';
+    const VERSION_PRE_RELEASE = 'beta.3';
 
     /**
      * API version.
@@ -89,10 +88,10 @@ class System
      * @var array
      */
     private $supportedDatabases = [
-        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x' ],
-        'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x' ],
+        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB' ],
+        'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL' ],
         'sqlite3' => [ self::VERSION_MINIMUM_PHP, 'SQLite 3' ],
-        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP']
+        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server']
     ];
 
     /**
@@ -124,20 +123,20 @@ class System
      */
     public static function getVersion()
     {
-        if (null !== self::VERSION_PRERELEASE) {
+        if (null !== self::VERSION_PRE_RELEASE) {
             return sprintf(
                 '%d.%d.%d-%s',
                 self::VERSION_MAJOR,
                 self::VERSION_MINOR,
-                self::VERSION_PATCHLEVEL,
-                self::VERSION_PRERELEASE
+                self::VERSION_PATCH_LEVEL,
+                self::VERSION_PRE_RELEASE
             );
         } else {
             return sprintf(
                 '%d.%d.%d',
                 self::VERSION_MAJOR,
                 self::VERSION_MINOR,
-                self::VERSION_PATCHLEVEL
+                self::VERSION_PATCH_LEVEL
             );
         }
     }
