@@ -43,7 +43,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     $categoryData = $category->getCategoryData($selectedCategoryId);
-    $records = $faq->showAllRecords(
+    $records = $faq->renderRecordsByCategoryId(
         $selectedCategoryId,
         $faqConfig->get('records.orderby'),
         $faqConfig->get('records.sortby')

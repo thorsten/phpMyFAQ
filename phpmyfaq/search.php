@@ -134,7 +134,7 @@ if (!is_null($inputTag) && '' !== $inputTag) {
                 break;
             }
         }
-        $searchResult = $faq->showAllRecordsByIds($recordIds);
+        $searchResult = $faq->renderRecordsByFaqIds($recordIds);
     }
 } else {
     $searchResult = '';

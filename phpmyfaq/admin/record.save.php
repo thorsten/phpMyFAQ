@@ -166,7 +166,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         $visits->logViews($recordId);
 
         // save or update the FAQ record
-        if ($faq->isAlreadyTranslated($recordId, $recordLang)) {
+        if ($faq->hasTranslation($recordId, $recordLang)) {
             $faq->updateRecord($recordData);
         } else {
             $recordId = $faq->addRecord($recordData, false);

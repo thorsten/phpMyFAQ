@@ -103,7 +103,7 @@ if ('insertentry' === $do &&
             $visits = new Visits($faqConfig);
             $visits->logViews($record_id);
 
-            if ($faq->isAlreadyTranslated($record_id, $record_lang)) {
+            if ($faq->hasTranslation($record_id, $record_lang)) {
                 $faq->updateRecord($recordData);
             } else {
                 $record_id = $faq->addRecord($recordData, false);

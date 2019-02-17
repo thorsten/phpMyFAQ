@@ -45,7 +45,7 @@ $template->parse(
         'msgQuestionText' => $PMF_LANG['msgQuestionText'],
         'msgDate_User' => $PMF_LANG['msgDate_User'],
         'msgQuestion2' => $PMF_LANG['msgQuestion2'],
-        'printOpenQuestions' => $faq->printOpenQuestions()
+        'printOpenQuestions' => $faq->renderOpenQuestions()
     ]
 );
 

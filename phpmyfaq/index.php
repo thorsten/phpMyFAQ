@@ -710,7 +710,7 @@ $tplHeaders = [
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
     'writeTags' => $oTag->printHTMLTagsCloud(),
     'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles' => $faq->showAllRecordsWoPaging($cat)
+    'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
 ];
 
 if (DEBUG) {
