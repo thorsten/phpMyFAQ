@@ -435,9 +435,9 @@ if ($action !== 'main') {
 // Set right column
 //
 if (($action === 'faq') || ($action === 'show')) {
-    $rightSidebarTemplate = $action === 'faq' ? 'catandtag.html' : 'tagcloud.html';
+    $sidebarTemplate = $action === 'faq' ? 'sidebar-categories-tags.html' : 'sidebar-tagcloud.html';
 } else {
-    $rightSidebarTemplate = 'startpage.html';
+    $sidebarTemplate = 'sidebar-categories-tags.html';
 }
 
 //
@@ -477,6 +477,7 @@ if ($faqConfig->get('main.maintenanceMode')) {
 $template = new Template(
     [
         'index' => $indexSet,
+        'sidebar' => $sidebarTemplate,
         'writeContent' => $includeTemplate,
     ],
     new TemplateHelper($faqConfig),
