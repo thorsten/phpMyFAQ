@@ -1,0 +1,85 @@
+version: "2.3"
+
+# Use this file for dev
+
+services:
+  mariadb:
+    image: mariadb:10.2.14
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=iop
+      - MYSQL_DATABASE=phpmyfaq
+      - MYSQL_USER=phpmyfaq
+      - MYSQL_PASSWORD=phpmyfaq
+    volumes:
+      - ./volumes/mariadb:/var/lib/mysql
+  phpmyfaq:
+    build: .
+    restart: always
+    stdin_open: true
+    environment:
+      - PMF_DB_HOST=db
+      - PMF_DB_NAME=phpmyfaq
+      - PMF_DB_USER=phpmyfaq
+      - PMF_DB_PASS=phpmyfaq
+      - PMF_DISABLE_HTACCESS=""
+      - PMF_TIMEZONE="Europe/Berlin"
+      - PMF_ENABLE_UPLOADS="On"
+      - PMF_MEMORY_LIMIT="64M"
+      - PHP_LOG_ERRORS="On"
+      - PHP_ERROR_REPORTING="E_ALL & E_DEPRECATED & E_STRICT" # Production Value: E_ALL & ~E_DEPRECATED & ~E_STRICT
+    links:
+      - mariadb:db
+      - elasticsearch
+    ports:
+      - "8080:80"
+    volumes:
+      - ./phpmyfaq:/var/www/html
+    depends_on:
+      - bower
+  bower:
+    image: node:latest
+    restart: "no"
+    command: sh -c "npm install node-sass bower grunt-cli -g --unsafe-perm && bower install --allow-root && grunt build"
+    working_dir: /app
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+    depends_on:
+      - composer
+  composer:
+    image: composer:latest
+    restart: "no"
+    command: composer install --verbose --no-dev
+    stdin_open: true
+    tty: true
+    volumes:
+      - .:/app
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    stdin_open: true
+    links:
+      - mariadb:db
+    ports:
+      - "8000:80"
+    volumes:
+      - ./volumes/sessions:/sessions
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:5.2.1
+    container_name: phpmyfaq-29-elasticsearch
+    restart: always
+    environment:
+      - cluster.name=phpmyfaq-cluster
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./volumes/esdata:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
