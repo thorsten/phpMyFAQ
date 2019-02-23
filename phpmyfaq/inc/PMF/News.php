@@ -106,7 +106,7 @@ class PMF_News
         if ($this->_config->get('records.numberOfShownNewsEntries') > 0 && $this->_config->getDb()->numRows($result) > 0) {
             while (($row = $this->_config->getDb()->fetchObject($result))) {
                 ++$counter;
-                if (($showArchive  && ($counter > $this->_config->get('records.numberOfShownNewsEntries'))) ||
+                if (($showArchive && ($counter > $this->_config->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && (!$forceConfLimit) &&
                    ($counter <= $this->_config->get('records.numberOfShownNewsEntries'))) ||
                    ((!$showArchive) && $forceConfLimit)) {
@@ -125,7 +125,7 @@ class PMF_News
                         'allowComments' => ('y' == $row->comment),
                         'link' => $row->link,
                         'linkTitle' => $row->linktitel,
-                        'target' => $row->target, );
+                        'target' => $row->target,);
                     $news[] = $item;
                 }
             }
@@ -150,9 +150,9 @@ class PMF_News
 
         foreach ($news as $item) {
             $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                           PMF_Link::getSystemRelativeUri(),
-                           $item['id'],
-                           $item['lang']);
+                            PMF_Link::getSystemRelativeUri(),
+                            $item['id'],
+                            $item['lang']);
             $oLink = new PMF_Link($url, $this->_config);
 
             if (isset($item['header'])) {
@@ -286,7 +286,7 @@ class PMF_News
                     'allowComments' => $allowComments,
                     'link' => $row->link,
                     'linkTitle' => $row->linktitel,
-                    'target' => $row->target, );
+                    'target' => $row->target,);
             }
         }
 

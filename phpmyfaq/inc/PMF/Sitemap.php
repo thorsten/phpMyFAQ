@@ -104,7 +104,7 @@ class PMF_Sitemap
     /**
      * Returns all available first letters.
      *
-     * @return array
+     * @return string
      *
      * @since  2007-03-30
      *
@@ -212,7 +212,7 @@ class PMF_Sitemap
      *
      * @param string $letter Letter
      *
-     * @return array
+     * @return string
      *
      * @since  2007-03-30
      *

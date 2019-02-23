@@ -95,7 +95,7 @@ class PMF_TransTool
         $exemplaryNPlurals = intval($exemplary['PMF_LANG[nplurals]']);
         $toCheckNPlurals = intval($toCheck['PMF_LANG[nplurals]']);
         // One English plural form is equal to (xx/en) of xx plural forms (1/2, 2/2, 3/2,..,6/2..)
-        $pluralsRatio = ($toCheckNPlurals != -1) ? ($toCheckNPlurals / $exemplaryNPlurals) : 1;
+        $pluralsRatio = ($toCheckNPlurals != -1) ? ($toCheckNPlurals/$exemplaryNPlurals) : 1;
 
         $retval = $countAll = $countTranslated = 0;
 
@@ -125,7 +125,7 @@ class PMF_TransTool
                 }
             }
 
-            $retval = floor(100 * $countTranslated / $countAll);
+            $retval = floor(100*$countTranslated/$countAll);
         }
 
         unset($exemplary, $toCheck);
@@ -183,7 +183,7 @@ class PMF_TransTool
      *
      * @param string $val Value
      *
-     * @return bool
+     * @return integer
      */
     public function isValIgnorable($val)
     {

@@ -53,7 +53,7 @@ class PMF_Helper_Category extends PMF_Helper
         $numFaqs = $this->Category->getNumberOfRecordsOfCategory();
 
         if ($numCategories > 0) {
-            for ($y = 0;$y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
+            for ($y = 0; $y < $numCategories; $y = $this->Category->getNextLineTree($y)) {
                 list($hasChild, $name, $categoryId, $description, $active) = $this->Category->getLineDisplay($y);
 
                 if (!$active) {
@@ -158,7 +158,7 @@ class PMF_Helper_Category extends PMF_Helper
         $this->Category->expandAll();
 
         if ($numCategories > 0) {
-            for ($y = 0;$y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
+            for ($y = 0; $y < $this->Category->height(); $y = $this->Category->getNextLineTree($y)) {
                 list($hasChild, $categoryName, $parent, $description, $active) = $this->Category->getLineDisplay($y);
 
                 if (!$active) {
@@ -253,7 +253,7 @@ class PMF_Helper_Category extends PMF_Helper
     {
         $categories = '';
         foreach ($this->Category->categories as $cat) {
-            if (0 === (int) $cat['parent_id']) {
+            if (0 === (int)$cat['parent_id']) {
                 $categories .= sprintf(
                     '<li><a href="?action=show&cat=%d">%s</a></li>',
                     $cat['id'],

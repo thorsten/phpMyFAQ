@@ -68,7 +68,7 @@ function buildSitemapNode($location, $lastmod = null, $changeFreq = null, $prior
         $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
     }
     $node =
-         '<url>'
+            '<url>'
         .'<loc>'.PMF_String::htmlspecialchars($location).'</loc>'
         .'<lastmod>'.$lastmod.'</lastmod>'
         .'<changefreq>'.$changeFreq.'</changefreq>'
@@ -99,7 +99,7 @@ if (count($items) > 0) {
 
 // Sitemap header
 $sitemap =
-     '<?xml version="1.0" encoding="UTF-8"?>'
+        '<?xml version="1.0" encoding="UTF-8"?>'
     .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
     .' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
     .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
@@ -116,7 +116,7 @@ $sitemap .= buildSitemapNode(
 foreach ($items as $item) {
     $priority = PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT;
     if (($visitsMax - $visitMin) > 0) {
-        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT * (1 + (($item['visits'] - $visitMin) / ($visitsMax - $visitMin))));
+        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT*(1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
     }
     // a. We use plain PMF urls w/o any SEO schema
     $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);

@@ -270,7 +270,7 @@ class PMF_Linkverifier
         while (list(, $type) = each($types)) {
             preg_match_all("|[^?&]$type\=(\"?'?`?)([[:alnum:]\:\#%?=;&@/\ \.\_\-\{\}]+)\\1|i", $string, $matches);
             $sz = sizeof($matches[2]);
-            for ($i = 0;$i < $sz; ++$i) {
+            for ($i = 0; $i < $sz; ++$i) {
                 $this->urlpool[$type][] = $matches[2][$i];
                 ++$urlCount;
             }
@@ -770,7 +770,7 @@ class PMF_Linkverifier
                         $inforeasons[] = sprintf(
                             $PMF_LANG['ad_linkcheck_openurl_infoprefix'],
                             PMF_String::htmlspecialchars($value['absurl'])
-                         ).$value['reason'];
+                            ).$value['reason'];
                     }
                 } else {
                     $_classname = 'urlfail';

@@ -68,7 +68,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param string
      * @param string
      *
-     * @return bool
+     * @return null|boolean
      */
     public function connect($host, $user, $passwd, $db = '')
     {
@@ -88,7 +88,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      * @param int    $offset
      * @param int    $rowcount
      *
-     * @return mixed $result
+     * @return SQLite3Result $result
      */
     public function query($query, $offset = 0, $rowcount = 0)
     {
@@ -124,7 +124,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
+     * @param SQLite3Result $result
      *
      * @return object or NULL if there are no more results
      */
@@ -134,7 +134,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
         return $return
-            ? (object) $return
+            ? (object)$return
             : null;
     }
 
@@ -157,7 +157,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @param SQLite3Result $result
      *
-     * @return array
+     * @return SQLite3Result
      */
     public function fetchAssoc($result)
     {
@@ -184,7 +184,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
 
         $result->fetchedByPMF = true;
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $ret[] = (object) $row;
+            $ret[] = (object)$row;
         }
 
         return $ret;
@@ -212,7 +212,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
     public function log()
     {
@@ -246,7 +246,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {
@@ -299,7 +299,7 @@ class PMF_DB_Sqlite3 implements PMF_DB_Driver
      */
     public function nextId($table, $id)
     {
-        $result = (int) $this->conn->querySingle(
+        $result = (int)$this->conn->querySingle(
             sprintf(
                 'SELECT max(%s) AS current_id FROM %s',
                 $id,

@@ -267,8 +267,8 @@ class PMF_Perm_Basic extends PMF_Perm
 
         // process right data
         $right_data = $this->config->getDb()->fetchArray($res);
-        $right_data['for_users'] = (bool) $right_data['for_users'];
-        $right_data['for_groups'] = (bool) $right_data['for_groups'];
+        $right_data['for_users'] = (bool)$right_data['for_users'];
+        $right_data['for_groups'] = (bool)$right_data['for_groups'];
 
         return $right_data;
     }
@@ -327,8 +327,8 @@ class PMF_Perm_Basic extends PMF_Perm
             $nextId,
             $rightData['name'],
             $rightData['description'],
-            isset($rightData['for_users']) ? (int) $rightData['for_users'] : 1,
-            isset($rightData['for_groups']) ? (int) $rightData['for_groups'] : 1
+            isset($rightData['for_users']) ? (int)$rightData['for_users'] : 1,
+            isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1
         );
 
         if (!$this->config->getDb()->query($insert)) {
@@ -552,8 +552,8 @@ class PMF_Perm_Basic extends PMF_Perm
             $right_data['for_groups'] = $this->default_right_data['for_groups'];
         }
 
-        $right_data['for_users'] = (int) $right_data['for_users'];
-        $right_data['for_groups'] = (int) $right_data['for_groups'];
+        $right_data['for_users'] = (int)$right_data['for_users'];
+        $right_data['for_groups'] = (int)$right_data['for_groups'];
 
         return $right_data;
     }

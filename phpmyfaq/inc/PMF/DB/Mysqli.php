@@ -249,8 +249,8 @@ class PMF_DB_Mysqli implements PMF_DB_Driver
                MAX(%s) AS current_id
            FROM
                %s',
-           $id,
-           $table);
+            $id,
+            $table);
 
         $result = $this->query($select);
 

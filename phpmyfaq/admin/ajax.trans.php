@@ -29,9 +29,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajax_action = PMF_Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
-$csrfToken  = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+$csrfToken = PMF_Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 if (is_null($csrfToken)) {
-    $csrfToken  = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+    $csrfToken = PMF_Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 }
 
 if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
@@ -40,167 +40,167 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 
 switch ($ajax_action) {
 
-    case 'save_page_buffer':
-        /*
+        case 'save_page_buffer':
+            /*
          * Build language variable definitions
          * @todo Change input handling using PMF_Filter
          */
-        foreach ((array) @$_POST['PMF_LANG'] as $key => $val) {
-            if (is_string($val)) {
-                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
-                $val = str_replace("'", "\\'", $val);
-                $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"] = $val;
-            } elseif (is_array($val)) {
-                /*
+            foreach ((array) @$_POST['PMF_LANG'] as $key => $val) {
+                if (is_string($val)) {
+                    $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                    $val = str_replace("'", "\\'", $val);
+                    $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key]"] = $val;
+                } elseif (is_array($val)) {
+                    /*
                  * Here we deal with a two dimensional array
                  */
-                foreach ($val as $key2 => $val2) {
-                    $val2 = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val2);
-                    $val2 = str_replace("'", "\\'", $val2);
-                    $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key][$key2]"] = $val2;
+                    foreach ($val as $key2 => $val2) {
+                        $val2 = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val2);
+                        $val2 = str_replace("'", "\\'", $val2);
+                        $_SESSION['trans']['rightVarsOnly']["PMF_LANG[$key][$key2]"] = $val2;
+                    }
                 }
             }
-        }
 
-        foreach ((array) @$_POST['LANG_CONF'] as $key => $val) {
-            // if string like array(blah-blah-blah), extract the contents inside the brackets
-            if (preg_match('/^\s*array\s*\(\s*(\d+.+)\s*\).*$/', $val, $matches1)) {
-                // split the resulting string of delimiters such as "number =>"
-                $valArr = preg_split(
-                    '/\s*(\d+)\s*\=\>\s*/',
-                    $matches1[1],
-                    null,
-                    PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
-                );
-                $numVal = count($valArr);
-                if ($numVal > 1) {
-                    $newValArr = [];
-                    for ($i = 0; $i < $numVal; $i += 2) {
-                        if (is_numeric($valArr[$i])) {
-                            // clearing quotes
-                            if (preg_match('/^\s*\\\\*[\"|\'](.+)\\\\*[\"|\'][\s\,]*$/', $valArr[$i + 1], $matches2)) {
-                                $subVal = $matches2[1];
-                                // normalize quotes
-                                $subVal = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $subVal);
-                                $subVal = str_replace("'", "\\'", $subVal);
-                                // assembly of the original substring back
-                                $newValArr[] = $valArr[$i].' => \''.$subVal.'\'';
+            foreach ((array) @$_POST['LANG_CONF'] as $key => $val) {
+                // if string like array(blah-blah-blah), extract the contents inside the brackets
+                if (preg_match('/^\s*array\s*\(\s*(\d+.+)\s*\).*$/', $val, $matches1)) {
+                    // split the resulting string of delimiters such as "number =>"
+                    $valArr = preg_split(
+                        '/\s*(\d+)\s*\=\>\s*/',
+                        $matches1[1],
+                        null,
+                        PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY
+                    );
+                    $numVal = count($valArr);
+                    if ($numVal > 1) {
+                        $newValArr = [];
+                        for ($i = 0; $i < $numVal; $i += 2) {
+                            if (is_numeric($valArr[$i])) {
+                                // clearing quotes
+                                if (preg_match('/^\s*\\\\*[\"|\'](.+)\\\\*[\"|\'][\s\,]*$/', $valArr[$i + 1], $matches2)) {
+                                    $subVal = $matches2[1];
+                                    // normalize quotes
+                                    $subVal = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $subVal);
+                                    $subVal = str_replace("'", "\\'", $subVal);
+                                    // assembly of the original substring back
+                                    $newValArr[] = $valArr[$i].' => \''.$subVal.'\'';
+                                }
                             }
                         }
+                        $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = 'array('.implode(', ', $newValArr).')';
                     }
-                    $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = 'array('.implode(', ', $newValArr).')';
+                } else {  // compatibility for old behavior
+                    $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
+                    $val = str_replace("'", "\\'", $val);
+                    $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
                 }
-            } else {  // compatibility for old behavior
-                $val = str_replace(array('\\\\', '\"', '\\\''), array('\\', '"', "'"), $val);
-                $val = str_replace("'", "\\'", $val);
-                $_SESSION['trans']['rightVarsOnly']["LANG_CONF[$key]"] = $val;
             }
-        }
 
-        echo 1;
-    break;
+            echo 1;
+        break;
     
-    case 'save_translated_lang':
+        case 'save_translated_lang':
 
-        if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
-            echo $PMF_LANG['err_NotAuth'];
-            exit;
-        }
-
-        $lang = strtolower($_SESSION['trans']['rightVarsOnly']['PMF_LANG[metaLanguage]']);
-        $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
-
-        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
-            echo 0;
-            exit;
-        }
-
-        if (!copy($filename, PMF_ROOT_DIR.'/lang/language_'.$lang.'.bak.php')) {
-            echo 0;
-            exit;
-        }
-
-        $newFileContents = '';
-        $tmpLines = [];
-
-        // Read in the head of the file we're writing to
-        $fh = fopen($filename, 'r');
-        do {
-            $line = fgets($fh);
-            array_push($tmpLines, rtrim($line));
-        } while ('*/' != substr(trim($line), -2));
-        fclose($fh);
-
-        // Construct lines with variable definitions
-        foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
-            if (0 === strpos($key, 'PMF_LANG')) {
-                $val = "'$val'";
+            if (!$user->perm->checkRight($user->getUserId(), 'edittranslation')) {
+                echo $PMF_LANG['err_NotAuth'];
+                exit;
             }
-            array_push($tmpLines, '$'.str_replace(array('[', ']'), array("['", "']"), $key)." = $val;");
-        }
 
-        $newFileContents .= implode("\n", $tmpLines);
+            $lang = strtolower($_SESSION['trans']['rightVarsOnly']['PMF_LANG[metaLanguage]']);
+            $filename = PMF_ROOT_DIR.'/lang/language_'.$lang.'.php';
 
-        unset($_SESSION['trans']);
+            if (!is_writable(PMF_ROOT_DIR.'/lang')) {
+                echo 0;
+                exit;
+            }
 
-        $retval = file_put_contents($filename, $newFileContents);
-        echo intval($retval);
-        break;
+            if (!copy($filename, PMF_ROOT_DIR.'/lang/language_'.$lang.'.bak.php')) {
+                echo 0;
+                exit;
+            }
 
-    case 'remove_lang_file':
+            $newFileContents = '';
+            $tmpLines = [];
 
-        if (!$user->perm->checkRight($user->getUserId(), 'deltranslation')) {
-            echo $PMF_LANG['err_NotAuth'];
-            exit;
-        }
+            // Read in the head of the file we're writing to
+            $fh = fopen($filename, 'r');
+            do {
+                $line = fgets($fh);
+                array_push($tmpLines, rtrim($line));
+            } while ('*/' != substr(trim($line), -2));
+            fclose($fh);
 
-        $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
+            // Construct lines with variable definitions
+            foreach ($_SESSION['trans']['rightVarsOnly'] as $key => $val) {
+                if (0 === strpos($key, 'PMF_LANG')) {
+                    $val = "'$val'";
+                }
+                array_push($tmpLines, '$'.str_replace(array('[', ']'), array("['", "']"), $key)." = $val;");
+            }
 
-        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
-            echo 0;
-            exit;
-        }
+            $newFileContents .= implode("\n", $tmpLines);
 
-        if (!copy(PMF_ROOT_DIR."/lang/language_$lang.php", PMF_ROOT_DIR."/lang/language_$lang.bak.php")) {
-            echo 0;
-            exit;
-        }
+            unset($_SESSION['trans']);
 
-        if (!unlink(PMF_ROOT_DIR."/lang/language_$lang.php")) {
-            echo 0;
-            exit;
-        }
+            $retval = file_put_contents($filename, $newFileContents);
+            echo intval($retval);
+            break;
 
-        echo 1;
-        break;
+        case 'remove_lang_file':
 
-    case 'save_added_trans':
+            if (!$user->perm->checkRight($user->getUserId(), 'deltranslation')) {
+                echo $PMF_LANG['err_NotAuth'];
+                exit;
+            }
 
-        if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
-            echo $PMF_LANG['err_NotAuth'];
-            exit;
-        }
+            $lang = PMF_Filter::filterInput(INPUT_GET, 'translang', FILTER_SANITIZE_STRING);
 
-        if (!is_writable(PMF_ROOT_DIR.'/lang')) {
-            echo 0;
-            exit;
-        }
+            if (!is_writable(PMF_ROOT_DIR.'/lang')) {
+                echo 0;
+                exit;
+            }
 
-        $langCode = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
-        $langName = @$languageCodes[$langCode];
-        $langCharset = 'UTF-8';
-        $langDir = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
-        $langNPlurals = strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
-        $langDesc = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
-        $author = (array) @$_POST['author'];
+            if (!copy(PMF_ROOT_DIR."/lang/language_$lang.php", PMF_ROOT_DIR."/lang/language_$lang.bak.php")) {
+                echo 0;
+                exit;
+            }
 
-        if (empty($langCode) || empty($langName) || empty($langCharset) ||
-           empty($langDir) || empty($langDesc) || empty($author)) {
-            echo 0;
-            exit;
-        }
+            if (!unlink(PMF_ROOT_DIR."/lang/language_$lang.php")) {
+                echo 0;
+                exit;
+            }
 
-        $fileTpl = <<<FILE
+            echo 1;
+            break;
+
+        case 'save_added_trans':
+
+            if (!$user->perm->checkRight($user->getUserId(), 'addtranslation')) {
+                echo $PMF_LANG['err_NotAuth'];
+                exit;
+            }
+
+            if (!is_writable(PMF_ROOT_DIR.'/lang')) {
+                echo 0;
+                exit;
+            }
+
+            $langCode = PMF_Filter::filterInput(INPUT_POST, 'translang', FILTER_SANITIZE_STRING);
+            $langName = @$languageCodes[$langCode];
+            $langCharset = 'UTF-8';
+            $langDir = PMF_Filter::filterInput(INPUT_POST, 'langdir', FILTER_SANITIZE_STRING);
+            $langNPlurals = strval(PMF_Filter::filterVar(@$_POST['langnplurals'], FILTER_VALIDATE_INT, -1));
+            $langDesc = PMF_Filter::filterInput(INPUT_POST, 'langdesc', FILTER_SANITIZE_STRING);
+            $author = (array) @$_POST['author'];
+
+            if (empty($langCode) || empty($langName) || empty($langCharset) ||
+               empty($langDir) || empty($langDesc) || empty($author)) {
+                echo 0;
+                exit;
+            }
+
+            $fileTpl = <<<FILE
 <?php
 /**
  * %s
@@ -232,7 +232,7 @@ FILE;
         }
 
         $fileTpl = sprintf($fileTpl, $langDesc, $authorTpl, date('Y-m-d'), $langCode, date('Y'),
-                                     $langCharset, strtolower($langCode), $langName, $langDir, $langNPlurals);
+                                        $langCharset, strtolower($langCode), $langName, $langDir, $langNPlurals);
 
         $retval = @file_put_contents(PMF_ROOT_DIR.'/lang/language_'.strtolower($langCode).'.php', $fileTpl);
         echo intval($retval);
@@ -260,6 +260,6 @@ FILE;
         $mail->addTo('thorsten@phpmyfaq.de');
         $mail->addAttachment($filename, null, 'text/plain');
 
-        echo (int) $mail->send();
+        echo (int)$mail->send();
     break;
 }

@@ -41,7 +41,7 @@ if ('insertentry' === $do &&
     $dateEnd = PMF_Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question = PMF_Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories = PMF_Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags' => FILTER_REQUIRE_ARRAY, )));
+                                                                                        'flags' => FILTER_REQUIRE_ARRAY, )));
     $record_lang = PMF_Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = PMF_Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = PMF_Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);

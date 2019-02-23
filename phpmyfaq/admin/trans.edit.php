@@ -58,8 +58,8 @@ if (!isset($_SESSION['trans'])) {
 }
 
 $leftVarsOnly = array_slice($_SESSION['trans']['leftVarsOnly'],
-                              ($page - 1) * $itemsPerPage,
-                              $itemsPerPage);
+                                ($page - 1) * $itemsPerPage,
+                                $itemsPerPage);
 $rightVarsOnly = &$_SESSION['trans']['rightVarsOnly'];
 
 $options = array(
@@ -76,8 +76,8 @@ $pageBar = $pagination->render();
  * We use these values to add the correct number of input boxes.
  * Left column will always have 2 boxes, right - 1 to 6+ boxes.
  */
-$leftNPlurals = (int) $_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
-$rightNPlurals = (int) $rightVarsOnly['PMF_LANG[nplurals]'];
+$leftNPlurals = (int)$_SESSION['trans']['leftVarsOnly']['PMF_LANG[nplurals]'];
+$rightNPlurals = (int)$rightVarsOnly['PMF_LANG[nplurals]'];
 
 printf(
     '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-wrench"></i> %s</h2></div></header>',
@@ -190,9 +190,12 @@ $NPluralsErrorReported = false;
                            $tt->isKeyIgnorable($key) || $tt->isValIgnorable($line))):
                     ?>
                     <td><input class="form-control" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($rightVarsOnly[$key]) ?>" /></td>
-                    <?php else: ?>
+                    <?php else {
+    : ?>
                     <td><input class="form-control alert-danger" type="text" name="<?php echo $key?>" value="<?php echo PMF_String::htmlspecialchars($line) ?>" /></td>
-                    <?php endif; ?>
+                    <?php endif;
+}
+?>
                 </tr>
                 <?php endwhile; ?>
                 <tr>

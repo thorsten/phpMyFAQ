@@ -2,8 +2,6 @@
 
 use Symfony\Component\ClassLoader\Psr4ClassLoader;
 use Elasticsearch\ClientBuilder;
-use Psr\Log\NullLogger;
-use GuzzleHttp\Ring\Client\CurlHandler;
 
 /**
  * The Installer class installs phpMyFAQ. Classy.
@@ -858,7 +856,7 @@ class PMF_Installer
             }
             usleep(1000);
             ++$count;
-            if (!($count % 10)) {
+            if (!($count%10)) {
                 echo '| ';
             }
         }

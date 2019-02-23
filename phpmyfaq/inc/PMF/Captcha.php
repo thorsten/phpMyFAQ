@@ -209,7 +209,7 @@ class PMF_Captcha
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');
-            imagejpeg($this->img, null, (int) $this->quality);
+            imagejpeg($this->img, null, (int)$this->quality);
         } elseif (function_exists('imagegif')) {
             header('Content-Type: image/gif');
             imagegif($this->img);
@@ -317,7 +317,7 @@ class PMF_Captcha
         $w1 = 0;
         $w2 = 0;
 
-        for ($x = 0; $x < $this->width; $x += (int) $nextline) {
+        for ($x = 0; $x < $this->width; $x += (int)$nextline) {
             if ($x < $this->width) {
                 imageline($this->img, $x + $w1, 0, $x + $w2, $this->height - 1, rand($color1, $color2));
             }
@@ -348,18 +348,18 @@ class PMF_Captcha
     {
         $len = PMF_String::strlen($this->code);
         $w1 = 15;
-        $w2 = $this->width / ($len + 1);
+        $w2 = $this->width/($len + 1);
 
         for ($p = 0; $p < $len; ++$p) {
             $letter = $this->code[$p];
             if (count($this->fonts) > 0) {
                 $font = $this->fonts[rand(0, count($this->fonts) - 1)];
             }
-            $size = rand(20, $this->height / 2.2);
+            $size = rand(20, $this->height/2.2);
             $rotation = rand(-23, 23);
             $y = rand($size + 3, $this->height - 5);
             // $w1 += rand(- $this->width / 90, $this->width / 40 );
-            $x = $w1 + $w2 * $p;
+            $x = $w1 + $w2*$p;
             $c1 = []; // fore char color
             $c2 = []; // back char color
             do {
@@ -373,28 +373,28 @@ class PMF_Captcha
             } while ($c1['b'] == $this->_backgroundColor['b']);
             $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
             do {
-                $c2['r'] = ($c1['r'] < 100 ? $c1['r'] * 2 : mt_rand(30, 199));
+                $c2['r'] = ($c1['r'] < 100 ? $c1['r']*2 : mt_rand(30, 199));
             } while (($c2['r'] == $this->_backgroundColor['r']) && ($c2['r'] == $c1['r']));
             do {
-                $c2['g'] = ($c1['g'] < 100 ? $c1['g'] * 2 : mt_rand(30, 199));
+                $c2['g'] = ($c1['g'] < 100 ? $c1['g']*2 : mt_rand(30, 199));
             } while (($c2['g'] == $this->_backgroundColor['g']) && ($c2['g'] == $c1['g']));
             do {
-                $c2['b'] = ($c1['b'] < 100 ? $c1['b'] * 2 : mt_rand(30, 199));
+                $c2['b'] = ($c1['b'] < 100 ? $c1['b']*2 : mt_rand(30, 199));
             } while (($c2['b'] == $this->_backgroundColor['b']) && ($c2['b'] == $c1['b']));
             $c2 = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
             // Add the letter
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {
-                imagettftext($this->img, $size, $rotation, $x + 2, $y,     $c2, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x + 2, $y, $c2, $font, $letter);
                 imagettftext($this->img, $size, $rotation, $x + 1, $y + 1, $c2, $font, $letter);
-                imagettftext($this->img, $size, $rotation, $x,     $y - 2,   $c1, $font, $letter);
+                imagettftext($this->img, $size, $rotation, $x, $y - 2, $c1, $font, $letter);
             } else {
                 $size = 5;
                 $c3 = imagecolorallocate($this->img, 0, 0, 255);
                 $x = 20;
                 $y = 12;
                 $s = 30;
-                imagestring($this->img, $size, $x + 1 + ($s * $p), $y + 1, $letter, $c3);
-                imagestring($this->img, $size, $x + ($s * $p),     $y,   $letter, $c1);
+                imagestring($this->img, $size, $x + 1 + ($s*$p), $y + 1, $letter, $c3);
+                imagestring($this->img, $size, $x + ($s*$p), $y, $letter, $c1);
             }
         }
 
@@ -479,8 +479,8 @@ class PMF_Captcha
                %sfaqcaptcha 
            WHERE 
                id = '%s'",
-           PMF_Db::getTablePrefix(),
-           $this->code
+            PMF_Db::getTablePrefix(),
+            $this->code
         );
 
         $result = $this->_config->getDb()->query($select);

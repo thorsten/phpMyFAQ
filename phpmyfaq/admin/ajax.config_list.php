@@ -107,8 +107,8 @@ function renderInputForm($key, $type)
                         echo PMF_Language::languageOptions(
                             str_replace(
                                 array(
-                                     'language_',
-                                     '.php',
+                                        'language_',
+                                        '.php',
                                 ),
                                 '',
                                 $faqConfig->get('main.language')
@@ -119,7 +119,7 @@ function renderInputForm($key, $type)
                     } else {
                         echo '<option value="language_en.php">English</option>';
                     }
-                   break;
+                    break;
 
                 case 'records.orderby':
                     echo PMF_Configuration::sortingOptions($faqConfig->get($key));

@@ -70,7 +70,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      * @param string $password
      * @param string $database
      *
-     * @return bool TRUE, if connected, otherwise FALSE
+     * @return null|boolean TRUE, if connected, otherwise FALSE
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -292,7 +292,7 @@ class PMF_DB_Mssql implements PMF_DB_Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {

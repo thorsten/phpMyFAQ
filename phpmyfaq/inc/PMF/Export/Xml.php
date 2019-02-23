@@ -76,8 +76,8 @@ class PMF_Export_Xml extends PMF_Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
         $comment = sprintf('XML output by phpMyFAQ %s | Date: %s',
-          $version,
-          PMF_Date::createIsoDate(date('YmdHis')));
+            $version,
+            PMF_Date::createIsoDate(date('YmdHis')));
 
         $this->xml->startDocument('1.0', 'utf-8', 'yes');
         $this->xml->writeComment($comment);

@@ -229,7 +229,7 @@ class PMF_Entity_Category
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getUserId()
     {

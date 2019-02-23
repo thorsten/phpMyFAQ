@@ -57,7 +57,7 @@ class PMF_DB_Helper
      * @param string $query
      * @param string $table
      *
-     * @return array
+     * @return string[]
      */
     public function buildInsertQueries($query, $table)
     {

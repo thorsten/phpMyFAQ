@@ -210,7 +210,7 @@ class PMF_Language
     {
         global $languageCodes;
 
-        $search = array('language_' , '.php');
+        $search = array('language_', '.php');
         $languages = $languageFiles = [];
 
         $dir = new DirectoryIterator(PMF_LANGUAGE_DIR);

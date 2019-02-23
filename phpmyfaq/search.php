@@ -109,7 +109,7 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, function ($a, $b) {
+        uasort($relatedTags, function($a, $b) {
             return ($b - $a);
             }
         );

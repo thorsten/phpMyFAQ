@@ -125,7 +125,7 @@ class PMF_Utils
      *
      * @param string $lang Language
      *
-     * @return bool
+     * @return integer
      */
     public static function isLanguage($lang)
     {
@@ -137,7 +137,7 @@ class PMF_Utils
      *
      * @param int $date Date
      *
-     * @return int
+     * @return boolean
      */
     public static function isLikeOnPMFDate($date)
     {
@@ -346,7 +346,7 @@ class PMF_Utils
     /**
      * debug_backtrace() wrapper function.
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */

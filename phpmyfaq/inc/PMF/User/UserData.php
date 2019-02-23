@@ -71,7 +71,7 @@ class PMF_User_UserData
      * Returns the field $field of the user data. If $field is an
      * array, an associative array will be returned.
      *
-     * @param mixed $field Field(s)
+     * @param string $field Field(s)
      *
      * @return mixed
      */
@@ -182,7 +182,7 @@ class PMF_User_UserData
      */
     public function load($userId)
     {
-        $userId = (int) $userId;
+        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
@@ -250,7 +250,7 @@ class PMF_User_UserData
      */
     public function add($userId)
     {
-        $userId = (int) $userId;
+        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }
@@ -285,7 +285,7 @@ class PMF_User_UserData
      */
     public function delete($userId)
     {
-        $userId = (int) $userId;
+        $userId = (int)$userId;
         if (($userId <= 0) && ($userId != -1)) {
             return false;
         }

@@ -121,7 +121,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
-            if (isset($categoryId)){
+            if (isset($categoryId)) {
                 $categories = ['category_id' => $categoryId, 'category_lang' => $lang];
             } 
         }
@@ -546,7 +546,7 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                         <div id="collapseViewChangelog" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <?php
-								$currentUserId = $user->getUserId();
+                                $currentUserId = $user->getUserId();
                                 foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
                                     $user->getUserById($entry['user']);
                                     ?>
@@ -565,9 +565,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         <?php echo $entry['changelog'] ?>
                                     </p>
                                 <?php 
-								} 
-								$user->getUserById($currentUserId);
-								?>
+                                } 
+                                $user->getUserById($currentUserId);
+                                ?>
                             </div>
                         </div>
                     </div>
@@ -671,12 +671,15 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         <input type="radio" name="active" value="no"
                                             <?php if (isset($sul)) { echo $sul; } ?>>
                                         <?php echo $PMF_LANG['ad_gen_no'] ?>
-                                <?php else: ?>
+                                <?php else {
+    : ?>
                                         <br>
                                         <input type="radio" name="active" value="no" checked>
                                         <?php echo $PMF_LANG['ad_gen_no'] ?>
 
-                                <?php endif; ?>
+                                <?php endif;
+}
+?>
                                     </label>
                             </div>
                         </div>
@@ -737,9 +740,12 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </div>
                         </div>
                     </div>
-                    <?php else: ?>
+                    <?php else {
+    : ?>
                         <input type="hidden" name="grouppermission" value="all">
-                    <?php endif; ?>
+                    <?php endif;
+}
+?>
                     <div class="panel-heading">
                         <?php echo $PMF_LANG['ad_entry_userpermission']; ?>
                     </div>

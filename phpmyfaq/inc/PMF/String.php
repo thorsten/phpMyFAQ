@@ -182,9 +182,9 @@ class PMF_String
     public static function isLangUTF8ToLatinConvertable($language)
     {
         $iso_languages = array('af', 'sq', 'br', 'ca', 'da', 'en', 'fo', 'gl', 'de', 'is', 'it',
-                               'ku', 'la', 'lb', 'nb', 'oc', 'pt', 'es', 'sw', 'sv', 'wa', 'eu',
-                               // NOTE this languages are not fully supported by latin1 
-                               'nl', 'fr', 'et', 'fi', 'cy',
+                                'ku', 'la', 'lb', 'nb', 'oc', 'pt', 'es', 'sw', 'sv', 'wa', 'eu',
+                                // NOTE this languages are not fully supported by latin1 
+                                'nl', 'fr', 'et', 'fi', 'cy',
         );
 
         return in_array($language, $iso_languages);
@@ -280,7 +280,7 @@ class PMF_String
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string|array $pattern
+     * @param string $pattern
      * @param function     $callback
      * @param string|array $subject
      * @param int          $limit
@@ -314,7 +314,7 @@ class PMF_String
      *
      * @param string $str String
      *
-     * @return bool
+     * @return string|boolean
      */
     public static function isUTF8($str)
     {

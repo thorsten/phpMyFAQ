@@ -277,8 +277,8 @@ class PMF_Pagination
     public function render()
     {
         $content = [];
-        $pages = ceil($this->total / $this->perPage);
-        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
+        $pages = ceil($this->total/$this->perPage);
+        $adjacents = floor($this->adjacents/2) >= 1 ? floor($this->adjacents/2) : 1;
 
         for ($page = 1; $page <= $pages; ++$page) {
             if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {

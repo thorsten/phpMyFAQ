@@ -105,7 +105,7 @@ class PMF_Instance
      */
     public function setId($id)
     {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
     }
 
     /**
@@ -147,7 +147,7 @@ class PMF_Instance
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
             PMF_Db::getTablePrefix(),
-            (int) $id
+            (int)$id
         );
 
         $result = $this->config->getDb()->query($select);
@@ -220,7 +220,7 @@ class PMF_Instance
             PMF_Db::getTablePrefix(),
             $data['instance'],
             $data['comment'],
-            (int) $id
+            (int)$id
         );
 
         return $this->config->getDb()->query($update);
@@ -239,12 +239,12 @@ class PMF_Instance
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
                 PMF_Db::getTablePrefix(),
-                (int) $id
+                (int)$id
             ),
             sprintf(
                 'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
                 PMF_Db::getTablePrefix(),
-                (int) $id
+                (int)$id
             ),
         );
 
@@ -262,7 +262,7 @@ class PMF_Instance
      * Adds a configuration item for the database.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param string  $value
      *
      * @return bool
      */

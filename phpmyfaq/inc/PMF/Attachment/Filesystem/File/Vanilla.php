@@ -75,7 +75,7 @@ class PMF_Attachment_Filesystem_File_Vanilla extends PMF_Attachment_Filesystem_F
          * If the target is a string or vanilla object, just move
          * it the simplest way we can. 
          */
-            $retval = $this->copyToSimple((string) $target);
+            $retval = $this->copyToSimple((string)$target);
         } else {
             $target->setMode(self::MODE_WRITE);
             while (!$this->eof()) {

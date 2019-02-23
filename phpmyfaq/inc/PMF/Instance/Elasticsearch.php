@@ -100,7 +100,7 @@ class PMF_Instance_Elasticsearch
     public function createIndex()
     {
         $this->client->indices()->create($this->getParams());
-        return $this->putMapping();;
+        return $this->putMapping(); ;
     }
 
     /**
@@ -211,7 +211,7 @@ class PMF_Instance_Elasticsearch
                 'category_id' => $faq['category_id']
             ];
 
-            if ($i % 1000 == 0) {
+            if ($i%1000 == 0) {
                 $responses = $this->client->bulk($params);
                 $params = ['body' => []];
                 unset($responses);

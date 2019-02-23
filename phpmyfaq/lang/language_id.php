@@ -664,14 +664,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Menunggu aktivasi oleh pengelola: ';
 $PMF_LANG['ad_entry_visibility'] = 'Terbitkan?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Silakan masukkan kata sandi. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Kata sandi tidak cocok. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Nama pengguna yang dimaksud tidak benar.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Silakan masukkan alamat email yang benar. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Silakan masukkan nama lengkap anda. ";
-$PMF_LANG['ad_user_error_delete'] =  "Akun pengguna tidak bisa dihapus. ";
-$PMF_LANG['ad_user_error_noId'] =  "Tidak ada ID yang dimasukkan. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Akun pengguna diproteksi. ";
+$PMF_LANG['ad_user_error_password'] = "Silakan masukkan kata sandi. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Kata sandi tidak cocok. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Nama pengguna yang dimaksud tidak benar.";
+$PMF_LANG['ad_user_error_noEmail'] = "Silakan masukkan alamat email yang benar. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Silakan masukkan nama lengkap anda. ";
+$PMF_LANG['ad_user_error_delete'] = "Akun pengguna tidak bisa dihapus. ";
+$PMF_LANG['ad_user_error_noId'] = "Tidak ada ID yang dimasukkan. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Akun pengguna diproteksi. ";
 $PMF_LANG['ad_user_deleteUser'] = "Hapus Pengguna";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "edit terakhir:";

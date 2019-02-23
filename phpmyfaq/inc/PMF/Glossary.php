@@ -216,7 +216,7 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             PMF_Db::getTablePrefix(),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -291,7 +291,7 @@ class PMF_Glossary
             PMF_Db::getTablePrefix(),
             PMF_String::htmlspecialchars($this->item),
             PMF_String::htmlspecialchars($this->definition),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -317,7 +317,7 @@ class PMF_Glossary
             WHERE
                 id = %d AND lang = '%s'",
             PMF_Db::getTablePrefix(),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 

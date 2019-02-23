@@ -244,10 +244,10 @@ class PMF_Category
         if ($result) {
             while ($row = $this->_config->getDb()->fetchArray($result)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[] =& $this->categoryName[$row['id']];
-                $this->children[$row['parent_id']][$row['id']] =& $this->categoryName[$row['id']];
-                $this->owner[$row['id']] =& $row['user_id'];
-                $this->moderators[$row['id']] =& $row['group_id'];
+                $this->categories[] = & $this->categoryName[$row['id']];
+                $this->children[$row['parent_id']][$row['id']] = & $this->categoryName[$row['id']];
+                $this->owner[$row['id']] = & $row['user_id'];
+                $this->moderators[$row['id']] = & $row['group_id'];
             }
         }
 
@@ -354,7 +354,7 @@ class PMF_Category
         $result = $this->_config->getDb()->query($query);
 
         while ($row = $this->_config->getDb()->fetchArray($result)) {
-            $categories[] = (int) $row['id'];
+            $categories[] = (int)$row['id'];
         }
 
         return $categories;
@@ -675,7 +675,7 @@ class PMF_Category
         $open = 0;
         $this->expandAll();
 
-        for ($y = 0;$y < $this->height(); $y = $this->getNextLineTree($y)) {
+        for ($y = 0; $y < $this->height(); $y = $this->getNextLineTree($y)) {
             list($hasChild, $categoryName, $parent, $description) = $this->getLineDisplay($y);
             $level = $this->treeTab[$y]['level'];
             $levelDiff = $open - $level;
@@ -950,7 +950,7 @@ class PMF_Category
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $categories[$row->category_id] = array(
                 'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang, );
+                'category_lang' => $row->category_lang,);
         }
 
         return $categories;
@@ -1253,7 +1253,7 @@ class PMF_Category
             array('faqcategories' => 'parent_id'),
             array('faqcategoryrelations' => 'category_id'),
             array('faqcategory_group' => 'category_id'),
-            array('faqcategory_user' => 'category_id'), );
+            array('faqcategory_user' => 'category_id'),);
 
         $result = true;
         foreach ($tables as $pair) {
@@ -1415,9 +1415,9 @@ class PMF_Category
                    id = %d
                AND
                    lang = '%s'",
-               PMF_Db::getTablePrefix(),
-               $category_id,
-               $language);
+                PMF_Db::getTablePrefix(),
+                $category_id,
+                $language);
             $result = $this->_config->getDb()->query($query);
             if ($row = $this->_config->getDb()->fetchArray($result)) {
                 $translated[$languageCodes[strtoupper($language)]] = $row['name'].('' == $row['description'] ? '' : '  ('.$row['description'].')');
@@ -1447,7 +1447,7 @@ class PMF_Category
                 if ($lang == $selected_lang) {
                     $output .= ' selected="selected"';
                 }
-                $output .=  '>'.$langname."</option>\n";
+                $output .= '>'.$langname."</option>\n";
             }
         }
 
@@ -1646,7 +1646,7 @@ class PMF_Category
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while ($row = $this->_config->getDb()->fetchObject($result)) {
-                $numRecordsByCat[$row->category_id] = (int) $row->num_records;
+                $numRecordsByCat[$row->category_id] = (int)$row->num_records;
             }
         }
 
@@ -1676,8 +1676,8 @@ class PMF_Category
                 fd.lang = fcr.category_lang
             ORDER BY
                 fcr.category_id, fd.id',
-             PMF_Db::getTablePrefix(),
-             PMF_Db::getTablePrefix());
+                PMF_Db::getTablePrefix(),
+                PMF_Db::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {

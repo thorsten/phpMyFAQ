@@ -638,14 +638,14 @@ $PMF_LANG["msgQuestionsWaiting"] = "Wartend auf die Freigabe durch den Administr
 $PMF_LANG["ad_entry_visibility"] = "sichtbar";
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG["ad_user_error_password"] =  "Bitte geben Sie ein Passwort ein. ";
-$PMF_LANG["ad_user_error_passwordsDontMatch"] =  "Die Passwörter stimmen nicht überein. ";
-$PMF_LANG["ad_user_error_loginInvalid"] =  "Der ausgewählte Benutzer ist ungültig.";
-$PMF_LANG["ad_user_error_noEmail"] =  "Bitte geben Sie eine korrekte E-Mailadresse ein. ";
-$PMF_LANG["ad_user_error_noRealName"] =  "Bitte geben Sie ihren Namen ein. ";
-$PMF_LANG["ad_user_error_delete"] =  "Der Benutzeraccount kann nicht gelöscht werden. ";
-$PMF_LANG["ad_user_error_noId"] =  "Keine ID ausgewählt. ";
-$PMF_LANG["ad_user_error_protectedAccount"] =  "Der Benutzeraccount ist geschützt. ";
+$PMF_LANG["ad_user_error_password"] = "Bitte geben Sie ein Passwort ein. ";
+$PMF_LANG["ad_user_error_passwordsDontMatch"] = "Die Passwörter stimmen nicht überein. ";
+$PMF_LANG["ad_user_error_loginInvalid"] = "Der ausgewählte Benutzer ist ungültig.";
+$PMF_LANG["ad_user_error_noEmail"] = "Bitte geben Sie eine korrekte E-Mailadresse ein. ";
+$PMF_LANG["ad_user_error_noRealName"] = "Bitte geben Sie ihren Namen ein. ";
+$PMF_LANG["ad_user_error_delete"] = "Der Benutzeraccount kann nicht gelöscht werden. ";
+$PMF_LANG["ad_user_error_noId"] = "Keine ID ausgewählt. ";
+$PMF_LANG["ad_user_error_protectedAccount"] = "Der Benutzeraccount ist geschützt. ";
 $PMF_LANG["ad_user_deleteUser"] = "Lösche Benutzer";
 $PMF_LANG["ad_user_status"] = "Status";
 $PMF_LANG["ad_user_lastModified"] = "Letzte Änderung:";
@@ -975,9 +975,9 @@ $PMF_LANG["msgSecureSwitch"] = "Zum sicheren Login wechseln";
 $PMF_LANG["ad_record_active"] = "aktiviert";
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF["search.numberSearchTerms"]   = array(0 => "input", 1 => "Anzahl der beliebtesten Suchbegriffe");
+$LANG_CONF["search.numberSearchTerms"] = array(0 => "input", 1 => "Anzahl der beliebtesten Suchbegriffe");
 $LANG_CONF["records.orderingPopularFaqs"] = array(0 => "select", 1 => "Sortierung der TOP-FAQ");
-$PMF_LANG["list_all_users"]            = "Alle Benutzer anzeigen";
+$PMF_LANG["list_all_users"] = "Alle Benutzer anzeigen";
 
 $PMF_LANG["records.orderingPopularFaqs.visits"] = "nach Anzahl der Besucher";
 $PMF_LANG["records.orderingPopularFaqs.voting"] = "nach Bewertung der Besucher";

@@ -68,7 +68,7 @@ class PMF_Language_Plurals
     public function __construct($translation)
     {
         $this->PMF_TRANSL = $translation;
-        $this->nPlurals = (int) $this->PMF_TRANSL['nplurals'];
+        $this->nPlurals = (int)$this->PMF_TRANSL['nplurals'];
         $this->lang = $this->PMF_TRANSL['metaLanguage'];
 
         if ($this->plural($this->lang, 0) != -1) {
@@ -156,7 +156,7 @@ class PMF_Language_Plurals
             // Note: expressions in .po files are not strict C expressions, so extra braces might be
             // needed for that expression to work here (for example see 'lt')
             case 'ar':
-                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 : (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5))));
+                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n%100 >= 3 && $n%100 <= 10) ? 3 : (($n%100 >= 11 && $n%100 <= 99) || ($n%100 == 1) || ($n%100 == 2) ? 4 : 5))));
             case 'bn':
                 return 0;
             case 'cy':
@@ -196,27 +196,27 @@ class PMF_Language_Plurals
             case 'ko':
                 return 0;
             case 'lt':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
             case 'lv':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2);
+                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n != 0 ? 1 : 2);
             case 'nb':
                 return $n != 1;
             case 'nl':
                 return $n != 1;
             case 'pl':
-                return ($n == 1) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n == 1) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
             case 'pt':
                 return $n != 1;
             case 'pt-br':
                 return $n > 1;
             case 'ro':
-                return ($n == 1) ? 0 : (($n == 0 || ($n % 100 > 0 && $n % 100 < 20)) ? 1 : 2);
+                return ($n == 1) ? 0 : (($n == 0 || ($n%100 > 0 && $n%100 < 20)) ? 1 : 2);
             case 'ru':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
             case 'sl':
-                return ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || n % 100 == 4 ? 2 : 3));
+                return ($n%100 == 1) ? 0 : ($n%100 == 2 ? 1 : ($n%100 == 3 || n%100 == 4 ? 2 : 3));
             case 'sr':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
             case 'sv':
                 return $n != 1;
             case 'th':
@@ -226,7 +226,7 @@ class PMF_Language_Plurals
             case 'tw':
                 return 0;
             case 'uk':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n%10 == 1 && $n%100 != 11) ? 0 : ($n%10 >= 2 && $n%10 <= 4 && ($n%100 < 10 || $n%100 >= 20) ? 1 : 2);
             case 'vi':
                 return 0;
             case 'zh':

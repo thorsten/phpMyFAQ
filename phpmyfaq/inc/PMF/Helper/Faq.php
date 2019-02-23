@@ -210,7 +210,7 @@ class PMF_Helper_Faq extends PMF_Helper
      * @param PMF_Faq      $faq
      * @param string       $language
      *
-     * @return array
+     * @return string
      */
     public function createOverview(PMF_Category $category, PMF_Faq $faq, $language = '')
     {

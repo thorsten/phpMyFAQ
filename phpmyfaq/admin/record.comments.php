@@ -71,9 +71,9 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                     </a> |
                     <?php echo $date->format(date('Y-m-d H:i', $faqcomment['date'])) ?> |
                     <a href="<?php printf('../?action=artikel&cat=%d&id=%d&artlang=%s',
-                       $faqcomment['category_id'],
-                       $faqcomment['record_id'],
-                       $LANGCODE) ?>">
+                        $faqcomment['category_id'],
+                        $faqcomment['record_id'],
+                        $LANGCODE) ?>">
                         <?php echo $faq->getRecordTitle($faqcomment['record_id']) ?>
                     </a>
                 </span><br/>

@@ -87,11 +87,11 @@ class PMF_System
      * @var array
      */
     private $supportedDatabases = [
-        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x and later' ],
-        'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x' ],
-        'sqlite3' => [ self::VERSION_MINIMUM_PHP, 'SQLite 3' ],
-        'mssql' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated, PHP 5 only)' ],
-        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP (PHP 5 and PHP 7)']
+        'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL 5.x / Percona Server 5.x / MariaDB 5.x and later'],
+        'pgsql' => [self::VERSION_MINIMUM_PHP, 'PostgreSQL 9.x'],
+        'sqlite3' => [self::VERSION_MINIMUM_PHP, 'SQLite 3'],
+        'mssql' => [self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 and later (deprecated, PHP 5 only)'],
+        'sqlsrv' => [self::VERSION_MINIMUM_PHP, 'MS SQL Server 2012 Driver for PHP (PHP 5 and PHP 7)']
     ];
 
     /**
@@ -167,7 +167,7 @@ class PMF_System
      * Returns the current API version of phpMyFAQ for installation and
      * version in the database.
      *
-     * @return int
+     * @return string
      */
     public static function getApiVersion()
     {
@@ -212,7 +212,7 @@ class PMF_System
      *
      * @param PMF_Configuration $faqConfig
      *
-     * @return mixed
+     * @return string
      */
     public function getSystemUri(PMF_Configuration $faqConfig)
     {

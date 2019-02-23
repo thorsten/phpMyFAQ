@@ -454,8 +454,8 @@ if ($faqConfig->get('main.enableUserTracking')) {
     $users = $faqsession->getUsersOnline();
     $totUsers = $users[0] + $users[1];
     $usersOnline = $plr->getMsg('plmsgUserOnline', $totUsers).' | '.
-                   $plr->getMsg('plmsgGuestOnline', $users[0]).
-                   $plr->getMsg('plmsgRegisteredOnline', $users[1]);
+                    $plr->getMsg('plmsgGuestOnline', $users[0]).
+                    $plr->getMsg('plmsgRegisteredOnline', $users[1]);
 } else {
     $usersOnline = '';
 }
@@ -497,7 +497,7 @@ $tplMainPage = array(
     'dir' => $PMF_LANG['dir'],
     'writeSendAdress' => '?'.$sids.'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
-    'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+    'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'showInstantResponse' => '', // @deprecated
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
@@ -509,7 +509,7 @@ $tplMainPage = array(
     'switchLanguages' => PMF_Language::selectLanguages($LANGCODE, true),
     'userOnline' => $usersOnline,
     'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
-                              $faqConfig->get('main.currentVersion'),
+                                $faqConfig->get('main.currentVersion'),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
     'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',
     'msgFullName' => $PMF_LANG['ad_user_loggedin'].$user->getLogin(),
@@ -544,7 +544,7 @@ if ('main' == $action || 'show' == $action) {
         array(
             'writeSendAdress' => '?'.$sids.'action=search',
             'searchBox' => $PMF_LANG['msgSearch'],
-            'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+            'categoryId' => ($cat === 0) ? '%' : (int)$cat,
             'msgSearch' => sprintf(
                 '<a class="help" href="%sindex.php?action=search">%s</a>',
                 $faqSystem->getSystemUri($faqConfig),
@@ -579,7 +579,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'allCategories' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
         'faqOverview' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'overview.html">'.$PMF_LANG['faqOverview'].'</a>',
         'showSitemap' => '<a href="'.$faqSystem->getSystemUri($faqConfig).'sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html', );
+        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.html',);
 } else {
     $tplNavigation = array(
         'msgSearch' => '<a href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
@@ -593,7 +593,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'faqOverview' => '<a href="index.php?'.$sids.'action=overview">'.$PMF_LANG['faqOverview'].'</a>',
         'backToHome' => '<a href="index.php?'.$sids.'">'.$PMF_LANG['msgHome'].'</a>',
         'showSitemap' => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php', );
+        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php',);
 }
 
 $tplNavigation['faqHome'] = $faqConfig->getDefaultUrl();
@@ -694,7 +694,7 @@ if (!isset($latestEntriesParams['error'])) {
     );
 } else {
     $tpl->parseBlock('rightBox', 'latestEntriesListError', array(
-        'errorMsgLatest' => $latestEntriesParams['error'], )
+        'errorMsgLatest' => $latestEntriesParams['error'],)
     );
 }
 

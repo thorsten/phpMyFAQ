@@ -124,7 +124,7 @@ class PMF_Search_Resultset
             if ('medium' === $this->_config->get('security.permLevel')) {
                 $groupPermissions = $this->faq->getPermission('group', $result->id);
                 if (is_array($groupPermissions)) {
-                    foreach($groupPermissions as $groupPermission) {
+                    foreach ($groupPermissions as $groupPermission) {
                         if (in_array($groupPermission, $currentGroupIds)) {
                             $permission = true;
                         }
@@ -222,6 +222,6 @@ class PMF_Search_Resultset
             $score += $object->relevance_keywords;
         }
 
-        return round($score / 3 * 100);
+        return round($score/3*100);
     }
 }

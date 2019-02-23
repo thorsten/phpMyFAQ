@@ -135,7 +135,7 @@ class PMF_Enc
     public function error()
     {
         if (!is_array($this->errors)) {
-            $this->errors = array((string) $this->errors);
+            $this->errors = array((string)$this->errors);
         }
         $message = '';
         foreach ($this->errors as $error) {

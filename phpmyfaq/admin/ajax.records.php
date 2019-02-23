@@ -55,7 +55,7 @@ switch ($ajax_action) {
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'active');
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
                     }
                 }
             }
@@ -72,7 +72,7 @@ switch ($ajax_action) {
 
                 foreach ($items as $item) {
                     if (is_array($item) && count($item) == 3 && PMF_Language::isASupportedLanguage($item[1])) {
-                        echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'sticky');
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
                     }
                 }
             }
@@ -134,7 +134,7 @@ switch ($ajax_action) {
 
             if (!is_null($questionIds['questions'])) {
                 foreach ($questionIds['questions'] as $questionId) {
-                    $faq->deleteQuestion((int) $questionId);
+                    $faq->deleteQuestion((int)$questionId);
                 }
             }
             echo $PMF_LANG['ad_entry_delsuc'];

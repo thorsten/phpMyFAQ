@@ -641,14 +641,14 @@ $PMF_LANG['msgQuestionsWaiting'] = "等待管理員開放公開: (Waiting for pu
 $PMF_LANG['ad_entry_visibility'] = "公開發佈? (Publish?)";
 
 // added v2.0.0 - 2006-01-02 by Lars 開發者
-$PMF_LANG['ad_user_error_password'] =  "請輸入密碼。 ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "密碼不不符合。 (Passwords do not match.) ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "使用者名稱是無效的。 (The specified user name is invalid.)";
-$PMF_LANG['ad_user_error_noEmail'] =  "請輸入一個有效的 email 地址。(Please enter a valid mail address.) ";
-$PMF_LANG['ad_user_error_noRealName'] =  "請輸入您的真實姓名。(Please enter your real name. )";
-$PMF_LANG['ad_user_error_delete'] =  "使用者帳號不能被刪除。(User account could not be deleted. )";
-$PMF_LANG['ad_user_error_noId'] =  "沒有指定 ID。 (No ID specified.) ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "使用者帳號受到保護。(User account is protected. )";
+$PMF_LANG['ad_user_error_password'] = "請輸入密碼。 ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "密碼不不符合。 (Passwords do not match.) ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "使用者名稱是無效的。 (The specified user name is invalid.)";
+$PMF_LANG['ad_user_error_noEmail'] = "請輸入一個有效的 email 地址。(Please enter a valid mail address.) ";
+$PMF_LANG['ad_user_error_noRealName'] = "請輸入您的真實姓名。(Please enter your real name. )";
+$PMF_LANG['ad_user_error_delete'] = "使用者帳號不能被刪除。(User account could not be deleted. )";
+$PMF_LANG['ad_user_error_noId'] = "沒有指定 ID。 (No ID specified.) ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "使用者帳號受到保護。(User account is protected. )";
 $PMF_LANG['ad_user_deleteUser'] = "刪除使用者 (Delete User)";
 $PMF_LANG['ad_user_status'] = "狀態: (Status:)";
 $PMF_LANG['ad_user_lastModified'] = "最後一次修改: (last modified:)";
@@ -981,7 +981,7 @@ $LANG_CONF['security.useSslForLogins'] = array(0 => "checkbox", 1 => "只允許�
 $PMF_LANG['msgSecureSwitch'] = "切換到安全模式來登入! (Switch to secure mode to login!)";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky 開發者
-$PMF_LANG['msgTransToolNoteFileSaving']  = "請注意，請按儲存(save)按鈕才會儲存檔案。(Please note that no files will we written until you click save button)";
+$PMF_LANG['msgTransToolNoteFileSaving'] = "請注意，請按儲存(save)按鈕才會儲存檔案。(Please note that no files will we written until you click save button)";
 $PMF_LANG['msgTransToolPageBufferRecorded'] = "頁面 %d 暫存 buffer 記錄成功 (Page %d buffer recorded successfully)";
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = "錯誤記錄頁面 %d 暫存 buffer (Error recording page %d buffer)";
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = "記錄頁面 %d 暫存 buffer (Recording page %d buffer)";
@@ -993,9 +993,9 @@ $PMF_LANG['ad_record_active'] = "有作用";
 $PMF_LANG['msgAttachmentInvalid'] = "附加檔案無效，請通報管理員。(The attachment is invalid, please inform admin.)";
 
 // added 2.6.0-alpha - 2009-11-02 by max 開發者
-$LANG_CONF['search.numberSearchTerms']   = array(0 => "input", 1 => "Number of listed search terms");
+$LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => "Number of listed search terms");
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "排列熱門的 FAQ's<br> Sorting of the top FAQ's");
-$PMF_LANG['list_all_users']            = "列出所有使用者 (List all users)";
+$PMF_LANG['list_all_users'] = "列出所有使用者 (List all users)";
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "列出最多訪問的 entries (list most visited entries)";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "列出最多得票的 entries (list most voted entries)";

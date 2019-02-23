@@ -62,10 +62,10 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
-        $pages = round((count($searchesList) + ($perpage / 3)) / $perpage, 0);
+        $pages = round((count($searchesList) + ($perpage/3))/$perpage, 0);
     }
 
-    $start = ($page - 1) * $perpage;
+    $start = ($page - 1)*$perpage;
     $ende = $start + $perpage;
 
     $baseUrl = sprintf(
@@ -118,7 +118,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         }
         ++$displayedCounter;
 
-        $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
+        $num = round(($searchItem['number']*100/$searchesCount), 2);
         ?>
                     <tr class="row_search_id_<?php echo $searchItem['id'] ?>">
                         <td><?php echo PMF_String::htmlspecialchars($searchItem['searchterm']);

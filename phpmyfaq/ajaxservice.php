@@ -435,7 +435,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId;
+                $faqConfig->getDefaultUrl().'admin/?action=editentry&id='.$recordId;
             $result = $mail->send();
             unset($mail);
 
@@ -667,8 +667,8 @@ switch ($action) {
 
                 $message = array(
                     'success' => trim($PMF_LANG['successMessage']).
-                                 ' '.
-                                 trim($PMF_LANG['msgRegThankYou']),
+                                    ' '.
+                                    trim($PMF_LANG['msgRegThankYou']),
                 );
             }
         } else {
@@ -694,7 +694,7 @@ switch ($action) {
             $votingData = array(
                 'record_id' => $recordId,
                 'vote' => $vote,
-                'user_ip' => $userIp, );
+                'user_ip' => $userIp,);
 
             if (!$faq->getNumberOfVotings($recordId)) {
                 $faq->addVoting($votingData);
@@ -770,7 +770,7 @@ switch ($action) {
         $attached = PMF_Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
         $mailto = PMF_Filter::filterInputArray(INPUT_POST,
             array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL,
-                      'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
+                        'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
                 ),
             )
         );
@@ -832,7 +832,7 @@ switch ($action) {
 
         $userData = array(
             'display_name' => $name,
-            'email' => $email, );
+            'email' => $email,);
         $success = $user->setUserData($userData);
 
         if (0 !== strlen($password) && 0 !== strlen($confirm)) {

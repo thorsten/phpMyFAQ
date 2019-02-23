@@ -243,7 +243,7 @@ class PMF_User
     public function getUserId()
     {
         if (isset($this->userId) && is_int($this->userId)) {
-            return (int) $this->userId;
+            return (int)$this->userId;
         }
         $this->userId = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
@@ -272,7 +272,7 @@ class PMF_User
             WHERE
                 user_id = %d '.($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
             PMF_Db::getTablePrefix(),
-            (int) $userId
+            (int)$userId
         );
 
         $res = $this->config->getDb()->query($select);
@@ -282,9 +282,9 @@ class PMF_User
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
@@ -349,9 +349,9 @@ class PMF_User
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
@@ -398,9 +398,9 @@ class PMF_User
             return false;
         }
 
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof PMF_User_UserData) {
@@ -504,7 +504,7 @@ class PMF_User
         }
 
         // is $login valid?
-        $login = (string) $login;
+        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
 
@@ -520,7 +520,7 @@ class PMF_User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int) $this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faquser', 'user_id');
+            $this->userId = (int)$this->config->getDb()->nextId(PMF_Db::getTablePrefix().'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -776,7 +776,7 @@ class PMF_User
      */
     public function isValidLogin($login)
     {
-        $login = (string) $login;
+        $login = (string)$login;
 
         if (strlen($login) < $this->loginMinLength || !preg_match($this->validUsername, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
@@ -1071,9 +1071,7 @@ class PMF_User
             }
 
             switch (rand(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
-                case 0:
-                case 1:
-                    $nextChar = $caseFunc($consonants[rand(0, 18)]);
+                case 0 : case 1 : $nextChar = $caseFunc($consonants[rand(0, 18)]);
                     break;
                 case 2:
                 case 3:

@@ -215,7 +215,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int) $key;
+                    $this->activeServer = (int)$key;
                     break;
                 }
             }
@@ -251,7 +251,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
             htmlspecialchars_decode($password)
         );
 
-        if (! $this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
+        if (!$this->ldap->bind($bindLogin, htmlspecialchars_decode($password))) {
             $this->errors[] = $this->ldap->error;
 
             return false;
@@ -288,7 +288,7 @@ class PMF_Auth_Ldap extends PMF_Auth implements PMF_Auth_Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int) $key;
+                    $this->activeServer = (int)$key;
                     break;
                 }
             }

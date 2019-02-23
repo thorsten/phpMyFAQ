@@ -64,7 +64,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
-        if (0 === (int) $userId || !$csrfOkay) {
+        if (0 === (int)$userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user = new PMF_User($faqConfig);
@@ -185,7 +185,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
             $csrfOkay = false;
         }
         $userAction = $defaultUserAction;
-        if (0 === (int) $userId || !$csrfOkay) {
+        if (0 === (int)$userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             if (!$user->getUserById($userId, true)) {
@@ -616,8 +616,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edituser') ||
         $numUsers = count($allUsers);
         $page = PMF_Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
-        $numPages = ceil($numUsers / $perPage);
-        $lastPage = $page * $perPage;
+        $numPages = ceil($numUsers/$perPage);
+        $lastPage = $page*$perPage;
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(

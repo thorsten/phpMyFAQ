@@ -18,7 +18,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require __DIR__ . '/../../libs/swiftmailer/swift_required.php';
+require __DIR__.'/../../libs/swiftmailer/swift_required.php';
 
 /**
  * Class PMF_Mail_SwiftSMTP
@@ -51,7 +51,7 @@ class PMF_Mail_SwiftSMTP implements PMF_Mail_IMUA
      * @param array $headers
      * @param string $body
      *
-     * @return bool True if successful, false otherwise.
+     * @return integer True if successful, false otherwise.
      */
     public function send($recipients, Array $headers, $body)
     {
