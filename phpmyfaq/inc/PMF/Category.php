@@ -550,6 +550,7 @@ class PMF_Category
 
             return $temp;
         }
+        return [];
     }
 
     /**
