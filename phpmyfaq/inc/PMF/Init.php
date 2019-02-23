@@ -145,7 +145,7 @@ class PMF_Init
    private static function _cleanFilenames()
    {
        reset($_FILES);
-       while (list($key, $value) = each($_FILES)) {
+       foreach ($_FILES as $key => $value) {
            if (is_array($_FILES[$key]['name'])) {
                reset($_FILES[$key]['name']);
                 // We have a multiple upload with the same name for <input />

@@ -636,7 +636,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         $res = $this->config->getDb()->query($select);
         $result = array(-1);
         while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[] = $row['group_id'];
+            $result[] = (int)$row['group_id'];
         }
 
         return $result;
