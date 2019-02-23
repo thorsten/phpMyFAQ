@@ -64,26 +64,23 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <input type="hidden" name="showcat" value="<?= $showcat ?>">
                 <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
                   <input type="hidden" name="restricted_groups[]" value="<?= $groupPermission[0] ?>">
-                <?php else {
-    : ?>
+                <?php else: ?>
                   <input type="hidden" name="restricted_groups[]" value="-1">
-                <?php endif;
-}
-?>
+                <?php endif; ?>
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
               <div class="form-group row">
-                <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
+                <label class="col-lg-2 col-form-label" for="name"><?= $PMF_LANG['ad_categ_titel'] ?>:</label>
                 <div class="col-lg-4">
-                  <input type="text" name="name" class="form-control">
+                  <input type="text" name="name" class="form-control" id="name">
                 </div>
               </div>
 
               <div class="form-group row">
-                <label class="col-lg-2 col-form-label"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
+                <label class="col-lg-2 col-form-label" for="catlang"><?= $PMF_LANG['ad_categ_lang'] ?>:</label>
                 <div class="col-lg-4">
-                  <select name="catlang" class="form-control">
+                  <select name="catlang" id="catlang" class="form-control">
                       <?= $category->getCategoryLanguagesToTranslate($id, $selectedLanguage) ?>
                   </select>
                 </div>

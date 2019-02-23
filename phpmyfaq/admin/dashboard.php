@@ -49,12 +49,9 @@ $faqSession = new Session($faqConfig);
           <a href="?action=config">
               <?php if ($faqConfig->get('main.maintenanceMode')): ?>
                 <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
-              <?php else {
-    : ?>
+              <?php else: ?>
                 <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
-              <?php endif;
-}
-?>
+              <?php endif; ?>
           </a>
         </div>
       </div>

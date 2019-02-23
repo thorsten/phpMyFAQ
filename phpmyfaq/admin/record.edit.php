@@ -507,12 +507,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                       </div>
                     </div>
                   </fieldset>
-                  <?php else {
-    : ?>
+                  <?php else: ?>
                     <input type="hidden" name="grouppermission" value="all">
-                  <?php endif;
-}
-?>
+                  <?php endif; ?>
 
                   <fieldset class="form-group">
                     <div class="row">
@@ -728,15 +725,12 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             <?php if (isset($sul)) { echo $sul; } ?>>
                         <label class="form-check-label" for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
                       </div>
-                    <?php else {
-    : ?>
+                    <?php else: ?>
                       <div class="form-check">
                         <input type="radio" id="inactive" name="active" value="no" class="form-check-input" checked>
                         <label class="form-check-label" for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
                       </div>
-                    <?php endif;
-}
-?>
+                    <?php endif; ?>
                   </div>
 
                   <div class="form-group">
