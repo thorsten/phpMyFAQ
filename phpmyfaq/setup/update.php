@@ -160,7 +160,7 @@ if ($step === 1) {
                 // 2.5 versions only
                 if (version_compare($version, '2.6.0-alpha', '<') && !is_writeable('../template')) {
                     echo '<p class="alert alert-danger text-center"><strong>Please change the directory ../template '.
-                         'and its contents writable (777 on Linux/UNIX).</strong></p>';
+                            'and its contents writable (777 on Linux/UNIX).</strong></p>';
                 }
 
                 // We only support updates from 2.6+
@@ -206,7 +206,7 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/database.php', PMF_ROOT_DIR.'/config/database.bak.php')) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php '.
-                  'could not be written. Please correct this!</p>';
+                    'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
             $updateMessages[] = 'A backup of your database configuration file has been made.';
@@ -229,7 +229,7 @@ if ($step == 2) {
     // Backup of config/elasticsearch.php if exists
     if (file_exists(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/elasticsearch.php', PMF_ROOT_DIR.'/config/elasticsearch.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file '.
                 '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
         } else {
             $checkElasticsearchSetupFile = true;
@@ -597,14 +597,14 @@ if ($step == 3) {
         foreach ($query as $key => $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
             echo '.';
-            if (!($key % 100)) {
+            if (!($key%100)) {
                 echo '<br />';
             }
             if (!$result) {
                 echo '</div>';
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ '.
-                      'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.'.
-                      '</p>';
+                        'once again or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.'.
+                        '</p>';
                 printf(
                     '<p class="alert alert-danger"><strong>DB error:</strong> %s</p>',
                     $faqConfig->getDb()->error()
@@ -617,7 +617,7 @@ if ($step == 3) {
             }
             usleep(10000);
             ++$count;
-            if (!($count % 10)) {
+            if (!($count%10)) {
                 ob_flush();
             }
         }
@@ -711,7 +711,7 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
         } elseif ('pgsql' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
@@ -906,7 +906,7 @@ if ($step == 3) {
             printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again '.
-                      'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
+                        'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 PMF_System::renderFooter();

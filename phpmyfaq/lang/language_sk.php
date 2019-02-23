@@ -664,14 +664,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Čakajte na publikovanie administrátorom: '
 $PMF_LANG['ad_entry_visibility'] = 'Publikovať?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Prosím zadajte heslo. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Heslá sa nezhodujú. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Užívateľské meno je nesprávne.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Prosím vložte správnu e-mailovú adresu. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Prosím vložte Vaše skutočné meno. ";
-$PMF_LANG['ad_user_error_delete'] =  "Konto užívateľa nemôže byť vymazané. ";
-$PMF_LANG['ad_user_error_noId'] =  "Žiadna ID. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Konto užívateľa je chránené. ";
+$PMF_LANG['ad_user_error_password'] = "Prosím zadajte heslo. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Heslá sa nezhodujú. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Užívateľské meno je nesprávne.";
+$PMF_LANG['ad_user_error_noEmail'] = "Prosím vložte správnu e-mailovú adresu. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Prosím vložte Vaše skutočné meno. ";
+$PMF_LANG['ad_user_error_delete'] = "Konto užívateľa nemôže byť vymazané. ";
+$PMF_LANG['ad_user_error_noId'] = "Žiadna ID. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Konto užívateľa je chránené. ";
 $PMF_LANG['ad_user_deleteUser'] = "Vymazať užívateľa";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "naposledy upravované:";
@@ -1004,7 +1004,7 @@ $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Povoliť i
 $PMF_LANG['msgSecureSwitch'] = "Prepnúť na bezpečný mód pre prihlásenie!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
-$PMF_LANG['msgTransToolNoteFileSaving']  = 'Majte prosím na pamäti, že ak dokument neuložíte, žiadne nové údaje nebudú zapísané';
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Majte prosím na pamäti, že ak dokument neuložíte, žiadne nové údaje nebudú zapísané';
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Strana %d nahrávanie úspešné';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Chyba pri nahrávaní strany %d ';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Nahrávanie strany %d ';
@@ -1016,9 +1016,9 @@ $PMF_LANG['ad_record_active'] = 'Aktívny';
 $PMF_LANG['msgAttachmentInvalid'] = 'Príloha je chybná, prosím informujte administrátora';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => "input", 1 => 'Počet nájdených položiek');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => "input", 1 => 'Počet nájdených položiek');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Triedenie top FAQ");
-$PMF_LANG['list_all_users']            = 'Zobraziť všetkých užívateľov';
+$PMF_LANG['list_all_users'] = 'Zobraziť všetkých užívateľov';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "zobraziť najnavštevovanejšie položky";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "zobraziť najviac hodnotené položky";

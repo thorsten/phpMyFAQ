@@ -670,14 +670,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Laukiama administratorių publikavimo: ';
 $PMF_LANG['ad_entry_visibility'] = 'Publikuoti';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Prašome įvesti slaptažodį. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Slaptažodžiai nesutampa. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Nurodytas naudotojo vardas neteisingas.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Įveskite teisingą el. pašto adresą. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Prašome įvesti savo tikrą vardą. ";
-$PMF_LANG['ad_user_error_delete'] =  "Naudotojų paskyros nepašalintos. ";
-$PMF_LANG['ad_user_error_noId'] =  "Nenurodytas identifikatorius. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Naudotojo paskyra apsaugota. ";
+$PMF_LANG['ad_user_error_password'] = "Prašome įvesti slaptažodį. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Slaptažodžiai nesutampa. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Nurodytas naudotojo vardas neteisingas.";
+$PMF_LANG['ad_user_error_noEmail'] = "Įveskite teisingą el. pašto adresą. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Prašome įvesti savo tikrą vardą. ";
+$PMF_LANG['ad_user_error_delete'] = "Naudotojų paskyros nepašalintos. ";
+$PMF_LANG['ad_user_error_noId'] = "Nenurodytas identifikatorius. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Naudotojo paskyra apsaugota. ";
 $PMF_LANG['ad_user_deleteUser'] = "Šalinti naudotoją";
 $PMF_LANG['ad_user_status'] = "Būsena:";
 $PMF_LANG['ad_user_lastModified'] = "paskutinių keitimų data:";
@@ -1017,7 +1017,7 @@ $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Leisti pri
 $PMF_LANG['msgSecureSwitch'] = "Jei norite prisijungti, persijunkite į saugujį režimą!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
-$PMF_LANG['msgTransToolNoteFileSaving']  = 'Pastebėkite, kad jokie failai nebus įrašyti kol nepaspausite mygtuko išsaugoti';
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Pastebėkite, kad jokie failai nebus įrašyti kol nepaspausite mygtuko išsaugoti';
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Puslapio %d buferis sėkmingai įrašytas';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Klaida įrašant puslapio %d buferį';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Įrašomas puslapio %d buferis';
@@ -1029,9 +1029,9 @@ $PMF_LANG['ad_record_active'] = 'Aktyvus';
 $PMF_LANG['msgAttachmentInvalid'] = 'Priedas yra blogas, informuokite administratorių';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Rodomų paieškos raktažodžių skaičius');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Rodomų paieškos raktažodžių skaičius');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Populiariausių DUK rikiavimas");
-$PMF_LANG['list_all_users']            = 'Rodyti visus naudotojus';
+$PMF_LANG['list_all_users'] = 'Rodyti visus naudotojus';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "rodyti dažniausiai peržiūrėtus įrašus";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "rodyti geriausiai įvertintus įrašus";

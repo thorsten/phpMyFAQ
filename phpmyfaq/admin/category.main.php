@@ -36,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                             <i aria-hidden="true" class="fa fa-plus fa-fw"></i> <?php echo $PMF_LANG['ad_kateg_add']; ?>
                         </a>
                         <a class="btn btn-info" href="?action=showcategory">
-                            <i aria-hidden="true" class="fa fa-th fa-fw"></i> <?php echo $PMF_LANG['ad_categ_show'];?>
+                            <i aria-hidden="true" class="fa fa-th fa-fw"></i> <?php echo $PMF_LANG['ad_categ_show']; ?>
                         </a>
                     </div>
                 </h2>
@@ -322,26 +322,26 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         // add faq to category (always)
         printf('
            <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-file-text-o fa-fw"></span></a> ',
-           $cat['id'],
-           $cat['lang'],
-           $PMF_LANG['ad_quick_entry']
+            $cat['id'],
+            $cat['lang'],
+            $PMF_LANG['ad_quick_entry']
         );
 
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
-           printf('
+            printf('
                <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><span title="%s" class="fa fa-plus fa-fw"></span></a> ',
-               $cat['id'],
-               $cat['lang'],
-               $PMF_LANG['ad_quick_category']
-           );
+                $cat['id'],
+                $cat['lang'],
+                $PMF_LANG['ad_quick_category']
+            );
 
-           // rename (sub) category (if current language)
-           printf('
+            // rename (sub) category (if current language)
+            printf('
                <a class="btn btn-info btn-sm" href="?action=editcategory&amp;cat=%s"><span title="%s" class="fa fa-edit fa-fw"></a> ',
-               $cat['id'],
-               $PMF_LANG['ad_kateg_rename']
-           );
+                $cat['id'],
+                $PMF_LANG['ad_kateg_rename']
+            );
         }
 
         // translate category (always)
@@ -365,20 +365,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
 
         if ($cat['lang'] == $lang) {
             // cut category (if current language)
-           printf(
-               '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="fa fa-cut fa-fw"></a> ',
-               $cat['id'],
-               $PMF_LANG['ad_categ_cut']
-           );
+            printf(
+                '<a class="btn btn-warning btn-sm" href="?action=cutcategory&amp;cat=%s"><span title="%s" class="fa fa-cut fa-fw"></a> ',
+                $cat['id'],
+                $PMF_LANG['ad_categ_cut']
+            );
 
             if ($category->numParent($cat['parent_id']) > 1) {
                 // move category (if current language) AND more than 1 category at the same level)
-              printf(
-                  '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="fa fa-sort fa-fw"></a> ',
-                  $cat['id'],
-                  $cat['parent_id'],
-                  $PMF_LANG['ad_categ_move']
-              );
+                printf(
+                    '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><span title="%s" class="fa fa-sort fa-fw"></a> ',
+                    $cat['id'],
+                    $cat['parent_id'],
+                    $PMF_LANG['ad_categ_move']
+                );
             }
         }
 

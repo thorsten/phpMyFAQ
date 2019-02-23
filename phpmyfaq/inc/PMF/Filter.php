@@ -124,7 +124,7 @@ class PMF_Filter
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr($attribute, '=', true);
             if (!in_array($attributeName, $keep)) {
-                $html = str_replace(' ' . $attribute, '', $html);
+                $html = str_replace(' '.$attribute, '', $html);
             }
         }
 

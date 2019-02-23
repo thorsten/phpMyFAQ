@@ -490,8 +490,8 @@ class PMF_Mail
         $this->headers['X-Mailer'] = $this->_mailer;
 
         // X-MSMail-Priority
-        if (isset($this->priorities[(int) $this->priority])) {
-            $this->headers['X-MSMail-Priority'] = $this->priorities[(int) $this->priority];
+        if (isset($this->priorities[(int)$this->priority])) {
+            $this->headers['X-MSMail-Priority'] = $this->priorities[(int)$this->priority];
         }
 
         // X-Originating-IP

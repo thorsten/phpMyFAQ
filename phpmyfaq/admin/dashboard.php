@@ -38,8 +38,11 @@ $faqSession = new PMF_Session($faqConfig);
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
                         <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
-                        <?php else: ?>
-                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
+                        <?php else {
+    : ?>
+                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode'];
+}
+?></span>
                         <?php endif; ?>
                     </a>
                 </div>
@@ -190,7 +193,7 @@ $faqSession = new PMF_Session($faqConfig);
                     $getJson = PMF_Filter::filterInput(INPUT_POST, 'getJson', FILTER_SANITIZE_STRING);
                     if (!is_null($getJson) && 'verify' === $getJson) {
                         set_error_handler(
-                            function ($severity, $message, $file, $line) {
+                            function($severity, $message, $file, $line) {
                                 throw new ErrorException($message, $severity, $severity, $file, $line);
                             }
                         );

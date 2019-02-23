@@ -28,17 +28,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * SQL constants definitions
  */
 define('FAQ_SQL_ACTIVE_YES', 'yes');
-define('FAQ_SQL_ACTIVE_NO',  'no');
+define('FAQ_SQL_ACTIVE_NO', 'no');
 
 /*
  * Query type definitions
  */
-define('FAQ_QUERY_TYPE_DEFAULT',      'faq_default');
-define('FAQ_QUERY_TYPE_APPROVAL',     'faq_approval');
-define('FAQ_QUERY_TYPE_EXPORT_PDF',   'faq_export_pdf');
+define('FAQ_QUERY_TYPE_DEFAULT', 'faq_default');
+define('FAQ_QUERY_TYPE_APPROVAL', 'faq_approval');
+define('FAQ_QUERY_TYPE_EXPORT_PDF', 'faq_export_pdf');
 define('FAQ_QUERY_TYPE_EXPORT_XHTML', 'faq_export_xhtml');
-define('FAQ_QUERY_TYPE_EXPORT_XML',   'faq_export_xml');
-define('FAQ_QUERY_TYPE_RSS_LATEST',   'faq_rss_latest');
+define('FAQ_QUERY_TYPE_EXPORT_XML', 'faq_export_xml');
+define('FAQ_QUERY_TYPE_RSS_LATEST', 'faq_rss_latest');
 
 /*
  * Sorting type definitions
@@ -379,12 +379,12 @@ class PMF_Faq
 
         $result = $this->_config->getDb()->query($query);
         $num = $this->_config->getDb()->numRows($result);
-        $pages = (int) ceil($num / $numPerPage);
+        $pages = (int)ceil($num/$numPerPage);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = $page * $numPerPage - $numPerPage;
+            $first = $page*$numPerPage - $numPerPage;
         }
 
         if ($num > 0) {
@@ -492,7 +492,7 @@ class PMF_Faq
      * This function returns all not expired records from the given record ids.
      *
      * @param array  $recordIds Array of record ids
-     * @param string $orderby    Order by
+     * @param string $orderBy    Order by
      * @param string $sortBy     Sort by
      *
      * @return string
@@ -565,12 +565,12 @@ class PMF_Faq
         $result = $this->_config->getDb()->query($query);
 
         $num = $this->_config->getDb()->numRows($result);
-        $pages = ceil($num / $this->_config->get('records.numberOfRecordsPerPage'));
+        $pages = ceil($num/$this->_config->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->_config->get('records.numberOfRecordsPerPage')) - $this->_config->get('records.numberOfRecordsPerPage');
+            $first = ($page*$this->_config->get('records.numberOfRecordsPerPage')) - $this->_config->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -1165,7 +1165,7 @@ class PMF_Faq
      * @param int    $record_id  Record id
      * @param string $language   Language
      *
-     * @return int
+     * @return boolean
      */
     public function addCategoryRelations(Array $categories, $record_id, $language)
     {
@@ -1368,7 +1368,7 @@ class PMF_Faq
                 AND
                 lang = '%s'",
             PMF_Db::getTablePrefix(),
-            (int) $faqId,
+            (int)$faqId,
             $this->_config->getDb()->escape($faqLang)
         );
 
@@ -1661,7 +1661,7 @@ class PMF_Faq
      * @param int    $record_id   Record id
      * @param string $record_lang Record language
      *
-     * @return array
+     * @return boolean
      */
     public function addNewRevision($record_id, $record_lang)
     {
@@ -1895,16 +1895,16 @@ class PMF_Faq
         return true;
     }
 
-     /**
-      * Returns the visibility of a question.
-      *
-      * @param   int $questionId
-      *
-      * @return  string
-      */
-     public function getVisibilityOfQuestion($questionId)
-     {
-         $query = sprintf("
+        /**
+         * Returns the visibility of a question.
+         *
+         * @param   int $questionId
+         *
+         * @return  string
+         */
+        public function getVisibilityOfQuestion($questionId)
+        {
+            $query = sprintf("
             SELECT
                 is_visible
             FROM
@@ -1918,15 +1918,15 @@ class PMF_Faq
             $this->_config->getLanguage()->getLanguage()
         );
 
-         $result = $this->_config->getDb()->query($query);
-         if ($this->_config->getDb()->numRows($result) > 0) {
-             $row = $this->_config->getDb()->fetchObject($result);
+            $result = $this->_config->getDb()->query($query);
+            if ($this->_config->getDb()->numRows($result) > 0) {
+                $row = $this->_config->getDb()->fetchObject($result);
 
-             return $row->is_visible;
-         }
+                return $row->is_visible;
+            }
 
-         return;
-     }
+            return;
+        }
 
     /**
      * Sets the visibility of a question.
@@ -2442,7 +2442,7 @@ class PMF_Faq
                     'category_id' => $row->category_id,
                     'question' => $row->question,
                     'created' => $row->created,
-                    'is_visible' => $row->is_visible, );
+                    'is_visible' => $row->is_visible,);
             }
         }
 
@@ -2489,7 +2489,7 @@ class PMF_Faq
                     'answer_id' => $row->answer_id,
                     'is_visible' => $row->is_visible,
                 );
-             }
+                }
         }
 
         return $questions;
@@ -2598,7 +2598,7 @@ class PMF_Faq
                     'revision_id' => $row->revision_id,
                     'user' => $row->usr,
                     'date' => $row->datum,
-                    'changelog' => $row->what, );
+                    'changelog' => $row->what,);
             }
         }
 
@@ -2655,7 +2655,7 @@ class PMF_Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param   $nCatid
+     * @param   integer $nCatid
      * @param   $logicOp
      * @param   $oCat
      *
@@ -2681,14 +2681,14 @@ class PMF_Faq
     /**
      * Build the SQL query for retrieving faq records according to the constraints provided.
      *
-     * @param   $QueryType
-     * @param   $nCatid
-     * @param   $bDownwards
-     * @param   $lang
-     * @param   $date
+     * @param   string $QueryType
+     * @param   integer $nCatid
+     * @param   boolean $bDownwards
+     * @param   string $lang
+     * @param   string $date
      * @param   $faqid
      *
-     * @return array
+     * @return string
      */
     private function _getSQLQuery($QueryType, $nCatid, $bDownwards, $lang, $date, $faqid = 0)
     {
@@ -2898,13 +2898,13 @@ class PMF_Faq
             $mode,
             PMF_Db::getTablePrefix(),
             $mode,
-            (int) $recordId);
+            (int)$recordId);
 
         $result = $this->_config->getDb()->query($query);
 
         if ($this->_config->getDb()->numRows($result) > 0) {
             while (($row = $this->_config->getDb()->fetchObject($result))) {
-                $permissions[] = (int) $row->permission;
+                $permissions[] = (int)$row->permission;
             }
         }
 
@@ -3001,7 +3001,7 @@ class PMF_Faq
                 $oLink->itemTitle = $title;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = '<li>' . $oLink->toHtmlAnchor() . '</li>';
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
                 $output .= $listItem;
             }
@@ -3157,7 +3157,7 @@ class PMF_Faq
                 $lang
             );
 
-            $retval = (bool) $this->_config->getDb()->query($update);
+            $retval = (bool)$this->_config->getDb()->query($update);
         }
 
         return $retval;

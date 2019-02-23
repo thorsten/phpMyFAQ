@@ -51,7 +51,7 @@ $user = PMF_User_CurrentUser::getFromCookie($faqConfig);
 if (!$user instanceof PMF_User_CurrentUser) {
     $user = PMF_User_CurrentUser::getFromSession($faqConfig);
 }
-$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING) * 60;
+$refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING)*60;
 ?>
 <!DOCTYPE html>
 <html lang="<?php print $PMF_LANG['metaLanguage']; ?>" class="no-js">

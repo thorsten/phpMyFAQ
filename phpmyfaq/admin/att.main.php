@@ -32,7 +32,7 @@ $fa = new PMF_Attachment_Collection($faqConfig);
 $itemsPerPage = 32;
 $allCrumbs = $fa->getBreadcrumbs();
 
-$crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
+$crumbs = array_slice($allCrumbs, ($page - 1)*$itemsPerPage, $itemsPerPage);
 
 $pagination = new PMF_Pagination(
     $faqConfig,

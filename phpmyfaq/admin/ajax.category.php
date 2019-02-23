@@ -50,7 +50,7 @@ switch ($ajaxAction) {
         if (empty($ajaxData['categories'])) {
             $categories = array(-1); // Access for all users and groups
         } else {
-            $categories = explode(',', (int) $ajaxData['categories']);
+            $categories = explode(',', (int)$ajaxData['categories']);
         }
 
         echo json_encode(

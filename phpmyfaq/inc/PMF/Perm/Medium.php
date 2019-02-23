@@ -272,7 +272,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
             $nextId,
             $groupData['name'],
             $groupData['description'],
-            (int) $groupData['auto_join']
+            (int)$groupData['auto_join']
         );
 
         $res = $this->config->getDb()->query($insert);
@@ -764,7 +764,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
         if (!isset($groupData['auto_join'])) {
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
-        $groupData['auto_join'] = (int) $groupData['auto_join'];
+        $groupData['auto_join'] = (int)$groupData['auto_join'];
 
         return $groupData;
     }

@@ -51,7 +51,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             'parent_id' => $parent_id,
             'name' => PMF_Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING),
             'description' => PMF_Filter::filterInput(INPUT_POST, 'description', FILTER_SANITIZE_STRING),
-            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT), );
+            'user_id' => PMF_Filter::filterInput(INPUT_POST, 'user_id', FILTER_VALIDATE_INT),);
 
         // translate.category only returns non-existent languages to translate too
         if ($category->addCategory($category_data, $parent_id, $category_data['id'])) {
@@ -99,14 +99,14 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         print '<td>';
         if ($cat['lang'] != $LANGCODE) {
             // translate category
-           printf(
-               '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
-               $currentLink,
-               $cat['id'],
-               $LANGCODE,
-               $PMF_LANG['ad_categ_translate'],
-               $PMF_LANG['ad_categ_translate']
-           );
+            printf(
+                '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
+                $currentLink,
+                $cat['id'],
+                $LANGCODE,
+                $PMF_LANG['ad_categ_translate'],
+                $PMF_LANG['ad_categ_translate']
+            );
         }
         printf('&nbsp;%s<strong>%s</strong>',
             $indent,

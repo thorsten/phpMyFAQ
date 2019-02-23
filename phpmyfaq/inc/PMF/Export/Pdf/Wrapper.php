@@ -183,7 +183,7 @@ define('K_TITLE_MAGNIFICATION', 1.3);
 /*
  * reduction factor for small font
  */
-define('K_SMALL_RATIO', 2 / 3);
+define('K_SMALL_RATIO', 2/3);
 
 require K_PATH_MAIN.'/tcpdf.php';
 
@@ -307,7 +307,7 @@ class PMF_Export_Pdf_Wrapper extends TCPDF
 
         // Set font
         if (array_key_exists($PMF_LANG['metaLanguage'], $this->fontFiles)) {
-            $this->currentFont = (string) $this->fontFiles[$PMF_LANG['metaLanguage']];
+            $this->currentFont = (string)$this->fontFiles[$PMF_LANG['metaLanguage']];
         }
     }
 

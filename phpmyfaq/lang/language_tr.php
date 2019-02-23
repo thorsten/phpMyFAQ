@@ -665,14 +665,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Yönetici tarafından yayınlama bekleniyor:
 $PMF_LANG['ad_entry_visibility'] = 'Yayınla?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Şifre giriniz. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Şifreler uyuşmuyor. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Belirtilen kullanıcı adı geçersiz.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Geçerli bir e-posta adresi giriniz. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Adınızı giriniz. ";
-$PMF_LANG['ad_user_error_delete'] =  "Kullanıcı hesabı silinemedi. ";
-$PMF_LANG['ad_user_error_noId'] =  "ID belirtilmedi. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Kullanıcı hesabı korumalı. ";
+$PMF_LANG['ad_user_error_password'] = "Şifre giriniz. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Şifreler uyuşmuyor. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Belirtilen kullanıcı adı geçersiz.";
+$PMF_LANG['ad_user_error_noEmail'] = "Geçerli bir e-posta adresi giriniz. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Adınızı giriniz. ";
+$PMF_LANG['ad_user_error_delete'] = "Kullanıcı hesabı silinemedi. ";
+$PMF_LANG['ad_user_error_noId'] = "ID belirtilmedi. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Kullanıcı hesabı korumalı. ";
 $PMF_LANG['ad_user_deleteUser'] = "Kullanıcıyı Sil";
 $PMF_LANG['ad_user_status'] = "Durum:";
 $PMF_LANG['ad_user_lastModified'] = "Son değişiklik:";

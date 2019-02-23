@@ -124,7 +124,7 @@ class PMF_Rating
                 );
                 break;
 
-             default:
+                default:
                 $query = sprintf('
                     SELECT
                         fd.id AS id,
@@ -164,12 +164,12 @@ class PMF_Rating
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $ratings[] = array(
-               'id' => $row->id,
-               'lang' => $row->lang,
-               'category_id' => $row->category_id,
-               'question' => $row->question,
-               'num' => $row->num,
-               'usr' => $row->usr,
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'category_id' => $row->category_id,
+                'question' => $row->question,
+                'num' => $row->num,
+                'usr' => $row->usr,
             );
         }
 

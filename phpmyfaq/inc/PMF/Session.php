@@ -87,7 +87,7 @@ class PMF_Session
             }
 
             foreach ($botBlacklist as $bot) {
-                if ((bool) PMF_String::strstr($agent, $bot)) {
+                if ((bool)PMF_String::strstr($agent, $bot)) {
                     ++$bots;
                 }
             }

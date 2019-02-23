@@ -300,7 +300,7 @@ class PMF_User_CurrentUser extends PMF_User
             return 0;
         }
 
-        return ($_SERVER['REQUEST_TIME'] - $_SESSION[PMF_SESSION_ID_TIMESTAMP]) / 60;
+        return ($_SERVER['REQUEST_TIME'] - $_SESSION[PMF_SESSION_ID_TIMESTAMP])/60;
     }
 
     /**
@@ -322,8 +322,8 @@ class PMF_User_CurrentUser extends PMF_User
                 %sfaquser
             WHERE
                 user_id = %d',
-           PMF_Db::getTablePrefix(),
-           $this->getUserId()
+            PMF_Db::getTablePrefix(),
+            $this->getUserId()
         );
 
         $res = $this->config->getDb()->query($select);
@@ -375,7 +375,7 @@ class PMF_User_CurrentUser extends PMF_User
             PMF_Db::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
-            $updateLastlogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
+            $updateLastlogin ? "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
@@ -611,7 +611,7 @@ class PMF_User_CurrentUser extends PMF_User
      */
     protected function setSuccess($success)
     {
-        $this->loginState = (int) $success;
+        $this->loginState = (int)$success;
 
         $update = sprintf('
             UPDATE

@@ -47,8 +47,8 @@ $artlang = PMF_Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPE
 
 $send2friendLink = sprintf('%sindex.php?action=artikel&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqConfig->getDefaultUrl(),
-    (int) $cat,
-    (int) $id,
+    (int)$cat,
+    (int)$id,
     urlencode($artlang));
 
 $captchaHelper = new PMF_Helper_Captcha($faqConfig);

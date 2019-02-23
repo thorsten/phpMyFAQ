@@ -94,10 +94,10 @@ class PMF_Logging
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->getDb()->fetchObject($result)) {
             $data[$row->id] = array(
-               'time' => $row->time,
-               'usr' => $row->usr,
-               'text' => $row->text,
-               'ip' => $row->ip,
+                'time' => $row->time,
+                'usr' => $row->usr,
+                'text' => $row->text,
+                'ip' => $row->ip,
             );
         }
 
@@ -148,7 +148,7 @@ class PMF_Logging
             WHERE
                 time < %d',
             PMF_Db::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] - 30 * 86400
+            $_SERVER['REQUEST_TIME'] - 30*86400
         );
 
         if ($this->_config->getDb()->query($query)) {

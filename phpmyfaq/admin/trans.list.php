@@ -105,9 +105,12 @@ $tt = new PMF_TransTool();
                         <?php echo $PMF_LANG['msgEdit'] ?>
                     </a>
                 </td>
-                <?php else: ?>
+                <?php else {
+    : ?>
                 <td><?php echo $PMF_LANG['msgEdit'] ?></td>
-                <?php endif; ?>
+                <?php endif;
+}
+?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'deltranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-danger" href="javascript: del('<?php echo $lang ?>');" >
@@ -115,9 +118,12 @@ $tt = new PMF_TransTool();
                         <?php echo $PMF_LANG['msgDelete'] ?>
                     </a>
                 </td>
-                <?php else: ?>
+                <?php else {
+    : ?>
                 <td><?php echo $PMF_LANG['msgDelete'] ?></td>
-                <?php endif; ?>
+                <?php endif;
+}
+?>
                 <?php if ($user->perm->checkRight($user->getUserId(), 'edittranslation') && $showActions): ?>
                 <td>
                     <a class="btn btn-success" href="javascript: sendToTeam('<?php echo $lang ?>');" >
@@ -125,14 +131,20 @@ $tt = new PMF_TransTool();
                         <?php echo $PMF_LANG['msgTransToolSendToTeam'] ?>
                     </a>
                 </td>
-                <?php else: ?>
+                <?php else {
+    : ?>
                 <td><?php echo $PMF_LANG['msgTransToolSendToTeam'] ?></td>
-                <?php endif; ?>
+                <?php endif;
+}
+?>
                 <?php if ($isLangFileWritable): ?>
                 <td><i aria-hidden="true" class="fa fa-ok-circle"></i> <?php echo $PMF_LANG['msgYes'] ?></td>
-                <?php else: ?>
+                <?php else {
+    : ?>
                 <td><i aria-hidden="true" class="fa fa-ban-circle"></i> <?php echo $PMF_LANG['msgNo'] ?></td>
-                <?php endif; ?>
+                <?php endif;
+}
+?>
                 <td>
                     <?php echo $percents ?>%
                     <meter value="<?php echo $percents ?>" max="100" min="0" title="<?php echo $percents ?>%">

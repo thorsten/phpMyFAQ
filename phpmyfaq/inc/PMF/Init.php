@@ -158,19 +158,19 @@ class PMF_Init
                         $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
                     }
                 }
-               reset($_FILES[$key]['name']);
-           } else {
-               $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
-               if ('' == $_FILES[$key]['name']) {
-                   $_FILES[$key]['type'] = '';
-                   $_FILES[$key]['tmp_name'] = '';
-                   $_FILES[$key]['size'] = 0;
-                   $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
-               }
-           }
-       }
-       reset($_FILES);
-   }
+                reset($_FILES[$key]['name']);
+            } else {
+                $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
+                if ('' == $_FILES[$key]['name']) {
+                    $_FILES[$key]['type'] = '';
+                    $_FILES[$key]['tmp_name'] = '';
+                    $_FILES[$key]['size'] = 0;
+                    $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
+                }
+            }
+        }
+        reset($_FILES);
+    }
 
     /**
      * Cleans a html string from some xss issues.

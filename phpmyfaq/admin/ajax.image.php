@@ -36,50 +36,50 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 switch ($ajaxAction) {
 
-    case 'upload':
+        case 'upload':
 
-        $uploadDir = PMF_ROOT_DIR . '/images/';
-        $uploadFile = basename($_FILES['upload']['name']);
-        $isUploaded = false;
-        $height = $width = 0;
-        $validFileExtensions = [ 'gif', 'jpg', 'jpeg', 'png' ];
+            $uploadDir = PMF_ROOT_DIR . '/images/';
+            $uploadFile = basename($_FILES['upload']['name']);
+            $isUploaded = false;
+            $height = $width = 0;
+            $validFileExtensions = [ 'gif', 'jpg', 'jpeg', 'png' ];
 
-        if ($csrfOkay) {
-            if (is_uploaded_file($uploadedFile['tmp_name']) &&
-                $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')
-            ) {
+            if ($csrfOkay) {
+                if (is_uploaded_file($uploadedFile['tmp_name']) &&
+                    $uploadedFile['size'] < $faqConfig->get('records.maxAttachmentSize')
+                ) {
 
-                $fileInfo = getimagesize($uploadedFile['tmp_name']);
-                $fileExtension = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
+                    $fileInfo = getimagesize($uploadedFile['tmp_name']);
+                    $fileExtension = strtolower(pathinfo($uploadFile, PATHINFO_EXTENSION));
 
-                if (false === $fileInfo) {
-                    $isUploaded = false;
-                }
-
-                if (($fileInfo[2] !== IMAGETYPE_GIF) &&
-                    ($fileInfo[2] !== IMAGETYPE_JPEG) &&
-                    ($fileInfo[2] !== IMAGETYPE_PNG)) {
-                    $isUploaded = false;
-                } else {
-                    $isUploaded = true;
-                }
-
-                if (!in_array($fileExtension, $validFileExtensions)) {
-                    $isUploaded = false;
-                }
-
-                if ($fileInfo && $isUploaded) {
-                    list($width, $height) = $fileInfo;
-                    if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadFile)) {
-                        $isUploaded = true;
-                    } else {
+                    if (false === $fileInfo) {
                         $isUploaded = false;
                     }
-                }
-                ?>
+
+                    if (($fileInfo[2] !== IMAGETYPE_GIF) &&
+                        ($fileInfo[2] !== IMAGETYPE_JPEG) &&
+                        ($fileInfo[2] !== IMAGETYPE_PNG)) {
+                        $isUploaded = false;
+                    } else {
+                        $isUploaded = true;
+                    }
+
+                    if (!in_array($fileExtension, $validFileExtensions)) {
+                        $isUploaded = false;
+                    }
+
+                    if ($fileInfo && $isUploaded) {
+                        list($width, $height) = $fileInfo;
+                        if (move_uploaded_file($uploadedFile['tmp_name'], $uploadDir . $uploadFile)) {
+                            $isUploaded = true;
+                        } else {
+                            $isUploaded = false;
+                        }
+                    }
+                    ?>
                 <script>
                     window.parent.window.pmfImageUpload.uploadFinished({
-                        filename: '<?php echo $faqConfig->getDefaultUrl() . 'images/' . $uploadFile ?>',
+                        filename: '<?php echo $faqConfig->getDefaultUrl().'images/'.$uploadFile ?>',
                         result: '<?php echo $isUploaded ? 'file_uploaded' : 'error' ?>',
                         resultCode: '<?php echo $isUploaded ? 'success' : 'failed' ?>',
                         height: <?php echo $height ?>,
@@ -87,8 +87,8 @@ switch ($ajaxAction) {
                     });
                 </script>
                 <?php
-            } else {
-                ?>
+                } else {
+                    ?>
                 <script>
                     window.parent.window.pmfImageUpload.uploadFinished({
                         filename: '',
@@ -99,9 +99,9 @@ switch ($ajaxAction) {
                     });
                 </script>
                 <?php
-            }
-        } else {
-            ?>
+                }
+            } else {
+                ?>
             <script>
                 window.parent.window.pmfImageUpload.uploadFinished({
                     filename: '',
@@ -112,7 +112,7 @@ switch ($ajaxAction) {
                 });
             </script>
             <?php
-        }
+            }
 
-        break;
+            break;
 }

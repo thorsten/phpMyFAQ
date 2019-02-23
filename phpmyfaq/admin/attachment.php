@@ -95,14 +95,14 @@ if (is_null($currentAction) || !is_null($currentSave)) {
 
 }
 if (is_null($currentAction) && $auth && $user->perm->checkRight($user->getUserId(), 'addattachment')) {
-    $recordId = filter_input(INPUT_GET, 'record_id',   FILTER_VALIDATE_INT);
+    $recordId = filter_input(INPUT_GET, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_GET, 'record_lang', FILTER_SANITIZE_STRING);
     ?>
         <form action="attachment.php?action=save" enctype="multipart/form-data" method="post" accept-charset="utf-8">
             <fieldset>
             <legend>
                 <?php echo $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?>
-                (max <?php echo round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
+                (max <?php echo round($faqConfig->get('records.maxAttachmentSize')/pow(1024, 2), 2) ?> MB)
             </legend>
                 <input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $faqConfig->get('records.maxAttachmentSize') ?>">
                 <input type="hidden" name="record_id" value="<?php echo $recordId ?>">
@@ -132,7 +132,7 @@ if (!is_null($currentAction) && $auth && !$user->perm->checkRight($user->getUser
 
 if (!is_null($currentSave) && $currentSave == true && $auth &&
     $user->perm->checkRight($user->getUserId(), 'addattachment')) {
-    $recordId = filter_input(INPUT_POST, 'record_id',   FILTER_VALIDATE_INT);
+    $recordId = filter_input(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
     $recordLang = filter_input(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
     ?>
 <p>
@@ -178,7 +178,7 @@ if (!is_null($currentSave) && $currentSave == true && $auth &&
             '<p>%s</p>',
             sprintf(
                 $PMF_LANG['ad_attach_4'],
-                round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2)
+                round($faqConfig->get('records.maxAttachmentSize')/pow(1024, 2), 2)
             )
         );
 

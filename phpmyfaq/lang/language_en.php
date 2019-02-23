@@ -668,14 +668,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail address. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
+$PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Passwords do not match. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "The specified user name is invalid.";
+$PMF_LANG['ad_user_error_noEmail'] = "Please enter a valid mail address. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Please enter your real name. ";
+$PMF_LANG['ad_user_error_delete'] = "User account could not be deleted. ";
+$PMF_LANG['ad_user_error_noId'] = "No ID specified. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "last modified:";
@@ -1008,7 +1008,7 @@ $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
-$PMF_LANG['msgTransToolNoteFileSaving']  = 'Please note that no files will we written until you click save button';
+$PMF_LANG['msgTransToolNoteFileSaving'] = 'Please note that no files will we written until you click save button';
 $PMF_LANG['msgTransToolPageBufferRecorded'] = 'Page %d buffer recorded successfully';
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = 'Error recording page %d buffer';
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = 'Recording page %d buffer';
@@ -1020,9 +1020,9 @@ $PMF_LANG['ad_record_active'] = 'Active';
 $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
-$PMF_LANG['list_all_users']            = 'List all users';
+$PMF_LANG['list_all_users'] = 'List all users';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "list most visited entries";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "list most voted entries";

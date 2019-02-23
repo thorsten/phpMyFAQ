@@ -38,7 +38,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- 
  * @link      https://www.phpmyfaq.de
  * @since     2009-04-06
  */
@@ -63,7 +62,7 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      *
      * @param string $language
      *
-     * @return PMF_String_Basic
+     * @return PMF_String_UTF8ToLatinConvertable
      */
     public static function getInstance($language = 'en')
     {
@@ -335,6 +334,6 @@ class PMF_String_UTF8ToLatinConvertable extends PMF_String_Abstract
      */
     private static function appendU($str)
     {
-        return ((string) $str).'u';
+        return ((string)$str).'u';
     }
 }

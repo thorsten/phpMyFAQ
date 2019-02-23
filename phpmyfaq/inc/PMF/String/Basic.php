@@ -155,7 +155,7 @@ class PMF_String_Basic extends PMF_String_Abstract
      */
     public function strstr($haystack, $needle, $part = false)
     {
-        return strstr($haystack, $needle, (boolean) $part);
+        return strstr($haystack, $needle, (boolean)$part);
     }
 
     /**

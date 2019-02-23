@@ -82,13 +82,13 @@ class PMF_Export_Xhtml extends PMF_Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
         $comment = sprintf('XHTML output by phpMyFAQ %s | Date: %s',
-          $version,
-          PMF_Date::createIsoDate(date('YmdHis')));
+            $version,
+            PMF_Date::createIsoDate(date('YmdHis')));
 
         $this->xml->startDocument('1.0', 'utf-8');
         $this->xml->writeDtd('html',
-                             '-//W3C//DTD XHTML 1.0 Transitional//EN',
-                             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
+                                '-//W3C//DTD XHTML 1.0 Transitional//EN',
+                                'http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd');
         $this->xml->startElement('html');
         $this->xml->writeAttribute('xmlns', 'http://www.w3.org/1999/xhtml');
         $this->xml->writeAttribute('xml:lang', $language);

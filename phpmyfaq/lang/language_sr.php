@@ -662,14 +662,14 @@ $PMF_LANG['msgQuestionsWaiting'] = '&#268;eka na potvrdu administratora: ';
 $PMF_LANG['ad_entry_visibility'] = 'Objavi?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Molimo unesite lozinku. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Lozinke se ne poklapaju. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Une&scaron;eno korisni&#269;ko ime nije na&#273;eno.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Unesite va&#382;e&#263;u email adresu. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Unesite Va&scaron;e pravo ime. ";
-$PMF_LANG['ad_user_error_delete'] =  "Korisni&#269;ki nalog ne mo&#382;e biti izbrisan. ";
-$PMF_LANG['ad_user_error_noId'] =  "Nije prilo&#382;en ID. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Korisni&#269;ki nalog je za&scaron;ti&#263;en. ";
+$PMF_LANG['ad_user_error_password'] = "Molimo unesite lozinku. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Lozinke se ne poklapaju. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Une&scaron;eno korisni&#269;ko ime nije na&#273;eno.";
+$PMF_LANG['ad_user_error_noEmail'] = "Unesite va&#382;e&#263;u email adresu. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Unesite Va&scaron;e pravo ime. ";
+$PMF_LANG['ad_user_error_delete'] = "Korisni&#269;ki nalog ne mo&#382;e biti izbrisan. ";
+$PMF_LANG['ad_user_error_noId'] = "Nije prilo&#382;en ID. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Korisni&#269;ki nalog je za&scaron;ti&#263;en. ";
 $PMF_LANG['ad_user_deleteUser'] = "Obri&scaron;i korisnika";
 $PMF_LANG['ad_user_status'] = "Status:";
 $PMF_LANG['ad_user_lastModified'] = "zadnji put menjano:";

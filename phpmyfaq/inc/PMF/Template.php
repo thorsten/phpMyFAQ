@@ -260,7 +260,7 @@ class PMF_Template
      * This function multiplies blocks.
      *
      * @param string $block        Blockname
-     * @param array  $blockContent Content of block
+     * @param string  $blockContent Content of block
      *
      * @return string implode('', $tmpBlock)
      */
@@ -351,7 +351,7 @@ class PMF_Template
      *
      * @param string $content Content to check
      *
-     * @return array
+     * @return string
      */
     private function _checkContent($content)
     {

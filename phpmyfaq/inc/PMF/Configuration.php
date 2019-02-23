@@ -397,12 +397,12 @@ class PMF_Configuration
     public function update(Array $newConfigs)
     {
         $runtimeConfigs = [
-            'core.database',           // PMF_DB_Driver
-            'core.instance',           // PMF_Instance
-            'core.language',           // Language
-            'core.ldap',               // PMF_Ldap
-            'core.ldapConfig',         // $PMF_LDAP
-            'core.elasticsearch',      // Elasticsearch\Client
+            'core.database', // PMF_DB_Driver
+            'core.instance', // PMF_Instance
+            'core.language', // Language
+            'core.ldap', // PMF_Ldap
+            'core.ldapConfig', // $PMF_LDAP
+            'core.elasticsearch', // Elasticsearch\Client
             'core.elasticsearchConfig' // $PMF_ES
         ];
 

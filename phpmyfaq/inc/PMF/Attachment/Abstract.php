@@ -242,7 +242,7 @@ abstract class PMF_Attachment_Abstract
             WHERE 
                 id = %d',
             PMF_Db::getTablePrefix(),
-            (int) $this->id);
+            (int)$this->id);
 
         $result = $this->db->query($sql);
 
@@ -364,9 +364,9 @@ abstract class PMF_Attachment_Abstract
                null === $this->realHash || null === $this->filename ||
                null === $this->key) {
                 throw new PMF_Attachment_Exception('All of id, '.
-                                     'recordId, hash, filename, '.
-                                     'key is needed to generate '.
-                                     'fs hash for encrypted files');
+                                        'recordId, hash, filename, '.
+                                        'key is needed to generate '.
+                                        'fs hash for encrypted files');
             }
 
             $src = $this->id.$this->recordId.$this->realHash.
@@ -422,7 +422,7 @@ abstract class PMF_Attachment_Abstract
     /**
      * Validate attached file with the real hash.
      *
-     * @return bool
+     * @return boolean|null
      */
     public function validate()
     {

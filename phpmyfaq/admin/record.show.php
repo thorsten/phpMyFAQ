@@ -210,11 +210,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                     $fdTable.'.active AS active',
                     $fdTable.'.thema AS thema',
                     $fdTable.'.content AS content',
-                    $fdTable.'.updated AS updated', ))
+                    $fdTable.'.updated AS updated',))
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(array(
                     $fdTable.'.id = '.$fcrTable.'.record_id',
-                    $fdTable.'.lang = '.$fcrTable.'.record_lang', ));
+                    $fdTable.'.lang = '.$fcrTable.'.record_lang',));
 
         if (is_numeric($searchTerm)) {
             $search->setMatchingColumns(array($fdTable.'.solution_id'));
@@ -230,7 +230,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
         $faqsFound = [];
 
         while ($row = $faqConfig->getDb()->fetchObject($result)) {
-            if ($searchCat != 0 && $searchCat != (int) $row->category_id) {
+            if ($searchCat != 0 && $searchCat != (int)$row->category_id) {
                 continue;
             }
 
@@ -405,7 +405,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editbt') || $user->perm->checkR
                                             <input type="checkbox" lang="<?php echo $record['lang'] ?>"
                                                onclick="saveStatus(<?php echo $cid.', ['.$record['id'].']' ?>, 'sticky', '<?php echo $user->getCsrfTokenFromSession() ?>');"
                                                id="sticky_record_<?php echo $cid.'_'.$record['id'] ?>"
-                                            <?php echo($record['sticky'] ? 'checked' :  '    ') ?>>
+                                            <?php echo($record['sticky'] ? 'checked' : '    ') ?>>
                                         </label>
                                     </td>
                                     <td>

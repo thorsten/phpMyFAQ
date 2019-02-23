@@ -66,7 +66,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * @param string $password Password
      * @param string $database Database name
      *
-     * @return bool true, if connected, otherwise false
+     * @return null|boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -133,7 +133,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
+     * @param resource $result
      *
      * @return mixed
      */
@@ -192,7 +192,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
     public function log()
     {
@@ -203,6 +203,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      * Returns just one row.
      *
      * @param  string
+     * @param string $query
      *
      * @return string
      */
@@ -296,7 +297,7 @@ class PMF_DB_Pgsql implements PMF_DB_Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {

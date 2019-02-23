@@ -374,8 +374,8 @@ $languageCodes = [
 define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
 // Misc parameters
-define('PMF_LANGUAGE_EXPIRED_TIME', 3600);      // 30 minutes
-define('PMF_SESSION_EXPIRED_TIME', 3600);       // 30 minutes
+define('PMF_LANGUAGE_EXPIRED_TIME', 3600); // 30 minutes
+define('PMF_SESSION_EXPIRED_TIME', 3600); // 30 minutes
 define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
 
 //
