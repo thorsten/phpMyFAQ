@@ -5,8 +5,6 @@ namespace phpMyFAQ\User;
 /**
  * The userdata class provides methods to manage user information.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -111,11 +109,9 @@ class UserData
 
     /**
      * Returns the first result of the given data.
-     *
      * @param string $key
      * @param string $value
-     *
-     * @return string
+     * @return string|null
      */
     public function fetch($key, $value)
     {
@@ -135,7 +131,7 @@ class UserData
         $res = $this->config->getDb()->query($select);
 
         if (0 === $this->config->getDb()->numRows($res)) {
-            return false;
+            return null;
         } else {
             return $this->config->getDb()->fetchObject($res)->$key;
         }

@@ -5,18 +5,14 @@ namespace phpMyFAQ\Strings;
 /**
  * The string wrapper class using mbstring extension. 
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
@@ -32,11 +28,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * String_Mbstring.
  *
  * @package phpMyFAQ
- *
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
@@ -51,8 +45,6 @@ class Mbstring extends StringsAbstract
 
     /**
      * Constructor.
-     *
-     * @return Mbstring
      */
     final private function __construct()
     {
@@ -60,9 +52,7 @@ class Mbstring extends StringsAbstract
 
     /**
      * Create and return an instance.
-     *
      * @param string $language
-     *
      * @return Mbstring
      */
     public static function getInstance($language = 'en')
@@ -79,9 +69,7 @@ class Mbstring extends StringsAbstract
 
     /**
      * Get string character count.
-     *
      * @param string $str String
-     *
      * @return int
      */
     public function strlen($str)

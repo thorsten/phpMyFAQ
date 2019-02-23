@@ -2426,7 +2426,7 @@ class Faq
                 created ASC",
             Db::getTablePrefix(),
             $this->config->getLanguage()->getLanguage(),
-            ($all == false ? " AND is_visible = 'Y'" : '')
+            ($all === false ? " AND is_visible = 'Y'" : '')
         );
 
         if ($result = $this->config->getDb()->query($query)) {

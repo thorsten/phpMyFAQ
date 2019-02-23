@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The Linkverifier class provides methods and functions for verifying URLs.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -15,16 +13,15 @@ namespace phpMyFAQ;
  * with permission from NetJapan, Inc. IT Administration Group.
  *
  * @package phpMyFAQ
- *
  * @author Minoru TODA <todam@netjapan.co.jp>
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc. and phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2005-08-01
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -33,13 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * LinkVerifier.
  *
  * @package phpMyFAQ
- *
  * @author Minoru TODA <todam@netjapan.co.jp>
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc. and phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2005-08-01
  */
@@ -157,7 +152,7 @@ class Linkverifier
      *
      * @return bool true if ready to verify URLs, otherwise false
      */
-    public function isReady()
+    public function isReady(): bool
     {
         if (is_null($this->config->getDefaultUrl()) || '' !== $this->config->getDefaultUrl()) {
             return false;
@@ -635,7 +630,7 @@ class Linkverifier
         global $PMF_LANG;
 
         // Check if feature is disabled.
-        if ($this->isReady() == false) {
+        if ($this->isReady() === false) {
             return sprintf(
                 '<span class="fa-stack" aria-hidden="true"><i class="fas fa-link fa-stack-1x"></i><i class="fas fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
                 $PMF_LANG['ad_linkcheck_feedback_url-disabled']

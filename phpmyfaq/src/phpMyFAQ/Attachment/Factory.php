@@ -126,7 +126,7 @@ class Factory
         );
 
         $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
-        if ($result) {
+        if (!empty($result)) {
             foreach ($result as $item) {
                 $retval[] = self::create($item->id);
             }

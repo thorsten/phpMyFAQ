@@ -24,8 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Report.
- *
+ * Class Seo.
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Gustavo Solt <gustavo.solt@mayflower.de>
@@ -36,17 +35,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  */
 class Seo
 {
-    /**
-     * @var PMF_Configuration
-     */
+    /** @var Configuration */
     private $config;
 
     /**
      * Constructor.
-     *
-     * @param PMF_Configuration
-     *
-     * @return PMF_Seo
+     * @param Configuration
      */
     public function __construct(Configuration $config)
     {
@@ -55,10 +49,9 @@ class Seo
 
     /**
      * @param string $action
-     *
      * @return mixed
      */
-    public function getMetaRobots($action)
+    public function getMetaRobots(string $action)
     {
         switch ($action) {
 
