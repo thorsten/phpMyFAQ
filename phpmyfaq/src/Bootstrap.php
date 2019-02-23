@@ -147,7 +147,7 @@ $faqConfig->getAll();
 // We always need a valid session!
 //
 ini_set('session.use_only_cookies', 1); // Avoid any PHP version to move sessions on URLs
-ini_set('session.auto_start', 0);       // Prevent error to use session_start() if it's active in php.ini
+ini_set('session.auto_start', 0); // Prevent error to use session_start() if it's active in php.ini
 ini_set('session.use_trans_sid', 0);
 ini_set('url_rewriter.tags', '');
 
@@ -205,7 +205,7 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
     $tmp = dirname(__DIR__).DIRECTORY_SEPARATOR.$confAttachmentsPath;
 
     // Check that nobody is traversing
-    if (0 === strpos((string) $tmp, dirname(__DIR__))) {
+    if (0 === strpos((string)$tmp, dirname(__DIR__))) {
         define('PMF_ATTACHMENTS_DIR', $tmp);
     } else {
         define('PMF_ATTACHMENTS_DIR', false);

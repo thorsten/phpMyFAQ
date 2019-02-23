@@ -454,7 +454,7 @@ switch ($action) {
             $mail->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/?action=editentry&id=' . $recordId . '&lang=' . $faqLanguage;
+                $faqConfig->getDefaultUrl().'admin/?action=editentry&id='.$recordId.'&lang='.$faqLanguage;
             $result = $mail->send();
             unset($mail);
 
@@ -688,8 +688,8 @@ switch ($action) {
 
                 $message = array(
                     'success' => trim($PMF_LANG['successMessage']).
-                                 ' '.
-                                 trim($PMF_LANG['msgRegThankYou']),
+                                    ' '.
+                                    trim($PMF_LANG['msgRegThankYou']),
                 );
             }
         } else {
@@ -716,7 +716,7 @@ switch ($action) {
             $votingData = array(
                 'record_id' => $recordId,
                 'vote' => $vote,
-                'user_ip' => $userIp, );
+                'user_ip' => $userIp,);
 
             if (!$rating->getNumberOfVotings($recordId)) {
                 $rating->addVoting($votingData);
@@ -791,7 +791,7 @@ switch ($action) {
         $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
         $mailto = Filter::filterInputArray(INPUT_POST,
             array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL,
-                      'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
+                        'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
                 ),
             )
         );
@@ -853,7 +853,7 @@ switch ($action) {
 
         $userData = array(
             'display_name' => $author,
-            'email' => $email, );
+            'email' => $email,);
         $success = $user->setUserData($userData);
 
         if (0 !== strlen($password) && 0 !== strlen($confirm)) {
@@ -888,10 +888,10 @@ switch ($action) {
 
             if ($loginExist && ($email == $user->getUserData('email'))) {
                 $consonants = array(
-                    'b','c','d','f','g','h','j','k','l','m','n','p','r','s','t','v','w','x','y','z',
+                    'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
                 );
                 $vowels = array(
-                    'a','e','i','o','u',
+                    'a', 'e', 'i', 'o', 'u',
                 );
                 $newPassword = '';
                 for ($i = 1; $i <= 4; ++$i) {

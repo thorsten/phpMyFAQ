@@ -95,7 +95,6 @@ class CategoryNews
      * Removes the news $newsId from all categories.
      * Returns true on success, otherwise false.
      *
-     * @param int $categoryId
      * @return bool
      */
     public function removeNewsFromAllCategories($newsId)

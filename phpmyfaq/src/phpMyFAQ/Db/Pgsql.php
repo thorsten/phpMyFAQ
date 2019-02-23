@@ -65,7 +65,7 @@ class Pgsql implements Driver
      * @param string $password Password
      * @param string $database Database name
      *
-     * @return bool true, if connected, otherwise false
+     * @return null|boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -132,7 +132,7 @@ class Pgsql implements Driver
     /**
      * Fetch a result row as an object.
      *
-     * @param mixed $result
+     * @param resource $result
      *
      * @return mixed
      */
@@ -191,7 +191,7 @@ class Pgsql implements Driver
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
     public function log()
     {
@@ -202,6 +202,7 @@ class Pgsql implements Driver
      * Returns just one row.
      *
      * @param  string
+     * @param string $query
      *
      * @return string
      */
@@ -295,7 +296,7 @@ class Pgsql implements Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {

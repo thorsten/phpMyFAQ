@@ -208,7 +208,7 @@ class Ldap extends Auth implements Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int) $key;
+                    $this->activeServer = (int)$key;
                     break;
                 }
             }
@@ -279,7 +279,7 @@ class Ldap extends Auth implements Driver
                 }
 
                 if (false !== $this->ldap->getDn($login)) {
-                    $this->activeServer = (int) $key;
+                    $this->activeServer = (int)$key;
                     break;
                 }
             }

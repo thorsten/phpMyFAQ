@@ -55,7 +55,7 @@ class Network
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      *
      * @return PMF_Network
      */
@@ -161,8 +161,8 @@ class Network
         $bytes_addr = unpack('n*', inet_pton($addr));
         $bytes_test = unpack('n*', inet_pton($ip));
 
-        for ($i = 1; $i <= ceil($preflen / 16); ++$i) {
-            $left = $preflen - 16 * ($i - 1);
+        for ($i = 1; $i <= ceil($preflen/16); ++$i) {
+            $left = $preflen - 16*($i - 1);
             if ($left > 16) {
                 $left = 16;
             }

@@ -775,9 +775,9 @@ class Installer
             $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
             // set LDAP Config to prevent DB query
-            foreach($this->_mainConfig as $configKey => $configValue){
+            foreach ($this->_mainConfig as $configKey => $configValue) {
                 if (strpos($configKey, 'ldap.') !== false) {
-                    $configuration->config[$configKey] =  $configValue;
+                    $configuration->config[$configKey] = $configValue;
                 }
             }
 
@@ -969,7 +969,7 @@ class Installer
             }
             usleep(1000);
             ++$count;
-            if (!($count % 10)) {
+            if (!($count%10)) {
                 echo '| ';
             }
         }

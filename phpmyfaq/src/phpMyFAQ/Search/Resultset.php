@@ -228,6 +228,6 @@ class Resultset
             $score += $object->relevance_keywords;
         }
 
-        return round($score / 3 * 100);
+        return round($score/3*100);
     }
 }

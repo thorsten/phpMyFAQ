@@ -257,8 +257,8 @@ class Mysqli implements Driver
                MAX(%s) AS current_id
            FROM
                %s',
-           $id,
-           $table);
+            $id,
+            $table);
 
         $result = $this->query($select);
 

@@ -59,7 +59,7 @@ class Stopwords
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      *
      * @return PMF_Stopwords
      */

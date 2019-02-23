@@ -431,12 +431,12 @@ class Configuration
     public function update(Array $newConfigs): bool
     {
         $runtimeConfigs = [
-            'core.database',           // phpMyFAQ\Db_Driver
-            'core.instance',           // Instance
-            'core.language',           // Language
-            'core.ldapServer',         // Ldap
-            'core.ldapConfig',         // $LDAP
-            'core.elasticsearch',      // Elasticsearch\Client
+            'core.database', // phpMyFAQ\Db_Driver
+            'core.instance', // Instance
+            'core.language', // Language
+            'core.ldapServer', // Ldap
+            'core.ldapConfig', // $LDAP
+            'core.elasticsearch', // Elasticsearch\Client
             'core.elasticsearchConfig' // $ES
         ];
 

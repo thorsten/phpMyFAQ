@@ -64,9 +64,12 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <input type="hidden" name="showcat" value="<?= $showcat ?>">
                 <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
                   <input type="hidden" name="restricted_groups[]" value="<?= $groupPermission[0] ?>">
-                <?php else: ?>
+                <?php else {
+    : ?>
                   <input type="hidden" name="restricted_groups[]" value="-1">
-                <?php endif; ?>
+                <?php endif;
+}
+?>
               <input type="hidden" name="restricted_users" value="<?= $userPermission[0] ?>">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
@@ -107,10 +110,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                 <div class="col-lg-4">
                   <ul class="list-unstyled">
                       <?php
-                      foreach ($category->getCategoryLanguagesTranslated($id) as $language => $description) {
-                          echo '<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="' . $language . ': ' . $description . '">';
-                      }
-                      ?>
+                        foreach ($category->getCategoryLanguagesTranslated($id) as $language => $description) {
+                            echo '<input type="text" readonly class="form-control-plaintext" id="staticEmail" value="' . $language . ': ' . $description . '">';
+                        }
+                        ?>
                   </ul>
                 </div>
               </div>

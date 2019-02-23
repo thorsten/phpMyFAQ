@@ -58,7 +58,7 @@ switch ($action) {
             $secLevelEntries .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group', 'ad_menu_group_administration', $action);
         }
         if ($faqConfig->get('security.permLevel') == 'large') {
-           $secLevelEntries .= $adminHelper->addMenuEntry('add_section+edit_section+del_section', 'section', 'ad_menu_section_administration', $action);
+            $secLevelEntries .= $adminHelper->addMenuEntry('add_section+edit_section+del_section', 'section', 'ad_menu_section_administration', $action);
         }
         if (!$faqConfig->get('ldap.ldapSupport')) {
             $secLevelEntries .= $adminHelper->addMenuEntry('passwd', 'passwd', 'ad_menu_passwd', $action);
@@ -230,13 +230,13 @@ switch ($action) {
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="pmf-admin-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <?php
-              if ($faqConfig->get('main.enableGravatarSupport')) {
-                  $avatar = new Gravatar($faqConfig);
-                  echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
-              } else {
-                  echo '<i aria-hidden="true" class="fas fa-user"></i>';
-              }
-              ?>
+                if ($faqConfig->get('main.enableGravatarSupport')) {
+                    $avatar = new Gravatar($faqConfig);
+                    echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
+                } else {
+                    echo '<i aria-hidden="true" class="fas fa-user"></i>';
+                }
+                ?>
             <span title="<?= $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
               <?= $user->getUserData('display_name'); ?>
             </span>

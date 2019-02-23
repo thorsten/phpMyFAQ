@@ -102,7 +102,7 @@ class Instance
      */
     public function setId($id)
     {
-        $this->id = (int) $id;
+        $this->id = (int)$id;
     }
 
     /**
@@ -144,7 +144,7 @@ class Instance
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
             Db::getTablePrefix(),
-            (int) $id
+            (int)$id
         );
 
         $result = $this->config->getDb()->query($select);
@@ -217,7 +217,7 @@ class Instance
             Db::getTablePrefix(),
             $data['instance'],
             $data['comment'],
-            (int) $id
+            (int)$id
         );
 
         return $this->config->getDb()->query($update);
@@ -236,12 +236,12 @@ class Instance
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
                 Db::getTablePrefix(),
-                (int) $id
+                (int)$id
             ),
             sprintf(
                 'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
                 Db::getTablePrefix(),
-                (int) $id
+                (int)$id
             ),
         );
 
@@ -259,7 +259,7 @@ class Instance
      * Adds a configuration item for the database.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param string  $value
      *
      * @return bool
      */

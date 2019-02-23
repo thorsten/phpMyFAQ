@@ -84,7 +84,7 @@ class Session
             }
 
             foreach ($botBlacklist as $bot) {
-                if ((bool) Strings::strstr($agent, $bot)) {
+                if ((bool)Strings::strstr($agent, $bot)) {
                     ++$bots;
                 }
             }

@@ -85,8 +85,8 @@ class Html5 extends Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
         $comment = sprintf('HTML5 output by phpMyFAQ %s | Date: %s',
-          $version,
-          Date::createIsoDate(date('YmdHis')));
+            $version,
+            Date::createIsoDate(date('YmdHis')));
 
         $this->xml->startDTD('html');
         $this->xml->startElement('html');

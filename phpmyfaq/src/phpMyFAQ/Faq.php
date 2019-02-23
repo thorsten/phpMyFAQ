@@ -408,20 +408,20 @@ class Faq
 
         $result = $this->config->getDb()->query($query);
         $num = $this->config->getDb()->numRows($result);
-        $pages = (int)ceil($num / $numPerPage);
+        $pages = (int)ceil($num/$numPerPage);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = $page * $numPerPage - $numPerPage;
+            $first = $page*$numPerPage - $numPerPage;
         }
 
         if ($num > 0) {
             if ($pages > 1) {
                 $output .= sprintf('<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'] . $page,
+                    $this->translation['msgPage'].$page,
                     $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']);
+                    $pages.$this->translation['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
 
@@ -594,20 +594,20 @@ class Faq
         $result = $this->config->getDb()->query($query);
 
         $num = $this->config->getDb()->numRows($result);
-        $pages = ceil($num / $this->config->get('records.numberOfRecordsPerPage'));
+        $pages = ceil($num/$this->config->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->config->get('records.numberOfRecordsPerPage')) - $this->config->get('records.numberOfRecordsPerPage');
+            $first = ($page*$this->config->get('records.numberOfRecordsPerPage')) - $this->config->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
             if ($pages > 1) {
                 $output .= sprintf('<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'] . $page,
+                    $this->translation['msgPage'].$page,
                     $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']);
+                    $pages.$this->translation['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -654,7 +654,7 @@ class Faq
 
                 $lastFaqId = $row->id;
             }
-            $output .= '</ul><span id="totFaqRecords" style="display: none;">' . $num . '</span>';
+            $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
         } else {
             return false;
         }
@@ -667,21 +667,21 @@ class Faq
             $vor = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
-                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$vor;
+                $oLink = new Link(Link::getSystemRelativeUri().'?'.$url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgPrevious'];
                 $oLink->tooltip = $this->translation['msgPrevious'];
-                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
             $output .= ' ';
             if ($next <= $pages) {
-                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$next;
+                $oLink = new Link(Link::getSystemRelativeUri().'?'.$url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgNext'];
                 $oLink->tooltip = $this->translation['msgNext'];
-                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
+                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
             }
             $output .= '</strong></p>';
         }
@@ -808,7 +808,7 @@ class Faq
             Db::getTablePrefix(),
             Db::getTablePrefix(),
             $faqId,
-            isset($faqRevisionId) ? 'AND revision_id = ' . $faqRevisionId : '',
+            isset($faqRevisionId) ? 'AND revision_id = '.$faqRevisionId : '',
             $faqLanguage,
             ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
@@ -901,7 +901,7 @@ class Faq
                 'record_title' => $row->question,
                 'record_preview' => $faqHelper->renderAnswerPreview($row->answer, 25),
                 'record_link' => $oLink->toString(),
-                'record_updated' => Date::createIsoDate($row->updated) . ':00',
+                'record_updated' => Date::createIsoDate($row->updated).':00',
                 'visits' => (int)$visits,
                 'record_created' => $row->created
             ];
@@ -921,7 +921,7 @@ class Faq
     public function addRecord(Array $data, $newRecord = true)
     {
         if ($newRecord) {
-            $recordId = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqdata', 'id');
+            $recordId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqdata', 'id');
         } else {
             $recordId = $data['id'];
         }
@@ -1279,7 +1279,7 @@ class Faq
      * @param int $recordId Record id
      * @param string $language Language
      *
-     * @return int
+     * @return boolean
      */
     public function addCategoryRelations(Array $categories, $recordId, $language)
     {
@@ -1464,12 +1464,12 @@ class Faq
                     $where .= ' IN (';
                     $separator = '';
                     foreach ($data as $value) {
-                        $where .= $separator . "'" . $this->config->getDb()->escape($value) . "'";
+                        $where .= $separator."'".$this->config->getDb()->escape($value)."'";
                         $separator = ', ';
                     }
                     $where .= ')';
                 } else {
-                    $where .= " = '" . $this->config->getDb()->escape($data) . "'";
+                    $where .= " = '".$this->config->getDb()->escape($data)."'";
                 }
                 if ($num > 0) {
                     $where .= ' AND ';
@@ -1818,7 +1818,7 @@ class Faq
             AND
                 date_end >= '%s'",
             Db::getTablePrefix(),
-            null == $language ? '' : "AND lang = '" . $language . "'",
+            null == $language ? '' : "AND lang = '".$language."'",
             $now,
             $now
         );
@@ -1905,25 +1905,25 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Db::getTablePrefix() . 'faqvisits fv,
-                ' . Db::getTablePrefix() . 'faqdata fd
+                ' . Db::getTablePrefix().'faqvisits fv,
+                ' . Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqcategoryrelations fcr
+                ' . Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_group AS fdg
+                ' . Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_user AS fdu
+                ' . Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \'' . $now.'\'
+                AND fd.date_end   >= \'' . $now.'\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -1931,15 +1931,15 @@ class Faq
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId . '\'';
+                fcr.category_id = \'' . $categoryId.'\'';
         }
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $language.'\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $this->queryPermission($this->groupSupport).'
 
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
@@ -2020,40 +2020,40 @@ class Faq
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
             FROM
-                ' . Db::getTablePrefix() . 'faqvoting fv,
-                ' . Db::getTablePrefix() . 'faqdata fd
+                ' . Db::getTablePrefix().'faqvoting fv,
+                ' . Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqcategoryrelations fcr
+                ' . Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_group AS fdg
+                ' . Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_user AS fdu
+                ' . Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \'' . $now.'\'
+                AND fd.date_end   >= \'' . $now.'\'
                 AND fd.id = fv.artikel
                 AND fd.active = \'yes\'';
 
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId . '\'';
+                fcr.category_id = \'' . $categoryId.'\'';
         }
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $language.'\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $this->queryPermission($this->groupSupport).'
             ORDER BY
                 avg DESC';
 
@@ -2142,25 +2142,25 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Db::getTablePrefix() . 'faqvisits fv,
-                ' . Db::getTablePrefix() . 'faqdata fd
+                ' . Db::getTablePrefix().'faqvisits fv,
+                ' . Db::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqcategoryrelations fcr
+                ' . Db::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_group AS fdg
+                ' . Db::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix() . 'faqdata_user AS fdu
+                ' . Db::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now . '\'
-                AND fd.date_end   >= \'' . $now . '\'
+                    fd.date_start <= \'' . $now.'\'
+                AND fd.date_end   >= \'' . $now.'\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -2168,10 +2168,10 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language . '\'';
+                fd.lang = \'' . $language.'\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport) . '
+                ' . $this->queryPermission($this->groupSupport).'
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
             ORDER BY
@@ -2329,7 +2329,7 @@ class Faq
                 VALUES
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
             Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqquestions', 'id'),
+            $this->config->getDb()->nextId(Db::getTablePrefix().'faqquestions', 'id'),
             $this->config->getLanguage()->getLanguage(),
             $this->config->getDb()->escape($questionData['username']),
             $this->config->getDb()->escape($questionData['email']),
@@ -2476,7 +2476,7 @@ class Faq
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
             Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqchanges', 'id'),
+            $this->config->getDb()->nextId(Db::getTablePrefix().'faqchanges', 'id'),
             $id,
             $lang,
             $revision_id,
@@ -2575,11 +2575,11 @@ class Faq
     /**
      * Build the SQL query for retrieving faq records according to the constraints provided.
      *
-     * @param $queryType
-     * @param $categoryId
-     * @param $bDownwards
-     * @param $lang
-     * @param $date
+     * @param string $queryType
+     * @param integer $categoryId
+     * @param boolean $bDownwards
+     * @param string $lang
+     * @param string $date
      * @param $faqId
      *
      * @return string
@@ -2627,7 +2627,7 @@ class Faq
         // faqvisits data selection
         if (!empty($faqId)) {
             // Select ONLY the faq with the provided $faqid
-            $query .= "fd.id = '" . $faqId . "' AND ";
+            $query .= "fd.id = '".$faqId."' AND ";
         }
         $query .= 'fd.id = fv.id
             AND
@@ -2637,7 +2637,7 @@ class Faq
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= ' (fcr.category_id = ' . $categoryId;
+            $query .= ' (fcr.category_id = '.$categoryId;
             if ($bDownwards) {
                 $query .= $this->getCatidWhereSequence($categoryId, 'OR');
             }
@@ -2648,14 +2648,14 @@ class Faq
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= " fd.updated LIKE '" . $date . "'";
+            $query .= " fd.updated LIKE '".$date."'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && Utils::isLanguage($lang)) {
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= " fd.lang = '" . $lang . "'";
+            $query .= " fd.lang = '".$lang."'";
             $needAndOp = true;
         }
         switch ($queryType) {
@@ -2663,7 +2663,7 @@ class Faq
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_NO . "'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
                 break;
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
@@ -2671,13 +2671,13 @@ class Faq
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 break;
             default:
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
+                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
                 break;
         }
         // Sort criteria
@@ -2703,7 +2703,7 @@ class Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param   $nCatid
+     * @param   integer $nCatid
      * @param   $logicOp
      * @param   $oCat
      *
@@ -2719,7 +2719,7 @@ class Faq
         $aChildren = array_values($oCat->getChildren($nCatid));
 
         foreach ($aChildren as $catid) {
-            $sqlWhereFilter .= ' ' . $logicOp . ' fcr.category_id = ' . $catid;
+            $sqlWhereFilter .= ' '.$logicOp.' fcr.category_id = '.$catid;
             $sqlWhereFilter .= $this->getCatidWhereSequence($catid, 'OR', $oCat);
         }
 
@@ -2922,7 +2922,7 @@ class Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = '<li>' . $oLink->toHtmlAnchor() . '</li>';
+                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
 
                 $output .= $listItem;
             }
@@ -3029,7 +3029,7 @@ class Faq
             );
         }
 
-        return $output . $extraout;
+        return $output.$extraout;
     }
 
     /**

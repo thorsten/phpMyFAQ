@@ -32,7 +32,6 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Linkverifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
-use phpMyFAQ\Search\Resultset as SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -44,7 +43,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -133,7 +132,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
+            $oLink = new Link(Link::getSystemRelativeUri().$_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -152,7 +151,7 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
             $att->getFilename());
     }
     if (count($attList) > 0) {
-        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ' ' . Strings::substr($outstr, 0, -2) . '</p>';
+        $answer .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.Strings::substr($outstr, 0, -2).'</p>';
     }
 }
 
@@ -189,7 +188,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         Link::getSystemRelativeUri('index.php'),
         $recordId,
         $lang,
-        $PMF_LANG['ad_entry_edit_1'] . ' ' . $PMF_LANG['ad_entry_edit_2']
+        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
     );
 }
 
@@ -213,7 +212,7 @@ $translationUrl = sprintf(
         '%',
         '%%',
         Link::getSystemRelativeUri('index.php')
-    ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
+    ).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,
     $recordId,
@@ -259,7 +258,7 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
         'writeContent',
         'tagsAvailable',
         [
-            'renderTags' => $PMF_LANG['msg_tags'] . ': ' . $faqTagging->getAllLinkTagsById($recordId),
+            'renderTags' => $PMF_LANG['msg_tags'].': '.$faqTagging->getAllLinkTagsById($recordId),
         ]
     );
 }
@@ -303,7 +302,7 @@ $template->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'writeRubrik' => $categoryName,
         'solution_id' => $faq->faqRecord['solution_id'],
-        'solution_id_link' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
+        'solution_id_link' => Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
         'writeThema' => $question,
         'writeContent' => $answer,
         'writeDateMsg' => $date->format($faq->faqRecord['date']),
@@ -322,7 +321,7 @@ $template->parse(
                 '%',
                 '%%',
                 Link::getSystemRelativeUri('index.php')
-            ) . 'index.php?%saction=savevoting',
+            ).'index.php?%saction=savevoting',
             $sids
         ),
         'saveVotingID' => $recordId,

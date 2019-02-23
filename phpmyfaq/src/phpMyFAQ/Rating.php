@@ -127,7 +127,7 @@ class Rating
                 );
                 break;
 
-             default:
+                default:
                 $query = sprintf('
                     SELECT
                         fd.id AS id,
@@ -167,12 +167,12 @@ class Rating
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
             $ratings[] = array(
-               'id' => $row->id,
-               'lang' => $row->lang,
-               'category_id' => $row->category_id,
-               'question' => $row->question,
-               'num' => $row->num,
-               'usr' => $row->usr,
+                'id' => $row->id,
+                'lang' => $row->lang,
+                'category_id' => $row->category_id,
+                'question' => $row->question,
+                'num' => $row->num,
+                'usr' => $row->usr,
             );
         }
 
@@ -285,7 +285,7 @@ class Rating
             VALUES
                 (%d, %d, %d, 1, %d, '%s')",
             Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqvoting', 'id'),
+            $this->config->getDb()->nextId(Db::getTablePrefix().'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],

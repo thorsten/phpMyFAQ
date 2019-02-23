@@ -19,8 +19,8 @@
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Filter;
-USE phpMyFAQ\Helper\CategoryHelper as HelperCategory;
-USE phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Helper\CaptchaHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';

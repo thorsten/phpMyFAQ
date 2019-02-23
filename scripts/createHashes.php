@@ -18,9 +18,9 @@
  * @since 2012-04-11
  */
 
-define('PMF_ROOT_DIR', dirname(__DIR__) . '/phpmyfaq');
+define('PMF_ROOT_DIR', dirname(__DIR__).'/phpmyfaq');
 
-require PMF_ROOT_DIR . '/src/phpMyFAQ/System.php';
+require PMF_ROOT_DIR.'/src/phpMyFAQ/System.php';
 
 $system = new phpMyFAQ\System();
 

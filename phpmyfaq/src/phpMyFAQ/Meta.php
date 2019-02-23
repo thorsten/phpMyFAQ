@@ -57,7 +57,7 @@ class Meta
      */
     public function add(MetaEntity $data)
     {
-        $id = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqmeta', 'id');
+        $id = $this->config->getDb()->nextId(Db::getTablePrefix().'faqmeta', 'id');
 
         $query = sprintf("
             INSERT INTO
@@ -183,7 +183,7 @@ class Meta
             $this->config->getLanguage()->getLanguage()
         );
 
-        return (boolean) $this->config->getDb()->query($query);
+        return (boolean)$this->config->getDb()->query($query);
     }
 
     /**
@@ -199,7 +199,7 @@ class Meta
             $id
         );
 
-        return (boolean) $this->config->getDb()->query($query);
+        return (boolean)$this->config->getDb()->query($query);
 
     }
 }

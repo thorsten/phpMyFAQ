@@ -251,7 +251,7 @@ class User
     public function getUserId()
     {
         if (isset($this->userId) && is_int($this->userId)) {
-            return (int) $this->userId;
+            return (int)$this->userId;
         }
         $this->userId = -1;
         $this->errors[] = self::ERROR_USER_NO_USERID;
@@ -281,7 +281,7 @@ class User
             WHERE
                 user_id = %d '.($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
             Db::getTablePrefix(),
-            (int) $userId
+            (int)$userId
         );
 
         $res = $this->config->getDb()->query($select);
@@ -291,10 +291,10 @@ class User
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
-        $this->isSuperAdmin = (bool) $user['is_superadmin'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
+        $this->isSuperAdmin = (bool)$user['is_superadmin'];
 
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
@@ -359,9 +359,9 @@ class User
             return false;
         }
         $user = $this->config->getDb()->fetchArray($res);
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
@@ -408,9 +408,9 @@ class User
             return false;
         }
 
-        $this->userId = (int) $user['user_id'];
-        $this->login = (string) $user['login'];
-        $this->status = (string) $user['account_status'];
+        $this->userId = (int)$user['user_id'];
+        $this->login = (string)$user['login'];
+        $this->status = (string)$user['account_status'];
 
         // get user-data
         if (!$this->userdata instanceof UserData) {
@@ -515,7 +515,7 @@ class User
         }
 
         // is $login valid?
-        $login = (string) $login;
+        $login = (string)$login;
         if (!$this->isValidLogin($login)) {
             $this->errors[] = self::ERROR_USER_LOGINNAME_TOO_SHORT;
 
@@ -531,7 +531,7 @@ class User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int) $this->config->getDb()->nextId(Db::getTablePrefix().'faquser', 'user_id');
+            $this->userId = (int)$this->config->getDb()->nextId(Db::getTablePrefix().'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -788,7 +788,7 @@ class User
      */
     public function isValidLogin($login)
     {
-        $login = (string) $login;
+        $login = (string)$login;
 
         if (strlen($login) < $this->loginMinLength || !preg_match($this->validUsername, $login)) {
             $this->errors[] = self::ERROR_USER_LOGIN_INVALID;
@@ -1070,8 +1070,8 @@ class User
         // To make passwords harder to get wrong, a few letters & numbers have been omitted.
         // This will ensure safety with browsers using fonts with confusable letters.
         // Removed: o,O,0,1,l,L
-        $consonants = ['b','c','d','f','g','h','j','k','m','n','p','r','s','t','v','w','x','y','z'];
-        $vowels = ['a','e','i','u'];
+        $consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
+        $vowels = ['a', 'e', 'i', 'u'];
         $newPassword = '';
         $skipped = false;
 
@@ -1083,9 +1083,7 @@ class User
             }
 
             switch (Utils::createRandomNumber(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
-                case 0:
-                case 1:
-                    $nextChar = $caseFunc($consonants[rand(0, 18)]);
+                case 0 : case 1 : $nextChar = $caseFunc($consonants[rand(0, 18)]);
                     break;
                 case 2:
                 case 3:
@@ -1189,7 +1187,7 @@ class User
             WHERE
                 user_id = %d",
             Db::getTablePrefix(),
-            (int) $this->isSuperAdmin,
+            (int)$this->isSuperAdmin,
             $this->userId
         );
 

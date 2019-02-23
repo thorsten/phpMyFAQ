@@ -105,7 +105,7 @@ class Factory
      *
      * @throws Exception
      *
-     * @return array
+     * @return integer|null
      */
     public static function fetchByRecordId(Configuration $config, $recordId): array
     {

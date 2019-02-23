@@ -20,7 +20,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require __DIR__ . '/../../libs/swiftmailer/swift_required.php';
+require __DIR__.'/../../libs/swiftmailer/swift_required.php';
 
 /**
  * class Mail_SwiftSMTP

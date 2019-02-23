@@ -149,7 +149,7 @@ switch ($action) {
                 $result[] = $data;
             }
         } catch (Search\Exception $e) {
-            $result = [ 'error' => $e->getMessage() ];
+            $result = ['error' => $e->getMessage()];
         }
         break;
 
@@ -211,7 +211,7 @@ switch ($action) {
         try {
             $attachments = Factory::fetchByRecordId($faqConfig, $recordId);
         } catch (\phpMyFAQ\Attachment\Exception $e) {
-            $result = [ 'error' => $e->getMessage() ];
+            $result = ['error' => $e->getMessage()];
         }
         foreach ($attachments as $attachment) {
             $result[] = [

@@ -242,7 +242,7 @@ abstract class AttachmentAbstract
             WHERE 
                 id = %d',
             Db::getTablePrefix(),
-            (int) $this->id);
+            (int)$this->id);
 
         $result = $this->db->query($sql);
 

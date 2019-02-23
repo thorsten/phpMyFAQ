@@ -63,77 +63,77 @@ if (isset($_POST['cancel'])) {
 }
 
 // validate sectionAction
-if (!in_array($sectionAction, $sectionActionList)){
+if (!in_array($sectionAction, $sectionActionList)) {
     // @Todo: implement Error message
 }
 
 // update section members
 if ($sectionAction == 'update_members' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
-  $message = '';
-  $sectionAction = $defaultSectionAction;
-  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
-  $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
+    $message = '';
+    $sectionAction = $defaultSectionAction;
+    $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+    $sectionMembers = isset($_POST['section_members']) ? $_POST['section_members'] : [];
 
-  if ($sectionId == 0) {
-      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
-  } else {
-      $user = new User($faqConfig);
-      $perm = $user->perm;
-      if (!$perm->removeAllGroupsFromSection($sectionId)) {
-          $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
-      }
-      foreach ($sectionMembers as $memberId) {
-          $perm->addGroupToSection((int) $memberId, $sectionId);
-      }
-      $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-          $PMF_LANG['ad_msg_savedsuc_1'],
-          $perm->getSectionName($sectionId),
-          $PMF_LANG['ad_msg_savedsuc_2']);
-  }
+    if ($sectionId == 0) {
+        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+    } else {
+        $user = new User($faqConfig);
+        $perm = $user->perm;
+        if (!$perm->removeAllGroupsFromSection($sectionId)) {
+            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
+        }
+        foreach ($sectionMembers as $memberId) {
+            $perm->addGroupToSection((int) $memberId, $sectionId);
+        }
+        $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+            $PMF_LANG['ad_msg_savedsuc_1'],
+            $perm->getSectionName($sectionId),
+            $PMF_LANG['ad_msg_savedsuc_2']);
+    }
 }
 
 // update section data
 if ($sectionAction == 'update_data' && $user->perm->checkRight($user->getUserId(), 'edit_section')) {
-  $message = '';
-  $sectionAction = $defaultSectionAction;
-  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
-  if ($sectionId == 0) {
-      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
-  } else {
-      $sectionData = [];
-      $dataFields = ['name', 'description'];
-      foreach ($dataFields as $field) {
-          $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
-      }
-      $user = new User($faqConfig);
-      $perm = $user->perm;
-      if (!$perm->changeSection($sectionId, $sectionData)) {
-          $message .= sprintf(
-          '<p class="alert alert-danger">%s<br>%s</p>',
-          $PMF_LANG['ad_msg_mysqlerr'],
-          $db->error()
-          );
-      } else {
-          $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
-              $PMF_LANG['ad_msg_savedsuc_1'],
-              $perm->getSectionName($sectionId),
-              $PMF_LANG['ad_msg_savedsuc_2']);
-      }
-  }
+    $message = '';
+    $sectionAction = $defaultSectionAction;
+    $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+    if ($sectionId == 0) {
+        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+    } else {
+        $sectionData = [];
+        $dataFields = ['name', 'description'];
+        foreach ($dataFields as $field) {
+            $sectionData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
+        }
+        $user = new User($faqConfig);
+        $perm = $user->perm;
+        if (!$perm->changeSection($sectionId, $sectionData)) {
+            $message .= sprintf(
+            '<p class="alert alert-danger">%s<br>%s</p>',
+            $PMF_LANG['ad_msg_mysqlerr'],
+            $db->error()
+            );
+        } else {
+            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+                $PMF_LANG['ad_msg_savedsuc_1'],
+                $perm->getSectionName($sectionId),
+                $PMF_LANG['ad_msg_savedsuc_2']);
+        }
+    }
 }
 
 // delete section confirmation
 if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
-  $message = '';
-  $user = new CurrentUser($faqConfig);
-  $perm = $user->perm;
-  $sectionId = Filter::filterInput(INPUT_POST, 'section_list_select', FILTER_VALIDATE_INT, 0);
-  if ($sectionId <= 0) {
-      $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
-      $sectionAction = $defaultSectionAction;
-  } else {
-      $sectionData = $perm->getSectionData($sectionId);
-      ?>
+    $message = '';
+    $user = new CurrentUser($faqConfig);
+    $perm = $user->perm;
+    $sectionId = Filter::filterInput(INPUT_POST, 'section_list_select', FILTER_VALIDATE_INT, 0);
+    if ($sectionId <= 0) {
+        $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $sectionAction = $defaultSectionAction;
+    } else {
+        $sectionData = $perm->getSectionData($sectionId);
+        ?>
       <header class="row">
           <div class="col-lg-12">
               <h2 class="page-header">
@@ -162,85 +162,85 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
       </div>
 <?php
 
-  }
+    }
 }
 
 if ($sectionAction == 'delete' && $user->perm->checkRight($user->getUserId(), 'delete_section')) {
-  $message = '';
-  $user = new User($faqConfig);
-  $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
-  $csrfOkay = true;
-  $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
-  if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-      $csrfOkay = false;
-  }
-  $sectionAction = $defaultSectionAction;
-  if ($sectionId <= 0) {
-      $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
-  } else {
-      if (!$user->perm->deleteSection($sectionId) && !$csrfOkay) {
-          $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_section_error_delete']);
-      } else {
-          $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_deleted']);
-      }
-      $userError = $user->error();
-      if ($userError != '') {
-          $message .= sprintf('<p class="alert alert-danger">%s</p>', $userError);
-      }
-  }
+    $message = '';
+    $user = new User($faqConfig);
+    $sectionId = Filter::filterInput(INPUT_POST, 'section_id', FILTER_VALIDATE_INT, 0);
+    $csrfOkay = true;
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfOkay = false;
+    }
+    $sectionAction = $defaultSectionAction;
+    if ($sectionId <= 0) {
+        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+    } else {
+        if (!$user->perm->deleteSection($sectionId) && !$csrfOkay) {
+            $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_section_error_delete']);
+        } else {
+            $message .= sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_deleted']);
+        }
+        $userError = $user->error();
+        if ($userError != '') {
+            $message .= sprintf('<p class="alert alert-danger">%s</p>', $userError);
+        }
+    }
 }
 
 if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
-  $user = new User($faqConfig);
-  $message = '';
-  $messages = [];
-  $sectionName = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
-  $sectionDescription = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
-  $csrfOkay = true;
-  $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
+    $user = new User($faqConfig);
+    $message = '';
+    $messages = [];
+    $sectionName = Filter::filterInput(INPUT_POST, 'section_name', FILTER_SANITIZE_STRING, '');
+    $sectionDescription = Filter::filterInput(INPUT_POST, 'section_description', FILTER_SANITIZE_STRING, '');
+    $csrfOkay = true;
+    $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
-  if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-      $csrfOkay = false;
-  }
-  // check section name
-  if ($sectionName == '') {
-      $messages[] = $PMF_LANG['ad_section_error_noName'];
-  }
-  // ok, let's go
-  if (count($messages) == 0 && $csrfOkay) {
-      // create section
-      $sectionData = array(
-          'name' => $sectionName,
-          'description' => $sectionDescription
-      );
+    if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+        $csrfOkay = false;
+    }
+    // check section name
+    if ($sectionName == '') {
+        $messages[] = $PMF_LANG['ad_section_error_noName'];
+    }
+    // ok, let's go
+    if (count($messages) == 0 && $csrfOkay) {
+        // create section
+        $sectionData = array(
+            'name' => $sectionName,
+            'description' => $sectionDescription
+        );
 
-      if ($user->perm->addSection($sectionData) <= 0) {
-          $messages[] = $PMF_LANG['ad_adus_dberr'];
-      }
-  }
-  // no errors, show list
-  if (count($messages) == 0) {
-      $sectionAction = $defaultSectionAction;
-      $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_suc']);
-  // display error messages and show form again
-  } else {
-      $sectionAction = 'add';
-      $message = '<p class="alert alert-danger">';
-      foreach ($messages as $err) {
-          $message .= $err.'<br>';
-      }
-      $message .= '</p>';
-  }
+        if ($user->perm->addSection($sectionData) <= 0) {
+            $messages[] = $PMF_LANG['ad_adus_dberr'];
+        }
+    }
+    // no errors, show list
+    if (count($messages) == 0) {
+        $sectionAction = $defaultSectionAction;
+        $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_section_suc']);
+    // display error messages and show form again
+    } else {
+        $sectionAction = 'add';
+        $message = '<p class="alert alert-danger">';
+        foreach ($messages as $err) {
+            $message .= $err.'<br>';
+        }
+        $message .= '</p>';
+    }
 }
 
 if (!isset($message)) {
-  $message = '';
+    $message = '';
 }
 
 // show new section form
 if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_section')) {
-  $user = new CurrentUser($faqConfig);
-  ?>
+    $user = new CurrentUser($faqConfig);
+    ?>
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">

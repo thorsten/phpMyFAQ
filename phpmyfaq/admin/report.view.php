@@ -57,18 +57,18 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
                     <thead>
                         <tr>
 <?php
-    ($useCategory)     ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_category']) : '';
-    ($useSubcategory)  ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sub_category']) : '';
-    ($useTranslation)  ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_translations']) : '';
-    ($useLanguage)     ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_language']) : '';
-    ($useId)           ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_id']) : '';
-    ($useSticky)       ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sticky']) : '';
-    ($useTitle)        ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_title']) : '';
+    ($useCategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_category']) : '';
+    ($useSubcategory) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sub_category']) : '';
+    ($useTranslation) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_translations']) : '';
+    ($useLanguage) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_language']) : '';
+    ($useId) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_id']) : '';
+    ($useSticky) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_sticky']) : '';
+    ($useTitle) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_title']) : '';
     ($useCreationDate) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_creation_date']) : '';
-    ($useOwner)        ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_owner']) : '';
+    ($useOwner) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_owner']) : '';
     ($useLastModified) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_last_modified_person']) : '';
-    ($useUrl)          ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_url']) : '';
-    ($useVisits)       ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_visits']) : '';
+    ($useUrl) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_url']) : '';
+    ($useVisits) ? printf('<th>%s</th>', $PMF_LANG['ad_stat_report_visits']) : '';
     ?>
                         </tr>
                     </thead>

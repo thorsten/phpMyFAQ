@@ -128,7 +128,7 @@ class Utils
      *
      * @param string $lang Language
      *
-     * @return bool
+     * @return integer
      */
     public static function isLanguage($lang)
     {
@@ -140,7 +140,7 @@ class Utils
      *
      * @param int $date Date
      *
-     * @return int
+     * @return boolean
      */
     public static function isLikeOnPMFDate($date)
     {
@@ -349,7 +349,7 @@ class Utils
     /**
      * debug_backtrace() wrapper function.
      *
-     * @param $string
+     * @param string $string
      *
      * @return string
      */
@@ -409,18 +409,18 @@ class Utils
     }
     /**
      * Creates a seed with microseconds.
-     * @return float|int
+     * @return integer|null
      */
     private static function makeSeed()
     {
         list($usec, $sec) = explode(' ', microtime());
-        return $sec + $usec * 1000000;
+        return $sec + $usec*1000000;
     }
 
     /**
      * Returns a random number.
-     * @param $min
-     * @param $max
+     * @param integer $min
+     * @param integer $max
      * @return int
      */
     public static function createRandomNumber($min, $max)

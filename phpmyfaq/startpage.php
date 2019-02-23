@@ -149,7 +149,7 @@ $template->parse(
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE)),
         'writeSendAdress' => '?'.$sids.'action=search',
         'searchBox' => $PMF_LANG['msgSearch'],
-        'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+        'categoryId' => ($cat === 0) ? '%' : (int)$cat,
         'msgSearch' => sprintf(
             '<a class="help" href="%sindex.php?action=search">%s</a>',
             $faqSystem->getSystemUri($faqConfig),

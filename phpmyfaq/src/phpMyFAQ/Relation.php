@@ -77,21 +77,21 @@ class Relation
         $search
             ->setTable(Db::getTablePrefix().'faqdata AS fd')
             ->setResultColumns(
-               [
-                   'fd.id AS id',
-                   'fd.lang AS lang',
-                   'fcr.category_id AS category_id',
-                   'fd.thema AS question',
-                   'fd.content AS answer',
-                   'fd.keywords AS keywords'
-               ]
+                [
+                    'fd.id AS id',
+                    'fd.lang AS lang',
+                    'fcr.category_id AS category_id',
+                    'fd.thema AS question',
+                    'fd.content AS answer',
+                    'fd.keywords AS keywords'
+                ]
             )
             ->setJoinedTable(Db::getTablePrefix().'faqcategoryrelations AS fcr')
             ->setJoinedColumns(
-               [
+                [
                 'fd.id = fcr.record_id',
                 'fd.lang = fcr.record_lang',
-               ]
+                ]
             )
             ->setConditions(
                 [

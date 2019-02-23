@@ -139,12 +139,12 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
-            if (isset($categoryId)){
+            if (isset($categoryId)) {
                 $categories = ['category_id' => $categoryId, 'category_lang' => $lang];
             } 
         }
         if (!is_null($translateTo)) {
-          $faqData['lang'] = $translateTo;
+            $faqData['lang'] = $translateTo;
         }
     } elseif ('copyentry' === $action) {
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
@@ -295,9 +295,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 <div class="tab-pane active" id="tab-question-answer">
                   <!-- Revision -->
                   <?php
-                  if ($user->perm->checkRight($currentUserId, 'changebtrevs')) {
-                      $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
-                      if (count($revisions)) { ?>
+                    if ($user->perm->checkRight($currentUserId, 'changebtrevs')) {
+                        $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
+                        if (count($revisions)) { ?>
                         <div class="form-group">
                           <form id="selectRevision" name="selectRevision" method="post" accept-charset="utf-8"
                                 action="?action=editentry&amp;id=<?= $faqData['id'] ?>&amp;lang=<?= $faqData['lang'] ?>">
@@ -307,17 +307,17 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                               </option>
                                 <?php foreach ($revisions as $revisionId => $revisionData) { ?>
                                   <option value="<?= $revisionData['revision_id'] ?>" <?php if ($selectedRevisionId == $revisionData['revision_id']) {
-                                      echo 'selected';
-                                  }
-                                  ?>>
+                                        echo 'selected';
+                                    }
+                                    ?>>
                                       <?php printf(
-                                          '%s 1.%d: %s - %s',
-                                          $PMF_LANG['ad_entry_revision'],
-                                          $revisionData['revision_id'],
-                                          Date::createIsoDate($revisionData['updated']),
-                                          $revisionData['author']
-                                      );
-                                      ?>
+                                            '%s 1.%d: %s - %s',
+                                            $PMF_LANG['ad_entry_revision'],
+                                            $revisionData['revision_id'],
+                                            Date::createIsoDate($revisionData['updated']),
+                                            $revisionData['author']
+                                        );
+                                        ?>
                                   </option>
                                     <?php
                                 }
@@ -326,15 +326,15 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                           </form>
                         </div>
                       <?php }
-                      if (isset($selectedRevisionId) &&
+                        if (isset($selectedRevisionId) &&
                           isset($faqData['revision_id']) &&
                           $selectedRevisionId != $faqData['revision_id']) {
-                          $faq->language = $faqData['lang'];
-                          $faq->getRecord($faqData['id'], $selectedRevisionId, true);
-                          $faqData = $faq->faqRecord;
-                          $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
-                      }
-                  } ?>
+                            $faq->language = $faqData['lang'];
+                            $faq->getRecord($faqData['id'], $selectedRevisionId, true);
+                            $faqData = $faq->faqRecord;
+                            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
+                        }
+                    } ?>
 
                   <!-- Question -->
                   <div class="form-group">
@@ -398,24 +398,24 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                         <div class="col-lg-10">
                           <ul class="list-unstyled adminAttachments">
                               <?php
-                              $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
-                              foreach ($attList as $att) {
-                                  printf(
-                                      '<li><a href="../%s">%s</a> ',
-                                      $att->buildUrl(),
-                                      $att->getFilename()
-                                  );
-                                  if ($user->perm->checkRight($currentUserId, 'delattachment')) {
-                                      printf(
-                                          '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fas fa-trash"></i></a>',
-                                          $faqData['id'],
-                                          $att->getId(),
-                                          $faqData['lang']
-                                      );
-                                  }
-                                  echo "</li>\n";
-                              }
-                              ?>
+                                $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
+                                foreach ($attList as $att) {
+                                    printf(
+                                        '<li><a href="../%s">%s</a> ',
+                                        $att->buildUrl(),
+                                        $att->getFilename()
+                                    );
+                                    if ($user->perm->checkRight($currentUserId, 'delattachment')) {
+                                        printf(
+                                            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fas fa-trash"></i></a>',
+                                            $faqData['id'],
+                                            $att->getId(),
+                                            $faqData['lang']
+                                        );
+                                    }
+                                    echo "</li>\n";
+                                }
+                                ?>
                           </ul>
                             <?php
                             printf(
@@ -496,20 +496,23 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                           </label>
                           <select name="restricted_groups[]" size="3" class="form-control" multiple>
                               <?php
-                              if ( $faqConfig->get('main.enableCategoryRestrictions')) {
-                                  echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
-                              } else {
-                                  echo $user->perm->getAllGroupsOptions($groupPermission);
-                              }
-                              ?>
+                                if ( $faqConfig->get('main.enableCategoryRestrictions')) {
+                                    echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
+                                } else {
+                                    echo $user->perm->getAllGroupsOptions($groupPermission);
+                                }
+                                ?>
                           </select>
                         </div>
                       </div>
                     </div>
                   </fieldset>
-                  <?php else: ?>
+                  <?php else {
+    : ?>
                     <input type="hidden" name="grouppermission" value="all">
-                  <?php endif; ?>
+                  <?php endif;
+}
+?>
 
                   <fieldset class="form-group">
                     <div class="row">
@@ -598,19 +601,19 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                     </div>
                     <div class="col-lg-10">
                       <?php foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
-                          $entryUser = new User($faqConfig);
-                          $entryUser->getUserById($entry['user']);
-                          ?>
+                            $entryUser = new User($faqConfig);
+                            $entryUser->getUserById($entry['user']);
+                            ?>
                         <p class="small pt-0">
                             <?php printf(
-                                  '%s  1.%d | %s | %s %s',
-                                  $PMF_LANG['ad_entry_revision'],
-                                  $entry['revision_id'],
-                                  $date->format(date('Y-m-d H:i', $entry['date'])),
-                                  $PMF_LANG['ad_entry_author'],
-                                  $entryUser->getUserData('display_name')
-                              );
-                              ?>
+                                    '%s  1.%d | %s | %s %s',
+                                    $PMF_LANG['ad_entry_revision'],
+                                    $entry['revision_id'],
+                                    $date->format(date('Y-m-d H:i', $entry['date'])),
+                                    $PMF_LANG['ad_entry_author'],
+                                    $entryUser->getUserData('display_name')
+                                );
+                                ?>
                             <br>
                             <?= $entry['changelog'] ?>
                         </p>
@@ -705,16 +708,16 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                     <!-- active or not -->
                     <?php if ($user->perm->checkRight($currentUserId, 'approverec')):
                       if (isset($faqData['active']) && $faqData['active'] == 'yes') {
-                          $suf = ' checked';
-                          $sul = null;
-                      } elseif ($faqConfig->get('records.defaultActivation')) {
-                          $suf = ' checked';
-                          $sul = null;
-                      } else {
-                          $suf = null;
-                          $sul = ' checked';
-                      }
-                      ?>
+                            $suf = ' checked';
+                            $sul = null;
+                        } elseif ($faqConfig->get('records.defaultActivation')) {
+                            $suf = ' checked';
+                            $sul = null;
+                        } else {
+                            $suf = null;
+                            $sul = ' checked';
+                        }
+                        ?>
                       <div class="form-check">
                         <input type="radio" id="active" name="active" value="yes" class="form-check-input"
                             <?php if (isset($suf)) { echo $suf; } ?>>
@@ -725,12 +728,15 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             <?php if (isset($sul)) { echo $sul; } ?>>
                         <label class="form-check-label" for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
                       </div>
-                    <?php else: ?>
+                    <?php else {
+    : ?>
                       <div class="form-check">
                         <input type="radio" id="inactive" name="active" value="no" class="form-check-input" checked>
                         <label class="form-check-label" for="inactive"><?= $PMF_LANG['ad_gen_no'] ?></label>
                       </div>
-                    <?php endif; ?>
+                    <?php endif;
+}
+?>
                   </div>
 
                   <div class="form-group">
@@ -855,10 +861,10 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         <!-- Attachment Upload Dialog -->
         <?php
         if (0 === $faqData['id']) {
-          $faqData['id'] = $faqConfig->getDb()->nextId(
+            $faqData['id'] = $faqConfig->getDb()->nextId(
             Db::getTablePrefix().'faqdata',
             'id'
-          );
+            );
         }
         ?>
         <div class="modal fade" id="attachmentModal" tabindex="-1" role="dialog" aria-labelledby="attachmentModalLabel" aria-hidden="true">
@@ -867,7 +873,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
               <div class="modal-header">
                 <h5 class="modal-title" id="attachmentModalLabel">
                     <?= $PMF_LANG['ad_att_addto'].' '.$PMF_LANG['ad_att_addto_2'] ?>
-                  (max <?= round($faqConfig->get('records.maxAttachmentSize') / pow(1024, 2), 2) ?> MB)
+                  (max <?= round($faqConfig->get('records.maxAttachmentSize')/pow(1024, 2), 2) ?> MB)
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>

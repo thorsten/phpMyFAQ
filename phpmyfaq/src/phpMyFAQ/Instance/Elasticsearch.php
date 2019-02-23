@@ -215,7 +215,7 @@ class Elasticsearch
                 'category_id' => $faq['category_id']
             ];
 
-            if ($i % 1000 == 0) {
+            if ($i%1000 == 0) {
                 $responses = $this->client->bulk($params);
                 $params = ['body' => []];
                 unset($responses);

@@ -59,7 +59,7 @@ if (isset($auth)) {
 <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $LANGCODE ?>" width="0" height="0"
         style="display: none;"></iframe>
 <?php
-    if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview'  == $action) ||
+    if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
                          ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
 ?>
@@ -224,12 +224,15 @@ if (isset($auth)) {
       action: 'ajax',
       ajax: 'recordAdd'
     };
-      <?php else: ?>
+      <?php else {
+    : ?>
     var data = {
       action: 'ajax',
       ajax: 'recordSave'
     };
-      <?php endif; ?>
+      <?php endif;
+}
+?>
 
     $.each($('#faqEditor').serializeArray(), function (i, field) {
       data[field.name] = field.value;

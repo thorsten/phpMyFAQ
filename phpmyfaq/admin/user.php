@@ -72,7 +72,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
 
     // validate userAction
-    if (!in_array($userAction, $userActionList)){
+    if (!in_array($userAction, $userActionList)) {
         // @Todo: Implement Error message
     }
 
@@ -86,7 +86,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $csrfOkay = false;
         }
-        if (0 === (int) $userId || !$csrfOkay) {
+        if (0 === (int)$userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             $user = new User($faqConfig);
@@ -210,7 +210,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             $csrfOkay = false;
         }
         $userAction = $defaultUserAction;
-        if (0 === (int) $userId || !$csrfOkay) {
+        if (0 === (int)$userId || !$csrfOkay) {
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         } else {
             if (!$user->getUserById($userId, true)) {
@@ -638,8 +638,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         $numUsers = count($allUsers);
         $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 0);
         $perPage = 10;
-        $numPages = ceil($numUsers / $perPage);
-        $lastPage = $page * $perPage;
+        $numPages = ceil($numUsers/$perPage);
+        $lastPage = $page*$perPage;
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(

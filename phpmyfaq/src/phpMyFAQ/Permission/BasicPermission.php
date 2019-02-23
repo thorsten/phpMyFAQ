@@ -270,9 +270,9 @@ class BasicPermission extends Permission
 
         // process right data
         $rightData = $this->config->getDb()->fetchArray($res);
-        $rightData['for_users'] = (bool) $rightData['for_users'];
-        $rightData['for_groups'] = (bool) $rightData['for_groups'];
-        $rightData['for_sections'] = (bool) $rightData['for_sections'];
+        $rightData['for_users'] = (bool)$rightData['for_users'];
+        $rightData['for_groups'] = (bool)$rightData['for_groups'];
+        $rightData['for_sections'] = (bool)$rightData['for_sections'];
 
         return $rightData;
     }
@@ -318,9 +318,9 @@ class BasicPermission extends Permission
             $nextId,
             $rightData['name'],
             $rightData['description'],
-            isset($rightData['for_users']) ? (int) $rightData['for_users'] : 1,
-            isset($rightData['for_groups']) ? (int) $rightData['for_groups'] : 1,
-            isset($rightData['for_sections']) ? (int) $rightData['for_sections'] : 1
+            isset($rightData['for_users']) ? (int)$rightData['for_users'] : 1,
+            isset($rightData['for_groups']) ? (int)$rightData['for_groups'] : 1,
+            isset($rightData['for_sections']) ? (int)$rightData['for_sections'] : 1
         );
 
         if (!$this->config->getDb()->query($insert)) {
@@ -582,9 +582,9 @@ class BasicPermission extends Permission
             $rightData['for_sections'] = $this->defaultRightData['for_sections'];
         }
 
-        $rightData['for_users'] = (int) $rightData['for_users'];
-        $rightData['for_groups'] = (int) $rightData['for_groups'];
-        $rightData['for_sections'] = (int) $rightData['for_sections'];
+        $rightData['for_users'] = (int)$rightData['for_users'];
+        $rightData['for_groups'] = (int)$rightData['for_groups'];
+        $rightData['for_sections'] = (int)$rightData['for_sections'];
 
         return $rightData;
     }

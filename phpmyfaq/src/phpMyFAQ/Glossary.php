@@ -216,7 +216,7 @@ class Glossary
             WHERE
                 id = %d AND lang = '%s'",
             Db::getTablePrefix(),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -291,7 +291,7 @@ class Glossary
             Db::getTablePrefix(),
             Strings::htmlspecialchars($this->item),
             Strings::htmlspecialchars($this->definition),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -317,7 +317,7 @@ class Glossary
             WHERE
                 id = %d AND lang = '%s'",
             Db::getTablePrefix(),
-            (int) $id,
+            (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
 

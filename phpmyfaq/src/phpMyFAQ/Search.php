@@ -86,7 +86,7 @@ class Search
      */
     public function setCategoryId($categoryId)
     {
-        $this->categoryId = (int) $categoryId;
+        $this->categoryId = (int)$categoryId;
     }
 
     /**
@@ -161,8 +161,8 @@ class Search
      */
     public function searchDatabase($searchTerm, $allLanguages = true)
     {
-        $fdTable = Db::getTablePrefix() . 'faqdata AS fd';
-        $fcrTable = Db::getTablePrefix() . 'faqcategoryrelations';
+        $fdTable = Db::getTablePrefix().'faqdata AS fd';
+        $fcrTable = Db::getTablePrefix().'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
         $search = SearchFactory::create($this->_config, ['database' => Db::getType()]);
 
@@ -170,7 +170,7 @@ class Search
             if ($this->getCategory() instanceof Category) {
                 $children = $this->getCategory()->getChildNodes($this->getCategoryId());
                 $selectedCategory = array(
-                    $fcrTable.'.category_id' => array_merge((array) $this->getCategoryId(), $children),
+                    $fcrTable.'.category_id' => array_merge((array)$this->getCategoryId(), $children),
                 );
             } else {
                 $selectedCategory = array(
@@ -181,7 +181,7 @@ class Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
-            $selectedLanguage = array('fd.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
+            $selectedLanguage = array('fd.lang' => "'".$this->_config->getLanguage()->getLanguage()."'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
 
@@ -190,13 +190,13 @@ class Search
                 'fd.id AS id',
                 'fd.lang AS lang',
                 'fd.solution_id AS solution_id',
-                $fcrTable . '.category_id AS category_id',
+                $fcrTable.'.category_id AS category_id',
                 'fd.thema AS question',
                 'fd.content AS answer'))
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(array(
-                'fd.id = ' . $fcrTable . '.record_id',
-                'fd.lang = ' . $fcrTable . '.record_lang'
+                'fd.id = '.$fcrTable.'.record_id',
+                'fd.lang = '.$fcrTable.'.record_lang'
             ))
             ->setConditions($condition);
 
@@ -342,7 +342,7 @@ class Search
             $i = 0;
             while ($row = $this->_config->getDb()->fetchObject($result)) {
                 if ($i < $numResults) {
-                    $searchResult[] = (array) $row;
+                    $searchResult[] = (array)$row;
                 }
                 ++$i;
             }
@@ -365,7 +365,7 @@ class Search
 
         $result = $this->_config->getDb()->query($sql);
 
-        return (int) $this->_config->getDb()->fetchObject($result)->count;
+        return (int)$this->_config->getDb()->fetchObject($result)->count;
     }
 
     /**

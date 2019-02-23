@@ -656,14 +656,14 @@ $PMF_LANG['msgQuestionsWaiting'] = "Yönetici tarafından yayına alınması bek
 $PMF_LANG['ad_entry_visibility'] = "Yayında?";
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail address. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
+$PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Passwords do not match. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "The specified user name is invalid.";
+$PMF_LANG['ad_user_error_noEmail'] = "Please enter a valid mail address. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Please enter your real name. ";
+$PMF_LANG['ad_user_error_delete'] = "User account could not be deleted. ";
+$PMF_LANG['ad_user_error_noId'] = "No ID specified. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Kullanıcı Sil";
 $PMF_LANG['ad_user_status'] = "Durum";
 $PMF_LANG['ad_user_lastModified'] = "Son değişiklik";
@@ -995,7 +995,7 @@ $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow
 $PMF_LANG['msgSecureSwitch'] = "Giriş yapabilmek için güvenli moda geçin!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
-$PMF_LANG['msgTransToolNoteFileSaving']  = "Lütfen dikkat, kaydet butonuna basılıncaya kadar hiçbir dosyaya yazılmayacaktır";
+$PMF_LANG['msgTransToolNoteFileSaving'] = "Lütfen dikkat, kaydet butonuna basılıncaya kadar hiçbir dosyaya yazılmayacaktır";
 $PMF_LANG['msgTransToolPageBufferRecorded'] = "Sayfa %d başarıyla önbelleğe alındı";
 $PMF_LANG['msgTransToolErrorRecordingPageBuffer'] = "Sayfa %d önbelleğe alınırken hata oluştu";
 $PMF_LANG['msgTransToolRecordingPageBuffer'] = "Sayfa %d önbelleğe alınıyor";
@@ -1007,9 +1007,9 @@ $PMF_LANG['ad_record_active'] = "Etkin";
 $PMF_LANG['msgAttachmentInvalid'] = "Eklenti hatalı, lütfen yöneticiyle iletişim kurun";
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms']   = array(0 => 'input', 1 => 'Number of listed search terms');
+$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
 $LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
-$PMF_LANG['list_all_users']            = "Tüm kullanıcıları listele";
+$PMF_LANG['list_all_users'] = "Tüm kullanıcıları listele";
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "En çok görüntülenen içerikleri listele";
 $PMF_LANG['records.orderingPopularFaqs.voting'] = "En çok oylanan içerikleri listele";

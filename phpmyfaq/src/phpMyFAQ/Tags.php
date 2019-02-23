@@ -215,7 +215,7 @@ class Tags
             $tagName = trim($tagName);
             if (Strings::strlen($tagName) > 0) {
                 if (!in_array(Strings::strtolower($tagName),
-                              array_map(array('String', 'strtolower'), $currentTags))) {
+                                array_map(array('String', 'strtolower'), $currentTags))) {
                     // Create the new tag
                     $newTagId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqtags', 'tagging_id');
                     $query = sprintf("

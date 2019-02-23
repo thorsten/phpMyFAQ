@@ -210,8 +210,8 @@ class SearchHelper extends Helper
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
-        $totalPages = ceil($numOfResults / $confPerPage);
-        $lastPage = $currentPage * $confPerPage;
+        $totalPages = ceil($numOfResults/$confPerPage);
+        $lastPage = $currentPage*$confPerPage;
         $firstPage = $lastPage - $confPerPage;
 
         if (0 < $numOfResults) {
@@ -285,7 +285,7 @@ class SearchHelper extends Helper
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
                 $html .= '<li>';
-                $html .= $this->renderScore($result->score * 33);
+                $html .= $this->renderScore($result->score*33);
                 $html .= sprintf('<strong>%s</strong>: %s<br />',
                     $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor()

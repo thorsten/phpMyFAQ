@@ -139,18 +139,18 @@ class Init
         return $filename;
     }
 
-   /**
-    * Clean the filename of any uploaded file by the user and force an error
-    * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong.
-    */
-   private static function _cleanFilenames()
-   {
-       reset($_FILES);
-       foreach ($_FILES as $key => $value) {
-           if (is_array($_FILES[$key]['name'])) {
-               reset($_FILES[$key]['name']);
-               // We have a multiple upload with the same name for <input />
-               foreach ($_FILES[$key]['name'] as $idx => $valu2) {
+    /**
+     * Clean the filename of any uploaded file by the user and force an error
+     * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong.
+     */
+    private static function _cleanFilenames()
+    {
+        reset($_FILES);
+        foreach ($_FILES as $key => $value) {
+            if (is_array($_FILES[$key]['name'])) {
+                reset($_FILES[$key]['name']);
+                // We have a multiple upload with the same name for <input />
+                foreach ($_FILES[$key]['name'] as $idx => $valu2) {
                     $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
                         $_FILES[$key]['type'][$idx] = '';
@@ -159,19 +159,19 @@ class Init
                         $_FILES[$key]['error'][$idx] = UPLOAD_ERR_NO_FILE;
                     }
                 }
-               reset($_FILES[$key]['name']);
-           } else {
-               $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
-               if ('' == $_FILES[$key]['name']) {
-                   $_FILES[$key]['type'] = '';
-                   $_FILES[$key]['tmp_name'] = '';
-                   $_FILES[$key]['size'] = 0;
-                   $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
-               }
-           }
-       }
-       reset($_FILES);
-   }
+                reset($_FILES[$key]['name']);
+            } else {
+                $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
+                if ('' == $_FILES[$key]['name']) {
+                    $_FILES[$key]['type'] = '';
+                    $_FILES[$key]['tmp_name'] = '';
+                    $_FILES[$key]['size'] = 0;
+                    $_FILES[$key]['error'] = UPLOAD_ERR_NO_FILE;
+                }
+            }
+        }
+        reset($_FILES);
+    }
 
     /**
      * Cleans a html string from some xss issues.

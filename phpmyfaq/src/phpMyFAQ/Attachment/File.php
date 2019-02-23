@@ -51,10 +51,10 @@ class File extends AttachmentAbstract implements AttachmentInterface
         $subDirNameLength = 5;
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i * $subDirNameLength, $subDirNameLength);
+            $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
         }
 
-        $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i * $subDirNameLength);
+        $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength);
 
         return $retval;
     }

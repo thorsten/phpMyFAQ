@@ -71,7 +71,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
     }
 } else {
     $user = CurrentUser::getFromCookie($faqConfig);
-    if (! $user instanceof CurrentUser) {
+    if (!$user instanceof CurrentUser) {
         $user = CurrentUser::getFromSession($faqConfig);
     }
 }

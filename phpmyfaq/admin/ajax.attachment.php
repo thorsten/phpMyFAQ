@@ -33,7 +33,7 @@ $http = new HttpHelper();
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
-$recordId = Filter::filterInput(INPUT_POST, 'record_id',   FILTER_SANITIZE_STRING);
+$recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_SANITIZE_STRING);
 $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
