@@ -20,7 +20,6 @@ namespace phpMyFAQ;
  * @since 2009-09-11
  */
 
-use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -496,8 +495,8 @@ class Mail
         $this->headers['X-Mailer'] = $this->_mailer;
 
         // X-MSMail-Priority
-        if (isset($this->priorities[(int) $this->priority])) {
-            $this->headers['X-MSMail-Priority'] = $this->priorities[(int) $this->priority];
+        if (isset($this->priorities[(int)$this->priority])) {
+            $this->headers['X-MSMail-Priority'] = $this->priorities[(int)$this->priority];
         }
 
         // X-Originating-IP

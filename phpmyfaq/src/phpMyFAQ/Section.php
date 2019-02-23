@@ -65,7 +65,7 @@ class Section
      */
     public function addSection($name, $description)
     {
-        $id = $this->config->getDb()->nextId(Db::getTablePrefix() . 'faqsections', 'id');
+        $id = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'id');
 
         $query = sprintf("
             INSERT INTO

@@ -47,10 +47,10 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT, 1);
 
     if (is_null($pages)) {
-        $pages = round(($logging->getNumberOfEntries() + ($perpage / 3)) / $perpage, 0);
+        $pages = round(($logging->getNumberOfEntries() + ($perpage/3))/$perpage, 0);
     }
 
-    $start = ($page - 1) * $perpage;
+    $start = ($page - 1)*$perpage;
     $ende = $start + $perpage;
 
     $baseUrl = sprintf(

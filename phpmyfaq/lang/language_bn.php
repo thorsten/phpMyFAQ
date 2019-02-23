@@ -670,14 +670,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'প্রকাশিত হওয়ার অ
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
+$PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Passwords do not match. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "The specified user name is invalid.";
+$PMF_LANG['ad_user_error_noEmail'] = "Please enter a valid mail adress. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Please enter your real name. ";
+$PMF_LANG['ad_user_error_delete'] = "User account could not be deleted. ";
+$PMF_LANG['ad_user_error_noId'] = "No ID specified. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "last modified";

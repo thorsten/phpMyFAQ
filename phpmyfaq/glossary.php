@@ -61,7 +61,7 @@ $pagination = new Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
     $output = [];
-    $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
+    $visibleItems = array_slice($glossaryItems, ($page - 1)*$itemsPerPage, $itemsPerPage);
 
     foreach ($visibleItems as $item) {
         $output['item'][] = $item['item'];

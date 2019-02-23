@@ -66,10 +66,10 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
-        $pages = round((count($searchesList) + ($perPage / 3)) / $perPage, 0);
+        $pages = round((count($searchesList) + ($perPage/3))/$perPage, 0);
     }
 
-    $start = ($page - 1) * $perPage;
+    $start = ($page - 1)*$perPage;
     $end = $start + $perPage;
 
     $baseUrl = sprintf(
@@ -120,7 +120,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         }
         ++$displayedCounter;
 
-        $num = round(($searchItem['number'] * 100 / $searchesCount), 2);
+        $num = round(($searchItem['number']*100/$searchesCount), 2);
         ?>
               <tr class="row_search_id_<?= $searchItem['id'] ?>">
                   <td><?= Strings::htmlspecialchars($searchItem['searchterm']) ?></td>
@@ -153,11 +153,11 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                   (response) => {
                     if (response === 1) {
                       $('#ajaxresponse').html('<?php printf('<p class="alert alert-success">%s</p>',
-                          $PMF_LANG['ad_search_delsuc']) ?>');
+                            $PMF_LANG['ad_search_delsuc']) ?>');
                       $('.row_search_id_' + searchId).fadeOut('slow');
                     } else {
                       $('#ajaxresponse').html('<?php printf('<p class="alert alert-danger">%s</p>',
-                          $PMF_LANG['ad_search_delfail']) ?>');
+                            $PMF_LANG['ad_search_delfail']) ?>');
                     }
                   });
               }

@@ -88,10 +88,10 @@ class System
      * @var array
      */
     private $supportedDatabases = [
-        'mysqli' => [ self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB' ],
-        'pgsql' => [ self::VERSION_MINIMUM_PHP, 'PostgreSQL' ],
-        'sqlite3' => [ self::VERSION_MINIMUM_PHP, 'SQLite 3' ],
-        'sqlsrv' => [ self::VERSION_MINIMUM_PHP, 'MS SQL Server']
+        'mysqli' => [self::VERSION_MINIMUM_PHP, 'MySQL / Percona Server / MariaDB'],
+        'pgsql' => [self::VERSION_MINIMUM_PHP, 'PostgreSQL'],
+        'sqlite3' => [self::VERSION_MINIMUM_PHP, 'SQLite 3'],
+        'sqlsrv' => [self::VERSION_MINIMUM_PHP, 'MS SQL Server']
     ];
 
     /**
@@ -164,7 +164,7 @@ class System
      * Returns the current API version of phpMyFAQ for installation and
      * version in the database.
      *
-     * @return int
+     * @return string
      */
     public static function getApiVersion()
     {
@@ -209,7 +209,7 @@ class System
      *
      * @param Configuration $faqConfig
      *
-     * @return mixed
+     * @return string
      */
     public function getSystemUri(Configuration $faqConfig)
     {

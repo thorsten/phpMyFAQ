@@ -49,9 +49,12 @@ $faqSession = new Session($faqConfig);
           <a href="?action=config">
               <?php if ($faqConfig->get('main.maintenanceMode')): ?>
                 <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
-              <?php else: ?>
+              <?php else {
+    : ?>
                 <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
-              <?php endif; ?>
+              <?php endif;
+}
+?>
           </a>
         </div>
       </div>
@@ -115,31 +118,31 @@ $faqSession = new Session($faqConfig);
                 <a href="?action=view" class="list-group-item">
                   <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix() . 'faqdata']; ?></em>
+                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
                   </span>
                 </a>
                 <a href="?action=comments" class="list-group-item">
                   <i aria-hidden="true" class="fas fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix() . 'faqcomments']; ?></em>
+                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
                   </span>
                 </a>
                 <a href="?action=question" class="list-group-item">
                   <i aria-hidden="true" class="fas fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix() . 'faqquestions']; ?></em>
+                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
                   </span>
                 </a>
                 <a href="?action=news" class="list-group-item">
                   <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix() . 'faqnews']; ?></em>
+                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
                   </span>
                 </a>
                 <a href="?action=user&user_action=listallusers" class="list-group-item">
                   <i aria-hidden="true" class="fas fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix() . 'faquser'] - 1; ?></em>
+                    <em><?= $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
                   </span>
                 </a>
                 <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
@@ -157,15 +160,15 @@ $faqSession = new Session($faqConfig);
             <div class="card-body">
               <ul class="list-unstyled">
               <?php
-              $inactiveFaqs = $faq->getInactiveFaqsData();
-              foreach ($inactiveFaqs as $inactiveFaq) {
+                $inactiveFaqs = $faq->getInactiveFaqsData();
+                foreach ($inactiveFaqs as $inactiveFaq) {
                 printf(
                     '<li><a href="%s">%s</a></li>',
                     $inactiveFaq['url'],
                     $inactiveFaq['question']
                 );
-              }
-              ?>
+                }
+                ?>
               </ul>
             </div>
           </div>
@@ -190,7 +193,7 @@ $faqSession = new Session($faqConfig);
                         );
                         // Installed phpMyFAQ version is outdated
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
-                            echo '<br />' . $PMF_LANG['ad_you_should_update'];
+                            echo '<br />'.$PMF_LANG['ad_you_should_update'];
                         }
                     } catch (Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());

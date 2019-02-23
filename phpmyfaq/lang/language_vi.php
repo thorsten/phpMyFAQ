@@ -656,14 +656,14 @@ $PMF_LANG['msgQuestionsWaiting'] = 'Waiting for publishing by the administrators
 $PMF_LANG['ad_entry_visibility'] = 'Publish?';
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Xin nhập mật khẩu. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Mật khẩu không trùng khớp. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "Tên đăng nhập không hợp lệ.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Xin nhập email hợp lệ. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Xin nhập tên thật của bạn. ";
-$PMF_LANG['ad_user_error_delete'] =  "Tài khoản thành viên không thể xóa. ";
-$PMF_LANG['ad_user_error_noId'] =  "Không tìm thấy ID. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "Tài khoản thành viên được khóa. ";
+$PMF_LANG['ad_user_error_password'] = "Xin nhập mật khẩu. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Mật khẩu không trùng khớp. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "Tên đăng nhập không hợp lệ.";
+$PMF_LANG['ad_user_error_noEmail'] = "Xin nhập email hợp lệ. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Xin nhập tên thật của bạn. ";
+$PMF_LANG['ad_user_error_delete'] = "Tài khoản thành viên không thể xóa. ";
+$PMF_LANG['ad_user_error_noId'] = "Không tìm thấy ID. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "Tài khoản thành viên được khóa. ";
 $PMF_LANG['ad_user_deleteUser'] = "Xóa thành viên";
 $PMF_LANG['ad_user_status'] = "Tình trạng";
 $PMF_LANG['ad_user_lastModified'] = "lần thay đổi mới nhất";

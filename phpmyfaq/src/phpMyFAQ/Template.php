@@ -86,7 +86,7 @@ class Template
 
         foreach ($myTemplate as $templateName => $filename) {
             $this->templates[$templateName] = $this->readTemplateFile(
-                'assets/themes/' . $tplSetName . '/templates/' . $filename,
+                'assets/themes/'.$tplSetName.'/templates/'.$filename,
                 $templateName
             );
         }
@@ -100,7 +100,7 @@ class Template
      */
     public function merge($from, $into)
     {
-        $this->outputs[$into] = str_replace('{{ ' . $from . ' }}', $this->outputs[$from], $this->outputs[$into]);
+        $this->outputs[$into] = str_replace('{{ '.$from.' }}', $this->outputs[$from], $this->outputs[$into]);
         $this->outputs[$from] = null;
     }
 
@@ -121,12 +121,12 @@ class Template
             foreach ($rawBlocks as $key => $rawBlock) {
                 if (in_array($key, $this->blocksTouched) && $key !== 'unblocked') {
                     $tmp = str_replace($rawBlock, $this->blocks[$templateName][$key], $tmp);
-                    $tmp = str_replace('[' . $key . ']', '', $tmp);
-                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
+                    $tmp = str_replace('['.$key.']', '', $tmp);
+                    $tmp = str_replace('[/'.$key.']', '', $tmp);
                 } elseif ($key !== 'unblocked') {
                     $tmp = str_replace($rawBlock, '', $tmp);
-                    $tmp = str_replace('[' . $key . ']', '', $tmp);
-                    $tmp = str_replace('[/' . $key . ']', '', $tmp);
+                    $tmp = str_replace('['.$key.']', '', $tmp);
+                    $tmp = str_replace('[/'.$key.']', '', $tmp);
                 }
             }
         }
@@ -146,9 +146,9 @@ class Template
         if (isset($filters[$templateName])) {
             if (count($filters[$templateName])) {
                 foreach ($filters[$templateName] as $filter) {
-                    $filterMethod = 'render' . ucfirst(key($filter)) . 'Filter';
+                    $filterMethod = 'render'.ucfirst(key($filter)).'Filter';
                     $filteredVar = $this->tplHelper->$filterMethod(current($filter));
-                    $tmp = str_replace('{{ ' . current($filter) . ' | ' . key($filter) . ' }}', $filteredVar, $tmp);
+                    $tmp = str_replace('{{ '.current($filter).' | '.key($filter).' }}', $filteredVar, $tmp);
                 }
             }
         }
@@ -210,7 +210,7 @@ class Template
                     $block = $this->multiplyBlock($this->blocks[$templateName][$blockName], $blockContent);
                     break;
                 } else {
-                    $block = str_replace('{{ ' . $var . ' }}', $val, $block);
+                    $block = str_replace('{{ '.$var.' }}', $val, $block);
                 }
             }
 
@@ -256,7 +256,7 @@ class Template
 
             return $tplContent;
         } else {
-            return '<p><span style="color: red;">Error:</span> Cannot open the file ' . $filename . '.</p>';
+            return '<p><span style="color: red;">Error:</span> Cannot open the file '.$filename.'.</p>';
         }
     }
 
@@ -299,7 +299,7 @@ class Template
         for ($i = 0; $i < $multiplyTimes; ++$i) {
             $tmpBlock[$i] = $block;
             foreach ($replace as $var => $val) {
-                $tmpBlock[$i] = str_replace('{{ ' . $var . ' }}', $val[$i], $tmpBlock[$i]);
+                $tmpBlock[$i] = str_replace('{{ '.$var.' }}', $val[$i], $tmpBlock[$i]);
             }
         }
 
@@ -329,14 +329,14 @@ class Template
                 Strings::preg_match('/\[.+\]/', $tmpBlocks[0][$i], $name);
                 $name = Strings::preg_replace('/[\[\[\/\]]/', '', $name);
                 // remove block tags from block
-                $res = str_replace('[' . $name[0] . ']', '', $tmpBlocks[0][$i]);
-                $res = str_replace('[/' . $name[0] . ']', '', $res);
+                $res = str_replace('['.$name[0].']', '', $tmpBlocks[0][$i]);
+                $res = str_replace('[/'.$name[0].']', '', $res);
                 $tplBlocks[$name[0]] = $res;
 
                 // unblocked content
                 $unblocked = str_replace($tplBlocks[$name[0]], '', $unblocked);
-                $unblocked = str_replace('[' . $name[0] . ']', '', $unblocked);
-                $unblocked = str_replace('[/' . $name[0] . ']', '', $unblocked);
+                $unblocked = str_replace('['.$name[0].']', '', $unblocked);
+                $unblocked = str_replace('[/'.$name[0].']', '', $unblocked);
             }
 
             $hits = [];

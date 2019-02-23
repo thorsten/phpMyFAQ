@@ -17,7 +17,6 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\LargePermission;
-use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -62,7 +61,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
         foreach ($memberList as $single_member) {
             $group = $user->perm->getGroupData($single_member);
             $members[] = array('group_id' => $group['group_id'],
-                               'name' => $group['name'] );
+                                'name' => $group['name'] );
         }
         echo json_encode($members);
     }

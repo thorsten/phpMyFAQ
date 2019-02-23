@@ -134,7 +134,7 @@ class Encryption
     public function error(): string
     {
         if (!is_array($this->errors)) {
-            $this->errors = array((string) $this->errors);
+            $this->errors = array((string)$this->errors);
         }
         $message = '';
         foreach ($this->errors as $error) {

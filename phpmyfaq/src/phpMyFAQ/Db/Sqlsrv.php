@@ -100,10 +100,10 @@ class Sqlsrv implements Driver
     private function setConnectionOptions($user, $passwd, $database)
     {
         $this->connectionOptions = array(
-           'UID' => $user,
-           'PWD' => $passwd,
-           'Database' => $database,
-           'CharacterSet' => 'UTF-8', );
+            'UID' => $user,
+            'PWD' => $passwd,
+            'Database' => $database,
+            'CharacterSet' => 'UTF-8', );
     }
 
     /**
@@ -262,8 +262,8 @@ class Sqlsrv implements Driver
                max(%s) as current_id
            FROM 
                %s',
-           $id,
-           $table);
+            $id,
+            $table);
 
         $result = $this->query($select);
         sqlsrv_fetch($result);

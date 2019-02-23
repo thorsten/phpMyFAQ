@@ -40,7 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
     $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user->getUserId()) : [];
     $userList = $user->getAllUsers(true, false);
 
-    if (!$faqConfig->get('main.enableCategoryRestrictions')){
+    if (!$faqConfig->get('main.enableCategoryRestrictions')) {
         $user = new User($faqConfig);
         $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups() : [];
     }
@@ -74,7 +74,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
         foreach ($userList as $single_user) {
             $user->getUserById($single_user, true);
             $users[] = array('user_id' => $user->getUserId(),
-                             'login' => $user->getLogin(), );
+                                'login' => $user->getLogin(), );
         }
         echo json_encode($users);
     }
@@ -86,7 +86,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
         foreach ($memberList as $single_member) {
             $user->getUserById($single_member, true);
             $members[] = array('user_id' => $user->getUserId(),
-                               'login' => $user->getLogin(), );
+                                'login' => $user->getLogin(), );
         }
         echo json_encode($members);
     }

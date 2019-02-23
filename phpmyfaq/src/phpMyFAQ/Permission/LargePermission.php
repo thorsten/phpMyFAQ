@@ -194,7 +194,7 @@ class LargePermission extends MediumPermission
         $comma = '';
 
         foreach ($sectionData as $key => $val) {
-            $set .= $comma . $key . " = '" . $this->config->getDb()->escape($checkedData[$key]) . "'";
+            $set .= $comma.$key." = '".$this->config->getDb()->escape($checkedData[$key])."'";
             $comma = ",\n                ";
         }
 
@@ -484,7 +484,7 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $delete =  sprintf('
+        $delete = sprintf('
             DELETE FROM
                 %sfaqsection_group
             WHERE

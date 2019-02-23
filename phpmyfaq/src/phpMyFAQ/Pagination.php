@@ -171,7 +171,7 @@ class Pagination
      * We read in the current page from the baseUrl, so if it contains
      * no pageParamName, first page is asumed
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      * @param array             $options initialization options,
      *                                   possible options:
      *                                   - baseUrl (default "")
@@ -279,8 +279,8 @@ class Pagination
     public function render()
     {
         $content = [];
-        $pages = ceil($this->total / $this->perPage);
-        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
+        $pages = ceil($this->total/$this->perPage);
+        $adjacents = floor($this->adjacents/2) >= 1 ? floor($this->adjacents/2) : 1;
 
         for ($page = 1; $page <= $pages; ++$page) {
             if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {

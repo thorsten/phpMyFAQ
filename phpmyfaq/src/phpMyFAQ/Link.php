@@ -344,7 +344,7 @@ class Link
 
     /**
      * Returns the HTTP GET parameters.
-     * @return array
+     * @return string
      */
     protected function getHttpGetParameters(): array
     {

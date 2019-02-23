@@ -302,7 +302,7 @@ class CurrentUser extends User
         if (!isset($_SESSION[SESSION_ID_TIMESTAMP])) {
             return 0;
         }
-        return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
+        return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP])/60;
     }
 
     /**
@@ -323,8 +323,8 @@ class CurrentUser extends User
                 %sfaquser
             WHERE
                 user_id = %d',
-           Db::getTablePrefix(),
-           $this->getUserId()
+            Db::getTablePrefix(),
+            $this->getUserId()
         );
 
         $res = $this->config->getDb()->query($select);
@@ -376,7 +376,7 @@ class CurrentUser extends User
             Db::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
-            $updateLastLogin ?  "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
+            $updateLastLogin ? "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
@@ -608,7 +608,7 @@ class CurrentUser extends User
      */
     protected function setSuccess($success)
     {
-        $this->loginState = (int) $success;
+        $this->loginState = (int)$success;
         $this->loginAttempts = 0;
 
         $update = sprintf('

@@ -176,7 +176,7 @@ if ($step === 1) { ?>
       <div class="row">
         <div class="col">
             <?php
-              // We only support updates from 2.8+
+                // We only support updates from 2.8+
             if (version_compare($version, '2.8.0', '>')) {
                 printf(
                     '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
@@ -218,7 +218,7 @@ if ($step == 2) {
     if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/database.php', PMF_ROOT_DIR.'/config/database.bak.php')) {
             echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ../config/database.bak.php '.
-                  'could not be written. Please correct this!</p>';
+                    'could not be written. Please correct this!</p>';
         } else {
             $checkDatabaseSetupFile = true;
             $updateMessages[] = 'A backup of your database configuration file has been made.';
@@ -241,7 +241,7 @@ if ($step == 2) {
     // Backup of config/elasticsearch.php if exists
     if (file_exists(PMF_ROOT_DIR.'/config/elasticsearch.php')) {
         if (!copy(PMF_ROOT_DIR.'/config/elasticsearch.php', PMF_ROOT_DIR.'/config/elasticsearch.bak.php')) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file ' .
+            echo '<p class="alert alert-danger"><strong>Error:</strong> The backup file '.
                 '../config/elasticsearch.bak.php could not be written. Please correct this!</p>';
         } else {
             $checkElasticsearchSetupFile = true;
@@ -372,7 +372,7 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
         } elseif ('pgsql' === $DB['type']) {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
@@ -535,8 +535,8 @@ if ($step == 3) {
     //
     if (version_compare($version, '2.9.6', '<')) {
         if ($DB['type'] === 'mysqli') {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD FULLTEXT(keywords,thema,content);';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions CHANGE COLUMN lang lang VARCHAR(5) AFTER id';
+            $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD FULLTEXT(keywords,thema,content);';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions CHANGE COLUMN lang lang VARCHAR(5) AFTER id';
         }
     }
 
@@ -699,7 +699,7 @@ if ($step == 3) {
             printf('<span title="%s"><i aria-hidden="true" class="fas fa-circle"></i></span>', $executeQuery);
             if (!$result) {
                 echo '<p class="alert alert-danger"><strong>Error:</strong> Please update your version of phpMyFAQ once again '.
-                      'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
+                        'or send us a <a href="http://bugs.phpmyfaq.de" target="_blank">bug report</a>.</p>';
                 printf('<p class="error"><strong>DB error:</strong> %s</p>', $faqConfig->getDb()->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 System::renderFooter();

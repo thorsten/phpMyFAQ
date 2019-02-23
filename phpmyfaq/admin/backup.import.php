@@ -131,7 +131,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
                 $errorMessage = 'The uploaded file exceeds the upload_max_filesize directive in php.ini.';
                 break;
             case 2:
-                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the ' .
+                $errorMessage = 'The uploaded file exceeds the MAX_FILE_SIZE directive that was specified in the '.
                                 'HTML form.';
                 break;
             case 3:

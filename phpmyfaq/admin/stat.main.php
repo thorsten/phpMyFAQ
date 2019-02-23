@@ -148,7 +148,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                     </tr>
                     <tr>
                         <td><?= $PMF_LANG['ad_stat_vpd'] ?>:</td>
-                        <td><?= ($danz != 0) ? round(($vanz / $danz), 2) : 0 ?></td>
+                        <td><?= ($danz != 0) ? round(($vanz/$danz), 2) : 0 ?></td>
                     </tr>
                     <tr>
                         <td><?= $PMF_LANG['ad_stat_fien'] ?>:</td>

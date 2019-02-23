@@ -45,18 +45,18 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
 
     $text = [];
     $text[0] = [];
-    ($useCategory)     ? $text[0][] = $PMF_LANG['ad_stat_report_category'] : '';
-    ($useSubcategory)  ? $text[0][] = $PMF_LANG['ad_stat_report_sub_category'] : '';
-    ($useTranslation)  ? $text[0][] = $PMF_LANG['ad_stat_report_translations'] : '';
-    ($useLanguage)     ? $text[0][] = $PMF_LANG['ad_stat_report_language'] : '';
-    ($useId)           ? $text[0][] = $PMF_LANG['ad_stat_report_id'] : '';
-    ($useSticky)       ? $text[0][] = $PMF_LANG['ad_stat_report_sticky'] : '';
-    ($useTitle)        ? $text[0][] = $PMF_LANG['ad_stat_report_title'] : '';
+    ($useCategory) ? $text[0][] = $PMF_LANG['ad_stat_report_category'] : '';
+    ($useSubcategory) ? $text[0][] = $PMF_LANG['ad_stat_report_sub_category'] : '';
+    ($useTranslation) ? $text[0][] = $PMF_LANG['ad_stat_report_translations'] : '';
+    ($useLanguage) ? $text[0][] = $PMF_LANG['ad_stat_report_language'] : '';
+    ($useId) ? $text[0][] = $PMF_LANG['ad_stat_report_id'] : '';
+    ($useSticky) ? $text[0][] = $PMF_LANG['ad_stat_report_sticky'] : '';
+    ($useTitle) ? $text[0][] = $PMF_LANG['ad_stat_report_title'] : '';
     ($useCreationDate) ? $text[0][] = $PMF_LANG['ad_stat_report_creation_date'] : '';
-    ($useOwner)        ? $text[0][] = $PMF_LANG['ad_stat_report_owner'] : '';
+    ($useOwner) ? $text[0][] = $PMF_LANG['ad_stat_report_owner'] : '';
     ($useLastModified) ? $text[0][] = $PMF_LANG['ad_stat_report_last_modified_person'] : '';
-    ($useUrl)          ? $text[0][] = $PMF_LANG['ad_stat_report_url'] : '';
-    ($useVisits)       ? $text[0][] = $PMF_LANG['ad_stat_report_visits'] : '';
+    ($useUrl) ? $text[0][] = $PMF_LANG['ad_stat_report_url'] : '';
+    ($useVisits) ? $text[0][] = $PMF_LANG['ad_stat_report_visits'] : '';
 
     $report = new Report($faqConfig);
 

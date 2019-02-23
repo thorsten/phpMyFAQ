@@ -44,7 +44,7 @@ if ('insertentry' === $do &&
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories = Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                      'flags' => FILTER_REQUIRE_ARRAY, )));
+                                                                                        'flags' => FILTER_REQUIRE_ARRAY, )));
     $record_lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);

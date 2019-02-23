@@ -466,7 +466,7 @@ $PMF_LANG["ad_start_articles"] = "Записів";
 $PMF_LANG["ad_start_comments"] = "Коментарів"; 
 
 
- // Added v1.1 - 30.01.2002 - Bastian 
+    // Added v1.1 - 30.01.2002 - Bastian 
  
 $PMF_LANG["ad_categ_paste"] = "вставити"; 
 $PMF_LANG["ad_categ_cut"] = "cut"; 
@@ -646,14 +646,14 @@ $PMF_LANG["ad_adminlog_delete_failure"] = "No logs deleted: an error occurred pe
 $PMF_LANG["newsArchive"] = ". Архів новин"; 
 
 // added v2.0.0 - 2006-01-02 by Lars
-$PMF_LANG['ad_user_error_password'] =  "Please enter a password. ";
-$PMF_LANG['ad_user_error_passwordsDontMatch'] =  "Passwords do not match. ";
-$PMF_LANG['ad_user_error_loginInvalid'] =  "The specified user name is invalid.";
-$PMF_LANG['ad_user_error_noEmail'] =  "Please enter a valid mail adress. ";
-$PMF_LANG['ad_user_error_noRealName'] =  "Please enter your real name. ";
-$PMF_LANG['ad_user_error_delete'] =  "User account could not be deleted. ";
-$PMF_LANG['ad_user_error_noId'] =  "No ID specified. ";
-$PMF_LANG['ad_user_error_protectedAccount'] =  "User account is protected. ";
+$PMF_LANG['ad_user_error_password'] = "Please enter a password. ";
+$PMF_LANG['ad_user_error_passwordsDontMatch'] = "Passwords do not match. ";
+$PMF_LANG['ad_user_error_loginInvalid'] = "The specified user name is invalid.";
+$PMF_LANG['ad_user_error_noEmail'] = "Please enter a valid mail adress. ";
+$PMF_LANG['ad_user_error_noRealName'] = "Please enter your real name. ";
+$PMF_LANG['ad_user_error_delete'] = "User account could not be deleted. ";
+$PMF_LANG['ad_user_error_noId'] = "No ID specified. ";
+$PMF_LANG['ad_user_error_protectedAccount'] = "User account is protected. ";
 $PMF_LANG['ad_user_deleteUser'] = "Delete User";
 $PMF_LANG['ad_user_status'] = "Status";
 $PMF_LANG['ad_user_lastModified'] = "last modified";

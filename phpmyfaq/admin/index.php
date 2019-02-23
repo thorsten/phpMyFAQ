@@ -351,7 +351,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'stopwordsconfig':   require 'stopwordsconfig.main.php'; break;
             case 'elasticsearch':     require 'elasticsearch.php'; break;
             case 'meta':
-            case 'meta.update';       require 'meta.php'; break;
+            case 'meta.update'; require 'meta.php'; break;
             case 'meta.edit':         require 'meta.edit.php'; break;
             // functions for backup administration
             case 'backup':            require 'backup.main.php'; break;

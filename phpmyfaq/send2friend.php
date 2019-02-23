@@ -58,8 +58,8 @@ $faqLanguage = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRIPPE
 
 $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
     $faqConfig->getDefaultUrl(),
-    (int) $cat,
-    (int) $id,
+    (int)$cat,
+    (int)$id,
     urlencode($faqLanguage));
 
 

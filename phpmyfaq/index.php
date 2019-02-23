@@ -521,7 +521,7 @@ $tplMainPage = [
     'writeSendAdress' => '?'.$sids.'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
     'searchTerm' => $searchTerm,
-    'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+    'categoryId' => ($cat === 0) ? '%' : (int)$cat,
     'headerCategories' => $PMF_LANG['msgFullCategories'],
     'msgCategory' => $PMF_LANG['msgCategory'],
     'showCategories' => $categoryHelper->renderNavigation($cat),
@@ -532,7 +532,7 @@ $tplMainPage = [
     'switchLanguages' => Language::selectLanguages($LANGCODE, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
-                              $faqConfig->get('main.currentVersion'),
+                                $faqConfig->get('main.currentVersion'),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
     'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',
     'msgFullName' => $PMF_LANG['ad_user_loggedin'].$user->getLogin(),
@@ -567,7 +567,7 @@ if ('main' == $action || 'show' == $action) {
         [
             'writeSendAdress' => '?'.$sids.'action=search',
             'searchBox' => $PMF_LANG['msgSearch'],
-            'categoryId' => ($cat === 0) ? '%' : (int) $cat,
+            'categoryId' => ($cat === 0) ? '%' : (int)$cat,
             'msgSearch' => sprintf(
                 '<a class="help" href="%sindex.php?action=search">%s</a>',
                 $faqSystem->getSystemUri($faqConfig),

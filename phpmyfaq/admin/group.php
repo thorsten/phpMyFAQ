@@ -65,7 +65,7 @@ if (isset($_POST['cancel'])) {
     $groupAction = $defaultGroupAction;
 }
 
-if (!in_array($groupAction, $groupActionList)){
+if (!in_array($groupAction, $groupActionList)) {
     // @Todo: implement Error message
 }
 
@@ -85,7 +85,7 @@ if ($groupAction == 'update_members' && $user->perm->checkRight($user->getUserId
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
         }
         foreach ($groupMembers as $memberId) {
-            $perm->addToGroup((int) $memberId, $groupId);
+            $perm->addToGroup((int)$memberId, $groupId);
         }
         $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
             $PMF_LANG['ad_msg_savedsuc_1'],
@@ -109,7 +109,7 @@ if ($groupAction == 'update_rights' && $user->perm->checkRight($user->getUserId(
             $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
         }
         foreach ($groupRights as $rightId) {
-            $perm->grantGroupRight($groupId, (int) $rightId);
+            $perm->grantGroupRight($groupId, (int)$rightId);
         }
         $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
             $PMF_LANG['ad_msg_savedsuc_1'],

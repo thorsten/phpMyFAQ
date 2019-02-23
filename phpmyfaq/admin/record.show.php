@@ -233,11 +233,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     $fdTable.'.active AS active',
                     $fdTable.'.thema AS thema',
                     $fdTable.'.content AS content',
-                    $fdTable.'.updated AS updated', ))
+                    $fdTable.'.updated AS updated',))
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(array(
                     $fdTable.'.id = '.$fcrTable.'.record_id',
-                    $fdTable.'.lang = '.$fcrTable.'.record_lang', ));
+                    $fdTable.'.lang = '.$fcrTable.'.record_lang',));
 
         if (is_numeric($searchTerm)) {
             $search->setMatchingColumns(array($fdTable.'.solution_id'));
@@ -253,7 +253,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         $faqsFound = array();
 
         while ($row = $faqConfig->getDb()->fetchObject($result)) {
-            if ($searchCat != 0 && $searchCat != (int) $row->category_id) {
+            if ($searchCat != 0 && $searchCat != (int)$row->category_id) {
                 continue;
             }
 
@@ -413,7 +413,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 <?php
             }
             ?>
-                    <tr id="record_<?= $record['id'] . '_' . $record['lang'] ?>">
+                    <tr id="record_<?= $record['id'].'_'.$record['lang'] ?>">
                       <td style="width: 24px; text-align: right;">
                         <a href="?action=editentry&id=<?= $record['id'] ?>&lang=<?= $record['lang'] ?>">
                             <?= $record['id'] ?>
@@ -464,18 +464,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                       <td style="width: 56px;">
                         <label>
                           <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                 onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>');"
-                                 id="sticky_record_<?= $cid . '_' . $record['id'] ?>"
+                                 onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'sticky', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                 id="sticky_record_<?= $cid.'_'.$record['id'] ?>"
                               <?= $record['sticky'] ? 'checked' : '    ' ?>>
                         </label>
                       </td>
                       <td>
                           <?php if ($user->perm->checkRight($user->getUserId(),
-                                  'approverec') && isset($numVisits[$record['id']])) { ?>
+                                    'approverec') && isset($numVisits[$record['id']])) { ?>
                             <label>
                               <input type="checkbox" lang="<?= $record['lang'] ?>"
-                                     onclick="saveStatus(<?= $cid . ', [' . $record['id'] . ']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
-                                     id="active_record_<?= $cid . '_' . $record['id'] ?>"
+                                     onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
+                                     id="active_record_<?= $cid.'_'.$record['id'] ?>"
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                             </label>
                           <?php } else { ?>
@@ -533,7 +533,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             if ('' === $categoryId) {
                 $categoryId = 0;
             }
-            echo '                id_map[' . $categoryId . '] = [' . implode(',', $recordIds) . "];\n";
+            echo '                id_map['.$categoryId.'] = ['.implode(',', $recordIds)."];\n";
         }
         ?>
       for (let i = 0; i < id_map[id].length; i++) {

@@ -115,18 +115,18 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
         ?></td>
                         <td>
                             <?php
-                            if (round($data['num'] * 20) > 75) {
+                            if (round($data['num']*20) > 75) {
                                 $progressBar = 'success';
-                            } elseif (round($data['num'] * 20) < 25) {
+                            } elseif (round($data['num']*20) < 25) {
                                 $progressBar = 'danger';
                             } else {
                                 $progressBar = 'info';
                             }
         ?>
-                            <meter value="<?= round($data['num'] * 20);
+                            <meter value="<?= round($data['num']*20);
         ?>" max="100" min="0" low="25" optimum="75"></meter>
                         </td>
-                        <td><?= round($data['num'] * 20);
+                        <td><?= round($data['num']*20);
         ?>%</td>
                     </tr>
 <?php

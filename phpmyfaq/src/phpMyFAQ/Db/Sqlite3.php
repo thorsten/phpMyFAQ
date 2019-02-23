@@ -69,7 +69,7 @@ class Sqlite3 implements Driver
      * @param string
      * @param string
      *
-     * @return bool
+     * @return null|boolean
      */
     public function connect($host, $user, $passwd, $db = '')
     {
@@ -136,7 +136,7 @@ class Sqlite3 implements Driver
         $return = $result->fetchArray(SQLITE3_ASSOC);
 
         return $return
-            ? (object) $return
+            ? (object)$return
             : null;
     }
 
@@ -186,7 +186,7 @@ class Sqlite3 implements Driver
 
         $result->fetchedByPMF = true;
         while ($row = $result->fetchArray(SQLITE3_ASSOC)) {
-            $ret[] = (object) $row;
+            $ret[] = (object)$row;
         }
 
         return $ret;
@@ -214,7 +214,7 @@ class Sqlite3 implements Driver
     /**
      * Logs the queries.
      *
-     * @return int
+     * @return string
      */
     public function log()
     {
@@ -248,7 +248,7 @@ class Sqlite3 implements Driver
      *
      * @param string $prefix Table prefix
      *
-     * @return array
+     * @return string[]
      */
     public function getTableNames($prefix = '')
     {
@@ -306,7 +306,7 @@ class Sqlite3 implements Driver
      */
     public function nextId($table, $id)
     {
-        $result = (int) $this->conn->querySingle(
+        $result = (int)$this->conn->querySingle(
             sprintf(
                 'SELECT max(%s) AS current_id FROM %s',
                 $id,

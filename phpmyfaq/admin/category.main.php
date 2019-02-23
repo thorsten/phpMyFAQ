@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                   <i aria-hidden="true" class="fas fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
               </a>
               <a class="btn btn-sm btn-outline-info" href="?action=showcategory">
-                <i aria-hidden="true" class="fas fa-list"></i> <?= $PMF_LANG['ad_categ_show'];?>
+                <i aria-hidden="true" class="fas fa-list"></i> <?= $PMF_LANG['ad_categ_show']; ?>
               </a>
             </div>
           </div>
@@ -318,7 +318,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $subCategories = $category->getChildren($cat['id']);
         $numSubCategories = count($subCategories);
 
-        $hasParent = (bool) $cat['parent_id'];
+        $hasParent = (bool)$cat['parent_id'];
 
         if ($hasParent) {
             printf(

@@ -160,7 +160,7 @@ class Entity
      */
     public function getId()
     {
-        return (int) $this->id;
+        return (int)$this->id;
     }
 
     /**
@@ -220,7 +220,7 @@ class Entity
      */
     public function getParentId()
     {
-        return (int) $this->parentId;
+        return (int)$this->parentId;
     }
 
     /**
@@ -236,11 +236,11 @@ class Entity
     }
 
     /**
-     * @return string
+     * @return integer
      */
     public function getUserId()
     {
-        return (int) $this->userId;
+        return (int)$this->userId;
     }
 
     /**
@@ -264,7 +264,6 @@ class Entity
     }
 
     /**
-     * @param $showHome $active
      *
      * @return Entity
      */

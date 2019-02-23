@@ -87,7 +87,7 @@ class Permission
     public static function selectPerm($permLevel, Configuration $config)
     {
         if (isset($permLevel)) {
-            $permClass = '\phpMyFAQ\Permission\\' . ucfirst(strtolower($permLevel)) . 'Permission';
+            $permClass = '\phpMyFAQ\Permission\\'.ucfirst(strtolower($permLevel)).'Permission';
             if (class_exists($permClass)) {
                 return new $permClass($config);
             }

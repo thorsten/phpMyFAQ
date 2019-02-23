@@ -287,7 +287,7 @@ class MediumPermission extends BasicPermission
             $nextId,
             $groupData['name'],
             $groupData['description'],
-            (int) $groupData['auto_join']
+            (int)$groupData['auto_join']
         );
 
         $res = $this->config->getDb()->query($insert);
@@ -672,7 +672,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup',
             Db::getTablePrefix()
         );
-        if ($userId != 1){
+        if ($userId != 1) {
             $select = sprintf('
                 SELECT
                     fg.group_id
@@ -794,7 +794,7 @@ class MediumPermission extends BasicPermission
         if (!isset($groupData['auto_join'])) {
             $groupData['auto_join'] = $this->defaultGroupData['auto_join'];
         }
-        $groupData['auto_join'] = (int) $groupData['auto_join'];
+        $groupData['auto_join'] = (int)$groupData['auto_join'];
 
         return $groupData;
     }

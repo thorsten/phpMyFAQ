@@ -124,7 +124,7 @@ class Auth
         $message = '';
 
         if (!is_array($this->errors)) {
-            $this->errors = array((string) $this->errors);
+            $this->errors = array((string)$this->errors);
         }
         foreach ($this->errors as $error) {
             $message .= $error."\n";
@@ -185,7 +185,7 @@ class Auth
         }
 
         $oldReadOnly = $this->readOnly;
-        $this->readOnly = (bool) $readOnly;
+        $this->readOnly = (bool)$readOnly;
 
         return $oldReadOnly;
     }

@@ -104,8 +104,8 @@ function renderInputForm($key, $type)
                         echo Language::languageOptions(
                             str_replace(
                                 array(
-                                     'language_',
-                                     '.php',
+                                        'language_',
+                                        '.php',
                                 ),
                                 '',
                                 $faqConfig->get('main.language')
@@ -116,7 +116,7 @@ function renderInputForm($key, $type)
                     } else {
                         echo '<option value="language_en.php">English</option>';
                     }
-                   break;
+                    break;
 
                 case 'records.orderby':
                     echo Configuration::sortingOptions($faqConfig->get($key));
