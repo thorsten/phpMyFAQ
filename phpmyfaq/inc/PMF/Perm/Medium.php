@@ -608,7 +608,7 @@ class PMF_Perm_Medium extends PMF_Perm_Basic
      *
      * @param integer $userId User ID
      *
-     * @return array
+     * @return integer[]
      */
     public function getUserGroups($userId)
     {
