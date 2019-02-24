@@ -272,7 +272,7 @@ module.exports = function (grunt) {
       },
       js: {
         files: ['phpmyfaq/admin/assets/js/**/*.js', 'phpmyfaq/assets/js/*.js'],
-        tasks: ['clean', 'jshint', 'concat', 'uglify'],
+        tasks: ['jshint', 'concat', 'uglify'],
         options: {
           livereload: true
         }
