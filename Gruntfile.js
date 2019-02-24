@@ -26,14 +26,12 @@ module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
+
     //
     // Metadata.
     //
     pkg: grunt.file.readJSON('package.json'),
     banner: '/*! phpMyFAQ v<%= pkg.version %> - <%= pkg.homepage %> - Copyright (c) 2001 - <%= grunt.template.today("yyyy") %> Thorsten Rinne and phpMyFAQ Team */\n',
-    bumpup: {
-      files: ['package.json', 'composer.json']
-    },
 
     //
     // Task configuration.
