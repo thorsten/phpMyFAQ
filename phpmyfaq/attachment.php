@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -53,7 +53,7 @@ $userPermission = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
-if ($user->perm instanceof PMF_Perm_Medium) {
+if ($user->perm instanceof MediumPermission) {
     if (count($groupPermission)) {
         foreach ($user->perm->getUserGroups($user->getUserId()) as $userGroups) {
             if (in_array($userGroups, $groupPermission)) {
@@ -93,12 +93,12 @@ if (isset($auth)) {
 }
 
 if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
-    (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))) {
+        (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))) {
     try {
         $attachment->rawOut();
         exit(0);
     } catch (Exception $e) {
-        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'].' ('.$e->getMessage().')';
+        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
     }
 } else {
     $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
