@@ -3,8 +3,6 @@
 /**
  * Handle attachment downloads.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -55,9 +53,14 @@ $userPermission = $faq->getPermission('user', $attachment->getRecordId());
 $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
 
 // Check on group permissions
-if ($user->perm instanceof MediumPermission) {
-    if (count($groupPermission) && in_array($groupPermission[0], $user->perm->getUserGroups($user->getUserId()))) {
-        $groupPermission = true;
+if ($user->perm instanceof PMF_Perm_Medium) {
+    if (count($groupPermission)) {
+        foreach ($user->perm->getUserGroups($user->getUserId()) as $userGroups) {
+            if (in_array($userGroups, $groupPermission)) {
+                $groupPermission = true;
+                break;
+            }
+        }
     } else {
         $groupPermission = false;
     }
