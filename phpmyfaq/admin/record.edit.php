@@ -671,15 +671,11 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                                         <input type="radio" name="active" value="no"
                                             <?php if (isset($sul)) { echo $sul; } ?>>
                                         <?php echo $PMF_LANG['ad_gen_no'] ?>
-                                <?php else {
-    : ?>
+                                            <?php else : ?>
                                         <br>
                                         <input type="radio" name="active" value="no" checked>
                                         <?php echo $PMF_LANG['ad_gen_no'] ?>
-
-                                <?php endif;
-}
-?>
+                                            <?php endif; ?>
                                     </label>
                             </div>
                         </div>
@@ -740,12 +736,9 @@ if (($user->perm->checkRight($user->getUserId(), 'editbt') ||
                             </div>
                         </div>
                     </div>
-                    <?php else {
-    : ?>
+                    <?php else : ?>
                         <input type="hidden" name="grouppermission" value="all">
-                    <?php endif;
-}
-?>
+                    <?php endif; ?>
                     <div class="panel-heading">
                         <?php echo $PMF_LANG['ad_entry_userpermission']; ?>
                     </div>

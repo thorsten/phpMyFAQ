@@ -38,11 +38,8 @@ $faqSession = new PMF_Session($faqConfig);
                     <a href="?action=config">
                         <?php if ($faqConfig->get('main.maintenanceMode')): ?>
                         <span class="label label-important"><?php print $PMF_LANG['msgMaintenanceMode']; ?></span>
-                        <?php else {
-    : ?>
-                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode'];
-}
-?></span>
+                        <?php else : ?>
+                        <span class="label label-success"><?php print $PMF_LANG['msgOnlineMode']; ?></span>
                         <?php endif; ?>
                     </a>
                 </div>

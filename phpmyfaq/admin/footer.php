@@ -8,13 +8,11 @@
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @category  phpMyFAQ 
- *
+ * @category  phpMyFAQ
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-26
  */
@@ -88,6 +86,7 @@ if (isset($auth)) {
         paste_remove_spans: true,
         entities : '10',
         entity_encoding: 'raw',
+        verify_html: false,
         toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
         toolbar2: "link image preview media imageupload | forecolor backcolor emoticons | phpmyfaq print save",
         image_advtab: true,
@@ -178,14 +177,12 @@ if (isset($auth)) {
             action: 'ajax',
             ajax: 'recordAdd'
         };
-        <?php else {
-    : ?>
+        <?php else: ?>
         var data = {
             action: 'ajax',
             ajax: 'recordSave'
         };
         <?php endif;
-}
 ?>
 
         $.each($('#faqEditor').serializeArray(), function(i, field) {
