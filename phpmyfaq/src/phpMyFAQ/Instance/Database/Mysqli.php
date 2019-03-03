@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance_Database_Mysqli.
+ * Mysqli.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -75,7 +75,7 @@ class Mysqli extends Database implements Driver
         'faqcategories' => 'CREATE TABLE %sfaqcategories (
             id INT(11) NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            parent_id SMALLINT NOT NULL,
+            parent_id INTEGER NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
             user_id INT(11) NOT NULL,

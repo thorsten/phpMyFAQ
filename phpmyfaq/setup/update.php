@@ -671,6 +671,21 @@ if ($step == 3) {
 
     }
 
+    //
+    // UPDATES FROM 3.0.0-beta.3
+    //
+    if (version_compare($version, '3.0.0-beta.3', '<=')) {
+        // Fix category table
+        switch ($DB['type']) {
+            case 'mysqli':
+                $query[] = 'ALTER TABLE '.$prefix.'faqcategories MODIFY parent_id INTEGER';
+                break;
+            case 'pgsql':
+                $query[] = 'ALTER TABLE '.$prefix.'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
+                break;
+        }
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);

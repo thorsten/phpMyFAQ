@@ -75,7 +75,7 @@ class Sqlite3 extends Database implements Driver
         'faqcategories' => 'CREATE TABLE %sfaqcategories (
             id INTEGER NOT NULL,
             lang VARCHAR(5) NOT NULL,
-            parent_id SMALLINT NOT NULL,
+            parent_id INTEGER NOT NULL,
             name VARCHAR(255) NOT NULL,
             description VARCHAR(255) DEFAULT NULL,
             user_id INTEGER NOT NULL,

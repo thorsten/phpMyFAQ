@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance;
 /**
  * The main phpMyFAQ instances class for instance clients.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -31,14 +29,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance.
+ * Client
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2012-03-31
  */
@@ -98,9 +94,7 @@ class Client extends Instance
 
     /**
      * Creates all tables with the given table prefix from the master tables.
-     *
      * @param string $prefix SQL table prefix
-     *
      * @return void
      */
     public function createClientTables($prefix)
@@ -134,7 +128,7 @@ class Client extends Instance
             );
             $this->config->getDb()->query(
                 sprintf(
-                    'INSERT INTO %sfaquser_right SELECT * FROM %sfaquserright WHERE user_id = 1',
+                    'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
                     $prefix,
                     Db::getTablePrefix()
                 )
@@ -145,7 +139,7 @@ class Client extends Instance
     }
 
     /**
-     * Sets the PMF_Filesystem.
+     * Sets the Filesystem.
      *
      * @param Filesystem $fileSystem
      */
@@ -158,6 +152,7 @@ class Client extends Instance
      * Copies the config/constants.php file to a new client instance.
      *
      * @param string $dest Destination file
+     * @throws
      * @return bool
      * @throws Exception
      */
