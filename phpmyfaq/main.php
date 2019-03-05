@@ -45,12 +45,17 @@ if (!is_null($archived)) {
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 
+$categoryHelper = new PMF_Helper_Category();
+$categoryHelper->setCategory($category);
+$categoryHelper->setConfiguration($faqConfig);
+
 $tpl->parseBlock(
     'writeContent',
     'tagListSection',
     [
         'msgTags' => $PMF_LANG['msgPopularTags'],
-        'tagList' => $oTag->renderPopularTags(12)
+        'tagList' => $oTag->renderPopularTags(12),
+        'showCategories' => $categoryHelper->renderNavigation($cat),
     ]
 );
 
@@ -69,7 +74,8 @@ $tpl->parse(
             '<a class="help" href="%sindex.php?action=search">%s</a>',
             $faqSystem->getSystemUri($faqConfig),
             $PMF_LANG['msgAdvancedSearch']
-        )
+        ),
+        'showCategories' => $categoryHelper->renderNavigation($cat),
     ]
 );
 
