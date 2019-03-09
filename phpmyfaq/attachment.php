@@ -15,6 +15,7 @@
  * @since 2009-06-23
  */
 
+use phpMyFAQ\Attachment\Exception;
 use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
@@ -25,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -47,10 +48,16 @@ if (!$user instanceof CurrentUser) {
 }
 
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$attachment = Factory::create($id);
+$userPermission = [];
+$groupPermission = [];
 
-$userPermission = $faq->getPermission('user', $attachment->getRecordId());
-$groupPermission = $faq->getPermission('group', $attachment->getRecordId());
+try {
+    $attachment = Factory::create($id);
+    $userPermission = $faq->getPermission('user', $attachment->getRecordId());
+    $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
+} catch (Exception $e) {
+    $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'].' ('.$e->getMessage().')';
+}
 
 // Check on group permissions
 if ($user->perm instanceof MediumPermission) {
@@ -68,7 +75,7 @@ if ($user->perm instanceof MediumPermission) {
     $groupPermission = true;
 }
 
-// Check in user's permissions
+// Check user's permissions
 if (in_array($user->getUserId(), $userPermission)) {
     $userPermission = true;
 } else {
@@ -78,12 +85,12 @@ if (in_array($user->getUserId(), $userPermission)) {
 // get user rights
 $permission = [];
 if (isset($auth)) {
-    // read all rights, set them FALSE
+    // read all rights, set false
     $allRights = $user->perm->getAllRightsData();
     foreach ($allRights as $right) {
         $permission[$right['name']] = false;
     }
-    // check user rights, set them TRUE
+    // check user rights, set true
     $allUserRights = $user->perm->getAllUserRights($user->getUserId());
     foreach ($allRights as $right) {
         if (in_array($right['right_id'], $allUserRights)) {
@@ -94,12 +101,8 @@ if (isset($auth)) {
 
 if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
         (($groupPermission || ($groupPermission && $userPermission)) && isset($permission['dlattachment'])))) {
-    try {
-        $attachment->rawOut();
-        exit(0);
-    } catch (Exception $e) {
-        $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
-    }
+    $attachment->rawOut();
+    exit(0);
 } else {
     $attachmentErrors[] = $PMF_LANG['err_NotAuth'];
 }
