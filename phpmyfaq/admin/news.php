@@ -15,11 +15,7 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Comment;
-use phpMyFAQ\Date;
-use phpMyFAQ\Filter;
-use phpMyFAQ\Language;
-use phpMyFAQ\News;
+use phpMyFAQ\Comment;use phpMyFAQ\Date;use phpMyFAQ\Filter;use phpMyFAQ\Language;use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -313,31 +309,32 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
                         <div class="col-lg-4">
-                            <input type="url" name="link" value="<?= $newsData['link'] ?>" class="form-control">
+                            <input type="url" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
                         <div class="col-lg-4">
-                            <input type="text" name="linkTitle" value="<?= $newsData['linkTitle'] ?>" class="form-control">
+                            <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
+                            class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="target"><?= $PMF_LANG['ad_news_link_target'] ?></label>
                         <div class="col-lg-4">
-                            <label>
+                        <label>
                                 <input type="radio" name="target" value="blank"
                                 <?php if ('blank' == $newsData['target']) { echo ' checked'; } ?>>
                                 <?= $PMF_LANG['ad_news_link_window'] ?>
-                            </label>
-                            <label>
-                                <input type="radio" name="target" value="self" <?php if ('self' == $newsData['target']) { echo ' checked'; } ?>>
+                                <br>
+                                <input type="radio" name="target" value="self"
+                                <?php if ('self' == $newsData['target']) { echo ' checked'; } ?>>
                                 <?= $PMF_LANG['ad_news_link_faq'] ?>
-                            </label>
-                            <label>
-                                <input type="radio" name="target" value="parent" <?php if ('parent' == $newsData['target']) { echo ' checked'; } ?>>
+                                <br>
+                                <input type="radio" name="target" value="parent"
+                                <?php if ('parent' == $newsData['target']) { echo ' checked'; } ?>>
                                 <?= $PMF_LANG['ad_news_link_parent'] ?>
                             </label>
                         </div>
@@ -347,38 +344,36 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                         <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
                         <?= Language::selectLanguages($newsData['lang'], false, [], 'langTo') ?>
+                        </div>
                     </div>
 <?php
     $dateStart = ($newsData['dateStart'] != '00000000000000' ? Date::createIsoDate($newsData['dateStart'], 'Y-m-d') : '');
     $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
 ?>
-
-                    <legend><?= $PMF_LANG['ad_news_expiration_window'] ?></legend>
-
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
-                        <div class="col-lg-2">
+                        <div class="col-lg-4">
                             <input type="datetime-local" name="dateStart" id="dateStart" class="form-control" value="<?= $dateStart ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
-                        <div class="col-lg-2">
+                        <div class="col-lg-4">
                             <input type="datetime-local"  name="dateEnd" id="dateEnd" class="form-control" value="<?= $dateEnd ?>">
                         </div>
                     </div>
 
-                <div class="form-group row">
-                    <div class="offset-lg-2 col-lg-4">
-                        <button class="btn btn-primary" type="submit">
-                            <?= $PMF_LANG['ad_news_edit'] ?>
-                        </button>
-                        <a class="btn btn-info" href="?action=news">
-                            <?= $PMF_LANG['ad_entry_back'] ?>
-                        </a>
+                    <div class="form-group row">
+                        <div class="offset-lg-2 col-lg-4">
+                            <button class="btn btn-primary" type="submit">
+                                <?= $PMF_LANG['ad_news_edit'] ?>
+                            </button>
+                            <a class="btn btn-info" href="?action=news">
+                                <?= $PMF_LANG['ad_entry_back'] ?>
+                            </a>
+                        </div>
                     </div>
-                </div>
                 </form>
 <?php
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

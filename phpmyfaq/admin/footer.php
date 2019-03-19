@@ -60,7 +60,7 @@ if (isset($auth)) {
           style="display: none;"></iframe>
     <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
-            ('addnews' == $action) || ('editnews' == $action) || ('copyentry' == $action))) {
+            ('add-news' == $action) || ('edit-news' == $action) || ('copyentry' == $action))) {
         if ($faqConfig->get('main.enableWysiwygEditor') == true) {
             ?>
           <script>
@@ -73,7 +73,7 @@ if (isset($auth)) {
               // General options
               mode: 'exact',
               language: '<?=(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
-              elements: '<?= ('addnews' == $action || 'editnews' == $action) ? 'news' : 'answer' ?>',
+              elements: '<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               theme: 'modern',
               plugins: [
                 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
@@ -91,7 +91,7 @@ if (isset($auth)) {
               entity_encoding: 'raw',
               toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
               toolbar2: "link image preview media | forecolor backcolor emoticons | phpmyfaq print",
-              height: "50vh",
+              height: "'<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>'",
               image_advtab: true,
               image_class_list: [
                 {title: 'None', value: ''},
