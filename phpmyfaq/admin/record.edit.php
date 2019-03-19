@@ -135,7 +135,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
             $faq->getRecord($id, null, true);
             $faqData = $faq->faqRecord;
-            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
+            $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
             $queryString = 'saveentry&amp;id='.$faqData['id'];
         } else {
             $queryString = 'insertentry';
@@ -332,7 +332,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             $faq->language = $faqData['lang'];
                             $faq->getRecord($faqData['id'], $selectedRevisionId, true);
                             $faqData = $faq->faqRecord;
-                            $faqData['tags'] = implode(',', $tagging->getAllTagsById($faqData['id']));
+                            $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
                         }
                     } ?>
 
@@ -434,7 +434,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                     </label>
                     <div class="col-lg-10">
                       <input type="text" name="tags" id="tags" value="<?= $faqData['tags'] ?>" autocomplete="off"
-                             class="form-control pmf-tags-autocomplete" data-tagList="<?= $faqData['tags'] ?>">
+                             class="form-control pmf-tags-autocomplete" data-tag-list="<?= $faqData['tags'] ?>">
                       <small id="tagsHelp" class="form-text text-muted"><?= $PMF_LANG['msgShowHelp'] ?></small>
                     </div>
                   </div>

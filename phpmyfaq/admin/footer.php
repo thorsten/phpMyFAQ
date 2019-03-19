@@ -91,7 +91,7 @@ if (isset($auth)) {
               entity_encoding: 'raw',
               toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
               toolbar2: "link image preview media | forecolor backcolor emoticons | phpmyfaq print",
-              height: "'<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>'",
+              height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
                 {title: 'None', value: ''},

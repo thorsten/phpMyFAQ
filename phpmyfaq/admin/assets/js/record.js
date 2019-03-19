@@ -159,59 +159,45 @@ $(document).ready(function () {
 
   // Instantiate the Typeahead UI
   $('.pmf-tags-autocomplete').typeahead({
-    autoSelect: true,
+    autoSelect: false,
     delay: 300,
+    fitToElement: true,
     minLength: 1,
+    showHintOnFocus: 'all',
     source: (request, response) => {
+      const tags = $('#tags');
+      let currentTags = tags.data('tag-list');
+
+      if (currentTags.length > 0) {
+        request = request.substr(currentTags.length + 1, request.length);
+      }
       $.ajax({
-        url: 'ajaxresponse.php',
+        url: 'index.php?action=ajax&ajax=tags&ajaxaction=list',
         type: 'GET',
         dataType: 'JSON',
-        data: 'search=' + request,
+        data: 'q=' + request,
         success: (data) => {
-          response(data.map((item) => {
+          response(data.map((tags) => {
             return {
-              url: item.faqLink,
-              question: item.faqQuestion
+              tagName: tags.tagName
             };
           }));
         }
       });
     },
-    displayText: (item) => {
-      return typeof item !== 'undefined' && typeof item.question !== 'undefined' ? item.question : item;
+    displayText: (tags) => {
+      return typeof tags !== 'undefined' && typeof tags.tagName !== 'undefined' ? tags.tagName : item;
     },
-    afterSelect: (event) => {
-      window.location.href = event.url;
+    updater: (event) => {
+      const tags = $('#tags');
+      let currentTags = tags.data('tag-list');
+      if (typeof currentTags === 'undefined') {
+        currentTags = event.tagName;
+      } else {
+        currentTags = currentTags + ', ' + event.tagName;
+      }
+      tags.data('tagList', currentTags);
+      tags.val(currentTags);
     }
   });
-
-  /*
-  $('.pmf-tags-autocomplete').typeahead(null, {
-    source: tags.ttAdapter(),
-    displayKey: 'tags',
-    name: 'tags',
-    minLength: 1,
-    templates: {
-      empty: [
-        '<div class="empty-message">',
-        'unable to find any Best Picture winners that match the current query',
-        '</div>'
-      ].join('\n'),
-      suggestion: Handlebars.compile('<div data-tagName="{{tagName}}">{{tagName}}</div>')
-    }
-  }).on('typeahead:selected typeahead:autocompleted', function (event, tag) {
-    const tags = $('#tags');
-    let currentTags = tags.data('tagList');
-
-    if (typeof currentTags === 'undefined') {
-      currentTags = tag.tagName;
-    } else {
-      currentTags = currentTags + ', ' + tag.tagName;
-    }
-
-    tags.data('tagList', currentTags);
-    $('.pmf-tags-autocomplete').typeahead('val', currentTags);
-  });
-  */
 });

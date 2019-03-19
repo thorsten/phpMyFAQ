@@ -61,7 +61,7 @@ switch ($ajaxAction) {
                 if ($i <= PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE) {
                     $currentTag = new stdClass();
                     $currentTag->tagName = $tagName;
-                    $tagNames['results'][] = $currentTag;
+                    $tagNames[] = $currentTag;
                 }
             }
 
