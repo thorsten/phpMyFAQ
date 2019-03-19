@@ -92,11 +92,11 @@ switch ($action) {
     case 'addglossary':
     case 'editglossary':
     case 'news':
-    case 'addnews':
-    case 'editnews':
-    case 'savenews':
-    case 'updatenews':
-    case 'delnews':
+    case 'add-news':
+    case 'edit-news':
+    case 'save-news':
+    case 'update-news':
+    case 'delete-news':
     case 'question':
     case 'takequestion':
     case 'comments':
