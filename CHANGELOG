@@ -23,6 +23,7 @@ Version 3.0.0-beta.3 - 2019-02-
 - added support for EU General Data Protection Regulation (Jochen Steinhilber)
 - added multiple attachment upload (Thorsten)
 - added 404 page template (Thorsten)
+- added Mongolian translation (khaidaw@gmail.com)
 - improved REST API including login (Thorsten)
 - improved sticky records (Thorsten)
 - improved brute force handling (Thorsten)
