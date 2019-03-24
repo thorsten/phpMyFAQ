@@ -6,7 +6,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   Administration
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
@@ -157,9 +156,9 @@ $(document).ready(function () {
     });
   });
 
-  // Instantiate the Typeahead UI
+  // Typeahead
   $('.pmf-tags-autocomplete').typeahead({
-    autoSelect: false,
+    autoSelect: true,
     delay: 300,
     fitToElement: true,
     minLength: 1,
@@ -175,7 +174,7 @@ $(document).ready(function () {
         url: 'index.php?action=ajax&ajax=tags&ajaxaction=list',
         type: 'GET',
         dataType: 'JSON',
-        data: 'q=' + request,
+        data: 'q=' + request.trim(),
         success: (data) => {
           response(data.map((tags) => {
             return {
@@ -186,7 +185,7 @@ $(document).ready(function () {
       });
     },
     displayText: (tags) => {
-      return typeof tags !== 'undefined' && typeof tags.tagName !== 'undefined' ? tags.tagName : item;
+      return typeof tags !== 'undefined' && typeof tags.tagName !== 'undefined' ? tags.tagName : tags;
     },
     updater: (event) => {
       const tags = $('#tags');
@@ -198,6 +197,7 @@ $(document).ready(function () {
       }
       tags.data('tagList', currentTags);
       tags.val(currentTags);
+      return event;
     }
   });
 });
