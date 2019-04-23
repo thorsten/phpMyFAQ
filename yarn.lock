@@ -2373,10 +2373,10 @@ tiny-lr@^1.1.1:
     object-assign "^4.1.0"
     qs "^6.4.0"
 
-tinymce@^4.9.3:
-  version "4.9.3"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.9.3.tgz#c866681484282fe9ce4694124990d94eb457c344"
-  integrity sha512-3IjnswgmzJJSgaJR9+tOPK7UYlHoxv8YzUi8ChqetIt1uljRycyqSu8aq1DOyPc+WJCZi9fWo9fEHCEAIYGaLg==
+tinymce@^5.0.4:
+  version "5.0.4"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.0.4.tgz#4f398ee977b487ef16aeda188b0d981bae536eb6"
+  integrity sha512-H5ogFjgpYSCSgHMMJtR1nPfSICEPtuMW6d/0jR/p4R2eajO0aY8e04Exq6C77JQy6Do3NkJlIZNl1D1ejCn+Jw==
 
 tough-cookie@~2.4.3:
   version "2.4.3"
