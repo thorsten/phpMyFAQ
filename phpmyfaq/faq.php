@@ -32,6 +32,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Linkverifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
+use phpMyFAQ\Search\Resultset as SearchResultset;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
