@@ -7,6 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 2.9.14 - 2019-
 - updated bundled TinyMCE to version 4.9.5 (Thorsten)
+- updated bundled Handlebars to version 4.1.2 (Thorsten)
 
 Version 2.9.13 - 2019-02-12
 - fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
