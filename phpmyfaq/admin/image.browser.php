@@ -96,12 +96,11 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
     });
 
     $(document).on('click', 'div.mce-file', function () {
-        var itemUrl = $(this).data('src'),
-            args = top.tinymce.activeEditor.windowManager.getParams(),
-            win = (args.window),
-            input = (args.input);
-        
-        win.document.getElementById(input).value = itemUrl;
+        var dialogArguments = top.tinymce.activeEditor.windowManager.getParams(),
+            win = (dialogArguments.window),
+            input = (dialogArguments.input);
+
+        win.document.getElementById(input).value = $(this).data('src');
         top.tinymce.activeEditor.windowManager.close();
     });
 </script>
