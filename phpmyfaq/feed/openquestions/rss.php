@@ -10,12 +10,10 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @category  phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-17
  */
@@ -44,7 +42,7 @@ if (isset($LANGCODE) && PMF_Language::isASupportedLanguage($LANGCODE)) {
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 PMF_String::init($LANGCODE);
 
@@ -130,8 +128,15 @@ if ($num > 0) {
             $rss->writeCdata($item['question']);
             $rss->endElement();
 
-            $rss->writeElement('link', (isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER['HTTP_HOST'].str_replace('feed/openquestions/rss.php', 'index.php', $_SERVER['SCRIPT_NAME']).'?action=open#openq_'.$item['id']);
-            $rss->writeElement('guid', (isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER['HTTP_HOST'].str_replace('feed/openquestions/rss.php', 'index.php', $_SERVER['SCRIPT_NAME']).'?action=open#openq_'.$item['id']);
+            $link =
+                'http'.
+                (isset($_SERVER['HTTPS']) ? 's' : '').
+                '://'.
+                $_SERVER['HTTP_HOST'].
+                str_replace('feed/openquestions/rss.php', 'index.php', $_SERVER['SCRIPT_NAME']).'?action=open#openq_'.$item['id'];
+
+            $rss->writeElement('link', $link);
+            $rss->writeElement('guid', $link);
 
             $rss->writeElement('pubDate', PMF_Date::createRFC822Date($item['created'], true));
             $rss->endElement();
