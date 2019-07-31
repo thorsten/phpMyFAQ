@@ -27,7 +27,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
-
 ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -44,7 +43,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
             </div>
           </div>
         </div>
-
 
         <div class="row">
             <div class="col-lg-12">
@@ -309,6 +307,11 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             $categoryName = $cat['name'];
         } else {
             $categoryName = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
+        }
+
+        // Has permissions, show lock icon
+        if ($category->hasPermissions($cat['id'])) {
+            $categoryName .= ' <i class="fas fa-lock"></i>';
         }
 
         // Level of the category

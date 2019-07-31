@@ -1773,7 +1773,7 @@ class Category
      *
      * @return array
      */
-    public function getPermissions($mode, Array $categories)
+    public function getPermissions($mode, Array $categories): array
     {
         $permissions = [];
         if (!($mode === 'user' || $mode === 'group')) {
@@ -1797,10 +1797,28 @@ class Category
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $permissions[] = $row->permission;
+            $permissions[] = (int) $row->permission;
         }
 
         return $permissions;
+    }
+
+    /**
+     * Returns true, if a given category has user or group permissions.
+     * Otherwise, the methods returns false.
+     * @param int $categoryId
+     * @return bool
+     */
+    public function hasPermissions(int $categoryId): bool
+    {
+        $hasUserPermissions = $this->getPermissions('user', [$categoryId]);
+        $hasGroupPermissions = $this->getPermissions('group', [$categoryId]);
+
+        if ($hasUserPermissions[0] !== -1 || $hasGroupPermissions[0] !== -1) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
