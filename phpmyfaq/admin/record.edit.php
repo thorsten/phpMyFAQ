@@ -491,10 +491,10 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                         <div class="form-check">
                           <input type="radio" id="restrictedgroups" name="grouppermission" class="form-check-input"
                                  value="restricted" <?php echo($restrictedGroups ? 'checked' : ''); ?>>
-                          <label class="form-check-label" for="restrictedgroups">
+                          <label for="selected-groups" class="form-check-label" for="restrictedgroups">
                               <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
                           </label>
-                          <select name="restricted_groups[]" size="3" class="form-control" multiple>
+                          <select id="selected-groups" name="restricted_groups[]" size="3" class="form-control" multiple>
                               <?php
                                 if ( $faqConfig->get('main.enableCategoryRestrictions')) {
                                     echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
@@ -953,7 +953,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                         $('#allgroups').prop('checked', false).prop("disabled", true);
                         $('#restrictedgroups').prop('checked', true).prop("disabled", false);
                         $.each(perms.group, function(key, value) {
-                            $(".selected-groups option[value='" + value + "']").prop('selected',true);
+                            $("#selected-groups option[value='" + value + "']").prop('selected',true);
                         });
                     }
                 }
