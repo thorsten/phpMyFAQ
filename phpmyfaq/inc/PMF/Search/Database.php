@@ -321,10 +321,18 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
                 if ($j != 0) {
                     $where = $where.' OR ';
                 }
+                 if ($this->matchingColumns[$j] === 'fd.content') {
+                        $where = sprintf("%s%s LIKE ' %%%s%% '",
+                    $where,
+                    $this->matchingColumns[$j],
+                    $this->_config->getDb()->escape($keys[$i]));
+
+                }else{
                 $where = sprintf("%s%s LIKE '%%%s%%'",
                     $where,
                     $this->matchingColumns[$j],
                     $this->_config->getDb()->escape($keys[$i]));
+                }
             }
             $where .= ')';
         }
