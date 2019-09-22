@@ -37,6 +37,7 @@
     "grunt-sass": "^3.0.1",
     "load-grunt-tasks": "^5.0.0",
     "node-sass": "^4.11.0",
+    "scsslint": "^0.0.3",
     "sigmund": "^1.0.1"
   },
   "repository": "git://github.com/thorsten/phpMyFAQ.git",
