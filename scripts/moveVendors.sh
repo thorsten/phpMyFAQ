@@ -12,7 +12,6 @@ mkdir -pv $cwd/phpmyfaq/src/libs/phpseclib/phpseclib/phpseclib/Crypt
 mkdir -pv $cwd/phpmyfaq/src/libs/psr/log/Psr
 mkdir -pv $cwd/phpmyfaq/src/libs/react/promise/src
 mkdir -pv $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
-mkdir -pv $cwd/phpmyfaq/src/libs/symfony/polyfill-ctype
 mkdir -pv $cwd/phpmyfaq/src/libs/tcpdf
 mkdir -pv $cwd/phpmyfaq/src/libs/myclabs/deep-copy/src
 
@@ -29,7 +28,6 @@ cp $cwd/vendor/phpseclib/phpseclib/phpseclib/bootstrap.php $cwd/phpmyfaq/src/lib
 cp -r $cwd/vendor/psr/log/Psr/* $cwd/phpmyfaq/src/libs/psr/log/Psr
 cp -r $cwd/vendor/react/promise/src/* $cwd/phpmyfaq/src/libs/react/promise/src
 cp -r $cwd/vendor/swiftmailer/swiftmailer/lib/* $cwd/phpmyfaq/src/libs/swiftmailer/swiftmailer/lib
-cp -r $cwd/vendor/symfony/polyfill-ctype/* $cwd/phpmyfaq/src/libs/symfony/polyfill-ctype
 cp -r $cwd/vendor/myclabs/deep-copy/src/* $cwd/phpmyfaq/src/libs/myclabs/deep-copy/src
 
 # TCPDF
