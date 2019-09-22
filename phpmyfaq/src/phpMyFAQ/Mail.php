@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * MUA (Mail User Agent) implementation.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -20,6 +18,7 @@ namespace phpMyFAQ;
  * @since 2009-09-11
  */
 
+use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -27,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Mail.
+ * Class Mail.
  *
  * @package phpMyFAQ
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
@@ -698,21 +697,19 @@ class Mail
      * Get the instance of the class implementing the MUA for the given type.
      *
      * @static
-     *
      * @param string $mua Type of the MUA.
-     *
-     * @return mixed The class instance if successful, false otherwise.
+     * @return Builtin|SwiftSMTP
      */
     public static function getMUA($mua)
     {
-        $impl = ucfirst(
+        $className = ucfirst(
             str_replace(
                 '-',
                 '',
                 $mua
             )
         );
-        $class = 'phpMyFAQ\Mail\\'.$impl;
+        $class = 'phpMyFAQ\Mail\\'.$className;
 
         return new $class();
     }

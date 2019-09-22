@@ -5,8 +5,6 @@ namespace phpMyFAQ\Mail;
 /**
  * MUA (Mail User Agent) interface.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,16 +22,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Mail_IMUA.
- *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-11
+ * Interface MailUserAgentInterface
+ * @package phpMyFAQ\Mail
  */
-interface IMUA
+interface MailUserAgentInterface
 {
     /**
      * Send the message using an e-mail.

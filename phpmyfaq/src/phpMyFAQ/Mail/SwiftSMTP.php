@@ -14,6 +14,7 @@ namespace phpMyFAQ\Mail;
  * @link https://www.phpmyfaq.de
  * @since 2014-10-10
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
@@ -25,9 +26,10 @@ use Swift_Message;
 use Swift_SmtpTransport;
 
 /**
- * class Mail_SwiftSMTP
+ * Class SwiftSMTP
+ * @package phpMyFAQ\Mail
  */
-class SwiftSMTP implements IMUA
+class SwiftSMTP implements MailUserAgentInterface
 {
     private $user;
     private $mailer;
