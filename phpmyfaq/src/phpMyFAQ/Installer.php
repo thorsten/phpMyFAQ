@@ -434,6 +434,8 @@ class Installer
         'mail.remoteSMTPServer' => '',
         'mail.remoteSMTPUsername' => '',
         'mail.remoteSMTPPassword' => '',
+        'mail.remoteSMTPPort' => '25',
+        'mail.remoteSMTPEncryption' => '',
 
         'ldap.ldapSupport' => 'false',
         'ldap.ldap_mapping.name' => 'cn',

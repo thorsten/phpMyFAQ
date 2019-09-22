@@ -225,7 +225,7 @@ class Mail
     private $_to;
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
     private $_config;
 
@@ -804,7 +804,9 @@ class Mail
             $mua->setAuthConfig(
                 $this->_config->get('mail.remoteSMTPServer'),
                 $this->_config->get('mail.remoteSMTPUsername'),
-                $this->_config->get('mail.remoteSMTPPassword')
+                $this->_config->get('mail.remoteSMTPPassword'),
+                $this->_config->get('mail.remoteSMTPPort'),
+                $this->_config->get('mail.remoteSMTPEncryption')
             );
         }
 

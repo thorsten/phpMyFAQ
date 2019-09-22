@@ -665,13 +665,6 @@ if ($step == 3) {
     }
 
     //
-    // UPDATES FROM 3.0.0-beta
-    //
-    if (version_compare($version, '3.0.0-beta', '<')) {
-
-    }
-
-    //
     // UPDATES FROM 3.0.0-beta.3
     //
     if (version_compare($version, '3.0.0-beta.3', '<=')) {
@@ -684,6 +677,9 @@ if ($step == 3) {
                 $query[] = 'ALTER TABLE '.$prefix.'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
                 break;
         }
+
+        $faqConfig->add('mail.remoteSMTPPort', '465');
+        $faqConfig->add('mail.remoteSMTPEncryption', 'ssl');
     }
 
     // Always the last step: Update version number

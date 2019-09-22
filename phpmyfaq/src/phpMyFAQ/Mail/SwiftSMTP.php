@@ -5,8 +5,6 @@ namespace phpMyFAQ\Mail;
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
- * 
- *
  * This document is distributed under the MIT licence.
  *
  * @package phpMyFAQ
@@ -20,7 +18,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require __DIR__.'/../../libs/swiftmailer/swift_required.php';
+require __DIR__.'/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
+
+use Swift_Mailer;
+use Swift_Message;
+use Swift_SmtpTransport;
 
 /**
  * class Mail_SwiftSMTP
@@ -31,16 +33,18 @@ class SwiftSMTP implements IMUA
     private $mailer;
 
     /**
-     * @param $server
-     * @param $user
-     * @param $pass
+     * @param string $server
+     * @param string $user
+     * @param string $pass
+     * @param int $port
+     * @param null $security
      */
-    public function setAuthConfig($server, $user, $pass)
+    public function setAuthConfig($server, $user, $pass, $port = 25, $security = null)
     {
         unset($this->mailer);
 
         $this->mailer = Swift_Mailer::newInstance(
-            Swift_SmtpTransport::newInstance($server)
+            Swift_SmtpTransport::newInstance($server, $port, $security)
                 ->setUsername($this->user = $user)
                 ->setPassword($pass)
         );
