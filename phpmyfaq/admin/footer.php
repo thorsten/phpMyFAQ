@@ -133,7 +133,7 @@ if (isset($auth)) {
               paste_data_images: true,
               visualblocks_default_state: true,
               end_container_on_empty_block: true,
-              extended_valid_elements: "code[class],video[*],audio[*],source[*]",
+              extended_valid_elements: "code[class],video[*],audio[*],source[*],iframe[*]",
               removeformat: [
                 {selector: '*', attributes: ['style'], split: false, expand: false, deep: true}
               ],
