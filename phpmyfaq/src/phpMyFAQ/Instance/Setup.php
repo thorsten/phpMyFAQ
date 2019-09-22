@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance;
 /**
  * The phpMyFAQ instances setup class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance.
+ * Class Setup.
  *
  * @package phpMyFAQ
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
@@ -41,10 +39,10 @@ class Setup
     /**
      * @var string
      */
-    private $_rootDir;
+    private $rootDir;
 
     /**
-     * Constructor.
+     * Setup constructor.
      */
     public function __construct()
     {
@@ -58,7 +56,7 @@ class Setup
      */
     public function setRootDir($rootDir)
     {
-        $this->_rootDir = $rootDir;
+        $this->rootDir = $rootDir;
     }
 
     /**
@@ -82,7 +80,6 @@ class Setup
      * Checks basic folders and creates them if necessary.
      *
      * @param string[] $dirs
-     *
      * @return array
      */
     public function checkDirs(Array $dirs)
@@ -90,16 +87,29 @@ class Setup
         $failedDirs = [];
 
         foreach ($dirs as $dir) {
-            if (false === is_writable($this->_rootDir.$dir)) {
-                $failedDirs[] = $dir;
-            } elseif (false === is_dir($this->_rootDir.$dir)) {
-                if (false === mkdir($this->_rootDir.$dir, 0775)) {
-                    $failedDirs[] = $dir;
+            if (false === is_dir($this->rootDir.$dir)) {
+                // If the folder does not exist try to create it
+                if (false === mkdir($this->rootDir.$dir)) {
+                    // If the folder creation fails
+                    $failedDirs[] = 'Folder [' . $dir . '] could not be created.';
+                } else {
+                    if (false === chmod($this->rootDir.$dir, 0775)) {
+                        $failedDirs[] = 'Folder [' . $dir . '] could not be given correct permissions (775).';
+                    }
                 }
             } else {
+                // The folder exists, check permissions
+                if (false === is_writable($this->rootDir.$dir)) {
+                    // If the folder exists but is not writeable
+                    $failedDirs[] = 'Folder [' . $dir . '] exists but is not writable.';
+                }
+            }
+
+            if (0 === count($failedDirs)){
+                // if no failed dirs exist
                 copy(
-                    $this->_rootDir.'/setup/index.html',
-                    $this->_rootDir.$dir.'/index.html'
+                    $this->rootDir.'/setup/index.html',
+                    $this->rootDir.$dir.'/index.html'
                 );
             }
         }
@@ -112,13 +122,12 @@ class Setup
      *
      * @param array  $data   Array with database credentials
      * @param string $folder Folder
-     *
-     * @return int
+     * @return int|bool
      */
     public function createDatabaseFile(Array $data, $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir.$folder.'/database.php',
+            $this->rootDir.$folder.'/database.php',
             "<?php\n".
             "\$DB['server'] = '".$data['dbServer']."';\n".
             "\$DB['user'] = '".$data['dbUser']."';\n".
@@ -137,13 +146,12 @@ class Setup
      *
      * @param array  $data   Array with LDAP credentials
      * @param string $folder Folder
-     *
-     * @return int
+     * @return int|bool
      */
-    public function createLdapFile(Array $data, $folder = '/config')
+    public function createLdapFile(Array $data, string $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir.$folder.'/config/ldap.php',
+            $this->rootDir.$folder.'/config/ldap.php',
             "<?php\n".
             "\$PMF_LDAP['ldap_server'] = '".$data['ldapServer']."';\n".
             "\$PMF_LDAP['ldap_port'] = '".$data['ldapPort']."';\n".
@@ -161,13 +169,12 @@ class Setup
      *
      * @param array  $data   Array with LDAP credentials
      * @param string $folder Folder
-     *
-     * @return int
+     * @return int|bool
      */
-    public function createElasticsearchFile(Array $data, $folder = '/config')
+    public function createElasticsearchFile(Array $data, string $folder = '/config')
     {
         $ret = file_put_contents(
-            $this->_rootDir.$folder.'/config/elasticsearch.php',
+            $this->rootDir.$folder.'/config/elasticsearch.php',
             "<?php\n".
             "\$PMF_ES['hosts'] = ['".implode("'], ['", $data['hosts'])."'];\n".
             "\$PMF_ES['index'] = '".$data['index']."';\n".
@@ -176,18 +183,5 @@ class Setup
         );
 
         return $ret;
-    }
-
-    /**
-     * Creates a new folder.
-     *
-     * @param string $name Name of the new folder
-     * @param string $path Path to the new folder
-     *
-     * @return boolean|null
-     */
-    public function createFolder($name, $path)
-    {
-        // @todo add code here
     }
 }
