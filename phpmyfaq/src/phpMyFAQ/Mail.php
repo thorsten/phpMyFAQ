@@ -20,6 +20,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;
+use Swift_TransportException;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -809,7 +810,12 @@ class Mail
 
         switch ($this->agent) {
             case 'SwiftSMTP':
-                $sent = $mua->send($this->_to, $this->headers, $this->body);
+                try {
+                    $sent = $mua->send($this->_to, $this->headers, $this->body);
+                } catch (Swift_TransportException $exception) {
+                    trigger_error($exception->getMessage());
+                    $sent = false;
+                }
                 break;
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
@@ -819,7 +825,6 @@ class Mail
                     "<strong>Mail Class</strong>: $this->agent has no implementation!",
                     E_USER_ERROR
                 );
-                $sent = false;
         }
 
         return $sent;

@@ -149,7 +149,7 @@ switch ($action) {
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
         $newsId = Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
         $username = Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
-        $mail = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
+        $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
         $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
 
         switch ($type) {
@@ -162,20 +162,20 @@ switch ($action) {
         }
 
         // If e-mail address is set to optional
-        if (!$faqConfig->get('main.optionalMailAddress') && is_null($mail)) {
-            $mail = $faqConfig->get('main.administrationMail');
+        if (!$faqConfig->get('main.optionalMailAddress') && is_null($mailer)) {
+            $mailer = $faqConfig->get('main.administrationMail');
         }
 
         // Check display name and e-mail address for not logged in users
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
-            if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mail)) {
+            if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
                 echo json_encode(array('error' => $PMF_LANG['err_SaveComment']));
                 break;
             }
         }
 
-        if (!is_null($username) && !empty($username) && !empty($mail) && !is_null($mail) && !is_null($comment) &&
+        if (!is_null($username) && !empty($username) && !empty($mailer) && !is_null($mailer) && !is_null($comment) &&
             !empty($comment) && $stopWords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
             try {
                 $faqSession->userTracking('save_comment', $id);
@@ -187,7 +187,7 @@ switch ($action) {
                 'record_id' => $id,
                 'type' => $type,
                 'username' => $username,
-                'usermail' => $mail,
+                'usermail' => $mailer,
                 'comment' => nl2br($comment),
                 'date' => $_SERVER['REQUEST_TIME'],
                 'helped' => '',
@@ -235,9 +235,9 @@ switch ($action) {
                     wordwrap($comment, 72);
 
                 $send = [];
-                $mail = new Mail($faqConfig);
-                $mail->setReplyTo($commentData['usermail'], $commentData['username']);
-                $mail->addTo($emailTo);
+                $mailer = new Mail($faqConfig);
+                $mailer->setReplyTo($commentData['usermail'], $commentData['username']);
+                $mailer->addTo($emailTo);
 
                 $send[$emailTo] = 1;
                 $send[$faqConfig->get('main.administrationMail')] = 1;
@@ -253,16 +253,16 @@ switch ($action) {
 
                     if ($catOwnerEmail !== '') {
                         if (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo) {
-                            $mail->addCc($catOwnerEmail);
+                            $mailer->addCc($catOwnerEmail);
                             $send[$catOwnerEmail] = 1;
                         }
                     }
                 }
 
-                $mail->subject = '%sitename%';
-                $mail->message = strip_tags($commentMail);
-                $result = $mail->send();
-                unset($mail);
+                $mailer->subject = '%sitename%';
+                $mailer->message = strip_tags($commentMail);
+                $result = $mailer->send();
+                unset($mailer);
 
                 $message = array('success' => $PMF_LANG['msgCommentThanks']);
             } else {
@@ -413,9 +413,9 @@ switch ($action) {
 
             // Let the PMF Administrator and the Entity Owner to be informed by email of this new entry
             $send = [];
-            $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $author);
-            $mail->addTo($faqConfig->get('main.administrationMail'));
+            $mailer = new Mail($faqConfig);
+            $mailer->setReplyTo($email, $author);
+            $mailer->addTo($faqConfig->get('main.administrationMail'));
             $send[$faqConfig->get('main.administrationMail')] = 1;
 
             foreach ($categories as $_category) {
@@ -429,7 +429,7 @@ switch ($action) {
 
                 // Avoid to send multiple emails to the same owner
                 if (!empty($catOwnerEmail) && !isset($send[$catOwnerEmail])) {
-                    $mail->addCc($catOwnerEmail);
+                    $mailer->addCc($catOwnerEmail);
                     $send[$catOwnerEmail] = 1;
                 }
 
@@ -441,22 +441,22 @@ switch ($action) {
 
                         // Avoid to send multiple emails to the same moderator
                         if (!empty($moderatorEmail) && !isset($send[$moderatorEmail])) {
-                            $mail->addCc($moderatorEmail);
+                            $mailer->addCc($moderatorEmail);
                             $send[$moderatorEmail] = 1;
                         }
                     }
                 }
             }
 
-            $mail->subject = '%sitename%';
+            $mailer->subject = '%sitename%';
 
             // @todo let the email contains the faq article both as plain text and as HTML
-            $mail->message = html_entity_decode(
+            $mailer->message = html_entity_decode(
                 $PMF_LANG['msgMailCheck'])."\n\n".
                 $faqConfig->get('main.titleFAQ').': '.
                 $faqConfig->getDefaultUrl().'admin/?action=editentry&id='.$recordId.'&lang='.$faqLanguage;
-            $result = $mail->send();
-            unset($mail);
+            $result = $mailer->send();
+            unset($mailer);
 
             $message = [
                 'success' => ($isNew ? $PMF_LANG['msgNewContentThanks'] : $PMF_LANG['msgNewTranslationThanks']),
@@ -583,17 +583,17 @@ switch ($action) {
                     $userEmail = $oUser->getUserData('email');
                     $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                    $mail = new Mail($faqConfig);
-                    $mail->setReplyTo($questionData['email'], $questionData['username']);
-                    $mail->addTo($mainAdminEmail);
+                    $mailer = new Mail($faqConfig);
+                    $mailer->setReplyTo($questionData['email'], $questionData['username']);
+                    $mailer->addTo($mainAdminEmail);
                     // Let the category owner get a copy of the message
                     if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
-                        $mail->addCc($userEmail);
+                        $mailer->addCc($userEmail);
                     }
-                    $mail->subject = '%sitename%';
-                    $mail->message = $questionMail;
-                    $mail->send();
-                    unset($mail);
+                    $mailer->subject = '%sitename%';
+                    $mailer->message = $questionMail;
+                    $mailer->send();
+                    unset($mailer);
 
                     $message = array('success' => $PMF_LANG['msgAskThx4Mail']);
                 }
@@ -613,17 +613,17 @@ switch ($action) {
                 $userEmail = $oUser->getUserData('email');
                 $mainAdminEmail = $faqConfig->get('main.administrationMail');
 
-                $mail = new Mail($faqConfig);
-                $mail->setReplyTo($questionData['email'], $questionData['username']);
-                $mail->addTo($mainAdminEmail);
+                $mailer = new Mail($faqConfig);
+                $mailer->setReplyTo($questionData['email'], $questionData['username']);
+                $mailer->addTo($mainAdminEmail);
                 // Let the category owner get a copy of the message
                 if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
-                    $mail->addCc($userEmail);
+                    $mailer->addCc($userEmail);
                 }
-                $mail->subject = '%sitename%';
-                $mail->message = $questionMail;
-                $mail->send();
-                unset($mail);
+                $mailer->subject = '%sitename%';
+                $mailer->message = $questionMail;
+                $mailer->send();
+                unset($mailer);
 
                 $message = array('success' => $PMF_LANG['msgAskThx4Mail']);
             }
@@ -678,13 +678,13 @@ switch ($action) {
                     $faqConfig->getDefaultUrl()
                 );
 
-                $mail = new Mail($faqConfig);
-                $mail->setReplyTo($email, $realname);
-                $mail->addTo($faqConfig->get('main.administrationMail'));
-                $mail->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
-                $mail->message = $text;
-                $result = $mail->send();
-                unset($mail);
+                $mailer = new Mail($faqConfig);
+                $mailer->setReplyTo($email, $realname);
+                $mailer->addTo($faqConfig->get('main.administrationMail'));
+                $mailer->subject = Utils::resolveMarkers($PMF_LANG['emailRegSubject'], $faqConfig);
+                $mailer->message = $text;
+                $result = $mailer->send();
+                unset($mailer);
 
                 $message = array(
                     'success' => trim($PMF_LANG['successMessage']).
@@ -768,17 +768,23 @@ switch ($action) {
                 $question
             );
 
-            $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $author);
-            $mail->addTo($faqConfig->get('main.administrationMail'));
-            $mail->subject = 'Feedback: %sitename%';
-            $mail->message = $question;
-            $result = $mail->send();
-            unset($mail);
+            $mailer = new Mail($faqConfig);
+            $mailer->setReplyTo($email, $author);
+            $mailer->addTo($faqConfig->get('main.administrationMail'));
+            $mailer->subject = 'Feedback: %sitename%';
+            $mailer->message = $question;
+            $result = $mailer->send();
 
-            $message = array('success' => $PMF_LANG['msgMailContact']);
+            unset($mailer);
+
+            if ($result) {
+                $message = ['success' => $PMF_LANG['msgMailContact']];
+            } else {
+                $message = ['error' => $PMF_LANG['err_sendMail']];
+            }
+
         } else {
-            $message = array('error' => $PMF_LANG['err_sendMail']);
+            $message = ['error' => $PMF_LANG['err_sendMail']];
         }
         break;
 
@@ -802,19 +808,19 @@ switch ($action) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
-                    $mail = new Mail($faqConfig);
-                    $mail->setReplyTo($email, $author);
-                    $mail->addTo($recipient);
-                    $mail->subject = $PMF_LANG['msgS2FMailSubject'].$author;
-                    $mail->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
+                    $mailer = new Mail($faqConfig);
+                    $mailer->setReplyTo($email, $author);
+                    $mailer->addTo($recipient);
+                    $mailer->subject = $PMF_LANG['msgS2FMailSubject'].$author;
+                    $mailer->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
                         $faqConfig->get('main.send2friendText'),
                         $PMF_LANG['msgS2FText2'],
                         $link,
                         $attached);
 
                     // Send the email
-                    $result = $mail->send();
-                    unset($mail);
+                    $result = $mailer->send();
+                    unset($mailer);
                     usleep(250);
                 }
             }
@@ -901,12 +907,12 @@ switch ($action) {
                 $user->changePassword($newPassword);
                 $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG['lostpwd_text_2'];
 
-                $mail = new Mail($faqConfig);
-                $mail->addTo($email);
-                $mail->subject = '[%sitename%] Username / password request';
-                $mail->message = $text;
-                $result = $mail->send();
-                unset($mail);
+                $mailer = new Mail($faqConfig);
+                $mailer->addTo($email);
+                $mailer->subject = '[%sitename%] Username / password request';
+                $mailer->message = $text;
+                $result = $mailer->send();
+                unset($mailer);
                 // Trust that the email has been sent
                 $message = array('success' => $PMF_LANG['lostpwd_mail_okay']);
             } else {
@@ -942,13 +948,13 @@ switch ($action) {
                 $question
             );
 
-            $mail = new Mail($faqConfig);
-            $mail->setReplyTo($email, $author);
-            $mail->addTo($faqConfig->get('main.administrationMail'));
-            $mail->subject = 'Remove User Request: %sitename%';
-            $mail->message = $question;
-            $result = $mail->send();
-            unset($mail);
+            $mailer = new Mail($faqConfig);
+            $mailer->setReplyTo($email, $author);
+            $mailer->addTo($faqConfig->get('main.administrationMail'));
+            $mailer->subject = 'Remove User Request: %sitename%';
+            $mailer->message = $question;
+            $result = $mailer->send();
+            unset($mailer);
 
             $message = ['success' => $PMF_LANG['msgMailContact']];
         } else {
