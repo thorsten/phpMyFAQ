@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const clearGroupData = function () {
-    var updateGroupAutoJoin = $('update_group_auto_join');
+    const updateGroupAutoJoin = $('update_group_auto_join');
     $('#update_group_id').empty();
     $('#update_group_name').empty();
     $('#update_group_description').empty();
@@ -74,14 +74,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  const clearGroupRights = function () {
-    $('.pmf-user-permissions input[type=checkbox]').prop('checked', false);
+  const clearGroupRights =  () => {
+    console.log('foo');
+    $('#groupRights input[type=checkbox]').prop('checked', false);
   };
 
   const groupSelect = function (event) {
     event = (event) ? event : ((window.event) ? window.event : null);
     if (event) {
-      var select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
+      const select = (event.target) ? event.target : ((event.srcElement) ? event.srcElement : null);
       if (select && select.value > 0) {
         clearGroupData();
         getGroupData(select.value);
