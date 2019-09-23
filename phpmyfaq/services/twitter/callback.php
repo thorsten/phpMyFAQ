@@ -4,18 +4,14 @@
  * Take the user when they return from Twitter. Get access tokens.
  * Verify credentials and redirect to based on response from Twitter.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2010-09-18
  */
@@ -34,30 +30,40 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
+$requestToken = [];
+$requestToken['oauth_token'] = $_SESSION['oauth_token'];
+$requestToken['oauth_token_secret'] = $_SESSION['oauth_token_secret'];
+
 $oAuthToken = Filter::filterInput(INPUT_GET, 'oauth_token', FILTER_SANITIZE_STRING);
 $oAuthVerifier = Filter::filterInput(INPUT_GET, 'oauth_verifier', FILTER_SANITIZE_STRING);
 
-if (!is_null($oAuthToken) && $_SESSION['oauth_token'] !== $oAuthToken) {
+if (isset($_REQUEST['denied'])) {
+    exit('Permission was denied. Please start over.');
+}
+
+if (isset($oAuthToken) && $requestToken['oauth_token'] !== $oAuthToken) {
     $_SESSION['oauth_status'] = 'oldtoken';
     header('Location: ./clearsessions.php');
+    exit;
 }
 
 $connection = new TwitterOAuth(
     $faqConfig->get('socialnetworks.twitterConsumerKey'),
     $faqConfig->get('socialnetworks.twitterConsumerSecret'),
-    $_SESSION['oauth_token'],
-    $_SESSION['oauth_token_secret']
+    $requestToken['oauth_token'],
+    $requestToken['oauth_token_secret']
 );
 
-$accessToken = $connection->getAccessToken($oAuthVerifier);
-$_SESSION['access_token'] = $accessToken;
+$accessToken = $connection->oauth('oauth/access_token', ['oauth_verifier' => $oAuthVerifier]);
 
-unset($_SESSION['oauth_token']);
-unset($_SESSION['oauth_token_secret']);
-
-if (200 === $connection->http_code) {
+if (200 === $connection->getLastHttpCode()) {
+    unset($_SESSION['oauth_token']);
+    unset($_SESSION['oauth_token_secret']);
+    $_SESSION['access_token'] = $accessToken;
     $_SESSION['status'] = 'verified';
+
     header('Location: ./index.php');
 } else {
+
     header('Location: ./clearsessions.php');
 }
