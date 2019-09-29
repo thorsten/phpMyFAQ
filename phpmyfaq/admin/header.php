@@ -196,7 +196,7 @@ switch ($action) {
   <meta name="publisher" content="phpMyFAQ Team">
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
 
-  <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="assets/css/style.css?v=1">
 
   <script src="../assets/themes/default/js/vendors.min.js"></script>

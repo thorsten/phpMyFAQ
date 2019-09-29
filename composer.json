@@ -56,10 +56,10 @@
     "minimum-stability": "stable",
     "scripts": {
         "post-install-cmd": [
-            "scripts/moveVendors.sh"
+            "scripts/reorgVendoredDeps.php"
         ],
         "post-update-cmd": [
-            "scripts/moveVendors.sh"
+            "scripts/reorgVendoredDeps.php"
         ]
     }
 }

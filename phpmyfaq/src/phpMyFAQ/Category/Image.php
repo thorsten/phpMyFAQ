@@ -107,7 +107,7 @@ class Image
      *
      * @return bool
      */
-    public function upload()
+    public function upload(): bool
     {
         if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name']) &&
             $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')) {
@@ -121,6 +121,8 @@ class Image
                     return false;
                 }
             }
+        } else {
+            return false;
         }
     }
 
@@ -129,7 +131,7 @@ class Image
      *
      * @return bool
      */
-    public function delete()
+    public function delete(): bool 
     {
         if (is_file(self::UPLOAD_DIR.$this->fileName)) {
             return unlink(self::UPLOAD_DIR.$this->fileName);

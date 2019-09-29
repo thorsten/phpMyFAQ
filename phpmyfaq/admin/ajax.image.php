@@ -44,6 +44,7 @@ switch ($ajaxAction) {
 
             $uploadDir = '../images/';
             $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+            $timestamp = time();
             if ($csrfOkay) {
                 reset($_FILES);
                 $temp = current($_FILES);
@@ -70,7 +71,7 @@ switch ($ajaxAction) {
                     }
 
                     // Accept upload if there was no origin, or if it is an accepted origin
-                    $fileToWrite = $uploadDir . $temp['name'];
+                    $fileToWrite = $uploadDir . $timestamp . $temp['name'];
                     move_uploaded_file($temp['tmp_name'], $fileToWrite);
 
                     // Respond to the successful upload with JSON.
