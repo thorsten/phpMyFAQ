@@ -1,8 +1,32 @@
 #!/usr/bin/env php
 <?php
+/**
+ * This scripts copies all 3rd party dependencies from vendor/ to
+ * phpmyfaq/src/libs/
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ * v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
+ *
+ * @package phpMyFAQ
+ * @author Florian Anderiasch <florian@phpmyfaq.de>
+ * @copyright 2019 phpMyFAQ Team
+ * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link https://www.phpmyfaq.de
+ * @since 2019-09-24
+ */
+
 $pmfBaseDir = realpath(sprintf('%s/..', dirname(__FILE__)));
 
-function copy_files($srcDir, $destDir, $ext) {
+/**
+ * Copy given files to given destination.
+ *
+ * @param string $srcDir
+ * @param string $destDir
+ * @param string $ext
+ * @return bool
+ */
+function copyFiles(string $srcDir, string $destDir, string $ext): bool {
    if (strlen($ext) == 0) {
        return false;
    }
@@ -21,25 +45,36 @@ function copy_files($srcDir, $destDir, $ext) {
     return true;
 }
 
-function copy_rec($src, $dst) {
-    if (is_dir($src)) {
-        if (!is_dir($dst)) mkdir($dst, 0777, true);
-        $entries = scandir($src);
-        if (empty($entries)) return true;
+/**
+ * Recursive copy of given source to given destination
+ *
+ * @param string $source
+ * @param string $destination
+ * @return bool
+ */
+function copyRecursive(string $source, string $destination): bool {
+    if (is_dir($source)) {
+        if (!is_dir($destination)) {
+          mkdir($destination, 0777, true);
+        }
+        $entries = scandir($source);
+        if (empty($entries)) {
+          return true;
+        }
         foreach ($entries as $entry) {
             if ($entry == '.' || $entry == '..') continue;
-            $fullSrc = $src . DIRECTORY_SEPARATOR . $entry;
-            $fullDst = $dst . DIRECTORY_SEPARATOR . $entry;
+            $fullSrc = $source . DIRECTORY_SEPARATOR . $entry;
+            $fullDst = $destination . DIRECTORY_SEPARATOR . $entry;
             if (is_dir($fullSrc)) {
-                copy_rec($fullSrc, $fullDst);
+                copyRecursive($fullSrc, $fullDst);
             } else {
                 echo "Copying $fullSrc to $fullDst \n";
                 copy($fullSrc, $fullDst);
             }
         }
         return true;
-    } else if (is_file($src)) {
-        return copy($src, $dest);
+    } else if (is_file($source)) {
+        return copy($source, $destination);
     } else {
         return false;
     }
@@ -63,9 +98,13 @@ $dirsToCreate = [
 
 foreach ($dirsToCreate as $dir) {
     $dn = $pmfBaseDir . DIRECTORY_SEPARATOR . $dir;
-	if (is_dir($dn)) continue;
+    if (is_dir($dn)) {
+      continue;
+    }
     $rv = mkdir($dn, 0777, true);
-    if (!$rv) echo "Creating $dn failed.\n";
+    if (!$rv) {
+      echo "Creating $dn failed.\n";
+    }
 }
 
 $copySingle = [
@@ -75,10 +114,10 @@ $copySingle = [
     'vendor/phpseclib/phpseclib/phpseclib/bootstrap.php' => 'phpmyfaq/src/libs/phpseclib/phpseclib/phpseclib/bootstrap.php',
 ];
 
-foreach ($copySingle as $src => $dst) {
-    $src = $pmfBaseDir . DIRECTORY_SEPARATOR . $src;
-    $dst = $pmfBaseDir . DIRECTORY_SEPARATOR . $dst;
-    copy($src, $dst);
+foreach ($copySingle as $source => $destination) {
+    $source = $pmfBaseDir . DIRECTORY_SEPARATOR . $source;
+    $destination = $pmfBaseDir . DIRECTORY_SEPARATOR . $destination;
+    copy($source, $destination);
 }
 
 $copyDirs = [
@@ -94,10 +133,10 @@ $copyDirs = [
     'vendor/myclabs/deep-copy/src' => 'phpmyfaq/src/libs/myclabs/deep-copy/src',
 ];
 
-foreach ($copyDirs as $src => $dst) {
-    $src = $pmfBaseDir . DIRECTORY_SEPARATOR . $src;
-    $dst = $pmfBaseDir . DIRECTORY_SEPARATOR . $dst;
-    copy_rec($src, $dst);
+foreach ($copyDirs as $source => $destination) {
+    $source = $pmfBaseDir . DIRECTORY_SEPARATOR . $source;
+    $destination = $pmfBaseDir . DIRECTORY_SEPARATOR . $destination;
+    copyRecursive($source, $destination);
 }
 
 $copyFiles = [
@@ -106,8 +145,8 @@ $copyFiles = [
     'vendor/tecnickcom/tcpdf/include' => 'phpmyfaq/src/libs/tcpdf/include',
 ];
 
-foreach ($copyFiles as $src => $dst) {
-    $src = $pmfBaseDir . DIRECTORY_SEPARATOR . $src;
-    $dst = $pmfBaseDir . DIRECTORY_SEPARATOR . $dst;
-    copy_files($src, $dst, "php");
+foreach ($copyFiles as $source => $destination) {
+    $source = $pmfBaseDir . DIRECTORY_SEPARATOR . $source;
+    $destination = $pmfBaseDir . DIRECTORY_SEPARATOR . $destination;
+    copyFiles($source, $destination, "php");
 }
