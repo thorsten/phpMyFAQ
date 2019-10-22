@@ -14,12 +14,11 @@
  * @author    Fernando G. Monteiro <fgmont@reit.up.pt>
  * @author    Luis Costa <izhirahider@gmail.com>
  * @author... Carlos E. Gorges <carlos@linuxwaves.com>
- * @copyright 2004-2019 phpMyFAQ Team
+ * @copyright 2004-2017 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
+ * @link      http://www.phpmyfaq.de
  * @since     2004-06-24
  */
-
 $PMF_LANG['metaCharset'] = 'UTF-8';
 $PMF_LANG['metaLanguage'] = 'pt';
 $PMF_LANG['language'] = 'Portuguese';
@@ -123,13 +122,13 @@ $PMF_LANG['err_noArticles'] = 'Sem artigos disponíveis.';
 $PMF_LANG['err_badID'] = 'ID Incorreto.';
 $PMF_LANG['err_noTopTen'] = 'O TOP 10 ainda não se encontra disponível.';
 $PMF_LANG['err_nothingFound'] = 'Sem artigos.';
-$PMF_LANG['err_SaveEntries'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Categoria</strong>, <strong>Questão</strong>, a sua <strong>Entrada</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
-$PMF_LANG['err_SaveComment'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Comentário</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
-$PMF_LANG['err_VoteTooMuch'] = 'Avaliações em duplicado não são contabilizadas.';
+$PMF_LANG['err_SaveEntries'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Categoria</strong>, <strong>Questão</strong>, a sua <strong>Entrada</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank" type="text/html"><em>Captcha</em></a></strong>.';
+$PMF_LANG['err_SaveComment'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Comentário</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank" tye="text/html"><em>Captcha</em></a></strong>.';
+$PMF_LANG['err_VoteTooMuch'] = 'As avaliações em duplicado não são contabilizadas.';
 $PMF_LANG['err_noVote'] = '<strong>Não efetuou a avaliação.</strong>';
 $PMF_LANG['err_noMailAdress'] = '<em>E-mail</em> incorreto.';
-$PMF_LANG['err_sendMail'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
-$PMF_LANG['help_search'] = '<strong>Pesquisa de artigos:</strong><br />Usando uma expressão do tipo <strong style="color: red;">palavra1 palavra2</strong> pode obter resultados por relevância descendente para dois ou mais critérios de pesquisa.<strong>Nota:</strong> A expressão a pesquisar tem que ter pelo menos 4 carateres, caso contrário será ignorada<br /><small>(no caso de uma sigla com três carateres acrescente um espaco no final)</small>.';
+$PMF_LANG['err_sendMail'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank" type="text/html"><em>Captcha</em></a></strong>.';
+$PMF_LANG['help_search'] = '<strong>Pesquisa de artigos:</strong><br />Usando uma expressão do tipo <strong style="color: red;">palavra1 palavra2</strong> pode obter resultados por relevância descendente para dois ou mais critérios de pesquisa.<strong>Nota:</strong> A expressão a pesquisar tem que ter pelo menos 4 carateres, caso contrário será ignorada<br /><small>(no caso de uma sigla com três carateres acrescente um espaço no final)</small>.';
 $PMF_LANG['ad'] = '<strong>Secção de Administração</strong>';
 $PMF_LANG['ad_menu_user_administration'] = 'Administrar Utilizadores';
 $PMF_LANG['ad_menu_entry_aprove'] = 'Aprovar Artigos';
@@ -199,9 +198,9 @@ $PMF_LANG['ad_entry_save'] = 'Gravar';
 $PMF_LANG['ad_entry_delete'] = 'Apagar';
 $PMF_LANG['ad_entry_delcom_1'] = 'Tem a certeza que o comentário do utilizador ';
 $PMF_LANG['ad_entry_delcom_2'] = ' deve ser apagado?';
-$PMF_LANG['ad_entry_commentdelsuc'] = 'O Comentário foi <strong>apagado</strong>.';
+$PMF_LANG['ad_entry_commentdelsuc'] = 'O comentário foi <strong>apagado</strong>.';
 $PMF_LANG['ad_entry_back'] = 'Voltar atrás';
-$PMF_LANG['ad_entry_commentdelfail'] = 'O Comentário <strong>não</strong> foi apagado.';
+$PMF_LANG['ad_entry_commentdelfail'] = 'O comentário <strong>não</strong> foi apagado.';
 $PMF_LANG['ad_entry_savedsuc'] = 'As alterações foram <strong>gravadas</strong>.';
 $PMF_LANG['ad_entry_savedfail'] = 'Ocorreu um <strong>erro na base de dados</strong>.';
 $PMF_LANG['ad_entry_del_1'] = 'Tem a certeza que o tópico ';
@@ -309,8 +308,8 @@ $PMF_LANG['ad_rs_altt'] = ' : média inferior a 20% ';
 $PMF_LANG['ad_rs_ahtf'] = ' : média superior a 40% ';
 $PMF_LANG['ad_rs_no'] = 'Sem Avaliação';
 $PMF_LANG['ad_auth_insert'] = 'Introduza o seu <em>username</em> e a sua <em>password</em>.';
-$PMF_LANG['ad_auth_user'] = '<em>Username</em>:';
-$PMF_LANG['ad_auth_passwd'] = '<em>Password</em>:';
+$PMF_LANG['ad_auth_user'] = 'Username:';
+$PMF_LANG['ad_auth_passwd'] = 'Password:';
 $PMF_LANG['ad_auth_ok'] = 'OK ';
 $PMF_LANG['ad_auth_reset'] = 'Limpar';
 $PMF_LANG['ad_auth_fail'] = 'Utilizador e/ou <em>password</em> incorreto(s).';
@@ -430,7 +429,7 @@ $PMF_LANG['ad_user_realname'] = 'Nome <small>(completo)</small>:';
 $PMF_LANG['ad_export_generate_pdf'] = ' PDF';
 $PMF_LANG['ad_export_full_faq'] = 'Exportar as FAQ para um ficheiro-PDF: ';
 $PMF_LANG['err_bannedIP'] = 'O seu IP encontra-se barrado.';
-$PMF_LANG['err_SaveQuestion'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank"><em>Captcha</em></a></strong>.';
+$PMF_LANG['err_SaveQuestion'] = 'Campos obrigatórios: <strong>Nome</strong>, <strong><em>E-mail</em></strong>, <strong>Questão</strong> e, quando exigido, o código <strong><a href="https://en.wikipedia.org/wiki/Captcha" title="Informação sobre Captcha na Wikipedia - versão em inglês (abre numa nova janela)" target="_blank" type="text/html"><em>Captcha</em></a></strong>.';
 $LANG_CONF['main.language'] = array(0 => 'select', 1 => 'Ficheiro de Idioma');
 $LANG_CONF['main.languageDetection'] = array(0 => 'checkbox', 1 => 'Ativar a negociação automática de conteúdo');
 $LANG_CONF['main.titleFAQ'] = array(0 => 'input', 1 => 'Título das FAQ');
@@ -453,7 +452,7 @@ $LANG_CONF['main.enableRewriteRules'] = array(0 => 'checkbox', 1 => 'Ativar o su
 $LANG_CONF['security.ldapSupport'] = array(0 => 'checkbox', 1 => 'Ativar o suporte para LDAP? <small>(pré-definição: desativado)</small>');
 $LANG_CONF['main.referenceURL'] = array(0 => 'input', 1 => 'URL-base para verificação de <em>links</em> <small>( ex.: http://www.example.org/faq/ )</small>');
 $LANG_CONF['main.urlValidateInterval'] = array(0 => 'input', 1 => 'Intervalo entre verificações de <em>links</em> pelo AJAX <small>(segundos)</small>');
-$LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Desativar a visibilidade de novos artigos?');
+$LANG_CONF['records.enableVisibilityQuestions'] = array(0 => 'checkbox', 1 => 'Desativar a visibilidade inicial de novos artigos?');
 $LANG_CONF['security.permLevel'] = array(0 => 'select', 1 => 'Nível de Permissão');
 $PMF_LANG['ad_categ_new_main_cat'] = ' como uma nova categoria principal <small>(i.e., de topo)</small>';
 $PMF_LANG['ad_categ_paste_error'] = 'Não é possível mover esta categoria.';
@@ -798,7 +797,7 @@ $PMF_LANG['msgShowHelp'] = 'Separe as palavras por vírgulas.';
 $PMF_LANG['msgUpdateFaqDate'] = 'Atualizar';
 $PMF_LANG['msgKeepFaqDate'] = 'Manter';
 $PMF_LANG['msgEditFaqDat'] = 'Editar';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Marcar como obrigatório o campo do endereço de <em>e-mail</em> <small>(pré-definição: desativada)</small>');
+$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Marcar como obrigatório o campo do endereço de <em>e-mail</em> <small>(pré-definição: desativado)</small>');
 $LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Ordenar por relevância');
 $LANG_CONF['search.enableRelevance'] = array(0 => 'checkbox', 1 => 'Ativar a utilização da relevância? <small>(pré-definição: desativada)</small>');
 $PMF_LANG['searchControlCenter'] = 'Pesquisa';
@@ -845,7 +844,7 @@ $PMF_LANG['msgRegistrationNote'] = 'Caso a operação de registo seja concluída
 $PMF_LANG['ad_entry_changelog_history'] = '<em>Changelog</em> - histórico';
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => '<em>Single Sign On Support - SSO</em> <small>(pré-definição: desativado)</small>');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => '<em>SSO logout redirect service URL</em>');
-$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Formato da Data e Hora <small>(pré-definição: Y-m-d H:i<br />ex.: 2011-12-31 13:00)</small>');
+$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Formato da Data e da Hora <small>(pré-definição: Y-m-d H:i<br />ex.: 2011-12-31 13:00)</small>');
 $LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Acesso restrito ao conteúdo - <small><em>Complete secured FAQ</em></small> <small>(pré-definição: desativado)</small>');
 $PMF_LANG['securityControlCenter'] = 'Segurança - configuração';
 $PMF_LANG['ad_search_delsuc'] = 'O termo pesquisado <strong>foi apagado</strong>.';
@@ -876,7 +875,7 @@ $PMF_LANG['msgOnlineMode'] = 'O sistema de FAQ está ativo e <em>on-line</em>.'
 $PMF_LANG['msgShowMore'] = 'ver mais';
 $PMF_LANG['msgQuestionAnswered'] = 'Questão respondida';
 $PMF_LANG['msgMessageQuestionAnswered'] = 'A sua questão de %s possui uma resposta, disponível em:';
-$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Ordenar os registos de FAQ de forma aleatória <small>(pré-definição: desativado)</small>');
+$LANG_CONF['records.randomSort'] = array(0 => 'checkbox', 1 => 'Ordenar os registos de FAQ de forma aleatória <small>(pré-definição: desativada)</small>');
 $LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => 'checkbox', 1 => 'Ativar o editor gráfico incluído no modo <em>frontend</em> <small>(pré-definição: desativado)</small>');
 $LANG_CONF['main.enableGravatarSupport'] = array(0 => 'checkbox', 1 => '<em>Gravatar</em> - suporte <small>(pré-definição: desativado)</small>');
 $PMF_LANG['ad_stopwords_desc'] = 'Escolha o idioma para adicionar ou editar <em>stop words</em>.';
@@ -895,6 +894,32 @@ $PMF_LANG['ad_instance_error_cannotdelete'] = 'Não foi possível apagar a ins
 $PMF_LANG['ad_instance_config'] = 'Instância - configuração';
 $PMF_LANG['msgAboutThisNews'] = 'Sobre esta notícia';
 $PMF_LANG['msgAccessDenied'] = 'Acesso negado.';
-$PMF_LANG['ad_xml_gen'] = 'Criar exportação XML';
+$PMF_LANG['ad_xml_gen'] = 'Criar uma exportação XML';
 $LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Número de termos de procura');
 $PMF_LANG['msgPDF'] = 'Versão PDF';
+$LANG_CONF['records.numberOfRecordsPerPage'] = array(0 => 'input', 1 => 'N.º máximo de Registos visíveis por página');
+$LANG_CONF['records.numberOfShownNewsEntries'] = array(0 => 'input', 1 => 'N.º máximo de Notícias visíveis por página');
+$PMF_LANG['msgSeeFAQinFrontend'] = 'FAQ visível na página incial (i.e. Frontend)';
+$PMF_LANG['msgRelatedTags'] = 'Adicionar um termo de pesquisa';
+$PMF_LANG['msgPopularTags'] = 'Termos de pesquisa mais utilizados ';
+$PMF_LANG['ad_searchterm_del'] = 'Apagar o histórico total dos Termos de pesquisa';
+$PMF_LANG['ad_searchterm_del_suc'] = 'Foi apagado o histórico total dos Termos de pesquisa';
+$PMF_LANG['ad_searchterm_del_err'] = 'Não foi possível apagar todos os Termos de pesquisa no histórico.';
+$PMF_LANG['ad_tag_delete_success'] = 'A Etiqueta foi apagada.';
+$PMF_LANG['ad_tag_delete_error'] = 'A Etiqueta não foi apagada porque ocorreu um erro durante a operação.';
+$PMF_LANG['seoCenter'] = 'SEO ';
+$LANG_CONF['search.enableHighlighting'] = array(0 => 'checkbox', 1 => 'Destacar os termos de pesquisa');
+$LANG_CONF['main.enableRssFeeds'] = array(0 => 'checkbox', 1 => 'Usar <em>feeds</em> RSS<br /><small>(pré-definição: ativada)</small>');
+$LANG_CONF['records.allowCommentsForGuests'] = array(0 => 'checkbox', 1 => 'Permitir comentários de Convidados<br /><small>(pré-definição: ativado)</small>');
+$LANG_CONF['records.allowQuestionsForGuests'] = array(0 => 'checkbox', 1 => 'Permitir a introdução de questões por Convidados<br /><small>(pré-definição: ativada)</small>');
+$LANG_CONF['records.allowNewFaqsForGuests'] = array(0 => 'checkbox', 1 => 'Permitir a introdução de novas FAQs<br /><small>(pré-definição : ativada)</small>');
+$LANG_CONF['records.hideEmptyCategories'] = array(0 => 'checkbox', 1 => 'Não mostrar categorias sem conteúdo (i.e. vazias)<br /><small>(pré-defnição: desativada)</small>');
+$LANG_CONF['search.searchForSolutionId'] = array(0 => 'checkbox', 1 => 'Pesquisar <em>solution</em> IDs<br /><small>(pré-definição: ativada)</small>');
+$LANG_CONF['socialnetworks.disableAll'] = array(0 => 'checkbox', 1 => 'Desativar todas as Redes sociais<br /><small>(pré-definição: desativada)</small>');
+$LANG_CONF['main.enableGzipCompression'] = array(0 => 'checkbox', 1 => 'Ativar a compressão GZIP<br /><small>(pré-definição: ativada)</small>');
+$LANG_CONF['seo.metaTagsHome'] = array(0 => 'select', 1 => 'Meta Tags - página inicial');
+$LANG_CONF['seo.metaTagsFaqs'] = array(0 => 'select', 1 => 'FAQs sobre Meta Tags');
+$PMF_LANG['ad_export_generate_json'] = 'Criar um ficheiro-JSON';
+$PMF_LANG['ad_image_name_search'] = 'Search for image name';
+$PMF_LANG['ad_admin_notes'] = 'Notas Privadas';
+$PMF_LANG['ad_admin_notes_hint'] = '%s (visível apenas para os editores)';
