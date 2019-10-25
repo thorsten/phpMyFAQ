@@ -41,7 +41,7 @@ $faqSession = new Session($faqConfig);
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">
-        <i aria-hidden="true" class="fas fa-tachometer-alt"></i>
+        <i aria-hidden="true" class="fa fa-tachometer-alt"></i>
           <?= $PMF_LANG['admin_mainmenu_home'] ?>
       </h1>
       <div class="btn-toolbar mb-2 mb-md-0">
@@ -74,7 +74,7 @@ $faqSession = new Session($faqConfig);
           <?php if ($faqConfig->get('main.enableUserTracking')): ?>
           <div class="card border-dark">
             <div class="card-header">
-              <i aria-hidden="true" class="fas fa-chart-line"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
+              <i aria-hidden="true" class="fa fa-chart-line"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
             </div>
             <div class="card-body">
                 <?php
@@ -102,49 +102,49 @@ $faqSession = new Session($faqConfig);
 
           <div class="card border-dark">
             <div class="card-header">
-              <i aria-hidden="true" class="fas fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
+              <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
             </div>
             <div class="card-body">
               <div class="list-group-flush">
                 <a href="?action=viewsessions" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-chart-bar"></i> <?= $PMF_LANG['ad_start_visits'] ?>
+                  <i aria-hidden="true" class="fa fa-chart-bar"></i> <?= $PMF_LANG['ad_start_visits'] ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqSession->getNumberOfSessions() ?></em>
                   </span>
                 </a>
                 <a href="?action=view" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
+                  <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
                   </span>
                 </a>
                 <a href="?action=comments" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
+                  <i aria-hidden="true" class="fa fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
                   </span>
                 </a>
                 <a href="?action=question" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
+                  <i aria-hidden="true" class="fa fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
                   </span>
                 </a>
                 <a href="?action=news" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
+                  <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
                   </span>
                 </a>
                 <a href="?action=user&user_action=listallusers" class="list-group-item">
-                  <i aria-hidden="true" class="fas fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
+                  <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
                   <span class="float-right text-muted small">
                     <em><?= $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
                   </span>
                 </a>
                 <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
                    Available on the App Store
-                  <span class="float-right text-muted small"><i aria-hidden="true" class="fas fa-heart"></i></span>
+                  <span class="float-right text-muted small"><i aria-hidden="true" class="fa fa-heart"></i></span>
                 </a>
               </div>
             </div>
@@ -152,7 +152,7 @@ $faqSession = new Session($faqConfig);
 
           <div class="card border-dark">
             <div class="card-header">
-              <i aria-hidden="true" class="fas fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
+              <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
             </div>
             <div class="card-body">
               <ul class="list-unstyled">
@@ -173,7 +173,7 @@ $faqSession = new Session($faqConfig);
           <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
             <div class="card border-dark">
             <div class="card-header">
-              <i aria-hidden="true" class="fas fa-check-double"></i> <?= $PMF_LANG['ad_online_info']; ?>
+              <i aria-hidden="true" class="fa fa-check-double"></i> <?= $PMF_LANG['ad_online_info']; ?>
             </div>
             <div class="card-body">
                 <?php
@@ -201,7 +201,7 @@ $faqSession = new Session($faqConfig);
                         accept-charset="utf-8">
                     <input type="hidden" name="param" value="version"/>
                     <button class="btn btn-primary" type="submit">
-                      <i aria-hidden="true" class="fas fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
+                      <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
                         ?>
                     </button>
                   </form>
@@ -213,7 +213,7 @@ $faqSession = new Session($faqConfig);
 
            <div class="card border-dark">
             <div class="card-header">
-              <i aria-hidden="true" class="fas fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
+              <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
             </div>
             <div class="card-body">
                 <?php
@@ -253,7 +253,7 @@ $faqSession = new Session($faqConfig);
                     <input type="hidden" name="getJson" value="verify"/>
                     <button class="btn btn-primary" type="submit">
                       <i aria-hidden="true"
-                         class="fas fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
+                         class="fa fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
                     </button>
                   </form>
                     <?php

@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
       <h1 class="h2">
-        <i aria-hidden="true" class="fas fa-tags"></i>
+        <i aria-hidden="true" class="fa fa-tags"></i>
           <?= $PMF_LANG['ad_entry_tags'] ?>
       </h1>
     </div>
@@ -65,7 +65,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         echo '<tr>';
         echo '<td><span data-tag-id="'.$key.'">'.Strings::htmlspecialchars($tag).'</span></td>';
         printf(
-            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fas fa-edit"></i></a></td>',
+            '<td><a class="btn btn-primary btn-edit" data-btn-id="%d" title="%s"><i aria-hidden="true" class="fa fa-edit"></i></a></td>',
             $key,
             $PMF_LANG['ad_user_edit']
         );
@@ -77,7 +77,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             $key
         );
         printf(
-            '<span title="%s"><i aria-hidden="true" class="fas fa-trash"></i></span></a></td>',
+            '<span title="%s"><i aria-hidden="true" class="fa fa-trash"></i></span></a></td>',
             $PMF_LANG['ad_entry_delete']
         );
 

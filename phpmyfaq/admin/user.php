@@ -171,7 +171,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="" class="fas fa-user"></i>
+            <i aria-hidden="" class="fa fa-user"></i>
               <?= $PMF_LANG['ad_user_deleteUser'] ?> <?= $user->getLogin() ?>
           </h1>
         </div>
@@ -339,7 +339,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i aria-hidden="" class="fas fa-user"></i>
+          <i aria-hidden="" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_adus_adduser'] ?>
         </h1>
       </div>
@@ -421,7 +421,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i aria-hidden="" class="fas fa-user"></i>
+          <i aria-hidden="" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
@@ -495,7 +495,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                        method="post" role="form" class="form_inline">
                     <div class="card">
                         <div class="card-header">
-                            <i aria-hidden="true" class="fas fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
+                            <i aria-hidden="true" class="fa fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
                         </div>
                         <div class="card-body">
                             <div class="input-group">
@@ -511,7 +511,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             <div class="col-lg-4">
                 <div class="card">
                     <div class="card-header" id="user_data_legend">
-                      <i aria-hidden="true" class="fas fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
+                      <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
                     </div>
                     <form action="?action=user&amp;user_action=update_data" method="post" accept-charset="utf-8"
                           >
@@ -535,7 +535,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         <div class="card-footer">
                             <div class="card-button text-right">
                                 <button class="btn btn-success" type="submit">
-                                    <i aria-hidden="true" class="fas fa-check"></i> <?= $PMF_LANG['ad_gen_save'] ?>
+                                    <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_gen_save'] ?>
                                 </button>
                             </div>
                         </div>
@@ -549,7 +549,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
                     <div class="card">
                         <div class="card-header" id="user_rights_legend">
-                            <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
+                            <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
                             <span class="float-right">
                                 <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                                     <?= $PMF_LANG['ad_user_checkall'] ?>
@@ -661,7 +661,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="" class="fas fa-user"></i>
+            <i aria-hidden="" class="fa fa-user"></i>
               <?= $PMF_LANG['ad_user'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">

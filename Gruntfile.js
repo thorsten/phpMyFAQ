@@ -79,17 +79,17 @@ module.exports = function (grunt) {
           }
         ]
       },
-      fontawesome: {
+      forkawesome: {
         files: [
           {
             expand: true,
-            cwd: 'node_modules/@fortawesome/fontawesome-free/webfonts/',
+            cwd: 'node_modules/fork-awesome/fonts/',
             src: '**',
             dest: 'phpmyfaq/admin/assets/fonts/'
           },
           {
             expand: true,
-            cwd: 'node_modules/@fortawesome/fontawesome-free/webfonts/',
+            cwd: 'node_modules/fork-awesome/fonts/',
             src: '**',
             dest: 'phpmyfaq/assets/themes/default/fonts/'
           }

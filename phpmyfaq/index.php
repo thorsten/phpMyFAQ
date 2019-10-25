@@ -696,8 +696,8 @@ if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
 }
 
 if ($faqConfig->get('main.enableRssFeeds')) {
-    $rssFeedTopTen = '<a href="feed/topten/rss.php" target="_blank"><i class="fas fa-rss-square"></i></a>';
-    $rssFeedLatest = '<a href="feed/latest/rss.php" target="_blank"><i class="fas fa-rss-square"></i></a>';
+    $rssFeedTopTen = '<a href="feed/topten/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
+    $rssFeedLatest = '<a href="feed/latest/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
 } else {
     $rssFeedTopTen = '';
     $rssFeedLatest = '';

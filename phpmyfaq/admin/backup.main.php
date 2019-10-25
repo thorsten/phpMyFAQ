@@ -27,7 +27,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fas fa-download"></i>
+      <i aria-hidden="true" class="fa fa-download"></i>
         <?= $PMF_LANG['ad_csv_backup'] ?>
     </h1>
   </div>
@@ -41,12 +41,12 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         <p><?= $PMF_LANG['ad_csv_make'] ?></p>
         <p>
           <a class="btn btn-primary" href="backup.export.php?action=backup_content">
-            <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
+            <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_linkdat'] ?>
           </a>
         </p>
         <p>
           <a class="btn btn-primary" href="backup.export.php?action=backup_logs">
-            <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_linklog'] ?>
+            <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_linklog'] ?>
           </a>
         </p>
       </div>
@@ -68,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
           </div>
           <div class="card-footer text-right">
             <button class="btn btn-primary" type="submit">
-              <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['ad_csv_ok'] ?>
+              <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_ok'] ?>
             </button>
           </div>
         </form>

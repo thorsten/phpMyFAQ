@@ -41,7 +41,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-list-alt"></i>
+            <i aria-hidden="true" class="fa fa-list-alt"></i>
               <?= $PMF_LANG['ad_entry_aor'] ?>
           </h1>
         </div>
@@ -454,7 +454,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                           <a class="btn btn-primary dropdown-toggle" href="#" role="button"
                              id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true"
                              aria-expanded="false">
-                            <i aria-hidden="true" class="fas fa-globe"></i>
+                            <i aria-hidden="true" class="fa fa-globe"></i>
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
                               <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
@@ -480,7 +480,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                             </label>
                           <?php } else { ?>
                             <span class="badge badge-important">
-                              <i aria-hidden="true" class="fas fa-white fa fa-ban-circle"></i>
+                              <i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i>
                             </span>
                           <?php } ?>
                       </td>
@@ -488,14 +488,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                         <a class="btn btn-info"
                            href="?action=copyentry&id=<?= $record['id'] ?>&lang=<?= $record['lang']; ?>"
                            title="<?= $PMF_LANG['ad_categ_copy'] ?>">
-                          <i aria-hidden="true" class="fas fa-copy"></i>
+                          <i aria-hidden="true" class="fa fa-copy"></i>
                         </a>
                       </td>
                       <td style="width: 16px;">
                         <a class="btn btn-danger" href="javascript:void(0);"
                            onclick="deleteRecord(<?= $record['id'] ?>, '<?= $record['lang'] ?>', '<?= $user->getCsrfTokenFromSession() ?>');"
                            title="<?= $PMF_LANG['ad_user_delete'] ?>">
-                          <i aria-hidden="true" class="fas fa-trash"></i>
+                          <i aria-hidden="true" class="fa fa-trash"></i>
                         </a>
                       </td>
                     </tr>
@@ -563,7 +563,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
           csrf: csrf
         };
 
-      indicator.html('<i class="fas fa-cog fa-spin"></i> Saving ...');
+      indicator.html('<i class="fa fa-cog fa-spin"></i> Saving ...');
 
       for (let i = 0; i < ids.length; i++) {
         const statusId = '#' + type + '_record_' + cid + '_' + ids[i];

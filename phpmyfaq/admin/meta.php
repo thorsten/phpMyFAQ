@@ -35,13 +35,13 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
 
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fas fa-code"></i>
+      <i aria-hidden="true" class="fa fa-code"></i>
         <?= $PMF_LANG['ad_menu_meta'] ?>
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
             <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#addMetaModal">
-              <i aria-hidden="true" class="fas fa-plus"></i>
+              <i aria-hidden="true" class="fa fa-plus"></i>
                 <?= $PMF_LANG['ad_meta_add'] ?>
             </button>
         </div>
@@ -107,11 +107,11 @@ $metaData = $meta->getAll();
             <td><?= $data->getContent() ?></td>
             <td>
                 <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-success">
-                  <i aria-hidden="true" class="fas fa-pencil"></i>
+                  <i aria-hidden="true" class="fa fa-pencil"></i>
                 </a>
                 <a href="#" id="delete-meta-<?= $data->getId() ?>" class="btn btn-danger pmf-meta-delete"
                    data-csrf="<?= $user->getCsrfTokenFromSession() ?>">
-                  <i aria-hidden="true" class="fas fa-trash"></i>
+                  <i aria-hidden="true" class="fa fa-trash"></i>
                 </a>
             </td>
         </tr>

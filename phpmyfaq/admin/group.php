@@ -163,7 +163,7 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
         <header class="row">
             <div class="col-lg-12">
                 <h2 class="page-header">
-                    <i aria-hidden="true" class="fas fa-users fa-fw"></i>
+                    <i aria-hidden="true" class="fa fa-users fa-fw"></i>
                     <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
                 </h2>
             </div>
@@ -272,7 +272,7 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-users"></i>
+            <i aria-hidden="true" class="fa fa-users"></i>
               <?= $PMF_LANG['ad_group_add'] ?>
           </h1>
         </div>
@@ -334,7 +334,7 @@ if ('list' === $groupAction) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-users"></i>
+            <i aria-hidden="true" class="fa fa-users"></i>
               <?= $PMF_LANG['ad_menu_group_administration'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
@@ -440,13 +440,13 @@ if ('list' === $groupAction) {
                                 <span class="select_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectSelectAll('group_user_list')">
-                                        <i aria-hidden="true" class="fas fa-user-plus"></i>
+                                        <i aria-hidden="true" class="fa fa-user-plus"></i>
                                     </a>
                                 </span>
                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectUnselectAll('group_user_list')">
-                                        <i aria-hidden="true" class="fas fa-user-minus"></i>
+                                        <i aria-hidden="true" class="fa fa-user-minus"></i>
                                     </a>
                                 </span>
               </div>
@@ -479,13 +479,13 @@ if ('list' === $groupAction) {
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('group_member_list')">
-                        <i aria-hidden="true" class="fas fa-user-plus"></i>
+                        <i aria-hidden="true" class="fa fa-user-plus"></i>
                     </a>
                 </span>
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('group_member_list')">
-                      <i aria-hidden="true" class="fas fa-user-minus"></i>
+                      <i aria-hidden="true" class="fa fa-user-minus"></i>
                   </a>
                 </span>
               </div>
@@ -515,7 +515,7 @@ if ('list' === $groupAction) {
         <form id="rightsForm" action="?action=group&amp;group_action=update_rights" method="post">
           <input id="rights_group_id" type="hidden" name="group_id" value="0">
           <div class="card-header" id="user_rights_legend">
-            <i aria-hidden="true" class="fas fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
+            <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_group_rights'] ?>
             <span class="float-right">
               <a class="btn btn-primary btn-sm" href="#" id="checkAll">
                 <?= $PMF_LANG['ad_user_checkall'] ?> / <?= $PMF_LANG['ad_user_uncheckall'] ?>

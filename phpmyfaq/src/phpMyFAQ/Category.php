@@ -808,7 +808,7 @@ class Category
                 $numFaqs = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
-                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fas fa-rss"></i></a>',
+                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fa fa-rss"></i></a>',
                         $parent,
                         $this->language,
                         $parent
@@ -943,7 +943,7 @@ class Category
 
         if ($hasChildren) {
             $oLink->text .= sprintf(
-                '<i aria-hidden="true" class="fas fa-caret-right"></i>',
+                '<i aria-hidden="true" class="fa fa-caret-right"></i>',
                 $categoryName);
         }
 

@@ -32,13 +32,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-tasks"></i>
+            <i aria-hidden="true" class="fa fa-tasks"></i>
               <?= $PMF_LANG['ad_menu_searchstats'] ?>
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <a class="btn btn-sm btn-outline-danger" href="?action=truncatesearchterms">
-                <i aria-hidden="true" class="fas fa-trash"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
+                <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
               </a>
             </div>
           </div>
@@ -131,7 +131,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
                   <td>
                       <a class="btn btn-danger" href="#" title="<?= $PMF_LANG['ad_news_delete'] ?>"
                          onclick="deleteSearchTerm('<?= urlencode($searchItem['searchterm']) ?>', <?= $searchItem['id'] ?>); return false;">
-                        <i aria-hidden="true" class="fas fa-trash"></i>
+                        <i aria-hidden="true" class="fa fa-trash"></i>
                       </a>
                   </td>
               </tr>

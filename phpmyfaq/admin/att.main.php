@@ -50,7 +50,7 @@ $pagination = new Pagination(
 ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-paperclip"></i>
+            <i aria-hidden="true" class="fa fa-paperclip"></i>
               <?= $PMF_LANG['ad_menu_attachment_admin'] ?>
           </h1>
         </div>
@@ -78,13 +78,13 @@ $pagination = new Pagination(
                             <td>
                                 <a href="deleteAttachment(<?= $item->id ?>, '<?= $user->getCsrfTokenFromSession() ?>'); void(0);"
                                    class="btn btn-danger" title="<?= $PMF_LANG['ad_gen_delete'] ?>">
-                                    <i aria-hidden="true" class="fas fa-trash"></i>
+                                    <i aria-hidden="true" class="fa fa-trash"></i>
                                 </a>
                             </td>
                             <td>
                                 <a title="<?= $PMF_LANG['ad_entry_faq_record'] ?>" class="btn btn-info"
                                    href="../index.php?action=faq&id=<?= $item->record_id ?>&lang=<?= $item->record_lang ?>">
-                                  <i aria-hidden="true" class="fas fa-link"></i>
+                                  <i aria-hidden="true" class="fa fa-link"></i>
                                 </a>
                             </td>
                         </tr>

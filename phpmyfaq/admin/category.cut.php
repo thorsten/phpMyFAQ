@@ -38,7 +38,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-cut"></i> <?= $header ?>
+            <i aria-hidden="true" class="fa fa-cut"></i> <?= $header ?>
           </h1>
         </div>
 
