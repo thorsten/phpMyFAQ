@@ -255,7 +255,7 @@ class Category
         if ($result) {
             while ($row = $this->config->getDb()->fetchArray($result)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[] = & $this->categoryName[$row['id']];
+                $this->categories[$row['id']] = $row;
                 $this->children[$row['parent_id']][$row['id']] = & $this->categoryName[$row['id']];
                 $this->owner[$row['id']] = & $row['user_id'];
                 $this->moderators[$row['id']] = & $row['group_id'];
@@ -1658,7 +1658,7 @@ class Category
         while ($row = $this->config->getDb()->fetchArray($result)) {
             if (!array_key_exists($row['id'], $this->categoryName)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[$row['id']] = &$this->categoryName[$row['id']];
+                $this->categories[$row['id']] = $row;
                 $this->children[$row['parent_id']][$row['id']] = &$this->categoryName[$row['id']];
             }
         }
