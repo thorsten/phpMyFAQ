@@ -225,6 +225,7 @@ $PMF_LANG["ad_entry_author"] = "Автор";
 $PMF_LANG["ad_entry_category"] = "Розділ";
 $PMF_LANG["ad_entry_active"] = "Активувати?";
 $PMF_LANG["ad_entry_date"] = "Дата";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Змінено?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Коментатор";

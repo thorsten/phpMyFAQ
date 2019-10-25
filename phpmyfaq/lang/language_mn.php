@@ -216,6 +216,7 @@ $PMF_LANG["ad_entry_author"] = "Зохиогч:";
 $PMF_LANG["ad_entry_category"] = "Ангилал:";
 $PMF_LANG["ad_entry_active"] = "Хандах боломжтой:";
 $PMF_LANG["ad_entry_date"] = "Огноо:";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Өөрчилсөн үү?";
 $PMF_LANG["ad_entry_changelog"] = "Өөрчлөлт:";
 $PMF_LANG["ad_entry_commentby"] = "Сэтгэгдэл бичсэн";

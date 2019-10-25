@@ -234,6 +234,7 @@ $PMF_LANG["ad_entry_author"] = "Oluşturan";
 $PMF_LANG["ad_entry_category"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Görünür";
 $PMF_LANG["ad_entry_date"] = "Tarih";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Değişiklik?";
 $PMF_LANG["ad_entry_changelog"] = "Değişiklik günlüğü";
 $PMF_LANG["ad_entry_commentby"] = "Yorumlayan";

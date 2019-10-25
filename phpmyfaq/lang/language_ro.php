@@ -190,6 +190,7 @@ $PMF_LANG['ad_entry_author'] = 'Autor:';
 $PMF_LANG['ad_entry_category'] = 'Categoria:';
 $PMF_LANG['ad_entry_active'] = 'Activ?';
 $PMF_LANG['ad_entry_date'] = 'Data';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Modificat?';
 $PMF_LANG['ad_entry_changelog'] = 'Jurnal modificari:';
 $PMF_LANG['ad_entry_commentby 	'] = 'Comentat de';

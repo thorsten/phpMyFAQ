@@ -695,7 +695,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
               <div class="card-header" role="tab" id="pmf-heading-activation">
                 <h6 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#pmf-collapse-activation" aria-expanded="false" aria-controls="pmf-collapse-activation">
-                    Status der FAQ
+                      <?= $PMF_LANG['ad_entry_status'] ?>
                   </a>
                 </h6>
               </div>

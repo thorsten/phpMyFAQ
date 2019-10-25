@@ -232,6 +232,7 @@ $PMF_LANG["ad_entry_author"] = "Egilea";
 $PMF_LANG["ad_entry_category"] = "Atala";
 $PMF_LANG["ad_entry_active"] = "Aktibatu?";
 $PMF_LANG["ad_entry_date"] = "Eguna";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Aldatu?";
 $PMF_LANG["ad_entry_changelog"] = "Aldaketen log-a";
 $PMF_LANG["ad_entry_commentby"] = "Iruzkinaren autorea";

@@ -224,6 +224,7 @@ $PMF_LANG["ad_entry_author"] = "작성자";
 $PMF_LANG["ad_entry_category"] = "카테고리";
 $PMF_LANG["ad_entry_active"] = "사용";
 $PMF_LANG["ad_entry_date"] = "날짜";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "변경?";
 $PMF_LANG["ad_entry_changelog"] = "변경이력";
 $PMF_LANG["ad_entry_commentby 	"] = "코멘트 작성자";

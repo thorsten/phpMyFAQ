@@ -226,6 +226,7 @@ $PMF_LANG["ad_entry_author"] = "Autor";
 $PMF_LANG["ad_entry_category"] = "Kategorija";
 $PMF_LANG["ad_entry_active"] = "Aktivno?";
 $PMF_LANG["ad_entry_date"] = "Datum";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Izmenjeno?";
 $PMF_LANG["ad_entry_changelog"] = "Log izmena";
 $PMF_LANG["ad_entry_commentby"] = "Komentar korisnika";

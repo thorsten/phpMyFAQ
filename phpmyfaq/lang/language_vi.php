@@ -225,6 +225,7 @@ $PMF_LANG["ad_entry_author"] = "Tác giả";
 $PMF_LANG["ad_entry_category"] = "Mục";
 $PMF_LANG["ad_entry_active"] = "Kích hoạt?";
 $PMF_LANG["ad_entry_date"] = "Ngày";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Bạn đã thay đổi những gì?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Bình luận bởi";
