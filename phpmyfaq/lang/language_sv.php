@@ -3,8 +3,6 @@
 /**
  * Swedish language file
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -476,7 +474,7 @@ $PMF_LANG['ad_categ_move'] = 'flytta kategori';
 $PMF_LANG['ad_categ_lang'] = 'Språk';
 $PMF_LANG['ad_categ_desc'] = 'Förklaring';
 $PMF_LANG['ad_categ_change'] = 'Ändra med';
-$PMF_LANG['lostPassword'] = 'har du glömt ditt lösenord? Klicka här.';
+$PMF_LANG['lostPassword'] = 'Har du glömt ditt lösenord? Klicka här för att få hjälp.';
 $PMF_LANG['lostpwd_err_1'] = 'Fel: Användarnamn och epostadress hittades inte.';
 $PMF_LANG['lostpwd_err_2'] = 'Fel: Felaktiga uppgifter!';
 $PMF_LANG['lostpwd_text_1'] = 'Här är dina uppgifter från phpMyFAQ';
@@ -826,3 +824,9 @@ $LANG_CONF['main.referenceURL'] = array(0 => "input", 1 => "Grundadress för lä
 $LANG_CONF['main.urlValidateInterval'] = array(0 => "input", 1 => "Intervall mellan länkkontroll via AJAX (i sekunder)");
 $LANG_CONF['records.enableVisibilityQuestions'] = array(0 => "checkbox", 1 => "Låt nya frågor vara dolda?");
 $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Åtkomstnivå");
+
+
+// added v2.7.0-alpha2 - 2019-10-25 Henrik Werkström
+$PMF_LANG['msgRegistration'] = "Registrera ny användare";
+$PMF_LANG['msgRegistrationCredentials'] = 'För att registrera dig ange ditt namn, ditt inloggningsnamn och en giltig epostadress.';
+$PMF_LANG['msgRegistrationNote'] = 'När en administratör har godkänt din registrering kommer du att få ett mail med dina uppgifter.';
