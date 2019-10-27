@@ -59,8 +59,8 @@
   }
   </style>
 </head>
-<body dir="{{ dir }}">
-<form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
+<body dir="{{ dir }}" class="bg-dark">
+<form class="form-signin bg-dark" action="{{ writeLoginPath }}" method="post" role="form">
 
   <div class="text-center mb-4">
     <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
@@ -77,13 +77,13 @@
   <div class="form-label-group">
     <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required
            autofocus>
-    <label for="faqusername">Benutzername</label>
+    <label for="faqusername">{{ username }}</label>
   </div>
 
   <div class="form-label-group">
     <input type="password" name="faqpassword" id="faqpassword" class="form-control" placeholder="{{ password }}"
            required>
-    <label for="faqpassword">Password</label>
+    <label for="faqpassword">{{ password }}</label>
   </div>
 
   <div class="checkbox mb-3">
