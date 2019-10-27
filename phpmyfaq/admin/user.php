@@ -714,7 +714,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             ?>
             <tr class="row_user_id_<?= $user->getUserId() ?>">
                 <td><?= $user->getUserId() ?></td>
-                <td><i class="fas <?php
+                <td><i class="fa <?php
                 switch ($user->getStatus()) {
                     case 'active':
                         echo 'fa-user-check';
@@ -727,7 +727,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         break;
                 }
             ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
-                <td><i class="fas <?= $user->isSuperAdmin() ? 'fa-user-tie' : 'fa-user-minus' ?>"></i></td>
+                <td><i class="fa <?= $user->isSuperAdmin() ? 'fa-user-tie' : 'fa-user-minus' ?>"></i></td>
                 <td><?= $user->getUserData('display_name') ?></td>
                 <td><?= $user->getLogin() ?></td>
                 <td>
