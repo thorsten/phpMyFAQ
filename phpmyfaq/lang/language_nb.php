@@ -921,3 +921,6 @@ $LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 
 $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Forbruker Nøkkel');
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Forbruker Hemmelig kode');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Aksess Token nøkkel');
+
+//Experimental - 2019-10-25 Henrik Werkström
+$PMF_LANG['loginPageMessage'] = 'Logge inn på ';
