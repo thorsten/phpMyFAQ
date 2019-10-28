@@ -923,9 +923,9 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'T
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Aksess Token nøkkel');
 
 // added v2.7.0-alpha2 - 2019-10-25 Henrik Werkström, Erik Paulsen
-$PMF_LANG['msgRegistration'] = "Registrere ny brukere";
-$PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg angi navn, innloggingsnavn og en gyldig epostadresse.';
-$PMF_LANG['msgRegistrationNote'] = 'Når en administrator har godkjent registreringen din, vill du få et mail.';
+$PMF_LANG['msgRegistration'] = "Registrer ny bruker";
+$PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, angi ditt navn, brukernavn  og gyldig e-postadresse. ';
+$PMF_LANG['msgRegistrationNote'] = 'Du vil få en epost så snart en administrator har godkjent registreringen din.';
 
 
 //Experimental - 2019-10-25 Henrik Werkström
