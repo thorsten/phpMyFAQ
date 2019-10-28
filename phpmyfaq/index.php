@@ -549,6 +549,7 @@ $tplMainPage = [
     'msgUsername' => $PMF_LANG['ad_auth_user'],
     'msgEmail' => $PMF_LANG['ad_entry_email'],
     'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
+    'loginPageMessage' => $PMF_LANG['loginPageMessage'],
 ];
 
 $template->parseBlock(

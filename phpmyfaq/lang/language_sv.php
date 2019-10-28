@@ -830,3 +830,6 @@ $LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Åtkomstnivå");
 $PMF_LANG['msgRegistration'] = "Registrera ny användare";
 $PMF_LANG['msgRegistrationCredentials'] = 'För att registrera dig ange ditt namn, ditt inloggningsnamn och en giltig epostadress.';
 $PMF_LANG['msgRegistrationNote'] = 'När en administratör har godkänt din registrering kommer du att få ett mail med dina uppgifter.';
+
+//Experimental - 2019-10-25 Henrik Werkström
+$PMF_LANG['loginPageMessage'] = 'Logga in på ';
