@@ -63,8 +63,8 @@
 <form class="form-signin bg-dark" action="{{ writeLoginPath }}" method="post" role="form">
 
   <div class="text-center mb-4">
-    <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ">
-    <h1 class="h3 mb-3 font-weight-normal">phpMyFAQ Login</h1>
+    <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="{{ header }}">
+    <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
     [useSslForLogins]
     <p>
       <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
