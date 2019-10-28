@@ -227,18 +227,18 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-edit"></i>
+            <i aria-hidden="true" class="fa fa-edit"></i>
             <?= $PMF_LANG['ad_entry_edit_1'] ?>
             <?= $PMF_LANG['ad_entry_edit_2'] ?>
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <span class="btn btn-sm btn-outline-info">
-                <i class="fas fa-hashtag" aria-hidden="true"></i>
+                <i class="fa fa-hashtag" aria-hidden="true"></i>
                 <?= $currentRevision ?>
               </span>
               <a href="<?= $link->toString() ?>" class="btn btn-sm btn-outline-success">
-                <i class="fas fa-arrow-alt-circle-right" aria-hidden="true"></i>
+                <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
                   <?= $PMF_LANG['ad_view_faq'] ?>
               </a>
             </div>
@@ -248,7 +248,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 <?php } else { ?>
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i aria-hidden="true" class="fas fa-edit"></i>
+          <i aria-hidden="true" class="fa fa-edit"></i>
             <?= $PMF_LANG['ad_entry_add'] ?>
         </h1>
     </div>
@@ -407,7 +407,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     );
                                     if ($user->perm->checkRight($currentUserId, 'delattachment')) {
                                         printf(
-                                            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fas fa-trash"></i></a>',
+                                            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=%d&amp;id=%d&amp;lang=%s"><i aria-hidden="true" class="fa fa-trash"></i></a>',
                                             $faqData['id'],
                                             $att->getId(),
                                             $faqData['lang']
@@ -631,7 +631,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 <h6 class="mb-0">
                   <a data-toggle="collapse" href="#pmf-collapse-date" aria-expanded="true" aria-controls="pmf-collapse-date">
                     <?= $PMF_LANG['ad_entry_date'] ?>
-                    <i class="fas fa-chevron-circle-left fa-pull-right"></i>
+                    <i class="fa fa-chevron-circle-left fa-pull-right"></i>
                   </a>
                 </h6>
               </div>
@@ -681,7 +681,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 <h6 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#pmf-collapse-category" aria-expanded="false" aria-controls="pmf-collapse-category">
                     <?= $PMF_LANG['ad_entry_category'] ?>
-                    <i class="fas fa-chevron-circle-left fa-pull-right"></i>
+                    <i class="fa fa-chevron-circle-left fa-pull-right"></i>
                   </a>
                 </h6>
               </div>
@@ -695,7 +695,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
               <div class="card-header" role="tab" id="pmf-heading-activation">
                 <h6 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#pmf-collapse-activation" aria-expanded="false" aria-controls="pmf-collapse-activation">
-                    Status der FAQ
+                      <?= $PMF_LANG['ad_entry_status'] ?>
                   </a>
                 </h6>
               </div>

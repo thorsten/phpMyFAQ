@@ -193,6 +193,7 @@ $PMF_LANG['ad_entry_author'] = 'מחבר:';
 $PMF_LANG['ad_entry_category'] = 'קטגוריה: ';
 $PMF_LANG['ad_entry_active'] = 'פעיל?';
 $PMF_LANG['ad_entry_date'] = 'תאריך';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'מה שונה?';
 $PMF_LANG['ad_entry_changelog'] = 'מעקב שינויים';
 $PMF_LANG['ad_entry_commentby'] = 'תגובה מ';

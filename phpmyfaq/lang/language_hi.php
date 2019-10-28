@@ -229,6 +229,7 @@ $PMF_LANG["ad_entry_author"] = "लेखक";
 $PMF_LANG["ad_entry_category"] = "वर्ग";
 $PMF_LANG["ad_entry_active"] = "सक्रिय?";
 $PMF_LANG["ad_entry_date"] = "दिनांक";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "बदला गया?";
 $PMF_LANG["ad_entry_changelog"] = "बदलाव का लॉग";
 $PMF_LANG["ad_entry_commentby"] = "के द्वारा टिका-टिप्पणी";

@@ -189,6 +189,7 @@ $PMF_LANG['ad_entry_author'] = 'Auteur :';
 $PMF_LANG['ad_entry_category'] = 'Catégorie :';
 $PMF_LANG['ad_entry_active'] = 'Publier ?';
 $PMF_LANG['ad_entry_date'] = 'Date';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Qu\'avez-vous modifié ?';
 $PMF_LANG['ad_entry_changelog'] = 'Changements';
 $PMF_LANG['ad_entry_commentby'] = 'Commenté par';

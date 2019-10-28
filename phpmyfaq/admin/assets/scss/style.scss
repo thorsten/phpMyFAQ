@@ -19,12 +19,10 @@
 @import '../../../../node_modules/bootstrap/scss/bootstrap';
 @import 'mixins';
 
-// Font Awesome
+// Fork Awesome
 $fa-font-path: '../fonts';
+@import '../../../../node_modules/fork-awesome/scss/fork-awesome';
 
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/fontawesome';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/solid.scss';
-@import '../../../../node_modules/@fortawesome/fontawesome-free/scss/brands.scss';
 
 html {
   position: relative;

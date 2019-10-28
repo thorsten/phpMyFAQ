@@ -220,6 +220,7 @@ $PMF_LANG['ad_entry_author'] = "Verfasser";
 $PMF_LANG['ad_entry_category'] = "Kategorie";
 $PMF_LANG['ad_entry_active'] = "Aktiviert";
 $PMF_LANG['ad_entry_date'] = "Datum";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG['ad_entry_changed'] = "Was wurde geändert?";
 $PMF_LANG['ad_entry_changelog'] = "Änderungen";
 $PMF_LANG['ad_entry_commentby'] = "Kommentar von";

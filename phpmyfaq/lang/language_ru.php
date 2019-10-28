@@ -190,6 +190,7 @@ $PMF_LANG['ad_entry_author'] = 'Автор:';
 $PMF_LANG['ad_entry_category'] = 'Раздел:';
 $PMF_LANG['ad_entry_active'] = 'Активировать?';
 $PMF_LANG['ad_entry_date'] = 'Дата';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Изменено?';
 $PMF_LANG['ad_entry_changelog'] = 'Список изменений:';
 $PMF_LANG['ad_entry_commentby'] = 'Комментарий от';

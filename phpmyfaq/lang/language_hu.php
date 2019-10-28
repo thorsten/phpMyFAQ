@@ -189,6 +189,7 @@ $PMF_LANG['ad_entry_author'] = 'Szerző:';
 $PMF_LANG['ad_entry_category'] = 'Kategória:';
 $PMF_LANG['ad_entry_active'] = 'Aktív?';
 $PMF_LANG['ad_entry_date'] = 'Dátum';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Változás';
 $PMF_LANG['ad_entry_changelog'] = 'Változtatások:';
 $PMF_LANG['ad_entry_commentby'] = 'Megjegyzés ';

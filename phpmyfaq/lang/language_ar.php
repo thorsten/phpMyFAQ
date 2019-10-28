@@ -190,6 +190,7 @@ $PMF_LANG['ad_entry_author'] = 'الكاتب:';
 $PMF_LANG['ad_entry_category'] = 'التصنيف:';
 $PMF_LANG['ad_entry_active'] = 'نشط؟';
 $PMF_LANG['ad_entry_date'] = 'التاريخ';
+$PMF_LANG['ad_entry_status'] = 'حالة السؤال';
 $PMF_LANG['ad_entry_changed'] = 'معدّل؟';
 $PMF_LANG['ad_entry_changelog'] = 'سجل التعديلات';
 $PMF_LANG['ad_entry_commentby'] = 'التعليق بواسطة';

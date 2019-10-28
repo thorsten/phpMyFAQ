@@ -255,7 +255,7 @@ class Category
         if ($result) {
             while ($row = $this->config->getDb()->fetchArray($result)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[] = & $this->categoryName[$row['id']];
+                $this->categories[$row['id']] = $row;
                 $this->children[$row['parent_id']][$row['id']] = & $this->categoryName[$row['id']];
                 $this->owner[$row['id']] = & $row['user_id'];
                 $this->moderators[$row['id']] = & $row['group_id'];
@@ -808,7 +808,7 @@ class Category
                 $numFaqs = '<span class="rssCategoryLink"> ('.$plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
-                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fas fa-rss"></i></a>',
+                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fa fa-rss"></i></a>',
                         $parent,
                         $this->language,
                         $parent
@@ -943,7 +943,7 @@ class Category
 
         if ($hasChildren) {
             $oLink->text .= sprintf(
-                '<i aria-hidden="true" class="fas fa-caret-right"></i>',
+                '<i aria-hidden="true" class="fa fa-caret-right"></i>',
                 $categoryName);
         }
 
@@ -1658,7 +1658,7 @@ class Category
         while ($row = $this->config->getDb()->fetchArray($result)) {
             if (!array_key_exists($row['id'], $this->categoryName)) {
                 $this->categoryName[$row['id']] = $row;
-                $this->categories[$row['id']] = &$this->categoryName[$row['id']];
+                $this->categories[$row['id']] = $row;
                 $this->children[$row['parent_id']][$row['id']] = &$this->categoryName[$row['id']];
             }
         }

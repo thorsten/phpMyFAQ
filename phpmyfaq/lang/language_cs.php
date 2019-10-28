@@ -191,6 +191,7 @@ $PMF_LANG['ad_entry_author'] = 'Autor:';
 $PMF_LANG['ad_entry_category'] = 'Kategorie:';
 $PMF_LANG['ad_entry_active'] = 'Aktivovat zobrazení tohoto záznamu:';
 $PMF_LANG['ad_entry_date'] = 'Datum';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Změněno?';
 $PMF_LANG['ad_entry_changelog'] = 'Změny';
 $PMF_LANG['ad_entry_commentby'] = 'Komentář od';

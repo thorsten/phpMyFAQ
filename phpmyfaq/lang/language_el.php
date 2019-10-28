@@ -190,6 +190,7 @@ $PMF_LANG['ad_entry_author'] = 'Συγγραφέας:';
 $PMF_LANG['ad_entry_category'] = 'Κατηγορία:';
 $PMF_LANG['ad_entry_active'] = 'Ενεργή;';
 $PMF_LANG['ad_entry_date'] = 'Ημερομηνία';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Αλλαγμένη;';
 $PMF_LANG['ad_entry_changelog'] = 'Ημερολόγιο αλλαγών:';
 $PMF_LANG['ad_entry_commentby 	'] = 'Σχόλια από';

@@ -229,6 +229,7 @@ $PMF_LANG["ad_entry_author"] = "Author";
 $PMF_LANG["ad_entry_category"] = "Entity";
 $PMF_LANG["ad_entry_active"] = "Active?";
 $PMF_LANG["ad_entry_date"] = "Date";
+$PMF_LANG["ad_entry_status"] = "FAQ Status";
 $PMF_LANG["ad_entry_changed"] = "Changed?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Comment by";

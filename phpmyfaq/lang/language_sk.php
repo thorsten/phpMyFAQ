@@ -223,6 +223,7 @@ $PMF_LANG["ad_entry_author"] = "Autor";
 $PMF_LANG["ad_entry_category"] = "Kategória";
 $PMF_LANG["ad_entry_active"] = "Aktívny?";
 $PMF_LANG["ad_entry_date"] = "Dátum";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Zmenený?";
 $PMF_LANG["ad_entry_changelog"] = "Changelog";
 $PMF_LANG["ad_entry_commentby"] = "Komentoval";

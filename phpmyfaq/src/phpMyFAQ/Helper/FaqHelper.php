@@ -125,7 +125,7 @@ class FaqHelper extends Helper
         }
 
         $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                         <i aria-hidden="true" class="fab fa-facebook fa-stack-1x"></i>
                     </span>';
 
@@ -149,7 +149,7 @@ class FaqHelper extends Helper
         }
 
         $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                         <i aria-hidden="true" class="fab fa-twitter fa-stack-1x"></i>
                     </span>';
 
@@ -172,8 +172,8 @@ class FaqHelper extends Helper
         }
 
         $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fas fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fas fa-envelope fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
+                        <i aria-hidden="true" class="fa fa-envelope fa-stack-1x"></i>
                     </span>';
 
         return sprintf(

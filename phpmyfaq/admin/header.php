@@ -234,7 +234,7 @@ switch ($action) {
                     $avatar = new Gravatar($faqConfig);
                     echo $avatar->getImage($user->getUserData('email'), ['size' => 24, 'class' => 'rounded-circle']);
                 } else {
-                    echo '<i aria-hidden="true" class="fas fa-user"></i>';
+                    echo '<i aria-hidden="true" class="fa fa-user"></i>';
                 }
                 ?>
             <span title="<?= $PMF_LANG['ad_user_loggedin'].$user->getLogin(); ?>">
@@ -243,11 +243,11 @@ switch ($action) {
           </a>
           <div class="dropdown-menu" aria-labelledby="pmf-admin-dropdown">
             <a class="dropdown-item" href="index.php?action=passwd">
-              <i aria-hidden="true" class="fas fa-key"></i>
+              <i aria-hidden="true" class="fa fa-key"></i>
                 <?= $PMF_LANG['ad_menu_passwd'] ?>
             </a>
             <a class="dropdown-item" href="index.php?action=logout">
-              <i aria-hidden="true" class="fas fa-sign-out-alt"></i>
+              <i aria-hidden="true" class="fa fa-sign-out-alt"></i>
                 <?= $PMF_LANG['admin_mainmenu_logout']; ?>
             </a>
           </div>
@@ -269,14 +269,14 @@ switch ($action) {
             <ul class="nav flex-column">
               <li class="nav-item <?= $dashboardPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php">
-                  <i aria-hidden="true" class="fas fa-tachometer-alt"></i> <?= $PMF_LANG['admin_mainmenu_home']; ?>
+                  <i aria-hidden="true" class="fa fa-tachometer-alt"></i> <?= $PMF_LANG['admin_mainmenu_home']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?= $userPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=user">
-                  <i aria-hidden="true" class="fas fa-user"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
-                  <span class="fas arrow"></span>
+                  <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
+                  <span class="fa fa-caret-down"></span>
                 </a>
                   <?php if ($userPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?= ($userPage ? 'in' : '') ?>" id="user-menu">
@@ -287,8 +287,8 @@ switch ($action) {
 
               <li class="nav-item <?= $contentPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=content">
-                  <i aria-hidden="true" class="fas fa-edit"></i> <?= $PMF_LANG['admin_mainmenu_content']; ?>
-                  <span class="fas arrow"></span>
+                  <i aria-hidden="true" class="fa fa-edit"></i> <?= $PMF_LANG['admin_mainmenu_content']; ?>
+                  <span class="fa fa-caret-down"></span>
                 </a>
                   <?php if ($contentPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?= ($contentPage ? 'in' : '') ?>">
@@ -299,8 +299,8 @@ switch ($action) {
 
               <li class="nav-item <?= $statisticsPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=statistics">
-                  <i aria-hidden="true" class="fas fa-chart-line"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
-                  <span class="fas arrow"></span>
+                  <i aria-hidden="true" class="fa fa-chart-line"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
+                  <span class="fa fa-caret-down"></span>
                 </a>
                   <?php if ($statisticsPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?= ($statisticsPage ? 'in' : '') ?>">
@@ -311,13 +311,13 @@ switch ($action) {
 
               <li class="nav-item <?= $exportsPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=export">
-                  <i aria-hidden="true" class="fas fa-file-export"></i> <?= $PMF_LANG['admin_mainmenu_exports']; ?>
+                  <i aria-hidden="true" class="fa fa-file-export"></i> <?= $PMF_LANG['admin_mainmenu_exports']; ?>
                 </a>
               </li>
 
               <li class="nav-item <?= $backupPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=backup">
-                  <i aria-hidden="true" class="fas fa-download"></i> <?= $PMF_LANG['admin_mainmenu_backup']; ?>
+                  <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['admin_mainmenu_backup']; ?>
                 </a>
                   <?php if ($backupPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?= $backupPage ? 'in' : '' ?>">
@@ -328,8 +328,8 @@ switch ($action) {
 
               <li class="nav-item <?= $configurationPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=config">
-                  <i aria-hidden="true" class="fas fa-wrench"></i> <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
-                  <span class="fas arrow"></span>
+                  <i aria-hidden="true" class="fa fa-wrench"></i> <?= $PMF_LANG['admin_mainmenu_configuration']; ?>
+                  <span class="fa fa-caret-down"></span>
                 </a>
                   <?php if ($configurationPage) { ?>
                     <ul class="navbar-nav navbar-dark ml-5 <?= $configurationPage ? 'in' : '' ?>">
@@ -350,7 +350,7 @@ switch ($action) {
               </li>
               <li class="nav-item">
                 <a class="nav-link" href="#">
-                  <i aria-hidden="true" class="fas fa-user-clock"></i>
+                  <i aria-hidden="true" class="fa fa-user-clock"></i>
                   <?= $PMF_LANG['ad_session_expiration']; ?>:
                   <span id="sessioncounter">Loading...</span>
                 </a>

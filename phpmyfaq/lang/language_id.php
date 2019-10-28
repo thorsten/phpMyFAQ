@@ -223,6 +223,7 @@ $PMF_LANG["ad_entry_author"] = "Penulis";
 $PMF_LANG["ad_entry_category"] = "Kategori";
 $PMF_LANG["ad_entry_active"] = "Aktif?";
 $PMF_LANG["ad_entry_date"] = "Tanggal";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Berubah?";
 $PMF_LANG["ad_entry_changelog"] = "Catatan perubahan";
 $PMF_LANG["ad_entry_commentby"] = "Komentar oleh";

@@ -233,6 +233,7 @@ $PMF_LANG["ad_entry_author"] = "Autors";
 $PMF_LANG["ad_entry_category"] = "Sada&iuml;a";
 $PMF_LANG["ad_entry_active"] = "Akt&icirc;vs?";
 $PMF_LANG["ad_entry_date"] = "Datums";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Modific&ccedil;ts?";
 $PMF_LANG["ad_entry_changelog"] = "Modific&ccedil;&eth;anas v&ccedil;sture";
 $PMF_LANG["ad_entry_commentby"] = "Koment&ccedil;ja";

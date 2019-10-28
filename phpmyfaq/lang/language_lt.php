@@ -229,6 +229,7 @@ $PMF_LANG["ad_entry_author"] = "Autorius";
 $PMF_LANG["ad_entry_category"] = "Grupė";
 $PMF_LANG["ad_entry_active"] = "Aktyvus?";
 $PMF_LANG["ad_entry_date"] = "Data";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Pakeistas?";
 $PMF_LANG["ad_entry_changelog"] = "Keitimų žurnalas";
 $PMF_LANG["ad_entry_commentby"] = "Komentavo";

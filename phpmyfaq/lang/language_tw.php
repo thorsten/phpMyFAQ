@@ -220,6 +220,7 @@ $PMF_LANG["ad_entry_author"] = "作者";
 $PMF_LANG["ad_entry_category"] = "類別";
 $PMF_LANG["ad_entry_active"] = "可被看到";
 $PMF_LANG["ad_entry_date"] = "日期";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "已變更?";
 $PMF_LANG["ad_entry_changelog"] = "異動日誌 Changelog";
 $PMF_LANG["ad_entry_commentby"] = "評論來自 ";

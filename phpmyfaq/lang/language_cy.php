@@ -230,6 +230,7 @@ $PMF_LANG["ad_entry_author"] = "Awdur";
 $PMF_LANG["ad_entry_category"] = "Categori";
 $PMF_LANG["ad_entry_active"] = "Gweithredol?";
 $PMF_LANG["ad_entry_date"] = "Dyddiad";
+$PMF_LANG["ad_entry_status"] = "Status der FAQ";
 $PMF_LANG["ad_entry_changed"] = "Newidiwyd?";
 $PMF_LANG["ad_entry_changelog"] = "Newid log";
 $PMF_LANG["ad_entry_commentby"] = "Sylw gan";

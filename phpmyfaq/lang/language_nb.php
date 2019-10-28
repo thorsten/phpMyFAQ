@@ -189,6 +189,7 @@ $PMF_LANG['ad_entry_author'] = 'Forfatter:';
 $PMF_LANG['ad_entry_category'] = 'Kategori:';
 $PMF_LANG['ad_entry_active'] = 'Synlig:';
 $PMF_LANG['ad_entry_date'] = 'Dato';
+$PMF_LANG['ad_entry_status'] = 'Status der FAQ';
 $PMF_LANG['ad_entry_changed'] = 'Endret?';
 $PMF_LANG['ad_entry_changelog'] = 'Historikk';
 $PMF_LANG['ad_entry_commentby'] = 'Kommentar av';

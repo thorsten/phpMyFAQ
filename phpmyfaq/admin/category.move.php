@@ -46,7 +46,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
-            <i aria-hidden="true" class="fas fa-folder"></i> <?= $header ?>
+            <i aria-hidden="true" class="fa fa-folder"></i> <?= $header ?>
           </h1>
         </div>
 
@@ -67,7 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                     } ?>
                             </select>
                             <?php printf(
-                                '<span class="form-text text-muted"><i aria-hidden="true" class="fas fa-info-circle fa-fw"></i> %s</span>',
+                                '<span class="form-text text-muted"><i aria-hidden="true" class="fa fa-info-circle fa-fw"></i> %s</span>',
                                 $PMF_LANG['ad_categ_remark_move']
                             ); ?>
                         </div>

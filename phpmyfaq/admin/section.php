@@ -2,8 +2,6 @@
 /**
  * Displays the section management frontend.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -137,7 +135,7 @@ if ($sectionAction == 'delete_confirm' && $user->perm->checkRight($user->getUser
       <header class="row">
           <div class="col-lg-12">
               <h2 class="page-header">
-                  <i aria-hidden="true" class="fas fa-users fa-fw"></i>
+                  <i aria-hidden="true" class="fa fa-users fa-fw"></i>
                   <?= $PMF_LANG['ad_section_deleteSection'] ?> "<?= $sectionData['name'] ?>"
               </h2>
           </div>
@@ -244,7 +242,7 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i aria-hidden="true" class="fas fa-layer-group"></i>
+          <i aria-hidden="true" class="fa fa-object-group"></i>
             <?= $PMF_LANG['ad_section_add'] ?>
         </h1>
       </div>
@@ -294,7 +292,7 @@ if ('list' === $sectionAction) {
     ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
-      <i aria-hidden="true" class="fas fa-layer-group"></i>
+      <i aria-hidden="true" class="fa fa-object-group"></i>
         <?= $PMF_LANG['ad_menu_section_administration'] ?> (beta)
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
@@ -388,13 +386,13 @@ if ('list' === $sectionAction) {
                 <span class="select_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectSelectAll('group_list_select')">
-                      <i aria-hidden="true" class="fas fa-layer-group"></i>
+                      <i aria-hidden="true" class="fa fa-object-group"></i>
                   </a>
                 </span>
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('group_list_select')">
-                      <i aria-hidden="true" class="fas fa-user-minus"></i>
+                      <i aria-hidden="true" class="fa fa-object-ungroup"></i>
                   </a>
               </span>
               </div>
@@ -427,13 +425,13 @@ if ('list' === $sectionAction) {
                 <span class="select_all">
                     <a class="btn btn-primary btn-sm"
                        href="javascript:selectSelectAll('section_member_list')">
-                        <i aria-hidden="true" class="fas fa-layer-group"></i>
+                        <i aria-hidden="true" class="fa fa-object-group"></i>
                     </a>
                 </span>
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('section_member_list')">
-                       <i aria-hidden="true" class="fas fa-user-minus"></i>
+                       <i aria-hidden="true" class="fa fa-object-ungroup"></i>
                   </a>
                 </span>
               </div>
