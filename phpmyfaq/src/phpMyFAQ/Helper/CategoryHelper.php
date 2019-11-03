@@ -300,8 +300,8 @@ class CategoryHelper extends Helper
             if (0 === $i && count($categoryId) === 0) {
                 $categories .= ' selected';
             } else {
-                foreach ($categoryId as $categoryid) {
-                    if ($cat['id'] == $categoryid['category_id']) {
+                foreach ($categoryId as $categorised) {
+                    if ($cat['id'] == $categorised['category_id']) {
                         $categories .= ' selected';
                     }
                 }

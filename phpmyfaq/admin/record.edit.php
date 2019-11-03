@@ -917,65 +917,83 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         bsCustomFileInput.init()
       });
 
-    $(function() {
+      $(function () {
 
         // Show help for keywords and users
-        $('#keywords').on('focus', () => { showHelp('keywords'); });
-        $('#tags').on('focus', () => { showHelp('tags'); });
+        $('#keywords').on('focus', () => {
+          showHelp('keywords');
+        });
+        $('#tags').on('focus', () => {
+          showHelp('tags');
+        });
+
+        let categories = $('#phpmyfaq-categories option:selected').map(function () {
+          return $(this).val();
+        }).get();
+
+        getPermissions(categories);
 
         // Override FAQ permissions with Category permission to avoid confused users
-        $('#phpmyfaq-categories').on('click', function() {
-            const categories = $('#phpmyfaq-categories option:selected').map(function() {
-                return $(this).val();
-            }).get();
-
-            $.ajax({
-                type: 'POST',
-                url:  'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
-                data: "categories=" + categories,
-                success: function(permissions) {
-                    const perms = jQuery.parseJSON(permissions);
-
-                    if (-1 === parseInt(perms.user[0])) {
-                        $('#restrictedusers').prop('checked', false).prop("disabled", true);
-                        $('#allusers').prop('checked', true).prop("disabled", false);
-                    } else {
-                        $('#allusers').prop('checked', false).prop("disabled", true);
-                        $('#restrictedusers').prop('checked', true).prop("disabled", false);
-                        $.each(perms.user, function(key, value) {
-                            $(".selected-users option[value='" + value + "']").prop('selected',true);
-                        });
-                    }
-                    if (-1 === parseInt(perms.group[0])) {
-                        $('#restrictedgroups').prop('checked', false).prop("disabled", true);
-                        $('#allgroups').prop('checked', true).prop("disabled", false);
-                    } else {
-                        $('#allgroups').prop('checked', false).prop("disabled", true);
-                        $('#restrictedgroups').prop('checked', true).prop("disabled", false);
-                        $.each(perms.group, function(key, value) {
-                            $("#selected-groups option[value='" + value + "']").prop('selected',true);
-                        });
-                    }
-                }
-            });
+        $('#phpmyfaq-categories').on('click', () => {
+          categories = $('#phpmyfaq-categories option:selected').map(function () {
+            return $(this).val();
+          }).get();
+          getPermissions(categories);
         });
-    });
+      });
 
-    function setRecordDate(how) {
-      if ('dateActualize' === how) {
-        $('#date').val('');
-      } else if ('dateKeep' === how) {
-        $('#date').val('<?= $faqData['isoDate'] ?>');
-      } else if ('dateCustomize' === how) {
-        $('#recordDateInputContainer').removeClass('invisible');
-        $('#date').val('');
+      function getPermissions(categories) {
+        $.ajax({
+          type: 'POST',
+          url: 'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
+          data: "categories=" + categories,
+          success: (permissions) => {
+            setPermissions(permissions);
+          }
+        });
       }
-    }
 
-    function showHelp(option) {
-        $('#' + option + 'Help').removeClass('hide');
-        $('#' + option + 'Help').fadeOut(2500);
-    }
+      function setPermissions(permissions) {
+        const perms = jQuery.parseJSON(permissions);
+
+        if (-1 === parseInt(perms.user[0])) {
+          $('#restrictedusers').prop('checked', false).prop('disabled', true);
+          $('#allusers').prop('checked', true).prop('disabled', false);
+        } else {
+          $('#allusers').prop('checked', false).prop('disabled', true);
+          $('#restrictedusers').prop('checked', true).prop('disabled', false);
+          $.each(perms.user, function (key, value) {
+            $(".selected-users option[value='" + value + "']").prop('selected', true);
+          });
+        }
+        if (-1 === parseInt(perms.group[0])) {
+          $('#restrictedgroups').prop('checked', false).prop('disabled', true);
+          $('#allgroups').prop('checked', true).prop('disabled', false);
+        } else {
+          $('#allgroups').prop('checked', false).prop('disabled', true);
+          $('#restrictedgroups').prop('checked', true).prop('disabled', false);
+          $.each(perms.group, function (key, value) {
+            $("#selected-groups option[value='" + value + "']").prop('selected', true);
+          });
+        }
+      }
+
+      function setRecordDate(how) {
+        if ('dateActualize' === how) {
+          $('#date').val('');
+        } else if ('dateKeep' === how) {
+          $('#date').val('<?= $faqData['isoDate'] ?>');
+        } else if ('dateCustomize' === how) {
+          $('#recordDateInputContainer').removeClass('invisible');
+          $('#date').val('');
+        }
+      }
+
+      function showHelp(option) {
+        const optionHelp = $('#' + option + 'Help');
+        optionHelp.removeClass('hide');
+        optionHelp.fadeOut(2500);
+      }
     </script>
 <?php
 
