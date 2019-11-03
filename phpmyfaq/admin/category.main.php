@@ -345,7 +345,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         echo '<span>';
         // Add FAQ to category (always)
         printf('
-           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-file-medical" title="%s"></i></a></a> ',
+           <a class="btn btn-info btn-sm" href="?action=editentry&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-indent" title="%s"></i></a></a> ',
             $cat['id'],
             $cat['lang'],
             $PMF_LANG['ad_quick_entry']
@@ -354,7 +354,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         if ($cat['lang'] == $lang) {
             // add sub category (if current language)
             printf('
-            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-folder-plus" title="%s"></i></a> ',
+            <a class="btn btn-info btn-sm" href="?action=addcategory&amp;cat=%s&amp;lang=%s"><i aria-hidden="true" class="fa fa-plus-square" title="%s"></i></a> ',
                 $cat['id'],
                 $cat['lang'],
                 $PMF_LANG['ad_quick_category']
