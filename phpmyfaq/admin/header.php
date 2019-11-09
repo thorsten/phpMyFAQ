@@ -269,7 +269,7 @@ switch ($action) {
             <ul class="nav flex-column">
               <li class="nav-item <?= $dashboardPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php">
-                  <i aria-hidden="true" class="fa fa-tachometer-alt"></i> <?= $PMF_LANG['admin_mainmenu_home']; ?>
+                  <i aria-hidden="true" class="fa fa-tachometer"></i> <?= $PMF_LANG['admin_mainmenu_home']; ?>
                 </a>
               </li>
 
@@ -299,7 +299,7 @@ switch ($action) {
 
               <li class="nav-item <?= $statisticsPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=statistics">
-                  <i aria-hidden="true" class="fa fa-chart-line"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
+                  <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['admin_mainmenu_statistics']; ?>
                   <span class="fa fa-caret-down"></span>
                 </a>
                   <?php if ($statisticsPage) { ?>
@@ -311,7 +311,7 @@ switch ($action) {
 
               <li class="nav-item <?= $exportsPage ? 'active' : ''; ?>">
                 <a class="nav-link" href="index.php?action=export">
-                  <i aria-hidden="true" class="fa fa-file-export"></i> <?= $PMF_LANG['admin_mainmenu_exports']; ?>
+                  <i aria-hidden="true" class="fa fa-book"></i> <?= $PMF_LANG['admin_mainmenu_exports']; ?>
                 </a>
               </li>
 
