@@ -446,7 +446,7 @@ if ('list' === $groupAction) {
                 <span class="unselect_all">
                                     <a class="btn btn-primary btn-sm"
                                        href="javascript:selectUnselectAll('group_user_list')">
-                                        <i aria-hidden="true" class="fa fa-user-minus"></i>
+                                        <i aria-hidden="true" class="fa fa-user-times"></i>
                                     </a>
                                 </span>
               </div>
@@ -485,7 +485,7 @@ if ('list' === $groupAction) {
                 <span class="unselect_all">
                   <a class="btn btn-primary btn-sm"
                      href="javascript:selectUnselectAll('group_member_list')">
-                      <i aria-hidden="true" class="fa fa-user-minus"></i>
+                      <i aria-hidden="true" class="fa fa-user-times"></i>
                   </a>
                 </span>
               </div>
