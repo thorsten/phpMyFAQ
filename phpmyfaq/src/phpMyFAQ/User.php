@@ -1073,6 +1073,7 @@ class User
         $consonants = ['b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z'];
         $vowels = ['a', 'e', 'i', 'u'];
         $newPassword = '';
+        $nextChar = '';
         $skipped = false;
 
         while (strlen($newPassword) < $minimumLength) {
@@ -1090,7 +1091,7 @@ class User
                     $nextChar = $caseFunc($vowels[rand(0, 3)]);
                     break;
                 case 4:
-                    $nextChar = rand(2, 9); // No 0 to avoid confusion with O, same for 1 and l.
+                    $nextChar = (string)rand(2, 9);
                     break;
                 case 5:
                     $newPassword .= '_';

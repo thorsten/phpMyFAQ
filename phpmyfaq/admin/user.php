@@ -242,7 +242,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
     // save new user
     if ($userAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'add_user')) {
-        $user = new User($faqConfig);
+        $newUser = new User($faqConfig);
         $message = '';
         $messages = [];
         $userName = Filter::filterInput(INPUT_POST, 'user_name', FILTER_SANITIZE_STRING, '');
@@ -266,11 +266,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         }
 
         // check login name
-        if (!$user->isValidLogin($userName)) {
+        if (!$newUser->isValidLogin($userName)) {
             $userName = '';
             $messages[] = $PMF_LANG['ad_user_error_loginInvalid'];
         }
-        if ($user->getUserByLogin($userName)) {
+        if ($newUser->getUserByLogin($userName)) {
             $userName = '';
             $messages[] = $PMF_LANG['ad_adus_exerr'];
         }
@@ -286,21 +286,22 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         }
 
         // ok, let's go
-        if (count($messages) == 0 && $csrfOkay) {
+        if (count($messages) === 0 && $csrfOkay) {
+
             // create user account (login and password)
-            if (!$user->createUser($userName, $userPassword)) {
-                $messages[] = $user->error();
+            if (!$newUser->createUser($userName, $userPassword)) {
+                $messages[] = $newUser->error();
             } else {
                 // set user data (realname, email)
-                $user->userdata->set(array('display_name', 'email'), array($userRealName, $userEmail));
+                $newUser->userdata->set(array('display_name', 'email'), array($userRealName, $userEmail));
                 // set user status
-                $user->setStatus($defaultUserStatus);
-                $user->setSuperAdmin($userIsSuperAdmin === 'on' ? true : false);
+                $newUser->setStatus($defaultUserStatus);
+                $newUser->setSuperAdmin($userIsSuperAdmin === 'on' ? true : false);
             }
         }
 
         // no errors, send notification to user and show list
-        if (count($messages) == 0) {
+        if (count($messages) === 0) {
             $text = sprintf(
                 "You have been registrated as a new user:\n\nName: %s\nLogin name: %s\n\nPassword: %\n\n".
                 'Check it out here: %s.',
@@ -323,7 +324,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             $userAction = 'add';
             $message = '<p class="alert alert-danger">';
             foreach ($messages as $err) {
-                $message .= $err.'<br />';
+                $message .= $err.'<br>';
             }
             $message .= '</p>';
         }
@@ -334,8 +335,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     }
 
     // show new user form
-    if ($userAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_user')) {
-        ?>
+    if ($userAction === 'add' && $user->perm->checkRight($user->getUserId(), 'add_user')) { ?>
 
       <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
@@ -411,7 +411,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 </div>
             </div>
         </form>
-</div> <!-- end #user_create -->
+</div>
 <?php
 
     }
@@ -487,7 +487,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         }
         </script>
 
-        <div id="user_message"><?= $message ?></div>
+
+      <div id="user_message"><?= $message ?></div>
 
         <div class="row">
             <div class="col-lg-4">
@@ -629,7 +630,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             </div>
         </div>
 <?php
-
     }
 
     // show list of all users
@@ -717,17 +717,17 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 <td><i class="fa <?php
                 switch ($user->getStatus()) {
                     case 'active':
-                        echo 'fa-user-check';
+                        echo 'fa-check-circle-o';
                         break;
                     case 'blocked':
                         echo 'fa-ban';
                         break;
                     case 'protected':
-                        echo 'fa-user-lock';
+                        echo 'fa-lock';
                         break;
                 }
             ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
-                <td><i class="fa <?= $user->isSuperAdmin() ? 'fa-user-tie' : 'fa-user-minus' ?>"></i></td>
+                <td><i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i></td>
                 <td><?= $user->getUserData('display_name') ?></td>
                 <td><?= $user->getLogin() ?></td>
                 <td>
@@ -737,7 +737,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 </td>
                 <td>
                     <a href="?action=user&amp;user_id=<?= $user->getUserData('user_id')?>" class="btn btn-info">
-                        <?= $PMF_LANG['ad_user_edit'] ?>
+                      <i class="fa fa-pencil"></i> <?= $PMF_LANG['ad_user_edit'] ?>
                     </a>
                 </td>
                 <td>
@@ -746,7 +746,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                          href="#" class="btn btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
                          data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                          data-user-id="<?= $user->getUserData('user_id') ?>">
-                            <?= $PMF_LANG['ad_news_set_active'] ?>
+                        <?= $PMF_LANG['ad_news_set_active'] ?>
                         </a>
                     <?php endif;
             ?>
@@ -756,7 +756,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                     <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
                        data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                        data-user-id="<?= $user->getUserData('user_id') ?>">
-                        <?= $PMF_LANG['ad_user_delete'] ?>
+                        <i class="fa fa-trash"></i> <?= $PMF_LANG['ad_user_delete'] ?>
                     </a>
                     <?php endif;
             ?>
