@@ -158,7 +158,7 @@ class Category
 
         $this->lineTab = $this->getOrderedCategories($withPerm);
         foreach (array_keys($this->lineTab) as $i) {
-            $this->lineTab[$i]['level'] = $this->levelOf($this->lineTab[$i]['id']);
+            $this->lineTab[$i]['level'] = $this->getLevelOf($this->lineTab[$i]['id']);
         }
     }
 
@@ -254,6 +254,7 @@ class Category
 
         if ($result) {
             while ($row = $this->config->getDb()->fetchArray($result)) {
+                $row['level'] = (int)$this->getLevelOf($row['id']);
                 $this->categoryName[$row['id']] = $row;
                 $this->categories[$row['id']] = $row;
                 $this->children[$row['parent_id']][$row['id']] = & $this->categoryName[$row['id']];
@@ -272,7 +273,7 @@ class Category
      *
      * @return int
      */
-    private function levelOf($id)
+    private function getLevelOf($id)
     {
         $alreadies = array($id);
         $ret = 0;
@@ -369,7 +370,7 @@ class Category
                 'active' => (int)$row['active'],
                 'show_home' => (int)$row['show_home'],
                 'image' => $row['image'],
-                'level' => (int)$this->levelOf($row['id'])
+                'level' => (int)$this->getLevelOf($row['id'])
             ];
         }
 
@@ -410,7 +411,7 @@ class Category
                 'active' => (int)$row['active'],
                 'show_home' => (int)$row['show_home'],
                 'image' => $row['image'],
-                'level' => (int)$this->levelOf($row['id'])
+                'level' => (int)$this->getLevelOf($row['id'])
             ];
         }
 
