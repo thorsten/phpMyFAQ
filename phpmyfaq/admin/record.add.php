@@ -3,8 +3,6 @@
  * Adds a record in the database, handles the preview and checks for missing
  * category entries.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -20,12 +18,13 @@
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Helper\LinkverifierHelper;
+use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Notification;
 use phpMyFAQ\Services\Twitter;
+use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\Visits;
 
@@ -228,7 +227,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
                 $link = sprintf(
                     'index.php?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    $category,
+                    $categories['rubrik'][0],
                     $recordId,
                     $recordLang
                 );
@@ -244,17 +243,15 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
             ?>
-    <script>
-        (function() {
-            setTimeout(function() {
+          <script>
+            (() => {
+              setTimeout(() => {
                 window.location = "index.php?action=editentry&id=<?= $recordId;
-            ?>&lang=<?= $recordData['lang'] ?>";
-            }, 5000);
-        })();
-    </script>
-
+                    ?>&lang=<?= $recordData['lang'] ?>";
+              }, 5000);
+            })();
+          </script>
 <?php
-
         } else {
             printf(
                 '<p class="alert alert-danger">%s</p>',
@@ -270,39 +267,39 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             '<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_entryins_fail']
         );
         ?>
-    <form action="?action=editpreview" method="post">
-    <input type="hidden" name="question"            value="<?= Strings::htmlspecialchars($question) ?>">
-    <input type="hidden" name="content" class="mceNoEditor" value="<?= Strings::htmlspecialchars($content) ?>">
-    <input type="hidden" name="lang"                value="<?= $recordLang ?>">
-    <input type="hidden" name="keywords"            value="<?= $keywords ?>">
-    <input type="hidden" name="tags"                value="<?= $tags ?>">
-    <input type="hidden" name="author"              value="<?= $author ?>">
-    <input type="hidden" name="email"               value="<?= $email ?>">
-    <?php
-        if (is_array($categories['rubrik'])) {
-            foreach ($categories['rubrik'] as $key => $_categories) {
-                echo '    <input type="hidden" name="rubrik['.$key.']" value="'.$_categories.'" />';
-            }
-        }
-    ?>
-    <input type="hidden" name="solution_id"         value="<?= $solutionId ?>">
-    <input type="hidden" name="revision"            value="<?= $revisionId ?>">
-    <input type="hidden" name="active"              value="<?= $active ?>">
-    <input type="hidden" name="changed"             value="<?= $changed ?>">
-    <input type="hidden" name="comment"             value="<?= $comment ?>">
-    <input type="hidden" name="dateStart"           value="<?= $dateStart ?>">
-    <input type="hidden" name="dateEnd"             value="<?= $dateEnd ?>">
-    <input type="hidden" name="userpermission"      value="<?= $user_permission ?>">
-    <input type="hidden" name="restricted_users"    value="<?= $permissions['restricted_user'] ?>">
-    <input type="hidden" name="grouppermission"     value="<?= $group_permission ?>">
-    <input type="hidden" name="restricted_group"    value="<?= $permissions['restricted_groups'] ?>">
-    <input type="hidden" name="notes"               value="<?= $notes ?>">
-    <p class="text-center">
-        <button class="btn btn-primary" type="submit" name="submit">
-            <?= $PMF_LANG['ad_entry_back'] ?>
-        </button>
-    </p>
-    </form>
+      <form action="?action=editpreview" method="post">
+        <input type="hidden" name="question" value="<?= Strings::htmlspecialchars($question) ?>">
+        <input type="hidden" name="content" class="mceNoEditor" value="<?= Strings::htmlspecialchars($content) ?>">
+        <input type="hidden" name="lang" value="<?= $recordLang ?>">
+        <input type="hidden" name="keywords" value="<?= $keywords ?>">
+        <input type="hidden" name="tags" value="<?= $tags ?>">
+        <input type="hidden" name="author" value="<?= $author ?>">
+        <input type="hidden" name="email" value="<?= $email ?>">
+          <?php
+          if (is_array($categories['rubrik'])) {
+              foreach ($categories['rubrik'] as $key => $_categories) {
+                  echo '    <input type="hidden" name="rubrik[' . $key . ']" value="' . $_categories . '" />';
+              }
+          }
+          ?>
+        <input type="hidden" name="solution_id" value="<?= $solutionId ?>">
+        <input type="hidden" name="revision" value="<?= $revisionId ?>">
+        <input type="hidden" name="active" value="<?= $active ?>">
+        <input type="hidden" name="changed" value="<?= $changed ?>">
+        <input type="hidden" name="comment" value="<?= $comment ?>">
+        <input type="hidden" name="dateStart" value="<?= $dateStart ?>">
+        <input type="hidden" name="dateEnd" value="<?= $dateEnd ?>">
+        <input type="hidden" name="userpermission" value="<?= $user_permission ?>">
+        <input type="hidden" name="restricted_users" value="<?= $permissions['restricted_user'] ?>">
+        <input type="hidden" name="grouppermission" value="<?= $group_permission ?>">
+        <input type="hidden" name="restricted_group" value="<?= $permissions['restricted_groups'] ?>">
+        <input type="hidden" name="notes" value="<?= $notes ?>">
+        <p class="text-center">
+          <button class="btn btn-primary" type="submit" name="submit">
+              <?= $PMF_LANG['ad_entry_back'] ?>
+          </button>
+        </p>
+      </form>
 <?php
     }
 } else {

@@ -5,7 +5,7 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for Administration backend.
  *
- * 
+ *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -47,15 +47,20 @@ class Administration
      * ',' stands for 'or', '*' stands for 'and'.
      *
      * @param string $restrictions Restrictions
-     * @param string $action       Action parameter
-     * @param string $caption      Caption
-     * @param string $active       Active
-     * @param bool   $checkPerm    Check permission (default: true)
+     * @param string $action Action parameter
+     * @param string $caption Caption
+     * @param string $active Active
+     * @param bool $checkPerm Check permission (default: true)
      *
      * @return string
      */
-    public function addMenuEntry($restrictions = '', $action = '', $caption = '', $active = '', $checkPerm = true)
-    {
+    public function addMenuEntry(
+        string $restrictions = '',
+        string $action = '',
+        string $caption = '',
+        string $active = '',
+        bool $checkPerm = true
+    ): string {
         global $PMF_LANG;
 
         if ($active == $action) {
@@ -65,13 +70,13 @@ class Administration
         }
 
         if ($action != '') {
-            $action = 'action='.$action;
+            $action = 'action=' . $action;
         }
 
         if (isset($PMF_LANG[$caption])) {
             $renderedCaption = $PMF_LANG[$caption];
         } else {
-            $renderedCaption = 'No string for '.$caption;
+            $renderedCaption = 'No string for ' . $caption;
         }
 
         $output = sprintf(
@@ -98,37 +103,37 @@ class Administration
      *
      * No braces will be parsed, only simple expressions
      *
-     * @example right1*right2+right3+right4*right5
-     *
      * @param string $restrictions
      *
      * @return bool
+     * @example right1*right2+right3+right4*right5
+     *
      */
-    private function evaluatePermission($restrictions)
+    private function evaluatePermission(string $restrictions): bool
     {
         if (false !== strpos($restrictions, '+')) {
-            $retval = false;
-            foreach (explode('+', $restrictions) as $_restriction) {
-                $retval = $retval || $this->evaluatePermission($_restriction);
-                if ($retval) {
+            $hasPermission = false;
+            foreach (explode('+', $restrictions) as $restriction) {
+                $hasPermission = $hasPermission || $this->evaluatePermission($restriction);
+                if ($hasPermission) {
                     break;
                 }
             }
         } elseif (false !== strpos($restrictions, '*')) {
-            $retval = true;
-            foreach (explode('*', $restrictions) as $_restriction) {
-                if (!isset($this->permission[$_restriction]) || !$this->permission[$_restriction]) {
-                    $retval = false;
+            $hasPermission = true;
+            foreach (explode('*', $restrictions) as $restriction) {
+                if (!isset($this->permission[$restriction]) || !$this->permission[$restriction]) {
+                    $hasPermission = false;
                     break;
                 }
             }
         } else {
-            $retval = strlen($restrictions) > 0 &&
+            $hasPermission = strlen($restrictions) > 0 &&
                 isset($this->permission[$restrictions]) &&
                 $this->permission [$restrictions];
         }
 
-        return $retval;
+        return $hasPermission;
     }
 
     /**
@@ -136,7 +141,7 @@ class Administration
      *
      * @param User $user
      */
-    public function setUser(User $user)
+    public function setUser(User $user): void
     {
         // read all rights, set them FALSE
         $allRights = $user->perm->getAllRightsData();
@@ -165,7 +170,7 @@ class Administration
      *
      * @return string
      */
-    public function renderMetaRobotsDropdown($metaRobots)
+    public function renderMetaRobotsDropdown(string $metaRobots): string
     {
         $html = '';
         $values = [
