@@ -73,6 +73,10 @@ RewriteRule ^(.*)$                  index.php?action=glossary [L,QSA]
 RewriteCond %{REQUEST_URI}          /overview\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=overview [L,QSA]
 
+# the login page
+RewriteCond %{REQUEST_URI}          /login\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=login [L,QSA]
+
 # start page
 RewriteRule ^index.html$                 index.php [PT]
 

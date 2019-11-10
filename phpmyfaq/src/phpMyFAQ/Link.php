@@ -604,6 +604,10 @@ class Link
                             $url .= self::LINK_HTML_OPEN;
                             break;
 
+                        case self::LINK_GET_ACTION_LOGIN:
+                            $url .= self::LINK_HTML_LOGIN;
+                            break;
+
                         case self::LINK_GET_ACTION_SEARCH:
                             if (!isset($getParams[self::LINK_GET_ACTION_SEARCH]) &&
                                 isset($getParams[self::LINK_GET_TAGGING_ID])) {
