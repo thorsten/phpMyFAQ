@@ -168,11 +168,6 @@ switch ($action) {
         break;
     default:
         $secLevelHeader = $PMF_LANG['admin_mainmenu_home'];
-        $secLevelEntries .= $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category', 'ad_menu_categ_edit');
-        $secLevelEntries .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_quick_record');
-        $secLevelEntries .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit');
-        $secLevelEntries .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open');
-        $secLevelEntries .= $adminHelper->addMenuEntry('', 'system', 'ad_system_info', $action, false);
         $dashboardPage = true;
         break;
 }

@@ -1,11 +1,7 @@
 <?php
 
-error_reporting(-1);
-
 /**
  * The main admin backend index file.
- *
- *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -295,7 +291,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'question':          require 'record.questions.php'; break;
             case 'comments':          require 'record.comments.php'; break;
             // functions for tags
-            case 'tags':              require 'tags.main.php'; break;
+            case 'tags':
             case 'deletetag':         require 'tags.main.php'; break;
             // news administration
             case 'news':
