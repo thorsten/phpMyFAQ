@@ -3,21 +3,24 @@
 /**
  * This is the page there a user can add a FAQ record translation.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2006-11-12
  */
+
+use phpMyFAQ\Captcha;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Language;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
@@ -27,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$captcha = new phpMyFAQ\Captcha($faqConfig);
+$captcha = new Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
@@ -35,7 +38,7 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$translationLanguage = phpMyFAQ\Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
+$translationLanguage = Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
 
 if (!Language::isASupportedLanguage($translationLanguage)) {
     $translationLanguage = $LANGCODE;
@@ -53,17 +56,17 @@ try {
     // @todo handle the exception
 }
 
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$categoryId = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$srclang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$srclang = Filter::filterInput(INPUT_GET, 'srclang', FILTER_SANITIZE_STRIPPED);
 
 if (!is_null($id) && !is_null($srclang) && Language::isASupportedLanguage($srclang)) {
-    $oFaq = new phpMyFAQ\Faq($faqConfig);
+    $oFaq = new Faq($faqConfig);
     $oFaq->getRecord($id);
     $faqSource = $oFaq->faqRecord;
 }
 
-$captchaHelper = new phpMyFAQ\Helper_Captcha($faqConfig);
+$captchaHelper = new CaptchaHelper($faqConfig);
 
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
