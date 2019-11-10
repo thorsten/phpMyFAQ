@@ -270,22 +270,22 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
               <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" data-toggle="tab" href="#tab-question-answer" role="tab">
-                    Question and Answer
+                    <i class="fa fa-pencil-square-o"></i> <?= $PMF_LANG['ad_record_faq'] ?>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#tab-meta-data" role="tab">
-                    Metadata
+                    <i class="fa fa-database"></i> <?= $PMF_LANG['ad_menu_meta'] ?>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#tab-permissions" role="tab">
-                    Rechte
+                    <i class="fa fa-unlock-alt"></i> <?= $PMF_LANG['ad_record_permissions'] ?>
                   </a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" data-toggle="tab" href="#tab-notes-changelog" role="tab">
-                    Notes and Changelog
+                    <i class="fa fa-sticky-note-o"></i> <?= $PMF_LANG['ad_admin_notes'] . ' / ' . $PMF_LANG['ad_entry_changelog'] ?>
                   </a>
                 </li>
               </ul>

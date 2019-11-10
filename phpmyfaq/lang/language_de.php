@@ -1293,3 +1293,6 @@ $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'An Freunde senden aktivier
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = [0 => 'input', 1 => 'SMTP Server Port'];
 $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP Server Verschlüsselung'];
+$PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
+$PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
+$PMF_LANG['loginPageMessage'] = 'Login für ';

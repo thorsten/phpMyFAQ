@@ -1319,6 +1319,6 @@ $PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = [0 => 'input', 1 => 'SMTP server port'];
 $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP server encryption'];
-
-//Experimental - 2019-10-25 Henrik Werkström
+$PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
+$PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
