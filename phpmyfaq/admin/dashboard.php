@@ -77,7 +77,7 @@ $faqSession = new Session($faqConfig);
 <?php endif; ?>
 
     <section class="row">
-      <div class="col-lg-6 mb-4">
+      <div class="card-columns">
 
           <?php if ($faqConfig->get('main.enableUserTracking')): ?>
             <div class="card shadow mb-4">
