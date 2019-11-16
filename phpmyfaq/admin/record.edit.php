@@ -233,11 +233,11 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <span class="btn btn-sm btn-outline-info">
+              <span class="btn btn-sm     btn-info">
                 <i class="fa fa-hashtag" aria-hidden="true"></i>
                 <?= $currentRevision ?>
               </span>
-              <a href="<?= $link->toString() ?>" class="btn btn-sm btn-outline-success">
+              <a href="<?= $link->toString() ?>" class="btn btn-sm     btn-success">
                 <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
                   <?= $PMF_LANG['ad_view_faq'] ?>
               </a>
@@ -846,7 +846,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 <?php } ?>
 
             </form>
-        </div>
+
         -->
 
         </

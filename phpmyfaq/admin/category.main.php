@@ -34,10 +34,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <a class="btn btn-sm btn-outline-success" href="?action=addcategory">
+              <a class="btn btn-sm     btn-success" href="?action=addcategory">
                   <i aria-hidden="true" class="fa fa-folder-plus"></i> <?= $PMF_LANG['ad_kateg_add']; ?>
               </a>
-              <a class="btn btn-sm btn-outline-info" href="?action=showcategory">
+              <a class="btn btn-sm     btn-info" href="?action=showcategory">
                 <i aria-hidden="true" class="fa fa-list"></i> <?= $PMF_LANG['ad_categ_show']; ?>
               </a>
             </div>

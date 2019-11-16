@@ -178,7 +178,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
               <a href="?action=add-news">
-                  <button class="btn btn-sm btn-outline-success">
+                  <button class="btn btn-sm     btn-success">
                     <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_menu_news_add'] ?>
                   </button>
               </a>

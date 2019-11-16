@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
                           is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')): ?>
                     <div class="float-right">
-                        <a class="btn btn-sm btn-outline-success" data-toggle="modal" href="#pmf-modal-add-instance">
+                        <a class="btn btn-sm     btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
                             <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
                         </a>
                     </div>

@@ -34,7 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#addMetaModal">
+            <button class="btn btn-sm     btn-success" data-toggle="modal" data-target="#addMetaModal">
                 <?= $PMF_LANG['ad_meta_add'] ?>
             </button>
         </div>

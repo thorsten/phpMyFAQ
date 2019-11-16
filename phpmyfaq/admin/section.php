@@ -297,7 +297,7 @@ if ('list' === $sectionAction) {
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <a class="btn btn-sm btn-outline-success" href="?action=section&amp;section_action=add">
+        <a class="btn btn-sm     btn-success" href="?action=section&amp;section_action=add">
             <?= $PMF_LANG['ad_section_add_link'] ?>
         </a>
       </div>
@@ -453,7 +453,6 @@ if ('list' === $sectionAction) {
           </div>
         </div>
       </form>
-    </div>
 <?php
 
 }

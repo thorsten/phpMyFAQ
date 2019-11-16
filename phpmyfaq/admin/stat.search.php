@@ -37,7 +37,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <a class="btn btn-sm btn-outline-danger" href="?action=truncatesearchterms">
+              <a class="btn btn-sm     btn-danger" href="?action=truncatesearchterms">
                 <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_searchterm_del'] ?>
               </a>
             </div>

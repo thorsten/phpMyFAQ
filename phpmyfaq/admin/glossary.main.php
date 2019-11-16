@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 <h2 class="page-header">
                     <i aria-hidden="true" class="fa fa-list-ul"></i> <?= $PMF_LANG['ad_menu_glossary'] ?>
                     <div class="float-right">
-                        <a class="btn btn-sm btn-outline-success" href="?action=addglossary">
+                        <a class="btn btn-sm     btn-success" href="?action=addglossary">
                             <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_glossary_add'] ?>
                         </a>
                     </div>

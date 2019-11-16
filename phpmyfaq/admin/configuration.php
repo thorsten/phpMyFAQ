@@ -103,10 +103,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 </h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
-                        <button class="btn btn-sm btn-outline-warning" type="reset">
+                        <button class="btn btn-sm     btn-warning" type="reset">
                             <?= $PMF_LANG['ad_config_reset'] ?>
                         </button>
-                        <button class="btn btn-sm btn-outline-success" type="submit">
+                        <button class="btn btn-sm     btn-success" type="submit">
                             <?= $PMF_LANG['ad_config_save'] ?>
                         </button>
                     </div>

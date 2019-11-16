@@ -58,16 +58,10 @@ class Administration
         string $restrictions = '',
         string $action = '',
         string $caption = '',
-        string $active = '',
+        $active = '',
         bool $checkPerm = true
     ): string {
         global $PMF_LANG;
-
-        if ($active == $action) {
-            $active = ' class="nav-item active"';
-        } else {
-            $active = ' class="nav-item"';
-        }
 
         if ($action != '') {
             $action = 'action=' . $action;
@@ -80,8 +74,7 @@ class Administration
         }
 
         $output = sprintf(
-            '<li%s><a class="nav-link" href="?%s">%s</a></li>%s',
-            $active,
+            '<a class="collapse-item" href="?%s">%s</a>%s',
             $action,
             $renderedCaption,
             "\n"

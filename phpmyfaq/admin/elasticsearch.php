@@ -54,15 +54,15 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig') && $faqConfig->get
       </h1>
       <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-          <button class="btn btn-sm btn-outline-primary pmf-elasticsearch" data-action="create">
+          <button class="btn btn-sm     btn-primary pmf-elasticsearch" data-action="create">
             <i aria-hidden="true" class="fa fa-searchengine"></i> <?= $PMF_LANG['ad_es_create_index'] ?>
           </button>
 
-          <button class="btn btn-sm btn-outline-primary pmf-elasticsearch" data-action="import">
+          <button class="btn btn-sm     btn-primary pmf-elasticsearch" data-action="import">
             <i aria-hidden="true" class="fa fa-search-plus"></i> <?= $PMF_LANG['ad_es_bulk_index'] ?>
           </button>
 
-          <button class="btn btn-sm btn-outline-danger pmf-elasticsearch" data-action="drop">
+          <button class="btn btn-sm     btn-danger pmf-elasticsearch" data-action="drop">
             <i aria-hidden="true" class="fa fa-trash"></i> <?= $PMF_LANG['ad_es_drop_index'] ?>
           </button>
         </div>

@@ -426,11 +426,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <a class="btn btn-sm btn-outline-success" href="?action=user&amp;user_action=add">
+            <a class="btn btn-sm     btn-success" href="?action=user&amp;user_action=add">
               <?= $PMF_LANG['ad_user_add'] ?>
             </a>
             <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')): ?>
-              <a class="btn btn-sm btn-outline-info" href="?action=user&amp;user_action=listallusers">
+              <a class="btn btn-sm     btn-info" href="?action=user&amp;user_action=listallusers">
                 <?= $PMF_LANG['list_all_users'] ?>
               </a>
             <?php endif ?>
@@ -666,7 +666,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <a class="btn btn-sm btn-outline-success" href="?action=user&amp;user_action=add">
+              <a class="btn btn-sm     btn-success" href="?action=user&amp;user_action=add">
                   <?= $PMF_LANG['ad_user_add'] ?>
               </a>
             </div>

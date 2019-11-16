@@ -44,9 +44,9 @@ $faqSession = new Session($faqConfig);
         <div class="btn-group mr-2">
           <a href="?action=config">
               <?php if ($faqConfig->get('main.maintenanceMode')): ?>
-                <button class="btn btn-sm btn-outline-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
+                <button class="btn btn-sm btn-danger"><?= $PMF_LANG['msgMaintenanceMode'] ?></button>
               <?php else: ?>
-                <button class="btn btn-sm btn-outline-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
+                <button class="btn btn-sm btn-success"><?= $PMF_LANG['msgOnlineMode'] ?></button>
               <?php endif; ?>
           </a>
         </div>
@@ -54,22 +54,34 @@ $faqSession = new Session($faqConfig);
     </div>
 
 <?php if (version_compare($faqConfig->getCurrentVersion(), System::getVersion(), '<')): ?>
-  <div class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">Attention!</h4>
-    <p>
-      The version number stored in your database is lower than your installed version, please update your installation
-      <a href="../setup/update.php" class="alert-link">here</a> to avoid an unintended behaviour.
-    </p>
-  </div>
+    <section class="row">
+      <div class="col-12">
+        <div class="card border-left-danger shadow h-100 py-2">
+          <div class="card-body">
+            <div class="row no-gutters align-items-center">
+              <div class="col mr-2">
+                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">Attention!</div>
+                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                  The version number stored in your database is lower than your installed version, please update your
+                  installation <a href="../setup/update.php" class="alert-link">here</a> to avoid an unintended behaviour.
+                </div>
+              </div>
+              <div class="col-auto">
+                <i class="fa fa-exclamation-triangle fa-2x text-gray-300"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 <?php endif; ?>
 
     <section class="row">
-      <div class="col-lg-12">
-        <div class="card-columns">
+      <div class="col-lg-6 mb-4">
 
           <?php if ($faqConfig->get('main.enableUserTracking')): ?>
-          <div class="card border-dark">
-            <div class="card-header">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-bar-chart"></i> <?= $PMF_LANG['ad_stat_report_visits'] ?>
             </div>
             <div class="card-body">
@@ -96,8 +108,8 @@ $faqSession = new Session($faqConfig);
           </div>
           <?php endif; ?>
 
-          <div class="card border-dark">
-            <div class="card-header">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-info-circle"></i> <?= $PMF_LANG['ad_pmf_info'] ?>
             </div>
             <div class="card-body">
@@ -146,8 +158,8 @@ $faqSession = new Session($faqConfig);
             </div>
           </div>
 
-          <div class="card border-dark">
-            <div class="card-header">
+          <div class="card shadow mb-4">
+            <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-ban"></i> <?= $PMF_LANG['ad_record_inactive']; ?>
             </div>
             <div class="card-body">
@@ -167,8 +179,8 @@ $faqSession = new Session($faqConfig);
           </div>
 
           <?php if ($user->perm->checkRight($user->getUserId(), 'editconfig')): ?>
-            <div class="card border-dark">
-            <div class="card-header">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-check"></i> <?= $PMF_LANG['ad_online_info']; ?>
             </div>
             <div class="card-body">
@@ -180,7 +192,7 @@ $faqSession = new Session($faqConfig);
                         $versions = $api->getVersions();
                         printf(
                             '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
-                            (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'dark',
+                            (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'primary',
                             $PMF_LANG['ad_xmlrpc_latest'],
                             $versions['current']
                         );
@@ -207,8 +219,8 @@ $faqSession = new Session($faqConfig);
             </div>
           </div>
 
-           <div class="card border-dark">
-            <div class="card-header">
+            <div class="card shadow mb-4">
+              <div class="card-header py-3">
               <i aria-hidden="true" class="fa fa-certificate fa-fw"></i> <?= $PMF_LANG['ad_online_verification'] ?>
             </div>
             <div class="card-body">
@@ -262,6 +274,5 @@ $faqSession = new Session($faqConfig);
           </div>
           <?php endif; ?>
 
-        </div>
     </section>
 

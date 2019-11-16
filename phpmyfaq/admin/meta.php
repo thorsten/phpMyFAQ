@@ -40,7 +40,7 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
         <div class="btn-group mr-2">
-            <button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#addMetaModal">
+            <button class="btn btn-sm     btn-success" data-toggle="modal" data-target="#addMetaModal">
               <i aria-hidden="true" class="fa fa-plus"></i>
                 <?= $PMF_LANG['ad_meta_add'] ?>
             </button>

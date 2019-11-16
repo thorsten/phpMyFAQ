@@ -339,7 +339,7 @@ if ('list' === $groupAction) {
           </h1>
           <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <a class="btn btn-sm btn-outline-success" href="?action=group&amp;group_action=add">
+              <a class="btn btn-sm     btn-success" href="?action=group&amp;group_action=add">
                   <?= $PMF_LANG['ad_group_add_link'] ?>
               </a>
             </div>
@@ -551,7 +551,6 @@ if ('list' === $groupAction) {
       </div>
       </form>
     </div>
-  </div>
   </div>
 <?php
 

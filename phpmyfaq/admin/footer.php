@@ -28,29 +28,45 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-</main> <!-- main -->
-</div> <!-- row -->
-</div> <!-- page-wrapper (container-fluid) -->
 
-<footer class="page-footer container-fluid">
-  <div class="row">
-    <div class="col-lg-12">
-      <p class="copyright text-right">
-        Proudly powered by <strong>phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></strong> |
-        <a href="https://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
-        Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
-        <i aria-hidden="true" class="fa fa-apple"></i> Available on the
-        <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957">App Store</a> |
-        &copy; 2001-<?= date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
-      </p>
+      </div>
+      <!-- /.container-fluid -->
+
     </div>
+    <!-- End of Main Content -->
+
+    <!-- Footer -->
+    <footer class="sticky-footer bg-white">
+      <div class="container my-auto">
+        <div class="copyright text-center my-auto">
+          Proudly powered by <strong>phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></strong> |
+          <a href="https://www.phpmyfaq.de/documentation" target="_blank">phpMyFAQ documentation</a> |
+          Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> |
+          <i aria-hidden="true" class="fa fa-apple"></i> Available on the
+          <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957">App Store</a> |
+          &copy; 2001-<?= date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
+        </div>
+      </div>
+    </footer>
+    <!-- End of Footer -->
+
   </div>
-    <?php
-    if (DEBUG) {
-        printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
-    }
-    ?>
-</footer>
+  <!-- End of Content Wrapper -->
+
+</div>
+<!-- End of Page Wrapper -->
+
+<!-- Scroll to Top Button-->
+<a class="scroll-to-top rounded" href="#page-top">
+  <i class="fas fa-angle-up"></i>
+</a>
+
+
+<?php
+if (DEBUG) {
+    printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
+}
+?>
 
 
 <?php
