@@ -17,17 +17,21 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 switch ($ajaxAction) {
 
@@ -39,27 +43,25 @@ switch ($ajaxAction) {
 
         $ajaxData = Filter::filterInputArray(
             INPUT_POST,
-            array(
-                'categories' => array(
+            [
+                'categories' => [
                     'filter' => FILTER_SANITIZE_STRING,
                     'flags' => FILTER_REQUIRE_SCALAR,
-                ),
-            )
+                ],
+            ]
         );
 
         if (empty($ajaxData['categories'])) {
-            $categories = array(-1); // Access for all users and groups
+            $categories = [-1]; // Access for all users and groups
         } else {
             $categories = explode(',', (int)$ajaxData['categories']);
         }
 
-        echo json_encode(
-            array(
+        $http->sendJsonWithHeaders(
+            [
                 'user' => $category->getPermissions('user', $categories),
-                'group' => $category->getPermissions('group', $categories),
-            ),
-            JSON_NUMERIC_CHECK
+                'group' => $category->getPermissions('group', $categories)
+            ]
         );
-
         break;
 }

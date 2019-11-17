@@ -15,21 +15,23 @@
  * @since 2010-12-20
  */
 
-use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Attachment\Exception;
-use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Attachment\Factory;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $attId = Filter::filterInput(INPUT_GET, 'attId', FILTER_VALIDATE_INT);
@@ -89,7 +91,7 @@ try {
                     ];
                 } else {
                     $http->sendStatus(400);
-                    $http->sendJsonWithHeaders('image too large');
+                    $http->sendJsonWithHeaders('The image is too large.');
                     return;
                 }
             }

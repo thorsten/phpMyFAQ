@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Comment;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -27,36 +28,40 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$ajax_action = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_POST, 'ajaxaction', FILTER_SANITIZE_STRING);
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
-if ('delete' === $ajax_action && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
+if ('delete' === $ajaxAction && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
     $comment = new Comment($faqConfig);
-    $checkFaqs = array(
+    $checkFaqs = [
         'filter' => FILTER_VALIDATE_INT,
         'flags' => FILTER_REQUIRE_ARRAY,
-    );
-    $checkNews = array(
+    ];
+    $checkNews = [
         'filter' => FILTER_VALIDATE_INT,
         'flags' => FILTER_REQUIRE_ARRAY,
-    );
-    $ret = false;
+    ];
+    $success = false;
 
-    $faqComments = Filter::filterInputArray(INPUT_POST, array('faq_comments' => $checkFaqs));
-    $newsComments = Filter::filterInputArray(INPUT_POST, array('news_comments' => $checkNews));
+    $faqComments = Filter::filterInputArray(INPUT_POST, ['faq_comments' => $checkFaqs]);
+    $newsComments = Filter::filterInputArray(INPUT_POST, ['news_comments' => $checkNews]);
 
     if (!is_null($faqComments['faq_comments'])) {
         foreach ($faqComments['faq_comments'] as $commentId => $recordId) {
-            $ret = $comment->deleteComment($recordId, $commentId);
+            $success = $comment->deleteComment($recordId, $commentId);
         }
     }
 
     if (!is_null($newsComments['news_comments'])) {
         foreach ($newsComments['news_comments'] as $commentId => $recordId) {
-            $ret = $comment->deleteComment($recordId, $commentId);
+            $success = $comment->deleteComment($recordId, $commentId);
         }
     }
 
-    print $ret;
+    $http->sendWithHeaders($success);
 } else {
-    print 0;
+    $http->sendStatus(401);
+    $http->sendWithHeaders(false);
 }

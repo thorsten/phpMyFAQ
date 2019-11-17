@@ -17,6 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Visits;
@@ -26,14 +27,19 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $do = Filter::filterInput(INPUT_GET, 'do', FILTER_SANITIZE_STRING);
 
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
+
 if ('insertentry' === $do &&
-    ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(), 'add_faq')) ||
+    ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->checkRight($user->getUserId(),
+            'add_faq')) ||
     'saveentry' === $do && $user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $user = CurrentUser::getFromCookie($faqConfig);
     if (!$user instanceof CurrentUser) {
@@ -43,8 +49,12 @@ if ('insertentry' === $do &&
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-    $categories = Filter::filterInputArray(INPUT_POST, array('rubrik' => array('filter' => FILTER_VALIDATE_INT,
-                                                                                        'flags' => FILTER_REQUIRE_ARRAY, )));
+    $categories = Filter::filterInputArray(INPUT_POST, array(
+        'rubrik' => array(
+            'filter' => FILTER_VALIDATE_INT,
+            'flags' => FILTER_REQUIRE_ARRAY,
+        )
+    ));
     $record_lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -60,9 +70,11 @@ if ('insertentry' === $do &&
     $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
 
     $user_permission = Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-    $restricted_users = ('all' == $user_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT);
+    $restricted_users = ('all' == $user_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_users',
+        FILTER_VALIDATE_INT);
     $group_permission = Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-    $restricted_groups = ('all' == $group_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_groups', FILTER_VALIDATE_INT);
+    $restricted_groups = ('all' == $group_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_groups',
+        FILTER_VALIDATE_INT);
 
     if (!is_null($question) && !is_null($categories)) {
         $tagging = new Tags($faqConfig);
@@ -87,8 +99,8 @@ if ('insertentry' === $do &&
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
             'date' => empty($date) ? date('YmdHis') : str_replace(array('-', ':', ' '), '', $date),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart).'000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
+            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
+            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
         );
@@ -154,14 +166,15 @@ if ('insertentry' === $do &&
             }
         }
 
-        $out = array(
+        $out = [
             'msg' => sprintf('Item auto-saved at revision %d', $revision_id),
             'revision_id' => $revision_id,
             'record_id' => $record_id,
-        );
+        ];
 
-        print json_encode($out);
+        $http->sendJsonWithHeaders($out);
     }
 } else {
-    print json_encode(array('msg' => 'Missing article rights'));
+    $http->sendStatus(401);
+    $http->sendJsonWithHeaders(['msg' => 'Missing article rights']);
 }

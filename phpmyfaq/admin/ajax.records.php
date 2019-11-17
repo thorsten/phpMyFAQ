@@ -30,11 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$ajax_action = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $csrfTokenPost = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 $csrfTokenGet = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
@@ -51,104 +51,104 @@ if (!isset($items[0][2])) {
     $items[0][2] = 0;
 }
 
-switch ($ajax_action) {
+switch ($ajaxAction) {
 
     // save active FAQs
-        case 'save_active_records':
-            if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
-                if (!empty($items)) {
-                    $faq = new Faq($faqConfig);
-
-                    foreach ($items as $item) {
-                        if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
-                            echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'active');
-                        }
-                    }
-                }
-            } else {
-                echo $PMF_LANG['err_NotAuth'];
-            }
-            break;
-
-        // save sticky FAQs
-        case 'save_sticky_records':
-            if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
-                if (!empty($items)) {
-                    $faq = new Faq($faqConfig);
-
-                    foreach ($items as $item) {
-                        if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
-                            echo $faq->updateRecordFlag((int) $item[0], addslashes($item[1]), $item[2], 'sticky');
-                        }
-                    }
-                }
-            } else {
-                echo $PMF_LANG['err_NotAuth'];
-            }
-            break;
-
-        // search FAQs for suggestions
-        case 'search_records':
-            if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+    case 'save_active_records':
+        if ($user->perm->checkRight($user->getUserId(), 'approverec')) {
+            if (!empty($items)) {
                 $faq = new Faq($faqConfig);
-                $faqSearch = new Search($faqConfig);
-                $faqSearch->setCategory(new Category($faqConfig));
-                $faqSearchResult = new Resultset($user, $faq, $faqConfig);
-                $searchResult = '';
-                $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
-                if (!is_null($searchString)) {
-                    try {
-                        $searchResult = $faqSearch->search($searchString, false);
-
-                        $faqSearchResult->reviewResultset($searchResult);
-
-                        $searchHelper = new SearchHelper($faqConfig);
-                        $searchHelper->setSearchterm($searchString);
-
-                        echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
-                    } catch (Search\Exception $e) {
-                        //
+                foreach ($items as $item) {
+                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'active');
                     }
                 }
-            } else {
-                echo $PMF_LANG['err_NotAuth'];
             }
-            break;
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        break;
 
-        // delete FAQs
-        case 'delete_record':
-            if ($user->perm->checkRight($user->getUserId(), 'delete_faq')) {
-                $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-                $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+    // save sticky FAQs
+    case 'save_sticky_records':
+        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+            if (!empty($items)) {
+                $faq = new Faq($faqConfig);
 
-                $logging = new Logging($faqConfig);
-                $logging->logAdmin($user, 'Deleted FAQ ID '.$recordId);
-
-                $faq->deleteRecord($recordId, $recordLang);
-                echo $PMF_LANG['ad_entry_delsuc'];
-            } else {
-                echo $PMF_LANG['err_NotAuth'];
-            }
-            break;
-
-        // delete open questions
-        case 'delete_question':
-            if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
-                $checks = array(
-                    'filter' => FILTER_VALIDATE_INT,
-                    'flags' => FILTER_REQUIRE_ARRAY,
-                );
-                $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
-
-                if (!is_null($questionIds['questions'])) {
-                    foreach ($questionIds['questions'] as $questionId) {
-                        $faq->deleteQuestion((int) $questionId);
+                foreach ($items as $item) {
+                    if (is_array($item) && count($item) == 3 && Language::isASupportedLanguage($item[1])) {
+                        echo $faq->updateRecordFlag((int)$item[0], addslashes($item[1]), $item[2], 'sticky');
                     }
                 }
-                echo $PMF_LANG['ad_entry_delsuc'];
-            } else {
-                echo $PMF_LANG['err_NotAuth'];
             }
-            break;
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        break;
+
+    // search FAQs for suggestions
+    case 'search_records':
+        if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
+            $faq = new Faq($faqConfig);
+            $faqSearch = new Search($faqConfig);
+            $faqSearch->setCategory(new Category($faqConfig));
+            $faqSearchResult = new Resultset($user, $faq, $faqConfig);
+            $searchResult = '';
+            $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
+
+            if (!is_null($searchString)) {
+                try {
+                    $searchResult = $faqSearch->search($searchString, false);
+
+                    $faqSearchResult->reviewResultset($searchResult);
+
+                    $searchHelper = new SearchHelper($faqConfig);
+                    $searchHelper->setSearchterm($searchString);
+
+                    echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
+                } catch (Search\Exception $e) {
+                    //
+                }
+            }
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        break;
+
+    // delete FAQs
+    case 'delete_record':
+        if ($user->perm->checkRight($user->getUserId(), 'delete_faq')) {
+            $recordId = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
+            $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STRING);
+
+            $logging = new Logging($faqConfig);
+            $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
+
+            $faq->deleteRecord($recordId, $recordLang);
+            echo $PMF_LANG['ad_entry_delsuc'];
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        break;
+
+    // delete open questions
+    case 'delete_question':
+        if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
+            $checks = array(
+                'filter' => FILTER_VALIDATE_INT,
+                'flags' => FILTER_REQUIRE_ARRAY,
+            );
+            $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+
+            if (!is_null($questionIds['questions'])) {
+                foreach ($questionIds['questions'] as $questionId) {
+                    $faq->deleteQuestion((int)$questionId);
+                }
+            }
+            echo $PMF_LANG['ad_entry_delsuc'];
+        } else {
+            echo $PMF_LANG['err_NotAuth'];
+        }
+        break;
 }

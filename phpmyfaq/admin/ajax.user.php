@@ -27,7 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -94,7 +94,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
 
             $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message = '<p class="error">'.$PMF_LANG['ad_user_error_protectedAccount'].'</p>';
+                $message = '<p class="error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
             } else {
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
@@ -108,7 +108,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
                         $permissions->removeFromAllGroups($userId);
                     }
 
-                    $message = '<p class="success">'.$PMF_LANG['ad_user_deleted'].'</p>';
+                    $message = '<p class="success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
                 }
             }
             $http->sendJsonWithHeaders($message);

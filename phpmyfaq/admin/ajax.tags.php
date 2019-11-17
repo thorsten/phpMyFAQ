@@ -65,7 +65,7 @@ switch ($ajaxAction) {
                 }
             }
 
-            echo json_encode($tagNames);
+            $http->sendJsonWithHeaders($tagNames);
         }
         break;
 
@@ -76,7 +76,7 @@ switch ($ajaxAction) {
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-            echo json_encode($PMF_LANG['err_NotAuth']);
+            $http->sendJsonWithHeaders($PMF_LANG['err_NotAuth']);
             exit(1);
         }
 
@@ -85,9 +85,9 @@ switch ($ajaxAction) {
         $entity->setName($tag);
 
         if ($oTag->updateTag($entity)) {
-            echo json_encode($PMF_LANG['ad_entryins_suc']);
+            $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_suc']);
         } else {
-            echo json_encode($PMF_LANG['ad_entryins_fail']);
+            $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_fail']);
         }
         break;
 }

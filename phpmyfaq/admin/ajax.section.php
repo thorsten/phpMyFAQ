@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Permission\LargePermission;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,6 +30,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $sectionId = Filter::filterInput(INPUT_GET, 'section_id', FILTER_VALIDATE_INT);
+
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
     $user->perm->checkRight($user->getUserId(), 'edit_section') ||
@@ -46,7 +51,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
                 'name' => $data['name'],
             );
         }
-        echo json_encode($sections);
+        $http->sendJsonWithHeaders($sections);
     }
 
     // Return the section data
@@ -63,6 +68,6 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
             $members[] = array('group_id' => $group['group_id'],
                                 'name' => $group['name'] );
         }
-        echo json_encode($members);
+        $http->sendJsonWithHeaders($members);
     }
 }

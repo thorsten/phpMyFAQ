@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User;
 
@@ -24,18 +25,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $groupId = Filter::filterInput(INPUT_GET, 'group_id', FILTER_VALIDATE_INT);
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
     $user->perm->checkRight($user->getUserId(), 'edit_user') ||
     $user->perm->checkRight($user->getUserId(), 'delete_user') ||
     $user->perm->checkRight($user->getUserId(), 'editgroup')) {
-    
+
     // pass the user id of the current user so it'll check which group he belongs to
     $groupList = ($user->perm instanceof MediumPermission) ? $user->perm->getAllGroups($user->getUserId()) : [];
     $userList = $user->getAllUsers(true, false);
@@ -55,39 +59,43 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
                 'name' => $data['name'],
             );
         }
-        echo json_encode($groups);
+        $http->sendJsonWithHeaders($groups);
     }
 
     // Return the group data
     if ('get_group_data' == $ajaxAction) {
-        echo json_encode($user->perm->getGroupData($groupId));
+        $http->sendJsonWithHeaders($user->perm->getGroupData($groupId));
     }
 
     // Return the group rights
     if ('get_group_rights' == $ajaxAction) {
-        echo json_encode($user->perm->getGroupRights($groupId));
+        $http->sendJsonWithHeaders($user->perm->getGroupRights($groupId));
     }
 
     // Return all users
     if ('get_all_users' == $ajaxAction) {
         $users = [];
-        foreach ($userList as $single_user) {
-            $user->getUserById($single_user, true);
-            $users[] = array('user_id' => $user->getUserId(),
-                                'login' => $user->getLogin(), );
+        foreach ($userList as $singleUser) {
+            $user->getUserById($singleUser, true);
+            $users[] = array(
+                'user_id' => $user->getUserId(),
+                'login' => $user->getLogin(),
+            );
         }
-        echo json_encode($users);
+        $http->sendJsonWithHeaders($users);
     }
 
     // Returns all group members
     if ('get_all_members' == $ajaxAction) {
         $memberList = $user->perm->getGroupMembers($groupId);
         $members = [];
-        foreach ($memberList as $single_member) {
-            $user->getUserById($single_member, true);
-            $members[] = array('user_id' => $user->getUserId(),
-                                'login' => $user->getLogin(), );
+        foreach ($memberList as $singleMember) {
+            $user->getUserById($singleMember, true);
+            $members[] = array(
+                'user_id' => $user->getUserId(),
+                'login' => $user->getLogin(),
+            );
         }
-        echo json_encode($members);
+        $http->sendJsonWithHeaders($members);
     }
 }

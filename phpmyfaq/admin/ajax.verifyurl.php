@@ -33,20 +33,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
-$httpHeader = new HttpHelper();
-$httpHeader->setContentType('text/html');
-$httpHeader->addHeader();
+$http = new HttpHelper();
+$http->setContentType('text/html');
+$http->addHeader();
 
 $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
     }
-    print 'disabled';
+    $http->sendWithHeaders('disabled');
     exit();
 }
 
@@ -54,7 +54,7 @@ $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
-    $httpHeader->sendStatus(401);
+    $http->sendStatus(401);
     exit();
 }
 
@@ -62,7 +62,7 @@ $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
-    $httpHeader->sendStatus(401);
+    $http->sendStatus(401);
     exit();
 }
 
@@ -74,6 +74,4 @@ $linkVerifier->parseString($faq->faqRecord['content']);
 $linkVerifier->verifyURLs($faqConfig->getDefaultUrl());
 $linkVerifier->markEntry($id, $lang);
 
-$httpHeader->sendWithHeaders($linkVerifier->getLinkStateString());
-
-exit();
+$http->sendWithHeaders($linkVerifier->getLinkStateString());

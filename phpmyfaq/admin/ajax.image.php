@@ -23,11 +23,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
 $upload = Filter::filterInput(INPUT_GET, 'image', FILTER_VALIDATE_INT);
@@ -40,47 +42,47 @@ if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token']
 }
 switch ($ajaxAction) {
 
-        case 'upload':
+    case 'upload':
 
-            $uploadDir = '../images/';
-            $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
-            $timestamp = time();
-            if ($csrfOkay) {
-                reset($_FILES);
-                $temp = current($_FILES);
-                if (is_uploaded_file($temp['tmp_name'])) {
-                    if (isset($_SERVER['HTTP_ORIGIN'])) {
-                        if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
-                            $http->sendCorsHeader();
-                        } else {
-                            $http->sendStatus(403);
-                            return;
-                        }
-                    }
-
-                    // Sanitize input
-                    if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-                        $http->sendStatus(400);
+        $uploadDir = '../images/';
+        $validFileExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+        $timestamp = time();
+        if ($csrfOkay) {
+            reset($_FILES);
+            $temp = current($_FILES);
+            if (is_uploaded_file($temp['tmp_name'])) {
+                if (isset($_SERVER['HTTP_ORIGIN'])) {
+                    if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
+                        $http->sendCorsHeader();
+                    } else {
+                        $http->sendStatus(403);
                         return;
                     }
-
-                    // Verify extension
-                    if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
-                        $http->sendStatus(400);
-                        return;
-                    }
-
-                    // Accept upload if there was no origin, or if it is an accepted origin
-                    $fileToWrite = $uploadDir . $timestamp . $temp['name'];
-                    move_uploaded_file($temp['tmp_name'], $fileToWrite);
-
-                    // Respond to the successful upload with JSON.
-                    $http->sendJsonWithHeaders(['location' => $fileToWrite]);
-                } else {
-                    $http->sendStatus(500);
                 }
+
+                // Sanitize input
+                if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
+                    $http->sendStatus(400);
+                    return;
+                }
+
+                // Verify extension
+                if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
+                    $http->sendStatus(400);
+                    return;
+                }
+
+                // Accept upload if there was no origin, or if it is an accepted origin
+                $fileToWrite = $uploadDir . $timestamp . $temp['name'];
+                move_uploaded_file($temp['tmp_name'], $fileToWrite);
+
+                // Respond to the successful upload with JSON.
+                $http->sendJsonWithHeaders(['location' => $fileToWrite]);
             } else {
-                $http->sendStatus(401);
+                $http->sendStatus(500);
             }
-            break;
+        } else {
+            $http->sendStatus(401);
+        }
+        break;
 }

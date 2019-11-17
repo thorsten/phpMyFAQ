@@ -15,10 +15,9 @@
  * @since 2015-12-26
  */
 
-use Elasticsearch\Common\Exceptions\BadRequest400Exception;
-use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,41 +30,34 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+
 $esInstance = new Elasticsearch($faqConfig);
+
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
+
 $result = [];
 
 switch ($ajaxAction) {
 
     case 'create':
-
-        try {
-            if ($esInstance->createIndex()) {
-                $result = ['success' => $PMF_LANG['ad_es_create_index_success']];
-            }
-        } catch (BadRequest400Exception $e) {
-            $result = ['error' => $e->getMessage()];
+        if ($esInstance->createIndex()) {
+            $result = ['success' => $PMF_LANG['ad_es_create_index_success']];
         }
-
         break;
 
     case 'drop':
-
-        try {
-            if ($esInstance->dropIndex()) {
-                $result = ['success' => $PMF_LANG['ad_es_drop_index_success']];
-            }
-        } catch (Missing404Exception $e) {
-            $result = ['error' => $e->getMessage()];
+        if ($esInstance->dropIndex()) {
+            $result = ['success' => $PMF_LANG['ad_es_drop_index_success']];
         }
         break;
 
     case 'import':
-
         $faq = new Faq($faqConfig);
         $faq->getAllRecords();
         $result = $esInstance->bulkIndex($faq->faqRecords);
-
         break;
 }
 
-echo json_encode($result);
+$http->sendJsonWithHeaders($result);

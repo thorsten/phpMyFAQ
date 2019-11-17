@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Search;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,15 +32,18 @@ $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRIN
 $searchTerm = Filter::filterInput(INPUT_GET, 'searchterm', FILTER_SANITIZE_STRING);
 
 $search = new Search($faqConfig);
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 switch ($ajaxAction) {
 
     case 'delete_searchterm':
 
         if ($search->deleteSearchTerm($searchTerm)) {
-            echo true;
+            $http->sendWithHeaders(true);
         } else {
-            echo false;
+            $http->sendWithHeaders(false);
         }
 
         break;

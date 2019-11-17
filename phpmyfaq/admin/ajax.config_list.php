@@ -1,4 +1,5 @@
 <?php
+
 /**
  * AJAX: lists the complete configuration items as text/html.
  *

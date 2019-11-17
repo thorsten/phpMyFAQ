@@ -17,6 +17,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -28,7 +29,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $answer = Filter::filterInput(INPUT_POST, 'text', FILTER_SANITIZE_STRING);
+$http = new HttpHelper();
+$http->setContentType('application/json');
+$http->addHeader();
 
 $parsedown = new ParsedownExtra();
 
-echo $parsedown->text($answer);
+$http->sendWithHeaders($parsedown->text($answer));
