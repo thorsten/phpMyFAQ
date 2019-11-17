@@ -1,6 +1,7 @@
 <?php
 
 namespace phpMyFAQ\Attachment;
+
 /**
  * Attachment handler class for files stored in filesystem.
  *
@@ -26,14 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Attachment_Abstract.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * Class File
+ * @package phpMyFAQ\Attachment
  */
 class File extends AttachmentAbstract implements AttachmentInterface
 {
@@ -45,24 +40,24 @@ class File extends AttachmentAbstract implements AttachmentInterface
      */
     protected function buildFilePath(): string
     {
-        $retval = PMF_ATTACHMENTS_DIR;
+        $attachmentPath = PMF_ATTACHMENTS_DIR;
         $fsHash = $this->mkVirtualHash();
         $subDirCount = 3;
         $subDirNameLength = 5;
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
+            $attachmentPath .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
         }
 
-        $retval .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength);
+        $attachmentPath .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength);
 
-        return $retval;
+        return $attachmentPath;
     }
 
     /**
-     * Create subdirs to save file to.
+     * Create subdirectories to save file to.
      *
-     * @param string $filepath filpath to create subdirs for
+     * @param string $filepath filepath to create subdirectories for
      *
      * @return bool success
      */
@@ -75,7 +70,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
     }
 
     /**
-     * Check wether the file storage is ok.
+     * Check whether the file storage is ok.
      *
      * @return bool
      */
@@ -100,14 +95,12 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @param string $filePath full path to the attachment file
      * @param string $filename filename to force
-     *
      * @throws
-     *
      * @return bool
      */
     public function save($filePath, $filename = null): bool
     {
-        $retval = false;
+        $success = false;
 
         if (file_exists($filePath)) {
             $this->realHash = md5_file($filePath);
@@ -119,60 +112,50 @@ class File extends AttachmentAbstract implements AttachmentInterface
             $targetFile = $this->buildFilePath();
 
             if (null !== $this->id && $this->createSubDirs($targetFile)) {
-                /*
-                 * Doing this check we're sure not to unnecessary 
-                 * overwrite existing unencrypted file duplicates.
-                 */
+                // Doing this check we're sure not to unnecessary
+                // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
                     $source = new Vanilla($filePath);
                     $target = $this->getFile(FilesystemFile::MODE_WRITE);
 
-                    $retval = $source->moveTo($target);
+                    $success = $source->moveTo($target);
                 } else {
-                    $retval = true;
+                    $success = true;
                 }
 
-                if ($retval) {
+                if ($success) {
                     $this->postUpdateMeta();
                 } else {
-                    /*
-                     * File wasn't saved
-                     */
+                    // File wasn't saved
                     $this->delete();
-                    $retval = false;
+                    $success = false;
                 }
             }
         }
 
-        return $retval;
+        return $success;
     }
 
     /**
      * Delete attachment.
-     * 
      * @return bool
      */
     public function delete(): bool
     {
-        $retval = true;
+        $success = true;
 
         // Won't delete the file if there are still some records hanging on it
         if (!$this->linkedRecords()) {
-            try {
-                $retval &= $this->getFile()->delete();
-            } catch (Exception $e) {
-                $retval &= !file_exists($this->buildFilePath());
-            }
+            $success &= $this->getFile()->delete();
         }
 
         $this->deleteMeta();
 
-        return $retval;
+        return $success;
     }
 
     /**
      * Retrieve file contents into a variable.
-     *
      * @return string
      */
     public function get(): string
@@ -181,13 +164,11 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Output current file to stdout.
-     *
-     * @param bool   $headers     if headers must be sent
-     * @param string $disposition diposition type (ignored if $headers false)
-     * 
-     * @return string
+     * @param bool $headers if headers must be sent
+     * @param string $disposition disposition type (ignored if $headers false)
+     * @return void
      */
-    public function rawOut($headers = true, $disposition = 'attachment'): string
+    public function rawOut($headers = true, $disposition = 'attachment'): void
     {
         $file = $this->getFile();
 
