@@ -6,7 +6,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   JavaScript
  * @author Hamed Ayari <hamed.ayari@maxdome.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2016-2019 phpMyFAQ Team

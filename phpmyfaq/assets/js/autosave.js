@@ -6,7 +6,6 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   JavaScript
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2012-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
