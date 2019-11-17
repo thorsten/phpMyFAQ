@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const csrf = $('#csrf').val();
     const pageId = $('#page_id').val();
     const type = $('#type').val();
-    const content = $('#content').val();
+    const content = $('#meta-content').val();
 
     $.get('index.php',
       {
@@ -54,8 +54,12 @@ document.addEventListener('DOMContentLoaded', () => {
             '<a href="?action=meta.edit&id=' + data.added + '" class="btn btn-success">' +
             '<i aria-hidden="true" class="fa fa-pencil"></i>' +
             '</a>' +
-            '<a href="javascript:;" id="delete-meta-' + data.added +
+            ' <a href="javascript:;" id="delete-meta-' + data.added +
             '" class="btn btn-danger pmf-meta-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
+            ' <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#codeModal"' +
+            ' data-code-snippet="' + pageId + '">' +
+            '<i aria-hidden="true" class="fa fa-code"></i>' +
+            '</button>' +
             '</td>' +
             '</tr>'
           );
@@ -88,4 +92,12 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
   });
+
+  $('#codeModal').on('show.bs.modal', function (event) {
+    const button = $(event.relatedTarget);
+    const codeSnippet = button.data('code-snippet');
+    const modal = $(this);
+    modal.find('.modal-body code').append('{{ ' + codeSnippet + ' | meta }}');
+  })
+
 });

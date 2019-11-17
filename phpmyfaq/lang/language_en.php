@@ -1295,6 +1295,7 @@ $PMF_LANG['ad_meta_add'] = 'Add meta data';
 $PMF_LANG['ad_meta_page_id'] = 'Page type';
 $PMF_LANG['ad_meta_type'] = 'Content type';
 $PMF_LANG['ad_meta_content'] = 'Content';
+$PMF_LANG['ad_meta_copy_snippet'] = 'Copy meta data snippet for templates';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Sections";
