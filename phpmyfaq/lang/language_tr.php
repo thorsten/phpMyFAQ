@@ -161,7 +161,7 @@ $PMF_LANG["err_noMailAdress"] = "E-mail adresiniz geçersiz.";
 $PMF_LANG["err_sendMail"] = "Doldurulması zorunlu alanlar <strong>adınız</strong>, <strong>e-mail adresiniz</strong>, <strong>sorunuz</strong> ve, eğer isteniyorsa <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Wikipediada Captcha hakkında daha fazlasını oku\" target=\"_blank\">Captcha</a> kodu</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Arama ipuçları:</strong><br />Şunun gibi kelimeler <strong style=\"color: Red;\">kelime1 kelime2</strong> you can do a relevance descending search for two or more search criterion.<strong>Önemli:</strong> aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
+$PMF_LANG["help_search"] = "<strong>Arama ipuçları:</strong><br>Şunun gibi kelimeler <strong style=\"color: Red;\">kelime1 kelime2</strong> you can do a relevance descending search for two or more search criterion.<strong>Önemli:</strong> aranacak sözcük en az 4 karakter uzunluğunda olmalıdır.";
 
 // Menu
 $PMF_LANG["ad"] = "Yönetim";
@@ -325,7 +325,7 @@ $PMF_LANG["ad_passwd_new"] = "Yeni şifre";
 $PMF_LANG["ad_passwd_con"] = "Yeni şifre tekrar";
 $PMF_LANG["ad_passwd_change"] = "Şifreyi değiştir";
 $PMF_LANG["ad_passwd_suc"] = "Şifre değiştirildi.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>DİKKAT:</strong><br />çerez yeniden ayarlanmalıdır!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>DİKKAT:</strong><br>çerez yeniden ayarlanmalıdır!";
 $PMF_LANG["ad_passwd_fail"] = "Eski şifre <strong>doğru</strong> girilmeli ve yeni şifreler <strong>eşleşmelidir</strong>.";
 
 // Adduser
@@ -936,7 +936,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = "Dil dosyası gönderilirken hata ol
 $PMF_LANG['msgTransToolPercent'] = "Yüzde";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "İndirmeye çalıştığınız dosya sunucuda mevcut değil";

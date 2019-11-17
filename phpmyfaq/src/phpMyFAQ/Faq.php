@@ -460,7 +460,7 @@ class Faq
                 }
 
                 $renderedItems[$row->id] = sprintf(
-                    '<li%s>%s<span id="viewsPerRecord"><br /><small>(%s)</small></span></li>',
+                    '<li%s>%s<span id="viewsPerRecord"><br><small>(%s)</small></span></li>',
                     ($row->sticky == 1) ? ' class="sticky-faqs"' : '',
                     $oLink->toHtmlAnchor(),
                     $this->plurals->GetMsg('plmsgViews', $visits)
@@ -645,7 +645,7 @@ class Faq
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
                 $listItem = sprintf(
-                    '<li>%s<br /><small>(%s)</small></li>',
+                    '<li>%s<br><small>(%s)</small></li>',
                     $oLink->toHtmlAnchor(),
                     $this->plurals->GetMsg('plmsgViews', $visits)
                 );
@@ -2993,13 +2993,13 @@ class Faq
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $output .= '<tr class="openquestions">';
                 $output .= sprintf(
-                    '<td><small>%s</small><br /><a href="mailto:%s">%s</a></td>',
+                    '<td><small>%s</small><br><a href="mailto:%s">%s</a></td>',
                     $date->format(Date::createIsoDate($row->created)),
                     $mail->safeEmail($row->email),
                     $row->username
                 );
                 $output .= sprintf(
-                    '<td><strong>%s:</strong><br />%s</td>',
+                    '<td><strong>%s:</strong><br>%s</td>',
                     isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
                     strip_tags($row->question)
                 );

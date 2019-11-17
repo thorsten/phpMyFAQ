@@ -143,7 +143,7 @@ $PMF_LANG["err_noMailAdress"] = "Таны имэйл хаяг алдаатай �
 $PMF_LANG["err_sendMail"] = "Шаардлагатай талбарууд <strong>таны нэр</strong>, <strong> email хаяг</strong>, <strong>таны асуулт</strong> болон, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<p><strong>Хайлт хийхдээ:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
+$PMF_LANG["help_search"] = "<p><strong>Хайлт хийхдээ:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.</p><p><strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.</p>";
 
 // Menu
 $PMF_LANG["ad"] = "Удирдлага";
@@ -307,7 +307,7 @@ $PMF_LANG["ad_passwd_new"] = "Шинэ нуууц үг:";
 $PMF_LANG["ad_passwd_con"] = "Нууц үгийг дахин оруул:";
 $PMF_LANG["ad_passwd_change"] = "Нууц үг өөрчлөх";
 $PMF_LANG["ad_passwd_suc"] = "Нууц үг өөрчлөгдлөө.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
 
 // Adduser
@@ -923,7 +923,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Хэлний файл илгээх�
 $PMF_LANG['msgTransToolPercent'] = 'Хувь';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Хавсралтын файл хадгалах зам хадгалагдлаа.<br /><small>Файл хадгалах хамааралтай зам нь web root байж болно.</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Хавсралтын файл хадгалах зам хадгалагдлаа.<br><small>Файл хадгалах хамааралтай зам нь web root байж болно.</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Таны татах гэж буй энэ файл сервэрт алга";

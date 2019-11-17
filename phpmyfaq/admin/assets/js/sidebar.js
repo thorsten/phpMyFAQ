@@ -17,7 +17,7 @@
 
 /*global $:false */
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
     'use strict';
 
     $(window).bind('load resize', function () {

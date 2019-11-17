@@ -153,11 +153,11 @@ $PMF_LANG["err_noArticles"] = "Nekas nav atrasts.<br/><br/><a href=\"javascript:
 $PMF_LANG["err_badID"] = "Nepareizs ID.";
 $PMF_LANG["err_noTopTen"] = "Pa&eth;laik TOP 10 nav pieejams.";
 $PMF_LANG["err_nothingFound"] = "Ieraksts netika atrasts.";
-$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br /><br /><a href=\"javascript:history.back();\">Atgriezties</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br /><br /><a href=\"javascript:history.back();\">atgriezties</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong>, <strong>sada&iuml;u</strong>, <strong>virsrakstu</strong> un <strong>tekstu</strong>!<br><br><a href=\"javascript:history.back();\">Atgriezties</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>koment&acirc;rus</strong>!<br><br><a href=\"javascript:history.back();\">atgriezties</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Atk&acirc;rtots v&ccedil;rt&ccedil;jums netiek pie&ograve;emts.";
 $PMF_LANG["err_noVote"] = "<strong>Sniedz savu nov&ccedil;rt&ccedil;jumu!</strong> <a href=\"javascript:history.back();\">Nov&ccedil;rt&ccedil; &eth;eit</a>";
-$PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br /><a href=\"javascript:history.back();\">Atgriezties</a>";
+$PMF_LANG["err_noMailAdress"] = "E-pasta adrese nepareiz&acirc; form&acirc;t&acirc;.<br><a href=\"javascript:history.back();\">Atgriezties</a>";
 $PMF_LANG["err_sendMail"] = "Nepiecie&eth;ams iesniegt <strong>savu v&acirc;rdu</strong>, <strong>savu e-pasta adresi</strong> un <strong>jaut&acirc;jumu par t&ccedil;mu</strong>!";
 
 // Hilfe zur Suche
@@ -324,7 +324,7 @@ $PMF_LANG["ad_passwd_new"] = "Jaun&acirc;";
 $PMF_LANG["ad_passwd_con"] = "Apstiprin&acirc;t";
 $PMF_LANG["ad_passwd_change"] = "Main&icirc;t paroli";
 $PMF_LANG["ad_passwd_suc"] = "Parole <strong>veiksm&icirc;gi</strong> nomain&icirc;ta.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>UZMAN&Icirc;BU:</strong><br />S&icirc;kdatne (<em>cookie</em>) j&acirc;uzst&acirc;da no jauna!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>UZMAN&Icirc;BU:</strong><br>S&icirc;kdatne (<em>cookie</em>) j&acirc;uzst&acirc;da no jauna!";
 $PMF_LANG["ad_passwd_fail"] = "Vec&acirc; parole ir uzrakst&icirc;ta <strong>nepareizi</strong> vai ar&icirc; jaun&acirc; nesakr&icirc;t ar apstiprin&acirc;jumu.";
 
 // Adduser
@@ -542,7 +542,7 @@ $PMF_LANG["ad_user_realname"] = "Pilnais v&acirc;rds (piem., Osvalds Zemesgrauzi
 $PMF_LANG["ad_export_generate_pdf"] = "&igrave;ener&ccedil;t k&acirc; PDF failu";
 $PMF_LANG["ad_export_full_faq"] = "BUJ k&acirc; PDF fails: ";
 $PMF_LANG["err_bannedIP"] = "Tava IP adrese &eth;eit nav at&iuml;auta.";
-$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir <strong>V&acirc;rds</strong>, <strong>E-pasta adrese</strong> un <strong>Jaut&acirc;jums</strong>.<br /><br /><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "Oblig&acirc;ti aizpild&acirc;mie lauki ir <strong>V&acirc;rds</strong>, <strong>E-pasta adrese</strong> un <strong>Jaut&acirc;jums</strong>.<br><br><a href=\"javascript:history.back();\">M&ccedil;&igrave;in&acirc;t v&ccedil;lreiz</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

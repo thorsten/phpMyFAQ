@@ -148,15 +148,15 @@ $PMF_LANG["err_noArticles"] = "कोई भी लेख उपलब्ध न
 $PMF_LANG["err_badID"] = "क्षमा करें, गलत ID.";
 $PMF_LANG["err_noTopTen"] = "अभी सर्वोत्तम १० उपलब्ध नहीं है.";
 $PMF_LANG["err_nothingFound"] = "कोई भी लेख उपलब्ध नहीं है.";
-$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>वर्ग</strong>, <strong>मुख्य वाक्य</strong>, <strong>आपका रिकॉर्ड</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपकी टिप्पणी</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br /><br />\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>वर्ग</strong>, <strong>मुख्य वाक्य</strong>, <strong>आपका रिकॉर्ड</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "आवश्यक जानकारी <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपकी टिप्पणी</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!<br><br>\n<a href=\"javascript:history.back();\">एक पृष्ट पीछे</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "हम दो बार दिए गए मत की गिनती नहीं करते हैं. पीछे जाने के लिए, क्लिक करें.";
 $PMF_LANG["err_noVote"] = "<strong>आपने सवाल को मत नहीं दिया!</strong> मत देने के लिए यहाँ पर <a href=\"javascript:history.back();\">क्लिक करें</a>.";
-$PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है.<br /><a href=\"javascript:history.back();\">पीछे</a>";
+$PMF_LANG["err_noMailAdress"] = "आपका ईमेल पता सही नहीं है.<br><a href=\"javascript:history.back();\">पीछे</a>";
 $PMF_LANG["err_sendMail"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कब अनुरोध किया, <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>लेख खोजें:</strong><br /><strong style=\"color: Red;\">शब्द1 शब्द2</strong> तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.<strong>ध्यान दें:</strong> आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.";
+$PMF_LANG["help_search"] = "<strong>लेख खोजें:</strong><br><strong style=\"color: Red;\">शब्द1 शब्द2</strong> तरह से खोजे गए शब्दों से आप दो या दो से जयादा मानदण्डों पर घटते क्रम में उपयुक्त लेख खोज सकतें हैं.<strong>ध्यान दें:</strong> आपका खोजने का मानदण्ड कम से कम ४ अक्षरों का होना चाहिए, वरना उस खोज मानदण्ड को नकार दिया जाएगा.";
 
 // Menü
 $PMF_LANG["ad"] = "प्रबंधन क्षेत्र";
@@ -321,7 +321,7 @@ $PMF_LANG["ad_passwd_new"] = "नया संकेतक शब्द";
 $PMF_LANG["ad_passwd_con"] = "पुनः डालें";
 $PMF_LANG["ad_passwd_change"] = "संकेतक शब्द बदलें";
 $PMF_LANG["ad_passwd_suc"] = "संकेतक शब्द सफलतापूर्वक बदल दिया गया.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ध्यान दें:</strong><br />कुकी पुनः जोड़नी होगी!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ध्यान दें:</strong><br>कुकी पुनः जोड़नी होगी!";
 $PMF_LANG["ad_passwd_fail"] = "पुराना संकेतक शब्द सही होना चाहिए तथा दोनों नए संकेतक शब्द एक ही होने चाहिए.";
 
 // Adduser
@@ -548,7 +548,7 @@ $PMF_LANG["ad_user_realname"] = "वास्तविक नाम";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF फाइल बनाएं";
 $PMF_LANG["ad_export_full_faq"] = "आपका FAQ PDF फाइल में: ";
 $PMF_LANG["err_bannedIP"] = "आपके IP पते को प्रतिबंधित कर दिया गया है.";
-$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कण अनुरोध किया गया,  <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br /><br /><a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "आवश्यक जानकारियाँ <strong>आपका नाम</strong>, <strong>आपका ईमेल पता</strong>, <strong>आपका सवाल</strong> और, कण अनुरोध किया गया,  <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.<br><br><a href=\"javascript:history.back();\">एक पृष्ठ पीछे</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "फॉण्ट का रंग: ";

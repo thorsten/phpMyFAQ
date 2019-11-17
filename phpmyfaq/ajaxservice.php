@@ -348,7 +348,7 @@ switch ($action) {
 
             if (Strings::substr($contentLink, 7) != '') {
                 $answer = sprintf(
-                    '%s<br /><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
+                    '%s<br><div id="newFAQContentLink">%s<a href="http://%s" target="_blank">%s</a></div>',
                     $answer,
                     $PMF_LANG['msgInfo'],
                     Strings::substr($contentLink, 7),
@@ -558,7 +558,7 @@ switch ($action) {
                         $oLink->itemTitle = $result->question;
 
                         $response .= sprintf(
-                            '<li>%s<br /><div class="searchpreview">%s...</div></li>',
+                            '<li>%s<br><div class="searchpreview">%s...</div></li>',
                             $oLink->toHtmlAnchor(),
                             $faqHelper->renderAnswerPreview($result->answer, 10)
                         );

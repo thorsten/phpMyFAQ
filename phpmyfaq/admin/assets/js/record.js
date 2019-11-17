@@ -15,7 +15,7 @@
 
 /*global $:false */
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /** File upload handling. */

@@ -148,7 +148,7 @@ $PMF_LANG['err_noMailAdress'] = "Die angegebene E-Mail-Adresse ist nicht korrekt
 $PMF_LANG['err_sendMail'] = "Pflichtfelder sind u.a. <strong>Name</strong> und <strong>E-Mail-Adresse</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG['help_search'] = "<strong>Antwort finden:</strong><br />Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.<strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
+$PMF_LANG['help_search'] = "<strong>Antwort finden:</strong><br>Mit der Eingabe <strong style=\"color: Red;\">Begriff1 Begriff2</strong> können zwei oder mehrere Suchbegriffe nach der Relevanz absteigend suchen lassen.<strong>Hinweis:</strong> Suchbegriff muss mindestens 4 Zeichen lang sein, kürzere Anfragen werden automatisch abgewiesen.";
 
 // Menü
 $PMF_LANG['ad'] = "ADMIN-BEREICH";
@@ -311,7 +311,7 @@ $PMF_LANG['ad_passwd_new'] = "Neues Passwort";
 $PMF_LANG['ad_passwd_con'] = "Bestätigung Passwort";
 $PMF_LANG['ad_passwd_change'] = "Änderung speichern";
 $PMF_LANG['ad_passwd_suc'] = "Passwort erfolgreich geändert.";
-$PMF_LANG['ad_passwd_remark'] = "<strong>ACHTUNG:</strong><br />Das Cookie muß neu gesetzt werden!";
+$PMF_LANG['ad_passwd_remark'] = "<strong>ACHTUNG:</strong><br>Das Cookie muß neu gesetzt werden!";
 $PMF_LANG['ad_passwd_fail'] = "Das alte Passwort muss <strong>korrekt</strong> eingegeben werden und beide neuen müssen <strong>übereinstimmen</strong>.";
 
 // Adduser
@@ -913,7 +913,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = "Beim Versenden der Sprachdatei ist 
 $PMF_LANG['msgTransToolPercent'] = "Vollständigkeit";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br /><small>Relativer Pfad wird ab Webroot gesucht.</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Pfad zum Speichern der Anhänge.<br><small>Relativer Pfad wird ab Webroot gesucht.</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Die Datei wurde auf dem Server nicht gefunden";

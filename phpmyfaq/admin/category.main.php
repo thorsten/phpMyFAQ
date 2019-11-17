@@ -256,7 +256,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
-                '<p class="alert alert-danger">%s<br />%s</p>',
+                '<p class="alert alert-danger">%s<br>%s</p>',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );
@@ -274,7 +274,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_categ_updated']);
         } else {
             printf(
-                '<p class="alert alert-danger">%s<br />%s</p>',
+                '<p class="alert alert-danger">%s<br>%s</p>',
                 $PMF_LANG['ad_categ_paste_error'],
                 $faqConfig->getDb()->error()
             );

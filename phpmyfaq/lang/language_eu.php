@@ -151,15 +151,15 @@ $PMF_LANG["err_noArticles"] = "Ez dago sarrerarik.";
 $PMF_LANG["err_badID"] = "ID okerra!";
 $PMF_LANG["err_noTopTen"] = "Oraindik ez dago TOP Ten-ik.";
 $PMF_LANG["err_nothingFound"] = "Ez da sarrerarik aurkitu.";
-$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br /><br />\n<a href=\"javascript:history.back();\">atzera itzuli</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br /><br />\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Beharrezko eremuak dira: <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea</strong>, <strong>kategoria</strong>, <strong>goiburua</strong> eta <strong>zure erregistroa </strong>!<br><br>\n<a href=\"javascript:history.back();\">atzera itzuli</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "Beharrezko eremuak dira <strong>zure izena </strong>, <strong>zure posta elektronikoaren helbidea</strong> eta <strong>zure iruzkinak</strong>!<br><br>\n<a href=\"javascript:history.back();\">itzuli volver atrás</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "Bi aldiz bozkatzen baduzu, ez da zenbatuko Klikatu hemen, itzultzeko.";
 $PMF_LANG["err_noVote"] = "<strong>Ez da ebaluatu!</strong> <a href=\"javascript:history.back();\">Mesedez, sakatu hemen</a>, bozkatzeko.";
-$PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br /><a href=\"javascript:history.back();\">itzuli</a>";
+$PMF_LANG["err_noMailAdress"] = "Zure posta elektronikoa ez da zuzena.<br><a href=\"javascript:history.back();\">itzuli</a>";
 $PMF_LANG["err_sendMail"] = "Beharrezko eremuak dira <strong>zure izena</strong>, <strong>zure posta elektronikoaren helbidea<strong> eta <strong>zure galdera</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Erregistro bilaketa:</strong><br />";
+$PMF_LANG["help_search"] = "<strong>Erregistro bilaketa:</strong><br>";
 
 // Menú
 $PMF_LANG["ad"] = "ADMINSTRATZAILEAREN ATALA";
@@ -324,7 +324,7 @@ $PMF_LANG["ad_passwd_new"] = "Pasahitz berria";
 $PMF_LANG["ad_passwd_con"] = "Berretsi";
 $PMF_LANG["ad_passwd_change"] = "Pasahitza aldatu";
 $PMF_LANG["ad_passwd_suc"] = "Pasahitza ondo aldatu da.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ADI:</strong><br /> Ez da oraindik Cookie-rik ezarri!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ADI:</strong><br> Ez da oraindik Cookie-rik ezarri!";
 $PMF_LANG["ad_passwd_fail"] = "Pasahitz zaharra <strong>zuzen </strong>idatzi behar da eta biek <strong>koinziditu</strong> behar dute.";
 
 // Adduser
@@ -549,7 +549,7 @@ $PMF_LANG["ad_user_realname"] = "Benetako izena";
 $PMF_LANG["ad_export_generate_pdf"] = "PDF fitxategia sortu";
 $PMF_LANG["ad_export_full_faq"] = "Zure FAQa PDF fitxategi gisa: ";
 $PMF_LANG["err_bannedIP"] = "Zure IPa blokeatu egin da.";
-$PMF_LANG["err_SaveQuestion"] = "Beharrezko eremuak dira <strong>Zure izena</strong>, <strong>Posta elektronikoa</strong> eta  <strong>zure galdera </strong>!<br /><br /><a href=\"javascript:history.back();\">itzuli</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "Beharrezko eremuak dira <strong>Zure izena</strong>, <strong>Posta elektronikoa</strong> eta  <strong>zure galdera </strong>!<br><br><a href=\"javascript:history.back();\">itzuli</a><br><br>";
 
 // added v1.3.4 - 23.07.2003  Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Letraren kolorea: ";

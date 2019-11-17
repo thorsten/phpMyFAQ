@@ -312,7 +312,7 @@ class Sitemap
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
-                $renderSiteMap .= '<li>'.$oLink->toHtmlAnchor().'<br />'."\n";
+                $renderSiteMap .= '<li>'.$oLink->toHtmlAnchor().'<br>'."\n";
 
                 if ($this->config->get('main.enableMarkdownEditor')) {
                     $renderSiteMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25)." ...</li>\n";

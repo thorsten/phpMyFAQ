@@ -16,10 +16,10 @@
 
 /*global $:false */
 
-$(document).ready(function () {
-    'use strict';
-  $(function() {
-    $('.list-group-item').on('click', function() {
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+  $(function () {
+    $('.list-group-item').on('click', function () {
       $('.fas', this)
         .toggleClass('fa-caret-right')
         .toggleClass('fa-caret-down');

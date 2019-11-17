@@ -264,7 +264,7 @@ foreach ($LANG_CONF as $key => $value) {
             if ('' == $faqConfig->get('socialnetworks.twitterConsumerKey') ||
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
-                echo "<br />\n";
+                echo "<br>\n";
                 echo 'Your Callback URL is: '.$faqConfig->getDefaultUrl().'services/twitter/callback.php';
             }
 
@@ -272,10 +272,10 @@ foreach ($LANG_CONF as $key => $value) {
                 echo '<br><a target="_blank" href="../services/twitter/redirect.php">';
                 echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
             } elseif (isset($content)) {
-                echo $content->screen_name."<br />\n";
-                echo "<img src='".$content->profile_image_url_https."'><br />\n";
-                echo 'Follower: '.$content->followers_count."<br />\n";
-                echo 'Status Count: '.$content->statuses_count."<br />\n";
+                echo $content->screen_name."<br>\n";
+                echo "<img src='".$content->profile_image_url_https."'><br>\n";
+                echo 'Follower: '.$content->followers_count."<br>\n";
+                echo 'Status Count: '.$content->statuses_count."<br>\n";
                 echo 'Status: '.$content->status->text;
             }
             echo '</div></div>';

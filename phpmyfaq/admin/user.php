@@ -402,12 +402,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
             <div class="form-group row">
                 <div class="offset-lg-2 col-lg-10">
-                    <button class="btn btn-success" type="submit">
-                        <?= $PMF_LANG['ad_gen_save'] ?>
-                    </button>
                     <a class="btn btn-info" href="?action=user">
                         <?= $PMF_LANG['ad_gen_cancel'] ?>
                     </a>
+                    <button class="btn btn-success" type="submit">
+                        <?= $PMF_LANG['ad_gen_save'] ?>
+                    </button>
                 </div>
             </div>
         </form>

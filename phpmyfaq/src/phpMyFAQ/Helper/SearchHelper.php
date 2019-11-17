@@ -286,7 +286,7 @@ class SearchHelper extends Helper
 
                 $html .= '<li>';
                 $html .= $this->renderScore($result->score*33);
-                $html .= sprintf('<strong>%s</strong>: %s<br />',
+                $html .= sprintf('<strong>%s</strong>: %s<br>',
                     $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor()
                 );

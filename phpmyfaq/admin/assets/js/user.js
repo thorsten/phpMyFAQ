@@ -46,7 +46,7 @@ function updateUser(userId) {
 }
 
 
-$(document).ready(function () {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   const button = $('#checkAll');

@@ -183,9 +183,9 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
             $stamp = $_SERVER['REQUEST_TIME'];
         }
 
-        echo $date->format(date('Y-m-d H:i', $stamp)).'<br />';
+        echo $date->format(date('Y-m-d H:i', $stamp)).'<br>';
     } else {
-        echo $PMF_LANG['ad_sess_noentry'].'<br />';
+        echo $PMF_LANG['ad_sess_noentry'].'<br>';
     }
 
     $dir = opendir(PMF_ROOT_DIR.'/data');

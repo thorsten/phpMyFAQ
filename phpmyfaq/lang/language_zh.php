@@ -128,8 +128,8 @@ $PMF_LANG['err_SaveComment'] = '必须输入的字段是<strong>姓名</strong>,
 $PMF_LANG['err_VoteTooMuch'] = '您已经评过分了。';
 $PMF_LANG['err_noVote'] = '<strong>你没有给此问题评分！</strong>';
 $PMF_LANG['err_noMailAdress'] = '你输入的email地不正确。';
-$PMF_LANG['err_sendMail'] = '必须输入<strong>姓名</strong>, <strong>email 地址</strong> 和 <strong>问题</strong>!<br /><';
-$PMF_LANG['help_search'] = '<strong>搜索问题:</strong><br />包含 <strong style="color: Red;">关键词1 关键词2</strong> ';
+$PMF_LANG['err_sendMail'] = '必须输入<strong>姓名</strong>, <strong>email 地址</strong> 和 <strong>问题</strong>!<br><';
+$PMF_LANG['help_search'] = '<strong>搜索问题:</strong><br>包含 <strong style="color: Red;">关键词1 关键词2</strong> ';
 $PMF_LANG['ad'] = '管理员界面';
 $PMF_LANG['ad_menu_user_administration'] = '用户管理';
 $PMF_LANG['ad_menu_entry_aprove'] = '审核问答';
@@ -269,7 +269,7 @@ $PMF_LANG['ad_passwd_new'] = '请输入新的密码:';
 $PMF_LANG['ad_passwd_con'] = '请确认新的密码:';
 $PMF_LANG['ad_passwd_change'] = '修改密码';
 $PMF_LANG['ad_passwd_suc'] = '密码修改成功。';
-$PMF_LANG['ad_passwd_remark'] = '<strong>注意:</strong><br />必须重新设置Cookie以使新密码生效';
+$PMF_LANG['ad_passwd_remark'] = '<strong>注意:</strong><br>必须重新设置Cookie以使新密码生效';
 $PMF_LANG['ad_passwd_fail'] = '旧密码<strong>必须</strong> 正确且新密码的两次输入必须<strong>一致</strong>。';
 $PMF_LANG['ad_adus_adduser'] = '添加用户';
 $PMF_LANG['ad_adus_name'] = '用户名:';
@@ -769,7 +769,7 @@ $LANG_CONF['records.sortby'] = array(0 => 'select', 1 => '记录分类 (倒排 �
 $LANG_CONF['records.defaultActivation'] = array(0 => 'checkbox', 1 => '激活新的记录 (默认: 不激活)');
 $LANG_CONF['records.defaultAllowComments'] = array(0 => 'checkbox', 1 => '允许评论新的记录 (默认: 不允许)');
 $LANG_CONF['main.enableWysiwygEditor'] = array(0 => 'checkbox', 1 => '打开内嵌的所见即所得编辑器 (默认: 打开)');
-$LANG_CONF['records.attachmentsPath'] = array(0 => 'input', 1 => '附件存储路径。<br /><small>相对路径表示根目录下的目录。</small>');
+$LANG_CONF['records.attachmentsPath'] = array(0 => 'input', 1 => '附件存储路径。<br><small>相对路径表示根目录下的目录。</small>');
 $PMF_LANG['plmsgUserOnline']['0'] = '%d 用户在线';
 $PMF_LANG['msgTransToolRemove'] = '移除';
 $PMF_LANG['msgTransToolLanguageNumberOfPlurals'] = '多选项的数目';

@@ -148,15 +148,15 @@ $PMF_LANG["err_noArticles"] = "Nėra prieinamų DUK.";
 $PMF_LANG["err_badID"] = "Blogas identifikatorius.";
 $PMF_LANG["err_noTopTen"] = "Populiariausi DUK kol kas neprieinami.";
 $PMF_LANG["err_nothingFound"] = "Įrašų nerasta.";
-$PMF_LANG["err_SaveEntries"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>grupė</strong>, <strong>antraštė</strong>, <strong>jūsų įrašas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
-$PMF_LANG["err_SaveComment"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų komentarai</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>grupė</strong>, <strong>antraštė</strong>, <strong>jūsų įrašas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
+$PMF_LANG["err_SaveComment"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų komentarai</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "Mes neskaičiuojame dvigubų balsų. Į ankstesnį tinklalapį.";
 $PMF_LANG["err_noVote"] = "<strong>Jūs neįvertinote klausimo!</strong> Norėdami balsuoti <a href=\"javascript:history.back();\">spauskite čia</a>.";
-$PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas.<br /><a href=\"javascript:history.back();\">atgal</a>";
+$PMF_LANG["err_noMailAdress"] = "Jūsų el. pašto adresas yra neteisingas.<br><a href=\"javascript:history.back();\">atgal</a>";
 $PMF_LANG["err_sendMail"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Ieškoti įrašų:</strong><br />Su tokia paieška <strong style=\"color: Red;\">žodis1 žodis2</strong> jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.<strong>Pastaba:</strong> Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
+$PMF_LANG["help_search"] = "<strong>Ieškoti įrašų:</strong><br>Su tokia paieška <strong style=\"color: Red;\">žodis1 žodis2</strong> jūs galite ieškoti svarbumo mažėjimo tvarka pagal du ar daugiau paieškos kriterijų.<strong>Pastaba:</strong> Jūsų paieškos kriterijus turi būti bent 4 raidžių ilgio, kitu atveju užklausa bus atmesta.";
 
 // Men�
 $PMF_LANG["ad"] = "ADMINISTRAVIMO SEKCIJA";
@@ -321,7 +321,7 @@ $PMF_LANG["ad_passwd_new"] = "Naujas slaptažodis";
 $PMF_LANG["ad_passwd_con"] = "Patvirtinti";
 $PMF_LANG["ad_passwd_change"] = "Keisti slaptažodį";
 $PMF_LANG["ad_passwd_suc"] = "Slaptažodis sėkmingai pakeistas.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>DĖMESIO:</strong><br />Slapukas turi būti nustatytas iš naujo!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>DĖMESIO:</strong><br>Slapukas turi būti nustatytas iš naujo!";
 $PMF_LANG["ad_passwd_fail"] = "Senas slaptažodis <strong>privalo</strong> būti teisingai įvestas, o abu nauji turi <strong>sutapti</strong>.";
 
 // Adduser
@@ -547,7 +547,7 @@ $PMF_LANG["ad_user_realname"] = "tikras vardas";
 $PMF_LANG["ad_export_generate_pdf"] = "generuoti PDF failą";
 $PMF_LANG["ad_export_full_faq"] = "Jūsų DUK kaip PDF failas: ";
 $PMF_LANG["err_bannedIP"] = "Jūsų IP adresas buvo uždraustas.";
-$PMF_LANG["err_SaveQuestion"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br /><br /><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "Būtini laukai yra <strong>jūsų vardas</strong>, <strong>jūsų el. pašto adresas</strong>, <strong>jūsų klausimas</strong> ir, kai prašoma, <strong><a href=\"http://lt.wikipedia.org/wiki/CAPTCHA\" title=\"Sužinokite daugiau apie CAPTCHA Vikipedijoje\" target=\"_blank\">CAPTCHA</a> kodas</strong>!<br><br><a href=\"javascript:history.back();\">į ankstesnį tinklalapį</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Šrifto spalva: ";
@@ -951,7 +951,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'Įvyko klaida siunčiant kalbos fai
 $PMF_LANG['msgTransToolPercent'] = 'Procentai';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus saugomi priedai.<br /><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Kelias, kur bus saugomi priedai.<br><small>Santykinis kelias reiškia katalogą žiniatinklio šakniniame kataloge</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "Failas, kurį mėginate atsisiųsti buvo nerastas serveryje";

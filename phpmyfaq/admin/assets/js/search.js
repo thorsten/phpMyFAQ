@@ -16,28 +16,28 @@
 
 /*global $:false */
 
-$(document).ready(function () {
-    'use strict';
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
 
-    $('button.pmf-elasticsearch').on('click', function () {
-        const action = $(this).data('action');
-        $.ajax({
-            url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
-            type: 'POST',
-            dataType: 'json'
-        })
-        .done((message) => {
-            const result = $('.result'),
-                indicator = $('#saving_data_indicator');
+  $('button.pmf-elasticsearch').on('click', function () {
+    const action = $(this).data('action');
+    $.ajax({
+      url: 'index.php?action=ajax&ajax=elasticsearch&ajaxaction=' + action,
+      type: 'POST',
+      dataType: 'json'
+    })
+      .done((message) => {
+        const result = $('.result'),
+          indicator = $('#saving_data_indicator');
 
-            indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
-            result.empty();
-            if (message.error) {
-                result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');
-            } else {
-                result.append('<p class="alert alert-success">✓ ' + message.success + '</p>');
-            }
-            indicator.fadeOut();
-        });
-    });
+        indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+        result.empty();
+        if (message.error) {
+          result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');
+        } else {
+          result.append('<p class="alert alert-success">✓ ' + message.success + '</p>');
+        }
+        indicator.fadeOut();
+      });
+  });
 });

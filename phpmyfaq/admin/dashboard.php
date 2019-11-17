@@ -198,7 +198,7 @@ $faqSession = new Session($faqConfig);
                         );
                         // Installed phpMyFAQ version is outdated
                         if (-1 == version_compare($versions['installed'], $versions['current'])) {
-                            echo '<br />'.$PMF_LANG['ad_you_should_update'];
+                            echo '<br>'.$PMF_LANG['ad_you_should_update'];
                         }
                     } catch (Exception $e) {
                         printf('<p class="alert alert-danger">%s</p>', $e->getMessage());

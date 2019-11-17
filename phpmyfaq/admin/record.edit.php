@@ -379,6 +379,18 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                     <?php endif; ?>
                 </div>
                 <div class="tab-pane" id="tab-meta-data">
+                  <!-- Categories -->
+                  <div class="form-group row">
+                    <label class="col-lg-2 col-form-label" for="phpmyfaq-categories">
+                        <?= $PMF_LANG['ad_entry_category'] ?>
+                    </label>
+                    <div class="col-lg-10">
+                      <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple class="form-control">
+                          <?= $categoryHelper->renderOptions($categories) ?>
+                      </select>
+                    </div>
+                  </div>
+
                   <!-- Language -->
                   <div class="form-group row">
                     <label class="col-lg-2 col-form-label" for="lang">
@@ -677,21 +689,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                   </div>
                 </div>
               </div>
-              <div class="card-header" role="tab" id="pmf-heading-category">
-                <h6 class="mb-0">
-                  <a class="collapsed" data-toggle="collapse" href="#pmf-collapse-category" aria-expanded="false" aria-controls="pmf-collapse-category">
-                    <?= $PMF_LANG['ad_entry_category'] ?>
-                    <i class="fa fa-chevron-circle-left fa-pull-right"></i>
-                  </a>
-                </h6>
-              </div>
-              <div id="pmf-collapse-category" class="collapse" role="tabpanel" aria-labelledby="pmf-heading-category" data-parent="#accordion">
-                <div class="card-body">
-                  <select name="rubrik[]" id="phpmyfaq-categories" size="5" multiple class="form-control">
-                      <?= $categoryHelper->renderOptions($categories) ?>
-                  </select>
-                </div>
-              </div>
               <div class="card-header" role="tab" id="pmf-heading-activation">
                 <h6 class="mb-0">
                   <a class="collapsed" data-toggle="collapse" href="#pmf-collapse-activation" aria-expanded="false" aria-controls="pmf-collapse-activation">
@@ -847,7 +844,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
             </form>
 
-        -->
 
         </
   <form action=""></form>

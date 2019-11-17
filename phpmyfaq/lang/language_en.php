@@ -163,7 +163,7 @@ $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
 $PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Search for records:</strong><br />With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.<strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.";
+$PMF_LANG["help_search"] = "<strong>Search for records:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.<strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.";
 
 // Menu
 $PMF_LANG["ad"] = "Administration";
@@ -327,7 +327,7 @@ $PMF_LANG["ad_passwd_new"] = "New password";
 $PMF_LANG["ad_passwd_con"] = "Retype password";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
 
 // Adduser
@@ -938,7 +938,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending th
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";

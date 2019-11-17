@@ -147,7 +147,7 @@ $PMF_LANG["err_noMailAdress"] = "您的 email 地址不正確。";
 $PMF_LANG["err_sendMail"] = "必填欄位是 <strong>您的姓名</strong>，<strong>您的 email</strong>，<strong>您的問題</strong> 和，何時提出， <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"閱讀更多關於 Captcha 於 Wikipedia\" target=\"_blank\">Captcha</a> 驗證碼</strong>!";
 
 // Hilfe zur Suche / Help to the search / 搜尋提示幫忙
-$PMF_LANG["help_search"] = "<strong>搜尋記錄:</strong><br />與一筆記錄類似 <strong style=\"color: Red;\">字串1 字串2</strong> 您也可以用兩個或更多的搜尋選項來排序。<strong>注意:</strong> 您的搜尋至少必須有四個字元，不然不會被執行。";
+$PMF_LANG["help_search"] = "<strong>搜尋記錄:</strong><br>與一筆記錄類似 <strong style=\"color: Red;\">字串1 字串2</strong> 您也可以用兩個或更多的搜尋選項來排序。<strong>注意:</strong> 您的搜尋至少必須有四個字元，不然不會被執行。";
 
 // Menu 選項單
 $PMF_LANG["ad"] = "管理員介面";
@@ -311,7 +311,7 @@ $PMF_LANG["ad_passwd_new"] = "請輸入新的密碼";
 $PMF_LANG["ad_passwd_con"] = "請再次輸入新的密碼以供確認";
 $PMF_LANG["ad_passwd_change"] = "修改密碼";
 $PMF_LANG["ad_passwd_suc"] = "密碼修改成功。";
-$PMF_LANG["ad_passwd_remark"] = "<strong>注意:</strong><br />必須重新設置 Cookie，新密碼才能生效。";
+$PMF_LANG["ad_passwd_remark"] = "<strong>注意:</strong><br>必須重新設置 Cookie，新密碼才能生效。";
 $PMF_LANG["ad_passwd_fail"] = "舊密碼<strong>必須</strong> 正確地輸入而且新密碼的兩次輸入必須<strong>一致</strong>。";
 
 // Adduser 新增使用者
@@ -922,7 +922,7 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = "寄送語言檔案，發生問題�
 $PMF_LANG['msgTransToolPercent'] = "% 百分比 Percentage";
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy 開發者
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "附加檔案的儲存路徑。<br /><small>於網頁根目錄下的相對路徑</small>Path where attachments will be saved.<br /><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "附加檔案的儲存路徑。<br><small>於網頁根目錄下的相對路徑</small>Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>");
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "您嘗試下載的檔案，不在此主機上。(The file you're trying to download was not found on this server)";

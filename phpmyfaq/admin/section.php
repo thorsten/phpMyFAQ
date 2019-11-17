@@ -272,11 +272,11 @@ if ($sectionAction == 'add' && $user->perm->checkRight($user->getUserId(), 'add_
 
                   <div class="form-group row">
                       <div class="offset-lg-2 col-lg-3">
-                          <button class="btn btn-primary" type="submit">
-                              <?= $PMF_LANG['ad_gen_save'] ?>
-                          </button>
                           <button class="btn btn-info" type="reset" name="cancel">
                               <?= $PMF_LANG['ad_gen_cancel'] ?>
+                          </button>
+                          <button class="btn btn-primary" type="submit">
+                              <?= $PMF_LANG['ad_gen_save'] ?>
                           </button>
                       </div>
                   </div>

@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
   };
 
-  const clearGroupRights =  () => {
+  const clearGroupRights = () => {
     console.log('foo');
     $('#groupRights input[type=checkbox]').prop('checked', false);
   };

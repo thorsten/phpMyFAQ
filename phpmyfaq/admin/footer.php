@@ -47,6 +47,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
           &copy; 2001-<?= date('Y') ?> <a href="https://www.phpmyfaq.de/" target="_blank">phpMyFAQ Team</a>
         </div>
       </div>
+        <?php
+        if (DEBUG) {
+            printf('<hr><div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
+        }
+        ?>
     </footer>
     <!-- End of Footer -->
 
@@ -62,11 +67,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 </a>
 
 
-<?php
-if (DEBUG) {
-    printf('<div class="container">DEBUG INFORMATION:<br>%s</div>', $faqConfig->getDb()->log());
-}
-?>
+
 
 
 <?php

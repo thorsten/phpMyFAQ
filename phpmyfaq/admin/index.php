@@ -292,7 +292,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'comments':          require 'record.comments.php'; break;
             // functions for tags
             case 'tags':
-            case 'deletetag':         require 'tags.main.php'; break;
+            case 'delete-tag':        require 'tags.php'; break;
             // news administration
             case 'news':
             case 'add-news':
@@ -355,7 +355,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             // functions for FAQ export
             case 'export':            require 'export.main.php'; break;
             // attachment administration 
-            case 'attachments':       require 'att.main.php'; break;
+            case 'attachments':       require 'attachments.php'; break;
 
             default:                  echo 'Dave, this conversation can serve no purpose anymore. Goodbye.'; break;
         }

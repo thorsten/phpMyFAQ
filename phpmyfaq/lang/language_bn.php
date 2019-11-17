@@ -149,14 +149,14 @@ $PMF_LANG["err_noArticles"] = "কোনো লেখা পাওয়া যা�
 $PMF_LANG["err_badID"] = "ভুল পরিচয়।";
 $PMF_LANG["err_noTopTen"] = "সেরা ১০ টি প্রশ্ন পাওয়া যায়নি।";
 $PMF_LANG["err_nothingFound"] = "কোনো প্রশ্ন পাওয়া যায়নি।";
-$PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরনাম</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
+$PMF_LANG["err_SaveEntries"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>বিভাগ</strong>, <strong>শিরনাম</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 $PMF_LANG["err_VoteTooMuch"] = "একাধিক ভোট দেয়া যায়না। আগের পাতায় ফেরত যান";
 $PMF_LANG["err_noVote"] = "<strong>আপনি এই প্রশ্নটিতে নম্বর দিতে পারবেন না!</strong> <a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান।</a>";
-$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
-$PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
+$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br><a href=\"javascript:history.back();\">back</a>";
+$PMF_LANG["err_sendMail"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>প্রশ্ন-উত্তর তালিকা খুঁজুন:</strong><br />একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।<strong>নোটিশ:</strong> শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।";
+$PMF_LANG["help_search"] = "<strong>প্রশ্ন-উত্তর তালিকা খুঁজুন:</strong><br>একটির বেশী শব্দ ব্যবহার করে আপনি খুঁজতে পারেন।<strong>নোটিশ:</strong> শব্দটি কমপক্ষে চার অক্ষরের হতে হবে।";
 
 // Menü
 $PMF_LANG["ad"] = "ADMIN SECTION";
@@ -321,7 +321,7 @@ $PMF_LANG["ad_passwd_new"] = "New password";
 $PMF_LANG["ad_passwd_con"] = "Confirm";
 $PMF_LANG["ad_passwd_change"] = "Change password";
 $PMF_LANG["ad_passwd_suc"] = "Password changed successfully.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br />Cookie have to be set again!";
+$PMF_LANG["ad_passwd_remark"] = "<strong>ATTENTION:</strong><br>Cookie have to be set again!";
 $PMF_LANG["ad_passwd_fail"] = "The old password <strong>must</strong> be entered correctly and both new ones have to <strong>match</strong>.";
 
 // Adduser
@@ -547,7 +547,7 @@ $PMF_LANG["ad_user_realname"] = "real name";
 $PMF_LANG["ad_export_generate_pdf"] = "generate PDF file";
 $PMF_LANG["ad_export_full_faq"] = "Your FAQ as a PDF file: ";
 $PMF_LANG["err_bannedIP"] = "আপনার IP নিষিদ্ধ করা হয়েছে।";
-$PMF_LANG["err_SaveQuestion"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br /><br />";
+$PMF_LANG["err_SaveQuestion"] = "প্রয়োজনীয় ফিল্ড হল <strong>আপনার নাম</strong>, <strong>আপনার ই-মেইল ঠিকানা</strong>, <strong>আপনার লেখা</strong><strong>আপনার প্রশ্ন</strong><a href=\"javascript:history.back();\">আগের পাতায় ফেরত যান</a><br><br>";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Font color: ";

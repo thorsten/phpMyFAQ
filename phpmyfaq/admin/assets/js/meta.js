@@ -29,10 +29,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     $.get('index.php',
       {
-        action: 'ajax', ajax: 'config', ajaxaction: 'add_meta', csrf: csrf, page_id: pageId, type: type, content: content
+        action: 'ajax',
+        ajax: 'config',
+        ajaxaction: 'add_meta',
+        csrf: csrf,
+        page_id: pageId,
+        type: type,
+        content: content
       },
       (data) => {
-        if (typeof(data.added) === 'undefined') {
+        if (typeof (data.added) === 'undefined') {
           $('.table').after(
             '<div class="alert alert-danger">Could not add meta data</div>'
           );
@@ -43,9 +49,9 @@ document.addEventListener('DOMContentLoaded', () => {
             '<td>' + data.added + '</td>' +
             '<td>' + pageId + '</td>' +
             '<td>' + type + '</td>' +
-            '<td>' + content +'</td>' +
+            '<td>' + content + '</td>' +
             '<td>' +
-            '<a href="?action=meta.edit&id='+ data.added + '" class="btn btn-success">' +
+            '<a href="?action=meta.edit&id=' + data.added + '" class="btn btn-success">' +
             '<i aria-hidden="true" class="fa fa-pencil"></i>' +
             '</a>' +
             '<a href="javascript:;" id="delete-meta-' + data.added +
@@ -68,12 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (confirm('Are you sure?')) {
       $.get('index.php',
-        { action: 'ajax', ajax: 'config', ajaxaction: 'delete_meta', 'meta_id': id, csrf: csrf },
-        function(data) {
-          if (typeof(data.deleted) === 'undefined') {
+        {action: 'ajax', ajax: 'config', ajaxaction: 'delete_meta', 'meta_id': id, csrf: csrf},
+        function (data) {
+          if (typeof (data.deleted) === 'undefined') {
             $('.table').after(
               '<div class="alert alert-danger">Could not add meta data</div>'
-          );
+            );
           } else {
             $('#row-meta-' + id).fadeOut('slow');
           }

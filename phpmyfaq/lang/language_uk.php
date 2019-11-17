@@ -60,7 +60,7 @@ $PMF_LANG["msgAverageVote"] = "Рейтинг відповіді";
 $PMF_LANG["msgVoteUseability"] = "Будь ласка оціните цю відповідь";
 $PMF_LANG["msgVoteFrom"] = "з";
 $PMF_LANG["msgVoteBad"] = "Так собі";
-$PMF_LANG["msgVoteGood"] = "Дуже <br />сильно допоміг";
+$PMF_LANG["msgVoteGood"] = "Дуже <br>сильно допоміг";
 $PMF_LANG["msgVotings"] = "Голосів ";
 $PMF_LANG["msgVoteSubmit"] = "Оцінити";
 $PMF_LANG["msgVoteThanks"] = "Спасибі за оцінку!";
@@ -102,7 +102,7 @@ $PMF_LANG["msgNewContentCategory"] = "Вибір розділу";
 $PMF_LANG["msgNewContentTheme"] = "Текст питання";
 $PMF_LANG["msgNewContentArticle"] = "Текст відповіді";
 $PMF_LANG["msgNewContentKeywords"] = "Ключові слова";
-$PMF_LANG["msgNewContentLink"] = "Посилання на сайт<br /> або сторінку<br /> пов'язану з питанням";
+$PMF_LANG["msgNewContentLink"] = "Посилання на сайт<br> або сторінку<br> пов'язану з питанням";
 $PMF_LANG["msgNewContentSubmit"] = "Відправити";
 $PMF_LANG["msgInfo"] = "Додаткова інформація: ";
 $PMF_LANG["msgNewContentThanks"] = "Спасибі! Ваша відповідь прийнята";
@@ -145,15 +145,15 @@ $PMF_LANG["err_noArticles"] = "Нічого не знайдено";
 $PMF_LANG["err_badID"] = "Wrong ID.";
 $PMF_LANG["err_noTopTen"] = "Нічого поки не немає.";
 $PMF_LANG["err_nothingFound"] = "No entry found.";
-$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br /><br />\n";
-$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br /><br />\n<a href=\"javascript:history.back();\">Вернуться назад</a><br /><br />\n";
+$PMF_LANG["err_SaveEntries"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong>, <strong>категорія</strong>, <strong>заголовок</strong> і <strong>текст питання</strong>!<br><br>\n<a href=\"javascript:history.back();\">Вернитесь назад і заповните необхідні поля</a><br><br>\n";
+$PMF_LANG["err_SaveComment"] = "Не заповнені обов'язкові поля <strong>ім'я</strong>, <strong>арес email</strong> i <strong>ваш коментар</strong>!<br><br>\n<a href=\"javascript:history.back();\">Вернуться назад</a><br><br>\n";
 $PMF_LANG["err_VoteTooMuch"] = "We do not count double votings. ";
 $PMF_LANG["err_noVote"] = "<strong>Ви забули поставити оцінку цій відповіді або намагаєтеся зробити це повторно!</strong> <a href=\"javascript:history.back();\">Натисніть сюди</a>, для повернення на попередню сторінку.";
-$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br /><a href=\"javascript:history.back();\">back</a>";
+$PMF_LANG["err_noMailAdress"] = "Your email address is not correct.<br><a href=\"javascript:history.back();\">back</a>";
 $PMF_LANG["err_sendMail"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>адрес email</strong> і <strong>текст повідомлення</strong>!";
 
 // Hilfe zur Suche
-$PMF_LANG["help_search"] = "<strong>Поиск по базе Mac F.A.Q.:</strong><br />";
+$PMF_LANG["help_search"] = "<strong>Поиск по базе Mac F.A.Q.:</strong><br>";
 
 // Menь
 $PMF_LANG["ad"] = "Адмінка";
@@ -318,7 +318,7 @@ $PMF_LANG["ad_passwd_new"] = "Новий пароль";
 $PMF_LANG["ad_passwd_con"] = "Підтвердження";
 $PMF_LANG["ad_passwd_change"] = "Змінити пароль";
 $PMF_LANG["ad_passwd_suc"] = "Пароль успішно змінений.";
-$PMF_LANG["ad_passwd_remark"] = "<strong>УВАГА:</strong><br /> інформація про сесію збережена у вашому комп'ютері";
+$PMF_LANG["ad_passwd_remark"] = "<strong>УВАГА:</strong><br> інформація про сесію збережена у вашому комп'ютері";
 $PMF_LANG["ad_passwd_fail"] = "Старий пароль <strong>повинен бути</strong> введений правильно, а новий підтверджений теж <strong>правильно</strong>.";
 
 // Adduser
@@ -549,7 +549,7 @@ $PMF_LANG["ad_user_realname"] = "Справжнє ім'я";
 $PMF_LANG["ad_export_generate_pdf "] = "Створити PDF файл"; 
 $PMF_LANG["ad_export_full_Mac F.A.Q."] = "База Mac F.A.Q. у вигляді PDF файлу: "; 
 $PMF_LANG["err_bannedIP"] = "Доступ до системи з вашого IP адреси заборонений.";
-$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br /><br /><a href=\"javascript:history.back();\">Вернутсья назад</a><br /><br />\n";
+$PMF_LANG["err_SaveQuestion"] = "Не заповнені обов'язкові поля <strong>ваше ім'я</strong>, <strong>ваше ім'я email</strong> і <strong>текст питання</strong>.<br><br><a href=\"javascript:history.back();\">Вернутсья назад</a><br><br>\n";
 
 // added v1.3.4 - 23.07.2003 - Thorsten
 $PMF_LANG["ad_entry_fontcolor"] = "Колір шрифту: "; 
