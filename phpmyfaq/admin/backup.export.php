@@ -2,19 +2,15 @@
 
 /**
  * The export function to import the phpMyFAQ backups.
- *
- *
- *
+ * 
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-08-18
  */
@@ -22,6 +18,7 @@
 use phpMyFAQ\Db;
 use phpMyFAQ\Db\Helper;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\User\CurrentUser;
 
 define('PMF_ROOT_DIR', dirname(__DIR__));
@@ -50,15 +47,15 @@ if ($user) {
     unset($user);
 }
 
-header('Content-Type: application/octet-stream');
-header('Pragma: no-cache');
-
 if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     $tables = $tableNames = $faqConfig->getDb()->getTableNames(Db::getTablePrefix());
     $tablePrefix = (Db::getTablePrefix() !== '') ? Db::getTablePrefix().'.phpmyfaq' : 'phpmyfaq';
     $tableNames = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
     $dbHelper = new Helper($faqConfig);
+    $httpHelper = new HttpHelper();
+    $httpHelper->addHeader();
+    $httpHelper->addAdditionalHeader('Content-Type: application/octet-stream');
 
     switch ($action) {
         case 'backup_content' :
@@ -96,9 +93,9 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                     )
                 )
             );
-            header($header);
+            $httpHelper->addAdditionalHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
-                print implode("\r\n", $text);
+                echo implode("\r\n", $text);
                 $text = $dbHelper->buildInsertQueries('SELECT * FROM '.$table, $table);
             }
             break;
@@ -113,13 +110,13 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
                     )
                 )
             );
-            header($header);
+            $httpHelper->addAdditionalHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
-                print implode("\r\n", $text);
+                echo implode("\r\n", $text);
                 $text = $dbHelper->buildInsertQueries('SELECT * FROM '.$table, $table);
             }
             break;
     }
 } else {
-    print $PMF_LANG['err_NotAuth'];
+    echo $PMF_LANG['err_NotAuth'];
 }

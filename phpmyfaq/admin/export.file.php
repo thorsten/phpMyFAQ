@@ -1,9 +1,7 @@
 <?php
 
 /**
- * XML, XHTML and PDF export - streamer page.
- *
- *
+ * JSON, XML, HTML5 and PDF export - streamer page.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -49,11 +47,11 @@ if ($user->perm->checkRight($user->getUserId(), 'export')) {
     $content = $export->generate($categoryId, $downwards, $faqConfig->getLanguage()->getLanguage());
 
     // Stream the file content
-    $oHttpStreamer = new HttpStreamer($type, $content);
+    $httpStreamer = new HttpStreamer($type, $content);
     if ('inline' === $inlineDisposition) {
-        $oHttpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
+        $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_INLINE);
     } else {
-        $oHttpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
+        $httpStreamer->send(HttpStreamer::EXPORT_DISPOSITION_ATTACHMENT);
     }
 } else {
     echo $PMF_LANG['err_noArticles'];

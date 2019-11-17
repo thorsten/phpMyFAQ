@@ -19,12 +19,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'backup')) {
-?>
+    ?>
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">
       <i aria-hidden="true" class="fa fa-download"></i>
@@ -33,8 +33,8 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
   </div>
 
   <div class="card-deck">
-    <div class="card">
-      <div class="card-header">
+    <div class="card shadow mb-4">
+      <div class="card-header py-3">
           <?= $PMF_LANG['ad_csv_head'] ?>
       </div>
       <div class="card-body">
@@ -51,32 +51,34 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
         </p>
       </div>
     </div>
-      <div class="card text-white bg-danger mb-3">
-        <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>"
-              enctype="multipart/form-data">
-          <div class="card-header">
-              <?= $PMF_LANG['ad_csv_head2'] ?>
-          </div>
-          <div class="card-body">
-            <p><?= $PMF_LANG['ad_csv_restore'] ?></p>
-            <div class="form-group row">
-              <label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
-              <div class="col-lg-8">
-                <input type="file" name="userfile">
-              </div>
+    <div class="card shadow mb-4">
+      <form method="post" action="?action=restore&csrf=<?= $user->getCsrfTokenFromSession() ?>"
+            enctype="multipart/form-data">
+        <div class="card-header py-3">
+            <?= $PMF_LANG['ad_csv_head2'] ?>
+        </div>
+        <div class="card-body">
+          <p><?= $PMF_LANG['ad_csv_restore'] ?></p>
+          <div class="form-group row">
+            <label class="col-lg-4 col-form-label"><?= $PMF_LANG['ad_csv_file'] ?>:</label>
+            <div class="col-lg-8">
+              <input type="file" name="userfile">
             </div>
           </div>
-          <div class="card-footer text-right">
-            <button class="btn btn-primary" type="submit">
-              <i aria-hidden="true" class="fa fa-download"></i> <?= $PMF_LANG['ad_csv_ok'] ?>
-            </button>
+          <div class="form-row row">
+            <div class="text-right">
+              <button class="btn btn-primary" type="submit">
+                <i aria-hidden="true" class="fa fa-upload"></i> <?= $PMF_LANG['ad_csv_ok'] ?>
+              </button>
+            </div>
           </div>
-        </form>
-      </div>
+        </div>
+      </form>
+    </div>
 
   </div>
 
-<?php
+    <?php
 
 } else {
     echo $PMF_LANG['err_NotAuth'];

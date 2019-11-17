@@ -404,7 +404,7 @@ $PMF_LANG['ad_att_fail'] = "Leider ist ein Fehler beim Hochladen des Anhangs auf
 $PMF_LANG['ad_att_close'] = "Dieses Fenster schließen";
 
 // Added v0.85 - 08.07.2001 - Bastian - Admin
-$PMF_LANG['ad_csv_restore'] = "Hiermit kann eine zuvor erstellte SQL-Datei hochgeladen werden. Es gilt zu beachten, dass das Wiedereinspielen einer Sicherung die FAQ auf den Stand zurücksetzt, der beim Erstellen der Sicherung geherscht hat (die Daten werden ersetzt).";
+$PMF_LANG['ad_csv_restore'] = "Hier kann eine zuvor erstellte phpMyFAQ-Sicherungsdatei hochgeladen werden. Es gilt zu beachten, dass das Wiedereinspielen einer Sicherung die FAQ auf den Stand zurücksetzt, der beim Erstellen der Sicherung bestand, d.h. die Daten werden ersetzt.";
 $PMF_LANG['ad_csv_file'] = "Datei auswählen";
 $PMF_LANG['ad_csv_ok'] = "Datei hochladen und einspielen";
 $PMF_LANG['ad_csv_linklog'] = "Sicherung der Loggingdaten herunterladen";

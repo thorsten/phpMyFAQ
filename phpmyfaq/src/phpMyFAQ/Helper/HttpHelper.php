@@ -74,6 +74,15 @@ class HttpHelper extends Helper
     }
 
     /**
+     * Adds an additional header.
+     * @param string $header
+     */
+    public function addAdditionalHeader(string $header)
+    {
+        header($header);
+    }
+
+    /**
      *
      */
     public function startCompression()

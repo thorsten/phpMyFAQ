@@ -224,7 +224,7 @@ class HttpStreamer
             header('Content-Type: application/force-download');
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header('Content-Disposition: '.$this->disposition.'; filename="'.Export::getExportTimestamp().'_'.$filename.'"');
+        header('Content-Disposition: '.$this->disposition.'; filename="phpMyFAQ_'.Export::getExportTimestamp().'_'.$filename.'"');
         if (!empty($description)) {
             header('Content-Description: '.$description);
         }
