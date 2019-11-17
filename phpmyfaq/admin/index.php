@@ -24,6 +24,7 @@ use phpMyFAQ\Auth\Ldap;
 use phpMyFAQ\Auth\Sso;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Permission\MediumPermission;
@@ -84,6 +85,11 @@ Factory::init(
 // Create a new phpMyFAQ system object
 //
 $faqSystem = new System();
+
+//
+// Create a new HTTP Helper
+//
+$http = new HttpHelper();
 
 //
 // Create a new FAQ object
@@ -180,7 +186,7 @@ if ($action == 'logout' && $auth) {
     $auth = null;
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
-        header("Location: $ssoLogout");
+        $http->redirect($ssoLogout);
     }
 }
 
