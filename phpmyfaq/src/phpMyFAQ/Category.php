@@ -20,7 +20,7 @@ namespace phpMyFAQ;
  * @since 2004-02-16
  */
 
-use phpMyFAQ\Category\Entity;
+use phpMyFAQ\Category\CategoryEntity;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -244,9 +244,9 @@ class Category
                 fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, fc.show_home
             ORDER BY
                 fc.parent_id, fc.id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $where
         );
 
@@ -316,7 +316,7 @@ class Category
             FROM
                 %sfaqcategories
             WHERE ',
-            Db::getTablePrefix());
+            Database::getTablePrefix());
 
         if (true === $parentId) {
             $query .= 'parent_id = 0';
@@ -352,7 +352,7 @@ class Category
                 id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
             FROM
                 %sfaqcategories',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang = '".$this->language."'";
@@ -392,7 +392,7 @@ class Category
                 %sfaqcategories
             WHERE 
                 parent_id = 0',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '".$this->language."'";
@@ -433,7 +433,7 @@ class Category
                 %sfaqcategories
             WHERE 
                 show_home = 1',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " AND lang = '".$this->language."'";
@@ -466,7 +466,7 @@ class Category
                 id
             FROM
                 %sfaqcategories',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
@@ -736,8 +736,8 @@ class Category
                 fcr.record_id = fd.id
             AND
                 fcr.record_lang = fd.lang',
-            Db::getTablePrefix(),
-            Db::getTablePrefix());
+            Database::getTablePrefix(),
+            Database::getTablePrefix());
 
         if (strlen($this->language) > 0) {
             $query .= sprintf(" AND fd.lang = '%s'",
@@ -749,8 +749,8 @@ class Category
                 fd.active = 'yes'
             GROUP BY
                 fcr.category_id",
-            Db::getTablePrefix(),
-            Db::getTablePrefix());
+            Database::getTablePrefix(),
+            Database::getTablePrefix());
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
@@ -991,15 +991,15 @@ class Category
      *
      * @param int $categoryId
      *
-     * @return Entity
+     * @return CategoryEntity
      */
     public function getCategoryData($categoryId)
     {
-        $entity = new Entity();
+        $entity = new CategoryEntity();
 
         $query = sprintf(
             "SELECT * FROM %sfaqcategories WHERE id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $categoryId,
             $this->language
         );
@@ -1132,7 +1132,7 @@ class Category
                 record_id = %d
             AND
                 record_lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $record_id,
             $record_lang);
 
@@ -1213,8 +1213,8 @@ class Category
                 fcr.category_lang = '%s'
             AND
                 fc.lang = '%s'",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $faqId,
             $this->language,
             $this->language
@@ -1300,7 +1300,7 @@ class Category
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
-            $id = $this->config->getDb()->nextId(Db::getTablePrefix().'faqcategories', 'id');
+            $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqcategories', 'id');
         }
 
         $query = sprintf("
@@ -1309,7 +1309,7 @@ class Category
             (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
                 VALUES
             (%d, '%s', %d, '%s', '%s', %d, %d, %d, '%s', %d)",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $categoryData['lang'],
             $parentId,
@@ -1350,7 +1350,7 @@ class Category
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $categoryData['name'],
             $categoryData['description'],
             $categoryData['user_id'],
@@ -1386,7 +1386,7 @@ class Category
                 user_id = %d
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $to,
             $from
         );
@@ -1414,7 +1414,7 @@ class Category
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $category_id,
             $category_lang);
 
@@ -1447,19 +1447,19 @@ class Category
         foreach ($tables as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $temp_cat,
                         $_field,
                         $category_id_2));
                 $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $category_id_2,
                         $_field,
                         $category_id_1));
                 $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $category_id_1,
                         $_field,
@@ -1472,19 +1472,19 @@ class Category
         foreach ($tables2 as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $temp_cat,
                         $_field,
                         $category_id_2));
                 $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $category_id_2,
                         $_field,
                         $category_id_1));
                 $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                        Db::getTablePrefix().$_table,
+                        Database::getTablePrefix().$_table,
                         $_field,
                         $category_id_1,
                         $_field,
@@ -1516,7 +1516,7 @@ class Category
                 parent_id = %d
             WHERE
                 id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $parent_id,
             $category_id);
         $this->config->getDb()->query($query);
@@ -1540,7 +1540,7 @@ class Category
                 %sfaqcategories
             WHERE
                 id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
             $query .= " AND lang = '".$category_lang."'";
@@ -1566,7 +1566,7 @@ class Category
                 %sfaqcategoryrelations
             WHERE
                 category_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $category_id);
         if (!$delete_all) {
             $query .= " AND category_lang = '".$category_lang."'";
@@ -1600,7 +1600,7 @@ class Category
                    id = %d
                AND
                    lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $category_id,
                 $language);
             $result = $this->config->getDb()->query($query);
@@ -1650,7 +1650,7 @@ class Category
                 id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories',
-            Db::getTablePrefix());
+            Database::getTablePrefix());
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang != '".$this->language."'";
         }
@@ -1681,7 +1681,7 @@ class Category
                 %sfaqcategories
             WHERE
                 parent_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $parent_id);
         $result = $this->config->getDb()->query($query);
 
@@ -1707,7 +1707,7 @@ class Category
             foreach ($ids as $id) {
                 $query = sprintf(
                     'SELECT * FROM %sfaqcategory_%s WHERE category_id = %d AND %s_id = %d',
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $mode,
                     $categoryId,
                     $mode,
@@ -1720,7 +1720,7 @@ class Category
 
                 $query = sprintf(
                     'INSERT INTO %sfaqcategory_%s (category_id, %s_id) VALUES (%d, %d)',
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $mode,
                     $mode,
                     $categoryId,
@@ -1757,7 +1757,7 @@ class Category
                     %sfaqcategory_%s
                 WHERE
                     category_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $mode,
                 $category_id);
             $this->config->getDb()->query($query);
@@ -1792,7 +1792,7 @@ class Category
             WHERE
                 category_id IN (%s)',
             $mode,
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $mode,
             implode(', ', $categories));
 
@@ -1848,9 +1848,9 @@ class Category
                 AND
                     fcr.record_lang = fd.lang
                 GROUP BY fcr.category_id',
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
                 $this->groups[0]);
         } else {
             $query = sprintf('
@@ -1864,8 +1864,8 @@ class Category
                 AND
                     fcr.record_lang = fd.lang
                 GROUP BY fcr.category_id',
-                Db::getTablePrefix(),
-                Db::getTablePrefix());
+                Database::getTablePrefix(),
+                Database::getTablePrefix());
         }
         $result = $this->config->getDb()->query($query);
 
@@ -1901,8 +1901,8 @@ class Category
                 fd.lang = fcr.category_lang
             ORDER BY
                 fcr.category_id, fd.id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix());
+            Database::getTablePrefix(),
+            Database::getTablePrefix());
         $result = $this->config->getDb()->query($query);
 
         if ($this->config->getDb()->numRows($result) > 0) {

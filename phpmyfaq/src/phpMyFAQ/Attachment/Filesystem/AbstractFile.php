@@ -17,8 +17,10 @@ namespace phpMyFAQ\Attachment\Filesystem;
  * @since 2009-08-21
  */
 
-use phpMyFAQ\Attachment\Filesystem\Entry;
-use phpMyFAQ\Attachment\Filesystem\File\Exception;
+use phpMyFAQ\Attachment\Filesystem\AbstractEntry;
+use phpMyFAQ\Attachment\Filesystem\File\FileException;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -34,7 +36,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link https://www.phpmyfaq.de
  * @since 2009-08-21
  */
-abstract class File extends Entry
+abstract class AbstractFile extends AbstractEntry
 {
     /**
      * Enums.
@@ -56,7 +58,7 @@ abstract class File extends Entry
      * @param string $filepath path to file
      * @param string $mode     mode for fopen
      *
-     * @throws Exception
+     * @throws FileException
      */
     public function __construct($filepath, $mode = self::MODE_READ)
     {
@@ -66,7 +68,7 @@ abstract class File extends Entry
         $this->handle = @fopen($this->path, $this->mode);
 
         if (!is_resource($this->handle)) {
-            throw new Exception('Could not open file: '.$this->path);
+            throw new FileException('Could not open file: '.$this->path);
         }
     }
 
@@ -112,20 +114,21 @@ abstract class File extends Entry
      * @see inc/PMF_Attachment/Filesystem/PMF_Attachment_Filesystem_Entry#delete()
      *
      * @return bool
+     * @throws FileException
      */
     public function delete(): bool
     {
-        $retval = true;
+        $deleted = true;
 
         if ($this->handle) {
             fclose($this->handle);
         }
 
         if (isset($_FILES['userfile']) && $this->path !== $_FILES['userfile']['tmp_name'] && file_exists($this->path)) {
-            $retval = $this->deleteDir(dirname($this->path));
+            $deleted = $this->deleteDir(dirname($this->path));
         }
 
-        return $retval;
+        return $deleted;
     }
 
     /**
@@ -169,16 +172,16 @@ abstract class File extends Entry
     public function copyToSimple($target): bool
     {
         if (is_uploaded_file($this->path)) {
-            $retval = move_uploaded_file($this->path, $target);
+            $success = move_uploaded_file($this->path, $target);
         } else {
-            $retval = copy($this->path, $target);
+            $success = copy($this->path, $target);
         }
 
-        return $retval;
+        return $success;
     }
 
     /**
-     * Selfcheck.
+     * Self check.
      *
      * @return bool
      */
@@ -192,19 +195,19 @@ abstract class File extends Entry
      *
      * @param string $path
      *
-     * @throws Exception
-     *
      * @return bool
+     * @throws FileException
+     *
      */
     public function deleteDir($path): bool
     {
         if (!file_exists($path)) {
-            throw new Exception("Directory $path doesn't exist.");
+            throw new FileException("Directory $path doesn't exist.");
         }
 
-        $it = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator($path),
-            \RecursiveIteratorIterator::CHILD_FIRST
+        $it = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator($path),
+            RecursiveIteratorIterator::CHILD_FIRST
         );
 
         foreach ($it as $file) {
@@ -214,7 +217,7 @@ abstract class File extends Entry
                 rmdir($file->getPathname());
             } elseif ($file->isFile() || $file->isLink()) {
                 if (!is_writable($file->getPathname())) {
-                    throw new Exception("File can't be deleted.");
+                    throw new FileException("File can't be deleted.");
                 }
                 unlink($file->getPathname());
             }

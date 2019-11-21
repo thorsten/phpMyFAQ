@@ -18,7 +18,7 @@
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Tags;
-use phpMyFAQ\Entity\Tags as TagEntity;
+use phpMyFAQ\Entity\TagEntity as TagEntity;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';

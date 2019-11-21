@@ -80,7 +80,7 @@ class Glossary
             WHERE
                 lang = '%s'
             ORDER BY item ASC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -215,7 +215,7 @@ class Glossary
                 %sfaqglossary
             WHERE
                 id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$id,
             $this->config->getLanguage()->getLanguage()
         );
@@ -252,8 +252,8 @@ class Glossary
             (id, lang, item, definition)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix().'faqglossary', 'id'),
+            Database::getTablePrefix(),
+            $this->config->getDb()->nextId(Database::getTablePrefix().'faqglossary', 'id'),
             $this->config->getLanguage()->getLanguage(),
             Strings::htmlspecialchars($this->item),
             Strings::htmlspecialchars($this->definition)
@@ -288,7 +288,7 @@ class Glossary
                 definition = '%s'
             WHERE
                 id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             Strings::htmlspecialchars($this->item),
             Strings::htmlspecialchars($this->definition),
             (int)$id,
@@ -316,7 +316,7 @@ class Glossary
                 %sfaqglossary
             WHERE
                 id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$id,
             $this->config->getLanguage()->getLanguage()
         );

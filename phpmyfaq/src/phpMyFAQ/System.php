@@ -17,7 +17,7 @@ namespace phpMyFAQ;
  * @since 2010-01-13
  */
 
-use phpMyFAQ\Db\Driver;
+use phpMyFAQ\Database\DatabaseDriver;
 
 /**
  * Class System.
@@ -96,16 +96,16 @@ class System
 
     /**
      * Database handle.
-     * @var Driver
+     * @var DatabaseDriver
      */
     private $database = null;
 
     /**
      * Sets the database handler.
-     * @param Driver $database
+     * @param DatabaseDriver $database
      * @return $this
      */
-    public function setDatabase(Driver $database)
+    public function setDatabase(DatabaseDriver $database)
     {
         $this->database = $database;
 
@@ -361,7 +361,7 @@ class System
      */
     public function dropTables(Array $queries)
     {
-        if ($this->database instanceof Driver) {
+        if ($this->database instanceof DatabaseDriver) {
             foreach ($queries as $query) {
                 $this->database->query($query);
             }

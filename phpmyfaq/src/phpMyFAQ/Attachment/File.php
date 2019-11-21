@@ -17,10 +17,10 @@ namespace phpMyFAQ\Attachment;
  * @since 2009-08-21
  */
 
-use phpMyFAQ\Attachment\Filesystem\File as FilesystemFile;
-use phpMyFAQ\Attachment\Filesystem\File\Encrypted;
-use phpMyFAQ\Attachment\Filesystem\File\Exception;
-use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
+use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
+use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
+use phpMyFAQ\Attachment\Filesystem\File\FileException;
+use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -115,7 +115,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
                 // Doing this check we're sure not to unnecessary
                 // overwrite existing unencrypted file duplicates.
                 if (!$this->linkedRecords()) {
-                    $source = new Vanilla($filePath);
+                    $source = new VanillaFile($filePath);
                     $target = $this->getFile(FilesystemFile::MODE_WRITE);
 
                     $success = $source->moveTo($target);
@@ -139,6 +139,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
     /**
      * Delete attachment.
      * @return bool
+     * @throws FileException
      */
     public function delete(): bool
     {
@@ -189,19 +190,19 @@ class File extends AttachmentAbstract implements AttachmentInterface
      * Factory method to initialise the corresponding file object.
      * 
      * @param string $mode File mode for file open
+     * @return VanillaFile|EncryptedFile
      * @throws
-     * @return Vanilla|Encrypted
      */
     private function getFile($mode = FilesystemFile::MODE_READ)
     {
         if ($this->encrypted) {
-            $file = new Encrypted(
+            $file = new EncryptedFile(
                 $this->buildFilePath(),
                 $mode,
                 $this->key
             );
         } else {
-            $file = new Vanilla($this->buildFilePath(), $mode);
+            $file = new VanillaFile($this->buildFilePath(), $mode);
         }
 
         return $file;

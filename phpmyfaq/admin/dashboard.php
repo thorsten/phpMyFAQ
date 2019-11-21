@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Api;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Session;
@@ -31,7 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-$faqTableInfo = $faqConfig->getDb()->getTableStatus(Db::getTablePrefix());
+$faqTableInfo = $faqConfig->getDb()->getTableStatus(Database::getTablePrefix());
 $faqSystem = new System();
 $faqSession = new Session($faqConfig);
 ?>
@@ -123,31 +123,31 @@ $faqSession = new Session($faqConfig);
                 <a href="?action=view" class="list-group-item">
                   <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['ad_start_articles']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqdata']; ?></em>
+                    <em><?= $faqTableInfo[Database::getTablePrefix().'faqdata']; ?></em>
                   </span>
                 </a>
                 <a href="?action=comments" class="list-group-item">
                   <i aria-hidden="true" class="fa fa-comments"></i> <?= $PMF_LANG['ad_start_comments']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqcomments']; ?></em>
+                    <em><?= $faqTableInfo[Database::getTablePrefix().'faqcomments']; ?></em>
                   </span>
                 </a>
                 <a href="?action=question" class="list-group-item">
                   <i aria-hidden="true" class="fa fa-question-circle"></i> <?= $PMF_LANG['msgOpenQuestions']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqquestions']; ?></em>
+                    <em><?= $faqTableInfo[Database::getTablePrefix().'faqquestions']; ?></em>
                   </span>
                 </a>
                 <a href="?action=news" class="list-group-item">
                   <i aria-hidden="true" class="fa fa-list-alt"></i> <?= $PMF_LANG['msgNews']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix().'faqnews']; ?></em>
+                    <em><?= $faqTableInfo[Database::getTablePrefix().'faqnews']; ?></em>
                   </span>
                 </a>
                 <a href="?action=user&user_action=listallusers" class="list-group-item">
                   <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['admin_mainmenu_users']; ?>
                   <span class="float-right text-muted small">
-                    <em><?= $faqTableInfo[Db::getTablePrefix().'faquser'] - 1; ?></em>
+                    <em><?= $faqTableInfo[Database::getTablePrefix().'faquser'] - 1; ?></em>
                   </span>
                 </a>
                 <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">

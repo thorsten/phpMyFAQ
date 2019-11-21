@@ -16,7 +16,7 @@
  * @since 2009-04-01
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance;
@@ -25,7 +25,7 @@ use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Language;
 use phpMyFAQ\Meta;
-use phpMyFAQ\Entity\Meta as MetaEntity;
+use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId(), 'editconfig')) {
@@ -94,7 +94,7 @@ switch ($ajaxAction) {
             $faqInstanceClient->setClientUrl('http://'.$hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
-            Db::setTablePrefix($dbSetup['dbPrefix']);
+            Database::setTablePrefix($dbSetup['dbPrefix']);
 
             // add admin account and rights
             $instanceAdmin = new User($faqConfig);
@@ -109,7 +109,7 @@ switch ($ajaxAction) {
             // Add anonymous user account
             $clientSetup->createAnonymousUser($faqConfig);
 
-            Db::setTablePrefix($DB['prefix']);
+            Database::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
             $payload = array('error' => 'Cannot create instance.');

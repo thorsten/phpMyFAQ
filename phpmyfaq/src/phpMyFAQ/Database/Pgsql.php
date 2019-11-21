@@ -1,12 +1,10 @@
 <?php
 
-namespace phpMyFAQ\Db;
+namespace phpMyFAQ\Database;
 
 /**
  * The phpMyFAQ\Db_Pgsql class provides methods and functions for a PostgreSQL
  * database.
- *
- *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,29 +18,20 @@ namespace phpMyFAQ\Db;
  * @link https://www.phpmyfaq.de
  */
 
+use Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Utils;
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * phpMyFAQ\Db_Pgsql.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Tom Rochester <tom.rochester@gmail.com>
- * @copyright 2003-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
+ * Class Pgsql
+ * @package phpMyFAQ\Database
  */
-class Pgsql implements Driver
+class Pgsql implements DatabaseDriver
 {
-    /**
-     * The connection resource.
-     *
-     * @var resource
-     */
-    private $conn = null;
-
     /**
      * The query log string.
      *
@@ -58,10 +47,17 @@ class Pgsql implements Driver
     public $tableNames = [];
 
     /**
+     * The connection resource.
+     *
+     * @var resource
+     */
+    private $conn = null;
+
+    /**
      * Connects to the database.
      *
-     * @param string $host     Database hostname
-     * @param string $user     Database username
+     * @param string $host Database hostname
+     * @param string $user Database username
      * @param string $password Password
      * @param string $database Database name
      *
@@ -80,7 +76,7 @@ class Pgsql implements Driver
         $this->conn = pg_pconnect($connectionString);
 
         if (empty($database) || $this->conn == false) {
-            Db::errorPage(pg_last_error($this->conn));
+            Database::errorPage(pg_last_error($this->conn));
             die();
         }
 
@@ -93,8 +89,8 @@ class Pgsql implements Driver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -118,15 +114,48 @@ class Pgsql implements Driver
     }
 
     /**
+     * Returns the error string.
+     *
+     * @return string
+     */
+    public function error()
+    {
+        return pg_last_error($this->conn);
+    }
+
+    /**
      * Escapes a string for use in a query.
      *
-     * @param   string
+     * @param string
      *
      * @return string
      */
     public function escape($string)
     {
         return pg_escape_string($this->conn, $string);
+    }
+
+    /**
+     * Fetches a complete result as an object.
+     *
+     * @param resource $result Resultset
+     *
+     * @return array
+     * @throws Exception
+     *
+     */
+    public function fetchAll($result)
+    {
+        $ret = [];
+        if (false === $result) {
+            throw new Exception('Error while fetching result: ' . $this->error());
+        }
+
+        while ($row = $this->fetchObject($result)) {
+            $ret[] = $row;
+        }
+
+        return $ret;
     }
 
     /**
@@ -139,41 +168,6 @@ class Pgsql implements Driver
     public function fetchObject($result)
     {
         return pg_fetch_object($result);
-    }
-
-    /**
-     * Fetch a result row as an object.
-     *
-     * @param mixed $result
-     *
-     * @return array
-     */
-    public function fetchArray($result)
-    {
-        return pg_fetch_array($result, null, PGSQL_ASSOC);
-    }
-
-    /**
-     * Fetches a complete result as an object.
-     *
-     * @param resource $result Resultset
-     *
-     * @throws Exception
-     *
-     * @return array
-     */
-    public function fetchAll($result)
-    {
-        $ret = [];
-        if (false === $result) {
-            throw new Exception('Error while fetching result: '.$this->error());
-        }
-
-        while ($row = $this->fetchObject($result)) {
-            $ret[] = $row;
-        }
-
-        return $ret;
     }
 
     /**
@@ -199,21 +193,6 @@ class Pgsql implements Driver
     }
 
     /**
-     * Returns just one row.
-     *
-     * @param  string
-     * @param string $query
-     *
-     * @return string
-     */
-    private function getOne($query)
-    {
-        $row = pg_fetch_row($this->query($query));
-
-        return $row[0];
-    }
-
-    /**
      * This function returns the table status.
      *
      * @param string $prefix Table prefix
@@ -226,7 +205,7 @@ class Pgsql implements Driver
         $arr = [];
         $result = $this->query($select);
         while ($row = $this->fetchArray($result)) {
-            $count = $this->getOne('SELECT count(1) FROM '.$row['relname'].';');
+            $count = $this->getOne('SELECT count(1) FROM ' . $row['relname'] . ';');
             $arr[$row['relname']] = $count;
         }
 
@@ -234,29 +213,45 @@ class Pgsql implements Driver
     }
 
     /**
+     * Fetch a result row as an object.
+     *
+     * @param mixed $result
+     *
+     * @return array
+     */
+    public function fetchArray($result)
+    {
+        return pg_fetch_array($result, null, PGSQL_ASSOC);
+    }
+
+    /**
+     * Returns just one row.
+     *
+     * @param string
+     *
+     * @return string
+     */
+    private function getOne($query)
+    {
+        $row = pg_fetch_row($this->query($query));
+
+        return $row[0];
+    }
+
+    /**
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id    the name of the ID column
+     * @param string $id the name of the ID column
      *
      * @return int
      */
     public function nextId($table, $id)
     {
-        $result = $this->query("SELECT nextval('".$table.'_'.$id."_seq') as current_id;");
-        $currentID = pg_result($result, 0, 'current_id');
+        $result = $this->query("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
+        $currentID = pg_result($result);
 
         return ($currentID);
-    }
-
-    /**
-     * Returns the error string.
-     *
-     * @return string
-     */
-    public function error()
-    {
-        return pg_last_error($this->conn);
     }
 
     /**
@@ -301,46 +296,46 @@ class Pgsql implements Driver
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix.'faqadminlog',
-            $prefix.'faqattachment',
-            $prefix.'faqattachment_file',
-            $prefix.'faqcaptcha',
-            $prefix.'faqcategories',
-            $prefix.'faqcategory_group',
-            $prefix.'faqcategory_news',
-            $prefix.'faqcategory_user',
-            $prefix.'faqcategoryrelations',
-            $prefix.'faqchanges',
-            $prefix.'faqcomments',
-            $prefix.'faqconfig',
-            $prefix.'faqdata',
-            $prefix.'faqdata_group',
-            $prefix.'faqdata_revisions',
-            $prefix.'faqdata_tags',
-            $prefix.'faqdata_user',
-            $prefix.'faqglossary',
-            $prefix.'faqgroup',
-            $prefix.'faqgroup_right',
-            $prefix.'faqinstances',
-            $prefix.'faqinstances_config',
-            $prefix.'faqmeta',
-            $prefix.'faqnews',
-            $prefix.'faqquestions',
-            $prefix.'faqright',
-            $prefix.'faqsearches',
-            $prefix.'faqsections',
-            $prefix.'faqsection_group',
-            $prefix.'faqsection_news',
-            $prefix.'faqsessions',
-            $prefix.'faqstopwords',
-            $prefix.'faqtags',
-            $prefix.'faquser',
-            $prefix.'faquser_group',
-            $prefix.'faquser_right',
-            $prefix.'faquserdata',
-            $prefix.'faquserlogin',
-            $prefix.'faqvisits',
-            $prefix.'faqvoting',
+            $prefix . 'faqadminlog',
+            $prefix . 'faqattachment',
+            $prefix . 'faqattachment_file',
+            $prefix . 'faqcaptcha',
+            $prefix . 'faqcategories',
+            $prefix . 'faqcategory_group',
+            $prefix . 'faqcategory_news',
+            $prefix . 'faqcategory_user',
+            $prefix . 'faqcategoryrelations',
+            $prefix . 'faqchanges',
+            $prefix . 'faqcomments',
+            $prefix . 'faqconfig',
+            $prefix . 'faqdata',
+            $prefix . 'faqdata_group',
+            $prefix . 'faqdata_revisions',
+            $prefix . 'faqdata_tags',
+            $prefix . 'faqdata_user',
+            $prefix . 'faqglossary',
+            $prefix . 'faqgroup',
+            $prefix . 'faqgroup_right',
+            $prefix . 'faqinstances',
+            $prefix . 'faqinstances_config',
+            $prefix . 'faqmeta',
+            $prefix . 'faqnews',
+            $prefix . 'faqquestions',
+            $prefix . 'faqright',
+            $prefix . 'faqsearches',
+            $prefix . 'faqsections',
+            $prefix . 'faqsection_group',
+            $prefix . 'faqsection_news',
+            $prefix . 'faqsessions',
+            $prefix . 'faqstopwords',
+            $prefix . 'faqtags',
+            $prefix . 'faquser',
+            $prefix . 'faquser_group',
+            $prefix . 'faquser_right',
+            $prefix . 'faquserdata',
+            $prefix . 'faquserlogin',
+            $prefix . 'faqvisits',
+            $prefix . 'faqvoting',
         ];
     }
 

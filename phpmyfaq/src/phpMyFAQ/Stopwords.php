@@ -20,7 +20,7 @@ namespace phpMyFAQ;
  * @since 2009-04-01
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -66,7 +66,7 @@ class Stopwords
     public function __construct(Configuration $config)
     {
         $this->_config = $config;
-        $this->table_name = Db::getTablePrefix().'faqstopwords';
+        $this->table_name = Database::getTablePrefix().'faqstopwords';
     }
 
     /**

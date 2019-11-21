@@ -73,7 +73,7 @@ class Visits
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage()
         );
@@ -108,7 +108,7 @@ class Visits
                 %sfaqvisits
             VALUES
                 (%d, '%s', %d, %d)",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage(),
             1,
@@ -140,7 +140,7 @@ class Visits
                 last_visit = %d
             WHERE
                 id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $id,
             $this->config->getLanguage()->getLanguage()
@@ -166,7 +166,7 @@ class Visits
                 %sfaqvisits
              ORDER BY
                 visits DESC',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
             );
         $result = $this->config->getDb()->query($query);
 
@@ -192,7 +192,7 @@ class Visits
         return $this->config->getDb()->query(
             sprintf(
                 'UPDATE %sfaqvisits SET visits = 1, last_visit = %d ',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $_SERVER['REQUEST_TIME']
             )
         );

@@ -51,6 +51,9 @@
         "phpdocumentor/reflection-docblock": "3.*",
         "phpunit/php-token-stream": "1.*"
     },
+    "suggest": {
+        "ext-mysqli": "*"
+    },
     "config": {
         "bin-dir": "bin",
         "secure-http": true

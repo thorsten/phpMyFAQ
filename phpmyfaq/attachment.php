@@ -15,8 +15,8 @@
  * @since 2009-06-23
  */
 
-use phpMyFAQ\Attachment\Exception;
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\CurrentUser;
@@ -52,10 +52,10 @@ $userPermission = [];
 $groupPermission = [];
 
 try {
-    $attachment = Factory::create($id);
+    $attachment = AttachmentFactory::create($id);
     $userPermission = $faq->getPermission('user', $attachment->getRecordId());
     $groupPermission = $faq->getPermission('group', $attachment->getRecordId());
-} catch (Exception $e) {
+} catch (AttachmentException $e) {
     $attachmentErrors[] = $PMF_LANG['msgAttachmentInvalid'] . ' (' . $e->getMessage() . ')';
 }
 

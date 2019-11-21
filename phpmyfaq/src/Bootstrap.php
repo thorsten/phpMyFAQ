@@ -18,9 +18,9 @@
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
-use phpMyFAQ\Init;
+use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
+use phpMyFAQ\Init;
 
 //
 // Debug mode:
@@ -53,7 +53,7 @@ while ((!$foundCurrPath) && ($i < count($includePaths))) {
     ++$i;
 }
 if (!$foundCurrPath) {
-    ini_set('include_path', '.'.PATH_SEPARATOR.ini_get('include_path'));
+    ini_set('include_path', '.' . PATH_SEPARATOR . ini_get('include_path'));
 }
 
 //
@@ -73,15 +73,15 @@ if (!defined('PMF_ROOT_DIR')) {
 //
 // Check if multisite/multisite.php exist for Multisite support
 //
-if (file_exists(PMF_ROOT_DIR.'/multisite/multisite.php') && 'cli' !== PHP_SAPI) {
-    require PMF_ROOT_DIR.'/multisite/multisite.php';
+if (file_exists(PMF_ROOT_DIR . '/multisite/multisite.php') && 'cli' !== PHP_SAPI) {
+    require PMF_ROOT_DIR . '/multisite/multisite.php';
 }
 
 //
 // Read configuration and constants
 //
 if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
-    define('PMF_CONFIG_DIR', PMF_ROOT_DIR.'/config'); // Single instance configuration
+    define('PMF_CONFIG_DIR', PMF_ROOT_DIR . '/config'); // Single instance configuration
 } else {
     define('PMF_CONFIG_DIR', PMF_MULTI_INSTANCE_CONFIG_DIR); // Multi instance configuration
 }
@@ -89,13 +89,13 @@ if (!defined('PMF_MULTI_INSTANCE_CONFIG_DIR')) {
 //
 // Check if config/database.php exist -> if not, redirect to installer
 //
-if (!file_exists(PMF_CONFIG_DIR.'/database.php')) {
+if (!file_exists(PMF_CONFIG_DIR . '/database.php')) {
     header('Location: setup/index.php');
     exit();
 }
 
-require PMF_CONFIG_DIR.'/database.php';
-require PMF_CONFIG_DIR.'/constants.php';
+require PMF_CONFIG_DIR . '/database.php';
+require PMF_CONFIG_DIR . '/constants.php';
 
 /*
  * The /src directory
@@ -105,20 +105,20 @@ define('PMF_SRC_DIR', __DIR__);
 /*
  * The directory where the translations reside
  */
-define('LANGUAGE_DIR', dirname(__DIR__).'/lang');
+define('LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
 // Setting up PSR-0 autoloader
 //
-require PMF_SRC_DIR.'/libs/autoload.php';
+require PMF_SRC_DIR . '/libs/autoload.php';
 
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
-$loader->addPsr4('Abraham\\TwitterOAuth\\', PMF_SRC_DIR.'/libs/abraham/twitteroauth/src');
+$loader->addPsr4('Abraham\\TwitterOAuth\\', PMF_SRC_DIR . '/libs/abraham/twitteroauth/src');
 $loader->register();
 
-require PMF_SRC_DIR.'/libs/parsedown/Parsedown.php';
-require PMF_SRC_DIR.'/libs/parsedown/ParsedownExtra.php';
+require PMF_SRC_DIR . '/libs/parsedown/Parsedown.php';
+require PMF_SRC_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 //
 // Set the error handler to our pmf_error_handler() function
@@ -129,11 +129,11 @@ set_error_handler('pmf_error_handler');
 // Create a database connection
 //
 try {
-    Db::setTablePrefix($DB['prefix']);
-    $db = Db::factory($DB['type']);
+    Database::setTablePrefix($DB['prefix']);
+    $db = Database::factory($DB['type']);
     $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
 } catch (Exception $e) {
-    Db::errorPage($e->getMessage());
+    Database::errorPage($e->getMessage());
     exit(-1);
 }
 
@@ -163,8 +163,8 @@ session_start();
 //
 // Connect to LDAP server, when LDAP support is enabled
 //
-if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap.php') && extension_loaded('ldap')) {
-    require PMF_CONFIG_DIR.'/ldap.php';
+if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR . '/ldap.php') && extension_loaded('ldap')) {
+    require PMF_CONFIG_DIR . '/ldap.php';
     $faqConfig->setLdapConfig($PMF_LDAP);
 } else {
     $ldap = null;
@@ -172,17 +172,17 @@ if ($faqConfig->get('ldap.ldapSupport') && file_exists(PMF_CONFIG_DIR.'/ldap.php
 //
 // Connect to Elasticsearch if enabled
 //
-if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR.'/elasticsearch.php')) {
+if ($faqConfig->get('search.enableElasticsearch') && file_exists(PMF_CONFIG_DIR . '/elasticsearch.php')) {
 
-    require PMF_CONFIG_DIR.'/elasticsearch.php';
-    require PMF_CONFIG_DIR.'/constants_elasticsearch.php';
+    require PMF_CONFIG_DIR . '/elasticsearch.php';
+    require PMF_CONFIG_DIR . '/constants_elasticsearch.php';
 
     $psr4Loader = new ClassLoader();
-    $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR.'/libs/elasticsearch/src/Elasticsearch');
-    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR.'/libs/guzzlehttp/ringphp/src');
-    $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR.'/libs/monolog/src/Monolog');
-    $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR.'/libs/psr/log/Psr');
-    $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR.'/libs/react/promise/src');
+    $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
+    $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
+    $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
+    $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
+    $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
     $psr4Loader->register();
 
     $esClient = ClientBuilder::create()
@@ -202,7 +202,7 @@ if ('/' == $confAttachmentsPath[0] || preg_match('%^[a-z]:(\\\\|/)%i', $confAtta
     define('PMF_ATTACHMENTS_DIR', $confAttachmentsPath);
 } else {
     // otherwise build the absolute path
-    $tmp = dirname(__DIR__).DIRECTORY_SEPARATOR.$confAttachmentsPath;
+    $tmp = dirname(__DIR__) . DIRECTORY_SEPARATOR . $confAttachmentsPath;
 
     // Check that nobody is traversing
     if (0 === strpos((string)$tmp, dirname(__DIR__))) {
@@ -247,11 +247,11 @@ $pmfExceptions = [];
  * phpMyFAQ custom error handler function, also to prevent the disclosure of
  * potential sensitive data.
  *
- * @param int    $level    The level of the error raised.
- * @param string $message  The error message.
+ * @param int $level The level of the error raised.
+ * @param string $message The error message.
  * @param string $filename The filename that the error was raised in.
- * @param int    $line     The line number the error was raised at.
- * @param mixed  $context  It optionally contains an array of every variable
+ * @param int $line The line number the error was raised at.
+ * @param mixed $context It optionally contains an array of every variable
  *                         that existed in the scope the error was triggered in.
  *
  * @return boolean|null
@@ -310,10 +310,10 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
     }
     if (ini_get('log_errors')) {
         error_log(sprintf('phpMyFAQ %s:  %s in %s on line %d',
-            $errorType,
-            $message,
-            $filename,
-            $line)
+                $errorType,
+                $message,
+                $filename,
+                $line)
         );
     }
 

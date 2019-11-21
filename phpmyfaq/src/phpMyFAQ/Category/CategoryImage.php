@@ -5,8 +5,6 @@ namespace phpMyFAQ\Category;
 /**
  * The category image class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,18 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Entity images.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2016 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2016-09-08
+ * Class CategoryImage
+ * @package phpMyFAQ\Category
  */
-class Image
+class CategoryImage
 {
-    const UPLOAD_DIR = PMF_ROOT_DIR.'/images/';
+    const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
 
     /** @var Configuration */
     private $config = null;
@@ -54,7 +46,7 @@ class Image
     /**
      * Constructor.
      *
-     * @param Configuration $config   Configuration object
+     * @param Configuration $config Configuration object
      */
     public function __construct(Configuration $config)
     {
@@ -66,7 +58,7 @@ class Image
      *
      * @param array $uploadedFile
      *
-     * @return Image
+     * @return CategoryImage
      */
     public function setUploadedFile(Array $uploadedFile)
     {
@@ -103,41 +95,17 @@ class Image
     }
 
     /**
-     * Uploads the current file and moves it into the images/ folder.
+     * Returns the filename.
      *
-     * @return bool
-     */
-    public function upload(): bool
-    {
-        if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name']) &&
-            $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')) {
-
-            if (false === getimagesize($this->uploadedFile['tmp_name'])) {
-                return false;
-            } else {
-                if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR.$this->fileName)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        } else {
-            return false;
-        }
-    }
-
-    /**
-     * Deletes the current file, returns true, if no file is available.
+     * @param string $fileName
      *
-     * @return bool
+     * @return CategoryImage
      */
-    public function delete(): bool 
+    public function setFileName($fileName)
     {
-        if (is_file(self::UPLOAD_DIR.$this->fileName)) {
-            return unlink(self::UPLOAD_DIR.$this->fileName);
-        }
+        $this->fileName = $fileName;
 
-        return true;
+        return $this;
     }
 
     /**
@@ -159,16 +127,40 @@ class Image
     }
 
     /**
-     * Returns the filename.
+     * Uploads the current file and moves it into the images/ folder.
      *
-     * @param string $fileName
-     *
-     * @return Image
+     * @return bool
      */
-    public function setFileName($fileName)
+    public function upload(): bool
     {
-        $this->fileName = $fileName;
+        if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name']) &&
+            $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')) {
 
-        return $this;
+            if (false === getimagesize($this->uploadedFile['tmp_name'])) {
+                return false;
+            } else {
+                if (move_uploaded_file($this->uploadedFile['tmp_name'], self::UPLOAD_DIR . $this->fileName)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        } else {
+            return false;
+        }
+    }
+
+    /**
+     * Deletes the current file, returns true, if no file is available.
+     *
+     * @return bool
+     */
+    public function delete(): bool
+    {
+        if (is_file(self::UPLOAD_DIR . $this->fileName)) {
+            return unlink(self::UPLOAD_DIR . $this->fileName);
+        }
+
+        return true;
     }
 }

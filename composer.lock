@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "377e0ee51aaed0292e310c2cdc9ee2b7",
+    "content-hash": "1ce3b3f1fa13933dc0e7621d4dcc0498",
     "packages": [
         {
             "name": "abraham/twitteroauth",
@@ -62,16 +62,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v7.3.0",
+            "version": "v7.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f"
+                "reference": "830a6f6fdb4a6b7005ff914fe761e1a92ebb5cb8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f",
-                "reference": "f8b5d2beeeb22a5a59aabb183b5bcd7e70878d2f",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/830a6f6fdb4a6b7005ff914fe761e1a92ebb5cb8",
+                "reference": "830a6f6fdb4a6b7005ff914fe761e1a92ebb5cb8",
                 "shasum": ""
             },
             "require": {
@@ -118,7 +118,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2019-09-30T12:52:38+00:00"
+            "time": "2019-11-19T15:10:44+00:00"
         },
         {
             "name": "erusev/parsedown",
@@ -2017,7 +2017,7 @@
         },
         {
             "name": "symfony/yaml",
-            "version": "v3.4.33",
+            "version": "v3.4.35",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/yaml.git",
@@ -2132,7 +2132,9 @@
     "prefer-lowest": false,
     "platform": {
         "php": ">=7.1.0",
-        "ext-json": "*"
+        "ext-json": "*",
+        "ext-xmlwriter": "*",
+        "ext-zlib": "*"
     },
     "platform-dev": []
 }

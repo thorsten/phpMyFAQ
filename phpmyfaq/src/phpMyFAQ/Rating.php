@@ -21,7 +21,7 @@ namespace phpMyFAQ;
  * @since 2007-03-31
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -83,7 +83,7 @@ class Rating
     {
         $ratings = [];
 
-        switch (Db::getType()) {
+        switch (Database::getType()) {
             case 'mssql':
             case 'sqlsrv':
                 // In order to remove this MS SQL 2000/2005 "limit" below:
@@ -121,9 +121,9 @@ class Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix()
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix()
                 );
                 break;
 
@@ -157,9 +157,9 @@ class Rating
                         fv.usr
                     ORDER BY
                         fcr.category_id',
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix()
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix()
                 );
                 break;
         }
@@ -195,7 +195,7 @@ class Rating
                 %sfaqvoting
             WHERE
                 artikel = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
         $result = $this->config->getDb()->query($query);
@@ -230,7 +230,7 @@ class Rating
                 %sfaqvoting
             WHERE
                 artikel = %d AND (ip = '%s' AND datum > '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $ip,
             $check
@@ -259,7 +259,7 @@ class Rating
                 %sfaqvoting
             WHERE
                 artikel = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId);
         if ($result = $this->config->getDb()->query($query)) {
             if ($row = $this->config->getDb()->fetchObject($result)) {
@@ -284,8 +284,8 @@ class Rating
                 %sfaqvoting
             VALUES
                 (%d, %d, %d, 1, %d, '%s')",
-            Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix().'faqvoting', 'id'),
+            Database::getTablePrefix(),
+            $this->config->getDb()->nextId(Database::getTablePrefix().'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
@@ -315,7 +315,7 @@ class Rating
                 ip = '%s'
             WHERE
                 artikel = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],
             $votingData['user_ip'],
@@ -334,7 +334,7 @@ class Rating
     public function deleteAll()
     {
         return $this->config->getDb()->query(
-            sprintf('DELETE FROM %sfaqvoting', Db::getTablePrefix())
+            sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix())
         );
     }
 }

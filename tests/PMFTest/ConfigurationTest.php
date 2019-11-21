@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 

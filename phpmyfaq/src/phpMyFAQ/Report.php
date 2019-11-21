@@ -96,12 +96,12 @@ class Report
             ORDER BY
                 fd.id
             ASC',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix()
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix()
         );
 
         $result = $this->_config->getDb()->query($query);

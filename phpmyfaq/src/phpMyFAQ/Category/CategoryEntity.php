@@ -22,18 +22,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * class Entity_Category.
- *
- * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2014-08-14
+ * Class CategoryEntity
+ * @package phpMyFAQ\Category
  */
-class Entity
+class CategoryEntity
 {
     /**
      * @var int
@@ -84,18 +76,6 @@ class Entity
     private $image = '';
 
     /**
-     * @param bool $active
-     *
-     * @return Entity
-     */
-    public function setActive($active)
-    {
-        $this->active = $active;
-
-        return $this;
-    }
-
-    /**
      * @return bool
      */
     public function getActive()
@@ -104,13 +84,13 @@ class Entity
     }
 
     /**
-     * @param string $description
+     * @param bool $active
      *
-     * @return Entity
+     * @return CategoryEntity
      */
-    public function setDescription($description)
+    public function setActive($active)
     {
-        $this->description = $description;
+        $this->active = $active;
 
         return $this;
     }
@@ -124,6 +104,18 @@ class Entity
     }
 
     /**
+     * @param string $description
+     *
+     * @return CategoryEntity
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    /**
      * @return int
      */
     public function getGroupId()
@@ -134,23 +126,11 @@ class Entity
     /**
      * @param int $groupId
      *
-     * @return Entity
+     * @return CategoryEntity
      */
     public function setGroupId($groupId)
     {
         $this->groupId = $groupId;
-
-        return $this;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return Entity
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
 
         return $this;
     }
@@ -164,13 +144,13 @@ class Entity
     }
 
     /**
-     * @param string $lang
+     * @param int $id
      *
-     * @return Entity
+     * @return CategoryEntity
      */
-    public function setLang($lang)
+    public function setId($id)
     {
-        $this->lang = $lang;
+        $this->id = $id;
 
         return $this;
     }
@@ -184,13 +164,13 @@ class Entity
     }
 
     /**
-     * @param string $name
+     * @param string $lang
      *
-     * @return Entity
+     * @return CategoryEntity
      */
-    public function setName($name)
+    public function setLang($lang)
     {
-        $this->name = $name;
+        $this->lang = $lang;
 
         return $this;
     }
@@ -204,13 +184,13 @@ class Entity
     }
 
     /**
-     * @param int $parentId
+     * @param string $name
      *
-     * @return Entity
+     * @return CategoryEntity
      */
-    public function setParentId($parentId)
+    public function setName($name)
     {
-        $this->parentId = $parentId;
+        $this->name = $name;
 
         return $this;
     }
@@ -224,13 +204,13 @@ class Entity
     }
 
     /**
-     * @param string $userId
+     * @param int $parentId
      *
-     * @return Entity
+     * @return CategoryEntity
      */
-    public function setUserId($userId)
+    public function setParentId($parentId)
     {
-        $this->userId = $userId;
+        $this->parentId = $parentId;
 
         return $this;
     }
@@ -244,6 +224,18 @@ class Entity
     }
 
     /**
+     * @param string $userId
+     *
+     * @return CategoryEntity
+     */
+    public function setUserId($userId)
+    {
+        $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
      * @return string|null
      */
     public function getImage()
@@ -254,22 +246,11 @@ class Entity
     /**
      * @param string $image
      *
-     * @return Entity
+     * @return CategoryEntity
      */
     public function setImage($image)
     {
         $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @return Entity
-     */
-    public function setShowHome($showHome)
-    {
-        $this->showHome = $showHome;
 
         return $this;
     }
@@ -280,5 +261,16 @@ class Entity
     public function getShowHome()
     {
         return $this->showHome;
+    }
+
+    /**
+     *
+     * @return CategoryEntity
+     */
+    public function setShowHome($showHome)
+    {
+        $this->showHome = $showHome;
+
+        return $this;
     }
 }

@@ -71,11 +71,11 @@ class Relation
         $terms = str_replace('-', ' ', $question).' '.$keywords;
         $search = SearchFactory::create(
             $this->_config,
-            ['database' => Db::getType()]
+            ['database' => Database::getType()]
         );
 
         $search
-            ->setTable(Db::getTablePrefix().'faqdata AS fd')
+            ->setTable(Database::getTablePrefix().'faqdata AS fd')
             ->setResultColumns(
                 [
                     'fd.id AS id',
@@ -86,7 +86,7 @@ class Relation
                     'fd.keywords AS keywords'
                 ]
             )
-            ->setJoinedTable(Db::getTablePrefix().'faqcategoryrelations AS fcr')
+            ->setJoinedTable(Database::getTablePrefix().'faqcategoryrelations AS fcr')
             ->setJoinedColumns(
                 [
                 'fd.id = fcr.record_id',

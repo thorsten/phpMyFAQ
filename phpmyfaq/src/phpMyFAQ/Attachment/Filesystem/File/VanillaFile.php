@@ -17,23 +17,17 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @since 2009-08-21
  */
 
-use phpMyFAQ\Attachment\Filesystem\File;
+use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Attachment_Abstract.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * Class VanillaFile
+ * @package phpMyFAQ\Attachment\Filesystem\File
  */
-class Vanilla extends File
+class VanillaFile extends AbstractFile
 {
     /**
      * Chunk size read/write operations will deal with
@@ -43,25 +37,13 @@ class Vanilla extends File
      */
     const chunkSize = 512;
 
-    /**
-     * @inheritdoc
-     */
-    public function getChunk(): string
-    {
-        return fread($this->handle, self::chunkSize);
-    }
-
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function putChunk($chunk): bool
     {
         return fwrite($this->handle, $chunk);
     }
 
-    /**
-     * @inheritdoc
-     */
+    /** @inheritdoc */
     public function copyTo($target): bool
     {
         $doSimple = is_string($target) || $target instanceof self;
@@ -69,16 +51,22 @@ class Vanilla extends File
         if ($doSimple) {
             // If the target is a string or vanilla object, just move
             // it the simplest way we can.
-            $retval = $this->copyToSimple((string)$target);
+            $success = $this->copyToSimple((string)$target);
         } else {
             $target->setMode(self::MODE_WRITE);
             while (!$this->eof()) {
                 $target->putChunk($this->getChunk());
             }
 
-            $retval = true;
+            $success = true;
         }
 
-        return $retval;
+        return $success;
+    }
+
+    /** @inheritdoc */
+    public function getChunk(): string
+    {
+        return fread($this->handle, self::chunkSize);
     }
 }

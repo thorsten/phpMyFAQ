@@ -21,7 +21,7 @@ namespace phpMyFAQ\Permission;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -126,8 +126,8 @@ class LargePermission extends MediumPermission
             AND
                 fgr.right_id = %d
             ',
-            DB::getTablePrefix(),
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $rightId
         );
@@ -158,7 +158,7 @@ class LargePermission extends MediumPermission
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'id');
+        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsections', 'id');
         $sectionData = $this->checkSectionData($sectionData);
         $insert = sprintf("
             INSERT INTO
@@ -166,7 +166,7 @@ class LargePermission extends MediumPermission
             (id, name, description)
                 VALUES
             (%d, '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $nextId,
             $sectionData['name'],
             $sectionData['description']
@@ -205,7 +205,7 @@ class LargePermission extends MediumPermission
                 %s
             WHERE
                 id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $set,
             $sectionId
         );
@@ -258,7 +258,7 @@ class LargePermission extends MediumPermission
                 %sfaqsections
             WHERE
                 id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -272,7 +272,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_group
             WHERE
                 section_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -286,7 +286,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_news
             WHERE
                 section_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -325,8 +325,8 @@ class LargePermission extends MediumPermission
                 fug.user_id = %d
             AND fsg.section_id = %d
             ',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $userId
         );
@@ -365,8 +365,8 @@ class LargePermission extends MediumPermission
             WHERE 
                 fsg.section_id = %d
             ',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -401,9 +401,9 @@ class LargePermission extends MediumPermission
             WHERE 
                 %sfaqsection_group.section_id = %d
             ',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -441,7 +441,7 @@ class LargePermission extends MediumPermission
             AND 
                 group_id = %d
             ',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $groupId
         );
@@ -458,7 +458,7 @@ class LargePermission extends MediumPermission
             (section_id, group_id)
                VALUES
             (%d, %d)',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $groupId
         );
@@ -489,7 +489,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_group
             WHERE
                 section_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -522,7 +522,7 @@ class LargePermission extends MediumPermission
                 group_id = %d
             AND
                 section_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $groupId
         );
@@ -551,7 +551,7 @@ class LargePermission extends MediumPermission
                 %sfaqsections
             WHERE 
                 name = %s',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $name
         );
 
@@ -580,7 +580,7 @@ class LargePermission extends MediumPermission
                 %sfaqsections
             WHERE 
                 id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -605,7 +605,7 @@ class LargePermission extends MediumPermission
             return $this->getUserSections($userId);
         }
 
-        $select = sprintf('SELECT * FROM %sfaqsections', Db::getTablePrefix());
+        $select = sprintf('SELECT * FROM %sfaqsections', Database::getTablePrefix());
 
         $res = $this->config->getDb()->query($select);
         if (!$res || $this->config->getDb()->numRows($res) < 1) {
@@ -643,8 +643,8 @@ class LargePermission extends MediumPermission
                 fug.group_id = fsg.group_id
             WHERE 
                 fug.user_id = %d',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId
         );
 
@@ -699,7 +699,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_group
             WHERE 
                 group_id = %s',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -733,8 +733,8 @@ class LargePermission extends MediumPermission
                 fgr.group_id = fug.group_id
             WHERE 
                 fug.user_id = %d',
-            DB::getTablePrefix(),
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId
         );
 
@@ -767,7 +767,7 @@ class LargePermission extends MediumPermission
                 %sfaqsections
             WHERE
                 id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
         $res = $this->config->getDb()->query($select);
@@ -798,7 +798,7 @@ class LargePermission extends MediumPermission
             (category_id, section_id)
                 VALUES
             (%s,%s)',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $categoryId,
             $sectionId
         );
@@ -829,7 +829,7 @@ class LargePermission extends MediumPermission
                 category_id = %d
             AND
                 section_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $categoryId,
             $sectionId
         );
@@ -859,7 +859,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_category
             WHERE 
                 section_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
         $res = $this->config->getDb()->query($select);
@@ -887,7 +887,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_category
             WHERE 
                 category_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $categoryId
         );
         $res = $this->config->getDb()->query($delete);
@@ -916,7 +916,7 @@ class LargePermission extends MediumPermission
             (news_id, section_id)
                 VALUES
             (%s,%s)',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $newsId,
             $sectionId
         );
@@ -947,7 +947,7 @@ class LargePermission extends MediumPermission
                 news_id = %d
             AND
                 section_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $newsId,
             $sectionId
         );
@@ -977,7 +977,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_news
             WHERE 
                 section_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
         $res = $this->config->getDb()->query($select);
@@ -1005,7 +1005,7 @@ class LargePermission extends MediumPermission
                 %sfaqsection_news
             WHERE 
                 news_id = %d',
-            DB::getTablePrefix(),
+            Database::getTablePrefix(),
             $newsId
         );
         $res = $this->config->getDb()->query($delete);

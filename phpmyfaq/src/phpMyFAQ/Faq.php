@@ -21,7 +21,7 @@ namespace phpMyFAQ;
  * @since 2005-12-20
  */
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
@@ -218,11 +218,11 @@ class Faq
                 %s
             ORDER BY
                 %s.%s %s",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now,
             $categoryId,
@@ -393,11 +393,11 @@ class Faq
                 fd.lang = '%s'
             %s
             %s",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now,
             $categoryId,
@@ -578,11 +578,11 @@ class Faq
                 %s
             ORDER BY
                 %s %s",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now,
             $records,
@@ -803,10 +803,10 @@ class Faq
             AND
                 fd.lang = '%s'
                 %s",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             isset($faqRevisionId) ? 'faqdata_revisions' : 'faqdata',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $faqId,
             isset($faqRevisionId) ? 'AND revision_id = '.$faqRevisionId : '',
             $faqLanguage,
@@ -864,11 +864,11 @@ class Faq
             AND
                 fd.lang = '%s'
                 %s",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             implode(',', $faqIds),
             $this->config->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport)
@@ -921,7 +921,7 @@ class Faq
     public function addRecord(Array $data, $newRecord = true)
     {
         if ($newRecord) {
-            $recordId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqdata', 'id');
+            $recordId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqdata', 'id');
         } else {
             $recordId = $data['id'];
         }
@@ -932,7 +932,7 @@ class Faq
                 %sfaqdata
             VALUES
                 (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $data['lang'],
             $this->getSolutionId(),
@@ -973,7 +973,7 @@ class Faq
                 MAX(solution_id) AS solution_id
             FROM
                 %sfaqdata',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         $result = $this->config->getDb()->query($query);
@@ -1024,7 +1024,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $data['revision_id'],
             $data['active'],
             $data['sticky'],
@@ -1064,66 +1064,66 @@ class Faq
         $queries = array(
             sprintf(
                 "DELETE FROM %sfaqchanges WHERE beitrag = %d AND lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqcategoryrelations WHERE record_id = %d AND record_lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata WHERE id = %d AND lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqdata_revisions WHERE id = %d AND lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 "DELETE FROM %sfaqvisits WHERE id = %d AND lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_user WHERE record_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_group WHERE record_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId,
                 $recordLang
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_tags WHERE record_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqdata_tags WHERE %sfaqdata_tags.record_id NOT IN (SELECT %sfaqdata.id FROM %sfaqdata)',
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
-                Db::getTablePrefix()
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix()
             ),
             sprintf(
                 'DELETE FROM %sfaqcomments WHERE id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId
             ),
             sprintf(
                 'DELETE FROM %sfaqvoting WHERE artikel = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $recordId
             ),
         );
@@ -1133,8 +1133,8 @@ class Faq
         }
 
         // Delete possible attachments
-        $attId = Factory::fetchByRecordId($this->config, $recordId);
-        $attachment = Factory::create($attId);
+        $attId = AttachmentFactory::fetchByRecordId($this->config, $recordId);
+        $attachment = AttachmentFactory::create($attId);
         $attachment->delete();
 
         // Delete possible Elasticsearch documents
@@ -1165,7 +1165,7 @@ class Faq
                 id = %d
                 AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$faqId,
             $this->config->getDb()->escape($faqLang)
         );
@@ -1198,7 +1198,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $recordLang);
 
@@ -1237,7 +1237,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $table,
             $recordId,
             $recordLang
@@ -1293,7 +1293,7 @@ class Faq
                     %sfaqcategoryrelations
                 VALUES
                     (%d, '%s', %d, '%s')",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $_category,
                 $language,
                 $recordId,
@@ -1321,7 +1321,7 @@ class Faq
                 record_id = %d
             AND
                 record_lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $recordLang
         );
@@ -1353,9 +1353,9 @@ class Faq
             WHERE
                 fd.solution_id = %d
                 %s',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $solutionId,
             $this->queryPermission($this->groupSupport)
         );
@@ -1424,8 +1424,8 @@ class Faq
                 fd.lang = fcr.record_lang
             WHERE
                 fd.solution_id = %d',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $solutionId
         );
 
@@ -1560,10 +1560,10 @@ class Faq
             %s
             %s
             %s',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $where,
             $this->queryPermission($this->groupSupport),
             $group_by,
@@ -1629,7 +1629,7 @@ class Faq
                 %sfaqdata
             WHERE
                 id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage()
         );
@@ -1669,7 +1669,7 @@ class Faq
                 lang = '%s'
             ORDER BY
                 revision_id",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $recordLang
         );
@@ -1708,8 +1708,8 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $recordLang);
         $this->config->getDb()->query($query);
@@ -1736,7 +1736,7 @@ class Faq
             FROM
                 %sfaqdata
             WHERE id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage());
 
@@ -1776,7 +1776,7 @@ class Faq
                 id = %d 
             AND 
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -1817,7 +1817,7 @@ class Faq
                 date_start <= '%s'
             AND
                 date_end >= '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             null == $language ? '' : "AND lang = '".$language."'",
             $now,
             $now
@@ -1905,20 +1905,20 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Db::getTablePrefix().'faqvisits fv,
-                ' . Db::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix().'faqvisits fv,
+                ' . Database::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -2020,20 +2020,20 @@ class Faq
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
             FROM
-                ' . Db::getTablePrefix().'faqvoting fv,
-                ' . Db::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix().'faqvoting fv,
+                ' . Database::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -2142,20 +2142,20 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Db::getTablePrefix().'faqvisits fv,
-                ' . Db::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix().'faqvisits fv,
+                ' . Database::getTablePrefix().'faqdata fd
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix().'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix().'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Db::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix().'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
@@ -2239,7 +2239,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $questionId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -2267,7 +2267,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $questionId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -2301,7 +2301,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $isVisible,
             $questionId,
             $this->config->getLanguage()->getLanguage()
@@ -2328,8 +2328,8 @@ class Faq
             (id, lang, username, email, category_id, question, created, is_visible, answer_id)
                 VALUES
             (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
-            Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix().'faqquestions', 'id'),
+            Database::getTablePrefix(),
+            $this->config->getDb()->nextId(Database::getTablePrefix().'faqquestions', 'id'),
             $this->config->getLanguage()->getLanguage(),
             $this->config->getDb()->escape($questionData['username']),
             $this->config->getDb()->escape($questionData['email']),
@@ -2379,7 +2379,7 @@ class Faq
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $questionId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -2424,7 +2424,7 @@ class Faq
                 %s
             ORDER BY 
                 created ASC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage(),
             ($all === false ? " AND is_visible = 'Y'" : '')
         );
@@ -2475,8 +2475,8 @@ class Faq
             (id, beitrag, lang, revision_id, usr, datum, what)
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
-            Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix().'faqchanges', 'id'),
+            Database::getTablePrefix(),
+            $this->config->getDb()->nextId(Database::getTablePrefix().'faqchanges', 'id'),
             $id,
             $lang,
             $revision_id,
@@ -2508,7 +2508,7 @@ class Faq
             WHERE
                 beitrag = %d
             ORDER BY revision_id, datum DESC',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId
         );
 
@@ -2619,9 +2619,9 @@ class Faq
             AND
                 fd.date_end   >= '%s'
             AND ",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now);
         // faqvisits data selection
@@ -2748,7 +2748,7 @@ class Faq
             (record_id, %s_id)
                 VALUES
             (%d, %d)',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $mode,
                 $mode,
                 $recordId,
@@ -2785,7 +2785,7 @@ class Faq
                 %sfaqdata_%s
             WHERE
                 record_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $mode,
             $record_id);
         $this->config->getDb()->query($query);
@@ -2817,7 +2817,7 @@ class Faq
             WHERE
                 record_id = %d',
             $mode,
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $mode,
             (int)$recordId);
 
@@ -2889,11 +2889,11 @@ class Faq
                 fd.id,fd.lang,fcr.category_id,fv.visits
             ORDER BY
                 %s %s",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now,
             $categoryId,
@@ -2953,7 +2953,7 @@ class Faq
                 lang = '%s'
             AND
                 is_visible != 'Y'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -2982,7 +2982,7 @@ class Faq
                 is_visible = 'Y'
             ORDER BY
                 created ASC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -3071,7 +3071,7 @@ class Faq
                     id = %d 
                 AND 
                     lang = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $type,
                 $flag,
                 $id,
@@ -3160,11 +3160,11 @@ class Faq
                 fd.id, fd.lang, fd.thema, fcr.category_id, fv.visits
             ORDER BY
                 fv.visits DESC",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage(),
             $now,
             $now,
@@ -3224,7 +3224,7 @@ class Faq
                 fd.id, fd.lang, fd.thema
             ORDER BY
                 fd.id DESC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -3263,7 +3263,7 @@ class Faq
     {
         $query = sprintf(
             'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d WHERE id= %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $faqId,
             $categoryId,
             $openQuestionId

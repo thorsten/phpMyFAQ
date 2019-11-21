@@ -14,10 +14,10 @@
  * @since 2003-12-20
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Category;
-use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\CategoryImage;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -62,7 +62,7 @@ if ('category' != $action && 'content' != $action &&
 // Image upload
 //
 $uploadedFile = (isset($_FILES['image']['size']) && $_FILES['image']['size'] > 0) ? $_FILES['image'] : [];
-$categoryImage = new Image($faqConfig);
+$categoryImage = new CategoryImage($faqConfig);
 $categoryImage->setUploadedFile($uploadedFile);
 
 if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
@@ -73,7 +73,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
         $parentId = Filter::filterInput(INPUT_POST, 'parent_id', FILTER_VALIDATE_INT);
-        $categoryId = $faqConfig->getDb()->nextId(Db::getTablePrefix().'faqcategories', 'id');
+        $categoryId = $faqConfig->getDb()->nextId(Database::getTablePrefix().'faqcategories', 'id');
         $categoryLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
         $categoryData = [
             'lang' => $categoryLang,
@@ -230,7 +230,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
         $category->setUser($currentAdminUser);
         $category->setGroups($currentAdminGroups);
 
-        $categoryImage = new Image($faqConfig);
+        $categoryImage = new CategoryImage($faqConfig);
         $categoryImage->setFileName($category->getCategoryData($categoryId)->getImage());
 
         if ($category->deleteCategory($categoryId, $categoryLang, $deleteAll) &&

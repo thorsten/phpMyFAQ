@@ -16,7 +16,7 @@
  * @since 2003-02-24
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Db\Helper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
@@ -98,7 +98,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $num = count($mquery);
             $kg = '';
             for ($i = 0; $i < $num; ++$i) {
-                $mquery[$i] = Helper::alignTablePrefix($mquery[$i], $tablePrefix, Db::getTablePrefix());
+                $mquery[$i] = Helper::alignTablePrefix($mquery[$i], $tablePrefix, Database::getTablePrefix());
                 $kg = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
                     printf(

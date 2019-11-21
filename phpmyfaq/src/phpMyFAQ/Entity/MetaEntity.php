@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * @link https://www.phpmyfaq.de
  * @since 2018-08-09
  */
-class Meta
+class MetaEntity
 {
     /** @var int */
     private $id;
@@ -50,16 +50,16 @@ class Meta
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
      * @param int $id
-     * @return Meta
+     * @return MetaEntity
      */
-    public function setId($id)
+    public function setId(int $id): MetaEntity
     {
         $this->id = $id;
         return $this;
@@ -68,16 +68,16 @@ class Meta
     /**
      * @return string
      */
-    public function getLang()
+    public function getLang(): string
     {
         return $this->lang;
     }
 
     /**
      * @param string $lang
-     * @return Meta
+     * @return MetaEntity
      */
-    public function setLang($lang)
+    public function setLang(string $lang): MetaEntity
     {
         $this->lang = $lang;
         return $this;
@@ -86,16 +86,16 @@ class Meta
     /**
      * @return string
      */
-    public function getPageId()
+    public function getPageId(): string
     {
         return $this->pageId;
     }
 
     /**
      * @param string $pageId
-     * @return Meta
+     * @return MetaEntity
      */
-    public function setPageId($pageId)
+    public function setPageId(string $pageId): MetaEntity
     {
         $this->pageId = $pageId;
         return $this;
@@ -104,16 +104,16 @@ class Meta
     /**
      * @return string
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->type;
     }
 
     /**
      * @param string $type
-     * @return Meta
+     * @return MetaEntity
      */
-    public function setType($type)
+    public function setType(string $type): MetaEntity
     {
         $this->type = $type;
         return $this;
@@ -122,18 +122,20 @@ class Meta
     /**
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
     /**
      * @param string $content
-     * @return Meta
+     * @return MetaEntity
      */
-    public function setContent($content)
+    public function setContent(string $content): MetaEntity
     {
         $this->content = $content;
         return $this;
     }
+
+
 }

@@ -14,10 +14,10 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Date;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language;
@@ -39,7 +39,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
-    $user->perm->checkRight($currentUserId, 'add_faq')) && !Db::checkOnEmptyTable('faqcategories')) {
+    $user->perm->checkRight($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
     $category = new Category($faqConfig, [], false);
 
     if ($faqConfig->get('main.enableCategoryRestrictions')) {
@@ -410,7 +410,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                         <div class="col-lg-10">
                           <ul class="list-unstyled adminAttachments">
                               <?php
-                                $attList = Factory::fetchByRecordId($faqConfig, $faqData['id']);
+                                $attList = AttachmentFactory::fetchByRecordId($faqConfig, $faqData['id']);
                                 foreach ($attList as $att) {
                                     printf(
                                         '<li><a href="../%s">%s</a> ',
@@ -852,7 +852,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         <?php
         if (0 === $faqData['id']) {
             $faqData['id'] = $faqConfig->getDb()->nextId(
-            Db::getTablePrefix().'faqdata',
+            Database::getTablePrefix().'faqdata',
             'id'
             );
         }
@@ -993,8 +993,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     </script>
 <?php
 
-} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') !== 1 && !Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') !== 1 && !Database::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['err_NotAuth'];
-} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') && Db::checkOnEmptyTable('faqcategories')) {
+} elseif ($user->perm->checkRight($currentUserId, 'edit_faq') && Database::checkOnEmptyTable('faqcategories')) {
     echo $PMF_LANG['no_cats'];
 }

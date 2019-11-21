@@ -1,12 +1,10 @@
 <?php
 
-namespace phpMyFAQ\Db;
+namespace phpMyFAQ\Database;
 
 /**
- * The phpMyFAQ\Db\Mysqli class provides methods and functions for MySQL 5.x and
- * MariaDB 5.x databases.
- *
- * 
+ * The phpMyFAQ\Database\Mysqli class provides methods and functions for MySQL and
+ * MariaDB databases.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,25 +18,28 @@ namespace phpMyFAQ\Db;
  * @link https://www.phpmyfaq.de
  */
 
-use phpMyFAQ\Db;
+use mysqli_result;
+use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Utils;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
+
 /**
- * phpMyFAQ\Db_Mysqli.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author David Soria Parra <dsoria@gmx.net>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
+ * Class Mysqli
+ * @package phpMyFAQ\Database
  */
-class Mysqli implements Driver
+class Mysqli implements DatabaseDriver
 {
+    /**
+     * Tables.
+     *
+     * @var array
+     */
+    public $tableNames = [];
+
     /**
      * The connection object.
      *
@@ -54,23 +55,16 @@ class Mysqli implements Driver
     private $sqllog = '';
 
     /**
-     * Tables.
-     *
-     * @var array
-     */
-    public $tableNames = [];
-
-    /**
      * Connects to the database.
      *
-     * @param string $host     Hostname or path to socket
-     * @param string $user     Username
+     * @param string $host Hostname or path to socket
+     * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
      *
+     * @return null|boolean true, if connected, otherwise false
      * @throws Exception
      *
-     * @return null|boolean true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -83,18 +77,18 @@ class Mysqli implements Driver
         }
 
         if ($this->conn->connect_error) {
-            Db::errorPage($this->conn->connect_errno.': '.$this->conn->connect_error);
+            Database::errorPage($this->conn->connect_errno . ': ' . $this->conn->connect_error);
             die();
         }
 
         // change character set to UTF-8
         if (!$this->conn->set_charset('utf8')) {
-            Db::errorPage($this->error());
+            Database::errorPage($this->error());
         }
 
         if ('' !== $database) {
             if (!$this->conn->select_db($database)) {
-                throw new Exception('Cannot connect to database '.$database);
+                throw new Exception('Cannot connect to database ' . $database);
             }
         }
 
@@ -102,63 +96,25 @@ class Mysqli implements Driver
     }
 
     /**
-     * This function sends a query to the database.
+     * Returns the error string.
      *
-     * @param string $query
-     * @param int    $offset
-     * @param int    $rowCount
-     *
-     * @return \mysqli_result $result
+     * @return string
      */
-    public function query($query, $offset = 0, $rowCount = 0)
+    public function error()
     {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
-
-        if (0 < $rowCount) {
-            $query .= sprintf(' LIMIT %d,%d', $offset, $rowCount);
-        }
-
-        $result = $this->conn->query($query);
-
-        if (false === $result) {
-            $this->sqllog .= $this->conn->errno.': '.$this->error();
-        }
-
-        return $result;
+        return $this->conn->error;
     }
 
     /**
      * Escapes a string for use in a query.
      *
-     * @param   string
+     * @param string
      *
      * @return string
      */
     public function escape($string)
     {
         return $this->conn->real_escape_string($string);
-    }
-
-    /**
-     * Fetch a result row as an object.
-     *
-     * This function fetches a result row as an object.
-     *
-     * @param \mysqli_result $result
-     *
-     * @throws Exception
-     *
-     * @return mixed
-     */
-    public function fetchObject($result)
-    {
-        if ($result instanceof \mysqli_result) {
-            return $result->fetch_object();
-        }
-
-        throw new Exception($this->error());
     }
 
     /**
@@ -178,17 +134,17 @@ class Mysqli implements Driver
     /**
      * Fetches a complete result as an object.
      *
-     * @param \mysqli_result $result Result set
-     *
-     * @throws Exception
+     * @param mysqli_result $result Result set
      *
      * @return array
+     * @throws Exception
+     *
      */
     public function fetchAll($result)
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: '.$this->error());
+            throw new Exception('Error while fetching result: ' . $this->error());
         }
 
         while ($row = $this->fetchObject($result)) {
@@ -199,15 +155,35 @@ class Mysqli implements Driver
     }
 
     /**
+     * Fetch a result row as an object.
+     *
+     * This function fetches a result row as an object.
+     *
+     * @param mysqli_result $result
+     *
+     * @return mixed
+     * @throws Exception
+     *
+     */
+    public function fetchObject($result)
+    {
+        if ($result instanceof mysqli_result) {
+            return $result->fetch_object();
+        }
+
+        throw new Exception($this->error());
+    }
+
+    /**
      * Number of rows in a result.
      *
-     * @param \mysqli_result $result
+     * @param mysqli_result $result
      *
      * @return int
      */
     public function numRows($result)
     {
-        if ($result instanceof \mysqli_result) {
+        if ($result instanceof mysqli_result) {
             return $result->num_rows;
         } else {
             return 0;
@@ -235,10 +211,79 @@ class Mysqli implements Driver
     {
         $status = [];
         foreach ($this->getTableNames($prefix) as $table) {
-            $status[$table] = $this->getOne('SELECT count(*) FROM '.$table);
+            $status[$table] = $this->getOne('SELECT count(*) FROM ' . $table);
         }
 
         return $status;
+    }
+
+    /**
+     * Returns an array with all table names.
+     *
+     * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
+     *
+     * @param string $prefix Table prefix
+     *
+     * @return string[]
+     */
+    public function getTableNames($prefix = '')
+    {
+        return $this->tableNames = [
+            $prefix . 'faqadminlog',
+            $prefix . 'faqattachment',
+            $prefix . 'faqattachment_file',
+            $prefix . 'faqcaptcha',
+            $prefix . 'faqcategories',
+            $prefix . 'faqcategory_group',
+            $prefix . 'faqcategory_news',
+            $prefix . 'faqcategory_user',
+            $prefix . 'faqcategoryrelations',
+            $prefix . 'faqchanges',
+            $prefix . 'faqcomments',
+            $prefix . 'faqconfig',
+            $prefix . 'faqdata',
+            $prefix . 'faqdata_group',
+            $prefix . 'faqdata_revisions',
+            $prefix . 'faqdata_tags',
+            $prefix . 'faqdata_user',
+            $prefix . 'faqglossary',
+            $prefix . 'faqgroup',
+            $prefix . 'faqgroup_right',
+            $prefix . 'faqinstances',
+            $prefix . 'faqinstances_config',
+            $prefix . 'faqmeta',
+            $prefix . 'faqnews',
+            $prefix . 'faqquestions',
+            $prefix . 'faqright',
+            $prefix . 'faqsearches',
+            $prefix . 'faqsections',
+            $prefix . 'faqsection_group',
+            $prefix . 'faqsection_news',
+            $prefix . 'faqsessions',
+            $prefix . 'faqstopwords',
+            $prefix . 'faqtags',
+            $prefix . 'faquser',
+            $prefix . 'faquser_group',
+            $prefix . 'faquser_right',
+            $prefix . 'faquserdata',
+            $prefix . 'faquserlogin',
+            $prefix . 'faqvisits',
+            $prefix . 'faqvoting',
+        ];
+    }
+
+    /**
+     * Returns just one row.
+     *
+     * @param string $query
+     *
+     * @return string
+     */
+    private function getOne($query)
+    {
+        $row = $this->conn->query($query)->fetch_row();
+
+        return $row[0];
     }
 
     /**
@@ -246,7 +291,7 @@ class Mysqli implements Driver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $id    The name of the ID column
+     * @param string $id The name of the ID column
      *
      * @return int
      */
@@ -262,7 +307,7 @@ class Mysqli implements Driver
 
         $result = $this->query($select);
 
-        if ($result instanceof \mysqli_result) {
+        if ($result instanceof mysqli_result) {
             $current = $result->fetch_row();
         } else {
             $current = [0];
@@ -272,13 +317,31 @@ class Mysqli implements Driver
     }
 
     /**
-     * Returns the error string.
+     * This function sends a query to the database.
      *
-     * @return string
+     * @param string $query
+     * @param int $offset
+     * @param int $rowCount
+     *
+     * @return mysqli_result $result
      */
-    public function error()
+    public function query($query, $offset = 0, $rowCount = 0)
     {
-        return $this->conn->error;
+        if (DEBUG) {
+            $this->sqllog .= Utils::debug($query);
+        }
+
+        if (0 < $rowCount) {
+            $query .= sprintf(' LIMIT %d,%d', $offset, $rowCount);
+        }
+
+        $result = $this->conn->query($query);
+
+        if (false === $result) {
+            $this->sqllog .= $this->conn->errno . ': ' . $this->error();
+        }
+
+        return $result;
     }
 
     /**
@@ -299,61 +362,6 @@ class Mysqli implements Driver
     public function serverVersion()
     {
         return $this->conn->server_info;
-    }
-
-    /**
-     * Returns an array with all table names.
-     *
-     * @todo Have to be refactored because of https://github.com/thorsten/phpMyFAQ/issues/965
-     *
-     * @param string $prefix Table prefix
-     *
-     * @return string[]
-     */
-    public function getTableNames($prefix = '')
-    {
-        return $this->tableNames = [
-            $prefix.'faqadminlog',
-            $prefix.'faqattachment',
-            $prefix.'faqattachment_file',
-            $prefix.'faqcaptcha',
-            $prefix.'faqcategories',
-            $prefix.'faqcategory_group',
-            $prefix.'faqcategory_news',
-            $prefix.'faqcategory_user',
-            $prefix.'faqcategoryrelations',
-            $prefix.'faqchanges',
-            $prefix.'faqcomments',
-            $prefix.'faqconfig',
-            $prefix.'faqdata',
-            $prefix.'faqdata_group',
-            $prefix.'faqdata_revisions',
-            $prefix.'faqdata_tags',
-            $prefix.'faqdata_user',
-            $prefix.'faqglossary',
-            $prefix.'faqgroup',
-            $prefix.'faqgroup_right',
-            $prefix.'faqinstances',
-            $prefix.'faqinstances_config',
-            $prefix.'faqmeta',
-            $prefix.'faqnews',
-            $prefix.'faqquestions',
-            $prefix.'faqright',
-            $prefix.'faqsearches',
-            $prefix.'faqsections',
-            $prefix.'faqsection_group',
-            $prefix.'faqsection_news',
-            $prefix.'faqsessions',
-            $prefix.'faqstopwords',
-            $prefix.'faqtags',
-            $prefix.'faquser',
-            $prefix.'faquser_group',
-            $prefix.'faquser_right',
-            $prefix.'faquserdata',
-            $prefix.'faquserlogin',
-            $prefix.'faqvisits',
-            $prefix.'faqvoting',
-        ];
     }
 
     /**
@@ -382,20 +390,6 @@ class Mysqli implements Driver
     public function now()
     {
         return 'NOW()';
-    }
-
-    /**
-     * Returns just one row.
-     *
-     * @param string $query
-     *
-     * @return string
-     */
-    private function getOne($query)
-    {
-        $row = $this->conn->query($query)->fetch_row();
-
-        return $row[0];
     }
 
 }

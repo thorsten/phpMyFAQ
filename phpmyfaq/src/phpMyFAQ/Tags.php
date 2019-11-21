@@ -19,7 +19,7 @@ namespace phpMyFAQ;
  * @since 2006-08-10
  */
 
-use phpMyFAQ\Entity\Tags as EntityTags;
+use phpMyFAQ\Entity\TagEntity as EntityTags;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -73,7 +73,7 @@ class Tags
         $allTags = [];
 
         // Hack: LIKE is case sensitive under PostgreSQL
-        switch (Db::getType()) {
+        switch (Database::getType()) {
             case 'pgsql':
                 $like = 'ILIKE';
                 break;
@@ -103,9 +103,9 @@ class Tags
                 tagging_name
             ORDER BY
                 tagging_name ASC',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             ($showInactive ? '' : "AND d.active = 'yes'"),
             (isset($search) && ($search != '') ? 'AND tagging_name '.$like." '".$search."%'" : '')
         );
@@ -150,8 +150,8 @@ class Tags
                 dt.tagging_id = t.tagging_id
             ORDER BY
                 t.tagging_name',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId
         );
 
@@ -217,14 +217,14 @@ class Tags
                 if (!in_array(Strings::strtolower($tagName),
                                 array_map(array('String', 'strtolower'), $currentTags))) {
                     // Create the new tag
-                    $newTagId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqtags', 'tagging_id');
+                    $newTagId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqtags', 'tagging_id');
                     $query = sprintf("
                         INSERT INTO
                             %sfaqtags
                         (tagging_id, tagging_name)
                             VALUES
                         (%d, '%s')",
-                        Db::getTablePrefix(),
+                        Database::getTablePrefix(),
                         $newTagId,
                         $tagName
                     );
@@ -237,7 +237,7 @@ class Tags
                         (record_id, tagging_id)
                             VALUES
                         (%d, %d)',
-                        Db::getTablePrefix(),
+                        Database::getTablePrefix(),
                         $recordId,
                         $newTagId
                     );
@@ -250,7 +250,7 @@ class Tags
                         (record_id, tagging_id)
                             VALUES
                         (%d, %d)',
-                        Db::getTablePrefix(),
+                        Database::getTablePrefix(),
                         $recordId,
                         array_search(
                             Strings::strtolower($tagName),
@@ -281,7 +281,7 @@ class Tags
                 tagging_name = '%s'
             WHERE
                 tagging_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $entity->getName(),
             $entity->getId()
         );
@@ -307,7 +307,7 @@ class Tags
                 %sfaqdata_tags
             WHERE
                 record_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId
         );
 
@@ -335,7 +335,7 @@ class Tags
                     %sfaqtags
                 WHERE
                     tagging_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $tagId
             );
 
@@ -350,7 +350,7 @@ class Tags
                     %sfaqdata_tags
                 WHERE
                     tagging_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $tagId
             );
 
@@ -392,9 +392,9 @@ class Tags
                 td.record_id
             HAVING
                 COUNT(td.record_id) = %d",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             implode("', '", $arrayOfTags),
             $this->config->getLanguage()->getLanguage(),
             count($arrayOfTags)
@@ -433,8 +433,8 @@ class Tags
                 (t.tagging_name IN ('%s'))
             GROUP BY
                 d.record_id",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             Strings::substr(implode("', '", $arrayOfTags), 0, -2)
         );
 
@@ -467,7 +467,7 @@ class Tags
                 %sfaqtags
             WHERE
                 tagging_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $tagId
         );
 
@@ -560,9 +560,9 @@ class Tags
                 t.tagging_id = dt.tagging_id
             AND 
                 t.tagging_name = '%s'",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($tagName));
 
         $this->recordsByTagName = [];
@@ -598,8 +598,8 @@ class Tags
                 t.tagging_id = %d
             GROUP BY
                 record_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $tagId);
 
         $records = [];
@@ -623,7 +623,7 @@ class Tags
                 COUNT(record_id) AS n
             FROM
                 %sfaqdata_tags',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         $result = $this->config->getDb()->query($query);
@@ -654,8 +654,8 @@ class Tags
               lang = '%s'
             GROUP BY tagging_id
             ORDER BY freq DESC",
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 

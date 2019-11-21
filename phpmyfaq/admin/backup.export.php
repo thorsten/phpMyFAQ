@@ -15,8 +15,8 @@
  * @since 2009-08-18
  */
 
-use phpMyFAQ\Db;
-use phpMyFAQ\Db\Helper;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\User\CurrentUser;
@@ -48,11 +48,11 @@ if ($user) {
 }
 
 if ($user->perm->checkRight($user->getUserId(), 'backup')) {
-    $tables = $tableNames = $faqConfig->getDb()->getTableNames(Db::getTablePrefix());
-    $tablePrefix = (Db::getTablePrefix() !== '') ? Db::getTablePrefix().'.phpmyfaq' : 'phpmyfaq';
+    $tables = $tableNames = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
+    $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix().'.phpmyfaq' : 'phpmyfaq';
     $tableNames = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
-    $dbHelper = new Helper($faqConfig);
+    $dbHelper = new DatabaseHelper($faqConfig);
     $httpHelper = new HttpHelper();
     $httpHelper->addHeader();
     $httpHelper->addAdditionalHeader('Content-Type: application/octet-stream');
@@ -60,7 +60,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     switch ($action) {
         case 'backup_content' :
             foreach ($tables as $table) {
-                if ((Db::getTablePrefix().'faqadminlog' == trim($table)) || (Db::getTablePrefix().'faqsessions' == trim($table))) {
+                if ((Database::getTablePrefix().'faqadminlog' == trim($table)) || (Database::getTablePrefix().'faqsessions' == trim($table))) {
                     continue;
                 }
                 $tableNames .= $table.' ';
@@ -68,7 +68,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             break;
         case 'backup_logs' :
             foreach ($tables as $table) {
-                if ((Db::getTablePrefix().'faqadminlog' == trim($table)) || (Db::getTablePrefix().'faqsessions' == trim($table))) {
+                if ((Database::getTablePrefix().'faqadminlog' == trim($table)) || (Database::getTablePrefix().'faqsessions' == trim($table))) {
                     $tableNames .= $table.' ';
                 }
             }
@@ -77,7 +77,7 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
 
     $text[] = '-- pmf'.$majorVersion.': '.$tableNames;
     $text[] = '-- DO NOT REMOVE THE FIRST LINE!';
-    $text[] = '-- pmftableprefix: '.Db::getTablePrefix();
+    $text[] = '-- pmftableprefix: '.Database::getTablePrefix();
     $text[] = '-- DO NOT REMOVE THE LINES ABOVE!';
     $text[] = '-- Otherwise this backup will be broken.';
 

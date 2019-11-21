@@ -1,12 +1,14 @@
 <?php
 
-namespace phpMyFAQ\Db;
+namespace phpMyFAQ\Database;
+
+use Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Utils;
 
 /**
  * The phpMyFAQ\Db_Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
- *
- * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,30 +27,26 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * phpMyFAQ\Db_Sqlsrv.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-02-18
+ * Class Sqlsrv
+ * @package phpMyFAQ\Database
  */
-class Sqlsrv implements Driver
+class Sqlsrv implements DatabaseDriver
 {
     /**
-     * The connection object.
+     * Tables.
      *
+     * @var array
      */
-    private $conn = false;
+    public $tableNames = [];
 
+    /** @var resource */
+    private $conn = false;
     /**
      * The query log string.
      *
      * @var string
      */
     private $sqllog = '';
-
     /**
      * Connection options array.
      *
@@ -57,23 +55,16 @@ class Sqlsrv implements Driver
     private $connectionOptions = [];
 
     /**
-     * Tables.
-     *
-     * @var array
-     */
-    public $tableNames = [];
-
-    /**
      * Connects to the database.
      *
      * This function connects to a MySQL database
      *
-     * @param string $host     A string specifying the name of the server to which a connection is being established
-     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $host A string specifying the name of the server to which a connection is being established
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
      * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
-     * 
+     *
      * @return bool true, if connected, otherwise false
      */
     public function connect($host, $user, $password, $database = '')
@@ -82,7 +73,7 @@ class Sqlsrv implements Driver
 
         $this->conn = sqlsrv_connect($host, $this->connectionOptions);
         if (!$this->conn) {
-            Db::errorPage(sqlsrv_errors());
+            Database::errorPage((string)sqlsrv_errors());
             die();
         }
 
@@ -92,8 +83,8 @@ class Sqlsrv implements Driver
     /**
      * Sets the connection options.
      *
-     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string $passwd   Specifies the password associated with the User ID to be used when connecting with 
+     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $passwd Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      */
@@ -103,37 +94,8 @@ class Sqlsrv implements Driver
             'UID' => $user,
             'PWD' => $passwd,
             'Database' => $database,
-            'CharacterSet' => 'UTF-8', );
-    }
-
-    /**
-     * This function sends a query to the database.
-     *
-     * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
-     *
-     * @return mixed $result
-     */
-    public function query($query, $offset = 0, $rowcount = 0)
-    {
-        if (DEBUG) {
-            $this->sqllog .= Utils::debug($query);
-        }
-
-        $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
-
-        if (0 < $rowcount) {
-            $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
-        }
-
-        $result = sqlsrv_query($this->conn, $query, [], $options);
-
-        if (!$result) {
-            $this->sqllog .= $this->error();
-        }
-
-        return $result;
+            'CharacterSet' => 'UTF-8',
+        );
     }
 
     /**
@@ -146,18 +108,6 @@ class Sqlsrv implements Driver
     public function escape($string)
     {
         return str_replace("'", "''", $string);
-    }
-
-    /**
-     * Fetch a result row as an object.
-     *
-     * @param resource $result Resultset
-     *
-     * @return resource
-     */
-    public function fetchObject($result)
-    {
-        return sqlsrv_fetch_object($result);
     }
 
     /**
@@ -177,15 +127,15 @@ class Sqlsrv implements Driver
      *
      * @param resource $result Resultset
      *
+     * @return array
      * @throws Exception
      *
-     * @return array
      */
     public function fetchAll($result)
     {
         $ret = [];
         if (false === $result) {
-            throw new Exception('Error while fetching result: '.$this->error());
+            throw new Exception('Error while fetching result: ' . $this->error());
         }
 
         while ($row = $this->fetchObject($result)) {
@@ -193,6 +143,32 @@ class Sqlsrv implements Driver
         }
 
         return $ret;
+    }
+
+    /**
+     * Returns the error string.
+     *
+     * @return mixed
+     */
+    public function error()
+    {
+        $errors = sqlsrv_errors();
+
+        if (null !== $errors) {
+            return $errors[0]['SQLSTATE'] . ': ' . $errors[0]['message'];
+        }
+    }
+
+    /**
+     * Fetch a result row as an object.
+     *
+     * @param resource $result Resultset
+     *
+     * @return resource
+     */
+    public function fetchObject($result)
+    {
+        return sqlsrv_fetch_object($result);
     }
 
     /**
@@ -248,10 +224,40 @@ class Sqlsrv implements Driver
     }
 
     /**
+     * This function sends a query to the database.
+     *
+     * @param string $query
+     * @param int $offset
+     * @param int $rowcount
+     *
+     * @return mixed $result
+     */
+    public function query($query, $offset = 0, $rowcount = 0)
+    {
+        if (DEBUG) {
+            $this->sqllog .= Utils::debug($query);
+        }
+
+        $options = array('Scrollable' => SQLSRV_CURSOR_KEYSET);
+
+        if (0 < $rowcount) {
+            $query .= sprintf(' OFFSET %d ROWS FETCH NEXT %d ROWS ONLY', $offset, $rowcount);
+        }
+
+        $result = sqlsrv_query($this->conn, $query, [], $options);
+
+        if (!$result) {
+            $this->sqllog .= $this->error();
+        }
+
+        return $result;
+    }
+
+    /**
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id    the name of the ID column
+     * @param string $id the name of the ID column
      *
      * @return int
      */
@@ -272,22 +278,6 @@ class Sqlsrv implements Driver
     }
 
     /**
-     * Returns the error string.
-     *
-     * @return mixed
-     */
-    public function error()
-    {
-        $errors = sqlsrv_errors();
-
-        if (null !== $errors) {
-            return $errors[0]['SQLSTATE'].': '.$errors[0]['message'];
-        } else {
-            return;
-        }
-    }
-
-    /**
      * Returns the libary version string.
      *
      * @return string
@@ -296,7 +286,7 @@ class Sqlsrv implements Driver
     {
         $client_info = sqlsrv_client_info($this->conn);
 
-        return $client_info['DriverODBCVer'].' '.$client_info['DriverVer'];
+        return $client_info['DriverODBCVer'] . ' ' . $client_info['DriverVer'];
     }
 
     /**
@@ -323,46 +313,46 @@ class Sqlsrv implements Driver
     public function getTableNames($prefix = '')
     {
         return $this->tableNames = [
-            $prefix.'faqadminlog',
-            $prefix.'faqattachment',
-            $prefix.'faqattachment_file',
-            $prefix.'faqcaptcha',
-            $prefix.'faqcategories',
-            $prefix.'faqcategory_group',
-            $prefix.'faqcategory_news',
-            $prefix.'faqcategory_user',
-            $prefix.'faqcategoryrelations',
-            $prefix.'faqchanges',
-            $prefix.'faqcomments',
-            $prefix.'faqconfig',
-            $prefix.'faqdata',
-            $prefix.'faqdata_group',
-            $prefix.'faqdata_revisions',
-            $prefix.'faqdata_tags',
-            $prefix.'faqdata_user',
-            $prefix.'faqglossary',
-            $prefix.'faqgroup',
-            $prefix.'faqgroup_right',
-            $prefix.'faqinstances',
-            $prefix.'faqinstances_config',
-            $prefix.'faqmeta',
-            $prefix.'faqnews',
-            $prefix.'faqquestions',
-            $prefix.'faqright',
-            $prefix.'faqsearches',
-            $prefix.'faqsections',
-            $prefix.'faqsection_group',
-            $prefix.'faqsection_news',
-            $prefix.'faqsessions',
-            $prefix.'faqstopwords',
-            $prefix.'faqtags',
-            $prefix.'faquser',
-            $prefix.'faquser_group',
-            $prefix.'faquser_right',
-            $prefix.'faquserdata',
-            $prefix.'faquserlogin',
-            $prefix.'faqvisits',
-            $prefix.'faqvoting',
+            $prefix . 'faqadminlog',
+            $prefix . 'faqattachment',
+            $prefix . 'faqattachment_file',
+            $prefix . 'faqcaptcha',
+            $prefix . 'faqcategories',
+            $prefix . 'faqcategory_group',
+            $prefix . 'faqcategory_news',
+            $prefix . 'faqcategory_user',
+            $prefix . 'faqcategoryrelations',
+            $prefix . 'faqchanges',
+            $prefix . 'faqcomments',
+            $prefix . 'faqconfig',
+            $prefix . 'faqdata',
+            $prefix . 'faqdata_group',
+            $prefix . 'faqdata_revisions',
+            $prefix . 'faqdata_tags',
+            $prefix . 'faqdata_user',
+            $prefix . 'faqglossary',
+            $prefix . 'faqgroup',
+            $prefix . 'faqgroup_right',
+            $prefix . 'faqinstances',
+            $prefix . 'faqinstances_config',
+            $prefix . 'faqmeta',
+            $prefix . 'faqnews',
+            $prefix . 'faqquestions',
+            $prefix . 'faqright',
+            $prefix . 'faqsearches',
+            $prefix . 'faqsections',
+            $prefix . 'faqsection_group',
+            $prefix . 'faqsection_news',
+            $prefix . 'faqsessions',
+            $prefix . 'faqstopwords',
+            $prefix . 'faqtags',
+            $prefix . 'faquser',
+            $prefix . 'faquser_group',
+            $prefix . 'faquser_right',
+            $prefix . 'faquserdata',
+            $prefix . 'faquserlogin',
+            $prefix . 'faqvisits',
+            $prefix . 'faqvoting',
         ];
     }
 

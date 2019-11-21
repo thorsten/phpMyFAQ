@@ -16,7 +16,7 @@
  * @since 2002-08-27
  */
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Comment;
 use phpMyFAQ\Date;
@@ -142,8 +142,8 @@ if (isset($linkArray['href'])) {
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
-        $attList = Factory::fetchByRecordId($faqConfig, $recordId);
-    } catch (\phpMyFAQ\Attachment\Exception $e) {
+        $attList = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+    } catch (\phpMyFAQ\Attachment\AttachmentException $e) {
         // handle exception
     }
     $outstr = '';

@@ -16,21 +16,16 @@ namespace phpMyFAQ\Attachment\Filesystem;
  * @link https://www.phpmyfaq.de
  * @since 2009-08-21
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
  * Class Entry
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * @package phpMyFAQ\Attachment\Filesystem
  */
-abstract class Entry
+abstract class AbstractEntry
 {
     /**
      * Path to the entry in the filesystem.

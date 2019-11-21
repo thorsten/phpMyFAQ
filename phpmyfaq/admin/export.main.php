@@ -16,7 +16,7 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\HttpStreamer;
 
@@ -38,8 +38,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <div class="row">
   <div class="col-lg-12">
       <?php
-      if ($user->perm->checkRight($user->getUserId(), 'export') && !Db::checkOnEmptyTable('faqdata')) {
-          if (!Db::checkOnEmptyTable('faqcategories')) {
+      if ($user->perm->checkRight($user->getUserId(), 'export') && !Database::checkOnEmptyTable('faqdata')) {
+          if (!Database::checkOnEmptyTable('faqcategories')) {
               $category = new Category($faqConfig, array(), false);
               $category->setUser($currentAdminUser);
               $category->setGroups($currentAdminGroups);

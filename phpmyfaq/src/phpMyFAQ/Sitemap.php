@@ -17,7 +17,7 @@ namespace phpMyFAQ;
  * @since 2007-03-30
  */
 
-use phpMyFAQ\Db\Sqlite3;
+use phpMyFAQ\Database\Sqlite3;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -131,9 +131,9 @@ class Sitemap
                         %s
                     ORDER BY
                         letters",
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
                 $this->config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -159,9 +159,9 @@ class Sitemap
                         %s
                     ORDER BY
                         letters",
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
                 $this->config->getLanguage()->getLanguage(),
                 $permPart
             );
@@ -214,7 +214,7 @@ class Sitemap
 
         $renderSiteMap = '';
 
-        switch (Db::getType()) {
+        switch (Database::getType()) {
             case 'sqlite3':
                 $query = sprintf("
                     SELECT
@@ -244,10 +244,10 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $letter,
                     $this->config->getLanguage()->getLanguage(),
                     $permPart);
@@ -282,10 +282,10 @@ class Sitemap
                         fd.active = 'yes'
                     AND
                         %s",
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $letter,
                     $this->config->getLanguage()->getLanguage(),
                     $permPart);

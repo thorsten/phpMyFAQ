@@ -541,7 +541,7 @@ class Linkverifier
                 id = %d 
             AND 
                 lang='%s'",
-            phpMyFAQ\Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $state,
             $_SERVER['REQUEST_TIME'],
             $id,
@@ -591,7 +591,7 @@ class Linkverifier
                 id = %d 
             AND 
                 lang = '%s'",
-            phpMyFAQ\Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getDb()->escape($artlang));
 

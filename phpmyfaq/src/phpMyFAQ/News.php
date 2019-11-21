@@ -24,7 +24,7 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Link;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -100,7 +100,7 @@ class News
                 lang = '%s'
             ORDER BY
                 datum DESC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
@@ -222,7 +222,7 @@ class News
                 lang = '%s'
             ORDER BY
                 datum DESC",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->_config->getLanguage()->getLanguage()
         );
 
@@ -266,7 +266,7 @@ class News
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage());
 
@@ -325,8 +325,8 @@ class News
             link, linktitel, target)
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-            Db::getTablePrefix(),
-            $this->_config->getDb()->nextId(Db::getTablePrefix().'faqnews', 'id'),
+            Database::getTablePrefix(),
+            $this->_config->getDb()->nextId(Database::getTablePrefix().'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -377,7 +377,7 @@ class News
                 target = '%s'
             WHERE
                 id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -418,7 +418,7 @@ class News
                 id = %d
             AND
                 lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->_config->getLanguage()->getLanguage()
         );

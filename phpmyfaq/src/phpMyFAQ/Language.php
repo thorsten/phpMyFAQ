@@ -96,7 +96,7 @@ class Language
                     %s%s
                 %s',
                 $distinct,
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $table,
                 $where
             );

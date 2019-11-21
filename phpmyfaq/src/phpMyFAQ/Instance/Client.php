@@ -18,7 +18,7 @@ namespace phpMyFAQ\Instance;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
@@ -101,7 +101,7 @@ class Client extends Instance
     {
         try {
             // First, create the client tables
-            $instanceDatabase = Database::factory($this->config, Db::getType());
+            $instanceDatabase = Database::factory($this->config, Database::getType());
             $instanceDatabase->createTables($prefix);
 
             // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
@@ -109,7 +109,7 @@ class Client extends Instance
                 sprintf(
                     'INSERT INTO %sfaqconfig SELECT * FROM %sfaqconfig',
                     $prefix,
-                    Db::getTablePrefix()
+                    Database::getTablePrefix()
                 )
             );
             $this->config->getDb()->query(
@@ -123,14 +123,14 @@ class Client extends Instance
                 sprintf(
                     'INSERT INTO %sfaqright SELECT * FROM %sfaqright',
                     $prefix,
-                    Db::getTablePrefix()
+                    Database::getTablePrefix()
                 )
             );
             $this->config->getDb()->query(
                 sprintf(
                     'INSERT INTO %sfaquser_right SELECT * FROM %sfaquser_right WHERE user_id = 1',
                     $prefix,
-                    Db::getTablePrefix()
+                    Database::getTablePrefix()
                 )
             );
         } catch (Exception $exception) {

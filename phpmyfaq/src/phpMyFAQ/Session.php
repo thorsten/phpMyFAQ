@@ -18,7 +18,7 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
@@ -107,7 +107,7 @@ class Session
 
             if (0 === $bots && false === $banned) {
                 if (!isset($sessionId)) {
-                    $sessionId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsessions', 'sid');
+                    $sessionId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($cookieId) && (!$cookieId != $sessionId)) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sessionId);
@@ -119,7 +119,7 @@ class Session
                         (sid, user_id, ip, time)
                             VALUES
                         (%d, %d, '%s', %d)",
-                        Db::getTablePrefix(),
+                        Database::getTablePrefix(),
                         $sessionId,
                         ($user ? $user->getUserId() : -1),
                         $remoteAddress,
@@ -169,7 +169,7 @@ class Session
                 %sfaqsessions
             WHERE
                 sid = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sid);
 
         $result = $this->config->getDb()->query($query);
@@ -205,7 +205,7 @@ class Session
                 time < %d
             ORDER BY
                 time',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $firstHour,
             $lastHour
         );
@@ -235,7 +235,7 @@ class Session
                 COUNT(sid) as num_sessions
             FROM
                 %sfaqsessions',
-            Db::getTablePrefix());
+            Database::getTablePrefix());
 
         $result = $this->config->getDb()->query($query);
         if ($result) {
@@ -263,7 +263,7 @@ class Session
                 time >= %d
             AND
                 time <= %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $first,
             $last);
 
@@ -279,7 +279,7 @@ class Session
      */
     public function deleteAllSessions()
     {
-        $query = sprintf('DELETE FROM %sfaqsessions', Db::getTablePrefix());
+        $query = sprintf('DELETE FROM %sfaqsessions', Database::getTablePrefix());
 
         return $this->config->getDb()->query($query);
     }
@@ -306,7 +306,7 @@ class Session
                 ip = '%s'
             AND
                 time > %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sessionIdToCheck,
             $ip,
             $_SERVER['REQUEST_TIME'] - 86400
@@ -328,7 +328,7 @@ class Session
                 WHERE
                     sid = %d
                     AND ip = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $_SERVER['REQUEST_TIME'],
                 ($user ? $user->getUserId() : '-1'),
                 $sessionIdToCheck,
@@ -365,7 +365,7 @@ class Session
                         user_id = -1
                     AND
                         time > %d',
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $timeNow
                 );
 
@@ -385,7 +385,7 @@ class Session
                     %sfaquser
                 WHERE
                     session_timestamp > %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $timeNow
             );
 
@@ -421,7 +421,7 @@ class Session
                 time > %d
             AND
                 time < %d;',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $startDate,
             $endDate
         );

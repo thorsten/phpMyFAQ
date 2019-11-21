@@ -324,7 +324,7 @@ class User
                 %sfaquser
             WHERE
                 remember_me = '%s' AND account_status != 'blocked'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($cookie)
         );
 
@@ -428,7 +428,7 @@ class User
                 %sfaquser
             WHERE 
                 login LIKE '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($search . '%')
         );
 
@@ -480,7 +480,7 @@ class User
 
         // set user-ID
         if (0 == $userId) {
-            $this->userId = (int)$this->config->getDb()->nextId(Db::getTablePrefix() . 'faquser', 'user_id');
+            $this->userId = (int)$this->config->getDb()->nextId(Database::getTablePrefix() . 'faquser', 'user_id');
         } else {
             $this->userId = $userId;
         }
@@ -492,7 +492,7 @@ class User
             (user_id, login, session_timestamp, member_since)
                 VALUES
             (%d, '%s', %d, '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->getUserId(),
             $this->config->getDb()->escape($login),
             $_SERVER['REQUEST_TIME'],
@@ -583,7 +583,7 @@ class User
                 %sfaquser
             WHERE
                 login = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($login)
         );
 
@@ -698,7 +698,7 @@ class User
                 %sfaquser
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userId
         );
 
@@ -823,7 +823,7 @@ class User
             %s
             ORDER BY
                 user_id ASC',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             ($withoutAnonymous ? 'AND user_id <> -1' : ''),
             ($allowBlockedUsers ? '' : "AND account_status != 'blocked'")
         );
@@ -862,7 +862,7 @@ class User
                 %sfaquser
             WHERE
                 user_id = %d ' . ($allowBlockedUsers ? '' : "AND account_status != 'blocked'"),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$userId
         );
 
@@ -888,7 +888,7 @@ class User
                     %sfaquserlogin
                 WHERE
                     login = '%s'",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $this->login
             );
 
@@ -1034,7 +1034,7 @@ class User
                 account_status = '%s'
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($status),
             $this->userId
         );
@@ -1127,7 +1127,7 @@ class User
                 is_superadmin = %d
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$this->isSuperAdmin,
             $this->userId
         );

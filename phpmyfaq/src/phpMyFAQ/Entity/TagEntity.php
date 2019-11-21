@@ -21,56 +21,51 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * class Entity_Tags.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2014-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2014-08-15
+ * Class TagEntity
+ * @package phpMyFAQ\Entity
  */
-class Tags
+class TagEntity
 {
-    /**
-     * @var int
-     */
+    /** @var int */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $name;
-
-    /**
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
-    }
 
     /**
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
     /**
-     * @param string $name
+     * @param int $id
+     * @return TagEntity
      */
-    public function setName($name)
+    public function setId(int $id): TagEntity
     {
-        $this->name = $name;
+        $this->id = $id;
+        return $this;
     }
 
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
+
+    /**
+     * @param string $name
+     * @return TagEntity
+     */
+    public function setName(string $name): TagEntity
+    {
+        $this->name = $name;
+        return $this;
+    }
+
 }

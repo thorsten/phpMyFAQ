@@ -66,7 +66,7 @@ class Logging
                 id
             FROM
                 %sfaqadminlog',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         return $this->_config->getDb()->numRows(
@@ -89,7 +89,7 @@ class Logging
             FROM
                 %sfaqadminlog
             ORDER BY id DESC',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         $result = $this->_config->getDb()->query($query);
@@ -122,8 +122,8 @@ class Logging
                 (id, time, usr, text, ip)
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
-                    Db::getTablePrefix(),
-                    $this->_config->getDb()->nextId(Db::getTablePrefix().'faqadminlog', 'id'),
+                    Database::getTablePrefix(),
+                    $this->_config->getDb()->nextId(Database::getTablePrefix().'faqadminlog', 'id'),
                     $_SERVER['REQUEST_TIME'],
                     $user->userdata->get('user_id'),
                     $this->_config->getDb()->escape(nl2br($logText)),
@@ -148,7 +148,7 @@ class Logging
                 %sfaqadminlog
             WHERE
                 time < %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - 30*86400
         );
 

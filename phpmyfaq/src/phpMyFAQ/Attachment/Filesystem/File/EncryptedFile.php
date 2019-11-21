@@ -17,26 +17,20 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @since 2009-08-21
  */
 
-use phpseclib\Crypt\AES;
 use phpMyFAQ\Attachment\File;
+use phpseclib\Crypt\AES;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require PMF_ROOT_DIR.'/src/libs/phpseclib/Crypt/AES.php';
+require PMF_ROOT_DIR . '/src/libs/phpseclib/Crypt/AES.php';
 
 /**
  * Class Encrypted
- *
  * @package phpMyFAQ\Attachment\Filesystem\File
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
  */
-class Encrypted extends File
+class EncryptedFile extends File
 {
     /**
      * Chunk delimiter.
@@ -65,9 +59,40 @@ class Encrypted extends File
         parent::__construct($filepath, $mode);
     }
 
+    /** @inheritdoc */
+    public function putChunk($chunk)
+    {
+        $content = $this->aes->encrypt($chunk) . self::chunkDelimiter;
+
+        return fwrite($this->handle, $content);
+    }
+
     /**
      * @inheritdoc
+     * @throws FileException
      */
+    public function copyTo($target): bool
+    {
+        $retval = false;
+
+        if (is_string($target)) {
+            $target = new VanillaFile($target, self::MODE_WRITE);
+        } else {
+            $target->setMode(self::MODE_WRITE);
+        }
+
+        if ($target->isOk()) {
+            while (!$this->eof()) {
+                $target->putChunk($this->getChunk());
+            }
+
+            $retval = true;
+        }
+
+        return $retval;
+    }
+
+    /** @inheritdoc */
     public function getChunk(): string
     {
         $readEnd = false;
@@ -82,49 +107,5 @@ class Encrypted extends File
         $chunk = substr($chunk, 0, -$chunkDelimLen);
 
         return empty($chunk) ? '' : $this->aes->decrypt($chunk);
-    }
-
-    /**
-     * Either file is encrypted.
-     *
-     * @return bool
-     */
-    public function isEncrypted(): bool
-    {
-        return true;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function putChunk($chunk)
-    {
-        $content = $this->aes->encrypt($chunk).self::chunkDelimiter;
-
-        return fwrite($this->handle, $content);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function copyTo($target): bool
-    {
-        $retval = false;
-
-        if (is_string($target)) {
-            $target = new Vanilla($target, self::MODE_WRITE);
-        } else {
-            $target->setMode(self::MODE_WRITE);
-        }
-
-        if ($target->isOk()) {
-            while (!$this->eof()) {
-                $target->putChunk($this->getChunk());
-            }
-
-            $retval = true;
-        }
-
-        return $retval;
     }
 }

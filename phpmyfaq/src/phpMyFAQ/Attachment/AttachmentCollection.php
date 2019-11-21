@@ -18,23 +18,17 @@ namespace phpMyFAQ\Attachment;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Collection.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-12-13
+ * Class Collection
+ * @package phpMyFAQ\Attachment
  */
-class Collection
+class AttachmentCollection
 {
     /**
      * Configuration.
@@ -60,7 +54,7 @@ class Collection
      */
     public function getBreadcrumbs(): array
     {
-        $retval = [];
+        $breadCrumbs = [];
 
         $query = sprintf('
             SELECT
@@ -79,16 +73,16 @@ class Collection
                 fa.record_id = fd.id
             GROUP BY
                 fa.id,fd.thema',
-            Db::getTablePrefix().'faqattachment',
-            Db::getTablePrefix().'faqdata'
+            Database::getTablePrefix().'faqattachment',
+            Database::getTablePrefix().'faqdata'
         );
 
         $result = $this->config->getDb()->query($query);
 
         if ($result) {
-            $retval = $this->config->getDb()->fetchAll($result);
+            $breadCrumbs = $this->config->getDb()->fetchAll($result);
         }
 
-        return $retval;
+        return $breadCrumbs;
     }
 }

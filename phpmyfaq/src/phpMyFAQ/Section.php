@@ -20,7 +20,7 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -65,7 +65,7 @@ class Section
      */
     public function addSection($name, $description)
     {
-        $id = $this->config->getDb()->nextId(Db::getTablePrefix().'faqsections', 'id');
+        $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsections', 'id');
 
         $query = sprintf("
             INSERT INTO
@@ -73,7 +73,7 @@ class Section
             (id, name, description)
                 VALUES
             (%d, '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $name,
             $description
@@ -95,7 +95,7 @@ class Section
             SELECT * 
             FROM %sfaqsections
             WHERE id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId
         );
 
@@ -115,7 +115,7 @@ class Section
      */
     public function getAllSections()
     {
-        $query = sprintf('SELECT id, name, description FROM %sfaqsections', Db::getTablePrefix());
+        $query = sprintf('SELECT id, name, description FROM %sfaqsections', Database::getTablePrefix());
         $res = $this->config->getDb()->query($query);
 
         if ($res) {
@@ -144,7 +144,7 @@ class Section
             ('%s', '%s')
             WHERE id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $name,
             $description,
             $id
@@ -172,7 +172,7 @@ class Section
                 %sfaqsections
             WHERE id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -186,7 +186,7 @@ class Section
                 %sfaqsection_category
             WHERE section_id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -200,7 +200,7 @@ class Section
                 %sfaqsection_user
             WHERE section_id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -214,7 +214,7 @@ class Section
                 %sfaqsection_group
             WHERE section_id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -228,7 +228,7 @@ class Section
                 %sfaqsection_right
             WHERE section_id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -242,7 +242,7 @@ class Section
                 %sfaqsection_news
             WHERE section_id = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -271,7 +271,7 @@ class Section
                 VALUES
             (%d, %d)
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $categoryId
         );
@@ -300,7 +300,7 @@ class Section
             WHERE 
                 sectionId = %d AND categoryId = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $categoryId
         );
@@ -330,7 +330,7 @@ class Section
                 VALUES
             (%d, %d)
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $userId
         );
@@ -359,7 +359,7 @@ class Section
             WHERE 
                 sectionId = %d AND userId = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $userId
         );
@@ -389,7 +389,7 @@ class Section
                 VALUES
             (%d, %d)
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $groupId
         );
@@ -418,7 +418,7 @@ class Section
             WHERE 
                 sectionId = %d AND groupId = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $groupId
         );
@@ -448,7 +448,7 @@ class Section
                 VALUES
             (%d, %d)
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $newsId
         );
@@ -477,7 +477,7 @@ class Section
             WHERE 
                 sectionId = %d AND newsId = %d
             ",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $sectionId,
             $newsId
         );

@@ -17,23 +17,17 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @since 2009-08-21
  */
 
-use phpMyFAQ\Attachment\Exception as AttachmentException;
+use phpMyFAQ\Attachment\AttachmentException as AttachmentException;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Class Exception
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * Class FileException
+ * @package phpMyFAQ\Attachment\Filesystem\File
  */
-class Exception extends AttachmentException
+class FileException extends AttachmentException
 {
 
 }

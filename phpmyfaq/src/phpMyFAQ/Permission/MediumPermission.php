@@ -20,7 +20,7 @@ namespace phpMyFAQ\Permission;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -89,9 +89,9 @@ class MediumPermission extends BasicPermission
                 fr.right_id = fgr.right_id AND
                 fg.group_id = fgr.group_id AND
                 fg.group_id = %d',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId,
             $groupId
         );
@@ -129,9 +129,9 @@ class MediumPermission extends BasicPermission
                 fg.group_id = %d AND
                 fg.group_id = fgr.group_id AND
                 fr.right_id = fgr.right_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -210,7 +210,7 @@ class MediumPermission extends BasicPermission
             (group_id, right_id)
                 VALUES
             (%d, %d)',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId,
             $rightId
         );
@@ -246,7 +246,7 @@ class MediumPermission extends BasicPermission
             WHERE
                 group_id = %d AND
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId,
             $rightId
         );
@@ -275,7 +275,7 @@ class MediumPermission extends BasicPermission
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqgroup', 'group_id');
+        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqgroup', 'group_id');
         $groupData = $this->checkGroupData($groupData);
         $insert = sprintf("
             INSERT INTO
@@ -283,7 +283,7 @@ class MediumPermission extends BasicPermission
             (group_id, name, description, auto_join)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $nextId,
             $groupData['name'],
             $groupData['description'],
@@ -324,7 +324,7 @@ class MediumPermission extends BasicPermission
                 %s
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $set,
             $groupId
         );
@@ -357,7 +357,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -371,7 +371,7 @@ class MediumPermission extends BasicPermission
                 %sfaquser_group
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -385,7 +385,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup_right
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -424,9 +424,9 @@ class MediumPermission extends BasicPermission
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id AND
                 fg.group_id = %d',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $groupId
         );
@@ -464,9 +464,9 @@ class MediumPermission extends BasicPermission
                 fg.group_id = %d AND
                 fg.group_id = fug.group_id AND
                 fu.user_id  = fug.user_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -505,7 +505,7 @@ class MediumPermission extends BasicPermission
             (user_id, group_id)
                VALUES
             (%d, %d)',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $groupId
         );
@@ -539,7 +539,7 @@ class MediumPermission extends BasicPermission
             WHERE
                 user_id  = %d AND
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $groupId);
 
@@ -568,7 +568,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup
             WHERE
                 name = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($name)
         );
 
@@ -605,7 +605,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -642,9 +642,9 @@ class MediumPermission extends BasicPermission
                 fu.user_id  = %d AND
                 fu.user_id  = fug.user_id AND
                 fg.group_id = fug.group_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId
         );
 
@@ -670,7 +670,7 @@ class MediumPermission extends BasicPermission
                 group_id
             FROM
                 %sfaqgroup',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
         if ($userId != 1) {
             $select = sprintf('
@@ -682,8 +682,8 @@ class MediumPermission extends BasicPermission
                     %sfaquser_group fug ON fg.group_id=fug.group_id
                 WHERE
                     fug.user_id = %d',
-                Db::getTablePrefix(),
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
+                Database::getTablePrefix(),
                 $userId
             );
         }
@@ -756,11 +756,11 @@ class MediumPermission extends BasicPermission
                 fg.group_id = fug.group_id AND
                 fu.user_id  = fug.user_id AND
                 fu.user_id  = %d',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId,
             $userId
         );
@@ -844,7 +844,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup
             WHERE
                 auto_join = 1',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         $res = $this->config->getDb()->query($select);
@@ -884,7 +884,7 @@ class MediumPermission extends BasicPermission
                 %sfaquser_group
             WHERE
                 user_id  = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId);
 
         $res = $this->config->getDb()->query($delete);
@@ -924,11 +924,11 @@ class MediumPermission extends BasicPermission
                 fg.group_id = fug.group_id AND
                 fg.group_id = fgr.group_id AND
                 fr.right_id = fgr.right_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId);
 
         $res = $this->config->getDb()->query($select);
@@ -959,7 +959,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup_right
             WHERE
                 group_id  = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId);
 
         $res = $this->config->getDb()->query($delete);
@@ -990,7 +990,7 @@ class MediumPermission extends BasicPermission
                 %sfaqgroup
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId
         );
 
@@ -1023,7 +1023,7 @@ class MediumPermission extends BasicPermission
                 %sfaquser_group
             WHERE
                 group_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $groupId);
 
         $res = $this->config->getDb()->query($delete);

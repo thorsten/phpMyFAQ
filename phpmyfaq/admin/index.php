@@ -19,7 +19,7 @@
  * @since 2002-09-16
  */
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Auth\AuthLdap;
 use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Faq;
@@ -75,7 +75,7 @@ Template::setTplSetName($faqConfig->get('main.templateSet'));
 //
 // Initialize attachment factory
 //
-Factory::init(
+AttachmentFactory::init(
     $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')

@@ -18,7 +18,7 @@ namespace phpMyFAQ\Permission;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User\CurrentUser;
 
@@ -89,9 +89,9 @@ class BasicPermission extends Permission
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
                 fu.user_id  = fur.user_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId,
             $userId
         );
@@ -127,9 +127,9 @@ class BasicPermission extends Permission
                 fr.right_id = fur.right_id AND
                 fu.user_id  = %d AND
                 fu.user_id  = fur.user_id',
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId);
 
         $res = $this->config->getDb()->query($select);
@@ -165,7 +165,7 @@ class BasicPermission extends Permission
             (user_id, right_id)
                 VALUES
             (%d, %d)',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $rightId
         );
@@ -195,7 +195,7 @@ class BasicPermission extends Permission
             WHERE
                 user_id  = %d AND
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId,
             $rightId);
 
@@ -258,7 +258,7 @@ class BasicPermission extends Permission
                 %sfaqright
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId);
 
         $res = $this->config->getDb()->query($select);
@@ -303,7 +303,7 @@ class BasicPermission extends Permission
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Db::getTablePrefix().'faqright', 'right_id');
+        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqright', 'right_id');
         $rightData = $this->checkRightData($rightData);
 
         $insert = sprintf("
@@ -312,7 +312,7 @@ class BasicPermission extends Permission
             (right_id, name, description, for_users, for_groups, for_sections)
                 VALUES
             (%d, '%s', '%s', %d, %d, %d)",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $nextId,
             $rightData['name'],
             $rightData['description'],
@@ -353,7 +353,7 @@ class BasicPermission extends Permission
                 %s
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $set,
             $rightId);
 
@@ -385,7 +385,7 @@ class BasicPermission extends Permission
                 name = \'%s\'
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $newName,
             $rightId
         );
@@ -413,7 +413,7 @@ class BasicPermission extends Permission
                 %sfaqright
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId);
 
         $res = $this->config->getDb()->query($delete);
@@ -427,7 +427,7 @@ class BasicPermission extends Permission
                 %sfaquser_right
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId);
 
         $res = $this->config->getDb()->query($delete);
@@ -441,7 +441,7 @@ class BasicPermission extends Permission
                 %sfaqgroup_right
             WHERE
                 right_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $rightId);
 
         $res = $this->config->getDb()->query($delete);
@@ -474,7 +474,7 @@ class BasicPermission extends Permission
                 %sfaqright
             WHERE
                 name = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($name));
 
         $res = $this->config->getDb()->query($select);
@@ -499,7 +499,7 @@ class BasicPermission extends Permission
                 right_id
             FROM
                 %sfaqright',
-            Db::getTablePrefix());
+            Database::getTablePrefix());
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -535,7 +535,7 @@ class BasicPermission extends Permission
                 %sfaqright
             ORDER BY
                 right_id %s',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $order);
 
         $res = $this->config->getDb()->query($select);
@@ -602,7 +602,7 @@ class BasicPermission extends Permission
                 %sfaquser_right
             WHERE
                 user_id  = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $userId);
 
         $res = $this->config->getDb()->query($delete);

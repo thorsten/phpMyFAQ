@@ -1,11 +1,9 @@
 <?php
 
-namespace phpMyFAQ\Db;
+namespace phpMyFAQ\Database;
 
 /**
  * Helper class for database drivers.
- *
- *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -28,17 +26,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * phpMyFAQ\Helper.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-12
+ * Class Helper
+ * @package phpMyFAQ\Database
  */
-class Helper
+class DatabaseHelper
 {
     /**
      * @var Configuration
@@ -54,44 +45,6 @@ class Helper
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-    }
-
-    /**
-     * This function builds the the queries for the backup.
-     *
-     * @param string $query
-     * @param string $table
-     *
-     * @return array
-     */
-    public function buildInsertQueries($query, $table)
-    {
-        if (!$result = $this->config->getDb()->query($query)) {
-            [];
-        }
-        $ret = [];
-
-        $ret[] = "\r\n-- Table: ".$table;
-
-        while ($row = $this->config->getDb()->fetchArray($result)) {
-            $p1 = [];
-            $p2 = [];
-            foreach ($row as $key => $val) {
-                $p1[] = $key;
-                if ('rights' != $key && is_numeric($val)) {
-                    $p2[] = $val;
-                } else {
-                    if (is_null($val)) {
-                        $p2[] = 'NULL';
-                    } else {
-                        $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
-                    }
-                }
-            }
-            $ret[] = 'INSERT INTO '.$table.' ('.implode(',', $p1).') VALUES ('.implode(',', $p2).');';
-        }
-
-        return $ret;
     }
 
     /**
@@ -128,7 +81,7 @@ class Helper
      * @param string $startPattern
      * @param string $oldValue
      * @param string $newValue
-     * 
+     *
      * @return string
      */
     private static function alignTablePrefixByPattern($query, $startPattern, $oldValue, $newValue)
@@ -136,14 +89,52 @@ class Helper
         $return = $query;
         $matches = [];
 
-        Strings::preg_match_all('/^'.$startPattern."\s+(\w+)(\s+|$)/i", $query, $matches);
+        Strings::preg_match_all('/^' . $startPattern . "\s+(\w+)(\s+|$)/i", $query, $matches);
 
         if (isset($matches[1][0])) {
             $oldTableFullName = $matches[1][0];
-            $newTableFullName = $newValue.Strings::substr($oldTableFullName, Strings::strlen($oldValue));
+            $newTableFullName = $newValue . Strings::substr($oldTableFullName, Strings::strlen($oldValue));
             $return = str_replace($oldTableFullName, $newTableFullName, $query);
         }
 
         return $return;
+    }
+
+    /**
+     * This function builds the the queries for the backup.
+     *
+     * @param string $query
+     * @param string $table
+     *
+     * @return array
+     */
+    public function buildInsertQueries($query, $table)
+    {
+        if (!$result = $this->config->getDb()->query($query)) {
+            [];
+        }
+        $ret = [];
+
+        $ret[] = "\r\n-- Table: " . $table;
+
+        while ($row = $this->config->getDb()->fetchArray($result)) {
+            $p1 = [];
+            $p2 = [];
+            foreach ($row as $key => $val) {
+                $p1[] = $key;
+                if ('rights' != $key && is_numeric($val)) {
+                    $p2[] = $val;
+                } else {
+                    if (is_null($val)) {
+                        $p2[] = 'NULL';
+                    } else {
+                        $p2[] = sprintf("'%s'", $this->config->getDb()->escape($val));
+                    }
+                }
+            }
+            $ret[] = 'INSERT INTO ' . $table . ' (' . implode(',', $p1) . ') VALUES (' . implode(',', $p2) . ');';
+        }
+
+        return $ret;
     }
 }

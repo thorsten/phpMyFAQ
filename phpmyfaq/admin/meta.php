@@ -14,7 +14,7 @@
  * @since 2018-08-10
  */
 
-use phpMyFAQ\Entity\Meta as MetaEntity;
+use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Meta;
 

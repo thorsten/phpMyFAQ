@@ -17,7 +17,7 @@
 
 define('IS_VALID_PHPMYFAQ', null);
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comment;
 use phpMyFAQ\Faq;
@@ -207,8 +207,8 @@ switch ($action) {
     case 'getAttachmentsFromFaq':
         $attachments = $result = [];
         try {
-            $attachments = Factory::fetchByRecordId($faqConfig, $recordId);
-        } catch (\phpMyFAQ\Attachment\Exception $e) {
+            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        } catch (\phpMyFAQ\Attachment\AttachmentException $e) {
             $result = ['error' => $e->getMessage()];
         }
         foreach ($attachments as $attachment) {

@@ -19,7 +19,7 @@ namespace phpMyFAQ;
 
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
-use phpMyFAQ\Db\Driver;
+use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Instance\Database;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -646,14 +646,14 @@ class Installer
 
     /**
      * Checks if phpMyFAQ database tables are available
-     * @param Driver $database
+     * @param DatabaseDriver $database
      * @throws
      */
-    public function checkAvailableDatabaseTables(Driver $database)
+    public function checkAvailableDatabaseTables(DatabaseDriver $database)
     {
         $query = sprintf(
             'SELECT 1 FROM %s%s LIMIT 1',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             'faqconfig'
         );
         $result = $database->query($query);
@@ -676,7 +676,7 @@ class Installer
         // Check table prefix
         $dbSetup['dbPrefix'] = Filter::filterInput(INPUT_POST, 'sqltblpre', FILTER_SANITIZE_STRING, '');
         if ('' !== $dbSetup['dbPrefix']) {
-            Db::setTablePrefix($dbSetup['dbPrefix']);
+            Database::setTablePrefix($dbSetup['dbPrefix']);
         }
 
         // Check database entries
@@ -733,8 +733,8 @@ class Installer
         }
 
         // check database connection
-        Db::setTablePrefix($dbSetup['dbPrefix']);
-        $db = Db::factory($dbSetup['dbType']);
+        Database::setTablePrefix($dbSetup['dbPrefix']);
+        $db = Database::factory($dbSetup['dbType']);
         try {
             $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
         } catch (Exception $e) {
@@ -923,7 +923,7 @@ class Installer
         // connect to the database using config/database.php
         require $rootDir.'/config/database.php';
         try {
-            $db = Db::factory($dbSetup['dbType']);
+            $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
             $this->system->cleanInstallation();

@@ -17,7 +17,7 @@ namespace phpMyFAQ;
  * @since 2018-08-09
  */
 
-use phpMyFAQ\Entity\Meta as MetaEntity;
+use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -57,7 +57,7 @@ class Meta
      */
     public function add(MetaEntity $data)
     {
-        $id = $this->config->getDb()->nextId(Db::getTablePrefix().'faqmeta', 'id');
+        $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqmeta', 'id');
 
         $query = sprintf("
             INSERT INTO
@@ -65,7 +65,7 @@ class Meta
             (id, lang, page_id, type, content)
                 VALUES
             (%d, '%s', '%s', '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id,
             $this->config->getLanguage()->getLanguage(),
             $data->getPageId(),
@@ -87,7 +87,7 @@ class Meta
         $entity = new MetaEntity();
         $query = sprintf(
             "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $metaId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -116,7 +116,7 @@ class Meta
         $entity = new MetaEntity();
         $query = sprintf(
             "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE page_id = '%s' AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $pageId,
             $this->config->getLanguage()->getLanguage()
         );
@@ -144,7 +144,7 @@ class Meta
         $metaData = [];
         $query = sprintf(
             "SELECT id, lang, page_id, type, content FROM %sfaqmeta WHERE lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage()
         );
 
@@ -175,7 +175,7 @@ class Meta
     {
         $query = sprintf(
             "UPDATE %sfaqmeta SET page_id = '%s', type = '%s', content = '%s' WHERE id = %d AND lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $data->getPageId(),
             $data->getType(),
             $data->getContent(),
@@ -194,7 +194,7 @@ class Meta
     {
         $query = sprintf(
             "DELETE FROM %sfaqmeta WHERE lang = '%s' AND id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getLanguage()->getLanguage(),
             $id
         );

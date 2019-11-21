@@ -16,7 +16,7 @@
  * @since 2002-01-10
  */
 
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
@@ -334,7 +334,7 @@ if ($step == 3) {
             <div class="col">
 <?php
     $images = [];
-    $prefix = Db::getTablePrefix();
+    $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
     $perm = new BasicPermission($faqConfig);
 

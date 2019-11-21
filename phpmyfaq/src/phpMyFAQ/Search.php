@@ -76,7 +76,7 @@ class Search
     public function __construct(Configuration $config)
     {
         $this->_config = $config;
-        $this->_table = Db::getTablePrefix().'faqsearches';
+        $this->_table = Database::getTablePrefix().'faqsearches';
     }
 
     /**
@@ -161,10 +161,10 @@ class Search
      */
     public function searchDatabase($searchTerm, $allLanguages = true)
     {
-        $fdTable = Db::getTablePrefix().'faqdata AS fd';
-        $fcrTable = Db::getTablePrefix().'faqcategoryrelations';
+        $fdTable = Database::getTablePrefix().'faqdata AS fd';
+        $fcrTable = Database::getTablePrefix().'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
-        $search = SearchFactory::create($this->_config, ['database' => Db::getType()]);
+        $search = SearchFactory::create($this->_config, ['database' => Database::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {

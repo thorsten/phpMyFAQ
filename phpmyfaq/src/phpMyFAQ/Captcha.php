@@ -221,7 +221,7 @@ class Captcha
      */
     public function getCaptchaCode()
     {
-        $query = sprintf('SELECT id FROM %sfaqcaptcha', Db::getTablePrefix());
+        $query = sprintf('SELECT id FROM %sfaqcaptcha', Database::getTablePrefix());
         $result = $this->_config->getDb()->query($query);
         while ($row = $this->_config->fetchArray($result)) {
             $this->code = $row['id'];
@@ -264,7 +264,7 @@ class Captcha
                 %sfaqcaptcha
             WHERE
                 id = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->_config->getDb()->escape($captchaCode));
 
         if ($result = $this->_config->getDb()->query($query)) {
@@ -476,7 +476,7 @@ class Captcha
                %sfaqcaptcha 
            WHERE 
                id = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->code
         );
 
@@ -493,7 +493,7 @@ class Captcha
                     (id, useragent, language, ip, captcha_time) 
                         VALUES 
                     ('%s', '%s', '%s', '%s', %d)",
-                    Db::getTablePrefix(),
+                    Database::getTablePrefix(),
                     $this->code,
                     $this->userAgent,
                     $this->_config->getLanguage()->getLanguage(),
@@ -520,7 +520,7 @@ class Captcha
         if ($captchaCode == null) {
             $captchaCode = $this->code;
         }
-        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", Db::getTablePrefix(), $captchaCode);
+        $query = sprintf("DELETE FROM %sfaqcaptcha WHERE id = '%s'", Database::getTablePrefix(), $captchaCode);
         $this->_config->getDb()->query($query);
     }
 
@@ -542,7 +542,7 @@ class Captcha
                 %sfaqcaptcha 
             WHERE 
                 captcha_time < %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'] - $time
         );
 
@@ -553,7 +553,7 @@ class Captcha
                 %sfaqcaptcha
             WHERE
                 useragent = '%s' AND language = '%s' AND ip = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userAgent,
             $this->_config->getLanguage()->getLanguage(),
             $this->ip

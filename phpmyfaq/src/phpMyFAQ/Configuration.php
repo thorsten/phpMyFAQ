@@ -19,7 +19,7 @@ namespace phpMyFAQ;
  */
 
 use Elasticsearch\Client;
-use phpMyFAQ\Db\Driver;
+use phpMyFAQ\Database\DatabaseDriver;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -49,9 +49,9 @@ class Configuration
     /**
      * Constructor.
      *
-     * @param Driver $database
+     * @param DatabaseDriver $database
      */
-    public function __construct(Driver $database)
+    public function __construct(DatabaseDriver $database)
     {
         $this->setDb($database);
     }
@@ -67,7 +67,7 @@ class Configuration
                 config_name, config_value
             FROM
                 %s%s',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->tableName
         );
 
@@ -124,7 +124,7 @@ class Configuration
     public function set($key, $value)
     {
         $query = sprintf("UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($value)),
             $this->getDb()->escape(trim($key))
@@ -136,9 +136,9 @@ class Configuration
     /**
      * Sets the phpMyFAQ\Db_Driver object.
      *
-     * @param Driver $database
+     * @param DatabaseDriver $database
      */
-    public function setDb(Driver $database)
+    public function setDb(DatabaseDriver $database)
     {
         $this->config['core.database'] = $database;
     }
@@ -146,9 +146,9 @@ class Configuration
     /**
      * Returns the phpMyFAQ\Db_Driver object.
      *
-     * @return Driver
+     * @return DatabaseDriver
      */
-    public function getDb(): Driver
+    public function getDb(): DatabaseDriver
     {
         return $this->config['core.database'];
     }
@@ -390,7 +390,7 @@ class Configuration
                 %s%s
             VALUES
                 ('%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($name)),
             $this->getDb()->escape(trim($value))
@@ -413,7 +413,7 @@ class Configuration
                 %s%s
             WHERE
               config_name = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($name))
         );
@@ -431,7 +431,7 @@ class Configuration
     public function update(Array $newConfigs): bool
     {
         $runtimeConfigs = [
-            'core.database', // phpMyFAQ\Db_Driver
+            'core.database', // phpMyFAQ\Database\DatabaseDriver
             'core.instance', // Instance
             'core.language', // Language
             'core.ldapServer', // Ldap
@@ -452,7 +452,7 @@ class Configuration
                             config_value = '%s'
                         WHERE
                             config_name = '%s'",
-                        Db::getTablePrefix(),
+                        Database::getTablePrefix(),
                         $this->tableName,
                         $this->getDb()->escape(trim($value)),
                         $name

@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The database abstraction factory.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,28 +17,26 @@ namespace phpMyFAQ;
  * @since 2003-02-24
  */
 
-use phpMyFAQ\Db\Driver;
+use phpMyFAQ\Database\DatabaseDriver;
+use phpMyFAQ\Database\Mysqli;
+use phpMyFAQ\Database\Pgsql;
+use phpMyFAQ\Database\Sqlite3;
+use phpMyFAQ\Database\Sqlsrv;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * phpMyFAQ\Db.
- *
+ * Class Database
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2003-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2003-02-24
  */
-class Db
+class Database
 {
     /**
      * Instance.
      *
-     * @var Driver
+     * @var DatabaseDriver
      */
     private static $instance = null;
 
@@ -70,18 +66,17 @@ class Db
      *
      * @param string $type Database management system type
      *
+     * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      * @throws Exception
-     *
-     * @return Driver
      */
     public static function factory($type)
     {
         self::$dbType = $type;
 
         if (0 === strpos($type, 'pdo_')) {
-            $class = 'phpMyFAQ\Db\Pdo_'.ucfirst(substr($type, 4));
+            $class = 'phpMyFAQ\Database\Pdo_'.ucfirst(substr($type, 4));
         } else {
-            $class = 'phpMyFAQ\Db\\'.ucfirst($type);
+            $class = 'phpMyFAQ\Database\\'.ucfirst($type);
         }
 
         if (class_exists($class)) {
@@ -96,7 +91,7 @@ class Db
     /**
      * Returns the single instance.
      *
-     * @return Driver
+     * @return DatabaseDriver
      */
     public static function getInstance()
     {

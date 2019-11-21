@@ -17,22 +17,16 @@ namespace phpMyFAQ\Attachment;
  * @since 2009-08-21
  */
 
-use phpMyFAQ\Db;
-use phpMyFAQ\Db\Driver;
+use phpMyFAQ\Database;
+use phpMyFAQ\Database\DatabaseDriver;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Attachment_Abstract.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * Class AttachmentAbstract
+ * @package phpMyFAQ\Attachment
  */
 abstract class AttachmentAbstract
 {
@@ -60,7 +54,7 @@ abstract class AttachmentAbstract
     /**
      * Database instance.
      *
-     * @var Driver
+     * @var DatabaseDriver
      */
     protected $db;
 
@@ -127,6 +121,7 @@ abstract class AttachmentAbstract
      * @var string
      */
     protected $mimeType;
+
     /**
      * Constructor.
      *
@@ -134,12 +129,54 @@ abstract class AttachmentAbstract
      */
     public function __construct($id = null)
     {
-        $this->db = Db::getInstance();
+        $this->db = Database::getInstance();
 
         if (null !== $id) {
             $this->id = $id;
             $this->getMeta();
         }
+    }
+
+    /**
+     * Get meta data.
+     *
+     * @return bool
+     */
+    protected function getMeta(): bool
+    {
+        $retval = false;
+
+        $sql = sprintf('
+            SELECT 
+                record_id, record_lang, real_hash, virtual_hash, password_hash,
+                filename, filesize, encrypted, mime_type
+            FROM
+                %sfaqattachment
+            WHERE 
+                id = %d',
+            Database::getTablePrefix(),
+            (int)$this->id);
+
+        $result = $this->db->query($sql);
+
+        if ($result) {
+            $assoc = $this->db->fetchArray($result);
+            if (!empty($assoc)) {
+                $this->recordId = $assoc['record_id'];
+                $this->recordLang = $assoc['record_lang'];
+                $this->realHash = $assoc['real_hash'];
+                $this->virtualHash = $assoc['virtual_hash'];
+                $this->passwordHash = $assoc['password_hash'];
+                $this->filename = $assoc['filename'];
+                $this->filesize = $assoc['filesize'];
+                $this->encrypted = $assoc['encrypted'];
+                $this->mimeType = $assoc['mime_type'];
+
+                $retval = true;
+            }
+        }
+
+        return $retval;
     }
 
     /**
@@ -159,8 +196,8 @@ abstract class AttachmentAbstract
     /**
      * Set encryption key.
      *
-     * @param string $key     encryption key
-     * @param bool   $default if the key is default system wide
+     * @param string $key encryption key
+     * @param bool $default if the key is default system wide
      */
     public function setKey($key, $default = true)
     {
@@ -172,16 +209,6 @@ abstract class AttachmentAbstract
         if ($this->encrypted && !$default) {
             $this->passwordHash = sha1($key);
         }
-    }
-
-    /**
-     * Set record id.
-     *
-     * @param int $id record id
-     */
-    public function setRecordId($id)
-    {
-        $this->recordId = $id;
     }
 
     /**
@@ -225,45 +252,13 @@ abstract class AttachmentAbstract
     }
 
     /**
-     * Get meta data.
+     * Set record id.
      *
-     * @return bool
+     * @param int $id record id
      */
-    protected function getMeta(): bool
+    public function setRecordId($id)
     {
-        $retval = false;
-
-        $sql = sprintf('
-            SELECT 
-                record_id, record_lang, real_hash, virtual_hash, password_hash,
-                filename, filesize, encrypted, mime_type
-            FROM
-                %sfaqattachment
-            WHERE 
-                id = %d',
-            Db::getTablePrefix(),
-            (int)$this->id);
-
-        $result = $this->db->query($sql);
-
-        if ($result) {
-            $assoc = $this->db->fetchArray($result);
-            if (!empty($assoc)) {
-                $this->recordId = $assoc['record_id'];
-                $this->recordLang = $assoc['record_lang'];
-                $this->realHash = $assoc['real_hash'];
-                $this->virtualHash = $assoc['virtual_hash'];
-                $this->passwordHash = $assoc['password_hash'];
-                $this->filename = $assoc['filename'];
-                $this->filesize = $assoc['filesize'];
-                $this->encrypted = $assoc['encrypted'];
-                $this->mimeType = $assoc['mime_type'];
-
-                $retval = true;
-            }
-        }
-
-        return $retval;
+        $this->recordId = $id;
     }
 
     /**
@@ -275,7 +270,7 @@ abstract class AttachmentAbstract
      */
     public function saveMeta(): int
     {
-        $faqattTableName = sprintf('%sfaqattachment', Db::getTablePrefix());
+        $faqattTableName = sprintf('%sfaqattachment', Database::getTablePrefix());
 
         if (null == $this->id) {
             $this->id = $this->db->nextId($faqattTableName, 'id');
@@ -307,6 +302,16 @@ abstract class AttachmentAbstract
     }
 
     /**
+     * Returns filename.
+     *
+     * @return string
+     */
+    public function getFilename(): string
+    {
+        return $this->filename;
+    }
+
+    /**
      * Update several meta things after it was saved.
      */
     protected function postUpdateMeta()
@@ -317,7 +322,7 @@ abstract class AttachmentAbstract
             SET virtual_hash = '%s',
                 mime_type = '%s'
             WHERE id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->virtualHash,
             $this->readMimeType(),
             $this->id
@@ -335,7 +340,7 @@ abstract class AttachmentAbstract
     protected function readMimeType(): string
     {
         $ext = pathinfo($this->filename, PATHINFO_EXTENSION);
-        $this->mimeType = MimeType::guessByExt($ext);
+        $this->mimeType = AbstractMimeType::guessByExt($ext);
 
         return $this->mimeType;
     }
@@ -343,32 +348,29 @@ abstract class AttachmentAbstract
     /**
      * Generate hash based on current conditions.
      *
-     * @throws Exception
-     *
      * @return string
-     * 
+     *
      * NOTE The way a file is saved in the filesystem
      * is based on md5 hash. If the file is unencrypted,
      * it's md5 hash is used directly, otherwise a
      * hash based on several tokens gets generated.
      *
-     * @throws Exception
-     *
      * @return string
+     * @throws AttachmentException
      */
     protected function mkVirtualHash(): string
     {
         if ($this->encrypted) {
             if (null === $this->id || null === $this->recordId ||
-               null === $this->realHash || null === $this->filename ||
-               null === $this->key) {
-                throw new Exception(
+                null === $this->realHash || null === $this->filename ||
+                null === $this->key) {
+                throw new AttachmentException(
                     'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files'
                 );
             }
 
-            $src = $this->id.$this->recordId.$this->realHash.
-                        $this->filename.$this->key;
+            $src = $this->id . $this->recordId . $this->realHash .
+                $this->filename . $this->key;
             $this->virtualHash = md5($src);
         } else {
             $this->virtualHash = $this->realHash;
@@ -381,7 +383,7 @@ abstract class AttachmentAbstract
      * Check if the same virtual hash exists more than once
      * in the database. If so, this means the file
      * is already uploaded as unencrypted.
-     *  
+     *
      * @return bool
      */
     protected function linkedRecords(): bool
@@ -390,7 +392,7 @@ abstract class AttachmentAbstract
 
         $sql = sprintf(
             "SELECT COUNT(1) AS count FROM  %sfaqattachment WHERE virtual_hash = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->virtualHash
         );
 
@@ -410,30 +412,10 @@ abstract class AttachmentAbstract
     {
         $sql = sprintf(
             'DELETE FROM %sfaqattachment WHERE id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->id
         );
 
         $this->db->query($sql);
-    }
-
-    /**
-     * Validate attached file with the real hash.
-     *
-     * @return bool
-     */
-    public function validate(): bool
-    {
-        // TODO implement this
-    }
-
-    /**
-     * Returns filename.
-     *
-     * @return string
-     */
-    public function getFilename(): string
-    {
-        return $this->filename;
     }
 }

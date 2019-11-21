@@ -15,8 +15,8 @@
  * @since 2010-12-20
  */
 
-use phpMyFAQ\Attachment\Exception;
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 
@@ -40,7 +40,7 @@ $recordLang = Filter::filterInput(INPUT_POST, 'record_lang', FILTER_SANITIZE_STR
 $csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
 
 try {
-    $attachment = Factory::create($attId);
+    $attachment = AttachmentFactory::create($attId);
 
     switch ($ajaxAction) {
         case 'delete':
@@ -64,7 +64,7 @@ try {
                 return;
             }
 
-            $files = Factory::rearrangeUploadedFiles($_FILES['filesToUpload']);
+            $files = AttachmentFactory::rearrangeUploadedFiles($_FILES['filesToUpload']);
             $uploadedFiles = [];
 
             foreach ($files as $file) {
@@ -73,14 +73,14 @@ try {
                     !($file['size'] > $faqConfig->get('records.maxAttachmentSize')) &&
                     $file['type'] !== "text/html"
                 ) {
-                    $attachment = Factory::create();
+                    $attachment = AttachmentFactory::create();
                     $attachment->setRecordId($recordId);
                     $attachment->setRecordLang($recordLang);
                     try {
                         if (!$attachment->save($file['tmp_name'], $file['name'])) {
-                            throw new Exception();
+                            throw new AttachmentException();
                         }
-                    } catch (Exception $e) {
+                    } catch (AttachmentException $e) {
                         $attachment->delete();
                     }
                     $uploadedFiles[] = [
@@ -100,6 +100,6 @@ try {
 
             break;
     }
-} catch (Exception $e) {
+} catch (AttachmentException $e) {
     // handle exception
 }

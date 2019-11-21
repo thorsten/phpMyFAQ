@@ -18,7 +18,7 @@ namespace phpMyFAQ\User;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -91,7 +91,7 @@ class UserData
             WHERE
                 user_id = %d',
             $fields,
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userId
         );
 
@@ -123,7 +123,7 @@ class UserData
             WHERE
                 %s = '%s'",
             $key,
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $key,
             $this->config->getDb()->escape($value)
         );
@@ -193,7 +193,7 @@ class UserData
                 %sfaquserdata
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userId);
 
         $res = $this->config->getDb()->query($select);
@@ -222,7 +222,7 @@ class UserData
                 email         = '%s'
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             date('YmdHis', $_SERVER['REQUEST_TIME']),
             $this->config->getDb()->escape($this->data['display_name']),
             $this->config->getDb()->escape($this->data['email']),
@@ -258,7 +258,7 @@ class UserData
             (user_id, last_modified)
                 VALUES
             (%d, '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userId,
             date('YmdHis', $_SERVER['REQUEST_TIME'])
         );
@@ -292,7 +292,7 @@ class UserData
                 %sfaquserdata
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->userId);
 
         $res = $this->config->getDb()->query($delete);

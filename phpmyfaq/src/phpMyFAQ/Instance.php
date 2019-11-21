@@ -75,11 +75,11 @@ class Instance
      */
     public function addInstance(Array $data)
     {
-        $this->setId($this->config->getDb()->nextId(Db::getTablePrefix().'faqinstances', 'id'));
+        $this->setId($this->config->getDb()->nextId(Database::getTablePrefix().'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->getId(),
             $data['url'],
             $data['instance'],
@@ -124,7 +124,7 @@ class Instance
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances ORDER BY id',
-            Db::getTablePrefix()
+            Database::getTablePrefix()
         );
 
         $result = $this->config->getDb()->query($select);
@@ -143,7 +143,7 @@ class Instance
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             (int)$id
         );
 
@@ -163,7 +163,7 @@ class Instance
     {
         $select = sprintf(
             "SELECT * FROM %sfaqinstances WHERE url = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $url
         );
 
@@ -188,7 +188,7 @@ class Instance
                 %sfaqinstances_config
             WHERE
                 instance_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id
         );
 
@@ -214,7 +214,7 @@ class Instance
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $data['instance'],
             $data['comment'],
             (int)$id
@@ -235,12 +235,12 @@ class Instance
         $deletes = array(
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 (int)$id
             ),
             sprintf(
                 'DELETE FROM %sfaqinstances_config WHERE instance_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 (int)$id
             ),
         );
@@ -270,7 +270,7 @@ class Instance
                 %sfaqinstances_config
             VALUES
                 (%d, '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->getId(),
             $this->config->getDb()->escape(trim($name)),
             $this->config->getDb()->escape(trim($value))

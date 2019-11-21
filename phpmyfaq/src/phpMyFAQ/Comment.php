@@ -95,7 +95,7 @@ class Comment
                 %sfaqcomments
             WHERE
                 id_comment = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $id);
 
         $result = $this->config->getDb()->query($query);
@@ -135,7 +135,7 @@ class Comment
                 type = '%s'
             AND 
                 id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $type,
             $id);
 
@@ -212,8 +212,8 @@ class Comment
                 %sfaqcomments
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
-            Db::getTablePrefix(),
-            $this->config->getDb()->nextId(Db::getTablePrefix().'faqcomments', 'id_comment'),
+            Database::getTablePrefix(),
+            $this->config->getDb()->nextId(Database::getTablePrefix().'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -251,7 +251,7 @@ class Comment
                 id = %d
             AND
                 id_comment = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             $commentId
         );
@@ -284,7 +284,7 @@ class Comment
                 type = '%s'
             GROUP BY id
             ORDER BY id",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $type
         );
 
@@ -324,9 +324,9 @@ class Comment
             WHERE
                 type = '%s'",
             ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             ($type == self::COMMENT_TYPE_FAQ) ? 'LEFT JOIN
-                '.Db::getTablePrefix()."faqcategoryrelations fcg
+                '.Database::getTablePrefix()."faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
             $type

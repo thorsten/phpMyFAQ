@@ -25,7 +25,7 @@ namespace phpMyFAQ\User;
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 
@@ -226,7 +226,7 @@ class CurrentUser extends User
                     auth_source = '%s'
                 WHERE
                     user_id = %d",
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $this->config->getDb()->escape($name),
                 $this->getUserId()
             );
@@ -323,7 +323,7 @@ class CurrentUser extends User
                 %sfaquser
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->getUserId()
         );
 
@@ -373,7 +373,7 @@ class CurrentUser extends User
                 ip = '%s'
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
             $updateLastLogin ? "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
@@ -428,7 +428,7 @@ class CurrentUser extends User
                 %s
             WHERE
                 user_id = %d',
-                Db::getTablePrefix(),
+                Database::getTablePrefix(),
                 $deleteCookie ? ', remember_me = NULL' : '',
                 $this->getUserId()
         );
@@ -591,7 +591,7 @@ class CurrentUser extends User
                 remember_me = '%s'
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->config->getDb()->escape($rememberMe),
             $this->getUserId()
         );
@@ -619,7 +619,7 @@ class CurrentUser extends User
                 login_attempts = %d
             WHERE
                 user_id = %d',
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->loginState,
             $this->loginAttempts,
             $this->getUserId()
@@ -648,7 +648,7 @@ class CurrentUser extends User
                 login_attempts = login_attempts + 1
             WHERE
                 user_id = %d",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $_SERVER['REQUEST_TIME'],
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
@@ -682,7 +682,7 @@ class CurrentUser extends User
                 success = 0
             AND
                 login_attempts > 5",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->getUserId(),
             $_SERVER['REQUEST_TIME'],
             $this->lockoutTime,

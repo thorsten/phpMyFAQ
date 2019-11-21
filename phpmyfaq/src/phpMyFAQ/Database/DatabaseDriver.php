@@ -1,11 +1,9 @@
 <?php
 
-namespace phpMyFAQ\Db;
+namespace phpMyFAQ\Database;
 
 /**
  * Interface for database drivers.
- *
- *
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -25,25 +23,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * phpMyFAQ\Db_Driver.
- *
- * @package phpMyFAQ
- * @author Johannes Schlüter <johannes@php.net>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-08-19
+ * Interface DatabaseDriver
+ * @package phpMyFAQ\Database
  */
-interface Driver
+interface DatabaseDriver
 {
     /**
      * Connects to the database server.
      *
-     * @param string $host     Hostname
-     * @param string $user     Username
+     * @param string $host Hostname
+     * @param string $user Username
      * @param string $password Password
-     * @param string $db       Database name
+     * @param string $db Database name
      *
      * @return bool
      */
@@ -53,8 +44,8 @@ interface Driver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int    $offset
-     * @param int    $rowcount
+     * @param int $offset
+     * @param int $rowcount
      *
      * @return mixed $result
      */
@@ -63,7 +54,7 @@ interface Driver
     /**
      * Escapes a string for use in a query.
      *
-     * @param   string
+     * @param string
      *
      * @return string
      */
@@ -124,8 +115,8 @@ interface Driver
     /**
      * Returns the next ID of a table.
      *
-     * @param   string      the name of the table
-     * @param   string      the name of the ID column
+     * @param string      the name of the table
+     * @param string      the name of the ID column
      *
      * @return int
      */

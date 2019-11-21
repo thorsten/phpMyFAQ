@@ -20,7 +20,7 @@ namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -75,7 +75,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             (login, pass, domain)
                 VALUES
             ('%s', '%s', '%s')",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->db->escape($login),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($domain)
@@ -116,7 +116,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->db->escape($login)
         );
 
@@ -150,7 +150,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->db->escape($login));
 
         $delete = $this->db->query($delete);
@@ -192,7 +192,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 %sfaquserlogin
             WHERE
                 login = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->db->escape($login)
         );
 
@@ -259,7 +259,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
                 pass = '%s'
             WHERE
                 login = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );

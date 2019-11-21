@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Filter;
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -39,7 +39,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delattachment')) {
     $recordLang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
     $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 
-    $att = Factory::create($id);
+    $att = AttachmentFactory::create($id);
 
     if ($att && $att->delete()) {
         printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_att_delsuc']);

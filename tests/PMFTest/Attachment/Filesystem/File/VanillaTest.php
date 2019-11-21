@@ -24,7 +24,7 @@
  */
 
 use PHPUnit\Framework\TestCase;
-use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
+use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 
 /**
  * PMF_Attachment_File test case
@@ -40,7 +40,7 @@ use phpMyFAQ\Attachment\Filesystem\File\Vanilla;
 class VanillaTest extends TestCase
 {
     /**
-     * @var Vanilla
+     * @var VanillaFile
      */
     private $instance;
 
@@ -56,7 +56,7 @@ class VanillaTest extends TestCase
         }
         copy(PMF_TEST_DIR . '/fixtures/path/foo.bar', PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz');
 
-        $this->instance = new Vanilla(
+        $this->instance = new VanillaFile(
             PMF_TEST_DIR . '/fixtures/path-to-delete/foo.bar.baz'
         );
     }

@@ -19,7 +19,7 @@ namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Attachment;
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Language;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -27,16 +27,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Attachment_Factory.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @since 2009-08-21
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @copyright 2009-2019 phpMyFAQ Team
+ * Class AttachmentFactory
+ * @package phpMyFAQ\Attachment
  */
-class Factory
+class AttachmentFactory
 {
     /**
      * Default encryption key.
@@ -65,9 +59,9 @@ class Factory
      * @param int    $id  ID
      * @param string $key Key
      *
-     * @throws Exception
-     *
      * @return File
+     * @throws AttachmentException
+     *
      */
     public static function create($id = null, $key = null): File
     {
@@ -79,7 +73,7 @@ class Factory
                 break;
 
             default:
-                throw new Exception('Unknown attachment storage type');
+                throw new AttachmentException('Unknown attachment storage type');
                 break;
         }
 
@@ -103,7 +97,7 @@ class Factory
      * @param Configuration $config
      * @param int $recordId ID of the record
      *
-     * @throws Exception
+     * @throws AttachmentException
      *
      * @return File[]
      */
@@ -120,7 +114,7 @@ class Factory
                 record_id = %d
             AND
                 record_lang = '%s'",
-            Db::getTablePrefix(),
+            Database::getTablePrefix(),
             $recordId,
             Language::$language
         );

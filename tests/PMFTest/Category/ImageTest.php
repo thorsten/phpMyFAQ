@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Db\Sqlite3;
-use phpMyFAQ\Category\Image;
+use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 
@@ -48,7 +48,7 @@ class ImageTest extends TestCase
         $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');
         $pmfConfig = new Configuration($dbHandle);
         $pmfConfig->set('records.maxAttachmentSize', 1234567890);
-        $this->instance = new Image($pmfConfig);
+        $this->instance = new CategoryImage($pmfConfig);
     }
 
     public function testNoUploadGetFileName()

@@ -20,7 +20,7 @@
  * @since 2001-02-12
  */
 
-use phpMyFAQ\Attachment\Factory;
+use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Auth\AuthLdap as AuthLdap;
 use phpMyFAQ\Auth\AuthSso as AuthSso;
 use phpMyFAQ\Category;
@@ -92,7 +92,7 @@ Strings::init($faqLangCode);
 /*
  * Initialize attachment factory
  */
-Factory::init(
+AttachmentFactory::init(
     $faqConfig->get('records.attachmentsStorageType'),
     $faqConfig->get('records.defaultAttachmentEncKey'),
     $faqConfig->get('records.enableAttachmentEncryption')

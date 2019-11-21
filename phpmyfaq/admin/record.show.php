@@ -20,7 +20,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Comment;
 use phpMyFAQ\Date;
-use phpMyFAQ\Db;
+use phpMyFAQ\Database;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
@@ -156,13 +156,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $searchTerm = Filter::filterInput(INPUT_POST, 'searchterm', FILTER_SANITIZE_STRIPPED);
 
     if (!is_null($linkState)) {
-        $cond[Db::getTablePrefix().'faqdata.links_state'] = 'linkbad';
+        $cond[Database::getTablePrefix().'faqdata.links_state'] = 'linkbad';
         $linkState = ' checked ';
         $internalSearch .= '&linkstate=linkbad';
     }
     if (!is_null($searchCat)) {
         $internalSearch .= '&searchcat='.$searchCat;
-        $cond[Db::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
+        $cond[Database::getTablePrefix().'faqcategoryrelations.category_id'] = array_merge(
             [$searchCat],
             $category->getChildNodes($searchCat)
         );
@@ -219,9 +219,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             $numActiveByCat[$record['category_id']] += $record['active'] == 'yes' ? 1 : 0;
         }
     } else {
-        $fdTable = Db::getTablePrefix().'faqdata';
-        $fcrTable = Db::getTablePrefix().'faqcategoryrelations';
-        $search = SearchFactory::create($faqConfig, array('database' => Db::getType()));
+        $fdTable = Database::getTablePrefix().'faqdata';
+        $fcrTable = Database::getTablePrefix().'faqcategoryrelations';
+        $search = SearchFactory::create($faqConfig, array('database' => Database::getType()));
 
         $search->setTable($fdTable)
             ->setResultColumns(array(

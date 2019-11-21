@@ -33,7 +33,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
     /**
      * Contain the db connector used in phpMyFAQ.
      *
-     * @var phpMyFAQ\Db
+     * @var phpMyFAQ\Database
      */
     public $db = null;
     
@@ -63,7 +63,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
         $this->data = $this->getDbData();
 
         // phpMyFAQ connection
-        $db = phpMyFAQ\Db::factory($this->data["type"]);
+        $db = phpMyFAQ\Database::factory($this->data["type"]);
         $db->connect($this->data["server"], $this->data["user"], $this->data["password"], $this->data["db"]);
         $this->db = $db;
 
