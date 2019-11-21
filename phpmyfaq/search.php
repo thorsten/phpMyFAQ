@@ -33,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -65,7 +65,7 @@ if (!is_null($inputLanguage)) {
 
 // HACK: (re)evaluate the Entity object w/o passing the user language
 //       so the result set of a Search will have the Entity Path
-//       for any of the multilanguage faq records and the Entity list
+//       for any of the multi language faq records and the Entity list
 //       on the left pane will not be affected
 if ($allLanguages) {
     $category = new Category($faqConfig);
@@ -121,9 +121,9 @@ if (!is_null($inputTag) && '' !== $inputTag) {
             }
         }
 
-        uasort($relatedTags, function($a, $b) {
+        uasort($relatedTags, function ($a, $b) {
             return ($b - $a);
-            }
+        }
         );
         $numTags = 0;
         $relTags = '';
@@ -158,7 +158,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
 
     try {
         $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
-    } catch (PMF_Search_Exception $e) {
+    } catch (Search\Exception $e) {
         // @todo handle the exception
     }
 
@@ -181,9 +181,9 @@ if (is_numeric($inputSearchTerm) && PMF_SOLUTION_ID_START_VALUE <= $inputSearchT
     0 < $faqSearchResult->getNumberOfResults() && $faqConfig->get('search.searchForSolutionId')) {
 
     if ($faqConfig->get('main.enableRewriteRules')) {
-        $http->redirect($faqConfig->getDefaultUrl().'solution_id_'.$inputSearchTerm.'.html');
+        $http->redirect($faqConfig->getDefaultUrl() . 'solution_id_' . $inputSearchTerm . '.html');
     } else {
-        $http->redirect($faqConfig->getDefaultUrl().'index.php?solution_id='.$inputSearchTerm);
+        $http->redirect($faqConfig->getDefaultUrl() . 'index.php?solution_id=' . $inputSearchTerm);
     }
     exit();
 }
@@ -204,7 +204,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 } else {
     $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
         Link::getSystemRelativeUri(),
-        empty($sids) ? '' : 'sids='.$sids.'&amp;',
+        empty($sids) ? '' : 'sids=' . $sids . '&amp;',
         urlencode($inputSearchTerm),
         $page,
         $languages,
@@ -270,7 +270,7 @@ if ($tagSearch) {
         'writeContent',
         'searchBoxSection',
         [
-            'writeSendAdress' => '?'.$sids.'action=search',
+            'writeSendAdress' => '?' . $sids . 'action=search',
             'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
             'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
             'checkedAllLanguages' => $allLanguages ? ' checked' : '',
@@ -296,9 +296,8 @@ $template->parse(
     [
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
-        /* @deprecated, the following variables will be removed with v3.0 */
         'printResult' => $searchResult,
-        'writeSendAdress' => '?'.$sids.'action=search',
+        'writeSendAdress' => '?' . $sids . 'action=search',
         'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
         'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
         'checkedAllLanguages' => $allLanguages ? ' checked' : '',

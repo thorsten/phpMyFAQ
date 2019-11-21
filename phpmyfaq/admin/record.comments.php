@@ -82,7 +82,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
                     <a href="<?php printf('../?action=faq&cat=%d&id=%d&artlang=%s',
                         $faqComment['category_id'],
                         $faqComment['record_id'],
-                        $LANGCODE) ?>">
+                        $faqLangCode) ?>">
                         <?= $faq->getRecordTitle($faqComment['record_id']) ?>
                     </a>
                 </span><br/>

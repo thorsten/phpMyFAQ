@@ -26,7 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -38,10 +38,10 @@ if (!is_null($showCaptcha)) {
     exit;
 }
 
-$translationLanguage = Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $LANGCODE);
+$translationLanguage = Filter::filterInput(INPUT_POST, 'translation', FILTER_SANITIZE_STRIPPED, $faqLangCode);
 
 if (!Language::isASupportedLanguage($translationLanguage)) {
-    $translationLanguage = $LANGCODE;
+    $translationLanguage = $faqLangCode;
 }
 
 $faqSource['id'] = 'writeSourceFaqId';
@@ -91,7 +91,7 @@ $template->parse(
         'msgNewTranslationAddon' => $PMF_LANG['msgNewTranslationAddon'],
         'msgNewTransSourcePane' => $PMF_LANG['msgNewTransSourcePane'],
         'msgNewTranslationPane' => $PMF_LANG['msgNewTranslationPane'],
-        'writeSendAdress' => '?'.$sids.'action=save',
+        'writeSendAdress' => '?' . $sids . 'action=save',
         'defaultContentName' => ($user ? $user->getUserData('display_name') : ''),
         'defaultContentMail' => ($user ? $user->getUserData('email') : ''),
         'msgNewTranslationQuestion' => $PMF_LANG['msgNewContentTheme'],
@@ -102,7 +102,7 @@ $template->parse(
         'writeTransFaqLanguage' => $translationLanguage,
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'translate', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewTranslationSubmit' => $PMF_LANG['msgNewTranslationSubmit'],
-        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en'),
+        'tinyMCELanguage' => (Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en'),
     )
 );
 

@@ -39,17 +39,17 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 // get language (default: english)
 //
 $Language = new Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
+if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
+    require_once PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
 } else {
-    $LANGCODE = 'en';
+    $faqLangCode = 'en';
 }
 
 if ($faqConfig->get('security.enableLoginOnly')) {
@@ -80,32 +80,32 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 // Get current user and group id - default: -1
 //
 if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
-    $current_user = $user->getUserId();
+    $currentUser = $user->getUserId();
     if ($user->perm instanceof MediumPermission) {
-        $current_groups = $user->perm->getUserGroups($current_user);
+        $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $current_groups = array(-1);
+        $currentGroups = array(-1);
     }
-    if (0 == count($current_groups)) {
-        $current_groups = array(-1);
+    if (0 == count($currentGroups)) {
+        $currentGroups = array(-1);
     }
 } else {
-    $current_user = -1;
-    $current_groups = array(-1);
+    $currentUser = -1;
+    $currentGroups = array(-1);
 }
 
 //
 // Initalizing static string wrapper
 //
-Strings::init($LANGCODE);
+Strings::init($faqLangCode);
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
 $faq = new Faq($faqConfig);
-$faq->setUser($current_user);
-$faq->setGroups($current_groups);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
 $rssData = $faq->getLatestData(PMF_NUMBER_RECORDS_LATEST);
 $num = count($rssData);

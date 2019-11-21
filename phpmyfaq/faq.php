@@ -3,8 +3,6 @@
 /**
  * Shows the page with the FAQ record and - when available - the user comments.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -143,7 +141,11 @@ if (isset($linkArray['href'])) {
 
 // List all faq attachments
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
-    $attList = Factory::fetchByRecordId($faqConfig, $recordId);
+    try {
+        $attList = Factory::fetchByRecordId($faqConfig, $recordId);
+    } catch (\phpMyFAQ\Attachment\Exception $e) {
+        // handle exception
+    }
     $outstr = '';
 
     foreach ($attList as $att) {
@@ -185,8 +187,7 @@ $relatedFaqs = $searchHelper->renderRelatedFaqs($faqSearchResult, $recordId);
 $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $editThisEntry = sprintf(
-        '<i aria-hidden="true" class="fa fa-pencil"></i> <a class="data" href="%sadmin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
-        Link::getSystemRelativeUri('index.php'),
+        '<i aria-hidden="true" class="fa fa-pencil"></i> <a class="data" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         $recordId,
         $lang,
         $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
@@ -315,7 +316,7 @@ $template->parse(
         ),
         'editThisEntry' => $editThisEntry,
         'translationUrl' => $translationUrl,
-        'languageSelection' => Language::selectLanguages($LANGCODE, false, $availableLanguages, 'translation'),
+        'languageSelection' => Language::selectLanguages($faqLangCode, false, $availableLanguages, 'translation'),
         'msgTranslateSubmit' => $PMF_LANG['msgTranslateSubmit'],
         'saveVotingPATH' => sprintf(
             str_replace(

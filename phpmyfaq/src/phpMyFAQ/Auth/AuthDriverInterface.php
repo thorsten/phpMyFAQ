@@ -24,17 +24,9 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Interface Driver
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2009-03-01
+ * @package phpMyFAQ\Auth
  */
-interface Driver
+interface AuthDriverInterface
 {
     /**
      * Adds a new user account to the authentication table. The domain
@@ -56,7 +48,7 @@ interface Driver
      * Error messages are added to the array errors.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
+     * @param string $pass Password
      *
      * @return bool
      */
@@ -85,9 +77,9 @@ interface Driver
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param string $pass Password
+     * @param array $optionalData Optional data
      *
      * @return bool
      */
@@ -96,8 +88,8 @@ interface Driver
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param array $optionalData Optional data
      *
      * @return int
      */

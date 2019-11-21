@@ -23,14 +23,14 @@ define('IS_VALID_PHPMYFAQ', null);
 require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 $Language = new Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
 
-if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
-    require_once PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
+if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
+    require_once PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
 } else {
-    $LANGCODE = 'en';
+    $faqLangCode = 'en';
 }
 
 $auth = false;

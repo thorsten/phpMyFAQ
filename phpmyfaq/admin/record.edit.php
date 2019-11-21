@@ -57,7 +57,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $categories = [];
     $faqData = [
         'id' => 0,
-        'lang' => $LANGCODE,
+        'lang' => $faqLangCode,
         'revision_id' => 0,
         'title' => '',
         'dateStart' => '',

@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -38,9 +38,9 @@ if (!is_null($archived)) {
     $showAllNews = sprintf('<a href="?%s">%s</a>', $sids, $PMF_LANG['newsShowCurrent']);
     $archived = true;
 } else {
-    $writeNewsHeader = ' '.$PMF_LANG['msgNews'];
+    $writeNewsHeader = ' ' . $PMF_LANG['msgNews'];
     if ($faqConfig->get('main.enableRssFeeds')) {
-        $writeNewsRSS = '&nbsp;<a href="feed/news/rss.php" target="_blank">'.
+        $writeNewsRSS = '&nbsp;<a href="feed/news/rss.php" target="_blank">' .
             '<i class="fa fa-rss-square"></i></a>';
     }
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
@@ -146,8 +146,8 @@ $template->parse(
         'writeNewsRSS' => $writeNewsRSS,
         'writeNews' => $news->getNews($archived),
         'showAllNews' => $showAllNews,
-        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($LANGCODE)),
-        'writeSendAdress' => '?'.$sids.'action=search',
+        'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
+        'writeSendAdress' => '?' . $sids . 'action=search',
         'searchBox' => $PMF_LANG['msgSearch'],
         'categoryId' => ($cat === 0) ? '%' : (int)$cat,
         'msgSearch' => sprintf(

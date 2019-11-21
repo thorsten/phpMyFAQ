@@ -4,19 +4,15 @@
  * Shows the page with the news record and - when available - the user
  * comments.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2006-07-23
  */
@@ -27,15 +23,15 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
-use phpMyFAQ\Link;
 use phpMyFAQ\News;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -52,7 +48,7 @@ $oNews = new News($faqConfig);
 $newsId = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (is_null($newsId)) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: http://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -63,7 +59,7 @@ try {
 }
 
 // Define the header of the page
-$newsMainHeader = $faqConfig->get('main.titleFAQ').$PMF_LANG['msgNews'];
+$newsMainHeader = $faqConfig->get('main.titleFAQ') . $PMF_LANG['msgNews'];
 if ($faqConfig->get('main.enableRssFeeds')) {
     $newsFeed = '&nbsp;<a href="feed/news/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
 } else {
@@ -94,10 +90,9 @@ if (strlen($news['link']) > 0) {
 $editThisEntry = '';
 if ($user->perm->checkRight($user->getUserId(), 'editnews')) {
     $editThisEntry = sprintf(
-                        '<a href="%sadmin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
-                        Link::getSystemRelativeUri('index.php'),
-                        $newsId,
-                        $PMF_LANG['ad_menu_news_edit']);
+        '<a href="./admin/index.php?action=news&amp;do=edit&amp;id=%d">%s</a>',
+        $newsId,
+        $PMF_LANG['ad_menu_news_edit']);
 }
 
 // Is the news item expired?
@@ -133,7 +128,7 @@ $template->parse(
         'writeContent' => $newsContent,
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
-        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'].': '.$news['authorName'] : '',
+        'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',
         'editThisEntry' => $editThisEntry,
         'writeCommentMsg' => $commentMessage,
         'msgWriteComment' => $PMF_LANG['newsWriteComment'],

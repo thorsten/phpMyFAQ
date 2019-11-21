@@ -3,8 +3,6 @@
 /**
  * This is the page there a user can view all glossary items.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -61,7 +59,7 @@ $pagination = new Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
     $output = [];
-    $visibleItems = array_slice($glossaryItems, ($page - 1)*$itemsPerPage, $itemsPerPage);
+    $visibleItems = array_slice($glossaryItems, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
     foreach ($visibleItems as $item) {
         $output['item'][] = $item['item'];

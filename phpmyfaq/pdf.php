@@ -3,14 +3,11 @@
 /**
  * PDF export.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Peter Beauvain <pbeauvain@web.de>
  * @author Olivier Plathey <olivier@fpdf.org>
@@ -18,10 +15,21 @@
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2003-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2003-02-12
  */
+
+use phpMyFAQ\Category;
+use phpMyFAQ\Export\Pdf;
+use phpMyFAQ\Faq;
+use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Language;
+use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Tags;
+use phpMyFAQ\User\CurrentUser;
+
 define('IS_VALID_PHPMYFAQ', null);
 
 //
@@ -31,20 +39,20 @@ require 'src/Bootstrap.php';
 
 // get language (default: english)
 $Language = new phpMyFAQ\Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 $faqConfig->setLanguage($Language);
 
 // Found an article language?
-$lang = phpMyFAQ\Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
+$lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-    $lang = phpMyFAQ\Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
+    $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
     if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-        $lang = $LANGCODE;
+        $lang = $faqLangCode;
     }
 }
 
 if (isset($lang) && Language::isASupportedLanguage($lang)) {
-    require_once 'lang/language_'.$lang.'.php';
+    require_once 'lang/language_' . $lang . '.php';
 } else {
     $lang = 'en';
     require_once 'lang/language_en.php';
@@ -52,7 +60,7 @@ if (isset($lang) && Language::isASupportedLanguage($lang)) {
 //
 // Initializing static string wrapper
 //
-Strings::init($LANGCODE);
+Strings::init($faqLangCode);
 
 // authenticate with session information
 $user = CurrentUser::getFromCookie($faqConfig);
@@ -67,46 +75,46 @@ if ($user instanceof CurrentUser) {
 
 // Get current user and group id - default: -1
 if (!is_null($user) && $user instanceof CurrentUser) {
-    $current_user = $user->getUserId();
-    if ($user->perm instanceof Medium) {
-        $current_groups = $user->perm->getUserGroups($current_user);
+    $currentUser = $user->getUserId();
+    if ($user->perm instanceof MediumPermission) {
+        $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $current_groups = array(-1);
+        $currentGroups = array(-1);
     }
-    if (0 == count($current_groups)) {
-        $current_groups = array(-1);
+    if (0 == count($currentGroups)) {
+        $currentGroups = array(-1);
     }
 } else {
-    $current_user = -1;
-    $current_groups = array(-1);
+    $currentUser = -1;
+    $currentGroups = array(-1);
 }
 
-$currentCategory = phpMyFAQ\Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
-$id = phpMyFAQ\Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-$getAll = phpMyFAQ\Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
+$currentCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+$id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
+$getAll = Filter::filterInput(INPUT_GET, 'getAll', FILTER_VALIDATE_BOOLEAN, false);
 
-$faq = new phpMyFAQ\Faq($faqConfig);
-$faq->setUser($current_user);
-$faq->setGroups($current_groups);
+$faq = new Faq($faqConfig);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
-$category = new phpMyFAQ\Category($faqConfig, $current_groups, true);
-$category->setUser($current_user);
+$category = new Category($faqConfig, $currentGroups, true);
+$category->setUser($currentUser);
 
-$pdf = new phpMyFAQ\Export_Pdf($faq, $category, $faqConfig);
-$http = new phpMyFAQ\Helper_Http();
+$pdf = new Pdf($faq, $category, $faqConfig);
+$http = new HttpHelper();
 
 if (true === $getAll) {
     $category->buildTree();
 }
-$tags = new phpMyFAQ\Tags($faqConfig);
+$tags = new Tags($faqConfig);
 
 session_cache_limiter('private');
 
-$headers = array(
+$headers = [
     'Pragma: public',
     'Expires: 0',
     'Cache-Control: must-revalidate, post-check=0, pre-check=0',
-);
+];
 
 if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
     $filename = 'FAQs.pdf';
@@ -120,14 +128,14 @@ if (true === $getAll && $user->perm->checkRight($user->getUserId(), 'export')) {
     $faq->getRecord($id);
     $faq->faqRecord['category_id'] = $currentCategory;
 
-    $filename = 'FAQ-'.$id.'-'.$lang.'.pdf';
+    $filename = 'FAQ-' . $id . '-' . $lang . '.pdf';
     $pdfFile = $pdf->generateFile($faq->faqRecord, $filename);
 }
 
 if (preg_match('/MSIE/i', $_SERVER['HTTP_USER_AGENT'])) {
     $headers[] = 'Content-type: application/pdf';
     $headers[] = 'Content-Transfer-Encoding: binary';
-    $headers[] = 'Content-Disposition: attachment; filename='.$filename;
+    $headers[] = 'Content-Disposition: attachment; filename=' . $filename;
 } else {
     $headers[] = 'Content-Type: application/pdf';
 }

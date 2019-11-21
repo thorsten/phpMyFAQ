@@ -3,8 +3,6 @@
 /**
  * FAQ overview page.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -36,13 +34,13 @@ try {
 
 $faqHelper = new FaqHelper($faqConfig);
 
-$faq->setUser($current_user);
-$faq->setGroups($current_groups);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
 $template->parse(
     'writeContent',
     [
-        'overview' => $faqHelper->createOverview($category, $faq, $LANGCODE),
+        'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
     ]
 );
 

@@ -3,8 +3,6 @@
 /**
  * Page for adding new questions.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,21 +17,22 @@
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Helper\CaptchaHelper;
+use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 // Check user permissions
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowQuestionsForGuests'))) {
-    header('Location:'.$faqSystem->getSystemUri($faqConfig).'?action=login');
+    header('Location:' . $faqSystem->getSystemUri($faqConfig) . '?action=login');
 }
 
 $captcha = new Captcha($faqConfig);

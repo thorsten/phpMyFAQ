@@ -14,18 +14,20 @@
  * @link https://www.phpmyfaq.de
  * @since 2012-02-12
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
 $loginMessage = '';
+
 if (!is_null($error)) {
-    $loginMessage = '<div class="alert alert-danger" role="alert">'.$error.'</div>';
+    $loginMessage = '<div class="alert alert-danger" role="alert">' . $error . '</div>';
 }
 
 try {
@@ -37,8 +39,8 @@ try {
 $template->parse(
     'writeContent',
     array(
-        'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
-        'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',
+        'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
+        'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader' => $PMF_LANG['msgLoginUser'],
         'loginMessage' => $loginMessage,
         'writeLoginPath' => $faqSystem->getSystemUri($faqConfig),

@@ -3,8 +3,6 @@
 /**
  * Contact page.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -17,8 +15,8 @@
  * @since 2002-09-16
  */
 
-use phpMyFAQ\Exception;
 use phpMyFAQ\Captcha;
+use phpMyFAQ\Exception;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\User\CurrentUser;
 
@@ -27,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 

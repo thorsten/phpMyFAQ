@@ -134,7 +134,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
-                            <?= Language::selectLanguages($LANGCODE, false, [], 'langTo') ?>
+                            <?= Language::selectLanguages($faqLangCode, false, [], 'langTo') ?>
                         </div>
                     </div>
 

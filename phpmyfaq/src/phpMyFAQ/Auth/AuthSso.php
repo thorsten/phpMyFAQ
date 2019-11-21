@@ -26,59 +26,16 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Sso
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2011-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-06-22
+ * Class Sso
+ * @package phpMyFAQ\Auth
  */
-class Sso extends Auth implements Driver
+class AuthSso extends Auth implements AuthDriverInterface
 {
     /**
      * Always returns true because of SSO.
      *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
-     * @throws
-     * @return bool
-     */
-    public function add($login, $pass, $domain = ''): bool
-    {
-        if ($this->_config->get('ldap.ldapSupport')) {
-            // LDAP/AD + SSO
-            $authLdap = new Ldap($this->_config);
-            $result = $authLdap->add($login, null, $domain);
-
-            return $result;
-        } else {
-            // SSO without LDAP/AD
-            $user = new User($this->_config);
-            $result = $user->createUser($login, null, $domain);
-
-            if ($result) {
-                $user->setStatus('active');
-            }
-
-            // Set user information
-            $user->setUserData(
-                array(
-                    'display_name' => $login,
-                )
-            );
-
-            return $result;
-        }
-    }
-
-    /**
-     * Always returns true because of SSO.
-     *
      * @param string $login Loginname
-     * @param string $pass  Password
+     * @param string $pass Password
      *
      * @return bool
      */
@@ -102,9 +59,9 @@ class Sso extends Auth implements Driver
     /**
      * Checks if the username of the remote user is equal to the login name.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param string $pass Password
+     * @param array $optionalData Optional data
      *
      * @return bool
      */
@@ -136,10 +93,47 @@ class Sso extends Auth implements Driver
     }
 
     /**
+     * Always returns true because of SSO.
+     *
+     * @param string $login
+     * @param string $pass
+     * @param string $domain
+     * @return bool
+     * @throws
+     */
+    public function add($login, $pass, $domain = ''): bool
+    {
+        if ($this->_config->get('ldap.ldapSupport')) {
+            // LDAP/AD + SSO
+            $authLdap = new AuthLdap($this->_config);
+            $result = $authLdap->add($login, null, $domain);
+
+            return $result;
+        } else {
+            // SSO without LDAP/AD
+            $user = new User($this->_config);
+            $result = $user->createUser($login, null, $domain);
+
+            if ($result) {
+                $user->setStatus('active');
+            }
+
+            // Set user information
+            $user->setUserData(
+                array(
+                    'display_name' => $login,
+                )
+            );
+
+            return $result;
+        }
+    }
+
+    /**
      * Returns 1, if $_SERVER['REMOTE_USER'] is set.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param array $optionalData Optional data
      *
      * @return int
      */

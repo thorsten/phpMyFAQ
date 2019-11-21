@@ -38,8 +38,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $PMF_LANG['ad_categ_trans_2'],
         $category->categoryName[$id]['name']);
 
-    $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $LANGCODE);
-    if ($selectedLanguage !== $LANGCODE) {
+    $selectedLanguage = Filter::filterInput(INPUT_GET, 'trlang', FILTER_SANITIZE_STRING, $faqLangCode);
+    if ($selectedLanguage !== $faqLangCode) {
         $action = 'showcategory';
         $showcat = 'yes';
     } else {

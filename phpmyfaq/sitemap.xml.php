@@ -31,19 +31,9 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_ALWAYS', 'always');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_HOURLY', 'hourly');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY', 'daily');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_WEEKLY', 'weekly');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_MONTHLY', 'monthly');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_YEARLY', 'yearly');
-define('PMF_SITEMAP_GOOGLE_CHANGEFREQ_NEVER', 'never');
 define('PMF_SITEMAP_GOOGLE_MAX_URL_LENGTH', 2048);
 define('PMF_SITEMAP_GOOGLE_MAX_URLS', 50000);
 define('PMF_SITEMAP_GOOGLE_MAX_FILE_LENGTH', 10485760); // 10MB
-define('PMF_SITEMAP_GOOGLE_PRIORITY_MIN', '0.0');
-define('PMF_SITEMAP_GOOGLE_PRIORITY_MAX', '1.0');
-define('PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT', '0.5');
 
 define('PMF_SITEMAP_GOOGLE_GET_GZIP', 'gz');
 define('PMF_SITEMAP_GOOGLE_GET_INDEX', 'idx');
@@ -57,10 +47,10 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require __DIR__.'/src/Bootstrap.php';
+require __DIR__ . '/src/Bootstrap.php';
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init('en');
 
@@ -69,21 +59,16 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 }
 
 // {{{ Functions
-function buildSiteMapNode($location, $lastModified = null, $changeFreq = null, $priority = null)
+function buildSiteMapNode($location, $lastModified = null)
 {
     if (!isset($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
-    if (!isset($changeFreq)) {
-        $changeFreq = PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY;
-    }
     $node =
-            '<url>'
-        .'<loc>'.Strings::htmlspecialchars($location).'</loc>'
-        .'<lastmod>'.$lastModified.'</lastmod>'
-        .'<changefreq>'.$changeFreq.'</changefreq>'
-        .(isset($priority) ? '<priority>'.$priority.'</priority>' : '')
-        .'</url>';
+        '<url>'
+        . '<loc>' . Strings::htmlspecialchars($location) . '</loc>'
+        . '<lastmod>' . $lastModified . '</lastmod>'
+        . '</url>';
 
     return $node;
 }
@@ -109,25 +94,19 @@ if (count($items) > 0) {
 
 // Sitemap header
 $siteMap =
-        '<?xml version="1.0" encoding="UTF-8"?>'
-    .'<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
-    .' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
-    .' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
-    .' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
+    '<?xml version="1.0" encoding="UTF-8"?>'
+    . '<urlset xmlns="http://www.google.com/schemas/sitemap/0.9"'
+    . ' xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"'
+    . ' xsi:schemaLocation="http://www.google.com/schemas/sitemap/0.9'
+    . ' http://www.google.com/schemas/sitemap/0.84/sitemap.xsd">';
 // 1st entry: the faq server itself
 $siteMap .= buildSiteMapNode(
     $faqConfig->getDefaultUrl(),
-    Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false),
-    PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
-    PMF_SITEMAP_GOOGLE_PRIORITY_MAX
+    Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false)
 );
 
 // nth entry: each faq
 foreach ($items as $item) {
-    $priority = PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT;
-    if (($visitsMax - $visitMin) > 0) {
-        $priority = sprintf('%.1f', PMF_SITEMAP_GOOGLE_PRIORITY_DEFAULT*(1 + (($item['visits'] - $visitMin)/($visitsMax - $visitMin))));
-    }
     // a. We use plain PMF urls w/o any SEO schema
     $link = str_replace($_SERVER['SCRIPT_NAME'], '/index.php', $item['url']);
     // b. We use SEO PMF urls
@@ -140,11 +119,7 @@ foreach ($items as $item) {
     }
     $siteMap .= buildSiteMapNode(
         $link,
-        Date::createIsoDate($item['date'], DATE_W3C),
-        // @todo: manage changefreq node with the info provided by faqchanges,
-        // if this will not add a big load to the server (+1 query/faq)
-        PMF_SITEMAP_GOOGLE_CHANGEFREQ_DAILY,
-        $priority
+        Date::createIsoDate($item['date'], DATE_ISO8601)
     );
 }
 
@@ -155,8 +130,8 @@ if (!is_null($getGzip) && (1 == $getGzip)) {
     if (function_exists('gzencode')) {
         $sitemapGz = gzencode($siteMap);
         header('Content-Type: application/x-gzip');
-        header('Content-Disposition: attachment; filename="'.PMF_SITEMAP_GOOGLE_FILENAME_GZ.'"');
-        header('Content-Length: '.strlen($sitemapGz));
+        header('Content-Disposition: attachment; filename="' . PMF_SITEMAP_GOOGLE_FILENAME_GZ . '"');
+        header('Content-Length: ' . strlen($sitemapGz));
         echo $sitemapGz;
     } else {
         $http = new HttpHelper();
@@ -164,8 +139,8 @@ if (!is_null($getGzip) && (1 == $getGzip)) {
     }
 } else {
     header('Content-Type: text/xml');
-    header('Content-Disposition: inline; filename="'.PMF_SITEMAP_GOOGLE_FILENAME.'"');
-    header('Content-Length: '.strlen($siteMap));
+    header('Content-Disposition: inline; filename="' . PMF_SITEMAP_GOOGLE_FILENAME . '"');
+    header('Content-Length: ' . strlen($siteMap));
     echo $siteMap;
 }
 

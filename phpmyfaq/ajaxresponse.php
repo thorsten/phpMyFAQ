@@ -23,10 +23,10 @@ use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Permission\MediumPermission;
-use phpMyFAQ\Strings;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
 define('IS_VALID_PHPMYFAQ', null);
@@ -51,7 +51,7 @@ require_once 'lang/language_en.php';
 
 if (Language::isASupportedLanguage($ajaxLanguage)) {
     $languageCode = trim($ajaxLanguage);
-    require_once 'lang/language_'.$languageCode.'.php';
+    require_once 'lang/language_' . $languageCode . '.php';
 } else {
     $languageCode = 'en';
     require_once 'lang/language_en.php';
@@ -73,24 +73,24 @@ if (!$user instanceof CurrentUser) {
     $user = CurrentUser::getFromSession($faqConfig);
 }
 if (isset($user) && is_object($user)) {
-    $current_user = $user->getUserId();
+    $currentUser = $user->getUserId();
     if ($user->perm instanceof MediumPermission) {
-        $current_groups = $user->perm->getUserGroups($current_user);
+        $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $current_groups = array(-1);
+        $currentGroups = array(-1);
     }
-    if (0 == count($current_groups)) {
-        $current_groups = array(-1);
+    if (0 == count($currentGroups)) {
+        $currentGroups = array(-1);
     }
 } else {
     $user = new CurrentUser($faqConfig);
-    $current_user = -1;
-    $current_groups = array(-1);
+    $currentUser = -1;
+    $currentGroups = array(-1);
 }
 
-$category = new Category($faqConfig, $current_groups);
-$category->setUser($current_user);
-$category->setGroups($current_groups);
+$category = new Category($faqConfig, $currentGroups);
+$category->setUser($currentUser);
+$category->setGroups($currentGroups);
 $category->transform(0);
 $category->buildTree();
 

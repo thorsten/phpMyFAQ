@@ -22,69 +22,50 @@ namespace phpMyFAQ;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Lars Tiedemann <php@larstiedemann.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2005-09-30
  */
-
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Auth.
- *
+ * Class Auth
  * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-30
  */
 class Auth
 {
-    /**
-     * Error constants.
-     *
-     * @var const
-     */
+    /** @var string */
     const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
-
-    /**
-     * p container that stores the encryption object.
-     *
-     * @var Encryption
-     */
-    protected $encContainer = null;
-
     /**
      * public array that contains error messages.
      *
      * @var array
      */
     public $errors = [];
-
     /**
-     * Short description of attribute read_only.
+     * p container that stores the encryption object.
      *
-     * @var bool
+     * @var Encryption
      */
-    private $readOnly = false;
-
+    protected $encContainer = null;
     /**
      * Configuration.
      *
      * @var Configuration
      */
     protected $_config = null;
+    /**
+     * Short description of attribute read_only.
+     *
+     * @var bool
+     */
+    private $readOnly = false;
 
     /**
      * Constructor.
@@ -127,7 +108,7 @@ class Auth
             $this->errors = array((string)$this->errors);
         }
         foreach ($this->errors as $error) {
-            $message .= $error."\n";
+            $message .= $error . "\n";
         }
 
         $message .= $this->encContainer->error();
@@ -160,7 +141,7 @@ class Auth
             return $this;
         }
 
-        $authClass = '\phpMyFAQ\\Auth\\'.$method;
+        $authClass = '\phpMyFAQ\\Auth\\Auth' . $method;
 
         if (!class_exists($authClass)) {
             $this->errors[] = self::PMF_ERROR_USER_NO_AUTHTYPE;
@@ -178,7 +159,7 @@ class Auth
      *
      * @return bool
      */
-    public function setReadOnly($readOnly = null): bool 
+    public function setReadOnly($readOnly = null): bool
     {
         if ($readOnly === null) {
             return $this->readOnly;
@@ -208,11 +189,11 @@ class Auth
      * with a salt.
      *
      * @param string $encryptedPassword Encrypted password
-     * @param string $clearPassword     Clear Password
-     *
-     * @deprecated
+     * @param string $clearPassword Clear Password
      *
      * @return bool
+     * @deprecated
+     *
      */
     public function checkEncryptedPassword($encryptedPassword, $clearPassword): bool
     {

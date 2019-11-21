@@ -21,21 +21,22 @@
  */
 
 use phpMyFAQ\Attachment\Factory;
-use phpMyFAQ\Auth\Ldap as AuthLdap;
-use phpMyFAQ\Auth\Sso as AuthSso;
+use phpMyFAQ\Auth\AuthLdap as AuthLdap;
+use phpMyFAQ\Auth\AuthSso as AuthSso;
 use phpMyFAQ\Category;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\HttpHelper as HelperHttp;
-use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
+use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Seo;
 use phpMyFAQ\Services;
 use phpMyFAQ\Session;
-use phpMyFAQ\Seo;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
 use phpMyFAQ\Tags;
@@ -52,7 +53,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require __DIR__.'/src/Bootstrap.php';
+require __DIR__ . '/src/Bootstrap.php';
 
 //
 // HTTP Helper
@@ -63,21 +64,21 @@ $http = new HelperHttp();
 // Get language (default: english)
 //
 $Language = new Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require_once 'lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
 $showCaptcha = Filter::filterInput(INPUT_GET, 'gen', FILTER_SANITIZE_STRING);
-if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE) && is_null($showCaptcha)) {
+if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode) && is_null($showCaptcha)) {
     // Overwrite English strings with the ones we have in the current language,
     // but don't include UTF-8 encoded files, these will break the captcha images
-    if (!file_exists('lang/language_'.$LANGCODE.'.php')) {
-        $LANGCODE = 'en';
+    if (!file_exists('lang/language_' . $faqLangCode . '.php')) {
+        $faqLangCode = 'en';
     }
-    require_once 'lang/language_'.$LANGCODE.'.php';
+    require_once 'lang/language_' . $faqLangCode . '.php';
 } else {
-    $LANGCODE = 'en';
+    $faqLangCode = 'en';
 }
 
 //Load plurals support for selected language
@@ -86,7 +87,7 @@ $plr = new Plurals($PMF_LANG);
 //
 // Initializing static string wrapper
 //
-Strings::init($LANGCODE);
+Strings::init($faqLangCode);
 
 /*
  * Initialize attachment factory
@@ -130,7 +131,7 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
             $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
         } catch (Exception $e) {
-            $error = $e->getMessage().'<br>';
+            $error = $e->getMessage() . '<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
@@ -144,13 +145,13 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
                 $action = $faqaction; // SSO logins don't have $faqaction
             }
         } else {
-            $error = $error.$PMF_LANG['ad_auth_fail'].' ('.$faqusername.')';
+            $error = $error . $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')';
             $loginVisibility = '';
             $action = 'password' === $action ? 'password' : 'login';
         }
     } else {
         // error
-        $error = $error.$PMF_LANG['ad_auth_fail'];
+        $error = $error . $PMF_LANG['ad_auth_fail'];
         $loginVisibility = '';
         $action = 'password' === $action ? 'password' : 'login';
     }
@@ -179,9 +180,9 @@ if ('logout' === $action && isset($auth)) {
     $action = 'main';
     $ssoLogout = $faqConfig->get('security.ssoLogoutRedirect');
     if ($faqConfig->get('security.ssoSupport') && !empty($ssoLogout)) {
-        header('Location: '.$ssoLogout);
+        header('Location: ' . $ssoLogout);
     } else {
-        header('Location: '.$faqConfig->getDefaultUrl());
+        header('Location: ' . $faqConfig->getDefaultUrl());
     }
 }
 
@@ -189,18 +190,18 @@ if ('logout' === $action && isset($auth)) {
 // Get current user and group id - default: -1
 //
 if (!is_null($user) && $user instanceof CurrentUser) {
-    $current_user = $user->getUserId();
-    if ($user->perm instanceof Medium) {
-        $current_groups = $user->perm->getUserGroups($current_user);
+    $currentUser = $user->getUserId();
+    if ($user->perm instanceof MediumPermission) {
+        $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $current_groups = [-1];
+        $currentGroups = [-1];
     }
-    if (0 == count($current_groups)) {
-        $current_groups = [-1];
+    if (0 == count($currentGroups)) {
+        $currentGroups = [-1];
     }
 } else {
-    $current_user = -1;
-    $current_groups = [-1];
+    $currentUser = -1;
+    $currentGroups = [-1];
 }
 
 //
@@ -234,14 +235,10 @@ if (!$internal) {
             $pmfExceptions[] = $e->getMessage();
         }
     } else {
-        try {
-            if (!is_null($sidCookie)) {
-                $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
-            } else {
-                $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
-            }
-        } catch (Exception $e) {
-            $pmfExceptions[] = $e->getMessage();
+        if (!is_null($sidCookie)) {
+            $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
+        } else {
+            $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
         }
     }
 }
@@ -254,18 +251,19 @@ if ($faqConfig->get('main.enableUserTracking')) {
     if (isset($sessionId)) {
         $faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId);
         if (is_null($sidCookie)) {
-            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sessionId, $LANGCODE);
+            $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sessionId, $faqLangCode);
         }
     } elseif (is_null($sidGet) || is_null($sidCookie)) {
         if (is_null($sidCookie)) {
             if (!is_null($sidGet)) {
-                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $LANGCODE);
+                $sids = sprintf('sid=%d&amp;lang=%s&amp;', $sidGet, $faqLangCode);
             }
         }
     }
 } else {
-    if (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId, $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
-        $sids = sprintf('lang=%s&amp;', $LANGCODE);
+    if (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId,
+        $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
+        $sids = sprintf('lang=%s&amp;', $faqLangCode);
     }
 }
 
@@ -276,7 +274,7 @@ $lang = Filter::filterInput(INPUT_POST, 'artlang', FILTER_SANITIZE_STRING);
 if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
     $lang = Filter::filterInput(INPUT_GET, 'artlang', FILTER_SANITIZE_STRING);
     if (is_null($lang) && !Language::isASupportedLanguage($lang)) {
-        $lang = $LANGCODE;
+        $lang = $faqLangCode;
     }
 }
 
@@ -289,15 +287,15 @@ $searchTerm = Filter::filterInput(INPUT_GET, 'search', FILTER_SANITIZE_STRIPPED)
 // Create a new FAQ object
 //
 $faq = new Faq($faqConfig);
-$faq->setUser($current_user);
-$faq->setGroups($current_groups);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
 //
 // Create a new Category object
 //
-$category = new Category($faqConfig, $current_groups, true);
-$category->setUser($current_user);
-$category->setGroups($current_groups);
+$category = new Category($faqConfig, $currentGroups, true);
+$category->setUser($currentUser);
+$category->setGroups($currentGroups);
 
 //
 // Create a new Tags object
@@ -317,8 +315,8 @@ $currentPageUrl = $faqLink->getCurrentUrl();
 $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 if (!is_null($id)) {
     $faq->getRecord($id);
-    $title = ' - '.$faq->faqRecord['title'];
-    $keywords = ','.$faq->faqRecord['keywords'];
+    $title = ' - ' . $faq->faqRecord['title'];
+    $keywords = ',' . $faq->faqRecord['keywords'];
     $metaDescription = str_replace('"', '', strip_tags($faq->getRecordPreview($id)));
     $url = sprintf(
         '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
@@ -333,7 +331,7 @@ if (!is_null($id)) {
     $currentPageUrl = $faqLink->toString(true);
 } else {
     $id = '';
-    $title = ' -  powered by phpMyFAQ '.$faqConfig->get('main.currentVersion');
+    $title = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
 }
@@ -343,14 +341,14 @@ if (!is_null($id)) {
 //
 $solutionId = Filter::filterInput(INPUT_GET, 'solution_id', FILTER_VALIDATE_INT);
 if (!is_null($solutionId)) {
-    $title = ' -  powered by phpMyFAQ '.$faqConfig->get('main.currentVersion');
+    $title = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords = '';
     $faqData = $faq->getIdFromSolutionId($solutionId);
     if (is_array($faqData)) {
         $id = $faqData['id'];
         $lang = $faqData['lang'];
-        $title = ' - '.$faq->getRecordTitle($id);
-        $keywords = ','.$faq->getRecordKeywords($id);
+        $title = ' - ' . $faq->getRecordTitle($id);
+        $keywords = ',' . $faq->getRecordKeywords($id);
         $metaDescription = str_replace('"', '', Utils::makeShorterText(strip_tags($faqData['content']), 12));
         $url = sprintf(
             '%sindex.php?%saction=faq&cat=%d&id=%d&artlang=%s',
@@ -371,7 +369,7 @@ if (!is_null($solutionId)) {
 //
 $tag_id = Filter::filterInput(INPUT_GET, 'tagging_id', FILTER_VALIDATE_INT);
 if (!is_null($tag_id)) {
-    $title = ' - '.$oTag->getTagNameById($tag_id);
+    $title = ' - ' . $oTag->getTagNameById($tag_id);
     $keywords = '';
 }
 
@@ -380,7 +378,7 @@ if (!is_null($tag_id)) {
 //
 $letter = Filter::filterInput(INPUT_GET, 'letter', FILTER_SANITIZE_STRIPPED);
 if (!is_null($letter) && (1 == Strings::strlen($letter))) {
-    $title = ' - '.$letter.'...';
+    $title = ' - ' . $letter . '...';
     $keywords = $letter;
 }
 
@@ -401,7 +399,7 @@ if ($cat != 0) {
     $category->expandTo($cat);
 }
 if (isset($cat) && ($cat != 0) && ($id == '') && isset($category->categoryName[$cat]['name'])) {
-    $title = ' - '.$category->categoryName[$cat]['name'];
+    $title = ' - ' . $category->categoryName[$cat]['name'];
     $metaDescription = $category->categoryName[$cat]['description'];
 }
 
@@ -416,9 +414,9 @@ if (!isset($allowedVariables[$action])) {
 // Select the template for the requested page
 //
 if ($action !== 'main') {
-    $includeTemplate = $action.'.html';
-    $includePhp = $action.'.php';
-    $renderUri = '?sid='.$sessionId;
+    $includeTemplate = $action . '.html';
+    $includePhp = $action . '.php';
+    $renderUri = '?sid=' . $sessionId;
 } else {
     if (isset($solutionId) && is_numeric($solutionId)) {
         // show the record with the solution ID
@@ -428,7 +426,7 @@ if ($action !== 'main') {
         $includeTemplate = 'startpage.html';
         $includePhp = 'startpage.php';
     }
-    $renderUri = '?sid='.$sessionId;
+    $renderUri = '?sid=' . $sessionId;
 }
 
 //
@@ -494,7 +492,7 @@ shuffle($keywordsArray);
 $keywords = implode(',', $keywordsArray);
 
 if (!is_null($error)) {
-    $loginMessage = '<p class="error">'.$error.'</p>';
+    $loginMessage = '<p class="error">' . $error . '</p>';
 } else {
     $loginMessage = '';
 }
@@ -503,11 +501,11 @@ $faqSeo = new Seo($faqConfig);
 
 $tplMainPage = [
     'msgLoginUser' => $user->isLoggedIn() ? $user->getUserData('display_name') : $PMF_LANG['msgLoginUser'],
-    'title' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ').$title),
+    'title' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ') . $title),
     'baseHref' => $faqSystem->getSystemUri($faqConfig),
     'version' => $faqConfig->get('main.currentVersion'),
     'header' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ'))),
-    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ').$title)),
+    'metaTitle' => Strings::htmlspecialchars(str_replace('"', '', $faqConfig->get('main.titleFAQ') . $title)),
     'metaDescription' => Strings::htmlspecialchars($metaDescription),
     'metaKeywords' => Strings::htmlspecialchars($keywords),
     'metaPublisher' => $faqConfig->get('main.metaPublisher'),
@@ -518,7 +516,7 @@ $tplMainPage = [
     'currentPageUrl' => $currentPageUrl,
     'action' => $action,
     'dir' => $PMF_LANG['dir'],
-    'writeSendAdress' => '?'.$sids.'action=search',
+    'writeSendAdress' => '?' . $sids . 'action=search',
     'searchBox' => $PMF_LANG['msgSearch'],
     'searchTerm' => $searchTerm,
     'categoryId' => ($cat === 0) ? '%' : (int)$cat,
@@ -529,17 +527,17 @@ $tplMainPage = [
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'renderUri' => $renderUri,
-    'switchLanguages' => Language::selectLanguages($LANGCODE, true),
+    'switchLanguages' => Language::selectLanguages($faqLangCode, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-    'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> '.
-                                $faqConfig->get('main.currentVersion'),
-    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">'.$PMF_LANG['msgRegistration'].'</a>' : '',
-    'sendPassword' => '<a href="?action=password">'.$PMF_LANG['lostPassword'].'</a>',
-    'msgFullName' => $PMF_LANG['ad_user_loggedin'].$user->getLogin(),
+    'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
+        $faqConfig->get('main.currentVersion'),
+    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
+    'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
+    'msgFullName' => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
     'msgLoginName' => $user->getUserData('display_name'),
     'loginHeader' => $PMF_LANG['msgLoginUser'],
     'loginMessage' => $loginMessage,
-    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig).'?'.Filter::getFilteredQueryString(),
+    'writeLoginPath' => $faqSystem->getSystemUri($faqConfig) . '?' . Filter::getFilteredQueryString(),
     'faqloginaction' => $action,
     'login' => $PMF_LANG['ad_auth_ok'],
     'username' => $PMF_LANG['ad_auth_user'],
@@ -566,12 +564,11 @@ if ('main' == $action || 'show' == $action) {
         'index',
         'globalSearchBox',
         [
-            'writeSendAdress' => '?'.$sids.'action=search',
+            'writeSendAdress' => '?' . $sids . 'action=search',
             'searchBox' => $PMF_LANG['msgSearch'],
             'categoryId' => ($cat === 0) ? '%' : (int)$cat,
             'msgSearch' => sprintf(
-                '<a class="help" href="%sindex.php?action=search">%s</a>',
-                $faqSystem->getSystemUri($faqConfig),
+                '<a class="help" href="./index.php?action=search">%s</a>',
                 $PMF_LANG['msgAdvancedSearch']
             ),
         ]
@@ -580,33 +577,33 @@ if ('main' == $action || 'show' == $action) {
 
 if ($faqConfig->get('main.enableRewriteRules')) {
     $tplNavigation = [
-        'msgSearch' => '<a class="nav-link" href="./search.html">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
-        'msgAddContent' => '<a class="nav-link" href="'.$faqSystem->getSystemUri($faqConfig).'addcontent.html">'.$PMF_LANG['msgAddContent'].'</a>',
-        'msgQuestion' => '<a class="nav-link" href="./ask.html">'.$PMF_LANG['msgQuestion'].'</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="./open.html">'.$PMF_LANG['msgOpenQuestions'].'</a>',
-        'msgContact' => '<a href="./contact.html">'.$PMF_LANG['msgContact'].'</a>',
-        'msgGlossary' => '<a href="./glossary.html">'.$PMF_LANG['ad_menu_glossary'].'</a>',
-        'backToHome' => '<a href="./index.html">'.$PMF_LANG['msgHome'].'</a>',
-        'allCategories' => '<a class="nav-link" href="./showcat.html">'.$PMF_LANG['msgShowAllCategories'].'</a>',
-        'faqOverview' => '<a href="./overview.html">'.$PMF_LANG['faqOverview'].'</a>',
-        'showSitemap' => '<a href="./sitemap/A/'.$LANGCODE.'.html">'.$PMF_LANG['msgSitemap'].'</a>',
+        'msgSearch' => '<a class="nav-link" href="./search.html">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
+        'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' . $PMF_LANG['msgAddContent'] . '</a>',
+        'msgQuestion' => '<a class="nav-link" href="./ask.html">' . $PMF_LANG['msgQuestion'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="./open.html">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgContact' => '<a href="./contact.html">' . $PMF_LANG['msgContact'] . '</a>',
+        'msgGlossary' => '<a href="./glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
+        'backToHome' => '<a href="./index.html">' . $PMF_LANG['msgHome'] . '</a>',
+        'allCategories' => '<a class="nav-link" href="./showcat.html">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
+        'faqOverview' => '<a href="./overview.html">' . $PMF_LANG['faqOverview'] . '</a>',
+        'showSitemap' => '<a href="./sitemap/A/' . $faqLangCode . '.html">' . $PMF_LANG['msgSitemap'] . '</a>',
         'opensearch' => './opensearch.xml',
-        'msgUserRemoval' => '<a href="./request-removal.html">'.$PMF_LANG['msgUserRemoval'].'</a>'
+        'msgUserRemoval' => '<a href="./request-removal.html">' . $PMF_LANG['msgUserRemoval'] . '</a>'
     ];
 } else {
     $tplNavigation = [
-        'msgSearch' => '<a class="nav-link" href="index.php?'.$sids.'action=search">'.$PMF_LANG['msgAdvancedSearch'].'</a>',
-        'msgAddContent' => '<a class="nav-link" href="index.php?'.$sids.'action=add&cat='.$cat.'">'.$PMF_LANG['msgAddContent'].'</a>',
-        'msgQuestion' => '<a class="nav-link" href="index.php?'.$sids.'action=ask&category_id='.$cat.'">'.$PMF_LANG['msgQuestion'].'</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="index.php?'.$sids.'action=open">'.$PMF_LANG['msgOpenQuestions'].'</a>',
-        'msgContact' => '<a href="index.php?'.$sids.'action=contact">'.$PMF_LANG['msgContact'].'</a>',
-        'msgGlossary' => '<a href="index.php?'.$sids.'action=glossary">'.$PMF_LANG['ad_menu_glossary'].'</a>',
-        'allCategories' => '<a class="nav-link" href="index.php?'.$sids.'action=show">'.$PMF_LANG['msgShowAllCategories'].'</a>',
-        'faqOverview' => '<a href="index.php?'.$sids.'action=overview">'.$PMF_LANG['faqOverview'].'</a>',
-        'backToHome' => '<a href="index.php?'.$sids.'">'.$PMF_LANG['msgHome'].'</a>',
-        'showSitemap' => '<a href="index.php?'.$sids.'action=sitemap&amp;lang='.$LANGCODE.'">'.$PMF_LANG['msgSitemap'].'</a>',
-        'opensearch' => $faqSystem->getSystemUri($faqConfig).'opensearch.php',
-        'msgUserRemoval' => '<a href="index.php?'.$sids.'action=request-removal">'.$PMF_LANG['msgUserRemoval'].'</a>',
+        'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
+        'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' . $PMF_LANG['msgAddContent'] . '</a>',
+        'msgQuestion' => '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' . $PMF_LANG['msgQuestion'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . $PMF_LANG['msgContact'] . '</a>',
+        'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
+        'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
+        'faqOverview' => '<a href="index.php?' . $sids . 'action=overview">' . $PMF_LANG['faqOverview'] . '</a>',
+        'backToHome' => '<a href="index.php?' . $sids . '">' . $PMF_LANG['msgHome'] . '</a>',
+        'showSitemap' => '<a href="index.php?' . $sids . 'action=sitemap&amp;lang=' . $faqLangCode . '">' . $PMF_LANG['msgSitemap'] . '</a>',
+        'opensearch' => $faqSystem->getSystemUri($faqConfig) . 'opensearch.php',
+        'msgUserRemoval' => '<a href="index.php?' . $sids . 'action=request-removal">' . $PMF_LANG['msgUserRemoval'] . '</a>',
     ];
 }
 
@@ -624,8 +621,7 @@ $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 if (isset($auth)) {
     if ($user->perm->checkRight($user->getUserId(), 'viewadminlink') || $user->isSuperAdmin()) {
         $adminSection = sprintf(
-            '<a class="dropdown-item" href="%s">%s</a>',
-            $faqSystem->getSystemUri($faqConfig).'admin/index.php',
+            '<a class="dropdown-item" href="./admin/index.php">%s</a>',
             $PMF_LANG['adminSection']
         );
     } else {
@@ -635,7 +631,7 @@ if (isset($auth)) {
     if ($faqConfig->get('ldap.ldapSupport')) {
         $userControlDropdown = '';
     } else {
-        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">'.$PMF_LANG['headerUserControlPanel'].'</a>';
+        $userControlDropdown = '<a class="dropdown-item" href="?action=ucp">' . $PMF_LANG['headerUserControlPanel'] . '</a>';
     }
 
     $template->parseBlock(
@@ -645,8 +641,8 @@ if (isset($auth)) {
             'msgUserControl' => $adminSection,
             'msgLoginName' => $user->getUserData('display_name'), // @deprecated
             'msgUserControlDropDown' => $userControlDropdown,
-            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">'.$PMF_LANG['ad_menu_RequestRemove'].'</a>',
-            'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">'.$PMF_LANG['ad_menu_logout'].'</a>',
+            'msgUserRemoval' => '<a class="dropdown-item" href="?action=request-removal">' . $PMF_LANG['ad_menu_RequestRemove'] . '</a>',
+            'msgLogoutUser' => '<a class="dropdown-item" href="?action=logout">' . $PMF_LANG['ad_menu_logout'] . '</a>',
             'activeUserControl' => ('ucp' == $action) ? 'active' : ''
         ]
     );
@@ -660,7 +656,7 @@ if (isset($auth)) {
         'index',
         'notLoggedIn',
         array(
-            'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a class="dropdown-item" href="?action=register">'.$PMF_LANG['msgRegisterUser'].'</a>' : '',
+            'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a class="dropdown-item" href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>' : '',
             'msgLoginUser' => sprintf($msgLoginUser, $PMF_LANG['msgLoginUser']),
             'activeRegister' => ('register' == $action) ? 'active' : '',
             'activeLogin' => ('login' == $action) ? 'active' : '',

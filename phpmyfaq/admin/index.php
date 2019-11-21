@@ -20,8 +20,8 @@
  */
 
 use phpMyFAQ\Attachment\Factory;
-use phpMyFAQ\Auth\Ldap;
-use phpMyFAQ\Auth\Sso;
+use phpMyFAQ\Auth\AuthLdap;
+use phpMyFAQ\Auth\AuthSso;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -47,25 +47,25 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 
 // get language (default: english)
 $Language = new Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
 require PMF_ROOT_DIR.'/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
-if (isset($LANGCODE) && Language::isASupportedLanguage($LANGCODE)) {
+if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     // Overwrite English strings with the ones we have in the current language
-    if (!file_exists(PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php')) {
-        $LANGCODE = 'en';
+    if (!file_exists(PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php')) {
+        $faqLangCode = 'en';
     }
-    require PMF_ROOT_DIR.'/lang/language_'.$LANGCODE.'.php';
+    require PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
 } else {
-    $LANGCODE = 'en';
+    $faqLangCode = 'en';
 }
 
 //
 // Initalizing static string wrapper
 //
-Strings::init($LANGCODE);
+Strings::init($faqLangCode);
 
 //
 // Set actual template set name
@@ -143,14 +143,14 @@ if (!is_null($faqusername) && !is_null($faqpassword)) {
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
         try {
-            $authLdap = new Ldap($faqConfig);
+            $authLdap = new AuthLdap($faqConfig);
             $user->addAuth($authLdap, 'ldap');
         } catch (Exception $e) {
             $error = $e->getMessage().'<br>';
         }
     }
     if ($faqConfig->get('security.ssoSupport')) {
-        $authSso = new Sso($faqConfig);
+        $authSso = new AuthSso($faqConfig);
         $user->addAuth($authSso, 'sso');
     }
     if ($user->login($faqusername, $faqpassword)) {

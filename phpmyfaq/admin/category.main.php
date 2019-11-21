@@ -282,7 +282,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg') && $csrfCheck) {
     }
 
     // Lists all categories
-    $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $LANGCODE);
+    $lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING, $faqLangCode);
 
     // If we changed the category tree, unset the object
     if (isset($category)) {

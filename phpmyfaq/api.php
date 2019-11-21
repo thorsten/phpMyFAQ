@@ -3,8 +3,6 @@
 /**
  * The REST API.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -74,9 +72,9 @@ $language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $f
 // Set language
 //
 if (Language::isASupportedLanguage($language)) {
-    require LANGUAGE_DIR.'/language_'.$language.'.php';
+    require LANGUAGE_DIR . '/language_' . $language . '.php';
 } else {
-    require LANGUAGE_DIR.'/language_en.php';
+    require LANGUAGE_DIR . '/language_en.php';
 }
 $faqConfig->setLanguage($Language);
 
@@ -140,7 +138,7 @@ switch ($action) {
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         try {
             $searchResults = $search->search($searchString, false);
-            $url = $faqConfig->getDefaultUrl().'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
             $faqSearchResult->reviewResultset($searchResults);
             foreach ($faqSearchResult->getResultset() as $data) {
                 $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
@@ -216,7 +214,7 @@ switch ($action) {
         foreach ($attachments as $attachment) {
             $result[] = [
                 'filename' => $attachment->getFilename(),
-                'url' => $faqConfig->getDefaultUrl().$attachment->buildUrl(),
+                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
             ];
         }
         break;
@@ -261,7 +259,7 @@ switch ($action) {
             } else {
                 $result = [
                     'loggedin' => false,
-                    'error' => $PMF_LANG['ad_auth_fail'].' ('.$faqusername.')'
+                    'error' => $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')'
                 ];
             }
         } else {

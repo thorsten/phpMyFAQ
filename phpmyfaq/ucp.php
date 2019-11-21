@@ -15,15 +15,15 @@
  * @since 2012-01-12
  */
 
-use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -72,6 +72,6 @@ if ($user instanceof CurrentUser) {
 
 } else {
     // Redirect to login
-    header('Location: '.$faqConfig->getDefaultUrl());
+    header('Location: ' . $faqConfig->getDefaultUrl());
     exit();
 }

@@ -24,7 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -50,8 +50,8 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     );
 
     if (empty($records) || $category->getChildNodes($selectedCategoryId)) {
-        $subCategory = new Category($faqConfig, $current_groups, true);
-        $subCategory->setUser($current_user);
+        $subCategory = new Category($faqConfig, $currentGroups, true);
+        $subCategory->setUser($currentUser);
         $subCategory->transform($selectedCategoryId);
         if (empty($records)) {
             $records = $subCategory->viewTree();
@@ -88,7 +88,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'writeContent',
             'categoryImage',
             [
-                'categoryImage' => $faqConfig->getDefaultUrl().'/images/'.$categoryData->getImage(),
+                'categoryImage' => $faqConfig->getDefaultUrl() . '/images/' . $categoryData->getImage(),
             ]
         );
     }
@@ -96,7 +96,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     $template->parse(
         'writeContent',
         [
-            'categoryHeader' => $PMF_LANG['msgEntriesIn'].$categoryData->getName(),
+            'categoryHeader' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName(),
             'categoryDescription' => $categoryData->getDescription(),
             'categoryFaqsHeader' => $PMF_LANG['msgEntries'],
             'categoryContent' => $records,
@@ -109,7 +109,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'index',
         'breadcrumb',
         [
-            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'].$categoryData->getName()
+            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName()
         ]
     );
 

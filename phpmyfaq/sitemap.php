@@ -25,7 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -43,8 +43,8 @@ if (!is_null($letter) && (1 == Strings::strlen($letter))) {
 }
 
 $siteMap = new Sitemap($faqConfig);
-$siteMap->setUser($current_user);
-$siteMap->setGroups($current_groups);
+$siteMap->setUser($currentUser);
+$siteMap->setGroups($currentGroups);
 
 $template->parse(
     'writeContent',

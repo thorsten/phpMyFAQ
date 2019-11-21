@@ -101,15 +101,15 @@ class Factory
      * Fetch all record attachments.
      *
      * @param Configuration $config
-     * @param int               $recordId ID of the record
+     * @param int $recordId ID of the record
      *
      * @throws Exception
      *
-     * @return integer|null
+     * @return File[]
      */
-    public static function fetchByRecordId(Configuration $config, $recordId): array
+    public static function fetchByRecordId(Configuration $config, int $recordId): array
     {
-        $retval = [];
+        $files = [];
 
         $sql = sprintf(
             "SELECT
@@ -128,12 +128,12 @@ class Factory
         $result = $config->getDb()->fetchAll($config->getDb()->query($sql));
         if (!empty($result)) {
             foreach ($result as $item) {
-                $retval[] = self::create($item->id);
+                $files[] = self::create($item->id);
             }
         }
-        reset($retval);
+        reset($files);
 
-        return $retval;
+        return $files;
     }
 
     /**

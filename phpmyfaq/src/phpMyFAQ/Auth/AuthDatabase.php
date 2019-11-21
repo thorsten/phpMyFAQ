@@ -28,22 +28,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Auth_Db.
- *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-30
+ * Class AuthDatabase
+ * @package phpMyFAQ\Auth
  */
-class Database extends Auth implements Driver
+class AuthDatabase extends Auth implements AuthDriverInterface
 {
     /**
      * Database connection.
      *
-     * @var Driver
+     * @var AuthDriverInterface
      */
     private $db = null;
 
@@ -71,7 +64,7 @@ class Database extends Auth implements Driver
     public function add($login, $pass, $domain = ''): bool
     {
         if ($this->checkLogin($login) > 0) {
-            $this->errors[] = User::ERROR_USER_ADD.User::ERROR_USER_LOGIN_NOT_UNIQUE;
+            $this->errors[] = User::ERROR_USER_ADD . User::ERROR_USER_LOGIN_NOT_UNIQUE;
 
             return false;
         }
@@ -93,7 +86,7 @@ class Database extends Auth implements Driver
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_ADD.'error(): '.$error;
+            $this->errors[] = User::ERROR_USER_ADD . 'error(): ' . $error;
 
             return false;
         }
@@ -107,46 +100,36 @@ class Database extends Auth implements Driver
     }
 
     /**
-     * Changes the password for the account specified by login.
-     *
-     * Returns true on success, otherwise false.
-     *
-     * Error messages are added to the array errors.
+     * Checks the number of entries of given login name.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
+     * @param array $optionalData Optional data
      *
-     * @return bool
+     * @return int
      */
-    public function changePassword($login, $pass): bool
+    public function checkLogin($login, Array $optionalData = null): int
     {
-        $change = sprintf("
-            UPDATE
+        $check = sprintf("
+            SELECT
+                login
+            FROM
                 %sfaquserlogin
-            SET
-                pass = '%s'
             WHERE
                 login = '%s'",
             Db::getTablePrefix(),
-            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );
 
-        $change = $this->db->query($change);
+        $check = $this->db->query($check);
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_CHANGE.'error(): '.$error;
+            $this->errors[] = $error;
 
-            return false;
-        }
-        if (!$change) {
-            $this->errors[] = User::ERROR_USER_CHANGE;
-
-            return false;
+            return 0;
         }
 
-        return true;
+        return $this->db->numRows($check);
     }
 
     /**
@@ -174,7 +157,7 @@ class Database extends Auth implements Driver
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_DELETE.'error(): '.$error;
+            $this->errors[] = User::ERROR_USER_DELETE . 'error(): ' . $error;
 
             return false;
         }
@@ -194,9 +177,9 @@ class Database extends Auth implements Driver
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login        Loginname
-     * @param string $password     Password
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param string $password Password
+     * @param array $optionalData Optional data
      *
      * @return bool
      */
@@ -217,7 +200,7 @@ class Database extends Auth implements Driver
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = User::ERROR_USER_NOT_FOUND.'error(): '.$error;
+            $this->errors[] = User::ERROR_USER_NOT_FOUND . 'error(): ' . $error;
 
             return false;
         }
@@ -256,35 +239,45 @@ class Database extends Auth implements Driver
     }
 
     /**
-     * Checks the number of entries of given login name.
+     * Changes the password for the account specified by login.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * Returns true on success, otherwise false.
      *
-     * @return int
+     * Error messages are added to the array errors.
+     *
+     * @param string $login Loginname
+     * @param string $pass Password
+     *
+     * @return bool
      */
-    public function checkLogin($login, Array $optionalData = null): int
+    public function changePassword($login, $pass): bool
     {
-        $check = sprintf("
-            SELECT
-                login
-            FROM
+        $change = sprintf("
+            UPDATE
                 %sfaquserlogin
+            SET
+                pass = '%s'
             WHERE
                 login = '%s'",
             Db::getTablePrefix(),
+            $this->db->escape($this->encContainer->setSalt($login)->encrypt($pass)),
             $this->db->escape($login)
         );
 
-        $check = $this->db->query($check);
+        $change = $this->db->query($change);
         $error = $this->db->error();
 
         if (strlen($error) > 0) {
-            $this->errors[] = $error;
+            $this->errors[] = User::ERROR_USER_CHANGE . 'error(): ' . $error;
 
-            return 0;
+            return false;
+        }
+        if (!$change) {
+            $this->errors[] = User::ERROR_USER_CHANGE;
+
+            return false;
         }
 
-        return $this->db->numRows($check);
+        return true;
     }
 }

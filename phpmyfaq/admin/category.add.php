@@ -47,7 +47,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addcateg')) {
     $parentId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT, 0);
     ?>
                 <form enctype="multipart/form-data"  action="?action=savecategory" method="post">
-                    <input type="hidden" id="lang" name="lang" value="<?= $LANGCODE ?>">
+                    <input type="hidden" id="lang" name="lang" value="<?= $faqLangCode ?>">
                     <input type="hidden" name="parent_id" value="<?= $parentId ?>">
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 <?php

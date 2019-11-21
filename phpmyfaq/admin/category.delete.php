@@ -44,7 +44,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcateg')) {
             <div class="col-lg-12">
                 <form  action="?action=removecategory" method="post" accept-charset="utf-8">
                     <input type="hidden" name="cat" value="<?= $id ?>">
-                    <input type="hidden" name="lang" value="<?= $LANGCODE ?>">
+                    <input type="hidden" name="lang" value="<?= $faqLangCode ?>">
                     <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
                     <div class="form-group row">

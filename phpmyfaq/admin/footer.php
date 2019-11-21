@@ -73,7 +73,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 <?php
 if (isset($auth)) {
     ?>
-  <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $LANGCODE ?>" width="0" height="0"
+  <iframe id="keepPMFSessionAlive" src="session.keepalive.php?lang=<?= $faqLangCode ?>" width="0" height="0"
           style="display: none;"></iframe>
     <?php
     if (isset($auth) && (('takequestion' == $action) || ('editentry' == $action) || ('editpreview' == $action) ||
@@ -89,7 +89,7 @@ if (isset($auth)) {
             tinyMCE.init({
               // General options
               mode: 'exact',
-              language: '<?=(Language::isASupportedTinyMCELanguage($LANGCODE) ? $LANGCODE : 'en') ?>',
+              language: '<?=(Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en') ?>',
               elements: '<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               theme: 'modern',
               plugins: [

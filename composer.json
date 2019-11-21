@@ -40,7 +40,8 @@
         "abraham/twitteroauth": "^0.7.4",
         "myclabs/deep-copy": "1.3.1",
         "ext-json": "*",
-        "ext-xmlwriter": "*"
+        "ext-xmlwriter": "*",
+        "ext-zlib": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "5.*",

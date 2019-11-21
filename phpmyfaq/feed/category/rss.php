@@ -42,12 +42,12 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 // get language (default: english)
 //
 $Language = new Language($faqConfig);
-$LANGCODE = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 //
 // Initalizing static string wrapper
 //
-Strings::init($LANGCODE);
+Strings::init($faqLangCode);
 
 // Preload English strings
 require_once PMF_ROOT_DIR.'/lang/language_en.php';
@@ -81,18 +81,18 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 // Get current user and group id - default: -1
 //
 if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
-    $current_user = $user->getUserId();
+    $currentUser = $user->getUserId();
     if ($user->perm instanceof MediumPermission) {
-        $current_groups = $user->perm->getUserGroups($current_user);
+        $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $current_groups = array(-1);
+        $currentGroups = array(-1);
     }
-    if (0 == count($current_groups)) {
-        $current_groups = array(-1);
+    if (0 == count($currentGroups)) {
+        $currentGroups = array(-1);
     }
 } else {
-    $current_user = -1;
-    $current_groups = array(-1);
+    $currentUser = -1;
+    $currentGroups = array(-1);
 }
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
@@ -101,12 +101,12 @@ if (!$faqConfig->get('main.enableRssFeeds')) {
 
 $category_id = Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
 $category = new Category($faqConfig);
-$category->setUser($current_user);
-$category->setGroups($current_groups);
+$category->setUser($currentUser);
+$category->setGroups($currentGroups);
 
 $faq = new Faq($faqConfig);
-$faq->setUser($current_user);
-$faq->setGroups($current_groups);
+$faq->setUser($currentUser);
+$faq->setGroups($currentGroups);
 
 $records = $faq->getAllRecordPerCategory(
     $category_id,

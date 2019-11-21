@@ -7,27 +7,30 @@
  * a. using PHP CLI
  * b. using a Web Hit to this file
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2006-09-17
  */
 
+use phpMyFAQ\Faq;
+use phpMyFAQ\Language;
+use phpMyFAQ\Language\Plurals;
+use phpMyFAQ\Linkverifier;
+use phpMyFAQ\Strings;
+use phpMyFAQ\Utils;
+
 /**
  * This is the flag with which you define the language of this cron script.
  *
- * @var const en
+ * @var string en
  */
 define('LANGCODE', 'en');
 
@@ -41,7 +44,7 @@ $isRequestedByWebLocalhost = isset($_SERVER['REMOTE_ADDR']) && ('127.0.0.1' == $
 
 $isCronRequest = $isRequestedByCLI || $isRequestedByWebLocalhost;
 
-if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     // Hack: set dummy values for those entries evaluated during a Web request but not during a CLI request
     if ($isRequestedByCLI) {
         $_SERVER['HTTP_HOST'] = '';
@@ -50,26 +53,26 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
 
     define('IS_VALID_PHPMYFAQ', null);
 
-    require PMF_ROOT_DIR.'/src/Bootstrap.php';
+    require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
     // Preload English strings
-    require_once PMF_ROOT_DIR.'/lang/language_en.php';
+    require_once PMF_ROOT_DIR . '/lang/language_en.php';
 
     if ((LANGCODE != 'en') && Language::isASupportedLanguage(LANGCODE)) {
         // Overwrite English strings with the ones we have in the current language
-        require_once PMF_ROOT_DIR.'/lang/language_'.LANGCODE.'.php';
+        require_once PMF_ROOT_DIR . '/lang/language_' . LANGCODE . '.php';
     }
 
     //Load plurals support for selected language
-    $plr = new phpMyFAQ\Language_Plurals($PMF_LANG);
+    $plr = new Plurals($PMF_LANG);
 
     //
     // Initalizing static string wrapper
     //
     Strings::init(LANGCODE);
 
-    $oLnk = new phpMyFAQ\Linkverifier($faqConfig);
-    $faq = new phpMyFAQ\Faq($faqConfig);
+    $oLnk = new Linkverifier($faqConfig);
+    $faq = new Faq($faqConfig);
     $totStart = microtime(true);
 
     // Read the data directly from the faqdata table (all faq records in all languages)
@@ -81,28 +84,31 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     $_records = $faq->faqRecords;
     $tot = count($_records);
     $end = microtime(true);
-    $output  .= ' #'.$tot.', done in '.round($end - $start, 4).' sec.'.($isRequestedByWebLocalhost ? '' : "\n");
-    $output  .= ($isRequestedByWebLocalhost ? '' : "\n");
+    $output .= ' #' . $tot . ', done in ' . round($end - $start,
+            4) . ' sec.' . ($isRequestedByWebLocalhost ? '' : "\n");
+    $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
         echo '<pre>';
     }
-    $output = $output."\n";
+    $output = $output . "\n";
     echo $output;
 
     $i = 0;
     foreach ($_records as $_r) {
         ++$i;
         $output = '';
-        $output .= sprintf('%0'.strlen((string)$tot).'d', $i).'/'.$tot.'. Checking '.$_r['solution_id'].' ('.Utils::makeShorterText(strip_tags($_r['title']), 8).'):';
+        $output .= sprintf('%0' . strlen((string)$tot) . 'd',
+                $i) . '/' . $tot . '. Checking ' . $_r['solution_id'] . ' (' . Utils::makeShorterText(strip_tags($_r['title']),
+                8) . '):';
         $start = microtime(true);
         if ($oLnk->getEntryState($_r['id'], $_r['lang'], true) === true) {
             $output .= $oLnk->verifyArticleURL($_r['content'], $_r['id'], $_r['lang'], true);
         }
         $end = microtime(true);
-        $output .= ' done in '.round($end - $start, 4).' sec.';
+        $output .= ' done in ' . round($end - $start, 4) . ' sec.';
         $output .= ($isRequestedByWebLocalhost ? '' : "\n");
         if ($isRequestedByWebLocalhost) {
-            $output = $output."\n";
+            $output = $output . "\n";
         }
         echo $output;
     }
@@ -110,10 +116,10 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR.'/config/database.php')) {
     $output = '';
     $totEnd = microtime(true);
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
-    $output .= 'Done in '.round($totEnd - $totStart, 4).' sec.';
+    $output .= 'Done in ' . round($totEnd - $totStart, 4) . ' sec.';
     $output .= ($isRequestedByWebLocalhost ? '' : "\n");
     if ($isRequestedByWebLocalhost) {
-        $output = $output."\n";
+        $output = $output . "\n";
     }
     echo $output;
 

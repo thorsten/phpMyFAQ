@@ -22,8 +22,8 @@ use phpMyFAQ\Category;
 use phpMyFAQ\Comment;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\FaqHelper;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
@@ -58,7 +58,7 @@ $faqConfig->setLanguage($Language);
 
 if (Language::isASupportedLanguage($ajaxLang)) {
     $languageCode = trim($ajaxLang);
-    require_once 'lang/language_'.$languageCode.'.php';
+    require_once 'lang/language_' . $languageCode . '.php';
 } else {
     $languageCode = 'en';
     require_once 'lang/language_en.php';
@@ -176,7 +176,8 @@ switch ($action) {
         }
 
         if (!is_null($username) && !empty($username) && !empty($mailer) && !is_null($mailer) && !is_null($comment) &&
-            !empty($comment) && $stopWords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode, $type)) {
+            !empty($comment) && $stopWords->checkBannedWord($comment) && !$faq->commentDisabled($id, $languageCode,
+                $type)) {
             try {
                 $faqSession->userTracking('save_comment', $id);
             } catch (Exception $e) {
@@ -229,9 +230,9 @@ switch ($action) {
                 }
 
                 $commentMail =
-                    'User: '.$commentData['username'].', mailto:'.$commentData['usermail']."\n".
-                    'New comment posted on: '.$urlToContent.
-                    "\n\n".
+                    'User: ' . $commentData['username'] . ', mailto:' . $commentData['usermail'] . "\n" .
+                    'New comment posted on: ' . $urlToContent .
+                    "\n\n" .
                     wordwrap($comment, 72);
 
                 $send = [];
@@ -323,7 +324,7 @@ switch ($action) {
             !is_null($question) && !empty($question) && $stopWords->checkBannedWord(strip_tags($question)) &&
             !is_null($answer) && !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
-            Language::isASupportedLanguage($faqLanguage)))) {
+                    Language::isASupportedLanguage($faqLanguage)))) {
             $isNew = true;
             if (!is_null($faqId)) {
                 $isNew = false;
@@ -452,9 +453,9 @@ switch ($action) {
 
             // @todo let the email contains the faq article both as plain text and as HTML
             $mailer->message = html_entity_decode(
-                $PMF_LANG['msgMailCheck'])."\n\n".
-                $faqConfig->get('main.titleFAQ').': '.
-                $faqConfig->getDefaultUrl().'admin/?action=editentry&id='.$recordId.'&lang='.$faqLanguage;
+                    $PMF_LANG['msgMailCheck']) . "\n\n" .
+                $faqConfig->get('main.titleFAQ') . ': ' .
+                $faqConfig->getDefaultUrl() . 'admin/?action=editentry&id=' . $recordId . '&lang=' . $faqLanguage;
             $result = $mailer->send();
             unset($mailer);
 
@@ -526,7 +527,11 @@ switch ($action) {
 
                 foreach ($cleanQuestion as $word) {
                     if (!empty($word)) {
-                        $searchResult[] = $faqSearch->search($word, false);
+                        try {
+                            $searchResult[] = $faqSearch->search($word, false);
+                        } catch (Search\Exception $e) {
+                            $searchResult = [];
+                        }
                     }
                 }
                 foreach ($searchResult as $resultSet) {
@@ -570,14 +575,14 @@ switch ($action) {
 
                     $faq->addQuestion($questionData);
 
-                    $questionMail = 'User: '.$questionData['username'].
-                                ', mailto:'.$questionData['email']."\n".$PMF_LANG['msgCategory'].
-                                ': '.$categories[$questionData['category_id']]['name']."\n\n".
-                                wordwrap($question, 72)."\n\n".
-                                $faqConfig->getDefaultUrl().'admin/';
+                    $questionMail = 'User: ' . $questionData['username'] .
+                        ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .
+                        ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
+                        wordwrap($question, 72) . "\n\n" .
+                        $faqConfig->getDefaultUrl() . 'admin/';
 
                     $userId = $cat->getOwner($questionData['category_id']);
-                    $oUser  = new User($faqConfig);
+                    $oUser = new User($faqConfig);
                     $oUser->getUserById($userId);
 
                     $userEmail = $oUser->getUserData('email');
@@ -600,14 +605,14 @@ switch ($action) {
             } else {
                 $faq->addQuestion($questionData);
 
-                $questionMail = 'User: '.$questionData['username'].
-                                ', mailto:'.$questionData['email']."\n".$PMF_LANG['msgCategory'].
-                                ': '.$categories[$questionData['category_id']]['name']."\n\n".
-                                wordwrap($question, 72)."\n\n".
-                                $faqConfig->getDefaultUrl().'admin/';
+                $questionMail = 'User: ' . $questionData['username'] .
+                    ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .
+                    ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
+                    wordwrap($question, 72) . "\n\n" .
+                    $faqConfig->getDefaultUrl() . 'admin/';
 
                 $userId = $cat->getOwner($questionData['category_id']);
-                $oUser  = new User($faqConfig);
+                $oUser = new User($faqConfig);
                 $oUser->getUserById($userId);
 
                 $userEmail = $oUser->getUserData('email');
@@ -663,14 +668,14 @@ switch ($action) {
                 }
 
                 if ($isNowActive) {
-                    $adminMessage = 'This user has been automatically activated, you can still'.
-                                    ' modify the users permissions or decline membership by visiting the admin section';
+                    $adminMessage = 'This user has been automatically activated, you can still' .
+                        ' modify the users permissions or decline membership by visiting the admin section';
                 } else {
                     $adminMessage = 'To activate this user please use';
                 }
 
                 $text = sprintf(
-                    "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n".
+                    "New user has been registrated:\n\nName: %s\nLogin name: %s\n\n" .
                     '%s the administration interface at %s.',
                     $realname,
                     $loginName,
@@ -687,9 +692,9 @@ switch ($action) {
                 unset($mailer);
 
                 $message = array(
-                    'success' => trim($PMF_LANG['successMessage']).
-                                    ' '.
-                                    trim($PMF_LANG['msgRegThankYou']),
+                    'success' => trim($PMF_LANG['successMessage']) .
+                        ' ' .
+                        trim($PMF_LANG['msgRegThankYou']),
                 );
             }
         } else {
@@ -716,7 +721,8 @@ switch ($action) {
             $votingData = array(
                 'record_id' => $recordId,
                 'vote' => $vote,
-                'user_ip' => $userIp,);
+                'user_ip' => $userIp,
+            );
 
             if (!$rating->getNumberOfVotings($recordId)) {
                 $rating->addVoting($votingData);
@@ -796,22 +802,24 @@ switch ($action) {
         $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
         $attached = Filter::filterInput(INPUT_POST, 'message', FILTER_SANITIZE_STRIPPED);
         $mailto = Filter::filterInputArray(INPUT_POST,
-            array('mailto' => array('filter' => FILTER_VALIDATE_EMAIL,
-                        'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
+            array(
+                'mailto' => array(
+                    'filter' => FILTER_VALIDATE_EMAIL,
+                    'flags' => FILTER_REQUIRE_ARRAY | FILTER_NULL_ON_FAILURE,
                 ),
             )
         );
 
         if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
             is_array($mailto) && !empty($mailto['mailto'][0]) &&
-                $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))) {
+            $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
                 if (!empty($recipient)) {
                     $mailer = new Mail($faqConfig);
                     $mailer->setReplyTo($email, $author);
                     $mailer->addTo($recipient);
-                    $mailer->subject = $PMF_LANG['msgS2FMailSubject'].$author;
+                    $mailer->subject = $PMF_LANG['msgS2FMailSubject'] . $author;
                     $mailer->message = sprintf("%s\r\n\r\n%s\r\n%s\r\n\r\n%s",
                         $faqConfig->get('main.send2friendText'),
                         $PMF_LANG['msgS2FText2'],
@@ -859,7 +867,8 @@ switch ($action) {
 
         $userData = array(
             'display_name' => $author,
-            'email' => $email,);
+            'email' => $email,
+        );
         $success = $user->setUserData($userData);
 
         if (0 !== strlen($password) && 0 !== strlen($confirm)) {
@@ -894,10 +903,33 @@ switch ($action) {
 
             if ($loginExist && ($email == $user->getUserData('email'))) {
                 $consonants = array(
-                    'b', 'c', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'm', 'n', 'p', 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
+                    'b',
+                    'c',
+                    'd',
+                    'f',
+                    'g',
+                    'h',
+                    'j',
+                    'k',
+                    'l',
+                    'm',
+                    'n',
+                    'p',
+                    'r',
+                    's',
+                    't',
+                    'v',
+                    'w',
+                    'x',
+                    'y',
+                    'z',
                 );
                 $vowels = array(
-                    'a', 'e', 'i', 'o', 'u',
+                    'a',
+                    'e',
+                    'i',
+                    'o',
+                    'u',
                 );
                 $newPassword = '';
                 for ($i = 1; $i <= 4; ++$i) {
@@ -905,7 +937,7 @@ switch ($action) {
                     $newPassword .= $vowels[Utils::createRandomNumber(0, 4)];
                 }
                 $user->changePassword($newPassword);
-                $text = $PMF_LANG['lostpwd_text_1']."\nUsername: ".$username."\nNew Password: ".$newPassword."\n\n".$PMF_LANG['lostpwd_text_2'];
+                $text = $PMF_LANG['lostpwd_text_1'] . "\nUsername: " . $username . "\nNew Password: " . $newPassword . "\n\n" . $PMF_LANG['lostpwd_text_2'];
 
                 $mailer = new Mail($faqConfig);
                 $mailer->addTo($email);

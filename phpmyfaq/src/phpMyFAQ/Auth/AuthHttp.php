@@ -26,21 +26,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Class Http
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alberto Cabello <alberto@unex.es>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-03-01
+ * Class AuthHttp
+ * @package phpMyFAQ\Auth
  */
-class Http extends Auth implements Driver
+class AuthHttp extends Auth implements AuthDriverInterface
 {
     /**
      * Adds a new user account to the authentication table.
-     *
      * Returns true on success, otherwise false.
      *
      * @param string $login
@@ -64,7 +56,7 @@ class Http extends Auth implements Driver
      * Returns true as it's not possible via HTTP Auth.
      *
      * @param string $login Loginname
-     * @param string $pass  Password
+     * @param string $pass Password
      *
      * @return bool
      */
@@ -96,9 +88,9 @@ class Http extends Auth implements Driver
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login        Loginname
-     * @param string $pass         Password
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param string $pass Password
+     * @param array $optionalData Optional data
      *
      * @return bool
      */
@@ -118,8 +110,8 @@ class Http extends Auth implements Driver
     /**
      * Returns 1 or 0 for true or false.
      *
-     * @param string $login        Loginname
-     * @param array  $optionalData Optional data
+     * @param string $login Loginname
+     * @param array $optionalData Optional data
      *
      * @return int
      */

@@ -40,7 +40,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $currentLink = $_SERVER['SCRIPT_NAME'];
-    $currentLanguage = $languageCodes[strtoupper($LANGCODE)];
+    $currentLanguage = $languageCodes[strtoupper($faqLangCode)];
     $all_languages = [];
     $all_lang = [];
     $showcat = Filter::filterInput(INPUT_POST, 'showcat', FILTER_SANITIZE_STRING);
@@ -96,17 +96,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             $indent .= '&nbsp;&nbsp;&nbsp;';
         }
         // category translated in this language?
-        ($cat['lang'] == $LANGCODE) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
+        ($cat['lang'] == $faqLangCode) ? $catname = $cat['name'] : $catname = $cat['name'].' ('.$languageCodes[strtoupper($cat['lang'])].')';
 
         // show category name in actual language
         print '<td>';
-        if ($cat['lang'] != $LANGCODE) {
+        if ($cat['lang'] != $faqLangCode) {
             // translate category
             printf(
                 '<a href="%s?action=translatecategory&amp;cat=%s&amp;trlang=%s" title="%s"><span title="%s" class="fa fa-share"></span></a></a>',
                 $currentLink,
                 $cat['id'],
-                $LANGCODE,
+                $faqLangCode,
                 $PMF_LANG['ad_categ_translate'],
                 $PMF_LANG['ad_categ_translate']
             );
