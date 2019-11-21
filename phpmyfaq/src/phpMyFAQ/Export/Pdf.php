@@ -5,8 +5,6 @@ namespace phpMyFAQ\Export;
 /**
  * PDF Export class for phpMyFAQ.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,26 +17,23 @@ namespace phpMyFAQ\Export;
  * @since 2009-10-07
  */
 
+use Exception;
+use ParsedownExtra;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Export;
 use phpMyFAQ\Export\Pdf\Wrapper;
 use phpMyFAQ\Faq;
+use phpMyFAQ\Tags;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Export_Pdf.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * Class Pdf
+ * @package phpMyFAQ\Export
  */
 class Pdf extends Export
 {
@@ -62,9 +57,10 @@ class Pdf extends Export
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config   Configuration
+     * @param Faq $faq FaqHelper object
+     * @param Category $category Entity object
+     * @param Configuration $config Configuration
+     * @throws Exception
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
@@ -88,9 +84,9 @@ class Pdf extends Export
     /**
      * Generates the export.
      *
-     * @param int    $categoryId CategoryHelper Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param int $categoryId CategoryHelper Id
+     * @param bool $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
      *
      * @return string
      */
@@ -109,8 +105,8 @@ class Pdf extends Export
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator(
-            $this->_config->get('main.titleFAQ').
-            ' - powered by phpMyFAQ '.
+            $this->_config->get('main.titleFAQ') .
+            ' - powered by phpMyFAQ ' .
             $this->_config->get('main.currentVersion')
         );
 
@@ -145,11 +141,11 @@ class Pdf extends Export
                         0
                     );
 
-                    if ($this->tags instanceof PMF_Tags) {
+                    if ($this->tags instanceof Tags) {
                         $tags = $this->tags->getAllTagsById($faq['id']);
                     }
 
-                    $this->pdf->WriteHTML('<h2 align="center">'.$faq['topic'].'</h2>', true);
+                    $this->pdf->WriteHTML('<h2 style="text-align: center;">' . $faq['topic'] . '</h2>', true);
                     $this->pdf->Ln(10);
 
                     $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
@@ -164,18 +160,18 @@ class Pdf extends Export
 
                     if (!empty($faq['keywords'])) {
                         $this->pdf->Ln();
-                        $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'].' '.$faq['keywords']);
+                        $this->pdf->Write(5, $PMF_LANG['msgNewContentKeywords'] . ' ' . $faq['keywords']);
                     }
                     if (isset($tags) && 0 !== count($tags)) {
                         $this->pdf->Ln();
-                        $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'].': '.implode(', ', $tags));
+                        $this->pdf->Write(5, $PMF_LANG['ad_entry_tags'] . ': ' . implode(', ', $tags));
                     }
 
                     $this->pdf->Ln();
                     $this->pdf->Ln();
                     $this->pdf->Write(
                         5,
-                        $PMF_LANG['msgLastUpdateArticle'].Date::createIsoDate($faq['lastmodified'])
+                        $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($faq['lastmodified'])
                     );
                 }
             }
@@ -191,7 +187,7 @@ class Pdf extends Export
     /**
      * Builds the PDF delivery for the given faq.
      *
-     * @param array  $faqData
+     * @param array $faqData
      * @param string $filename
      *
      * @return string
@@ -202,7 +198,7 @@ class Pdf extends Export
 
         // Default filename: FAQ-<id>-<language>.pdf
         if (empty($filename)) {
-            $filename = 'FAQ-'.$faqData['id'].'-'.$faqData['lang'].'.pdf';
+            $filename = 'FAQ-' . $faqData['id'] . '-' . $faqData['lang'] . '.pdf';
         }
 
         $this->pdf->setFaq($faqData);
@@ -213,15 +209,15 @@ class Pdf extends Export
         // Set any item
         $this->pdf->SetTitle($faqData['title']);
         $this->pdf->SetCreator(
-            $this->_config->get('main.titleFAQ').
-            ' - powered by phpMyFAQ '.
+            $this->_config->get('main.titleFAQ') .
+            ' - powered by phpMyFAQ ' .
             $this->_config->get('main.currentVersion')
         );
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
         $this->pdf->SetDisplayMode('real');
         $this->pdf->Ln();
-        $this->pdf->WriteHTML('<h1 align="center">'.$faqData['title'].'</h1>', true);
+        $this->pdf->WriteHTML('<h1 style="text-align: center;">' . $faqData['title'] . '</h1>', true);
         $this->pdf->Ln();
         $this->pdf->Ln();
 
@@ -234,12 +230,12 @@ class Pdf extends Export
         $this->pdf->Ln(10);
         $this->pdf->Ln();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 11);
-        $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'].': #'.$faqData['solution_id']);
+        $this->pdf->Write(5, $PMF_LANG['ad_entry_solution_id'] . ': #' . $faqData['solution_id']);
         $this->pdf->SetAuthor($faqData['author']);
         $this->pdf->Ln();
-        $this->pdf->Write(5, $PMF_LANG['msgAuthor'].': '.$faqData['author']);
+        $this->pdf->Write(5, $PMF_LANG['msgAuthor'] . ': ' . $faqData['author']);
         $this->pdf->Ln();
-        $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'].$faqData['date']);
+        $this->pdf->Write(5, $PMF_LANG['msgLastUpdateArticle'] . $faqData['date']);
 
         return $this->pdf->Output($filename);
     }

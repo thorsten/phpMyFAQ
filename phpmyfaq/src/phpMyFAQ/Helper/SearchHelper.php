@@ -17,6 +17,7 @@ namespace phpMyFAQ\Helper;
  * @since 2009-09-07
  */
 
+use Exception;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Helper;
@@ -33,13 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class SearchHelper
- *
  * @package phpMyFAQ\Helper
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-07
  */
 class SearchHelper extends Helper
 {
@@ -127,7 +122,7 @@ class SearchHelper extends Helper
 
                 // Build the link to the faq record
                 $currentUrl = sprintf('%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
-                    Link::getSystemRelativeUri('ajaxresponse.php').'index.php',
+                    Link::getSystemRelativeUri('ajaxresponse.php') . 'index.php',
                     $this->sessionId,
                     $result->category_id,
                     $result->id,
@@ -200,9 +195,10 @@ class SearchHelper extends Helper
      * Renders the result page for the main search page.
      *
      * @param Resultset $resultSet
-     * @param int       $currentPage
+     * @param int $currentPage
      *
      * @return string
+     * @throws Exception
      */
     public function renderSearchResult(Resultset $resultSet, int $currentPage): string
     {
@@ -210,8 +206,8 @@ class SearchHelper extends Helper
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
-        $totalPages = ceil($numOfResults/$confPerPage);
-        $lastPage = $currentPage*$confPerPage;
+        $totalPages = ceil($numOfResults / $confPerPage);
+        $lastPage = $currentPage * $confPerPage;
         $firstPage = $lastPage - $confPerPage;
 
         if (0 < $numOfResults) {
@@ -285,7 +281,7 @@ class SearchHelper extends Helper
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
                 $html .= '<li>';
-                $html .= $this->renderScore($result->score*33);
+                $html .= $this->renderScore($result->score * 33);
                 $html .= sprintf('<strong>%s</strong>: %s<br>',
                     $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor()
@@ -311,8 +307,30 @@ class SearchHelper extends Helper
     }
 
     /**
+     * @param int $relevance
+     *
+     * @return string
+     */
+    private function renderScore(int $relevance = 0): string
+    {
+        $html = sprintf('<span title="%01.2f%%">', $relevance);
+
+        if (0 === (int)$relevance) {
+            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+        } elseif ($relevance < 33) {
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+        } elseif ($relevance < 66) {
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+        } else {
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>';
+        }
+
+        return $html . '</span>';
+    }
+
+    /**
      * @param Resultset $resultSet
-     * @param int       $recordId
+     * @param int $recordId
      *
      * @return string
      */
@@ -322,7 +340,7 @@ class SearchHelper extends Helper
         $numOfResults = $resultSet->getNumberOfResults();
 
         if ($numOfResults > 0) {
-            $html   .= '<ul>';
+            $html .= '<ul>';
             $counter = 0;
             foreach ($resultSet->getResultset() as $result) {
                 if ($counter >= 5) {
@@ -344,7 +362,7 @@ class SearchHelper extends Helper
                 $oLink->itemTitle = $result->question;
                 $oLink->text = $result->question;
                 $oLink->tooltip = $result->question;
-                $html .= '<li>'.$oLink->toHtmlAnchor().'</li>';
+                $html .= '<li>' . $oLink->toHtmlAnchor() . '</li>';
             }
             $html .= '</ul>';
         }
@@ -376,27 +394,5 @@ class SearchHelper extends Helper
         }
 
         return $html;
-    }
-
-    /**
-     * @param int $relevance
-     *
-     * @return string
-     */
-    private function renderScore(int $relevance = 0): string
-    {
-        $html = sprintf('<span title="%01.2f%%">', $relevance);
-
-        if (0 === (int)$relevance) {
-            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
-        } elseif ($relevance < 33) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
-        } elseif ($relevance < 66) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
-        } else {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>';
-        }
-
-        return $html.'</span>';
     }
 }

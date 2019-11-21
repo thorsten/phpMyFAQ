@@ -5,8 +5,6 @@ namespace phpMyFAQ\Instance;
 /**
  * The phpMyFAQ instances basic Elasticsearch class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
@@ -27,14 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance_Elasticsearch.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-25
+ * Class Elasticsearch
+ * @package phpMyFAQ\Instance
  */
 class Elasticsearch
 {
@@ -108,13 +100,47 @@ class Elasticsearch
     }
 
     /**
-     * Deletes the Elasticsearch index.
+     * Returns the basic phpMyFAQ index structure as raw array.
      *
      * @return array
      */
-    public function dropIndex()
+    private function getParams()
     {
-        return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
+        global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
+
+        return [
+            'index' => $this->esConfig['index'],
+            'body' => [
+                'settings' => [
+                    'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
+                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS,
+                    'analysis' => [
+                        'filter' => [
+                            'autocomplete_filter' => [
+                                'type' => 'edge_ngram',
+                                'min_gram' => 1,
+                                'max_gram' => 20
+                            ],
+                            'Language_stemmer' => [
+                                'type' => 'stemmer',
+                                'name' => $PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
+                            ]
+                        ],
+                        'analyzer' => [
+                            'autocomplete' => [
+                                'type' => 'custom',
+                                'tokenizer' => 'standard',
+                                'filter' => [
+                                    'lowercase',
+                                    'autocomplete_filter',
+                                    'Language_stemmer'
+                                ]
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ];
     }
 
     /**
@@ -152,6 +178,16 @@ class Elasticsearch
     public function getMapping()
     {
         return $this->client->indices()->getMapping();
+    }
+
+    /**
+     * Deletes the Elasticsearch index.
+     *
+     * @return array
+     */
+    public function dropIndex()
+    {
+        return $this->client->indices()->delete(['index' => $this->esConfig['index']]);
     }
 
     /**
@@ -215,7 +251,7 @@ class Elasticsearch
                 'category_id' => $faq['category_id']
             ];
 
-            if ($i%1000 == 0) {
+            if ($i % 1000 == 0) {
                 $responses = $this->client->bulk($params);
                 $params = ['body' => []];
                 unset($responses);
@@ -274,49 +310,5 @@ class Elasticsearch
         ];
 
         return $this->client->delete($params);
-    }
-
-    /**
-     * Returns the basic phpMyFAQ index structure as raw array.
-     *
-     * @return array
-     */
-    private function getParams()
-    {
-        global $PMF_ELASTICSEARCH_STEMMING_LANGUAGE;
-
-        return [
-            'index' => $this->esConfig['index'],
-            'body' => [
-                'settings' => [
-                    'number_of_shards' => PMF_ELASTICSEARCH_NUMBER_SHARDS,
-                    'number_of_replicas' => PMF_ELASTICSEARCH_NUMBER_REPLICAS,
-                    'analysis' => [
-                        'filter' => [
-                            'autocomplete_filter' => [
-                                'type' =>'edge_ngram',
-                                'min_gram' => 1,
-                                'max_gram' => 20
-                            ],
-                            'Language_stemmer'=>[
-                                'type' => 'stemmer',
-                                'name' => $PMF_ELASTICSEARCH_STEMMING_LANGUAGE[$this->config->getDefaultLanguage()]
-                            ]
-                        ],
-                        'analyzer' => [
-                            'autocomplete' => [
-                                'type' => 'custom',
-                                'tokenizer' => 'standard',
-                                'filter' => [
-                                    'lowercase',
-                                    'autocomplete_filter',
-                                    'Language_stemmer'
-                                ]
-                            ]
-                        ]
-                    ]
-                ]
-            ]
-        ];
     }
 }

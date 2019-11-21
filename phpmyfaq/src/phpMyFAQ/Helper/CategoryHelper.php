@@ -5,8 +5,6 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for phpMyFAQ categories.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -27,14 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_CategoryHelper.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-07
+ * Class CategoryHelper
+ * @package phpMyFAQ\Helper
  */
 class CategoryHelper extends Helper
 {

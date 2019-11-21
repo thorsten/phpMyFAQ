@@ -19,7 +19,7 @@
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\Administration;
+use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\PermissionHelper;
 use phpMyFAQ\System;
@@ -211,7 +211,7 @@ function renderInputForm($key, $type)
                 case 'seo.metaTagsCategories':
                 case 'seo.metaTagsPages':
                 case 'seo.metaTagsAdmin':
-                    $adminHelper = new Administration();
+                    $adminHelper = new AdministrationHelper();
                     echo $adminHelper->renderMetaRobotsDropdown($faqConfig->get($key));
                     break;
             }

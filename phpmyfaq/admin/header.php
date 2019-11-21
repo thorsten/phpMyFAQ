@@ -14,7 +14,7 @@
  * @since 2003-02-26
  */
 
-use phpMyFAQ\Helper\Administration;
+use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
@@ -50,7 +50,7 @@ $backupPage = false;
 $configurationPage = false;
 $edAutoSave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
-$adminHelper = new Administration();
+$adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);
 
 $secLevelEntries['user'] = $adminHelper->addMenuEntry('add_user+edit_user+delete_user', 'user',

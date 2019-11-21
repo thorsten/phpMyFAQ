@@ -17,6 +17,7 @@ namespace phpMyFAQ\Helper;
  * @since 2010-11-12
  */
 
+use Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
@@ -32,11 +33,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class FaqHelper
  * @package phpMyFAQ\Helper
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-11-12
  */
 class FaqHelper extends Helper
 {
@@ -65,15 +61,6 @@ class FaqHelper extends Helper
     public function setSsl($ssl)
     {
         $this->ssl = $ssl;
-    }
-
-    /**
-     * Returns current SSL mode.
-     * @return bool
-     */
-    public function getSsl(): bool
-    {
-        return $this->ssl;
     }
 
     /**
@@ -106,7 +93,7 @@ class FaqHelper extends Helper
         }
 
         return sprintf(
-            '<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" scrolling="no" frameborder="0" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
+            '<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
             $http,
             urlencode($url)
         );
@@ -202,7 +189,7 @@ class FaqHelper extends Helper
             $faq->faqRecord['id']
         );
 
-        $oLink = new Link(Link::getSystemRelativeUri().$faqUrl, $this->_config);
+        $oLink = new Link(Link::getSystemRelativeUri() . $faqUrl, $this->_config);
         $oLink->itemTitle = $faq->faqRecord['title'];
         $availableLanguages = $this->_config->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
@@ -228,6 +215,7 @@ class FaqHelper extends Helper
      * @param string $answer
      * @param integer $numWords
      * @return string
+     * @throws Exception
      */
     public function renderAnswerPreview($answer, $numWords): string
     {
@@ -259,7 +247,7 @@ class FaqHelper extends Helper
         // Get all FAQs
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
         $date = new Date($this->_config);
-        
+
         if (count($faq->faqRecords)) {
             $lastCategory = 0;
             foreach ($faq->faqRecords as $data) {
@@ -272,7 +260,7 @@ class FaqHelper extends Helper
                 $output .= sprintf('<p>%s: %s<br>%s',
                     $PMF_LANG['msgAuthor'],
                     $data['author'],
-                    $PMF_LANG['msgLastUpdateArticle'].$date->format($data['updated'])
+                    $PMF_LANG['msgLastUpdateArticle'] . $date->format($data['updated'])
                 );
                 $output .= '<hr>';
 

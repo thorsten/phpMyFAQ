@@ -5,8 +5,6 @@ namespace phpMyFAQ\Export;
 /**
  * JSON Export class for phpMyFAQ.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -22,8 +20,8 @@ namespace phpMyFAQ\Export;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -31,23 +29,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Export_Xml.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-29
+ * Class Json
+ * @package phpMyFAQ\Export
  */
 class Json extends Export
 {
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config   Configuration
+     * @param Faq $faq FaqHelper object
+     * @param Category $category Entity object
+     * @param Configuration $config Configuration
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
@@ -59,9 +51,9 @@ class Json extends Export
     /**
      * Generates the export.
      *
-     * @param int    $categoryId Entity Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param int $categoryId Entity Id
+     * @param bool $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
      *
      * @return string
      */

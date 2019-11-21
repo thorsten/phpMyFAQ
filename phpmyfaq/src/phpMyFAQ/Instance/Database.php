@@ -26,14 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Class Database.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-02-14
+ * Class Database
+ * @package phpMyFAQ\Instance
  */
 class Database
 {
@@ -50,10 +44,13 @@ class Database
      * @var string
      */
     private static $dbType = null;
-
+    /**
+     * @var Configuration
+     */
+    protected $config;
     /**
      * DROP TABLE statements.
-     * 
+     *
      * @var array
      */
     private $dropTableStmts = [
@@ -95,11 +92,6 @@ class Database
     ];
 
     /**
-     * @var Configuration
-     */
-    protected $config;
-
-    /**
      * Constructor.
      *
      * @param Configuration $config
@@ -113,24 +105,24 @@ class Database
      * Database factory.
      *
      * @param Configuration $config phpMyFAQ configuration container
-     * @param string            $type   Database management system type
-     *
-     * @throws Exception
+     * @param string $type Database management system type
      *
      * @return Driver
+     * @throws Exception
+     *
      */
     public static function factory(Configuration $config, $type)
     {
         self::$dbType = $type;
 
-        $class = '\phpMyFAQ\Instance\Database\\'.ucfirst($type);
+        $class = '\phpMyFAQ\Instance\Database\\' . ucfirst($type);
 
         if (class_exists($class)) {
             self::$instance = new $class($config);
 
             return self::$instance;
         } else {
-            throw new Exception('Invalid Database Type: '.$type);
+            throw new Exception('Invalid Database Type: ' . $type);
         }
     }
 
@@ -147,13 +139,6 @@ class Database
         }
 
         return self::$instance;
-    }
-
-    /**
-     * __clone() Magic method to prevent cloning.
-     */
-    private function __clone()
-    {
     }
 
     /**
@@ -174,5 +159,12 @@ class Database
         }
 
         return true;
+    }
+
+    /**
+     * __clone() Magic method to prevent cloning.
+     */
+    private function __clone()
+    {
     }
 }

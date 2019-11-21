@@ -18,7 +18,7 @@
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\LinkverifierHelper;
+use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
@@ -197,7 +197,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             }
 
             // Call Link Verification
-            LinkverifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);
+            LinkVerifierHelper::linkOndemandJavascript($recordId, $recordData['lang']);
 
             // If Elasticsearch is enabled, index new FAQ document
             if ($faqConfig->get('search.enableElasticsearch')) {

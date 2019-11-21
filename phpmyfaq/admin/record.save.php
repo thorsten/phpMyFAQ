@@ -20,7 +20,7 @@
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\LinkverifierHelper;
+use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Tags;
@@ -174,7 +174,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
 
         if ($recordId) {
             printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_entry_savedsuc']);
-            LinkverifierHelper::linkOndemandJavascript($recordId, $recordLang);
+            LinkVerifierHelper::linkOndemandJavascript($recordId, $recordLang);
         } else {
             printf(
                 '<p class="alert alert-danger">%s</p>',

@@ -28,12 +28,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class HttpHelper
  * @package phpMyFAQ\Helper
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-13
  */
 class HttpHelper extends Helper
 {
@@ -65,12 +59,12 @@ class HttpHelper extends Helper
     public function addHeader()
     {
         header('Expires: Thu, 07 Apr 1977 14:47:00 GMT');
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         header('Cache-Control: no-store, no-cache, must-revalidate');
         header('Cache-Control: post-check=0, pre-check=0', false);
         header('Pragma: no-cache');
         header('Vary: Negotiate,Accept');
-        header('Content-type: '.$this->contentType);
+        header('Content-type: ' . $this->contentType);
     }
 
     /**
@@ -90,6 +84,36 @@ class HttpHelper extends Helper
         if (false === $this->_config->get('main.enableGzipCompression') || !DEBUG) {
             ob_start('ob_gzhandler');
         }
+    }
+
+    /**
+     *  Sends the CORS header.
+     */
+    public function sendCorsHeader()
+    {
+        header('Access-Control-Allow-Origin: ' . $_SERVER['HTTP_ORIGIN']);
+    }
+
+    /**
+     * Returns the HTTP status code
+     * @return int
+     */
+    public function getStatusCode(): int
+    {
+        return $this->statusCode;
+    }
+
+    /**
+     * URL to redirect
+     * @param string $url
+     */
+    public function redirect(string $url)
+    {
+        // Before a redirection we must force the PHP session update
+        // for preventing data loss
+        session_write_close();
+        $this->sendStatus(301);
+        header('Location: ' . $url);
     }
 
     /**
@@ -121,35 +145,6 @@ class HttpHelper extends Helper
                 header('HTTP/1.1 500 Internal Server Error');
                 break;
         }
-    }
-
-    /**
-     *  Sends the CORS header.
-     */
-    public function sendCorsHeader() {
-        header('Access-Control-Allow-Origin: '.$_SERVER['HTTP_ORIGIN']);
-    }
-
-    /**
-     * Returns the HTTP status code
-     * @return int
-     */
-    public function getStatusCode(): int
-    {
-        return $this->statusCode;
-    }
-
-    /**
-     * URL to redirect
-     * @param string $url
-     */
-    public function redirect(string $url)
-    {
-        // Before a redirection we must force the PHP session update
-        // for preventing data loss
-        session_write_close();
-        $this->sendStatus(301);
-        header('Location: '.$url);
     }
 
     /**

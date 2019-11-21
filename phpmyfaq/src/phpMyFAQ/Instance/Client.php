@@ -22,21 +22,15 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
-use phpMyFAQ\Instance\Database as Database;
+use phpMyFAQ\Instance\Database as InstanceDatabase;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Client
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-31
+ * Class Client
+ * @package phpMyFAQ\Instance
  */
 class Client extends Instance
 {
@@ -101,7 +95,7 @@ class Client extends Instance
     {
         try {
             // First, create the client tables
-            $instanceDatabase = Database::factory($this->config, Database::getType());
+            $instanceDatabase = InstanceDatabase::factory($this->config, Database::getType());
             $instanceDatabase->createTables($prefix);
 
             // Then, copy data from the tables "faqconfig" , "faqright" and "faquser_right"
@@ -189,15 +183,5 @@ class Client extends Instance
     public function setClientUrl($clientUrl)
     {
         $this->clientUrl = $clientUrl;
-    }
-
-    /**
-     * Returns client URL.
-     *
-     * @return string
-     */
-    public function getClientUrl()
-    {
-        return $this->clientUrl;
     }
 }

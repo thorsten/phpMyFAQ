@@ -23,7 +23,7 @@
  * @since 2014-08-31
  */
 
-use phpMyFAQ\Helper\Administration;
+use phpMyFAQ\Helper\AdministrationHelper;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,13 +40,13 @@ use PHPUnit\Framework\TestCase;
 class AdministrationTest extends TestCase
 {
     /**
-     * @var Administration
+     * @var AdministrationHelper
      */
     protected $instance;
 
     protected function setUp()
     {
-        $this->instance = new Administration();
+        $this->instance = new AdministrationHelper();
     }
 
     public function testRenderMetaRobotsDropdown()

@@ -20,38 +20,33 @@ namespace phpMyFAQ\Export;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
+use XMLWriter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * HTML5
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * Class Html5
+ * @package phpMyFAQ\Export
  */
 class Html5 extends Export
 {
     /**
      * XMLWriter object.
      *
-     * @var \XMLWriter
+     * @var XMLWriter
      */
     private $xml = null;
 
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category CategoryHelper object
-     * @param Configuration $config   Configuration
+     * @param Faq $faq FaqHelper object
+     * @param Category $category CategoryHelper object
+     * @param Configuration $config Configuration
      *
      * return PMF_Export_Xhtml
      */
@@ -60,7 +55,7 @@ class Html5 extends Export
         $this->faq = $faq;
         $this->category = $category;
         $this->_config = $config;
-        $this->xml = new \XMLWriter();
+        $this->xml = new XMLWriter();
 
         $this->xml->openMemory();
         $this->xml->setIndent(true);
@@ -69,9 +64,9 @@ class Html5 extends Export
     /**
      * Generates the export.
      *
-     * @param int    $categoryId CategoryHelper Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param int $categoryId CategoryHelper Id
+     * @param bool $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
      *
      * @return string
      */
@@ -114,10 +109,10 @@ class Html5 extends Export
                 $this->xml->startElement('p');
                 $this->xml->writeCdata(html_entity_decode($data['content'], ENT_QUOTES, 'UTF-8'));
                 $this->xml->endElement();
-                $this->xml->writeElement('p', $PMF_LANG['msgAuthor'].': '.$data['author_email']);
+                $this->xml->writeElement('p', $PMF_LANG['msgAuthor'] . ': ' . $data['author_email']);
                 $this->xml->writeElement(
                     'p',
-                    $PMF_LANG['msgLastUpdateArticle'].Date::createIsoDate($data['lastmodified'])
+                    $PMF_LANG['msgLastUpdateArticle'] . Date::createIsoDate($data['lastmodified'])
                 );
 
                 $lastCategory = $data['category_id'];

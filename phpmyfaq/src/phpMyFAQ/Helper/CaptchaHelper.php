@@ -5,8 +5,6 @@ namespace phpMyFAQ\Helper;
 /**
  * Helper class for the default phpMyFAQ captcha.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,14 +22,8 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper;
 
 /**
- * Helper to render the default captcha
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-11
+ * Class CaptchaHelper
+ * @package phpMyFAQ\Helper
  */
 class CaptchaHelper extends Helper
 {
@@ -52,9 +44,9 @@ class CaptchaHelper extends Helper
      * Renders the captcha check.
      *
      * @param Captcha $captcha
-     * @param string      $action
-     * @param string      $legend
-     * @param bool        $auth
+     * @param string $action
+     * @param string $legend
+     * @param bool $auth
      *
      * @return string
      */

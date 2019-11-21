@@ -36,18 +36,18 @@ define('K_PATH_URL', '');
  * path to TCPDF
  *
  */
-define('K_PATH_MAIN', PMF_SRC_DIR.'/libs/tcpdf/');
+define('K_PATH_MAIN', PMF_SRC_DIR . '/libs/tcpdf/');
 
 /*
  * path for PDF fonts
  * use K_PATH_MAIN.'fonts/old/' for old non-UTF8 fonts
  */
-define('K_PATH_FONTS', K_PATH_MAIN.'fonts/');
+define('K_PATH_FONTS', K_PATH_MAIN . 'fonts/');
 
 /*
  * cache directory for temporary files (full path)
  */
-define('K_PATH_CACHE', PMF_ROOT_DIR.'/images/');
+define('K_PATH_CACHE', PMF_ROOT_DIR . '/images/');
 
 /*
  * cache directory for temporary files (url path)
@@ -57,12 +57,12 @@ define('K_PATH_URL_CACHE', K_PATH_CACHE);
 /*
  * images directory
  */
-define('K_PATH_IMAGES', K_PATH_MAIN.'images/');
+define('K_PATH_IMAGES', K_PATH_MAIN . 'images/');
 
 /*
  * blank image
  */
-define('K_BLANK_IMAGE', K_PATH_IMAGES.'_blank.png');
+define('K_BLANK_IMAGE', K_PATH_IMAGES . '_blank.png');
 
 /*
  * page format
@@ -187,20 +187,13 @@ define('K_TITLE_MAGNIFICATION', 1.3);
 /*
  * reduction factor for small font
  */
-define('K_SMALL_RATIO', 2/3);
+define('K_SMALL_RATIO', 2 / 3);
 
-require K_PATH_MAIN.'/tcpdf.php';
+require K_PATH_MAIN . '/tcpdf.php';
 
 /**
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Peter Beauvain <pbeauvain@web.de>
- * @author Olivier Plathey <olivier@fpdf.org>
- * @author Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
- * @copyright 2004-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-11-21
+ * Class Wrapper
+ * @package phpMyFAQ\Export\Pdf
  */
 class Wrapper extends \TCPDF
 {
@@ -236,21 +229,18 @@ class Wrapper extends \TCPDF
      * @var array
      */
     public $faq = [];
-
-    /**
-     * Question.
-     *
-     * @var string
-     */
-    private $question = '';
-
     /**
      * Configuration.
      *
      * @var Configuration
      */
     protected $_config = null;
-
+    /**
+     * Question.
+     *
+     * @var string
+     */
+    private $question = '';
     /**
      * Font files.
      *
@@ -350,22 +340,6 @@ class Wrapper extends \TCPDF
     }
 
     /**
-     * Sets custom header.
-     */
-    public function setCustomHeader()
-    {
-        $this->customHeader = html_entity_decode($this->_config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
-    }
-
-    /**
-     * Sets custom footer.
-     */
-    public function setCustomFooter()
-    {
-        $this->customFooter = $this->_config->get('main.customPdfFooter');
-    }
-
-    /**
      * The header of the PDF file.
      */
     public function Header()
@@ -390,6 +364,14 @@ class Wrapper extends \TCPDF
             $this->MultiCell(0, 10, html_entity_decode($title, ENT_QUOTES, 'utf-8'), 0, 'C', 0);
             $this->SetMargins(PDF_MARGIN_LEFT, $this->getLastH() + 5, PDF_MARGIN_RIGHT);
         }
+    }
+
+    /**
+     * Sets custom header.
+     */
+    public function setCustomHeader()
+    {
+        $this->customHeader = html_entity_decode($this->_config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
     }
 
     /**
@@ -420,7 +402,8 @@ class Wrapper extends \TCPDF
         $this->SetTextColor(0, 0, 0);
         $this->SetY(-25);
         $this->SetFont($this->currentFont, '', 10);
-        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'].' '.$this->getAliasNumPage().' / '.$this->getAliasNbPages(), 0, 0, 'C');
+        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
+            0, 0, 'C');
         $this->SetY(-20);
         $this->SetFont($this->currentFont, 'B', 8);
         $this->Cell(0, 10, $footer, 0, 1, 'C');
@@ -431,20 +414,28 @@ class Wrapper extends \TCPDF
             if (is_array($this->faq) && !empty($this->faq)) {
                 $baseUrl .= '?action=faq&amp;';
                 if (array_key_exists($this->category, $this->categories)) {
-                    $baseUrl .= 'cat='.$this->categories[$this->category]['id'];
+                    $baseUrl .= 'cat=' . $this->categories[$this->category]['id'];
                 } else {
                     $baseUrl .= 'cat=0';
                 }
-                $baseUrl .= '&amp;id='.$this->faq['id'];
-                $baseUrl .= '&amp;artlang='.$this->faq['lang'];
+                $baseUrl .= '&amp;id=' . $this->faq['id'];
+                $baseUrl .= '&amp;artlang=' . $this->faq['lang'];
             }
-            $url = $this->_config->getDefaultUrl().$baseUrl;
+            $url = $this->_config->getDefaultUrl() . $baseUrl;
             $urlObj = new Link($url, $this->_config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
-            $this->Cell(0, 10, 'URL: '.$_url, 0, 1, 'C', 0, $_url);
+            $this->Cell(0, 10, 'URL: ' . $_url, 0, 1, 'C', 0, $_url);
         }
         $this->TextColor = $currentTextColor;
+    }
+
+    /**
+     * Sets custom footer.
+     */
+    public function setCustomFooter()
+    {
+        $this->customFooter = $this->_config->get('main.customPdfFooter');
     }
 
     /**
@@ -473,16 +464,6 @@ class Wrapper extends \TCPDF
     }
 
     /**
-     * Sets the current font for PDF export.
-     *
-     * @param string $currentFont
-     */
-    public function setCurrentFont($currentFont)
-    {
-        $this->currentFont = $currentFont;
-    }
-
-    /**
      * Returns the current font for PDF export.
      *
      * @return string
@@ -505,50 +486,70 @@ class Wrapper extends \TCPDF
     /**
      * Extends the TCPDF::Image() method to handle base64 encoded images.
      *
-     * @param string $file      Name of the file containing the image or a '@' character followed by the image data
+     * @param string $file Name of the file containing the image or a '@' character followed by the image data
      *                          string. To link an image without embedding it on the document, set an asterisk character
      *                          before the URL (i.e.: '*http://www.example.com/image.jpg').
-     * @param string $x         Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param string $y         Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param int    $w         Width of the image in the page. If not specified or equal to zero, it is automatically
+     * @param string $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param string $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param int $w Width of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param int    $h         Height of the image in the page. If not specified or equal to zero, it is automatically
+     * @param int $h Height of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param string $type      Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
+     * @param string $type Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
      *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If not
      *                          specified, the type is inferred from the file extension.
-     * @param string $link      URL or identifier returned by AddLink().
-     * @param string $align     Indicates the alignment of the pointer next to image insertion relative to image height.
-     * @param bool   $resize    If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
+     * @param string $link URL or identifier returned by AddLink().
+     * @param string $align Indicates the alignment of the pointer next to image insertion relative to image height.
+     * @param bool $resize If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
      *                          if false do not resize; if 2 force resize in all cases (upscaling and downscaling).
-     * @param int    $dpi       dot-per-inch resolution used on resize
-     * @param string $palign    Allows to center or align the image on the current line.
-     * @param bool   $ismask    true if this image is a mask, false otherwise
-     * @param mixed  $imgmask   Image object returned by this function or false
-     * @param int    $border    Indicates if borders must be drawn around the cell.
-     * @param mixed  $fitbox    If not false scale image dimensions proportionally to fit within the ($w, $h) box.
+     * @param int $dpi dot-per-inch resolution used on resize
+     * @param string $palign Allows to center or align the image on the current line.
+     * @param bool $ismask true if this image is a mask, false otherwise
+     * @param mixed $imgmask Image object returned by this function or false
+     * @param int $border Indicates if borders must be drawn around the cell.
+     * @param mixed $fitbox If not false scale image dimensions proportionally to fit within the ($w, $h) box.
      *                          $fitbox can be true or a 2 characters string indicating the image alignment inside the
      *                          box. The first character indicate the horizontal alignment (L = left, C = center,
      *                          R = right) the second character indicate the vertical algnment (T = top, M = middle,
      *                          B = bottom).
-     * @param bool   $hidden    If true do not display the image.
-     * @param bool   $fitonpage If true the image is resized to not exceed page dimensions.
-     * @param bool   $alt       If true the image will be added as alternative and not directly printed (the ID of the
+     * @param bool $hidden If true do not display the image.
+     * @param bool $fitonpage If true the image is resized to not exceed page dimensions.
+     * @param bool $alt If true the image will be added as alternative and not directly printed (the ID of the
      *                          image will be returned).
-     * @param array  $altimgs   Array of alternate images IDs. Each alternative image must be an array with two values:
+     * @param array $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
      *                          an integer representing the image ID (the value returned by the Image method) and a
      *                          boolean value to indicate if the image is the default for printing.
      *
-     * @return
+     * @return string
      */
-    public function Image($file, $x = '', $y = '', $w = 0, $h = 0, $type = '', $link = '', $align = '', $resize = false, $dpi = 300, $palign = '', $ismask = false, $imgmask = false, $border = 0, $fitbox = false, $hidden = false, $fitonpage = false, $alt = false, $altimgs = [])
-    {
+    public function Image(
+        $file,
+        $x = '',
+        $y = '',
+        $w = 0,
+        $h = 0,
+        $type = '',
+        $link = '',
+        $align = '',
+        $resize = false,
+        $dpi = 300,
+        $palign = '',
+        $ismask = false,
+        $imgmask = false,
+        $border = 0,
+        $fitbox = false,
+        $hidden = false,
+        $fitonpage = false,
+        $alt = false,
+        $altimgs = []
+    ) {
         if (!strpos($file, 'data:image/png;base64,') === false) {
-            $file = '@'.base64_decode(
-                chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
-            );
+            $file = '@' . base64_decode(
+                    chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
+                );
         }
 
-        parent::Image($file, $x, $y, $w, $h, $type, $link, $align, $resize, $dpi, $palign, $ismask, $imgmask, $border, $fitbox, $hidden, $fitonpage, $alt, $altimgs);
+        parent::Image($file, $x, $y, $w, $h, $type, $link, $align, $resize, $dpi, $palign, $ismask, $imgmask, $border,
+            $fitbox, $hidden, $fitonpage, $alt, $altimgs);
     }
 }

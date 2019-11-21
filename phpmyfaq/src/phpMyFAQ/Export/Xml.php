@@ -5,8 +5,6 @@ namespace phpMyFAQ\Export;
 /**
  * XML Export class for phpMyFAQ.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -22,46 +20,41 @@ namespace phpMyFAQ\Export;
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Export;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
+use XMLWriter;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Export_Xml.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * Class Xml
+ * @package phpMyFAQ\Export
  */
 class Xml extends Export
 {
     /**
      * XMLWriter object.
      *
-     * @var \XMLWriter
+     * @var XMLWriter
      */
     private $xml = null;
 
     /**
      * Constructor.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config   Configuration
+     * @param Faq $faq FaqHelper object
+     * @param Category $category Entity object
+     * @param Configuration $config Configuration
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
         $this->faq = $faq;
         $this->category = $category;
         $this->_config = $config;
-        $this->xml = new \XMLWriter();
+        $this->xml = new XMLWriter();
 
         $this->xml->openMemory();
         $this->xml->setIndent(true);
@@ -70,9 +63,9 @@ class Xml extends Export
     /**
      * Generates the export.
      *
-     * @param int    $categoryId Entity Id
-     * @param bool   $downwards  If true, downwards, otherwise upward ordering
-     * @param string $language   Language
+     * @param int $categoryId Entity Id
+     * @param bool $downwards If true, downwards, otherwise upward ordering
+     * @param string $language Language
      *
      * @return string
      */

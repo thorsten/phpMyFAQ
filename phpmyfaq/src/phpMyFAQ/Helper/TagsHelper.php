@@ -25,18 +25,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class TagsHelper
- *
  * @package phpMyFAQ\Helper
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-12-26
  */
 class TagsHelper extends Helper
 {
     /**
-     * @var
+     * @var array
      */
     private $taggingIds;
 
@@ -74,15 +68,31 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<a class="btn     btn-primary" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+                '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<a class="btn     btn-primary" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+                '<a class="btn btn-primary" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $tagName
             );
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTaggingIds()
+    {
+        return $this->taggingIds;
+    }
+
+    /**
+     * @param mixed $taggingIds
+     */
+    public function setTaggingIds($taggingIds)
+    {
+        $this->taggingIds = $taggingIds;
     }
 
     /**
@@ -97,27 +107,11 @@ class TagsHelper extends Helper
     public function renderRelatedTag($tagId, $tagName, $relevance): string
     {
         return sprintf(
-            '<a class="btn     btn-primary" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge badge-dark">%d</span></a>',
-            implode(',', $this->getTaggingIds()).','.$tagId,
+            '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge badge-dark">%d</span></a>',
+            implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
             $tagName,
             $relevance
         );
-    }
-
-    /**
-     * @param mixed $taggingIds
-     */
-    public function setTaggingIds($taggingIds)
-    {
-        $this->taggingIds = $taggingIds;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getTaggingIds()
-    {
-        return $this->taggingIds;
     }
 }
