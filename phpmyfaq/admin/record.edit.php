@@ -16,6 +16,7 @@
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Date;
 use phpMyFAQ\Database;
@@ -51,6 +52,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->buildTree();
+
+    $categoryRelation = new CategoryRelation($faqConfig);
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
@@ -137,7 +140,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'admin-edit-faq, '.$id);
 
-            $categories = $category->getCategoryRelationsFromArticle($id, $lang);
+            $categories = $categoryRelation->getCategories($id, $lang);
 
             $faq->getRecord($id, null, true);
             $faqData = $faq->faqRecord;
@@ -155,7 +158,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     } elseif ('copyentry' === $action) {
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
         $faqData['lang'] = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
-        $categories = $category->getCategoryRelationsFromArticle($faqData['id'], $faqData['lang']);
+        $categories = $categoryRelation->getCategories($faqData['id'], $faqData['lang']);
 
         $faq->getRecord($faqData['id'], null, true);
 

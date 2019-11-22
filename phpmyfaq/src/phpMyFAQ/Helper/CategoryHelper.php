@@ -44,7 +44,7 @@ class CategoryHelper extends Helper
         $open = 0;
         $output = '';
         $numCategories = $this->Category->height();
-        $numFaqs = $this->Category->getNumberOfRecordsOfCategory();
+        $numFaqs = $this->categoryRelation->getNumberOfFaqsPerCategory();
 
         if ($numCategories > 0) {
             for ($y = 0; $y < $numCategories; $y = $this->Category->getNextLineTree($y)) {

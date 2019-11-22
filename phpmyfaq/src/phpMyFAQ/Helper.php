@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * Main helper class for phpMyFAQ.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,6 +17,7 @@ namespace phpMyFAQ;
  * @since 2009-09-07
  */
 
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Language\Plurals;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,14 +25,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Helper.
- *
+ * Class Helper
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-07
  */
 abstract class Helper
 {
@@ -43,6 +36,9 @@ abstract class Helper
      * @var Category
      */
     protected $Category = null;
+
+    /** @var CategoryRelation */
+    protected $categoryRelation;
 
     /**
      * Tagging class.
@@ -92,6 +88,16 @@ abstract class Helper
     public function setCategory(Category $Category)
     {
         $this->Category = $Category;
+    }
+
+    /**
+     * @param CategoryRelation $categoryRelation
+     * @return Helper
+     */
+    public function setCategoryRelation(CategoryRelation $categoryRelation): Helper
+    {
+        $this->categoryRelation = $categoryRelation;
+        return $this;
     }
 
     /**

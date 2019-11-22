@@ -24,6 +24,7 @@ use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Auth\AuthLdap as AuthLdap;
 use phpMyFAQ\Auth\AuthSso as AuthSso;
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
@@ -482,9 +483,12 @@ $template = new Template(
     $faqConfig->get('main.templateSet')
 );
 
+$categoryRelation = new CategoryRelation($faqConfig);
+
 $categoryHelper = new HelperCategory();
 $categoryHelper->setCategory($category);
 $categoryHelper->setConfiguration($faqConfig);
+$categoryHelper->setCategoryRelation($categoryRelation);
 
 $keywordsArray = array_merge(explode(',', $keywords), explode(',', $faqConfig->get('main.metaKeywords')));
 $keywordsArray = array_filter($keywordsArray, 'strlen');

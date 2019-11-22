@@ -1007,42 +1007,6 @@ class Category
     }
 
     /**
-     * Returns the categories from a record id and language.
-     *
-     * @param int $record_id record id
-     * @param int $record_lang record language
-     *
-     * @return array
-     */
-    public function getCategoryRelationsFromArticle($record_id, $record_lang)
-    {
-        $categories = [];
-
-        $query = sprintf("
-            SELECT
-                category_id, category_lang
-            FROM
-                %sfaqcategoryrelations
-            WHERE
-                record_id = %d
-            AND
-                record_lang = '%s'",
-            Database::getTablePrefix(),
-            $record_id,
-            $record_lang);
-
-        $result = $this->config->getDb()->query($query);
-        while ($row = $this->config->getDb()->fetchObject($result)) {
-            $categories[$row->category_id] = array(
-                'category_id' => $row->category_id,
-                'category_lang' => $row->category_lang,
-            );
-        }
-
-        return $categories;
-    }
-
-    /**
      * Returns the ID of a category that associated with the given article.
      *
      * @param int $faqId FAQ id
@@ -1430,32 +1394,6 @@ class Category
     }
 
     /**
-     * Deletes a category relation.
-     *
-     * @param int $category_id Entity id
-     * @param string $category_lang Categiry language
-     * @param bool $delete_all Delete all languages?
-     *
-     * @return bool
-     */
-    public function deleteCategoryRelation($category_id, $category_lang, $delete_all = false)
-    {
-        $query = sprintf('
-            DELETE FROM
-                %sfaqcategoryrelations
-            WHERE
-                category_id = %d',
-            Database::getTablePrefix(),
-            $category_id);
-        if (!$delete_all) {
-            $query .= " AND category_lang = '" . $category_lang . "'";
-        }
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
-    /**
      * Create array with translated categories.
      *
      * @param int $category_id
@@ -1547,21 +1485,21 @@ class Category
     /**
      * Get number of nodes at the same parent_id level.
      *
-     * @param int $parent_id Parent id
+     * @param int $parentId Parent id
      *
      * @return int
      */
-    public function numParent($parent_id)
+    public function numParent($parentId)
     {
         $query = sprintf('
-            SELECT distinct
+            SELECT DISTINCT 
                 id
             FROM
                 %sfaqcategories
             WHERE
                 parent_id = %d',
             Database::getTablePrefix(),
-            $parent_id);
+            $parentId);
         $result = $this->config->getDb()->query($query);
 
         return $this->config->getDb()->numRows($result);
@@ -1671,7 +1609,7 @@ class Category
      *
      * @return array
      */
-    public function getPermissions($mode, Array $categories): array
+    public function getPermissions(string $mode, Array $categories): array
     {
         $permissions = [];
         if (!($mode === 'user' || $mode === 'group')) {
@@ -1699,98 +1637,6 @@ class Category
         }
 
         return $permissions;
-    }
-
-    /**
-     * Returns the number of records in each category.
-     *
-     * @param bool $categoryRestriction
-     *
-     * @return array
-     */
-    public function getNumberOfRecordsOfCategory($categoryRestriction = false)
-    {
-        $numRecordsByCat = [];
-        if ($categoryRestriction) {
-            $query = sprintf('
-                SELECT
-                    fcr.category_id AS category_id,
-                    COUNT(fcr.record_id) AS number
-                FROM
-                    %sfaqcategoryrelations fcr
-                LEFT JOIN
-                    %sfaqdata fd on fcr.record_id = fd.id
-                LEFT JOIN
-                    %sfaqdata_group fdg on fdg.record_id = fcr.record_id
-                WHERE
-                    fdg.group_id = %s
-                AND
-                    fcr.record_lang = fd.lang
-                GROUP BY fcr.category_id',
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                Database::getTablePrefix(),
-                $this->groups[0]);
-        } else {
-            $query = sprintf('
-                SELECT
-                    fcr.category_id AS category_id,
-                    COUNT(fcr.record_id) AS number
-                FROM
-                    %sfaqcategoryrelations fcr, %sfaqdata fd
-                WHERE
-                    fcr.record_id = fd.id
-                AND
-                    fcr.record_lang = fd.lang
-                GROUP BY fcr.category_id',
-                Database::getTablePrefix(),
-                Database::getTablePrefix());
-        }
-        $result = $this->config->getDb()->query($query);
-
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $numRecordsByCat[$row->category_id] = $row->number;
-            }
-        }
-
-        return $numRecordsByCat;
-    }
-
-    /**
-     * Create a matrix for representing categories and faq records.
-     *
-     * @return array
-     */
-    public function getCategoryRecordsMatrix()
-    {
-        $matrix = [];
-
-        $query = sprintf('
-            SELECT
-                fcr.category_id AS id_cat,
-                fd.id AS id
-            FROM
-                %sfaqdata fd
-            INNER JOIN
-                %sfaqcategoryrelations fcr
-            ON
-                fd.id = fcr.record_id
-            AND
-                fd.lang = fcr.category_lang
-            ORDER BY
-                fcr.category_id, fd.id',
-            Database::getTablePrefix(),
-            Database::getTablePrefix());
-        $result = $this->config->getDb()->query($query);
-
-        if ($this->config->getDb()->numRows($result) > 0) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $matrix[$row->id_cat][$row->id] = true;
-            }
-        }
-
-        return $matrix;
     }
 
     /**

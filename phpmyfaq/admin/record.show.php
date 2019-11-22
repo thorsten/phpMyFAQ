@@ -2,8 +2,6 @@
 /**
  * Shows the list of records ordered by categories.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -18,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Comment;
 use phpMyFAQ\Date;
 use phpMyFAQ\Database;
@@ -55,9 +54,10 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
 
-    // Set the CategoryHelper for the helper class
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
+
+    $categoryRelation = new CategoryRelation($faqConfig);
 
     $faqHelper = new FaqHelper($faqConfig);
 
@@ -190,10 +190,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 <?php
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numCommentsByCat = [];
-    $numRecordsByCat = $category->getNumberOfRecordsOfCategory($faqConfig->get('main.enableCategoryRestrictions'));
+    $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(
+        $faqConfig->get('main.enableCategoryRestrictions')
+    );
     $numActiveByCat = [];
 
-    $matrix = $category->getCategoryRecordsMatrix();
+    $matrix = $categoryRelation->getCategoryFaqsMatrix();
     foreach ($matrix as $categoryKey => $value) {
         $numCommentsByCat[$categoryKey] = 0;
         foreach ($value as $faqKey => $value) {
