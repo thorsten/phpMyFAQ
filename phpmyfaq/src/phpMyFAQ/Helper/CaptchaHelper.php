@@ -59,7 +59,7 @@ class CaptchaHelper extends Helper
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
             $html .= '    <div class="col-sm-4">';
             $html .= '        <p class="form-control-static">';
-            $html .= $captcha->printCaptcha($action);
+            $html .= $captcha->renderCaptchaImage($action);
             $html .= '        </p>';
             $html .= '    </div>';
             $html .= '    <div class="col-sm-5">';

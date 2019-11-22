@@ -63,7 +63,7 @@ $faqSearchResult = new SearchResultset($user, $faq, $faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
-    $captcha->showCaptchaImg();
+    $captcha->drawCaptchaImage();
     exit;
 }
 

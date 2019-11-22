@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ;
 
+use stdClass;
+
 /**
  * API handler class.
  *
@@ -23,34 +25,20 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Api
- *
- * @package   phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-03-27
+ * @package phpMyFAQ
  */
 class Api
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $apiUrl = 'https://api.phpmyfaq.de';
 
-    /**
-     * @var Configuration
-     */
+    /** @var Configuration */
     private $config = null;
 
-    /**
-     * @var System
-     */
+    /** @var System */
     private $system = null;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $remoteHashes = null;
 
     /**
@@ -74,9 +62,9 @@ class Api
      */
     public function getVersions(): array
     {
-        $json = file_get_contents($this->apiUrl.'/versions');
+        $json = file_get_contents($this->apiUrl . '/versions');
         $result = json_decode($json);
-        if ($result instanceof \stdClass) {
+        if ($result instanceof stdClass) {
             return [
                 'installed' => $this->config->get('main.currentVersion'),
                 'current' => $result->stable,
@@ -95,9 +83,9 @@ class Api
      */
     public function isVerified(): bool
     {
-        $this->remoteHashes = file_get_contents($this->apiUrl.'/verify/'.$this->config->get('main.currentVersion'));
+        $this->remoteHashes = file_get_contents($this->apiUrl . '/verify/' . $this->config->get('main.currentVersion'));
 
-        if (json_decode($this->remoteHashes) instanceof \stdClass) {
+        if (json_decode($this->remoteHashes) instanceof stdClass) {
             if (!is_array(json_decode($this->remoteHashes, true))) {
                 return false;
             }

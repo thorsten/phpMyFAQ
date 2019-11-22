@@ -2,10 +2,10 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
+
 /**
  * phpMyFAQ Date class.
- *
- * 
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -19,8 +19,6 @@ namespace phpMyFAQ;
  * @link https://www.phpmyfaq.de
  * @since 2009-09-24
  */
-
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -42,7 +40,7 @@ class Date
     /**
      * @var Configuration
      */
-    private $_config = null;
+    private $config = null;
 
     /**
      * Constructor.
@@ -51,41 +49,14 @@ class Date
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
-    }
-
-    /**
-     * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard.
-     *
-     * @param string $date      Date string
-     * @param string $format    Date format
-     * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
-     *                          Unix timestamp format
-     *
-     * @return string
-     */
-    public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
-    {
-        if ($pmfFormat) {
-            $dateString = strtotime(
-                substr($date, 0, 4).'-'.
-                substr($date, 4, 2).'-'.
-                substr($date, 6, 2).' '.
-                substr($date, 8, 2).':'.
-                substr($date, 10, 2)
-            );
-        } else {
-            $dateString = $date;
-        }
-
-        return date($format, $dateString);
+        $this->config = $config;
     }
 
     /**
      * Converts the phpMyFAQ/Unix date format to the RFC 822 format.
      *
-     * @param string $date      Date string
-     * @param bool   $pmfFormat true if the passed date is in phpMyFAQ format, false if in
+     * @param string $date Date string
+     * @param bool $pmfFormat true if the passed date is in phpMyFAQ format, false if in
      *                          Unix timestamp format
      *
      * @return string RFC 822 date
@@ -96,10 +67,37 @@ class Date
     }
 
     /**
+     * Converts the phpMyFAQ date format to a format similar to ISO 8601 standard.
+     *
+     * @param string $date Date string
+     * @param string $format Date format
+     * @param bool $pmfFormat true if the passed date is in phpMyFAQ format, false if in
+     *                          Unix timestamp format
+     *
+     * @return string
+     */
+    public static function createIsoDate($date, $format = 'Y-m-d H:i', $pmfFormat = true)
+    {
+        if ($pmfFormat) {
+            $dateString = strtotime(
+                substr($date, 0, 4) . '-' .
+                substr($date, 4, 2) . '-' .
+                substr($date, 6, 2) . ' ' .
+                substr($date, 8, 2) . ':' .
+                substr($date, 10, 2)
+            );
+        } else {
+            $dateString = $date;
+        }
+
+        return date($format, $dateString);
+    }
+
+    /**
      * Returns the timestamp of a tracking file.
      *
-     * @param string $file     Filename
-     * @param bool   $endOfDay End of day?
+     * @param string $file Filename
+     * @param bool $endOfDay End of day?
      *
      * @return int
      */
@@ -124,15 +122,14 @@ class Date
 
     /**
      * Returns date formatted according to user defined format.
-     *
      * @param string $unformattedDate
-     *
+     * @throws \Exception
      * @return string
      */
     public function format($unformattedDate)
     {
-        $date = new \DateTime($unformattedDate);
+        $date = new DateTime($unformattedDate);
 
-        return $date->format($this->_config->get('main.dateFormat'));
+        return $date->format($this->config->get('main.dateFormat'));
     }
 }

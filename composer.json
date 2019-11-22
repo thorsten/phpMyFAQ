@@ -41,7 +41,8 @@
         "myclabs/deep-copy": "1.3.1",
         "ext-json": "*",
         "ext-xmlwriter": "*",
-        "ext-zlib": "*"
+        "ext-zlib": "*",
+        "ext-gd": "*"
     },
     "require-dev": {
         "phpunit/phpunit": "5.*",

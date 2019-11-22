@@ -3,7 +3,7 @@
 namespace phpMyFAQ;
 
 /**
- * The main FAQ class.
+ * The main FAQ class. Yes, it's very huge.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -22,7 +22,7 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
-use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 
@@ -56,18 +56,8 @@ define('FAQ_SORTING_TYPE_DATE_FAQID', 3);
 define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
- * The main FAQ class - 3K LOC of funny things for phpMyFAQ.
- *
+ * Class Faq
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Georgi Korchev <korchev@yahoo.com>
- * @author Adrianna Musiol <musiol@imageaccess.de>
- * @author Peter Caesar <p.caesar@osmaco.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-12-20
  */
 class Faq
 {
@@ -159,8 +149,9 @@ class Faq
      * @param string $sortBy Sort by
      *
      * @return array
+     * @throws \Exception
      */
-    public function getAllRecordPerCategory($categoryId, $orderBy = 'id', $sortBy = 'ASC')
+    public function getAllRecordPerCategory(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): array
     {
         global $sids;
 
@@ -237,7 +228,7 @@ class Faq
         $num = $this->config->getDb()->numRows($result);
 
         if ($num > 0) {
-            $faqHelper = new HelperFaq($this->config);
+            $faqHelper = new FaqHelper($this->config);
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 if (empty($row->visits)) {
                     $visits = 0;
@@ -282,14 +273,12 @@ class Faq
      *
      * @return string
      */
-    protected function queryPermission($hasGroupSupport = false)
+    protected function queryPermission(bool $hasGroupSupport = false): string
     {
         if ($hasGroupSupport) {
             if (-1 === $this->user) {
                 return sprintf(
                     'AND fdg.group_id IN (%s)',
-                    implode(', ', $this->groups),
-                    $this->user,
                     implode(', ', $this->groups));
             } else {
                 return sprintf(
@@ -307,8 +296,7 @@ class Faq
                 );
             } else {
                 return sprintf(
-                    'AND fdu.user_id = -1',
-                    $this->user
+                    'AND fdu.user_id = -1'
                 );
             }
         }
@@ -323,7 +311,7 @@ class Faq
      *
      * @return string
      */
-    public function renderRecordsByCategoryId($categoryId, $orderBy = 'id', $sortBy = 'ASC')
+    public function renderRecordsByCategoryId(int $categoryId, string $orderBy = 'id', string $sortBy = 'ASC'): string
     {
         global $sids;
 
@@ -408,20 +396,20 @@ class Faq
 
         $result = $this->config->getDb()->query($query);
         $num = $this->config->getDb()->numRows($result);
-        $pages = (int)ceil($num/$numPerPage);
+        $pages = (int)ceil($num / $numPerPage);
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = $page*$numPerPage - $numPerPage;
+            $first = $page * $numPerPage - $numPerPage;
         }
 
         if ($num > 0) {
             if ($pages > 1) {
                 $output .= sprintf('<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'].$page,
+                    $this->translation['msgPage'] . $page,
                     $this->translation['msgVoteFrom'],
-                    $pages.$this->translation['msgPages']);
+                    $pages . $this->translation['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
 
@@ -526,7 +514,7 @@ class Faq
      *
      * @return string
      */
-    public function renderRecordsByFaqIds(Array $recordIds, $orderBy = 'fd.id', $sortBy = 'ASC')
+    public function renderRecordsByFaqIds(Array $recordIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): string
     {
         global $sids;
 
@@ -594,20 +582,20 @@ class Faq
         $result = $this->config->getDb()->query($query);
 
         $num = $this->config->getDb()->numRows($result);
-        $pages = ceil($num/$this->config->get('records.numberOfRecordsPerPage'));
+        $pages = ceil($num / $this->config->get('records.numberOfRecordsPerPage'));
 
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page*$this->config->get('records.numberOfRecordsPerPage')) - $this->config->get('records.numberOfRecordsPerPage');
+            $first = ($page * $this->config->get('records.numberOfRecordsPerPage')) - $this->config->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
             if ($pages > 1) {
                 $output .= sprintf('<p><strong>%s %s %s</strong></p>',
-                    $this->translation['msgPage'].$page,
+                    $this->translation['msgPage'] . $page,
                     $this->translation['msgVoteFrom'],
-                    $pages.$this->translation['msgPages']);
+                    $pages . $this->translation['msgPages']);
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -654,7 +642,7 @@ class Faq
 
                 $lastFaqId = $row->id;
             }
-            $output .= '</ul><span id="totFaqRecords" style="display: none;">'.$num.'</span>';
+            $output .= '</ul><span id="totFaqRecords" style="display: none;">' . $num . '</span>';
         } else {
             return false;
         }
@@ -667,21 +655,21 @@ class Faq
             $vor = $page - 1;
             $next = $page + 1;
             if ($vor != 0) {
-                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$vor;
-                $oLink = new Link(Link::getSystemRelativeUri().'?'.$url, $this->config);
+                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
+                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgPrevious'];
                 $oLink->tooltip = $this->translation['msgPrevious'];
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
             $output .= ' ';
             if ($next <= $pages) {
-                $url = $sids.'&amp;action=search&amp;tagging_id='.$taggingId.'&amp;seite='.$next;
-                $oLink = new Link(Link::getSystemRelativeUri().'?'.$url, $this->config);
+                $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
+                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgNext'];
                 $oLink->tooltip = $this->translation['msgNext'];
-                $output .= '[ '.$oLink->toHtmlAnchor().' ]';
+                $output .= '[ ' . $oLink->toHtmlAnchor() . ' ]';
             }
             $output .= '</strong></p>';
         }
@@ -696,7 +684,7 @@ class Faq
      * @param int $faqRevisionId Revision ID
      * @param bool $isAdmin Must be true if it is called by an admin/author context
      */
-    public function getRecord($faqId, $faqRevisionId = null, $isAdmin = false)
+    public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false)
     {
         global $PMF_LANG;
 
@@ -808,7 +796,7 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $faqId,
-            isset($faqRevisionId) ? 'AND revision_id = '.$faqRevisionId : '',
+            isset($faqRevisionId) ? 'AND revision_id = ' . $faqRevisionId : '',
             $faqLanguage,
             ($isAdmin) ? 'AND 1=1' : $this->queryPermission($this->groupSupport)
         );
@@ -820,10 +808,10 @@ class Faq
      * Return records from given IDs
      *
      * @param array $faqIds
-     *
      * @return array
+     * @throws \Exception
      */
-    public function getRecordsByIds(Array $faqIds)
+    public function getRecordsByIds(Array $faqIds): array
     {
         $faqRecords = [];
 
@@ -876,7 +864,7 @@ class Faq
 
         $result = $this->config->getDb()->query($query);
 
-        $faqHelper = new HelperFaq($this->config);
+        $faqHelper = new FaqHelper($this->config);
         while ($row = $this->config->getDb()->fetchObject($result)) {
             if (empty($row->visits)) {
                 $visits = 0;
@@ -901,7 +889,7 @@ class Faq
                 'record_title' => $row->question,
                 'record_preview' => $faqHelper->renderAnswerPreview($row->answer, 25),
                 'record_link' => $oLink->toString(),
-                'record_updated' => Date::createIsoDate($row->updated).':00',
+                'record_updated' => Date::createIsoDate($row->updated) . ':00',
                 'visits' => (int)$visits,
                 'record_created' => $row->created
             ];
@@ -921,7 +909,7 @@ class Faq
     public function addRecord(Array $data, $newRecord = true)
     {
         if ($newRecord) {
-            $recordId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqdata', 'id');
+            $recordId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id');
         } else {
             $recordId = $data['id'];
         }
@@ -1056,6 +1044,8 @@ class Faq
      * @param string $recordLang Record language
      *
      * @return bool
+     * @throws Attachment\AttachmentException
+     * @throws Attachment\Filesystem\File\FileException
      */
     public function deleteRecord($recordId, $recordLang)
     {
@@ -1253,26 +1243,6 @@ class Faq
     }
 
     /**
-     * Adds new category relation to a record.
-     *
-     * @param mixed $category Entity or array of categories
-     * @param int $recordId Record id
-     * @param string $language Language
-     *
-     * @return bool
-     */
-    public function addCategoryFaqRelation($category, $recordId, $language)
-    {
-        // Just a fallback when (wrong case) $category is an array
-        if (is_array($category)) {
-            $this->addCategoryRelations($category, $recordId, $language);
-        }
-        $categories[] = $category;
-
-        return $this->addCategoryRelations($categories, $recordId, $language);
-    }
-
-    /**
      * Adds new category relations to a record.
      *
      * @param array $categories Array of categories
@@ -1289,15 +1259,15 @@ class Faq
 
         foreach ($categories as $_category) {
             $this->config->getDb()->query(sprintf(
-                "INSERT INTO
+                    "INSERT INTO
                     %sfaqcategoryrelations
                 VALUES
                     (%d, '%s', %d, '%s')",
-                Database::getTablePrefix(),
-                $_category,
-                $language,
-                $recordId,
-                $language)
+                    Database::getTablePrefix(),
+                    $_category,
+                    $language,
+                    $recordId,
+                    $language)
             );
         }
 
@@ -1464,12 +1434,12 @@ class Faq
                     $where .= ' IN (';
                     $separator = '';
                     foreach ($data as $value) {
-                        $where .= $separator."'".$this->config->getDb()->escape($value)."'";
+                        $where .= $separator . "'" . $this->config->getDb()->escape($value) . "'";
                         $separator = ', ';
                     }
                     $where .= ')';
                 } else {
-                    $where .= " = '".$this->config->getDb()->escape($data)."'";
+                    $where .= " = '" . $this->config->getDb()->escape($data) . "'";
                 }
                 if ($num > 0) {
                     $where .= ' AND ';
@@ -1515,8 +1485,8 @@ class Faq
                 break;
         }
 
-        // prevents multiple display of FAQ incase it is tagged under multiple groups.
-        $group_by = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
+        // prevents multiple display of FAQ in case it is tagged under multiple groups.
+        $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
         $query = sprintf('
             SELECT
                 fd.id AS id,
@@ -1566,7 +1536,7 @@ class Faq
             Database::getTablePrefix(),
             $where,
             $this->queryPermission($this->groupSupport),
-            $group_by,
+            $groupBy,
             $orderBy
         );
 
@@ -1818,7 +1788,7 @@ class Faq
             AND
                 date_end >= '%s'",
             Database::getTablePrefix(),
-            null == $language ? '' : "AND lang = '".$language."'",
+            null == $language ? '' : "AND lang = '" . $language . "'",
             $now,
             $now
         );
@@ -1836,11 +1806,6 @@ class Faq
      * This function generates a list with the most voted or most visited records.
      *
      * @param string $type Type definition visits/voted
-     *
-     * @since  2009-11-03
-     *
-     * @author Max Köhler <me@max-koehler.de>
-     *
      * @return array
      */
     public function getTopTen($type = 'visits')
@@ -1905,25 +1870,25 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Database::getTablePrefix().'faqvisits fv,
-                ' . Database::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix() . 'faqvisits fv,
+                ' . Database::getTablePrefix() . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now.'\'
-                AND fd.date_end   >= \'' . $now.'\'
+                    fd.date_start <= \'' . $now . '\'
+                AND fd.date_end   >= \'' . $now . '\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -1931,15 +1896,15 @@ class Faq
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId.'\'';
+                fcr.category_id = \'' . $categoryId . '\'';
         }
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language.'\'';
+                fd.lang = \'' . $language . '\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport).'
+                ' . $this->queryPermission($this->groupSupport) . '
 
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fv.last_visit,fdg.group_id,fdu.user_id
@@ -2020,40 +1985,40 @@ class Faq
                 (fv.vote/fv.usr) AS avg,
                 fv.usr AS user
             FROM
-                ' . Database::getTablePrefix().'faqvoting fv,
-                ' . Database::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix() . 'faqvoting fv,
+                ' . Database::getTablePrefix() . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now.'\'
-                AND fd.date_end   >= \'' . $now.'\'
+                    fd.date_start <= \'' . $now . '\'
+                AND fd.date_end   >= \'' . $now . '\'
                 AND fd.id = fv.artikel
                 AND fd.active = \'yes\'';
 
         if (isset($categoryId) && is_numeric($categoryId) && ($categoryId != 0)) {
             $query .= '
             AND
-                fcr.category_id = \'' . $categoryId.'\'';
+                fcr.category_id = \'' . $categoryId . '\'';
         }
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language.'\'';
+                fd.lang = \'' . $language . '\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport).'
+                ' . $this->queryPermission($this->groupSupport) . '
             ORDER BY
                 avg DESC';
 
@@ -2095,6 +2060,7 @@ class Faq
      * This function generates the list with the latest published records.
      *
      * @return array
+     * @throws \Exception
      */
     public function getLatest()
     {
@@ -2142,25 +2108,25 @@ class Faq
                 fdg.group_id AS group_id,
                 fdu.user_id AS user_id
             FROM
-                ' . Database::getTablePrefix().'faqvisits fv,
-                ' . Database::getTablePrefix().'faqdata fd
+                ' . Database::getTablePrefix() . 'faqvisits fv,
+                ' . Database::getTablePrefix() . 'faqdata fd
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqcategoryrelations fcr
+                ' . Database::getTablePrefix() . 'faqcategoryrelations fcr
             ON
                 fd.id = fcr.record_id
             AND
                 fd.lang = fcr.record_lang
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_group AS fdg
+                ' . Database::getTablePrefix() . 'faqdata_group AS fdg
             ON
                 fd.id = fdg.record_id
             LEFT JOIN
-                ' . Database::getTablePrefix().'faqdata_user AS fdu
+                ' . Database::getTablePrefix() . 'faqdata_user AS fdu
             ON
                 fd.id = fdu.record_id
             WHERE
-                    fd.date_start <= \'' . $now.'\'
-                AND fd.date_end   >= \'' . $now.'\'
+                    fd.date_start <= \'' . $now . '\'
+                AND fd.date_end   >= \'' . $now . '\'
                 AND fd.id = fv.id
                 AND fd.lang = fv.lang
                 AND fd.active = \'yes\'';
@@ -2168,10 +2134,10 @@ class Faq
         if (isset($language) && Language::isASupportedLanguage($language)) {
             $query .= '
             AND
-                fd.lang = \'' . $language.'\'';
+                fd.lang = \'' . $language . '\'';
         }
         $query .= '
-                ' . $this->queryPermission($this->groupSupport).'
+                ' . $this->queryPermission($this->groupSupport) . '
             GROUP BY
                 fd.id,fd.lang,fcr.category_id,fv.visits,fdg.group_id,fdu.user_id
             ORDER BY
@@ -2224,231 +2190,6 @@ class Faq
     }
 
     /**
-     * Deletes a question for the table faqquestions.
-     *
-     * @param int $questionId
-     *
-     * @return bool
-     */
-    public function deleteQuestion($questionId)
-    {
-        $delete = sprintf("
-            DELETE FROM
-                %sfaqquestions
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->config->getLanguage()->getLanguage()
-        );
-
-        $this->config->getDb()->query($delete);
-
-        return true;
-    }
-
-    /**
-     * Returns the visibility of a question.
-     *
-     * @param   int $questionId
-     *
-     * @return  string
-     */
-    public function getVisibilityOfQuestion($questionId)
-    {
-        $query = sprintf("
-            SELECT
-                is_visible
-            FROM
-                %sfaqquestions
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->config->getLanguage()->getLanguage()
-        );
-
-        $result = $this->config->getDb()->query($query);
-        if ($this->config->getDb()->numRows($result) > 0) {
-            $row = $this->config->getDb()->fetchObject($result);
-
-            return $row->is_visible;
-        }
-
-        return;
-    }
-
-    /**
-     * Sets the visibility of a question.
-     *
-     * @param int $questionId
-     * @param string $isVisible
-     *
-     * @return bool
-     */
-    public function setVisibilityOfQuestion($questionId, $isVisible)
-    {
-        $query = sprintf("
-            UPDATE
-                %sfaqquestions
-            SET
-                is_visible = '%s'
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $isVisible,
-            $questionId,
-            $this->config->getLanguage()->getLanguage()
-        );
-
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
-
-    /**
-     * Adds a new question.
-     *
-     * @param array $questionData
-     *
-     * @return bool
-     */
-    public function addQuestion(Array $questionData)
-    {
-        $query = sprintf("
-            INSERT INTO
-                %sfaqquestions
-            (id, lang, username, email, category_id, question, created, is_visible, answer_id)
-                VALUES
-            (%d, '%s', '%s', '%s', %d, '%s', '%s', '%s', %d)",
-            Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix().'faqquestions', 'id'),
-            $this->config->getLanguage()->getLanguage(),
-            $this->config->getDb()->escape($questionData['username']),
-            $this->config->getDb()->escape($questionData['email']),
-            $questionData['category_id'],
-            $this->config->getDb()->escape($questionData['question']),
-            date('YmdHis'),
-            $questionData['is_visible'],
-            0
-        );
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
-    /**
-     * Returns a new question.
-     *
-     * @param int $questionId
-     *
-     * @return array
-     */
-    public function getQuestion($questionId)
-    {
-        $question = [
-            'id' => 0,
-            'lang' => '',
-            'username' => '',
-            'email' => '',
-            'category_id' => '',
-            'question' => '',
-            'created' => '',
-            'is_visible' => '',
-        ];
-
-        if (!is_int($questionId)) {
-            return $question;
-        }
-
-        $question = [];
-
-        $query = sprintf("
-            SELECT
-                 id, lang, username, email, category_id, question, created, is_visible
-            FROM
-                %sfaqquestions
-            WHERE
-                id = %d
-            AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $questionId,
-            $this->config->getLanguage()->getLanguage()
-        );
-
-        if ($result = $this->config->getDb()->query($query)) {
-            if ($row = $this->config->getDb()->fetchObject($result)) {
-                $question = array(
-                    'id' => $row->id,
-                    'lang' => $row->lang,
-                    'username' => $row->username,
-                    'email' => $row->email,
-                    'category_id' => $row->category_id,
-                    'question' => $row->question,
-                    'created' => $row->created,
-                    'is_visible' => $row->is_visible,
-                );
-            }
-        }
-
-        return $question;
-    }
-
-    /**
-     * Returns all open questions.
-     *
-     * @param boolean $all If true, then return visible and non-visible
-     *                     questions; otherwise only visible ones
-     *
-     * @return array
-     */
-    public function getAllOpenQuestions($all = true)
-    {
-        $questions = [];
-
-        $query = sprintf("
-            SELECT
-                id, lang, username, email, category_id, question, created, answer_id, is_visible
-            FROM
-                %sfaqquestions
-            WHERE
-                lang = '%s'
-                %s
-            ORDER BY 
-                created ASC",
-            Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage(),
-            ($all === false ? " AND is_visible = 'Y'" : '')
-        );
-
-        if ($result = $this->config->getDb()->query($query)) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $questions[] = array(
-                    'id' => $row->id,
-                    'lang' => $row->lang,
-                    'username' => $row->username,
-                    'email' => $row->email,
-                    'category_id' => $row->category_id,
-                    'question' => $row->question,
-                    'created' => $row->created,
-                    'answer_id' => $row->answer_id,
-                    'is_visible' => $row->is_visible,
-                );
-            }
-        }
-
-        return $questions;
-    }
-
-    /**
      * Adds a new changelog entry in the table faqchanges.
      *
      * @param int $id
@@ -2476,7 +2217,7 @@ class Faq
                 VALUES
             (%d, %d, '%s', %d, %d, %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix().'faqchanges', 'id'),
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
             $id,
             $lang,
             $revision_id,
@@ -2627,7 +2368,7 @@ class Faq
         // faqvisits data selection
         if (!empty($faqId)) {
             // Select ONLY the faq with the provided $faqid
-            $query .= "fd.id = '".$faqId."' AND ";
+            $query .= "fd.id = '" . $faqId . "' AND ";
         }
         $query .= 'fd.id = fv.id
             AND
@@ -2637,7 +2378,7 @@ class Faq
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= ' (fcr.category_id = '.$categoryId;
+            $query .= ' (fcr.category_id = ' . $categoryId;
             if ($bDownwards) {
                 $query .= $this->getCatidWhereSequence($categoryId, 'OR');
             }
@@ -2648,14 +2389,14 @@ class Faq
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= " fd.updated LIKE '".$date."'";
+            $query .= " fd.updated LIKE '" . $date . "'";
             $needAndOp = true;
         }
         if ((!empty($lang)) && Utils::isLanguage($lang)) {
             if ($needAndOp) {
                 $query .= ' AND';
             }
-            $query .= " fd.lang = '".$lang."'";
+            $query .= " fd.lang = '" . $lang . "'";
             $needAndOp = true;
         }
         switch ($queryType) {
@@ -2663,7 +2404,7 @@ class Faq
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '".FAQ_SQL_ACTIVE_NO."'";
+                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_NO . "'";
                 break;
             case FAQ_QUERY_TYPE_EXPORT_PDF:
             case FAQ_QUERY_TYPE_EXPORT_XHTML:
@@ -2671,13 +2412,13 @@ class Faq
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
                 break;
             default:
                 if ($needAndOp) {
                     $query .= ' AND';
                 }
-                $query .= " fd.active = '".FAQ_SQL_ACTIVE_YES."'";
+                $query .= " fd.active = '" . FAQ_SQL_ACTIVE_YES . "'";
                 break;
         }
         // Sort criteria
@@ -2703,7 +2444,7 @@ class Faq
      * Build a logic sequence, for a WHERE statement, of those category IDs
      * children of the provided category ID, if any.
      *
-     * @param   integer $nCatid
+     * @param integer $nCatid
      * @param   $logicOp
      * @param   $oCat
      *
@@ -2719,7 +2460,7 @@ class Faq
         $aChildren = array_values($oCat->getChildren($nCatid));
 
         foreach ($aChildren as $catid) {
-            $sqlWhereFilter .= ' '.$logicOp.' fcr.category_id = '.$catid;
+            $sqlWhereFilter .= ' ' . $logicOp . ' fcr.category_id = ' . $catid;
             $sqlWhereFilter .= $this->getCatidWhereSequence($catid, 'OR', $oCat);
         }
 
@@ -2768,8 +2509,6 @@ class Faq
      * @param int $record_id ID of the current record
      *
      * @return bool
-     *
-     * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
      */
     public function deletePermission($mode, $record_id)
     {
@@ -2922,7 +2661,7 @@ class Faq
                 $oLink->itemTitle = $row->thema;
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
-                $listItem = '<li>'.$oLink->toHtmlAnchor().'</li>';
+                $listItem = '<li>' . $oLink->toHtmlAnchor() . '</li>';
 
                 $output .= $listItem;
             }
@@ -2933,9 +2672,10 @@ class Faq
     }
 
     /**
-     * Prints the open questions as a XHTML table.
+     * Prints the open questions as a HTML table.
      *
      * @return string
+     * @throws \Exception
      */
     public function renderOpenQuestions(): string
     {
@@ -3029,7 +2769,7 @@ class Faq
             );
         }
 
-        return $output.$extraout;
+        return $output . $extraout;
     }
 
     /**
@@ -3250,25 +2990,4 @@ class Faq
         return $inactive;
     }
 
-    /**
-     * Updates field answer_id in faqquestion.
-     *
-     * @param int $openQuestionId
-     * @param int $faqId
-     * @param int $categoryId
-     *
-     * @return bool
-     */
-    public function updateQuestionAnswer($openQuestionId, $faqId, $categoryId)
-    {
-        $query = sprintf(
-            'UPDATE %sfaqquestions SET answer_id = %d, category_id= %d WHERE id= %d',
-            Database::getTablePrefix(),
-            $faqId,
-            $categoryId,
-            $openQuestionId
-        );
-
-        return $this->config->getDb()->query($query);
-    }
 }

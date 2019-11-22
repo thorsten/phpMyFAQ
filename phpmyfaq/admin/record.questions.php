@@ -17,6 +17,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Date;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Question;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -39,6 +40,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
       <?php
       if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
           $category = new Category($faqConfig, [], false);
+          $question = new Question($faqConfig);
           $category->setUser($currentAdminUser);
           $category->setGroups($currentAdminGroups);
           $date = new Date($faqConfig);
@@ -46,17 +48,17 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
           $toggle = Filter::filterInput(INPUT_GET, 'is_visible', FILTER_SANITIZE_STRING);
           if ($toggle == 'toggle') {
-              $is_visible = $faq->getVisibilityOfQuestion($questionId);
-              if (!is_null($is_visible)) {
-                  $faq->setVisibilityOfQuestion($questionId, ($is_visible == 'N' ? 'Y' : 'N'));
+              $isVisible = $question->getVisibility($questionId);
+              if (!is_null($isVisible)) {
+                  $question->setVisibility($questionId, ($isVisible == 'N' ? 'Y' : 'N'));
               }
           }
 
           echo '<div id="returnMessage"></div>';
 
-          $openquestions = $faq->getAllOpenQuestions();
+          $openQuestions = $question->getAllOpenQuestions();
 
-          if (count($openquestions) > 0) {
+          if (count($openQuestions) > 0) {
               ?>
             <form id="questionSelection" name="questionSelection" method="post" accept-charset="utf-8">
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
@@ -71,40 +73,40 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 </thead>
                 <tbody>
                 <?php
-                foreach ($openquestions as $question) {
+                foreach ($openQuestions as $openQuestion) {
                     ?>
                   <tr>
                     <td>
                       <label>
-                        <input id="questions[]" name="questions[]" value="<?= $question['id'] ?>" type="checkbox">
+                        <input id="questions[]" name="questions[]" value="<?= $openQuestion->getId() ?>" type="checkbox">
                       </label>
                     </td>
                     <td>
-                        <?= $date->format(Date::createIsoDate($question['created'])) ?>
+                        <?= $date->format(Date::createIsoDate($openQuestion->getCreated())) ?>
                       <br>
-                      <a href="mailto:<?= $question['email'] ?>">
-                          <?= $question['username'] ?>
+                      <a href="mailto:<?= $openQuestion->getEmail() ?>">
+                          <?= $openQuestion->getUsername() ?>
                       </a>
                     </td>
                     <td>
-                      <strong><?= $category->categoryName[$question['category_id']]['name'] ?></strong>
+                      <strong><?= $category->categoryName[$openQuestion->getCategoryId()]['name'] ?></strong>
                       <br>
-                        <?= $question['question'] ?>
+                        <?= $openQuestion->getQuestion() ?>
                     </td>
                     <td>
-                      <a href="?action=question&amp;id=<?= $question['id'] ?>&amp;is_visible=toggle"
+                      <a href="?action=question&amp;id=<?= $openQuestion->getId() ?>&amp;is_visible=toggle"
                          class="btn btn-info">
-                          <?= ('Y' == $question['is_visible']) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
+                          <?= ('Y' === $openQuestion->isVisible()) ? $PMF_LANG['ad_gen_yes'] : $PMF_LANG['ad_gen_no'] ?>
                       </a>
                     </td>
                     <td>
-                        <?php if ($faqConfig->get('records.enableCloseQuestion') && $question['answer_id']) { ?>
-                        <a href="?action=editentry&amp;id=<?= $question['answer_id'] ?>&amp;lang=<?= $faqLangCode ?>"
+                        <?php if ($faqConfig->get('records.enableCloseQuestion') && $openQuestion['answer_id']) { ?>
+                        <a href="?action=editentry&amp;id=<?= $openQuestion->getAnswerId() ?>&amp;lang=<?= $faqLangCode ?>"
                            class="btn btn-success">
                             <?= $PMF_LANG['msg2answerFAQ'] ?>
                         </a>
                         <?php } else { ?>
-                        <a href="?action=takequestion&amp;id=<?= $question['id'] ?>" class="btn btn-success">
+                        <a href="?action=takequestion&amp;id=<?= $openQuestion->getId() ?>" class="btn btn-success">
                             <?= $PMF_LANG['ad_ques_take'] ?>
                         </a>
                         <?php } ?>

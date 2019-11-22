@@ -161,7 +161,7 @@ class CategoryHelper extends Helper
 
                 $level = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
-                $numChilds = $this->Category->treeTab[$y]['numChilds'];
+                $numChildren = $this->Category->treeTab[$y]['numChilds'];
 
                 if (!isset($number[$parent])) {
                     $number[$parent] = 0;
@@ -197,14 +197,14 @@ class CategoryHelper extends Helper
                         str_repeat("\t", $level + 1),
                         str_repeat("\t", $level + 1)
                     );
-                    if ($numChilds > 0) {
+                    if ($numChildren > 0) {
                         $output .= '<li class="dropdown-submenu">';
                     } else {
                         $output .= '<li>';
                     }
                 } else {
                     $output .= str_repeat("\t", $level + 1);
-                    if ($numChilds > 0) {
+                    if ($numChildren > 0) {
                         $output .= '<li class="dropdown-submenu">';
                     } else {
                         $output .= '<li>';

@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The main Comment class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,22 +17,13 @@ namespace phpMyFAQ;
  * @since 2006-07-23
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Date;
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Comment.
- *
+ * Class Comment
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-07-23
  */
 class Comment
 {
@@ -78,51 +67,55 @@ class Comment
     }
 
     /**
-     * Returns a user comment.
+     * Returns all user comments (HTML formatted) from a record by type.
      *
-     * @param int $id comment id
-     *
+     * @todo Move this code to a helper class
+     * @param int $id Comment ID
+     * @param int $type Comment type: {faq|news}
      * @return string
      */
-    public function getCommentDataById($id)
+    public function getComments(int $id, int $type): string
     {
-        $item = [];
+        $comments = $this->getCommentsData($id, $type);
+        $date = new Date($this->config);
+        $mail = new Mail($this->config);
 
-        $query = sprintf('
-            SELECT
-                id_comment, id, type, usr, email, comment, datum
-            FROM
-                %sfaqcomments
-            WHERE
-                id_comment = %d',
-            Database::getTablePrefix(),
-            $id);
+        $output = '';
+        foreach ($comments as $item) {
 
-        $result = $this->config->getDb()->query($query);
-        if (($this->config->getDb()->numRows($result) > 0) && ($row = $this->config->getDb()->fetchObject($result))) {
-            $item = array(
-                'id' => $row->id_comment,
-                'recordId' => $row->id,
-                'type' => $row->type,
-                'content' => $row->comment,
-                'date' => $row->datum,
-                'user' => $row->usr,
-                'email' => $row->email,
+            $output .= '<article class="pmf-comment">';
+            $output .= '    <header class="clearfix">';
+            $output .= '        <div class="pmf-commment-meta">';
+            $output .= sprintf(
+                '            <h3><a href="mailto:%s">%s</a></h3>',
+                $mail->safeEmail($item['email']),
+                $item['user']
             );
+            $output .= sprintf(
+                '            <span class="pmf-comment-date">%s</span>',
+                $date->format($item['date'])
+            );
+            $output .= '        </div>';
+            $output .= '    </header>';
+            $output .= sprintf(
+                '    <div class="pmf-comment-body">%s</div>',
+                $this->showShortComment($id, $item['content'])
+            );
+            $output .= '</article>';
         }
 
-        return $item;
+        return $output;
     }
 
     /**
      * Returns all user comments from a record by type.
      *
-     * @param int $id   record id
+     * @param int $id record id
      * @param int $type record type: {faq|news}
      *
      * @return array
      */
-    public function getCommentsData($id, $type)
+    public function getCommentsData(int $id, int $type): array
     {
         $comments = [];
 
@@ -156,46 +149,31 @@ class Comment
     }
 
     /**
-     * Returns all user comments (HTML formatted) from a record by type.
+     * Adds some fancy HTML if a comment is too long.
      *
-     * @todo Move this code to a helper class
-     *
-     * @param int $id   Comment ID
-     * @param int $type Comment type: {faq|news}
-     *
+     * @param int $id
+     * @param string $comment
      * @return string
      */
-    public function getComments($id, $type)
+    private function showShortComment(int $id, string $comment): string
     {
-        $comments = $this->getCommentsData($id, $type);
-        $date = new Date($this->config);
-        $mail = new Mail($this->config);
+        $words = explode(' ', nl2br($comment));
+        $numWords = 0;
 
-        $output = '';
-        foreach ($comments as $item) {
-
-            $output .= '<article class="pmf-comment">';
-            $output .= '    <header class="clearfix">';
-            $output .= '        <div class="pmf-commment-meta">';
-            $output .= sprintf(
-                '            <h3><a href="mailto:%s">%s</a></h3>',
-                $mail->safeEmail($item['email']),
-                $item['user']
-                );
-            $output .= sprintf(
-                '            <span class="pmf-comment-date">%s</span>',
-                $date->format($item['date'])
-                );
-            $output .= '        </div>';
-            $output .= '    </header>';
-            $output .= sprintf(
-                '    <div class="pmf-comment-body">%s</div>',
-                $this->showShortComment($id, $item['content'])
-            );
-            $output .= '</article>';
+        $comment = '';
+        foreach ($words as $word) {
+            $comment .= $word . ' ';
+            if (15 === $numWords) {
+                $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
+                    '<a data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
+                    ' pointer">' . $this->pmfStr['msgShowMore'] . '</a>' .
+                    '<span class="comment-more-' . $id . ' hide">';
+            }
+            ++$numWords;
         }
 
-        return $output;
+        // Convert URLs to HTML anchors
+        return Utils::parseUrl($comment) . '</span>';
     }
 
     /**
@@ -205,7 +183,7 @@ class Comment
      *
      * @return bool
      */
-    public function addComment(Array $commentData)
+    public function addComment(Array $commentData): bool
     {
         $query = sprintf("
             INSERT INTO
@@ -213,7 +191,7 @@ class Comment
             VALUES
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix().'faqcomments', 'id_comment'),
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
             $commentData['record_id'],
             $commentData['type'],
             $commentData['username'],
@@ -233,12 +211,12 @@ class Comment
     /**
      * Deletes a comment.
      *
-     * @param int $recordId  Record id
+     * @param int $recordId Record id
      * @param int $commentId Comment id
      *
      * @return bool
      */
-    public function deleteComment($recordId, $commentId)
+    public function deleteComment(int $recordId, int $commentId): bool
     {
         if (!is_int($recordId) && !is_int($commentId)) {
             return false;
@@ -326,7 +304,7 @@ class Comment
             ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
             Database::getTablePrefix(),
             ($type == self::COMMENT_TYPE_FAQ) ? 'LEFT JOIN
-                '.Database::getTablePrefix()."faqcategoryrelations fcg
+                ' . Database::getTablePrefix() . "faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
             $type
@@ -348,34 +326,5 @@ class Comment
         }
 
         return $comments;
-    }
-
-    /**
-     * Adds some fancy HTML if a comment is too long.
-     *
-     * @param int    $id
-     * @param string $comment
-     *
-     * @return string
-     */
-    public function showShortComment($id, $comment)
-    {
-        $words = explode(' ', nl2br($comment));
-        $numWords = 0;
-
-        $comment = '';
-        foreach ($words as $word) {
-            $comment .= $word.' ';
-            if (15 === $numWords) {
-                $comment .= '<span class="comment-dots-'.$id.'">&hellip; </span>'.
-                        '<a data-comment-id="'.$id.'" class="pmf-comments-show-more comment-show-more-'.$id.
-                        ' pointer">'.$this->pmfStr['msgShowMore'].'</a>'.
-                        '<span class="comment-more-'.$id.' hide">';
-            }
-            ++$numWords;
-        }
-
-        // Convert URLs to HTML anchors
-        return Utils::parseUrl($comment).'</span>';
     }
 }

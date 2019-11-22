@@ -30,6 +30,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Mail;
 use phpMyFAQ\Network;
 use phpMyFAQ\News;
+use phpMyFAQ\Question;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
@@ -289,6 +290,7 @@ switch ($action) {
 
         $faq = new Faq($faqConfig);
         $category = new Category($faqConfig);
+        $questionObject = new Question($faqConfig);
         $author = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
         $faqId = Filter::filterInput(INPUT_POST, 'faqid', FILTER_VALIDATE_INT);
@@ -390,9 +392,9 @@ switch ($action) {
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionID', FILTER_VALIDATE_INT);
             if ($openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) {
-                    $faq->deleteQuestion($openQuestionId);
+                    $questionObject->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
-                    $faq->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
+                    $questionObject->updateQuestionAnswer($openQuestionId, $recordId, $categories[0]);
                 }
             }
 
@@ -573,7 +575,8 @@ switch ($action) {
                     $message = array('result' => $response);
                 } else {
 
-                    $faq->addQuestion($questionData);
+                    $questionObject = new Question($faqConfig);
+                    $questionObject->addQuestion($questionData);
 
                     $questionMail = 'User: ' . $questionData['username'] .
                         ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .

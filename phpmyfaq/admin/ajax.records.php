@@ -22,6 +22,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
+use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 
@@ -140,10 +141,11 @@ switch ($ajaxAction) {
                 'flags' => FILTER_REQUIRE_ARRAY,
             );
             $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
+            $question = new Question($faqConfig);
 
             if (!is_null($questionIds['questions'])) {
                 foreach ($questionIds['questions'] as $questionId) {
-                    $faq->deleteQuestion((int)$questionId);
+                    $question->deleteQuestion((int)$questionId);
                 }
             }
             echo $PMF_LANG['ad_entry_delsuc'];

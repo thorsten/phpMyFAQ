@@ -30,6 +30,6 @@ $captcha = new Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
-    $captcha->showCaptchaImg();
+    $captcha->drawCaptchaImage();
     exit;
 }

@@ -23,15 +23,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * EncryptionTypes.
- *
+ * Class Encryption
  * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-18
  */
 class Encryption
 {
@@ -54,7 +47,7 @@ class Encryption
      *
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
      * Salt.
@@ -70,19 +63,7 @@ class Encryption
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
-    }
-
-    /**
-     * Encrypts the string str and returns the result.
-     *
-     * @param string $str String
-     *
-     * @return string
-     */
-    public function encrypt($str): string
-    {
-        return $str;
+        $this->config = $config;
     }
 
     /**
@@ -98,12 +79,12 @@ class Encryption
      * object without database access and with an error message. See the
      * of the error() method for further details.
      *
-     * @param string            $encType
+     * @param string $encType
      * @param Configuration $config
      *
      * @return Encryption
      */
-    public static function selectEnc($encType, Configuration $config)
+    public static function selectEnc(string $encType, Configuration $config): Encryption
     {
         $enc = new self($config);
         $encType = ucfirst(strtolower($encType));
@@ -114,7 +95,7 @@ class Encryption
             return $enc;
         }
 
-        $encClass = 'phpMyFAQ\\EncryptionTypes\\'.$encType;
+        $encClass = 'phpMyFAQ\\EncryptionTypes\\' . $encType;
 
         if (!class_exists($encClass)) {
             $enc->errors[] = self::PMF_ERROR_USER_NO_ENCTYPE;
@@ -123,6 +104,18 @@ class Encryption
         }
 
         return new $encClass($config);
+    }
+
+    /**
+     * Encrypts the string str and returns the result.
+     *
+     * @param string $str String
+     *
+     * @return string
+     */
+    public function encrypt(string $str): string
+    {
+        return $str;
     }
 
     /**
@@ -138,7 +131,7 @@ class Encryption
         }
         $message = '';
         foreach ($this->errors as $error) {
-            $message .= $error."\n";
+            $message .= $error . "\n";
         }
 
         return $message;
@@ -151,9 +144,9 @@ class Encryption
      *
      * @return Encryption
      */
-    public function setSalt($login)
+    public function setSalt(string $login): Encryption
     {
-        $this->salt = $this->_config->get('security.salt').$login;
+        $this->salt = $this->config->get('security.salt') . $login;
 
         return $this;
     }

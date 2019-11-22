@@ -49,7 +49,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     {
         parent::__construct($config);
 
-        $this->db = $this->_config->getDb();
+        $this->db = $this->config->getDb();
     }
 
     /**
@@ -221,7 +221,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         while ($user = $this->db->fetchArray($check)) {
 
             // Check password against old one
-            if ($this->_config->get('security.forcePasswordUpdate')) {
+            if ($this->config->get('security.forcePasswordUpdate')) {
                 if ($this->checkEncryptedPassword($user['pass'], $password) &&
                     $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']) {
                     return $this->changePassword($login, $password);

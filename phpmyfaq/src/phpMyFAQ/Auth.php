@@ -42,24 +42,28 @@ class Auth
 {
     /** @var string */
     const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
+
     /**
      * public array that contains error messages.
      *
      * @var array
      */
     public $errors = [];
+
     /**
      * p container that stores the encryption object.
      *
      * @var Encryption
      */
     protected $encContainer = null;
+
     /**
      * Configuration.
      *
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
+
     /**
      * Short description of attribute read_only.
      *
@@ -74,7 +78,7 @@ class Auth
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -82,13 +86,11 @@ class Auth
      * method.
      *
      * @param string $encType encryption type
-     *
      * @return Encryption
      */
-    public function selectEncType($encType)
+    public function selectEncType($encType): Encryption
     {
-        $this->encContainer = Encryption::selectEnc($encType, $this->_config);
-
+        $this->encContainer = Encryption::selectEnc($encType, $this->config);
         return $this->encContainer;
     }
 
@@ -130,7 +132,7 @@ class Auth
      *
      * @return Auth
      */
-    public function selectAuth($method)
+    public function selectAuth($method): Auth
     {
         // verify selected database
         $method = ucfirst(strtolower($method));
@@ -149,7 +151,7 @@ class Auth
             return $this;
         }
 
-        return new $authClass($this->_config);
+        return new $authClass($this->config);
     }
 
     /**
@@ -159,7 +161,7 @@ class Auth
      *
      * @return bool
      */
-    public function setReadOnly($readOnly = null): bool
+    public function setReadOnly(bool $readOnly = null): bool
     {
         if ($readOnly === null) {
             return $this->readOnly;
@@ -200,7 +202,7 @@ class Auth
         $encTypes = ['crypt', 'md5', 'sha'];
 
         foreach ($encTypes as $encType) {
-            if ($encryptedPassword === Encryption::selectEnc($encType, $this->_config)->encrypt($clearPassword)) {
+            if ($encryptedPassword === Encryption::selectEnc($encType, $this->config)->encrypt($clearPassword)) {
                 return true;
             }
         }

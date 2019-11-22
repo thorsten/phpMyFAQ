@@ -103,15 +103,15 @@ class AuthSso extends Auth implements AuthDriverInterface
      */
     public function add($login, $pass, $domain = ''): bool
     {
-        if ($this->_config->get('ldap.ldapSupport')) {
+        if ($this->config->get('ldap.ldapSupport')) {
             // LDAP/AD + SSO
-            $authLdap = new AuthLdap($this->_config);
+            $authLdap = new AuthLdap($this->config);
             $result = $authLdap->add($login, null, $domain);
 
             return $result;
         } else {
             // SSO without LDAP/AD
-            $user = new User($this->_config);
+            $user = new User($this->config);
             $result = $user->createUser($login, null, $domain);
 
             if ($result) {

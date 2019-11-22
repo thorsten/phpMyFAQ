@@ -23,6 +23,7 @@ use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
+use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User;
@@ -53,6 +54,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
+    $questionObject = new Question($faqConfig);
+
     $selectedCategory = '';
     $categories = [];
     $faqData = [
@@ -69,7 +72,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
     if ('takequestion' === $action) {
         $questionId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-        $question = $faq->getQuestion($questionId);
+        $question = $questionObject->getQuestion($questionId);
         $selectedCategory = $question['category_id'];
         $faqData['title'] = $question['question'];
         $notifyUser = $question['username'];

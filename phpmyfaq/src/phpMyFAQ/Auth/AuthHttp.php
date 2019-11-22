@@ -42,7 +42,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
      */
     public function add($login, $pass, $domain = ''): bool
     {
-        $user = new User($this->_config);
+        $user = new User($this->config);
         $result = $user->createUser($login, null);
 
         $user->setStatus('active');

@@ -36,16 +36,20 @@ if ($faqConfig->get('main.enableRssFeeds')) {
     $rssFeedOpenQuestions = '';
 }
 
-$template->parse(
-    'writeContent',
-    [
-        'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
-        'msgQuestionText' => $PMF_LANG['msgQuestionText'],
-        'msgDate_User' => $PMF_LANG['msgDate_User'],
-        'msgQuestion2' => $PMF_LANG['msgQuestion2'],
-        'printOpenQuestions' => $faq->renderOpenQuestions()
-    ]
-);
+try {
+    $template->parse(
+        'writeContent',
+        [
+            'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
+            'msgQuestionText' => $PMF_LANG['msgQuestionText'],
+            'msgDate_User' => $PMF_LANG['msgDate_User'],
+            'msgQuestion2' => $PMF_LANG['msgQuestion2'],
+            'printOpenQuestions' => $faq->renderOpenQuestions()
+        ]
+    );
+} catch (Exception $e) {
+
+}
 
 $template->parseBlock(
     'index',

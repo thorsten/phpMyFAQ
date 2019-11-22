@@ -28,23 +28,18 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Configuration
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-01-04
  */
 class Configuration
 {
     /**
-     * @var string
-     */
-    protected $tableName = 'faqconfig';
-
-    /**
      * @var array
      */
     public $config = [];
+
+    /**
+     * @var string
+     */
+    protected $tableName = 'faqconfig';
 
     /**
      * Constructor.
@@ -57,67 +52,46 @@ class Configuration
     }
 
     /**
-     * Fetches all configuration items into an array.
+     * Sets the phpMyFAQ\Db_Driver object.
+     *
+     * @param DatabaseDriver $database
      */
-    public function getAll()
+    public function setDb(DatabaseDriver $database)
     {
-        $config = [];
-        $query = sprintf('
-            SELECT
-                config_name, config_value
-            FROM
-                %s%s',
-            Database::getTablePrefix(),
-            $this->tableName
-        );
-
-        $result = $this->getDb()->query($query);
-        try {
-            $config = $this->getDb()->fetchAll($result);
-        } catch (Exception $e) {
-            // @todo Added proper handling of exception
-            echo $e->getMessage();
-        }
-        foreach ($config as $items) {
-            $this->config[$items->config_name] = $items->config_value;
-        }
+        $this->config['core.database'] = $database;
     }
 
     /**
-     * Returns a configuration item.
+     * Returns all sorting possibilities for FAQ records.
      *
-     * @param string $item Configuration item
+     * @param string $current
      *
-     * @return mixed
+     * @return string
      */
-    public function get($item)
+    public static function sortingOptions($current): string
     {
-        if (!isset($this->config[$item])) {
-            $this->getAll();
+        global $LANG;
+
+        $options = ['id', 'thema', 'visits', 'updated', 'author'];
+        $output = '';
+
+        foreach ($options as $value) {
+            printf(
+                '<option value="%s" %s>%s</option>',
+                $value,
+                ($value == $current) ? 'selected' : '',
+                $LANG['ad_conf_order_' . $value]
+            );
         }
 
-        if (isset($this->config[$item])) {
-            switch ($this->config[$item]) {
-                case 'true':
-                    return true;
-                    break;
-                case 'false':
-                    return false;
-                    break;
-                default:
-                    return $this->config[$item];
-                    break;
-            }
-        }
-
-        return;
+        return $output;
     }
 
     /**
      * Sets one single configuration item.
      *
      * @param string $key
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool
      */
@@ -134,17 +108,7 @@ class Configuration
     }
 
     /**
-     * Sets the phpMyFAQ\Db_Driver object.
-     *
-     * @param DatabaseDriver $database
-     */
-    public function setDb(DatabaseDriver $database)
-    {
-        $this->config['core.database'] = $database;
-    }
-
-    /**
-     * Returns the phpMyFAQ\Db_Driver object.
+     * Returns the DatabaseDriver object.
      *
      * @return DatabaseDriver
      */
@@ -220,9 +184,66 @@ class Configuration
         $defaultUrl = $this->get('main.referenceURL');
 
         if (substr($defaultUrl, -1) !== '/') {
-            return $defaultUrl.'/';
+            return $defaultUrl . '/';
         } else {
             return $defaultUrl;
+        }
+    }
+
+    /**
+     * Returns a configuration item.
+     *
+     * @param string $item Configuration item
+     *
+     * @return mixed
+     */
+    public function get($item)
+    {
+        if (!isset($this->config[$item])) {
+            $this->getAll();
+        }
+
+        if (isset($this->config[$item])) {
+            switch ($this->config[$item]) {
+                case 'true':
+                    return true;
+                    break;
+                case 'false':
+                    return false;
+                    break;
+                default:
+                    return $this->config[$item];
+                    break;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Fetches all configuration items into an array.
+     */
+    public function getAll()
+    {
+        $config = [];
+        $query = sprintf('
+            SELECT
+                config_name, config_value
+            FROM
+                %s%s',
+            Database::getTablePrefix(),
+            $this->tableName
+        );
+
+        $result = $this->getDb()->query($query);
+        try {
+            $config = $this->getDb()->fetchAll($result);
+        } catch (Exception $e) {
+            // @todo Added proper handling of exception
+            echo $e->getMessage();
+        }
+        foreach ($config as $items) {
+            $this->config[$items->config_name] = $items->config_value;
         }
     }
 
@@ -288,16 +309,6 @@ class Configuration
     }
 
     /**
-     * Returns the LDAP configuration.
-     *
-     * @return array
-     */
-    public function getLdapConfig(): array
-    {
-        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
-    }
-
-    /**
      * Returns the LDAP mapping configuration.
      *
      * @return array
@@ -314,7 +325,7 @@ class Configuration
 
     /**
      * Returns the LDAP options configuration.
-     * 
+     *
      * @return array
      */
     public function getLdapOptions(): array
@@ -323,6 +334,16 @@ class Configuration
             'LDAP_OPT_PROTOCOL_VERSION' => $this->get('ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'),
             'LDAP_OPT_REFERRALS' => $this->get('ldap.ldap_options.LDAP_OPT_REFERRALS')
         ];
+    }
+
+    /**
+     * Returns the LDAP configuration.
+     *
+     * @return array
+     */
+    public function getLdapConfig(): array
+    {
+        return isset($this->config['core.ldapConfig']) ? $this->config['core.ldapConfig'] : [];
     }
 
     /**
@@ -379,7 +400,7 @@ class Configuration
      * Adds a configuration item for the database.
      *
      * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @return bool|object
      */
@@ -469,31 +490,5 @@ class Configuration
         }
 
         return false;
-    }
-
-    /**
-     * Returns all sorting possibilities for FAQ records.
-     *
-     * @param string $current
-     *
-     * @return string
-     */
-    public static function sortingOptions($current): string
-    {
-        global $LANG;
-
-        $options = ['id', 'thema', 'visits', 'updated', 'author'];
-        $output = '';
-
-        foreach ($options as $value) {
-            printf(
-                '<option value="%s" %s>%s</option>',
-                $value,
-                ($value == $current) ? 'selected' : '',
-                $LANG['ad_conf_order_'.$value]
-            );
-        }
-
-        return $output;
     }
 }

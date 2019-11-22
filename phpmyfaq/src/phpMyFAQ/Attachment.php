@@ -23,13 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Attachment
- *
  * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
  */
 class Attachment
 {

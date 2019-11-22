@@ -3,19 +3,15 @@
 /**
  * The RSS feed with the latest open questions.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2006-06-17
  */
@@ -24,10 +20,10 @@ define('PMF_ROOT_DIR', dirname(dirname(__DIR__)));
 define('IS_VALID_PHPMYFAQ', null);
 
 use phpMyFAQ\Date;
-use phpMyFAQ\Faq;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Permission\MediumPermission;
+use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 use phpMyFAQ\Utils;
@@ -35,7 +31,7 @@ use phpMyFAQ\Utils;
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 //
 // get language (default: english)
@@ -43,12 +39,12 @@ require PMF_ROOT_DIR.'/src/Bootstrap.php';
 $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 // Preload English strings
-require_once PMF_ROOT_DIR.'/lang/language_en.php';
+require_once PMF_ROOT_DIR . '/lang/language_en.php';
 $faqConfig->setLanguage($Language);
 
 if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
     // Overwrite English strings with the ones we have in the current language
-    require_once PMF_ROOT_DIR.'/lang/language_'.$faqLangCode.'.php';
+    require_once PMF_ROOT_DIR . '/lang/language_' . $faqLangCode . '.php';
 } else {
     $faqLangCode = 'en';
 }
@@ -104,11 +100,11 @@ if (!$faqConfig->get('main.enableRssFeeds')) {
     exit();
 }
 
-$faq = new Faq($faqConfig);
-$rssData = $faq->getAllOpenQuestions(false);
-$num = count($rssData);
+$question = new Question($faqConfig);
+$openQuestions = $question->getAllOpenQuestions(false);
+$num = count($openQuestions);
 
-$rss = new \XMLWriter();
+$rss = new XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
@@ -117,33 +113,38 @@ $rss->startElement('rss');
 $rss->writeAttribute('version', '2.0');
 $rss->writeAttribute('xmlns:atom', 'http://www.w3.org/2005/Atom');
 $rss->startElement('channel');
-$rss->writeElement('title', $faqConfig->get('main.titleFAQ').' - '.$PMF_LANG['msgOpenQuestions']);
+$rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgOpenQuestions']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->getDefaultUrl());
 $rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
-$rss->writeAttribute('href', $faqConfig->getDefaultUrl().'feed/openquestions/rss.php');
+$rss->writeAttribute('href', $faqConfig->getDefaultUrl() . 'feed/openquestions/rss.php');
 $rss->endElement();
 
 if ($num > 0) {
     $counter = 0;
-    foreach ($rssData as $item) {
+    foreach ($openQuestions as $openQuestion) {
         if ($counter < PMF_RSS_OPENQUESTIONS_MAX) {
             ++$counter;
 
             $rss->startElement('item');
-            $rss->writeElement('title', Utils::makeShorterText(html_entity_decode($item['question'], ENT_COMPAT, 'UTF-8'), 8).
-                                        ' ('.$item['username'].')');
+            $rss->writeElement('title',
+                Utils::makeShorterText(html_entity_decode($openQuestion->getQuestion(), ENT_COMPAT, 'UTF-8'), 8) .
+                ' (' . $openQuestion->getUsername() . ')');
 
             $rss->startElement('description');
-            $rss->writeCdata($item['question']);
+            $rss->writeCdata($openQuestion->getQuestion());
             $rss->endElement();
 
-            $rss->writeElement('link', (isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER['HTTP_HOST'].str_replace('feed/openquestions/rss.php', 'index.php', $_SERVER['SCRIPT_NAME']).'?action=open#openq_'.$item['id']);
-            $rss->writeElement('guid', (isset($_SERVER['HTTPS']) ? 's' : '').'://'.$_SERVER['HTTP_HOST'].str_replace('feed/openquestions/rss.php', 'index.php', $_SERVER['SCRIPT_NAME']).'?action=open#openq_'.$item['id']);
+            $rss->writeElement('link',
+                (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . str_replace('feed/openquestions/rss.php',
+                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open#openq_' . $openQuestion->getId());
+            $rss->writeElement('guid',
+                (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . str_replace('feed/openquestions/rss.php',
+                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open#openq_' . $openQuestion->getId());
 
-            $rss->writeElement('pubDate', Date::createRFC822Date($item['created'], true));
+            $rss->writeElement('pubDate', Date::createRFC822Date($openQuestion->getCreated(), true));
             $rss->endElement();
         }
     }
@@ -151,14 +152,14 @@ if ($num > 0) {
 
 $rss->endElement();
 $rss->endElement();
-$rssData = $rss->outputMemory();
+$openQuestions = $rss->outputMemory();
 
 $headers = array(
     'Content-Type: application/rss+xml',
-    'Content-Length: '.strlen($rssData),
+    'Content-Length: ' . strlen($openQuestions),
 );
 
 $http = new HttpHelper();
-$http->sendWithHeaders($rssData, $headers);
+$http->sendWithHeaders($openQuestions, $headers);
 
 $faqConfig->getDb()->close();

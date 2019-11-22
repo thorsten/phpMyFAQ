@@ -19,6 +19,7 @@ use phpMyFAQ\Captcha;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
+use phpMyFAQ\Question;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
@@ -39,8 +40,10 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowNewFaqsForGuest
 $captcha = new Captcha($faqConfig);
 $captcha->setSessionId($sids);
 
+$questionObject = new Question($faqConfig);
+
 if (!is_null($showCaptcha)) {
-    $captcha->showCaptchaImg();
+    $captcha->drawCaptchaImage();
     exit;
 }
 
@@ -56,7 +59,7 @@ $selectedCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
 
 $question = $readonly = '';
 if (!is_null($selectedQuestion)) {
-    $oQuestion = $faq->getQuestion($selectedQuestion);
+    $oQuestion = $questionObject->getQuestion($selectedQuestion);
     $question = $oQuestion['question'];
     if (Strings::strlen($question)) {
         $readonly = ' readonly';

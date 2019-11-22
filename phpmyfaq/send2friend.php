@@ -42,7 +42,7 @@ if (!$faqConfig->get('main.enableSendToFriend')) {
 $captcha->setSessionId($sids);
 
 if (!is_null($showCaptcha)) {
-    $captcha->showCaptchaImg();
+    $captcha->drawCaptchaImage();
     exit;
 }
 

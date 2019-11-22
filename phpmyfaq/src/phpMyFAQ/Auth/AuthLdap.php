@@ -72,17 +72,17 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
-        $this->ldapServer = $this->_config->getLdapServer();
-        $this->multipleServers = $this->_config->get('ldap.ldap_use_multiple_servers');
+        $this->config = $config;
+        $this->ldapServer = $this->config->getLdapServer();
+        $this->multipleServers = $this->config->get('ldap.ldap_use_multiple_servers');
 
-        parent::__construct($this->_config);
+        parent::__construct($this->config);
 
         if (0 === count($this->ldapServer)) {
             throw new Exception('An error occurred while contacting LDAP: No configuration found.');
         }
 
-        $this->ldap = new LdapCore($this->_config);
+        $this->ldap = new LdapCore($this->config);
         $this->ldap->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
             $this->ldapServer[$this->activeServer]['ldap_port'],
@@ -168,7 +168,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         $bindLogin = $login;
-        if ($this->_config->get('ldap.ldap_use_domain_prefix')) {
+        if ($this->config->get('ldap.ldap_use_domain_prefix')) {
             if (array_key_exists('domain', $optionalData)) {
                 $bindLogin = $optionalData['domain'] . '\\' . $login;
             }
@@ -188,7 +188,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
         }
 
         // Check user in LDAP
-        $this->ldap = new LdapCore($this->_config);
+        $this->ldap = new LdapCore($this->config);
         $this->ldap->connect(
             $this->ldapServer[$this->activeServer]['ldap_server'],
             $this->ldapServer[$this->activeServer]['ldap_port'],
@@ -217,7 +217,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      */
     public function add($login, $password, $domain = ''): bool
     {
-        $user = new User($this->_config);
+        $user = new User($this->config);
         $result = $user->createUser($login, null, $domain);
 
         $this->ldap->connect(

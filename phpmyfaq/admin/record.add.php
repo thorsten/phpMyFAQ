@@ -23,6 +23,7 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Notification;
+use phpMyFAQ\Question;
 use phpMyFAQ\Services\Twitter;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -171,12 +172,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             }
 
             // Open question answered
+            $questionObject = new Question($faqConfig);
             $openQuestionId = Filter::filterInput(INPUT_POST, 'openQuestionId', FILTER_VALIDATE_INT);
             if (0 !== $openQuestionId) {
                 if ($faqConfig->get('records.enableDeleteQuestion')) { // deletes question
-                    $faq->deleteQuestion($openQuestionId);
+                    $questionObject->deleteQuestion($openQuestionId);
                 } else { // adds this faq record id to the related open question
-                    $faq->updateQuestionAnswer($openQuestionId, $recordId, $categories['rubrik'][0]);
+                    $questionObject->updateQuestionAnswer($openQuestionId, $recordId, $categories['rubrik'][0]);
                 }
 
                 $url = sprintf(

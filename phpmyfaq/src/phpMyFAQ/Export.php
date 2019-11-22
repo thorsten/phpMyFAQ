@@ -3,7 +3,7 @@
 namespace phpMyFAQ;
 
 /**
- * JSON, XML, HTML5 and PDF export - Classes and Functions.
+ * JSON, XML, HTML5 and PDF export
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,7 +18,6 @@ namespace phpMyFAQ;
  * @since 2005-11-02
  */
 
-use phpMyFAQ\Exception;
 use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
@@ -60,12 +59,13 @@ class Export
     /**
      * Factory.
      *
-     * @param Faq           $faq      FaqHelper object
-     * @param Category      $category Entity object
-     * @param Configuration $config   Configuration object
-     * @param string            $mode     Export
+     * @param Faq $faq FaqHelper object
+     * @param Category $category Entity object
+     * @param Configuration $config Configuration object
+     * @param string $mode Export
      * @return mixed
      * @throws Exception
+     * @throws \Exception
      */
     public static function create(Faq $faq, Category $category, Configuration $config, $mode = 'pdf')
     {
@@ -85,15 +85,5 @@ class Export
             default:
                 throw new Exception('Export not implemented!');
         }
-    }
-
-    /**
-     * Returns the timestamp of the export.
-     *
-     * @return string
-     */
-    public static function getExportTimeStamp()
-    {
-        return date('Y-m-d-H:i:s', $_SERVER['REQUEST_TIME']);
     }
 }
