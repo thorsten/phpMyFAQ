@@ -69,12 +69,13 @@ class Comment
     /**
      * Returns all user comments (HTML formatted) from a record by type.
      *
-     * @todo Move this code to a helper class
      * @param int $id Comment ID
-     * @param int $type Comment type: {faq|news}
+     * @param string $type Comment type: {faq|news}
      * @return string
+     * @throws \Exception
+     * @todo Move this code to a helper class
      */
-    public function getComments(int $id, int $type): string
+    public function getComments(int $id, string $type): string
     {
         $comments = $this->getCommentsData($id, $type);
         $date = new Date($this->config);
@@ -115,7 +116,7 @@ class Comment
      *
      * @return array
      */
-    public function getCommentsData(int $id, int $type): array
+    public function getCommentsData(int $id, string $type): array
     {
         $comments = [];
 
