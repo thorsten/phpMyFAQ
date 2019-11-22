@@ -16,6 +16,7 @@
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
+use phpMyFAQ\Changelog;
 use phpMyFAQ\Date;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
@@ -55,6 +56,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     $categoryHelper->setCategory($category);
 
     $questionObject = new Question($faqConfig);
+
+    $changelog = new Changelog($faqConfig);
 
     $selectedCategory = '';
     $categories = [];
@@ -612,7 +615,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                       </h6>
                     </div>
                     <div class="col-lg-10">
-                      <?php foreach ($faq->getChangeEntries($faqData['id']) as $entry) {
+                      <?php foreach ($changelog->getChangeEntries($faqData['id']) as $entry) {
                             $entryUser = new User($faqConfig);
                             $entryUser->getUserById($entry['user']);
                             ?>

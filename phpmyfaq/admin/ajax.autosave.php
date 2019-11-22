@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Tags;
@@ -110,7 +111,8 @@ if ('insertentry' === $do &&
             $faq->addNewRevision($record_id, $record_lang);
             ++$revision_id;
 
-            $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
+            $changelog = new Changelog($faqConfig);
+            $changelog->addEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
 
             $visits = new Visits($faqConfig);
             $visits->logViews($record_id);
@@ -146,7 +148,8 @@ if ('insertentry' === $do &&
             $revision_id = 1;
             $record_id = $faq->addRecord($recordData);
             if ($record_id) {
-                $faq->createChangeEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+                $changelog = new Changelog($faqConfig);
+                $changelog->addEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
                 $visits = new Visits($faqConfig);
                 $visits->add($record_id);
 

@@ -3,8 +3,6 @@
 /**
  * Save an existing FAQ record.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,6 +17,7 @@
 
 use Elasticsearch\Common\Exceptions\Missing404Exception;
 use phpMyFAQ\Category;
+use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -31,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -67,7 +66,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     );
     $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
-    $active = 'yes' == Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING) && $user->perm->checkRight($user->getUserId(), 'approverec') ? 'yes' : 'no';
+    $active = 'yes' == Filter::filterInput(INPUT_POST, 'active',
+        FILTER_SANITIZE_STRING) && $user->perm->checkRight($user->getUserId(), 'approverec') ? 'yes' : 'no';
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
     if ($faqConfig->get('main.enableMarkdownEditor')) {
         $content = Filter::filterInput(INPUT_POST, 'answer', FILTER_UNSAFE_RAW);
@@ -123,7 +123,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     if (!is_null($question) && !is_null($categories)) {
         // Save entry
         $logging = new Logging($faqConfig);
-        $logging->logAdmin($user, 'admin-save-existing-faq '.$recordId);
+        $logging->logAdmin($user, 'admin-save-existing-faq ' . $recordId);
 
         printf(
             '<header class="row"><div class="col-lg-12"><h2 class="page-header"><i aria-hidden="true" class="fa fa-pencil"></i> %s</h2></div></header>',
@@ -151,15 +151,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
             'date' => empty($date) ? date('YmdHis') : str_replace(array('-', ':', ' '), '', $date),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart).'000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
+            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
+            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
         );
 
         // Create ChangeLog entry
-        $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
+        $changelog = new Changelog($faqConfig);
+        $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
 
         // Create the visit entry
         $visits = new Visits($faqConfig);
@@ -178,7 +179,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         } else {
             printf(
                 '<p class="alert alert-danger">%s</p>',
-                $PMF_LANG['ad_entry_savedfail'].$faqConfig->getDb()->error()
+                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
             );
         }
 
@@ -233,14 +234,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         // All the other translations        
         $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
         ?>
-    <script>
-        (function() {
-            setTimeout(function() {
-                window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $recordData['lang'] ?>";
-            }, 5000);
+      <script>
+        (function () {
+          setTimeout(function () {
+            window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $recordData['lang'] ?>";
+          }, 5000);
         })();
-    </script>
-<?php
+      </script>
+        <?php
 
     }
 } else {

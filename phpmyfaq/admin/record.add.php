@@ -17,6 +17,7 @@
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Category;
+use phpMyFAQ\Changelog;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\LinkVerifierHelper;
 use phpMyFAQ\Instance\Elasticsearch;
@@ -34,7 +35,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -136,8 +137,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
             'date' => date('YmdHis'),
-            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart).'000000'),
-            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959'),
+            'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
+            'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
@@ -149,7 +150,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
         if ($recordId) {
             // Create ChangeLog entry
-            $faq->createChangeEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
+            $changelog = new Changelog($faqConfig);
+            $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
             // Create the visit entry
 
             $visits = new Visits($faqConfig);
@@ -233,7 +235,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     $recordId,
                     $recordLang
                 );
-                $oLink = new Link($faqConfig->getDefaultUrl().$link, $faqConfig);
+                $oLink = new Link($faqConfig->getDefaultUrl() . $link, $faqConfig);
                 $oLink->itemTitle = $question;
                 $link = $oLink->toString();
 
@@ -253,11 +255,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
               }, 5000);
             })();
           </script>
-<?php
+            <?php
         } else {
             printf(
                 '<p class="alert alert-danger">%s</p>',
-                $PMF_LANG['ad_entry_savedfail'].$faqConfig->getDb()->error()
+                $PMF_LANG['ad_entry_savedfail'] . $faqConfig->getDb()->error()
             );
         }
     } else {
@@ -302,7 +304,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
           </button>
         </p>
       </form>
-<?php
+        <?php
     }
 } else {
     echo $PMF_LANG['err_NotAuth'];

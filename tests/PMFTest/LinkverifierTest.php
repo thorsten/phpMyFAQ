@@ -57,7 +57,7 @@ class LinkverifierTest extends TestCase
         $config->config_name = 'foo';
         $config->config_value = '';
 
-        $this->dbHandle = $this->getMockBuilder('phpMyFAQ\Db\Sqlite3')->disableOriginalConstructor()->getMock();
+        $this->dbHandle = $this->getMockBuilder('phpMyFAQ\Database\Sqlite3')->disableOriginalConstructor()->getMock();
         $this->dbHandle->method('fetchAll')->willReturn([$config]);
 
         $this->config       = new Configuration($this->dbHandle);
@@ -86,7 +86,7 @@ class LinkverifierTest extends TestCase
      */
     public function testAddIgnoreProtocol()
     {
-        $class  = new ReflectionClass('phpMyFAQ\Linkverifier');
+        $class  = new ReflectionClass('phpMyFAQ\LinkVerifier');
         $method = $class->getMethod('addIgnoreProtocol');
         $method->setAccessible(true);
 

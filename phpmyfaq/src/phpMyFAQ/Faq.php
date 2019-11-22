@@ -2190,84 +2190,6 @@ class Faq
     }
 
     /**
-     * Adds a new changelog entry in the table faqchanges.
-     *
-     * @param int $id
-     * @param int $userId
-     * @param string $text
-     * @param string $lang
-     * @param int $revision_id
-     *
-     * @return bool
-     */
-    public function createChangeEntry($id, $userId, $text, $lang, $revision_id = 0)
-    {
-        if (!is_numeric($id)
-            && !is_numeric($userId)
-            && !is_string($text)
-            && !is_string($lang)
-        ) {
-            return false;
-        }
-
-        $query = sprintf(
-            "INSERT INTO
-                %sfaqchanges
-            (id, beitrag, lang, revision_id, usr, datum, what)
-                VALUES
-            (%d, %d, '%s', %d, %d, %d, '%s')",
-            Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqchanges', 'id'),
-            $id,
-            $lang,
-            $revision_id,
-            $userId,
-            $_SERVER['REQUEST_TIME'],
-            $text);
-
-        $this->config->getDb()->query($query);
-
-        return true;
-    }
-
-    /**
-     * Returns the changelog of a FAQ record.
-     *
-     * @param int $recordId
-     *
-     * @return array
-     */
-    public function getChangeEntries($recordId)
-    {
-        $entries = [];
-
-        $query = sprintf('
-            SELECT
-                DISTINCT revision_id, usr, datum, what
-            FROM
-                %sfaqchanges
-            WHERE
-                beitrag = %d
-            ORDER BY revision_id, datum DESC',
-            Database::getTablePrefix(),
-            $recordId
-        );
-
-        if ($result = $this->config->getDb()->query($query)) {
-            while ($row = $this->config->getDb()->fetchObject($result)) {
-                $entries[] = array(
-                    'revision_id' => $row->revision_id,
-                    'user' => $row->usr,
-                    'date' => $row->datum,
-                    'changelog' => $row->what,
-                );
-            }
-        }
-
-        return $entries;
-    }
-
-    /**
      * Retrieve faq records according to the constraints provided.
      *
      * @param string $queryType
@@ -2673,7 +2595,7 @@ class Faq
 
     /**
      * Prints the open questions as a HTML table.
-     *
+     * @todo needs to be moved to a QuestionHelper class
      * @return string
      * @throws \Exception
      */
@@ -2989,5 +2911,4 @@ class Faq
 
         return $inactive;
     }
-
 }

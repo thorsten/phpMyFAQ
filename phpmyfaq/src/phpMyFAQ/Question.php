@@ -2,8 +2,6 @@
 
 namespace phpMyFAQ;
 
-use phpMyFAQ\Entity\QuestionEntity;
-
 /**
  * The main Question class.
  *
@@ -18,6 +16,13 @@ use phpMyFAQ\Entity\QuestionEntity;
  * @link https://www.phpmyfaq.de
  * @since 2019-11-22
  */
+
+
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
+use phpMyFAQ\Entity\QuestionEntity;
 
 /**
  * Class Question
@@ -225,6 +230,7 @@ class Question
 
         return true;
     }
+
     /**
      * Updates field answer_id in the table "faqquestion".
      * @param int $openQuestionId

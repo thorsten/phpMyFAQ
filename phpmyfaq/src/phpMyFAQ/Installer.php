@@ -20,7 +20,7 @@ namespace phpMyFAQ;
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Database\DatabaseDriver;
-use phpMyFAQ\Instance\Database;
+use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Instance\Setup;
@@ -31,14 +31,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * Class Installer.
- *
+ * Class Installer
  * @package phpMyFAQ
- * @author Florian Anderiasch <florian@phpmyfaq.net>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-08-27
  */
 class Installer
 {
@@ -937,7 +931,7 @@ class Installer
             System::renderFooter(true);
         }
         try {
-            $databaseInstaller = Database::factory($configuration, $dbSetup['dbType']);
+            $databaseInstaller = InstanceDatabase::factory($configuration, $dbSetup['dbType']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
             $this->system->cleanInstallation();
