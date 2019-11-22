@@ -19,7 +19,7 @@
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Db\Sqlite3;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
@@ -57,7 +57,7 @@ class ResultsetTest extends TestCase
         $userMock = $this->getMockBuilder('phpMyFAQ\User\CurrentUser')->disableOriginalConstructor()->getMock();
         $faqMock  = $this->getMockBuilder('phpMyFAQ\Faq')->disableOriginalConstructor()->getMock();
         
-        $this->resultset = new Resultset($userMock, $faqMock, $this->configuration);
+        $this->resultset = new SearchResultSet($userMock, $faqMock, $this->configuration);
     }
     
     /**

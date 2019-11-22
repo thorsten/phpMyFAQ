@@ -27,7 +27,7 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
@@ -134,13 +134,13 @@ switch ($action) {
         $search = new Search($faqConfig);
         $search->setCategory(new Category($faqConfig));
 
-        $faqSearchResult = new Resultset($user, $faq, $faqConfig);
+        $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         try {
             $searchResults = $search->search($searchString, false);
             $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-            $faqSearchResult->reviewResultset($searchResults);
-            foreach ($faqSearchResult->getResultset() as $data) {
+            $faqSearchResult->reviewResultSet($searchResults);
+            foreach ($faqSearchResult->getResultSet() as $data) {
                 $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
                 $data->answer = Utils::makeShorterText($data->answer, 12);
                 $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);

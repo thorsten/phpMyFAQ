@@ -27,20 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * BasicPermission.
- *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * Class BasicPermission
+ * @package phpMyFAQ\Permission
  */
 class BasicPermission extends Permission
 {
     /**
      * Default right data stored when a new right is created.
-     *
      * @var array
      */
     public $defaultRightData = [
@@ -61,15 +54,147 @@ class BasicPermission extends Permission
     }
 
     /**
+     * Gives the user a new user-right.
+     * Returns true on success, otherwise false.
+     * @param int $userId User ID
+     * @param int $rightId Right ID
+     * @return bool
+     */
+    public function grantUserRight(int $userId, int $rightId): bool
+    {
+        // is right for users?
+        $rightData = $this->getRightData($rightId);
+
+        if (!isset($rightData['for_users'])) {
+            return false;
+        }
+
+        $insert = sprintf('
+            INSERT INTO
+                %sfaquser_right
+            (user_id, right_id)
+                VALUES
+            (%d, %d)',
+            Database::getTablePrefix(),
+            $userId,
+            $rightId
+        );
+
+        $res = $this->config->getDb()->query($insert);
+        if (!$res) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns an associative array with all data stored for in the
+     * database for the specified right. The keys of the returned
+     * array are the field names.
+     *
+     * @param int
+     *
+     * @return array
+     */
+    public function getRightData(int $rightId): array
+    {
+        // get right data
+        $select = sprintf('
+            SELECT
+                right_id,
+                name,
+                description,
+                for_users,
+                for_groups,
+                for_sections
+            FROM
+                %sfaqright
+            WHERE
+                right_id = %d',
+            Database::getTablePrefix(),
+            $rightId);
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return [];
+        }
+
+        // process right data
+        $rightData = $this->config->getDb()->fetchArray($res);
+        $rightData['for_users'] = (bool)$rightData['for_users'];
+        $rightData['for_groups'] = (bool)$rightData['for_groups'];
+        $rightData['for_sections'] = (bool)$rightData['for_sections'];
+
+        return $rightData;
+    }
+
+    /**
+     * Returns true if the user given by user_id has the right,
+     * otherwise false. Unlike checkUserRight(), right may be a
+     * right-ID or a right-name. Another difference is, that also
+     * group-rights are taken into account.
+     *
+     * @param int $userId User ID
+     * @param mixed $right Right ID or right name
+     *
+     * @return bool
+     */
+    public function checkRight(int $userId, $right): bool
+    {
+        $user = new CurrentUser($this->config);
+        $user->getUserById($userId);
+
+        if ($user->isSuperAdmin()) {
+            return true;
+        }
+
+        if (!is_numeric($right) and is_string($right)) {
+            $right = $this->getRightId($right);
+        }
+
+        return $this->checkUserRight($user->getUserId(), $right);
+    }
+
+    /**
+     * Returns the right-ID of the right with the name $name.
+     *
+     * @param string $name Name
+     *
+     * @return int
+     */
+    public function getRightId(string $name): int
+    {
+        // get right id
+        $select = sprintf("
+            SELECT
+                right_id
+            FROM
+                %sfaqright
+            WHERE
+                name = '%s'",
+            Database::getTablePrefix(),
+            $this->config->getDb()->escape($name));
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return 0;
+        }
+        $row = $this->config->getDb()->fetchArray($res);
+
+        return $row['right_id'];
+    }
+
+    /**
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @param int $userId  User ID
+     * @param int $userId User ID
      * @param int $rightId Right ID
      *
      * @return bool
      */
-    public function checkUserRight($userId, $rightId)
+    public function checkUserRight(int $userId, int $rightId): bool
     {
         // check right id
         if ($rightId <= 0) {
@@ -105,6 +230,19 @@ class BasicPermission extends Permission
     }
 
     /**
+     * Returns an array that contains the IDs of all user-rights
+     * the user owns.
+     *
+     * @param int $userId User ID
+     *
+     * @return array
+     */
+    public function getAllUserRights(int $userId): array
+    {
+        return $this->getUserRights($userId);
+    }
+
+    /**
      * Returns an array with the IDs of all user-rights the user
      * specified by user_id owns. Group rights are not taken into
      * account.
@@ -113,7 +251,7 @@ class BasicPermission extends Permission
      *
      * @return array
      */
-    public function getUserRights($userId)
+    public function getUserRights(int $userId): array
     {
         // get user rights
         $select = sprintf('
@@ -142,168 +280,21 @@ class BasicPermission extends Permission
     }
 
     /**
-     * Gives the user a new user-right.
-     * Returns true on success, otherwise false.
-     *
-     * @param int $userId  User ID
-     * @param int $rightId Right ID
-     *
-     * @return bool
-     */
-    public function grantUserRight($userId, $rightId)
-    {
-        // is right for users?
-        $rightData = $this->getRightData($rightId);
-
-        if (!isset($rightData['for_users'])) {
-            return false;
-        }
-
-        $insert = sprintf('
-            INSERT INTO
-                %sfaquser_right
-            (user_id, right_id)
-                VALUES
-            (%d, %d)',
-            Database::getTablePrefix(),
-            $userId,
-            $rightId
-        );
-
-        $res = $this->config->getDb()->query($insert);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Refuses the user a user-right.
-     * Returns true on succes, otherwise false.
-     *
-     * @param int $userId  User ID
-     * @param int $rightId Right ID
-     *
-     * @return bool
-     */
-    public function refuseUserRight($userId, $rightId)
-    {
-        $delete = sprintf('
-            DELETE FROM
-                %sfaquser_right
-            WHERE
-                user_id  = %d AND
-                right_id = %d',
-            Database::getTablePrefix(),
-            $userId,
-            $rightId);
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns true if the user given by user_id has the right,
-     * otherwise false. Unlike checkUserRight(), right may be a
-     * right-ID or a right-name. Another difference is, that also
-     * group-rights are taken into account.
-     *
-     * @param int   $userId User ID
-     * @param mixed $right   Right ID or right name
-     *
-     * @return bool
-     */
-    public function checkRight($userId, $right)
-    {
-        $user = new CurrentUser($this->config);
-        $user->getUserById($userId);
-
-        if ($user->isSuperAdmin()) {
-            return true;
-        }
-
-        if (!is_numeric($right) and is_string($right)) {
-            $right = $this->getRightId($right);
-        }
-
-        return $this->checkUserRight($user->getUserId(), $right);
-    }
-
-    /**
-     * Returns an associative array with all data stored for in the
-     * database for the specified right. The keys of the returned
-     * array are the fieldnames.
-     *
-     * @param int
-     *
-     * @return array
-     */
-    public function getRightData($rightId)
-    {
-        // get right data
-        $select = sprintf('
-            SELECT
-                right_id,
-                name,
-                description,
-                for_users,
-                for_groups,
-                for_sections
-            FROM
-                %sfaqright
-            WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $rightId);
-
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
-            return [];
-        }
-
-        // process right data
-        $rightData = $this->config->getDb()->fetchArray($res);
-        $rightData['for_users'] = (bool)$rightData['for_users'];
-        $rightData['for_groups'] = (bool)$rightData['for_groups'];
-        $rightData['for_sections'] = (bool)$rightData['for_sections'];
-
-        return $rightData;
-    }
-
-    /**
-     * Returns an array that contains the IDs of all user-rights
-     * the user owns.
-     *
-     * @param int $userId User ID
-     *
-     * @return array
-     */
-    public function getAllUserRights($userId)
-    {
-        return $this->getUserRights($userId);
-    }
-
-    /**
      * Adds a new right into the database. Returns the ID of the
-     * new right. The associative array right_data contains the right 
-     * data stored in the rights table. 
+     * new right. The associative array right_data contains the right
+     * data stored in the rights table.
      *
      * @param array $rightData Array if rights
      *
      * @return int
      */
-    public function addRight(Array $rightData)
+    public function addRight(Array $rightData): int
     {
         if ($this->getRightId($rightData['name']) > 0) {
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqright', 'right_id');
+        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqright', 'right_id');
         $rightData = $this->checkRightData($rightData);
 
         $insert = sprintf("
@@ -329,49 +320,48 @@ class BasicPermission extends Permission
     }
 
     /**
-     * Changes the right data. Returns true on success, otherwise false.
+     * Checks the given associative array $right_data. If a
+     * parameter is incorrect or is missing, it will be replaced
+     * by the default values in $this->default_right_data.
+     * Returns the corrected $right_data associative array.
      *
-     * @param int   $rightId   Right ID
      * @param array $rightData Array of rights
      *
-     * @return bool
+     * @return array
      */
-    public function changeRight($rightId, Array $rightData)
+    public function checkRightData(array $rightData): array
     {
-        $checked_data = $this->checkRightData($rightData);
-        $set = '';
-        $comma = '';
-        foreach ($rightData as $key => $val) {
-            $set .= $comma.$key." = '".$checked_data[$key]."'";
-            $comma = ",\n                ";
+        if (!isset($rightData['name']) || !is_string($rightData['name'])) {
+            $rightData['name'] = $this->defaultRightData['name'];
+        }
+        if (!isset($rightData['description']) || !is_string($rightData['description'])) {
+            $rightData['description'] = $this->defaultRightData['description'];
+        }
+        if (!isset($rightData['for_users'])) {
+            $rightData['for_users'] = $this->defaultRightData['for_users'];
+        }
+        if (!isset($rightData['for_groups'])) {
+            $rightData['for_groups'] = $this->defaultRightData['for_groups'];
+        }
+        if (!isset($rightData['for_sections'])) {
+            $rightData['for_sections'] = $this->defaultRightData['for_sections'];
         }
 
-        $update = sprintf('
-            UPDATE
-                %sfaqright
-            SET
-                %s
-            WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $set,
-            $rightId);
+        $rightData['for_users'] = (int)$rightData['for_users'];
+        $rightData['for_groups'] = (int)$rightData['for_groups'];
+        $rightData['for_sections'] = (int)$rightData['for_sections'];
 
-        if (!$this->config->getDb()->query($update)) {
-            return false;
-        }
-
-        return true;
+        return $rightData;
     }
 
     /**
      * Renames rights, only used for updates.
      *
-     * @param $oldName
-     * @param $newName
+     * @param string $oldName
+     * @param string $newName
      * @return bool
      */
-    public function renameRight($oldName, $newName)
+    public function renameRight(string $oldName, string $newName): bool
     {
         $rightId = $this->getRightId($oldName);
         if ($rightId === 0) {
@@ -398,119 +388,6 @@ class BasicPermission extends Permission
     }
 
     /**
-     * Deletes the right from the database.
-     * Returns true on success, otherwise false.
-     *
-     * @param int $rightId Right ID
-     *
-     * @return bool
-     */
-    public function deleteRight($rightId)
-    {
-        // delete right
-        $delete = sprintf('
-            DELETE FROM
-                %sfaqright
-            WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $rightId);
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        // delete user-right links
-        $delete = sprintf('
-            DELETE FROM
-                %sfaquser_right
-            WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $rightId);
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        // delete group-right links
-        $delete = sprintf('
-            DELETE FROM
-                %sfaqgroup_right
-            WHERE
-                right_id = %d',
-            Database::getTablePrefix(),
-            $rightId);
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns the right-ID of the right with the name $name.
-     *
-     * @param string $name Name
-     *
-     * @return int
-     */
-    public function getRightId($name)
-    {
-        // get right id
-        $select = sprintf("
-            SELECT
-                right_id
-            FROM
-                %sfaqright
-            WHERE
-                name = '%s'",
-            Database::getTablePrefix(),
-            $this->config->getDb()->escape($name));
-
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
-            return 0;
-        }
-        $row = $this->config->getDb()->fetchArray($res);
-
-        return $row['right_id'];
-    }
-
-    /**
-     * Returns an array that contains the IDs of all rights stored
-     * in the database.
-     *
-     * @return array
-     */
-    public function getAllRights()
-    {
-        $select = sprintf('
-            SELECT
-                right_id
-            FROM
-                %sfaqright',
-            Database::getTablePrefix());
-
-        $res = $this->config->getDb()->query($select);
-        $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[] = $row['right_id'];
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns an array that contains all rights stored in the
      * database. Each array element is an associative array with
      * the complete right-data. By passing the optional parameter
@@ -521,7 +398,7 @@ class BasicPermission extends Permission
      *
      * @return array
      */
-    public function getAllRightsData($order = 'ASC')
+    public function getAllRightsData(string $order = 'ASC'): array
     {
         $select = sprintf('
             SELECT
@@ -553,41 +430,6 @@ class BasicPermission extends Permission
     }
 
     /**
-     * Checks the given associative array $right_data. If a
-     * parameter is incorrect or is missing, it will be replaced
-     * by the default values in $this->default_right_data.
-     * Returns the corrected $right_data associative array.
-     *
-     * @param array $rightData Array of rights
-     *
-     * @return array
-     */
-    public function checkRightData(Array $rightData)
-    {
-        if (!isset($rightData['name']) || !is_string($rightData['name'])) {
-            $rightData['name'] = $this->defaultRightData['name'];
-        }
-        if (!isset($rightData['description']) || !is_string($rightData['description'])) {
-            $rightData['description'] = $this->defaultRightData['description'];
-        }
-        if (!isset($rightData['for_users'])) {
-            $rightData['for_users'] = $this->defaultRightData['for_users'];
-        }
-        if (!isset($rightData['for_groups'])) {
-            $rightData['for_groups'] = $this->defaultRightData['for_groups'];
-        }
-        if (!isset($rightData['for_sections'])) {
-            $rightData['for_sections'] = $this->defaultRightData['for_sections'];
-        }
-
-        $rightData['for_users'] = (int)$rightData['for_users'];
-        $rightData['for_groups'] = (int)$rightData['for_groups'];
-        $rightData['for_sections'] = (int)$rightData['for_sections'];
-
-        return $rightData;
-    }
-
-    /**
      * Refuses all user rights.
      * Returns true on success, otherwise false.
      *
@@ -595,7 +437,7 @@ class BasicPermission extends Permission
      *
      * @return bool
      */
-    public function refuseAllUserRights($userId)
+    public function refuseAllUserRights(int $userId): bool
     {
         $delete = sprintf('
             DELETE FROM

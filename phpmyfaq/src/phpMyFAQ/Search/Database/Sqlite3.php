@@ -45,7 +45,7 @@ class Sqlite3 extends SearchDatabase
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -55,15 +55,13 @@ class Sqlite3 extends SearchDatabase
     /**
      * Prepares the search and executes it.
      *
-     * @param string $searchTerm Search term
-     *
+     * @param string $searchTerm Search ter
+     * @throws
      * @return resource
-     *
-     * @throws PMF_Search_Exception
      */
-    public function search($searchTerm)
+    public function search(string $searchTerm)
     {
-        if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
             $query = sprintf('
@@ -82,7 +80,7 @@ class Sqlite3 extends SearchDatabase
                 $this->getConditions()
             );
 
-            $this->resultSet = $this->_config->getDb()->query($query);
+            $this->resultSet = $this->config->getDb()->query($query);
         }
 
         return $this->resultSet;

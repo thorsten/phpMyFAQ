@@ -5,8 +5,6 @@ namespace phpMyFAQ\Permission;
 /**
  * The large permission class provides section rights for groups and users.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -22,6 +20,7 @@ namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
+use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -29,15 +28,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * The large permission class is not yet implemented in phpMyFAQ.
- *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * Class LargePermission
+ * @package phpMyFAQ\Permission
  */
 class LargePermission extends MediumPermission
 {
@@ -73,7 +65,7 @@ class LargePermission extends MediumPermission
      *
      * @return bool
      */
-    public function checkRight($userId, $right)
+    public function checkRight(int $userId, $right): bool
     {
         $user = new CurrentUser($this->config);
         $user->getUserById($userId);
@@ -107,7 +99,7 @@ class LargePermission extends MediumPermission
      *
      * @return bool
      */
-    public function checkUserSectionRight($userId, $rightId)
+    public function checkUserSectionRight(int $userId, int $rightId): bool
     {
         if ($userId < 0 || !is_numeric($userId) || $rightId < 0 || !is_numeric($rightId)) {
             return false;
@@ -151,14 +143,14 @@ class LargePermission extends MediumPermission
      *
      * @return int
      */
-    public function addSection(Array $sectionData)
+    public function addSection(Array $sectionData): int
     {
         // check if section already exists
         if ($this->getSectionId($sectionData['name']) > 0) {
             return 0;
         }
 
-        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsections', 'id');
+        $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsections', 'id');
         $sectionData = $this->checkSectionData($sectionData);
         $insert = sprintf("
             INSERT INTO
@@ -181,20 +173,70 @@ class LargePermission extends MediumPermission
     }
 
     /**
+     * Returns the ID of the section that has the name $name. Returns
+     * 0 if the section name cannot be found.
+     *
+     * @param string $name
+     * @return int
+     */
+    public function getSectionId(string $name): int
+    {
+        $select = sprintf('
+            SELECT 
+                    id
+            FROM 
+                %sfaqsections
+            WHERE 
+                name = %s',
+            Database::getTablePrefix(),
+            $name
+        );
+
+        $res = $this->config->getDb()->query($select);
+        if ($this->config->getDb()->numRows($res) != 1) {
+            return 0;
+        }
+        $row = $this->config->getDb()->fetchArray($res);
+
+        return $row['id'];
+    }
+
+    /**
+     * Checks the given associative array $sectionData. If a
+     * parameter is incorrect or is missing, it will be replaced
+     * by the default values in $this->defaultSectionData.
+     * Returns the corrected $sectionData associative array.
+     *
+     * @param array $sectionData
+     * @return array
+     */
+    public function checkSectionData(array $sectionData): array
+    {
+        if (!isset($sectionData['name']) || !is_string($sectionData['name'])) {
+            $sectionData['name'] = $this->defaultSectionData['name'];
+        }
+        if (!isset($sectionData['description']) || !is_string($sectionData['description'])) {
+            $sectionData['description'] = $this->defaultSectionData['description'];
+        }
+
+        return $sectionData;
+    }
+
+    /**
      * Changes the section data of the given section.
      *
      * @param int $sectionId
      * @param array $sectionData
      * @return bool
      */
-    public function changeSection($sectionId, Array $sectionData)
+    public function changeSection(int $sectionId, Array $sectionData): bool
     {
         $checkedData = $this->checkSectionData($sectionData);
         $set = '';
         $comma = '';
 
         foreach ($sectionData as $key => $val) {
-            $set .= $comma.$key." = '".$this->config->getDb()->escape($checkedData[$key])."'";
+            $set .= $comma . $key . " = '" . $this->config->getDb()->escape($checkedData[$key]) . "'";
             $comma = ",\n                ";
         }
 
@@ -220,34 +262,13 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Checks the given associative array $sectionData. If a
-     * parameter is incorrect or is missing, it will be replaced
-     * by the default values in $this->defaultSectionData.
-     * Returns the corrected $sectionData associative array.
-     *
-     * @param array $sectionData
-     * @return array
-     */
-    public function checkSectionData(Array $sectionData)
-    {
-        if (!isset($sectionData['name']) || !is_string($sectionData['name'])) {
-            $sectionData['name'] = $this->defaultSectionData['name'];
-        }
-        if (!isset($sectionData['description']) || !is_string($sectionData['description'])) {
-            $sectionData['description'] = $this->defaultSectionData['description'];
-        }
-
-        return $sectionData;
-    }
-
-    /**
      * Removes the section given by $sectionId from the database.
      * Returns true on success, otherwise false.
      *
      * @param int $sectionId
      * @return bool
      */
-    public function deleteSection($sectionId)
+    public function deleteSection(int $sectionId): bool
     {
         if ($sectionId <= 0 || !is_numeric($sectionId)) {
             return false;
@@ -299,95 +320,13 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Returns true if the user given by $userId is a member of
-     * the section specified by $sectionId, otherwise false.
-     *
-     * @param int $userId
-     * @param int $sectionId
-     * @return bool
-     */
-    public function isSectionMember($userId, $sectionId)
-    {
-        if ($sectionId <= 0 || !is_numeric($sectionId) || $userId <= 0 || !is_numeric($userId)) {
-            return false;
-        }
-
-        $select = sprintf('
-            SELECT 
-                fsg.user_id
-            FROM
-                %sfaqsection_group fsg
-            LEFT JOIN 
-                %sfaquser_group fug
-            ON 
-                fug.group_id = fsg.group_id
-            WHERE 
-                fug.user_id = %d
-            AND fsg.section_id = %d
-            ',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $sectionId,
-            $userId
-        );
-
-        $res = $this->config->getDb()->query($select);
-
-        if ($this->config->getDb()->numRows($res) > 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns an array that contains the user IDs of all members
-     * of the section $sectionId.
-     *
-     * @param int $sectionId
-     * @return array
-     */
-    public function getSectionMembers($sectionId)
-    {
-        if ($sectionId <= 0 || !is_numeric($sectionId)) {
-            return [];
-        }
-
-        $select = sprintf('
-            SELECT 
-                fsg.user_id
-            FROM
-                %sfaqsection_group fsg
-            LEFT JOIN 
-                %sfaquser_group fug
-            ON 
-                fug.group_id = fsg.group_id
-            WHERE 
-                fsg.section_id = %d
-            ',
-            Database::getTablePrefix(),
-            Database::getTablePrefix(),
-            $sectionId
-        );
-
-        $res = $this->config->getDb()->query($select);
-
-        $result = [];
-        while ($row = $this->config->getDb()->fetchArray($res)) {
-            $result[] = $row['user_id'];
-        }
-
-        return $result;
-    }
-
-    /**
      * Returns an array that contains the group IDs of all groups
      * of the section $sectionId.
      *
      * @param int $sectionId
      * @return array
      */
-    public function getSectionGroups($sectionId)
+    public function getSectionGroups(int $sectionId): array
     {
         if ($sectionId <= 0 || !is_numeric($sectionId)) {
             return [];
@@ -425,7 +364,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function addGroupToSection($groupId, $sectionId)
+    public function addGroupToSection(int $groupId, int $sectionId): bool
     {
         if ($sectionId <= 0 || !is_numeric($sectionId) | $groupId <= 0 || !is_numeric($groupId)) {
             return false;
@@ -470,7 +409,7 @@ class LargePermission extends MediumPermission
 
         return true;
     }
-    
+
     /**
      * Removes all groups from the section $sectionId.
      * Returns true on success, otherwise false.
@@ -478,7 +417,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function removeAllGroupsFromSection($sectionId)
+    public function removeAllGroupsFromSection(int $sectionId): bool
     {
         if ($sectionId <= 0 || !is_numeric($sectionId)) {
             return false;
@@ -502,76 +441,13 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Removes a group $groupId from the section $sectionId.
-     * Returns true on success, otherwise false.
-     *
-     * @param int $groupId
-     * @param int $sectionId
-     * @return bool
-     */
-    public function removeGroupFromSection($groupId, $sectionId)
-    {
-        if ($sectionId <= 0 || !is_numeric($sectionId) | $groupId <= 0 || !is_numeric($groupId)) {
-            return false;
-        }
-
-        $delete = sprintf('
-            DELETE FROM
-                %sfaqsection_group
-            WHERE
-                group_id = %d
-            AND
-                section_id = %d',
-            Database::getTablePrefix(),
-            $sectionId,
-            $groupId
-        );
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Returns the ID of the section that has the name $name. Returns
-     * 0 if the section name cannot be found.
-     *
-     * @param string $name
-     * @return int
-     */
-    public function getSectionId($name)
-    {
-        $select = sprintf('
-            SELECT 
-                    id
-            FROM 
-                %sfaqsections
-            WHERE 
-                name = %s',
-            Database::getTablePrefix(),
-            $name
-        );
-
-        $res = $this->config->getDb()->query($select);
-        if ($this->config->getDb()->numRows($res) != 1) {
-            return 0;
-        }
-        $row = $this->config->getDb()->fetchArray($res);
-
-        return $row['id'];
-    }
-
-    /**
      * Returns an associative array with the section data of the section
      * $sectionId.
      *
      * @param int $sectionId
      * @return array
      */
-    public function getSectionData($sectionId)
+    public function getSectionData(int $sectionId): array
     {
         $select = sprintf('
             SELECT 
@@ -586,7 +462,7 @@ class LargePermission extends MediumPermission
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
-            return 0;
+            return [];
         }
         $row = $this->config->getDb()->fetchArray($res);
 
@@ -599,9 +475,9 @@ class LargePermission extends MediumPermission
      * @param int $userId
      * @return array
      */
-    public function getAllSections($userId = 1)
+    public function getAllSections(int $userId = -1): array
     {
-        if ($userId != 1) {
+        if ($userId !== -1) {
             return $this->getUserSections($userId);
         }
 
@@ -626,7 +502,7 @@ class LargePermission extends MediumPermission
      * @param int $userId
      * @return array
      */
-    public function getUserSections($userId)
+    public function getUserSections(int $userId): array
     {
         if ($userId <= 0 || !is_numeric($userId)) {
             return [-1];
@@ -669,7 +545,7 @@ class LargePermission extends MediumPermission
      * @param int $userId
      * @return array
      */
-    public function getAllUserRights($userId)
+    public function getAllUserRights(int $userId): array
     {
         if ($userId <= 0 || !is_numeric($userId)) {
             return [];
@@ -682,42 +558,13 @@ class LargePermission extends MediumPermission
     }
 
     /**
-     * Removes the group $groupId from all sections.
-     * Returns true on success, otherwise false.
-     *
-     * @param int $groupId
-     * @return bool
-     */
-    public function removeGroupFromAllSections($groupId)
-    {
-        if ($groupId < 1 || !is_numeric($groupId)) {
-            return false;
-        }
-
-        $delete = sprintf('
-            DELETE FROM
-                %sfaqsection_group
-            WHERE 
-                group_id = %s',
-            Database::getTablePrefix(),
-            $groupId
-        );
-
-        $res = $this->config->getDb()->query($delete);
-        if (!$res) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a section membership.
      *
      * @param int $userId
      * @return array
      */
-    public function getUserSectionRights($userId)
+    public function getUserSectionRights(int $userId): array
     {
         if ($userId < 1 || !is_numeric($userId)) {
             return [];
@@ -755,7 +602,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return string
      */
-    public function getSectionName($sectionId)
+    public function getSectionName(int $sectionId): string
     {
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return '-';
@@ -787,7 +634,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function addCategoryToSection($categoryId, $sectionId)
+    public function addCategoryToSection(int $categoryId, int $sectionId): bool
     {
         if (!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
@@ -817,7 +664,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function removeCategoryFromSection($categoryId, $sectionId)
+    public function removeCategoryFromSection(int $categoryId, int $sectionId): bool
     {
         if (!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
@@ -847,7 +694,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return array
      */
-    public function getSectionCategories($sectionId)
+    public function getSectionCategories(int $sectionId): array
     {
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return [];
@@ -877,7 +724,7 @@ class LargePermission extends MediumPermission
      * @param int $categoryId
      * @return bool
      */
-    public function removeCategoryFromAllSections($categoryId)
+    public function removeCategoryFromAllSections(int $categoryId): bool
     {
         if (!is_numeric($categoryId) || $categoryId < 1) {
             return false;
@@ -905,7 +752,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function addNewsToSection($newsId, $sectionId)
+    public function addNewsToSection(int $newsId, int $sectionId): bool
     {
         if (!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
@@ -935,7 +782,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return bool
      */
-    public function removeNewsFromSection($newsId, $sectionId)
+    public function removeNewsFromSection(int $newsId, int $sectionId): bool
     {
         if (!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
@@ -965,7 +812,7 @@ class LargePermission extends MediumPermission
      * @param int $sectionId
      * @return array
      */
-    public function getSectionNews($sectionId)
+    public function getSectionNews(int $sectionId): array
     {
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return [];
@@ -995,7 +842,7 @@ class LargePermission extends MediumPermission
      * @param int $newsId
      * @return bool
      */
-    public function removeNewsFromAllSections($newsId)
+    public function removeNewsFromAllSections(int $newsId): bool
     {
         if (!is_numeric($newsId) || $newsId < 1) {
             return false;

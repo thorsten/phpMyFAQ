@@ -30,7 +30,7 @@ use phpMyFAQ\Link;
 use phpMyFAQ\Linkverifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
-use phpMyFAQ\Search\Resultset as SearchResultset;
+use phpMyFAQ\Search\SearchResultSet as SearchResultset;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -172,7 +172,7 @@ if (count($multiCategories) > 1) {
 }
 
 // Related FAQs
-$faqSearchResult->reviewResultset(
+$faqSearchResult->reviewResultSet(
     $faqRelation->getAllRelatedById(
         $recordId,
         $faq->faqRecord['title'],

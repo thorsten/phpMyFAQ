@@ -5,46 +5,35 @@ namespace phpMyFAQ\Search\Database;
 /**
  * phpMyFAQ PostgreSQL search classes.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2010-06-06
  */
 
 use phpMyFAQ\Configuration;
+use phpMyFAQ\Search\SearchDatabase;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Search_Database_Pgsql.
- *
- * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2010-06-06
+ * Class Pgsql
+ * @package phpMyFAQ\Search\Database
  */
 class Pgsql extends SearchDatabase
 {
     /**
      * Constructor.
      *
-     * @param PMF_Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -56,21 +45,19 @@ class Pgsql extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
-     *
      * @return resource
-     *
-     * @throws PMF_Search_Exception
+     * @throws
      */
-    public function search($searchTerm)
+    public function search(string $searchTerm)
     {
-        if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $enableRelevance = $this->_config->get('search.enableRelevance');
+            $enableRelevance = $this->config->get('search.enableRelevance');
 
             $columns = $this->getResultColumns();
             $columns .= ($enableRelevance) ? $this->getMatchingColumnsAsResult() : '';
-            $orderBy = ($enableRelevance) ? 'ORDER BY '.$this->getMatchingOrder() : '';
+            $orderBy = ($enableRelevance) ? 'ORDER BY ' . $this->getMatchingOrder() : '';
 
             $query = sprintf("
                 SELECT
@@ -86,47 +73,17 @@ class Pgsql extends SearchDatabase
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 ($enableRelevance)
-                    ? ", plainto_tsquery('".$this->_config->getDb()->escape($searchTerm)."') query "
+                    ? ", plainto_tsquery('" . $this->config->getDb()->escape($searchTerm) . "') query "
                     : '',
                 $this->getMatchingColumns(),
-                $this->_config->getDb()->escape($searchTerm),
+                $this->config->getDb()->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy);
 
-            $this->resultSet = $this->_config->getDb()->query($query);
+            $this->resultSet = $this->config->getDb()->query($query);
         }
 
         return $this->resultSet;
-    }
-
-    /**
-     * Returns the part of the SQL query with the matching columns.
-     *
-     * @return string
-     */
-    public function getMatchingColumns()
-    {
-        $enableRelevance = $this->_config->get('search.enableRelevance');
-
-        if ($enableRelevance) {
-            $matchColumns = '';
-
-            foreach ($this->matchingColumns as $matchColumn) {
-                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchColumn);
-                if (empty($matchColumns)) {
-                    $matchColumns .= '('.$match;
-                } else {
-                    $matchColumns .= ' || '.$match;
-                }
-            }
-
-            // Add the ILIKE since the FULLTEXT looks for the exact phrase only
-            $matchColumns .= ') @@ query) OR ('.implode(" || ' ' || ", $this->matchingColumns);
-        } else {
-            $matchColumns = implode(" || ' ' || ", $this->matchingColumns);
-        }
-
-        return $matchColumns;
     }
 
     /**
@@ -134,10 +91,10 @@ class Pgsql extends SearchDatabase
      *
      * @return string
      */
-    public function getMatchingColumnsAsResult()
+    public function getMatchingColumnsAsResult(): string
     {
         $resultColumns = '';
-        $config = $this->_config->get('search.relevance');
+        $config = $this->config->get('search.relevance');
         $list = explode(',', $config);
 
         // Set weight
@@ -158,7 +115,7 @@ class Pgsql extends SearchDatabase
                     $columnName
                 );
 
-                $resultColumns .= ', '.$column;
+                $resultColumns .= ', ' . $column;
             }
         }
 
@@ -172,9 +129,9 @@ class Pgsql extends SearchDatabase
      *
      * @return string
      */
-    public function getMatchingOrder()
+    public function getMatchingOrder(): string
     {
-        $list = explode(',', $this->_config->get('search.relevance'));
+        $list = explode(',', $this->config->get('search.relevance'));
         $order = '';
 
         foreach ($list as $field) {
@@ -185,10 +142,40 @@ class Pgsql extends SearchDatabase
             if (empty($order)) {
                 $order .= $string;
             } else {
-                $order .= ', '.$string;
+                $order .= ', ' . $string;
             }
         }
 
         return $order;
+    }
+
+    /**
+     * Returns the part of the SQL query with the matching columns.
+     *
+     * @return string
+     */
+    public function getMatchingColumns(): string
+    {
+        $enableRelevance = $this->config->get('search.enableRelevance');
+
+        if ($enableRelevance) {
+            $matchColumns = '';
+
+            foreach ($this->matchingColumns as $matchColumn) {
+                $match = sprintf("to_tsvector(coalesce(%s,''))", $matchColumn);
+                if (empty($matchColumns)) {
+                    $matchColumns .= '(' . $match;
+                } else {
+                    $matchColumns .= ' || ' . $match;
+                }
+            }
+
+            // Add the ILIKE since the FULLTEXT looks for the exact phrase only
+            $matchColumns .= ') @@ query) OR (' . implode(" || ' ' || ", $this->matchingColumns);
+        } else {
+            $matchColumns = implode(" || ' ' || ", $this->matchingColumns);
+        }
+
+        return $matchColumns;
     }
 }

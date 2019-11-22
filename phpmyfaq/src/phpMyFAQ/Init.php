@@ -26,7 +26,7 @@ namespace phpMyFAQ;
  * @since 2005-09-24
  */
 
-use phpMyFAQ\Strings\Basic;
+use phpMyFAQ\Strings\StringBasic;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -114,7 +114,7 @@ class Init
         if (isset($path_parts['extension']) && ($path_parts['basename'] == '.'.$path_parts['extension'])) {
             return '';
         }
-        if (!isset($path_parts['extension']) && (Basic::strlen($path_parts['basename']) == 0)) {
+        if (!isset($path_parts['extension']) && (StringBasic::strlen($path_parts['basename']) == 0)) {
             return '';
         }
 

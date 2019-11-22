@@ -52,7 +52,8 @@
         "phpunit/php-token-stream": "1.*"
     },
     "suggest": {
-        "ext-mysqli": "*"
+        "ext-mysqli": "*",
+        "ext-mbstring": "*"
     },
     "config": {
         "bin-dir": "bin",

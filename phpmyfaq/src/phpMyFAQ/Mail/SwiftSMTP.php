@@ -19,7 +19,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-require __DIR__.'/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
+require __DIR__ . '/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
 
 use Swift_Mailer;
 use Swift_Message;
@@ -31,7 +31,10 @@ use Swift_SmtpTransport;
  */
 class SwiftSMTP implements MailUserAgentInterface
 {
+    /** @var string */
     private $user;
+
+    /** @var Swift_Mailer */
     private $mailer;
 
     /**

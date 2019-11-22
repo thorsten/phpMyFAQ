@@ -2,58 +2,45 @@
 
 namespace phpMyFAQ\Strings;
 
+use phpMyFAQ\Language;
+
 /**
  * The string wrapper class using single byte string functions.
- *
- * .0
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
-
-use phpMyFAQ\Strings\StringsAbstract;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * String_Basic.
- *
- * @package phpMyFAQ
- *
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * Class Basic
+ * @package phpMyFAQ\Strings
  */
-class Basic extends StringsAbstract
+class StringBasic extends StringsAbstract
 {
-    /**
-     * Instance.
-     *
-     * @var String_Basic
-     */
-    private static $instance;
-
     /**
      * Default encoding.
      *
      * @var string
      */
-    const DEFAULT_ENCODING = 'iso-8859-1';
+    const DEFAULT_ENCODING = 'utf-8';
+    /**
+     * Instance.
+     *
+     * @var StringBasic
+     */
+    private static $instance;
 
     /**
      * Constructor.
@@ -68,9 +55,9 @@ class Basic extends StringsAbstract
      * @param string $encoding
      * @param string $language
      *
-     * @return String_Basic
+     * @return self
      */
-    public static function getInstance($encoding = null, $language = 'en')
+    public static function getInstance(string $encoding = null, string $language = 'en'): StringBasic
     {
         if (!self::$instance) {
             self::$instance = new self();
@@ -88,7 +75,7 @@ class Basic extends StringsAbstract
      *
      * @return int
      */
-    public static function strlen($str)
+    public static function strlen(string $str): int
     {
         return strlen($str);
     }
@@ -96,9 +83,9 @@ class Basic extends StringsAbstract
     /**
      * Get a part of string.
      *
-     * @param string $str    String
-     * @param int    $start  Start
-     * @param int    $length Length
+     * @param string $str String
+     * @param int $start Start
+     * @param int $length Length
      *
      * @return string
      */
@@ -113,8 +100,8 @@ class Basic extends StringsAbstract
      * Get position of the first occurence of a string.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param int    $offset   Offset
+     * @param string $needle Needle
+     * @param int $offset Offset
      *
      * @return int
      */
@@ -148,11 +135,11 @@ class Basic extends StringsAbstract
     }
 
     /**
-     * Get occurence of a string within another.
+     * Get occurrence of a string within another.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param bool   $part     Part
+     * @param string $needle Needle
+     * @param bool $part Part
      *
      * @return string|false
      */
@@ -162,20 +149,7 @@ class Basic extends StringsAbstract
     }
 
     /**
-     * Get last occurence of a string within another.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return string
-     */
-    public function strrchr($haystack, $needle)
-    {
-        return strrchr($haystack, $needle);
-    }
-
-    /**
-     * Count substring occurences.
+     * Count substring occurrences.
      *
      * @param string $haystack
      * @param string $needle
@@ -192,7 +166,7 @@ class Basic extends StringsAbstract
      *
      * @param string $haystack
      * @param string $needle
-     * @param int    $offset
+     * @param int $offset
      *
      * @return int
      */
@@ -207,8 +181,8 @@ class Basic extends StringsAbstract
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int    $flags
-     * @param int    $offset
+     * @param int $flags
+     * @param int $offset
      *
      * @return int
      */
@@ -223,8 +197,8 @@ class Basic extends StringsAbstract
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int    $flags
-     * @param int    $offset
+     * @param int $flags
+     * @param int $offset
      *
      * @return int
      */
@@ -238,8 +212,8 @@ class Basic extends StringsAbstract
      *
      * @param string $pattern
      * @param string $subject
-     * @param int    $limit
-     * @param int    $flags
+     * @param int $limit
+     * @param int $flags
      *
      * @return array
      */
@@ -252,9 +226,9 @@ class Basic extends StringsAbstract
      * Search and replace by a regexp using a callback.
      *
      * @param string|array $pattern
-     * @param function     $callback
+     * @param callable $callback
      * @param string|array $subject
-     * @param int          $limit
+     * @param int $limit
      * @param int          &$count
      *
      * @return array|string
@@ -270,7 +244,7 @@ class Basic extends StringsAbstract
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int          $limit
+     * @param int $limit
      * @param int          &$count
      *
      * @return array|string|null

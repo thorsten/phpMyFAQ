@@ -5,8 +5,6 @@ namespace phpMyFAQ\Search;
 /**
  * Abstract class for phpMyFAQ search classes.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,36 +24,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search_Exception.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-06-06
+ * Class AbstractSearch
+ * @package phpMyFAQ\Search
  */
-class AbstractSearch
+abstract class AbstractSearch
 {
     /**
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
-     * Resultset.
+     * ResultSet
      *
      * @var resource
      */
     protected $resultSet = false;
 
     /**
-     * Constructor.
-     *
-     * @param Configuration
+     * AbstractSearch constructor.
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 }

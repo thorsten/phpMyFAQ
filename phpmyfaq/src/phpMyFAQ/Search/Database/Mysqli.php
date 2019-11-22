@@ -5,22 +5,19 @@ namespace phpMyFAQ\Search\Database;
 /**
  * phpMyFAQ MySQL (ext/mysqli) search classes.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2010-06-06
  */
 
+use mysqli_result;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
 
@@ -29,23 +26,15 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search_Database_Mysqli.
- *
- * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2010-06-06
+ * Class Mysqli
+ * @package phpMyFAQ\Search\Database
  */
 class Mysqli extends SearchDatabase
 {
     /**
      * Constructor.
      *
-     * @param PMF_Configuration $config
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -57,22 +46,20 @@ class Mysqli extends SearchDatabase
      * Prepares the search and executes it.
      *
      * @param string $searchTerm Search term
-     *
-     * @throws PMF_Search_Exception
-     *
+     * @throws
      * @return mysqli_result
      */
-    public function search($searchTerm)
+    public function search(string $searchTerm): mysqli_result
     {
-        if (is_numeric($searchTerm) && $this->_config->get('search.searchForSolutionId')) {
+        if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $relevance = $this->_config->get('search.enableRelevance');
+            $relevance = $this->config->get('search.enableRelevance');
             $columns = $this->getResultColumns();
 
             if ($this->relevanceSupport && $relevance) {
                 $columns .= $this->getMatchingColumnsAsResult($searchTerm);
-                $orderBy = 'ORDER BY '.$this->getMatchingOrder().' DESC';
+                $orderBy = 'ORDER BY ' . $this->getMatchingOrder() . ' DESC';
             } else {
                 $orderBy = '';
             }
@@ -103,15 +90,15 @@ class Mysqli extends SearchDatabase
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchingColumns(),
-                $this->_config->getDb()->escape($searchTerm),
+                $this->config->getDb()->escape($searchTerm),
                 $this->getConditions(),
                 $orderBy
             );
 
-            $this->resultSet = $this->_config->getDb()->query($query);
+            $this->resultSet = $this->config->getDb()->query($query);
 
             // Fallback for searches with less than three characters
-            if (false !== $this->resultSet && 0 === $this->_config->getDb()->numRows($this->resultSet)) {
+            if (false !== $this->resultSet && 0 === $this->config->getDb()->numRows($this->resultSet)) {
                 $query = sprintf('
                     SELECT
                         %s
@@ -128,7 +115,7 @@ class Mysqli extends SearchDatabase
                     $this->getConditions()
                 );
 
-                $this->resultSet = $this->_config->getDb()->query($query);
+                $this->resultSet = $this->config->getDb()->query($query);
             }
         }
 
@@ -142,7 +129,7 @@ class Mysqli extends SearchDatabase
      *
      * @return string
      */
-    public function getMatchingColumnsAsResult($searchTerm)
+    public function getMatchingColumnsAsResult(string $searchTerm): string
     {
         $resultColumns = '';
 
@@ -150,11 +137,11 @@ class Mysqli extends SearchDatabase
             $column = sprintf(
                 "MATCH (%s) AGAINST ('*%s*' IN BOOLEAN MODE) AS relevance_%s",
                 $matchColumn,
-                $this->_config->getDb()->escape($searchTerm),
+                $this->config->getDb()->escape($searchTerm),
                 substr(strstr($matchColumn, '.'), 1)
             );
 
-            $resultColumns .= ', '.$column;
+            $resultColumns .= ', ' . $column;
         }
 
         return $resultColumns;
@@ -167,9 +154,9 @@ class Mysqli extends SearchDatabase
      *
      * @return string
      */
-    public function getMatchingOrder()
+    public function getMatchingOrder(): string
     {
-        $list = explode(',', $this->_config->get('search.relevance'));
+        $list = explode(',', $this->config->get('search.relevance'));
         $count = count($list);
         $order = '';
 
@@ -182,11 +169,11 @@ class Mysqli extends SearchDatabase
             if (empty($order)) {
                 $order .= $string;
             } else {
-                $order .= ' + '.$string;
+                $order .= ' + ' . $string;
             }
             --$count;
         }
 
-        return '('.$order.')';
+        return '(' . $order . ')';
     }
 }

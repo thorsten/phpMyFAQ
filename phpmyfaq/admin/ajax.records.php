@@ -23,7 +23,7 @@ use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -93,7 +93,7 @@ switch ($ajaxAction) {
             $faq = new Faq($faqConfig);
             $faqSearch = new Search($faqConfig);
             $faqSearch->setCategory(new Category($faqConfig));
-            $faqSearchResult = new Resultset($user, $faq, $faqConfig);
+            $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
             $searchResult = '';
             $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
@@ -101,7 +101,7 @@ switch ($ajaxAction) {
                 try {
                     $searchResult = $faqSearch->search($searchString, false);
 
-                    $faqSearchResult->reviewResultset($searchResult);
+                    $faqSearchResult->reviewResultSet($searchResult);
 
                     $searchHelper = new SearchHelper($faqConfig);
                     $searchHelper->setSearchterm($searchString);

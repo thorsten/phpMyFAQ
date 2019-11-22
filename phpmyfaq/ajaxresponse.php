@@ -25,7 +25,7 @@ use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\Exception;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
 
@@ -96,7 +96,7 @@ $category->buildTree();
 
 $faq = new Faq($faqConfig);
 $faqSearch = new Search($faqConfig);
-$faqSearchResult = new Resultset($user, $faq, $faqConfig);
+$faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
 
 //
 // Send headers
@@ -113,7 +113,7 @@ if (!is_null($searchString)) {
 
     try {
         $searchResult = $faqSearch->autoComplete($searchString);
-        $faqSearchResult->reviewResultset($searchResult);
+        $faqSearchResult->reviewResultSet($searchResult);
     } catch (Exception $e) {
         $http->sendWithHeaders($e->getMessage());
     }

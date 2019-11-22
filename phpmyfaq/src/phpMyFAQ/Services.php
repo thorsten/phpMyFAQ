@@ -21,9 +21,6 @@ namespace phpMyFAQ;
  * @since 2010-09-05
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Link;
-
 /**
  * Services.
  *
@@ -67,7 +64,7 @@ class Services
     protected $question;
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
     private $config;
 
@@ -100,6 +97,54 @@ class Services
         $link->itemTitle = $this->question;
 
         return urlencode($link->toString());
+    }
+
+    /**
+     * @return int
+     */
+    public function getCategoryId()
+    {
+        return $this->categoryId;
+    }
+
+    /**
+     * @param int $categoryId
+     */
+    public function setCategoryId($categoryId)
+    {
+        $this->categoryId = $categoryId;
+    }
+
+    /**
+     * @return int
+     */
+    public function getFaqId()
+    {
+        return $this->faqId;
+    }
+
+    /**
+     * @param int $faqId
+     */
+    public function setFaqId($faqId)
+    {
+        $this->faqId = $faqId;
+    }
+
+    /**
+     * @return string
+     */
+    public function getLanguage()
+    {
+        return $this->language;
+    }
+
+    /**
+     * @param string $language
+     */
+    public function setLanguage($language)
+    {
+        $this->language = $language;
     }
 
     /**
@@ -144,8 +189,24 @@ class Services
         return sprintf(
             'https://twitter.com/share?url=%s&text=%s',
             urlencode($link->toString()),
-            $this->getQuestion().urlencode(' | '.$link->toString())
+            $this->getQuestion() . urlencode(' | ' . $link->toString())
         );
+    }
+
+    /**
+     * @return string
+     */
+    public function getQuestion()
+    {
+        return urlencode(trim($this->question));
+    }
+
+    /**
+     * @param string $question
+     */
+    public function setQuestion($question)
+    {
+        $this->question = $question;
     }
 
     /**
@@ -194,69 +255,5 @@ class Services
             $this->getFaqId(),
             $this->getLanguage()
         );
-    }
-
-    /**
-     * @param int $categoryId
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
-    }
-
-    /**
-     * @param int $faqId
-     */
-    public function setFaqId($faqId)
-    {
-        $this->faqId = $faqId;
-    }
-
-    /**
-     * @return int
-     */
-    public function getFaqId()
-    {
-        return $this->faqId;
-    }
-
-    /**
-     * @param string $language
-     */
-    public function setLanguage($language)
-    {
-        $this->language = $language;
-    }
-
-    /**
-     * @return string
-     */
-    public function getLanguage()
-    {
-        return $this->language;
-    }
-
-    /**
-     * @param string $question
-     */
-    public function setQuestion($question)
-    {
-        $this->question = $question;
-    }
-
-    /**
-     * @return string
-     */
-    public function getQuestion()
-    {
-        return urlencode(trim($this->question));
     }
 }

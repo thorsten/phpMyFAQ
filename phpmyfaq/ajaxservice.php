@@ -32,7 +32,7 @@ use phpMyFAQ\Network;
 use phpMyFAQ\News;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Session;
 use phpMyFAQ\Stopwords;
 use phpMyFAQ\Strings;
@@ -521,7 +521,7 @@ switch ($action) {
                 $faqSearch = new Search($faqConfig);
                 $faqSearch->setCategory(new Category($faqConfig));
                 $faqSearch->setCategoryId($ucategory);
-                $faqSearchResult = new Resultset($user, $faq, $faqConfig);
+                $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
                 $searchResult = [];
                 $mergedResult = [];
 
@@ -539,7 +539,7 @@ switch ($action) {
                         $mergedResult[] = $result;
                     }
                 }
-                $faqSearchResult->reviewResultset($mergedResult);
+                $faqSearchResult->reviewResultSet($mergedResult);
 
                 if (0 < $faqSearchResult->getNumberOfResults()) {
                     $response = sprintf(
@@ -550,7 +550,7 @@ switch ($action) {
                     $response .= '<ul>';
 
                     $faqHelper = new FaqHelper($faqConfig);
-                    foreach ($faqSearchResult->getResultset() as $result) {
+                    foreach ($faqSearchResult->getResultSet() as $result) {
                         $url = sprintf(
                             '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
                             $faqConfig->getDefaultUrl(),

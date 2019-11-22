@@ -32,10 +32,10 @@ interface MailUserAgentInterface
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list
      *                           of RFC 2822 compliant elements
-     * @param array  $headers    Headers of the e-mail
-     * @param string $body       Body of the e-mail
+     * @param array $headers Headers of the e-mail
+     * @param string $body Body of the e-mail
      *
-     * @return bool True if successful, false otherwise.     
+     * @return bool True if successful, false otherwise.
      */
     public function send($recipients, Array $headers, $body);
 }

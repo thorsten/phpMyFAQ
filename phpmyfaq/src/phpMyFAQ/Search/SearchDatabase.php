@@ -27,16 +27,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Search_Database.
- *
- * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2010-06-06
+ * Class SearchDatabase
+ * @package phpMyFAQ\Search
  */
 class SearchDatabase extends AbstractSearch implements SearchInterface
 {
@@ -55,7 +47,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     protected $joinedTable = '';
 
     /**
-     * Columns for the resultset.
+     * Columns for the result set.
      *
      * @var array
      */
@@ -92,7 +84,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     /**
      * Constructor.
      *
-     * @param Configuration
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -101,12 +93,10 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
     /**
      * Prepares the search and executes it.
-     *
      * @param string $searchTerm Search term
-     *
-     * @throws PMF_Search_Exception
+     * @throws
      */
-    public function search($searchTerm)
+    public function search(string $searchTerm)
     {
         $query = sprintf('
             SELECT
@@ -123,59 +113,27 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
             $searchTerm
         );
 
-        $this->resultSet = $this->_config->getDb()->query($query);
+        $this->resultSet = $this->config->getDb()->query($query);
     }
 
     /**
-     * Sets search table.
-     *
-     * @param string $table Table where search should be performed
-     *
-     * @return PMF_Search_Database
-     */
-    public function setTable($table)
-    {
-        $this->table = $table;
-
-        return $this;
-    }
-
-    /**
-     * Returns the search table.
+     * Returns the part of the SQL query with the columns for the result set.
      *
      * @return string
      */
-    public function getTable()
+    public function getResultColumns()
     {
-        return $this->table;
-    }
+        $resultColumns = '';
 
-    /**
-     * Sets joined search table.
-     *
-     * @param string $joinedTable Joined table where search should be performed
-     *
-     * @return PMF_Search_Database
-     */
-    public function setJoinedTable($joinedTable = '')
-    {
-        $this->joinedTable = $joinedTable;
-
-        return $this;
-    }
-
-    /**
-     * Returns the joined table.
-     *
-     * @return string
-     */
-    public function getJoinedTable()
-    {
-        if (empty($this->joinedTable)) {
-            return '';
-        } else {
-            return ' LEFT JOIN '.$this->joinedTable.' ON ';
+        foreach ($this->resultColumns as $column) {
+            if (empty($resultColumns)) {
+                $resultColumns = $column;
+            } else {
+                $resultColumns .= ', ' . $column;
+            }
         }
+
+        return $resultColumns;
     }
 
     /**
@@ -193,23 +151,71 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     }
 
     /**
-     * Returns the part of the SQL query with the columns for the result set.
+     * Returns the search table.
      *
      * @return string
      */
-    public function getResultColumns()
+    public function getTable()
     {
-        $resultColumns = '';
+        return $this->table;
+    }
 
-        foreach ($this->resultColumns as $column) {
-            if (empty($resultColumns)) {
-                $resultColumns = $column;
-            } else {
-                $resultColumns .= ', '.$column;
-            }
+    /**
+     * Sets search table.
+     *
+     * @param string $table Table where search should be performed
+     *
+     * @return PMF_Search_Database
+     */
+    public function setTable($table)
+    {
+        $this->table = $table;
+
+        return $this;
+    }
+
+    /**
+     * Returns the joined table.
+     *
+     * @return string
+     */
+    public function getJoinedTable()
+    {
+        if (empty($this->joinedTable)) {
+            return '';
+        } else {
+            return ' LEFT JOIN ' . $this->joinedTable . ' ON ';
+        }
+    }
+
+    /**
+     * Sets joined search table.
+     *
+     * @param string $joinedTable Joined table where search should be performed
+     *
+     * @return PMF_Search_Database
+     */
+    public function setJoinedTable($joinedTable = '')
+    {
+        $this->joinedTable = $joinedTable;
+
+        return $this;
+    }
+
+    /**
+     * Returns the part of the SQL query with the columns for the join.
+     *
+     * @return string
+     */
+    public function getJoinedColumns()
+    {
+        $joinedColumns = '';
+
+        foreach ($this->joinedColumns as $column) {
+            $joinedColumns .= $column . ' AND ';
         }
 
-        return $resultColumns;
+        return Strings::substr($joinedColumns, 0, -4);
     }
 
     /**
@@ -227,19 +233,13 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     }
 
     /**
-     * Returns the part of the SQL query with the columns for the join.
+     * Returns the part of the SQL query with the matching columns.
      *
      * @return string
      */
-    public function getJoinedColumns()
+    public function getMatchingColumns()
     {
-        $joinedColumns = '';
-
-        foreach ($this->joinedColumns as $column) {
-            $joinedColumns .= $column.' AND ';
-        }
-
-        return Strings::substr($joinedColumns, 0, -4);
+        return implode(', ', $this->matchingColumns);
     }
 
     /**
@@ -257,13 +257,25 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
     }
 
     /**
-     * Returns the part of the SQL query with the matching columns.
+     * Returns the part of the SQL query with the conditions.
      *
      * @return string
      */
-    public function getMatchingColumns()
+    public function getConditions()
     {
-        return implode(', ', $this->matchingColumns);
+        $conditions = '';
+
+        if (count($this->conditions)) {
+            foreach ($this->conditions as $column => $value) {
+                if (is_array($value)) {
+                    $conditions .= ' AND ' . $column . ' IN (' . implode(', ', $value) . ')';
+                } else {
+                    $conditions .= ' AND ' . $column . ' = ' . $value;
+                }
+            }
+        }
+
+        return $conditions;
     }
 
     /**
@@ -278,28 +290,6 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
         $this->conditions = $conditions;
 
         return $this;
-    }
-
-    /**
-     * Returns the part of the SQL query with the conditions.
-     *
-     * @return string
-     */
-    public function getConditions()
-    {
-        $conditions = '';
-
-        if (count($this->conditions)) {
-            foreach ($this->conditions as $column => $value) {
-                if (is_array($value)) {
-                    $conditions .= ' AND '.$column.' IN ('.implode(', ', $value).')';
-                } else {
-                    $conditions .= ' AND '.$column.' = '.$value;
-                }
-            }
-        }
-
-        return $conditions;
     }
 
     /**
@@ -318,17 +308,17 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
 
         for ($i = 0; $i < $numKeys; ++$i) {
             if (strlen($where) != 0) {
-                $where = $where.' OR';
+                $where = $where . ' OR';
             }
-            $where = $where.' (';
+            $where = $where . ' (';
             for ($j = 0; $j < $numMatch; ++$j) {
                 if ($j != 0) {
-                    $where = $where.' OR ';
+                    $where = $where . ' OR ';
                 }
                 $where = sprintf("%s%s LIKE '%%%s%%'",
                     $where,
                     $this->matchingColumns[$j],
-                    $this->_config->getDb()->escape($keys[$i]));
+                    $this->config->getDb()->escape($keys[$i]));
             }
             $where .= ')';
         }

@@ -3,7 +3,13 @@
 namespace phpMyFAQ;
 
 /**
- * The main string wrapper class. 
+ * The main string wrapper class.
+ *
+ * The class uses mbstring extension if available. It's strongly recommended
+ * to use and extend this class instead of using direct string functions. Doing so
+ * you guarantees your code is upwards compatible with UTF-8 improvements. All
+ * the string methods behaviour is identical to that of the same named
+ * single byte string functions.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -18,34 +24,22 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Strings\Mbstring;
-use phpMyFAQ\Strings\Basic;
+use phpMyFAQ\Strings\StringBasic;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Class Strings.
- *
- * The class uses mbstring extension if available. It's strongly recommended
- * to use and extend this class instead of using direct string functions. Doing so
- * you guarantees your code is upwards compatible with UTF-8 improvements. All
- * the string methods behaviour is identical to that of the same named 
- * single byte string functions.
- *
+ * Class Strings
  * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
  */
 class Strings
 {
     /**
      * Instance.
      *
-     * @var String
+     * @var Strings
      */
     private static $instance;
 
@@ -56,20 +50,18 @@ class Strings
     {
     }
 
-    /** 
+    /**
      * Init.
      *
      * @param string $language Language
      */
-    public static function init($language = 'en')
+    public static function init(string $language = 'en')
     {
         if (!self::$instance) {
             if (extension_loaded('mbstring') && function_exists('mb_regex_encoding')) {
                 self::$instance = Mbstring::getInstance($language);
-            } elseif (self::isLangUTF8ToLatinConvertable($language)) {
-                self::$instance = UTF8ToLatinConvertable::getInstance($language);
             } else {
-                self::$instance = Basic::getInstance($language);
+                self::$instance = StringBasic::getInstance($language);
             }
         }
     }
@@ -100,8 +92,8 @@ class Strings
      * Get a part of string.
      *
      * @param string $string String
-     * @param int    $start  Start
-     * @param int    $length Length
+     * @param int $start Start
+     * @param int $length Length
      *
      * @return string
      */
@@ -111,11 +103,11 @@ class Strings
     }
 
     /**
-     * Get position of the first occurence of a string.
+     * Get position of the first occurrence of a string.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param int    $offset   Offset
+     * @param string $needle Needle
+     * @param int $offset Offset
      *
      * @return int
      */
@@ -149,11 +141,11 @@ class Strings
     }
 
     /**
-     * Get occurence of a string within another.
+     * Get occurrence of a string within another.
      *
      * @param string $haystack Haystack
-     * @param string $needle   Needle
-     * @param bool   $part     Part
+     * @param string $needle Needle
+     * @param bool $part Part
      *
      * @return string|false
      */
@@ -173,38 +165,7 @@ class Strings
     }
 
     /**
-     * Check if a language could be converted to iso-8859-1.
-     *
-     * @param string $language
-     *
-     * @return bool
-     */
-    public static function isLangUTF8ToLatinConvertable($language)
-    {
-        $iso_languages = array('af', 'sq', 'br', 'ca', 'da', 'en', 'fo', 'gl', 'de', 'is', 'it',
-                                'ku', 'la', 'lb', 'nb', 'oc', 'pt', 'es', 'sw', 'sv', 'wa', 'eu',
-                                // NOTE this languages are not fully supported by latin1 
-                                'nl', 'fr', 'et', 'fi', 'cy',
-        );
-
-        return in_array($language, $iso_languages);
-    }
-
-    /**
-     * Get last occurence of a string within another.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return string
-     */
-    public static function strrchr($haystack, $needle)
-    {
-        return self::$instance->strrchr($haystack, $needle);
-    }
-
-    /**
-     * Count substring occurences.
+     * Count substring occurrences.
      *
      * @param string $haystack
      * @param string $needle
@@ -221,7 +182,7 @@ class Strings
      *
      * @param string $haystack
      * @param string $needle
-     * @param int    $offset
+     * @param int $offset
      *
      * @return int
      */
@@ -236,8 +197,8 @@ class Strings
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int    $flags
-     * @param int    $offset
+     * @param int $flags
+     * @param int $offset
      *
      * @return int
      */
@@ -252,8 +213,8 @@ class Strings
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int    $flags
-     * @param int    $offset
+     * @param int $flags
+     * @param int $offset
      *
      * @return int
      */
@@ -267,8 +228,8 @@ class Strings
      *
      * @param string $pattern
      * @param string $subject
-     * @param int    $limit
-     * @param int    $flags
+     * @param int $limit
+     * @param int $flags
      *
      * @return array
      */
@@ -281,9 +242,9 @@ class Strings
      * Search and replace by a regexp using a callback.
      *
      * @param string $pattern
-     * @param function     $callback
+     * @param callable $callback
      * @param string|array $subject
-     * @param int          $limit
+     * @param int $limit
      * @param int          &$count
      *
      * @return array|string
@@ -299,7 +260,7 @@ class Strings
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int          $limit
+     * @param int $limit
      * @param int          &$count
      *
      * @return array|string|null
@@ -318,16 +279,16 @@ class Strings
      */
     public static function isUTF8($str)
     {
-        return Basic::isUTF8($str);
+        return StringBasic::isUTF8($str);
     }
 
     /**
      * Convert special chars to html entities.
      *
-     * @param string $string       The input string.
-     * @param int    $quoteStyle   Quote style
-     * @param string $charset      Character set, UTF-8 by default
-     * @param bool   $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string The input string.
+     * @param int $quoteStyle Quote style
+     * @param string $charset Character set, UTF-8 by default
+     * @param bool $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */
@@ -344,10 +305,10 @@ class Strings
     /**
      * Convert all applicable characters to HTML entities.
      *
-     * @param string $string       The input string.
-     * @param int    $quoteStyle   Quote style
-     * @param string $charset      Character set, UTF-8 by default
-     * @param bool   $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string The input string.
+     * @param int $quoteStyle Quote style
+     * @param string $charset Character set, UTF-8 by default
+     * @param bool $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */

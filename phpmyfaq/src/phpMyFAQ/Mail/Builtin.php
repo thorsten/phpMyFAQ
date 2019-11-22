@@ -31,8 +31,8 @@ class Builtin implements MailUserAgentInterface
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list
      *                           of RFC 2822 compliant items
-     * @param array  $headers    Headers of the e-mail
-     * @param string $body       Body of the e-mail
+     * @param array $headers Headers of the e-mail
+     * @param string $body Body of the e-mail
      *
      * @return bool True if successful, false otherwise.
      */
@@ -56,14 +56,14 @@ class Builtin implements MailUserAgentInterface
         // Prepare the headers for the e-mail
         $mailHeaders = '';
         foreach ($headers as $key => $value) {
-            $mailHeaders .= $key.': '.$value.PHP_EOL;
+            $mailHeaders .= $key . ': ' . $value . PHP_EOL;
         }
 
         // Send the e-mail
         if (empty($sender)) {
             return mail($recipients, $subject, $body, $mailHeaders);
         } else {
-            return mail($recipients, $subject, $body, $mailHeaders, '-f'.$sender);
+            return mail($recipients, $subject, $body, $mailHeaders, '-f' . $sender);
         }
     }
 }

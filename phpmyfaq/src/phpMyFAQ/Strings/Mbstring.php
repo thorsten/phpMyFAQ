@@ -146,19 +146,6 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Get last occurence of a string within another.
-     *
-     * @param string $haystack
-     * @param string $needle
-     *
-     * @return string
-     */
-    public function strrchr($haystack, $needle)
-    {
-        return mb_strrchr($haystack, $needle, false, $this->encoding);
-    }
-
-    /**
      * Count substring occurences.
      *
      * @param string $haystack

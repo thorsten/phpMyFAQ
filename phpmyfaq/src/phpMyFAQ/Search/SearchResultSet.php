@@ -21,27 +21,22 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Faq;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
+use stdClass;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * Class Resultset.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-06-06
+ * Class SearchResultSet
+ * @package phpMyFAQ\Search
  */
-class Resultset
+class SearchResultSet
 {
     /**
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
      * "Raw" search result set without permission checks and with possible
@@ -49,7 +44,7 @@ class Resultset
      *
      * @var array
      */
-    protected $rawResultset = [];
+    protected $rawResultSet = [];
 
     /**
      * "Reviewed" search result set with checked permissions and without
@@ -57,7 +52,7 @@ class Resultset
      *
      * @var array
      */
-    protected $reviewedResultset = [];
+    protected $reviewedResultSet = [];
 
     /**
      * Ordering of result set.
@@ -90,15 +85,15 @@ class Resultset
     /**
      * Constructor.
      *
-     * @param CurrentUser   $user   User object
-     * @param Faq           $faq    FaqHelper object
+     * @param CurrentUser $user User object
+     * @param Faq $faq FaqHelper object
      * @param Configuration $config Configuration object
      */
     public function __construct(CurrentUser $user, Faq $faq, Configuration $config)
     {
         $this->user = $user;
         $this->faq = $faq;
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -106,28 +101,28 @@ class Resultset
      *
      * @param array $resultSet Array with search results
      */
-    public function reviewResultset(Array $resultSet)
+    public function reviewResultSet(Array $resultSet)
     {
-        $this->setResultset($resultSet);
+        $this->setResultSet($resultSet);
 
         $duplicateResults = [];
 
-        if ('medium' === $this->_config->get('security.permLevel')) {
+        if ('medium' === $this->config->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($this->user->getUserId());
         } else {
             $currentGroupIds = [-1];
         }
 
-        foreach ($this->rawResultset as $result) {
+        foreach ($this->rawResultSet as $result) {
             $permission = false;
             // check permission for sections
-            if ('large' === $this->_config->get('security.permLevel')) {
+            if ('large' === $this->config->get('security.permLevel')) {
                 // @todo Add code for section permissions
                 $permission = true;
             }
 
             // check permissions for groups
-            if ('medium' === $this->_config->get('security.permLevel')) {
+            if ('medium' === $this->config->get('security.permLevel')) {
                 $groupPermissions = $this->faq->getPermission('group', $result->id);
                 if (is_array($groupPermissions)) {
                     foreach ($groupPermissions as $groupPermission) {
@@ -138,7 +133,7 @@ class Resultset
                 }
             }
             // check permission for user
-            if ('basic' === $this->_config->get('security.permLevel')) {
+            if ('basic' === $this->config->get('security.permLevel')) {
                 $userPermission = $this->faq->getPermission('user', $result->id);
                 if (in_array(-1, $userPermission) || in_array($this->user->getUserId(), $userPermission)) {
                     $permission = true;
@@ -160,11 +155,11 @@ class Resultset
             }
 
             if ($permission) {
-                $this->reviewedResultset[] = $result;
+                $this->reviewedResultSet[] = $result;
             }
         }
 
-        $this->setNumberOfResults($this->reviewedResultset);
+        $this->setNumberOfResults($this->reviewedResultSet);
     }
 
     /**
@@ -172,47 +167,17 @@ class Resultset
      *
      * @param array $resultSet Array with search results
      */
-    public function setResultset(Array $resultSet)
+    public function setResultSet(Array $resultSet)
     {
-        $this->rawResultset = $resultSet;
+        $this->rawResultSet = $resultSet;
     }
 
     /**
-     * Returns the "reviewed" search results.
-     *
-     * @return array
-     */
-    public function getResultset()
-    {
-        return $this->reviewedResultset;
-    }
-
-    /**
-     * Sets the number of search results.
-     *
-     * @param array
-     */
-    public function setNumberOfResults(Array $resultSet)
-    {
-        $this->numberOfResults = count($resultSet);
-    }
-
-    /**
-     * Returns the number search results.
-     *
-     * @return int
-     */
-    public function getNumberOfResults()
-    {
-        return $this->numberOfResults;
-    }
-
-    /**
-     * @param \stdClass $object
+     * @param stdClass $object
      *
      * @return float
      */
-    public function getScore(\stdClass $object)
+    public function getScore(stdClass $object)
     {
         $score = 0;
 
@@ -228,6 +193,36 @@ class Resultset
             $score += $object->relevance_keywords;
         }
 
-        return round($score/3*100);
+        return round($score / 3 * 100);
+    }
+
+    /**
+     * Returns the "reviewed" search results.
+     *
+     * @return array
+     */
+    public function getResultSet(): array
+    {
+        return $this->reviewedResultSet;
+    }
+
+    /**
+     * Returns the number search results.
+     *
+     * @return int
+     */
+    public function getNumberOfResults(): int
+    {
+        return $this->numberOfResults;
+    }
+
+    /**
+     * Sets the number of search results.
+     *
+     * @param array
+     */
+    public function setNumberOfResults(Array $resultSet)
+    {
+        $this->numberOfResults = count($resultSet);
     }
 }

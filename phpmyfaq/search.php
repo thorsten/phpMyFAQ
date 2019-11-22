@@ -23,7 +23,7 @@ use phpMyFAQ\Helper\TagsHelper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -77,7 +77,7 @@ if (is_null($user)) {
 }
 
 $faqSearch = new Search($faqConfig);
-$faqSearchResult = new Resultset($user, $faq, $faqConfig);
+$faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
 $tagging = new Tags($faqConfig);
 $tagHelper = new TagsHelper();
 $tagSearch = false;
@@ -162,7 +162,7 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
         // @todo handle the exception
     }
 
-    $faqSearchResult->reviewResultset($searchResults);
+    $faqSearchResult->reviewResultSet($searchResults);
 
     $inputSearchTerm = stripslashes($inputSearchTerm);
     $faqSearch->logSearchTerm($inputSearchTerm);

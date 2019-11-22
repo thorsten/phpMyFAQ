@@ -5,8 +5,6 @@ namespace phpMyFAQ\Services;
 /**
  * Service class for Gravatar support.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -26,54 +24,40 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Services_Gravatar.
- *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2013 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-01-14
+ * Class Gravatar
+ * @package phpMyFAQ\Services
  */
-class Gravatar extends Services
+class Gravatar
 {
-    /**
-     * http://gravatar.com/.
-     * 
-     * @var string
-     */
+    /** @var string */
     private $httpBaseUrl = 'http://gravatar.com/';
 
-    /**
-     * https://secure.gravatar.com/.
-     * 
-     * @var string
-     */
+    /** @var string */
     private $httpsBaseUrl = 'https://secure.gravatar.com/';
 
     /**
      * Returns a image or the URL to the image of a Gravatar based off an email
      * address.
      *
-     * @param string $email  Email address
-     * @param array  $params Allows multiple keys with values to give more control
+     * @param string $email Email address
+     * @param array $params Allows multiple keys with values to give more control
      *
      * @return string
      */
-    public function getImage($email, $params = [])
+    public function getImage(string $email, array $params = []): string
     {
-        $imageUrl = $this->getUrl().'avatar/'.$this->getHash($email);
+        $imageUrl = $this->getUrl() . 'avatar/' . $this->getHash($email);
 
         $opts = [];
 
         if (isset($params['default'])) {
-            $opts[] = 'default='.$params['default'];
+            $opts[] = 'default=' . $params['default'];
         }
         if (isset($params['size'])) {
-            $opts[] = 'size='.$params['size'];
+            $opts[] = 'size=' . $params['size'];
         }
         if (isset($params['rating'])) {
-            $opts[] = 'rating='.$params['rating'];
+            $opts[] = 'rating=' . $params['rating'];
         }
         if (isset($params['force_default']) && $params['force_default'] === true) {
             $opts[] = 'forcedefault=y';
@@ -82,7 +66,7 @@ class Gravatar extends Services
             $params['class'] = '';
         }
 
-        $gravatar = $imageUrl.(sizeof($opts) > 0 ? '?'.implode($opts, '&') : false);
+        $gravatar = $imageUrl . (sizeof($opts) > 0 ? '?' . implode($opts, '&') : false);
 
         return sprintf(
             '<img src="%s" class="%s" alt="Gravatar">',
@@ -97,7 +81,7 @@ class Gravatar extends Services
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return (isset($_SERVER['HTTPS'])) ? $this->httpsBaseUrl : $this->httpBaseUrl;
     }
@@ -109,7 +93,7 @@ class Gravatar extends Services
      *
      * @return string
      */
-    public static function getHash($email)
+    public static function getHash(string $email): string
     {
         return md5($email);
     }

@@ -5,8 +5,6 @@ namespace phpMyFAQ\Strings;
 /**
  * Abstract parent for the string wrapper classes.
  *
- * .0
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -18,19 +16,14 @@ namespace phpMyFAQ\Strings;
  * @link https://www.phpmyfaq.de
  * @since 2009-04-06
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * String_Abstract.
- *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * Class StringsAbstract
+ * @package phpMyFAQ\Strings
  */
 abstract class StringsAbstract
 {
@@ -72,30 +65,20 @@ abstract class StringsAbstract
     public static function isUTF8($str)
     {
         if (function_exists('mb_detect_encoding')) {
-            return mb_detect_encoding($str, 'UTF-8', true);
+            return mb_detect_encoding($str, self::DEFAULT_ENCODING, true);
         } else {
             $regex = '/^([\x00-\x7f]|'
-                    .'[\xc2-\xdf][\x80-\xbf]|'
-                    .'\xe0[\xa0-\xbf][\x80-\xbf]|'
-                    .'[\xe1-\xec][\x80-\xbf]{2}|'
-                    .'\xed[\x80-\x9f][\x80-\xbf]|'
-                    .'[\xee-\xef][\x80-\xbf]{2}|'
-                    .'\xf0[\x90-\xbf][\x80-\xbf]{2}|'
-                    .'[\xf1-\xf3][\x80-\xbf]{3}|'
-                    .'\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
+                . '[\xc2-\xdf][\x80-\xbf]|'
+                . '\xe0[\xa0-\xbf][\x80-\xbf]|'
+                . '[\xe1-\xec][\x80-\xbf]{2}|'
+                . '\xed[\x80-\x9f][\x80-\xbf]|'
+                . '[\xee-\xef][\x80-\xbf]{2}|'
+                . '\xf0[\x90-\xbf][\x80-\xbf]{2}|'
+                . '[\xf1-\xf3][\x80-\xbf]{3}|'
+                . '\xf4[\x80-\x8f][\x80-\xbf]{2})*$/';
 
             return preg_match($regex, $str) === 1;
         }
-    }
-
-    /**
-     * Set current encoding.
-     *
-     * @param string $encoding
-     */
-    public function setEncoding($encoding)
-    {
-        $this->encoding = $encoding;
     }
 
     /**
@@ -106,5 +89,15 @@ abstract class StringsAbstract
     public function getEncoding()
     {
         return $this->encoding;
+    }
+
+    /**
+     * Set current encoding.
+     *
+     * @param string $encoding
+     */
+    public function setEncoding($encoding)
+    {
+        $this->encoding = $encoding;
     }
 }

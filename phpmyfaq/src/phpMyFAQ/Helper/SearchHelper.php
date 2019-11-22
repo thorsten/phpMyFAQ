@@ -24,7 +24,7 @@ use phpMyFAQ\Helper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
-use phpMyFAQ\Search\Resultset;
+use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
 
@@ -103,11 +103,11 @@ class SearchHelper extends Helper
     /**
      * Renders the results for Typehead.
      *
-     * @param Resultset $resultSet Resultset object
+     * @param SearchResultSet $resultSet Resultset object
      *
      * @return string
      */
-    public function renderInstantResponseResult(Resultset $resultSet): string
+    public function renderInstantResponseResult(SearchResultSet $resultSet): string
     {
         $results = [];
         $maxResults = $this->_config->get('records.numberOfRecordsPerPage');
@@ -115,7 +115,7 @@ class SearchHelper extends Helper
 
         if (0 < $numOfResults) {
             $i = 0;
-            foreach ($resultSet->getResultset() as $result) {
+            foreach ($resultSet->getResultSet() as $result) {
                 if ($i > $maxResults) {
                     continue;
                 }
@@ -148,11 +148,11 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for Instant Response.
      *
-     * @param Resultset $resultSet PMF_Search_Resultset object
+     * @param SearchResultSet $resultSet PMF_Search_Resultset object
      *
      * @return string
      */
-    public function renderAdminSuggestionResult(Resultset $resultSet): string
+    public function renderAdminSuggestionResult(SearchResultSet $resultSet): string
     {
         $html = '';
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
@@ -160,7 +160,7 @@ class SearchHelper extends Helper
 
         if (0 < $numOfResults) {
             $i = 0;
-            foreach ($resultSet->getResultset() as $result) {
+            foreach ($resultSet->getResultSet() as $result) {
                 if ($i > $confPerPage) {
                     continue;
                 }
@@ -194,13 +194,13 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for the main search page.
      *
-     * @param Resultset $resultSet
+     * @param SearchResultSet $resultSet
      * @param int $currentPage
      *
      * @return string
      * @throws Exception
      */
-    public function renderSearchResult(Resultset $resultSet, int $currentPage): string
+    public function renderSearchResult(SearchResultSet $resultSet, int $currentPage): string
     {
         $html = '';
         $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
@@ -230,7 +230,7 @@ class SearchHelper extends Helper
 
             $counter = $displayedCounter = 0;
             $faqHelper = new FaqHelper($this->_config);
-            foreach ($resultSet->getResultset() as $result) {
+            foreach ($resultSet->getResultSet() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
                 }
@@ -329,12 +329,12 @@ class SearchHelper extends Helper
     }
 
     /**
-     * @param Resultset $resultSet
+     * @param SearchResultSet $resultSet
      * @param int $recordId
      *
      * @return string
      */
-    public function renderRelatedFaqs(Resultset $resultSet, int $recordId)
+    public function renderRelatedFaqs(SearchResultSet $resultSet, int $recordId)
     {
         $html = '';
         $numOfResults = $resultSet->getNumberOfResults();
@@ -342,7 +342,7 @@ class SearchHelper extends Helper
         if ($numOfResults > 0) {
             $html .= '<ul>';
             $counter = 0;
-            foreach ($resultSet->getResultset() as $result) {
+            foreach ($resultSet->getResultSet() as $result) {
                 if ($counter >= 5) {
                     continue;
                 }
