@@ -22,6 +22,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Database;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\Logging;
@@ -406,7 +407,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                         <?= $PMF_LANG['ad_entry_locale'] ?>:
                     </label>
                     <div class="col-lg-10">
-                        <?= Language::selectLanguages($faqData['lang'], false, [], 'lang') ?>
+                        <?= LanguageHelper::renderSelectLanguage($faqData['lang'], false, [], 'lang') ?>
                     </div>
                   </div>
 

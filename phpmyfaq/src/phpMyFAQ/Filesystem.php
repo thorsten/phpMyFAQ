@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * Class for filesystem operations.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,14 +22,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Filesystem.
- *
+ * Class Filesystem
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-02
  */
 class Filesystem
 {
@@ -73,14 +65,6 @@ class Filesystem
     }
 
     /**
-     * @param array $folders
-     */
-    public function setFolders(Array $folders)
-    {
-        $this->folders = $folders;
-    }
-
-    /**
      * @return array
      */
     public function getFolders()
@@ -89,11 +73,11 @@ class Filesystem
     }
 
     /**
-     * @param string $path
+     * @param array $folders
      */
-    public function setPath($path)
+    public function setFolders(Array $folders)
     {
-        $this->path = $path;
+        $this->folders = $folders;
     }
 
     /**
@@ -105,31 +89,11 @@ class Filesystem
     }
 
     /**
-     * Copies the source file to the destination.
-     *
-     * @param string $source
-     * @param string $dest
-     *
-     * @throws Exception
-     *
-     * @return bool
+     * @param string $path
      */
-    public function copy($source, $dest)
+    public function setPath($path)
     {
-        if (!is_readable($source)) {
-            throw new Exception($source.' is not readable.');
-        }
-
-        if (!is_writable(dirname($dest))) {
-            throw new Exception($dest.' is not writeable.');
-        }
-
-        if (!copy($source, $dest)) {
-            $error = error_get_last();
-            throw new Exception($error['message']);
-        }
-
-        return true;
+        $this->path = $path;
     }
 
     /**
@@ -137,10 +101,10 @@ class Filesystem
      *
      * @param string $source
      * @param string $dest
-     *
+     * @throws Exception
      * @return bool
      */
-    public function recursiveCopy($source, $dest)
+    public function recursiveCopy(string $source, string $dest): bool
     {
         if (is_dir($source)) {
             $directoryHandle = opendir($source);
@@ -148,17 +112,17 @@ class Filesystem
 
         $directoryName = substr($source, strrpos($source, '/') + 1);
 
-        $this->mkdir($dest.'/'.$directoryName, 0750, true);
+        $this->mkdir($dest . '/' . $directoryName, 0750, true);
 
         while ($file = readdir($directoryHandle)) {
             if ('.' != $file && '..' != $file) {
-                if (!is_dir($source.'/'.$file)) {
+                if (!is_dir($source . '/' . $file)) {
                     $this->copy(
-                        $source.'/'.$file,
-                        $dest.'/'.$directoryName.'/'.$file
+                        $source . '/' . $file,
+                        $dest . '/' . $directoryName . '/' . $file
                     );
                 } else {
-                    $this->recursiveCopy($source.'/'.$file, $dest.'/'.$directoryName);
+                    $this->recursiveCopy($source . '/' . $file, $dest . '/' . $directoryName);
                 }
             }
         }
@@ -171,9 +135,9 @@ class Filesystem
     /**
      * Makes directory.
      *
-     * @param string $pathname  The directory path
-     * @param int    $mode      The mode is 0777 by default
-     * @param bool   $recursive Allows the creation of nested directories
+     * @param string $pathname The directory path
+     * @param int $mode The mode is 0777 by default
+     * @param bool $recursive Allows the creation of nested directories
      *                          specified in the pathname.
      *
      * @return bool
@@ -185,5 +149,33 @@ class Filesystem
         }
 
         return mkdir($pathname, $mode, $recursive);
+    }
+
+    /**
+     * Copies the source file to the destination.
+     *
+     * @param string $source
+     * @param string $dest
+     *
+     * @return bool
+     * @throws Exception
+     *
+     */
+    public function copy($source, $dest)
+    {
+        if (!is_readable($source)) {
+            throw new Exception($source . ' is not readable.');
+        }
+
+        if (!is_writable(dirname($dest))) {
+            throw new Exception($dest . ' is not writeable.');
+        }
+
+        if (!copy($source, $dest)) {
+            $error = error_get_last();
+            throw new Exception($error['message']);
+        }
+
+        return true;
     }
 }

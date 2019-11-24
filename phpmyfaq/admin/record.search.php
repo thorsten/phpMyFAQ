@@ -18,7 +18,7 @@
 use phpMyFAQ\Category;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -54,7 +54,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
     $category->buildTree();
 
-    $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
+    $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
     ?>
 
                 <form action="?action=view" method="post"  accept-charset="utf-8">

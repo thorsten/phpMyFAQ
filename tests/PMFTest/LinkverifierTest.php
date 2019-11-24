@@ -18,7 +18,7 @@
  */
 
 use phpMyFAQ\Configuration;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
@@ -38,7 +38,7 @@ class LinkverifierTest extends TestCase
     /** @var phpMyFAQ\Db_Sqlite3  */
     private $dbHandle;
 
-    /** @var  Linkverifier */
+    /** @var  LinkVerifier */
     private $linkVerifier;
 
     /** @var  PMF_Configuration */
@@ -61,7 +61,7 @@ class LinkverifierTest extends TestCase
         $this->dbHandle->method('fetchAll')->willReturn([$config]);
 
         $this->config       = new Configuration($this->dbHandle);
-        $this->linkVerifier = new Linkverifier($this->config);
+        $this->linkVerifier = new LinkVerifier($this->config);
     }
 
     /**

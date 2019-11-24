@@ -20,7 +20,7 @@ use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
-use phpMyFAQ\Language;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Permission\PermissionHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Utils;
@@ -30,7 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -48,7 +48,7 @@ if (!empty($_SESSION['access_token'])) {
 $configMode = Filter::filterInput(INPUT_GET, 'conf', FILTER_SANITIZE_STRING, 'main');
 
 /**
- * @param mixed  $key
+ * @param mixed $key
  * @param string $type
  */
 function renderInputForm($key, $type)
@@ -100,13 +100,13 @@ function renderInputForm($key, $type)
             switch ($key) {
 
                 case 'main.language':
-                    $languages = Language::getAvailableLanguages();
+                    $languages = LanguageHelper::getAvailableLanguages();
                     if (count($languages) > 0) {
-                        echo Language::languageOptions(
+                        echo LanguageHelper::renderLanguageOptions(
                             str_replace(
                                 array(
-                                        'language_',
-                                        '.php',
+                                    'language_',
+                                    '.php',
                                 ),
                                 '',
                                 $faqConfig->get('main.language')
@@ -266,18 +266,18 @@ foreach ($LANG_CONF as $key => $value) {
                 '' == $faqConfig->get('socialnetworks.twitterConsumerSecret')) {
                 echo '<a target="_blank" href="https://dev.twitter.com/apps/new">Create Twitter App for your FAQ</a>';
                 echo "<br>\n";
-                echo 'Your Callback URL is: '.$faqConfig->getDefaultUrl().'services/twitter/callback.php';
+                echo 'Your Callback URL is: ' . $faqConfig->getDefaultUrl() . 'services/twitter/callback.php';
             }
 
             if (!isset($content)) {
                 echo '<br><a target="_blank" href="../services/twitter/redirect.php">';
                 echo '<img src="../assets/img/twitter.signin.png" alt="Sign in with Twitter"/></a>';
             } elseif (isset($content)) {
-                echo $content->screen_name."<br>\n";
-                echo "<img src='".$content->profile_image_url_https."'><br>\n";
-                echo 'Follower: '.$content->followers_count."<br>\n";
-                echo 'Status Count: '.$content->statuses_count."<br>\n";
-                echo 'Status: '.$content->status->text;
+                echo $content->screen_name . "<br>\n";
+                echo "<img alt=\"Twitter profile\" src='" . $content->profile_image_url_https . "'><br>\n";
+                echo 'Follower: ' . $content->followers_count . "<br>\n";
+                echo 'Status Count: ' . $content->statuses_count . "<br>\n";
+                echo 'Status: ' . $content->status->text;
             }
             echo '</div></div>';
         }
@@ -285,7 +285,7 @@ foreach ($LANG_CONF as $key => $value) {
         printf(
             '<div class="form-group row"><label class="col-lg-4 col-form-label %s">',
             $value[0] === 'checkbox' || $value[0] === 'radio' ? 'pt-0' : ''
-            );
+        );
 
         switch ($key) {
             case 'records.maxAttachmentSize':
@@ -302,12 +302,12 @@ foreach ($LANG_CONF as $key => $value) {
                 echo $value[1];
                 break;
         }
-?>
-                </label>
-                <div class="col-lg-8">
-                    <?php renderInputForm($key, $value[0]) ?>
-                </div>
-<?php
+        ?>
+      </label>
+      <div class="col-lg-8">
+          <?php renderInputForm($key, $value[0]) ?>
+      </div>
+        <?php
 
     }
 }

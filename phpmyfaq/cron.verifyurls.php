@@ -23,7 +23,7 @@
 use phpMyFAQ\Faq;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
 
@@ -71,7 +71,7 @@ if ($isCronRequest && file_exists(PMF_ROOT_DIR . '/config/database.php')) {
     //
     Strings::init(LANGCODE);
 
-    $oLnk = new Linkverifier($faqConfig);
+    $oLnk = new LinkVerifier($faqConfig);
     $faq = new Faq($faqConfig);
     $totStart = microtime(true);
 

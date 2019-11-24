@@ -15,7 +15,7 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Comment;use phpMyFAQ\Date;use phpMyFAQ\Filter;use phpMyFAQ\Language;use phpMyFAQ\News;
+use phpMyFAQ\Comment;use phpMyFAQ\Date;use phpMyFAQ\Filter;use phpMyFAQ\Helper\LanguageHelper;use phpMyFAQ\Language;use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -134,7 +134,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
-                            <?= Language::selectLanguages($faqLangCode, false, [], 'langTo') ?>
+                            <?= LanguageHelper::renderSelectLanguage($faqLangCode, false, [], 'langTo') ?>
                         </div>
                     </div>
 
@@ -343,7 +343,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     <div class="form-group row">
                         <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
                         <div class="col-lg-4">
-                        <?= Language::selectLanguages($newsData['lang'], false, [], 'langTo') ?>
+                        <?= LanguageHelper::renderSelectLanguage($newsData['lang'], false, [], 'langTo') ?>
                         </div>
                     </div>
 <?php

@@ -5,28 +5,6 @@ namespace phpMyFAQ;
 /**
  * Simple HTTP Streamer.
  *
- *
- *
- * This Source Code Form is subject to the terms of the Mozilla Public License,
- *  v. 2.0. If a copy of the MPL was not distributed with this file, You can
- * obtain one at http://mozilla.org/MPL/2.0/.
- *
- * @package phpMyFAQ
- *
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2005-11-02
- */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
-/**
- * PMF_HttpStreamer Class.
- *
  * This class manages the stream of a generic content
  * taking into account the correct http headers settings
  *
@@ -36,14 +14,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  * - XML: text/xml
  * - Generic file: application/octet-stream
  *
- * @package phpMyFAQ
+ * This Source Code Form is subject to the terms of the Mozilla Public License,
+ *  v. 2.0. If a copy of the MPL was not distributed with this file, You can
+ * obtain one at http://mozilla.org/MPL/2.0/.
  *
+ * @package phpMyFAQ
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2005-11-02
+ */
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    exit();
+}
+
+/**
+ * Class HttpStreamer
+ * @package phpMyFAQ
  */
 class HttpStreamer
 {
@@ -113,7 +101,7 @@ class HttpStreamer
     /**
      * Constructor.
      *
-     * @param string $type    Type
+     * @param string $type Type
      * @param string $content Content
      */
     public function __construct($type, $content)
@@ -164,8 +152,6 @@ class HttpStreamer
      */
     private function _setHttpHeaders()
     {
-        $filename = $description = $mimeType = '';
-
         // Evaluate data upon export type request
         switch ($this->type) {
             case 'pdf':
@@ -179,10 +165,11 @@ class HttpStreamer
                 $mimeType = 'text/html';
                 // Why not: text/html or text/xml?
                 // See e.g.: http://www.hixie.ch/advocacy/xhtml
-                // Unfortunaltelly IE doesn't handle it correctly :(
-                // so currenctly we must use text/html as default.
+                // Unfortunately IE doesn't handle it correctly :(
+                // so currently we must use text/html as default.
                 // See e.g.: http://keystonewebsites.com/articles/mime_type.php
-                if (isset($_SERVER['HTTP_ACCEPT']) && !(strpos($_SERVER['HTTP_ACCEPT'], 'application/xhtml+xml') === false)) {
+                if (isset($_SERVER['HTTP_ACCEPT']) && !(strpos($_SERVER['HTTP_ACCEPT'],
+                            'application/xhtml+xml') === false)) {
                     $mimeType = 'application/xhtml+xml';
                 }
                 break;
@@ -212,25 +199,25 @@ class HttpStreamer
 
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
-        header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+        header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
         header('Expires: 0');
         header('Cache-Control: private, no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         header('Pragma: no-cache');
 
         // 2. Set the correct values for file streaming
-        header('Content-Type: '.$mimeType);
+        header('Content-Type: ' . $mimeType);
         if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT) &&
-             isset($_SERVER['HTTP_USER_AGENT']) && !(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false)) {
+            isset($_SERVER['HTTP_USER_AGENT']) && !(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false)) {
             header('Content-Type: application/force-download');
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header('Content-Disposition: '.$this->disposition.'; filename="phpMyFAQ_'.Export::getExportTimestamp().'_'.$filename.'"');
+        header('Content-Disposition: ' . $this->disposition . '; filename="phpMyFAQ_' . Export::getExportTimestamp() . '_' . $filename . '"');
         if (!empty($description)) {
-            header('Content-Description: '.$description);
+            header('Content-Description: ' . $description);
         }
         header('Content-Transfer-Encoding: binary');
         header('Accept-Ranges: none');
-        header('Content-Length: '.$this->size);
+        header('Content-Length: ' . $this->size);
     }
 
     /**

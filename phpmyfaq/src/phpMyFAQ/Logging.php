@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The main Logging class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -19,30 +17,20 @@ namespace phpMyFAQ;
  * @since 2006-08-15
  */
 
-use phpMyFAQ\Configuration;
-
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Logging.
- *
+ * Class Logging
  * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2006-08-15
  */
 class Logging
 {
     /**
      * @var Configuration
      */
-    private $_config = null;
+    private $config = null;
 
     /**
      * Constructor.
@@ -51,7 +39,7 @@ class Logging
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -69,13 +57,13 @@ class Logging
             Database::getTablePrefix()
         );
 
-        return $this->_config->getDb()->numRows(
-            $this->_config->getDb()->query($query)
+        return $this->config->getDb()->numRows(
+            $this->config->getDb()->query($query)
         );
     }
 
     /**
-     * Returns all data from the adminlog.
+     * Returns all data from the admin log.
      *
      * @return array
      */
@@ -92,8 +80,8 @@ class Logging
             Database::getTablePrefix()
         );
 
-        $result = $this->_config->getDb()->query($query);
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        $result = $this->config->getDb()->query($query);
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             $data[$row->id] = array(
                 'time' => $row->time,
                 'usr' => $row->usr,
@@ -106,7 +94,7 @@ class Logging
     }
 
     /**
-     * Adds a new adminlog entry.
+     * Adds a new admin log entry.
      *
      * @param User $user    User object
      * @param string   $logText Logged string
@@ -115,22 +103,22 @@ class Logging
      */
     public function logAdmin(User $user, $logText = '')
     {
-        if ($this->_config->get('main.enableAdminLog')) {
+        if ($this->config->get('main.enableAdminLog')) {
             $query = sprintf("
                 INSERT INTO
                     %sfaqadminlog
                 (id, time, usr, text, ip)
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
-                    Database::getTablePrefix(),
-                    $this->_config->getDb()->nextId(Database::getTablePrefix().'faqadminlog', 'id'),
-                    $_SERVER['REQUEST_TIME'],
-                    $user->userdata->get('user_id'),
-                    $this->_config->getDb()->escape(nl2br($logText)),
-                    $_SERVER['REMOTE_ADDR']
+                Database::getTablePrefix(),
+                $this->config->getDb()->nextId(Database::getTablePrefix().'faqadminlog', 'id'),
+                $_SERVER['REQUEST_TIME'],
+                $user->userdata->get('user_id'),
+                $this->config->getDb()->escape(nl2br($logText)),
+                $_SERVER['REMOTE_ADDR']
             );
 
-            return $this->_config->getDb()->query($query);
+            return $this->config->getDb()->query($query);
         } else {
             return false;
         }
@@ -141,21 +129,14 @@ class Logging
      *
      * @return bool
      */
-    public function delete()
+    public function delete(): bool
     {
         $query = sprintf(
-            'DELETE FROM
-                %sfaqadminlog
-            WHERE
-                time < %d',
+            'DELETE FROM %sfaqadminlog WHERE time < %d',
             Database::getTablePrefix(),
-            $_SERVER['REQUEST_TIME'] - 30*86400
+            $_SERVER['REQUEST_TIME'] - 30 * 86400
         );
 
-        if ($this->_config->getDb()->query($query)) {
-            return true;
-        }
-
-        return false;
+        return $this->config->getDb()->query($query);
     }
 }

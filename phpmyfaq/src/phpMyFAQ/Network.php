@@ -5,63 +5,46 @@ namespace phpMyFAQ;
 /**
  * The network class for IPv4 and IPv6 handling.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @author Kenneth Shaw <ken@expitrans.com>
  * @author David Soria Parra <dsp@php.net>
  * @copyright 2011-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2011-02-04
  */
-
-use phpMyFAQ\Configuration;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+use InvalidArgumentException;
+
 /**
- * PMF_Network.
- *
+ * Class Network
  * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Kenneth Shaw <ken@expitrans.com>
- * @author David Soria Parra <dsp@php.net>
- * @copyright 2011-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2011-02-04
  */
 class Network
 {
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor.
      *
      * @param Configuration $config
-     *
-     * @return PMF_Network
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -71,9 +54,9 @@ class Network
      *
      * @return bool true, if not banned
      */
-    public function checkIp($ip)
+    public function checkIp(string $ip)
     {
-        $bannedIps = explode(' ', $this->_config->get('security.bannedIPs'));
+        $bannedIps = explode(' ', $this->config->get('security.bannedIPs'));
 
         foreach ($bannedIps as $ipAddress) {
             if (0 === strlen($ipAddress)) {

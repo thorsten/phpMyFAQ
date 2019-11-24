@@ -31,6 +31,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper as HelperCategory;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\HttpHelper as HelperHttp;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
@@ -531,7 +532,7 @@ $tplMainPage = [
     'msgExportAllFaqs' => $PMF_LANG['msgExportAllFaqs'],
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'renderUri' => $renderUri,
-    'switchLanguages' => Language::selectLanguages($faqLangCode, true),
+    'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
         $faqConfig->get('main.currentVersion'),

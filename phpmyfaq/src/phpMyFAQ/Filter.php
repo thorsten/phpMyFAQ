@@ -5,46 +5,35 @@ namespace phpMyFAQ;
 /**
  * ext/filter wrapper class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2009-01-28
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * phpMyFAQ\Filter.
- *
+ * Class Filter
  * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2009-01-28
  */
 class Filter
 {
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int    $type         Filter type
+     * @param int $type Filter type
      * @param string $variableName Variable name
-     * @param int    $filter       Filter
-     * @param mixed  $default      Default value
+     * @param int $filter Filter
+     * @param mixed $default Default value
      *
      * @return mixed
      */
@@ -58,7 +47,7 @@ class Filter
     /**
      * Static wrapper method for filter_input_array.
      *
-     * @param int   $type       Filter type
+     * @param int $type Filter type
      * @param array $definition Definition
      *
      * @return mixed
@@ -72,8 +61,8 @@ class Filter
      * Static wrapper method for filter_var().
      *
      * @param mixed $variable Variable
-     * @param int   $filter   Filter
-     * @param mixed $default  Default value
+     * @param int $filter Filter
+     * @param mixed $default Default value
      *
      * @return mixed
      */
@@ -117,8 +106,22 @@ class Filter
     public static function removeAttributes($html = '')
     {
         $keep = [
-            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'size', 'dir', 'rel', 'rev', 'target', 'width', 'height', 'controls'
+            'href',
+            'src',
+            'title',
+            'alt',
+            'class',
+            'style',
+            'id',
+            'name',
+            'size',
+            'dir',
+            'rel',
+            'rev',
+            'target',
+            'width',
+            'height',
+            'controls'
         ];
 
         preg_match_all('/[a-z]+=".+"/iU', $html, $attributes);
@@ -126,7 +129,7 @@ class Filter
         foreach ($attributes[0] as $attribute) {
             $attributeName = stristr($attribute, '=', true);
             if (!in_array($attributeName, $keep)) {
-                $html = str_replace(' '.$attribute, '', $html);
+                $html = str_replace(' ' . $attribute, '', $html);
             }
         }
 

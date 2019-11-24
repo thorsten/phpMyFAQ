@@ -25,7 +25,7 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Language;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Search\SearchFactory;
 use phpMyFAQ\Visits;
 
@@ -63,7 +63,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
     $category->buildTree();
 
-    $linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
+    $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
     if ($linkVerifier->isReady()) {
 ?>
     <script>

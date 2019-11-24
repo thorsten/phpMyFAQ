@@ -17,7 +17,7 @@ namespace phpMyFAQ;
  * @since 2018-08-09
  */
 
-use phpMyFAQ\Entity\MetaEntity as MetaEntity;
+use phpMyFAQ\Entity\MetaEntity;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -26,11 +26,6 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Meta
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-09
  */
 class Meta
 {
@@ -57,7 +52,7 @@ class Meta
      */
     public function add(MetaEntity $data)
     {
-        $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqmeta', 'id');
+        $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
         $query = sprintf("
             INSERT INTO
@@ -200,6 +195,5 @@ class Meta
         );
 
         return (boolean)$this->config->getDb()->query($query);
-
     }
 }

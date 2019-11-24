@@ -628,17 +628,6 @@ class Installer
     }
 
     /**
-     * Checks if we can store data via sessions. If not, e.g. an user can't
-     * login into the admin section.
-     *
-     * @return bool
-     */
-    public function checkSessionSettings()
-    {
-        return true;
-    }
-
-    /**
      * Checks if phpMyFAQ database tables are available
      * @param DatabaseDriver $database
      * @throws
@@ -932,16 +921,15 @@ class Installer
         }
         try {
             $databaseInstaller = InstanceDatabase::factory($configuration, $dbSetup['dbType']);
+            $databaseInstaller->createTables($dbSetup['dbPrefix']);
         } catch (Exception $exception) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $exception->getMessage());
             $this->system->cleanInstallation();
             System::renderFooter(true);
         }
 
-        $databaseInstaller->createTables($dbSetup['dbPrefix']);
-
-        $stopwords = new Stopwords($configuration);
-        $stopwords->executeInsertQueries($dbSetup['dbPrefix']);
+        $stopWords = new Stopwords($configuration);
+        $stopWords->executeInsertQueries($dbSetup['dbPrefix']);
 
         $this->system->setDatabase($db);
 
@@ -955,8 +943,8 @@ class Installer
         foreach ($query as $executeQuery) {
             $result = @$db->query($executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once again or send
-            us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once 
+                      again or send us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->system->dropTables($uninst);

@@ -67,7 +67,7 @@ class Export
      * @throws Exception
      * @throws \Exception
      */
-    public static function create(Faq $faq, Category $category, Configuration $config, $mode = 'pdf')
+    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf'): string
     {
         switch ($mode) {
             case 'json':
@@ -85,5 +85,14 @@ class Export
             default:
                 throw new Exception('Export not implemented!');
         }
+    }
+
+    /**
+     * Returns the timestamp of the export.
+     * @return string
+     */
+    public static function getExportTimestamp(): string
+    {
+        return date('Y-m-d-H-i-s', $_SERVER['REQUEST_TIME']);
     }
 }

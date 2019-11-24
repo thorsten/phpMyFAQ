@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The main phpMyFAQ instances class.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -24,14 +22,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 /**
- * PMF_Instance.
- *
+ * Class Instance
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-02-20
  */
 class Instance
 {
@@ -73,9 +65,9 @@ class Instance
      *
      * @return int $id
      */
-    public function addInstance(Array $data)
+    public function addInstance(Array $data): int
     {
-        $this->setId($this->config->getDb()->nextId(Database::getTablePrefix().'faqinstances', 'id'));
+        $this->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
         $insert = sprintf(
             "INSERT INTO %sfaqinstances VALUES (%d, '%s', '%s', '%s', %s, %s)",
@@ -96,23 +88,23 @@ class Instance
     }
 
     /**
-     * Sets the instance ID.
-     *
-     * @param int $id
-     */
-    public function setId($id)
-    {
-        $this->id = (int)$id;
-    }
-
-    /**
      * Returns the current instance id.
      *
      * @return int
      */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
+    }
+
+    /**
+     * Sets the instance ID.
+     *
+     * @param int $id
+     */
+    public function setId(int $id)
+    {
+        $this->id = (int)$id;
     }
 
     /**
@@ -120,7 +112,7 @@ class Instance
      *
      * @return array
      */
-    public function getAllInstances()
+    public function getAllInstances(): array
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances ORDER BY id',
@@ -139,7 +131,7 @@ class Instance
      *
      * @return array
      */
-    public function getInstanceById($id)
+    public function getInstanceById(int $id): array
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
@@ -153,64 +145,14 @@ class Instance
     }
 
     /**
-     * Returns the instance.
-     *
-     * @param string $url
-     *
-     * @return array
-     */
-    public function getInstanceByUrl($url)
-    {
-        $select = sprintf(
-            "SELECT * FROM %sfaqinstances WHERE url = '%s'",
-            Database::getTablePrefix(),
-            $url
-        );
-
-        $result = $this->config->getDb()->query($select);
-
-        return $this->config->getDb()->fetchObject($result);
-    }
-
-    /**
-     * Returns the configuration of the given instance ID.
-     *
-     * @param int $id
-     *
-     * @return array
-     */
-    public function getInstanceConfig($id)
-    {
-        $query = sprintf('
-            SELECT
-                config_name, config_value
-            FROM
-                %sfaqinstances_config
-            WHERE
-                instance_id = %d',
-            Database::getTablePrefix(),
-            $id
-        );
-
-        $result = $this->config->getDb()->query($query);
-        $config = $this->config->getDb()->fetchAll($result);
-
-        foreach ($config as $items) {
-            $this->instanceConfig[$items->config_name] = $items->config_value;
-        }
-
-        return $this->instanceConfig;
-    }
-
-    /**
      * Updates the instance data.
      *
-     * @param int   $id
+     * @param int $id
      * @param array $data
      *
      * @return bool
      */
-    public function updateInstance($id, Array $data)
+    public function updateInstance(int $id, Array $data): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",
@@ -230,7 +172,7 @@ class Instance
      *
      * @return bool
      */
-    public function removeInstance($id)
+    public function removeInstance(int $id)
     {
         $deletes = array(
             sprintf(
@@ -259,11 +201,11 @@ class Instance
      * Adds a configuration item for the database.
      *
      * @param string $name
-     * @param string  $value
+     * @param string $value
      *
      * @return bool
      */
-    public function addConfig($name, $value)
+    public function addConfig(string $name, string $value)
     {
         $insert = sprintf(
             "INSERT INTO
@@ -286,7 +228,7 @@ class Instance
      *
      * @return mixed
      */
-    public function getConfig($name)
+    public function getConfig(string $name)
     {
         if (!isset($this->instanceConfig[$name])) {
             $this->getInstanceConfig($this->getId());
@@ -303,5 +245,35 @@ class Instance
                 return $this->instanceConfig[$name];
                 break;
         }
+    }
+
+    /**
+     * Returns the configuration of the given instance ID.
+     *
+     * @param int $id
+     *
+     * @return array
+     */
+    public function getInstanceConfig(int $id): array
+    {
+        $query = sprintf('
+            SELECT
+                config_name, config_value
+            FROM
+                %sfaqinstances_config
+            WHERE
+                instance_id = %d',
+            Database::getTablePrefix(),
+            $id
+        );
+
+        $result = $this->config->getDb()->query($query);
+        $config = $this->config->getDb()->fetchAll($result);
+
+        foreach ($config as $items) {
+            $this->instanceConfig[$items->config_name] = $items->config_value;
+        }
+
+        return $this->instanceConfig;
     }
 }

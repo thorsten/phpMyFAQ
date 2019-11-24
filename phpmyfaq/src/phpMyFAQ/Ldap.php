@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The PMF_Ldap class provides methods and functions for a LDAP database.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,25 +19,31 @@ namespace phpMyFAQ;
  * @link https://www.phpmyfaq.de
  * @since 2004-12-16
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Ldap.
- *
+ * Class Ldap
  * @package phpMyFAQ
- * @author Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alberto Cabello Sanchez <alberto@unex.es>
- * @author Lars Scheithauer <larsscheithauer@googlemail.com>
- * @copyright 2004-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-12-16
  */
 class Ldap
 {
+    /**
+     * Errorlog.
+     *
+     * @var string
+     */
+    public $error = null;
+
+    /**
+     * LDAP error number.
+     *
+     * @var int
+     */
+    public $errno = null;
+
     /**
      * @var array
      */
@@ -63,20 +67,6 @@ class Ldap
     private $base = null;
 
     /**
-     * Errorlog.
-     *
-     * @var string
-     */
-    public $error = null;
-
-    /**
-     * LDAP error number.
-     *
-     * @var int
-     */
-    public $errno = null;
-
-    /**
      * Constructor.
      *
      * @param Configuration $config
@@ -91,7 +81,7 @@ class Ldap
      * Connects to given LDAP server with given credentials.
      *
      * @param string $ldapServer
-     * @param int    $ldapPort
+     * @param int $ldapPort
      * @param string $ldapBase
      * @param string $ldapUser
      * @param string $ldapPassword
@@ -135,7 +125,7 @@ class Ldap
 
         if ($this->config->get('ldap.ldap_use_dynamic_login')) {
             // Check for dynamic user binding
-            $ldapRdn = $this->config->get('ldap.ldap_dynamic_login_attribute').'='.$ldapUser.','.$ldapBase;
+            $ldapRdn = $this->config->get('ldap.ldap_dynamic_login_attribute') . '=' . $ldapUser . ',' . $ldapBase;
             $ldapBind = $this->bind($ldapRdn, $ldapPassword);
         } elseif ($this->config->get('ldap.ldap_use_anonymous_login')) {
             // Check for anonymous binding
@@ -195,50 +185,10 @@ class Ldap
     }
 
     /**
-     * Returns the user's DN.
-     *
-     * @param string $username Username
-     *
-     * @return string
-     */
-    public function getDn($username)
-    {
-        return $this->getLdapDn($username);
-    }
-
-    /**
-     * Returns the user's full name from LDAP.
-     *
-     * @param string $username Username
-     *
-     * @return string
-     */
-    public function getCompleteName($username)
-    {
-        return $this->getLdapData($username, 'name');
-    }
-
-    /**
-     * Returns the LDAP error message of the last LDAP command.
-     *
-     * @param resource $ds LDAP resource
-     *
-     * @return string
-     */
-    public function error($ds = null)
-    {
-        if ($ds === null) {
-            $ds = $this->ds;
-        }
-
-        return ldap_error($ds);
-    }
-
-    /**
      * Returns specific data from LDAP.
      *
      * @param string $username Username
-     * @param string $data     MapKey
+     * @param string $data MapKey
      *
      * @return string|false
      */
@@ -305,6 +255,34 @@ class Ldap
     }
 
     /**
+     * Quotes LDAP strings in accordance with the RFC 2254.
+     *
+     * @param string $string
+     *
+     * @return string
+     */
+    public function quote($string)
+    {
+        return str_replace(
+            array('\\', ' ', '*', '(', ')'),
+            array('\\5c', '\\20', '\\2a', '\\28', '\\29'),
+            $string
+        );
+    }
+
+    /**
+     * Returns the user's DN.
+     *
+     * @param string $username Username
+     *
+     * @return string
+     */
+    public function getDn($username)
+    {
+        return $this->getLdapDn($username);
+    }
+
+    /**
      * Returns the DN from LDAP.
      *
      * @param string $username Username
@@ -352,18 +330,30 @@ class Ldap
     }
 
     /**
-     * Quotes LDAP strings in accordance with the RFC 2254.
+     * Returns the user's full name from LDAP.
      *
-     * @param string $string
+     * @param string $username Username
      *
      * @return string
      */
-    public function quote($string)
+    public function getCompleteName($username)
     {
-        return str_replace(
-            array('\\', ' ', '*', '(', ')'),
-            array('\\5c', '\\20', '\\2a', '\\28', '\\29'),
-            $string
-        );
+        return $this->getLdapData($username, 'name');
+    }
+
+    /**
+     * Returns the LDAP error message of the last LDAP command.
+     *
+     * @param resource $ds LDAP resource
+     *
+     * @return string
+     */
+    public function error($ds = null)
+    {
+        if ($ds === null) {
+            $ds = $this->ds;
+        }
+
+        return ldap_error($ds);
     }
 }

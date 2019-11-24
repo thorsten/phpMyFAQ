@@ -21,6 +21,7 @@ namespace phpMyFAQ;
  */
 
 use phpMyFAQ\Category\CategoryEntity;
+use phpMyFAQ\Helper\LanguageHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -1443,7 +1444,7 @@ class Category
         $output = '';
         $existcatlang = $this->config->getLanguage()->languageAvailable($category_id, 'faqcategories');
 
-        foreach (Language::getAvailableLanguages() as $lang => $langname) {
+        foreach (LanguageHelper::getAvailableLanguages() as $lang => $langname) {
             if (!in_array(strtolower($lang), $existcatlang)) {
                 $output .= "\t<option value=\"" . strtolower($lang) . '"';
                 if ($lang == $selected_lang) {

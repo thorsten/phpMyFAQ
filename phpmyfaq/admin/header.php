@@ -16,6 +16,7 @@
 
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
 use phpMyFAQ\Template;
@@ -362,7 +363,7 @@ switch ($action) {
         <!-- Topbar Language Switcher -->
         <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
               action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-            <?= Language::selectLanguages($faqLangCode, true); ?>
+            <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
         </form>
 
         <!-- Topbar Navbar -->
@@ -379,7 +380,7 @@ switch ($action) {
                  aria-labelledby="searchDropdown">
               <form class="form-inline mr-auto w-100 navbar-search"
                     action="index.php<?= (isset($action) ? '?action=' . $action : ''); ?>" method="post">
-                  <?= Language::selectLanguages($faqLangCode, true); ?>
+                  <?= LanguageHelper::renderSelectLanguage($faqLangCode, true); ?>
               </form>
             </div>
           </li>

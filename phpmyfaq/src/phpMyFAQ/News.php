@@ -5,58 +5,40 @@ namespace phpMyFAQ;
 /**
  * The News class for phpMyFAQ news.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2006-06-25
  */
-
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Date;
-use phpMyFAQ\Database;
-use phpMyFAQ\Link;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * The News class for phpMyFAQ news.
- *
+ * Class News
  * @package phpMyFAQ
- *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link https://www.phpmyfaq.de
- * @since 2006-06-25
  */
 class News
 {
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Language strings.
      *
      * @var string
      */
-    private $pmf_lang;
+    private $pmfLang;
 
     /**
      * Constructor.
@@ -67,15 +49,69 @@ class News
     {
         global $PMF_LANG;
 
-        $this->_config = $config;
-        $this->pmf_lang = $PMF_LANG;
+        $this->config = $config;
+        $this->pmfLang = $PMF_LANG;
+    }
+
+    /**
+     * Function for generating the HTML5 code for the current news.
+     *
+     * @param bool $showArchive Show archived news
+     * @param bool $active Show active news
+     *
+     * @return string
+     * @throws \Exception
+     */
+    public function getNews($showArchive = false, $active = true)
+    {
+        $output = '';
+        $news = $this->getLatestData($showArchive, $active);
+        $date = new Date($this->config);
+
+        foreach ($news as $item) {
+            $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                Link::getSystemRelativeUri(),
+                $item['id'],
+                $item['lang']);
+            $oLink = new Link($url, $this->config);
+
+            if (isset($item['header'])) {
+                $oLink->itemTitle = $item['header'];
+            }
+
+            $output .= sprintf(
+                '<h6><a id="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
+                $item['id'],
+                $oLink->toString(),
+                $item['header'],
+                $item['header']
+            );
+
+            $output .= sprintf('%s', $item['content']);
+
+            if (strlen($item['link']) > 1) {
+                $output .= sprintf(
+                    '<br>%s <a href="%s" target="_%s">%s</a>',
+                    $this->pmfLang['msgInfo'],
+                    $item['link'],
+                    $item['target'],
+                    $item['linkTitle']);
+            }
+
+            $output .= sprintf(
+                '<small class="text-muted">%s</small>',
+                $date->format($item['date'])
+            );
+        }
+
+        return ('' == $output) ? $this->pmfLang['msgNoNews'] : $output;
     }
 
     /**
      * Return the latest news data.
      *
-     * @param bool $showArchive    Show archived news
-     * @param bool $active         Show active news
+     * @param bool $showArchive Show archived news
+     * @param bool $active Show active news
      * @param bool $forceConfLimit Force to limit in configuration
      *
      * @return array
@@ -104,25 +140,25 @@ class News
             $now,
             $now,
             $active ? "AND active = 'y'" : '',
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        if ($this->_config->get('records.numberOfShownNewsEntries') > 0 && $this->_config->getDb()->numRows($result) > 0) {
-            while (($row = $this->_config->getDb()->fetchObject($result))) {
+        if ($this->config->get('records.numberOfShownNewsEntries') > 0 && $this->config->getDb()->numRows($result) > 0) {
+            while (($row = $this->config->getDb()->fetchObject($result))) {
                 ++$counter;
-                if (($showArchive && ($counter > $this->_config->get('records.numberOfShownNewsEntries'))) ||
-                   ((!$showArchive) && (!$forceConfLimit) &&
-                   ($counter <= $this->_config->get('records.numberOfShownNewsEntries'))) ||
-                   ((!$showArchive) && $forceConfLimit)) {
+                if (($showArchive && ($counter > $this->config->get('records.numberOfShownNewsEntries'))) ||
+                    ((!$showArchive) && (!$forceConfLimit) &&
+                        ($counter <= $this->config->get('records.numberOfShownNewsEntries'))) ||
+                    ((!$showArchive) && $forceConfLimit)) {
 
                     $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                        $this->_config->getDefaultUrl(),
+                        $this->config->getDefaultUrl(),
                         $row->id,
                         $row->lang
                     );
-                    $oLink = new Link($url, $this->_config);
+                    $oLink = new Link($url, $this->config);
                     $oLink->itemTitle = $row->header;
 
                     $item = [
@@ -151,59 +187,6 @@ class News
     }
 
     /**
-     * Function for generating the HTML5 code for the current news.
-     *
-     * @param bool $showArchive Show archived news
-     * @param bool $active      Show active news
-     *
-     * @return string
-     */
-    public function getNews($showArchive = false, $active = true)
-    {
-        $output = '';
-        $news = $this->getLatestData($showArchive, $active);
-        $date = new Date($this->_config);
-
-        foreach ($news as $item) {
-            $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                            Link::getSystemRelativeUri(),
-                            $item['id'],
-                            $item['lang']);
-            $oLink = new Link($url, $this->_config);
-
-            if (isset($item['header'])) {
-                $oLink->itemTitle = $item['header'];
-            }
-
-            $output .= sprintf(
-                '<h6><a name="news_%d" href="%s">%s <i aria-hidden="true" class="fa fa-caret-right"></i></a></h6>',
-                $item['id'],
-                $oLink->toString(),
-                $item['header'],
-                $item['header']
-                );
-
-            $output .= sprintf('%s', $item['content']);
-
-            if (strlen($item['link']) > 1) {
-                $output .= sprintf(
-                    '<br>%s <a href="%s" target="_%s">%s</a>',
-                    $this->pmf_lang['msgInfo'],
-                    $item['link'],
-                    $item['target'],
-                    $item['linkTitle']);
-            }
-
-            $output .= sprintf(
-                '<small class="text-muted">%s</small>',
-                $date->format($item['date'])
-            );
-        }
-
-        return ('' == $output) ? $this->pmf_lang['msgNoNews'] : $output;
-    }
-
-    /**
      * Fetches all news headers.
      *
      * @return array
@@ -223,13 +206,13 @@ class News
             ORDER BY
                 datum DESC",
             Database::getTablePrefix(),
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        if ($this->_config->getDb()->numRows($result) > 0) {
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+        if ($this->config->getDb()->numRows($result) > 0) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 $expired = ($now > $row->date_end);
                 $headers[] = array(
                     'id' => $row->id,
@@ -248,7 +231,7 @@ class News
     /**
      * Fetches a news entry identified by its ID.
      *
-     * @param int  $id    ID of news
+     * @param int $id ID of news
      * @param bool $admin Is admin
      *
      * @return array
@@ -268,12 +251,12 @@ class News
                 lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->_config->getLanguage()->getLanguage());
+            $this->config->getLanguage()->getLanguage());
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
-        if ($this->_config->getDb()->numRows($result) > 0) {
-            if ($row = $this->_config->getDb()->fetchObject($result)) {
+        if ($this->config->getDb()->numRows($result) > 0) {
+            if ($row = $this->config->getDb()->fetchObject($result)) {
                 $content = $row->artikel;
                 $active = ('y' == $row->active);
                 $allowComments = ('y' == $row->comment);
@@ -281,10 +264,10 @@ class News
 
                 if (!$admin) {
                     if (!$active) {
-                        $content = $this->pmf_lang['err_inactiveNews'];
+                        $content = $this->pmfLang['err_inactiveNews'];
                     }
                     if ($expired) {
-                        $content = $this->pmf_lang['err_expiredNews'];
+                        $content = $this->pmfLang['err_expiredNews'];
                     }
                 }
 
@@ -302,7 +285,8 @@ class News
                     'allowComments' => $allowComments,
                     'link' => $row->link,
                     'linkTitle' => $row->linktitel,
-                    'target' => $row->target,);
+                    'target' => $row->target,
+                );
             }
         }
 
@@ -326,7 +310,7 @@ class News
                 VALUES
             (%d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->_config->getDb()->nextId(Database::getTablePrefix().'faqnews', 'id'),
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqnews', 'id'),
             $data['date'],
             $data['lang'],
             $data['header'],
@@ -341,7 +325,7 @@ class News
             $data['linkTitle'],
             $data['target']);
 
-        if (!$this->_config->getDb()->query($query)) {
+        if (!$this->config->getDb()->query($query)) {
             return false;
         }
 
@@ -351,7 +335,7 @@ class News
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param int   $id   News ID
+     * @param int $id News ID
      * @param array $data Array with news data
      *
      * @return bool
@@ -393,7 +377,7 @@ class News
             $data['target'],
             $id);
 
-        if (!$this->_config->getDb()->query($query)) {
+        if (!$this->config->getDb()->query($query)) {
             return false;
         }
 
@@ -403,11 +387,11 @@ class News
     /**
      * Deletes a news entry identified by its ID.
      *
-     * @todo check if there are comments attached to the deleted news
-     *
      * @param int $id News ID
      *
      * @return bool
+     * @todo check if there are comments attached to the deleted news
+     *
      */
     public function deleteNews($id)
     {
@@ -420,10 +404,10 @@ class News
                 lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->_config->getLanguage()->getLanguage()
+            $this->config->getLanguage()->getLanguage()
         );
 
-        if (!$this->_config->getDb()->query($query)) {
+        if (!$this->config->getDb()->query($query)) {
             return false;
         }
 

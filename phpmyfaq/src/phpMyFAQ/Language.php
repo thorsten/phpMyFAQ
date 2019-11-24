@@ -2,6 +2,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Helper\LanguageHelper;
+
 /**
  * Manages all language stuff.
  *
@@ -26,29 +28,22 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Language
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-05-14
  */
 class Language
 {
-    /**
-     * The accepted language of the user agend.
-     *
-     * @var string
-     */
-    public $acceptedLanguage = '';
-
     /**
      * The current language.
      *
      * @var string
      */
     public static $language = '';
+
+    /**
+     * The accepted language of the user agent.
+     *
+     * @var string
+     */
+    public $acceptedLanguage = '';
 
     /**
      * @var Configuration
@@ -66,10 +61,31 @@ class Language
     }
 
     /**
+     * True if the language is supported by the bundled TinyMCE editor.
+     *
+     * TinyMCE Language is supported if there is a language file present in
+     * ROOT/admin/editor/langs/$langcode.js
+     *
+     * TinyMCE language packs can be downloaded from
+     * http://tinymce.moxiecode.com/download_i18n.php
+     * and extracted to ROOT/admin/editor
+     *
+     * @param string|null $langCode Language code
+     *
+     * @return bool
+     */
+    public static function isASupportedTinyMCELanguage($langCode): bool
+    {
+        return file_exists(
+            PMF_ROOT_DIR . '/admin/assets/js/editor/langs/' . $langCode . '.js'
+        );
+    }
+
+    /**
      * Returns an array of country codes for a specific FAQ record ID,
      * specific category ID or all languages used by FAQ records , categories.
      *
-     * @param int    $id    ID
+     * @param int $id ID
      * @param string $table Specifies table
      *
      * @return array
@@ -86,7 +102,7 @@ class Language
             } else {
                 // get languages for specified id
                 $distinct = '';
-                $where = ' WHERE id = '.$id;
+                $where = ' WHERE id = ' . $id;
             }
 
             $query = sprintf('
@@ -116,8 +132,8 @@ class Language
     /**
      * Sets the current language for phpMyFAQ user session.
      *
-     * @param bool   $configDetection Configuration detection
-     * @param string $configLanguage  Language from configuration
+     * @param bool $configDetection Configuration detection
+     * @param string $configLanguage Language from configuration
      *
      * @return string
      */
@@ -186,170 +202,6 @@ class Language
     }
 
     /**
-     * Returns the current language.
-     *
-     * @return string
-     */
-    public function getLanguage(): string
-    {
-        return self::$language;
-    }
-
-    /**
-     * This function returns the available languages.
-     *
-     * @return array
-     */
-    public static function getAvailableLanguages(): array
-    {
-        global $languageCodes;
-
-        $search = array('language_', '.php');
-        $languages = $languageFiles = [];
-
-        $dir = new \DirectoryIterator(LANGUAGE_DIR);
-        foreach ($dir as $fileinfo) {
-            if (!$fileinfo->isDot()) {
-                $languageFiles[] = strtoupper(
-                    str_replace($search, '', trim($fileinfo->getFilename()))
-                );
-            }
-        }
-
-        foreach ($languageFiles as $lang) {
-            // Check if the file is related to a (real) language before using it
-            if (array_key_exists($lang, $languageCodes)) {
-                $languages[strtolower($lang)] = $languageCodes[$lang];
-            }
-        }
-
-        // Sort the languages list
-        asort($languages);
-        reset($languages);
-
-        return $languages;
-    }
-
-    /**
-     * This function displays the <select> box for the available languages
-     * optionally filtered by excluding some provided languages.
-     *
-     * @param string $default
-     * @param bool   $submitOnChange
-     * @param array  $excludedLanguages
-     * @param string $id
-     *
-     * @return string
-     */
-    public static function selectLanguages(
-        string $default,
-        bool $submitOnChange = false,
-        array $excludedLanguages = [],
-        string $id = 'language'): string
-    {
-        global $languageCodes;
-
-        $onChange = ($submitOnChange ? ' onchange="this.form.submit();"' : '');
-        $output = '<select class="form-control" name="'.$id.'" id="'.$id.'"'.$onChange.">\n";
-        $languages = self::getAvailableLanguages();
-
-        if (count($languages) > 0) {
-            foreach ($languages as $lang => $value) {
-                if (!in_array($lang, $excludedLanguages)) {
-                    $output .= "\t".'<option value="'.$lang.'"';
-                    if ($lang == $default) {
-                        $output .= ' selected';
-                    }
-                    $output .= '>'.$value."</option>\n";
-                }
-            }
-        } else {
-            $output .= "\t<option value=\"en\">".$languageCodes['EN'].'</option>';
-        }
-        $output .= "</select>\n";
-
-        return $output;
-    }
-
-    /**
-     * Function for displaying all languages in <option>.
-     *
-     * @param string $lang              the languange to be selected
-     * @param bool   $onlyThisLang      print only the passed language?
-     * @param bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
-     *
-     * @return string
-     */
-    public static function languageOptions(
-        string $lang = '',
-        bool $onlyThisLang = false,
-        bool $fileLanguageValue = false): string
-    {
-        $output = '';
-        foreach (self::getAvailableLanguages() as $key => $value) {
-            if ($onlyThisLang) {
-                if (strtolower($key) == $lang) {
-                    if ($fileLanguageValue) {
-                        $output .= "\t<option value=\"language_".strtolower($lang).'.php"';
-                    } else {
-                        $output .= "\t<option value=\"".strtolower($lang).'"';
-                    }
-                    $output .= ' selected="selected"';
-                    $output .= '>'.$value."</option>\n";
-                    break;
-                }
-            } else {
-                if ($fileLanguageValue) {
-                    $output .= "\t<option value=\"language_".strtolower($key).'.php"';
-                } else {
-                    $output .= "\t<option value=\"".strtolower($key).'"';
-                }
-                if (strtolower($key) == $lang) {
-                    $output .= ' selected="selected"';
-                }
-                $output .= '>'.$value."</option>\n";
-            }
-        }
-
-        return $output;
-    }
-
-    /**
-     * True if the language is supported by the current phpMyFAQ installation.
-     *
-     * @param string|null $langCode Language code
-     *
-     * @return bool
-     */
-    public static function isASupportedLanguage($langCode): bool
-    {
-        global $languageCodes;
-
-        return isset($languageCodes[strtoupper($langCode)]);
-    }
-
-    /**
-     * True if the language is supported by the bundled TinyMCE editor.
-     *
-     * TinyMCE Language is supported if there is a language file present in
-     * ROOT/admin/editor/langs/$langcode.js
-     *
-     * TinyMCE language packs can be downloaded from 
-     * http://tinymce.moxiecode.com/download_i18n.php
-     * and extracted to ROOT/admin/editor
-     *
-     * @param string|null $langCode Language code
-     *
-     * @return bool
-     */
-    public static function isASupportedTinyMCELanguage($langCode): bool
-    {
-        return file_exists(
-            PMF_ROOT_DIR.'/admin/assets/js/editor/langs/'.$langCode.'.js'
-        );
-    }
-
-    /**
      * Gets the accepted language from the user agent.
      *
      * $_SERVER['HTTP_ACCEPT_LANGUAGE'] could be like the text below:
@@ -384,5 +236,29 @@ class Language
                 }
             }
         }
+    }
+
+    /**
+     * True if the language is supported by the current phpMyFAQ installation.
+     *
+     * @param string|null $langCode Language code
+     *
+     * @return bool
+     */
+    public static function isASupportedLanguage($langCode): bool
+    {
+        global $languageCodes;
+
+        return isset($languageCodes[strtoupper($langCode)]);
+    }
+
+    /**
+     * Returns the current language.
+     *
+     * @return string
+     */
+    public function getLanguage(): string
+    {
+        return self::$language;
     }
 }

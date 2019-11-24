@@ -57,17 +57,17 @@ class Json extends Export
      *
      * @return string
      */
-    public function generate($categoryId = 0, $downwards = true, $language = '')
+    public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
         $generated = [];
 
         // Initialize categories
         $this->category->transform($categoryId);
 
-        $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
+        $faqData = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
 
-        if (count($faqdata)) {
-            foreach ($faqdata as $data) {
+        if (count($faqData)) {
+            foreach ($faqData as $data) {
 
                 $generated[] = [
                     'faq' => [

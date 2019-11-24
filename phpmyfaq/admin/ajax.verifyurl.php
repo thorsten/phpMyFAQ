@@ -26,7 +26,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -41,7 +41,7 @@ $http = new HttpHelper();
 $http->setContentType('text/html');
 $http->addHeader();
 
-$linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();

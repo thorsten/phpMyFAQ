@@ -24,10 +24,11 @@ use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
+use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Link;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet as SearchResultset;
@@ -116,8 +117,8 @@ if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight
     }
 }
 
-$linkVerifier = new Linkverifier($faqConfig);
-$linkArray = $linkVerifier->getUrlpool();
+$linkVerifier = new LinkVerifier($faqConfig);
+$linkArray = $linkVerifier->getUrlPool();
 if (isset($linkArray['href'])) {
     foreach (array_unique($linkArray['href']) as $_url) {
         $xpos = strpos($_url, 'index.php?action=faq');
@@ -316,7 +317,7 @@ $template->parse(
         ),
         'editThisEntry' => $editThisEntry,
         'translationUrl' => $translationUrl,
-        'languageSelection' => Language::selectLanguages($faqLangCode, false, $availableLanguages, 'translation'),
+        'languageSelection' => LanguageHelper::renderSelectLanguage($faqLangCode, false, $availableLanguages, 'translation'),
         'msgTranslateSubmit' => $PMF_LANG['msgTranslateSubmit'],
         'saveVotingPATH' => sprintf(
             str_replace(

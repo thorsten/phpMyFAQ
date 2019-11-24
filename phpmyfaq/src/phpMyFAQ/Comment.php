@@ -112,7 +112,7 @@ class Comment
      * Returns all user comments from a record by type.
      *
      * @param int $id record id
-     * @param int $type record type: {faq|news}
+     * @param string $type record type: {faq|news}
      *
      * @return array
      */

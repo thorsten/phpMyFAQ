@@ -25,7 +25,7 @@
 
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
-use phpMyFAQ\Linkverifier;
+use phpMyFAQ\LinkVerifier;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     $protocol = 'http';
@@ -40,7 +40,7 @@ $httpHeader = new HttpHelper();
 $httpHeader->setContentType('text/html');
 $httpHeader->addHeader();
 
-$linkVerifier = new Linkverifier($faqConfig, $user->getLogin());
+$linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
 if ($linkVerifier->isReady() === false) {
     if (count(ob_list_handlers()) > 0) {
         ob_clean();
@@ -114,6 +114,6 @@ if (!is_null($lookup)) {
 }
 
 ?>
-<?php Linkverifier::linkOndemandJavascript($id, $artlang); ?>
+<?php LinkVerifier::linkOndemandJavascript($id, $artlang); ?>
 </body>
 </html>

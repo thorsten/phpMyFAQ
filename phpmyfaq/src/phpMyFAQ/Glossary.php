@@ -5,8 +5,6 @@ namespace phpMyFAQ;
 /**
  * The main glossary class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -18,19 +16,14 @@ namespace phpMyFAQ;
  * @link https://www.phpmyfaq.de
  * @since 2005-09-15
  */
+
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
 /**
- * PMF_Glossary.
- *
+ * Class Glossary
  * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-15
  */
 class Glossary
 {
@@ -61,6 +54,132 @@ class Glossary
     public function __construct(Configuration $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * Fill the passed string with the current Glossary items.
+     *
+     * @param string $content Content
+     *
+     * @return string
+     */
+    public function insertItemsIntoContent($content = '')
+    {
+        if ('' == $content) {
+            return '';
+        }
+
+        $attributes = array(
+            'href',
+            'src',
+            'title',
+            'alt',
+            'class',
+            'style',
+            'id',
+            'name',
+            'face',
+            'size',
+            'dir',
+            'rel',
+            'rev',
+            'onmouseenter',
+            'onmouseleave',
+            'onafterprint',
+            'onbeforeprint',
+            'onbeforeunload',
+            'onhashchange',
+            'onmessage',
+            'onoffline',
+            'ononline',
+            'onpopstate',
+            'onpagehide',
+            'onpageshow',
+            'onresize',
+            'onunload',
+            'ondevicemotion',
+            'ondeviceorientation',
+            'onabort',
+            'onblur',
+            'oncanplay',
+            'oncanplaythrough',
+            'onchange',
+            'onclick',
+            'oncontextmenu',
+            'ondblclick',
+            'ondrag',
+            'ondragend',
+            'ondragenter',
+            'ondragleave',
+            'ondragover',
+            'ondragstart',
+            'ondrop',
+            'ondurationchange',
+            'onemptied',
+            'onended',
+            'onerror',
+            'onfocus',
+            'oninput',
+            'oninvalid',
+            'onkeydown',
+            'onkeypress',
+            'onkeyup',
+            'onload',
+            'onloadeddata',
+            'onloadedmetadata',
+            'onloadstart',
+            'onmousedown',
+            'onmousemove',
+            'onmouseout',
+            'onmouseover',
+            'onmouseup',
+            'onpause',
+            'onplay',
+            'onplaying',
+            'onprogress',
+            'onratechange',
+            'onreset',
+            'onscroll',
+            'onseeked',
+            'onseeking',
+            'onselect',
+            'onshow',
+            'onstalled',
+            'onsubmit',
+            'onsuspend',
+            'ontimeupdate',
+            'onvolumechange',
+            'onwaiting',
+            'oncopy',
+            'oncut',
+            'onpaste',
+            'onbeforescriptexecute',
+            'onafterscriptexecute',
+        );
+
+        foreach ($this->getAllGlossaryItems() as $item) {
+            $this->definition = $item['definition'];
+            $item['item'] = preg_quote($item['item'], '/');
+            $content = Strings::preg_replace_callback(
+                '/'
+                // a. the glossary item could be an attribute name
+                . '(' . $item['item'] . '="[^"]*")|'
+                // b. the glossary item could be inside an attribute value
+                . '((' . implode('|', $attributes) . ')="[^"]*' . $item['item'] . '[^"]*")|'
+                // c. the glossary item could be everywhere as a distinct word
+                . '(\W+)(' . $item['item'] . ')(\W+)|'
+                // d. the glossary item could be at the beginning of the string as a distinct word
+                . '^(' . $item['item'] . ')(\W+)|'
+                // e. the glossary item could be at the end of the string as a distinct word
+                . '(\W+)(' . $item['item'] . ')$'
+                . '/mis',
+                array($this, 'setTooltip'),
+                $content,
+                1
+            );
+        }
+
+        return $content;
     }
 
     /**
@@ -95,64 +214,6 @@ class Glossary
         }
 
         return $items;
-    }
-
-    /**
-     * Fill the passed string with the current Glossary items.
-     *
-     * @param string $content Content
-     *
-     * @return string
-     */
-    public function insertItemsIntoContent($content = '')
-    {
-        if ('' == $content) {
-            return '';
-        }
-
-        $attributes = array(
-            'href', 'src', 'title', 'alt', 'class', 'style', 'id', 'name',
-            'face', 'size', 'dir', 'rel', 'rev',
-            'onmouseenter', 'onmouseleave', 'onafterprint', 'onbeforeprint',
-            'onbeforeunload', 'onhashchange', 'onmessage', 'onoffline', 'ononline',
-            'onpopstate', 'onpagehide', 'onpageshow', 'onresize', 'onunload',
-            'ondevicemotion', 'ondeviceorientation', 'onabort', 'onblur',
-            'oncanplay', 'oncanplaythrough', 'onchange', 'onclick', 'oncontextmenu',
-            'ondblclick', 'ondrag', 'ondragend', 'ondragenter', 'ondragleave',
-            'ondragover', 'ondragstart', 'ondrop', 'ondurationchange', 'onemptied',
-            'onended', 'onerror', 'onfocus', 'oninput', 'oninvalid', 'onkeydown',
-            'onkeypress', 'onkeyup', 'onload', 'onloadeddata', 'onloadedmetadata',
-            'onloadstart', 'onmousedown', 'onmousemove', 'onmouseout', 'onmouseover',
-            'onmouseup', 'onmozfullscreenchange', 'onmozfullscreenerror', 'onpause',
-            'onplay', 'onplaying', 'onprogress', 'onratechange', 'onreset',
-            'onscroll', 'onseeked', 'onseeking', 'onselect', 'onshow', 'onstalled',
-            'onsubmit', 'onsuspend', 'ontimeupdate', 'onvolumechange', 'onwaiting',
-            'oncopy', 'oncut', 'onpaste', 'onbeforescriptexecute', 'onafterscriptexecute',
-        );
-
-        foreach ($this->getAllGlossaryItems() as $item) {
-            $this->definition = $item['definition'];
-            $item['item'] = preg_quote($item['item'], '/');
-            $content = Strings::preg_replace_callback(
-                '/'
-                // a. the glossary item could be an attribute name
-                .'('.$item['item'].'="[^"]*")|'
-                // b. the glossary item could be inside an attribute value
-                .'(('.implode('|', $attributes).')="[^"]*'.$item['item'].'[^"]*")|'
-                // c. the glossary item could be everywhere as a distinct word
-                .'(\W+)('.$item['item'].')(\W+)|'
-                // d. the glossary item could be at the beginning of the string as a distinct word
-                .'^('.$item['item'].')(\W+)|'
-                // e. the glossary item could be at the end of the string as a distinct word
-                .'(\W+)('.$item['item'].')$'
-                .'/mis',
-                array($this, 'setTooltip'),
-                $content,
-                1
-            );
-        }
-
-        return $content;
     }
 
     /**
@@ -236,7 +297,7 @@ class Glossary
     /**
      * Inserts an item and definition into the database.
      *
-     * @param string $item       Item
+     * @param string $item Item
      * @param string $definition Definition
      *
      * @return bool
@@ -253,7 +314,7 @@ class Glossary
                 VALUES
             (%d, '%s', '%s', '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix().'faqglossary', 'id'),
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqglossary', 'id'),
             $this->config->getLanguage()->getLanguage(),
             Strings::htmlspecialchars($this->item),
             Strings::htmlspecialchars($this->definition)
@@ -269,8 +330,8 @@ class Glossary
     /**
      * Updates an item and definition into the database.
      *
-     * @param int    $id         Glossary ID
-     * @param string $item       Item
+     * @param int $id Glossary ID
+     * @param string $item Item
      * @param string $definition Definition
      *
      * @return bool

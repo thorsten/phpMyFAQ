@@ -54,7 +54,8 @@
     },
     "suggest": {
         "ext-mysqli": "*",
-        "ext-mbstring": "*"
+        "ext-mbstring": "*",
+        "ext-ldap": "*"
     },
     "config": {
         "bin-dir": "bin",
