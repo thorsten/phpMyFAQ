@@ -9,16 +9,16 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Georgi Korchev <korchev@yahoo.com>
- * @author Adrianna Musiol <musiol@imageaccess.de>
- * @author Peter Caesar <p.caesar@osmaco.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
+ * @author    Peter Caesar <p.caesar@osmaco.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-12-20
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-12-20
  */
 
 use phpMyFAQ\Attachment\AttachmentFactory;
@@ -57,18 +57,21 @@ define('FAQ_SORTING_TYPE_FAQID', 4);
 
 /**
  * Class Faq
+ *
  * @package phpMyFAQ
  */
 class Faq
 {
     /**
      * The current FAQ record.
+     *
      * @var array
      */
     public $faqRecord = [];
 
     /**
      * All current FAQ records in an array.
+     *
      * @var array
      */
     public $faqRecords = [];
@@ -80,36 +83,42 @@ class Faq
 
     /**
      * Language strings.
+     *
      * @var string
      */
     private $translation;
 
     /**
      * Plural form support.
+     *
      * @var Plurals
      */
     private $plurals;
 
     /**
      * Users.
+     *
      * @var int
      */
     private $user = -1;
 
     /**
      * Groups.
+     *
      * @var array
      */
     private $groups = [-1];
 
     /**
      * Flag for Group support.
+     *
      * @var bool
      */
     private $groupSupport = false;
 
     /**
      * Constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -144,9 +153,9 @@ class Faq
     /**
      * This function returns all not expired records from one category.
      *
-     * @param int $categoryId Entity ID
-     * @param string $orderBy Order by
-     * @param string $sortBy Sort by
+     * @param int    $categoryId Entity ID
+     * @param string $orderBy    Order by
+     * @param string $sortBy     Sort by
      *
      * @return array
      * @throws \Exception
@@ -164,7 +173,8 @@ class Faq
         }
 
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -279,7 +289,8 @@ class Faq
             if (-1 === $this->user) {
                 return sprintf(
                     'AND fdg.group_id IN (%s)',
-                    implode(', ', $this->groups));
+                    implode(', ', $this->groups)
+                );
             } else {
                 return sprintf(
                     'AND ( fdg.group_id IN (%s) OR (fdu.user_id = %d OR fdg.group_id IN (%s)) )',
@@ -305,9 +316,9 @@ class Faq
     /**
      * This function returns all not expired records from one category.
      *
-     * @param int $categoryId Entity ID
-     * @param string $orderBy Order by
-     * @param string $sortBy Sort by
+     * @param int    $categoryId Entity ID
+     * @param string $orderBy    Order by
+     * @param string $sortBy     Sort by
      *
      * @return string
      */
@@ -339,7 +350,8 @@ class Faq
         }
 
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -406,10 +418,12 @@ class Faq
 
         if ($num > 0) {
             if ($pages > 1) {
-                $output .= sprintf('<p><strong>%s %s %s</strong></p>',
+                $output .= sprintf(
+                    '<p><strong>%s %s %s</strong></p>',
                     $this->translation['msgPage'] . $page,
                     $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']);
+                    $pages . $this->translation['msgPages']
+                );
             }
             $output .= '<ul class="phpmyfaq_ul">';
 
@@ -508,9 +522,9 @@ class Faq
     /**
      * This function returns all not expired records from the given record ids.
      *
-     * @param array $recordIds Array of record ids
-     * @param string $orderBy Order by
-     * @param string $sortBy Sort by
+     * @param array  $recordIds Array of record ids
+     * @param string $orderBy   Order by
+     * @param string $sortBy    Sort by
      *
      * @return string
      */
@@ -524,7 +538,8 @@ class Faq
         $output = '';
 
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -577,7 +592,8 @@ class Faq
             $this->config->getLanguage()->getLanguage(),
             $this->queryPermission($this->groupSupport),
             $this->config->getDb()->escape($orderBy),
-            $this->config->getDb()->escape($sortBy));
+            $this->config->getDb()->escape($sortBy)
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -592,10 +608,12 @@ class Faq
 
         if ($num > 0) {
             if ($pages > 1) {
-                $output .= sprintf('<p><strong>%s %s %s</strong></p>',
+                $output .= sprintf(
+                    '<p><strong>%s %s %s</strong></p>',
                     $this->translation['msgPage'] . $page,
                     $this->translation['msgVoteFrom'],
-                    $pages . $this->translation['msgPages']);
+                    $pages . $this->translation['msgPages']
+                );
             }
             $output .= '<ul class="phpmyfaq_ul">';
             $counter = 0;
@@ -680,9 +698,9 @@ class Faq
     /**
      * Returns an array with all data from a FAQ record.
      *
-     * @param int $faqId FAQ ID
-     * @param int $faqRevisionId Revision ID
-     * @param bool $isAdmin Must be true if it is called by an admin/author context
+     * @param int  $faqId         FAQ ID
+     * @param int  $faqRevisionId Revision ID
+     * @param bool $isAdmin       Must be true if it is called by an admin/author context
      */
     public function getRecord(int $faqId, int $faqRevisionId = null, bool $isAdmin = false)
     {
@@ -761,10 +779,10 @@ class Faq
     /**
      * Executes a query to retrieve a single FAQ.
      *
-     * @param int $faqId
+     * @param int    $faqId
      * @param string $faqLanguage
-     * @param int $faqRevisionId
-     * @param bool $isAdmin
+     * @param int    $faqRevisionId
+     * @param bool   $isAdmin
      *
      * @return mixed
      */
@@ -807,7 +825,7 @@ class Faq
     /**
      * Return records from given IDs
      *
-     * @param array $faqIds
+     * @param  array $faqIds
      * @return array
      * @throws \Exception
      */
@@ -901,8 +919,8 @@ class Faq
     /**
      * Adds a new record.
      *
-     * @param array $data Array of FAQ data
-     * @param bool $newRecord Do not create a new ID if false
+     * @param array $data      Array of FAQ data
+     * @param bool  $newRecord Do not create a new ID if false
      *
      * @return int
      */
@@ -915,7 +933,8 @@ class Faq
         }
 
         // Add new entry
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqdata
             VALUES
@@ -956,7 +975,8 @@ class Faq
     {
         $latestId = 0;
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 MAX(solution_id) AS solution_id
             FROM
@@ -989,7 +1009,8 @@ class Faq
     public function updateRecord(Array $data)
     {
         // Update entry
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqdata
             SET
@@ -1040,7 +1061,7 @@ class Faq
     /**
      * Deletes a record and all the dependencies.
      *
-     * @param int $recordId Record id
+     * @param int    $recordId   Record id
      * @param string $recordLang Record language
      *
      * @return bool
@@ -1140,13 +1161,14 @@ class Faq
      * Returns the solution ID from a given ID and language
      *
      * @param integer $faqId
-     * @param string $faqLang
+     * @param string  $faqLang
      *
      * @return int
      */
     public function getSolutionIdFromId($faqId, $faqLang)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 solution_id
             FROM
@@ -1172,14 +1194,15 @@ class Faq
     /**
      * Checks if a record is already translated.
      *
-     * @param int $recordId Record id
+     * @param int    $recordId   Record id
      * @param string $recordLang Record language
      *
      * @return bool
      */
     public function hasTranslation($recordId, $recordLang)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, lang
             FROM
@@ -1190,7 +1213,8 @@ class Faq
                 lang = '%s'",
             Database::getTablePrefix(),
             $recordId,
-            $recordLang);
+            $recordLang
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -1204,8 +1228,8 @@ class Faq
     /**
      * Checks, if comments are disabled for the FAQ record.
      *
-     * @param int $recordId Id of FAQ or news entry
-     * @param string $recordLang Language
+     * @param int    $recordId    Id of FAQ or news entry
+     * @param string $recordLang  Language
      * @param string $commentType Type of comment: faq or news
      *
      * @return bool true, if comments are disabled
@@ -1218,7 +1242,8 @@ class Faq
             $table = 'faqdata';
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 comment
             FROM
@@ -1245,9 +1270,9 @@ class Faq
     /**
      * Adds new category relations to a record.
      *
-     * @param array $categories Array of categories
-     * @param int $recordId Record id
-     * @param string $language Language
+     * @param array  $categories Array of categories
+     * @param int    $recordId   Record id
+     * @param string $language   Language
      *
      * @return boolean
      */
@@ -1258,7 +1283,8 @@ class Faq
         }
 
         foreach ($categories as $_category) {
-            $this->config->getDb()->query(sprintf(
+            $this->config->getDb()->query(
+                sprintf(
                     "INSERT INTO
                     %sfaqcategoryrelations
                 VALUES
@@ -1267,7 +1293,8 @@ class Faq
                     $_category,
                     $language,
                     $recordId,
-                    $language)
+                    $language
+                )
             );
         }
 
@@ -1277,14 +1304,15 @@ class Faq
     /**
      * Deletes category relations to a record.
      *
-     * @param int $recordId Record id
+     * @param int    $recordId   Record id
      * @param string $recordLang Language
      *
      * @return bool
      */
     public function deleteCategoryRelations($recordId, $recordLang)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             DELETE FROM
                 %sfaqcategoryrelations
             WHERE
@@ -1377,7 +1405,8 @@ class Faq
      */
     public function getIdFromSolutionId($solutionId)
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fd.id,
                 fd.lang,
@@ -1417,8 +1446,8 @@ class Faq
     /**
      * Returns an array with all data from all FAQ records.
      *
-     * @param int $sortType Sorting type
-     * @param array $condition Condition
+     * @param int    $sortType  Sorting type
+     * @param array  $condition Condition
      * @param string $sortOrder Sorting order
      */
     public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, Array $condition = null, $sortOrder = 'ASC')
@@ -1448,36 +1477,43 @@ class Faq
         }
 
         switch ($sortType) {
-
             case FAQ_SORTING_TYPE_CATID_FAQID:
-                $orderBy = sprintf('
+                $orderBy = sprintf(
+                    '
             ORDER BY
                 fcr.category_id,
                 fd.id %s',
-                    $sortOrder);
+                    $sortOrder
+                );
                 break;
 
             case FAQ_SORTING_TYPE_FAQID:
-                $orderBy = sprintf('
+                $orderBy = sprintf(
+                    '
             ORDER BY
                 fd.id %s',
-                    $sortOrder);
+                    $sortOrder
+                );
                 break;
 
             case FAQ_SORTING_TYPE_FAQTITLE_FAQID:
-                $orderBy = sprintf('
+                $orderBy = sprintf(
+                    '
             ORDER BY
                 fcr.category_id,
                 fd.thema %s',
-                    $sortOrder);
+                    $sortOrder
+                );
                 break;
 
             case FAQ_SORTING_TYPE_DATE_FAQID:
-                $orderBy = sprintf('
+                $orderBy = sprintf(
+                    '
             ORDER BY
                 fcr.category_id,
                 fd.updated %s',
-                    $sortOrder);
+                    $sortOrder
+                );
                 break;
 
             default:
@@ -1487,7 +1523,8 @@ class Faq
 
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
         $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -1619,7 +1656,7 @@ class Faq
     /**
      * Gets all revisions from a given record ID.
      *
-     * @param int $recordId Record id
+     * @param int    $recordId   Record id
      * @param string $recordLang Record language
      *
      * @return array
@@ -1628,7 +1665,8 @@ class Faq
     {
         $revisionData = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 revision_id, updated, author
             FROM
@@ -1662,14 +1700,15 @@ class Faq
     /**
      * Adds a new revision from a given record ID.
      *
-     * @param int $recordId Record id
+     * @param int    $recordId   Record id
      * @param string $recordLang Record language
      *
      * @return bool
      */
     public function addNewRevision($recordId, $recordLang)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqdata_revisions
             SELECT * FROM
@@ -1681,7 +1720,8 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $recordId,
-            $recordLang);
+            $recordLang
+        );
         $this->config->getDb()->query($query);
 
         return true;
@@ -1708,7 +1748,8 @@ class Faq
             WHERE id = %d AND lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage());
+            $this->config->getLanguage()->getLanguage()
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -1724,7 +1765,7 @@ class Faq
     /**
      * Returns a answer preview of the FAQ record.
      *
-     * @param int $recordId FAQ record ID
+     * @param int $recordId  FAQ record ID
      * @param int $wordCount Number of words, default: 12
      *
      * @return string
@@ -1737,7 +1778,8 @@ class Faq
             return Utils::makeShorterText($answerPreview, $wordCount);
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 content as answer
             FROM
@@ -1775,7 +1817,8 @@ class Faq
     {
         $now = date('YmdHis');
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id
             FROM
@@ -1805,7 +1848,7 @@ class Faq
     /**
      * This function generates a list with the most voted or most visited records.
      *
-     * @param string $type Type definition visits/voted
+     * @param  string $type Type definition visits/voted
      * @return array
      */
     public function getTopTen($type = 'visits')
@@ -1846,9 +1889,9 @@ class Faq
     /**
      * This function generates the Top Ten data with the mosted viewed records.
      *
-     * @param int $count Number of records
-     * @param int $categoryId Entity ID
-     * @param string $language Language
+     * @param int    $count      Number of records
+     * @param int    $categoryId Entity ID
+     * @param string $language   Language
      *
      * @return array
      */
@@ -1963,7 +2006,7 @@ class Faq
     /**
      * This function generates a data-set with the most voted FAQs.
      *
-     * @param int $count Number of records
+     * @param int    $count    Number of records
      * @param string $language Language
      *
      * @return array
@@ -2086,7 +2129,7 @@ class Faq
      * This function generates an array with a specified number of most recent
      * published records.
      *
-     * @param int $count Number of records
+     * @param int    $count    Number of records
      * @param string $language Language
      *
      * @return array
@@ -2193,8 +2236,8 @@ class Faq
      * Retrieve faq records according to the constraints provided.
      *
      * @param string $queryType
-     * @param int $nCatid
-     * @param bool $bDownwards
+     * @param int    $nCatid
+     * @param bool   $bDownwards
      * @param string $lang
      * @param string $date
      *
@@ -2238,11 +2281,11 @@ class Faq
     /**
      * Build the SQL query for retrieving faq records according to the constraints provided.
      *
-     * @param string $queryType
+     * @param string  $queryType
      * @param integer $categoryId
      * @param boolean $bDownwards
-     * @param string $lang
-     * @param string $date
+     * @param string  $lang
+     * @param string  $date
      * @param $faqId
      *
      * @return string
@@ -2250,7 +2293,8 @@ class Faq
     private function getSQLQuery($queryType, $categoryId, $bDownwards, $lang, $date, $faqId = 0)
     {
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.solution_id AS solution_id,
@@ -2286,7 +2330,8 @@ class Faq
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             $now,
-            $now);
+            $now
+        );
         // faqvisits data selection
         if (!empty($faqId)) {
             // Select ONLY the faq with the provided $faqid
@@ -2367,8 +2412,8 @@ class Faq
      * children of the provided category ID, if any.
      *
      * @param integer $nCatid
-     * @param   $logicOp
-     * @param   $oCat
+     * @param $logicOp
+     * @param $oCat
      *
      * @return string
      */
@@ -2392,9 +2437,9 @@ class Faq
     /**
      * Adds the record permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param int $recordId ID of the current record
-     * @param array $ids Array of group or user IDs
+     * @param string $mode     'group' or 'user'
+     * @param int    $recordId ID of the current record
+     * @param array  $ids      Array of group or user IDs
      *
      * @return bool
      */
@@ -2405,7 +2450,8 @@ class Faq
         }
 
         foreach ($ids as $id) {
-            $query = sprintf('
+            $query = sprintf(
+                '
             INSERT INTO
                 %sfaqdata_%s
             (record_id, %s_id)
@@ -2427,8 +2473,8 @@ class Faq
     /**
      * Deletes the record permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param int $record_id ID of the current record
+     * @param string $mode      'group' or 'user'
+     * @param int    $record_id ID of the current record
      *
      * @return bool
      */
@@ -2441,14 +2487,16 @@ class Faq
             return false;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqdata_%s
             WHERE
                 record_id = %d',
             Database::getTablePrefix(),
             $mode,
-            $record_id);
+            $record_id
+        );
         $this->config->getDb()->query($query);
 
         return true;
@@ -2457,8 +2505,8 @@ class Faq
     /**
      * Returns the record permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param int $recordId
+     * @param string $mode     'group' or 'user'
+     * @param int    $recordId
      *
      * @return array
      */
@@ -2470,7 +2518,8 @@ class Faq
             return $permissions;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 %s_id AS permission
             FROM
@@ -2480,7 +2529,8 @@ class Faq
             $mode,
             Database::getTablePrefix(),
             $mode,
-            (int)$recordId);
+            (int)$recordId
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -2506,7 +2556,8 @@ class Faq
 
         $output = '';
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -2595,7 +2646,8 @@ class Faq
 
     /**
      * Prints the open questions as a HTML table.
-     * @todo needs to be moved to a QuestionHelper class
+     *
+     * @todo   needs to be moved to a QuestionHelper class
      * @return string
      * @throws \Exception
      */
@@ -2606,7 +2658,8 @@ class Faq
         $date = new Date($this->config);
         $mail = new Mail($this->config);
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 COUNT(id) AS num
             FROM
@@ -2633,7 +2686,8 @@ class Faq
             $extraout = '';
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 *
             FROM
@@ -2697,9 +2751,9 @@ class Faq
     /**
      * Set or unset a faq item flag.
      *
-     * @param int $id Record id
+     * @param int    $id   Record id
      * @param string $lang language code which is valid with Language::isASupportedLanguage
-     * @param bool $flag record is set to sticky or not
+     * @param bool   $flag record is set to sticky or not
      * @param string $type type of the flag to set, use the column name
      *
      * @return bool
@@ -2724,7 +2778,8 @@ class Faq
         }
 
         if (null !== $flag) {
-            $update = sprintf("
+            $update = sprintf(
+                "
                 UPDATE 
                     %sfaqdata 
                 SET 
@@ -2779,7 +2834,8 @@ class Faq
         global $sids;
 
         $now = date('YmdHis');
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,
@@ -2871,7 +2927,8 @@ class Faq
      */
     public function getInactiveFaqsData()
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fd.id AS id,
                 fd.lang AS lang,

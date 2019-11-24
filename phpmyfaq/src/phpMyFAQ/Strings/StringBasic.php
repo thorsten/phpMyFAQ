@@ -11,12 +11,12 @@ use phpMyFAQ\Language;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Basic
+ *
  * @package phpMyFAQ\Strings
  */
 class StringBasic extends StringsAbstract
@@ -83,9 +84,9 @@ class StringBasic extends StringsAbstract
     /**
      * Get a part of string.
      *
-     * @param string $str String
-     * @param int $start Start
-     * @param int $length Length
+     * @param string $str    String
+     * @param int    $start  Start
+     * @param int    $length Length
      *
      * @return string
      */
@@ -100,8 +101,8 @@ class StringBasic extends StringsAbstract
      * Get position of the first occurence of a string.
      *
      * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param int $offset Offset
+     * @param string $needle   Needle
+     * @param int    $offset   Offset
      *
      * @return int
      */
@@ -138,8 +139,8 @@ class StringBasic extends StringsAbstract
      * Get occurrence of a string within another.
      *
      * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param bool $part Part
+     * @param string $needle   Needle
+     * @param bool   $part     Part
      *
      * @return string|false
      */
@@ -166,7 +167,7 @@ class StringBasic extends StringsAbstract
      *
      * @param string $haystack
      * @param string $needle
-     * @param int $offset
+     * @param int    $offset
      *
      * @return int
      */
@@ -181,8 +182,8 @@ class StringBasic extends StringsAbstract
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -197,8 +198,8 @@ class StringBasic extends StringsAbstract
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -212,8 +213,8 @@ class StringBasic extends StringsAbstract
      *
      * @param string $pattern
      * @param string $subject
-     * @param int $limit
-     * @param int $flags
+     * @param int    $limit
+     * @param int    $flags
      *
      * @return array
      */
@@ -226,9 +227,9 @@ class StringBasic extends StringsAbstract
      * Search and replace by a regexp using a callback.
      *
      * @param string|array $pattern
-     * @param callable $callback
+     * @param callable     $callback
      * @param string|array $subject
-     * @param int $limit
+     * @param int          $limit
      * @param int          &$count
      *
      * @return array|string
@@ -244,7 +245,7 @@ class StringBasic extends StringsAbstract
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int $limit
+     * @param int          $limit
      * @param int          &$count
      *
      * @return array|string|null

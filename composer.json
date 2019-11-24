@@ -50,7 +50,8 @@
         "doctrine/instantiator": "1.0.*",
         "symfony/yaml": "3.*",
         "phpdocumentor/reflection-docblock": "3.*",
-        "phpunit/php-token-stream": "1.*"
+        "phpunit/php-token-stream": "1.*",
+        "squizlabs/php_codesniffer": "*"
     },
     "suggest": {
         "ext-mysqli": "*",

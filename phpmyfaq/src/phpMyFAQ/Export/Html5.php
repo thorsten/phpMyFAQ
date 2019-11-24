@@ -9,12 +9,12 @@ namespace phpMyFAQ\Export;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-10-07
  */
 
 use phpMyFAQ\Category;
@@ -30,6 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Html5
+ *
  * @package phpMyFAQ\Export
  */
 class Html5 extends Export
@@ -44,11 +45,11 @@ class Html5 extends Export
     /**
      * Constructor.
      *
-     * @param Faq $faq FaqHelper object
-     * @param Category $category CategoryHelper object
-     * @param Configuration $config Configuration
-     *
-     * return PMF_Export_Xhtml
+     * @param Faq           $faq      FaqHelper object
+     * @param Category      $category CategoryHelper object
+     * @param Configuration $config   Configuration
+     *                                return
+     *                                PMF_Export_Xhtml
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
@@ -64,9 +65,9 @@ class Html5 extends Export
     /**
      * Generates the export.
      *
-     * @param int $categoryId CategoryHelper Id
-     * @param bool $downwards If true, downwards, otherwise upward ordering
-     * @param string $language Language
+     * @param int    $categoryId CategoryHelper Id
+     * @param bool   $downwards  If true, downwards, otherwise upward ordering
+     * @param string $language   Language
      *
      * @return string
      */
@@ -79,9 +80,11 @@ class Html5 extends Export
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
-        $comment = sprintf('HTML5 output by phpMyFAQ %s | Date: %s',
+        $comment = sprintf(
+            'HTML5 output by phpMyFAQ %s | Date: %s',
             $version,
-            Date::createIsoDate(date('YmdHis')));
+            Date::createIsoDate(date('YmdHis'))
+        );
 
         $this->xml->startDTD('html');
         $this->xml->startElement('html');

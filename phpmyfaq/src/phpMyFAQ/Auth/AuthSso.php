@@ -10,12 +10,12 @@ namespace phpMyFAQ\Auth;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2011-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2011-06-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2011-06-22
  */
 
 use phpMyFAQ\Auth;
@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Sso
+ *
  * @package phpMyFAQ\Auth
  */
 class AuthSso extends Auth implements AuthDriverInterface
@@ -35,7 +36,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      * Always returns true because of SSO.
      *
      * @param string $login Loginname
-     * @param string $pass Password
+     * @param string $pass  Password
      *
      * @return bool
      */
@@ -59,9 +60,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Checks if the username of the remote user is equal to the login name.
      *
-     * @param string $login Loginname
-     * @param string $pass Password
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param string $pass         Password
+     * @param array  $optionalData Optional data
      *
      * @return bool
      */
@@ -95,9 +96,9 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Always returns true because of SSO.
      *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
+     * @param  string $login
+     * @param  string $pass
+     * @param  string $domain
      * @return bool
      * @throws
      */
@@ -132,8 +133,8 @@ class AuthSso extends Auth implements AuthDriverInterface
     /**
      * Returns 1, if $_SERVER['REMOTE_USER'] is set.
      *
-     * @param string $login Loginname
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
      *
      * @return int
      */

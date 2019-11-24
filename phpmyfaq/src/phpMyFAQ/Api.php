@@ -11,12 +11,12 @@ use stdClass;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-03-27
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-03-27
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -25,27 +25,36 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Api
+ *
  * @package phpMyFAQ
  */
 class Api
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $apiUrl = 'https://api.phpmyfaq.de';
 
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config = null;
 
-    /** @var System */
+    /**
+     * @var System
+     */
     private $system = null;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $remoteHashes = null;
 
     /**
      * Api constructor.
      *
      * @param Configuration $config
-     * @param System $system
+     * @param System        $system
      */
     public function __construct(Configuration $config, System $system)
     {

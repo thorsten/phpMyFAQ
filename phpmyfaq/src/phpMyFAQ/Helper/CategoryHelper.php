@@ -9,12 +9,12 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-07
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 
 use phpMyFAQ\Helper;
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class CategoryHelper
+ *
  * @package phpMyFAQ\Helper
  */
 class CategoryHelper extends Helper
@@ -63,17 +64,20 @@ class CategoryHelper extends Helper
                 $level = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
 
-                if ($this->_config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId]) &&
-                    '-' === $hasChild) {
+                if ($this->_config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
+                    && '-' === $hasChild
+                ) {
                     continue;
                 }
 
                 if ($leveldiff > 1) {
                     $output .= '</li>';
                     for ($i = $leveldiff; $i > 1; --$i) {
-                        $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                        $output .= sprintf(
+                            "\n%s</ul>\n%s</li>\n",
                             str_repeat("\t", $level + $i + 1),
-                            str_repeat("\t", $level + $i));
+                            str_repeat("\t", $level + $i)
+                        );
                     }
                 }
 
@@ -103,7 +107,12 @@ class CategoryHelper extends Helper
 
                 if (isset($this->Category->treeTab[$y]['symbol']) && $this->Category->treeTab[$y]['symbol'] == 'plus') {
                     $output .= $this->Category->addCategoryLink(
-                        $sids, $categoryId, $name, $description, true, $isActive
+                        $sids,
+                        $categoryId,
+                        $name,
+                        $description,
+                        true,
+                        $isActive
                     );
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
@@ -113,11 +122,21 @@ class CategoryHelper extends Helper
                                 :
                                 $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
                         $output .= $this->Category->addCategoryLink(
-                            $sids, $categoryId, $name, $description, false, $isActive
+                            $sids,
+                            $categoryId,
+                            $name,
+                            $description,
+                            false,
+                            $isActive
                         );
                     } else {
                         $output .= $this->Category->addCategoryLink(
-                            $sids, $categoryId, $name, $description, false, $isActive
+                            $sids,
+                            $categoryId,
+                            $name,
+                            $description,
+                            false,
+                            $isActive
                         );
                     }
                 }
@@ -174,9 +193,11 @@ class CategoryHelper extends Helper
                 if ($leveldiff > 1) {
                     $output .= '</li>';
                     for ($i = $leveldiff; $i > 1; --$i) {
-                        $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                        $output .= sprintf(
+                            "\n%s</ul>\n%s</li>\n",
                             str_repeat("\t", $level + $i + 1),
-                            str_repeat("\t", $level + $i));
+                            str_repeat("\t", $level + $i)
+                        );
                     }
                 }
 
@@ -184,9 +205,11 @@ class CategoryHelper extends Helper
                     if (($level - $open) == -1) {
                         $output .= '</li>';
                     }
-                    $output .= sprintf("\n%s</ul>\n%s</li>\n",
+                    $output .= sprintf(
+                        "\n%s</ul>\n%s</li>\n",
                         str_repeat("\t", $level + 2),
-                        str_repeat("\t", $level + 1));
+                        str_repeat("\t", $level + 1)
+                    );
                 } elseif ($level == $open && $y != 0) {
                     $output .= "</li>\n";
                 }
@@ -252,7 +275,7 @@ class CategoryHelper extends Helper
                     '<li><a href="?action=show&cat=%d">%s</a></li>',
                     $cat['id'],
                     $cat['name']
-                    );
+                );
             }
         }
 

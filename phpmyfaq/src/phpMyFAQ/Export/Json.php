@@ -9,12 +9,12 @@ namespace phpMyFAQ\Export;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-29
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-29
  */
 
 use phpMyFAQ\Category;
@@ -30,6 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Json
+ *
  * @package phpMyFAQ\Export
  */
 class Json extends Export
@@ -37,9 +38,9 @@ class Json extends Export
     /**
      * Constructor.
      *
-     * @param Faq $faq FaqHelper object
-     * @param Category $category Entity object
-     * @param Configuration $config Configuration
+     * @param Faq           $faq      FaqHelper object
+     * @param Category      $category Entity object
+     * @param Configuration $config   Configuration
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
@@ -51,9 +52,9 @@ class Json extends Export
     /**
      * Generates the export.
      *
-     * @param int $categoryId Entity Id
-     * @param bool $downwards If true, downwards, otherwise upward ordering
-     * @param string $language Language
+     * @param int    $categoryId Entity Id
+     * @param bool   $downwards  If true, downwards, otherwise upward ordering
+     * @param string $language   Language
      *
      * @return string
      */
@@ -68,7 +69,6 @@ class Json extends Export
 
         if (count($faqData)) {
             foreach ($faqData as $data) {
-
                 $generated[] = [
                     'faq' => [
                         'id' => $data['id'],

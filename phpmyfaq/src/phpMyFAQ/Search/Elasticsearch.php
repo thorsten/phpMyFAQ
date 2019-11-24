@@ -9,12 +9,12 @@ namespace phpMyFAQ\Search;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-25
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-25
  */
 
 use Elasticsearch\Client;
@@ -26,20 +26,29 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Elasticsearch
+ *
  * @package phpMyFAQ\Search
  */
 class Elasticsearch extends AbstractSearch implements SearchInterface
 {
-    /** @var Client */
+    /**
+     * @var Client
+     */
     private $client = null;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $esConfig = [];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $language = '';
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $categoryIds = [];
 
     /**
@@ -93,7 +102,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $result = $this->client->search($searchParams);
 
         if (0 !== $result['hits']['total']) {
-
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new \stdClass();
                 $resultSet->id = $hit['_source']['id'];
@@ -106,7 +114,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
                 $this->resultSet[] = $resultSet;
             }
-
         } else {
             $this->resultSet = [];
         }
@@ -174,7 +181,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
         $result = $this->client->search($searchParams);
 
         if (0 !== $result['hits']['total']) {
-
             foreach ($result['hits']['hits'] as $hit) {
                 $resultSet = new \stdClass();
                 $resultSet->id = $hit['_source']['id'];
@@ -187,7 +193,6 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
                 $this->resultSet[] = $resultSet;
             }
-
         } else {
             $this->resultSet = [];
         }

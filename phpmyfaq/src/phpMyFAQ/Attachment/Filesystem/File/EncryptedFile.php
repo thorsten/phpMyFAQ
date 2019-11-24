@@ -9,12 +9,12 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Attachment\Filesystem\File
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ\Attachment\Filesystem\File
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-08-21
  */
 
 use phpMyFAQ\Attachment\File;
@@ -28,6 +28,7 @@ require PMF_ROOT_DIR . '/src/libs/phpseclib/Crypt/AES.php';
 
 /**
  * Class Encrypted
+ *
  * @package phpMyFAQ\Attachment\Filesystem\File
  */
 class EncryptedFile extends File
@@ -59,7 +60,9 @@ class EncryptedFile extends File
         parent::__construct($filepath, $mode);
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     public function putChunk($chunk)
     {
         $content = $this->aes->encrypt($chunk) . self::chunkDelimiter;
@@ -69,7 +72,7 @@ class EncryptedFile extends File
 
     /**
      * @inheritdoc
-     * @throws FileException
+     * @throws     FileException
      */
     public function copyTo($target): bool
     {
@@ -92,7 +95,9 @@ class EncryptedFile extends File
         return $retval;
     }
 
-    /** @inheritdoc */
+    /**
+     * @inheritdoc
+     */
     public function getChunk(): string
     {
         $readEnd = false;

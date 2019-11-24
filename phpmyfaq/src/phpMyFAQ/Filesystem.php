@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-02
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-04-02
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Filesystem
+ *
  * @package phpMyFAQ
  */
 class Filesystem
@@ -99,8 +100,8 @@ class Filesystem
     /**
      * Copies recursively the source to the destination.
      *
-     * @param string $source
-     * @param string $dest
+     * @param  string $source
+     * @param  string $dest
      * @throws Exception
      * @return bool
      */
@@ -135,9 +136,9 @@ class Filesystem
     /**
      * Makes directory.
      *
-     * @param string $pathname The directory path
-     * @param int $mode The mode is 0777 by default
-     * @param bool $recursive Allows the creation of nested directories
+     * @param string $pathname  The directory path
+     * @param int    $mode      The mode is 0777 by default
+     * @param bool   $recursive Allows the creation of nested directories
      *                          specified in the pathname.
      *
      * @return bool
@@ -159,7 +160,6 @@ class Filesystem
      *
      * @return bool
      * @throws Exception
-     *
      */
     public function copy($source, $dest)
     {

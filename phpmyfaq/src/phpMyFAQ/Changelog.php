@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2019-11-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2019-11-22
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,11 +23,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Changelog
+ *
  * @package phpMyFAQ
  */
 class Changelog
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config;
 
     public function __construct(Configuration $config)
@@ -37,11 +40,12 @@ class Changelog
 
     /**
      * Adds a new changelog entry in the table "faqchanges".
-     * @param int $id
-     * @param int $userId
-     * @param string $text
-     * @param string $lang
-     * @param int $revisionId
+     *
+     * @param  int    $id
+     * @param  int    $userId
+     * @param  string $text
+     * @param  string $lang
+     * @param  int    $revisionId
      * @return bool
      */
     public function addEntry(int $id, int $userId, string $text, string $lang, int $revisionId = 0): bool
@@ -59,21 +63,24 @@ class Changelog
             $revisionId,
             $userId,
             $_SERVER['REQUEST_TIME'],
-            $text);
+            $text
+        );
 
         return $this->config->getDb()->query($query);
     }
 
     /**
      * Returns the changelog of a FAQ record.
-     * @param int $recordId
+     *
+     * @param  int $recordId
      * @return array
      */
     public function getChangeEntries(int $recordId): array
     {
         $entries = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 DISTINCT revision_id, usr, datum, what
             FROM
@@ -98,5 +105,4 @@ class Changelog
 
         return $entries;
     }
-
 }

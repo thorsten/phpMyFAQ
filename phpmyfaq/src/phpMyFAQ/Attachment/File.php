@@ -9,12 +9,12 @@ namespace phpMyFAQ\Attachment;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-08-21
  */
 
 use phpMyFAQ\Attachment\Filesystem\AbstractFile as FilesystemFile;
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class File
+ *
  * @package phpMyFAQ\Attachment
  */
 class File extends AttachmentAbstract implements AttachmentInterface
@@ -93,8 +94,8 @@ class File extends AttachmentAbstract implements AttachmentInterface
      *
      * @todo rollback if something went wrong
      *
-     * @param string $filePath full path to the attachment file
-     * @param string $filename filename to force
+     * @param  string $filePath full path to the attachment file
+     * @param  string $filename filename to force
      * @throws
      * @return bool
      */
@@ -138,6 +139,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Delete attachment.
+     *
      * @return bool
      * @throws FileException
      */
@@ -157,6 +159,7 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Retrieve file contents into a variable.
+     *
      * @return string
      */
     public function get(): string
@@ -165,8 +168,9 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Output current file to stdout.
-     * @param bool $headers if headers must be sent
-     * @param string $disposition disposition type (ignored if $headers false)
+     *
+     * @param  bool   $headers     if headers must be sent
+     * @param  string $disposition disposition type (ignored if $headers false)
      * @return void
      */
     public function rawOut($headers = true, $disposition = 'attachment'): void
@@ -188,8 +192,8 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
     /**
      * Factory method to initialise the corresponding file object.
-     * 
-     * @param string $mode File mode for file open
+     *
+     * @param  string $mode File mode for file open
      * @return VanillaFile|EncryptedFile
      * @throws
      */

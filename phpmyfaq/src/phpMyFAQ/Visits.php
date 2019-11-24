@@ -5,19 +5,17 @@ namespace phpMyFAQ;
 /**
  * Handles all the stuff for visits.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2009-03-08
  */
 
@@ -32,11 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2009-03-08
  */
 class Visits
@@ -64,7 +62,8 @@ class Visits
     public function logViews($id)
     {
         $nVisits = 0;
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 visits
             FROM
@@ -103,7 +102,8 @@ class Visits
             return false;
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqvisits
             VALUES
@@ -132,7 +132,8 @@ class Visits
             return false;
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqvisits
             SET
@@ -159,7 +160,8 @@ class Visits
     {
         $data = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 *
              FROM
@@ -167,7 +169,7 @@ class Visits
              ORDER BY
                 visits DESC',
             Database::getTablePrefix()
-            );
+        );
         $result = $this->config->getDb()->query($query);
 
         while ($row = $this->config->getDb()->fetchObject($result)) {

@@ -9,14 +9,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Adrianna Musiol <musiol@imageaccess.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2008-01-26
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2008-01-26
  */
 
 use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
@@ -31,14 +31,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Search.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Adrianna Musiol <musiol@imageaccess.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Adrianna Musiol <musiol@imageaccess.de>
  * @copyright 2008-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2008-01-26
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2008-01-26
  */
 class Search
 {
@@ -134,7 +134,6 @@ class Search
     public function autoComplete($searchTerm)
     {
         if ($this->_config->get('search.enableElasticsearch')) {
-
             $esSearch = new Elasticsearch($this->_config);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 
@@ -186,18 +185,22 @@ class Search
         }
 
         $search->setTable($fdTable)
-            ->setResultColumns(array(
+            ->setResultColumns(
+                array(
                 'fd.id AS id',
                 'fd.lang AS lang',
                 'fd.solution_id AS solution_id',
                 $fcrTable.'.category_id AS category_id',
                 'fd.thema AS question',
-                'fd.content AS answer'))
+                'fd.content AS answer')
+            )
             ->setJoinedTable($fcrTable)
-            ->setJoinedColumns(array(
+            ->setJoinedColumns(
+                array(
                 'fd.id = '.$fcrTable.'.record_id',
                 'fd.lang = '.$fcrTable.'.record_lang'
-            ))
+                )
+            )
             ->setConditions($condition);
 
         if (is_numeric($searchTerm)) {
@@ -218,8 +221,8 @@ class Search
     /**
      * The search function for the Elasticsearch powered full text search.
      *
-     * @param string $searchTerm   Text/Number (solution id)
-     * @param bool   $allLanguages true to search over all languages
+     * @param  string $searchTerm   Text/Number (solution id)
+     * @param  bool   $allLanguages true to search over all languages
      * @throws
      *
      * @return array
@@ -259,7 +262,8 @@ class Search
         }
 
         $date = new \DateTime();
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %s
             (id, lang, searchterm, searchdate)
@@ -284,7 +288,8 @@ class Search
      */
     public function deleteSearchTerm($searchTerm)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             DELETE FROM
                 %s
             WHERE
@@ -321,7 +326,8 @@ class Search
         $searchResult = [];
 
         $byLang = $withLang ? ', lang' : '';
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT 
                 MIN(id) as id, searchterm, COUNT(searchterm) AS number %s
             FROM

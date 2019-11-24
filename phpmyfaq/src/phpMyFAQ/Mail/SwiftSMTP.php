@@ -7,12 +7,12 @@ namespace phpMyFAQ\Mail;
  *
  * This document is distributed under the MIT licence.
  *
- * @package phpMyFAQ
- * @author Christopher Andrews <http://arduino.land>
+ * @package   phpMyFAQ
+ * @author    Christopher Andrews <http://arduino.land>
  * @copyright 2009-2019 Christopher Andrews, phpMyFAQ Team
- * @license http://opensource.org/licenses/MIT MIT Public License
- * @link https://www.phpmyfaq.de
- * @since 2014-10-10
+ * @license   http://opensource.org/licenses/MIT MIT Public License
+ * @link      https://www.phpmyfaq.de
+ * @since     2014-10-10
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -27,22 +27,27 @@ use Swift_SmtpTransport;
 
 /**
  * Class SwiftSMTP
+ *
  * @package phpMyFAQ\Mail
  */
 class SwiftSMTP implements MailUserAgentInterface
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $user;
 
-    /** @var Swift_Mailer */
+    /**
+     * @var Swift_Mailer
+     */
     private $mailer;
 
     /**
      * @param string $server
      * @param string $user
      * @param string $pass
-     * @param int $port
-     * @param null $security
+     * @param int    $port
+     * @param null   $security
      */
     public function setAuthConfig($server, $user, $pass, $port = 25, $security = null)
     {
@@ -59,7 +64,7 @@ class SwiftSMTP implements MailUserAgentInterface
      * Send the message using SMTP with authorisation.
      *
      * @param string $recipients
-     * @param array $headers
+     * @param array  $headers
      * @param string $body
      *
      * @return bool True if successful, false otherwise.

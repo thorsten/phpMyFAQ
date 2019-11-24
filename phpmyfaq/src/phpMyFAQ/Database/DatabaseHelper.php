@@ -9,13 +9,13 @@ namespace phpMyFAQ\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-12
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-04-12
  */
 
 use phpMyFAQ\Configuration;
@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Helper
+ *
  * @package phpMyFAQ\Database
  */
 class DatabaseHelper
@@ -40,7 +41,6 @@ class DatabaseHelper
      * Constructor.
      *
      * @param Configuration $config
-     *
      */
     public function __construct(Configuration $config)
     {

@@ -10,12 +10,12 @@ namespace phpMyFAQ\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Tom Rochester <tom.rochester@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Tom Rochester <tom.rochester@gmail.com>
  * @copyright 2003-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
  */
 
 use Exception;
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Pgsql
+ *
  * @package phpMyFAQ\Database
  */
 class Pgsql implements DatabaseDriver
@@ -56,8 +57,8 @@ class Pgsql implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host Database hostname
-     * @param string $user Database username
+     * @param string $host     Database hostname
+     * @param string $user     Database username
      * @param string $password Password
      * @param string $database Database name
      *
@@ -89,8 +90,8 @@ class Pgsql implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int $offset
-     * @param int $rowcount
+     * @param int    $offset
+     * @param int    $rowcount
      *
      * @return mixed $result
      */
@@ -142,7 +143,6 @@ class Pgsql implements DatabaseDriver
      *
      * @return array
      * @throws Exception
-     *
      */
     public function fetchAll($result)
     {
@@ -242,7 +242,7 @@ class Pgsql implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id the name of the ID column
+     * @param string $id    the name of the ID column
      *
      * @return int
      */

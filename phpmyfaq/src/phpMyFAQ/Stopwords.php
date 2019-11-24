@@ -5,19 +5,17 @@ namespace phpMyFAQ;
 /**
  * The main Stopwords class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-01
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-01
  */
 
 use phpMyFAQ\Database;
@@ -29,13 +27,13 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * PMF_Stopwords.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-01
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-01
  */
 class Stopwords
 {
@@ -103,10 +101,10 @@ class Stopwords
 
     /**
      * Add a word to the stop words dictionary.
-     * If the given word already exists, false is returned. 
+     * If the given word already exists, false is returned.
      *
-     * @param  string $word
-     *                       
+     * @param string $word
+     *
      * @return bool
      */
     public function add($word)
@@ -227,8 +225,9 @@ class Stopwords
 
         foreach ($words as $word) {
             $word = Strings::strtolower($word);
-            if (!is_numeric($word) && 1 < Strings::strlen($word) &&
-               !in_array($word, $stop_words) && !in_array($word, $retval)) {
+            if (!is_numeric($word) && 1 < Strings::strlen($word)
+                && !in_array($word, $stop_words) && !in_array($word, $retval)
+            ) {
                 $retval[] = $word;
             }
         }

@@ -5,19 +5,17 @@ namespace phpMyFAQ;
 /**
  * The main Rating class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2007-03-31
  */
 
@@ -32,11 +30,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2007-03-31
  */
 class Rating
@@ -92,7 +90,8 @@ class Rating
                 // we'll cast faqdata.thema datatype from text to char(2000)
                 // Note: the char length is simply an heuristic value
                 // Doing so we'll also need to trim $row->thema to remove blank chars when it is shorter than 2000 chars
-                $query = sprintf('
+                $query = sprintf(
+                    '
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -127,8 +126,9 @@ class Rating
                 );
                 break;
 
-                default:
-                $query = sprintf('
+            default:
+                $query = sprintf(
+                    '
                     SELECT
                         fd.id AS id,
                         fd.lang AS lang,
@@ -188,7 +188,8 @@ class Rating
      */
     public function getVotingResult($id)
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 (vote/usr) as voting, usr
             FROM
@@ -215,7 +216,7 @@ class Rating
     /**
      * Reload locking for user votings.
      *
-     * @param int $id FAQ record id
+     * @param int    $id FAQ record id
      * @param string $ip IP
      *
      * @return bool
@@ -260,7 +261,8 @@ class Rating
             WHERE
                 artikel = %d',
             Database::getTablePrefix(),
-            $recordId);
+            $recordId
+        );
         if ($result = $this->config->getDb()->query($query)) {
             if ($row = $this->config->getDb()->fetchObject($result)) {
                 return $row->usr;

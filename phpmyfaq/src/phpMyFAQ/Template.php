@@ -10,13 +10,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Jan Mergler <jan.mergler@gmx.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Jan Mergler <jan.mergler@gmx.de>
  * @copyright 2002-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2002-08-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2002-08-22
  */
 
 use phpMyFAQ\Template\TemplateHelper;
@@ -28,49 +28,57 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Template
+ *
  * @package phpMyFAQ
  */
 class Template
 {
     /**
      * Name of active template set.
+     *
      * @var string
      */
     private static $tplSetName;
 
     /**
      * The template array.
+     *
      * @var array
      */
     public $templates = [];
 
     /**
      * The output array.
+     *
      * @var array
      */
     private $outputs = [];
 
     /**
      * The blocks array.
+     *
      * @var array
      */
     private $blocks = [];
 
     /**
      * array containing the touched blocks.
+     *
      * @var array
      */
     private $blocksTouched = [];
 
-    /** @var TemplateHelper */
+    /**
+     * @var TemplateHelper
+     */
     private $tplHelper;
 
     /**
      * Combine all template files into the main templates array
      *
-     * @param array $myTemplate Templates
+     * @param array          $myTemplate Templates
      * @param TemplateHelper $tplHelper
-     * @param string $tplSetName Active template name
+     * @param string         $tplSetName Active template name
      */
     public function __construct(Array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
     {
@@ -89,7 +97,7 @@ class Template
      * This function reads a template file.
      *
      * @param string $filename Filename
-     * @param string $tplName Name of the template
+     * @param string $tplName  Name of the template
      *
      * @return string
      */
@@ -184,8 +192,8 @@ class Template
     /**
      * Parses the template.
      *
-     * @param string $templateName Name of the template
-     * @param array $templateContent Content of the template
+     * @param string $templateName    Name of the template
+     * @param array  $templateContent Content of the template
      */
     public function parse(string $templateName, Array $templateContent)
     {
@@ -241,7 +249,7 @@ class Template
     }
 
     /**
-     * @param $template
+     * @param  $template
      * @return array
      */
     private function readFilters(string $template): array
@@ -250,7 +258,6 @@ class Template
         Strings::preg_match_all('/\{\{.+?\}\}/', $template, $tmpFilter);
 
         if (isset($tmpFilter)) {
-
             $filterCount = count($tmpFilter[0]);
             for ($i = 0; $i < $filterCount; ++$i) {
                 if (false !== strpos($tmpFilter[0][$i], ' | meta ')) {
@@ -326,8 +333,8 @@ class Template
      * This function processes the block.
      *
      * @param string $templateName Name of the template
-     * @param string $blockName Block name
-     * @param array $blockContent Content of the block
+     * @param string $blockName    Block name
+     * @param array  $blockContent Content of the block
      */
     public function parseBlock(string $templateName, string $blockName, Array $blockContent)
     {
@@ -355,8 +362,8 @@ class Template
     /**
      * This function multiplies blocks.
      *
-     * @param string $blockName Block name
-     * @param array $blockContent Content of block
+     * @param string $blockName    Block name
+     * @param array  $blockContent Content of block
      *
      * @return string
      */

@@ -10,12 +10,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-01-04
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-01-04
  */
 
 use Elasticsearch\Client;
@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Configuration
+ *
  * @package phpMyFAQ
  */
 class Configuration
@@ -91,13 +92,14 @@ class Configuration
      * Sets one single configuration item.
      *
      * @param string $key
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool
      */
     public function set($key, $value)
     {
-        $query = sprintf("UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
+        $query = sprintf(
+            "UPDATE %s%s SET config_value = '%s' WHERE config_name = '%s'",
             Database::getTablePrefix(),
             $this->tableName,
             $this->getDb()->escape(trim($value)),
@@ -149,6 +151,7 @@ class Configuration
 
     /**
      * Returns the Language object.
+     *
      * @return Language
      */
     public function getLanguage(): Language
@@ -158,6 +161,7 @@ class Configuration
 
     /**
      * Returns the default language.
+     *
      * @return string
      */
     public function getDefaultLanguage(): string
@@ -167,6 +171,7 @@ class Configuration
 
     /**
      * Returns the current version
+     *
      * @return string
      */
     public function getCurrentVersion(): string
@@ -226,7 +231,8 @@ class Configuration
     public function getAll()
     {
         $config = [];
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 config_name, config_value
             FROM
@@ -400,7 +406,7 @@ class Configuration
      * Adds a configuration item for the database.
      *
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      *
      * @return bool|object
      */
@@ -463,10 +469,11 @@ class Configuration
 
         if (is_array($newConfigs)) {
             foreach ($newConfigs as $name => $value) {
-                if ($name != 'main.phpMyFAQToken' &&
-                    !in_array($name, $runtimeConfigs)
+                if ($name != 'main.phpMyFAQToken'
+                    && !in_array($name, $runtimeConfigs)
                 ) {
-                    $update = sprintf("
+                    $update = sprintf(
+                        "
                         UPDATE
                             %s%s
                         SET

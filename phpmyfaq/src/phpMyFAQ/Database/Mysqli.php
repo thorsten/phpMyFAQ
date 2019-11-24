@@ -10,12 +10,12 @@ namespace phpMyFAQ\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author David Soria Parra <dsoria@gmx.net>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    David Soria Parra <dsoria@gmx.net>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
  */
 
 use mysqli_result;
@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Mysqli
+ *
  * @package phpMyFAQ\Database
  */
 class Mysqli implements DatabaseDriver
@@ -57,14 +58,13 @@ class Mysqli implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host Hostname or path to socket
-     * @param string $user Username
+     * @param string $host     Hostname or path to socket
+     * @param string $user     Username
      * @param string $password Password
      * @param string $database Database name
      *
      * @return null|boolean true, if connected, otherwise false
      * @throws Exception
-     *
      */
     public function connect($host, $user, $password, $database = '')
     {
@@ -138,7 +138,6 @@ class Mysqli implements DatabaseDriver
      *
      * @return array
      * @throws Exception
-     *
      */
     public function fetchAll($result)
     {
@@ -163,7 +162,6 @@ class Mysqli implements DatabaseDriver
      *
      * @return mixed
      * @throws Exception
-     *
      */
     public function fetchObject($result)
     {
@@ -291,19 +289,21 @@ class Mysqli implements DatabaseDriver
      * we don't need it anymore.
      *
      * @param string $table The name of the table
-     * @param string $id The name of the ID column
+     * @param string $id    The name of the ID column
      *
      * @return int
      */
     public function nextId($table, $id)
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
            SELECT
                MAX(%s) AS current_id
            FROM
                %s',
             $id,
-            $table);
+            $table
+        );
 
         $result = $this->query($select);
 
@@ -320,8 +320,8 @@ class Mysqli implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int $offset
-     * @param int $rowCount
+     * @param int    $offset
+     * @param int    $rowCount
      *
      * @return mysqli_result $result
      */
@@ -391,5 +391,4 @@ class Mysqli implements DatabaseDriver
     {
         return 'NOW()';
     }
-
 }

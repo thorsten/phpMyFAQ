@@ -5,20 +5,18 @@ namespace phpMyFAQ;
 /**
  * Pagination handler class.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  *
- * @author Anatoliy Belsky <ab@php.net>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2009-09-27
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -30,12 +28,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @package phpMyFAQ
  *
- * @author Anatoliy Belsky <ab@php.net>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2009-09-27
  */
 class Pagination
@@ -76,7 +74,7 @@ class Pagination
     protected $adjacents = 4;
 
     /**
-     * Default link template. 
+     * Default link template.
      * Possible variables are {LINK}, {TITLE}, {TEXT}.
      *
      * @var string
@@ -172,20 +170,19 @@ class Pagination
      * no pageParamName, first page is asumed
      *
      * @param Configuration $config
-     * @param array             $options initialization options,
-     *                                   possible options:
-     *                                   - baseUrl (default "")
-     *                                   - total
-     *                                   - perPage
-     *                                   - linkTpl
-     *                                   - currentPageLinkTpl
-     *                                   - nextPageLinkTpl
-     *                                   - prevPageLinkTpl
-     *                                   - firstPageLinkTpl
-     *                                   - lastPageLinkTpl
-     *                                   - layoutTpl
-     *                                   - pageParamName (default "page")
-     *                                   - useRewrite
+     * @param array         $options initialization options,
+     *                               possible options: -
+     *                               baseUrl (default "") -
+     *                               total - perPage -
+     *                               linkTpl -
+     *                               currentPageLinkTpl -
+     *                               nextPageLinkTpl -
+     *                               prevPageLinkTpl -
+     *                               firstPageLinkTpl -
+     *                               lastPageLinkTpl -
+     *                               layoutTpl -
+     *                               pageParamName (default
+     *                               "page") - useRewrite
      *
      * @return PMF_Pagination
      */

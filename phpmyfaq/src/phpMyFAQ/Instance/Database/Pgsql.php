@@ -9,12 +9,12 @@ namespace phpMyFAQ\Instance\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-04-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-04-16
  */
 
 use phpMyFAQ\Configuration;
@@ -26,11 +26,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Pgsql
+ *
  * @package phpMyFAQ\Instance\Database
  */
 class Pgsql extends Database implements Driver
 {
-    /** @var array */
+    /**
+     * @var array
+     */
     private $createTableStatements = [
         'faquser_user_id_seq' => 'CREATE SEQUENCE %sfaquser_user_id_seq START WITH 2',
 

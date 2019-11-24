@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-08-15
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-08-15
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Logging
+ *
  * @package phpMyFAQ
  */
 class Logging
@@ -49,7 +50,8 @@ class Logging
      */
     public function getNumberOfEntries()
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id
             FROM
@@ -71,7 +73,8 @@ class Logging
     {
         $data = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id, time, usr, text, ip
             FROM
@@ -96,15 +99,16 @@ class Logging
     /**
      * Adds a new admin log entry.
      *
-     * @param User $user    User object
-     * @param string   $logText Logged string
+     * @param User   $user    User object
+     * @param string $logText Logged string
      *
      * @return bool
      */
     public function logAdmin(User $user, $logText = '')
     {
         if ($this->config->get('main.enableAdminLog')) {
-            $query = sprintf("
+            $query = sprintf(
+                "
                 INSERT INTO
                     %sfaqadminlog
                 (id, time, usr, text, ip)

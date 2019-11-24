@@ -21,13 +21,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -36,11 +36,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Auth
+ *
  * @package phpMyFAQ
  */
 class Auth
 {
-    /** @var string */
+    /**
+ * @var string
+*/
     const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
 
     /**
@@ -85,7 +88,7 @@ class Auth
      * This method instantiates a new EncryptionTypes object by calling the static
      * method.
      *
-     * @param string $encType encryption type
+     * @param  string $encType encryption type
      * @return Encryption
      */
     public function selectEncType($encType): Encryption
@@ -191,11 +194,10 @@ class Auth
      * with a salt.
      *
      * @param string $encryptedPassword Encrypted password
-     * @param string $clearPassword Clear Password
+     * @param string $clearPassword     Clear Password
      *
-     * @return bool
+     * @return     bool
      * @deprecated
-     *
      */
     public function checkEncryptedPassword($encryptedPassword, $clearPassword): bool
     {

@@ -9,13 +9,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-06-25
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-06-25
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,6 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class News
+ *
  * @package phpMyFAQ
  */
 class News
@@ -57,7 +58,7 @@ class News
      * Function for generating the HTML5 code for the current news.
      *
      * @param bool $showArchive Show archived news
-     * @param bool $active Show active news
+     * @param bool $active      Show active news
      *
      * @return string
      * @throws \Exception
@@ -69,10 +70,12 @@ class News
         $date = new Date($this->config);
 
         foreach ($news as $item) {
-            $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+            $url = sprintf(
+                '%s?action=news&amp;newsid=%d&amp;newslang=%s',
                 Link::getSystemRelativeUri(),
                 $item['id'],
-                $item['lang']);
+                $item['lang']
+            );
             $oLink = new Link($url, $this->config);
 
             if (isset($item['header'])) {
@@ -95,7 +98,8 @@ class News
                     $this->pmfLang['msgInfo'],
                     $item['link'],
                     $item['target'],
-                    $item['linkTitle']);
+                    $item['linkTitle']
+                );
             }
 
             $output .= sprintf(
@@ -110,8 +114,8 @@ class News
     /**
      * Return the latest news data.
      *
-     * @param bool $showArchive Show archived news
-     * @param bool $active Show active news
+     * @param bool $showArchive    Show archived news
+     * @param bool $active         Show active news
      * @param bool $forceConfLimit Force to limit in configuration
      *
      * @return array
@@ -122,7 +126,8 @@ class News
         $counter = 0;
         $now = date('YmdHis');
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 *
             FROM
@@ -148,12 +153,13 @@ class News
         if ($this->config->get('records.numberOfShownNewsEntries') > 0 && $this->config->getDb()->numRows($result) > 0) {
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 ++$counter;
-                if (($showArchive && ($counter > $this->config->get('records.numberOfShownNewsEntries'))) ||
-                    ((!$showArchive) && (!$forceConfLimit) &&
-                        ($counter <= $this->config->get('records.numberOfShownNewsEntries'))) ||
-                    ((!$showArchive) && $forceConfLimit)) {
-
-                    $url = sprintf('%s?action=news&amp;newsid=%d&amp;newslang=%s',
+                if (($showArchive && ($counter > $this->config->get('records.numberOfShownNewsEntries')))
+                    || ((!$showArchive) && (!$forceConfLimit)
+                    && ($counter <= $this->config->get('records.numberOfShownNewsEntries')))
+                    || ((!$showArchive) && $forceConfLimit)
+                ) {
+                    $url = sprintf(
+                        '%s?action=news&amp;newsid=%d&amp;newslang=%s',
                         $this->config->getDefaultUrl(),
                         $row->id,
                         $row->lang
@@ -196,7 +202,8 @@ class News
         $headers = [];
         $now = date('YmdHis');
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, datum, lang, header, active, date_start, date_end
             FROM
@@ -231,7 +238,7 @@ class News
     /**
      * Fetches a news entry identified by its ID.
      *
-     * @param int $id ID of news
+     * @param int  $id    ID of news
      * @param bool $admin Is admin
      *
      * @return array
@@ -251,7 +258,8 @@ class News
                 lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getLanguage()->getLanguage());
+            $this->config->getLanguage()->getLanguage()
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -302,7 +310,8 @@ class News
      */
     public function addNewsEntry($data)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqnews
             (id, datum, lang, header, artikel, author_name, author_email, date_start, date_end, active, comment,
@@ -323,7 +332,8 @@ class News
             $data['comment'],
             $data['link'],
             $data['linkTitle'],
-            $data['target']);
+            $data['target']
+        );
 
         if (!$this->config->getDb()->query($query)) {
             return false;
@@ -335,14 +345,15 @@ class News
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param int $id News ID
+     * @param int   $id   News ID
      * @param array $data Array with news data
      *
      * @return bool
      */
     public function updateNewsEntry($id, Array $data)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqnews
             SET
@@ -375,7 +386,8 @@ class News
             $data['link'],
             $data['linkTitle'],
             $data['target'],
-            $id);
+            $id
+        );
 
         if (!$this->config->getDb()->query($query)) {
             return false;
@@ -390,8 +402,7 @@ class News
      * @param int $id News ID
      *
      * @return bool
-     * @todo check if there are comments attached to the deleted news
-     *
+     * @todo   check if there are comments attached to the deleted news
      */
     public function deleteNews($id)
     {

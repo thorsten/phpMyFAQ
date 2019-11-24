@@ -5,18 +5,16 @@ namespace phpMyFAQ;
 /**
  * The section class provides sections
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Timo Wolf <amna.wolf@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Timo Wolf <amna.wolf@gmail.com>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-07-19
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-07-19
  */
 
 use phpMyFAQ\Configuration;
@@ -29,12 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Section.
  *
- * @package phpMyFAQ
- * @author Timo Wolf <amna.wolf@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Timo Wolf <amna.wolf@gmail.com>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-07-19
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-07-19
  */
 class Section
 {
@@ -58,7 +56,7 @@ class Section
     /**
      * Adds a new section entry.
      *
-     * @param string $name Name of the section
+     * @param string $name        Name of the section
      * @param string $description Description of the category
      *
      * @return int
@@ -67,7 +65,8 @@ class Section
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsections', 'id');
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqsections
             (id, name, description)
@@ -86,12 +85,13 @@ class Section
     /**
      * Gets one section by id.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return array
      */
     public function getSection($sectionId)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT * 
             FROM %sfaqsections
             WHERE id = %d",
@@ -128,15 +128,16 @@ class Section
     /**
      * updates a section entry.
      *
-     * @param int $id Id of the section to edit
-     * @param string $name Name of the section
+     * @param int    $id          Id of the section to edit
+     * @param string $name        Name of the section
      * @param string $description Description of the category
      *
      * @return bool
      */
     public function updateSection($id, $name, $description)
     {
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaqsections
             (name, description)
@@ -167,7 +168,8 @@ class Section
      */
     public function deleteSection($id)
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsections
             WHERE id = %d
@@ -181,7 +183,8 @@ class Section
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_category
             WHERE section_id = %d
@@ -195,7 +198,8 @@ class Section
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_user
             WHERE section_id = %d
@@ -209,7 +213,8 @@ class Section
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_group
             WHERE section_id = %d
@@ -223,7 +228,8 @@ class Section
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_right
             WHERE section_id = %d
@@ -237,7 +243,8 @@ class Section
             return false;
         }
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_news
             WHERE section_id = %d
@@ -257,14 +264,15 @@ class Section
     /**
      * adds a section - category relation
      *
-     * @param int $sectionId Id of the section
+     * @param int $sectionId  Id of the section
      * @param int $categoryId Id of the category
      *
      * @return bool
      */
     public function addSectionCategory($sectionId, $categoryId)
     {
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqsection_category
             (sectionId, categoryId)
@@ -287,14 +295,15 @@ class Section
     /**
      * removes a section - category relation
      *
-     * @param int $sectionId Id of the section
+     * @param int $sectionId  Id of the section
      * @param int $categoryId Id of the category
      *
      * @return bool
      */
     public function removeSectionCategory($sectionId, $categoryId)
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_category
             WHERE 
@@ -317,13 +326,14 @@ class Section
      * adds a section - user relation
      *
      * @param int $sectionId Id of the section
-     * @param int $userId Id of the user
+     * @param int $userId    Id of the user
      *
      * @return bool
      */
     public function addSectionuser($sectionId, $userId)
     {
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqsection_user
             (sectionId, userId)
@@ -347,13 +357,14 @@ class Section
      * removes a section - user relation
      *
      * @param int $sectionId Id of the section
-     * @param int $userId Id of the user
+     * @param int $userId    Id of the user
      *
      * @return bool
      */
     public function removeSectionUser($sectionId, $userId)
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_user
             WHERE 
@@ -376,13 +387,14 @@ class Section
      * adds a section - group relation
      *
      * @param int $sectionId Id of the section
-     * @param int $groupId Id of the group
+     * @param int $groupId   Id of the group
      *
      * @return bool
      */
     public function addSectionGroup($sectionId, $groupId)
     {
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqsection_group
             (sectionId, groupId)
@@ -406,13 +418,14 @@ class Section
      * removes a section - group relation
      *
      * @param int $sectionId Id of the section
-     * @param int $groupId Id of the group
+     * @param int $groupId   Id of the group
      *
      * @return bool
      */
     public function removeSectionGroup($sectionId, $groupId)
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_group
             WHERE 
@@ -435,13 +448,14 @@ class Section
      * adds a section - news relation
      *
      * @param int $sectionId Id of the section
-     * @param int $newsId Id of the news
+     * @param int $newsId    Id of the news
      *
      * @return bool
      */
     public function addSectionNews($sectionId, $newsId)
     {
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqsection_news
             (sectionId, newsId)
@@ -465,13 +479,14 @@ class Section
      * removes a section - news relation
      *
      * @param int $sectionId Id of the section
-     * @param int $newsId Id of the news
+     * @param int $newsId    Id of the news
      *
      * @return bool
      */
     public function removeSectionNews($sectionId, $newsId)
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqsection_news
             WHERE 

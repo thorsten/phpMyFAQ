@@ -9,12 +9,12 @@ namespace phpMyFAQ\Mail;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-11
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-11
  */
 if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
@@ -22,6 +22,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Builtin
+ *
  * @package phpMyFAQ\Mail
  */
 class Builtin implements MailUserAgentInterface
@@ -31,8 +32,8 @@ class Builtin implements MailUserAgentInterface
      *
      * @param string $recipients Recipients of the e-mail as a comma-separated list
      *                           of RFC 2822 compliant items
-     * @param array $headers Headers of the e-mail
-     * @param string $body Body of the e-mail
+     * @param array  $headers    Headers of the e-mail
+     * @param string $body       Body of the e-mail
      *
      * @return bool True if successful, false otherwise.
      */

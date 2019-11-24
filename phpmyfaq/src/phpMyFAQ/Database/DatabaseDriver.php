@@ -9,13 +9,13 @@ namespace phpMyFAQ\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Johannes Schlüter <johannes@php.net>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Johannes Schlüter <johannes@php.net>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-08-19
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-08-19
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,6 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Interface DatabaseDriver
+ *
  * @package phpMyFAQ\Database
  */
 interface DatabaseDriver
@@ -31,10 +32,10 @@ interface DatabaseDriver
     /**
      * Connects to the database server.
      *
-     * @param string $host Hostname
-     * @param string $user Username
+     * @param string $host     Hostname
+     * @param string $user     Username
      * @param string $password Password
-     * @param string $db Database name
+     * @param string $db       Database name
      *
      * @return bool
      */
@@ -44,8 +45,8 @@ interface DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int $offset
-     * @param int $rowcount
+     * @param int    $offset
+     * @param int    $rowcount
      *
      * @return mixed $result
      */

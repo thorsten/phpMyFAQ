@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-03-31
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 
 use phpMyFAQ\Configuration;
@@ -30,21 +30,25 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Session.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-03-31
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-31
  */
 class Session
 {
-    /** Constants. */
+    /**
+ * Constants.
+*/
     const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
     const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
     const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
 
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config;
 
     /**
@@ -113,7 +117,8 @@ class Session
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sessionId);
                     }
 
-                    $query = sprintf("
+                    $query = sprintf(
+                        "
                         INSERT INTO 
                             %sfaqsessions
                         (sid, user_id, ip, time)
@@ -162,7 +167,8 @@ class Session
     {
         $timestamp = 0;
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 time
             FROM
@@ -170,7 +176,8 @@ class Session
             WHERE
                 sid = %d',
             Database::getTablePrefix(),
-            $sid);
+            $sid
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -194,7 +201,8 @@ class Session
     {
         $sessions = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 sid, ip, time
             FROM
@@ -230,12 +238,14 @@ class Session
     {
         $num = 0;
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 COUNT(sid) as num_sessions
             FROM
                 %sfaqsessions',
-            Database::getTablePrefix());
+            Database::getTablePrefix()
+        );
 
         $result = $this->config->getDb()->query($query);
         if ($result) {
@@ -256,7 +266,8 @@ class Session
      */
     public function deleteSessions(int $first, int $last): bool
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqsessions
             WHERE
@@ -265,7 +276,8 @@ class Session
                 time <= %d',
             Database::getTablePrefix(),
             $first,
-            $last);
+            $last
+        );
 
         $this->config->getDb()->query($query);
 
@@ -287,15 +299,16 @@ class Session
     /**
      * Checks the Session ID.
      *
-     * @param int $sessionIdToCheck Session ID
-     * @param string $ip IP
+     * @param  int    $sessionIdToCheck Session ID
+     * @param  string $ip               IP
      * @throws
      */
     public function checkSessionId(int $sessionIdToCheck, string $ip)
     {
         global $sessionId, $user;
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 sid
             FROM
@@ -319,7 +332,8 @@ class Session
             // Update global session id
             $sessionId = $sessionIdToCheck;
             // Update db tracking
-            $query = sprintf("
+            $query = sprintf(
+                "
                 UPDATE
                     %sfaqsessions
                 SET
@@ -342,7 +356,7 @@ class Session
      * These are the numbers of unique users who have performed
      * some activities within the last five minutes.
      *
-     * @param int $activityTimeWindow Optionally set the time window size in sec. 
+     * @param int $activityTimeWindow Optionally set the time window size in sec.
      *                                Default: 300sec, 5 minutes
      *
      * @return array
@@ -356,7 +370,8 @@ class Session
 
             if (!$this->config->get('security.enableLoginOnly')) {
                 // Count all sids within the time window for public installations
-                $query = sprintf('
+                $query = sprintf(
+                    '
                     SELECT
                         count(sid) AS anonymous_users
                     FROM
@@ -378,7 +393,8 @@ class Session
             }
 
             // Count all faquser records within the time window
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT
                     count(session_id) AS registered_users
                 FROM
@@ -412,7 +428,8 @@ class Session
         $startDate = strtotime('-1 month');
         $endDate = $_SERVER['REQUEST_TIME'];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 time
             FROM
@@ -446,9 +463,9 @@ class Session
      * Store the Session ID into a persistent cookie expiring
      * PMF_SESSION_EXPIRED_TIME seconds after the page request.
      *
-     * @param string $name Cookie name
+     * @param string      $name      Cookie name
      * @param string|null $sessionId Session ID
-     * @param int $timeout Cookie timeout
+     * @param int         $timeout   Cookie timeout
      *
      * @return bool
      */

@@ -9,14 +9,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thomas Zeithaml <seo@annatom.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @package   phpMyFAQ
+ * @author    Thomas Zeithaml <seo@annatom.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-02-04
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-02-04
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Captcha
+ *
  * @package phpMyFAQ
  */
 class Captcha
@@ -311,7 +312,7 @@ class Captcha
      *   ORDER BY times DESC
      * to find out *bots and human attempts
      *
-     * @param int $capLength Length of captcha code
+     * @param  int $capLength Length of captcha code
      * @return string
      */
     private function generateCaptchaCode(int $capLength): string
@@ -343,7 +344,8 @@ class Captcha
      */
     private function garbageCollector(int $time = 604800)
     {
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM 
                 %sfaqcaptcha 
             WHERE 
@@ -354,7 +356,8 @@ class Captcha
 
         $this->config->getDb()->query($delete);
 
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaqcaptcha
             WHERE
@@ -375,7 +378,8 @@ class Captcha
      */
     private function saveCaptcha(): bool
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
            SELECT 
                id 
            FROM 
@@ -393,7 +397,8 @@ class Captcha
             if ($num > 0) {
                 return false;
             } else {
-                $insert = sprintf("
+                $insert = sprintf(
+                    "
                     INSERT INTO 
                         %sfaqcaptcha 
                     (id, useragent, language, ip, captcha_time) 
@@ -522,7 +527,8 @@ class Captcha
             }
         }
         // Search for this Captcha in the db
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id
             FROM
@@ -530,7 +536,8 @@ class Captcha
             WHERE
                 id = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($captchaCode));
+            $this->config->getDb()->escape($captchaCode)
+        );
 
         if ($result = $this->config->getDb()->query($query)) {
             $num = $this->config->getDb()->numRows($result);

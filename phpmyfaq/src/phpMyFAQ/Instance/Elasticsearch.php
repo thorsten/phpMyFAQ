@@ -9,12 +9,12 @@ namespace phpMyFAQ\Instance;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2015-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2015-12-25
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2015-12-25
  */
 
 use Elasticsearch\Client;
@@ -26,17 +26,24 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Elasticsearch
+ *
  * @package phpMyFAQ\Instance
  */
 class Elasticsearch
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     protected $config;
 
-    /** @var Client */
+    /**
+     * @var Client
+     */
     protected $client;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     protected $esConfig;
 
     /**
@@ -79,6 +86,7 @@ class Elasticsearch
 
     /**
      * Elasticsearch constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -153,7 +161,6 @@ class Elasticsearch
         $response = $this->getMapping();
 
         if (0 === count($response[$this->esConfig['index']]['mappings'])) {
-
             $params = [
                 'index' => $this->esConfig['index'],
                 'type' => $this->esConfig['type'],
@@ -271,7 +278,7 @@ class Elasticsearch
     /**
      * Updates a FAQ document
      *
-     * @param array $faq
+     * @param  array $faq
      * @return array
      */
     public function update(Array $faq)
@@ -298,7 +305,7 @@ class Elasticsearch
     /**
      * Deletes a FAQ document
      *
-     * @param integer $solutionId
+     * @param  integer $solutionId
      * @return array
      */
     public function delete($solutionId)

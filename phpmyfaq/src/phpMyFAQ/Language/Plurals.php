@@ -5,18 +5,16 @@ namespace phpMyFAQ\Language;
 /**
  * The plurals class provides support for plural forms in PMF translations.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Aurimas Fišeras <aurimas@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 Aurimas Fišeras and phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-07-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-07-30
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,12 +24,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Language_Plurals
  *
- * @package phpMyFAQ
- * @author Aurimas Fišeras <aurimas@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 Aurimas Fišeras and phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-07-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-07-30
  */
 class Plurals
 {
@@ -87,9 +85,9 @@ class Plurals
     /**
      * Returns the plural form for language $lang or -1 if language $lang is not supported.
      *
-     * @link  http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
-     * @param string $lang The language code
-     * @param int $n The number used to determine the plural form
+     * @link   http://www.gnu.org/software/gettext/manual/gettext.html#Plural-forms
+     * @param  string $lang The language code
+     * @param  int    $n    The number used to determine the plural form
      * @return int
      */
     private function plural(string $lang, int $n): int
@@ -158,7 +156,7 @@ class Plurals
      * produced according to the formatting of the message.
      *
      * @param string $msgID Message identificator
-     * @param int $n The number used to determine the plural form
+     * @param int    $n     The number used to determine the plural form
      *
      * @return string
      */
@@ -172,7 +170,7 @@ class Plurals
      * If translation is missing, message in English plural form is returned.
      *
      * @param string $msgID Message identification
-     * @param int $n The number used to determine the plural form
+     * @param int    $n     The number used to determine the plural form
      *
      * @return string
      */

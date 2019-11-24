@@ -9,12 +9,12 @@ namespace phpMyFAQ\Permission;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 use phpMyFAQ\Configuration;
@@ -28,12 +28,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class BasicPermission
+ *
  * @package phpMyFAQ\Permission
  */
 class BasicPermission extends Permission
 {
     /**
      * Default right data stored when a new right is created.
+     *
      * @var array
      */
     public $defaultRightData = [
@@ -46,6 +48,7 @@ class BasicPermission extends Permission
 
     /**
      * Constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -56,8 +59,9 @@ class BasicPermission extends Permission
     /**
      * Gives the user a new user-right.
      * Returns true on success, otherwise false.
-     * @param int $userId User ID
-     * @param int $rightId Right ID
+     *
+     * @param  int $userId  User ID
+     * @param  int $rightId Right ID
      * @return bool
      */
     public function grantUserRight(int $userId, int $rightId): bool
@@ -69,7 +73,8 @@ class BasicPermission extends Permission
             return false;
         }
 
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaquser_right
             (user_id, right_id)
@@ -100,7 +105,8 @@ class BasicPermission extends Permission
     public function getRightData(int $rightId): array
     {
         // get right data
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 right_id,
                 name,
@@ -113,7 +119,8 @@ class BasicPermission extends Permission
             WHERE
                 right_id = %d',
             Database::getTablePrefix(),
-            $rightId);
+            $rightId
+        );
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
@@ -135,8 +142,8 @@ class BasicPermission extends Permission
      * right-ID or a right-name. Another difference is, that also
      * group-rights are taken into account.
      *
-     * @param int $userId User ID
-     * @param mixed $right Right ID or right name
+     * @param int   $userId User ID
+     * @param mixed $right  Right ID or right name
      *
      * @return bool
      */
@@ -166,7 +173,8 @@ class BasicPermission extends Permission
     public function getRightId(string $name): int
     {
         // get right id
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 right_id
             FROM
@@ -174,7 +182,8 @@ class BasicPermission extends Permission
             WHERE
                 name = '%s'",
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($name));
+            $this->config->getDb()->escape($name)
+        );
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
@@ -189,7 +198,7 @@ class BasicPermission extends Permission
      * Returns true if the user given by user_id has the right
      * specified by right_id, otherwise false.
      *
-     * @param int $userId User ID
+     * @param int $userId  User ID
      * @param int $rightId Right ID
      *
      * @return bool
@@ -202,7 +211,8 @@ class BasicPermission extends Permission
         }
 
         // check right
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -254,7 +264,8 @@ class BasicPermission extends Permission
     public function getUserRights(int $userId): array
     {
         // get user rights
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -268,7 +279,8 @@ class BasicPermission extends Permission
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $userId);
+            $userId
+        );
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -297,7 +309,8 @@ class BasicPermission extends Permission
         $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqright', 'right_id');
         $rightData = $this->checkRightData($rightData);
 
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqright
             (right_id, name, description, for_users, for_groups, for_sections)
@@ -357,8 +370,8 @@ class BasicPermission extends Permission
     /**
      * Renames rights, only used for updates.
      *
-     * @param string $oldName
-     * @param string $newName
+     * @param  string $oldName
+     * @param  string $newName
      * @return bool
      */
     public function renameRight(string $oldName, string $newName): bool
@@ -368,7 +381,8 @@ class BasicPermission extends Permission
             return false;
         }
 
-        $update = sprintf('
+        $update = sprintf(
+            '
             UPDATE
                 %sfaqright
             SET
@@ -400,7 +414,8 @@ class BasicPermission extends Permission
      */
     public function getAllRightsData(string $order = 'ASC'): array
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 right_id,
                 name,
@@ -413,7 +428,8 @@ class BasicPermission extends Permission
             ORDER BY
                 right_id %s',
             Database::getTablePrefix(),
-            $order);
+            $order
+        );
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -439,13 +455,15 @@ class BasicPermission extends Permission
      */
     public function refuseAllUserRights(int $userId): bool
     {
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaquser_right
             WHERE
                 user_id  = %d',
             Database::getTablePrefix(),
-            $userId);
+            $userId
+        );
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {

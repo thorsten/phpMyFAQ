@@ -9,24 +9,25 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-13
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-01-13
  */
 
 use phpMyFAQ\Database\DatabaseDriver;
 
 /**
  * Class System.
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ *
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-13
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-01-13
  */
 class System
 {
@@ -55,7 +56,7 @@ class System
      */
     const VERSION_API = '2.0';
 
-    /**     
+    /**
      * Minimum required PHP version.
      */
     const VERSION_MINIMUM_PHP = '7.1.0';
@@ -96,13 +97,15 @@ class System
 
     /**
      * Database handle.
+     *
      * @var DatabaseDriver
      */
     private $database = null;
 
     /**
      * Sets the database handler.
-     * @param DatabaseDriver $database
+     *
+     * @param  DatabaseDriver $database
      * @return $this
      */
     public function setDatabase(DatabaseDriver $database)
@@ -333,9 +336,9 @@ class System
 
         try {
             foreach ($files as $file) {
-                if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION) &&
-                !preg_match('#/tests/#', $file->getPath())
-            ) {
+                if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION)
+                    && !preg_match('#/tests/#', $file->getPath())
+                ) {
                     $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
 
                     if (isset($blacklist[$current])) {
@@ -357,6 +360,7 @@ class System
 
     /**
      * Drops all given tables
+     *
      * @param array $queries
      */
     public function dropTables(Array $queries)

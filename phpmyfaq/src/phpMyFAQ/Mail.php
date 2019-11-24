@@ -9,13 +9,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-11
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-11
  */
 
 use phpMyFAQ\Mail\Builtin;
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Mail
+ *
  * @package phpMyFAQ
  */
 class Mail
@@ -225,7 +226,7 @@ class Mail
     /*
      * Default constructor.
      * Note: any email will be sent from the PMF administrator, use unsetFrom
-     *       before using setFrom.     
+     *       before using setFrom.
      *
      * @param Configuration $config
      */
@@ -294,7 +295,7 @@ class Mail
      * Set the "From" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -306,10 +307,10 @@ class Mail
     /**
      * Set just one e-mail address into an array.
      *
-     * @param array $target Target array.
+     * @param array  $target      Target array.
      * @param string $targetAlias Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $address     User e-mail address.
+     * @param string $name        User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -332,14 +333,14 @@ class Mail
     /**
      * Add an e-mail address to an array.
      *
-     * @param array $target Target array.
+     * @param array  $target      Target array.
      * @param string $targetAlias Alias Target alias.
-     * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $address     User e-mail address.
+     * @param string $name        User name (optional).
      *
      * @return bool True if successful, false otherwise.
      *
-     * @todo   Enhance error handling using exceptions
+     * @todo Enhance error handling using exceptions
      */
     private function _addEmailTo(&$target, $targetAlias, $address, $name = null)
     {
@@ -419,11 +420,11 @@ class Mail
     /**
      * Add an attachment.
      *
-     * @param string $path File path.
-     * @param string $name File name. Defaults to the basename.
-     * @param string $mimetype File MIME type. Defaults to 'application/octet-stream'.
+     * @param string $path        File path.
+     * @param string $name        File name. Defaults to the basename.
+     * @param string $mimetype    File MIME type. Defaults to 'application/octet-stream'.
      * @param string $disposition Attachment disposition. Defaults to 'attachment'.
-     * @param string $cid Content ID, required when disposition is 'inline'. Defaults to ''.
+     * @param string $cid         Content ID, required when disposition is 'inline'. Defaults to ''.
      *
      * @return bool True if successful, false otherwise.
      */
@@ -461,7 +462,7 @@ class Mail
      * Add a recipient as <BCC>.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -474,7 +475,7 @@ class Mail
      * Add a recipient as <CC>.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -487,7 +488,7 @@ class Mail
      * Add an address to send a notification to.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -500,7 +501,7 @@ class Mail
      * Add a recipient as <TO>.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -514,7 +515,7 @@ class Mail
      *
      * @return bool True if successful, false otherwise.
      *
-     * @todo   Enhance error handling using exceptions
+     * @todo Enhance error handling using exceptions
      */
     public function send()
     {
@@ -753,7 +754,8 @@ class Mail
             $lines[] = '';
         }
 
-        if (in_array($this->contentType,
+        if (in_array(
+            $this->contentType,
             array(
                 'multipart/mixed',
                 'multipart/related',
@@ -789,7 +791,8 @@ class Mail
             $lines[] = self::wrapLines($this->message);
         }
 
-        if (in_array($this->contentType,
+        if (in_array(
+            $this->contentType,
             array(
                 'multipart/mixed',
                 'multipart/related',
@@ -825,8 +828,8 @@ class Mail
      * Wraps the lines contained into the given message.
      *
      * @param string $message Message.
-     * @param int $width Column width. Defaults to 72.
-     * @param bool $cut Cutting a word is allowed. Defaults to false.
+     * @param int    $width   Column width. Defaults to 72.
+     * @param bool   $cut     Cutting a word is allowed. Defaults to false.
      *
      * @return string The given message, wrapped as requested.
      */
@@ -881,7 +884,7 @@ class Mail
      * Get the instance of the class implementing the MUA for the given type.
      *
      * @static
-     * @param string $mua Type of the MUA.
+     * @param  string $mua Type of the MUA.
      * @return Builtin|SwiftSMTP
      */
     public static function getMUA($mua)
@@ -903,9 +906,9 @@ class Mail
      * if not already set using the $messageAlt property.
      * Besides it is possible to put resources as inline attachments.
      *
-     * @param string $message HTML message.
-     * @param bool $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
-     * @param bool $inline Add images as inline attachments. Defaults to false.
+     * @param string $message  HTML message.
+     * @param bool   $sanitize Strip out potentially unsecured HTML tags. Defaults to false.
+     * @param bool   $inline   Add images as inline attachments. Defaults to false.
      */
     public function setHTMLMessage($message, $sanitize = false, $inline = false)
     {
@@ -954,7 +957,7 @@ class Mail
      * Set the "Reply-to" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -979,7 +982,7 @@ class Mail
      * Set the "Sender" address.
      *
      * @param string $address User e-mail address.
-     * @param string $name User name (optional).
+     * @param string $name    User name (optional).
      *
      * @return bool True if successful, false otherwise.
      */
@@ -1006,7 +1009,7 @@ class Mail
      * from "user@example.org" to "user_AT_example_DOT_org". Otherwise
      * it will return the plain email address.
      *
-     * @param string $email E-mail address
+     * @param  string $email E-mail address
      * @static
      *
      * @return string

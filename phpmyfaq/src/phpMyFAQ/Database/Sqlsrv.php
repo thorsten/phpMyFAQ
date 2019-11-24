@@ -14,12 +14,12 @@ use phpMyFAQ\Utils;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-02-18
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-02-18
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Sqlsrv
+ *
  * @package phpMyFAQ\Database
  */
 class Sqlsrv implements DatabaseDriver
@@ -39,7 +40,9 @@ class Sqlsrv implements DatabaseDriver
      */
     public $tableNames = [];
 
-    /** @var resource */
+    /**
+     * @var resource
+     */
     private $conn = false;
     /**
      * The query log string.
@@ -59,8 +62,8 @@ class Sqlsrv implements DatabaseDriver
      *
      * This function connects to a MySQL database
      *
-     * @param string $host A string specifying the name of the server to which a connection is being established
-     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $host     A string specifying the name of the server to which a connection is being established
+     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
      * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
@@ -83,8 +86,8 @@ class Sqlsrv implements DatabaseDriver
     /**
      * Sets the connection options.
      *
-     * @param string $user Specifies the User ID to be used when connecting with SQL Server Authentication
-     * @param string $passwd Specifies the password associated with the User ID to be used when connecting with
+     * @param string $user     Specifies the User ID to be used when connecting with SQL Server Authentication
+     * @param string $passwd   Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
      */
@@ -129,7 +132,6 @@ class Sqlsrv implements DatabaseDriver
      *
      * @return array
      * @throws Exception
-     *
      */
     public function fetchAll($result)
     {
@@ -227,8 +229,8 @@ class Sqlsrv implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int $offset
-     * @param int $rowcount
+     * @param int    $offset
+     * @param int    $rowcount
      *
      * @return mixed $result
      */
@@ -257,19 +259,21 @@ class Sqlsrv implements DatabaseDriver
      * Returns the next ID of a table.
      *
      * @param string $table the name of the table
-     * @param string $id the name of the ID column
+     * @param string $id    the name of the ID column
      *
      * @return int
      */
     public function nextID($table, $id)
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
            SELECT 
                max(%s) as current_id
            FROM 
                %s',
             $id,
-            $table);
+            $table
+        );
 
         $result = $this->query($select);
         sqlsrv_fetch($result);

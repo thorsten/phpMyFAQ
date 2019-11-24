@@ -10,12 +10,12 @@ namespace phpMyFAQ\Template;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Template
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ\Template
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-08-17
  */
 
 use phpMyFAQ\Configuration;
@@ -23,14 +23,19 @@ use phpMyFAQ\Meta;
 
 /**
  * Class TemplateHelper
+ *
  * @package phpMyFAQ\Template
  */
 class TemplateHelper
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config = null;
 
-    /** @var Meta */
+    /**
+     * @var Meta
+     */
     private $meta = null;
 
     /**
@@ -46,7 +51,8 @@ class TemplateHelper
 
     /**
      * Renders all {{ var | meta }} filters.
-     * @param $key
+     *
+     * @param  $key
      * @return string
      */
     public function renderMetaFilter($key)

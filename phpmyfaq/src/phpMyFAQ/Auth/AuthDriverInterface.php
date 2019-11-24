@@ -9,13 +9,13 @@ namespace phpMyFAQ\Auth;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alberto Cabello <alberto@unex.es>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Alberto Cabello <alberto@unex.es>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-03-01
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-03-01
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -24,6 +24,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Interface Driver
+ *
  * @package phpMyFAQ\Auth
  */
 interface AuthDriverInterface
@@ -33,9 +34,9 @@ interface AuthDriverInterface
      * is only used in LDAP/AD environments. Returns true on success,
      * otherwise false.
      *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
+     * @param  string $login
+     * @param  string $pass
+     * @param  string $domain
      * @return mixed
      */
     public function add($login, $pass, $domain = '');
@@ -48,7 +49,7 @@ interface AuthDriverInterface
      * Error messages are added to the array errors.
      *
      * @param string $login Loginname
-     * @param string $pass Password
+     * @param string $pass  Password
      *
      * @return bool
      */
@@ -77,9 +78,9 @@ interface AuthDriverInterface
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login Loginname
-     * @param string $pass Password
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param string $pass         Password
+     * @param array  $optionalData Optional data
      *
      * @return bool
      */
@@ -88,8 +89,8 @@ interface AuthDriverInterface
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login Loginname
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
      *
      * @return int
      */

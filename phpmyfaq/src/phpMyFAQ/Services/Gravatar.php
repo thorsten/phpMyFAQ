@@ -9,12 +9,12 @@ namespace phpMyFAQ\Services;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2013-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2013-01-14
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2013-01-14
  */
 
 use phpMyFAQ\Services;
@@ -25,22 +25,27 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Gravatar
+ *
  * @package phpMyFAQ\Services
  */
 class Gravatar
 {
-    /** @var string */
+    /**
+     * @var string
+     */
     private $httpBaseUrl = 'http://gravatar.com/';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $httpsBaseUrl = 'https://secure.gravatar.com/';
 
     /**
      * Returns a image or the URL to the image of a Gravatar based off an email
      * address.
      *
-     * @param string $email Email address
-     * @param array $params Allows multiple keys with values to give more control
+     * @param string $email  Email address
+     * @param array  $params Allows multiple keys with values to give more control
      *
      * @return string
      */

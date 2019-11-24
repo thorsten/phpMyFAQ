@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-03-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-30
  */
 
 use phpMyFAQ\Database\Sqlite3;
@@ -26,12 +26,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Sitemap.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2007-03-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2007-03-30
  */
 class Sitemap
 {
@@ -42,24 +42,28 @@ class Sitemap
 
     /**
      * User
+     *
      * @var int
      */
     private $user = -1;
 
     /**
      * Groups.
+     *
      * @var array
      */
     private $groups = [];
 
     /**
      * Flag for Group support.
+     *
      * @var bool
      */
     private $groupSupport = false;
 
     /**
      * Constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -89,6 +93,7 @@ class Sitemap
 
     /**
      * Returns all available first letters.
+     *
      * @return string
      */
     public function getAllFirstLetters(): string
@@ -96,21 +101,26 @@ class Sitemap
         global $sids;
 
         if ($this->groupSupport) {
-            $permPart = sprintf('( fdg.group_id IN (%s)
+            $permPart = sprintf(
+                '( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups));
+                implode(', ', $this->groups)
+            );
         } else {
-            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user);
+            $permPart = sprintf(
+                '( fdu.user_id = %d OR fdu.user_id = -1 )',
+                $this->user
+            );
         }
 
         $renderLetters = '<ul class="nav">';
 
         if ($this->config->getDb() instanceof Sqlite3) {
-            $query = sprintf("
+            $query = sprintf(
+                "
                     SELECT
                         DISTINCT UPPER(SUBSTR(fd.thema, 1, 1)) AS letters
                     FROM
@@ -138,7 +148,8 @@ class Sitemap
                 $permPart
             );
         } else {
-            $query = sprintf("
+            $query = sprintf(
+                "
                     SELECT
                         DISTINCT UPPER(SUBSTRING(fd.thema, 1, 1)) AS letters
                     FROM
@@ -191,7 +202,8 @@ class Sitemap
 
     /**
      * Returns all records from the current first letter.
-     * @param string $letter Letter
+     *
+     * @param  string $letter Letter
      * @return string
      */
     public function getRecordsFromLetter($letter = 'A'): string
@@ -199,15 +211,19 @@ class Sitemap
         global $sids;
 
         if ($this->groupSupport) {
-            $permPart = sprintf('( fdg.group_id IN (%s)
+            $permPart = sprintf(
+                '( fdg.group_id IN (%s)
             OR
                 (fdu.user_id = %d AND fdg.group_id IN (%s)))',
                 implode(', ', $this->groups),
                 $this->user,
-                implode(', ', $this->groups));
+                implode(', ', $this->groups)
+            );
         } else {
-            $permPart = sprintf('( fdu.user_id = %d OR fdu.user_id = -1 )',
-                $this->user);
+            $permPart = sprintf(
+                '( fdu.user_id = %d OR fdu.user_id = -1 )',
+                $this->user
+            );
         }
 
         $letter = Strings::strtoupper($this->config->getDb()->escape(Strings::substr($letter, 0, 1)));
@@ -216,7 +232,8 @@ class Sitemap
 
         switch (Database::getType()) {
             case 'sqlite3':
-                $query = sprintf("
+                $query = sprintf(
+                    "
                     SELECT
                         fd.thema AS thema,
                         fd.id AS id,
@@ -250,11 +267,13 @@ class Sitemap
                     Database::getTablePrefix(),
                     $letter,
                     $this->config->getLanguage()->getLanguage(),
-                    $permPart);
+                    $permPart
+                );
                 break;
 
             default:
-                $query = sprintf("
+                $query = sprintf(
+                    "
                     SELECT
                         fd.thema AS thema,
                         fd.id AS id,
@@ -288,7 +307,8 @@ class Sitemap
                     Database::getTablePrefix(),
                     $letter,
                     $this->config->getLanguage()->getLanguage(),
-                    $permPart);
+                    $permPart
+                );
                 break;
         }
 

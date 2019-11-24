@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-01-28
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-01-28
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Filter
+ *
  * @package phpMyFAQ
  */
 class Filter
@@ -30,10 +31,10 @@ class Filter
     /**
      * Static wrapper method for filter_input().
      *
-     * @param int $type Filter type
+     * @param int    $type         Filter type
      * @param string $variableName Variable name
-     * @param int $filter Filter
-     * @param mixed $default Default value
+     * @param int    $filter       Filter
+     * @param mixed  $default      Default value
      *
      * @return mixed
      */
@@ -47,7 +48,7 @@ class Filter
     /**
      * Static wrapper method for filter_input_array.
      *
-     * @param int $type Filter type
+     * @param int   $type       Filter type
      * @param array $definition Definition
      *
      * @return mixed
@@ -61,8 +62,8 @@ class Filter
      * Static wrapper method for filter_var().
      *
      * @param mixed $variable Variable
-     * @param int $filter Filter
-     * @param mixed $default Default value
+     * @param int   $filter   Filter
+     * @param mixed $default  Default value
      *
      * @return mixed
      */

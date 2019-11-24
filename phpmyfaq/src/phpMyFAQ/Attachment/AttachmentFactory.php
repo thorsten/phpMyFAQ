@@ -9,11 +9,11 @@ namespace phpMyFAQ\Attachment;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
- * @since 2009-08-21
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
+ * @since     2009-08-21
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
  * @copyright 2009-2019 phpMyFAQ Team
  */
 
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class AttachmentFactory
+ *
  * @package phpMyFAQ\Attachment
  */
 class AttachmentFactory
@@ -61,7 +62,6 @@ class AttachmentFactory
      *
      * @return File
      * @throws AttachmentException
-     *
      */
     public static function create($id = null, $key = null): File
     {
@@ -95,7 +95,7 @@ class AttachmentFactory
      * Fetch all record attachments.
      *
      * @param Configuration $config
-     * @param int $recordId ID of the record
+     * @param int           $recordId ID of the record
      *
      * @throws AttachmentException
      *

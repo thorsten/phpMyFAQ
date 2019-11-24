@@ -12,16 +12,16 @@ namespace phpMyFAQ;
  * Portions created by Christian Stocker are Copyright (c) 2001-2008 Liip AG.
  * All Rights Reserved.
  *
- * @package phpMyFAQ
- * @author Johann-Peter Hartmann <hartmann@mayflower.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Stefan Esser <sesser@php.net>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @author Christian Stocker <chregu@bitflux.ch>
+ * @package   phpMyFAQ
+ * @author    Johann-Peter Hartmann <hartmann@mayflower.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Stefan Esser <sesser@php.net>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Christian Stocker <chregu@bitflux.ch>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-24
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-24
  */
 
 use phpMyFAQ\Strings\StringBasic;
@@ -32,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Init
+ *
  * @package phpMyFAQ
  */
 class Init
@@ -55,7 +56,6 @@ class Init
         $externals = array('_REQUEST', '_GET', '_POST', '_COOKIE');
         foreach ($externals as $external) {
             if (isset($GLOBALS[$external]) && is_array($GLOBALS[$external])) {
-
                 // first clean XSS issues
                 $newValues = $GLOBALS[$external];
                 $newValues = self::_removeXSSGPC($newValues);
@@ -77,7 +77,8 @@ class Init
 
     /**
      * Removes XSS from an array.
-     * @param array $data Array of data
+     *
+     * @param  array $data Array of data
      * @return array
      */
     private static function _removeXSSGPC(Array $data)
@@ -131,23 +132,44 @@ class Init
         $string = preg_replace('#(<[^>]+[\x00-\x20\"\'\/])(on|xmlns)[^>]*>#iU', '$1>', $string);
 
         // remove javascript: and vbscript: protocol
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
-            '$1=$2nojavascript...', $string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
-            '$1=$2novbscript...', $string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#U',
-            '$1=$2nomozbinding...', $string);
-        $string = preg_replace('#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*data[\x00-\x20]*:#U', '$1=$2nodata...',
-            $string);
+        $string = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
+            '$1=$2nojavascript...',
+            $string
+        );
+        $string = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
+            '$1=$2novbscript...',
+            $string
+        );
+        $string = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*-moz-binding[\x00-\x20]*:#U',
+            '$1=$2nomozbinding...',
+            $string
+        );
+        $string = preg_replace(
+            '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*data[\x00-\x20]*:#U',
+            '$1=$2nodata...',
+            $string
+        );
 
         //<span style="width: expression(alert('Ping!'));"></span>
         // only works in ie...
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',
-            '$1>', $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',
-            '$1>', $string);
-        $string = preg_replace('#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',
-            '$1>', $string);
+        $string = preg_replace(
+            '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*expression[\x00-\x20]*\([^>]*>#iU',
+            '$1>',
+            $string
+        );
+        $string = preg_replace(
+            '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*behaviour[\x00-\x20]*\([^>]*>#iU',
+            '$1>',
+            $string
+        );
+        $string = preg_replace(
+            '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',
+            '$1>',
+            $string
+        );
 
         //remove namespaced elements (we do not need them...)
         $string = preg_replace('#</*\w+:\w[^>]*>#i', '', $string);
@@ -157,7 +179,8 @@ class Init
             $oldString = $string;
             $string = preg_replace(
                 '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',
-                '', $string
+                '',
+                $string
             );
         } while ($oldString != $string);
 

@@ -5,20 +5,18 @@ namespace phpMyFAQ;
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2005-11-01
  */
 
@@ -26,7 +24,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-/**#@+
+/**
+* #@+
   * HTTP GET Parameters PMF accepted keys definitions
   */
 define('HTTP_PARAMS_GET_CATID', 'catid');
@@ -44,12 +43,12 @@ define('HTTP_PARAMS_GET_TYPE', 'type');
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2005-11-01
  */
 class Utils
@@ -192,7 +191,7 @@ class Utils
     /**
      * Resolves the PMF markers like e.g. %sitename%.
      *
-     * @param string            $text   Text contains PMF markers
+     * @param string        $text   Text contains PMF markers
      * @param Configuration $config
      *
      * @return string
@@ -409,6 +408,7 @@ class Utils
     }
     /**
      * Creates a seed with microseconds.
+     *
      * @return integer|null
      */
     private static function makeSeed()
@@ -419,8 +419,9 @@ class Utils
 
     /**
      * Returns a random number.
-     * @param integer $min
-     * @param integer $max
+     *
+     * @param  integer $min
+     * @param  integer $max
      * @return int
      */
     public static function createRandomNumber($min, $max)

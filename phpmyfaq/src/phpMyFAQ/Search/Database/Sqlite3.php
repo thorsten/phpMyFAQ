@@ -5,19 +5,17 @@ namespace phpMyFAQ\Search\Database;
 /**
  * phpMyFAQ SQlite based search classes.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2012-12-26
  */
 
@@ -33,11 +31,11 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
  *
  * @package phpMyFAQ
  *
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  *
- * @link https://www.phpmyfaq.de
+ * @link  https://www.phpmyfaq.de
  * @since 2012-12-26
  */
 class Sqlite3 extends SearchDatabase
@@ -55,7 +53,7 @@ class Sqlite3 extends SearchDatabase
     /**
      * Prepares the search and executes it.
      *
-     * @param string $searchTerm Search ter
+     * @param  string $searchTerm Search ter
      * @throws
      * @return resource
      */
@@ -64,7 +62,8 @@ class Sqlite3 extends SearchDatabase
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT
                     %s
                 FROM 

@@ -9,12 +9,12 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Helper
- * @author  Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ\Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-07
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-07
  */
 
 use Exception;
@@ -34,6 +34,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class SearchHelper
+ *
  * @package phpMyFAQ\Helper
  */
 class SearchHelper extends Helper
@@ -121,7 +122,8 @@ class SearchHelper extends Helper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = sprintf('%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
+                $currentUrl = sprintf(
+                    '%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
                     Link::getSystemRelativeUri('ajaxresponse.php') . 'index.php',
                     $this->sessionId,
                     $result->category_id,
@@ -195,7 +197,7 @@ class SearchHelper extends Helper
      * Renders the result page for the main search page.
      *
      * @param SearchResultSet $resultSet
-     * @param int $currentPage
+     * @param int             $currentPage
      *
      * @return string
      * @throws Exception
@@ -282,7 +284,8 @@ class SearchHelper extends Helper
 
                 $html .= '<li>';
                 $html .= $this->renderScore($result->score * 33);
-                $html .= sprintf('<strong>%s</strong>: %s<br>',
+                $html .= sprintf(
+                    '<strong>%s</strong>: %s<br>',
                     $categoryInfo[0]['name'],
                     $oLink->toHtmlAnchor()
                 );
@@ -330,7 +333,7 @@ class SearchHelper extends Helper
 
     /**
      * @param SearchResultSet $resultSet
-     * @param int $recordId
+     * @param int             $recordId
      *
      * @return string
      */
@@ -383,7 +386,6 @@ class SearchHelper extends Helper
 
         foreach ($mostPopularSearches as $searchItem) {
             if (Strings::strlen($searchItem['searchterm']) > 0) {
-
                 $html .= sprintf(
                     '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s <span class="badge">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),

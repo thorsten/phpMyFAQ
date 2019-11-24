@@ -9,12 +9,12 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-09-03
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-09-03
  */
 
 use phpMyFAQ\Helper;
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class LinkverifierHelper
+ *
  * @package phpMyFAQ\Helper
  */
 class LinkVerifierHelper extends Helper
@@ -32,7 +33,7 @@ class LinkVerifierHelper extends Helper
     /**
      * Returns JavaScript needed for AJAX verification on record add/save/clicked on listing.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $lang
      */
     public static function linkOndemandJavascript($id, $lang)
@@ -63,7 +64,7 @@ class LinkVerifierHelper extends Helper
             }
           }
 
-          ajaxOnDemandVerify(<?= $id ?>, '<?= $lang ?>');
+          ajaxOnDemandVerify(<?php echo $id ?>, '<?php echo $lang ?>');
 
         </script>
         <?php

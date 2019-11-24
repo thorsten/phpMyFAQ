@@ -9,12 +9,12 @@ namespace phpMyFAQ\Entity;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Entity
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ\Entity
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-09
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-08-09
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,23 +23,34 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class MetaEntity
+ *
  * @package phpMyFAQ\Entity
  */
 class MetaEntity
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $lang;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $pageId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $type;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $content;
 
     /**
@@ -51,7 +62,7 @@ class MetaEntity
     }
 
     /**
-     * @param int $id
+     * @param  int $id
      * @return MetaEntity
      */
     public function setId(int $id): MetaEntity
@@ -69,7 +80,7 @@ class MetaEntity
     }
 
     /**
-     * @param string $lang
+     * @param  string $lang
      * @return MetaEntity
      */
     public function setLang(string $lang): MetaEntity
@@ -87,7 +98,7 @@ class MetaEntity
     }
 
     /**
-     * @param string $pageId
+     * @param  string $pageId
      * @return MetaEntity
      */
     public function setPageId(string $pageId): MetaEntity
@@ -105,7 +116,7 @@ class MetaEntity
     }
 
     /**
-     * @param string $type
+     * @param  string $type
      * @return MetaEntity
      */
     public function setType(string $type): MetaEntity
@@ -123,7 +134,7 @@ class MetaEntity
     }
 
     /**
-     * @param string $content
+     * @param  string $content
      * @return MetaEntity
      */
     public function setContent(string $content): MetaEntity
@@ -131,6 +142,4 @@ class MetaEntity
         $this->content = $content;
         return $this;
     }
-
-
 }

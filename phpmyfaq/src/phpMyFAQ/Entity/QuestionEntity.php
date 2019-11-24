@@ -9,12 +9,12 @@ namespace phpMyFAQ\Entity;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Entity
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ\Entity
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2019-11-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2019-11-22
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,35 +23,54 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class QuestionEntity
+ *
  * @package phpMyFAQ\Entity
  */
 class QuestionEntity
 {
-    /** @var int */
+    /**
+     * @var int
+     */
     private $id;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $lang;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $username;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $email;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $categoryId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $question;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $created;
 
-    /** @var int */
+    /**
+     * @var int
+     */
     private $answerId;
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $isVisible;
 
     /**
@@ -71,7 +90,7 @@ class QuestionEntity
     }
 
     /**
-     * @param int $id
+     * @param  int $id
      * @return QuestionEntity
      */
     public function setId(int $id): QuestionEntity
@@ -89,7 +108,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $lang
+     * @param  string $lang
      * @return QuestionEntity
      */
     public function setLang(string $lang): QuestionEntity
@@ -107,7 +126,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $username
+     * @param  string $username
      * @return QuestionEntity
      */
     public function setUsername(string $username): QuestionEntity
@@ -125,7 +144,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $email
+     * @param  string $email
      * @return QuestionEntity
      */
     public function setEmail(string $email): QuestionEntity
@@ -143,7 +162,7 @@ class QuestionEntity
     }
 
     /**
-     * @param int $categoryId
+     * @param  int $categoryId
      * @return QuestionEntity
      */
     public function setCategoryId(int $categoryId): QuestionEntity
@@ -161,7 +180,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $question
+     * @param  string $question
      * @return QuestionEntity
      */
     public function setQuestion(string $question): QuestionEntity
@@ -179,7 +198,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $created
+     * @param  string $created
      * @return QuestionEntity
      */
     public function setCreated(string $created): QuestionEntity
@@ -197,7 +216,7 @@ class QuestionEntity
     }
 
     /**
-     * @param int $answerId
+     * @param  int $answerId
      * @return QuestionEntity
      */
     public function setAnswerId(int $answerId): QuestionEntity
@@ -215,7 +234,7 @@ class QuestionEntity
     }
 
     /**
-     * @param string $isVisible
+     * @param  string $isVisible
      * @return QuestionEntity
      */
     public function setIsVisible(string $isVisible): QuestionEntity

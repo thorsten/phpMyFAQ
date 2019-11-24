@@ -9,12 +9,12 @@ namespace phpMyFAQ\Export;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-10-07
  */
 
 use Exception;
@@ -33,6 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Pdf
+ *
  * @package phpMyFAQ\Export
  */
 class Pdf extends Export
@@ -57,9 +58,9 @@ class Pdf extends Export
     /**
      * Constructor.
      *
-     * @param Faq $faq FaqHelper object
-     * @param Category $category Entity object
-     * @param Configuration $config Configuration
+     * @param  Faq           $faq      FaqHelper object
+     * @param  Category      $category Entity object
+     * @param  Configuration $config   Configuration
      * @throws Exception
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
@@ -84,9 +85,9 @@ class Pdf extends Export
     /**
      * Generates the export.
      *
-     * @param int $categoryId CategoryHelper Id
-     * @param bool $downwards If true, downwards, otherwise upward ordering
-     * @param string $language Language
+     * @param int    $categoryId CategoryHelper Id
+     * @param bool   $downwards  If true, downwards, otherwise upward ordering
+     * @param string $language   Language
      *
      * @return string
      */
@@ -116,11 +117,12 @@ class Pdf extends Export
         $categoryGroup = '';
         $this->pdf->AddPage();
         foreach ($categories as $catKey => $category) {
-
             if (0 === $catKey || $this->category->categoryName[$category['id']]['name'] !== $categoryGroup) {
                 $this->pdf->Bookmark(
                     html_entity_decode(
-                        $this->category->categoryName[$category['id']]['name'], ENT_QUOTES, 'utf-8'
+                        $this->category->categoryName[$category['id']]['name'],
+                        ENT_QUOTES,
+                        'utf-8'
                     ),
                     $category['level'],
                     0
@@ -130,12 +132,13 @@ class Pdf extends Export
             }
 
             foreach ($faqdata as $faq) {
-
                 if ($faq['category_id'] === $category['id']) {
                     $this->pdf->AddPage();
                     $this->pdf->Bookmark(
                         html_entity_decode(
-                            $faq['topic'], ENT_QUOTES, 'utf-8'
+                            $faq['topic'],
+                            ENT_QUOTES,
+                            'utf-8'
                         ),
                         $category['level'] + 1,
                         0
@@ -187,7 +190,7 @@ class Pdf extends Export
     /**
      * Builds the PDF delivery for the given faq.
      *
-     * @param array $faqData
+     * @param array  $faqData
      * @param string $filename
      *
      * @return string

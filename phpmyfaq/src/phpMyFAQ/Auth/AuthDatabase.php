@@ -9,13 +9,13 @@ namespace phpMyFAQ\Auth;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-30
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-30
  */
 
 use phpMyFAQ\Auth;
@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class AuthDatabase
+ *
  * @package phpMyFAQ\Auth
  */
 class AuthDatabase extends Auth implements AuthDriverInterface
@@ -56,9 +57,9 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * Adds a new user account to the faquserlogin table. Returns true on
      * success, otherwise false. Error messages are added to the array errors.
      *
-     * @param string $login
-     * @param string $pass
-     * @param string $domain
+     * @param  string $login
+     * @param  string $pass
+     * @param  string $domain
      * @return bool
      */
     public function add($login, $pass, $domain = ''): bool
@@ -69,7 +70,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
             return false;
         }
 
-        $add = sprintf("
+        $add = sprintf(
+            "
             INSERT INTO
                 %sfaquserlogin
             (login, pass, domain)
@@ -102,14 +104,15 @@ class AuthDatabase extends Auth implements AuthDriverInterface
     /**
      * Checks the number of entries of given login name.
      *
-     * @param string $login Loginname
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
      *
      * @return int
      */
     public function checkLogin($login, Array $optionalData = null): int
     {
-        $check = sprintf("
+        $check = sprintf(
+            "
             SELECT
                 login
             FROM
@@ -145,13 +148,15 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      */
     public function delete($login): bool
     {
-        $delete = sprintf("
+        $delete = sprintf(
+            "
             DELETE FROM
                 %sfaquserlogin
             WHERE
                 login = '%s'",
             Database::getTablePrefix(),
-            $this->db->escape($login));
+            $this->db->escape($login)
+        );
 
         $delete = $this->db->query($delete);
         $error = $this->db->error();
@@ -177,15 +182,16 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * is correct, otherwise false.
      * Error messages are added to the array errors.
      *
-     * @param string $login Loginname
-     * @param string $password Password
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param string $password     Password
+     * @param array  $optionalData Optional data
      *
      * @return bool
      */
     public function checkPassword($login, $password, Array $optionalData = null): bool
     {
-        $check = sprintf("
+        $check = sprintf(
+            "
             SELECT
                 login, pass
             FROM
@@ -219,11 +225,11 @@ class AuthDatabase extends Auth implements AuthDriverInterface
 
         // if multiple accounts are ok, just 1 valid required
         while ($user = $this->db->fetchArray($check)) {
-
             // Check password against old one
             if ($this->config->get('security.forcePasswordUpdate')) {
-                if ($this->checkEncryptedPassword($user['pass'], $password) &&
-                    $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']) {
+                if ($this->checkEncryptedPassword($user['pass'], $password)
+                    && $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']
+                ) {
                     return $this->changePassword($login, $password);
                 }
             }
@@ -246,13 +252,14 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      * Error messages are added to the array errors.
      *
      * @param string $login Loginname
-     * @param string $pass Password
+     * @param string $pass  Password
      *
      * @return bool
      */
     public function changePassword($login, $pass): bool
     {
-        $change = sprintf("
+        $change = sprintf(
+            "
             UPDATE
                 %sfaquserlogin
             SET

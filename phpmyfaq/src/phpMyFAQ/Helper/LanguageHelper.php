@@ -9,12 +9,12 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Helper
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ\Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2019-11-24
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2019-11-24
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -25,6 +25,7 @@ use DirectoryIterator;
 
 /**
  * Class LanguageHelper
+ *
  * @package phpMyFAQ\Helper
  */
 class LanguageHelper
@@ -33,10 +34,10 @@ class LanguageHelper
      * This function displays the <select> box for the available languages
      * optionally filtered by excluding some provided languages.
      *
-     * @param string $default
-     * @param bool $submitOnChange
-     * @param array $excludedLanguages
-     * @param string $id
+     * @param  string $default
+     * @param  bool   $submitOnChange
+     * @param  array  $excludedLanguages
+     * @param  string $id
      * @return string
      */
     public static function renderSelectLanguage(
@@ -107,9 +108,9 @@ class LanguageHelper
     /**
      * Function for displaying all languages in <option>.
      *
-     * @param string $lang the language to be selected
-     * @param bool $onlyThisLang print only the passed language?
-     * @param bool $fileLanguageValue print the <language file> instead of the <language code> as value?
+     * @param string $lang              the language to be selected
+     * @param bool   $onlyThisLang      print only the passed language?
+     * @param bool   $fileLanguageValue print the <language file> instead of the <language code> as value?
      *
      * @return string
      */

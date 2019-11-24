@@ -9,12 +9,12 @@ namespace phpMyFAQ\User;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-18
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-18
  */
 
 use phpMyFAQ\Configuration;
@@ -27,12 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * UserData.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-18
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-18
  */
 class UserData
 {
@@ -83,7 +83,8 @@ class UserData
             $fields = implode(', ', $field);
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 %s
             FROM
@@ -109,13 +110,15 @@ class UserData
 
     /**
      * Returns the first result of the given data.
-     * @param string $key
-     * @param string $value
+     *
+     * @param  string $key
+     * @param  string $value
      * @return string|null
      */
     public function fetch($key, $value)
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 %s
             FROM
@@ -184,7 +187,8 @@ class UserData
         }
 
         $this->userId = $userId;
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 last_modified, 
                 display_name, 
@@ -194,7 +198,8 @@ class UserData
             WHERE
                 user_id = %d',
             Database::getTablePrefix(),
-            $this->userId);
+            $this->userId
+        );
 
         $res = $this->config->getDb()->query($select);
         if ($this->config->getDb()->numRows($res) != 1) {
@@ -213,7 +218,8 @@ class UserData
      */
     public function save()
     {
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquserdata
             SET
@@ -226,7 +232,8 @@ class UserData
             date('YmdHis', $_SERVER['REQUEST_TIME']),
             $this->config->getDb()->escape($this->data['display_name']),
             $this->config->getDb()->escape($this->data['email']),
-            $this->userId);
+            $this->userId
+        );
 
         $res = $this->config->getDb()->query($update);
         if (!$res) {
@@ -252,7 +259,8 @@ class UserData
         }
 
         $this->userId = $userId;
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaquserdata
             (user_id, last_modified)
@@ -287,13 +295,15 @@ class UserData
         }
 
         $this->userId = $userId;
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaquserdata
             WHERE
                 user_id = %d',
             Database::getTablePrefix(),
-            $this->userId);
+            $this->userId
+        );
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {

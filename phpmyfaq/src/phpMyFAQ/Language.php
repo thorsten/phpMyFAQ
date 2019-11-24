@@ -11,14 +11,14 @@ use phpMyFAQ\Helper\LanguageHelper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo scaramuccia <matteo@phpmyfaq.de>
- * @author Aurimas Fišeras <aurimas@gmail.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo scaramuccia <matteo@phpmyfaq.de>
+ * @author    Aurimas Fišeras <aurimas@gmail.com>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-05-14
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-05-14
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Language
+ *
  * @package phpMyFAQ
  */
 class Language
@@ -85,7 +86,7 @@ class Language
      * Returns an array of country codes for a specific FAQ record ID,
      * specific category ID or all languages used by FAQ records , categories.
      *
-     * @param int $id ID
+     * @param int    $id    ID
      * @param string $table Specifies table
      *
      * @return array
@@ -105,7 +106,8 @@ class Language
                 $where = ' WHERE id = ' . $id;
             }
 
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT %s
                     lang
                 FROM
@@ -132,8 +134,8 @@ class Language
     /**
      * Sets the current language for phpMyFAQ user session.
      *
-     * @param bool $configDetection Configuration detection
-     * @param string $configLanguage Language from configuration
+     * @param bool   $configDetection Configuration detection
+     * @param string $configLanguage  Language from configuration
      *
      * @return string
      */

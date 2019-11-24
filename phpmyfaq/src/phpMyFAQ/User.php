@@ -13,14 +13,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Sarah Hermann <sayh@gmx.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Sarah Hermann <sayh@gmx.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 use phpMyFAQ\Auth\AuthDatabase;
@@ -42,6 +42,7 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
 
 /**
  * Class User
+ *
  * @package phpMyFAQ
  */
 class User
@@ -147,6 +148,7 @@ class User
     private $status = '';
     /**
      * IS the user a super admin?
+     *
      * @var bool
      */
     private $isSuperAdmin = false;
@@ -179,7 +181,9 @@ class User
         // always make a 'local' $auth object (see: $authData)
         $this->authContainer = [];
         $auth = new Auth($this->config);
-        /** @var AuthDatabase|AuthHttp|AuthLdap|AuthSso */
+        /**
+ * @var AuthDatabase|AuthHttp|AuthLdap|AuthSso
+*/
         $authLocal = $auth->selectAuth($this->getAuthSource('name'));
         $authLocal->selectEncType($this->getAuthData('encType'));
         $authLocal->setReadOnly($this->getAuthData('readOnly'));
@@ -269,7 +273,7 @@ class User
     /**
      * adds a new authentication object to the user object.
      *
-     * @param Auth $auth Driver object
+     * @param Auth   $auth Driver object
      * @param string $name Auth name
      *
      * @return bool
@@ -315,7 +319,8 @@ class User
      */
     public function getUserByCookie($cookie)
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 user_id,
                 login,
@@ -419,7 +424,8 @@ class User
      */
     public function searchUsers($search)
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 login, 
                 user_id,
@@ -451,7 +457,7 @@ class User
      * @param string $login
      * @param string $pass
      * @param string $domain
-     * @param int $userId
+     * @param int    $userId
      *
      * @return boolean
      */
@@ -486,7 +492,8 @@ class User
         }
 
         // create user entry
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaquser
             (user_id, login, session_timestamp, member_since)
@@ -567,14 +574,15 @@ class User
      * loads basic user information from the database selecting the user with
      * specified login.
      *
-     * @param string $login Login name
-     * @param bool $raiseError Raise error?
+     * @param string $login      Login name
+     * @param bool   $raiseError Raise error?
      *
      * @return bool
      */
     public function getUserByLogin($login, $raiseError = true)
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 user_id,
                 login,
@@ -612,7 +620,7 @@ class User
     /**
      * Returns a new password.
      *
-     * @param int $minimumLength
+     * @param int  $minimumLength
      * @param bool $allowUnderscore
      *
      * @return string
@@ -636,8 +644,8 @@ class User
             }
 
             switch (Utils::createRandomNumber(0, $skipped ? 3 : ($allowUnderscore ? 5 : 4))) {
-                case 0 :
-                case 1 :
+                case 0:
+                case 1:
                     $nextChar = $caseFunc($consonants[rand(0, 18)]);
                     break;
                 case 2:
@@ -693,7 +701,8 @@ class User
 
         $this->perm->refuseAllUserRights($this->userId);
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaquser
             WHERE
@@ -775,7 +784,7 @@ class User
     /**
      * Get all users in <option> tags.
      *
-     * @param int $id Selected user ID
+     * @param int  $id                Selected user ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return string
@@ -805,14 +814,15 @@ class User
      * Returns an array with the user-IDs of all users found in
      * the database. By default, the Anonymous User will not be returned.
      *
-     * @param bool $withoutAnonymous Without anonymous?
+     * @param bool $withoutAnonymous  Without anonymous?
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return array
      */
     public function getAllUsers($withoutAnonymous = true, $allowBlockedUsers = true)
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 user_id
             FROM
@@ -845,14 +855,15 @@ class User
      * Loads basic user information from the database selecting the user with
      * specified user-ID.
      *
-     * @param int $userId User ID
+     * @param int  $userId            User ID
      * @param bool $allowBlockedUsers Allow blocked users as well, e.g. in admin
      *
      * @return bool
      */
     public function getUserById($userId, $allowBlockedUsers = false)
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 user_id,
                 login,
@@ -881,7 +892,8 @@ class User
         // get encrypted password
         // @todo: Add a getEncPassword method to the Auth* classes for the (local and remote) Auth Sources.
         if ('db' === $this->getAuthSource('name')) {
-            $select = sprintf("
+            $select = sprintf(
+                "
                 SELECT
                     pass
                 FROM
@@ -973,7 +985,6 @@ class User
     public function activateUser()
     {
         if ($this->getStatus() == 'blocked') {
-
             // Generate and change user password.
             $newPassword = $this->createPassword();
             $this->changePassword($newPassword);
@@ -1012,7 +1023,7 @@ class User
     /**
      * Sets the user's status and updates the database entry.
      *
-     * @param string $status Status
+     * @param  string $status Status
      * @return bool
      */
     public function setStatus($status)
@@ -1027,7 +1038,8 @@ class User
 
         // update status
         $this->status = $status;
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquser
             SET
@@ -1087,8 +1099,8 @@ class User
     /**
      * Sends mail to the current user.
      *
-     * @param string $subject
-     * @param string $message
+     * @param  string $subject
+     * @param  string $message
      * @return bool
      */
     public function mailUser($subject, $message)
@@ -1105,6 +1117,7 @@ class User
 
     /**
      * Returns true, if a user is a super admin.
+     *
      * @return bool
      */
     public function isSuperAdmin()
@@ -1114,13 +1127,15 @@ class User
 
     /**
      * Sets the users "is_superadmin" flag and updates the database entry.
-     * @param $isSuperAdmin
+     *
+     * @param  $isSuperAdmin
      * @return bool
      */
     public function setSuperAdmin($isSuperAdmin)
     {
         $this->isSuperAdmin = $isSuperAdmin;
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquser
             SET

@@ -9,15 +9,15 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Adam Greene <phpmyfaq@skippy.fastmail.fm>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Alberto Cabello Sanchez <alberto@unex.es>
- * @author Lars Scheithauer <larsscheithauer@googlemail.com>
+ * @package   phpMyFAQ
+ * @author    Adam Greene <phpmyfaq@skippy.fastmail.fm>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Alberto Cabello Sanchez <alberto@unex.es>
+ * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-12-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-12-16
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Ldap
+ *
  * @package phpMyFAQ
  */
 class Ldap
@@ -49,7 +50,9 @@ class Ldap
      */
     private $_ldapConfig = [];
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $config = [];
 
     /**
@@ -81,7 +84,7 @@ class Ldap
      * Connects to given LDAP server with given credentials.
      *
      * @param string $ldapServer
-     * @param int $ldapPort
+     * @param int    $ldapPort
      * @param string $ldapBase
      * @param string $ldapUser
      * @param string $ldapPassword
@@ -188,7 +191,7 @@ class Ldap
      * Returns specific data from LDAP.
      *
      * @param string $username Username
-     * @param string $data MapKey
+     * @param string $data     MapKey
      *
      * @return string|false
      */
@@ -297,7 +300,8 @@ class Ldap
             return false;
         }
 
-        $filter = sprintf('(%s=%s)',
+        $filter = sprintf(
+            '(%s=%s)',
             $this->config->get('ldap.ldap_mapping.username'),
             $this->quote($username)
         );

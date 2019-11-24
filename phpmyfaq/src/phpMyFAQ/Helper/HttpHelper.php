@@ -9,13 +9,13 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ\Helper
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Florian Anderiasch <florian@phpmyfaq.de>
+ * @package   phpMyFAQ\Helper
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Florian Anderiasch <florian@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-09-13
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-13
  */
 
 use phpMyFAQ\Helper;
@@ -27,18 +27,21 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class HttpHelper
+ *
  * @package phpMyFAQ\Helper
  */
 class HttpHelper extends Helper
 {
     /**
      * Content type
+     *
      * @var string
      */
     private $contentType = '';
 
     /**
      * HTTP status code
+     *
      * @var int
      */
     private $statusCode = 200;
@@ -69,6 +72,7 @@ class HttpHelper extends Helper
 
     /**
      * Adds an additional header.
+     *
      * @param string $header
      */
     public function addAdditionalHeader(string $header)
@@ -96,6 +100,7 @@ class HttpHelper extends Helper
 
     /**
      * Returns the HTTP status code
+     *
      * @return int
      */
     public function getStatusCode(): int
@@ -105,6 +110,7 @@ class HttpHelper extends Helper
 
     /**
      * URL to redirect
+     *
      * @param string $url
      */
     public function redirect(string $url)
@@ -150,7 +156,7 @@ class HttpHelper extends Helper
     /**
      * Sends any kind of data with optional HTTP headers as JSON.
      *
-     * @param mixed $payload What to send
+     * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
      *
      * @return void
@@ -163,9 +169,9 @@ class HttpHelper extends Helper
     /**
      * Sends any kind of data with optional HTTP headers as text or JSON.
      *
-     * @param mixed $payload What to send
+     * @param mixed        $payload What to send
      * @param string|array $headers Which headers to send
-     * @param bool $isJson Send as JSON?
+     * @param bool         $isJson  Send as JSON?
      *
      * @return void
      */

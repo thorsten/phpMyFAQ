@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-15
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-15
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Glossary
+ *
  * @package phpMyFAQ
  */
 class Glossary
@@ -191,7 +192,8 @@ class Glossary
     {
         $items = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, item, definition
             FROM
@@ -269,7 +271,8 @@ class Glossary
     {
         $item = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, item, definition
             FROM
@@ -297,7 +300,7 @@ class Glossary
     /**
      * Inserts an item and definition into the database.
      *
-     * @param string $item Item
+     * @param string $item       Item
      * @param string $definition Definition
      *
      * @return bool
@@ -307,7 +310,8 @@ class Glossary
         $this->item = $this->config->getDb()->escape($item);
         $this->definition = $this->config->getDb()->escape($definition);
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqglossary
             (id, lang, item, definition)
@@ -330,8 +334,8 @@ class Glossary
     /**
      * Updates an item and definition into the database.
      *
-     * @param int $id Glossary ID
-     * @param string $item Item
+     * @param int    $id         Glossary ID
+     * @param string $item       Item
      * @param string $definition Definition
      *
      * @return bool
@@ -341,7 +345,8 @@ class Glossary
         $this->item = $this->config->getDb()->escape($item);
         $this->definition = $this->config->getDb()->escape($definition);
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqglossary
             SET
@@ -372,7 +377,8 @@ class Glossary
      */
     public function deleteGlossaryItem($id)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             DELETE FROM
                 %sfaqglossary
             WHERE

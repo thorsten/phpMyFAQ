@@ -9,12 +9,12 @@ namespace phpMyFAQ\Instance;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-31
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-03-31
  */
 
 use phpMyFAQ\Configuration;
@@ -30,6 +30,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Client
+ *
  * @package phpMyFAQ\Instance
  */
 class Client extends Instance
@@ -88,7 +89,8 @@ class Client extends Instance
 
     /**
      * Creates all tables with the given table prefix from the master tables.
-     * @param string $prefix SQL table prefix
+     *
+     * @param  string $prefix SQL table prefix
      * @return void
      */
     public function createClientTables($prefix)
@@ -128,7 +130,6 @@ class Client extends Instance
                 )
             );
         } catch (Exception $exception) {
-
         }
     }
 
@@ -145,7 +146,7 @@ class Client extends Instance
     /**
      * Copies the config/constants.php file to a new client instance.
      *
-     * @param string $dest Destination file
+     * @param  string $dest Destination file
      * @throws
      * @return bool
      * @throws Exception

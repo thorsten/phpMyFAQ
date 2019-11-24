@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Florian Anderiasch <florian@phpmyfaq.net>
+ * @package   phpMyFAQ
+ * @author    Florian Anderiasch <florian@phpmyfaq.net>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-08-27
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-08-27
  */
 
 use Composer\Autoload\ClassLoader;
@@ -32,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Installer
+ *
  * @package phpMyFAQ
  */
 class Installer
@@ -449,7 +450,6 @@ class Installer
 
     /**
      * Constructor.
-     *
      */
     public function __construct()
     {
@@ -629,7 +629,8 @@ class Installer
 
     /**
      * Checks if phpMyFAQ database tables are available
-     * @param DatabaseDriver $database
+     *
+     * @param  DatabaseDriver $database
      * @throws
      */
     public function checkAvailableDatabaseTables(DatabaseDriver $database)
@@ -649,7 +650,7 @@ class Installer
     /**
      * Starts the installation.
      *
-     * @param array $setup
+     * @param  array $setup
      * @throws
      */
     public function startInstall(array $setup = null)
@@ -904,7 +905,7 @@ class Installer
         }
 
         // connect to the database using config/database.php
-        require $rootDir.'/config/database.php';
+        include $rootDir.'/config/database.php';
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
@@ -1013,7 +1014,7 @@ class Installer
 
         // connect to Elasticsearch if enabled
         if (!is_null($esEnabled) && is_file($rootDir.'/config/elasticsearch.php')) {
-            require $rootDir.'/config/elasticsearch.php';
+            include $rootDir.'/config/elasticsearch.php';
 
             $configuration->setElasticsearchConfig($PMF_ES);
 
@@ -1043,6 +1044,5 @@ class Installer
                 echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
             }
         }
-
     }
 }

@@ -9,12 +9,12 @@ namespace phpMyFAQ\Permission;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 use phpMyFAQ\Configuration;
@@ -27,6 +27,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class MediumPermission
+ *
  * @package phpMyFAQ\Permission
  */
 class MediumPermission extends BasicPermission
@@ -66,7 +67,8 @@ class MediumPermission extends BasicPermission
             return [];
         }
         // check right
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -99,8 +101,8 @@ class MediumPermission extends BasicPermission
      * The parameter $right may be a right-ID (recommended for
      * performance) or a right-name.
      *
-     * @param int $userId Group ID
-     * @param mixed $right Rights
+     * @param int   $userId Group ID
+     * @param mixed $right  Rights
      *
      * @return bool
      */
@@ -119,9 +121,8 @@ class MediumPermission extends BasicPermission
         }
 
         // check user right and group right
-        if (
-            $this->checkUserGroupRight($userId, $right) ||
-            $this->checkUserRight($userId, $right)
+        if ($this->checkUserGroupRight($userId, $right)
+            || $this->checkUserRight($userId, $right)
         ) {
             return true;
         }
@@ -133,7 +134,7 @@ class MediumPermission extends BasicPermission
      * Returns true if the user $userId owns the right $rightId
      * because of a group-membership, otherwise false.
      *
-     * @param int $userId User ID
+     * @param int $userId  User ID
      * @param int $rightId Right ID
      *
      * @return bool
@@ -145,7 +146,8 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -201,7 +203,8 @@ class MediumPermission extends BasicPermission
         }
 
         // grant right
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaqgroup_right
             (group_id, right_id)
@@ -238,7 +241,8 @@ class MediumPermission extends BasicPermission
 
         $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqgroup', 'group_id');
         $groupData = $this->checkGroupData($groupData);
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqgroup
             (group_id, name, description, auto_join)
@@ -269,7 +273,8 @@ class MediumPermission extends BasicPermission
      */
     public function getGroupId(string $name): int
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 group_id
             FROM
@@ -318,7 +323,7 @@ class MediumPermission extends BasicPermission
     /**
      * Changes the group data of the given group.
      *
-     * @param int $groupId Group ID
+     * @param int   $groupId   Group ID
      * @param array $groupData Array of group data
      *
      * @return bool
@@ -334,7 +339,8 @@ class MediumPermission extends BasicPermission
             $comma = ",\n                ";
         }
 
-        $update = sprintf('
+        $update = sprintf(
+            '
             UPDATE
                 %sfaqgroup
             SET
@@ -369,7 +375,8 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqgroup
             WHERE
@@ -383,7 +390,8 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaquser_group
             WHERE
@@ -397,7 +405,8 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqgroup_right
             WHERE
@@ -428,7 +437,8 @@ class MediumPermission extends BasicPermission
             return [];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fu.user_id AS user_id
             FROM
@@ -468,7 +478,8 @@ class MediumPermission extends BasicPermission
             return [-1];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fg.group_id AS group_id
             FROM
@@ -497,10 +508,10 @@ class MediumPermission extends BasicPermission
     /**
      * Get all groups in <option> tags.
      *
-     * @param array $groups Selected groups
-     * @param integer $userId
+     * @param  array   $groups Selected groups
+     * @param  integer $userId
      * @return string
-     * @todo Move into the Helper class
+     * @todo   Move into the Helper class
      */
     public function getAllGroupsOptions(array $groups, int $userId = 1): string
     {
@@ -509,7 +520,8 @@ class MediumPermission extends BasicPermission
 
         foreach ($allGroups as $groupId) {
             if (-1 != $groupId) {
-                $options .= sprintf('<option value="%d" %s>%s</option>',
+                $options .= sprintf(
+                    '<option value="%d" %s>%s</option>',
                     $groupId,
                     (in_array($groupId, $groups) ? 'selected' : ''),
                     $this->getGroupName($groupId)
@@ -523,12 +535,14 @@ class MediumPermission extends BasicPermission
     /**
      * Returns an array with the IDs of all groups stored in the
      * database if no user ID is passed.
-     * @param int userId
+     *
+     * @param  int userId
      * @return array
      */
     public function getAllGroups(int $userId = 1): array
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 group_id
             FROM
@@ -536,7 +550,8 @@ class MediumPermission extends BasicPermission
             Database::getTablePrefix()
         );
         if ($userId != 1) {
-            $select = sprintf('
+            $select = sprintf(
+                '
                 SELECT
                     fg.group_id
                 FROM
@@ -573,7 +588,8 @@ class MediumPermission extends BasicPermission
             return '-';
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 name
             FROM
@@ -627,7 +643,8 @@ class MediumPermission extends BasicPermission
             return [];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fr.right_id AS right_id
             FROM
@@ -647,7 +664,8 @@ class MediumPermission extends BasicPermission
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $userId);
+            $userId
+        );
 
         $res = $this->config->getDb()->query($select);
         $result = [];
@@ -676,7 +694,8 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 group_id
             FROM
@@ -708,7 +727,7 @@ class MediumPermission extends BasicPermission
      * Adds a new member $userId to the group $groupId.
      * Returns true on success, otherwise false.
      *
-     * @param int $userId User ID
+     * @param int $userId  User ID
      * @param int $groupId Group ID
      *
      * @return bool
@@ -724,7 +743,8 @@ class MediumPermission extends BasicPermission
         }
 
         // add user to group
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaquser_group
             (user_id, group_id)
@@ -757,7 +777,8 @@ class MediumPermission extends BasicPermission
             return [];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 group_id,
                 name,
@@ -793,13 +814,15 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaquser_group
             WHERE
                 user_id  = %d',
             Database::getTablePrefix(),
-            $userId);
+            $userId
+        );
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {
@@ -823,13 +846,15 @@ class MediumPermission extends BasicPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqgroup_right
             WHERE
                 group_id  = %d',
             Database::getTablePrefix(),
-            $groupId);
+            $groupId
+        );
 
         $res = $this->config->getDb()->query($delete);
         if (!$res) {

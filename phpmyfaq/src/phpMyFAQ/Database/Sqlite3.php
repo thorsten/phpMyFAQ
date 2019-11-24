@@ -9,12 +9,12 @@ namespace phpMyFAQ\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-02
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-03-02
  */
 
 use phpMyFAQ\Database;
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Sqlite3
+ *
  * @package phpMyFAQ\Database
  */
 class Sqlite3 implements DatabaseDriver
@@ -51,7 +52,7 @@ class Sqlite3 implements DatabaseDriver
      *
      * @var string
      *
-     * @see   query()
+     * @see query()
      */
     private $sqllog = '';
 
@@ -127,7 +128,6 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return array of stdClass
      * @throws Exception
-     *
      */
     public function fetchAll($result)
     {
@@ -192,8 +192,8 @@ class Sqlite3 implements DatabaseDriver
      * This function sends a query to the database.
      *
      * @param string $query
-     * @param int $offset
-     * @param int $rowcount
+     * @param int    $offset
+     * @param int    $rowcount
      *
      * @return mixed $result
      */

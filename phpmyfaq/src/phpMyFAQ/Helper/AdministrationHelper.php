@@ -9,19 +9,20 @@ namespace phpMyFAQ\Helper;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Anatoliy Belsky <anatoliy.belsky@mayflower.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Anatoliy Belsky <anatoliy.belsky@mayflower.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-01-19
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-01-19
  */
 
 use phpMyFAQ\User;
 
 /**
  * Class Administration
+ *
  * @package phpMyFAQ\Helper
  */
 class AdministrationHelper
@@ -38,10 +39,10 @@ class AdministrationHelper
      * ',' stands for 'or', '*' stands for 'and'.
      *
      * @param string $restrictions Restrictions
-     * @param string $action Action parameter
-     * @param string $caption Caption
-     * @param string $active Active
-     * @param bool $checkPerm Check permission (default: true)
+     * @param string $action       Action parameter
+     * @param string $caption      Caption
+     * @param string $active       Active
+     * @param bool   $checkPerm    Check permission (default: true)
      *
      * @return string
      */
@@ -89,9 +90,8 @@ class AdministrationHelper
      *
      * @param string $restrictions
      *
-     * @return bool
+     * @return  bool
      * @example right1*right2+right3+right4*right5
-     *
      */
     private function evaluatePermission(string $restrictions): bool
     {

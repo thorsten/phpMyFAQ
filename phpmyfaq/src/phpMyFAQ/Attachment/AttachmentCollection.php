@@ -9,12 +9,12 @@ namespace phpMyFAQ\Attachment;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-12-13
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-12-13
  */
 
 use phpMyFAQ\Configuration;
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Collection
+ *
  * @package phpMyFAQ\Attachment
  */
 class AttachmentCollection
@@ -56,7 +57,8 @@ class AttachmentCollection
     {
         $breadCrumbs = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fa.id AS id,
                 fa.record_id AS record_id,

@@ -9,12 +9,12 @@ namespace phpMyFAQ\Category;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-07-20
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-07-20
  */
 
 use phpMyFAQ\Configuration;
@@ -25,11 +25,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class CategoryNews
+ *
  * @package phpMyFAQ\Category
  */
 class CategoryNews
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config = null;
 
     /**
@@ -46,8 +49,8 @@ class CategoryNews
      * Adds a new news $newsId to the category $categoryId.
      * Returns true on success, otherwise false.
      *
-     * @param int $newsId
-     * @param int $categoryId
+     * @param  int $newsId
+     * @param  int $categoryId
      * @return bool
      */
     public function addNewsToCategory($newsId, $categoryId)
@@ -60,8 +63,8 @@ class CategoryNews
      * Removes a news $newsId to the category $categoryId.
      * Returns true on success, otherwise false.
      *
-     * @param int $newsId
-     * @param int $categoryId
+     * @param  int $newsId
+     * @param  int $categoryId
      * @return bool
      */
     public function removeNewsFromCategory($newsId, $categoryId)
@@ -74,7 +77,7 @@ class CategoryNews
      * Returns an array that contains the news IDs of all news
      * of the category $categoryId.
      *
-     * @param int $categoryId
+     * @param  int $categoryId
      * @return array
      */
     public function getCategoryNews($categoryId)
@@ -94,5 +97,4 @@ class CategoryNews
         // @todo implement me
         return false;
     }
-
 }

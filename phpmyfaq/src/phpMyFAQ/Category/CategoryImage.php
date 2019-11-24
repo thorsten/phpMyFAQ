@@ -9,12 +9,12 @@ namespace phpMyFAQ\Category;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2016 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2016-09-08
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2016-09-08
  */
 
 use phpMyFAQ\Configuration;
@@ -25,22 +25,31 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class CategoryImage
+ *
  * @package phpMyFAQ\Category
  */
 class CategoryImage
 {
     const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
 
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config = null;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     private $isUpload = false;
 
-    /** @var array */
+    /**
+     * @var array
+     */
     private $uploadedFile = [];
 
-    /** @var string */
+    /**
+     * @var string
+     */
     private $fileName = '';
 
     /**
@@ -74,7 +83,7 @@ class CategoryImage
      * Returns the filename for the given category ID and language.
      *
      * @param integer $categoryId
-     * @param string $categoryName
+     * @param string  $categoryName
      *
      * @return string
      */
@@ -133,9 +142,9 @@ class CategoryImage
      */
     public function upload(): bool
     {
-        if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name']) &&
-            $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')) {
-
+        if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
+            && $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')
+        ) {
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {
                 return false;
             } else {

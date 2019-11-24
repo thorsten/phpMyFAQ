@@ -15,13 +15,13 @@ namespace phpMyFAQ\User;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-28
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-28
  */
 
 use phpMyFAQ\Configuration;
@@ -40,18 +40,19 @@ define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');
 /**
  * Class CurrentUser
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-28
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-28
  */
 class CurrentUser extends User
 {
     /**
      * true if CurrentUser is logged in, otherwise false.
+     *
      * @var bool
      */
     private $loggedIn = false;
@@ -60,12 +61,14 @@ class CurrentUser extends User
      * Specifies the timeout for the session in minutes. If the session ID was
      * not updated for the last $this->_sessionTimeout minutes, the CurrentUser
      * will be logged out automatically if no cookie was set.
+     *
      * @var int
      */
     private $sessionTimeout = PMF_AUTH_TIMEOUT;
 
     /**
      * The Session class object
+     *
      * @var Session
      */
     private $session;
@@ -75,18 +78,21 @@ class CurrentUser extends User
      * was not updated for the last $this->_sessionIdTimeout minutes, it will
      * be updated. If set to 0, the session ID will be updated on every click.
      * The session ID timeout must not be greater than Session timeout.
+     *
      * @var int
      */
     private $sessionIdTimeout = 1;
 
     /**
      * LDAP configuration if available.
+     *
      * @var array
      */
     private $ldapConfig = [];
 
     /**
      * Remember me activated or deactivated.
+     *
      * @var bool
      */
     private $rememberMe = false;
@@ -95,24 +101,28 @@ class CurrentUser extends User
      * Login successful or auth failure:
      * 1 -> success
      * 0 -> failure.
+     *
      * @var int
      */
     private $loginState = 1;
 
     /**
      * Number of failed login attempts
+     *
      * @var int
      */
     private $loginAttempts = 0;
 
     /**
      * Lockout time in seconds
+     *
      * @var integer
      */
     private $lockoutTime = 600;
 
     /**
      * Constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -149,8 +159,9 @@ class CurrentUser extends User
         }
 
         // Additional code for LDAP: user\\domain
-        if ($this->config->get('ldap.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix') &&
-            '' !== $password) {
+        if ($this->config->get('ldap.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix')
+            && '' !== $password
+        ) {
             // If LDAP configuration and ldap_use_domain_prefix is true
             // and LDAP credentials are provided (password is not empty)
             if (($pos = strpos($login, '\\')) !== false) {
@@ -219,7 +230,8 @@ class CurrentUser extends User
             }
 
             // remember the auth container for administration
-            $update = sprintf("
+            $update = sprintf(
+                "
                 UPDATE
                     %sfaquser
                 SET
@@ -257,6 +269,7 @@ class CurrentUser extends User
 
     /**
      * Returns true if CurrentUser is logged in, otherwise false.
+     *
      * @return bool
      */
     public function isLoggedIn(): bool
@@ -269,6 +282,7 @@ class CurrentUser extends User
      * session is valid and not timed out. There are two
      * parameters for session timeouts: $this->_sessionTimeout
      * and $this->_sessionIdTimeout.
+     *
      * @return bool
      */
     public function sessionIsTimedOut(): bool
@@ -309,11 +323,13 @@ class CurrentUser extends User
      * Returns an associative array with session information stored
      * in the user table. The array has the following keys:
      * session_id, session_timestamp and ip.
+     *
      * @return array
      */
     public function getSessionInfo(): array
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 session_id,
                 session_timestamp,
@@ -363,7 +379,8 @@ class CurrentUser extends User
         // store session-ID age
         $_SESSION[SESSION_ID_TIMESTAMP] = $_SERVER['REQUEST_TIME'];
         // save session information in user table
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquser
             SET
@@ -394,6 +411,7 @@ class CurrentUser extends User
     /**
      * Saves the CurrentUser into the session. This method
      * may be called after a successful login.
+     *
      * @return void
      */
     public function saveToSession()
@@ -404,7 +422,8 @@ class CurrentUser extends User
     /**
      * Deletes the CurrentUser from the session. The user
      * will be logged out. Return true on success, otherwise false.
-     * @param bool $deleteCookie
+     *
+     * @param  bool $deleteCookie
      * @return bool
      */
     public function deleteFromSession(bool $deleteCookie = false): bool
@@ -420,7 +439,8 @@ class CurrentUser extends User
         $this->loggedIn = false;
 
         // delete session-ID
-        $update = sprintf('
+        $update = sprintf(
+            '
             UPDATE
                 %sfaquser
             SET
@@ -428,9 +448,9 @@ class CurrentUser extends User
                 %s
             WHERE
                 user_id = %d',
-                Database::getTablePrefix(),
-                $deleteCookie ? ', remember_me = NULL' : '',
-                $this->getUserId()
+            Database::getTablePrefix(),
+            $deleteCookie ? ', remember_me = NULL' : '',
+            $this->getUserId()
         );
 
         $res = $this->config->getDb()->query($update);
@@ -458,8 +478,9 @@ class CurrentUser extends User
      * session is timed out, null will be returned. If the session data is
      * correct, but there is no user found in the user table, false will be
      * returned. On success, a valid CurrentUser object is returned.
+     *
      * @static
-     * @param Configuration $config
+     * @param  Configuration $config
      * @return null|CurrentUser
      */
     public static function getFromSession(Configuration $config)
@@ -487,8 +508,9 @@ class CurrentUser extends User
             return null;
         }
         // check ip
-        if ($config->get('security.ipCheck') &&
-            $session_info['ip'] != $_SERVER['REMOTE_ADDR']) {
+        if ($config->get('security.ipCheck')
+            && $session_info['ip'] != $_SERVER['REMOTE_ADDR']
+        ) {
             return null;
         }
         // session-id needs to be updated
@@ -584,7 +606,8 @@ class CurrentUser extends User
      */
     protected function setRememberMe($rememberMe)
     {
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquser
             SET
@@ -611,7 +634,8 @@ class CurrentUser extends User
         $this->loginState = (int)$success;
         $this->loginAttempts = 0;
 
-        $update = sprintf('
+        $update = sprintf(
+            '
             UPDATE
                 %sfaquser
             SET
@@ -638,7 +662,8 @@ class CurrentUser extends User
     {
         $this->loginAttempts++;
 
-        $update = sprintf("
+        $update = sprintf(
+            "
             UPDATE
                 %sfaquser
             SET
@@ -664,7 +689,8 @@ class CurrentUser extends User
      */
     protected function isFailedLastLoginAttempt()
     {
-        $select = sprintf("
+        $select = sprintf(
+            "
             SELECT
                 session_timestamp,
                 ip,

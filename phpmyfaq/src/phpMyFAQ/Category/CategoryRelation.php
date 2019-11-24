@@ -9,12 +9,12 @@ namespace phpMyFAQ\Category;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2019-11-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2019-11-22
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -26,15 +26,19 @@ use phpMyFAQ\Database;
 
 /**
  * Class CategoryRelation
+ *
  * @package phpMyFAQ\Category
  */
 class CategoryRelation
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config;
 
     /**
      * CategoryRelation constructor.
+     *
      * @param Configuration $config
      */
     public function __construct(Configuration $config)
@@ -44,13 +48,15 @@ class CategoryRelation
 
     /**
      * Create a matrix for representing categories and FAQs.
+     *
      * @return array
      */
     public function getCategoryFaqsMatrix()
     {
         $matrix = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fcr.category_id AS id_cat,
                 fd.id AS id
@@ -65,7 +71,8 @@ class CategoryRelation
             ORDER BY
                 fcr.category_id, fd.id',
             Database::getTablePrefix(),
-            Database::getTablePrefix());
+            Database::getTablePrefix()
+        );
         $result = $this->config->getDb()->query($query);
 
         if ($this->config->getDb()->numRows($result) > 0) {
@@ -79,14 +86,16 @@ class CategoryRelation
 
     /**
      * Returns the number of records in each category.
-     * @param bool $categoryRestriction
+     *
+     * @param  bool $categoryRestriction
      * @return array
      */
     public function getNumberOfFaqsPerCategory(bool $categoryRestriction = false): array
     {
         $numRecordsByCat = [];
         if ($categoryRestriction) {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT
                     fcr.category_id AS category_id,
                     COUNT(fcr.record_id) AS number
@@ -104,9 +113,11 @@ class CategoryRelation
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $this->groups[0]);
+                $this->groups[0]
+            );
         } else {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT
                     fcr.category_id AS category_id,
                     COUNT(fcr.record_id) AS number
@@ -118,7 +129,8 @@ class CategoryRelation
                     fcr.record_lang = fd.lang
                 GROUP BY fcr.category_id',
                 Database::getTablePrefix(),
-                Database::getTablePrefix());
+                Database::getTablePrefix()
+            );
         }
         $result = $this->config->getDb()->query($query);
 
@@ -133,15 +145,17 @@ class CategoryRelation
 
     /**
      * Returns the categories from a FAQ id and language.
-     * @param int $faqId FAQ id
-     * @param string $faqLang FAQ language
+     *
+     * @param  int    $faqId   FAQ id
+     * @param  string $faqLang FAQ language
      * @return array
      */
     public function getCategories(int $faqId, string $faqLang): array
     {
         $categories = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 category_id, category_lang
             FROM
@@ -152,7 +166,8 @@ class CategoryRelation
                 record_lang = '%s'",
             Database::getTablePrefix(),
             $faqId,
-            $faqLang);
+            $faqLang
+        );
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
@@ -167,9 +182,10 @@ class CategoryRelation
 
     /**
      * Deletes a category relation.
-     * @param int $categoryId Category id
-     * @param string $categoryLang Category language
-     * @param bool $deleteForAllLanguages Delete all languages?
+     *
+     * @param  int    $categoryId            Category id
+     * @param  string $categoryLang          Category language
+     * @param  bool   $deleteForAllLanguages Delete all languages?
      * @return bool
      */
     public function deleteRelations(int $categoryId, string $categoryLang, bool $deleteForAllLanguages = false): bool

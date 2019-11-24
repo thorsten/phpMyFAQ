@@ -9,12 +9,12 @@ namespace phpMyFAQ\Instance;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2012-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-04-04
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2012-04-04
  */
 
 use phpMyFAQ\Configuration;
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Setup
+ *
  * @package phpMyFAQ\Instance
  */
 class Setup
@@ -73,7 +74,7 @@ class Setup
     /**
      * Checks basic folders and creates them if necessary.
      *
-     * @param string[] $dirs
+     * @param  string[] $dirs
      * @return array
      */
     public function checkDirs(Array $dirs)
@@ -114,8 +115,8 @@ class Setup
     /**
      * Creates the file /config/database.php.
      *
-     * @param array $data Array with database credentials
-     * @param string $folder Folder
+     * @param  array  $data   Array with database credentials
+     * @param  string $folder Folder
      * @return int|bool
      */
     public function createDatabaseFile(Array $data, $folder = '/config')
@@ -138,8 +139,8 @@ class Setup
     /**
      * Creates the file /config/ldap.php.
      *
-     * @param array $data Array with LDAP credentials
-     * @param string $folder Folder
+     * @param  array  $data   Array with LDAP credentials
+     * @param  string $folder Folder
      * @return int|bool
      */
     public function createLdapFile(Array $data, string $folder = '/config')
@@ -161,8 +162,8 @@ class Setup
     /**
      * Creates the file /config/elasticsearch.php
      *
-     * @param array $data Array with LDAP credentials
-     * @param string $folder Folder
+     * @param  array  $data   Array with LDAP credentials
+     * @param  string $folder Folder
      * @return int|bool
      */
     public function createElasticsearchFile(Array $data, string $folder = '/config')

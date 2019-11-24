@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-07-23
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-07-23
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -23,6 +23,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Comment
+ *
  * @package phpMyFAQ
  */
 class Comment
@@ -69,11 +70,11 @@ class Comment
     /**
      * Returns all user comments (HTML formatted) from a record by type.
      *
-     * @param int $id Comment ID
-     * @param string $type Comment type: {faq|news}
+     * @param  int    $id   Comment ID
+     * @param  string $type Comment type: {faq|news}
      * @return string
      * @throws \Exception
-     * @todo Move this code to a helper class
+     * @todo   Move this code to a helper class
      */
     public function getComments(int $id, string $type): string
     {
@@ -83,7 +84,6 @@ class Comment
 
         $output = '';
         foreach ($comments as $item) {
-
             $output .= '<article class="pmf-comment">';
             $output .= '    <header class="clearfix">';
             $output .= '        <div class="pmf-commment-meta">';
@@ -111,7 +111,7 @@ class Comment
     /**
      * Returns all user comments from a record by type.
      *
-     * @param int $id record id
+     * @param int    $id   record id
      * @param string $type record type: {faq|news}
      *
      * @return array
@@ -120,7 +120,8 @@ class Comment
     {
         $comments = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id_comment, usr, email, comment, datum
             FROM
@@ -131,7 +132,8 @@ class Comment
                 id = %d",
             Database::getTablePrefix(),
             $type,
-            $id);
+            $id
+        );
 
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
@@ -152,8 +154,8 @@ class Comment
     /**
      * Adds some fancy HTML if a comment is too long.
      *
-     * @param int $id
-     * @param string $comment
+     * @param  int    $id
+     * @param  string $comment
      * @return string
      */
     private function showShortComment(int $id, string $comment): string
@@ -186,7 +188,8 @@ class Comment
      */
     public function addComment(Array $commentData): bool
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqcomments
             VALUES
@@ -212,7 +215,7 @@ class Comment
     /**
      * Deletes a comment.
      *
-     * @param int $recordId Record id
+     * @param int $recordId  Record id
      * @param int $commentId Comment id
      *
      * @return bool
@@ -223,7 +226,8 @@ class Comment
             return false;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqcomments
             WHERE
@@ -253,7 +257,8 @@ class Comment
     {
         $num = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 COUNT(id) AS anz,
                 id
@@ -288,7 +293,8 @@ class Comment
     {
         $comments = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fc.id_comment AS comment_id,
                 fc.id AS record_id,

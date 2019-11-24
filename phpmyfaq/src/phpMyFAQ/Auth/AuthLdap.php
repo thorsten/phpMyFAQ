@@ -9,14 +9,14 @@ namespace phpMyFAQ\Auth;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Alberto Cabello <alberto@unex.es>
- * @author Lars Scheithauer <larsscheithauer@googlemail.com>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Alberto Cabello <alberto@unex.es>
+ * @author    Lars Scheithauer <larsscheithauer@googlemail.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-03-01
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-03-01
  */
 
 use phpMyFAQ\Auth;
@@ -31,6 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class AuthLdap
+ *
  * @package phpMyFAQ\Auth
  */
 class AuthLdap extends Auth implements AuthDriverInterface
@@ -99,7 +100,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * Does nothing. A function required to be a valid auth.
      *
-     * @param string $login Loginname
+     * @param string $login    Loginname
      * @param string $password Password
      *
      * @return bool
@@ -131,9 +132,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * This function is only called when local authentication has failed, so
      * we are about to create user account.
      *
-     * @param string $login Loginname
-     * @param string $password Password
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param string $password     Password
+     * @param array  $optionalData Optional data
      *
      * @return bool
      */
@@ -210,9 +211,9 @@ class AuthLdap extends Auth implements AuthDriverInterface
      * Adds a new user account to the authentication table.
      * Returns true on success, otherwise false.
      *
-     * @param string $login
-     * @param string $password
-     * @param string $domain
+     * @param  string $login
+     * @param  string $password
+     * @param  string $domain
      * @return bool
      */
     public function add($login, $password, $domain = ''): bool
@@ -248,8 +249,8 @@ class AuthLdap extends Auth implements AuthDriverInterface
     /**
      * Returns number of characters of name, 0 will be returned if it fails.
      *
-     * @param string $login Loginname
-     * @param array $optionalData Optional data
+     * @param string $login        Loginname
+     * @param array  $optionalData Optional data
      *
      * @return int
      */

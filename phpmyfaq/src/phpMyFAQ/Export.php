@@ -9,13 +9,13 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @copyright 2005-2019 phpMyFAQ Team
- * @link https://www.phpmyfaq.de
- * @since 2005-11-02
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-11-02
  */
 
 use phpMyFAQ\Export\Html5;
@@ -31,6 +31,7 @@ require_once PMF_CONFIG_DIR.'/constants.php';
 
 /**
  * Class Export
+ *
  * @package phpMyFAQ
  */
 class Export
@@ -59,10 +60,10 @@ class Export
     /**
      * Factory.
      *
-     * @param Faq $faq FaqHelper object
-     * @param Category $category Entity object
-     * @param Configuration $config Configuration object
-     * @param string $mode Export
+     * @param  Faq           $faq      FaqHelper object
+     * @param  Category      $category Entity object
+     * @param  Configuration $config   Configuration object
+     * @param  string        $mode     Export
      * @return mixed
      * @throws Exception
      * @throws \Exception
@@ -89,6 +90,7 @@ class Export
 
     /**
      * Returns the timestamp of the export.
+     *
      * @return string
      */
     public static function getExportTimestamp(): string

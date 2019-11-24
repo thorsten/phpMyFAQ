@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2018-08-09
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2018-08-09
  */
 
 use phpMyFAQ\Entity\MetaEntity;
@@ -25,6 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Meta
+ *
  * @package phpMyFAQ
  */
 class Meta
@@ -47,14 +48,15 @@ class Meta
     }
 
     /**
-     * @param MetaEntity $data
+     * @param  MetaEntity $data
      * @return int
      */
     public function add(MetaEntity $data)
     {
         $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqmeta', 'id');
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqmeta
             (id, lang, page_id, type, content)
@@ -74,7 +76,7 @@ class Meta
     }
 
     /**
-     * @param $metaId
+     * @param  $metaId
      * @return MetaEntity
      */
     public function getById($metaId)
@@ -103,7 +105,7 @@ class Meta
     }
 
     /**
-     * @param $pageId
+     * @param  $pageId
      * @return MetaEntity
      */
     public function getByPageId($pageId)
@@ -162,8 +164,8 @@ class Meta
     }
 
     /**
-     * @param $metaId
-     * @param MetaEntity $data
+     * @param  $metaId
+     * @param  MetaEntity $data
      * @return bool
      */
     public function update($metaId, MetaEntity $data)
@@ -182,7 +184,7 @@ class Meta
     }
 
     /**
-     * @param $id
+     * @param  $id
      * @return bool
      */
     public function delete($id)

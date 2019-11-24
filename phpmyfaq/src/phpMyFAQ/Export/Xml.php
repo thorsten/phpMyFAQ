@@ -9,12 +9,12 @@ namespace phpMyFAQ\Export;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-10-07
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-10-07
  */
 
 use phpMyFAQ\Category;
@@ -31,6 +31,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Xml
+ *
  * @package phpMyFAQ\Export
  */
 class Xml extends Export
@@ -45,9 +46,9 @@ class Xml extends Export
     /**
      * Constructor.
      *
-     * @param Faq $faq FaqHelper object
-     * @param Category $category Entity object
-     * @param Configuration $config Configuration
+     * @param Faq           $faq      FaqHelper object
+     * @param Category      $category Entity object
+     * @param Configuration $config   Configuration
      */
     public function __construct(Faq $faq, Category $category, Configuration $config)
     {
@@ -63,9 +64,9 @@ class Xml extends Export
     /**
      * Generates the export.
      *
-     * @param int $categoryId Entity Id
-     * @param bool $downwards If true, downwards, otherwise upward ordering
-     * @param string $language Language
+     * @param int    $categoryId Entity Id
+     * @param bool   $downwards  If true, downwards, otherwise upward ordering
+     * @param string $language   Language
      *
      * @return string
      */
@@ -76,9 +77,11 @@ class Xml extends Export
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
         $version = $this->_config->get('main.currentVersion');
-        $comment = sprintf('XML output by phpMyFAQ %s | Date: %s',
+        $comment = sprintf(
+            'XML output by phpMyFAQ %s | Date: %s',
             $version,
-            Date::createIsoDate(date('YmdHis')));
+            Date::createIsoDate(date('YmdHis'))
+        );
 
         $this->xml->startDocument('1.0', 'utf-8', 'yes');
         $this->xml->writeComment($comment);
@@ -86,7 +89,6 @@ class Xml extends Export
 
         if (count($faqdata)) {
             foreach ($faqdata as $data) {
-
                 // Build the <article/> node
                 $this->xml->startElement('article');
                 $this->xml->writeAttribute('id', $data['id']);

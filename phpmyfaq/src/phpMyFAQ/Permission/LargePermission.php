@@ -9,13 +9,13 @@ namespace phpMyFAQ\Permission;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Lars Tiedemann <php@larstiedemann.de>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Lars Tiedemann <php@larstiedemann.de>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-09-17
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-09-17
  */
 
 use phpMyFAQ\Configuration;
@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class LargePermission
+ *
  * @package phpMyFAQ\Permission
  */
 class LargePermission extends MediumPermission
@@ -60,7 +61,7 @@ class LargePermission extends MediumPermission
      * group-membership in a section. The parameter $right may
      * be a right-ID (recommended for performance) or a right-name.
      *
-     * @param int $userId
+     * @param int   $userId
      * @param mixed $right
      *
      * @return bool
@@ -80,10 +81,9 @@ class LargePermission extends MediumPermission
         }
 
         // check user right, group right and section right
-        if (
-            $this->checkUserSectionRight($userId, $right) ||
-            $this->checkUserGroupRight($userId, $right) ||
-            $this->checkUserRight($userId, $right)
+        if ($this->checkUserSectionRight($userId, $right)
+            || $this->checkUserGroupRight($userId, $right)
+            || $this->checkUserRight($userId, $right)
         ) {
             return true;
         }
@@ -104,7 +104,8 @@ class LargePermission extends MediumPermission
         if ($userId < 0 || !is_numeric($userId) || $rightId < 0 || !is_numeric($rightId)) {
             return false;
         }
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 fgr.right_id
             FROM 
@@ -152,7 +153,8 @@ class LargePermission extends MediumPermission
 
         $nextId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsections', 'id');
         $sectionData = $this->checkSectionData($sectionData);
-        $insert = sprintf("
+        $insert = sprintf(
+            "
             INSERT INTO
                 %sfaqsections
             (id, name, description)
@@ -176,12 +178,13 @@ class LargePermission extends MediumPermission
      * Returns the ID of the section that has the name $name. Returns
      * 0 if the section name cannot be found.
      *
-     * @param string $name
+     * @param  string $name
      * @return int
      */
     public function getSectionId(string $name): int
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                     id
             FROM 
@@ -207,7 +210,7 @@ class LargePermission extends MediumPermission
      * by the default values in $this->defaultSectionData.
      * Returns the corrected $sectionData associative array.
      *
-     * @param array $sectionData
+     * @param  array $sectionData
      * @return array
      */
     public function checkSectionData(array $sectionData): array
@@ -225,8 +228,8 @@ class LargePermission extends MediumPermission
     /**
      * Changes the section data of the given section.
      *
-     * @param int $sectionId
-     * @param array $sectionData
+     * @param  int   $sectionId
+     * @param  array $sectionData
      * @return bool
      */
     public function changeSection(int $sectionId, Array $sectionData): bool
@@ -240,7 +243,8 @@ class LargePermission extends MediumPermission
             $comma = ",\n                ";
         }
 
-        $update = sprintf('
+        $update = sprintf(
+            '
             UPDATE
                 %sfaqsections
             SET
@@ -265,7 +269,7 @@ class LargePermission extends MediumPermission
      * Removes the section given by $sectionId from the database.
      * Returns true on success, otherwise false.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return bool
      */
     public function deleteSection(int $sectionId): bool
@@ -274,7 +278,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsections
             WHERE
@@ -288,7 +293,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_group
             WHERE
@@ -302,7 +308,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_news
             WHERE
@@ -323,7 +330,7 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the group IDs of all groups
      * of the section $sectionId.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return array
      */
     public function getSectionGroups(int $sectionId): array
@@ -332,7 +339,8 @@ class LargePermission extends MediumPermission
             return [];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                 %sfaqsection_group.group_id
             FROM
@@ -360,8 +368,8 @@ class LargePermission extends MediumPermission
      * Adds a new group $groupId to the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $groupId
-     * @param int $sectionId
+     * @param  int $groupId
+     * @param  int $sectionId
      * @return bool
      */
     public function addGroupToSection(int $groupId, int $sectionId): bool
@@ -370,7 +378,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                 group_id
             FROM
@@ -391,7 +400,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaqsection_group
             (section_id, group_id)
@@ -414,7 +424,7 @@ class LargePermission extends MediumPermission
      * Removes all groups from the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return bool
      */
     public function removeAllGroupsFromSection(int $sectionId): bool
@@ -423,7 +433,8 @@ class LargePermission extends MediumPermission
             return false;
         }
 
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_group
             WHERE
@@ -444,12 +455,13 @@ class LargePermission extends MediumPermission
      * Returns an associative array with the section data of the section
      * $sectionId.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return array
      */
     public function getSectionData(int $sectionId): array
     {
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                     *
             FROM 
@@ -472,7 +484,8 @@ class LargePermission extends MediumPermission
     /**
      * Returns an array with the IDs of all sections stored in the
      * database if no user ID is passed.
-     * @param int $userId
+     *
+     * @param  int $userId
      * @return array
      */
     public function getAllSections(int $userId = -1): array
@@ -499,7 +512,7 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the IDs of all sections in which
      * the user $userId is a member.
      *
-     * @param int $userId
+     * @param  int $userId
      * @return array
      */
     public function getUserSections(int $userId): array
@@ -508,7 +521,8 @@ class LargePermission extends MediumPermission
             return [-1];
         }
 
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                 fsg.section_id
             FROM 
@@ -542,7 +556,7 @@ class LargePermission extends MediumPermission
      * the user $userId owns. User-rights and the rights the user
      * owns because of a section membership are taken into account.
      *
-     * @param int $userId
+     * @param  int $userId
      * @return array
      */
     public function getAllUserRights(int $userId): array
@@ -561,7 +575,7 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the IDs of all rights the user
      * $userId owns because of a section membership.
      *
-     * @param int $userId
+     * @param  int $userId
      * @return array
      */
     public function getUserSectionRights(int $userId): array
@@ -569,7 +583,8 @@ class LargePermission extends MediumPermission
         if ($userId < 1 || !is_numeric($userId)) {
             return [];
         }
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 right_id
             FROM 
@@ -599,7 +614,7 @@ class LargePermission extends MediumPermission
     /**
      * Returns the name of the section $sectionId.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return string
      */
     public function getSectionName(int $sectionId): string
@@ -607,7 +622,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return '-';
         }
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT 
                 name
             FROM 
@@ -630,8 +646,8 @@ class LargePermission extends MediumPermission
      * Adds a new category $categoryId to the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $categoryId
-     * @param int $sectionId
+     * @param  int $categoryId
+     * @param  int $sectionId
      * @return bool
      */
     public function addCategoryToSection(int $categoryId, int $sectionId): bool
@@ -639,7 +655,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
         }
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaqsection_category
             (category_id, section_id)
@@ -660,8 +677,8 @@ class LargePermission extends MediumPermission
      * Removes a category $categoryId to the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $categoryId
-     * @param int $sectionId
+     * @param  int $categoryId
+     * @param  int $sectionId
      * @return bool
      */
     public function removeCategoryFromSection(int $categoryId, int $sectionId): bool
@@ -669,7 +686,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($categoryId) || $categoryId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
         }
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_category
             WHERE 
@@ -691,7 +709,7 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the category IDs of all categories
      * of the section $sectionId.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return array
      */
     public function getSectionCategories(int $sectionId): array
@@ -699,7 +717,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return [];
         }
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 category_id
             FROM
@@ -721,7 +740,7 @@ class LargePermission extends MediumPermission
      * Removes the category $categoryId from all sections.
      * Returns true on success, otherwise false.
      *
-     * @param int $categoryId
+     * @param  int $categoryId
      * @return bool
      */
     public function removeCategoryFromAllSections(int $categoryId): bool
@@ -729,7 +748,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($categoryId) || $categoryId < 1) {
             return false;
         }
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_category
             WHERE 
@@ -748,8 +768,8 @@ class LargePermission extends MediumPermission
      * Adds a new news $newsId to the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $newsId
-     * @param int $sectionId
+     * @param  int $newsId
+     * @param  int $sectionId
      * @return bool
      */
     public function addNewsToSection(int $newsId, int $sectionId): bool
@@ -757,7 +777,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
         }
-        $insert = sprintf('
+        $insert = sprintf(
+            '
             INSERT INTO
                 %sfaqsection_news
             (news_id, section_id)
@@ -778,8 +799,8 @@ class LargePermission extends MediumPermission
      * Removes a news $newsId from the section $sectionId.
      * Returns true on success, otherwise false.
      *
-     * @param int $newsId
-     * @param int $sectionId
+     * @param  int $newsId
+     * @param  int $sectionId
      * @return bool
      */
     public function removeNewsFromSection(int $newsId, int $sectionId): bool
@@ -787,7 +808,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($newsId) || $newsId < 1 || !is_numeric($sectionId) || $sectionId < 1) {
             return false;
         }
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_news
             WHERE 
@@ -809,7 +831,7 @@ class LargePermission extends MediumPermission
      * Returns an array that contains the news IDs of all news
      * of the section $sectionId.
      *
-     * @param int $sectionId
+     * @param  int $sectionId
      * @return array
      */
     public function getSectionNews(int $sectionId): array
@@ -817,7 +839,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($sectionId) || $sectionId < 1) {
             return [];
         }
-        $select = sprintf('
+        $select = sprintf(
+            '
             SELECT
                 news_id
             FROM
@@ -839,7 +862,7 @@ class LargePermission extends MediumPermission
      * Removes the news $newsId from all sections.
      * Returns true on success, otherwise false.
      *
-     * @param int $newsId
+     * @param  int $newsId
      * @return bool
      */
     public function removeNewsFromAllSections(int $newsId): bool
@@ -847,7 +870,8 @@ class LargePermission extends MediumPermission
         if (!is_numeric($newsId) || $newsId < 1) {
             return false;
         }
-        $delete = sprintf('
+        $delete = sprintf(
+            '
             DELETE FROM
                 %sfaqsection_news
             WHERE 
@@ -861,5 +885,4 @@ class LargePermission extends MediumPermission
         }
         return true;
     }
-
 }

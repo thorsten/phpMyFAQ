@@ -3,18 +3,18 @@
 namespace phpMyFAQ\Strings;
 
 /**
- * The string wrapper class using mbstring extension. 
+ * The string wrapper class using mbstring extension.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 
 use phpMyFAQ\Language;
@@ -27,12 +27,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * String_Mbstring.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 class Mbstring extends StringsAbstract
 {
@@ -52,7 +52,8 @@ class Mbstring extends StringsAbstract
 
     /**
      * Create and return an instance.
-     * @param string $language
+     *
+     * @param  string $language
      * @return Mbstring
      */
     public static function getInstance($language = 'en')
@@ -69,7 +70,8 @@ class Mbstring extends StringsAbstract
 
     /**
      * Get string character count.
-     * @param string $str String
+     *
+     * @param  string $str String
      * @return int
      */
     public function strlen($str)
@@ -254,7 +256,7 @@ class Mbstring extends StringsAbstract
     }
 
     /**
-     * Append an u to the string. The string is supposed 
+     * Append an u to the string. The string is supposed
      * to be a regex prepared to use with a preg_* function.
      *
      * @param string $str

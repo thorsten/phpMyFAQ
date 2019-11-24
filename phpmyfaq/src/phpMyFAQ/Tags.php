@@ -9,14 +9,14 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Georgi Korchev <korchev@yahoo.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-08-10
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-08-10
  */
 
 use phpMyFAQ\Entity\TagEntity as EntityTags;
@@ -28,14 +28,14 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 /**
  * Class Tags
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Georgi Korchev <korchev@yahoo.com>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Georgi Korchev <korchev@yahoo.com>
  * @copyright 2006-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2006-08-10
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2006-08-10
  */
 class Tags
 {
@@ -82,7 +82,8 @@ class Tags
                 break;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 MIN(t.tagging_id) AS tagging_id, t.tagging_name AS tagging_name
             FROM
@@ -138,7 +139,8 @@ class Tags
     {
         $tags = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 dt.tagging_id AS tagging_id, 
                 t.tagging_name AS tagging_name
@@ -214,11 +216,15 @@ class Tags
         foreach ($tags as $tagName) {
             $tagName = trim($tagName);
             if (Strings::strlen($tagName) > 0) {
-                if (!in_array(Strings::strtolower($tagName),
-                                array_map(array('String', 'strtolower'), $currentTags))) {
+                if (!in_array(
+                    Strings::strtolower($tagName),
+                    array_map(array('String', 'strtolower'), $currentTags)
+                )
+                ) {
                     // Create the new tag
                     $newTagId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqtags', 'tagging_id');
-                    $query = sprintf("
+                    $query = sprintf(
+                        "
                         INSERT INTO
                             %sfaqtags
                         (tagging_id, tagging_name)
@@ -231,7 +237,8 @@ class Tags
                     $this->config->getDb()->query($query);
 
                     // Add the tag reference for the faq record
-                    $query = sprintf('
+                    $query = sprintf(
+                        '
                         INSERT INTO
                             %sfaqdata_tags
                         (record_id, tagging_id)
@@ -244,7 +251,8 @@ class Tags
                     $this->config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
-                    $query = sprintf('
+                    $query = sprintf(
+                        '
                         INSERT INTO
                             %sfaqdata_tags
                         (record_id, tagging_id)
@@ -274,7 +282,8 @@ class Tags
      */
     public function updateTag(EntityTags $entity)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqtags
             SET
@@ -302,7 +311,8 @@ class Tags
             return false;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqdata_tags
             WHERE
@@ -330,7 +340,8 @@ class Tags
         }
 
         try {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 DELETE FROM
                     %sfaqtags
                 WHERE
@@ -345,7 +356,8 @@ class Tags
         }
 
         try {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 DELETE FROM
                     %sfaqdata_tags
                 WHERE
@@ -375,7 +387,8 @@ class Tags
             return false;
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 td.record_id AS record_id
             FROM
@@ -422,7 +435,8 @@ class Tags
             return false;
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 d.record_id AS record_id
             FROM
@@ -460,7 +474,8 @@ class Tags
             return;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 tagging_name
             FROM
@@ -534,7 +549,8 @@ class Tags
 
     /**
      * Returns all FAQ record IDs where all tags are included.
-     * @param string $tagName The name of the tag
+     *
+     * @param  string $tagName The name of the tag
      * @return array
      */
     public function getRecordsByTagName(string $tagName): array
@@ -547,7 +563,8 @@ class Tags
             return $this->recordsByTagName;
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 dt.record_id AS record_id
             FROM
@@ -563,7 +580,8 @@ class Tags
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $this->config->getDb()->escape($tagName));
+            $this->config->getDb()->escape($tagName)
+        );
 
         $this->recordsByTagName = [];
         $result = $this->config->getDb()->query($query);
@@ -587,7 +605,8 @@ class Tags
             return [];
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 d.record_id AS record_id
             FROM
@@ -600,7 +619,8 @@ class Tags
                 record_id',
             Database::getTablePrefix(),
             Database::getTablePrefix(),
-            $tagId);
+            $tagId
+        );
 
         $records = [];
         $result = $this->config->getDb()->query($query);
@@ -618,7 +638,8 @@ class Tags
      */
     public function existTagRelations()
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 COUNT(record_id) AS n
             FROM
@@ -643,7 +664,8 @@ class Tags
     {
         $tags = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 COUNT(record_id) as freq, tagging_id
             FROM

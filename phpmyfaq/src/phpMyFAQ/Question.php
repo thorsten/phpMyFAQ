@@ -9,12 +9,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2019-11-22
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2019-11-22
  */
 
 
@@ -26,11 +26,14 @@ use phpMyFAQ\Entity\QuestionEntity;
 
 /**
  * Class Question
+ *
  * @package phpMyFAQ
  */
 class Question
 {
-    /** @var Configuration */
+    /**
+     * @var Configuration
+     */
     private $config;
 
     public function __construct(Configuration $config)
@@ -40,12 +43,14 @@ class Question
 
     /**
      * Adds a new question.
-     * @param array $questionData
+     *
+     * @param  array $questionData
      * @return bool
      */
     public function addQuestion(Array $questionData): bool
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqquestions
             (id, lang, username, email, category_id, question, created, is_visible, answer_id)
@@ -69,7 +74,8 @@ class Question
 
     /**
      * Deletes a question for the table "faqquestions".
-     * @param int $questionId
+     *
+     * @param  int $questionId
      * @return bool
      */
     public function deleteQuestion(int $questionId): bool
@@ -88,7 +94,8 @@ class Question
 
     /**
      * Returns a new question.
-     * @param int $questionId
+     *
+     * @param  int $questionId
      * @return array
      */
     public function getQuestion(int $questionId): array
@@ -110,7 +117,8 @@ class Question
 
         $question = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                  id, lang, username, email, category_id, question, created, is_visible
             FROM
@@ -144,14 +152,16 @@ class Question
 
     /**
      * Returns all open questions.
-     * @param boolean $showAll
+     *
+     * @param  boolean $showAll
      * @return QuestionEntity[]
      */
     public function getAllOpenQuestions(bool $showAll = true): array
     {
         $questions = [];
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 id, lang, username, email, category_id, question, created, answer_id, is_visible
             FROM
@@ -188,7 +198,8 @@ class Question
 
     /**
      * Returns the visibility of a question.
-     * @param int $questionId
+     *
+     * @param  int $questionId
      * @return string
      */
     public function getVisibility(int $questionId): string
@@ -212,8 +223,9 @@ class Question
 
     /**
      * Sets the visibility of a question.
-     * @param int $questionId
-     * @param string $isVisible
+     *
+     * @param  int    $questionId
+     * @param  string $isVisible
      * @return bool
      */
     public function setVisibility(int $questionId, string $isVisible): bool
@@ -233,9 +245,10 @@ class Question
 
     /**
      * Updates field answer_id in the table "faqquestion".
-     * @param int $openQuestionId
-     * @param int $faqId
-     * @param int $categoryId
+     *
+     * @param  int $openQuestionId
+     * @param  int $faqId
+     * @param  int $categoryId
      * @return bool
      */
     public function updateQuestionAnswer(int $openQuestionId, int $faqId, int $categoryId): bool

@@ -12,14 +12,14 @@ namespace phpMyFAQ;
  * The Initial Developer of the Original Code is released for external use
  * with permission from NetJapan, Inc. IT Administration Group.
  *
- * @package phpMyFAQ
- * @author Minoru TODA <todam@netjapan.co.jp>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Minoru TODA <todam@netjapan.co.jp>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2005-2019 NetJapan, Inc. and phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2005-08-01
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2005-08-01
  */
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,6 +28,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class LinkVerifier
+ *
  * @package phpMyFAQ
  */
 class LinkVerifier
@@ -91,7 +92,7 @@ class LinkVerifier
      * Constructor.
      *
      * @param Configuration $config
-     * @param string $user User
+     * @param string        $user   User
      */
     public function __construct(Configuration $config, string $user = null)
     {
@@ -146,7 +147,7 @@ class LinkVerifier
     /**
      * Returns the HTML text that needs to be shown in entry listing.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $faqLang
      *
      * @return string
@@ -210,16 +211,17 @@ class LinkVerifier
     /**
      * retrieves stored link state and validates timestamp.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $faqLang
-     * @param bool $checkDate
+     * @param bool   $checkDate
      *
      * @return bool|string
      */
     public function getEntryState($id = 0, $faqLang = '', $checkDate = false)
     {
         $interval = $this->getURLValidateInterval();
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT 
                 links_state, links_check_date 
             FROM 
@@ -230,7 +232,8 @@ class LinkVerifier
                 lang = '%s'",
             Database::getTablePrefix(),
             $id,
-            $this->config->getDb()->escape($faqLang));
+            $this->config->getDb()->escape($faqLang)
+        );
 
         if ($result = $this->config->getDb()->query($query)) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
@@ -259,7 +262,7 @@ class LinkVerifier
      *
      * @return int
      */
-    public function getURLValidateInterval(): int 
+    public function getURLValidateInterval(): int
     {
         if ($this->config->get('main.urlValidateInterval') != '') {
             $requestTime = $_SERVER['REQUEST_TIME'] - $this->config->get('main.urlValidateInterval');
@@ -274,9 +277,9 @@ class LinkVerifier
      * Verifies specified article content and update links_state database entry.
      *
      * @param string $contents
-     * @param int $id
+     * @param int    $id
      * @param string $faqLang
-     * @param bool $cron
+     * @param bool   $cron
      *
      * @return string HTML text, if $cron is false (default)
      */
@@ -309,9 +312,11 @@ class LinkVerifier
 
         // If no URLs found
         if ($result == false) {
-            $output = sprintf('<h3>%s</h3><p class="alert alert-info">%s</p>',
+            $output = sprintf(
+                '<h3>%s</h3><p class="alert alert-info">%s</p>',
                 $PMF_LANG['ad_linkcheck_checkResult'],
-                $PMF_LANG['ad_linkcheck_noLinksFound']);
+                $PMF_LANG['ad_linkcheck_noLinksFound']
+            );
 
             return ($cron ? '' : $output);
         }
@@ -335,9 +340,9 @@ class LinkVerifier
                     $_output .= '<td class="' . $_classname . '">' . $PMF_LANG['ad_linkcheck_checkSuccess'] . $_redirects . '</td>';
                     if ($value['reason'] != '') {
                         $inforeasons[] = sprintf(
-                                $PMF_LANG['ad_linkcheck_openurl_infoprefix'],
-                                Strings::htmlspecialchars($value['absurl'])
-                            ) . $value['reason'];
+                            $PMF_LANG['ad_linkcheck_openurl_infoprefix'],
+                            Strings::htmlspecialchars($value['absurl'])
+                        ) . $value['reason'];
                     }
                 } else {
                     $_classname = 'urlfail';
@@ -502,7 +507,7 @@ class LinkVerifier
      *
      * @param string $url
      * @param string $redirect
-     * @param int $redirectCount
+     * @param int    $redirectCount
      *
      * @return array
      */
@@ -668,8 +673,10 @@ class LinkVerifier
         switch ($code) {
             // TODO: Add more explicit http status management
             case '200': // OK
-                $_reason = ($redirectCount > 0) ? sprintf($PMF_LANG['ad_linkcheck_openurl_redirected'],
-                    Strings::htmlspecialchars($url)) : '';
+                $_reason = ($redirectCount > 0) ? sprintf(
+                    $PMF_LANG['ad_linkcheck_openurl_redirected'],
+                    Strings::htmlspecialchars($url)
+                ) : '';
 
                 return array(true, $redirectCount, $_reason);
                 break;
@@ -712,9 +719,9 @@ class LinkVerifier
     /**
      * logs the current state of link to the specified entry.
      *
-     * @param int $id
+     * @param int    $id
      * @param string $faqLang
-     * @param string $state (optional)
+     * @param string $state   (optional)
      *
      * @return bool true if operation successful, otherwise false
      */
@@ -728,7 +735,8 @@ class LinkVerifier
             $state = $this->getLinkStateString();
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE 
                 %sfaqdata 
             SET 
@@ -741,7 +749,8 @@ class LinkVerifier
             $state,
             $_SERVER['REQUEST_TIME'],
             $id,
-            $faqLang);
+            $faqLang
+        );
 
         if ($this->config->getDb()->query($query)) {
             return true;

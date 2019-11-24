@@ -9,12 +9,12 @@ namespace phpMyFAQ\Search\Database;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2010-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2010-07-06
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2010-07-06
  */
 
 use phpMyFAQ\Configuration;
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Sqlsrv
+ *
  * @package phpMyFAQ\Search\Database
  */
 class Sqlsrv extends SearchDatabase
@@ -43,7 +44,7 @@ class Sqlsrv extends SearchDatabase
     /**
      * Prepares the search and executes it.
      *
-     * @param string $searchTerm Search term
+     * @param  string $searchTerm Search term
      * @throws
      * @return resource
      */
@@ -52,7 +53,8 @@ class Sqlsrv extends SearchDatabase
         if (is_numeric($searchTerm) && $this->config->get('search.searchForSolutionId')) {
             parent::search($searchTerm);
         } else {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 SELECT
                     %s
                 FROM 
@@ -65,7 +67,8 @@ class Sqlsrv extends SearchDatabase
                 $this->getJoinedTable(),
                 $this->getJoinedColumns(),
                 $this->getMatchClause($searchTerm),
-                $this->getConditions());
+                $this->getConditions()
+            );
 
             $this->resultSet = $this->config->getDb()->query($query);
         }

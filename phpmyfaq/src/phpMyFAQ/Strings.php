@@ -15,12 +15,12 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-04-06
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-04-06
  */
 
 use phpMyFAQ\Strings\Mbstring;
@@ -32,6 +32,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Strings
+ *
  * @package phpMyFAQ
  */
 class Strings
@@ -92,8 +93,8 @@ class Strings
      * Get a part of string.
      *
      * @param string $string String
-     * @param int $start Start
-     * @param int $length Length
+     * @param int    $start  Start
+     * @param int    $length Length
      *
      * @return string
      */
@@ -106,8 +107,8 @@ class Strings
      * Get position of the first occurrence of a string.
      *
      * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param int $offset Offset
+     * @param string $needle   Needle
+     * @param int    $offset   Offset
      *
      * @return int
      */
@@ -144,8 +145,8 @@ class Strings
      * Get occurrence of a string within another.
      *
      * @param string $haystack Haystack
-     * @param string $needle Needle
-     * @param bool $part Part
+     * @param string $needle   Needle
+     * @param bool   $part     Part
      *
      * @return string|false
      */
@@ -182,7 +183,7 @@ class Strings
      *
      * @param string $haystack
      * @param string $needle
-     * @param int $offset
+     * @param int    $offset
      *
      * @return int
      */
@@ -197,8 +198,8 @@ class Strings
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -213,8 +214,8 @@ class Strings
      * @param string $pattern
      * @param string $subject
      * @param array  &$matches
-     * @param int $flags
-     * @param int $offset
+     * @param int    $flags
+     * @param int    $offset
      *
      * @return int
      */
@@ -228,8 +229,8 @@ class Strings
      *
      * @param string $pattern
      * @param string $subject
-     * @param int $limit
-     * @param int $flags
+     * @param int    $limit
+     * @param int    $flags
      *
      * @return array
      */
@@ -241,10 +242,10 @@ class Strings
     /**
      * Search and replace by a regexp using a callback.
      *
-     * @param string $pattern
-     * @param callable $callback
+     * @param string       $pattern
+     * @param callable     $callback
      * @param string|array $subject
-     * @param int $limit
+     * @param int          $limit
      * @param int          &$count
      *
      * @return array|string
@@ -260,7 +261,7 @@ class Strings
      * @param string|array $pattern
      * @param string|array $replacement
      * @param string|array $subject
-     * @param int $limit
+     * @param int          $limit
      * @param int          &$count
      *
      * @return array|string|null
@@ -285,10 +286,10 @@ class Strings
     /**
      * Convert special chars to html entities.
      *
-     * @param string $string The input string.
-     * @param int $quoteStyle Quote style
-     * @param string $charset Character set, UTF-8 by default
-     * @param bool $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string       The input string.
+     * @param int    $quoteStyle   Quote style
+     * @param string $charset      Character set, UTF-8 by default
+     * @param bool   $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */
@@ -305,10 +306,10 @@ class Strings
     /**
      * Convert all applicable characters to HTML entities.
      *
-     * @param string $string The input string.
-     * @param int $quoteStyle Quote style
-     * @param string $charset Character set, UTF-8 by default
-     * @param bool $doubleEncode If set to false, no encoding of existing entities
+     * @param string $string       The input string.
+     * @param int    $quoteStyle   Quote style
+     * @param string $charset      Character set, UTF-8 by default
+     * @param bool   $doubleEncode If set to false, no encoding of existing entities
      *
      * @return string
      */

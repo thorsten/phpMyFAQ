@@ -9,15 +9,15 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Lars Tiedemann <larstiedemann@yahoo.de>
- * @author Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author Rudi Ferrari <bookcrossers@gmx.de>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Lars Tiedemann <larstiedemann@yahoo.de>
+ * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
+ * @author    Rudi Ferrari <bookcrossers@gmx.de>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-02-16
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-02-16
  */
 
 use phpMyFAQ\Category\CategoryEntity;
@@ -29,6 +29,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class Category
+ *
  * @package phpMyFAQ
  */
 class Category
@@ -61,6 +62,7 @@ class Category
     public $treeTab = [];
     /**
      * The category tree.
+     *
      * @var array
      */
     private $catTree = [];
@@ -136,9 +138,9 @@ class Category
     /**
      * Constructor.
      *
-     * @param Configuration $config Configuration object
-     * @param array $groups Array with group IDs
-     * @param bool $withPerm With or without permission check
+     * @param Configuration $config   Configuration object
+     * @param array         $groups   Array with group IDs
+     * @param bool          $withPerm With or without permission check
      */
     public function __construct(Configuration $config, $groups = [], $withPerm = true)
     {
@@ -187,7 +189,8 @@ class Category
         $where = '';
 
         if ($withPermission) {
-            $where = sprintf('
+            $where = sprintf(
+                '
                 WHERE
                     ( fg.group_id IN (%s)
                 OR
@@ -208,7 +211,8 @@ class Category
                 fc.lang = '" . $this->language . "'";
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fc.id AS id,
                 fc.lang AS lang,
@@ -294,20 +298,22 @@ class Category
      * Gets the main categories and write them in an array.
      *
      * @param string $categories Array of parent category ids
-     * @param bool $parentId Only top level categories?
+     * @param bool   $parentId   Only top level categories?
      *
      * @return array
      */
     public function getCategories($categories, $parentId = true)
     {
         $_query = '';
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id, lang, parent_id, name, description, user_id, group_id, active, image, show_home
             FROM
                 %sfaqcategories
             WHERE ',
-            Database::getTablePrefix());
+            Database::getTablePrefix()
+        );
 
         if (true === $parentId) {
             $query .= 'parent_id = 0';
@@ -338,7 +344,8 @@ class Category
     public function getAllCategories()
     {
         $categories = [];
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
             FROM
@@ -377,7 +384,8 @@ class Category
     public function getHomeCategories()
     {
         $categories = [];
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
             FROM
@@ -412,7 +420,8 @@ class Category
     {
         $categories = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id
             FROM
@@ -437,7 +446,7 @@ class Category
      * Builds the category tree.
      *
      * @param int $id_parent Parent id
-     * @param int $indent Indention
+     * @param int $indent    Indention
      */
     public function buildTree($id_parent = 0, $indent = 0)
     {
@@ -536,7 +545,7 @@ class Category
     /**
      * List in array the root, super-root, ... of the $id.
      *
-     * @param $id
+     * @param  $id
      * @return array
      */
     private function getNodes($id)
@@ -676,7 +685,8 @@ class Category
 
         $number = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 fcr.category_id AS category_id,
                 count(fcr.category_id) AS number
@@ -688,11 +698,14 @@ class Category
             AND
                 fcr.record_lang = fd.lang',
             Database::getTablePrefix(),
-            Database::getTablePrefix());
+            Database::getTablePrefix()
+        );
 
         if (strlen($this->language) > 0) {
-            $query .= sprintf(" AND fd.lang = '%s'",
-                $this->language);
+            $query .= sprintf(
+                " AND fd.lang = '%s'",
+                $this->language
+            );
         }
 
         $query .= " AND fd.active = 'yes' GROUP BY fcr.category_id";
@@ -857,12 +870,12 @@ class Category
     /**
      * Creates a category link.
      *
-     * @param string $sids Session id
-     * @param int $categoryId Parent category
+     * @param string $sids         Session id
+     * @param int    $categoryId   Parent category
      * @param string $categoryName Entity name
-     * @param string $description Description
-     * @param bool $hasChildren Child categories available
-     * @param bool $isActive Sets a link active via CSS
+     * @param string $description  Description
+     * @param bool   $hasChildren  Child categories available
+     * @param bool   $isActive     Sets a link active via CSS
      *
      * @return string
      */
@@ -889,7 +902,8 @@ class Category
         if ($hasChildren) {
             $oLink->text .= sprintf(
                 '<i aria-hidden="true" class="fa fa-caret-right" title="%s"></i>',
-                $categoryName);
+                $categoryName
+            );
         }
 
         if ($isActive) {
@@ -941,10 +955,10 @@ class Category
     /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int $id Entity ID
-     * @param string $separator Path separator
-     * @param bool $renderAsMicroData Renders breadcrumbs as HTML5 microdata
-     * @param string $useCssClass Use CSS class "breadcrumb"
+     * @param int    $id                Entity ID
+     * @param string $separator         Path separator
+     * @param bool   $renderAsMicroData Renders breadcrumbs as HTML5 microdata
+     * @param string $useCssClass       Use CSS class "breadcrumb"
      *
      * @return string
      */
@@ -1055,7 +1069,8 @@ class Category
      */
     public function getCategoriesFromFaq($faqId)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 fc.id AS id,
                 fc.lang AS lang,
@@ -1094,8 +1109,9 @@ class Category
 
     /**
      * Given FAQ ID and category ID are connected or not.
-     * @param $faqId
-     * @param $categoryId
+     *
+     * @param  $faqId
+     * @param  $categoryId
      * @return bool
      */
     public function categoryHasLinkToFaq($faqId, $categoryId)
@@ -1112,6 +1128,7 @@ class Category
 
     /**
      * Returns the category tree as array.
+     *
      * @return array
      */
     public function getCategoryTree(): array
@@ -1135,8 +1152,8 @@ class Category
      * Adds a new category entry.
      *
      * @param array $categoryData Array of category data
-     * @param int $parentId Parent id
-     * @param int $id Entity id
+     * @param int   $parentId     Parent id
+     * @param int   $id           Entity id
      *
      * @return int
      */
@@ -1147,7 +1164,8 @@ class Category
             $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcategories', 'id');
         }
 
-        $query = sprintf("
+        $query = sprintf(
+            "
             INSERT INTO
                 %sfaqcategories
             (id, lang, parent_id, name, description, user_id, group_id, active, image, show_home)
@@ -1179,7 +1197,8 @@ class Category
      */
     public function updateCategory(Array $categoryData)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqcategories
             SET
@@ -1213,7 +1232,7 @@ class Category
      * Move the categories ownership for users.
      *
      * @param int $from Old user id
-     * @param int $to New user id
+     * @param int $to   New user id
      *
      * @return bool
      */
@@ -1223,7 +1242,8 @@ class Category
             return false;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             UPDATE
                 %sfaqcategories
             SET
@@ -1242,14 +1262,15 @@ class Category
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int $category_id Entity id
+     * @param int    $category_id   Entity id
      * @param string $category_lang Entity language
      *
      * @return bool
      */
     public function checkLanguage($category_id, $category_lang)
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             SELECT
                 lang
             FROM
@@ -1260,7 +1281,8 @@ class Category
                 lang = '%s'",
             Database::getTablePrefix(),
             $category_id,
-            $category_lang);
+            $category_lang
+        );
 
         $result = $this->config->getDb()->query($query);
 
@@ -1290,24 +1312,36 @@ class Category
         $result = true;
         foreach ($tables as $pair) {
             foreach ($pair as $_table => $_field) {
-                $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $temp_cat,
                         $_field,
-                        $category_id_2));
-                $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
+                        $category_id_2
+                    )
+                );
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $category_id_2,
                         $_field,
-                        $category_id_1));
-                $result = $result && $this->config->getDb()->query(sprintf('UPDATE %s SET %s = %d WHERE %s = %d',
+                        $category_id_1
+                    )
+                );
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $category_id_1,
                         $_field,
-                        $temp_cat));
+                        $temp_cat
+                    )
+                );
             }
         }
 
@@ -1315,24 +1349,36 @@ class Category
 
         foreach ($tables2 as $pair) {
             foreach ($pair as $_table => $_field) {
-                $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $temp_cat,
                         $_field,
-                        $category_id_2));
-                $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                        $category_id_2
+                    )
+                );
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $category_id_2,
                         $_field,
-                        $category_id_1));
-                $result = $result && $this->config->getDb()->query(sprintf("UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                        $category_id_1
+                    )
+                );
+                $result = $result && $this->config->getDb()->query(
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
                         Database::getTablePrefix() . $_table,
                         $_field,
                         $category_id_1,
                         $_field,
-                        $temp_cat));
+                        $temp_cat
+                    )
+                );
             }
         }
 
@@ -1343,7 +1389,7 @@ class Category
      * Updates the parent category.
      *
      * @param int $category_id Entity id
-     * @param int $parent_id Parent category id
+     * @param int $parent_id   Parent category id
      *
      * @return bool
      */
@@ -1353,7 +1399,8 @@ class Category
             return false;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             UPDATE
                 %sfaqcategories
             SET
@@ -1362,7 +1409,8 @@ class Category
                 id = %d',
             Database::getTablePrefix(),
             $parent_id,
-            $category_id);
+            $category_id
+        );
         $this->config->getDb()->query($query);
 
         return true;
@@ -1371,21 +1419,23 @@ class Category
     /**
      * Deletes a category.
      *
-     * @param int $category_id Entity id
+     * @param int    $category_id   Entity id
      * @param string $category_lang Categiry language
-     * @param bool $delete_all Delete all languages?
+     * @param bool   $delete_all    Delete all languages?
      *
      * @return bool
      */
     public function deleteCategory($category_id, $category_lang, $delete_all = false)
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqcategories
             WHERE
                 id = %d',
             Database::getTablePrefix(),
-            $category_id);
+            $category_id
+        );
         if (!$delete_all) {
             $query .= " AND lang = '" . $category_lang . "'";
         }
@@ -1409,7 +1459,8 @@ class Category
         $translated = [];
 
         foreach ($existcatlang as $language) {
-            $query = sprintf("
+            $query = sprintf(
+                "
                SELECT
                   name, description
                FROM
@@ -1420,7 +1471,8 @@ class Category
                    lang = '%s'",
                 Database::getTablePrefix(),
                 $category_id,
-                $language);
+                $language
+            );
             $result = $this->config->getDb()->query($query);
             if ($row = $this->config->getDb()->fetchArray($result)) {
                 $translated[$languageCodes[strtoupper($language)]] = $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
@@ -1434,7 +1486,7 @@ class Category
     /**
      * Create all languages which can be used for translation as <option>.
      *
-     * @param int $category_id Entity id
+     * @param int    $category_id   Entity id
      * @param string $selected_lang Selected language
      *
      * @return string
@@ -1463,12 +1515,14 @@ class Category
      */
     public function getMissingCategories()
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 id, lang, parent_id, name, description, user_id
             FROM
                 %sfaqcategories',
-            Database::getTablePrefix());
+            Database::getTablePrefix()
+        );
         if (isset($this->language) && preg_match("/^[a-z\-]{2,}$/", $this->language)) {
             $query .= " WHERE lang != '" . $this->language . "'";
         }
@@ -1492,7 +1546,8 @@ class Category
      */
     public function numParent($parentId)
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT DISTINCT 
                 id
             FROM
@@ -1500,7 +1555,8 @@ class Category
             WHERE
                 parent_id = %d',
             Database::getTablePrefix(),
-            $parentId);
+            $parentId
+        );
         $result = $this->config->getDb()->query($query);
 
         return $this->config->getDb()->numRows($result);
@@ -1509,9 +1565,9 @@ class Category
     /**
      * Adds the category permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param array $categories ID of the current category
-     * @param array $ids Array of group or user IDs
+     * @param string $mode       'group' or 'user'
+     * @param array  $categories ID of the current category
+     * @param array  $ids        Array of group or user IDs
      *
      * @return bool
      */
@@ -1555,8 +1611,8 @@ class Category
     /**
      * Deletes the category permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param array $categories ID of the current category
+     * @param string $mode       'group' or 'user'
+     * @param array  $categories ID of the current category
      *
      * @return bool
      */
@@ -1570,14 +1626,16 @@ class Category
         }
 
         foreach ($categories as $category_id) {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 DELETE FROM
                     %sfaqcategory_%s
                 WHERE
                     category_id = %d',
                 Database::getTablePrefix(),
                 $mode,
-                $category_id);
+                $category_id
+            );
             $this->config->getDb()->query($query);
         }
 
@@ -1587,7 +1645,8 @@ class Category
     /**
      * Returns true, if a given category has user or group permissions.
      * Otherwise, the methods returns false.
-     * @param int $categoryId
+     *
+     * @param  int $categoryId
      * @return bool
      */
     public function hasPermissions(int $categoryId): bool
@@ -1605,8 +1664,8 @@ class Category
     /**
      * Returns the category permissions for users and groups.
      *
-     * @param string $mode 'group' or 'user'
-     * @param array $categories Array of category ids
+     * @param string $mode       'group' or 'user'
+     * @param array  $categories Array of category ids
      *
      * @return array
      */
@@ -1620,7 +1679,8 @@ class Category
             return $permissions;
         }
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 %s_id AS permission
             FROM
@@ -1630,7 +1690,8 @@ class Category
             $mode,
             Database::getTablePrefix(),
             $mode,
-            implode(', ', $categories));
+            implode(', ', $categories)
+        );
 
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchObject($result)) {
@@ -1642,7 +1703,8 @@ class Category
 
     /**
      * Returns the user id of the category owner
-     * @param integer $categoryId
+     *
+     * @param  integer $categoryId
      * @return int
      */
     public function getOwner(int $categoryId): int

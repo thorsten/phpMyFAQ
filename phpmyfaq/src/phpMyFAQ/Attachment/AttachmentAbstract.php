@@ -9,12 +9,12 @@ namespace phpMyFAQ\Attachment;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Anatoliy Belsky <ab@php.net>
+ * @package   phpMyFAQ
+ * @author    Anatoliy Belsky <ab@php.net>
  * @copyright 2009-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2009-08-21
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-08-21
  */
 
 use phpMyFAQ\Database;
@@ -26,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
 /**
  * Class AttachmentAbstract
+ *
  * @package phpMyFAQ\Attachment
  */
 abstract class AttachmentAbstract
@@ -146,7 +147,8 @@ abstract class AttachmentAbstract
     {
         $retval = false;
 
-        $sql = sprintf('
+        $sql = sprintf(
+            '
             SELECT 
                 record_id, record_lang, real_hash, virtual_hash, password_hash,
                 filename, filesize, encrypted, mime_type
@@ -155,7 +157,8 @@ abstract class AttachmentAbstract
             WHERE 
                 id = %d',
             Database::getTablePrefix(),
-            (int)$this->id);
+            (int)$this->id
+        );
 
         $result = $this->db->query($sql);
 
@@ -196,8 +199,8 @@ abstract class AttachmentAbstract
     /**
      * Set encryption key.
      *
-     * @param string $key encryption key
-     * @param bool $default if the key is default system wide
+     * @param string $key     encryption key
+     * @param bool   $default if the key is default system wide
      */
     public function setKey($key, $default = true)
     {
@@ -275,7 +278,8 @@ abstract class AttachmentAbstract
         if (null == $this->id) {
             $this->id = $this->db->nextId($faqattTableName, 'id');
 
-            $sql = sprintf("
+            $sql = sprintf(
+                "
                 INSERT INTO 
                     %s
                 (id, record_id, record_lang, real_hash, virtual_hash,
@@ -316,7 +320,8 @@ abstract class AttachmentAbstract
      */
     protected function postUpdateMeta()
     {
-        $sql = sprintf("
+        $sql = sprintf(
+            "
             UPDATE
                 %sfaqattachment
             SET virtual_hash = '%s',
@@ -361,9 +366,10 @@ abstract class AttachmentAbstract
     protected function mkVirtualHash(): string
     {
         if ($this->encrypted) {
-            if (null === $this->id || null === $this->recordId ||
-                null === $this->realHash || null === $this->filename ||
-                null === $this->key) {
+            if (null === $this->id || null === $this->recordId
+                || null === $this->realHash || null === $this->filename
+                || null === $this->key
+            ) {
                 throw new AttachmentException(
                     'All of id, recordId, hash, filename, key is needed to generate fs hash for encrypted files'
                 );

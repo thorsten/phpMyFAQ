@@ -9,14 +9,14 @@ namespace phpMyFAQ\Export\Pdf;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author Peter Beauvain <pbeauvain@web.de>
- * @author Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
+ * @package   phpMyFAQ
+ * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
+ * @author    Peter Beauvain <pbeauvain@web.de>
+ * @author    Krzysztof Kruszynski <thywolf@wolf.homelinux.net>
  * @copyright 2004-2019 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2004-11-21
+ * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
+ * @link      https://www.phpmyfaq.de
+ * @since     2004-11-21
  */
 
 use phpMyFAQ\Configuration;
@@ -193,6 +193,7 @@ require K_PATH_MAIN . '/tcpdf.php';
 
 /**
  * Class Wrapper
+ *
  * @package phpMyFAQ\Export\Pdf
  */
 class Wrapper extends \TCPDF
@@ -402,8 +403,14 @@ class Wrapper extends \TCPDF
         $this->SetTextColor(0, 0, 0);
         $this->SetY(-25);
         $this->SetFont($this->currentFont, '', 10);
-        $this->Cell(0, 10, $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
-            0, 0, 'C');
+        $this->Cell(
+            0,
+            10,
+            $PMF_LANG['ad_gen_page'] . ' ' . $this->getAliasNumPage() . ' / ' . $this->getAliasNbPages(),
+            0,
+            0,
+            'C'
+        );
         $this->SetY(-20);
         $this->SetFont($this->currentFont, 'B', 8);
         $this->Cell(0, 10, $footer, 0, 1, 'C');
@@ -486,37 +493,37 @@ class Wrapper extends \TCPDF
     /**
      * Extends the TCPDF::Image() method to handle base64 encoded images.
      *
-     * @param string $file Name of the file containing the image or a '@' character followed by the image data
-     *                          string. To link an image without embedding it on the document, set an asterisk character
-     *                          before the URL (i.e.: '*http://www.example.com/image.jpg').
-     * @param string $x Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param string $y Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
-     * @param int $w Width of the image in the page. If not specified or equal to zero, it is automatically
+     * @param string $file      Name of the file containing the image or a '@' character followed by the image data
+     *                          string. To link an image without embedding it on the document, set an asterisk
+     *                          character before the URL (i.e.: '*http://www.example.com/image.jpg').
+     * @param string $x         Abscissa of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param string $y         Ordinate of the upper-left corner (LTR) or upper-right corner (RTL).
+     * @param int    $w         Width of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param int $h Height of the image in the page. If not specified or equal to zero, it is automatically
+     * @param int    $h         Height of the image in the page. If not specified or equal to zero, it is automatically
      *                          calculated.
-     * @param string $type Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
-     *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If not
-     *                          specified, the type is inferred from the file extension.
-     * @param string $link URL or identifier returned by AddLink().
-     * @param string $align Indicates the alignment of the pointer next to image insertion relative to image height.
-     * @param bool $resize If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
+     * @param string $type      Image format. Possible values are (case insensitive): JPEG and PNG (whitout GD library)
+     *                          and all images supported by GD: GD, GD2, GD2PART, GIF, JPEG, PNG, BMP, XBM, XPM;. If
+     *                          not specified, the type is inferred from the file extension.
+     * @param string $link      URL or identifier returned by AddLink().
+     * @param string $align     Indicates the alignment of the pointer next to image insertion relative to image height.
+     * @param bool   $resize    If true resize (reduce) the image to fit $w and $h (requires GD or ImageMagick library);
      *                          if false do not resize; if 2 force resize in all cases (upscaling and downscaling).
-     * @param int $dpi dot-per-inch resolution used on resize
-     * @param string $palign Allows to center or align the image on the current line.
-     * @param bool $ismask true if this image is a mask, false otherwise
-     * @param mixed $imgmask Image object returned by this function or false
-     * @param int $border Indicates if borders must be drawn around the cell.
-     * @param mixed $fitbox If not false scale image dimensions proportionally to fit within the ($w, $h) box.
-     *                          $fitbox can be true or a 2 characters string indicating the image alignment inside the
-     *                          box. The first character indicate the horizontal alignment (L = left, C = center,
-     *                          R = right) the second character indicate the vertical algnment (T = top, M = middle,
-     *                          B = bottom).
-     * @param bool $hidden If true do not display the image.
-     * @param bool $fitonpage If true the image is resized to not exceed page dimensions.
-     * @param bool $alt If true the image will be added as alternative and not directly printed (the ID of the
+     * @param int    $dpi       dot-per-inch resolution used on resize
+     * @param string $palign    Allows to center or align the image on the current line.
+     * @param bool   $ismask    true if this image is a mask, false otherwise
+     * @param mixed  $imgmask   Image object returned by this function or false
+     * @param int    $border    Indicates if borders must be drawn around the cell.
+     * @param mixed  $fitbox    If not false scale image dimensions proportionally to fit within the ($w, $h) box.
+     *                          $fitbox can be true or a 2 characters string indicating the image alignment inside
+     *                          the box. The first character indicate the horizontal alignment (L = left, C =
+     *                          center, R = right) the second character indicate the vertical algnment (T = top, M
+     *                          = middle, B = bottom).
+     * @param bool   $hidden    If true do not display the image.
+     * @param bool   $fitonpage If true the image is resized to not exceed page dimensions.
+     * @param bool   $alt       If true the image will be added as alternative and not directly printed (the ID of the
      *                          image will be returned).
-     * @param array $altimgs Array of alternate images IDs. Each alternative image must be an array with two values:
+     * @param array  $altimgs   Array of alternate images IDs. Each alternative image must be an array with two values:
      *                          an integer representing the image ID (the value returned by the Image method) and a
      *                          boolean value to indicate if the image is the default for printing.
      *
@@ -545,11 +552,30 @@ class Wrapper extends \TCPDF
     ) {
         if (!strpos($file, 'data:image/png;base64,') === false) {
             $file = '@' . base64_decode(
-                    chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
-                );
+                chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))
+            );
         }
 
-        parent::Image($file, $x, $y, $w, $h, $type, $link, $align, $resize, $dpi, $palign, $ismask, $imgmask, $border,
-            $fitbox, $hidden, $fitonpage, $alt, $altimgs);
+        parent::Image(
+            $file,
+            $x,
+            $y,
+            $w,
+            $h,
+            $type,
+            $link,
+            $align,
+            $resize,
+            $dpi,
+            $palign,
+            $ismask,
+            $imgmask,
+            $border,
+            $fitbox,
+            $hidden,
+            $fitonpage,
+            $alt,
+            $altimgs
+        );
     }
 }
