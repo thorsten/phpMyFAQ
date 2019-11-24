@@ -16,9 +16,7 @@ namespace phpMyFAQ\Entity;
  * @link      https://www.phpmyfaq.de
  * @since     2014-08-15
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class TagEntity

@@ -22,10 +22,6 @@ use phpMyFAQ\Exception;
 use phpMyFAQ\Utils;
 use SQLite3Result;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Sqlite3
  *

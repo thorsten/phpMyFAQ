@@ -21,10 +21,6 @@ namespace phpMyFAQ\Helper;
 use phpMyFAQ\Helper;
 use phpMyFAQ\Strings;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class HttpHelper
  *

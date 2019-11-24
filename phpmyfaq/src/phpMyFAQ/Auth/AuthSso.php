@@ -21,10 +21,6 @@ namespace phpMyFAQ\Auth;
 use phpMyFAQ\Auth;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Sso
  *

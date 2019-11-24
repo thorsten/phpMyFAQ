@@ -23,10 +23,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class AuthDatabase
  *

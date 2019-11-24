@@ -20,9 +20,7 @@ use phpMyFAQ\Category\CategoryImage;
 use phpMyFAQ\Configuration;
 use PHPUnit\Framework\TestCase;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Test category images.

@@ -17,9 +17,7 @@ namespace phpMyFAQ\Mail;
  * @since     2009-09-11
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Interface MailUserAgentInterface

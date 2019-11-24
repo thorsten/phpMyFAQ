@@ -26,10 +26,6 @@ use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Instance\Master;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Installer
  *

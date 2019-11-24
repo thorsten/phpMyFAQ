@@ -21,10 +21,6 @@ namespace phpMyFAQ\EncryptionTypes;
 
 use phpMyFAQ\Encryption;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Sha1
  *

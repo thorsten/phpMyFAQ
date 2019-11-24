@@ -23,10 +23,6 @@ namespace phpMyFAQ;
 use phpMyFAQ\Category\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Category
  *

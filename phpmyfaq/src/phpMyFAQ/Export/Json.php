@@ -24,10 +24,6 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Json
  *
@@ -46,7 +42,7 @@ class Json extends Export
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**

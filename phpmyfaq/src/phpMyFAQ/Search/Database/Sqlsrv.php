@@ -20,10 +20,6 @@ namespace phpMyFAQ\Search\Database;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Sqlsrv
  *

@@ -25,10 +25,6 @@ use phpMyFAQ\Exception;
 use phpMyFAQ\Ldap as LdapCore;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class AuthLdap
  *

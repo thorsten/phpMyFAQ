@@ -19,10 +19,6 @@ namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Instance;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Master
  *

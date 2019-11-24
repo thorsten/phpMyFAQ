@@ -22,10 +22,6 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User\CurrentUser;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class BasicPermission
  *

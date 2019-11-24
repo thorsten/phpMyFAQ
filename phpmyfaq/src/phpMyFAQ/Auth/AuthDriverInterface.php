@@ -18,9 +18,7 @@ namespace phpMyFAQ\Auth;
  * @since     2009-03-01
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Interface Driver

@@ -23,10 +23,6 @@ use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
 use phpMyFAQ\Export\Xml;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 require_once PMF_CONFIG_DIR.'/constants.php';
 
 /**
@@ -55,7 +51,7 @@ class Export
      *
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
 
     /**
      * Factory.

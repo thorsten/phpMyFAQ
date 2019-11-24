@@ -20,9 +20,7 @@ namespace phpMyFAQ;
  * @since 2005-11-01
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
 * #@+

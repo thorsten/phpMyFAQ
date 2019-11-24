@@ -19,10 +19,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Sitemap.
  *

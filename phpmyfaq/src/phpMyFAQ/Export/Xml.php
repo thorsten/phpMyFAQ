@@ -25,10 +25,6 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Strings;
 use XMLWriter;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Xml
  *
@@ -54,7 +50,7 @@ class Xml extends Export
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->_config = $config;
+        $this->config = $config;
         $this->xml = new XMLWriter();
 
         $this->xml->openMemory();
@@ -76,7 +72,7 @@ class Xml extends Export
         $this->category->transform($categoryId);
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
-        $version = $this->_config->get('main.currentVersion');
+        $version = $this->config->get('main.currentVersion');
         $comment = sprintf(
             'XML output by phpMyFAQ %s | Date: %s',
             $version,

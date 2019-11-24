@@ -18,9 +18,7 @@ namespace phpMyFAQ;
  * @since     2005-09-18
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Encryption

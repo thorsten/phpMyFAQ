@@ -17,9 +17,7 @@ namespace phpMyFAQ\Category;
  * @since     2014-08-14
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class CategoryEntity

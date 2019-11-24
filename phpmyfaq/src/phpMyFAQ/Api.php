@@ -19,9 +19,7 @@ use stdClass;
  * @since     2018-03-27
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Api

@@ -24,10 +24,6 @@ use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\SearchFactory;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Search.
  *

@@ -19,10 +19,6 @@ namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class AbstractSearch
  *

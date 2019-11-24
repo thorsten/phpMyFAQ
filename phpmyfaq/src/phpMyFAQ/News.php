@@ -18,9 +18,7 @@ namespace phpMyFAQ;
  * @since     2006-06-25
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class News

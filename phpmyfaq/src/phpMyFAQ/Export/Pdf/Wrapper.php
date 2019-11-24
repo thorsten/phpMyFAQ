@@ -24,10 +24,6 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 define('K_TCPDF_EXTERNAL_CONFIG', true);
 
 define('K_PATH_URL', '');

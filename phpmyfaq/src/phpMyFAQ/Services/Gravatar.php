@@ -19,10 +19,6 @@ namespace phpMyFAQ\Services;
 
 use phpMyFAQ\Services;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Gravatar
  *

@@ -26,10 +26,6 @@ use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Instance\Elasticsearch;
 use phpMyFAQ\Language\Plurals;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /*
  * SQL constants definitions
  */

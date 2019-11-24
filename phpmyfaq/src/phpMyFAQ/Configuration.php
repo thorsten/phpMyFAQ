@@ -21,10 +21,6 @@ namespace phpMyFAQ;
 use Elasticsearch\Client;
 use phpMyFAQ\Database\DatabaseDriver;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Configuration
  *

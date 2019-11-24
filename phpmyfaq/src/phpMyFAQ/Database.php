@@ -23,10 +23,6 @@ use phpMyFAQ\Database\Pgsql;
 use phpMyFAQ\Database\Sqlite3;
 use phpMyFAQ\Database\Sqlsrv;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Database
  *

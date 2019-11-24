@@ -19,10 +19,6 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class LinkverifierHelper
  *

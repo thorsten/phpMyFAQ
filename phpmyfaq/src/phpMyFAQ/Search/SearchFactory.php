@@ -23,10 +23,6 @@ use phpMyFAQ\Search\Database\Pgsql;
 use phpMyFAQ\Search\Database\Sqlite3;
 use phpMyFAQ\Search\Database\Sqlsrv;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class SearchFactory
  *

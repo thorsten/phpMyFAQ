@@ -19,10 +19,6 @@ namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class TagsHelper
  *
@@ -69,13 +65,15 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+                '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s '.
+                '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<a class="btn btn-primary" href="?action=search&amp;search=">%s <i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
+                '<a class="btn btn-primary" href="?action=search&amp;search=">%s '.
+                '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $tagName
             );
     }
@@ -108,7 +106,8 @@ class TagsHelper extends Helper
     public function renderRelatedTag($tagId, $tagName, $relevance): string
     {
         return sprintf(
-            '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s %s <span class="badge badge-dark">%d</span></a>',
+            '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s %s '.
+            '<span class="badge badge-dark">%d</span></a>',
             implode(',', $this->getTaggingIds()) . ',' . $tagId,
             '<i aria-hidden="true" class="fa fa-plus-square"></i> ',
             $tagName,

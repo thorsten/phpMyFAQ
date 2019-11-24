@@ -20,9 +20,7 @@ namespace phpMyFAQ;
  * @since     2011-02-04
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 use InvalidArgumentException;
 

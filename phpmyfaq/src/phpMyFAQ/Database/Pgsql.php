@@ -22,10 +22,6 @@ use Exception;
 use phpMyFAQ\Database;
 use phpMyFAQ\Utils;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Pgsql
  *

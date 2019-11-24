@@ -21,10 +21,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\TagEntity as EntityTags;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Tags
  *

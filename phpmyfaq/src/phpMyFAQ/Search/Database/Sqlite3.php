@@ -22,10 +22,6 @@ namespace phpMyFAQ\Search\Database;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * PMF_Search_Database_Sqlite3.
  *

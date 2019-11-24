@@ -9,32 +9,20 @@ namespace phpMyFAQ;
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
- * @package phpMyFAQ
- *
+ * @package   phpMyFAQ
  * @author    Anatoliy Belsky <ab@php.net>
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2009-09-27
+ * @link      https://www.phpmyfaq.de
+ * @since     2009-09-27
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
- * PMF_Pagination.
+ * Class Pagination
  *
  * @package phpMyFAQ
- *
- * @author    Anatoliy Belsky <ab@php.net>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2009-09-27
  */
 class Pagination
 {
@@ -159,9 +147,9 @@ class Pagination
     protected $rewriteUrl = '';
 
     /**
-     * @var PMF_Configuration
+     * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor.
@@ -183,12 +171,10 @@ class Pagination
      *                               layoutTpl -
      *                               pageParamName (default
      *                               "page") - useRewrite
-     *
-     * @return PMF_Pagination
      */
     public function __construct(Configuration $config, Array $options = null)
     {
-        $this->_config = $config;
+        $this->config = $config;
 
         if (isset($options['baseUrl'])) {
             $this->baseUrl = $options['baseUrl'];

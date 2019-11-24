@@ -20,10 +20,6 @@ namespace phpMyFAQ\Instance;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Setup
  *

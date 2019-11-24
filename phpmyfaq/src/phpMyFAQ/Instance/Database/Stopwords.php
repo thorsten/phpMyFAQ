@@ -20,10 +20,6 @@ namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Stopwords
  *

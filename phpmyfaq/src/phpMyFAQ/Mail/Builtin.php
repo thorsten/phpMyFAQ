@@ -16,9 +16,7 @@ namespace phpMyFAQ\Mail;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-11
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Builtin

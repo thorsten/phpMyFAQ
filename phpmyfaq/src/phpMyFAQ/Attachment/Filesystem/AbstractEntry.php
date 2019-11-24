@@ -17,9 +17,7 @@ namespace phpMyFAQ\Attachment\Filesystem;
  * @since     2009-08-21
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Entry

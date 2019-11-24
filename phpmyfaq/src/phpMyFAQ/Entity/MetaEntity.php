@@ -17,9 +17,7 @@ namespace phpMyFAQ\Entity;
  * @since     2018-08-09
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class MetaEntity

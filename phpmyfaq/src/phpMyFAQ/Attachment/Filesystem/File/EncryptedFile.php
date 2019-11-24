@@ -20,10 +20,6 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 use phpMyFAQ\Attachment\File;
 use phpseclib\Crypt\AES;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 require PMF_ROOT_DIR . '/src/libs/phpseclib/Crypt/AES.php';
 
 /**

@@ -28,10 +28,6 @@ use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Utils;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class SearchHelper
  *
@@ -319,13 +315,17 @@ class SearchHelper extends Helper
         $html = sprintf('<span title="%01.2f%%">', $relevance);
 
         if (0 === (int)$relevance) {
-            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>
+                      <i aria-hidden="true" class="fa fa-star-o"></i>';
         } elseif ($relevance < 33) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>
+                      <i aria-hidden="true" class="fa fa-star-o"></i>';
         } elseif ($relevance < 66) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>
+                      <i aria-hidden="true" class="fa fa-star-o"></i>';
         } else {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>';
+            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>
+                      <i aria-hidden="true" class="fa fa-star"></i>';
         }
 
         return $html . '</span>';
@@ -387,7 +387,8 @@ class SearchHelper extends Helper
         foreach ($mostPopularSearches as $searchItem) {
             if (Strings::strlen($searchItem['searchterm']) > 0) {
                 $html .= sprintf(
-                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s <span class="badge">%dx</span> </a></li>',
+                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s '.
+                    '<span class="badge">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']

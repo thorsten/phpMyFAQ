@@ -19,10 +19,6 @@ namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class CategoryImage
  *

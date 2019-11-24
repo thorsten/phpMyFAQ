@@ -21,10 +21,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Configuration;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * PMF_Visits.
  *

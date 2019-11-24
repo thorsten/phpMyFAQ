@@ -15,10 +15,6 @@ namespace phpMyFAQ\Mail;
  * @since     2014-10-10
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 require __DIR__ . '/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
 
 use Swift_Mailer;

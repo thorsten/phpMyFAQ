@@ -16,9 +16,7 @@ namespace phpMyFAQ\Instance\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2015-04-06
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Interface Driver

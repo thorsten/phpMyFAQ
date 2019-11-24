@@ -20,9 +20,7 @@ namespace phpMyFAQ;
  * @since     2004-12-16
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Ldap

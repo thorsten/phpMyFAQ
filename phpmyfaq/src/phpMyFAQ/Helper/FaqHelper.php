@@ -26,10 +26,6 @@ use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
 use phpMyFAQ\Utils;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class FaqHelper
  *
@@ -95,7 +91,9 @@ class FaqHelper extends Helper
         }
 
         return sprintf(
-            '<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" style="border:none; overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
+            '<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true'.
+            '&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" style="border:none; '.
+            'overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
             $http,
             urlencode($url)
         );

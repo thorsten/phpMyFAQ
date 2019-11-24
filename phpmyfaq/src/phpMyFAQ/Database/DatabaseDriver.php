@@ -18,9 +18,7 @@ namespace phpMyFAQ\Database;
  * @since     2007-08-19
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Interface DatabaseDriver

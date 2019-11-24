@@ -24,10 +24,6 @@ use phpMyFAQ\Filesystem;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Client
  *

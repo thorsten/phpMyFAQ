@@ -25,9 +25,7 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class HttpStreamer
@@ -139,9 +137,9 @@ class HttpStreamer
             ob_start();
         }
         // Send the right HTTP headers
-        $this->_setHttpHeaders();
+        $this->setHttpHeaders();
         // Send the raw content
-        $this->_streamContent();
+        $this->streamContent();
         // Manage output buffer flushing
         if (self::EXPORT_BUFFER_ENABLE) {
             ob_end_flush();
@@ -151,7 +149,7 @@ class HttpStreamer
     /**
      * Sends HTTP Headers.
      */
-    private function _setHttpHeaders()
+    private function setHttpHeaders()
     {
         // Evaluate data upon export type request
         switch ($this->type) {
@@ -201,6 +199,8 @@ class HttpStreamer
                 break;
         }
 
+        $filename = Export::getExportTimestamp() . '_' . $filename;
+
         // Set the correct HTTP headers:
         // 1. Prevent proxies&browsers caching
         header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
@@ -216,7 +216,7 @@ class HttpStreamer
             header('Content-Type: application/force-download');
         }
         // RFC2616, �19.5.1: $filename must be a quoted-string
-        header('Content-Disposition: ' . $this->disposition . '; filename="phpMyFAQ_' . Export::getExportTimestamp() . '_' . $filename . '"');
+        header('Content-Disposition: ' . $this->disposition . '; filename="phpMyFAQ_' . $filename . '"');
         if (!empty($description)) {
             header('Content-Description: ' . $description);
         }
@@ -228,7 +228,7 @@ class HttpStreamer
     /**
      * Streams the content.
      */
-    private function _streamContent()
+    private function streamContent()
     {
         print $this->content;
     }

@@ -24,10 +24,6 @@ use phpMyFAQ\Export;
 use phpMyFAQ\Faq;
 use XMLWriter;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Html5
  *
@@ -55,7 +51,7 @@ class Html5 extends Export
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->_config = $config;
+        $this->config = $config;
         $this->xml = new XMLWriter();
 
         $this->xml->openMemory();
@@ -79,7 +75,7 @@ class Html5 extends Export
         $this->category->transform($categoryId);
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
-        $version = $this->_config->get('main.currentVersion');
+        $version = $this->config->get('main.currentVersion');
         $comment = sprintf(
             'HTML5 output by phpMyFAQ %s | Date: %s',
             $version,
@@ -92,7 +88,7 @@ class Html5 extends Export
         $this->xml->writeComment($comment);
 
         $this->xml->startElement('head');
-        $this->xml->writeElement('title', $this->_config->get('main.titleFAQ'));
+        $this->xml->writeElement('title', $this->config->get('main.titleFAQ'));
         $this->xml->startElement('meta');
         $this->xml->writeAttribute('charset', 'utf-8');
         $this->xml->endElement();

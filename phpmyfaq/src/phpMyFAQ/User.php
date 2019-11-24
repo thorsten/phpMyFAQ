@@ -32,10 +32,6 @@ use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\User\UserData;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 if (!defined('PMF_ENCRYPTION_TYPE')) {
     define('PMF_ENCRYPTION_TYPE', 'md5'); // Fallback to md5()
 }

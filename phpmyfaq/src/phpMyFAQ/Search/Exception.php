@@ -17,9 +17,7 @@ namespace phpMyFAQ\Search;
  * @since     2010-06-06
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Exception

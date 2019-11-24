@@ -27,10 +27,6 @@ use phpMyFAQ\Export\Pdf\Wrapper;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Tags;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Pdf
  *
@@ -67,10 +63,10 @@ class Pdf extends Export
     {
         $this->faq = $faq;
         $this->category = $category;
-        $this->_config = $config;
+        $this->config = $config;
 
         $this->pdf = new Wrapper();
-        $this->pdf->setConfig($this->_config);
+        $this->pdf->setConfig($this->config);
 
         // Set PDF options
         $this->pdf->Open();
@@ -106,9 +102,9 @@ class Pdf extends Export
         $this->pdf->setCategory($categoryId);
         $this->pdf->setCategories($this->category->categoryName);
         $this->pdf->SetCreator(
-            $this->_config->get('main.titleFAQ') .
+            $this->config->get('main.titleFAQ') .
             ' - powered by phpMyFAQ ' .
-            $this->_config->get('main.currentVersion')
+            $this->config->get('main.currentVersion')
         );
 
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
@@ -153,7 +149,7 @@ class Pdf extends Export
 
                     $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
 
-                    if ($this->_config->get('main.enableMarkdownEditor')) {
+                    if ($this->config->get('main.enableMarkdownEditor')) {
                         $this->pdf->WriteHTML(trim($this->parsedown->text($faq['content'])));
                     } else {
                         $this->pdf->WriteHTML(trim($faq['content']));
@@ -212,9 +208,9 @@ class Pdf extends Export
         // Set any item
         $this->pdf->SetTitle($faqData['title']);
         $this->pdf->SetCreator(
-            $this->_config->get('main.titleFAQ') .
+            $this->config->get('main.titleFAQ') .
             ' - powered by phpMyFAQ ' .
-            $this->_config->get('main.currentVersion')
+            $this->config->get('main.currentVersion')
         );
         $this->pdf->AddPage();
         $this->pdf->SetFont($this->pdf->getCurrentFont(), '', 12);
@@ -224,7 +220,7 @@ class Pdf extends Export
         $this->pdf->Ln();
         $this->pdf->Ln();
 
-        if ($this->_config->get('main.enableMarkdownEditor')) {
+        if ($this->config->get('main.enableMarkdownEditor')) {
             $this->pdf->WriteHTML(str_replace('../', '', $this->parsedown->text($faqData['content'])), true);
         } else {
             $this->pdf->WriteHTML(str_replace('../', '', $faqData['content']), true);

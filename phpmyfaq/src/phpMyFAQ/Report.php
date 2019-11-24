@@ -18,27 +18,16 @@ namespace phpMyFAQ;
  * @since     2011-02-04
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
- * Class Report.
- *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Gustavo Solt <gustavo.solt@mayflower.de>
- * @copyright 2011-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2011-02-04
+ * Class Report
+ * @package phpMyFAQ
  */
 class Report
 {
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor.
@@ -47,7 +36,7 @@ class Report
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -106,10 +95,10 @@ class Report
             Database::getTablePrefix()
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
         $lastId = 0;
-        while ($row = $this->_config->getDb()->fetchObject($result)) {
+        while ($row = $this->config->getDb()->fetchObject($result)) {
             if ($row->id == $lastId) {
                 $report[$row->id]['faq_translations'] += 1;
             } else {

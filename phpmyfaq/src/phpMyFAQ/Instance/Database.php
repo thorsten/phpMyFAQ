@@ -21,10 +21,6 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Exception;
 use phpMyFAQ\Instance\Database\Driver;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Database
  *

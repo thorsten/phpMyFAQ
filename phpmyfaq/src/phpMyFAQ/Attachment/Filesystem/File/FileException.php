@@ -19,10 +19,6 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\AttachmentException as AttachmentException;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class FileException
  *

@@ -23,10 +23,6 @@ use phpMyFAQ\Exception;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Network;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Session.
  *

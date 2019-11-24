@@ -18,9 +18,7 @@ namespace phpMyFAQ;
  */
 
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 use phpMyFAQ\Entity\QuestionEntity;
 

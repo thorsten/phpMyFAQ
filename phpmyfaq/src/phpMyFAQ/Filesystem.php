@@ -17,9 +17,7 @@ namespace phpMyFAQ;
  * @since     2012-04-02
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Filesystem

@@ -23,10 +23,6 @@ use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 use stdClass;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class SearchResultSet
  *

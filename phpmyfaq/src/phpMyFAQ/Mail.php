@@ -22,10 +22,6 @@ use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;
 use Swift_TransportException;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Mail
  *

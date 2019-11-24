@@ -19,9 +19,7 @@ use phpMyFAQ\Language;
  * @since     2009-04-06
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Basic

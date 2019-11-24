@@ -26,10 +26,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Strings\StringBasic;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Init
  *

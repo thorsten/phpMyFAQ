@@ -17,9 +17,7 @@ namespace phpMyFAQ\Helper;
  * @since     2019-11-24
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 use DirectoryIterator;
 

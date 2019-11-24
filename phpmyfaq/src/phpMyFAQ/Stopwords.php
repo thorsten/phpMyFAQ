@@ -20,10 +20,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Database;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * PMF_Stopwords.
  *

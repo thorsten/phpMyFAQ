@@ -17,9 +17,7 @@ namespace phpMyFAQ\Permission;
  * @since     2018-07-18
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class PermissionHelper

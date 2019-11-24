@@ -20,10 +20,6 @@ namespace phpMyFAQ;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Section.
  *

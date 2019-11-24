@@ -19,10 +19,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\MetaEntity;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Meta
  *

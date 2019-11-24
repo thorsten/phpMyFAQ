@@ -20,10 +20,6 @@ namespace phpMyFAQ\Strings;
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings\StringsAbstract;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * String_Mbstring.
  *

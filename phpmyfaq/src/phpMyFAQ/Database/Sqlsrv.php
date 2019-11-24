@@ -22,9 +22,7 @@ use phpMyFAQ\Utils;
  * @since     2009-02-18
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Sqlsrv

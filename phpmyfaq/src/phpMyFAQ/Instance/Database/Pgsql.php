@@ -20,10 +20,6 @@ namespace phpMyFAQ\Instance\Database;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Instance\Database;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Pgsql
  *

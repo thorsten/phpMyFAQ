@@ -21,10 +21,6 @@ use mysqli_result;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Mysqli
  *

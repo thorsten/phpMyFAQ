@@ -22,10 +22,6 @@ namespace phpMyFAQ;
 use phpMyFAQ\Template\TemplateHelper;
 use phpseclib\Crypt\Blowfish;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Template
  *

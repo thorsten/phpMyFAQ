@@ -29,10 +29,6 @@ use phpMyFAQ\Database;
 use phpMyFAQ\Session;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /* user defined constants */
 define('SESSION_CURRENT_USER', 'CURRENT_USER');
 define('SESSION_ID_TIMESTAMP', 'SESSION_TIMESTAMP');

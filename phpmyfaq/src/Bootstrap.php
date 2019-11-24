@@ -36,9 +36,7 @@ if (DEBUG) {
     error_reporting(0);
 }
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration

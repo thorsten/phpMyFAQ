@@ -22,10 +22,6 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class File.
  *

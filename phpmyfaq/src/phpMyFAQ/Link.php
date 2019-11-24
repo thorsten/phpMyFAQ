@@ -22,9 +22,7 @@ namespace phpMyFAQ;
  * @since     2005-11-02
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Link

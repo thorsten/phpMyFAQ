@@ -18,23 +18,12 @@ namespace phpMyFAQ;
  * @since     2006-06-18
  */
 
-use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchFactory;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
- * PMF_Relation.
+ * Class Relation
  *
- * @package   phpMyFAQ
- * @author    Marco Enders <marco@minimarco.de>
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2006-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2006-06-18
+ * @package phpMyFAQ
  */
 class Relation
 {
@@ -43,7 +32,7 @@ class Relation
      *
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Constructor.
@@ -52,7 +41,7 @@ class Relation
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -68,7 +57,7 @@ class Relation
     {
         $terms = str_replace('-', ' ', $question).' '.$keywords;
         $search = SearchFactory::create(
-            $this->_config,
+            $this->config,
             ['database' => Database::getType()]
         );
 
@@ -94,7 +83,7 @@ class Relation
             ->setConditions(
                 [
                     'fd.active' => "'yes'",
-                    'fd.lang' => "'".$this->_config->getLanguage()->getLanguage()."'",
+                    'fd.lang' => "'".$this->config->getLanguage()->getLanguage()."'",
                 ]
             )
             ->setMatchingColumns(['fd.keywords'])
@@ -102,6 +91,6 @@ class Relation
 
         $result = $search->search($terms);
 
-        return $this->_config->getDb()->fetchAll($result);
+        return $this->config->getDb()->fetchAll($result);
     }
 }

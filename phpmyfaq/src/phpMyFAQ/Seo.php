@@ -17,9 +17,7 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2014-08-31
  */
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Class Seo.

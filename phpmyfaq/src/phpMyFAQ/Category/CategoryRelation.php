@@ -17,9 +17,7 @@ namespace phpMyFAQ\Category;
  * @since     2019-11-22
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

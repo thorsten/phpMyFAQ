@@ -22,10 +22,6 @@ use phpMyFAQ\Attachment\Filesystem\File\EncryptedFile;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Attachment\Filesystem\File\VanillaFile;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class File
  *

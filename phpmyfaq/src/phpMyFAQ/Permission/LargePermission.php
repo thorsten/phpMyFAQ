@@ -23,10 +23,6 @@ use phpMyFAQ\Database;
 use phpMyFAQ\User;
 use phpMyFAQ\User\CurrentUser;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class LargePermission
  *

@@ -19,10 +19,6 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class VanillaFile
  *
@@ -36,7 +32,7 @@ class VanillaFile extends AbstractFile
      *
      * @var int
      */
-    const chunkSize = 512;
+    const CHUNKSIZE = 512;
 
     /**
      * @inheritdoc
@@ -74,6 +70,6 @@ class VanillaFile extends AbstractFile
      */
     public function getChunk(): string
     {
-        return fread($this->handle, self::chunkSize);
+        return fread($this->handle, self::CHUNKSIZE);
     }
 }

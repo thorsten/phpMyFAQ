@@ -20,10 +20,6 @@ namespace phpMyFAQ\Services;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Strings;
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
-
 /**
  * Class Twitter
  *

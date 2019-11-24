@@ -17,9 +17,7 @@ namespace phpMyFAQ\Attachment;
  * @since     2009-08-21
  */
 
-if (!defined('IS_VALID_PHPMYFAQ')) {
-    exit();
-}
+
 
 /**
  * Interface AttachmentInterface
