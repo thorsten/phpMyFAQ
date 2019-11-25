@@ -14,7 +14,7 @@
  */
 
 /*global $: false */
-$(window).on('load', () => {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
   $('.typeahead').typeahead({
     autoSelect: true,

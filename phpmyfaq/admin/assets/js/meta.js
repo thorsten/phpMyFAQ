@@ -98,6 +98,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const codeSnippet = button.data('code-snippet');
     const modal = $(this);
     modal.find('.modal-body code').append('{{ ' + codeSnippet + ' | meta }}');
-  })
+  });
 
 });

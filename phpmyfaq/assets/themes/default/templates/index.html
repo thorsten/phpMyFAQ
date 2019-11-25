@@ -85,7 +85,26 @@
   </div>
 </nav>
 
-<!-- Main Search -->
+<!-- SEARCH -->
+<div class="pmf-search-section">
+  <div class="pmf-masthead pmf-single-masthead">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-8 mx-md-auto">
+          <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
+            <input type="text" class="typeahead pmf-search-field" placeholder="{{ searchBox }} ..." name="search"
+                   autocomplete="off" data-provide="typeahead" value="{{ searchTerm }}">
+            <button type="submit"><i class="fa fa-search"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- Main Search
 <div class="container d-print-none">
   <br/>
   <div class="row justify-content-center">
@@ -96,25 +115,21 @@
           <div class="col-auto">
             <i class="fa fa-search h4 text-body"></i>
           </div>
-          <!--end of col-->
           <div class="col">
             <input
               class="typeahead form-control form-control-lg form-control-borderless"  name="search" autocomplete="off"
               data-provide="typeahead" type="search" placeholder="{{ searchBox }} ..." value="{{ searchTerm }}"
             >
           </div>
-          <!--end of col-->
           <div class="col-auto">
             <button class="btn btn-lg btn-success" type="submit">{{ searchBox }}</button>
           </div>
-          <!--end of col-->
         </div>
       </form>
     </div>
-    <!--end of col-->
   </div>
 </div>
-
+-->
 
 <section>
   <div class="container">
