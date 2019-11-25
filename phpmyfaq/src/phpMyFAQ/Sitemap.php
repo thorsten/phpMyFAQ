@@ -20,14 +20,9 @@ namespace phpMyFAQ;
 use phpMyFAQ\Database\Sqlite3;
 
 /**
- * Class Sitemap.
+ * Class Sitemap
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-30
+ * @package phpMyFAQ
  */
 class Sitemap
 {
@@ -199,7 +194,8 @@ class Sitemap
     /**
      * Returns all records from the current first letter.
      *
-     * @param  string $letter Letter
+     * @param string $letter Letter
+     * @throws \Exception
      * @return string
      */
     public function getRecordsFromLetter($letter = 'A'): string

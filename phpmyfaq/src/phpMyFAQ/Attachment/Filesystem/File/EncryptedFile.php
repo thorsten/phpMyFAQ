@@ -34,7 +34,7 @@ class EncryptedFile extends File
      *
      * @var string
      */
-    const chunkDelimiter = 'ฒૐᥤ';
+    const CHUNKDELIMITER = 'ฒૐᥤ';
 
     /**
      * AES instance.
@@ -61,7 +61,7 @@ class EncryptedFile extends File
      */
     public function putChunk($chunk)
     {
-        $content = $this->aes->encrypt($chunk) . self::chunkDelimiter;
+        $content = $this->aes->encrypt($chunk) . self::CHUNKDELIMITER;
 
         return fwrite($this->handle, $content);
     }
@@ -98,11 +98,11 @@ class EncryptedFile extends File
     {
         $readEnd = false;
         $chunk = '';
-        $chunkDelimLen = strlen(self::chunkDelimiter);
+        $chunkDelimLen = strlen(self::CHUNKDELIMITER);
 
         while (!$readEnd && !$this->eof()) {
             $chunk .= fread($this->handle, 1);
-            $readEnd = self::chunkDelimiter == substr($chunk, -$chunkDelimLen);
+            $readEnd = self::CHUNKDELIMITER == substr($chunk, -$chunkDelimLen);
         }
 
         $chunk = substr($chunk, 0, -$chunkDelimLen);

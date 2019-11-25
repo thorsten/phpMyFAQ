@@ -17,18 +17,10 @@ namespace phpMyFAQ;
  * @since     2012-08-30
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Mail;
-
 /**
- * PMF_Notification.
+ * Class Notification
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2012-08-30
+ * @package phpMyFAQ
  */
 class Notification
 {
@@ -76,7 +68,7 @@ class Notification
      * @param string $userName Name of the user
      * @param string $url      URL of answered FAQ
      */
-    public function sendOpenQuestionAnswered($email, $userName, $url)
+    public function sendOpenQuestionAnswered(string $email, string $userName, string $url)
     {
         $this->mail->addTo($email, $userName);
         $this->mail->subject = $this->config->get('main.titleFAQ').' - '.$this->pmfStr['msgQuestionAnswered'];

@@ -20,7 +20,6 @@ namespace phpMyFAQ;
 
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;
-use Swift_TransportException;
 
 /**
  * Class Mail
@@ -156,68 +155,68 @@ class Mail
      *
      * @var mixed
      */
-    private $_bcc;
+    private $bcc;
 
     /**
      * Recipients of the e-mail as <CC>.
      *
      * @var mixed
      */
-    private $_cc;
+    private $cc;
 
     /**
      * Recipients of the e-mail as <From>.
      *
      * @var mixed
      */
-    private $_from;
+    private $from;
 
     /**
      * Mailer string.
      *
      * @var string
      */
-    private $_mailer;
+    private $mailer;
 
     /**
      * Recipient of the optional notification.
      *
      * @var mixed
      */
-    private $_notifyTo;
+    private $notifyTo;
 
     /**
      * Recipient of the e-mail as <Reply-To>.
      *
      * @var mixed
      */
-    private $_replyTo;
+    private $replyTo;
 
     /**
      * Recipient of the e-mail as <Return-Path>.
      *
      * @var mixed
      */
-    private $_returnPath;
+    private $returnPath;
 
     /**
      * Recipient of the e-mail as <Sender>.
      *
      * @var mixed
      */
-    private $_sender;
+    private $sender;
 
     /**
      * Recipients of the e-mail as <TO:>.
      *
      * @var mixed
      */
-    private $_to;
+    private $to;
 
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /*
      * Default constructor.
@@ -240,20 +239,20 @@ class Mail
         $this->subject = '';
 
         // Set default value for private properties
-        $this->_config = $config;
-        $this->_bcc = [];
-        $this->_cc = [];
-        $this->_from = [];
-        $this->_mailer = 'phpMyFAQ on PHP/' . PHP_VERSION;
-        $this->_notifyTo = [];
-        $this->_replyTo = [];
-        $this->_returnPath = [];
-        $this->_sender = [];
-        $this->_to = [];
+        $this->config = $config;
+        $this->bcc = [];
+        $this->cc = [];
+        $this->from = [];
+        $this->mailer = 'phpMyFAQ on PHP/' . PHP_VERSION;
+        $this->notifyTo = [];
+        $this->replyTo = [];
+        $this->returnPath = [];
+        $this->sender = [];
+        $this->to = [];
 
         // Set phpMyFAQ related data
-        $this->_mailer = 'phpMyFAQ/' . $this->_config->get('main.currentVersion');
-        $this->setFrom($this->_config->get('main.administrationMail'), $this->_config->get('main.titleFAQ'));
+        $this->mailer = 'phpMyFAQ/' . $this->config->get('main.currentVersion');
+        $this->setFrom($this->config->get('main.administrationMail'), $this->config->get('main.titleFAQ'));
     }
 
     /**
@@ -297,7 +296,7 @@ class Mail
      */
     public function setFrom($address, $name = null)
     {
-        return $this->_setEmailTo($this->_from, 'From', $address, $name);
+        return $this->setEmailTo($this->from, 'From', $address, $name);
     }
 
     /**
@@ -310,7 +309,7 @@ class Mail
      *
      * @return bool True if successful, false otherwise.
      */
-    private function _setEmailTo(&$target, $targetAlias, $address, $name = null)
+    private function setEmailTo(&$target, $targetAlias, $address, $name = null)
     {
         // Check for the permitted number of items into the $target array
         if (count($target) > 2) {
@@ -323,7 +322,7 @@ class Mail
             return false;
         }
 
-        return $this->_addEmailTo($target, $targetAlias, $address, $name);
+        return $this->addEmailTo($target, $targetAlias, $address, $name);
     }
 
     /**
@@ -338,7 +337,7 @@ class Mail
      *
      * @todo Enhance error handling using exceptions
      */
-    private function _addEmailTo(&$target, $targetAlias, $address, $name = null)
+    private function addEmailTo(&$target, $targetAlias, $address, $name = null)
     {
         // Sanity check
         if (!self::validateEmail($address)) {
@@ -464,7 +463,7 @@ class Mail
      */
     public function addBcc($address, $name = null)
     {
-        return $this->_addEmailTo($this->_bcc, 'Bcc', $address, $name);
+        return $this->addEmailTo($this->bcc, 'Bcc', $address, $name);
     }
 
     /**
@@ -477,7 +476,7 @@ class Mail
      */
     public function addCc($address, $name = null)
     {
-        return $this->_addEmailTo($this->_cc, 'Cc', $address, $name);
+        return $this->addEmailTo($this->cc, 'Cc', $address, $name);
     }
 
     /**
@@ -490,7 +489,7 @@ class Mail
      */
     public function addNotificationTo($address, $name = null)
     {
-        return $this->_addEmailTo($this->_notifyTo, 'Disposition-Notification-To', $address, $name);
+        return $this->addEmailTo($this->notifyTo, 'Disposition-Notification-To', $address, $name);
     }
 
     /**
@@ -503,7 +502,7 @@ class Mail
      */
     public function addTo($address, $name = null)
     {
-        return $this->_addEmailTo($this->_to, 'To', $address, $name);
+        return $this->addEmailTo($this->to, 'To', $address, $name);
     }
 
     /**
@@ -516,7 +515,7 @@ class Mail
     public function send()
     {
         // Sanity check
-        if (count($this->_to) + count($this->_cc) + count($this->_bcc) < 1) {
+        if (count($this->to) + count($this->cc) + count($this->bcc) < 1) {
             trigger_error(
                 '<strong>Mail Class</strong>: you need at least to set one recipient among TO, CC and BCC!',
                 E_USER_ERROR
@@ -552,42 +551,37 @@ class Mail
 
         // Prepare the recipients
         $to = [];
-        foreach ($this->_to as $address => $name) {
+        foreach ($this->to as $address => $name) {
             $to[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
         $recipients = implode(',', $to);
         // Check for the need of undisclosed recipients outlook-like <TO:>
-        if (empty($recipients) && (0 == count($this->_cc))) {
+        if (empty($recipients) && (0 == count($this->cc))) {
             $recipients = '<Undisclosed-Recipient:;>';
         }
 
         // Prepare the headers
-        $this->_createHeaders();
+        $this->createHeaders();
 
         // Prepare the body
-        $this->_createBody();
+        $this->createBody();
 
         // Send the email adopting to the given MUA
         $mua = self::getMUA($this->agent);
 
         if (is_object($mua) && method_exists($mua, 'setAuthConfig')) {
             $mua->setAuthConfig(
-                $this->_config->get('mail.remoteSMTPServer'),
-                $this->_config->get('mail.remoteSMTPUsername'),
-                $this->_config->get('mail.remoteSMTPPassword'),
-                $this->_config->get('mail.remoteSMTPPort'),
-                $this->_config->get('mail.remoteSMTPEncryption')
+                $this->config->get('mail.remoteSMTPServer'),
+                $this->config->get('mail.remoteSMTPUsername'),
+                $this->config->get('mail.remoteSMTPPassword'),
+                $this->config->get('mail.remoteSMTPPort'),
+                $this->config->get('mail.remoteSMTPEncryption')
             );
         }
 
         switch ($this->agent) {
             case 'SwiftSMTP':
-                try {
-                    $sent = $mua->send($this->_to, $this->headers, $this->body);
-                } catch (Swift_TransportException $exception) {
-                    trigger_error($exception->getMessage());
-                    $sent = false;
-                }
+                $sent = $mua->send($this->to, $this->headers, $this->body);
                 break;
             case 'built-in':
                 $sent = $mua->send($recipients, $this->headers, $this->body);
@@ -605,7 +599,7 @@ class Mail
     /**
      * Create the headers of the email.
      */
-    private function _createHeaders()
+    private function createHeaders()
     {
         // Cleanup headers
         $this->headers = [];
@@ -628,7 +622,7 @@ class Mail
 
         // Disposition-Notification-To, RFC 3798
         $notifyTos = [];
-        foreach ($this->_notifyTo as $address => $name) {
+        foreach ($this->notifyTo as $address => $name) {
             $notifyTos[] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
         $notifyTo = implode(',', $notifyTos);
@@ -637,17 +631,17 @@ class Mail
         }
 
         // From
-        foreach ($this->_from as $address => $name) {
+        foreach ($this->from as $address => $name) {
             $this->headers['From'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
         // CC
-        foreach ($this->_cc as $address => $name) {
+        foreach ($this->cc as $address => $name) {
             $this->headers['CC'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
         // BCC
-        foreach ($this->_bcc as $address => $name) {
+        foreach ($this->bcc as $address => $name) {
             $this->headers['BCC'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
@@ -659,21 +653,21 @@ class Mail
 
         // Reply-To
         $this->headers['Reply-To'] = $this->headers['From'];
-        foreach ($this->_replyTo as $address => $name) {
+        foreach ($this->replyTo as $address => $name) {
             $this->headers['Reply-To'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
         // Return-Path
-        foreach ($this->_from as $address => $name) {
+        foreach ($this->from as $address => $name) {
             $this->headers['Return-Path'] = '<' . $address . '>';
         }
-        foreach ($this->_returnPath as $address => $name) {
+        foreach ($this->returnPath as $address => $name) {
             $this->headers['Return-Path'] = '<' . $address . '>';
         }
 
         // Sender
         $this->headers['Sender'] = $this->headers['From'];
-        foreach ($this->_sender as $address => $name) {
+        foreach ($this->sender as $address => $name) {
             $this->headers['Sender'] = (empty($name) ? '' : $name . ' ') . '<' . $address . '>';
         }
 
@@ -681,11 +675,11 @@ class Mail
         // TODO: wrap mb_encode_mimeheader() to add other content encodings
         $this->headers['Subject'] = Utils::resolveMarkers(
             html_entity_decode($this->subject, ENT_COMPAT, 'UTF-8'),
-            $this->_config
+            $this->config
         );
 
         // X-Mailer
-        $this->headers['X-Mailer'] = $this->_mailer;
+        $this->headers['X-Mailer'] = $this->mailer;
 
         // X-MSMail-Priority
         if (isset($this->priorities[(int)$this->priority])) {
@@ -736,7 +730,7 @@ class Mail
     /**
      * Create the body of the email.
      */
-    private function _createBody()
+    private function createBody()
     {
         $lines = [];
         $mainBoundary = $this->boundary;
@@ -772,7 +766,7 @@ class Mail
                 $lines[] = 'Content-Type: text/plain; charset="' . $this->charset . '"';
                 $lines[] = 'Content-Transfer-Encoding: ' . $this->contentTransferEncoding;
                 $lines[] = '';
-                $lines[] = self::wrapLines(Utils::resolveMarkers($this->messageAlt, $this->_config));
+                $lines[] = self::wrapLines(Utils::resolveMarkers($this->messageAlt, $this->config));
                 $lines[] = '';
             }
             // 2/2. message, supposed as, potentially, HTML
@@ -805,7 +799,8 @@ class Mail
                 if ('inline' == $attachment['disposition']) {
                     $lines[] = 'Content-ID: <' . $attachment['cid'] . '>';
                 }
-                $lines[] = 'Content-Disposition: ' . $attachment['disposition'] . '; filename="' . $attachment['name'] . '"';
+                $lines[] =
+                    'Content-Disposition: ' . $attachment['disposition'] . '; filename="' . $attachment['name'] . '"';
                 $lines[] = '';
                 $lines[] = chunk_split(base64_encode(file_get_contents($attachment['path'])));
             }
@@ -959,7 +954,7 @@ class Mail
      */
     public function setReplyTo($address, $name = null)
     {
-        return $this->_setEmailTo($this->_replyTo, 'Reply-To', $address, $name);
+        return $this->setEmailTo($this->replyTo, 'Reply-To', $address, $name);
     }
 
     /**
@@ -971,7 +966,7 @@ class Mail
      */
     public function setReturnPath($address)
     {
-        return $this->_setEmailTo($this->_returnPath, 'Return-Path', $address);
+        return $this->setEmailTo($this->returnPath, 'Return-Path', $address);
     }
 
     /**
@@ -984,7 +979,7 @@ class Mail
      */
     public function setSender($address, $name = null)
     {
-        return $this->_setEmailTo($this->_sender, 'Sender', $address, $name);
+        return $this->setEmailTo($this->sender, 'Sender', $address, $name);
     }
 
     /**
@@ -994,7 +989,7 @@ class Mail
      */
     public function unsetFrom()
     {
-        $this->_from = [];
+        $this->from = [];
 
         return true;
     }
@@ -1012,7 +1007,7 @@ class Mail
      */
     public function safeEmail($email)
     {
-        if ($this->_config->get('spam.enableSafeEmail')) {
+        if ($this->config->get('spam.enableSafeEmail')) {
             return str_replace(array('@', '.'), array('_AT_', '_DOT_'), $email);
         } else {
             return $email;

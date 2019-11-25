@@ -17,21 +17,10 @@ namespace phpMyFAQ;
  * @since     2007-03-31
  */
 
-use phpMyFAQ\Configuration;
-use phpMyFAQ\Database;
-use phpMyFAQ\Exception;
-use phpMyFAQ\Filter;
-use phpMyFAQ\Network;
-
 /**
- * Class Session.
+ * Class Session
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2007-03-31
+ * @package phpMyFAQ
  */
 class Session
 {
@@ -255,7 +244,7 @@ class Session
     /**
      * Deletes the sessions for a given timespan.
      *
-     * @param int $first Frist session ID
+     * @param int $first First session ID
      * @param int $last  Last session ID
      *
      * @return bool

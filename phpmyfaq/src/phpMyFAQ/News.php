@@ -4,7 +4,6 @@ namespace phpMyFAQ;
 
 /**
  * The News class for phpMyFAQ news.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -17,7 +16,6 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-25
  */
-
 
 
 /**
@@ -56,8 +54,7 @@ class News
      * Function for generating the HTML5 code for the current news.
      *
      * @param bool $showArchive Show archived news
-     * @param bool $active      Show active news
-     *
+     * @param bool $active Show active news
      * @return string
      * @throws \Exception
      */
@@ -100,10 +97,7 @@ class News
                 );
             }
 
-            $output .= sprintf(
-                '<small class="text-muted">%s</small>',
-                $date->format($item['date'])
-            );
+            $output .= sprintf('<small class="text-muted">%s</small>', $date->format($item['date']));
         }
 
         return ('' == $output) ? $this->pmfLang['msgNoNews'] : $output;
@@ -112,10 +106,9 @@ class News
     /**
      * Return the latest news data.
      *
-     * @param bool $showArchive    Show archived news
-     * @param bool $active         Show active news
+     * @param bool $showArchive Show archived news
+     * @param bool $active Show active news
      * @param bool $forceConfLimit Force to limit in configuration
-     *
      * @return array
      */
     public function getLatestData($showArchive = false, $active = true, $forceConfLimit = false)
@@ -147,15 +140,13 @@ class News
         );
 
         $result = $this->config->getDb()->query($query);
-
-        if ($this->config->get('records.numberOfShownNewsEntries') > 0 && $this->config->getDb()->numRows($result) > 0) {
+        $numberOfShownNewsEntries = $this->config->get('records.numberOfShownNewsEntries');
+        if ($numberOfShownNewsEntries > 0 && $this->config->getDb()->numRows($result) > 0) {
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 ++$counter;
-                if (($showArchive && ($counter > $this->config->get('records.numberOfShownNewsEntries')))
-                    || ((!$showArchive) && (!$forceConfLimit)
-                    && ($counter <= $this->config->get('records.numberOfShownNewsEntries')))
-                    || ((!$showArchive) && $forceConfLimit)
-                ) {
+                if (($showArchive && ($counter > $numberOfShownNewsEntries)) ||
+                    ((!$showArchive) && (!$forceConfLimit) && ($counter <= $numberOfShownNewsEntries)) ||
+                    ((!$showArchive) && $forceConfLimit)) {
                     $url = sprintf(
                         '%s?action=news&amp;newsid=%d&amp;newslang=%s',
                         $this->config->getDefaultUrl(),
@@ -200,8 +191,7 @@ class News
         $headers = [];
         $now = date('YmdHis');
 
-        $query = sprintf(
-            "
+        $query = sprintf("
             SELECT
                 id, datum, lang, header, active, date_start, date_end
             FROM
@@ -209,10 +199,7 @@ class News
             WHERE
                 lang = '%s'
             ORDER BY
-                datum DESC",
-            Database::getTablePrefix(),
-            $this->config->getLanguage()->getLanguage()
-        );
+                datum DESC", Database::getTablePrefix(), $this->config->getLanguage()->getLanguage());
 
         $result = $this->config->getDb()->query($query);
 
@@ -236,28 +223,22 @@ class News
     /**
      * Fetches a news entry identified by its ID.
      *
-     * @param int  $id    ID of news
+     * @param int  $id ID of news
      * @param bool $admin Is admin
-     *
      * @return array
      */
     public function getNewsEntry($id, $admin = false)
     {
         $news = [];
 
-        $query = sprintf(
-            "SELECT
+        $query = sprintf("SELECT
                 *
             FROM
                 %sfaqnews
             WHERE
                 id = %d
             AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $this->config->getLanguage()->getLanguage()
-        );
+                lang = '%s'", Database::getTablePrefix(), $id, $this->config->getLanguage()->getLanguage());
 
         $result = $this->config->getDb()->query($query);
 
@@ -303,7 +284,6 @@ class News
      * Adds a new news entry.
      *
      * @param array $data Array with news data
-     *
      * @return bool
      */
     public function addNewsEntry($data)
@@ -343,9 +323,8 @@ class News
     /**
      * Updates a new news entry identified by its ID.
      *
-     * @param int   $id   News ID
+     * @param int   $id News ID
      * @param array $data Array with news data
-     *
      * @return bool
      */
     public function updateNewsEntry($id, Array $data)
@@ -398,23 +377,17 @@ class News
      * Deletes a news entry identified by its ID.
      *
      * @param int $id News ID
-     *
      * @return bool
      * @todo   check if there are comments attached to the deleted news
      */
     public function deleteNews($id)
     {
-        $query = sprintf(
-            "DELETE FROM
+        $query = sprintf("DELETE FROM
                 %sfaqnews
             WHERE
                 id = %d
             AND
-                lang = '%s'",
-            Database::getTablePrefix(),
-            $id,
-            $this->config->getLanguage()->getLanguage()
-        );
+                lang = '%s'", Database::getTablePrefix(), $id, $this->config->getLanguage()->getLanguage());
 
         if (!$this->config->getDb()->query($query)) {
             return false;

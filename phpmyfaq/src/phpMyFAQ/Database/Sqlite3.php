@@ -52,6 +52,10 @@ class Sqlite3 implements DatabaseDriver
      */
     private $sqllog = '';
 
+    const ERROR_MESSAGE =
+        'Do not call numRows() after you\'ve fetched one or more result records, because '.
+        'phpMyFAQ\Database\Sqlite3::numRows() has to reset the resultset at its end.';
+
     /**
      * Connects to the database.
      *
@@ -233,9 +237,9 @@ class Sqlite3 implements DatabaseDriver
      *
      * @return int
      */
-    public function numRows($result)
+    public function numRows($result): int
     {
-        !isset($result->fetchedByPMF) || !$result->fetchedByPMF || die("Do not call numRows() after you've fetched one or more result records, because phpMyFAQ\Db_Sqlite3::numRows() has to reset the resultset at its end.");
+        !isset($result->fetchedByPMF) || !$result->fetchedByPMF || die(self::ERROR_MESSAGE);
         $numberOfRows = 0;
         while ($result->fetchArray(SQLITE3_NUM)) {
             ++$numberOfRows;

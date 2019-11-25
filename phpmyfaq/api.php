@@ -167,7 +167,7 @@ switch ($action) {
 
     case 'getFAQsByTag':
         $tags = new Tags($faqConfig);
-        $recordIds = $tags->getRecordsByTagId($tagId);
+        $recordIds = $tags->getFaqsByTagId($tagId);
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);

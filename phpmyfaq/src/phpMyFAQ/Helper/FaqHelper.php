@@ -47,7 +47,7 @@ class FaqHelper extends Helper
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -80,7 +80,7 @@ class FaqHelper extends Helper
      */
     public function renderFacebookLikeButton(string $url): string
     {
-        if (empty($url) || $this->_config->get('socialnetworks.enableFacebookSupport') == false) {
+        if (empty($url) || $this->config->get('socialnetworks.enableFacebookSupport') == false) {
             return '';
         }
 
@@ -107,7 +107,7 @@ class FaqHelper extends Helper
      */
     public function renderFacebookShareLink(string $url): string
     {
-        if (empty($url) || $this->_config->get('socialnetworks.disableAll') === true) {
+        if (empty($url) || $this->config->get('socialnetworks.disableAll') === true) {
             return '';
         }
 
@@ -131,7 +131,7 @@ class FaqHelper extends Helper
      */
     public function renderTwitterShareLink(string $url): string
     {
-        if (empty($url) || $this->_config->get('socialnetworks.disableAll')) {
+        if (empty($url) || $this->config->get('socialnetworks.disableAll')) {
             return '';
         }
 
@@ -155,7 +155,7 @@ class FaqHelper extends Helper
      */
     public function renderSendToFriend(string $url): string
     {
-        if (empty($url) || !$this->_config->get('main.enableSendToFriend')) {
+        if (empty($url) || !$this->config->get('main.enableSendToFriend')) {
             return '';
         }
 
@@ -190,9 +190,9 @@ class FaqHelper extends Helper
             $faq->faqRecord['id']
         );
 
-        $oLink = new Link(Link::getSystemRelativeUri() . $faqUrl, $this->_config);
+        $oLink = new Link(Link::getSystemRelativeUri() . $faqUrl, $this->config);
         $oLink->itemTitle = $faq->faqRecord['title'];
-        $availableLanguages = $this->_config->getLanguage()->languageAvailable($faq->faqRecord['id']);
+        $availableLanguages = $this->config->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
         if (count($availableLanguages) > 1) {
             $html = '<form method="post">';
@@ -220,7 +220,7 @@ class FaqHelper extends Helper
      */
     public function renderAnswerPreview($answer, $numWords): string
     {
-        if ($this->_config->get('main.enableMarkdownEditor')) {
+        if ($this->config->get('main.enableMarkdownEditor')) {
             $parseDown = new \ParsedownExtra();
             return Utils::chopString(strip_tags($parseDown->text($answer)), $numWords);
         } else {
@@ -247,7 +247,7 @@ class FaqHelper extends Helper
 
         // Get all FAQs
         $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
-        $date = new Date($this->_config);
+        $date = new Date($this->config);
 
         if (count($faq->faqRecords)) {
             $lastCategory = 0;
@@ -286,7 +286,7 @@ class FaqHelper extends Helper
         global $languageCodes;
         $output = '';
 
-        $languages = $this->_config->getLanguage()->languageAvailable(0, 'faqcategories');
+        $languages = $this->config->getLanguage()->languageAvailable(0, 'faqcategories');
         foreach ($languages as $languageCode) {
             if ($languageCode !== $faqLang) {
                 $output .= sprintf(

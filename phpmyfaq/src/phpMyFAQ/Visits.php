@@ -10,28 +10,17 @@ namespace phpMyFAQ;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2009-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link  https://www.phpmyfaq.de
  * @since 2009-03-08
  */
 
-use phpMyFAQ\Configuration;
-
 /**
- * PMF_Visits.
+ * Class Visits
  *
  * @package phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2009-03-08
  */
 class Visits
 {
@@ -92,12 +81,8 @@ class Visits
      *
      * @return bool
      */
-    public function add($id)
+    public function add(int $id): bool
     {
-        if (!is_numeric($id)) {
-            return false;
-        }
-
         $query = sprintf(
             "
             INSERT INTO
@@ -110,9 +95,8 @@ class Visits
             1,
             $_SERVER['REQUEST_TIME']
         );
-        $this->config->getDb()->query($query);
 
-        return true;
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -122,12 +106,8 @@ class Visits
      *
      * @return bool
      */
-    private function update($id)
+    private function update(int $id): bool
     {
-        if (!is_numeric($id)) {
-            return false;
-        }
-
         $query = sprintf(
             "
             UPDATE
@@ -142,9 +122,8 @@ class Visits
             $id,
             $this->config->getLanguage()->getLanguage()
         );
-        $this->config->getDb()->query($query);
 
-        return true;
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -152,7 +131,7 @@ class Visits
      *
      * @return array
      */
-    public function getAllData()
+    public function getAllData(): array
     {
         $data = [];
 
@@ -183,9 +162,9 @@ class Visits
     /**
      * Resets all visits to current date and one visit per FAQ.
      *
-     * @return mixed
+     * @return bool
      */
-    public function resetAll()
+    public function resetAll(): bool
     {
         return $this->config->getDb()->query(
             sprintf(

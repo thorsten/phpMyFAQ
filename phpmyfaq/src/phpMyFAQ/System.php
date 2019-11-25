@@ -17,17 +17,17 @@ namespace phpMyFAQ;
  * @since     2010-01-13
  */
 
+use DateTime;
+use DirectoryIterator;
 use phpMyFAQ\Database\DatabaseDriver;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use UnexpectedValueException;
 
 /**
- * Class System.
+ * Class System
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2010-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2010-01-13
+ * @package phpMyFAQ
  */
 class System
 {
@@ -153,7 +153,7 @@ class System
     {
         $templates = [];
 
-        foreach (new \DirectoryIterator(PMF_ROOT_DIR.'/assets/themes/') as $item) {
+        foreach (new DirectoryIterator(PMF_ROOT_DIR.'/assets/themes/') as $item) {
             $basename = $item->getBasename();
             if (!$item->isDot() && $item->isDir()) {
                 $templates[$basename] = (Template::getTplSetName() === $basename ? true : false);
@@ -271,14 +271,13 @@ class System
     /**
      * Checks for an installed phpMyFAQ version.
      *
-     * inc/data.php        -> phpMyFAQ 2.0 and 2.5
      * config/database.php -> phpMyFAQ 2.6 and later
      *
      * @return bool
      */
     public function checkphpMyFAQInstallation()
     {
-        if (is_file(PMF_ROOT_DIR.'/inc/data.php') || is_file(PMF_ROOT_DIR.'/config/database.php')) {
+        if (is_file(PMF_ROOT_DIR.'/config/database.php')) {
             return false;
         } else {
             return true;
@@ -312,15 +311,16 @@ class System
     /**
      * Creates a JSON object with all .php files of phpMyFAQ with their sha1 hashes.
      *
+     * @throws \Exception
      * @return string
      */
     public function createHashes()
     {
-        $created = new \DateTime();
+        $created = new DateTime();
 
-        $files = new \RecursiveIteratorIterator(
-            new \RecursiveDirectoryIterator(PMF_ROOT_DIR),
-            \RecursiveIteratorIterator::SELF_FIRST
+        $files = new RecursiveIteratorIterator(
+            new RecursiveDirectoryIterator(PMF_ROOT_DIR),
+            RecursiveIteratorIterator::SELF_FIRST
         );
 
         $hashes = array(
@@ -347,16 +347,12 @@ class System
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
                 }
             }
-        } catch (\UnexpectedValueException $e) {
+        } catch (UnexpectedValueException $e) {
             $hashes[$current.' failed'] = $e->getMessage();
         }
 
         return json_encode($hashes);
     }
-
-    //
-    // Methods to clean a phpMyFAQ installation
-    //
 
     /**
      * Drops all given tables

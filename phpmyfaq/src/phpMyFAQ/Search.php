@@ -19,22 +19,13 @@ namespace phpMyFAQ;
  * @since     2008-01-26
  */
 
-use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use phpMyFAQ\Search\Elasticsearch;
-use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\SearchFactory;
 
 /**
- * Search.
+ * Class Search
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@scaramuccia.com>
- * @author    Adrianna Musiol <musiol@imageaccess.de>
- * @copyright 2008-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2008-01-26
+ * @package phpMyFAQ
  */
 class Search
 {
@@ -100,19 +91,12 @@ class Search
      *
      * @param string $searchTerm   Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     *
-     * @throws Exception
-     *
      * @return array
      */
     public function search($searchTerm, $allLanguages = true)
     {
         if ($this->_config->get('search.enableElasticsearch')) {
-            try {
-                return $this->searchElasticsearch($searchTerm, $allLanguages);
-            } catch (Exception $e) {
-                throw new Exception($e->getMessage());
-            }
+            return $this->searchElasticsearch($searchTerm, $allLanguages);
         } else {
             return $this->searchDatabase($searchTerm, $allLanguages);
         }
@@ -122,9 +106,6 @@ class Search
      * The auto complete function to handle the different search engines.
      *
      * @param string $searchTerm Text to auto complete
-     *
-     * @throws Exception
-     *
      * @return array
      */
     public function autoComplete($searchTerm)
@@ -136,11 +117,7 @@ class Search
             $esSearch->setCategoryIds($allCategories);
             $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
 
-            try {
-                return $esSearch->autoComplete($searchTerm);
-            } catch (NoNodesAvailableException $e) {
-                throw new Exception($e->getMessage());
-            }
+            return $esSearch->autoComplete($searchTerm);
         } else {
             return $this->searchDatabase($searchTerm, false);
         }
@@ -151,7 +128,6 @@ class Search
      *
      * @param string $searchTerm   Text/Number (solution id)
      * @param bool   $allLanguages true to search over all languages
-     *
      * @return array
      */
     public function searchDatabase($searchTerm, $allLanguages = true)
@@ -250,6 +226,7 @@ class Search
      * Logging of search terms for improvements.
      *
      * @param string $searchTerm Search term
+     * @throws \Exception
      */
     public function logSearchTerm($searchTerm)
     {
@@ -282,7 +259,7 @@ class Search
      *
      * @return bool
      */
-    public function deleteSearchTerm($searchTerm)
+    public function deleteSearchTerm(string $searchTerm): bool
     {
         $query = sprintf(
             "
@@ -302,7 +279,7 @@ class Search
      *
      * @return bool
      */
-    public function deleteAllSearchTerms()
+    public function deleteAllSearchTerms(): bool
     {
         $query = sprintf('DELETE FROM %s', $this->_table);
 
@@ -317,7 +294,7 @@ class Search
      *
      * @return array
      */
-    public function getMostPopularSearches($numResults = 7, $withLang = false)
+    public function getMostPopularSearches(int $numResults = 7, bool $withLang = false): array
     {
         $searchResult = [];
 
@@ -358,7 +335,7 @@ class Search
      *
      * @return int
      */
-    public function getSearchesCount()
+    public function getSearchesCount(): int
     {
         $sql = sprintf(
             'SELECT COUNT(1) AS count FROM %s',

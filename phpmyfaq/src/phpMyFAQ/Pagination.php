@@ -74,7 +74,8 @@ class Pagination
      *
      * @var string
      */
-    protected $currentPageLinkTpl = '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
+    protected $currentPageLinkTpl =
+        '<li class="page-item active"><a class="page-link" href="{LINK_URL}">{LINK_TEXT}</a></li>';
 
     /**
      * Next page link template.
@@ -109,7 +110,8 @@ class Pagination
      *
      * @var string
      */
-    protected $layoutTpl = '<nav class="pmf-pagination"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></nav>';
+    protected $layoutTpl =
+        '<nav class="pmf-pagination"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></nav>';
 
     /**
      * Current page index.

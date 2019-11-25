@@ -4,34 +4,24 @@ namespace phpMyFAQ;
 
 /**
  * The main Rating class.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2007-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link  https://www.phpmyfaq.de
  * @since 2007-03-31
  */
 
-use phpMyFAQ\Database;
+use phpMyFAQ\Language\Plurals;
 
 /**
- * PMF_Rating.
+ * Class Rating
  *
  * @package phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2007-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2007-03-31
  */
 class Rating
 {
@@ -45,7 +35,7 @@ class Rating
      *
      * @var string
      */
-    private $pmf_lang;
+    private $pmfLang;
 
     /**
      * Plural form support.
@@ -64,7 +54,7 @@ class Rating
         global $PMF_LANG, $plr;
 
         $this->config = $config;
-        $this->pmf_lang = $PMF_LANG;
+        $this->pmfLang = $PMF_LANG;
         $this->plr = $plr;
     }
 
@@ -73,7 +63,7 @@ class Rating
      *
      * @return array
      */
-    public function getAllRatings()
+    public function getAllRatings(): array
     {
         $ratings = [];
 
@@ -176,13 +166,13 @@ class Rating
     }
 
     /**
-     * Calculates the rating of the user votings.
+     * Calculates the rating of the user voting.
      *
      * @param int $id
      *
      * @return string
      */
-    public function getVotingResult($id)
+    public function getVotingResult(int $id): string
     {
         $query = sprintf(
             '
@@ -210,7 +200,7 @@ class Rating
     }
 
     /**
-     * Reload locking for user votings.
+     * Reload locking for user voting.
      *
      * @param int    $id FAQ record id
      * @param string $ip IP
@@ -241,7 +231,7 @@ class Rating
     }
 
     /**
-     * Returns the number of users from the table faqvotings.
+     * Returns the number of users from the table "faqvotings".
      *
      * @param integer $recordId
      *
@@ -329,7 +319,7 @@ class Rating
      *
      * @return bool
      */
-    public function deleteAll()
+    public function deleteAll(): bool
     {
         return $this->config->getDb()->query(
             sprintf('DELETE FROM %sfaqvoting', Database::getTablePrefix())

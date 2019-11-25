@@ -10,22 +10,14 @@ namespace phpMyFAQ;
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2005-2019 phpMyFAQ Team
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link  https://www.phpmyfaq.de
  * @since 2005-11-01
  */
 
-
-
-/**
-* #@+
-  * HTTP GET Parameters PMF accepted keys definitions
-  */
 define('HTTP_PARAMS_GET_CATID', 'catid');
 define('HTTP_PARAMS_GET_CURRENTDAY', 'today');
 define('HTTP_PARAMS_GET_DISPOSITION', 'dispos');
@@ -35,91 +27,12 @@ define('HTTP_PARAMS_GET_DOWNWARDS', 'downwards');
 define('HTTP_PARAMS_GET_TYPE', 'type');
 
 /**
- * Utils class.
- *
- * This class has only static methods
+ * Class Utils
  *
  * @package phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2005-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2005-11-01
  */
 class Utils
 {
-    /**
-     * Get the content at the given URL using an HTTP GET call.
-     *
-     * @param string $url URL of the content
-     *
-     * @return string
-     */
-    public static function getHTTPContent($url)
-    {
-        // Sanity check
-        if (empty($url)) {
-            return false;
-        }
-
-        // Create the HTTP options for the HTTP stream context, see below
-        // Set phpMyFAQ agent related data
-        $agent = 'phpMyFAQ/'.System::getVersion().' on PHP/'.PHP_VERSION;
-        $opts = array(
-            'header' => 'User-Agent: '.$agent."\r\n",
-            'method' => 'GET',
-        );
-        // HTTP 1.1 Virtual Host
-        $urlParts = @parse_url($url);
-        if (isset($urlParts['host'])) {
-            $opts['header'] = $opts['header'].'Host: '.$urlParts['host']."\r\n";
-        }
-        // Socket timeout
-        $opts['timeout'] = 5;
-
-        // Create the HTTP stream context
-        $ctx = stream_context_create(
-            array(
-                'http' => $opts,
-            )
-        );
-
-        return file_get_contents($url, null, $ctx);
-    }
-
-    /**
-     * Returns date from out of time.
-     *
-     * @return string
-     */
-    public static function getNeverExpireDate()
-    {
-        // Unix: 13 Dec 1901 20:45:54 -> 19 Jan 2038 03:14:07, signed 32 bit
-        // Windows: 1 Jan 1970 -> 19 Jan 2038.
-        // So we will use: 1 Jan 2038 -> 2038-01-01, 00:00:01
-        return self::getPMFDate(mktime(0, 0, 1, 1, 1, 2038));
-    }
-
-    /**
-     * Returns a phpMyFAQ date.
-     *
-     * @param int $unixTime Unix timestamp
-     *
-     * @return string
-     */
-    public static function getPMFDate($unixTime = null)
-    {
-        if (!isset($unixTime)) {
-            // localtime
-            $unixTime = $_SERVER['REQUEST_TIME'];
-        }
-
-        return date('YmdHis', $unixTime);
-    }
-
     /**
      * Check if a given string could be a language.
      *
@@ -143,11 +56,11 @@ class Utils
     {
         // Test if the passed string is in the format: %YYYYMMDDhhmmss%
         $testdate = $date;
-        // Suppress first occurence of '%'
+        // Suppress first occurrences of '%'
         if (substr($testdate, 0, 1) == '%') {
             $testdate = substr($testdate, 1);
         }
-        // Suppress last occurence of '%'
+        // Suppress last occurrences of '%'
         if (substr($testdate, -1, 1) == '%') {
             $testdate = substr($testdate, 0, strlen($testdate) - 1);
         }
@@ -207,32 +120,6 @@ class Utils
             array_values($markers),
             $text
         );
-    }
-
-    /**
-     * Shuffles an associative array without losing key associations.
-     *
-     * @param array $data Array of data
-     *
-     * @return array $shuffled_data Array of shuffled data
-     */
-    public static function shuffleData($data)
-    {
-        $shuffled_data = [];
-
-        if (is_array($data)) {
-            if (count($data) > 1) {
-                $randomized_keys = array_rand($data, count($data));
-
-                foreach ($randomized_keys as $current_key) {
-                    $shuffled_data[$current_key] = $data[$current_key];
-                }
-            } else {
-                $shuffled_data = $data;
-            }
-        }
-
-        return $shuffled_data;
     }
 
     /**

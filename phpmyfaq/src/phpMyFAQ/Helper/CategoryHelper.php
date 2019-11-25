@@ -60,7 +60,7 @@ class CategoryHelper extends Helper
                 $level = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
 
-                if ($this->_config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
+                if ($this->config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
                     && '-' === $hasChild
                 ) {
                     continue;
@@ -182,7 +182,7 @@ class CategoryHelper extends Helper
                     $number[$parent] = 0;
                 }
 
-                if ($this->_config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
+                if ($this->config->get('records.hideEmptyCategories') && 0 === $number[$parent] && '-' === $hasChild) {
                     continue;
                 }
 
@@ -236,7 +236,7 @@ class CategoryHelper extends Helper
                     $sids,
                     $parent
                 );
-                $oLink = new Link($url, $this->_config);
+                $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $categoryName;
                 $oLink->text = $categoryName;
                 $oLink->tooltip = $description;

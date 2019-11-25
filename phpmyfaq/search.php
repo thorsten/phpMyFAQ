@@ -98,7 +98,7 @@ if (!is_null($inputTag) && '' !== $inputTag) {
         }
     }
 
-    $recordIds = $tagging->getRecordsByIntersectionTags($tags);
+    $recordIds = $tagging->getFaqsByIntersectionTags($tags);
 
     if (0 === count($recordIds)) {
         $searchResult = '';

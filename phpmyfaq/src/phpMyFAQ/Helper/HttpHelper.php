@@ -81,7 +81,7 @@ class HttpHelper extends Helper
      */
     public function startCompression()
     {
-        if (false === $this->_config->get('main.enableGzipCompression') || !DEBUG) {
+        if (false === $this->config->get('main.enableGzipCompression') || !DEBUG) {
             ob_start('ob_gzhandler');
         }
     }

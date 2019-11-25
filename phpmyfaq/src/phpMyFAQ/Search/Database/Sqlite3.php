@@ -23,16 +23,9 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;
 
 /**
- * PMF_Search_Database_Sqlite3.
+ * Class Sqlite3
  *
- * @package phpMyFAQ
- *
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
- * @link  https://www.phpmyfaq.de
- * @since 2012-12-26
+ * @package phpMyFAQ\Search\Database
  */
 class Sqlite3 extends SearchDatabase
 {

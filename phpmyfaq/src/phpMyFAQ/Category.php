@@ -232,7 +232,8 @@ class Category
                 fc.id = fu.category_id
             %s
             GROUP BY
-                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, fc.show_home
+                fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
+                fc.show_home
             ORDER BY
                 fc.parent_id, fc.id',
             Database::getTablePrefix(),
@@ -763,7 +764,8 @@ class Category
                 $numFaqs = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries', $number[$parent]);
                 if ($this->config->get('main.enableRssFeeds')) {
                     $numFaqs .= sprintf(
-                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank"><i aria-hidden="true" class="fa fa-rss"></i></a>',
+                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank">' .
+                        '<i aria-hidden="true" class="fa fa-rss"></i></a>',
                         $parent,
                         $this->language
                     );
@@ -1471,7 +1473,8 @@ class Category
             );
             $result = $this->config->getDb()->query($query);
             if ($row = $this->config->getDb()->fetchArray($result)) {
-                $translated[$languageCodes[strtoupper($language)]] = $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
+                $translated[$languageCodes[strtoupper($language)]] =
+                    $row['name'] . ('' == $row['description'] ? '' : '  (' . $row['description'] . ')');
             }
         }
         ksort($translated);
@@ -1540,7 +1543,7 @@ class Category
      *
      * @return int
      */
-    public function numParent($parentId)
+    public function numParent(int $parentId): int
     {
         $query = sprintf(
             '

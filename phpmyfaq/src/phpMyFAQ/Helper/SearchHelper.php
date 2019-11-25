@@ -63,7 +63,7 @@ class SearchHelper extends Helper
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
         $this->pmfLang = $this->getTranslations();
     }
 
@@ -107,7 +107,7 @@ class SearchHelper extends Helper
     public function renderInstantResponseResult(SearchResultSet $resultSet): string
     {
         $results = [];
-        $maxResults = $this->_config->get('records.numberOfRecordsPerPage');
+        $maxResults = $this->config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
@@ -129,7 +129,7 @@ class SearchHelper extends Helper
                 );
 
                 $question = html_entity_decode($result->question, ENT_QUOTES | ENT_XML1 | ENT_HTML5, 'UTF-8');
-                $link = new Link($currentUrl, $this->_config);
+                $link = new Link($currentUrl, $this->config);
                 $link->itemTitle = $result->question;
                 $faq = new \stdClass();
                 $faq->categoryName = $this->Category->getPath($result->category_id);
@@ -153,7 +153,7 @@ class SearchHelper extends Helper
     public function renderAdminSuggestionResult(SearchResultSet $resultSet): string
     {
         $html = '';
-        $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
         if (0 < $numOfResults) {
@@ -164,7 +164,7 @@ class SearchHelper extends Helper
                 }
 
                 if (!isset($result->solution_id)) {
-                    $faq = new Faq($this->_config);
+                    $faq = new Faq($this->config);
                     $solutionId = $faq->getSolutionIdFromId($result->id, $result->lang);
                 } else {
                     $solutionId = $result->solution_id;
@@ -201,7 +201,7 @@ class SearchHelper extends Helper
     public function renderSearchResult(SearchResultSet $resultSet, int $currentPage): string
     {
         $html = '';
-        $confPerPage = $this->_config->get('records.numberOfRecordsPerPage');
+        $confPerPage = $this->config->get('records.numberOfRecordsPerPage');
         $numOfResults = $resultSet->getNumberOfResults();
 
         $totalPages = ceil($numOfResults / $confPerPage);
@@ -227,7 +227,7 @@ class SearchHelper extends Helper
             $html .= "<ul class=\"phpmyfaq-search-results list-unstyled\">\n";
 
             $counter = $displayedCounter = 0;
-            $faqHelper = new FaqHelper($this->_config);
+            $faqHelper = new FaqHelper($this->config);
             foreach ($resultSet->getResultSet() as $result) {
                 if ($displayedCounter >= $confPerPage) {
                     break;
@@ -254,7 +254,7 @@ class SearchHelper extends Helper
                 $searchTerm = preg_quote($searchTerm, '/');
                 $searchItems = explode(' ', $searchTerm);
 
-                if ($this->_config->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
+                if ($this->config->get('search.enableHighlighting') && Strings::strlen($searchItems[0]) > 1) {
                     foreach ($searchItems as $item) {
                         if (Strings::strlen($item) > 2) {
                             $question = Utils::setHighlightedString($question, $item);
@@ -274,7 +274,7 @@ class SearchHelper extends Helper
                     urlencode($searchTerm)
                 );
 
-                $oLink = new Link($currentUrl, $this->_config);
+                $oLink = new Link($currentUrl, $this->config);
                 $oLink->text = $question;
                 $oLink->itemTitle = $oLink->tooltip = $result->question;
 
@@ -361,7 +361,7 @@ class SearchHelper extends Helper
                     $result->id,
                     $result->lang
                 );
-                $oLink = new Link($url, $this->_config);
+                $oLink = new Link($url, $this->config);
                 $oLink->itemTitle = $result->question;
                 $oLink->text = $result->question;
                 $oLink->tooltip = $result->question;

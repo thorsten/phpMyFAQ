@@ -54,7 +54,7 @@ class Init
             if (isset($GLOBALS[$external]) && is_array($GLOBALS[$external])) {
                 // first clean XSS issues
                 $newValues = $GLOBALS[$external];
-                $newValues = self::_removeXSSGPC($newValues);
+                $newValues = self::removeXSSGPC($newValues);
 
                 // clean old array and insert cleaned data
                 foreach (array_keys($GLOBALS[$external]) as $key) {
@@ -68,7 +68,7 @@ class Init
         }
 
         // clean external filenames (uploaded files)
-        self::_cleanFilenames();
+        self::cleanFilenames();
     }
 
     /**
@@ -77,7 +77,7 @@ class Init
      * @param  array $data Array of data
      * @return array
      */
-    private static function _removeXSSGPC(Array $data)
+    private static function removeXSSGPC(Array $data)
     {
         static $recursionCounter = 0;
         // Avoid webserver crashes. For any detail, see: http://www.php-security.org/MOPB/MOPB-02-2007.html
@@ -88,12 +88,12 @@ class Init
 
         $cleanData = [];
         foreach ($data as $key => $val) {
-            $key = self::_basicXSSClean($key);
+            $key = self::basicXSSClean($key);
             if (is_array($val)) {
                 ++$recursionCounter;
-                $cleanData[$key] = self::_removeXSSGPC($val);
+                $cleanData[$key] = self::removeXSSGPC($val);
             } else {
-                $cleanData[$key] = self::_basicXSSClean($val);
+                $cleanData[$key] = self::basicXSSClean($val);
             }
         }
 
@@ -107,7 +107,7 @@ class Init
      *
      * @return string
      */
-    private static function _basicXSSClean($string)
+    private static function basicXSSClean($string)
     {
         if (strpos($string, '\0') !== false) {
             return '';
@@ -129,12 +129,14 @@ class Init
 
         // remove javascript: and vbscript: protocol
         $string = preg_replace(
-            '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
+            '#([a-z]*)[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*)[\\x00-\x20]*j[\x00-\x20]*a[\x00-\x20]*v[\x00-\x20]*a'.
+            '[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
             '$1=$2nojavascript...',
             $string
         );
         $string = preg_replace(
-            '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
+            '#([a-z]*)[\x00-\x20]*=([\'\"]*)[\x00-\x20]*v[\x00-\x20]*b[\x00-\x20]*s[\x00-\x20]*c[\x00-\x20]*r'.
+            '[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:#iU',
             '$1=$2novbscript...',
             $string
         );
@@ -162,7 +164,8 @@ class Init
             $string
         );
         $string = preg_replace(
-            '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',
+            '#(<[^>]+)style[\x00-\x20]*=[\x00-\x20]*([\`\'\"]*).*s[\x00-\x20]*c[\x00-\x20]*r[\x00-\x20]*i'.
+            '[\x00-\x20]*p[\x00-\x20]*t[\x00-\x20]*:*[^>]*>#iU',
             '$1>',
             $string
         );
@@ -174,7 +177,8 @@ class Init
         do {
             $oldString = $string;
             $string = preg_replace(
-                '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|bgsound|title|base)[^>]*>#i',
+                '#</*(applet|meta|xml|blink|link|style|script|embed|object|iframe|frame|frameset|ilayer|layer|'.
+                'bgsound|title|base)[^>]*>#i',
                 '',
                 $string
             );
@@ -187,7 +191,7 @@ class Init
      * Clean the filename of any uploaded file by the user and force an error
      * when calling is_uploaded_file($_FILES[key]['tmp_name']) if the cleanup goes wrong.
      */
-    private static function _cleanFilenames()
+    private static function cleanFilenames()
     {
         reset($_FILES);
         foreach ($_FILES as $key => $value) {
@@ -195,7 +199,7 @@ class Init
                 reset($_FILES[$key]['name']);
                 // We have a multiple upload with the same name for <input />
                 foreach ($_FILES[$key]['name'] as $idx => $valu2) {
-                    $_FILES[$key]['name'][$idx] = self::_basicFilenameClean($_FILES[$key]['name'][$idx]);
+                    $_FILES[$key]['name'][$idx] = self::basicFilenameClean($_FILES[$key]['name'][$idx]);
                     if ('' == $_FILES[$key]['name'][$idx]) {
                         $_FILES[$key]['type'][$idx] = '';
                         $_FILES[$key]['tmp_name'][$idx] = '';
@@ -205,7 +209,7 @@ class Init
                 }
                 reset($_FILES[$key]['name']);
             } else {
-                $_FILES[$key]['name'] = self::_basicFilenameClean($_FILES[$key]['name']);
+                $_FILES[$key]['name'] = self::basicFilenameClean($_FILES[$key]['name']);
                 if ('' == $_FILES[$key]['name']) {
                     $_FILES[$key]['type'] = '';
                     $_FILES[$key]['tmp_name'] = '';
@@ -224,7 +228,7 @@ class Init
      *
      * @return string
      */
-    private static function _basicFilenameClean($filename)
+    private static function basicFilenameClean($filename)
     {
         global $denyUploadExts;
 

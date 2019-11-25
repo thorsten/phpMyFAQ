@@ -38,7 +38,7 @@ class CaptchaHelper extends Helper
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
@@ -55,7 +55,7 @@ class CaptchaHelper extends Helper
     {
         $html = '';
 
-        if (true === $this->_config->get('spam.enableCaptchaCode') && is_null($auth)) {
+        if (true === $this->config->get('spam.enableCaptchaCode') && is_null($auth)) {
             $html .= '<div class="form-group row">';
             $html .= sprintf('<label class="col-sm-3 col-form-label">%s</label>', $legend);
             $html .= '    <div class="col-sm-4">';

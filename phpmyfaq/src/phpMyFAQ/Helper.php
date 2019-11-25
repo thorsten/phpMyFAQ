@@ -77,7 +77,7 @@ abstract class Helper
     /**
      * @var Configuration
      */
-    protected $_config;
+    protected $config;
 
     /**
      * Entity Setter.
@@ -148,7 +148,7 @@ abstract class Helper
      */
     public function setConfiguration(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**

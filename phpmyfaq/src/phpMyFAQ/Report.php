@@ -20,6 +20,7 @@ namespace phpMyFAQ;
 
 /**
  * Class Report
+ *
  * @package phpMyFAQ
  */
 class Report
@@ -130,7 +131,7 @@ class Report
      * @param  string $outputString String to encode.
      * @return string Encoded string.
      */
-    public function convertEncoding($outputString): string
+    public function convertEncoding(string $outputString): string
     {
         $outputString = html_entity_decode($outputString, ENT_QUOTES, 'utf-8');
         $outputString = str_replace(',', ' ', $outputString);

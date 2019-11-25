@@ -711,7 +711,7 @@ $tplHeaders = [
     'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
     'rssFeedLatest' => $rssFeedLatest,
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
-    'writeTags' => $oTag->printHTMLTagsCloud(),
+    'writeTags' => $oTag->renderTagCloud(),
     'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
     'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
 ];

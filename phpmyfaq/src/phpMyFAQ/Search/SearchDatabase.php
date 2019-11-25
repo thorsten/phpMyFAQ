@@ -138,7 +138,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param array $columns Array of columns
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setResultColumns(Array $columns)
     {
@@ -162,7 +162,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param string $table Table where search should be performed
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setTable($table)
     {
@@ -190,7 +190,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param string $joinedTable Joined table where search should be performed
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setJoinedTable($joinedTable = '')
     {
@@ -220,7 +220,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param array $joinedColumns Array of columns
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setJoinedColumns(Array $joinedColumns)
     {
@@ -244,7 +244,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param array $matchingColumns Array of columns
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setMatchingColumns(Array $matchingColumns)
     {
@@ -280,7 +280,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @param array $conditions Array of columns
      *
-     * @return PMF_Search_Database
+     * @return SearchDatabase
      */
     public function setConditions(Array $conditions)
     {
