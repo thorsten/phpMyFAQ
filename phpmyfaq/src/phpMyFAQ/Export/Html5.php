@@ -67,7 +67,7 @@ class Html5 extends Export
      *
      * @return string
      */
-    public function generate($categoryId = 0, $downwards = true, $language = '')
+    public function generate(int $categoryId = 0, bool $downwards = true, string $language = ''): string
     {
         global $PMF_LANG;
 
@@ -77,7 +77,7 @@ class Html5 extends Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XHTML, $categoryId, $downwards, $language);
         $version = $this->config->get('main.currentVersion');
         $comment = sprintf(
-            'HTML5 output by phpMyFAQ %s | Date: %s',
+            ' HTML5 output by phpMyFAQ %s | Date: %s ',
             $version,
             Date::createIsoDate(date('YmdHis'))
         );

@@ -74,7 +74,7 @@ class Xml extends Export
         $faqdata = $this->faq->get(FAQ_QUERY_TYPE_EXPORT_XML, $categoryId, $downwards, $language);
         $version = $this->config->get('main.currentVersion');
         $comment = sprintf(
-            'XML output by phpMyFAQ %s | Date: %s',
+            ' XML output by phpMyFAQ %s | Date: %s ',
             $version,
             Date::createIsoDate(date('YmdHis'))
         );
@@ -85,7 +85,6 @@ class Xml extends Export
 
         if (count($faqdata)) {
             foreach ($faqdata as $data) {
-                // Build the <article/> node
                 $this->xml->startElement('article');
                 $this->xml->writeAttribute('id', $data['id']);
                 $this->xml->writeElement('language', $data['lang']);

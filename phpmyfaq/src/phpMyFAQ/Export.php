@@ -32,25 +32,13 @@ require_once PMF_CONFIG_DIR.'/constants.php';
  */
 class Export
 {
-    /**
-     * FaqHelper object.
-     *
-     * @var Faq
-     */
+    /** @var Faq */
     protected $faq = null;
 
-    /**
-     * CategoryHelper object.
-     *
-     * @var Category
-     */
+    /** @var Category */
     protected $category = null;
 
-    /**
-     * Configuration.
-     *
-     * @var Configuration
-     */
+    /** @var Configuration */
     protected $config = null;
 
     /**
@@ -64,7 +52,7 @@ class Export
      * @throws Exception
      * @throws \Exception
      */
-    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf'): string
+    public static function create(Faq $faq, Category $category, Configuration $config, string $mode = 'pdf')
     {
         switch ($mode) {
             case 'json':

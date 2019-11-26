@@ -468,7 +468,7 @@ class Category
      *
      * @param int $id Entity id
      */
-    public function transform($id)
+    public function transform(int $id)
     {
         $parentId = $level = $showHome = 0;
         $tree = [];

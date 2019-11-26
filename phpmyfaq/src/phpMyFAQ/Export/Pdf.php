@@ -120,7 +120,7 @@ class Pdf extends Export
                         ENT_QUOTES,
                         'utf-8'
                     ),
-                    $category['level'],
+                    $this->category->categoryName[$category['id']]['level'],
                     0
                 );
                 $this->pdf->setCategory($category['id']);
@@ -136,7 +136,7 @@ class Pdf extends Export
                             ENT_QUOTES,
                             'utf-8'
                         ),
-                        $category['level'] + 1,
+                        $this->category->categoryName[$category['id']]['level'] + 1,
                         0
                     );
 

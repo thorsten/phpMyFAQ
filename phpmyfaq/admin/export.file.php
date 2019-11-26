@@ -40,10 +40,14 @@ if ($user->perm->checkRight($user->getUserId(), 'export')) {
 
     $faq = new Faq($faqConfig);
     $tags = new Tags($faqConfig);
-    $category = new Category($faqConfig);
+    $category = new Category($faqConfig, [], false);
     $category->buildTree($categoryId);
 
-    $export = Export::create($faq, $category, $faqConfig, $type);
+    try {
+        $export = Export::create($faq, $category, $faqConfig, $type);
+    } catch (Exception $e) {
+        // handle exception
+    }
     $content = $export->generate($categoryId, $downwards, $faqConfig->getLanguage()->getLanguage());
 
     // Stream the file content

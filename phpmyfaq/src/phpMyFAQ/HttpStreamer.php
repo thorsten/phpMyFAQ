@@ -10,8 +10,9 @@ namespace phpMyFAQ;
  *
  * Currently it supports only 4 content (mime) types:
  * - PDF: application/pdf
- * - XHTML: application/xhtml+xml
+ * - HTML5: text/html
  * - XML: text/xml
+ * - CSV: text/csv
  * - Generic file: application/octet-stream
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -158,22 +159,10 @@ class HttpStreamer
                 $description = 'phpMyFaq PDF export file';
                 $mimeType = 'application/pdf';
                 break;
-            case 'xhtml':
-                $filename = 'phpmyfaq.xhtml';
-                $description = 'phpMyFaq XHTML export file';
+            case 'html5':
+                $filename = 'phpmyfaq.html';
+                $description = 'phpMyFaq HTML5 export file';
                 $mimeType = 'text/html';
-                // Why not: text/html or text/xml?
-                // See e.g.: http://www.hixie.ch/advocacy/xhtml
-                // Unfortunately IE doesn't handle it correctly :(
-                // so currently we must use text/html as default.
-                // See e.g.: http://keystonewebsites.com/articles/mime_type.php
-                if (isset($_SERVER['HTTP_ACCEPT']) && !(strpos(
-                    $_SERVER['HTTP_ACCEPT'],
-                    'application/xhtml+xml'
-                ) === false)
-                ) {
-                    $mimeType = 'application/xhtml+xml';
-                }
                 break;
             case 'xml':
                 $filename = 'phpmyfaq.xml';
@@ -230,6 +219,6 @@ class HttpStreamer
      */
     private function streamContent()
     {
-        print $this->content;
+        echo $this->content;
     }
 }
