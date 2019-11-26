@@ -35,11 +35,6 @@
 $fa-font-path: '../fonts';
 @import '../../../../../node_modules/fork-awesome/scss/fork-awesome';
 
-// RSS Icon
-.fa.fa-rss-square {
-  color: orange;
-}
-
 //
 // MAIN LAYOUT
 //
@@ -61,7 +56,6 @@ blockquote, q {
 
 blockquote:before, blockquote:after, q:before, q:after {
   content: '';
-  content: none;
 }
 
 table {
@@ -197,7 +191,6 @@ mark, .mark {
   height: 60px;
   -webkit-appearance: none;
 }
-
 .typeahead {
   &.dropdown-menu {
     background-color: transparent !important;
@@ -216,6 +209,35 @@ mark, .mark {
 }
 
 //
+// BREADCRUMBS
+//
+.pmf-breadcrumbs {
+  background: #fff;
+  padding: 12px;
+  border-bottom: 1px solid $gray-500;
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline-block;
+      color: #5e6977;
+      font-size: 14px;
+
+      & + li:before {
+        content: ' / ';
+        padding-left: 10px;
+        padding-right: 10px;
+        color: #e1e8ee;
+      }
+    }
+  }
+}
+
+
+
+//
 // FOOTER
 //
 .pmf-footer {
@@ -226,7 +248,6 @@ mark, .mark {
 .pmf-footer-menu {
   list-style: none;
   display: flex;
-  //justify-content: center;
   flex-wrap: wrap;
   padding: 0;
   margin-bottom: 0;

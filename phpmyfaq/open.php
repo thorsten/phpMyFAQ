@@ -30,12 +30,6 @@ try {
     // @todo handle the exception
 }
 
-if ($faqConfig->get('main.enableRssFeeds')) {
-    $rssFeedOpenQuestions = ' <a href="feed/openquestions/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
-} else {
-    $rssFeedOpenQuestions = '';
-}
-
 try {
     $template->parse(
         'writeContent',
@@ -55,6 +49,6 @@ $template->parseBlock(
     'index',
     'breadcrumb',
     [
-        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions'].$rssFeedOpenQuestions
+        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions']
     ]
 );

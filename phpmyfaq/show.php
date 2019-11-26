@@ -109,7 +109,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         'index',
         'breadcrumb',
         [
-            'breadcrumbHeadline' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName()
+            'breadcrumbHeadline' => $category->getPath($selectedCategoryId, ' &raquo; ', true, '')
         ]
     );
 

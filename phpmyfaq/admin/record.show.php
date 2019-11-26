@@ -53,15 +53,16 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
     $category->transform(0);
+    $category->buildTree();
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
 
     $categoryRelation = new CategoryRelation($faqConfig);
+    $categoryRelation->setGroups($currentAdminGroups);
 
     $faqHelper = new FaqHelper($faqConfig);
 
-    $category->buildTree();
 
     $linkVerifier = new LinkVerifier($faqConfig, $user->getLogin());
     if ($linkVerifier->isReady()) {
@@ -144,7 +145,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
 
     }
 
-    $comment = new Comment($faqConfig);
     $faq = new Faq($faqConfig);
     $faq->setUser($currentAdminUser);
     $faq->setGroups($currentAdminGroups);
@@ -188,6 +188,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
         <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
+    $comment = new Comment($faqConfig);
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numCommentsByCat = [];
     $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(

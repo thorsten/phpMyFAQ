@@ -34,6 +34,9 @@ class CategoryRelation
      */
     private $config;
 
+    /** @var array */
+    private $groups;
+
     /**
      * CategoryRelation constructor.
      *
@@ -42,6 +45,16 @@ class CategoryRelation
     public function __construct(Configuration $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @param array $groups
+     * @return CategoryRelation
+     */
+    public function setGroups(array $groups): CategoryRelation
+    {
+        $this->groups = $groups;
+        return $this;
     }
 
     /**

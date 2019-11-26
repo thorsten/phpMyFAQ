@@ -20,6 +20,7 @@ namespace phpMyFAQ;
  * @since     2004-02-16
  */
 
+use mysql_xdevapi\Warning;
 use phpMyFAQ\Category\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
@@ -96,13 +97,6 @@ class Category
     private $language = null;
 
     /**
-     * The lines of tabs.
-     *
-     * @var array
-     */
-    private $lineTab = [];
-
-    /**
      * Entity owners
      *
      * @var array
@@ -138,16 +132,16 @@ class Category
      * @param array         $groups   Array with group IDs
      * @param bool          $withPerm With or without permission check
      */
-    public function __construct(Configuration $config, $groups = [], $withPerm = true)
+    public function __construct(Configuration $config, array $groups = [], bool $withPerm = true)
     {
         $this->config = $config;
 
         $this->setGroups($groups);
         $this->setLanguage($this->config->getLanguage()->getLanguage());
 
-        $this->lineTab = $this->getOrderedCategories($withPerm);
-        foreach (array_keys($this->lineTab) as $i) {
-            $this->lineTab[$i]['level'] = $this->getLevelOf($this->lineTab[$i]['id']);
+        $this->getOrderedCategories($withPerm);
+        foreach ($this->categoryName as $id) {
+            $this->categoryName[$id['id']]['level'] = $this->getLevelOf($this->categoryName[$id['id']]['id']);
         }
     }
 
@@ -180,7 +174,7 @@ class Category
      *
      * @return array
      */
-    private function getOrderedCategories($withPermission = true)
+    private function getOrderedCategories(bool $withPermission = true): array
     {
         $where = '';
 
@@ -246,12 +240,11 @@ class Category
 
         if ($result) {
             while ($row = $this->config->getDb()->fetchArray($result)) {
-                $row['level'] = (int)$this->getLevelOf($row['id']);
-                $this->categoryName[$row['id']] = $row;
-                $this->categories[$row['id']] = $row;
-                $this->children[$row['parent_id']][$row['id']] = &$this->categoryName[$row['id']];
-                $this->owner[$row['id']] = &$row['user_id'];
-                $this->moderators[$row['id']] = &$row['group_id'];
+                $this->categoryName[(int)$row['id']] = $row;
+                $this->categories[(int)$row['id']] = $row;
+                $this->children[(int)$row['parent_id']][(int)$row['id']] = &$this->categoryName[(int)$row['id']];
+                $this->owner[(int)$row['id']] = &$row['user_id'];
+                $this->moderators[(int)$row['id']] = &$row['group_id'];
             }
         }
 
@@ -265,22 +258,21 @@ class Category
      *
      * @return int
      */
-    private function getLevelOf($id)
+    private function getLevelOf(int $id): int
     {
-        $alreadies = array($id);
-        $ret = 0;
-        while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] != 0)) {
-            ++$ret;
-            $id = $this->categoryName[$id]['parent_id'];
-
-            if (in_array($id, $alreadies)) {
+        $alreadyListed = [$id];
+        $level = 0;
+        while ((isset($this->categoryName[$id]['parent_id'])) && ($this->categoryName[$id]['parent_id'] !== 0)) {
+            ++$level;
+            $id = (int)$this->categoryName[$id]['parent_id'];
+            if (in_array($id, $alreadyListed)) {
                 break;
             } else {
-                array_push($alreadies, $id);
+                array_push($alreadyListed, $id);
             }
         }
 
-        return $ret;
+        return $level;
     }
 
     /**
@@ -294,12 +286,12 @@ class Category
     /**
      * Gets the main categories and write them in an array.
      *
-     * @param string $categories Array of parent category ids
-     * @param bool   $parentId   Only top level categories?
+     * @param array $categories Array of parent category ids
+     * @param bool  $parentId   Only top level categories?
      *
      * @return array
      */
-    public function getCategories($categories, $parentId = true)
+    public function getCategories(array $categories, bool $parentId = true): array
     {
         $_query = '';
         $query = sprintf(
@@ -342,8 +334,7 @@ class Category
     {
         $categories = [];
         $query = sprintf(
-            '
-            SELECT
+            'SELECT
                 id, lang, parent_id, name, description, user_id, group_id, active, show_home, image
             FROM
                 %sfaqcategories',
@@ -442,16 +433,16 @@ class Category
     /**
      * Builds the category tree.
      *
-     * @param int $id_parent Parent id
+     * @param int $parentId Parent id
      * @param int $indent    Indention
      */
-    public function buildTree($id_parent = 0, $indent = 0)
+    public function buildTree(int $parentId = 0, int $indent = 0)
     {
         $tt = [];
         $x = 0;
 
         foreach ($this->categories as $categoryId => $n) {
-            if (isset($n['parent_id']) && $n['parent_id'] == $id_parent) {
+            if (isset($n['parent_id']) && $n['parent_id'] == $parentId) {
                 $tt[$x++] = $categoryId;
             }
         }
@@ -491,7 +482,6 @@ class Category
         if ($id > 0) {
             $active = $this->categoryName[$id]['active'];
             $description = $this->categoryName[$id]['description'];
-            $level = $this->categoryName[$id]['level'];
             $name = $this->categoryName[$id]['name'];
             $parentId = $this->categoryName[$id]['parent_id'];
             $image = $this->categoryName[$id]['image'];
@@ -510,6 +500,9 @@ class Category
 
         if ($id > 0) {
             for ($i = 0; $i < $numAscendants; ++$i) {
+                if (0 === (int)$ascendants[$i]) {
+                    break;
+                }
                 $brothers = $this->getBrothers($ascendants[$i]);
                 $tree[$i] = ($ascendants[$i] == $brothers[count($brothers) - 1]) ? 'space' : 'vertical';
             }
@@ -521,7 +514,7 @@ class Category
                 'symbol' => $symbol,
                 'name' => $name,
                 'numChilds' => count($tabs),
-                'level' => $level,
+                'level' => $this->getLevelOf($id),
                 'parent_id' => $parentId,
                 'childs' => $tabs,
                 'tree' => $tree,
@@ -545,7 +538,7 @@ class Category
      * @param  $id
      * @return array
      */
-    private function getNodes($id)
+    private function getNodes(int $id): array
     {
         if (($id > 0) && (isset($this->categoryName[$id]['level']))) {
             $thisLevel = $this->categoryName[$id]['level'];
@@ -568,7 +561,7 @@ class Category
      *
      * @return array
      */
-    private function getBrothers($id)
+    private function getBrothers(int $id): array
     {
         return $this->getChildren($this->categoryName[$id]['parent_id']);
     }
@@ -576,11 +569,11 @@ class Category
     /**
      * List in a array of the $id of the child.
      *
-     * @param integer $categoryId
+     * @param int $categoryId
      *
      * @return array
      */
-    public function getChildren($categoryId)
+    public function getChildren(int $categoryId): array
     {
         return isset($this->children[$categoryId]) ? array_keys($this->children[$categoryId]) : [];
     }
@@ -761,16 +754,7 @@ class Category
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $numFaqs = '<span class="rssCategoryLink"> (' . $plr->GetMsg('plmsgEntries', $number[$parent]);
-                if ($this->config->get('main.enableRssFeeds')) {
-                    $numFaqs .= sprintf(
-                        ' <a href="feed/category/rss.php?category_id=%d&category_lang=%s" target="_blank">' .
-                        '<i aria-hidden="true" class="fa fa-rss"></i></a>',
-                        $parent,
-                        $this->language
-                    );
-                }
-                $numFaqs .= ')</span>';
+                $numFaqs = '(' . $plr->GetMsg('plmsgEntries', $number[$parent]) . ')</span>';
             }
 
             $url = sprintf(
@@ -965,6 +949,7 @@ class Category
         global $sids;
 
         $ids = $this->getNodes($id);
+
         $num = count($ids);
 
         $temp = $catid = $desc = $breadcrumb = [];
