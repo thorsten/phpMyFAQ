@@ -100,7 +100,11 @@ $faq->setGroups($currentGroups);
 $category = new Category($faqConfig, $currentGroups, true);
 $category->setUser($currentUser);
 
-$pdf = new Pdf($faq, $category, $faqConfig);
+try {
+    $pdf = new Pdf($faq, $category, $faqConfig);
+} catch (Exception $e) {
+    // handle exception
+}
 $http = new HttpHelper();
 
 if (true === $getAll) {
