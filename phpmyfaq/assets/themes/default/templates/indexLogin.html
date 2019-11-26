@@ -43,19 +43,20 @@
   </style>
 
   <script>
-    if (self === top) {
-      document.documentElement.style.display = 'block';
-    } else {
-      top.location = self.location;
-    }
+      if (self === top) {
+          document.documentElement.style.display = 'block';
+      } else {
+          top.location = self.location;
+      }
   </script>
   <style> html {
     display: none;
   }
   </style>
 </head>
-<body dir="{{ dir }}" class="bg-dark">
-<form class="form-signin bg-dark" action="{{ writeLoginPath }}" method="post" role="form">
+<body dir="{{ dir }}" class="d-flex flex-column">
+
+<form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
 
   <div class="text-center mb-4">
     <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="{{ header }}">
@@ -95,54 +96,6 @@
   </form>
 
 </form>
-
-<footer class="pmf-footer font-small pt-4">
-  <div class="container">
-    <div class="row">
-      <div class="col-md-6 mb-4">
-        <ul class="pmf-footer-menu">
-          <li class="foot-menu-item">
-            {{ faqOverview }}
-          </li>
-          <li class="foot-menu-item">
-            {{ showSitemap }}
-          </li>
-          <li class="foot-menu-item">
-            {{ msgGlossary }}
-          </li>
-          <li class="foot-menu-item">
-            {{ msgContact }}
-          </li>
-        </ul>
-      </div>
-      <div class="col-md-6 mb-4">
-        <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
-          {{ switchLanguages }}
-          <input type="hidden" name="action" value="">
-        </form>
-      </div>
-    </div>
-  </div>
-  <div class="text-center py-3">{{ copyright }}</div>
-  [debugMode]
-  <div class="container debug-mode">
-    <hr>
-    <h4>DEBUG INFORMATION</h4>
-    <div class="row">
-      <div class="col-12">
-        <h5>EXCEPTIONS</h5>
-        {{ debugExceptions }}
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-12">
-        <h5>DATABASE QUERIES</h5>
-        {{ debugQueries }}
-      </div>
-    </div>
-  </div>
-  [/debugMode]
-</footer>
 
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
 <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>

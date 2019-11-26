@@ -24,6 +24,7 @@ use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\QuestionHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Link;
@@ -529,11 +530,7 @@ switch ($action) {
 
                 foreach ($cleanQuestion as $word) {
                     if (!empty($word)) {
-                        try {
-                            $searchResult[] = $faqSearch->search($word, false);
-                        } catch (Search\Exception $e) {
-                            $searchResult = [];
-                        }
+                        $searchResult[] = $faqSearch->search($word, false);
                     }
                 }
                 foreach ($searchResult as $resultSet) {
@@ -564,75 +561,27 @@ switch ($action) {
                         $oLink->text = Utils::chopString($result->question, 15);
                         $oLink->itemTitle = $result->question;
 
-                        $response .= sprintf(
-                            '<li>%s<br><div class="searchpreview">%s...</div></li>',
-                            $oLink->toHtmlAnchor(),
-                            $faqHelper->renderAnswerPreview($result->answer, 10)
-                        );
+                        try {
+                            $response .= sprintf(
+                                '<li>%s<br><div class="searchpreview">%s...</div></li>',
+                                $oLink->toHtmlAnchor(),
+                                $faqHelper->renderAnswerPreview($result->answer, 10)
+                            );
+                        } catch (Exception $e) {
+                            // handle exception
+                        }
                     }
                     $response .= '</ul>';
 
                     $message = array('result' => $response);
                 } else {
-
-                    $questionObject = new Question($faqConfig);
-                    $questionObject->addQuestion($questionData);
-
-                    $questionMail = 'User: ' . $questionData['username'] .
-                        ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .
-                        ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
-                        wordwrap($question, 72) . "\n\n" .
-                        $faqConfig->getDefaultUrl() . 'admin/';
-
-                    $userId = $cat->getOwner($questionData['category_id']);
-                    $oUser = new User($faqConfig);
-                    $oUser->getUserById($userId);
-
-                    $userEmail = $oUser->getUserData('email');
-                    $mainAdminEmail = $faqConfig->get('main.administrationMail');
-
-                    $mailer = new Mail($faqConfig);
-                    $mailer->setReplyTo($questionData['email'], $questionData['username']);
-                    $mailer->addTo($mainAdminEmail);
-                    // Let the category owner get a copy of the message
-                    if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
-                        $mailer->addCc($userEmail);
-                    }
-                    $mailer->subject = '%sitename%';
-                    $mailer->message = $questionMail;
-                    $mailer->send();
-                    unset($mailer);
-
+                    $questionHelper = new QuestionHelper($faqConfig, $category);
+                    $questionHelper->sendSuccessMail($questionData, $categories);
                     $message = array('success' => $PMF_LANG['msgAskThx4Mail']);
                 }
             } else {
-                $faq->addQuestion($questionData);
-
-                $questionMail = 'User: ' . $questionData['username'] .
-                    ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .
-                    ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
-                    wordwrap($question, 72) . "\n\n" .
-                    $faqConfig->getDefaultUrl() . 'admin/';
-
-                $userId = $cat->getOwner($questionData['category_id']);
-                $oUser = new User($faqConfig);
-                $oUser->getUserById($userId);
-
-                $userEmail = $oUser->getUserData('email');
-                $mainAdminEmail = $faqConfig->get('main.administrationMail');
-
-                $mailer = new Mail($faqConfig);
-                $mailer->setReplyTo($questionData['email'], $questionData['username']);
-                $mailer->addTo($mainAdminEmail);
-                // Let the category owner get a copy of the message
-                if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
-                    $mailer->addCc($userEmail);
-                }
-                $mailer->subject = '%sitename%';
-                $mailer->message = $questionMail;
-                $mailer->send();
-                unset($mailer);
-
+                $questionHelper = new QuestionHelper($faqConfig, $category);
+                $questionHelper->sendSuccessMail($questionData, $categories);
                 $message = array('success' => $PMF_LANG['msgAskThx4Mail']);
             }
         } else {

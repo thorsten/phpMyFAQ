@@ -45,7 +45,7 @@ if ($user instanceof CurrentUser) {
     }
 
     $template->parse(
-        'writeContent',
+        'mainPageContent',
         array(
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
             'ucpGravatarImage' => $gravatarImg,

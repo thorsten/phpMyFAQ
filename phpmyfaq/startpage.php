@@ -49,7 +49,7 @@ if (!is_null($archived)) {
 $startPageCategories = $category->getHomeCategories();
 if (count($startPageCategories) > 0) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'startPageCategories',
         [
             'categoryUrl' => $startPageCategories['url'],
@@ -63,7 +63,7 @@ if (count($startPageCategories) > 0) {
 $stickyRecordsParams = $faq->getStickyRecords();
 if (!isset($stickyRecordsParams['error'])) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'stickyRecordsList',
         [
             'stickyTitle' => $stickyRecordsParams['title'],
@@ -83,7 +83,7 @@ if ($faqConfig->get('records.orderingPopularFaqs') == 'visits') {
 $toptenParams = $faq->getTopTen($param);
 if (!isset($toptenParams['error'])) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'toptenList',
         array(
             'toptenUrl' => $toptenParams['url'],
@@ -94,7 +94,7 @@ if (!isset($toptenParams['error'])) {
     );
 } else {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'toptenListError',
         array(
             'errorMsgTopTen' => $toptenParams['error'],
@@ -105,7 +105,7 @@ if (!isset($toptenParams['error'])) {
 $latestEntriesParams = $faq->getLatest();
 if (!isset($latestEntriesParams['error'])) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'latestEntriesList',
         array(
             'latestEntriesUrl' => $latestEntriesParams['url'],
@@ -116,7 +116,7 @@ if (!isset($latestEntriesParams['error'])) {
     );
 } else {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'latestEntriesListError',
         [
             'errorMsgLatest' => $latestEntriesParams['error']
@@ -125,7 +125,7 @@ if (!isset($latestEntriesParams['error'])) {
 }
 
 $template->parseBlock(
-    'writeContent',
+    'mainPageContent',
     'tagListSection',
     [
         'msgTags' => $PMF_LANG['msgPopularTags'],
@@ -134,7 +134,7 @@ $template->parseBlock(
 );
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     [
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],

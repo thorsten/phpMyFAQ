@@ -1,14 +1,13 @@
-footer.sticky-footer {
-  padding: 2rem 0;
-  flex-shrink: 0;
-  .copyright {
-    line-height: 1;
-    font-size: 0.8rem;
-  }
+.pmf-footer {
+  background-color: fade_in($gray-900, 0.8);
 }
-
-body.sidebar-toggled {
-  footer.sticky-footer {
-    width: 100%;
+.pmf-footer-menu {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  padding: 0;
+  margin-bottom: 0;
+  li {
+    padding: 0.5rem 1rem 1rem 1rem;
   }
 }

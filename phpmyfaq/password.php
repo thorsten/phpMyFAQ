@@ -31,7 +31,7 @@ try {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
         'msgUsername' => $PMF_LANG['ad_auth_user'],

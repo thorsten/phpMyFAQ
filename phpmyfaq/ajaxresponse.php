@@ -111,12 +111,8 @@ $http->addHeader();
 if (!is_null($searchString)) {
     $faqSearch->setCategory($category);
 
-    try {
-        $searchResult = $faqSearch->autoComplete($searchString);
-        $faqSearchResult->reviewResultSet($searchResult);
-    } catch (Exception $e) {
-        $http->sendWithHeaders($e->getMessage());
-    }
+    $searchResult = $faqSearch->autoComplete($searchString);
+    $faqSearchResult->reviewResultSet($searchResult);
 
     $faqSearchHelper = new SearchHelper($faqConfig);
     $faqSearchHelper->setSearchterm($searchString);

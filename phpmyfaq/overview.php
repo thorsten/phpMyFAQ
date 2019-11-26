@@ -37,13 +37,6 @@ $faqHelper = new FaqHelper($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$template->parse(
-    'writeContent',
-    [
-        'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
-    ]
-);
-
 $template->parseBlock(
     'index',
     'breadcrumb',
@@ -51,3 +44,11 @@ $template->parseBlock(
         'breadcrumbHeadline' => $PMF_LANG['faqOverview']
     ]
 );
+
+$template->parse(
+    'mainPageContent',
+    [
+        'overview' => $faqHelper->createOverview($category, $faq, $faqLangCode),
+    ]
+);
+

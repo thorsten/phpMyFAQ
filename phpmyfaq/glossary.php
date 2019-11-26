@@ -68,7 +68,7 @@ if (0 < $numItems) {
     }
 
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'glossaryItems',
         array(
             'item' => $output['item'],
@@ -78,7 +78,7 @@ if (0 < $numItems) {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'msgGlossary' => $PMF_LANG['ad_menu_glossary'],
         'msgGlossrayItem' => $PMF_LANG['ad_glossary_item'],

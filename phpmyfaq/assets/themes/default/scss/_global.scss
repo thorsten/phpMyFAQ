@@ -6,13 +6,51 @@ html {
 }
 
 body {
+  color: #717f86;
   height: 100%;
+  font-size: 16px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  line-height: 1.52;
+}
+
+ol, ul {
+  list-style: none;
+}
+
+blockquote, q {
+  quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+  content: '';
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.section-padding {
+  padding: 60px 0;
+}
+
+h1, h2, h3, h4, h5, h6{
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 700;
+  color: #4B4B4C;
 }
 
 a {
-  &:focus {
+  color: #5fcf80;
+  &:hover, &:focus {
+    color: #5fcf80;
     outline: none;
   }
+}
+
+mark, .mark {
+  padding: 0 !important; // override Bootstrap default
 }
 
 // Main page wrapper

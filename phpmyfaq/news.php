@@ -120,12 +120,12 @@ if ($news['active'] && (!$expired)) {
 $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'writeNewsHeader' => $newsMainHeader,
         'writeNewsRSS' => $newsFeed,
         'writeHeader' => $newsHeader,
-        'writeContent' => $newsContent,
+        'mainPageContent' => $newsContent,
         'writeDateMsg' => $newsDate,
         'msgAboutThisNews' => $PMF_LANG['msgAboutThisNews'],
         'writeAuthor' => ($news['active'] && (!$expired)) ? $PMF_LANG['msgAuthor'] . ': ' . $news['authorName'] : '',

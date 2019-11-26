@@ -64,7 +64,7 @@ $send2friendLink = sprintf('%sindex.php?action=faq&amp;cat=%d&amp;id=%d&amp;artl
 
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     [
         'lang' => $faqLanguage,
         'msgSend2Friend' => $PMF_LANG['msgSend2Friend'],

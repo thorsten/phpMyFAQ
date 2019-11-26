@@ -37,7 +37,7 @@ try {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
         'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',

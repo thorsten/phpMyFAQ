@@ -1,0 +1,68 @@
+// Search page
+
+
+// Search masthead
+.pmf-search-section {
+  background-color: fade-out($gray-500, 0.8);
+  position: relative;
+  border-bottom: 1px solid $gray-500;
+  border-top: 1px solid $primary;
+}
+
+.pmf-single-masthead {
+  padding: 30px;
+}
+
+.pmf-masthead {
+  display: table-cell;
+  vertical-align: middle;
+  width: 1%;
+  padding: 50px 0 50px;
+  text-align: center;
+
+  form {
+
+    button {
+      position: absolute;
+      right: 25px;
+      top: 25px;
+      background: none;
+      border: none;
+      font-size: 30px;
+      color: $gray-600;
+    }
+  }
+}
+
+.pmf-search-field {
+  width: 100%;
+  font-size: 18px;
+  border-radius: 30px;
+  border: 2px solid $gray-500;
+  padding: 0 30px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  height: 60px;
+  -webkit-appearance: none;
+}
+
+.typeahead {
+
+  &.dropdown-menu {
+    background-color: transparent !important;
+
+    li {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-left: 1px solid rgba(0, 0, 0, 0.2);
+      border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+      &:first-child {
+        border-top: 1px solid rgba(0, 0, 0, 0.2);
+      }
+
+      &:last-child {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+      }
+    }
+  }
+}

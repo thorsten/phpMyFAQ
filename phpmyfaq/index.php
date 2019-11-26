@@ -478,7 +478,7 @@ $template = new Template(
     [
         'index' => $indexSet,
         'sidebar' => $sidebarTemplate,
-        'writeContent' => $includeTemplate,
+        'mainPageContent' => $includeTemplate,
     ],
     new TemplateHelper($faqConfig),
     $faqConfig->get('main.templateSet')
@@ -735,7 +735,7 @@ require $includePhp;
 // Get main template, set main variables
 //
 $template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
-$template->merge('writeContent', 'index');
+$template->merge('mainPageContent', 'index');
 
 //
 // Send headers and print template

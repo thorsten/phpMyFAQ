@@ -1,5 +1,5 @@
 /**
- * phpMyFAQ 3.0 default layout, compatible with https://bootswatch.com
+ * phpMyFAQ 3.0 default layout
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -30,173 +30,12 @@
 @import "cards.scss";
 @import "error.scss";
 @import "footer.scss";
+@import "breadcrumbs";
+@import "search";
 
 // Fork Awesome
 $fa-font-path: '../fonts';
 @import '../../../../../node_modules/fork-awesome/scss/fork-awesome';
-
-//
-// MAIN LAYOUT
-//
-body {
-  line-height: 1.52;
-  color: #717f86;
-  font-size: 16px;
-  font-family: 'Open Sans', sans-serif;
-  font-weight: 400;
-}
-
-ol, ul {
-  list-style: none;
-}
-
-blockquote, q {
-  quotes: none;
-}
-
-blockquote:before, blockquote:after, q:before, q:after {
-  content: '';
-}
-
-table {
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.section-padding {
-  padding: 60px 0px;
-}
-
-h1, h2, h3, h4, h5, h6{
-  font-family: Open Sans, sans-serif;
-  font-weight: 700;
-  color: #4B4B4C;
-}
-
-a {
-  color: #5fcf80;
-  &:hover, &:focus {
-    color: #5fcf80;
-  }
-}
-
-mark, .mark {
-  padding: 0 !important; // override Bootstrap default
-}
-
-//
-// SEARCH
-//
-.pmf-search-section {
-  background-color: fade-out($gray-500, 0.8);
-  position: relative;
-  border-bottom: 1px solid $gray-500;
-  border-top: 1px solid $primary;
-}
-
-.pmf-single-masthead {
-  padding: 30px;
-}
-
-.pmf-masthead {
-  display: table-cell;
-  vertical-align: middle;
-  width: 1%;
-  padding: 50px 0 50px;
-  text-align: center;
-
-  form {
-
-    button {
-      position: absolute;
-      right: 25px;
-      top: 25px;
-      background: none;
-      border: none;
-      font-size: 30px;
-      color: $gray-600;
-    }
-  }
-}
-
-.pmf-search-field {
-  width: 100%;
-  font-size: 18px;
-  border-radius: 30px;
-  border: 2px solid $gray-500;
-  padding: 0 30px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  height: 60px;
-  -webkit-appearance: none;
-}
-
-.typeahead {
-
-  &.dropdown-menu {
-    background-color: transparent !important;
-
-    li {
-      background-color: rgba(255, 255, 255, 0.9);
-      border-left: 1px solid rgba(0, 0, 0, 0.2);
-      border-right: 1px solid rgba(0, 0, 0, 0.2);
-
-      &:first-child {
-        border-top: 1px solid rgba(0, 0, 0, 0.2);
-      }
-
-      &:last-child {
-        border-bottom: 1px solid rgba(0, 0, 0, 0.2);
-      }
-    }
-  }
-}
-
-//
-// BREADCRUMBS
-//
-.pmf-breadcrumbs {
-  background: #fff;
-  padding: 12px;
-  border-bottom: 1px solid $gray-500;
-
-  ul {
-    margin: 0;
-    padding: 0;
-
-    li {
-      display: inline-block;
-      color: #5e6977;
-      font-size: 14px;
-
-      & + li:before {
-        content: ' / ';
-        padding-left: 10px;
-        padding-right: 10px;
-        color: #e1e8ee;
-      }
-    }
-  }
-}
-
-
-
-//
-// FOOTER
-//
-.pmf-footer {
-  background-color: fade_in($gray-900, 0.8);
-}
-.pmf-footer-menu {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  padding: 0;
-  margin-bottom: 0;
-  li {
-    padding: 0.5rem 1rem 1rem 1rem;
-  }
-}
 
 //
 // LOGIN

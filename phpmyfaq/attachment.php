@@ -108,5 +108,5 @@ if ($attachment && ($faqConfig->get('records.allowDownloadsForGuests') ||
 }
 
 // If we're here, there was an error with file download
-$template->parseBlock('writeContent', 'attachmentErrors', array('item' => implode('<br>', $attachmentErrors)));
-$template->parse('writeContent', []);
+$template->parseBlock('mainPageContent', 'attachmentErrors', array('item' => implode('<br>', $attachmentErrors)));
+$template->parse('mainPageContent', []);

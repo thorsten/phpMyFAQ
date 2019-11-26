@@ -46,7 +46,7 @@ if (!is_null($showCaptcha)) {
 $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'msgContact' => $PMF_LANG['msgContact'],
         'msgContactOwnText' => nl2br($faqConfig->get('main.contactInformations')),

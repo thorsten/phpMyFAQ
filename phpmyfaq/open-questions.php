@@ -30,25 +30,20 @@ try {
     // @todo handle the exception
 }
 
+$template->parseBlock('index', 'breadcrumb', [ 'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions'] ]);
+
 try {
     $template->parse(
-        'writeContent',
+        'mainPageContent',
         [
             'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
             'msgQuestionText' => $PMF_LANG['msgQuestionText'],
             'msgDate_User' => $PMF_LANG['msgDate_User'],
             'msgQuestion2' => $PMF_LANG['msgQuestion2'],
-            'printOpenQuestions' => $faq->renderOpenQuestions()
+            'renderOpenQuestionTable' => $faq->renderOpenQuestions()
         ]
     );
 } catch (Exception $e) {
 
 }
 
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions']
-    ]
-);

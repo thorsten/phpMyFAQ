@@ -60,7 +60,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             $categoryFaqsHeader = $PMF_LANG['msgSubCategories'];
             $subCategoryContent = $subCategory->viewTree();
             $template->parseBlock(
-                'writeContent',
+                'mainPageContent',
                 'subCategories',
                 [
                     'categorySubsHeader' => $categoryFaqsHeader
@@ -85,7 +85,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
 
     if (!is_null($categoryData->getImage())) {
         $template->parseBlock(
-            'writeContent',
+            'mainPageContent',
             'categoryImage',
             [
                 'categoryImage' => $faqConfig->getDefaultUrl() . '/images/' . $categoryData->getImage(),
@@ -94,7 +94,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     $template->parse(
-        'writeContent',
+        'mainPageContent',
         [
             'categoryHeader' => $PMF_LANG['msgEntriesIn'] . $categoryData->getName(),
             'categoryDescription' => $categoryData->getDescription(),
@@ -121,7 +121,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     }
 
     $template->parse(
-        'writeContent',
+        'mainPageContent',
         [
             'categoryHeader' => $PMF_LANG['msgFullCategories'],
             'categoryDescription' => '',

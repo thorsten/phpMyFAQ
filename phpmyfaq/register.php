@@ -48,7 +48,7 @@ if (!is_null($showCaptcha)) {
 $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'msgRegistration' => $PMF_LANG['msgRegistration'],
         'msgRegistrationCredentials' => $PMF_LANG['msgRegistrationCredentials'],

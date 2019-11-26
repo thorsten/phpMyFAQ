@@ -71,7 +71,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'enableWysiwygEditor',
         array(
             'currentTimestamp' => $_SERVER['REQUEST_TIME'],
@@ -80,7 +80,7 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'writeSourceFaqId' => $faqSource['id'],
         'writeSourceTitle' => $faqSource['title'],

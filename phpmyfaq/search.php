@@ -240,14 +240,14 @@ if ('' == $searchResult && !is_null($inputSearchTerm)) {
 
 if ($tagSearch) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'searchTagsSection',
         [
             'searchTags' => $tagHelper->renderTagList($tags),
         ]
     );
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'relatedTags',
         [
             'relatedTagsHeader' => $PMF_LANG['msgRelatedTags'],
@@ -257,7 +257,7 @@ if ($tagSearch) {
 } else {
     if ('' === $searchTerm) {
         $template->parseBlock(
-            'writeContent',
+            'mainPageContent',
             'tagListSection',
             [
                 'msgTags' => $PMF_LANG['msgPopularTags'],
@@ -267,7 +267,7 @@ if ($tagSearch) {
     }
 
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'searchBoxSection',
         [
             'writeSendAdress' => '?' . $sids . 'action=search',
@@ -282,7 +282,7 @@ if ($tagSearch) {
     );
 
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'popularSearchesSection',
         [
             'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
@@ -292,7 +292,7 @@ if ($tagSearch) {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     [
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],

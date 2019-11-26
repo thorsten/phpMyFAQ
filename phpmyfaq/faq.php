@@ -226,7 +226,7 @@ $availableLanguages = $faqConfig->getLanguage()->languageAvailable($faq->faqReco
 
 if (!empty($availableLanguages) && count($availableLanguages) > 1) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'switchLanguage',
         [
             'msgChangeLanguage' => $PMF_LANG['msgLanguageSubmit'],
@@ -237,7 +237,7 @@ if (!empty($availableLanguages) && count($availableLanguages) > 1) {
 if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
     !empty($availableLanguages) && count($availableLanguages) > 1) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'addTranslation',
         [
             'msgTranslate' => $PMF_LANG['msgTranslate'],
@@ -247,7 +247,7 @@ if ($user->perm->checkRight($user->getUserId(), 'addtranslation') &&
 
 if ($user->perm->checkRight($user->getUserId(), 'edit_faq') && !empty($faq->faqRecord['notes'])) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'privateNotes',
         [
             'notesHeader' => $PMF_LANG['ad_admin_notes'],
@@ -258,7 +258,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') && !empty($faq->faqR
 
 if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'tagsAvailable',
         [
             'renderTags' => $PMF_LANG['msg_tags'].': '.$faqTagging->getAllLinkTagsById($recordId),
@@ -268,7 +268,7 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
 
 if ('' !== $htmlAllCategories) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'relatedCategories',
         [
             'renderRelatedCategoriesHeader' => $PMF_LANG['msgArticleCategories'],
@@ -279,7 +279,7 @@ if ('' !== $htmlAllCategories) {
 
 if ('' !== $relatedFaqs) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'relatedFaqs',
         [
             'renderRelatedArticlesHeader' => $PMF_LANG['msg_related_articles'],
@@ -300,14 +300,14 @@ if (!$isLinkedFAQ) {
 }
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     array(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'writeRubrik' => $categoryName,
         'solution_id' => $faq->faqRecord['solution_id'],
         'solution_id_link' => Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
         'writeThema' => $question,
-        'writeContent' => $answer,
+        'mainPageContent' => $answer,
         'writeDateMsg' => $date->format($faq->faqRecord['date']),
         'writeAuthor' => $faq->faqRecord['author'],
         'numberOfComments' => sprintf(

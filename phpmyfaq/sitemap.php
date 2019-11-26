@@ -47,7 +47,7 @@ $siteMap->setUser($currentUser);
 $siteMap->setGroups($currentGroups);
 
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     [
         'renderLetters' => $siteMap->getAllFirstLetters(),
         'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),

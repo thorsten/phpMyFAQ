@@ -76,7 +76,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 // Enable/Disable WYSIWYG editor
 if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     $template->parseBlock(
-        'writeContent',
+        'mainPageContent',
         'enableWysiwygEditor',
         array(
             'currentTimestamp' => $_SERVER['REQUEST_TIME'],
@@ -84,8 +84,16 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     );
 }
 
+$template->parseBlock(
+    'index',
+    'breadcrumb',
+    [
+        'breadcrumbHeadline' => $PMF_LANG['msgNewContentHeader']
+    ]
+);
+
 $template->parse(
-    'writeContent',
+    'mainPageContent',
     [
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
@@ -106,13 +114,5 @@ $template->parse(
         'msgNewContentLink' => $PMF_LANG['msgNewContentLink'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'add', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgNewContentHeader']
     ]
 );
