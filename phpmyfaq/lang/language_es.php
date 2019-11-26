@@ -829,7 +829,6 @@ $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Clav
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Consumidor Secreto Twitter');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Token de acceso a Twitter');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Token secreto a Twitter');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Soporte a Facebook (por defecto: desactivado)');
 $PMF_LANG['admin_mainmenu_backup'] = 'Respaldo';
 $PMF_LANG['plmsgHomeArticlesOnline']['0'] = 'hay %d FAQ online';
 $PMF_LANG['plmsgHomeArticlesOnline']['1'] = 'hay %d FAQs online';

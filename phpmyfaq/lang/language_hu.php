@@ -560,7 +560,6 @@ $PMF_LANG['msgRegistrationCredentials'] = 'To register please enter your name, y
 $PMF_LANG['msgRegistrationNote'] = 'Sikeres regisztráció után az Adminisztrátortól kapsz egy megerősítő e-mailt.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Verziótörténet';
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook támogatás (default: deactivated)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On támogatás(alapértelmezetten:kikapcsolva)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Dátum formátum (alapértelmezett: Y-m-d H:i)');

@@ -882,7 +882,6 @@ $PMF_LANG['msgRegistrationCredentials'] = 'Para se registrar entre com seu nome,
 $PMF_LANG['msgRegistrationNote'] = 'Após o registo bem sucedido, você receberá uma resposta logo após Administração autorizou a sua inscrição.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Histórico de mudanças';
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Suporte Facebook (padrão: desativado)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Suporte ao Single Sign On (padrão: desativado)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'URL do serviço de redirecionamento de logout do Single Sign On');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Formato de Data (padrão: Y-m-d H:i)');

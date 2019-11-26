@@ -411,7 +411,6 @@ class Installer
         'socialnetworks.twitterConsumerSecret' => '',
         'socialnetworks.twitterAccessTokenKey' => '',
         'socialnetworks.twitterAccessTokenSecret' => '',
-        'socialnetworks.enableFacebookSupport' => 'false',
         'socialnetworks.disableAll' => 'false',
 
         'seo.metaTagsHome' => 'index, follow',

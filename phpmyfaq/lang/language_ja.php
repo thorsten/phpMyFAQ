@@ -862,7 +862,6 @@ $PMF_LANG['ad_entry_changelog_history'] = '改編履歴';
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter アクセス・トークン・キー');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook サポート (初期値:無効)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'シングルサインオンサポート (初期値:無効)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'シングルサインオン ログアウトのリダイレクトサービスURL');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => '日付フォーマット (初期値: Y-m-d H:i)');

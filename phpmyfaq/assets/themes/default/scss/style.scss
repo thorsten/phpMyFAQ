@@ -85,90 +85,28 @@ mark, .mark {
 }
 
 //
-// NAVBAR
-//
-.navbar-default .navbar-brand {
-  color: #5FCF80;
-}
-.navbar-default {
-  background-color: #ffffff;
-}
-.course-text{
-  padding: 84px;
-}
-.navbar-default .navbar-nav > li > a {
-  color: #717f86;
-  font-size: 14px;
-  font-weight: 700;
-}
-.navbar-nav > li > a{
-  padding: 0px;
-  margin: 10px 5px;
-  padding: 10px 15px;
-}
-.navbar-default .navbar-nav > li > a:focus, .navbar-default .navbar-nav > li > a:hover
-{
-  color: #5FCF80;
-}
-
-.navbar-nav .active a{
-  background: none !important;
-  color: #5FCF80 !important;
-  outline: none;
-}
-
-.btn-trial a{
-  background-color: #5FCF80;
-  border-radius: 25px;
-  color: #ffffff !important;
-  border: 1px solid #5FCF80;
-}
-.btn-trial a:hover, .btn-trial a:focus{
-  border: 1px solid #5FCF80;
-  background-color: #fff;
-  color: #5FCF80 !important;
-}
-.navbar-default .navbar-brand {
-  font-family: 'Dosis', sans-serif !important;
-  font-weight: 700;
-  text-transform: uppercase;
-  padding: 0px;
-  height: inherit;
-  font-size: 36px;
-  margin: 20px 0px;
-}
-.navbar-default .navbar-brand span{
-  font-weight: 100 !important;
-}
-.navbar {
-  margin-bottom: 0;
-}
-.padding-zero{
-  padding: 0;
-}
-.mart20{
-  margin-top: 20px;
-}
-
-//
 // SEARCH
 //
 .pmf-search-section {
-  background-color: $gray-200;
+  background-color: fade-out($gray-500, 0.8);
   position: relative;
   border-bottom: 1px solid $gray-500;
   border-top: 1px solid $primary;
 }
+
 .pmf-single-masthead {
   padding: 30px;
 }
+
 .pmf-masthead {
   display: table-cell;
   vertical-align: middle;
   width: 1%;
   padding: 50px 0 50px;
   text-align: center;
+
   form {
+
     button {
       position: absolute;
       right: 25px;
@@ -180,6 +118,7 @@ mark, .mark {
     }
   }
 }
+
 .pmf-search-field {
   width: 100%;
   font-size: 18px;
@@ -191,16 +130,21 @@ mark, .mark {
   height: 60px;
   -webkit-appearance: none;
 }
+
 .typeahead {
+
   &.dropdown-menu {
     background-color: transparent !important;
+
     li {
       background-color: rgba(255, 255, 255, 0.9);
       border-left: 1px solid rgba(0, 0, 0, 0.2);
       border-right: 1px solid rgba(0, 0, 0, 0.2);
+
       &:first-child {
         border-top: 1px solid rgba(0, 0, 0, 0.2);
       }
+
       &:last-child {
         border-bottom: 1px solid rgba(0, 0, 0, 0.2);
       }

@@ -72,58 +72,6 @@ class FaqHelper extends Helper
     }
 
     /**
-     * Renders a Facebook Like button.
-     *
-     * @param string $url
-     *
-     * @return string
-     */
-    public function renderFacebookLikeButton(string $url): string
-    {
-        if (empty($url) || $this->config->get('socialnetworks.enableFacebookSupport') == false) {
-            return '';
-        }
-
-        if ($this->ssl) {
-            $http = 'https://';
-        } else {
-            $http = 'http://';
-        }
-
-        return sprintf(
-            '<iframe src="%sfacebook.com/plugins/like.php?href=%s&amp;layout=standard&amp;show_faces=true'.
-            '&amp;width=250&amp;action=like&amp;font=arial&amp;colorscheme=light&amp;height=30" style="border:none; '.
-            'overflow:hidden; width:250px; height:30px;" allowTransparency="true"></iframe>',
-            $http,
-            urlencode($url)
-        );
-    }
-
-    /**
-     * Renders a Share on Facebook link.
-     *
-     * @param  string $url
-     * @return string
-     */
-    public function renderFacebookShareLink(string $url): string
-    {
-        if (empty($url) || $this->config->get('socialnetworks.disableAll') === true) {
-            return '';
-        }
-
-        $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fab fa-facebook fa-stack-1x"></i>
-                    </span>';
-
-        return sprintf(
-            '<a rel="nofollow" href="%s" target="_blank">%s</a>',
-            $url,
-            $icon
-        );
-    }
-
-    /**
      * Renders a Share on Twitter link.
      *
      * @param  string $url

@@ -844,7 +844,6 @@ $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twit
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitterin salainen avain (Secret)');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitterin käyttöoikeustunnuksen avain');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitterin salainen käyttöoikeustunnus');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook-tuki (oletus: ei valittu)');
 $PMF_LANG['ad_menu_attachments'] = 'Liitteet';
 $PMF_LANG['ad_menu_attachment_admin'] = 'Liitteiden moderointi';
 $PMF_LANG['msgAttachmentsFilename'] = 'Tiedostonimi';

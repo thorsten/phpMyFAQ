@@ -1010,7 +1010,6 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => "input", 1 => "T
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => "input", 1 => "Twitter Access Token Key");
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => "input", 1 => "Twitter Access Token Secret");
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => "checkbox", 1 => "Facebook Support ");
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG['ad_menu_attachments'] = "Anhänge";

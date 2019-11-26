@@ -860,7 +860,6 @@ $PMF_LANG['ad_entry_changelog_history'] = 'Wijzigingslog geschiedenis';
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consument Geheim');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Toegang Token Sleutel');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Toegang Token Geheim');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook ondersteuning (standaard: gedeactivateerd)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On ondersteuning (standaard: gedeactiveerd)');
 $PMF_LANG['searchControlCenter'] = 'Zoeken';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Vraag - Antwoord - Trefwoorden';

@@ -902,7 +902,6 @@ $PMF_LANG['msgRegistrationCredentials'] = 'For å registrere deg, vennligst oppg
 $PMF_LANG['msgRegistrationNote'] = 'Etter en vellykket registrering vil du snarlig motta en epost med påloggingsdata. Dette skjer såsnart administrator har autorisert registreringen din.';
 $PMF_LANG['ad_entry_changelog_history'] = 'Endringslogg historikk';
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Hemmelig Token for aksess');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (Standard: deaktivert)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (Standard: deaktivert)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On utlogging videresendingsservice URL');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Dato format (Standard: Y-m-d H:i)');

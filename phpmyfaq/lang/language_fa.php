@@ -583,7 +583,6 @@ $PMF_LANG['msgRegistrationCredentials'] = 'برای ثبت نام لطفا نا�
 $PMF_LANG['msgRegistrationNote'] = 'بعد از اتمام ثبت نام توسط مدیر سیستم اعتبار سنجی خواهید شد.';
 $PMF_LANG['ad_entry_changelog_history'] = 'تاریخچه تغییرات';
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'رمز توکن دسترسی به توییتر');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'پشتیبانی از فیس‌بوک (پیش‌فرض: غیرفعال)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'پشتیبانی از SSO (پیش‌فرض: غیرفعال)');
 $LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'URL تغییر مسیر خروج از SSO');
 $LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'فرمت تاریخ (پیش‌فرض: Y-m-d H:i)');

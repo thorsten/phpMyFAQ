@@ -855,7 +855,6 @@ $PMF_LANG['ad_entry_changelog_history'] = '更新日志历史';
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => '推特客户密码');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => '推特准入令牌');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => '推特准入令牌密码');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => '脸谱网支持 (默认: 不激活)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => '单点登录支持 (默认: 不激活)');
 $PMF_LANG['searchControlCenter'] = '搜索';
 $PMF_LANG['search.relevance.thema-content-keywords'] = '问题 - 答案 - 关键字';

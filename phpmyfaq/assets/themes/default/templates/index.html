@@ -15,11 +15,6 @@
   <meta name="revisit-after" content="7 days">
   <meta name="apple-itunes-app" content="app-id=977896957">
 
-  <!-- Share on Facebook -->
-  <meta property="og:title" content="{{ title }}">
-  <meta property="og:description" content="{{ metaDescription }}">
-  <meta property="og:image" content="">
-
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
   <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
@@ -113,17 +108,14 @@
 </div>
 
 
-<div class="container" style="margin-top: 10px">
-
-  {{ writeContent }}
-
-</div>
-
 
 <div class="pmf-wrapper pmf-main">
   <div class="container">
     <div class="row">
       <div class="col-md-8 pmf-maincontent">
+
+        {{ writeContent }}
+
       </div>
       <aside class="col-md-4 pmf-aside">
 
@@ -143,7 +135,6 @@
                     </span>
             </a>
             {{ sendToFriend }}
-            {{ shareOnFacebook }}
             {{ shareOnTwitter }}
             {{ facebookLikeButton }}
           </div>

@@ -873,7 +873,6 @@ $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Ун
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Секретный ID (Twitter Consumer Secret)');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Ключ доступа (Twitter Access Token Key)');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Секретный код (Twitter Access Token Secret)');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Поддержка Facebook (по умолчанию: отключено)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Одноразовый вход для поддержки (по умолчанию: отключено)');
 $LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Использовать только защищенное соединение?");
 $PMF_LANG['msgExportAllFaqs'] = 'Печатать всё в PDF';

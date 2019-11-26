@@ -689,10 +689,8 @@ if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
             'writePDFTag' => $PMF_LANG['msgPDF'],
             'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
             'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
-            'shareOnFacebook' => $faqHelper->renderFacebookShareLink($faqServices->getShareOnFacebookLink()),
             'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
-            'link_pdf' => $faqServices->getPdfLink(),
-            'facebookLikeButton' => $faqHelper->renderFacebookLikeButton($faqServices->getLink())
+            'link_pdf' => $faqServices->getPdfLink()
         ]
     );
 }

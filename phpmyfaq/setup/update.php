@@ -680,6 +680,7 @@ if ($step == 3) {
 
         $faqConfig->add('mail.remoteSMTPPort', '465');
         $faqConfig->add('mail.remoteSMTPEncryption', 'ssl');
+        $faqConfig->delete('socialnetworks.enableFacebookSupport');
     }
 
     // Always the last step: Update version number

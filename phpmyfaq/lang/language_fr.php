@@ -885,7 +885,6 @@ $PMF_LANG['ad_entry_changelog_history'] = 'Historique des modifications';
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => "input", 1 => "Twitter Consumer Secret");
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => "input", 1 => "Twitter Access Token Key");
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook support (default: deactivated)');
 $LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support (default: deactivated)');
 $PMF_LANG['securityControlCenter'] = 'Configuration de la sécurité';
 $PMF_LANG['ad_search_delsuc'] = 'Le terme de recherche a été supprimé avec succès.';

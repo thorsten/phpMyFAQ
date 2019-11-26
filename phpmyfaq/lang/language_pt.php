@@ -816,7 +816,6 @@ $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => '<em>
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => '<em>Twitter Consumer Secret</em>');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => '<em>Twitter Access Token Key</em>');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => '<em>Twitter Access Token Secret</em>');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook <small>(pré-definição: desativado)</small>)');
 $PMF_LANG['ad_menu_attachments'] = 'Anexos';
 $PMF_LANG['ad_menu_attachment_admin'] = 'Administração de Anexos';
 $PMF_LANG['msgAttachmentsFilename'] = 'Nome do ficheiro';

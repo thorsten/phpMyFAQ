@@ -137,27 +137,6 @@ class Services
     }
 
     /**
-     * Returns the current "share on Facebook" URL.
-     *
-     * @return string
-     */
-    public function getShareOnFacebookLink()
-    {
-        $url = sprintf(
-            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
-            $this->config->getDefaultUrl(),
-            $this->getCategoryId(),
-            $this->getFaqId(),
-            $this->getLanguage()
-        );
-
-        $link = new Link($url, $this->config);
-        $link->itemTitle = $this->question;
-
-        return sprintf('https://www.facebook.com/sharer.php?u=%s', urlencode($link->toString()));
-    }
-
-    /**
      * Returns the current "share on Twitter" URL.
      *
      * @return string

@@ -38,6 +38,8 @@ Version 3.0.0-beta.3 - 2019-11-
 - removed bundled Symfony ClassLoader (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
 - removed Modernizr (Thorsten)
+- removed share on Facebook link (Thorsten)
+- removed Facebook Like Button support (Thorsten)
 
 Version 2.9.13 - 2019-02-14
 - fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)

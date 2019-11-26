@@ -851,7 +851,6 @@ $LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twit
 $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter secret');
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter přístupový Token Klíč');
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter přístupový Token Secret');
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => 'checkbox', 1 => 'Facebook podpora (výchozí: deaktivováno)');
 $PMF_LANG['ad_menu_attachments'] = 'Přílohy';
 $PMF_LANG['ad_menu_attachment_admin'] = 'Administrace příloh';
 $PMF_LANG['msgAttachmentsFilename'] = 'Název souboru';

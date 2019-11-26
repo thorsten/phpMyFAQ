@@ -1031,7 +1031,6 @@ $LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => "input", 1 => "T
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml 開發者
 $LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => "input", 1 => "Twitter 存取金鑰 Twitter Access Token Key");
 $LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => "input", 1 => "Twitter 秘密存取金鑰 Twitter Access Token Secret");
-$LANG_CONF['socialnetworks.enableFacebookSupport'] = array(0 => "checkbox", 1 => "Facebook 支援 (預設: 關閉) Facebook support (default: deactivated)");
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky 開發者
 $PMF_LANG["ad_menu_attachments"] = "FAQ 附加檔案 (Attachments)";
