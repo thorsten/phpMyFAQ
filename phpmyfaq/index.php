@@ -264,7 +264,7 @@ if ($faqConfig->get('main.enableUserTracking')) {
     }
 } else {
     if (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId,
-        $_SERVER['REQUEST_TIME'] + Language_EXPIRED_TIME)) {
+        $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
         $sids = sprintf('lang=%s&amp;', $faqLangCode);
     }
 }
@@ -534,9 +534,10 @@ $tplMainPage = [
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
     // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
-    'copyright' => 'powered by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
+    'copyright' => 'powered with ❤️ and ☕️ by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
         $faqConfig->get('main.currentVersion'),
-    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
+    'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
+        $PMF_LANG['msgRegistration'] . '</a>' : '',
     'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
     'msgFullName' => $PMF_LANG['ad_user_loggedin'] . $user->getLogin(),
     'msgLoginName' => $user->getUserData('display_name'),
@@ -585,7 +586,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgSearch' => '<a class="nav-link" href="./search.html">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
         'msgAddContent' => '<a class="nav-link" href="' . $faqSystem->getSystemUri($faqConfig) . 'addcontent.html">' . $PMF_LANG['msgAddContent'] . '</a>',
         'msgQuestion' => '<a class="nav-link" href="./ask.html">' . $PMF_LANG['msgQuestion'] . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="./open.html">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="./open-questions.html">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
         'msgContact' => '<a href="./contact.html">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="./glossary.html">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
         'backToHome' => '<a href="./index.html">' . $PMF_LANG['msgHome'] . '</a>',
@@ -600,7 +601,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         'msgSearch' => '<a class="nav-link" href="index.php?' . $sids . 'action=search">' . $PMF_LANG['msgAdvancedSearch'] . '</a>',
         'msgAddContent' => '<a class="nav-link" href="index.php?' . $sids . 'action=add&cat=' . $cat . '">' . $PMF_LANG['msgAddContent'] . '</a>',
         'msgQuestion' => '<a class="nav-link" href="index.php?' . $sids . 'action=ask&category_id=' . $cat . '">' . $PMF_LANG['msgQuestion'] . '</a>',
-        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
+        'msgOpenQuestions' => '<a class="nav-link" href="index.php?' . $sids . 'action=open-questions">' . $PMF_LANG['msgOpenQuestions'] . '</a>',
         'msgContact' => '<a href="index.php?' . $sids . 'action=contact">' . $PMF_LANG['msgContact'] . '</a>',
         'msgGlossary' => '<a href="index.php?' . $sids . 'action=glossary">' . $PMF_LANG['ad_menu_glossary'] . '</a>',
         'allCategories' => '<a class="nav-link" href="index.php?' . $sids . 'action=show">' . $PMF_LANG['msgShowAllCategories'] . '</a>',
@@ -617,7 +618,7 @@ $tplNavigation['activeSearch'] = ('search' == $action) ? 'active' : '';
 $tplNavigation['activeAllCategories'] = ('show' == $action) ? 'active' : '';
 $tplNavigation['activeAddContent'] = ('add' == $action) ? 'active' : '';
 $tplNavigation['activeAddQuestion'] = ('ask' == $action) ? 'active' : '';
-$tplNavigation['activeOpenQuestions'] = ('open' == $action) ? 'active' : '';
+$tplNavigation['activeOpenQuestions'] = ('open-questions' == $action) ? 'active' : '';
 $tplNavigation['activeLogin'] = ('login' == $action) ? 'active' : '';
 
 //

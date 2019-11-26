@@ -54,8 +54,8 @@ RewriteCond %{REQUEST_URI}          /ask\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=ask [L,QSA]
 
 # the open questions page
-RewriteCond %{REQUEST_URI}          /open\.html$ [NC]
-RewriteRule ^(.*)$                  index.php?action=open [L,QSA]
+RewriteCond %{REQUEST_URI}          /open-questions\.html$ [NC]
+RewriteRule ^(.*)$                  index.php?action=open-questions [L,QSA]
 
 # the help page
 RewriteCond %{REQUEST_URI}          /help\.html$ [NC]

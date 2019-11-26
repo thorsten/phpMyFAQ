@@ -3,8 +3,6 @@
 /**
  * Constants for phpMyFAQ.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -30,7 +28,7 @@
  *
  * @var string
  */
-define('DateTIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
+define('DATETIME_TIMEZONE_DEFAULT', 'Europe/Berlin');
 
 /**
  * Sets the current session save path if needed, by default not used
@@ -198,7 +196,7 @@ $allowedVariables = [
     'login' => 1,
     'mailsend2friend' => 1,
     'news' => 1,
-    'open' => 1,
+    'open-questions' => 1,
     'overview' => 1,
     'password' => 1,
     'register' => 1,
@@ -373,14 +371,13 @@ $languageCodes = [
 //
 
 // HTTP GET parameters
-define('PMF_GET_KEY_NAME_LANGUAGE', 'lang');
 define('PMF_GET_KEY_NAME_SESSIONID', 'sid');
 // Misc parameters
-define('Language_EXPIRED_TIME', 3600); // 30 minutes
+define('PMF_LANGUAGE_EXPIRED_TIME', 3600); // 30 minutes
 define('PMF_SESSION_EXPIRED_TIME', 3600); // 30 minutes
 define('PMF_REMEMBERME_EXPIRED_TIME', 1209600); // 2 weeks
 
 //
 // Set the default timezone used by all date/time functions
 //
-date_default_timezone_set(DateTIME_TIMEZONE_DEFAULT);
+date_default_timezone_set(DATETIME_TIMEZONE_DEFAULT);

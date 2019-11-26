@@ -185,9 +185,7 @@ mark, .mark {
 // FOOTER
 //
 .pmf-footer {
-  background-color: $gray-800;
-  padding-top: 3rem;
-  padding-bottom: 1rem;
+  background-color: fade_in($gray-900, 0.8);
 }
 .pmf-footer-menu {
   list-style: none;
@@ -196,7 +194,7 @@ mark, .mark {
   padding: 0;
   margin-bottom: 0;
   li {
-    padding: 0 1rem 1rem 1rem;
+    padding: 0.5rem 1rem 1rem 1rem;
   }
 }
 

@@ -139,10 +139,10 @@ if ($num > 0) {
 
             $rss->writeElement('link',
                 (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . str_replace('feed/openquestions/rss.php',
-                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open#openq_' . $openQuestion->getId());
+                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open-questions#openq_' . $openQuestion->getId());
             $rss->writeElement('guid',
                 (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . $_SERVER['HTTP_HOST'] . str_replace('feed/openquestions/rss.php',
-                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open#openq_' . $openQuestion->getId());
+                    'index.php', $_SERVER['SCRIPT_NAME']) . '?action=open-questions#openq_' . $openQuestion->getId());
 
             $rss->writeElement('pubDate', Date::createRFC822Date($openQuestion->getCreated(), true));
             $rss->endElement();

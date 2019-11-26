@@ -77,7 +77,7 @@ class Link
     const LINK_GET_ACTION_HELP = 'help';
     const LINK_GET_ACTION_LOGIN = 'login';
     const LINK_GET_ACTION_NEWS = 'news';
-    const LINK_GET_ACTION_OPEN = 'open';
+    const LINK_GET_ACTION_OPEN = 'open-questions';
     const LINK_GET_ACTION_PASSWORD = 'password';
     const LINK_GET_ACTION_REGISTER = 'register';
     const LINK_GET_ACTION_SEARCH = 'search';
@@ -94,7 +94,7 @@ class Link
     const LINK_HTML_GLOSSARY = 'glossary.html';
     const LINK_HTML_HELP = 'help.html';
     const LINK_HTML_LOGIN = 'login.html';
-    const LINK_HTML_OPEN = 'open.html';
+    const LINK_HTML_OPEN = 'open-questions.html';
     const LINK_HTML_PASSWORD = 'password.html';
     const LINK_HTML_REGISTER = 'register.html';
     const LINK_HTML_SEARCH = 'search.html';
