@@ -153,7 +153,7 @@ class Plurals
      * Returns a translated string in the correct plural form,
      * produced according to the formatting of the message.
      *
-     * @param string $msgID Message identificator
+     * @param string $msgID Message identification
      * @param int    $n     The number used to determine the plural form
      *
      * @return string
