@@ -83,7 +83,7 @@ function copyRecursive(string $source, string $destination): bool {
 $dirsToCreate = [
     'phpmyfaq/src/libs/abraham/twitteroauth',
     'phpmyfaq/src/libs/composer',
-    'phpmyfaq/src/libs/elasticsearch/src/Elasticsearch',
+    'phpmyfaq/src/libs/elasticsearch/elasticsearch/src',
     'phpmyfaq/src/libs/guzzlehttp/ringphp/src',
     'phpmyfaq/src/libs/monolog/src/Monolog',
     'phpmyfaq/src/libs/myclabs/deep-copy/src',
@@ -123,7 +123,7 @@ foreach ($copySingle as $source => $destination) {
 $copyDirs = [
     'vendor/abraham/twitteroauth' => 'phpmyfaq/src/libs/abraham/twitteroauth',
     'vendor/composer' => 'phpmyfaq/src/libs/composer',
-    'vendor/elasticsearch/elasticsearch/src/Elasticsearch' => 'phpmyfaq/src/libs/elasticsearch/src/Elasticsearch',
+    'vendor/elasticsearch/elasticsearch/src' => 'phpmyfaq/src/libs/elasticsearch/elasticsearch/src',
     'vendor/guzzlehttp/ringphp/src' => 'phpmyfaq/src/libs/guzzlehttp/ringphp/src',
     'vendor/monolog/monolog/src/Monolog' => 'phpmyfaq/src/libs/monolog/src/Monolog',
     'vendor/phpseclib/phpseclib/phpseclib/Crypt' => 'phpmyfaq/src/libs/phpseclib/Crypt',
@@ -131,6 +131,8 @@ $copyDirs = [
     'vendor/react/promise/src' => 'phpmyfaq/src/libs/react/promise/src',
     'vendor/swiftmailer/swiftmailer/lib' => 'phpmyfaq/src/libs/swiftmailer/swiftmailer/lib',
     'vendor/myclabs/deep-copy/src' => 'phpmyfaq/src/libs/myclabs/deep-copy/src',
+    'vendor/symfony/polyfill-ctype' => 'phpmyfaq/src/libs/symfony/polyfill-ctype',
+    'vendor/symfony/yaml' => 'phpmyfaq/src/libs/symfony/yaml',
 ];
 
 foreach ($copyDirs as $source => $destination) {
