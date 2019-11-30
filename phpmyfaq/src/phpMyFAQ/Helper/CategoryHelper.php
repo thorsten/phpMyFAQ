@@ -60,7 +60,8 @@ class CategoryHelper extends Helper
                 $level = $this->Category->treeTab[$y]['level'];
                 $leveldiff = $open - $level;
 
-                if ($this->config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
+                if (
+                    $this->config->get('records.hideEmptyCategories') && !isset($numFaqs[$categoryId])
                     && '-' === $hasChild
                 ) {
                     continue;
@@ -81,7 +82,7 @@ class CategoryHelper extends Helper
                     if (($level - $open) == -1) {
                         $output .= '</li>';
                     }
-                    $output .= "\n".str_repeat("\t", $level + 2)."</ul>\n".str_repeat("\t", $level + 1)."</li>\n";
+                    $output .= "\n" . str_repeat("\t", $level + 2) . "</ul>\n" . str_repeat("\t", $level + 1) . "</li>\n";
                 } elseif ($level == $open && $y != 0) {
                     $output .= "</li>\n";
                 }
@@ -145,7 +146,7 @@ class CategoryHelper extends Helper
 
             return $output;
         } else {
-            $output = '<li><a href="#">'.$PMF_LANG['no_cats'].'</a></li>';
+            $output = '<li><a href="#">' . $PMF_LANG['no_cats'] . '</a></li>';
         }
 
         return $output;
@@ -251,7 +252,7 @@ class CategoryHelper extends Helper
 
             return $output;
         } else {
-            $output = '<li><a href="#">'.$PMF_LANG['no_cats'].'</a></li>';
+            $output = '<li><a href="#">' . $PMF_LANG['no_cats'] . '</a></li>';
         }
 
         return $output;
@@ -306,7 +307,7 @@ class CategoryHelper extends Helper
             for ($j = 0; $j < $cat['indent']; ++$j) {
                 $indent .= '....';
             }
-            $categories .= "\t<option value=\"".$cat['id'].'"';
+            $categories .= "\t<option value=\"" . $cat['id'] . '"';
 
             if (0 === $i && count($categoryId) === 0) {
                 $categories .= ' selected';
@@ -319,7 +320,7 @@ class CategoryHelper extends Helper
             }
 
             $categories .= '>';
-            $categories .= $indent.$cat['name']."</option>\n";
+            $categories .= $indent . $cat['name'] . "</option>\n";
             ++$i;
         }
 

@@ -191,7 +191,7 @@ class Pdf extends Export
      *
      * @return string
      */
-    public function generateFile(Array $faqData, $filename = null)
+    public function generateFile(array $faqData, $filename = null)
     {
         global $PMF_LANG;
 

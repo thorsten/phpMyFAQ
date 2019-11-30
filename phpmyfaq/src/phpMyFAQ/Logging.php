@@ -113,7 +113,7 @@ class Logging
                     VALUES 
                 (%d, %d, %d, '%s', '%s')",
                 Database::getTablePrefix(),
-                $this->config->getDb()->nextId(Database::getTablePrefix().'faqadminlog', 'id'),
+                $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqadminlog', 'id'),
                 $_SERVER['REQUEST_TIME'],
                 $user->userdata->get('user_id'),
                 $this->config->getDb()->escape(nl2br($logText)),

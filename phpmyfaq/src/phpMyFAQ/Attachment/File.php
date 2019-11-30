@@ -43,10 +43,10 @@ class File extends AttachmentAbstract implements AttachmentInterface
         $subDirNameLength = 5;
 
         for ($i = 0; $i < $subDirCount; ++$i) {
-            $attachmentPath .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength, $subDirNameLength);
+            $attachmentPath .= DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength, $subDirNameLength);
         }
 
-        $attachmentPath .= DIRECTORY_SEPARATOR.substr($fsHash, $i*$subDirNameLength);
+        $attachmentPath .= DIRECTORY_SEPARATOR . substr($fsHash, $i * $subDirNameLength);
 
         return $attachmentPath;
     }
@@ -175,9 +175,9 @@ class File extends AttachmentAbstract implements AttachmentInterface
 
         if ($headers) {
             $disposition = 'attachment' == $disposition ? 'attachment' : 'inline';
-            header('Content-Type: '.$this->mimeType, true);
-            header('Content-Length: '.$this->filesize, true);
-            header("Content-Disposition: $disposition; filename=\"".rawurlencode($this->filename)."\"", true);
+            header('Content-Type: ' . $this->mimeType, true);
+            header('Content-Length: ' . $this->filesize, true);
+            header("Content-Disposition: $disposition; filename=\"" . rawurlencode($this->filename) . "\"", true);
             header("Content-MD5: {$this->realHash}", true);
         }
 

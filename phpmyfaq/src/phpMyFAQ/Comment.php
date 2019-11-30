@@ -184,7 +184,7 @@ class Comment
      *
      * @return bool
      */
-    public function addComment(Array $commentData): bool
+    public function addComment(array $commentData): bool
     {
         $query = sprintf(
             "

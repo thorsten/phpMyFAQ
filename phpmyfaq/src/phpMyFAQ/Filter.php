@@ -51,7 +51,7 @@ class Filter
      *
      * @return mixed
      */
-    public static function filterInputArray($type, Array $definition)
+    public static function filterInputArray($type, array $definition)
     {
         return filter_input_array($type, $definition);
     }

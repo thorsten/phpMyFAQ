@@ -477,7 +477,7 @@ class Installer
         }
 
         if (!$this->system->checkDatabase()) {
-            echo '<p class="alert alert-danger">No supported database detected! Please install one of the following'.
+            echo '<p class="alert alert-danger">No supported database detected! Please install one of the following' .
                 ' database systems and enable the corresponding PHP extension in php.ini:</p>';
             echo '<ul>';
             foreach ($this->system->getSupportedDatabases() as $database) {
@@ -488,7 +488,7 @@ class Installer
         }
 
         if (!$this->system->checkRequiredExtensions()) {
-            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in '.
+            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in ' .
                 'php.ini.</p>';
             echo '<ul>';
             foreach ($this->system->getMissingExtensions() as $extension) {
@@ -499,8 +499,8 @@ class Installer
         }
 
         if (!$this->system->checkphpMyFAQInstallation()) {
-            echo '<p class="alert alert-danger">The file <code>config/database.php</code> was detected. It seems'.
-                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script</a>.'.
+            echo '<p class="alert alert-danger">The file <code>config/database.php</code> was detected. It seems' .
+                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script</a>.' .
                 '</p>';
             System::renderFooter();
         }
@@ -523,8 +523,8 @@ class Installer
             System::renderFooter();
         }
 
-        if (!is_readable(PMF_ROOT_DIR.'/inc/data.php') && !is_readable(PMF_ROOT_DIR.'/config/database.php')) {
-            echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>'.
+        if (!is_readable(PMF_ROOT_DIR . '/inc/data.php') && !is_readable(PMF_ROOT_DIR . '/config/database.php')) {
+            echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
                 'Please use the <a href="setup.php">install script</a>.</p>';
             System::renderFooter();
         }
@@ -538,8 +538,8 @@ class Installer
                 }
             }
             if (!$databaseFound) {
-                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>'.
-                    'We found '.ucfirst($database).'<br>'.
+                echo '<p class="alert alert-danger">It seems you\'re using an unsupported database version.<br>' .
+                    'We found ' . ucfirst($database) . '<br>' .
                     'Please use the change the database type in <code>config/database.php</code>.</p>';
                 System::renderFooter();
             }
@@ -582,7 +582,7 @@ class Installer
                 echo "<li>$dir</li>\n";
             }
             printf(
-                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or '.
+                '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
                     'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
@@ -598,26 +598,26 @@ class Installer
     public function checkNoncriticalSettings()
     {
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write '.
+            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
                 ' in some directories.</p>';
         }
         if (!extension_loaded('gd')) {
-            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please enable GD '.
+            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
                 'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
         }
         if (!function_exists('imagettftext')) {
-            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of your PHP '.
-                'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam '.
+            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
+                'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
                 'protection will be quite easy to break.</p>';
         }
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. '.
-                'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter '.
+            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
+                'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
                 ' support or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
-            echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. '.
-                'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore '.
+            echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. ' .
+                'Please enable Fileinfo support in your php.ini file otherwise you can\'t use our backup/restore ' .
                 'functionality.</p>';
         }
     }
@@ -662,7 +662,7 @@ class Installer
         $dbSetup['dbType'] = Filter::filterInput(INPUT_POST, 'sql_type', FILTER_SANITIZE_STRING, $setup['dbType']);
         if (!is_null($dbSetup['dbType'])) {
             $dbSetup['dbType'] = trim($dbSetup['dbType']);
-            if (!file_exists(PMF_SRC_DIR.'/phpMyFAQ/Instance/Database/'.ucfirst($dbSetup['dbType']).'.php')) {
+            if (!file_exists(PMF_SRC_DIR . '/phpMyFAQ/Instance/Database/' . ucfirst($dbSetup['dbType']) . '.php')) {
                 printf(
                     '<p class="alert alert-danger"><strong>Error:</strong> Invalid server type: %s</p>',
                     $dbSetup['dbType']
@@ -772,7 +772,7 @@ class Installer
                 $ldapSetup['ldapPassword']
             );
             if (!$ldap) {
-                echo '<p class="alert alert-danger"><strong>LDAP Error:</strong> '.$ldap->error()."</p>\n";
+                echo '<p class="alert alert-danger"><strong>LDAP Error:</strong> ' . $ldap->error() . "</p>\n";
                 System::renderFooter(true);
             }
         }
@@ -807,11 +807,11 @@ class Installer
             }
 
             $psr4Loader = new ClassLoader();
-            $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR.'/libs/elasticsearch/src/Elasticsearch');
-            $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR.'/libs/guzzlehttp/ringphp/src');
-            $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR.'/libs/monolog/src/Monolog');
-            $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR.'/libs/psr/log/Psr');
-            $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR.'/libs/react/promise/src');
+            $psr4Loader->addPsr4('Elasticsearch\\', PMF_SRC_DIR . '/libs/elasticsearch/src/Elasticsearch');
+            $psr4Loader->addPsr4('GuzzleHttp\\Ring\\', PMF_SRC_DIR . '/libs/guzzlehttp/ringphp/src');
+            $psr4Loader->addPsr4('Monolog\\', PMF_SRC_DIR . '/libs/monolog/src/Monolog');
+            $psr4Loader->addPsr4('Psr\\', PMF_SRC_DIR . '/libs/psr/log/Psr');
+            $psr4Loader->addPsr4('React\\Promise\\', PMF_SRC_DIR . '/libs/react/promise/src');
             $psr4Loader->register();
 
             // check LDAP connection
@@ -854,12 +854,12 @@ class Installer
         }
 
         if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too short.'.
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too short.' .
                 ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
             System::renderFooter(true);
         }
         if ($password != $password_retyped) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not equal.'.
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not equal.' .
                 ' Please check your password and your retyped password.</p>';
             System::renderFooter(true);
         }
@@ -900,7 +900,7 @@ class Installer
         }
 
         // connect to the database using config/database.php
-        include $rootDir.'/config/database.php';
+        include $rootDir . '/config/database.php';
         try {
             $db = Database::factory($dbSetup['dbType']);
         } catch (Exception $exception) {
@@ -949,7 +949,7 @@ class Installer
             }
             usleep(1000);
             ++$count;
-            if (!($count%10)) {
+            if (!($count % 10)) {
                 echo '| ';
             }
         }
@@ -973,7 +973,7 @@ class Installer
         $admin = new User($configuration);
         if (!$admin->createUser($loginname, $password, null, 1)) {
             printf(
-                '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>'.
+                '<p class="alert alert-danger"><strong>Fatal installation error:</strong><br>' .
                 "Couldn't create the admin user: %s</p>\n",
                 $admin->error()
             );
@@ -999,7 +999,7 @@ class Installer
         $instanceData = [
             'url' => $link->getSystemUri($_SERVER['SCRIPT_NAME']),
             'instance' => $link->getSystemRelativeUri('setup/index.php'),
-            'comment' => 'phpMyFAQ '.System::getVersion(),
+            'comment' => 'phpMyFAQ ' . System::getVersion(),
         ];
         $faqInstance = new Instance($configuration);
         $faqInstance->addInstance($instanceData);
@@ -1008,8 +1008,8 @@ class Installer
         $faqInstanceMaster->createMaster($faqInstance);
 
         // connect to Elasticsearch if enabled
-        if (!is_null($esEnabled) && is_file($rootDir.'/config/elasticsearch.php')) {
-            include $rootDir.'/config/elasticsearch.php';
+        if (!is_null($esEnabled) && is_file($rootDir . '/config/elasticsearch.php')) {
+            include $rootDir . '/config/elasticsearch.php';
 
             $configuration->setElasticsearchConfig($PMF_ES);
 
@@ -1033,7 +1033,7 @@ class Installer
     {
         if (!DEBUG) {
             // Remove 'index.php' file
-            if (@unlink(dirname($_SERVER['PATH_TRANSLATED']).'/index.php')) {
+            if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/index.php')) {
                 echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
             } else {
                 echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";

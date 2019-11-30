@@ -35,7 +35,7 @@ class Builtin implements MailUserAgentInterface
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send($recipients, Array $headers, $body)
+    public function send($recipients, array $headers, $body)
     {
         // Get the subject of the e-mail, RFC 2047 compliant
         $subject = $headers['Subject'];

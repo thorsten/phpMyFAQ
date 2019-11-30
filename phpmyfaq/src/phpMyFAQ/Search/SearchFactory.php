@@ -40,7 +40,7 @@ class SearchFactory
      *
      * @return Mysqli|Pgsql|Sqlite3|Sqlsrv
      */
-    public static function create(Configuration $config, Array $searchHandler)
+    public static function create(Configuration $config, array $searchHandler)
     {
         $searchClass = sprintf(
             '\phpMyFAQ\Search\%s\%s',

@@ -98,7 +98,7 @@ class SearchResultSet
      *
      * @param array $resultSet Array with search results
      */
-    public function reviewResultSet(Array $resultSet)
+    public function reviewResultSet(array $resultSet)
     {
         $this->setResultSet($resultSet);
 
@@ -164,7 +164,7 @@ class SearchResultSet
      *
      * @param array $resultSet Array with search results
      */
-    public function setResultSet(Array $resultSet)
+    public function setResultSet(array $resultSet)
     {
         $this->rawResultSet = $resultSet;
     }
@@ -218,7 +218,7 @@ class SearchResultSet
      *
      * @param array
      */
-    public function setNumberOfResults(Array $resultSet)
+    public function setNumberOfResults(array $resultSet)
     {
         $this->numberOfResults = count($resultSet);
     }

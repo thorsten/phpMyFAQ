@@ -70,7 +70,7 @@ class Client extends Instance
      */
     public function createClientFolder($hostname)
     {
-        $clientDir = PMF_ROOT_DIR.'/multisite/';
+        $clientDir = PMF_ROOT_DIR . '/multisite/';
 
         if (!$this->fileSystem instanceof Filesystem) {
             $this->fileSystem = new Filesystem();
@@ -80,7 +80,7 @@ class Client extends Instance
             return false;
         }
 
-        return $this->fileSystem->mkdir($clientDir.$hostname);
+        return $this->fileSystem->mkdir($clientDir . $hostname);
     }
 
     /**
@@ -150,7 +150,7 @@ class Client extends Instance
     public function copyConstantsFile($dest)
     {
         return $this->fileSystem->copy(
-            $this->fileSystem->getRootPath().'/config/constants.php',
+            $this->fileSystem->getRootPath() . '/config/constants.php',
             $dest
         );
     }
@@ -166,8 +166,8 @@ class Client extends Instance
      */
     public function copyTemplateFolder($dest, $templateDir = 'default')
     {
-        $sourceTpl = $this->fileSystem->getRootPath().'/assets/themes/'.$templateDir;
-        $destTpl = $dest.'/assets/themes/';
+        $sourceTpl = $this->fileSystem->getRootPath() . '/assets/themes/' . $templateDir;
+        $destTpl = $dest . '/assets/themes/';
 
         $this->fileSystem->recursiveCopy($sourceTpl, $destTpl);
     }

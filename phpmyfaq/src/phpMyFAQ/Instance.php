@@ -64,7 +64,7 @@ class Instance
      *
      * @return int $id
      */
-    public function addInstance(Array $data): int
+    public function addInstance(array $data): int
     {
         $this->setId($this->config->getDb()->nextId(Database::getTablePrefix() . 'faqinstances', 'id'));
 
@@ -151,7 +151,7 @@ class Instance
      *
      * @return bool
      */
-    public function updateInstance(int $id, Array $data): bool
+    public function updateInstance(int $id, array $data): bool
     {
         $update = sprintf(
             "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",

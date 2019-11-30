@@ -17,8 +17,6 @@ namespace phpMyFAQ\Helper;
  * @since     2019-11-24
  */
 
-
-
 use DirectoryIterator;
 
 /**

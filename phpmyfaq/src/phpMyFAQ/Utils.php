@@ -89,7 +89,7 @@ class Utils
 
         if ($num > $char) {
             for ($j = 0; $j < $char; ++$j) {
-                $shortStr .= $arrStr[$j].' ';
+                $shortStr .= $arrStr[$j] . ' ';
             }
             $shortStr .= '...';
         } else {
@@ -139,7 +139,7 @@ class Utils
             $words = $num;
         }
         for ($i = 0; $i < $words; ++$i) {
-            $str .= $pieces[$i].' ';
+            $str .= $pieces[$i] . ' ';
         }
 
         return $str;
@@ -176,9 +176,9 @@ class Utils
         ];
 
         return Strings::preg_replace_callback(
-            '/('.$highlight.'="[^"]*")|'.
-            '(('.implode('|', $attributes).')="[^"]*'.$highlight.'[^"]*")|'.
-            '('.$highlight.')/mis',
+            '/(' . $highlight . '="[^"]*")|' .
+            '((' . implode('|', $attributes) . ')="[^"]*' . $highlight . '[^"]*")|' .
+            '(' . $highlight . ')/mis',
             ['phpMyFAQ\Utils', 'highlightNoLinks'],
             $string
         );
@@ -191,7 +191,7 @@ class Utils
      *
      * @return string
      */
-    public static function highlightNoLinks(Array $matches)
+    public static function highlightNoLinks(array $matches)
     {
         $prefix = isset($matches[3]) ? $matches[3] : '';
         $item = isset($matches[4]) ? $matches[4] : '';
@@ -200,7 +200,7 @@ class Utils
         if (!empty($item) && !self::isForbiddenElement($item)) {
             return sprintf(
                 '<mark class="pmf-highlighted-string">%s</mark>',
-                $prefix.$item.$postfix
+                $prefix . $item . $postfix
             );
         }
 
@@ -241,15 +241,15 @@ class Utils
     {
         // sometimes Zend Optimizer causes segfaults with debug_backtrace()
         if (extension_loaded('Zend Optimizer')) {
-            $ret = '<code>'.$string."</code><br>\n";
+            $ret = '<code>' . $string . "</code><br>\n";
         } else {
             $debug = debug_backtrace();
             $ret = '';
             if (isset($debug[2]['class'])) {
-                $ret = $debug[2]['file'].':<br>';
-                $ret .= $debug[2]['class'].$debug[1]['type'];
-                $ret .= $debug[2]['function'].'() in line '.$debug[2]['line'];
-                $ret .= ': <code>'.$string."</code><br>\n";
+                $ret = $debug[2]['file'] . ':<br>';
+                $ret .= $debug[2]['class'] . $debug[1]['type'];
+                $ret .= $debug[2]['function'] . '() in line ' . $debug[2]['line'];
+                $ret .= ': <code>' . $string . "</code><br>\n";
             }
         }
 
@@ -299,7 +299,7 @@ class Utils
     private static function makeSeed()
     {
         list($usec, $sec) = explode(' ', microtime());
-        return $sec + $usec*1000000;
+        return $sec + $usec * 1000000;
     }
 
     /**

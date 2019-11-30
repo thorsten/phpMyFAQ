@@ -199,7 +199,8 @@ class HttpStreamer
 
         // 2. Set the correct values for file streaming
         header('Content-Type: ' . $mimeType);
-        if (($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT)
+        if (
+            ($this->disposition == self::HTTP_CONTENT_DISPOSITION_ATTACHMENT)
             && isset($_SERVER['HTTP_USER_AGENT']) && !(strpos($_SERVER['HTTP_USER_AGENT'], 'MSIE') === false)
         ) {
             header('Content-Type: application/force-download');

@@ -174,7 +174,7 @@ class Pagination
      *                               pageParamName (default
      *                               "page") - useRewrite
      */
-    public function __construct(Configuration $config, Array $options = null)
+    public function __construct(Configuration $config, array $options = null)
     {
         $this->config = $config;
 
@@ -248,7 +248,7 @@ class Pagination
 
         if (!empty($url)) {
             $match = [];
-            if (Strings::preg_match('$&(amp;|)'.$this->pageParamName.'=(\d+)$', $url, $match)) {
+            if (Strings::preg_match('$&(amp;|)' . $this->pageParamName . '=(\d+)$', $url, $match)) {
                 $page = isset($match[2]) ? $match[2] : $page;
             }
         }
@@ -264,8 +264,8 @@ class Pagination
     public function render()
     {
         $content = [];
-        $pages = ceil($this->total/$this->perPage);
-        $adjacents = floor($this->adjacents/2) >= 1 ? floor($this->adjacents/2) : 1;
+        $pages = ceil($this->total / $this->perPage);
+        $adjacents = floor($this->adjacents / 2) >= 1 ? floor($this->adjacents / 2) : 1;
 
         for ($page = 1; $page <= $pages; ++$page) {
             if ($page > $this->adjacents && $page < $this->currentPage - $adjacents) {
@@ -345,7 +345,7 @@ class Pagination
         if ($this->useRewrite) {
             $url = sprintf($this->rewriteUrl, $page);
         } else {
-            $cleanedUrl = Strings::preg_replace(array('$&(amp;|)'.$this->pageParamName.'=(\d+)$'), '', $url);
+            $cleanedUrl = Strings::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'), '', $url);
             $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
         }
 

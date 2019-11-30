@@ -71,11 +71,11 @@ class Notification
     public function sendOpenQuestionAnswered(string $email, string $userName, string $url)
     {
         $this->mail->addTo($email, $userName);
-        $this->mail->subject = $this->config->get('main.titleFAQ').' - '.$this->pmfStr['msgQuestionAnswered'];
+        $this->mail->subject = $this->config->get('main.titleFAQ') . ' - ' . $this->pmfStr['msgQuestionAnswered'];
         $this->mail->message = sprintf(
             $this->pmfStr['msgMessageQuestionAnswered'],
             $this->config->get('main.titleFAQ')
-        )."\n\r".$url;
+        ) . "\n\r" . $url;
         $this->mail->send();
     }
 }

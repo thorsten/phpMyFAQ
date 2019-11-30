@@ -183,7 +183,7 @@ class Sitemap
                 $oLink = new Link($url, $this->config);
                 $oLink->text = (string)$letters;
                 $oLink->class = 'nav-link';
-                $renderLetters .= '<li class="nav-item">'.$oLink->toHtmlAnchor().'</li>';
+                $renderLetters .= '<li class="nav-item">' . $oLink->toHtmlAnchor() . '</li>';
             }
         }
         $renderLetters .= '</ul>';
@@ -324,18 +324,18 @@ class Sitemap
                 $oLink->text = $title;
                 $oLink->tooltip = $title;
 
-                $renderSiteMap .= '<li>'.$oLink->toHtmlAnchor().'<br>'."\n";
+                $renderSiteMap .= '<li>' . $oLink->toHtmlAnchor() . '<br>' . "\n";
 
                 if ($this->config->get('main.enableMarkdownEditor')) {
-                    $renderSiteMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25)." ...</li>\n";
+                    $renderSiteMap .= Utils::chopString(strip_tags($parsedown->text($row->snap)), 25) . " ...</li>\n";
                 } else {
-                    $renderSiteMap .= Utils::chopString(strip_tags($row->snap), 25)." ...</li>\n";
+                    $renderSiteMap .= Utils::chopString(strip_tags($row->snap), 25) . " ...</li>\n";
                 }
             }
             $oldId = $row->id;
         }
 
-        $renderSiteMap = empty($renderSiteMap) ? '' : '<ul>'.$renderSiteMap.'</ul>';
+        $renderSiteMap = empty($renderSiteMap) ? '' : '<ul>' . $renderSiteMap . '</ul>';
 
         return $renderSiteMap;
     }

@@ -144,7 +144,7 @@ class StringBasic extends StringsAbstract
      */
     public function strstr($haystack, $needle, $part = false)
     {
-        return strstr($haystack, $needle, (boolean)$part);
+        return strstr($haystack, $needle, (bool)$part);
     }
 
     /**

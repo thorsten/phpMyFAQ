@@ -263,6 +263,6 @@ class Mbstring extends StringsAbstract
     {
         $str = (string)$str;
 
-        return parent::isUTF8($str) ? $str.'u' : $str;
+        return parent::isUTF8($str) ? $str . 'u' : $str;
     }
 }

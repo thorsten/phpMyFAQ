@@ -17,8 +17,6 @@ namespace phpMyFAQ\Category;
  * @since     2019-11-22
  */
 
-
-
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;
 

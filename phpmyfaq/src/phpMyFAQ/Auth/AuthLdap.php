@@ -134,7 +134,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      *
      * @return bool
      */
-    public function checkPassword($login, $password, Array $optionalData = null): bool
+    public function checkPassword($login, $password, array $optionalData = null): bool
     {
         if ('' === trim($password)) {
             $this->errors[] = User::ERROR_USER_INCORRECT_PASSWORD;
@@ -250,7 +250,7 @@ class AuthLdap extends Auth implements AuthDriverInterface
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null): int
+    public function checkLogin($login, array $optionalData = null): int
     {
         // Get active LDAP server for current user
         if ($this->multipleServers) {

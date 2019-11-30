@@ -323,7 +323,7 @@ class Wrapper extends \TCPDF
      *
      * @param array $categories Categories
      */
-    public function setCategories(Array $categories)
+    public function setCategories(array $categories)
     {
         $this->categories = $categories;
     }
@@ -481,7 +481,7 @@ class Wrapper extends \TCPDF
      *
      * @param array $faq
      */
-    public function setFaq(Array $faq)
+    public function setFaq(array $faq)
     {
         $this->faq = $faq;
     }

@@ -153,7 +153,7 @@ class System
     {
         $templates = [];
 
-        foreach (new DirectoryIterator(PMF_ROOT_DIR.'/assets/themes/') as $item) {
+        foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/themes/') as $item) {
             $basename = $item->getBasename();
             if (!$item->isDot() && $item->isDir()) {
                 $templates[$basename] = (Template::getTplSetName() === $basename ? true : false);
@@ -277,7 +277,7 @@ class System
      */
     public function checkphpMyFAQInstallation()
     {
-        if (is_file(PMF_ROOT_DIR.'/config/database.php')) {
+        if (is_file(PMF_ROOT_DIR . '/config/database.php')) {
             return false;
         } else {
             return true;
@@ -336,7 +336,8 @@ class System
 
         try {
             foreach ($files as $file) {
-                if ('php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION)
+                if (
+                    'php' === pathinfo($file->getFilename(), PATHINFO_EXTENSION)
                     && !preg_match('#/tests/#', $file->getPath())
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
@@ -348,7 +349,7 @@ class System
                 }
             }
         } catch (UnexpectedValueException $e) {
-            $hashes[$current.' failed'] = $e->getMessage();
+            $hashes[$current . ' failed'] = $e->getMessage();
         }
 
         return json_encode($hashes);
@@ -359,7 +360,7 @@ class System
      *
      * @param array $queries
      */
-    public function dropTables(Array $queries)
+    public function dropTables(array $queries)
     {
         if ($this->database instanceof DatabaseDriver) {
             foreach ($queries as $query) {
@@ -374,12 +375,12 @@ class System
     public function cleanInstallation()
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR.'/config/database.php')) {
-            @unlink(PMF_ROOT_DIR.'/config/database.php');
+        if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
+            @unlink(PMF_ROOT_DIR . '/config/database.php');
         }
         // Remove './config/ldap.php' file: no need of prompt anything to the user
-        if (file_exists(PMF_ROOT_DIR.'/config/ldap.php')) {
-            @unlink(PMF_ROOT_DIR.'/config/ldap.php');
+        if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
+            @unlink(PMF_ROOT_DIR . '/config/ldap.php');
         }
     }
 

@@ -77,7 +77,8 @@ class LargePermission extends MediumPermission
         }
 
         // check user right, group right and section right
-        if ($this->checkUserSectionRight($userId, $right)
+        if (
+            $this->checkUserSectionRight($userId, $right)
             || $this->checkUserGroupRight($userId, $right)
             || $this->checkUserRight($userId, $right)
         ) {
@@ -140,7 +141,7 @@ class LargePermission extends MediumPermission
      *
      * @return int
      */
-    public function addSection(Array $sectionData): int
+    public function addSection(array $sectionData): int
     {
         // check if section already exists
         if ($this->getSectionId($sectionData['name']) > 0) {
@@ -228,7 +229,7 @@ class LargePermission extends MediumPermission
      * @param  array $sectionData
      * @return bool
      */
-    public function changeSection(int $sectionId, Array $sectionData): bool
+    public function changeSection(int $sectionId, array $sectionData): bool
     {
         $checkedData = $this->checkSectionData($sectionData);
         $set = '';

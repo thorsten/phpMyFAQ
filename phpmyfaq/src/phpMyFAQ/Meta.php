@@ -176,7 +176,7 @@ class Meta
             $this->config->getLanguage()->getLanguage()
         );
 
-        return (boolean)$this->config->getDb()->query($query);
+        return (bool)$this->config->getDb()->query($query);
     }
 
     /**
@@ -192,6 +192,6 @@ class Meta
             $id
         );
 
-        return (boolean)$this->config->getDb()->query($query);
+        return (bool)$this->config->getDb()->query($query);
     }
 }

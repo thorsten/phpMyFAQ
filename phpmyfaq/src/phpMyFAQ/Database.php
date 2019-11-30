@@ -71,9 +71,9 @@ class Database
         self::$dbType = $type;
 
         if (0 === strpos($type, 'pdo_')) {
-            $class = 'phpMyFAQ\Database\Pdo_'.ucfirst(substr($type, 4));
+            $class = 'phpMyFAQ\Database\Pdo_' . ucfirst(substr($type, 4));
         } else {
-            $class = 'phpMyFAQ\Database\\'.ucfirst($type);
+            $class = 'phpMyFAQ\Database\\' . ucfirst($type);
         }
 
         if (class_exists($class)) {
@@ -81,7 +81,7 @@ class Database
 
             return self::$instance;
         } else {
-            throw new Exception('Invalid Database Type: '.$type);
+            throw new Exception('Invalid Database Type: ' . $type);
         }
     }
 
@@ -126,9 +126,10 @@ class Database
      */
     public static function checkOnEmptyTable($tableName)
     {
-        if (self::$instance->numRows(
-            self::$instance->query('SELECT * FROM '.self::getTablePrefix().$tableName)
-        ) < 1
+        if (
+            self::$instance->numRows(
+                self::$instance->query('SELECT * FROM ' . self::getTablePrefix() . $tableName)
+            ) < 1
         ) {
             return true;
         } else {
@@ -157,7 +158,7 @@ class Database
             <body>
                 <div class="container">
                 <p class="alert alert-danger">The connection to the database server could not be established.</p>
-                <p class="alert alert-danger">The error message of the database server:<br>'.$method.'</p>
+                <p class="alert alert-danger">The error message of the database server:<br>' . $method . '</p>
                 </div>
             </body>
             </html>';

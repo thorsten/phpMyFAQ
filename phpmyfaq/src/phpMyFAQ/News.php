@@ -144,9 +144,11 @@ class News
         if ($numberOfShownNewsEntries > 0 && $this->config->getDb()->numRows($result) > 0) {
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 ++$counter;
-                if (($showArchive && ($counter > $numberOfShownNewsEntries)) ||
+                if (
+                    ($showArchive && ($counter > $numberOfShownNewsEntries)) ||
                     ((!$showArchive) && (!$forceConfLimit) && ($counter <= $numberOfShownNewsEntries)) ||
-                    ((!$showArchive) && $forceConfLimit)) {
+                    ((!$showArchive) && $forceConfLimit)
+                ) {
                     $url = sprintf(
                         '%s?action=news&amp;newsid=%d&amp;newslang=%s',
                         $this->config->getDefaultUrl(),
@@ -327,7 +329,7 @@ class News
      * @param array $data Array with news data
      * @return bool
      */
-    public function updateNewsEntry($id, Array $data)
+    public function updateNewsEntry($id, array $data)
     {
         $query = sprintf(
             "

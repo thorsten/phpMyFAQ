@@ -74,7 +74,7 @@ class Filesystem
     /**
      * @param array $folders
      */
-    public function setFolders(Array $folders)
+    public function setFolders(array $folders)
     {
         $this->folders = $folders;
     }

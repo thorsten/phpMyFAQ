@@ -51,7 +51,7 @@ class Section
      */
     public function addSection($name, $description)
     {
-        $id = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsections', 'id');
+        $id = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsections', 'id');
 
         $query = sprintf(
             "

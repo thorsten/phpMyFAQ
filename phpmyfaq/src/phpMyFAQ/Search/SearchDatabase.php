@@ -140,7 +140,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setResultColumns(Array $columns)
+    public function setResultColumns(array $columns)
     {
         $this->resultColumns = $columns;
 
@@ -222,7 +222,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setJoinedColumns(Array $joinedColumns)
+    public function setJoinedColumns(array $joinedColumns)
     {
         $this->joinedColumns = $joinedColumns;
 
@@ -246,7 +246,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setMatchingColumns(Array $matchingColumns)
+    public function setMatchingColumns(array $matchingColumns)
     {
         $this->matchingColumns = $matchingColumns;
 
@@ -282,7 +282,7 @@ class SearchDatabase extends AbstractSearch implements SearchInterface
      *
      * @return SearchDatabase
      */
-    public function setConditions(Array $conditions)
+    public function setConditions(array $conditions)
     {
         $this->conditions = $conditions;
 

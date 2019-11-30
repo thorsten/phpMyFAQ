@@ -73,7 +73,7 @@ class Setup
      * @param  string[] $dirs
      * @return array
      */
-    public function checkDirs(Array $dirs)
+    public function checkDirs(array $dirs)
     {
         $failedDirs = [];
 
@@ -115,7 +115,7 @@ class Setup
      * @param  string $folder Folder
      * @return int|bool
      */
-    public function createDatabaseFile(Array $data, $folder = '/config')
+    public function createDatabaseFile(array $data, $folder = '/config')
     {
         $ret = file_put_contents(
             $this->rootDir . $folder . '/database.php',
@@ -139,7 +139,7 @@ class Setup
      * @param  string $folder Folder
      * @return int|bool
      */
-    public function createLdapFile(Array $data, string $folder = '/config')
+    public function createLdapFile(array $data, string $folder = '/config')
     {
         $ret = file_put_contents(
             $this->rootDir . $folder . '/config/ldap.php',
@@ -162,7 +162,7 @@ class Setup
      * @param  string $folder Folder
      * @return int|bool
      */
-    public function createElasticsearchFile(Array $data, string $folder = '/config')
+    public function createElasticsearchFile(array $data, string $folder = '/config')
     {
         $ret = file_put_contents(
             $this->rootDir . $folder . '/config/elasticsearch.php',

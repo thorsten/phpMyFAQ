@@ -71,8 +71,8 @@ class AttachmentCollection
                 fa.record_id = fd.id
             GROUP BY
                 fa.id,fd.thema',
-            Database::getTablePrefix().'faqattachment',
-            Database::getTablePrefix().'faqdata'
+            Database::getTablePrefix() . 'faqattachment',
+            Database::getTablePrefix() . 'faqdata'
         );
 
         $result = $this->config->getDb()->query($query);

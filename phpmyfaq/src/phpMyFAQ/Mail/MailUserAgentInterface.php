@@ -36,5 +36,5 @@ interface MailUserAgentInterface
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send($recipients, Array $headers, $body);
+    public function send($recipients, array $headers, $body);
 }

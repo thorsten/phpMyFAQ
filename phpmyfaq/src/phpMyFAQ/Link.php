@@ -356,8 +356,9 @@ class Link
                             break;
 
                         case self::LINK_GET_ACTION_SEARCH:
-                            if (!isset($getParams[self::LINK_GET_ACTION_SEARCH])
-                            && isset($getParams[self::LINK_GET_TAGGING_ID])
+                            if (
+                                !isset($getParams[self::LINK_GET_ACTION_SEARCH])
+                                && isset($getParams[self::LINK_GET_TAGGING_ID])
                             ) {
                                 $url .= self::LINK_TAGS . $getParams[self::LINK_GET_TAGGING_ID];
                                 if (isset($getParams[self::LINK_GET_PAGE])) {
@@ -399,9 +400,10 @@ class Link
                             break;
 
                         case self::LINK_GET_ACTION_SHOW:
-                            if (!isset($getParams[self::LINK_GET_CATEGORY])
-                            || (isset($getParams[self::LINK_GET_CATEGORY])
-                            && (0 == $getParams[self::LINK_GET_CATEGORY]))
+                            if (
+                                !isset($getParams[self::LINK_GET_CATEGORY])
+                                || (isset($getParams[self::LINK_GET_CATEGORY])
+                                && (0 == $getParams[self::LINK_GET_CATEGORY]))
                             ) {
                                 $url .= self::LINK_HTML_SHOWCAT;
                             } else {

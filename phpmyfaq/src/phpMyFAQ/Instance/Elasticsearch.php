@@ -200,7 +200,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function index(Array $faq)
+    public function index(array $faq)
     {
         $params = [
             'index' => $this->esConfig['index'],
@@ -226,7 +226,7 @@ class Elasticsearch
      *
      * @return array
      */
-    public function bulkIndex(Array $faqs)
+    public function bulkIndex(array $faqs)
     {
         $params = ['body' => []];
         $responses = [];
@@ -277,7 +277,7 @@ class Elasticsearch
      * @param  array $faq
      * @return array
      */
-    public function update(Array $faq)
+    public function update(array $faq)
     {
         $params = [
             'index' => $this->esConfig['index'],

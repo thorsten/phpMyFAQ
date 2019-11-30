@@ -76,7 +76,7 @@ class Template
      * @param TemplateHelper $tplHelper
      * @param string         $tplSetName Active template name
      */
-    public function __construct(Array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
+    public function __construct(array $myTemplate, TemplateHelper $tplHelper, $tplSetName = 'default')
     {
         $this->tplHelper = $tplHelper;
         self::$tplSetName = $tplSetName;
@@ -191,7 +191,7 @@ class Template
      * @param string $templateName    Name of the template
      * @param array  $templateContent Content of the template
      */
-    public function parse(string $templateName, Array $templateContent)
+    public function parse(string $templateName, array $templateContent)
     {
         $tmp = $this->templates[$templateName];
         $rawBlocks = $this->readBlocks($tmp);
@@ -274,7 +274,7 @@ class Template
      *
      * @return array
      */
-    private function checkContent(Array $content): array
+    private function checkContent(array $content): array
     {
         // Security measure: avoid the injection of php/shell-code
         $search = ['#<\?php#i', '#\{$\{#', '#<\?#', '#<\%#', '#`#', '#<script[^>]+php#mi'];
@@ -332,7 +332,7 @@ class Template
      * @param string $blockName    Block name
      * @param array  $blockContent Content of the block
      */
-    public function parseBlock(string $templateName, string $blockName, Array $blockContent)
+    public function parseBlock(string $templateName, string $blockName, array $blockContent)
     {
         if (isset($this->blocks[$templateName][$blockName])) {
             $block = $this->blocks[$templateName][$blockName];

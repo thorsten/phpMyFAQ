@@ -744,13 +744,14 @@ class Mail
             $lines[] = '';
         }
 
-        if (in_array(
-            $this->contentType,
-            array(
+        if (
+            in_array(
+                $this->contentType,
+                array(
                 'multipart/mixed',
                 'multipart/related',
+                )
             )
-        )
         ) {
             $lines[] = '--' . $mainBoundary;
             $this->boundary = '--=alternative=' . self::createBoundary();
@@ -781,13 +782,14 @@ class Mail
             $lines[] = self::wrapLines($this->message);
         }
 
-        if (in_array(
-            $this->contentType,
-            array(
+        if (
+            in_array(
+                $this->contentType,
+                array(
                 'multipart/mixed',
                 'multipart/related',
+                )
             )
-        )
         ) {
             // Back to the main boundary
             $this->boundary = $mainBoundary;

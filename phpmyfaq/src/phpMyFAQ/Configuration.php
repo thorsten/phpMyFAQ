@@ -274,7 +274,7 @@ class Configuration
      *
      * @param array $ldapConfig
      */
-    public function setLdapConfig(Array $ldapConfig)
+    public function setLdapConfig(array $ldapConfig)
     {
         // Always add main LDAP server
         $this->config['core.ldapServer'][0] = [
@@ -383,7 +383,7 @@ class Configuration
      *
      * @param array $data
      */
-    public function setElasticsearchConfig(Array $data)
+    public function setElasticsearchConfig(array $data)
     {
         $this->config['core.elasticsearchConfig'] = $data;
     }
@@ -451,7 +451,7 @@ class Configuration
      *
      * @return bool
      */
-    public function update(Array $newConfigs): bool
+    public function update(array $newConfigs): bool
     {
         $runtimeConfigs = [
             'core.database', // phpMyFAQ\Database\DatabaseDriver
@@ -465,7 +465,8 @@ class Configuration
 
         if (is_array($newConfigs)) {
             foreach ($newConfigs as $name => $value) {
-                if ($name != 'main.phpMyFAQToken'
+                if (
+                    $name != 'main.phpMyFAQToken'
                     && !in_array($name, $runtimeConfigs)
                 ) {
                     $update = sprintf(

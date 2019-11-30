@@ -42,7 +42,7 @@ class Question
      * @param  array $questionData
      * @return bool
      */
-    public function addQuestion(Array $questionData): bool
+    public function addQuestion(array $questionData): bool
     {
         $query = sprintf(
             "

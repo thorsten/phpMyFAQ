@@ -155,7 +155,8 @@ class CurrentUser extends User
         }
 
         // Additional code for LDAP: user\\domain
-        if ($this->config->get('ldap.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix')
+        if (
+            $this->config->get('ldap.ldapSupport') && $this->config->get('ldap.ldap_use_domain_prefix')
             && '' !== $password
         ) {
             // If LDAP configuration and ldap_use_domain_prefix is true
@@ -312,7 +313,7 @@ class CurrentUser extends User
         if (!isset($_SESSION[SESSION_ID_TIMESTAMP])) {
             return 0;
         }
-        return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP])/60;
+        return ($_SERVER['REQUEST_TIME'] - $_SESSION[SESSION_ID_TIMESTAMP]) / 60;
     }
 
     /**
@@ -367,7 +368,7 @@ class CurrentUser extends User
             if (strpos($sessionPath, ';') !== false) {
                 $sessionPath = substr($sessionPath, strpos($sessionPath, ';') + 1);
             }
-            $sessionFilename = $sessionPath.'/sess_'.$oldSessionId;
+            $sessionFilename = $sessionPath . '/sess_' . $oldSessionId;
             if (@file_exists($sessionFilename)) {
                 @unlink($sessionFilename);
             }
@@ -389,7 +390,7 @@ class CurrentUser extends User
             Database::getTablePrefix(),
             session_id(),
             $_SERVER['REQUEST_TIME'],
-            $updateLastLogin ? "last_login = '".date('YmdHis', $_SERVER['REQUEST_TIME'])."'," : '',
+            $updateLastLogin ? "last_login = '" . date('YmdHis', $_SERVER['REQUEST_TIME']) . "'," : '',
             $_SERVER['REMOTE_ADDR'],
             $this->getUserId()
         );
@@ -504,7 +505,8 @@ class CurrentUser extends User
             return null;
         }
         // check ip
-        if ($config->get('security.ipCheck')
+        if (
+            $config->get('security.ipCheck')
             && $session_info['ip'] != $_SERVER['REMOTE_ADDR']
         ) {
             return null;
@@ -754,6 +756,6 @@ class CurrentUser extends User
      */
     private function createCsrfToken()
     {
-        return sha1(microtime().$this->getLogin());
+        return sha1(microtime() . $this->getLogin());
     }
 }

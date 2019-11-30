@@ -117,7 +117,8 @@ class MediumPermission extends BasicPermission
         }
 
         // check user right and group right
-        if ($this->checkUserGroupRight($userId, $right)
+        if (
+            $this->checkUserGroupRight($userId, $right)
             || $this->checkUserRight($userId, $right)
         ) {
             return true;
@@ -324,7 +325,7 @@ class MediumPermission extends BasicPermission
      *
      * @return bool
      */
-    public function changeGroup(int $groupId, Array $groupData): bool
+    public function changeGroup(int $groupId, array $groupData): bool
     {
         $checkedData = $this->checkGroupData($groupData);
         $set = '';

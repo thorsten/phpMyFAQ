@@ -939,7 +939,7 @@ class User
      *
      * @return bool
      */
-    public function setUserData(Array $data)
+    public function setUserData(array $data)
     {
         if (!($this->userdata instanceof UserData)) {
             $this->userdata = new UserData($this->config);

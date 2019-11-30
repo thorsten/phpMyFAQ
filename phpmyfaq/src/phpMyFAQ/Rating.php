@@ -190,12 +190,12 @@ class Rating
             $row = $this->config->getDb()->fetchObject($result);
 
             return sprintf(
-                ' <span data-rating="%s">%s</span> ('.$this->plr->GetMsg('plmsgVotes', $row->usr).')',
+                ' <span data-rating="%s">%s</span> (' . $this->plr->GetMsg('plmsgVotes', $row->usr) . ')',
                 round($row->voting, 2),
                 round($row->voting, 2)
             );
         } else {
-            return ' <span data-rating="0">0</span> ('.$this->plr->GetMsg('plmsgVotes', 0).')';
+            return ' <span data-rating="0">0</span> (' . $this->plr->GetMsg('plmsgVotes', 0) . ')';
         }
     }
 
@@ -273,7 +273,7 @@ class Rating
             VALUES
                 (%d, %d, %d, 1, %d, '%s')",
             Database::getTablePrefix(),
-            $this->config->getDb()->nextId(Database::getTablePrefix().'faqvoting', 'id'),
+            $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqvoting', 'id'),
             $votingData['record_id'],
             $votingData['vote'],
             $_SERVER['REQUEST_TIME'],

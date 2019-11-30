@@ -53,7 +53,7 @@ class Sqlite3 implements DatabaseDriver
     private $sqllog = '';
 
     const ERROR_MESSAGE =
-        'Do not call numRows() after you\'ve fetched one or more result records, because '.
+        'Do not call numRows() after you\'ve fetched one or more result records, because ' .
         'phpMyFAQ\Database\Sqlite3::numRows() has to reset the resultset at its end.';
 
     /**

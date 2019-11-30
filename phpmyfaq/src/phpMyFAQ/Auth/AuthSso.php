@@ -62,7 +62,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, Array $optionalData = null): bool
+    public function checkPassword($login, $pass, array $optionalData = null): bool
     {
         if (!isset($_SERVER['REMOTE_USER'])) {
             return false;
@@ -134,7 +134,7 @@ class AuthSso extends Auth implements AuthDriverInterface
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null): int
+    public function checkLogin($login, array $optionalData = null): int
     {
         return isset($_SERVER['REMOTE_USER']) ? 1 : 0;
     }

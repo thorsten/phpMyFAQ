@@ -91,7 +91,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, Array $optionalData = null): bool
+    public function checkPassword($login, $pass, array $optionalData = null): bool
     {
         if (!isset($_SERVER['PHP_AUTH_USER']) && $_SERVER['PHP_AUTH_PW']) {
             return false;
@@ -112,7 +112,7 @@ class AuthHttp extends Auth implements AuthDriverInterface
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null): int
+    public function checkLogin($login, array $optionalData = null): int
     {
         return isset($_SERVER['PHP_AUTH_USER']) ? 1 : 0;
     }

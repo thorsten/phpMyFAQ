@@ -223,7 +223,7 @@ class Glossary
      *
      * @return string
      */
-    public function setTooltip(Array $matches)
+    public function setTooltip(array $matches)
     {
         $prefix = $postfix = '';
 

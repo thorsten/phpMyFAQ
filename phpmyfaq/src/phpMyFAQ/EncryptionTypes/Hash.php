@@ -34,6 +34,6 @@ class Hash extends Encryption
      */
     public function encrypt($str): string
     {
-        return hash('sha256', $str.$this->salt);
+        return hash('sha256', $str . $this->salt);
     }
 }

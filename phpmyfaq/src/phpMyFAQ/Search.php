@@ -63,7 +63,7 @@ class Search
     public function __construct(Configuration $config)
     {
         $this->_config = $config;
-        $this->_table = Database::getTablePrefix().'faqsearches';
+        $this->_table = Database::getTablePrefix() . 'faqsearches';
     }
 
     /**
@@ -132,8 +132,8 @@ class Search
      */
     public function searchDatabase($searchTerm, $allLanguages = true)
     {
-        $fdTable = Database::getTablePrefix().'faqdata AS fd';
-        $fcrTable = Database::getTablePrefix().'faqcategoryrelations';
+        $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
+        $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
         $search = SearchFactory::create($this->_config, ['database' => Database::getType()]);
 
@@ -141,18 +141,18 @@ class Search
             if ($this->getCategory() instanceof Category) {
                 $children = $this->getCategory()->getChildNodes($this->getCategoryId());
                 $selectedCategory = array(
-                    $fcrTable.'.category_id' => array_merge((array)$this->getCategoryId(), $children),
+                    $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children),
                 );
             } else {
                 $selectedCategory = array(
-                    $fcrTable.'.category_id' => $this->getCategoryId(),
+                    $fcrTable . '.category_id' => $this->getCategoryId(),
                 );
             }
             $condition = array_merge($selectedCategory, $condition);
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
-            $selectedLanguage = array('fd.lang' => "'".$this->_config->getLanguage()->getLanguage()."'");
+            $selectedLanguage = array('fd.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
 
@@ -162,15 +162,15 @@ class Search
                 'fd.id AS id',
                 'fd.lang AS lang',
                 'fd.solution_id AS solution_id',
-                $fcrTable.'.category_id AS category_id',
+                $fcrTable . '.category_id AS category_id',
                 'fd.thema AS question',
                 'fd.content AS answer')
             )
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(
                 array(
-                'fd.id = '.$fcrTable.'.record_id',
-                'fd.lang = '.$fcrTable.'.record_lang'
+                'fd.id = ' . $fcrTable . '.record_id',
+                'fd.lang = ' . $fcrTable . '.record_lang'
                 )
             )
             ->setConditions($condition);

@@ -96,7 +96,7 @@ class Session
 
             if (0 === $bots && false === $banned) {
                 if (!isset($sessionId)) {
-                    $sessionId = $this->config->getDb()->nextId(Database::getTablePrefix().'faqsessions', 'sid');
+                    $sessionId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqsessions', 'sid');
                     // Sanity check: force the session cookie to contains the current $sid
                     if (!is_null($cookieId) && (!$cookieId != $sessionId)) {
                         self::setCookie(self::PMF_COOKIE_NAME_SESSIONID, $sessionId);
@@ -118,15 +118,15 @@ class Session
                     $this->config->getDb()->query($query);
                 }
 
-                $data = $sessionId.';'.
-                        str_replace(';', ',', $action).';'.
-                        $data.';'.
-                        $remoteAddress.';'.
-                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '').';'.
-                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '').';'.
-                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])).';'.
-                        $_SERVER['REQUEST_TIME'].";\n";
-                $file = PMF_ROOT_DIR.'/data/tracking'.date('dmY');
+                $data = $sessionId . ';' .
+                        str_replace(';', ',', $action) . ';' .
+                        $data . ';' .
+                        $remoteAddress . ';' .
+                        str_replace(';', ',', isset($_SERVER['QUERY_STRING']) ? $_SERVER['QUERY_STRING'] : '') . ';' .
+                        str_replace(';', ',', isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '') . ';' .
+                        str_replace(';', ',', urldecode($_SERVER['HTTP_USER_AGENT'])) . ';' .
+                        $_SERVER['REQUEST_TIME'] . ";\n";
+                $file = PMF_ROOT_DIR . '/data/tracking' . date('dmY');
 
                 if (!is_file($file)) {
                     touch($file);
@@ -135,7 +135,7 @@ class Session
                 if (is_writeable($file)) {
                     file_put_contents($file, $data, FILE_APPEND | LOCK_EX);
                 } else {
-                    throw new Exception('Cannot write to '.$file);
+                    throw new Exception('Cannot write to ' . $file);
                 }
             }
         }

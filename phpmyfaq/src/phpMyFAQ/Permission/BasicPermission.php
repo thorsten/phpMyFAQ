@@ -296,7 +296,7 @@ class BasicPermission extends Permission
      *
      * @return int
      */
-    public function addRight(Array $rightData): int
+    public function addRight(array $rightData): int
     {
         if ($this->getRightId($rightData['name']) > 0) {
             return 0;

@@ -65,7 +65,7 @@ class CategoryImage
      *
      * @return CategoryImage
      */
-    public function setUploadedFile(Array $uploadedFile)
+    public function setUploadedFile(array $uploadedFile)
     {
         if (isset($uploadedFile['error']) && UPLOAD_ERR_OK === $uploadedFile['error']) {
             $this->isUpload = true;
@@ -138,7 +138,8 @@ class CategoryImage
      */
     public function upload(): bool
     {
-        if ($this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
+        if (
+            $this->isUpload && is_uploaded_file($this->uploadedFile['tmp_name'])
             && $this->uploadedFile['size'] < $this->config->get('records.maxAttachmentSize')
         ) {
             if (false === getimagesize($this->uploadedFile['tmp_name'])) {

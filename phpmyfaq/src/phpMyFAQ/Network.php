@@ -20,8 +20,6 @@ namespace phpMyFAQ;
  * @since     2011-02-04
  */
 
-
-
 use InvalidArgumentException;
 
 /**
@@ -62,7 +60,8 @@ class Network
                 continue;
             }
 
-            if (false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
+            if (
+                false === filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
                 && false === filter_var($ipAddress, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)
             ) {
                 // Handle IPv4
@@ -144,8 +143,8 @@ class Network
         $bytes_addr = unpack('n*', inet_pton($addr));
         $bytes_test = unpack('n*', inet_pton($ip));
 
-        for ($i = 1; $i <= ceil($preflen/16); ++$i) {
-            $left = $preflen - 16*($i - 1);
+        for ($i = 1; $i <= ceil($preflen / 16); ++$i) {
+            $left = $preflen - 16 * ($i - 1);
             if ($left > 16) {
                 $left = 16;
             }

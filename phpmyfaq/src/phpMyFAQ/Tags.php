@@ -110,7 +110,7 @@ class Tags
      * @param array $tags Array of tags
      * @return bool
      */
-    public function saveTags(int $recordId, Array $tags): bool
+    public function saveTags(int $recordId, array $tags): bool
     {
         $currentTags = $this->getAllTags();
 

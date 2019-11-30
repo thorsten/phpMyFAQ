@@ -82,7 +82,7 @@ interface AuthDriverInterface
      *
      * @return bool
      */
-    public function checkPassword($login, $pass, Array $optionalData = []);
+    public function checkPassword($login, $pass, array $optionalData = []);
 
     /**
      * Does nothing. A function required to be a valid auth.
@@ -92,5 +92,5 @@ interface AuthDriverInterface
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = []);
+    public function checkLogin($login, array $optionalData = []);
 }

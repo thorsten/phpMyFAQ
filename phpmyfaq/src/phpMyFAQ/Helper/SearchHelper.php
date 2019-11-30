@@ -380,14 +380,14 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderMostPopularSearches(Array $mostPopularSearches)
+    public function renderMostPopularSearches(array $mostPopularSearches)
     {
         $html = '';
 
         foreach ($mostPopularSearches as $searchItem) {
             if (Strings::strlen($searchItem['searchterm']) > 0) {
                 $html .= sprintf(
-                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s '.
+                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s ' .
                     '<span class="badge">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],

@@ -148,7 +148,7 @@ class Category
     /**
      * @param array $groups
      */
-    public function setGroups(Array $groups)
+    public function setGroups(array $groups)
     {
         if (0 === count($groups)) {
             $groups = array(-1);
@@ -1140,7 +1140,7 @@ class Category
      *
      * @return int
      */
-    public function addCategory(Array $categoryData, $parentId = 0, $id = null)
+    public function addCategory(array $categoryData, $parentId = 0, $id = null)
     {
         // If we only need a new language, we don't need a new category id
         if (is_null($id)) {
@@ -1178,7 +1178,7 @@ class Category
      *
      * @return bool
      */
-    public function updateCategory(Array $categoryData)
+    public function updateCategory(array $categoryData)
     {
         $query = sprintf(
             "
@@ -1555,7 +1555,7 @@ class Category
      *
      * @return bool
      */
-    public function addPermission($mode, Array $categories, Array $ids)
+    public function addPermission($mode, array $categories, array $ids)
     {
         if ('user' !== $mode && 'group' !== $mode) {
             return false;
@@ -1653,7 +1653,7 @@ class Category
      *
      * @return array
      */
-    public function getPermissions(string $mode, Array $categories): array
+    public function getPermissions(string $mode, array $categories): array
     {
         $permissions = [];
         if (!($mode === 'user' || $mode === 'group')) {

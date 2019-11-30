@@ -65,7 +65,7 @@ class SwiftSMTP implements MailUserAgentInterface
      *
      * @return bool True if successful, false otherwise.
      */
-    public function send($recipients, Array $headers, $body)
+    public function send($recipients, array $headers, $body)
     {
         $sender = '';
         if (('WIN' !== strtoupper(substr(PHP_OS, 0, 3))) && !ini_get('safe_mode')) {

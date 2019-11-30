@@ -105,7 +105,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      *
      * @return int
      */
-    public function checkLogin($login, Array $optionalData = null): int
+    public function checkLogin($login, array $optionalData = null): int
     {
         $check = sprintf(
             "
@@ -184,7 +184,7 @@ class AuthDatabase extends Auth implements AuthDriverInterface
      *
      * @return bool
      */
-    public function checkPassword($login, $password, Array $optionalData = null): bool
+    public function checkPassword($login, $password, array $optionalData = null): bool
     {
         $check = sprintf(
             "
@@ -223,7 +223,8 @@ class AuthDatabase extends Auth implements AuthDriverInterface
         while ($user = $this->db->fetchArray($check)) {
             // Check password against old one
             if ($this->config->get('security.forcePasswordUpdate')) {
-                if ($this->checkEncryptedPassword($user['pass'], $password)
+                if (
+                    $this->checkEncryptedPassword($user['pass'], $password)
                     && $this->encContainer->setSalt($user['login'])->encrypt($password) !== $user['pass']
                 ) {
                     return $this->changePassword($login, $password);

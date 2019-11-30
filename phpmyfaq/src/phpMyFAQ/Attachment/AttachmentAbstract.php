@@ -362,7 +362,8 @@ abstract class AttachmentAbstract
     protected function mkVirtualHash(): string
     {
         if ($this->encrypted) {
-            if (null === $this->id || null === $this->recordId
+            if (
+                null === $this->id || null === $this->recordId
                 || null === $this->realHash || null === $this->filename
                 || null === $this->key
             ) {

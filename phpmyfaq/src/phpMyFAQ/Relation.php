@@ -55,14 +55,14 @@ class Relation
      */
     public function getAllRelatedById($recordId, $question, $keywords)
     {
-        $terms = str_replace('-', ' ', $question).' '.$keywords;
+        $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
         $search = SearchFactory::create(
             $this->config,
             ['database' => Database::getType()]
         );
 
         $search
-            ->setTable(Database::getTablePrefix().'faqdata AS fd')
+            ->setTable(Database::getTablePrefix() . 'faqdata AS fd')
             ->setResultColumns(
                 [
                     'fd.id AS id',
@@ -73,7 +73,7 @@ class Relation
                     'fd.keywords AS keywords'
                 ]
             )
-            ->setJoinedTable(Database::getTablePrefix().'faqcategoryrelations AS fcr')
+            ->setJoinedTable(Database::getTablePrefix() . 'faqcategoryrelations AS fcr')
             ->setJoinedColumns(
                 [
                 'fd.id = fcr.record_id',
@@ -83,7 +83,7 @@ class Relation
             ->setConditions(
                 [
                     'fd.active' => "'yes'",
-                    'fd.lang' => "'".$this->config->getLanguage()->getLanguage()."'",
+                    'fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'",
                 ]
             )
             ->setMatchingColumns(['fd.keywords'])

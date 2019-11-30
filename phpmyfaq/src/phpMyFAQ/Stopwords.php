@@ -50,7 +50,7 @@ class Stopwords
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->table_name = Database::getTablePrefix().'faqstopwords';
+        $this->table_name = Database::getTablePrefix() . 'faqstopwords';
     }
 
     /**
@@ -211,7 +211,8 @@ class Stopwords
 
         foreach ($words as $word) {
             $word = Strings::strtolower($word);
-            if (!is_numeric($word) && 1 < Strings::strlen($word)
+            if (
+                !is_numeric($word) && 1 < Strings::strlen($word)
                 && !in_array($word, $stop_words) && !in_array($word, $retval)
             ) {
                 $retval[] = $word;
@@ -266,7 +267,7 @@ class Stopwords
     private function getBannedWords()
     {
         $bannedTrimmedWords = [];
-        $bannedWordsFile = PMF_SRC_DIR.'/blockedwords.txt';
+        $bannedWordsFile = PMF_SRC_DIR . '/blockedwords.txt';
         $bannedWords = [];
 
         // Read the dictionary

@@ -141,7 +141,7 @@ class Faq
     /**
      * @param array $groups
      */
-    public function setGroups(Array $groups)
+    public function setGroups(array $groups)
     {
         $this->groups = $groups;
     }
@@ -524,7 +524,7 @@ class Faq
      *
      * @return string
      */
-    public function renderRecordsByFaqIds(Array $recordIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): string
+    public function renderRecordsByFaqIds(array $recordIds, string $orderBy = 'fd.id', string $sortBy = 'ASC'): string
     {
         global $sids;
 
@@ -825,7 +825,7 @@ class Faq
      * @return array
      * @throws \Exception
      */
-    public function getRecordsByIds(Array $faqIds): array
+    public function getRecordsByIds(array $faqIds): array
     {
         $faqRecords = [];
 
@@ -920,7 +920,7 @@ class Faq
      *
      * @return int
      */
-    public function addRecord(Array $data, $newRecord = true)
+    public function addRecord(array $data, $newRecord = true)
     {
         if ($newRecord) {
             $recordId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqdata', 'id');
@@ -1002,7 +1002,7 @@ class Faq
      *
      * @return bool
      */
-    public function updateRecord(Array $data)
+    public function updateRecord(array $data)
     {
         // Update entry
         $query = sprintf(
@@ -1272,7 +1272,7 @@ class Faq
      *
      * @return boolean
      */
-    public function addCategoryRelations(Array $categories, $recordId, $language)
+    public function addCategoryRelations(array $categories, $recordId, $language)
     {
         if (!is_array($categories)) {
             return false;
@@ -1446,7 +1446,7 @@ class Faq
      * @param array  $condition Condition
      * @param string $sortOrder Sorting order
      */
-    public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, Array $condition = null, $sortOrder = 'ASC')
+    public function getAllRecords($sortType = FAQ_SORTING_TYPE_CATID_FAQID, array $condition = null, $sortOrder = 'ASC')
     {
         $where = '';
         if (!is_null($condition)) {
