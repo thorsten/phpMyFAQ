@@ -31,4 +31,4 @@ install:
   - yarn install
   - grunt build
 
-script: ./bin/phpunit --configuration phpunit.xml
+script: ./vendor/bin/phpunit --configuration phpunit.xml
