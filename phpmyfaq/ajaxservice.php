@@ -175,12 +175,14 @@ switch ($action) {
 
             if ($oComment->addComment($commentData)) {
                 $emailTo = $faqConfig->get('main.administrationMail');
+                $title = '';
                 $urlToContent = '';
                 if ('faq' == $type) {
                     $faq->getRecord($id);
                     if ($faq->faqRecord['email'] != '') {
                         $emailTo = $faq->faqRecord['email'];
                     }
+                    $title = $faq->getRecordTitle($id);
                     $faqUrl = sprintf(
                         '%s?action=artikel&cat=%d&id=%d&artlang=%s',
                         $faqConfig->getDefaultUrl(),
@@ -198,6 +200,7 @@ switch ($action) {
                     if ($news['authorEmail'] != '') {
                         $emailTo = $news['authorEmail'];
                     }
+                    $title = $news['header'];
                     $link = sprintf('%s?action=news&newsid=%d&newslang=%s',
                         $faqConfig->getDefaultUrl(),
                         $news['id'],
@@ -210,6 +213,7 @@ switch ($action) {
 
                 $commentMail =
                     'User: '.$commentData['username'].', mailto:'.$commentData['usermail']."\n".
+                    'Title: ' . $title . "\n" .
                     'New comment posted on: '.$urlToContent.
                     "\n\n".
                     wordwrap($comment, 72);
@@ -240,7 +244,7 @@ switch ($action) {
                     }
                 }
 
-                $mail->subject = '%sitename%';
+                $mailer->subject = '%sitename%: ' . $title;
                 $mail->message = strip_tags($commentMail);
                 $result = $mail->send();
                 unset($mail);
