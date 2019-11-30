@@ -240,6 +240,7 @@ switch ($action) {
 
                 $commentMail =
                     'User: ' . $commentData['username'] . ', mailto:' . $commentData['usermail'] . "\n" .
+                    'Title: ' . $title . "\n" .
                     'New comment posted here: ' . $urlToContent .
                     "\n\n" .
                     wordwrap($comment, 72);
