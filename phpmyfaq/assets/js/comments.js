@@ -15,34 +15,24 @@
 
 /*global $:false */
 
-$(function () {
-    'use strict';
+$(() => {
+  'use strict';
 
-    /**
-     * Show full comment
-     *
-     * @param id
-     */
-    var showLongComment = function (id) {
-        $('.comment-more-' + id).removeClass('hide');
-        $('.comment-dots-' + id).addClass('hide');
-        $('.comment-show-more-' + id).addClass('hide');
-    };
+  const showLongComment = id => {
+    $('.comment-more-' + id).removeClass('hide');
+    $('.comment-dots-' + id).addClass('hide');
+    $('.comment-show-more-' + id).addClass('hide');
+  };
 
+  $('.show-comment-form').on('click', event => {
+    event.preventDefault();
+    $('#pmf-create-comment').removeClass('hide');
+    document.getElementById('pmf-create-comment').scrollIntoView();
+  });
 
-    //
-    // Event listeners
-    //
-    $('.show-comment-form').on('click', function(event) {
-        event.preventDefault();
-        $('#pmf-create-comment').removeClass('hide');
-        document.getElementById('pmf-create-comment').scrollIntoView();
-    });
-
-    $('.pmf-comments-show-more').on('click', function (event) {
-        var commentId = $(this).data('comment-id');
-        event.preventDefault();
-        showLongComment(commentId);
-    });
-
+  $('.pmf-comments-show-more').on('click', event => {
+    const commentId = $(this).data('comment-id');
+    event.preventDefault();
+    showLongComment(commentId);
+  });
 });

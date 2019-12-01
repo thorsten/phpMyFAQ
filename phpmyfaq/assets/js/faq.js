@@ -19,7 +19,7 @@
  * HighlightJS
  *
  */
-$('pre code').each(function(i, block) {
+$('pre code').each((i, block) => {
   'use strict';
   hljs.highlightBlock(block);
 });

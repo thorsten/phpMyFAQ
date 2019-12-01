@@ -20,57 +20,73 @@ $(document).ready(function() {
   if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
     tinyMCE.init({
       // General options
-      mode     : 'exact',
-      language : 'en',
-      elements : 'answer',
-      theme    : 'modern',
+      mode: 'exact',
+      language: 'en',
+      elements: 'answer',
+      theme: 'modern',
       plugins: [
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',
         'searchreplace wordcount visualblocks visualchars code fullscreen',
         'insertdatetime media nonbreaking save table contextmenu directionality',
-        'emoticons template paste textcolor'
+        'emoticons template paste textcolor',
       ],
       relative_urls: false,
       convert_urls: false,
       remove_linebreaks: false,
       use_native_selects: true,
       paste_remove_spans: true,
-      entities : '10',
+      entities: '10',
       entity_encoding: 'raw',
 
-      toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent",
-      toolbar2: "link | forecolor backcolor emoticons | print",
+      toolbar1:
+        'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
+      toolbar2: 'link | forecolor backcolor emoticons | print',
       image_advtab: true,
 
       // Formatting
       style_formats: [
-        {  title: 'Headers', items: [
-          {  title: 'h1', block: 'h1'  },
-          {  title: 'h2', block: 'h2'  },
-          {  title: 'h3', block: 'h3'  },
-          {  title: 'h4', block: 'h4'  },
-          {  title: 'h5', block: 'h5'  },
-          {  title: 'h6', block: 'h6'  }
-        ] },
+        {
+          title: 'Headers',
+          items: [
+            { title: 'h1', block: 'h1' },
+            { title: 'h2', block: 'h2' },
+            { title: 'h3', block: 'h3' },
+            { title: 'h4', block: 'h4' },
+            { title: 'h5', block: 'h5' },
+            { title: 'h6', block: 'h6' },
+          ],
+        },
 
-        {  title: 'Blocks', items: [
-          {  title: 'p', block: 'p'  },
-          {  title: 'div', block: 'div'  },
-          {  title: 'pre', block: 'pre'  },
-          {  title: 'code', block: 'code'  }
-        ] },
+        {
+          title: 'Blocks',
+          items: [
+            { title: 'p', block: 'p' },
+            { title: 'div', block: 'div' },
+            { title: 'pre', block: 'pre' },
+            { title: 'code', block: 'code' },
+          ],
+        },
 
-        {  title: 'Containers', items: [
-          {  title: 'blockquote', block: 'blockquote', wrapper: true  },
-          {  title: 'figure', block: 'figure', wrapper: true  }
-        ] }
+        {
+          title: 'Containers',
+          items: [
+            { title: 'blockquote', block: 'blockquote', wrapper: true },
+            { title: 'figure', block: 'figure', wrapper: true },
+          ],
+        },
       ],
 
       visualblocks_default_state: true,
       end_container_on_empty_block: true,
-      extended_valid_elements : "code[class],video[*],audio[*],source[*]",
-      removeformat : [
-        {  selector : '*', attributes : ['style'], split : false, expand : false, deep : true  }
+      extended_valid_elements: 'code[class],video[*],audio[*],source[*]',
+      removeformat: [
+        {
+          selector: '*',
+          attributes: ['style'],
+          split: false,
+          expand: false,
+          deep: true,
+        },
       ],
       importcss_append: true,
     });

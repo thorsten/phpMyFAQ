@@ -26,22 +26,25 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'search=' + request,
-        success: (data) => {
-          response(data.map((item) => {
-            return {
-              url: item.faqLink,
-              question: item.faqQuestion
-            };
-          }));
-        }
+        success: data => {
+          response(
+            data.map(item => {
+              return {
+                url: item.faqLink,
+                question: item.faqQuestion,
+              };
+            })
+          );
+        },
       });
     },
-    displayText: (item) => {
-      return typeof item !== 'undefined' && typeof item.question !== 'undefined' ? item.question : item;
+    displayText: item => {
+      return typeof item !== 'undefined' && typeof item.question !== 'undefined'
+        ? item.question
+        : item;
     },
-    afterSelect: (event) => {
+    afterSelect: event => {
       window.location.href = event.url;
-    }
+    },
   });
-
 });

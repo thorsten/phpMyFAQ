@@ -16,47 +16,51 @@
 /*global $: false */
 
 $(document).ready(function() {
+  'use strict';
 
-    'use strict';
+  var setupForm = $('.form-horizontal'),
+    setupType = $('#sql_type'),
+    setupTypeOptions = $('#sql_type option'),
+    $dbSqlite = $('#dbsqlite'),
+    $dbFull = $('#dbdatafull');
 
-    var setupForm = $('.form-horizontal'),
-        setupType = $('#sql_type'),
-        setupTypeOptions = $('#sql_type option'),
-        $dbSqlite = $('#dbsqlite'),
-        $dbFull = $('#dbdatafull');
+  var addInput = function(event) {
+    var current = $(event.currentTarget);
+    var tag = current.parent().parent();
 
-    var addInput = function (event) {
-
-        var current = $(event.currentTarget);
-        var tag = current.parent().parent();
-
-        if ('add' === current.attr('data-action')) {
-            tag.after(tag.clone().find('input').val('').find('span.input-group-addon').remove().end());
-        }
-
-        return false;
-    };
-
-    var selectDatabaseSetup = function () {
-
-        switch ($(this).val()) {
-            case 'sqlite3':
-                $dbSqlite.show();
-                $dbFull.hide();
-                break;
-            default:
-                $dbSqlite.hide();
-                $dbFull.show();
-                break;
-        }
-    };
-
-    setupForm.find('a').on('click', addInput);
-    setupType.on('change', selectDatabaseSetup);
-
-    if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {
-        $dbSqlite.show().removeClass('hide');
-        $dbFull.hide();
+    if ('add' === current.attr('data-action')) {
+      tag.after(
+        tag
+          .clone()
+          .find('input')
+          .val('')
+          .find('span.input-group-addon')
+          .remove()
+          .end()
+      );
     }
 
+    return false;
+  };
+
+  var selectDatabaseSetup = function() {
+    switch ($(this).val()) {
+      case 'sqlite3':
+        $dbSqlite.show();
+        $dbFull.hide();
+        break;
+      default:
+        $dbSqlite.hide();
+        $dbFull.show();
+        break;
+    }
+  };
+
+  setupForm.find('a').on('click', addInput);
+  setupType.on('change', selectDatabaseSetup);
+
+  if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {
+    $dbSqlite.show().removeClass('hide');
+    $dbFull.hide();
+  }
 });
