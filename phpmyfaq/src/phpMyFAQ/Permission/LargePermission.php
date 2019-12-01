@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Permission;
-
 /**
  * The large permission class provides section rights for groups and users.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Permission;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
+
+namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

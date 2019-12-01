@@ -1,9 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
-use phpMyFAQ\Helper\LanguageHelper;
-
 /**
  * Manages all language stuff.
  *
@@ -21,7 +17,7 @@ use phpMyFAQ\Helper\LanguageHelper;
  * @since     2009-05-14
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Language

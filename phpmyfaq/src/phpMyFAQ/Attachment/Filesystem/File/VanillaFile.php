@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment\Filesystem\File;
-
 /**
  * Unencrypted file handler class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+namespace phpMyFAQ\Attachment\Filesystem\File;
 
 use phpMyFAQ\Attachment\Filesystem\AbstractFile;
 

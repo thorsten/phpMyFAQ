@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The section class provides sections
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-19
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Section

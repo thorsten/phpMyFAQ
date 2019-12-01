@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Logging class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2006-08-15
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Logging

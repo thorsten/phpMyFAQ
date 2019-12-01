@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Entity;
-
 /**
  * The MetaEntity class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Entity;
  * @since     2018-08-09
  */
 
-
+namespace phpMyFAQ\Entity;
 
 /**
  * Class MetaEntity

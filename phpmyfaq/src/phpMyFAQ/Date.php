@@ -1,9 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
-use DateTime;
-
 /**
  * phpMyFAQ Date class.
  *
@@ -20,18 +16,14 @@ use DateTime;
  * @since     2009-09-24
  */
 
+namespace phpMyFAQ;
 
+use DateTime;
 
 /**
- * Date.
+ * Class Date
  *
- * @package   phpMyFAQ
- * @author    Thorsten Rinne <thorsten@phpmyfaq.de>
- * @author    Matteo Scaramuccia <matteo@phpmyfaq.de>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-09-24
+ * @package phpMyFAQ
  */
 class Date
 {

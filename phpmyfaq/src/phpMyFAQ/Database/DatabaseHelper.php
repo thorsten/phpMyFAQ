@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
 /**
  * Helper class for database drivers.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-12
  */
+
+namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Strings;

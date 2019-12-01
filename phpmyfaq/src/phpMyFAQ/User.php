@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Creates a new user object.
  *
@@ -23,6 +21,8 @@ namespace phpMyFAQ;
  * @since     2005-09-17
  */
 
+namespace phpMyFAQ;
+
 use phpMyFAQ\Auth\AuthDatabase;
 use phpMyFAQ\Auth\AuthDriverInterface;
 use phpMyFAQ\Auth\AuthHttp;
@@ -43,29 +43,29 @@ if (!defined('PMF_ENCRYPTION_TYPE')) {
  */
 class User
 {
-    const ERROR_USER_ADD = 'Account could not be created. ';
-    const ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
-    const ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
-    const ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
-    const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
-    const ERROR_USER_CHANGE = 'Account could not be updated. ';
-    const ERROR_USER_DELETE = 'Account could not be deleted. ';
-    const ERROR_USER_INCORRECT_LOGIN = 'Specified login could not be found. ';
-    const ERROR_USER_INCORRECT_PASSWORD = 'Specified password is not correct.';
-    const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
-    const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
-    const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
-    const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
-    const ERROR_USER_NO_PERM = 'No permission container specified.';
-    const ERROR_USER_NO_USERID = 'No user-ID found. ';
-    const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
-    const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
-    const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
-    const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are temporarily blocked. Please try again later.';
+    public const ERROR_USER_ADD = 'Account could not be created. ';
+    public const ERROR_USER_CANNOT_CREATE_USER = 'User account could not be created. ';
+    public const ERROR_USER_CANNOT_CREATE_USERDATA = 'Entry for user data could not be created. ';
+    public const ERROR_USER_CANNOT_DELETE_USER = 'User account could not be deleted. ';
+    public const ERROR_USER_CANNOT_DELETE_USERDATA = 'Entry for user data could not be deleted. ';
+    public const ERROR_USER_CHANGE = 'Account could not be updated. ';
+    public const ERROR_USER_DELETE = 'Account could not be deleted. ';
+    public const ERROR_USER_INCORRECT_LOGIN = 'Specified login could not be found. ';
+    public const ERROR_USER_INCORRECT_PASSWORD = 'Specified password is not correct.';
+    public const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
+    public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
+    public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
+    public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    public const ERROR_USER_NO_PERM = 'No permission container specified.';
+    public const ERROR_USER_NO_USERID = 'No user-ID found. ';
+    public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
+    public const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
+    public const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
+    public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are temporarily blocked. Please try again later.';
 
-    const STATUS_USER_PROTECTED = 'User account is protected. ';
-    const STATUS_USER_BLOCKED = 'User account is blocked. ';
-    const STATUS_USER_ACTIVE = 'User account is active. ';
+    public const STATUS_USER_PROTECTED = 'User account is protected. ';
+    public const STATUS_USER_BLOCKED = 'User account is blocked. ';
+    public const STATUS_USER_ACTIVE = 'User account is active. ';
 
     /**
      * Permission container.

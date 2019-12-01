@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main glossary class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2005-09-15
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Glossary

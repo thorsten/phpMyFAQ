@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The Template class provides methods and functions for the
  * template parser.
@@ -18,6 +16,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2002-08-22
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Template\TemplateHelper;
 use phpseclib\Crypt\Blowfish;

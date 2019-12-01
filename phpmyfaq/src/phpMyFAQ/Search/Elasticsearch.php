@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Search;
-
 /**
  * phpMyFAQ Elasticsearch based search classes.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Search;
  * @link      https://www.phpmyfaq.de
  * @since     2015-12-25
  */
+
+namespace phpMyFAQ\Search;
 
 use Elasticsearch\Client;
 use phpMyFAQ\Configuration;

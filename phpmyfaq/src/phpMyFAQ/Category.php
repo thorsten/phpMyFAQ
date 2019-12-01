@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main category class. Yes, it's huge.
  *
@@ -19,6 +17,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2004-02-16
  */
+
+namespace phpMyFAQ;
 
 use mysql_xdevapi\Warning;
 use phpMyFAQ\Category\CategoryEntity;

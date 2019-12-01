@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Helper class for the default phpMyFAQ captcha.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Helper;
  * @since     2010-01-11
  */
 
+namespace phpMyFAQ\Helper;
+
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Helper;
@@ -28,8 +28,8 @@ use phpMyFAQ\Helper;
  */
 class CaptchaHelper extends Helper
 {
-    const FORM_ID = 'captcha';
-    const FORM_BUTTON = 'captcha-button';
+    private const FORM_ID = 'captcha';
+    private const FORM_BUTTON = 'captcha-button';
 
     /**
      * Constructor.

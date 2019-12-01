@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The Installer class installs phpMyFAQ. Classy.
  *
@@ -17,14 +15,16 @@ namespace phpMyFAQ;
  * @since     2012-08-27
  */
 
+namespace phpMyFAQ;
+
 use Composer\Autoload\ClassLoader;
 use Elasticsearch\ClientBuilder;
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Instance\Database as InstanceDatabase;
 use phpMyFAQ\Instance\Database\Stopwords;
 use phpMyFAQ\Instance\Elasticsearch;
-use phpMyFAQ\Instance\Setup;
 use phpMyFAQ\Instance\Master;
+use phpMyFAQ\Instance\Setup;
 
 /**
  * Class Installer
@@ -318,7 +318,7 @@ class Installer
      *
      * @var array
      */
-    protected $_mainConfig = [
+    protected $mainConfig = [
         'main.currentVersion' => null,
         'main.currentApiVersion' => null,
         'main.language' => '__PHPMYFAQ_LANGUAGE__',
@@ -455,7 +455,7 @@ class Installer
             'main.phpMyFAQToken' => md5(uniqid(rand())),
             'spam.enableCaptchaCode' => (extension_loaded('gd') ? 'true' : 'false')
         ];
-        $this->_mainConfig = array_merge($this->_mainConfig, $dynMainConfig);
+        $this->mainConfig = array_merge($this->mainConfig, $dynMainConfig);
     }
 
     /**
@@ -472,7 +472,8 @@ class Installer
         }
 
         if (!function_exists('date_default_timezone_set')) {
-            echo '<p class="alert alert-danger">Sorry, but setting a default timezone doesn\'t work in your environment!</p>';
+            echo '<p class="alert alert-danger">Sorry, but setting a default timezone doesn\'t work in your ' .
+                'environment!</p>';
             System::renderFooter();
         }
 
@@ -488,8 +489,8 @@ class Installer
         }
 
         if (!$this->system->checkRequiredExtensions()) {
-            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP extension(s) in ' .
-                'php.ini.</p>';
+            echo '<p class="alert alert-danger">The following extensions are missing! Please enable the PHP ' .
+                'extension(s) in php.ini.</p>';
             echo '<ul>';
             foreach ($this->system->getMissingExtensions() as $extension) {
                 printf('    <li>ext/%s</li>', $extension);
@@ -500,10 +501,24 @@ class Installer
 
         if (!$this->system->checkphpMyFAQInstallation()) {
             echo '<p class="alert alert-danger">The file <code>config/database.php</code> was detected. It seems' .
-                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script</a>.' .
-                '</p>';
+                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script' .
+                '</a>.</p>';
             System::renderFooter();
         }
+    }
+
+    /**
+     * Checks the minimum required PHP version, defined in System.
+     *
+     * @return bool
+     */
+    public function checkMinimumPhpVersion()
+    {
+        if (version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP, '<')) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -547,20 +562,6 @@ class Installer
     }
 
     /**
-     * Checks the minimum required PHP version, defined in System.
-     *
-     * @return bool
-     */
-    public function checkMinimumPhpVersion()
-    {
-        if (version_compare(PHP_VERSION, System::VERSION_MINIMUM_PHP, '<')) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
      * Checks if the file permissions are okay.
      */
     public function checkFilesystemPermissions()
@@ -583,7 +584,7 @@ class Installer
             }
             printf(
                 '</ul><p class="alert alert-danger">Please create %s manually and/or change access to chmod 775 (or ' .
-                    'greater if necessary).</p>',
+                'greater if necessary).</p>',
                 (1 < $numDirs) ? 'them' : 'it'
             );
             System::renderFooter();
@@ -598,22 +599,22 @@ class Installer
     public function checkNoncriticalSettings()
     {
         if ((@ini_get('safe_mode') == 'On' || @ini_get('safe_mode') === 1)) {
-            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ tries to write ' .
-                ' in some directories.</p>';
+            echo '<p class="alert alert-danger">The PHP safe mode is enabled. You may have problems when phpMyFAQ ' .
+                ' tries to write in some directories.</p>';
         }
         if (!extension_loaded('gd')) {
-            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please enable GD ' .
-                'support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
+            echo '<p class="alert alert-danger">You don\'t have GD support enabled in your PHP installation. Please ' .
+                'enable GD support in your php.ini file otherwise you can\'t use Captchas for spam protection.</p>';
         }
         if (!function_exists('imagettftext')) {
-            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of your PHP ' .
-                'installation. Please enable Freetype support in GD extension otherwise the Captchas for spam ' .
-                'protection will be quite easy to break.</p>';
+            echo '<p class="alert alert-danger">You don\'t have Freetype support enabled in the GD extension of ' .
+                'your PHP installation. Please enable Freetype support in GD extension otherwise the Captchas ' .
+                'for spam protection will be quite easy to break.</p>';
         }
         if (!extension_loaded('curl') || !extension_loaded('openssl')) {
-            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP installation. ' .
-                'Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t use the Twitter ' .
-                ' support or Elasticsearch.</p>';
+            echo '<p class="alert alert-danger">You don\'t have cURL and/or OpenSSL support enabled in your PHP ' .
+                'installation. Please enable cURL and/or OpenSSL support in your php.ini file otherwise you can\'t ' .
+                'use the Twitter  support or Elasticsearch.</p>';
         }
         if (!extension_loaded('fileinfo')) {
             echo '<p class="alert alert-danger">You don\'t have Fileinfo support enabled in your PHP installation. ' .
@@ -625,7 +626,7 @@ class Installer
     /**
      * Checks if phpMyFAQ database tables are available
      *
-     * @param  DatabaseDriver $database
+     * @param DatabaseDriver $database
      * @throws
      */
     public function checkAvailableDatabaseTables(DatabaseDriver $database)
@@ -645,7 +646,7 @@ class Installer
     /**
      * Starts the installation.
      *
-     * @param  array $setup
+     * @param array $setup
      * @throws
      */
     public function startInstall(array $setup = null)
@@ -706,7 +707,8 @@ class Installer
                 $setup['dbServer']
             );
             if (is_null($dbSetup['dbServer'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a SQLite database filename.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a SQLite database " .
+                    "filename.</p>\n";
                 System::renderFooter(true);
             }
         }
@@ -756,7 +758,7 @@ class Installer
             $ldapSetup['ldapPassword'] = Filter::filterInput(INPUT_POST, 'ldap_password', FILTER_SANITIZE_STRING, '');
 
             // set LDAP Config to prevent DB query
-            foreach ($this->_mainConfig as $configKey => $configValue) {
+            foreach ($this->mainConfig as $configKey => $configValue) {
                 if (strpos($configKey, 'ldap.') !== false) {
                     $configuration->config[$configKey] = $configValue;
                 }
@@ -793,7 +795,8 @@ class Installer
             // ES hosts
             $esHosts = Filter::filterInputArray(INPUT_POST, $esHostFilter);
             if (is_null($esHosts)) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add at least one Elasticsearch host.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add at least one Elasticsearch " .
+                    "host.</p>\n";
                 System::renderFooter(true);
             }
 
@@ -802,7 +805,8 @@ class Installer
             // ES Index name
             $esSetup['index'] = Filter::filterInput(INPUT_POST, 'elasticsearch_index', FILTER_SANITIZE_STRING);
             if (is_null($esSetup['index'])) {
-                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add an Elasticsearch index name.</p>\n";
+                echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add an Elasticsearch index " .
+                    "name.</p>\n";
                 System::renderFooter(true);
             }
 
@@ -838,7 +842,8 @@ class Installer
         // check user entries
         $password = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, $setup['password']);
         if (is_null($password)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your account.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Please add a password for the your ' .
+                'account.</p>';
             System::renderFooter(true);
         }
 
@@ -854,13 +859,13 @@ class Installer
         }
 
         if (strlen($password) <= 5 || strlen($password_retyped) <= 5) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too short.' .
-                ' Please set your password and your retyped password with a minimum of 6 characters.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are too ' .
+                'short. Please set your password and your retyped password with a minimum of 6 characters.</p>';
             System::renderFooter(true);
         }
         if ($password != $password_retyped) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not equal.' .
-                ' Please check your password and your retyped password.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Your password and retyped password are not ' .
+                'equal. Please check your password and your retyped password.</p>';
             System::renderFooter(true);
         }
 
@@ -876,7 +881,8 @@ class Installer
 
         // Write the DB variables in database.php
         if (!$instanceSetup->createDatabaseFile($dbSetup)) {
-            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/database.php.</p>';
+            echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/database.php.' .
+                '</p>';
             $this->system->cleanInstallation();
             System::renderFooter(true);
         }
@@ -884,7 +890,8 @@ class Installer
         // check LDAP is enabled
         if (extension_loaded('ldap') && !is_null($ldapEnabled) && count($ldapSetup)) {
             if (!$instanceSetup->createLdapFile($ldapSetup, '')) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.</p>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/ldap.php.' .
+                    '</p>';
                 $this->system->cleanInstallation();
                 System::renderFooter(true);
             }
@@ -893,7 +900,8 @@ class Installer
         // check if Elasticsearch is enabled
         if (!is_null($esEnabled) && count($esSetup)) {
             if (!$instanceSetup->createElasticsearchFile($esSetup, '')) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ./config/elasticsearch.php.</p>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Setup cannot write to ' .
+                    './config/elasticsearch.php.</p>';
                 $this->system->cleanInstallation();
                 System::renderFooter(true);
             }
@@ -939,8 +947,8 @@ class Installer
         foreach ($query as $executeQuery) {
             $result = @$db->query($executeQuery);
             if (!$result) {
-                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ once 
-                      again or send us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
+                echo '<p class="alert alert-danger"><strong>Error:</strong> Please install your version of phpMyFAQ 
+                    once again or send us a <a href=\"https://www.phpmyfaq.de\" target=\"_blank\">bug report</a>.</p>';
                 printf('<p class="alert alert-danger"><strong>DB error:</strong> %s</p>', $db->error());
                 printf('<code>%s</code>', htmlentities($executeQuery));
                 $this->system->dropTables($uninst);
@@ -957,12 +965,12 @@ class Installer
         $link = new Link(null, $configuration);
 
         // add main configuration, add personal settings
-        $this->_mainConfig['main.metaPublisher'] = $realname;
-        $this->_mainConfig['main.administrationMail'] = $email;
-        $this->_mainConfig['main.language'] = $language;
-        $this->_mainConfig['security.permLevel'] = $permLevel;
+        $this->mainConfig['main.metaPublisher'] = $realname;
+        $this->mainConfig['main.administrationMail'] = $email;
+        $this->mainConfig['main.language'] = $language;
+        $this->mainConfig['security.permLevel'] = $permLevel;
 
-        foreach ($this->_mainConfig as $name => $value) {
+        foreach ($this->mainConfig as $name => $value) {
             $configuration->add($name, $value);
         }
 
@@ -1034,9 +1042,11 @@ class Installer
         if (!DEBUG) {
             // Remove 'index.php' file
             if (@unlink(dirname($_SERVER['PATH_TRANSLATED']) . '/index.php')) {
-                echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
+                echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted " .
+                    "automatically.</p>\n";
             } else {
-                echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
+                echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> " .
+                    "manually.</p>\n";
             }
         }
     }

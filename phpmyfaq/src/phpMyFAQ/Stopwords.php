@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Stopwords class.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2009-04-01
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Stopwords

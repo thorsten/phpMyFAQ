@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main FAQ class. Yes, it's very huge.
  *
@@ -20,6 +18,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2005-12-20
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Helper\FaqHelper;

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The Meta class provides CRUD methods for meta data information.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2018-08-09
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Entity\MetaEntity;
 

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
 /**
  * Interface for database drivers.
  *
@@ -18,7 +16,7 @@ namespace phpMyFAQ\Database;
  * @since     2007-08-19
  */
 
-
+namespace phpMyFAQ\Database;
 
 /**
  * Interface DatabaseDriver

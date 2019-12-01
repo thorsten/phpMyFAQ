@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Class for filesystem operations.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2012-04-02
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Filesystem

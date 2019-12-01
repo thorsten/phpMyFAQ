@@ -1,9 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
-use stdClass;
-
 /**
  * API handler class.
  *
@@ -19,7 +15,9 @@ use stdClass;
  * @since     2018-03-27
  */
 
+namespace phpMyFAQ;
 
+use stdClass;
 
 /**
  * Class Api

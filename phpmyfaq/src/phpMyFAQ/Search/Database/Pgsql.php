@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Search\Database;
-
 /**
  * phpMyFAQ PostgreSQL search classes.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Search\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2010-06-06
  */
+
+namespace phpMyFAQ\Search\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;

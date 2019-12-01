@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Class for checking system requirements.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-13
  */
+
+namespace phpMyFAQ;
 
 use DateTime;
 use DirectoryIterator;

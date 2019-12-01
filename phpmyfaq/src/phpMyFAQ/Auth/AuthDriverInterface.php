@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Auth;
-
 /**
  * Interface for managing user authentication.
  *
@@ -18,7 +16,7 @@ namespace phpMyFAQ\Auth;
  * @since     2009-03-01
  */
 
-
+namespace phpMyFAQ\Auth;
 
 /**
  * Interface Driver

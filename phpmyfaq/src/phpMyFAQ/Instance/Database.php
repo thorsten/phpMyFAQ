@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance;
-
 /**
  * The phpMyFAQ instances basic database class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Instance;
  * @link      https://www.phpmyfaq.de
  * @since     2015-02-14
  */
+
+namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Exception;

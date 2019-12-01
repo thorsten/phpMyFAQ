@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Init class.
  *
@@ -23,6 +21,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-24
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Strings\StringBasic;
 

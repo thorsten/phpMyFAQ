@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Strings;
-
 /**
  * Abstract parent for the string wrapper classes.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Strings;
  * @since     2009-04-06
  */
 
-
+namespace phpMyFAQ\Strings;
 
 /**
  * Class StringsAbstract

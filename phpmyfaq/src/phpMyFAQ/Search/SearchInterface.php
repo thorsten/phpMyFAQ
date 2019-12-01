@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Search;
-
 /**
  * Interface for phpMyFAQ search classes.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Search;
  * @since     2010-06-06
  */
 
-
+namespace phpMyFAQ\Search;
 
 /**
  * Interface SearchInterface

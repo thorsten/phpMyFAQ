@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main string wrapper class.
  *
@@ -22,6 +20,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2009-04-06
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Strings\Mbstring;
 use phpMyFAQ\Strings\StringBasic;

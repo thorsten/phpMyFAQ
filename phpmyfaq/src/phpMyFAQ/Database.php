@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The database abstraction factory.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2003-02-24
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Database\DatabaseDriver;
 use phpMyFAQ\Database\Mysqli;

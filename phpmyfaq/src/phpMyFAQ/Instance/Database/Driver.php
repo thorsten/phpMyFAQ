@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance\Database;
-
 /**
  * The phpMyFAQ instances database interface.
  *
@@ -17,6 +15,7 @@ namespace phpMyFAQ\Instance\Database;
  * @since     2015-04-06
  */
 
+namespace phpMyFAQ\Instance\Database;
 
 /**
  * Interface Driver

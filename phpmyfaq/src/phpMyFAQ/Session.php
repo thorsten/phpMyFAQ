@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Session class.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @since     2007-03-31
  */
 
+namespace phpMyFAQ;
+
 /**
  * Class Session
  *
@@ -24,12 +24,9 @@ namespace phpMyFAQ;
  */
 class Session
 {
-    /**
- * Constants.
-*/
-    const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
-    const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
-    const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
+    public const PMF_COOKIE_NAME_REMEMBERME = 'pmf_rememberme';
+    public const PMF_COOKIE_NAME_SESSIONID = 'pmf_sid';
+    private const PMF_COOKIE_NAME_AUTH = 'pmf_auth';
 
     /**
      * @var Configuration

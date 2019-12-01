@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Mail;
-
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -14,6 +12,8 @@ namespace phpMyFAQ\Mail;
  * @link      https://www.phpmyfaq.de
  * @since     2014-10-10
  */
+
+namespace phpMyFAQ\Mail;
 
 require __DIR__ . '/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
 

@@ -1,9 +1,7 @@
 <?php
 
-namespace phpMyFAQ\Language;
-
 /**
- * The plurals class provides support for plural forms in PMF translations.
+ * The plurals class provides support for plural forms in phpMyFAQ translations.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -17,17 +15,12 @@ namespace phpMyFAQ\Language;
  * @since     2009-07-30
  */
 
-
+namespace phpMyFAQ\Language;
 
 /**
- * Language_Plurals
+ * Class Plurals
  *
- * @package   phpMyFAQ
- * @author    Aurimas Fišeras <aurimas@gmail.com>
- * @copyright 2009-2019 Aurimas Fišeras and phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-07-30
+ * @package phpMyFAQ\Language
  */
 class Plurals
 {

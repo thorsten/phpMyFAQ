@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The notification class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2012-08-30
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Notification

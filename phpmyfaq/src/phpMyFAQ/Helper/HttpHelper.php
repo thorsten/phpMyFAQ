@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * HTTP Helper class for phpMyFAQ.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-13
  */
+
+namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 use phpMyFAQ\Strings;

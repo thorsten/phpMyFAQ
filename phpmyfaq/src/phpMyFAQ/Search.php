@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The phpMyFAQ Search class.
  *
@@ -18,6 +16,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2008-01-26
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\SearchFactory;

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * MUA (Mail User Agent) implementation.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-11
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Mail\Builtin;
 use phpMyFAQ\Mail\SwiftSMTP;

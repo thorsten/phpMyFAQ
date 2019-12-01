@@ -1,9 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Strings;
-
-use phpMyFAQ\Language;
-
 /**
  * The string wrapper class using single byte string functions.
  *
@@ -19,7 +15,9 @@ use phpMyFAQ\Language;
  * @since     2009-04-06
  */
 
+namespace phpMyFAQ\Strings;
 
+use phpMyFAQ\Language;
 
 /**
  * Class Basic

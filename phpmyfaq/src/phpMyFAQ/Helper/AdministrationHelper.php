@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Helper class for Administration backend.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2010-01-19
  */
+
+namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\User;
 

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * JSON, XML, HTML5 and PDF export
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2005-11-02
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Export\Html5;
 use phpMyFAQ\Export\Json;

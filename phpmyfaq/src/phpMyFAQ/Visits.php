@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Handles all the stuff for visits.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link  https://www.phpmyfaq.de
  * @since 2009-03-08
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Visits

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The PMF_Ldap class provides methods and functions for a LDAP database.
  *
@@ -20,7 +18,7 @@ namespace phpMyFAQ;
  * @since     2004-12-16
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Ldap

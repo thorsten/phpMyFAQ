@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Category;
-
 /**
  * The category news class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Category;
  * @link      https://www.phpmyfaq.de
  * @since     2018-07-20
  */
+
+namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 

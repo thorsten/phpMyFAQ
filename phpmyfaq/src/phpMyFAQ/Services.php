@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Abstract class for various services, e.g. Twitter, Facebook.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link  https://www.phpmyfaq.de
  * @since 2010-09-05
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Services

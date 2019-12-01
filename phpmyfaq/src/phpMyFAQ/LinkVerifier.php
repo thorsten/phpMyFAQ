@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The Linkverifier class provides methods and functions for verifying URLs.
  *
@@ -22,7 +20,7 @@ namespace phpMyFAQ;
  * @since     2005-08-01
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class LinkVerifier

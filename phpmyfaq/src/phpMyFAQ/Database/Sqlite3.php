@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
 /**
  * The Sqlite3 class provides methods and functions for a SQLite v3 database.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-02
  */
+
+namespace phpMyFAQ\Database;
 
 use phpMyFAQ\Database;
 use phpMyFAQ\Exception;

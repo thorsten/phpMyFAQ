@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment;
-
 /**
  * Mime type class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Attachment;
  * @since     2009-08-21
  */
 
-
+namespace phpMyFAQ\Attachment;
 
 /**
  * Class AbstractMimeType

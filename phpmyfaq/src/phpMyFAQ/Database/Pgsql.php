@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
 /**
  * The phpMyFAQ\Db_Pgsql class provides methods and functions for a PostgreSQL
  * database.
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Database;
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  */
+
+namespace phpMyFAQ\Database;
 
 use Exception;
 use phpMyFAQ\Database;

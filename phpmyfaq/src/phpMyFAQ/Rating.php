@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Rating class.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -15,6 +13,8 @@ namespace phpMyFAQ;
  * @link  https://www.phpmyfaq.de
  * @since 2007-03-31
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Language\Plurals;
 

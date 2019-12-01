@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance\Database;
-
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements
  * for the stop words.
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Instance\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2015-09-05
  */
+
+namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
 

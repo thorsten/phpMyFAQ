@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance;
-
 /**
  * The main phpMyFAQ instances class for instance masters.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Instance;
  * @link      https://www.phpmyfaq.de
  * @since     2012-03-31
  */
+
+namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Instance;
 

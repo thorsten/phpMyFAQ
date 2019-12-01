@@ -31,12 +31,12 @@ class Attachment
      *
      * @var int
      */
-    const STORAGE_TYPE_FILESYSTEM = 0;
+    public const STORAGE_TYPE_FILESYSTEM = 0;
 
     /**
      * Storage type database.
      *
      * @var int
      */
-    const STORAGE_TYPE_DB = 1;
+    public const STORAGE_TYPE_DB = 1;
 }

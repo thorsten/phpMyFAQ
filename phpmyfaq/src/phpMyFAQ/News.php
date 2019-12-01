@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The News class for phpMyFAQ news.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -17,6 +15,7 @@ namespace phpMyFAQ;
  * @since     2006-06-25
  */
 
+namespace phpMyFAQ;
 
 /**
  * Class News

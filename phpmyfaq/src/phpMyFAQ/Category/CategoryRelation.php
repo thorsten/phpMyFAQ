@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Category;
-
 /**
  * Category relations class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Category;
  * @link      https://www.phpmyfaq.de
  * @since     2019-11-22
  */
+
+namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

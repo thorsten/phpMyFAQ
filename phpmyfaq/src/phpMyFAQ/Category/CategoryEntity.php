@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Category;
-
 /**
  * Entity entity class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Category;
  * @since     2014-08-14
  */
 
-
+namespace phpMyFAQ\Category;
 
 /**
  * Class CategoryEntity

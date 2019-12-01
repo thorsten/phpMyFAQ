@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The reporting class for simple report generation.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
  */
+
+namespace phpMyFAQ;
 
 /**
  * Class Report

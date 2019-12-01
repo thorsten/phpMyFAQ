@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance;
-
 /**
  * The phpMyFAQ instances setup class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Instance;
  * @link      https://www.phpmyfaq.de
  * @since     2012-04-04
  */
+
+namespace phpMyFAQ\Instance;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\User;

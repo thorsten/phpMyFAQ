@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\User;
-
 /**
  * Manages authentication process using PHP sessions.
  *
@@ -23,6 +21,8 @@ namespace phpMyFAQ\User;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-28
  */
+
+namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

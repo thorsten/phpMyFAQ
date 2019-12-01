@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Auth;
-
 /**
  * Manages user authentication with Apache's SSO authentication, e.g. mod_sspi
  * or mod_auth_kerb.
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Auth;
  * @link      https://www.phpmyfaq.de
  * @since     2011-06-22
  */
+
+namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\User;

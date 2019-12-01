@@ -21,7 +21,7 @@ use phpMyFAQ\Configuration;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\LanguageHelper;
-use phpMyFAQ\Permission\PermissionHelper;
+use phpMyFAQ\Helper\PermissionHelper;
 use phpMyFAQ\System;
 use phpMyFAQ\Utils;
 

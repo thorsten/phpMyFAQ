@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Language helper class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2019-11-24
  */
+
+namespace phpMyFAQ\Helper;
 
 use DirectoryIterator;
 

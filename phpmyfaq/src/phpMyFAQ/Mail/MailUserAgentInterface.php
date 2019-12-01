@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Mail;
-
 /**
  * MUA (Mail User Agent) interface.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Mail;
  * @since     2009-09-11
  */
 
-
+namespace phpMyFAQ\Mail;
 
 /**
  * Interface MailUserAgentInterface

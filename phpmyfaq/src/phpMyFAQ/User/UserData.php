@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\User;
-
 /**
  * The userdata class provides methods to manage user information.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\User;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-18
  */
+
+namespace phpMyFAQ\User;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

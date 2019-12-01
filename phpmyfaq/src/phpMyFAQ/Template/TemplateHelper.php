@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Template;
-
 /**
  * The template helper class provides methods for extended template parsing
  * like filters
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Template;
  * @link      https://www.phpmyfaq.de
  * @since     2018-08-17
  */
+
+namespace phpMyFAQ\Template;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Meta;

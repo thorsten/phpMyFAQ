@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Export;
-
 /**
  * PDF Export class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Export;
  * @link      https://www.phpmyfaq.de
  * @since     2009-10-07
  */
+
+namespace phpMyFAQ\Export;
 
 use Exception;
 use ParsedownExtra;

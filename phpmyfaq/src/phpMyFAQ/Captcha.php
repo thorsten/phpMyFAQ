@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The phpMyFAQ Captcha class.
  *
@@ -19,7 +17,7 @@ namespace phpMyFAQ;
  * @since     2006-02-04
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Captcha

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Entity;
-
 /**
  * Tags entity class.
  *
@@ -17,6 +15,7 @@ namespace phpMyFAQ\Entity;
  * @since     2014-08-15
  */
 
+namespace phpMyFAQ\Entity;
 
 /**
  * Class TagEntity

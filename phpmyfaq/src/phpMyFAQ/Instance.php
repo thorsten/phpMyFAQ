@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main phpMyFAQ instances class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2012-02-20
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Instance

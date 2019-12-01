@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Sitemap class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2007-03-30
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Database\Sqlite3;
 

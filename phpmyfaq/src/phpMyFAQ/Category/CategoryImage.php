@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Category;
-
 /**
  * The category image class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Category;
  * @link      https://www.phpmyfaq.de
  * @since     2016-09-08
  */
+
+namespace phpMyFAQ\Category;
 
 use phpMyFAQ\Configuration;
 

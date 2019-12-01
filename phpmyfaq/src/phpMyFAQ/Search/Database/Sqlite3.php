@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Search\Database;
-
 /**
  * phpMyFAQ SQlite based search classes.
  *
@@ -18,6 +16,8 @@ namespace phpMyFAQ\Search\Database;
  * @link  https://www.phpmyfaq.de
  * @since 2012-12-26
  */
+
+namespace phpMyFAQ\Search\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Search\SearchDatabase;

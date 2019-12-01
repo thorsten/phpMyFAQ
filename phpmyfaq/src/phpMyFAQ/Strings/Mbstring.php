@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Strings;
-
 /**
  * The string wrapper class using mbstring extension.
  *
@@ -17,18 +15,15 @@ namespace phpMyFAQ\Strings;
  * @since     2009-04-06
  */
 
+namespace phpMyFAQ\Strings;
+
 use phpMyFAQ\Language;
 use phpMyFAQ\Strings\StringsAbstract;
 
 /**
- * String_Mbstring.
+ * Class Mbstring
  *
- * @package   phpMyFAQ
- * @author    Anatoliy Belsky <ab@php.net>
- * @copyright 2009-2019 phpMyFAQ Team
- * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link      https://www.phpmyfaq.de
- * @since     2009-04-06
+ * @package phpMyFAQ\Strings
  */
 class Mbstring extends StringsAbstract
 {

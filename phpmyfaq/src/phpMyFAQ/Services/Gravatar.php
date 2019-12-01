@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Services;
-
 /**
  * Service class for Gravatar support.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Services;
  * @link      https://www.phpmyfaq.de
  * @since     2013-01-14
  */
+
+namespace phpMyFAQ\Services;
 
 /**
  * Class Gravatar

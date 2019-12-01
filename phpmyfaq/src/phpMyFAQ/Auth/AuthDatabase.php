@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Auth;
-
 /**
  * Manages user authentication with databases.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Auth;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-30
  */
+
+namespace phpMyFAQ\Auth;
 
 use phpMyFAQ\Auth;
 use phpMyFAQ\Configuration;

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Main helper class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-07
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Language\Plurals;

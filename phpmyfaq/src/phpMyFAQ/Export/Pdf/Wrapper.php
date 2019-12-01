@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Export\Pdf;
-
 /**
  * Main PDF class for phpMyFAQ which "just" extends the TCPDF library.
  *
@@ -19,11 +17,14 @@ namespace phpMyFAQ\Export\Pdf;
  * @since     2004-11-21
  */
 
+namespace phpMyFAQ\Export\Pdf;
+
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Date;
 use phpMyFAQ\Link;
 use phpMyFAQ\Strings;
 
+// phpcs:disable
 define('K_TCPDF_EXTERNAL_CONFIG', true);
 
 define('K_PATH_URL', '');
@@ -186,6 +187,7 @@ define('K_TITLE_MAGNIFICATION', 1.3);
 define('K_SMALL_RATIO', 2 / 3);
 
 require K_PATH_MAIN . '/tcpdf.php';
+// phpcs:enable
 
 /**
  * Class Wrapper
@@ -231,7 +233,7 @@ class Wrapper extends \TCPDF
      *
      * @var Configuration
      */
-    protected $_config = null;
+    protected $config = null;
     /**
      * Question.
      *
@@ -333,13 +335,13 @@ class Wrapper extends \TCPDF
      */
     public function setConfig(Configuration $config)
     {
-        $this->_config = $config;
+        $this->config = $config;
     }
 
     /**
      * The header of the PDF file.
      */
-    public function Header()
+    public function Header(): void // phpcs:ignore
     {
         // Set custom header and footer
         $this->setCustomHeader();
@@ -368,26 +370,27 @@ class Wrapper extends \TCPDF
      */
     public function setCustomHeader()
     {
-        $this->customHeader = html_entity_decode($this->_config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
+        $this->customHeader = html_entity_decode($this->config->get('main.customPdfHeader'), ENT_QUOTES, 'utf-8');
     }
 
     /**
      * The footer of the PDF file.
+     * @throws \Exception
      */
-    public function Footer()
+    public function Footer(): void // phpcs:ignore
     {
         global $PMF_LANG;
 
         // Set custom footer
         $this->setCustomFooter();
 
-        $date = new Date($this->_config);
+        $date = new Date($this->config);
 
         $footer = sprintf(
             '(c) %d %s <%s> | %s',
             date('Y'),
-            $this->_config->get('main.metaPublisher'),
-            $this->_config->get('main.administrationMail'),
+            $this->config->get('main.metaPublisher'),
+            $this->config->get('main.administrationMail'),
             $date->format(date('Y-m-d H:i'))
         );
 
@@ -424,8 +427,8 @@ class Wrapper extends \TCPDF
                 $baseUrl .= '&amp;id=' . $this->faq['id'];
                 $baseUrl .= '&amp;artlang=' . $this->faq['lang'];
             }
-            $url = $this->_config->getDefaultUrl() . $baseUrl;
-            $urlObj = new Link($url, $this->_config);
+            $url = $this->config->getDefaultUrl() . $baseUrl;
+            $urlObj = new Link($url, $this->config);
             $urlObj->itemTitle = $this->question;
             $_url = str_replace('&amp;', '&', $urlObj->toString());
             $this->Cell(0, 10, 'URL: ' . $_url, 0, 1, 'C', 0, $_url);
@@ -438,7 +441,7 @@ class Wrapper extends \TCPDF
      */
     public function setCustomFooter()
     {
-        $this->customFooter = $this->_config->get('main.customPdfFooter');
+        $this->customFooter = $this->config->get('main.customPdfFooter');
     }
 
     /**
@@ -452,7 +455,7 @@ class Wrapper extends \TCPDF
 
         // Title
         $this->SetFont($this->currentFont, 'B', 24);
-        $this->MultiCell(0, 0, $this->_config->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
+        $this->MultiCell(0, 0, $this->config->get('main.titleFAQ'), 0, 'C', 0, 1, '', '', true, 0);
         $this->Ln();
 
         // TOC
@@ -525,7 +528,7 @@ class Wrapper extends \TCPDF
      *
      * @return string
      */
-    public function Image(
+    public function Image(// phpcs:ignore
         $file,
         $x = '',
         $y = '',
@@ -545,7 +548,7 @@ class Wrapper extends \TCPDF
         $fitonpage = false,
         $alt = false,
         $altimgs = []
-    ) {
+    ): void {
         if (!strpos($file, 'data:image/png;base64,') === false) {
             $file = '@' . base64_decode(
                 chunk_split(str_replace(' ', '+', str_replace('data:image/png;base64,', '', $file)))

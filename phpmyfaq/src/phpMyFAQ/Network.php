@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The network class for IPv4 and IPv6 handling.
  *
@@ -19,6 +17,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2011-02-04
  */
+
+namespace phpMyFAQ;
 
 use InvalidArgumentException;
 

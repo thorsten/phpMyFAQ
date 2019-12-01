@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment\Filesystem;
-
 /**
  * File handler class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Attachment\Filesystem;
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+namespace phpMyFAQ\Attachment\Filesystem;
 
 use phpMyFAQ\Attachment\Filesystem\AbstractEntry;
 use phpMyFAQ\Attachment\Filesystem\File\FileException;

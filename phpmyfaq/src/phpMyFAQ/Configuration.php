@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main class for fetching the configuration, update and delete items. This
  * class is also a small Dependency Injection Container for phpMyFAQ.
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2006-01-04
  */
+
+namespace phpMyFAQ;
 
 use Elasticsearch\Client;
 use phpMyFAQ\Database\DatabaseDriver;

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * ext/filter wrapper class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2009-01-28
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Filter

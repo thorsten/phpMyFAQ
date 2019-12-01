@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Helper class for phpMyFAQ categories.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-07
  */
+
+namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 use phpMyFAQ\Link;
@@ -82,7 +82,8 @@ class CategoryHelper extends Helper
                     if (($level - $open) == -1) {
                         $output .= '</li>';
                     }
-                    $output .= "\n" . str_repeat("\t", $level + 2) . "</ul>\n" . str_repeat("\t", $level + 1) . "</li>\n";
+                    $output .= "\n" . str_repeat("\t", $level + 2) . "</ul>\n" .
+                        str_repeat("\t", $level + 1) . "</li>\n";
                 } elseif ($level == $open && $y != 0) {
                     $output .= "</li>\n";
                 }

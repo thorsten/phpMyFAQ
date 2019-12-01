@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * phpMyFAQ main exception class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2009-12-28
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Exception

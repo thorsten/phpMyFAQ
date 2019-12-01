@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Permission;
-
 /**
  * This class is a helper class for permission relevant methods.
  *
@@ -17,12 +15,12 @@ namespace phpMyFAQ\Permission;
  * @since     2018-07-18
  */
 
-
+namespace phpMyFAQ\Helper;
 
 /**
  * Class PermissionHelper
  *
- * @package phpMyFAQ\Permission
+ * @package phpMyFAQ\Helper
  */
 class PermissionHelper
 {

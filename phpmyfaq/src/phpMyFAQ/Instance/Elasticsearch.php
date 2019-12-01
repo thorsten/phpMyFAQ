@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance;
-
 /**
  * The phpMyFAQ instances basic Elasticsearch class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Instance;
  * @link      https://www.phpmyfaq.de
  * @since     2015-12-25
  */
+
+namespace phpMyFAQ\Instance;
 
 use Elasticsearch\Client;
 use phpMyFAQ\Configuration;

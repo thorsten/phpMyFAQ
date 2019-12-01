@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Permission;
-
 /**
  * The basic permission class provides user rights.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Permission;
  * @link      https://www.phpmyfaq.de
  * @since     2005-09-17
  */
+
+namespace phpMyFAQ\Permission;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Database;

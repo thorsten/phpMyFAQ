@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Provides methods for password encryption.
  *
@@ -18,7 +16,7 @@ namespace phpMyFAQ;
  * @since     2005-09-18
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Encryption

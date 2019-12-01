@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * This class manages user permissions and group memberships.
  *
@@ -29,8 +27,6 @@ namespace phpMyFAQ;
  * in the user's $perm variable. Permission methods are performed using the
  * variable (e.g. $user->perm->method() ).
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -43,6 +39,7 @@ namespace phpMyFAQ;
  * @since     2005-09-17
  */
 
+namespace phpMyFAQ;
 
 /**
  * Class Permission

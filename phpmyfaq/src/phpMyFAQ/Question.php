@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Question class.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @since     2019-11-22
  */
 
+namespace phpMyFAQ;
+
 use phpMyFAQ\Entity\QuestionEntity;
 
 /**
@@ -31,6 +31,10 @@ class Question
      */
     private $config;
 
+    /**
+     * Question constructor.
+     * @param Configuration $config
+     */
     public function __construct(Configuration $config)
     {
         $this->config = $config;
@@ -129,7 +133,7 @@ class Question
 
         if ($result = $this->config->getDb()->query($query)) {
             if ($row = $this->config->getDb()->fetchObject($result)) {
-                $question = array(
+                $question = [
                     'id' => $row->id,
                     'lang' => $row->lang,
                     'username' => $row->username,
@@ -138,7 +142,7 @@ class Question
                     'question' => $row->question,
                     'created' => $row->created,
                     'is_visible' => $row->is_visible,
-                );
+                ];
             }
         }
 

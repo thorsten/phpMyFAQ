@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Linkverifier Helper class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2012-09-03
  */
+
+namespace phpMyFAQ\Helper;
 
 use phpMyFAQ\Helper;
 

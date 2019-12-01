@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Manages user authentication.
  *
@@ -30,7 +28,7 @@ namespace phpMyFAQ;
  * @since     2005-09-30
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Auth

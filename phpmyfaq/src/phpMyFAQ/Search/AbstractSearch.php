@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Search;
-
 /**
  * Abstract class for phpMyFAQ search classes.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Search;
  * @link      https://www.phpmyfaq.de
  * @since     2010-06-06
  */
+
+namespace phpMyFAQ\Search;
 
 use phpMyFAQ\Configuration;
 

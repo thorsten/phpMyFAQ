@@ -1,11 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
-use Exception;
-use phpMyFAQ\Database;
-use phpMyFAQ\Utils;
-
 /**
  * The phpMyFAQ\Db_Sqlsrv class provides methods and functions for SQL Server Driver
  * for PHP from Microsoft for Microsoft SQL Server 2012 or later.
@@ -22,7 +16,11 @@ use phpMyFAQ\Utils;
  * @since     2009-02-18
  */
 
+namespace phpMyFAQ\Database;
 
+use Exception;
+use phpMyFAQ\Database;
+use phpMyFAQ\Utils;
 
 /**
  * Class Sqlsrv

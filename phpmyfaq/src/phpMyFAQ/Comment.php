@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The main Comment class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ;
  * @since     2006-07-23
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Comment

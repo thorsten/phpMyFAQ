@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Database;
-
 /**
  * The phpMyFAQ\Database\Mysqli class provides methods and functions for MySQL and
  * MariaDB databases.
@@ -17,6 +15,8 @@ namespace phpMyFAQ\Database;
  * @license   http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link      https://www.phpmyfaq.de
  */
+
+namespace phpMyFAQ\Database;
 
 use mysqli_result;
 use phpMyFAQ\Database;

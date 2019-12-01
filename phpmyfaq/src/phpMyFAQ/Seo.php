@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * All SEO relevant stuff.
  *
@@ -18,6 +16,7 @@ namespace phpMyFAQ;
  * @since     2014-08-31
  */
 
+namespace phpMyFAQ;
 
 /**
  * Class Seo

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Helper class for phpMyFAQ search.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2009-09-07
  */
+
+namespace phpMyFAQ\Helper;
 
 use Exception;
 use phpMyFAQ\Configuration;

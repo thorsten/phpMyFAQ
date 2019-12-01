@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Simple HTTP Streamer.
  *
@@ -27,6 +25,7 @@ namespace phpMyFAQ;
  * @since     2005-11-02
  */
 
+namespace phpMyFAQ;
 
 /**
  * Class HttpStreamer
@@ -40,35 +39,35 @@ class HttpStreamer
      *
      * @var string
      */
-    const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
+    public const HTTP_CONTENT_DISPOSITION_ATTACHMENT = 'attachment';
 
     /**
      * HTTP content disposition inline constant.
      *
      * @var string
      */
-    const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
+    public const HTTP_CONTENT_DISPOSITION_INLINE = 'inline';
 
     /**
      * Disposition attachment constant.
      *
      * @var string
      */
-    const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
+    public const EXPORT_DISPOSITION_ATTACHMENT = 'attachment';
 
     /**
      * Disposition inline constant.
      *
      * @var string
      */
-    const EXPORT_DISPOSITION_INLINE = 'inline';
+    public const EXPORT_DISPOSITION_INLINE = 'inline';
 
     /**
      * Enable buffer.
      *
      * @var bool
      */
-    const EXPORT_BUFFER_ENABLE = true;
+    private const EXPORT_BUFFER_ENABLE = true;
 
     /**
      * PMF export data type.

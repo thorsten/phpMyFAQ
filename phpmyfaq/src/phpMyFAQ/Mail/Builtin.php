@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Mail;
-
 /**
  * MUA (Mail User Agent) implementation using the PHP built-in mail() function.
  *
@@ -17,6 +15,7 @@ namespace phpMyFAQ\Mail;
  * @since     2009-09-11
  */
 
+namespace phpMyFAQ\Mail;
 
 /**
  * Class Builtin

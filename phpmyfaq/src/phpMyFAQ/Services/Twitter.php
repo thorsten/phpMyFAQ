@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Services;
-
 /**
  * Service class for Twitter support.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Services;
  * @link      https://www.phpmyfaq.de
  * @since     2010-09-05
  */
+
+namespace phpMyFAQ\Services;
 
 use Abraham\TwitterOAuth\TwitterOAuth;
 use phpMyFAQ\Strings;

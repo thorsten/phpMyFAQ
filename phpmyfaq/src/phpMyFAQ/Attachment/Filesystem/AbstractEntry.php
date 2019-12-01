@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment\Filesystem;
-
 /**
  * File handler class.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Attachment\Filesystem;
  * @since     2009-08-21
  */
 
-
+namespace phpMyFAQ\Attachment\Filesystem;
 
 /**
  * Class Entry

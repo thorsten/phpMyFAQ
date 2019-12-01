@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment;
-
 /**
  * Abstract attachment class.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Attachment;
  * @link      https://www.phpmyfaq.de
  * @since     2009-08-21
  */
+
+namespace phpMyFAQ\Attachment;
 
 use phpMyFAQ\Database;
 use phpMyFAQ\Database\DatabaseDriver;

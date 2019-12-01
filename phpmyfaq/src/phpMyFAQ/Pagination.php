@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Pagination handler class.
  *
@@ -18,6 +16,7 @@ namespace phpMyFAQ;
  * @since     2009-09-27
  */
 
+namespace phpMyFAQ;
 
 /**
  * Class Pagination

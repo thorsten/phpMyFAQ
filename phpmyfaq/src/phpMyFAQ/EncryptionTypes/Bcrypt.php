@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\EncryptionTypes;
-
 /**
  * Provides methods for password encryption using PHP 5.5+ password_hash().
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\EncryptionTypes;
  * @link      https://www.phpmyfaq.de
  * @since     2014-03-29
  */
+
+namespace phpMyFAQ\EncryptionTypes;
 
 use phpMyFAQ\Encryption;
 

@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Link management
  *
@@ -22,7 +20,7 @@ namespace phpMyFAQ;
  * @since     2005-11-02
  */
 
-
+namespace phpMyFAQ;
 
 /**
  * Class Link
@@ -34,71 +32,71 @@ class Link
     /**
      * class constants.
      */
-    const LINK_AMPERSAND = '&amp;';
-    const LINK_CATEGORY = 'category/';
-    const LINK_CONTENT = 'content/';
-    const LINK_EQUAL = '=';
-    const LINK_FRAGMENT_SEPARATOR = '#';
-    const LINK_HTML_MINUS = '-';
-    const LINK_HTML_UNDERSCORE = '_';
-    const LINK_HTML_SLASH = '/';
-    const LINK_HTML_TARGET_BLANK = '_blank';
-    const LINK_HTML_TARGET_PARENT = '_parent';
-    const LINK_HTML_TARGET_SELF = '_self';
-    const LINK_HTML_TARGET_TOP = '_top';
-    const LINK_NEWS = 'news/';
-    const LINK_SITEMAP = 'sitemap/';
-    const LINK_SLASH = '/';
-    const LINK_SEARCHPART_SEPARATOR = '?';
-    const LINK_TAGS = 'tags/';
+    private const LINK_AMPERSAND = '&amp;';
+    private const LINK_CATEGORY = 'category/';
+    private const LINK_CONTENT = 'content/';
+    private const LINK_EQUAL = '=';
+    private const LINK_FRAGMENT_SEPARATOR = '#';
+    private const LINK_HTML_MINUS = '-';
+    private const LINK_HTML_UNDERSCORE = '_';
+    private const LINK_HTML_SLASH = '/';
+    private const LINK_HTML_TARGET_BLANK = '_blank';
+    private const LINK_HTML_TARGET_PARENT = '_parent';
+    private const LINK_HTML_TARGET_SELF = '_self';
+    private const LINK_HTML_TARGET_TOP = '_top';
+    private const LINK_NEWS = 'news/';
+    private const LINK_SITEMAP = 'sitemap/';
+    private const LINK_SLASH = '/';
+    private const LINK_SEARCHPART_SEPARATOR = '?';
+    private const LINK_TAGS = 'tags/';
 
-    const LINK_INDEX_ADMIN = '/admin/index.php';
-    const LINK_INDEX_HOME = '/index.php';
+    private const LINK_INDEX_ADMIN = '/admin/index.php';
+    private const LINK_INDEX_HOME = '/index.php';
 
-    const LINK_GET_ACTION = 'action';
-    const LINK_GET_ARTLANG = 'artlang';
-    const LINK_GET_CATEGORY = 'cat';
-    const LINK_GET_HIGHLIGHT = 'highlight';
-    const LINK_GET_ID = 'id';
-    const LINK_GET_LANG = 'lang';
-    const LINK_GET_LETTER = 'letter';
-    const LINK_GET_NEWS_ID = 'newsid';
-    const LINK_GET_NEWS_LANG = 'newslang';
-    const LINK_GET_PAGE = 'seite';
-    const LINK_GET_SIDS = 'sid';
-    const LINK_GET_TAGGING_ID = 'tagging_id';
-    const LINK_GET_LANGS = 'langs';
+    private const LINK_GET_ACTION = 'action';
+    private const LINK_GET_ARTLANG = 'artlang';
+    private const LINK_GET_CATEGORY = 'cat';
+    private const LINK_GET_HIGHLIGHT = 'highlight';
+    private const LINK_GET_ID = 'id';
+    private const LINK_GET_LANG = 'lang';
+    private const LINK_GET_LETTER = 'letter';
+    private const LINK_GET_NEWS_ID = 'newsid';
+    private const LINK_GET_NEWS_LANG = 'newslang';
+    private const LINK_GET_PAGE = 'seite';
+    private const LINK_GET_SIDS = 'sid';
+    private const LINK_GET_TAGGING_ID = 'tagging_id';
+    private const LINK_GET_LANGS = 'langs';
 
-    const LINK_GET_ACTION_ADD = 'add';
-    const LINK_GET_ACTION_FAQ = 'faq';
-    const LINK_GET_ACTION_ASK = 'ask';
-    const LINK_GET_ACTION_CONTACT = 'contact';
-    const LINK_GET_ACTION_GLOSSARY = 'glossary';
-    const LINK_GET_ACTION_HELP = 'help';
-    const LINK_GET_ACTION_LOGIN = 'login';
-    const LINK_GET_ACTION_NEWS = 'news';
-    const LINK_GET_ACTION_OPEN = 'open-questions';
-    const LINK_GET_ACTION_PASSWORD = 'password';
-    const LINK_GET_ACTION_REGISTER = 'register';
-    const LINK_GET_ACTION_SEARCH = 'search';
-    const LINK_GET_ACTION_SITEMAP = 'sitemap';
-    const LINK_GET_ACTION_SHOW = 'show';
+    private const LINK_GET_ACTION_ADD = 'add';
+    private const LINK_GET_ACTION_FAQ = 'faq';
+    private const LINK_GET_ACTION_ASK = 'ask';
+    private const LINK_GET_ACTION_CONTACT = 'contact';
+    private const LINK_GET_ACTION_GLOSSARY = 'glossary';
+    private const LINK_GET_ACTION_HELP = 'help';
+    private const LINK_GET_ACTION_LOGIN = 'login';
+    private const LINK_GET_ACTION_NEWS = 'news';
+    private const LINK_GET_ACTION_OPEN = 'open-questions';
+    private const LINK_GET_ACTION_PASSWORD = 'password';
+    private const LINK_GET_ACTION_REGISTER = 'register';
+    private const LINK_GET_ACTION_SEARCH = 'search';
+    private const LINK_GET_ACTION_SITEMAP = 'sitemap';
+    private const LINK_GET_ACTION_SHOW = 'show';
 
-    const LINK_HTML_CATEGORY = 'category';
-    const LINK_HTML_EXTENSION = '.html';
-    const LINK_HTML_SITEMAP = 'sitemap';
+    private const LINK_HTML_CATEGORY = 'category';
+    private const LINK_HTML_EXTENSION = '.html';
+    private const LINK_HTML_SITEMAP = 'sitemap';
 
-    const LINK_HTML_ADDCONTENT = 'addcontent.html';
-    const LINK_HTML_ASK = 'ask.html';
-    const LINK_HTML_CONTACT = 'contact.html';
-    const LINK_HTML_GLOSSARY = 'glossary.html';
-    const LINK_HTML_HELP = 'help.html';
-    const LINK_HTML_LOGIN = 'login.html';
-    const LINK_HTML_OPEN = 'open-questions.html';
-    const LINK_HTML_PASSWORD = 'password.html';
-    const LINK_HTML_REGISTER = 'register.html';
-    const LINK_HTML_SEARCH = 'search.html';
-    const LINK_HTML_SHOWCAT = 'showcat.html';
+    private const LINK_HTML_ADDCONTENT = 'addcontent.html';
+    private const LINK_HTML_ASK = 'ask.html';
+    private const LINK_HTML_CONTACT = 'contact.html';
+    private const LINK_HTML_GLOSSARY = 'glossary.html';
+    private const LINK_HTML_HELP = 'help.html';
+    private const LINK_HTML_LOGIN = 'login.html';
+    private const LINK_HTML_OPEN = 'open-questions.html';
+    private const LINK_HTML_PASSWORD = 'password.html';
+    private const LINK_HTML_REGISTER = 'register.html';
+    private const LINK_HTML_SEARCH = 'search.html';
+    private const LINK_HTML_SHOWCAT = 'showcat.html';
 
     /**
      * URL.

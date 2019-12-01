@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Attachment;
-
 /**
  * Interface to create new attachment types.
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Attachment;
  * @since     2009-08-21
  */
 
-
+namespace phpMyFAQ\Attachment;
 
 /**
  * Interface AttachmentInterface

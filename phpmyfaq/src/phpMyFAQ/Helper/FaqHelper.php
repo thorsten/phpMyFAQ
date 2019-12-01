@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Helper;
-
 /**
  * Helper class for phpMyFAQ FAQs.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Helper;
  * @link      https://www.phpmyfaq.de
  * @since     2010-11-12
  */
+
+namespace phpMyFAQ\Helper;
 
 use Exception;
 use phpMyFAQ\Category;

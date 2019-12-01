@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * Utilities - Functions and Classes common to the whole phpMyFAQ architecture.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link  https://www.phpmyfaq.de
  * @since 2005-11-01
  */
+
+namespace phpMyFAQ;
 
 define('HTTP_PARAMS_GET_CATID', 'catid');
 define('HTTP_PARAMS_GET_CURRENTDAY', 'today');

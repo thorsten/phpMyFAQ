@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Entity;
-
 /**
  * The QuestionEntity class
  *
@@ -17,7 +15,7 @@ namespace phpMyFAQ\Entity;
  * @since     2019-11-22
  */
 
-
+namespace phpMyFAQ\Entity;
 
 /**
  * Class QuestionEntity

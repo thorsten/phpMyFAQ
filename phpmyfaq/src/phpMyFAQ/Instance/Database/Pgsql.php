@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Instance\Database;
-
 /**
  * The phpMyFAQ instances database class with CREATE TABLE statements for PostgreSQL.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Instance\Database;
  * @link      https://www.phpmyfaq.de
  * @since     2015-04-16
  */
+
+namespace phpMyFAQ\Instance\Database;
 
 use phpMyFAQ\Configuration;
 use phpMyFAQ\Instance\Database;

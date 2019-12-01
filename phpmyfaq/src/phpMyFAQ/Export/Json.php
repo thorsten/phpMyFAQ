@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ\Export;
-
 /**
  * JSON Export class for phpMyFAQ.
  *
@@ -16,6 +14,8 @@ namespace phpMyFAQ\Export;
  * @link      https://www.phpmyfaq.de
  * @since     2015-12-29
  */
+
+namespace phpMyFAQ\Export;
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Configuration;

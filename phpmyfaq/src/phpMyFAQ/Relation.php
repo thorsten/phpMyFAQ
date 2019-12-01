@@ -1,7 +1,5 @@
 <?php
 
-namespace phpMyFAQ;
-
 /**
  * The Relation class for dynamic related record linking.
  *
@@ -17,6 +15,8 @@ namespace phpMyFAQ;
  * @link      https://www.phpmyfaq.de
  * @since     2006-06-18
  */
+
+namespace phpMyFAQ;
 
 use phpMyFAQ\Search\SearchFactory;
 
