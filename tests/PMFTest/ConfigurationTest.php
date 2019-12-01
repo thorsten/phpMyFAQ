@@ -41,7 +41,7 @@ class ConfigurationTest extends TestCase
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -55,7 +55,7 @@ class ConfigurationTest extends TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown(): void
     {
         $this->pmfConfig = null;
         parent::tearDown();

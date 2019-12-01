@@ -565,7 +565,7 @@ class Installer
      */
     public function checkFilesystemPermissions()
     {
-        $instanceSetup = new Setup();
+        $instanceSetup = new setUp();
         $instanceSetup->setRootDir(PMF_ROOT_DIR);
 
         $dirs = ['/attachments', '/config', '/data', '/images'];
@@ -871,7 +871,7 @@ class Installer
 
         $rootDir = isset($setup['rootDir']) ? $setup['rootDir'] : PMF_ROOT_DIR;
 
-        $instanceSetup = new Setup();
+        $instanceSetup = new setUp();
         $instanceSetup->setRootDir($rootDir);
 
         // Write the DB variables in database.php

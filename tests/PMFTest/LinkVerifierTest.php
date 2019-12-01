@@ -23,31 +23,23 @@ use phpMyFAQ\Strings;
 use PHPUnit\Framework\TestCase;
 
 /**
- * LinkverifierTest
- *
- * @package phpMyFAQ
- * @package   PMF_Tests
- * @author Thorsten Rinne <thorsten@phpmyfaq.de>
- * @copyright 2012 phpMyFAQ Team
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @since 2012-03-29
+ * Class LinkVerifierTest
  */
-class LinkverifierTest extends TestCase
+class LinkVerifierTest extends TestCase
 {
-    /** @var phpMyFAQ\Db_Sqlite3  */
+    /** @var \phpMyFAQ\Database\Sqlite3  */
     private $dbHandle;
 
     /** @var  LinkVerifier */
     private $linkVerifier;
 
-    /** @var  PMF_Configuration */
+    /** @var  Configuration */
     private $config;
 
     /**
      * Prepares the environment before running a test.
      */
-    protected function setUp ()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -67,7 +59,7 @@ class LinkverifierTest extends TestCase
     /**
      * Cleans up the environment after running a test.
      */
-    protected function tearDown ()
+    protected function tearDown(): void
     {
         $this->linkVerifier = null;
         parent::tearDown();

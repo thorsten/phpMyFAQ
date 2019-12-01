@@ -1,4 +1,4 @@
-phpMyFAQ 3.0.0-beta.3
+phpMyFAQ 3.0.0-RC
 Codename "Phobos"
 
 CHANGELOG
@@ -7,7 +7,7 @@ This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.0-beta.3 - 2019-11-30
 - fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
-- changed PHP requirement to PHP 7.1+ (Thorsten)
+- changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
 - added experimental large permissions support with sections (Timo Wolf, Thorsten)

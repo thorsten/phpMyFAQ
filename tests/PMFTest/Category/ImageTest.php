@@ -38,7 +38,7 @@ class ImageTest extends TestCase
     /** @var PMF_Category_Image */
     private $instance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $dbHandle  = new Sqlite3();
         $dbHandle->connect(PMF_TEST_DIR.'/test.db', '', '');

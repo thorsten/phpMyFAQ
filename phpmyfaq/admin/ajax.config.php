@@ -76,7 +76,7 @@ switch ($ajaxAction) {
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
             $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
-            $clientSetup = new Setup();
+            $clientSetup = new setUp(): void;
             $clientSetup->setRootDir($clientDir);
 
             $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');

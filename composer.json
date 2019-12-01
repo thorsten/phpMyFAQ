@@ -29,7 +29,7 @@
         }
     ],
     "require": {
-        "php": ">=7.1.0",
+        "php": ">=7.2.0",
         "phpseclib/phpseclib": "~2.0",
         "swiftmailer/swiftmailer": "~5.0",
         "erusev/parsedown": "~1.0",
@@ -45,12 +45,12 @@
         "ext-gd": "*"
     },
     "require-dev": {
-        "phpunit/phpunit": "5.*",
+        "phpunit/phpunit": "8.*",
         "phpunit/dbunit": "1.3.*",
-        "doctrine/instantiator": "1.0.*",
+        "doctrine/instantiator": "1.*",
         "symfony/yaml": "3.*",
         "phpdocumentor/reflection-docblock": "3.*",
-        "phpunit/php-token-stream": "1.*",
+        "phpunit/php-token-stream": "*",
         "squizlabs/php_codesniffer": "*"
     },
     "suggest": {
@@ -64,8 +64,8 @@
     "minimum-stability": "stable",
     "scripts": {
         "test": "vendor/bin/phpunit",
-        "lint": "vendor/bin/phpcs  --standard=PSR2 ./phpmyfaq/src/phpMyFAQ",
-        "lint-fix": "vendor/bin/phpcbf  --standard=PSR2 ./phpmyfaq/src/phpMyFAQ",
+        "lint": "vendor/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
+        "lint-fix": "vendor/bin/phpcbf  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
         "post-install-cmd": [
             "scripts/reorgVendoredDeps.php"
         ],

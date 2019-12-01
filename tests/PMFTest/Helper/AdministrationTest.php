@@ -44,7 +44,7 @@ class AdministrationTest extends TestCase
      */
     protected $instance;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->instance = new AdministrationHelper();
     }

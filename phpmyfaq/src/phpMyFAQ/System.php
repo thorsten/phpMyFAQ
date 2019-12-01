@@ -49,7 +49,7 @@ class System
     /**
      * Pre-release version.
      */
-    const VERSION_PRE_RELEASE = 'beta.3';
+    const VERSION_PRE_RELEASE = 'RC';
 
     /**
      * API version.
@@ -59,7 +59,7 @@ class System
     /**
      * Minimum required PHP version.
      */
-    const VERSION_MINIMUM_PHP = '7.1.0';
+    const VERSION_MINIMUM_PHP = '7.2.0';
 
     /**
      * Array of required PHP extensions.

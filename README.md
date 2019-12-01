@@ -1,7 +1,7 @@
 # phpMyFAQ 3.0
 
 [![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/3.0.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
-[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.1-%23777BB4.svg?style=flat-square)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-%23777BB4.svg?style=flat-square)](https://php.net/)
 [![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com) 
 [![Greenkeeper badge](https://badges.greenkeeper.io/thorsten/phpMyFAQ.svg)](https://greenkeeper.io/)
 
@@ -9,7 +9,7 @@
 ## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
-various databases to store all data, PHP 7.1+ is needed in order to
+various databases to store all data, PHP 7.2+ is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, real time search support with
 Elasticsearch, flexible multi-user support with user and group based permissions 
