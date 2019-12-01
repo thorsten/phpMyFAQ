@@ -49,10 +49,12 @@
     "husky": "^3.1.0",
     "load-grunt-tasks": "^5.0.0",
     "node-sass": "^4.11.0",
-    "scsslint": "^0.0.3",
+    "prettier": "^1.19.1",
     "sigmund": "^1.0.1"
   },
-
+  "engines": {
+    "node": "^11.0"
+  },
   "husky": {
     "hooks": {
       "pre-commit": "composer lint && composer test",
