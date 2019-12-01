@@ -169,7 +169,7 @@ class Strings
      *
      * @return int
      */
-    public static function substr_count($haystack, $needle)
+    public static function substr_count($haystack, $needle) // phpcs:ignore
     {
         return self::$instance->substr_count($haystack, $needle);
     }
@@ -199,7 +199,7 @@ class Strings
      *
      * @return int
      */
-    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    public static function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return self::$instance->preg_match($pattern, $subject, $matches, $flags, $offset);
     }
@@ -215,7 +215,7 @@ class Strings
      *
      * @return int
      */
-    public static function preg_match_all($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    public static function preg_match_all($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return self::$instance->preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
@@ -230,7 +230,7 @@ class Strings
      *
      * @return array
      */
-    public static function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    public static function preg_split($pattern, $subject, $limit = -1, $flags = 0) // phpcs:ignore
     {
         return self::$instance->preg_split($pattern, $subject, $limit, $flags);
     }
@@ -246,7 +246,7 @@ class Strings
      *
      * @return array|string
      */
-    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
+    public static function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         return self::$instance->preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -262,7 +262,7 @@ class Strings
      *
      * @return array|string|null
      */
-    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
+    public static function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         return self::$instance->preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

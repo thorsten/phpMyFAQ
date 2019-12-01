@@ -32,17 +32,17 @@ class LinkVerifier
     /**
      * Defines number of times link verifier follows 302 response before failing.
      */
-    const LINKVERIFIER_MAX_REDIRECT_COUNT = 10;
+    private const LINKVERIFIER_MAX_REDIRECT_COUNT = 10;
 
     /**
      * Defines the number of seconds to wait for the remote server to respond.
      */
-    const LINKVERIFIER_CONNECT_TIMEOUT = 5;
+    private const LINKVERIFIER_CONNECT_TIMEOUT = 5;
 
     /**
      * Defines the number of seconds to wait for the remote server to send data.
      */
-    const LINKVERIFIER_RESPONSE_TIMEOUT = 10;
+    private const LINKVERIFIER_RESPONSE_TIMEOUT = 10;
 
     /**
      * List of protocol and urls.
@@ -155,7 +155,8 @@ class LinkVerifier
         // Check if feature is disabled.
         if ($this->isReady() === false) {
             return sprintf(
-                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
+                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i>' .
+                '<i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
                 $PMF_LANG['ad_linkcheck_feedback_url-disabled']
             );
         }
@@ -164,7 +165,8 @@ class LinkVerifier
         $src = $this->getEntryState($id, $faqLang, false);
         if ($src === false) {
             return sprintf(
-                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i><i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
+                '<span class="fa-stack" aria-hidden="true"><i class="fa fa-link fa-stack-1x"></i>' .
+                '<i class="fa fa-ban fa-stack-2x text-danger" title="%s"></i></span>',
                 $PMF_LANG['ad_linkcheck_feedback_url-disabled']
             );
         }
@@ -178,7 +180,8 @@ class LinkVerifier
         $divId = 'divurl_' . $faqLang . '_' . $id;
 
         $output = sprintf(
-            '<div id="%s" class="url-%s"><span id="%s"><a href="javascript:onDemandVerifyURL(%d,\'%s\');">%s</a></span></div>',
+            '<div id="%s" class="url-%s"><span id="%s"><a href="javascript:onDemandVerifyURL(%d,\'%s\');">%s</a>' .
+            '</span></div>',
             $divId,
             $src,
             $spanId,
@@ -263,7 +266,8 @@ class LinkVerifier
         if ($this->config->get('main.urlValidateInterval') != '') {
             $requestTime = $_SERVER['REQUEST_TIME'] - $this->config->get('main.urlValidateInterval');
         } else {
-            $requestTime = $_SERVER['REQUEST_TIME'] - 86400; // default in recheck links once a day unless explicitly requested.
+            // default in recheck links once a day unless explicitly requested.
+            $requestTime = $_SERVER['REQUEST_TIME'] - 86400;
         }
 
         return $requestTime;
@@ -324,7 +328,8 @@ class LinkVerifier
             $output .= '        <tr><td><strong>' . Strings::htmlspecialchars($type) . "</strong></td></tr>\n";
             foreach ($_value as $value) {
                 $_output = '            <td />';
-                $_output .= '            <td><a href="' . $value['absurl'] . '" target="_blank">' . Strings::htmlspecialchars($value['absurl']) . "</a></td>\n";
+                $_output .= '            <td><a href="' . $value['absurl'] . '" target="_blank">' .
+                    Strings::htmlspecialchars($value['absurl']) . "</a></td>\n";
                 $_output .= '            <td>';
                 if (isset($value['redirects']) && ($value['redirects'] > 0)) {
                     $_redirects = '(' . $value['redirects'] . ')';
@@ -333,7 +338,8 @@ class LinkVerifier
                 }
                 if ($value['valid'] === true) {
                     $_classname = 'urlsuccess';
-                    $_output .= '<td class="' . $_classname . '">' . $PMF_LANG['ad_linkcheck_checkSuccess'] . $_redirects . '</td>';
+                    $_output .= '<td class="' . $_classname . '">' . $PMF_LANG['ad_linkcheck_checkSuccess'] .
+                        $_redirects . '</td>';
                     if ($value['reason'] != '') {
                         $inforeasons[] = sprintf(
                             $PMF_LANG['ad_linkcheck_openurl_infoprefix'],

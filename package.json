@@ -55,8 +55,8 @@
 
   "husky": {
     "hooks": {
-      "pre-commit": "composer test",
-      "pre-push": "composer test"
+      "pre-commit": "composer lint && composer test",
+      "pre-push": "composer lint && composer test"
     }
   }
 }

@@ -26,7 +26,8 @@ use phpMyFAQ\Configuration;
  */
 class CategoryImage
 {
-    const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
+    /** @var string */
+    private const UPLOAD_DIR = PMF_ROOT_DIR . '/images/';
 
     /**
      * @var Configuration

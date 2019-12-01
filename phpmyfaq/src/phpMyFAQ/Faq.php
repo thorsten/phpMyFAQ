@@ -599,7 +599,8 @@ class Faq
         if ($page == 1) {
             $first = 0;
         } else {
-            $first = ($page * $this->config->get('records.numberOfRecordsPerPage')) - $this->config->get('records.numberOfRecordsPerPage');
+            $first = ($page * $this->config->get('records.numberOfRecordsPerPage')) -
+                $this->config->get('records.numberOfRecordsPerPage');
         }
 
         if ($num > 0) {
@@ -616,7 +617,10 @@ class Faq
             $displayedCounter = 0;
 
             $lastFaqId = 0;
-            while (($row = $this->config->getDb()->fetchObject($result)) && $displayedCounter < $this->config->get('records.numberOfRecordsPerPage')) {
+            while (
+                ($row = $this->config->getDb()->fetchObject($result)) &&
+                $displayedCounter < $this->config->get('records.numberOfRecordsPerPage')
+            ) {
                 ++$counter;
                 if ($counter <= $first) {
                     continue;
@@ -930,11 +934,8 @@ class Faq
 
         // Add new entry
         $query = sprintf(
-            "
-            INSERT INTO
-                %sfaqdata
-            VALUES
-                (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
+            "INSERT INTO %sfaqdata VALUES
+            (%d, '%s', %d, %d, '%s', %d, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', %d, '%s', '%s', '%s', '%s')",
             Database::getTablePrefix(),
             $recordId,
             $data['lang'],
@@ -1518,7 +1519,9 @@ class Faq
         }
 
         // prevents multiple display of FAQ in case it is tagged under multiple groups.
-        $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
+        $groupBy = ' group by fd.id, fcr.category_id,fd.solution_id,fd.revision_id,fd.active,fd.sticky,fd.keywords,' .
+            'fd.thema,fd.content,fd.author,fd.email,fd.comment,fd.updated,fd.links_state,fd.links_check_date,' .
+            'fd.date_start,fd.date_end,fd.sticky,fd.created,fd.notes,fd.lang ';
         $query = sprintf(
             '
             SELECT
@@ -2712,7 +2715,9 @@ class Faq
                 );
                 $output .= sprintf(
                     '<td><strong>%s:</strong><br>%s</td>',
-                    isset($category->categoryName[$row->category_id]['name']) ? $category->categoryName[$row->category_id]['name'] : '',
+                    isset($category->categoryName[$row->category_id]['name']) ?
+                        $category->categoryName[$row->category_id]['name'] :
+                        '',
                     strip_tags($row->question)
                 );
                 if ($this->config->get('records.enableCloseQuestion') && $row->answer_id) {

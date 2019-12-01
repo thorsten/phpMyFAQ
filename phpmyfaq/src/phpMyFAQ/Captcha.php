@@ -128,7 +128,7 @@ class Captcha
      *
      * @var array
      */
-    private $_backgroundColor;
+    private $backgroundColor;
 
     /**
      * Generated image.
@@ -194,19 +194,16 @@ class Captcha
      */
     public function renderCaptchaImage(string $action): string
     {
-        $output = sprintf(
-            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s" title="%s">',
+        return sprintf(
+            '<img id="captchaImage" src="%s?%saction=%s&amp;gen=img&amp;ck=%s" height="%d" width="%d" alt="%s" >',
             $_SERVER['SCRIPT_NAME'],
             $this->sids,
             $action,
             $_SERVER['REQUEST_TIME'],
             $this->height,
             $this->width,
-            'Chuck Norris has counted to infinity. Twice.',
-            'click to refresh'
+            'Chuck Norris has counted to infinity. Twice.'
         );
-
-        return $output;
     }
 
     /**
@@ -236,15 +233,15 @@ class Captcha
     private function createBackground()
     {
         $this->img = imagecreate($this->width, $this->height);
-        $this->_backgroundColor['r'] = rand(220, 255);
-        $this->_backgroundColor['g'] = rand(220, 255);
-        $this->_backgroundColor['b'] = rand(220, 255);
+        $this->backgroundColor['r'] = rand(220, 255);
+        $this->backgroundColor['g'] = rand(220, 255);
+        $this->backgroundColor['b'] = rand(220, 255);
 
         $colorAllocate = imagecolorallocate(
             $this->img,
-            $this->_backgroundColor['r'],
-            $this->_backgroundColor['g'],
-            $this->_backgroundColor['b']
+            $this->backgroundColor['r'],
+            $this->backgroundColor['g'],
+            $this->backgroundColor['b']
         );
 
         imagefilledrectangle($this->img, 0, 0, $this->width, $this->height, $colorAllocate);
@@ -442,23 +439,23 @@ class Captcha
             $c2 = []; // back char color
             do {
                 $c1['r'] = mt_rand(30, 199);
-            } while ($c1['r'] == $this->_backgroundColor['r']);
+            } while ($c1['r'] == $this->backgroundColor['r']);
             do {
                 $c1['g'] = mt_rand(30, 199);
-            } while ($c1['g'] == $this->_backgroundColor['g']);
+            } while ($c1['g'] == $this->backgroundColor['g']);
             do {
                 $c1['b'] = mt_rand(30, 199);
-            } while ($c1['b'] == $this->_backgroundColor['b']);
+            } while ($c1['b'] == $this->backgroundColor['b']);
             $c1 = imagecolorallocate($this->img, $c1['r'], $c1['g'], $c1['b']);
             do {
                 $c2['r'] = ($c1['r'] < 100 ? $c1['r'] * 2 : mt_rand(30, 199));
-            } while (($c2['r'] == $this->_backgroundColor['r']) && ($c2['r'] == $c1['r']));
+            } while (($c2['r'] == $this->backgroundColor['r']) && ($c2['r'] == $c1['r']));
             do {
                 $c2['g'] = ($c1['g'] < 100 ? $c1['g'] * 2 : mt_rand(30, 199));
-            } while (($c2['g'] == $this->_backgroundColor['g']) && ($c2['g'] == $c1['g']));
+            } while (($c2['g'] == $this->backgroundColor['g']) && ($c2['g'] == $c1['g']));
             do {
                 $c2['b'] = ($c1['b'] < 100 ? $c1['b'] * 2 : mt_rand(30, 199));
-            } while (($c2['b'] == $this->_backgroundColor['b']) && ($c2['b'] == $c1['b']));
+            } while (($c2['b'] == $this->backgroundColor['b']) && ($c2['b'] == $c1['b']));
             $c2 = imagecolorallocate($this->img, $c2['r'], $c2['g'], $c2['b']);
             // Add the letter
             if (function_exists('imagettftext') && (count($this->fonts) > 0)) {

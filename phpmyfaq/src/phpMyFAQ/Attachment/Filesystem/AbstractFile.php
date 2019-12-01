@@ -37,9 +37,9 @@ abstract class AbstractFile extends AbstractEntry
     /**
      * Enums.
      */
-    const MODE_READ = 'rb';
-    const MODE_APPEND = 'ab';
-    const MODE_WRITE = 'wb';
+    protected const MODE_READ = 'rb';
+    protected const MODE_APPEND = 'ab';
+    protected const MODE_WRITE = 'wb';
 
     /**
      * Filemode.

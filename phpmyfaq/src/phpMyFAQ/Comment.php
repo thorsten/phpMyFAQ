@@ -29,14 +29,14 @@ class Comment
      *
      * @const string
      */
-    const COMMENT_TYPE_FAQ = 'faq';
+    public const COMMENT_TYPE_FAQ = 'faq';
 
     /**
      * News type.
      *
      * @const string
      */
-    const COMMENT_TYPE_NEWS = 'news';
+    public const COMMENT_TYPE_NEWS = 'news';
 
     /**
      * @var Configuration

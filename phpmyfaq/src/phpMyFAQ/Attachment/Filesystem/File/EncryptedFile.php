@@ -20,7 +20,9 @@ namespace phpMyFAQ\Attachment\Filesystem\File;
 use phpMyFAQ\Attachment\File;
 use phpseclib\Crypt\AES;
 
+// phpcs:disable
 require PMF_ROOT_DIR . '/src/libs/phpseclib/Crypt/AES.php';
+// phpcs:enable
 
 /**
  * Class Encrypted
@@ -34,7 +36,7 @@ class EncryptedFile extends File
      *
      * @var string
      */
-    const CHUNKDELIMITER = 'ฒૐᥤ';
+    private const CHUNKDELIMITER = 'ฒૐᥤ';
 
     /**
      * AES instance.

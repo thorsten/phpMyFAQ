@@ -38,9 +38,9 @@ namespace phpMyFAQ;
 class Auth
 {
     /**
- * @var string
-*/
-    const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
+     * @var string
+     */
+    private const PMF_ERROR_USER_NO_AUTHTYPE = 'Specified authentication access class could not be found.';
 
     /**
      * public array that contains error messages.

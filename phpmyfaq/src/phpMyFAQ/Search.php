@@ -32,7 +32,7 @@ class Search
     /**
      * @var Configuration
      */
-    private $_config;
+    private $config;
 
     /**
      * Entity ID.
@@ -53,7 +53,7 @@ class Search
      *
      * @var string
      */
-    private $_table = null;
+    private $table = null;
 
     /**
      * Constructor.
@@ -62,8 +62,8 @@ class Search
      */
     public function __construct(Configuration $config)
     {
-        $this->_config = $config;
-        $this->_table = Database::getTablePrefix() . 'faqsearches';
+        $this->config = $config;
+        $this->table = Database::getTablePrefix() . 'faqsearches';
     }
 
     /**
@@ -95,7 +95,7 @@ class Search
      */
     public function search($searchTerm, $allLanguages = true)
     {
-        if ($this->_config->get('search.enableElasticsearch')) {
+        if ($this->config->get('search.enableElasticsearch')) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         } else {
             return $this->searchDatabase($searchTerm, $allLanguages);
@@ -110,12 +110,12 @@ class Search
      */
     public function autoComplete($searchTerm)
     {
-        if ($this->_config->get('search.enableElasticsearch')) {
-            $esSearch = new Elasticsearch($this->_config);
+        if ($this->config->get('search.enableElasticsearch')) {
+            $esSearch = new Elasticsearch($this->config);
             $allCategories = $this->getCategory()->getAllCategoryIds();
 
             $esSearch->setCategoryIds($allCategories);
-            $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
+            $esSearch->setLanguage($this->config->getLanguage()->getLanguage());
 
             return $esSearch->autoComplete($searchTerm);
         } else {
@@ -135,7 +135,7 @@ class Search
         $fdTable = Database::getTablePrefix() . 'faqdata AS fd';
         $fcrTable = Database::getTablePrefix() . 'faqcategoryrelations';
         $condition = ['fd.active' => "'yes'"];
-        $search = SearchFactory::create($this->_config, ['database' => Database::getType()]);
+        $search = SearchFactory::create($this->config, ['database' => Database::getType()]);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
@@ -152,7 +152,7 @@ class Search
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
-            $selectedLanguage = array('fd.lang' => "'" . $this->_config->getLanguage()->getLanguage() . "'");
+            $selectedLanguage = array('fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'");
             $condition        = array_merge($selectedLanguage, $condition);
         }
 
@@ -183,10 +183,10 @@ class Search
 
         $result = $search->search($searchTerm);
 
-        if (!$this->_config->getDb()->numRows($result)) {
+        if (!$this->config->getDb()->numRows($result)) {
             return [];
         } else {
-            return $this->_config->getDb()->fetchAll($result);
+            return $this->config->getDb()->fetchAll($result);
         }
     }
 
@@ -201,7 +201,7 @@ class Search
      */
     public function searchElasticsearch($searchTerm, $allLanguages = true)
     {
-        $esSearch = new Elasticsearch($this->_config);
+        $esSearch = new Elasticsearch($this->config);
 
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
@@ -214,7 +214,7 @@ class Search
         }
 
         if (!$allLanguages) {
-            $esSearch->setLanguage($this->_config->getLanguage()->getLanguage());
+            $esSearch->setLanguage($this->config->getLanguage()->getLanguage());
         }
 
         $result = $esSearch->search($searchTerm);
@@ -242,14 +242,14 @@ class Search
             (id, lang, searchterm, searchdate)
                 VALUES
             (%d, '%s', '%s', '%s')",
-            $this->_table,
-            $this->_config->getDb()->nextId($this->_table, 'id'),
-            $this->_config->getLanguage()->getLanguage(),
-            $this->_config->getDb()->escape($searchTerm),
+            $this->table,
+            $this->config->getDb()->nextId($this->table, 'id'),
+            $this->config->getLanguage()->getLanguage(),
+            $this->config->getDb()->escape($searchTerm),
             $date->format('Y-m-d H:i:s')
         );
 
-        $this->_config->getDb()->query($query);
+        $this->config->getDb()->query($query);
     }
 
     /**
@@ -267,11 +267,11 @@ class Search
                 %s
             WHERE
                 searchterm = '%s'",
-            $this->_table,
+            $this->table,
             $searchTerm
         );
 
-        return $this->_config->getDb()->query($query);
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -281,9 +281,9 @@ class Search
      */
     public function deleteAllSearchTerms(): bool
     {
-        $query = sprintf('DELETE FROM %s', $this->_table);
+        $query = sprintf('DELETE FROM %s', $this->table);
 
-        return $this->_config->getDb()->query($query);
+        return $this->config->getDb()->query($query);
     }
 
     /**
@@ -311,15 +311,15 @@ class Search
                 number
             DESC',
             $byLang,
-            $this->_table,
+            $this->table,
             $byLang
         );
 
-        $result = $this->_config->getDb()->query($query);
+        $result = $this->config->getDb()->query($query);
 
         if (false !== $result) {
             $i = 0;
-            while ($row = $this->_config->getDb()->fetchObject($result)) {
+            while ($row = $this->config->getDb()->fetchObject($result)) {
                 if ($i < $numResults) {
                     $searchResult[] = (array)$row;
                 }
@@ -339,12 +339,12 @@ class Search
     {
         $sql = sprintf(
             'SELECT COUNT(1) AS count FROM %s',
-            $this->_table
+            $this->table
         );
 
-        $result = $this->_config->getDb()->query($sql);
+        $result = $this->config->getDb()->query($sql);
 
-        return (int)$this->_config->getDb()->fetchObject($result)->count;
+        return (int)$this->config->getDb()->fetchObject($result)->count;
     }
 
     /**

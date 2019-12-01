@@ -28,9 +28,9 @@ class Encryption
     /**
      * Error constant.
      *
-     * @const
+     * @var string
      */
-    const PMF_ERROR_USER_NO_ENCTYPE = 'EncryptionTypes method could not be found.';
+    private const PMF_ERROR_USER_NO_ENCTYPE = 'EncryptionTypes method could not be found.';
 
     /**
      * Public array that contains error messages.

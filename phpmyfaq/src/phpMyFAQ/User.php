@@ -55,13 +55,15 @@ class User
     public const ERROR_USER_INVALID_STATUS = 'Undefined user status.';
     public const ERROR_USER_LOGINNAME_TOO_SHORT = 'The chosen loginname is too short.';
     public const ERROR_USER_LOGIN_NOT_UNIQUE = 'Specified login name already exists. ';
-    public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
+    public const ERROR_USER_LOGIN_INVALID = 'The chosen login is invalid. A valid login has at least four ' .
+    'characters. Only letters, numbers and underscore _ are allowed. The first letter must be a letter. ';
     public const ERROR_USER_NO_PERM = 'No permission container specified.';
     public const ERROR_USER_NO_USERID = 'No user-ID found. ';
     public const ERROR_USER_NO_USERLOGINDATA = 'No user login data found. ';
     public const ERROR_USER_NOT_FOUND = 'User account could not be found. ';
     public const ERROR_USER_NO_AUTH_WRITABLE = 'No authentication object is writable.';
-    public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are temporarily blocked. Please try again later.';
+    public const ERROR_USER_TOO_MANY_FAILED_LOGINS = 'You exceeded the maximum amounts of login attempts and are ' .
+    'temporarily blocked. Please try again later.';
 
     public const STATUS_USER_PROTECTED = 'User account is protected. ';
     public const STATUS_USER_BLOCKED = 'User account is blocked. ';
@@ -689,7 +691,10 @@ class User
             return false;
         }
 
-        if (isset($this->allowedStatus[$this->status]) && $this->allowedStatus[$this->status] == self::STATUS_USER_PROTECTED) {
+        if (
+            isset($this->allowedStatus[$this->status]) &&
+            $this->allowedStatus[$this->status] == self::STATUS_USER_PROTECTED
+        ) {
             $this->errors[] = self::ERROR_USER_CANNOT_DELETE_USER . self::STATUS_USER_PROTECTED;
 
             return false;

@@ -146,7 +146,7 @@ class Mbstring extends StringsAbstract
      *
      * @return int
      */
-    public function substr_count($haystack, $needle)
+    public function substr_count($haystack, $needle) // phpcs:ignore
     {
         return mb_substr_count($haystack, $needle, $this->encoding);
     }
@@ -162,7 +162,7 @@ class Mbstring extends StringsAbstract
      *
      * @return int
      */
-    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return preg_match(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
@@ -178,7 +178,7 @@ class Mbstring extends StringsAbstract
      *
      * @return int
      */
-    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return preg_match_all(self::appendU($pattern), $subject, $matches, $flags, $offset);
     }
@@ -193,7 +193,7 @@ class Mbstring extends StringsAbstract
      *
      * @return array
      */
-    public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    public function preg_split($pattern, $subject, $limit = -1, $flags = 0) // phpcs:ignore
     {
         return preg_split(self::appendU($pattern), $subject, $limit, $flags);
     }
@@ -209,7 +209,7 @@ class Mbstring extends StringsAbstract
      *
      * @return array|string
      */
-    public function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
+    public function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {
@@ -233,7 +233,7 @@ class Mbstring extends StringsAbstract
      *
      * @return array|string|null
      */
-    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
+    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         if (is_array($pattern)) {
             foreach ($pattern as &$p) {

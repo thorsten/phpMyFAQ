@@ -34,32 +34,32 @@ class System
     /**
      * Major version.
      */
-    const VERSION_MAJOR = 3;
+    private const VERSION_MAJOR = 3;
 
     /**
      * Minor version.
      */
-    const VERSION_MINOR = 0;
+    private const VERSION_MINOR = 0;
 
     /**
      * Patch level.
      */
-    const VERSION_PATCH_LEVEL = 0;
+    private const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    const VERSION_PRE_RELEASE = 'RC';
+    private const VERSION_PRE_RELEASE = 'RC';
 
     /**
      * API version.
      */
-    const VERSION_API = '2.0';
+    private const VERSION_API = '2.0';
 
     /**
      * Minimum required PHP version.
      */
-    const VERSION_MINIMUM_PHP = '7.2.0';
+    public const VERSION_MINIMUM_PHP = '7.2.0';
 
     /**
      * Array of required PHP extensions.
@@ -398,7 +398,8 @@ class System
             );
         }
         printf(
-            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer></body></html>',
+            '</div></section></main><footer class="setup-footer container"><p class="text-right">%s</p></footer>' .
+            '</body></html>',
             COPYRIGHT
         );
         exit(-1);

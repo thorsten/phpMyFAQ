@@ -315,7 +315,8 @@ class Mail
         if (count($target) > 2) {
             $keys = array_keys($target);
             trigger_error(
-                "<strong>Mail Class</strong>: a valid e-mail address, $keys[0], has been already added as '$targetAlias'!",
+                "<strong>Mail Class</strong>: a valid e-mail address, $keys[0], " .
+                "has been already added as '$targetAlias'!",
                 E_USER_ERROR
             );
 

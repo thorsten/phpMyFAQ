@@ -67,8 +67,6 @@ class Plurals
             $this->useDefaultPluralForm = false;
         } else {
             //  @todo update $this->PMF_TRANSL with English plural messages for fall-back
-            //  @todo display warning!?
-            //echo "function plural_".$this->PMF_TRANSL['metaLanguage']." was not found for language ".$this->PMF_TRANSL['language'])
             $this->useDefaultPluralForm = true;
         }
     }
@@ -87,7 +85,8 @@ class Plurals
             // Note: expressions in .po files are not strict C expressions, so extra braces might be
             // needed for that expression to work here (for example see 'lt')
             case 'ar':
-                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 : (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5))));
+                return ($n == 0) ? 0 : ($n == 1 ? 1 : ($n == 2 ? 2 : (($n % 100 >= 3 && $n % 100 <= 10) ? 3 :
+                    (($n % 100 >= 11 && $n % 100 <= 99) || ($n % 100 == 1) || ($n % 100 == 2) ? 4 : 5))));
             case 'bn':
             case 'he':
             case 'hi':
@@ -123,7 +122,8 @@ class Plurals
             case 'pt-br':
                 return $n > 1;
             case 'lt':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && ($n % 100 < 10 || $n % 100 >= 20) ?
+                    1 : 2);
             case 'lv':
                 return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n != 0 ? 1 : 2);
             case 'pl':
@@ -133,7 +133,8 @@ class Plurals
             case 'ru':
             case 'sr':
             case 'uk':
-                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 && ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
+                return ($n % 10 == 1 && $n % 100 != 11) ? 0 : ($n % 10 >= 2 && $n % 10 <= 4 &&
+                ($n % 100 < 10 || $n % 100 >= 20) ? 1 : 2);
             case 'sl':
                 return ($n % 100 == 1) ? 0 : ($n % 100 == 2 ? 1 : ($n % 100 == 3 || $n % 100 == 4 ? 2 : 3));
             default:
@@ -167,7 +168,7 @@ class Plurals
      */
     public function getMsgTemplate($msgID, $n)
     {
-        $plural = $this->_getPlural($n);
+        $plural = $this->getPlural($n);
         if (isset($this->PMF_TRANSL[$msgID][$plural])) {
             return $this->PMF_TRANSL[$msgID][$plural];
         } else {
@@ -185,7 +186,7 @@ class Plurals
      *
      * @return int
      */
-    private function _getPlural($n)
+    private function getPlural($n)
     {
         if ($this->useDefaultPluralForm) {
             // this means we have to fallback to English, so return correct English plural form

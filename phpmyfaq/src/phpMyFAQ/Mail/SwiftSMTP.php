@@ -15,7 +15,9 @@
 
 namespace phpMyFAQ\Mail;
 
+// phpcs:disable
 require __DIR__ . '/../../libs/swiftmailer/swiftmailer/lib/swift_required.php';
+// phpcs:enable
 
 use Swift_Mailer;
 use Swift_Message;

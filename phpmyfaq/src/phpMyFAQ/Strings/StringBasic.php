@@ -31,7 +31,7 @@ class StringBasic extends StringsAbstract
      *
      * @var string
      */
-    const DEFAULT_ENCODING = 'utf-8';
+    public const DEFAULT_ENCODING = 'utf-8';
     /**
      * Instance.
      *
@@ -153,7 +153,7 @@ class StringBasic extends StringsAbstract
      *
      * @return int
      */
-    public function substr_count($haystack, $needle)
+    public function substr_count($haystack, $needle) // phpcs:ignore
     {
         return substr_count($haystack, $needle);
     }
@@ -167,7 +167,7 @@ class StringBasic extends StringsAbstract
      *
      * @return int
      */
-    public function strrpos($haystack, $needle, $offset = 0)
+    public function strrpos($haystack, $needle, $offset = 0) // phpcs:ignore
     {
         return strrpos($haystack, $needle, $offset);
     }
@@ -183,7 +183,7 @@ class StringBasic extends StringsAbstract
      *
      * @return int
      */
-    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0)
+    public function preg_match($pattern, $subject, &$matches = null, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return preg_match($pattern, $subject, $matches, $flags, $offset);
     }
@@ -199,7 +199,7 @@ class StringBasic extends StringsAbstract
      *
      * @return int
      */
-    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0)
+    public function preg_match_all($pattern, $subject, &$matches, $flags = 0, $offset = 0) // phpcs:ignore
     {
         return preg_match_all($pattern, $subject, $matches, $flags, $offset);
     }
@@ -214,7 +214,7 @@ class StringBasic extends StringsAbstract
      *
      * @return array
      */
-    public function preg_split($pattern, $subject, $limit = -1, $flags = 0)
+    public function preg_split($pattern, $subject, $limit = -1, $flags = 0) // phpcs:ignore
     {
         return preg_split($pattern, $subject, $limit, $flags);
     }
@@ -230,7 +230,7 @@ class StringBasic extends StringsAbstract
      *
      * @return array|string
      */
-    public function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0)
+    public function preg_replace_callback($pattern, $callback, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         return preg_replace_callback($pattern, $callback, $subject, $limit, $count);
     }
@@ -246,7 +246,7 @@ class StringBasic extends StringsAbstract
      *
      * @return array|string|null
      */
-    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0)
+    public function preg_replace($pattern, $replacement, $subject, $limit = -1, &$count = 0) // phpcs:ignore
     {
         return preg_replace($pattern, $replacement, $subject, $limit, $count);
     }

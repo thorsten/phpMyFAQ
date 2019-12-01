@@ -32,7 +32,7 @@ class VanillaFile extends AbstractFile
      *
      * @var int
      */
-    const CHUNKSIZE = 512;
+    private const CHUNKSIZE = 512;
 
     /**
      * @inheritdoc

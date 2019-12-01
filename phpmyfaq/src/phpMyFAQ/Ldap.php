@@ -44,7 +44,7 @@ class Ldap
     /**
      * @var array
      */
-    private $_ldapConfig = [];
+    private $ldapConfig = [];
 
     /**
      * @var array
@@ -73,7 +73,7 @@ class Ldap
     public function __construct(Configuration $config)
     {
         $this->config = $config;
-        $this->_ldapConfig = $this->config->getLdapConfig();
+        $this->ldapConfig = $this->config->getLdapConfig();
     }
 
     /**
@@ -199,7 +199,7 @@ class Ldap
             return false;
         }
 
-        if (!array_key_exists($data, $this->_ldapConfig['ldap_mapping'])) {
+        if (!array_key_exists($data, $this->ldapConfig['ldap_mapping'])) {
             $this->error = sprintf(
                 'The requested datafield "%s" does not exist in LDAP mapping configuration.',
                 $data
@@ -222,7 +222,7 @@ class Ldap
             );
         }
 
-        $fields = array($this->_ldapConfig['ldap_mapping'][$data]);
+        $fields = array($this->ldapConfig['ldap_mapping'][$data]);
         $sr = ldap_search($this->ds, $this->base, $filter, $fields);
 
         if (false === $sr) {

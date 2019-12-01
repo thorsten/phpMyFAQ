@@ -29,14 +29,14 @@ abstract class StringsAbstract
      *
      * @var string
      */
-    const DEFAULT_ENCODING = 'utf-8';
+    public const DEFAULT_ENCODING = 'utf-8';
 
     /**
      * Default language.
      *
      * @var string
      */
-    const DEFAULT_LANGUAGE = 'en';
+    public const DEFAULT_LANGUAGE = 'en';
 
     /**
      * Encoding.

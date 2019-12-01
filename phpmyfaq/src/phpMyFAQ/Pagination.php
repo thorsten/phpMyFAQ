@@ -28,9 +28,9 @@ class Pagination
     /**
      * Template vars.
      */
-    const TPL_VAR_LINK_URL = '{LINK_URL}';
-    const TPL_VAR_LINK_TEXT = '{LINK_TEXT}';
-    const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
+    private const TPL_VAR_LINK_URL = '{LINK_URL}';
+    private const TPL_VAR_LINK_TEXT = '{LINK_TEXT}';
+    private const TPL_VAR_LAYOUT_CONTENT = '{LAYOUT_CONTENT}';
 
     /**
      * Base url used for links.
