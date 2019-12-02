@@ -1,6 +1,6 @@
-version: "2.3"
+version: '2.3'
 
-# Use this file for dev
+# Use this file for development
 
 services:
   mariadb:
@@ -32,14 +32,14 @@ services:
       - mariadb:db
       - elasticsearch
     ports:
-      - "8080:80"
+      - '8080:80'
     volumes:
       - ./phpmyfaq:/var/www/html
     depends_on:
       - yarn
   yarn:
-    image: node:latest
-    restart: "no"
+    image: node:10
+    restart: 'no'
     command: sh -c "npm install node-sass bower grunt-cli -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
     stdin_open: true
@@ -50,7 +50,7 @@ services:
       - composer
   composer:
     image: composer:latest
-    restart: "no"
+    restart: 'no'
     command: composer install --verbose --no-dev
     stdin_open: true
     tty: true
@@ -63,7 +63,7 @@ services:
     links:
       - mariadb:db
     ports:
-      - "8000:80"
+      - '8080:80'
     volumes:
       - ./volumes/sessions:/sessions
   elasticsearch:
@@ -73,7 +73,7 @@ services:
     environment:
       - cluster.name=phpmyfaq-cluster
       - bootstrap.memory_lock=true
-      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
       - xpack.security.enabled=false
     ulimits:
       memlock:
