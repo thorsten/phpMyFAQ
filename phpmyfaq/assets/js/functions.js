@@ -126,10 +126,11 @@ $(document).ready(function() {
    * @return void
    */
   window.saveFormValues = function saveFormValues(action, formName) {
-    var formValues = $('#formValues');
+    const formValues = $('#formValues');
+    const loader = $('#loader');
 
-    $('#loader').show();
-    $('#loader')
+    loader
+      .show()
       .fadeIn(400)
       .html('<img src="assets/img/ajax-loader.gif">Saving ...');
 

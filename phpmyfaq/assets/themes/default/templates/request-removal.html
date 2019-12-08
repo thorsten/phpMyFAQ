@@ -1,47 +1,87 @@
 <section>
+  <h1>
+    {{ pageHeader }}
+  </h1>
   <p>{{ msgUserRemovalText }}</p>
 
-  <p>{{ msgContactPrivacyNote }} <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank">
-    {{ msgPrivacyNote }}</a></p>
+  <p>
+    {{ msgContactPrivacyNote }}
+    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank">
+      {{ msgPrivacyNote }}</a
+    >
+  </p>
   <p><strong>{{ msgContactRemove }}</strong></p>
-
-
 
   <div id="loader"></div>
   <div id="contacts"></div>
 
   <form class="form-horizontal" id="formValues" action="#" method="post">
-    <input type="hidden" name="lang" id="lang" value="{{ lang }}">
-
+    <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="name">{{ ad_user_loginname }}</label>
+      <label class="col-sm-3 form-control-label" for="name"
+        >{{ ad_user_loginname }}</label
+      >
       <div class="col-sm-9">
-        <input type="text" class="form-control" name="loginname" id="loginname" value="{{ defaultLoginName }}" readonly
-               required>
+        <input
+          type="text"
+          class="form-control"
+          name="loginname"
+          id="loginname"
+          value="{{ defaultLoginName }}"
+          readonly
+          required
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
+      <label class="col-sm-3 form-control-label" for="name"
+        >{{ msgNewContentName }}</label
+      >
       <div class="col-sm-9">
-        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" readonly
-               required>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          value="{{ defaultContentName }}"
+          readonly
+          required
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
+      <label class="col-sm-3 form-control-label" for="email"
+        >{{ msgNewContentMail }}</label
+      >
       <div class="col-sm-9">
-        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" readonly
-               required>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          value="{{ defaultContentMail }}"
+          readonly
+          required
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="question">{{ msgMessage }}</label>
+      <label class="col-sm-3 form-control-label" for="question"
+        >{{ msgMessage }}</label
+      >
       <div class="col-sm-9">
-          <textarea class="form-control" cols="37" rows="5" name="question" id="question" required></textarea>
+        <textarea
+          class="form-control"
+          cols="37"
+          rows="5"
+          name="question"
+          id="question"
+          required
+        ></textarea>
       </div>
     </div>
 
@@ -62,7 +102,9 @@
     'use strict';
     $('#submitcontact').on('click', () => {
       saveFormValues('request-removal', 'contact');
-     });
-    $('form#formValues').submit(() => {  return false;  });
-   });
+    });
+    $('form#formValues').submit(() => {
+      return false;
+    });
+  });
 </script>

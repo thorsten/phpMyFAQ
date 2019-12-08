@@ -47,7 +47,8 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
+        'pageHeader' => $PMF_LANG['msgUserRemoval'],
         'msgContact' => $PMF_LANG['msgContact'],
         'msgUserRemovalText' => $PMF_LANG['msgUserRemovalText'],
         'msgContactRemove' => $PMF_LANG['msgContactRemove'],
@@ -65,13 +66,5 @@ $template->parse(
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
         'version' => $faqConfig->get('main.currentVersion'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'], $auth),
-    )
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgUserRemoval']
     ]
 );
