@@ -72,4 +72,4 @@ node_modules/*
 backup/*
 
 # PHPUnit
-/.phpunit.result.cache
+.phpunit.result.cache
