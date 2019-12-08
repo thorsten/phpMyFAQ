@@ -84,17 +84,10 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     );
 }
 
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgNewContentHeader']
-    ]
-);
-
 $template->parse(
     'mainPageContent',
     [
+        'pageHeader' => $PMF_LANG['msgNewContentHeader'],
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'msgNewContentHeader' => $PMF_LANG['msgNewContentHeader'],
         'msgNewContentAddon' => $PMF_LANG['msgNewContentAddon'],

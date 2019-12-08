@@ -136,6 +136,7 @@ $template->parseBlock(
 $template->parse(
     'mainPageContent',
     [
+        'pageHeader' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ')),
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
         'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
@@ -155,13 +156,5 @@ $template->parse(
             $faqSystem->getSystemUri($faqConfig),
             $PMF_LANG['msgAdvancedSearch']
         )
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => Strings::htmlspecialchars($faqConfig->get('main.titleFAQ'))
     ]
 );

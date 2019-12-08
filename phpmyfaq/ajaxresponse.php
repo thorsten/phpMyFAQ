@@ -24,7 +24,6 @@ use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\Permission\MediumPermission;
 use phpMyFAQ\Search;
-use phpMyFAQ\Search\Exception;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Strings;
 use phpMyFAQ\User\CurrentUser;
@@ -77,15 +76,15 @@ if (isset($user) && is_object($user)) {
     if ($user->perm instanceof MediumPermission) {
         $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
     if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
 } else {
     $user = new CurrentUser($faqConfig);
     $currentUser = -1;
-    $currentGroups = array(-1);
+    $currentGroups = [-1];
 }
 
 $category = new Category($faqConfig, $currentGroups);

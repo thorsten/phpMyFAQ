@@ -1,5 +1,7 @@
 <section>
-
+  <h1>
+    {{ pageHeader }}
+  </h1>
   <div id="questionForm">
     <p>{{ msgNewQuestion }}</p>
   </div>
@@ -14,24 +16,44 @@
   </p>
 
   <form id="formValues" action="#" method="post">
-    <input type="hidden" name="lang" id="lang" value="{{ lang }}"/>
+    <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
+      <label class="col-sm-3 form-control-label" for="name"
+        >{{ msgNewContentName }}</label
+      >
       <div class="col-sm-9">
-        <input type="text" class="form-control" name="name" id="name" value="{{ defaultContentName }}" required>
+        <input
+          type="text"
+          class="form-control"
+          name="name"
+          id="name"
+          value="{{ defaultContentName }}"
+          required
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
+      <label class="col-sm-3 form-control-label" for="email"
+        >{{ msgNewContentMail }}</label
+      >
       <div class="col-sm-9">
-        <input type="email" class="form-control" name="email" id="email" value="{{ defaultContentMail }}" required>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          id="email"
+          value="{{ defaultContentMail }}"
+          required
+        />
       </div>
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="category">{{ msgAskCategory }}</label>
+      <label class="col-sm-3 form-control-label" for="category"
+        >{{ msgAskCategory }}</label
+      >
       <div class="col-sm-9">
         <select name="category" class="form-control" id="category" required>
           {{ printCategoryOptions }}
@@ -40,9 +62,18 @@
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="question">{{ msgAskYourQuestion }}</label>
+      <label class="col-sm-3 form-control-label" for="question"
+        >{{ msgAskYourQuestion }}</label
+      >
       <div class="col-sm-9">
-        <textarea class="form-control" cols="45" rows="5" name="question" id="question" required></textarea>
+        <textarea
+          class="form-control"
+          cols="45"
+          rows="5"
+          name="question"
+          id="question"
+          required
+        ></textarea>
       </div>
     </div>
 
@@ -53,22 +84,25 @@
 
     <div class="form-group row">
       <div class="col-sm-12 text-right">
-        <button class="btn btn-primary btn-lg" type="submit" id="submitquestion">
+        <button
+          class="btn btn-primary btn-lg"
+          type="submit"
+          id="submitquestion"
+        >
           {{ msgNewContentSubmit }}
         </button>
       </div>
     </div>
-
   </form>
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        $(() => {
-            $('#submitquestion').on('click', (event) => {
-                event.preventDefault();
-                checkQuestion();
-            });
-        });
+  document.addEventListener('DOMContentLoaded', () => {
+    $(() => {
+      $('#submitquestion').on('click', event => {
+        event.preventDefault();
+        checkQuestion();
+      });
     });
+  });
 </script>

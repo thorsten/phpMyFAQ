@@ -49,7 +49,8 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
+        'pageHeader' => $PMF_LANG['msgRegistration'],
         'msgRegistration' => $PMF_LANG['msgRegistration'],
         'msgRegistrationCredentials' => $PMF_LANG['msgRegistrationCredentials'],
         'msgRegistrationNote' => $PMF_LANG['msgRegistrationNote'],
@@ -59,13 +60,5 @@ $template->parse(
         'email' => $PMF_LANG['ad_entry_email'],
         'submitRegister' => $PMF_LANG['submitRegister'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'register', $PMF_LANG['msgCaptcha'], $auth),
-    )
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgRegistration']
     ]
 );

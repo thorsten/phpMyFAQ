@@ -1,3 +1,6 @@
+<h1>
+  {{ pageHeader }}
+</h1>
 <!-- Start page -->
 <div class="row mb-3">
   <div class="col-12">
@@ -5,7 +8,13 @@
       [startPageCategories]
       <div class="card">
         <a href="{{ categoryUrl }}">
-          <img class="card-img-top" width="200" height="200" src="images/{{ categoryImage }}" alt="{{ categoryName }}">
+          <img
+            class="card-img-top"
+            width="200"
+            height="200"
+            src="images/{{ categoryImage }}"
+            alt="{{ categoryName }}"
+          />
         </a>
         <div class="card-body">
           <h5 class="card-title text-center">
@@ -21,7 +30,6 @@
 <div class="row">
   <div class="col-12">
     <div class="card-columns">
-
       <!-- Sticky FAQs -->
       <div class="card">
         <div class="card-body">
@@ -29,8 +37,13 @@
           <ul class="pmf-list">
             [stickyRecordsList]
             <li>
-              <a class="sticky-faqs" title="{{ stickyTitle }}" href="{{ stickyUrl }}"
-                 data-toggle="tooltip" data-placement="top">
+              <a
+                class="sticky-faqs"
+                title="{{ stickyTitle }}"
+                href="{{ stickyUrl }}"
+                data-toggle="tooltip"
+                data-placement="top"
+              >
                 {{ stickyPreview }}
               </a>
             </li>
@@ -45,16 +58,24 @@
           <h5 class="card-title text-center">{{ writeTopTenHeader }}</h5>
           <ol class="pmf-list">
             [toptenList]
-            <li><a class="topten" data-toggle="tooltip" data-placement="top" title="{{ toptenPreview }}"
-                   href="{{ toptenUrl }}">{{ toptenTitle }}</a>
+            <li>
+              <a
+                class="topten"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="{{ toptenPreview }}"
+                href="{{ toptenUrl }}"
+                >{{ toptenTitle }}</a
+              >
               <small>({{ toptenVisits }})</small>
             </li>
-            [/toptenList]
-            [toptenListError]
+            [/toptenList] [toptenListError]
             <li>{{ errorMsgTopTen }}</li>
             [/toptenListError]
           </ol>
-          <p class="card-text"><small class="text-muted">{{ writeNumberOfArticles }}</small></p>
+          <p class="card-text">
+            <small class="text-muted">{{ writeNumberOfArticles }}</small>
+          </p>
         </div>
       </div>
 
@@ -64,12 +85,18 @@
           <h5 class="card-title text-center">{{ writeNewestHeader }}</h5>
           <ol class="pmf-list">
             [latestEntriesList]
-            <li><a class="latest-entries" data-toggle="tooltip" data-placement="top"
-                   title="{{ latestEntriesPreview }}" href="{{ latestEntriesUrl }}">{{ latestEntriesTitle }}</a>
+            <li>
+              <a
+                class="latest-entries"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="{{ latestEntriesPreview }}"
+                href="{{ latestEntriesUrl }}"
+                >{{ latestEntriesTitle }}</a
+              >
               <small>({{ latestEntriesDate }})</small>
             </li>
-            [/latestEntriesList]
-            [latestEntriesListError]
+            [/latestEntriesList] [latestEntriesListError]
             <li>{{ errorMsgLatest }}</li>
             [/latestEntriesListError]
           </ol>
@@ -81,7 +108,9 @@
         <div class="card-body">
           <h5 class="card-title">{{ writeNewsHeader }} {{ writeNewsRSS }}</h5>
           <p class="card-text">{{ writeNews }}</p>
-          <p class="card-text"><small class="text-muted">{{ showAllNews }}</small></p>
+          <p class="card-text">
+            <small class="text-muted">{{ showAllNews }}</small>
+          </p>
         </div>
       </div>
 
@@ -94,7 +123,6 @@
         </div>
       </div>
       [/tagListSection]
-
     </div>
   </div>
 </div>

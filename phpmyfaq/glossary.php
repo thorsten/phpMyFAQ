@@ -49,12 +49,12 @@ $baseUrl = sprintf(
 );
 
 // Pagination options
-$options = array(
+$options = [
     'baseUrl' => $baseUrl,
     'total' => count($glossaryItems),
     'perPage' => $itemsPerPage,
     'pageParamName' => 'page',
-);
+];
 $pagination = new Pagination($faqConfig, $options);
 
 if (0 < $numItems) {
@@ -70,28 +70,21 @@ if (0 < $numItems) {
     $template->parseBlock(
         'mainPageContent',
         'glossaryItems',
-        array(
+        [
             'item' => $output['item'],
             'desc' => $output['definition'],
-        )
+        ]
     );
 }
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
+        'pageHeader' => $PMF_LANG['ad_menu_glossary'],
         'msgGlossary' => $PMF_LANG['ad_menu_glossary'],
         'msgGlossrayItem' => $PMF_LANG['ad_glossary_item'],
         'msgGlossaryDescription' => $PMF_LANG['ad_glossary_definition'],
         'pagination' => $pagination->render(),
         'glossaryData' => '',
-    )
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['ad_menu_glossary']
     ]
 );

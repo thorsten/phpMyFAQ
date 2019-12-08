@@ -719,10 +719,10 @@ if (DEBUG) {
     $template->parseBlock(
         'index',
         'debugMode',
-        array(
+        [
             'debugExceptions' => implode('<br>', $pmfExceptions),
             'debugQueries' => $faqConfig->getDb()->log(),
-        )
+        ]
     );
 }
 

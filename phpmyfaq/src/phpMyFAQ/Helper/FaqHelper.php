@@ -85,7 +85,7 @@ class FaqHelper extends Helper
 
         $icon = '<span class="fa-stack fa-lg">
                         <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fab fa-twitter fa-stack-1x"></i>
+                        <i aria-hidden="true" class="fa fa-twitter fa-stack-1x"></i>
                     </span>';
 
         return sprintf(

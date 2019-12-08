@@ -49,16 +49,9 @@ $siteMap->setGroups($currentGroups);
 $template->parse(
     'mainPageContent',
     [
+        'pageHeader' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
         'renderLetters' => $siteMap->getAllFirstLetters(),
         'renderSiteMap' => $siteMap->getRecordsFromLetter($currentLetter),
         'writeCurrentLetter' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter,
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => empty($currentLetter) ? $PMF_LANG['msgSitemap'] : $currentLetter
     ]
 );

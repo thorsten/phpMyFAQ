@@ -38,7 +38,7 @@ try {
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
         'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' . $PMF_LANG['msgRegistration'] . '</a>' : '',
         'sendPassword' => '<a href="?action=password">' . $PMF_LANG['lostPassword'] . '</a>',
         'loginHeader' => $PMF_LANG['msgLoginUser'],
@@ -49,13 +49,5 @@ $template->parse(
         'username' => $PMF_LANG['ad_auth_user'],
         'password' => $PMF_LANG['ad_auth_passwd'],
         'rememberMe' => $PMF_LANG['rememberMe'],
-    )
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgLoginUser']
     ]
 );

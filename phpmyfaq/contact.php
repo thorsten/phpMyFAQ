@@ -47,8 +47,8 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
     'mainPageContent',
-    array(
-        'msgContact' => $PMF_LANG['msgContact'],
+    [
+        'pageHeader' => $PMF_LANG['msgContact'],
         'msgContactOwnText' => nl2br($faqConfig->get('main.contactInformations')),
         'msgContactEMail' => $PMF_LANG['msgContactEMail'],
         'msgContactPrivacyNote' => $PMF_LANG['msgContactPrivacyNote'],
@@ -63,13 +63,5 @@ $template->parse(
         'msgS2FButton' => $PMF_LANG['msgS2FButton'],
         'version' => $faqConfig->get('main.currentVersion'),
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'contact', $PMF_LANG['msgCaptcha'], $auth),
-    )
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgContact']
     ]
 );

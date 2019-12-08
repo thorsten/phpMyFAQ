@@ -105,14 +105,6 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         ]
     );
 
-    $template->parseBlock(
-        'index',
-        'breadcrumb',
-        [
-            'breadcrumbHeadline' => $category->getPath($selectedCategoryId, ' &raquo; ', true, '')
-        ]
-    );
-
 } else {
     try {
         $faqSession->userTracking('show_all_categories', 0);
@@ -129,14 +121,6 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
             'categoryContent' => $category->viewTree(),
             'subCategoryContent' => $subCategoryContent,
             'categoryLevelUp' => '',
-        ]
-    );
-
-    $template->parseBlock(
-        'index',
-        'breadcrumb',
-        [
-            'breadcrumbHeadline' => $PMF_LANG['msgFullCategories']
         ]
     );
 }

@@ -30,12 +30,11 @@ try {
     // @todo handle the exception
 }
 
-$template->parseBlock('index', 'breadcrumb', [ 'breadcrumbHeadline' => $PMF_LANG['msgOpenQuestions'] ]);
-
 try {
     $template->parse(
         'mainPageContent',
         [
+            'pageHeader' => $PMF_LANG['msgOpenQuestions'],
             'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
             'msgQuestionText' => $PMF_LANG['msgQuestionText'],
             'msgDate_User' => $PMF_LANG['msgDate_User'],

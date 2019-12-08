@@ -61,6 +61,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 $template->parse(
     'mainPageContent',
     [
+        'pageHeader' => $PMF_LANG['msgQuestion'],
         'msgQuestion' => $PMF_LANG['msgQuestion'],
         'msgNewQuestion' => $PMF_LANG['msgNewQuestion'],
         'msgMatchingQuestions' => $PMF_LANG['msgMatchingQuestions'],
@@ -75,13 +76,5 @@ $template->parse(
         'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['msgQuestion']
     ]
 );
