@@ -327,7 +327,7 @@ class PMF_Search_Database extends PMF_Search_Abstract implements PMF_Search_Inte
                     $this->matchingColumns[$j],
                     $this->_config->getDb()->escape($keys[$i]));
 
-                }else{
+                } else {
                 $where = sprintf("%s%s LIKE '%%%s%%'",
                     $where,
                     $this->matchingColumns[$j],
