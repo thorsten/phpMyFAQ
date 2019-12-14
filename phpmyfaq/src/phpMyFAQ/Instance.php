@@ -126,9 +126,9 @@ class Instance
      *
      * @param int $id
      *
-     * @return array
+     * @return object
      */
-    public function getInstanceById(int $id): array
+    public function getInstanceById(int $id): object
     {
         $select = sprintf(
             'SELECT * FROM %sfaqinstances WHERE id = %d',
