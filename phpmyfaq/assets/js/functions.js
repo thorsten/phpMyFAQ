@@ -19,12 +19,7 @@
 
 /*global document: false, window: false, $: false */
 
-var infoBox,
-  selectSelectAll,
-  selectUnselectAll,
-  closeWindow,
-  addAttachmentLink,
-  saveVoting;
+var infoBox, selectSelectAll, selectUnselectAll, closeWindow, addAttachmentLink, saveVoting;
 
 $(document).ready(function() {
   'use strict';
@@ -79,12 +74,7 @@ $(document).ready(function() {
    * @param recordId
    * @param recordLang
    */
-  addAttachmentLink = function addAttachmentLink(
-    attachmentId,
-    fileName,
-    recordId,
-    recordLang
-  ) {
+  addAttachmentLink = function addAttachmentLink(attachmentId, fileName, recordId, recordLang) {
     window.opener
       .$('.adminAttachments')
       .append(
@@ -245,9 +235,7 @@ $(document).ready(function() {
           $('#answerForm').html(json.result);
           $('#answerForm').fadeIn('slow');
           $('#loader').hide();
-          $('#formValues').append(
-            '<input type="hidden" name="save" value="1" />'
-          );
+          $('#formValues').append('<input type="hidden" name="save" value="1" />');
           $('#captcha').val('');
         } else {
           $('#answers').html(
@@ -273,10 +261,7 @@ $(document).ready(function() {
       url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
       success: function() {
         var captcha = $('#captcha');
-        $('#captchaImage').attr(
-          'src',
-          'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime()
-        );
+        $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
         captcha.val('');
         captcha.focus();
       },

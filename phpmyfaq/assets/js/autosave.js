@@ -18,14 +18,9 @@
 $(document).ready(function() {
   'use strict';
   $(window).on('unload', function() {
-    if (
-      typeof window.tinyMCE !== 'undefined' &&
-      window.tinyMCE.activeEditor !== null
-    ) {
+    if (typeof window.tinyMCE !== 'undefined' && window.tinyMCE.activeEditor !== null) {
       if (window.tinyMCE.activeEditor.isDirty()) {
-        const chk = window.confirm(
-          'Do you want to save the article before navigating away?'
-        );
+        const chk = window.confirm('Do you want to save the article before navigating away?');
 
         if (chk) {
           pmfAutosave();
@@ -34,10 +29,7 @@ $(document).ready(function() {
     }
   });
 
-  if (
-    typeof window.tinyMCE !== 'undefined' &&
-    typeof pmfAutosaveInterval !== 'undefined'
-  ) {
+  if (typeof window.tinyMCE !== 'undefined' && typeof pmfAutosaveInterval !== 'undefined') {
     setInterval(function() {
       pmfAutosave();
     }, window.pmfAutosaveInterval * 1000);
@@ -103,8 +95,7 @@ $(document).ready(function() {
     let act,
       fa = $('#faqEditor').attr('action');
 
-    act =
-      '?action=ajax&ajax=autosave&' + fa.substr(1).replace(/action=/, 'do=');
+    act = '?action=ajax&ajax=autosave&' + fa.substr(1).replace(/action=/, 'do=');
 
     return act;
   }

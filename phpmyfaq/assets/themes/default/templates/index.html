@@ -15,37 +15,14 @@
     <meta name="revisit-after" content="7 days" />
     <meta name="apple-itunes-app" content="app-id=977896957" />
 
-    <link
-      href="https://fonts.googleapis.com/css?family=Roboto"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <link
-      rel="stylesheet"
-      href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1"
-    />
-    <link
-      rel="shortcut icon"
-      href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico"
-    />
-    <link
-      rel="apple-touch-icon"
-      href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png"
-    />
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1" />
+    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
     <link rel="canonical" href="{{ currentPageUrl }}" />
 
-    <link
-      rel="alternate"
-      title="News RSS Feed"
-      type="application/rss+xml"
-      href="{{ baseHref }}feed/news/rss.php"
-    />
-    <link
-      rel="alternate"
-      title="TopTen RSS Feed"
-      type="application/rss+xml"
-      href="{{ baseHref }}feed/topten/rss.php"
-    />
+    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php" />
+    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php" />
     <link
       rel="alternate"
       title="Latest FAQ Records RSS Feed"
@@ -58,12 +35,7 @@
       type="application/rss+xml"
       href="{{ baseHref }}feed/openquestions/rss.php"
     />
-    <link
-      rel="search"
-      type="application/opensearchdescription+xml"
-      title="{{ metaTitle }}"
-      href="{{ opensearch }}"
-    />
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}" />
 
     <script>
       if (self === top) {
@@ -81,16 +53,8 @@
   <body class="d-flex flex-column" dir="{{ dir }}">
     <nav class="topbar navbar navbar-expand-lg navbar-dark bg-primary">
       <div class="container">
-        <a
-          class="navbar-brand"
-          id="phpmyfaq-logo"
-          title="{{ header }}"
-          href="{{ faqHome }}"
-        >
-          <img
-            src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png"
-            alt="phpMyFAQ"
-          />
+        <a class="navbar-brand" id="phpmyfaq-logo" title="{{ header }}" href="{{ faqHome }}">
+          <img src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="phpMyFAQ" />
         </a>
         <button
           class="navbar-toggler"
@@ -103,10 +67,7 @@
         >
           <span class="navbar-toggler-icon"></span>
         </button>
-        <div
-          class="collapse navbar-collapse justify-content-end"
-          id="pmf-navbar-toggle"
-        >
+        <div class="collapse navbar-collapse justify-content-end" id="pmf-navbar-toggle">
           <ul class="navbar-nav mr-md-12">
             <li class="nav-item {{ activeAllCategories }}">
               {{ allCategories }}
@@ -128,9 +89,8 @@
                 {{ msgLoginUser }}
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn] {{ msgRegisterUser }} {{ msgLoginUser }}
-                [/notLoggedIn] [userloggedIn] {{ msgUserControlDropDown }} {{
-                msgUserControl }} {{ msgLogoutUser }}
+                [notLoggedIn] {{ msgRegisterUser }} {{ msgLoginUser }} [/notLoggedIn] [userloggedIn] {{
+                msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
                 <div class="dropdown-divider"></div>
                 {{ msgUserRemoval }} [/userloggedIn]
               </div>
@@ -146,12 +106,7 @@
         <div class="container">
           <div class="row">
             <div class="col-lg-8 mx-md-auto">
-              <form
-                role="search"
-                id="search"
-                action="{{ writeSendAdress }}"
-                method="get"
-              >
+              <form role="search" id="search" action="{{ writeSendAdress }}" method="get">
                 <input
                   type="text"
                   class="typeahead pmf-search-field"
@@ -185,25 +140,13 @@
           {{ mainPageContent }} [socialLinks]
           <section class="pmf-aside-widget">
             <div class="pmf-aside-widget-body pmf-social-links">
-              <a
-                target="_blank"
-                href="{{ link_pdf }}"
-                rel="nofollow"
-                title="{{ writePDFTag }}"
-              >
+              <a target="_blank" href="{{ link_pdf }}" rel="nofollow" title="{{ writePDFTag }}">
                 <span class="fa-stack fa-lg">
                   <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
-                  <i
-                    aria-hidden="true"
-                    class="fa fa-file-pdf-o fa-stack-1x"
-                  ></i>
+                  <i aria-hidden="true" class="fa fa-file-pdf-o fa-stack-1x"></i>
                 </span>
               </a>
-              <a
-                href="javascript:window.print();"
-                rel="nofollow"
-                title="{{ writePrintMsgTag }}"
-              >
+              <a href="javascript:window.print();" rel="nofollow" title="{{ writePrintMsgTag }}">
                 <span class="fa-stack fa-lg">
                   <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
                   <i aria-hidden="true" class="fa fa-print fa-stack-1x"></i>
@@ -237,12 +180,7 @@
             </ul>
           </div>
           <div class="col-md-6 mb-4">
-            <form
-              action="{{ renderUri }}"
-              method="post"
-              accept-charset="utf-8"
-              class="pmf-footer-language"
-            >
+            <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="pmf-footer-language">
               {{ switchLanguages }}
               <input type="hidden" name="action" value="" />
             </form>

@@ -20,9 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   $('#submitfaq').on('click', () => {
     if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
       tinyMCE.get('answer').setContent(tinyMCE.activeEditor.getContent());
-      document.getElementById(
-        'answer'
-      ).value = tinyMCE.activeEditor.getContent();
+      document.getElementById('answer').value = tinyMCE.activeEditor.getContent();
     }
     saveFormValues('savefaq', 'faq');
   });

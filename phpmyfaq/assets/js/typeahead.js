@@ -39,9 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     },
     displayText: item => {
-      return typeof item !== 'undefined' && typeof item.question !== 'undefined'
-        ? item.question
-        : item;
+      return typeof item !== 'undefined' && typeof item.question !== 'undefined' ? item.question : item;
     },
     afterSelect: event => {
       window.location.href = event.url;

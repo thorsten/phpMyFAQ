@@ -23,9 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Show rating
   //
   if (document.querySelector('#rating span')) {
-    let rating = parseInt(
-      document.querySelector('#rating span').dataset.rating
-    );
+    let rating = parseInt(document.querySelector('#rating span').dataset.rating);
     if (0 < rating) {
       rating = Math.floor(rating);
 
