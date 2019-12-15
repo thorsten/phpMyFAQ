@@ -56,9 +56,6 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10"
   },
-  "engines": {
-    "node": "^11.0"
-  },
   "husky": {
     "hooks": {
       "pre-commit": "composer lint && composer test && pretty-quick --staged",
