@@ -677,10 +677,10 @@ builtin-status-codes@^3.0.0:
   resolved "https://registry.yarnpkg.com/builtin-status-codes/-/builtin-status-codes-3.0.0.tgz#85982878e21b98e1c66425e03d0174788f569ee8"
   integrity sha1-hZgoeOIbmOHGZCXgPQF0eI9Wnug=
 
-bxslider@^4.2.14:
-  version "4.2.14"
-  resolved "https://registry.yarnpkg.com/bxslider/-/bxslider-4.2.14.tgz#5318b78b28a984fc10f3a2e6b04836c6b4b712a2"
-  integrity sha512-7/OV7Jxe8yBS/7tOcxg2hYTPmACFMU1rRs3xqoljjFX/rSgMFVX0dzFqxZHWvUgl0+9TryNy5vhufB/499heFQ==
+bxslider@4.2.13:
+  version "4.2.13"
+  resolved "https://registry.yarnpkg.com/bxslider/-/bxslider-4.2.13.tgz#4fcc136a5c2c9719690b9ea1fd16e929e1c7cfc0"
+  integrity sha512-T0xMeVQ42R/Nmd/RApabMtrnOyLS2Ey23n5EA8N6HTrGHuycVUdMasDa5iLmFsolS4PGMxInphV873jhcBHZng==
 
 bytes@1:
   version "1.0.0"

@@ -3,7 +3,7 @@ language: php
 php:
   - 7.2
   - 7.3
-  # - 7.4
+  - 7.4
   # - nightly (8.0.0-dev does not work yet)
 
 sudo: required
@@ -11,7 +11,7 @@ dist: trusty
 group: edge
 
 env:
-  - NODE_VERSION=10.x
+  - NODE_VERSION=11.x
 
 cache:
   yarn: true
