@@ -4830,10 +4830,10 @@ tiny-lr@^1.1.1:
     object-assign "^4.1.0"
     qs "^6.4.0"
 
-tinymce@^4.9.3:
-  version "4.9.6"
-  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-4.9.6.tgz#ffba4fc56e3196f66873b60571b9aa164b2da931"
-  integrity sha512-ZSBxBVvAHhi6KTSWGVsnv7X7drJJbInOrpCiSuvNLQz0Po8lZfeLh8nt7asQ9eGxD7TUD1dD46iXhOH+SsBbNg==
+tinymce@^5.1.5:
+  version "5.1.5"
+  resolved "https://registry.yarnpkg.com/tinymce/-/tinymce-5.1.5.tgz#08a4815bcefd33fb5f654b0b82b066f788a8ddf4"
+  integrity sha512-xl7rMhjxtDLWGXJF2ZNGv6Dxqy64HAQKSCvfcbfFuF+oJYRA1JqfNLfgS3yqG4D/V30adFWOZUv9Eng6l5BWOA==
 
 to-arraybuffer@^1.0.0:
   version "1.0.1"
