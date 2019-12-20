@@ -89,10 +89,17 @@
                 {{ msgLoginUser }}
               </a>
               <div class="dropdown-menu" aria-labelledby="dropdown">
-                [notLoggedIn] {{ msgRegisterUser }} {{ msgLoginUser }} [/notLoggedIn] [userloggedIn] {{
-                msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
-                <div class="dropdown-divider"></div>
-                {{ msgUserRemoval }} [/userloggedIn]
+                [notLoggedIn]
+                <div>
+                  {{ msgRegisterUser }} {{ msgLoginUser }}
+                </div>
+                [/notLoggedIn] [userloggedIn]
+                <div>
+                  {{ msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
+                  <div class="dropdown-divider"></div>
+                  {{ msgUserRemoval }}
+                </div>
+                [/userloggedIn]
               </div>
             </li>
           </ul>
@@ -208,7 +215,7 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/vendor.bundle.js"></script>
+    <script src="{{ baseHref }}assets/dist/vendors.bundle.js"></script>
     <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
     <script>
       $('.topten').tooltip();

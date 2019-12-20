@@ -113,7 +113,7 @@ $(document).ready(function() {
    *                          sendtofriends
    * @param formName Name of the current form
    *
-   * @return void
+   * @return boolean
    */
   window.saveFormValues = function saveFormValues(action, formName) {
     const formValues = $('#formValues');
