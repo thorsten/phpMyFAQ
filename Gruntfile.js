@@ -154,28 +154,6 @@ module.exports = function(grunt) {
         banner: '<%= banner %>',
         stripBanners: false,
       },
-      vendors: {
-        src: [
-          'node_modules/jquery/dist/jquery.min.js',
-          'node_modules/popper.js/dist/umd/popper.min.js',
-          'node_modules/bootstrap/js/dist/util.js',
-          'node_modules/bootstrap/js/dist/tooltip.js',
-          'node_modules/bootstrap/js/dist/alert.js',
-          'node_modules/bootstrap/js/dist/button.js',
-          'node_modules/bootstrap/js/dist/collapse.js',
-          'node_modules/bootstrap/js/dist/dropdown.js',
-          'node_modules/bootstrap/js/dist/modal.js',
-          'node_modules/bootstrap/js/dist/popover.js',
-          'node_modules/bootstrap/js/dist/tab.js',
-          'node_modules/bootstrap-3-typeahead/bootstrap3-typeahead.js',
-          'node_modules/handlebars/dist/handlebars.js',
-          'node_modules/mermaid/dist/mermaid.js',
-          'node_modules/bxslider/dist/jquery.bxslider.js',
-          'node_modules/cookieconsent/src/cookieconsent.js',
-          'node_modules/bs-custom-file-input/dist/bs-custom-file-input.js',
-        ],
-        dest: 'phpmyfaq/assets/themes/default/js/vendors.js',
-      },
       dist: {
         src: [
           'phpmyfaq/assets/js/add.js',
@@ -199,12 +177,7 @@ module.exports = function(grunt) {
       },
       frontend: {
         files: {
-          'phpmyfaq/assets/themes/default/js/phpmyfaq.min.js': [
-            '<%= concat.dist.dest %>',
-          ],
-          'phpmyfaq/assets/themes/default/js/vendors.min.js': [
-            '<%= concat.vendors.dest %>',
-          ],
+          'phpmyfaq/assets/themes/default/js/phpmyfaq.min.js': ['<%= concat.dist.dest %>'],
         },
       },
       phpmyfaq_tinymce_plugin: {
@@ -223,11 +196,9 @@ module.exports = function(grunt) {
       development: {
         banner: '<%= banner %>',
         files: {
-          'phpmyfaq/admin/assets/css/style.css':
-            'phpmyfaq/admin/assets/scss/style.scss',
+          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
-          'phpmyfaq/assets/themes/default/css/style.css':
-            'phpmyfaq/assets/themes/default/scss/style.scss',
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss',
           'phpmyfaq/assets/themes/default/css/floating-labels.css':
             'phpmyfaq/assets/scss/themes/default/floating-labels.scss',
           //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
@@ -235,11 +206,9 @@ module.exports = function(grunt) {
       },
       production: {
         files: {
-          'phpmyfaq/admin/assets/css/style.css':
-            'phpmyfaq/admin/assets/scss/style.scss',
+          'phpmyfaq/admin/assets/css/style.css': 'phpmyfaq/admin/assets/scss/style.scss',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/scss/style.rtl.scss',
-          'phpmyfaq/assets/themes/default/css/style.css':
-            'phpmyfaq/assets/themes/default/scss/style.scss',
+          'phpmyfaq/assets/themes/default/css/style.css': 'phpmyfaq/assets/themes/default/scss/style.scss',
           'phpmyfaq/assets/themes/default/css/floating-labels.css':
             'phpmyfaq/assets/themes/default/scss/floating-labels.scss',
           //'phpmyfaq/assets/themes/default/css/style.rtl.css': 'phpmyfaq/assets/themes/default/scss/style.rtl.scss'
@@ -254,12 +223,9 @@ module.exports = function(grunt) {
           keepSpecialComments: 0,
         },
         files: {
-          'phpmyfaq/admin/assets/css/style.min.css':
-            'phpmyfaq/admin/assets/css/style.css',
+          'phpmyfaq/admin/assets/css/style.min.css': 'phpmyfaq/admin/assets/css/style.css',
           //'phpmyfaq/admin/assets/css/style.rtl.css': 'phpmyfaq/admin/assets/css/style.rtl.css',
-          'phpmyfaq/assets/themes/default/css/style.min.css': [
-            'phpmyfaq/assets/themes/default/css/style.css',
-          ],
+          'phpmyfaq/assets/themes/default/css/style.min.css': ['phpmyfaq/assets/themes/default/css/style.css'],
           //'phpmyfaq/assets/themes/default/css/style.rtl.min.css': ['phpmyfaq/assets/themes/default/css/style.rtl.css']
         },
       },
@@ -273,10 +239,7 @@ module.exports = function(grunt) {
         },
       },
       css: {
-        files: [
-          'phpmyfaq/admin/assets/scss/*.scss',
-          'phpmyfaq/assets/themes/default/scss/*.scss',
-        ],
+        files: ['phpmyfaq/admin/assets/scss/*.scss', 'phpmyfaq/assets/themes/default/scss/*.scss'],
         tasks: ['sass', 'cssmin'],
         options: {
           livereload: true,
@@ -293,24 +256,10 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', [
-    'clean',
-    'copy',
-    'concat',
-    'uglify',
-    'sass:development',
-    'cssmin',
-  ]);
+  grunt.registerTask('default', ['clean', 'copy', 'concat', 'uglify', 'sass:development', 'cssmin']);
 
   // Build task
-  grunt.registerTask('build', [
-    'clean',
-    'copy',
-    'concat',
-    'uglify',
-    'sass:production',
-    'cssmin',
-  ]);
+  grunt.registerTask('build', ['clean', 'copy', 'concat', 'uglify', 'sass:production', 'cssmin']);
 
   // Watcher
   grunt.event.on('watch', function(action, filepath, target) {

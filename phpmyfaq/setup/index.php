@@ -87,9 +87,6 @@ $loader->register()
             <li class="nav-item">
             <a class="nav-link" target="_blank" href="http://forum.phpmyfaq.de/">Forums</a>
             </li>
-            <li class="nav-item">
-            <a class="nav-link" target="_blank" href="http://faq.phpmyfaq.de/">FAQ</a>
-            </li>
           </ul>
         </div>
       </div>

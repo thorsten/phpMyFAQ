@@ -15,7 +15,7 @@
   "homepage": "https://www.phpmyfaq.de/",
   "main": "Gruntfile.js",
   "scripts": {
-    "build": "grunt build",
+    "build": "grunt build && webpack",
     "build:webpack": "webpack",
     "watch": "grunt watch"
   },
@@ -31,7 +31,6 @@
     "highlightjs": "^9.12.0",
     "jquery": "^3.4.1",
     "jquery-sparkline": "^2.4.0",
-    "mermaid": "^8.0.0",
     "popper.js": "^1.14.6",
     "tinymce": "^4.9.3"
   },

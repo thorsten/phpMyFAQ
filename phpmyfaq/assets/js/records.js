@@ -14,7 +14,7 @@
  * @since 2016-03-25
  */
 
-/*global $: false, saveFormValues: false, mermaid: false */
+/*global $: false, saveFormValues: false */
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
@@ -50,13 +50,4 @@ document.addEventListener('DOMContentLoaded', () => {
   // Tooltips
   //
   $('[data-toggle="tooltip"]').tooltip();
-
-  //
-  // Initialize Mermaid
-  //
-  const config = {
-    startOnLoad: true,
-    arrowMarkerAbsolute: true,
-  };
-  mermaid.initialize(config);
 });
