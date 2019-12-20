@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The main phpMyFAQ Setup.
  *
@@ -21,26 +22,34 @@
  * @link https://www.phpmyfaq.de
  * @since 2002-08-20
  */
+
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
 use phpMyFAQ\System;
-define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> | All rights reserved.');
+
+define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR.'/src');
 define('IS_VALID_PHPMYFAQ', null);
-if (version_compare(PHP_VERSION, '5.6.6') < 0) {
-    die('Sorry, but you need PHP 5.6.6 or later!');
+
+if (version_compare(PHP_VERSION, '7.2.0') < 0) {
+    die('Sorry, but you need PHP 7.2.0 or later!');
 }
+
 set_time_limit(0);
+
 if (!defined('DEBUG')) {
     define('DEBUG', true);
 }
+
 session_name('phpmyfaq-setup');
 session_start();
+
 require PMF_ROOT_DIR.'/src/libs/autoload.php';
 require PMF_ROOT_DIR.'/config/constants.php';
 require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
+
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register()
@@ -58,7 +67,7 @@ $loader->register()
   <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
-<body>
+<body class="d-flex flex-column" >
 
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
