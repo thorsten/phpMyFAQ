@@ -101,7 +101,7 @@ $loader->register()
 
     <div class="jumbotron">
       <div class="container">
-        <h1 class="display-4 text-center">
+        <h1 class="display-4 text-center mt-5">
           phpMyFAQ <?= System::getVersion() ?>
         </h1>
         <p class="text-center">
