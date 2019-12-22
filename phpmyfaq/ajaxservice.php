@@ -77,19 +77,10 @@ $plr = new Plurals($PMF_LANG);
 Strings::init($languageCode);
 
 //
-// Check captcha
-//
-$captcha = new Captcha($faqConfig);
-$captcha->setSessionId(
-    Filter::filterInput(INPUT_COOKIE, Session::PMF_COOKIE_NAME_SESSIONID, FILTER_VALIDATE_INT)
-);
-
-//
 // Send headers
 //
 $http = new HttpHelper();
 $http->setContentType('application/json');
-
 
 $faqSession = new Session($faqConfig);
 $network = new Network($faqConfig);
@@ -112,8 +103,14 @@ if ($user instanceof CurrentUser) {
     $isLoggedIn = false;
 }
 
+//
+// Check captcha
+//
+$captcha = new Captcha($faqConfig);
+$captcha->setUserIsLoggedIn($isLoggedIn);
+
 if ('savevoting' !== $action && 'saveuserdata' !== $action && 'changepassword' !== $action &&
-    !$captcha->checkCaptchaCode($code) && !$isLoggedIn) {
+    !$captcha->checkCaptchaCode($code)) {
     $message = ['error' => $PMF_LANG['msgCaptcha']];
 }
 
@@ -384,7 +381,8 @@ switch ($action) {
                 'dateStart' => '00000000000000',
                 'dateEnd' => '99991231235959',
                 'linkState' => '',
-                'linkDateCheck' => 0
+                'linkDateCheck' => 0,
+                'notes' => ''
             ];
 
             if ($isNew) {
@@ -585,12 +583,12 @@ switch ($action) {
 
                     $message = ['result' => $response];
                 } else {
-                    $questionHelper = new QuestionHelper($faqConfig, $category);
+                    $questionHelper = new QuestionHelper($faqConfig, $cat);
                     $questionHelper->sendSuccessMail($questionData, $categories);
                     $message = ['success' => $PMF_LANG['msgAskThx4Mail']];
                 }
             } else {
-                $questionHelper = new QuestionHelper($faqConfig, $category);
+                $questionHelper = new QuestionHelper($faqConfig, $cat);
                 $questionHelper->sendSuccessMail($questionData, $categories);
                 $message = ['success' => $PMF_LANG['msgAskThx4Mail']];
             }

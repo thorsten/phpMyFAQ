@@ -45,6 +45,9 @@ class Captcha
      */
     private $sids;
 
+    /** @var bool */
+    private $userIsLoggedIn = false;
+
     /**
      * Array of fonts.
      *
@@ -178,11 +181,31 @@ class Captcha
     /**
      * Setter for session id.
      *
-     * @param int $sid session id
+     * @param string $sid session id
+     * @return Captcha
      */
-    public function setSessionId($sid)
+    public function setSessionId(string $sid): Captcha
     {
         $this->sids = $sid;
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isUserIsLoggedIn(): bool
+    {
+        return $this->userIsLoggedIn;
+    }
+
+    /**
+     * @param bool $userIsLoggedIn
+     * @return Captcha
+     */
+    public function setUserIsLoggedIn(bool $userIsLoggedIn): Captcha
+    {
+        $this->userIsLoggedIn = $userIsLoggedIn;
+        return $this;
     }
 
     /**
@@ -486,6 +509,9 @@ class Captcha
      */
     public function checkCaptchaCode($code)
     {
+        if ($this->isUserIsLoggedIn()) {
+            return true;
+        }
         if ($this->config->get('spam.enableCaptchaCode')) {
             return $this->validateCaptchaCode($code);
         } else {

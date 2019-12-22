@@ -356,10 +356,10 @@ abstract class AttachmentAbstract
      * it's md5 hash is used directly, otherwise a
      * hash based on several tokens gets generated.
      *
-     * @return string
+     * @return string|null
      * @throws AttachmentException
      */
-    protected function mkVirtualHash(): string
+    protected function mkVirtualHash()
     {
         if ($this->encrypted) {
             if (

@@ -95,7 +95,7 @@ class Elasticsearch
     /**
      * Creates the Elasticsearch index.
      *
-     * @return boolean
+     * @return bool
      */
     public function createIndex()
     {
@@ -301,7 +301,7 @@ class Elasticsearch
     /**
      * Deletes a FAQ document
      *
-     * @param  integer $solutionId
+     * @param int $solutionId
      * @return array
      */
     public function delete($solutionId)

@@ -16,6 +16,8 @@
  * @since 2009-03-31
  */
 
+use phpMyFAQ\Attachment\AttachmentException;
+use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
@@ -126,7 +128,11 @@ switch ($ajaxAction) {
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'Deleted FAQ ID ' . $recordId);
 
-            $faq->deleteRecord($recordId, $recordLang);
+            try {
+                $faq->deleteRecord($recordId, $recordLang);
+            } catch (FileException $e) {
+            } catch (AttachmentException $e) {
+            }
             echo $PMF_LANG['ad_entry_delsuc'];
         } else {
             echo $PMF_LANG['err_NotAuth'];

@@ -35,6 +35,9 @@ class QuestionHelper
     /** @var Category */
     private $category;
 
+    /** @var array */
+    private $translation;
+
     /**
      * QuestionHelper constructor.
      * @param Configuration $config
@@ -42,8 +45,10 @@ class QuestionHelper
      */
     public function __construct(Configuration $config, Category $category)
     {
+        global $PMF_LANG;
         $this->config = $config;
         $this->category = $category;
+        $this->translation = $PMF_LANG;
     }
 
     /**
@@ -56,7 +61,7 @@ class QuestionHelper
         $questionObject->addQuestion($questionData);
 
         $questionMail = 'User: ' . $questionData['username'] .
-            ', mailto:' . $questionData['email'] . "\n" . $PMF_LANG['msgCategory'] .
+            ', mailto:' . $questionData['email'] . "\n" . $this->translation['msgCategory'] .
             ': ' . $categories[$questionData['category_id']]['name'] . "\n\n" .
             wordwrap($questionData['question'], 72) . "\n\n" .
             $this->config->getDefaultUrl() . 'admin/';
@@ -66,9 +71,9 @@ class QuestionHelper
         $oUser->getUserById($userId);
 
         $userEmail = $oUser->getUserData('email');
-        $mainAdminEmail = $faqConfig->get('main.administrationMail');
+        $mainAdminEmail = $this->config->get('main.administrationMail');
 
-        $mailer = new Mail($faqConfig);
+        $mailer = new Mail($this->config);
         $mailer->setReplyTo($questionData['email'], $questionData['username']);
         $mailer->addTo($mainAdminEmail);
         // Let the category owner get a copy of the message
