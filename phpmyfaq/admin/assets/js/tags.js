@@ -19,22 +19,19 @@
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  $('.btn-edit').on('click', function () {
+  $('.btn-edit').on('click', function() {
     const id = $(this).data('btn-id');
     const span = $('span[data-tag-id="' + id + '"]');
 
     if (span.length > 0) {
-      span.replaceWith(
-        '<input name="tag" class="form-control" data-tag-id="' + id + '" value="' + span.html() + '">'
-      );
+      span.replaceWith('<input name="tag" class="form-control" data-tag-id="' + id + '" value="' + span.html() + '">');
     } else {
       const input = $('input[data-tag-id="' + id + '"]');
       input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
     }
   });
 
-  $('.tag-form').bind('submit', function (event) {
-
+  $('.tag-form').bind('submit', function(event) {
     event.preventDefault();
 
     const input = $('input[data-tag-id]:focus');
@@ -47,16 +44,14 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       data: 'id=' + id + '&tag=' + tag + '&csrf=' + csrf,
       dataType: 'json',
-      beforeSend: function () {
-        $('#saving_data_indicator').html(
-          '<img src="../assets/svg/spinning-circles.svg"> Saving ...'
-        );
+      beforeSend: function() {
+        $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
       },
-      success: function (message) {
+      success: function(message) {
         input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
         $('span[data-tag-id="' + id + '"]');
         $('#saving_data_indicator').html(message);
-      }
+      },
     });
 
     return false;

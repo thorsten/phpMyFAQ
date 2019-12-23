@@ -23,9 +23,3 @@ $('pre code').each((i, block) => {
   'use strict';
   hljs.highlightBlock(block);
 });
-
-/**
- * bxSlider
- *
- */
-$('.bxslider').bxSlider();

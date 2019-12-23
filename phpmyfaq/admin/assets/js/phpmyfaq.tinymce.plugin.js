@@ -15,22 +15,23 @@
 
 /*global tinymce:false, $:false */
 
-tinymce.PluginManager.add('phpmyfaq', function (editor) {
+tinymce.PluginManager.add('phpmyfaq', function(editor) {
   'use strict';
 
   editor.addButton('phpmyfaq', {
     image: 'images/phpmyfaq.gif',
-    onclick: function () {
+    onclick: function() {
       // Open window
-      editor.windowManager.open({
+      editor.windowManager.open(
+        {
           title: 'Internal links',
           width: 480,
           height: 320,
           body: [
-            {type: 'textbox', name: 'search', label: 'Search', id: 'pmf-internal-links'},
-            {type: 'container', name: 'pmf-faq-list', id: 'pmf-faq-list', minHeight: 240}
+            { type: 'textbox', name: 'search', label: 'Search', id: 'pmf-internal-links' },
+            { type: 'container', name: 'pmf-faq-list', id: 'pmf-faq-list', minHeight: 240 },
           ],
-          onkeyup: function () {
+          onkeyup: function() {
             var search = $('#pmf-internal-links').val();
             var url = location.protocol + '//' + location.host + location.pathname;
             var args = top.tinymce.activeEditor.windowManager.getParams();
@@ -40,26 +41,27 @@ tinymce.PluginManager.add('phpmyfaq', function (editor) {
                 type: 'POST',
                 url: url + 'index.php?action=ajax&ajax=records&ajaxaction=search_records',
                 data: 'search=' + search + '&csrf=' + args.csrf,
-                success: function (searchresults) {
+                success: function(searchresults) {
                   list.empty();
                   if (searchresults.length > 0) {
                     list.append(searchresults);
                   }
-                }
+                },
               });
             }
           },
-          onsubmit: function () {
+          onsubmit: function() {
             var selected = $('input:radio[name=faqURL]:checked');
             var url = selected.val();
             var title = selected.parent().text();
             var anchor = '<a class="pmf-internal-link" href="' + url + '">' + title + '</a>';
             editor.insertContent(anchor);
-          }
-        }, {
-          csrf: $('#csrf').val()
+          },
+        },
+        {
+          csrf: $('#csrf').val(),
         }
       );
-    }
+    },
   });
 });

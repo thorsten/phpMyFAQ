@@ -16,7 +16,8 @@
     <meta name="apple-itunes-app" content="app-id=977896957" />
 
     <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1" />
+    <link rel="stylesheet" href="{{ baseHref }}assets/dist/styles.css" />
+
     <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
     <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
     <link rel="canonical" href="{{ currentPageUrl }}" />
@@ -215,8 +216,9 @@
       [/debugMode]
     </footer>
 
-    <script src="{{ baseHref }}assets/dist/vendors.bundle.js"></script>
-    <script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
+    <script src="{{ baseHref }}assets/dist/vendors.js"></script>
+    <script src="{{ baseHref }}assets/dist/phpmyfaq.js"></script>
+    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
     <script>
       $('.topten').tooltip();
       $('.latest-entries').tooltip();
@@ -232,6 +234,7 @@
             button: {
               background: '#14a7d0',
             },
+            revokable: true,
           },
         });
       });

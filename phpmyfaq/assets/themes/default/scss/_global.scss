@@ -9,20 +9,25 @@ body {
   color: #717f86;
   height: 100%;
   font-size: 16px;
-  font-family: 'Open Sans', sans-serif;
+  font-family: 'Roboto', 'Open Sans', sans-serif;
   font-weight: 400;
   line-height: 1.52;
 }
 
-ol, ul {
+ol,
+ul {
   list-style: none;
 }
 
-blockquote, q {
+blockquote,
+q {
   quotes: none;
 }
 
-blockquote:before, blockquote:after, q:before, q:after {
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
   content: '';
 }
 
@@ -35,21 +40,27 @@ table {
   padding: 60px 0;
 }
 
-h1, h2, h3, h4, h5, h6{
-  font-family: 'Open Sans', sans-serif;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-weight: 700;
-  color: #4B4B4C;
+  color: #4b4b4c;
 }
 
 a {
   color: #5fcf80;
-  &:hover, &:focus {
+  &:hover,
+  &:focus {
     color: #5fcf80;
     outline: none;
   }
 }
 
-mark, .mark {
+mark,
+.mark {
   padding: 0 !important; // override Bootstrap default
 }
 
@@ -87,7 +98,7 @@ mark, .mark {
   height: 2.75rem;
   text-align: center;
   color: $white;
-  background: fade-out($gray-800, .5);
+  background: fade-out($gray-800, 0.5);
   line-height: 46px;
   &:focus,
   &:hover {

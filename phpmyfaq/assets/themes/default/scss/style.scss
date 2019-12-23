@@ -14,28 +14,28 @@
  */
 
 // Import variables
-@import "variables.scss";
+@import 'variables.scss';
 
 // Import Bootstrap
-@import "../../../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import '~bootstrap';
 
 // Import global styles
-@import "global.scss";
-@import "utilities.scss";
+@import 'global.scss';
+@import 'utilities.scss';
 
 // Custom Components
-@import "dropdowns.scss";
-@import "navs.scss";
-@import "buttons.scss";
-@import "cards.scss";
-@import "error.scss";
-@import "footer.scss";
-@import "breadcrumbs";
-@import "search";
+@import 'dropdowns.scss';
+@import 'navs.scss';
+@import 'buttons.scss';
+@import 'cards.scss';
+@import 'error.scss';
+@import 'footer.scss';
+@import 'breadcrumbs';
+@import 'search';
 
 // Fork Awesome
-$fa-font-path: '../fonts';
-@import '../../../../../node_modules/fork-awesome/scss/fork-awesome';
+$fa-font-path: '~fork-awesome/fonts';
+@import '~fork-awesome/scss/fork-awesome';
 
 //
 // LOGIN
@@ -45,7 +45,8 @@ $fa-font-path: '../fonts';
   padding: 15px;
   margin: 0 auto;
 
-  .pmf-form-login-heading, .checkbox {
+  .pmf-form-login-heading,
+  .checkbox {
     margin-bottom: 10px;
   }
 
@@ -65,13 +66,13 @@ $fa-font-path: '../fonts';
     }
   }
 
-  input[type="text"] {
+  input[type='text'] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  input[type="password"] {
+  input[type='password'] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;

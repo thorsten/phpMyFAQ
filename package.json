@@ -15,16 +15,13 @@
   "homepage": "https://www.phpmyfaq.de/",
   "main": "Gruntfile.js",
   "scripts": {
-    "build": "grunt build && webpack",
-    "build:webpack": "webpack",
-    "watch": "grunt watch"
+    "build": "webpack"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",
     "bootstrap-3-typeahead": "^4.0.2",
     "bootstrap-datepicker": "^1.8.0",
     "bs-custom-file-input": "^1.3.1",
-    "bxslider": "4.2.13",
     "cookieconsent": "^3.1.0",
     "fork-awesome": "^1.1.7",
     "handlebars": "^4.0.12",
@@ -35,29 +32,26 @@
     "tinymce": "^4.9.3"
   },
   "devDependencies": {
+    "@babel/core": "^7.7.7",
+    "autoprefixer": "^9.7.3",
+    "babel-loader": "^8.0.6",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-es2015": "^6.24.1",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.1.1",
     "css-loader": "^3.4.0",
-    "grunt": "^1.0.3",
-    "grunt-contrib-clean": "^2.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-csslint": "^2.0.0",
-    "grunt-contrib-cssmin": "^3.0.0",
-    "grunt-contrib-uglify-es": "^3.3.0",
-    "grunt-contrib-watch": "^1.1.0",
-    "grunt-exec": "^3.0.0",
-    "grunt-sass": "^3.0.1",
+    "file-loader": "^5.0.2",
     "husky": "^3.1.0",
-    "load-grunt-tasks": "^5.0.0",
-    "mini-css-extract-plugin": "^0.8.2",
+    "mini-css-extract-plugin": "^0.9.0",
     "node-sass": "^4.13.0",
     "prettier": "1.19.1",
     "pretty-quick": "^2.0.1",
     "sass-loader": "^8.0.0",
     "sigmund": "^1.0.1",
-    "style-loader": "^1.0.2",
+    "style-loader": "^1.1.1",
     "webpack": "^4.41.2",
-    "webpack-cli": "^3.3.10"
+    "webpack-cli": "^3.3.10",
+    "webpack-concat-plugin": "3.0.0"
   },
   "husky": {
     "hooks": {

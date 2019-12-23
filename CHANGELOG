@@ -5,7 +5,7 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-beta.3 - 2019-11-30
+Version 3.0.0-RC - 2019-12-
 - fixed XSS vulnerabilities in the bundled Bootstrap version (Thorsten)
 - changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
@@ -17,7 +17,6 @@ Version 3.0.0-beta.3 - 2019-11-30
 - added support for category images (Thorsten)
 - added support for categories on homepage (Thorsten)
 - added filter functionality in templates (Thorsten)
-- added image slider template (Thorsten)
 - added improved attachment overview (Thorsten)
 - added HTML5 export (Thorsten)
 - added support for EU General Data Protection Regulation (Jochen Steinhilber)
@@ -37,6 +36,7 @@ Version 3.0.0-beta.3 - 2019-11-30
 - removed support for ext/mssql (Thorsten)
 - removed bundled Symfony ClassLoader (Thorsten)
 - removed Bower, now using Yarn only (Thorsten)
+- removed Grunt, now using Webpack (Thorsten)
 - removed Modernizr (Thorsten)
 - removed share on Facebook link (Thorsten)
 - removed Facebook Like Button support (Thorsten)

@@ -12,3 +12,5 @@
  * @link https://www.phpmyfaq.de
  * @since 2019-12-20
  */
+
+import 'cookieconsent';

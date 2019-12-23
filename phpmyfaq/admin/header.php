@@ -200,16 +200,17 @@ switch ($action) {
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="assets/css/style.css?v=1">
+  <link rel="stylesheet" href="../assets/dist/admin-styles.css?v=1">
 
-  <script src="../assets/dist/vendors.bundle.js"></script>
-  <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
+  <script src="../assets/dist/vendors.js"></script>
+    <script src="../assets/dist/phpmyfaq.js"></script>
+    <script src="../assets/dist/backend.js"></script>
   <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
 
     <?php if ($edAutoSave): ?>
       <script>let pmfAutosaveInterval = <?= $faqConfig->get('records.autosaveSecs') ?>;</script>
-      <script src="../assets/js/autosave.js" async></script>
+      <script src="../assets/src/autosave.js" async></script>
     <?php endif; ?>
 
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">

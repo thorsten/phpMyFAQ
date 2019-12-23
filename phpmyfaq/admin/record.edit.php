@@ -960,7 +960,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
       }
 
       function setPermissions(permissions) {
-        const perms = jQuery.parseJSON(permissions);
+        const perms = permissions;
 
         if (-1 === parseInt(perms.user[0])) {
           $('#restrictedusers').prop('checked', false).prop('disabled', true);

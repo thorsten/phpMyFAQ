@@ -21,7 +21,7 @@ require('popper.js');
 require('bootstrap');
 require('bootstrap-3-typeahead');
 require('bootstrap-datepicker');
-require('bs-custom-file-input');
-require('bxslider');
+window.bsCustomFileInput = require('bs-custom-file-input');
+
 require('cookieconsent');
 require('handlebars');

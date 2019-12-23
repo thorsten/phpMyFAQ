@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /** File upload handling. */
-  $('#filesToUpload').on('change', function () {
+  $('#filesToUpload').on('change', function() {
     const files = $('#filesToUpload')[0].files,
       fileSize = $('#filesize'),
       fileList = $('.pmf-attachment-upload-files');
@@ -32,7 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
       fileList.append('<li>' + files[nFileId].name + '</li>');
     }
     let sOutput = nBytes + ' bytes';
-    for (let aMultiples = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'], nMultiple = 0, nApprox = nBytes / 1024; nApprox > 1; nApprox /= 1024, nMultiple++) {
+    for (
+      let aMultiples = ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'], nMultiple = 0, nApprox = nBytes / 1024;
+      nApprox > 1;
+      nApprox /= 1024, nMultiple++
+    ) {
       sOutput = nApprox.toFixed(2) + ' ' + aMultiples[nMultiple] + ' (' + nBytes + ' bytes)';
     }
     fileSize.html(sOutput);
@@ -40,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /** Handler for closing the modal */
-  $('#pmf-attachment-modal-close').on('click', function () {
+  $('#pmf-attachment-modal-close').on('click', function() {
     $('#filesize').html('');
     $('.pmf-attachment-upload-files li').remove();
     $('.pmf-attachment-upload-files').addClass('invisible');
@@ -48,7 +52,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /** File upload via Ajax */
-  $('#pmf-attachment-modal-upload').on('click', function (event) {
+  $('#pmf-attachment-modal-upload').on('click', function(event) {
     event.preventDefault();
     event.stopImmediatePropagation();
 
@@ -68,25 +72,37 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       xhr: function() {
         const xhr = new window.XMLHttpRequest();
-        xhr.upload.addEventListener('progress', function(event) {
-          if (event.lengthComputable) {
-            let percentComplete = event.loaded / event.total;
-            percentComplete = parseInt(percentComplete * 100);
-            $('.progress-bar').width(percentComplete);
-          }
-        }, false);
+        xhr.upload.addEventListener(
+          'progress',
+          function(event) {
+            if (event.lengthComputable) {
+              let percentComplete = event.loaded / event.total;
+              percentComplete = parseInt(percentComplete * 100);
+              $('.progress-bar').width(percentComplete);
+            }
+          },
+          false
+        );
         return xhr;
       },
-      success: function (attachments) {
-        attachments.forEach(function (attachment) {
-          $('.adminAttachments').
-          append(
+      success: function(attachments) {
+        attachments.forEach(function(attachment) {
+          $('.adminAttachments').append(
             '<li>' +
-            '<a href="../index.php?action=attachment&id=' + attachment.attachmentId + '">' + attachment.fileName + '</a>' +
-            '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' + attachment.faqId +
-            '&amp;id=' + attachment.attachmentId + '&amp;lang=' + attachment.faqLanguage + '">' +
-            '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
-            '</li>'
+              '<a href="../index.php?action=attachment&id=' +
+              attachment.attachmentId +
+              '">' +
+              attachment.fileName +
+              '</a>' +
+              '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' +
+              attachment.faqId +
+              '&amp;id=' +
+              attachment.attachmentId +
+              '&amp;lang=' +
+              attachment.faqLanguage +
+              '">' +
+              '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
+              '</li>'
           );
         });
         progress.addClass('invisible');
@@ -96,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#attachmentForm')[0].reset();
         $('#attachmentModal').modal('hide');
       },
-      error: function (data) {
+      error: function(data) {
         console.log(data);
       },
       data: formData,
       cache: false,
       contentType: false,
-      processData: false
+      processData: false,
     });
     return false;
   });
@@ -111,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
    * Delete questions
    *
    */
-  $('#submitDeleteQuestions').on('click', function () {
+  $('#submitDeleteQuestions').on('click', function() {
     const questions = $('#questionSelection').serialize(),
       indicator = $('#saving_data_indicator');
 
@@ -120,17 +136,21 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
       data: questions,
-      success: function (msg) {
+      success: function(msg) {
         indicator.html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
-        $('tr td input:checked').parent().parent().parent().fadeOut('slow');
+        $('tr td input:checked')
+          .parent()
+          .parent()
+          .parent()
+          .fadeOut('slow');
         indicator.fadeOut('slow');
         $('#returnMessage').html('<p class="alert alert-success">' + msg + '</p>');
-      }
+      },
     });
     return false;
   });
 
-  $(function () {
+  $(function() {
     // set the textarea to its previous height
     const answerHeight = localStorage.getItem('textarea.answer.height'),
       answer = $('#answer');
@@ -140,20 +160,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // when reszied, store the textarea's height
-    answer.on('mouseup', function () {
+    answer.on('mouseup', function() {
       localStorage.setItem('textarea.answer.height', $(this).height());
     });
 
     // on clicking the Preview tab, refresh the preview
-    $('.markdown-tabs').find('a').on('click', function () {
-      if ($(this).attr('data-markdown-tab') === 'preview') {
-        $('.markdown-preview')
-          .height(answer.height());
-        $.post('index.php?action=ajax&ajax=markdown', {text: answer.val()}, function (result) {
-          $('.markdown-preview').html(result);
-        });
-      }
-    });
+    $('.markdown-tabs')
+      .find('a')
+      .on('click', function() {
+        if ($(this).attr('data-markdown-tab') === 'preview') {
+          $('.markdown-preview').height(answer.height());
+          $.post('index.php?action=ajax&ajax=markdown', { text: answer.val() }, function(result) {
+            $('.markdown-preview').html(result);
+          });
+        }
+      });
   });
 
   // Typeahead
@@ -175,19 +196,21 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'q=' + request.trim(),
-        success: (data) => {
-          response(data.map((tags) => {
-            return {
-              tagName: tags.tagName
-            };
-          }));
-        }
+        success: data => {
+          response(
+            data.map(tags => {
+              return {
+                tagName: tags.tagName,
+              };
+            })
+          );
+        },
       });
     },
-    displayText: (tags) => {
+    displayText: tags => {
       return typeof tags !== 'undefined' && typeof tags.tagName !== 'undefined' ? tags.tagName : tags;
     },
-    updater: (event) => {
+    updater: event => {
       const tags = $('#tags');
       let currentTags = tags.data('tag-list');
       if (typeof currentTags === 'undefined') {
@@ -198,6 +221,6 @@ document.addEventListener('DOMContentLoaded', () => {
       tags.data('tagList', currentTags);
       tags.val(currentTags);
       return event;
-    }
+    },
   });
 });

@@ -96,7 +96,7 @@ if (isset($auth)) {
                 'advlist autolink lists link image charmap print preview hr anchor pagebreak',
                 'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
                 'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons template paste textcolor autosave phpmyfaq save'
+                'emoticons template paste textcolor autosave phpmyfaq'
               ],
               relative_urls: false,
               convert_urls: false,
@@ -162,17 +162,13 @@ if (isset($auth)) {
               },
 
               // phpMyFAQ CSS
-              content_css: '../assets/themes/<?= Template::getTplSetName() ?>/css/style.min.css?<?= time(); ?>',
+              content_css: '../assets/dist/styles.css?<?= time(); ?>',
 
               // Replace values for the template plugin
               template_replace_values: {
                 username: '<?= addslashes($user->userdata->get('display_name')) ?>',
                 user_id: '<?= $user->userdata->get('user_id') ?>'
               },
-
-              templates: [
-                {title: 'Slider', description: 'phpMyFAQ Image Slider', url: 'assets/templates/image-slider.html'}
-              ],
 
               // File browser
               file_browser_callback: function (fieldName, url, type, win) {

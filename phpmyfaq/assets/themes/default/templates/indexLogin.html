@@ -1,117 +1,140 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="{{ metaLanguage }}">
-<head>
-  <meta charset="utf-8">
+  <head>
+    <meta charset="utf-8" />
 
-  <title>{{ title }}</title>
-  <base href="{{ baseHref }}">
+    <title>{{ title }}</title>
+    <base href="{{ baseHref }}" />
 
-  <meta name="description" content="{{ metaDescription }}">
-  <meta name="keywords" content="{{ metaKeywords }}">
-  <meta name="author" content="{{ metaPublisher }}">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}">
-  <meta name="robots" content="{{ metaRobots }}">
-  <meta name="revisit-after" content="7 days">
+    <meta name="description" content="{{ metaDescription }}" />
+    <meta name="keywords" content="{{ metaKeywords }}" />
+    <meta name="author" content="{{ metaPublisher }}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="application-name" content="phpMyFAQ {{ phpmyfaqversion }}" />
+    <meta name="robots" content="{{ metaRobots }}" />
+    <meta name="revisit-after" content="7 days" />
 
-  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/{{ stylesheet }}.css?v=1">
-  <link rel="stylesheet" href="{{ baseHref }}assets/themes/{{ tplSetName }}/css/floating-labels.css?v=1">
-  <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico">
-  <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png">
-  <link rel="canonical" href="{{ currentPageUrl }}">
+    <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="{{ baseHref }}assets/dist/styles.css" />
 
-  <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php">
-  <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php">
-  <link rel="alternate" title="Latest FAQ Records RSS Feed" type="application/rss+xml"
-        href="{{ baseHref }}feed/latest/rss.php">
-  <link rel="alternate" title="Open Questions RSS Feed" type="application/rss+xml"
-        href="{{ baseHref }}feed/openquestions/rss.php">
-  <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}">
+    <link rel="shortcut icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/favicon.ico" />
+    <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
+    <link rel="canonical" href="{{ currentPageUrl }}" />
 
-  <style>
-    .bd-placeholder-img {
-      font-size: 1.125rem;
-      text-anchor: middle;
-    }
+    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php" />
+    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php" />
+    <link
+      rel="alternate"
+      title="Latest FAQ Records RSS Feed"
+      type="application/rss+xml"
+      href="{{ baseHref }}feed/latest/rss.php"
+    />
+    <link
+      rel="alternate"
+      title="Open Questions RSS Feed"
+      type="application/rss+xml"
+      href="{{ baseHref }}feed/openquestions/rss.php"
+    />
+    <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}" />
 
-    @media (min-width: 768px) {
-      .bd-placeholder-img-lg {
-        font-size: 3.5rem;
+    <style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
       }
-    }
-  </style>
 
-  <script>
-      if (self === top) {
-          document.documentElement.style.display = 'block';
-      } else {
-          top.location = self.location;
-      }
-  </script>
-  <style> html {
-    display: none;
-  }
-  </style>
-</head>
-<body dir="{{ dir }}" class="d-flex flex-column">
-
-<form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
-
-  <div class="text-center mb-4">
-    <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="{{ header }}">
-    <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
-    [useSslForLogins]
-    <p>
-      <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
-    </p>
-    [/useSslForLogins]
-
-    <p> {{ loginMessage }}</p>
-  </div>
-
-  <div class="form-label-group">
-    <input type="text" name="faqusername" id="faqusername" class="form-control" placeholder="{{ username }}" required
-           autofocus>
-    <label for="faqusername">{{ username }}</label>
-  </div>
-
-  <div class="form-label-group">
-    <input type="password" name="faqpassword" id="faqpassword" class="form-control" placeholder="{{ password }}"
-           required>
-    <label for="faqpassword">{{ password }}</label>
-  </div>
-
-  <div class="checkbox mb-3">
-    <label>
-      <input type="checkbox" name="faqrememberme" value="rememberMe" id="faqrememberme"> {{ rememberMe }}
-    </label>
-  </div>
-  <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
-  <p class="mt-5 mb-3 text-center">{{ sendPassword }} <br> {{ registerUser }}</p>
-  <br>
-  <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
-    {{ switchLanguages }}
-    <input type="hidden" name="action" value=""/>
-  </form>
-
-</form>
-
-<script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/vendors.min.js"></script>
-<script src="{{ baseHref }}assets/themes/{{ tplSetName }}/js/phpmyfaq.min.js"></script>
-<script>
-  window.addEventListener('load', () => {
-    window.cookieconsent.initialise({
-      'palette': {
-        'popup': {
-          'background': '#252e39'
-        },
-        'button': {
-          'background': '#14a7d0'
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
         }
       }
-    })
-  });
-</script>
-</body>
+    </style>
+
+    <script>
+      if (self === top) {
+        document.documentElement.style.display = 'block';
+      } else {
+        top.location = self.location;
+      }
+    </script>
+    <style>
+      html {
+        display: none;
+      }
+    </style>
+  </head>
+  <body dir="{{ dir }}" class="d-flex flex-column">
+    <form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
+      <div class="text-center mb-4">
+        <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="{{ header }}" />
+        <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
+        [useSslForLogins]
+        <p>
+          <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+        </p>
+        [/useSslForLogins]
+
+        <p>{{ loginMessage }}</p>
+      </div>
+
+      <div class="form-label-group">
+        <input
+          type="text"
+          name="faqusername"
+          id="faqusername"
+          class="form-control"
+          placeholder="{{ username }}"
+          required
+          autofocus
+        />
+        <label for="faqusername">{{ username }}</label>
+      </div>
+
+      <div class="form-label-group">
+        <input
+          type="password"
+          name="faqpassword"
+          id="faqpassword"
+          class="form-control"
+          placeholder="{{ password }}"
+          required
+        />
+        <label for="faqpassword">{{ password }}</label>
+      </div>
+
+      <div class="checkbox mb-3">
+        <label>
+          <input type="checkbox" name="faqrememberme" value="rememberMe" id="faqrememberme" /> {{ rememberMe }}
+        </label>
+      </div>
+      <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
+      <p class="mt-5 mb-3 text-center">
+        {{ sendPassword }} <br />
+        {{ registerUser }}
+      </p>
+      <br />
+      <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
+        {{ switchLanguages }}
+        <input type="hidden" name="action" value="" />
+      </form>
+    </form>
+
+    <script src="{{ baseHref }}assets/dist/vendors.js"></script>
+    <script src="{{ baseHref }}assets/dist/phpmyfaq.js"></script>
+    <script src="{{ baseHref }}assets/dist/frontend.js"></script>
+    <script>
+      window.addEventListener('load', () => {
+        window.cookieconsent.initialise({
+          palette: {
+            popup: {
+              background: '#252e39',
+            },
+            button: {
+              background: '#14a7d0',
+            },
+          },
+        });
+      });
+    </script>
+  </body>
 </html>

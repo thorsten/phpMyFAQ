@@ -24,13 +24,12 @@
 function getUserRights(userId) {
   'use strict';
 
-  $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId,
-    (data) => {
-      $.each(data, (i, val) => {
-        $('#user_right_' + val).attr('checked', true);
-      });
-      $('#rights_user_id').val(userId);
+  $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=get_user_rights&user_id=' + userId, data => {
+    $.each(data, (i, val) => {
+      $('#user_right_' + val).attr('checked', true);
     });
+    $('#rights_user_id').val(userId);
+  });
 }
 
 /**
@@ -45,7 +44,6 @@ function updateUser(userId) {
   getUserRights(userId);
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
@@ -53,7 +51,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const buttonOverridePassword = $('.pmf-user-password-override-action');
 
   button.data('type', 'check');
-  button.on('click', (event) => {
+  button.on('click', event => {
     const checkbox = $('.permission');
     event.preventDefault();
     if (button.data('type') === 'check') {
@@ -65,7 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  buttonOverridePassword.on('click', (event) => {
+  buttonOverridePassword.on('click', event => {
     event.preventDefault();
 
     // Fetch data
@@ -74,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       data: $('#pmf-modal-user-password-override form').serialize(),
       dataType: 'json',
-      beforeSend: function () {
+      beforeSend: function() {
         $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
       },
-      success: function (message) {
+      success: function(message) {
         $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
         $('#pmf-modal-user-password-override').modal('hide');
         $('#saving_data_indicator').fadeOut();
-      }
+      },
     });
     return false;
   });
@@ -96,23 +94,24 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'q=' + request,
-        success: (data) => {
-          response(data.map((item) => {
-            return {
-              user_id: item.user_id,
-              name: item.name
-            };
-          }));
-        }
+        success: data => {
+          response(
+            data.map(item => {
+              return {
+                user_id: item.user_id,
+                name: item.name,
+              };
+            })
+          );
+        },
       });
     },
-    displayText: (item) => {
+    displayText: item => {
       return typeof item !== 'undefined' && typeof item.name !== 'undefined' ? item.name : item;
     },
-    afterSelect: (user) => {
+    afterSelect: user => {
       $('#user_list_select').val(user.user_id);
       updateUser(user.user_id);
-    }
+    },
   });
-
 });

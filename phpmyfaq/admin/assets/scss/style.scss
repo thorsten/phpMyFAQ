@@ -14,26 +14,26 @@
  */
 
 // Import variables
-@import "variables.scss";
+@import 'variables.scss';
 
 // Import Bootstrap
-@import "../../../../node_modules/bootstrap/scss/bootstrap.scss";
+@import '~bootstrap';
 
 // Import global styles
-@import "global.scss";
-@import "utilities.scss";
+@import 'global.scss';
+@import 'utilities.scss';
 
 // Custom Components
-@import "dropdowns.scss";
-@import "navs.scss";
-@import "buttons.scss";
-@import "cards.scss";
-@import "error.scss";
-@import "footer.scss";
+@import 'dropdowns.scss';
+@import 'navs.scss';
+@import 'buttons.scss';
+@import 'cards.scss';
+@import 'error.scss';
+@import 'footer.scss';
 
 // Fork Awesome
-$fa-font-path: '../fonts';
-@import '../../../../node_modules/fork-awesome/scss/fork-awesome';
+$fa-font-path: '~fork-awesome/fonts';
+@import '~fork-awesome/scss/fork-awesome';
 
 //
 // Login
@@ -59,13 +59,13 @@ $fa-font-path: '../fonts';
     z-index: 2;
   }
 
-  input[type="text"] {
+  input[type='text'] {
     margin-bottom: -1px;
     border-bottom-right-radius: 0;
     border-bottom-left-radius: 0;
   }
 
-  input[type="password"] {
+  input[type='password'] {
     margin-bottom: 10px;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -78,9 +78,10 @@ $fa-font-path: '../fonts';
 .jqstooltip {
   box-sizing: content-box;
 }
-.card-columns, .card-deck {
+.card-columns,
+.card-deck {
   .card {
-    margin-bottom: .75rem;
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -101,7 +102,8 @@ $fa-font-path: '../fonts';
 //
 // SETUP
 //
-.setup-content, .setup-footer {
+.setup-content,
+.setup-footer {
   border-top: 1px solid darkgray;
   margin-top: 1rem;
   padding-top: 1rem;
@@ -154,7 +156,6 @@ $fa-font-path: '../fonts';
     border-width: 1px 0 0 0;
     border-right: none !important;
     cursor: pointer;
-
   }
 
   & > .list-group-item:first-child {
