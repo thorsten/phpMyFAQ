@@ -19,7 +19,7 @@
 
 /*global document: false, window: false, $: false */
 
-var infoBox, selectSelectAll, selectUnselectAll, closeWindow, addAttachmentLink, saveVoting;
+let selectSelectAll, selectUnselectAll, saveVoting;
 
 $(document).ready(function() {
   'use strict';
@@ -50,59 +50,6 @@ $(document).ready(function() {
     for (i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = false;
     }
-  };
-
-  /**
-   * Displays or hides the info boxes
-   *
-   * @return void
-   */
-  infoBox = function infoBox(infobox_id) {
-    var domId = $('#' + infobox_id);
-    if (domId.css('display') === 'none') {
-      $('.faqTabContent').hide();
-      domId.show();
-    } else {
-      domId.hide();
-    }
-  };
-
-  /**
-   * Adds the link to the attachment in the main FAQ window
-   * @param attachmentId
-   * @param fileName
-   * @param recordId
-   * @param recordLang
-   */
-  addAttachmentLink = function addAttachmentLink(attachmentId, fileName, recordId, recordLang) {
-    window.opener
-      .$('.adminAttachments')
-      .append(
-        '<li>' +
-          '<a href="../index.php?action=attachment&id=' +
-          attachmentId +
-          '">' +
-          fileName +
-          '</a>' +
-          '<a class="badge badge-danger" href="?action=delatt&amp;record_id=' +
-          recordId +
-          '&amp;id=' +
-          attachmentId +
-          '&amp;lang=' +
-          recordLang +
-          '">' +
-          '<i aria-hidden="true" class="fa fa-trash"></i></a>' +
-          '</li>'
-      );
-    window.close();
-  };
-
-  /**
-   * Closes the current window
-   *
-   */
-  closeWindow = function closeWindow() {
-    window.close();
   };
 
   /**

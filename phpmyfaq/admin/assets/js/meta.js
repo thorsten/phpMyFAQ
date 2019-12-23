@@ -6,15 +6,12 @@
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- * @package   Administration
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2018-2019 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2018-08-10
  */
-
-/*global $:false */
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';

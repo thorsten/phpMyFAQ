@@ -13,8 +13,6 @@
  * @since 2016-01-11
  */
 
-/*global $:false */
-
 $(() => {
   'use strict';
 

@@ -2730,7 +2730,8 @@ class Faq
                     );
                 } else {
                     $output .= sprintf(
-                        '<td><a class="btn btn-primary" href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
+                        '<td class="text-right">' .
+                        '<a class="btn btn-primary" href="?%saction=add&amp;question=%d&amp;cat=%d">%s</a></td>',
                         $sids,
                         $row->id,
                         $row->category_id,

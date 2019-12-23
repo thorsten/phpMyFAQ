@@ -13,8 +13,6 @@
  * @since 2013-11-17
  */
 
-/*global $:false */
-
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
