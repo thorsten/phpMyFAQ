@@ -244,7 +244,7 @@ switch ($action) {
                     }
                 }
 
-                $mailer->subject = '%sitename%: ' . $title;
+                $mail->subject = $faqConfig->get('main.titleFAQ') . ': New comment for "' . $title . '"';
                 $mail->message = strip_tags($commentMail);
                 $result = $mail->send();
                 unset($mail);
