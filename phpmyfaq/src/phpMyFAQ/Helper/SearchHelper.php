@@ -387,8 +387,8 @@ class SearchHelper extends Helper
         foreach ($mostPopularSearches as $searchItem) {
             if (Strings::strlen($searchItem['searchterm']) > 0) {
                 $html .= sprintf(
-                    '<li><a class="pmf-tag" href="?search=%s&submit=Search&action=search">%s ' .
-                    '<span class="badge">%dx</span> </a></li>',
+                    '<li><a class="btn btn-primary" href="?search=%s&submit=Search&action=search">%s ' .
+                    '<span class="badge badge-info">%dx</span> </a></li>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']
