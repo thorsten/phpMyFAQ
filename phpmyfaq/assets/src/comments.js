@@ -17,20 +17,20 @@ $(() => {
   'use strict';
 
   const showLongComment = id => {
-    $('.comment-more-' + id).removeClass('hide');
-    $('.comment-dots-' + id).addClass('hide');
-    $('.comment-show-more-' + id).addClass('hide');
+    $('.comment-more-' + id).removeClass('d-none');
+    $('.comment-dots-' + id).addClass('d-none');
+    $('.comment-show-more-' + id).addClass('d-none');
   };
 
   $('.show-comment-form').on('click', event => {
     event.preventDefault();
-    $('#pmf-create-comment').removeClass('hide');
+    $('#pmf-create-comment').removeClass('d-none');
     document.getElementById('pmf-create-comment').scrollIntoView();
   });
 
   $('.pmf-comments-show-more').on('click', event => {
-    const commentId = $(this).data('comment-id');
     event.preventDefault();
+    const commentId = $(this).data('comment-id');
     showLongComment(commentId);
   });
 });

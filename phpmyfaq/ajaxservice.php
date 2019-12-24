@@ -146,7 +146,7 @@ switch ($action) {
         $newsId = Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
         $username = Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
         $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
-        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_SPECIAL_CHARS);
+        $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
 
         switch ($type) {
             case 'news':
@@ -170,9 +170,9 @@ switch ($action) {
                 break;
             }
         }
-
-        if (!is_null($username) && !empty($username) && !empty($mailer) && !is_null($mailer) && !is_null($comment) &&
-            !empty($comment) && $stopWords->checkBannedWord($comment) && !$faq->commentDisabled(
+        if (!is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
+                $comment
+            ) && !$faq->commentDisabled(
                 $id,
                 $languageCode,
                 $type
@@ -282,7 +282,7 @@ switch ($action) {
                 $message = ['error' => $PMF_LANG['err_SaveComment']];
             }
         } else {
-            $message = ['error' => 'Please add your name, your e-mail address and a comment!'];
+            $message = ['error' => 'xxxxPlease add your name, your e-mail address and a comment!'];
         }
         break;
 
@@ -925,3 +925,4 @@ switch ($action) {
 }
 
 $http->sendJsonWithHeaders($message);
+exit();

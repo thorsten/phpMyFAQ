@@ -56,7 +56,7 @@ $PMF_LANG['msgPrinterFriendly'] = "Druckerfreundliche Version";
 $PMF_LANG['msgPrintArticle'] = "FAQ ausdrucken";
 $PMF_LANG['msgMakeXMLExport'] = "als XML-Datei exportieren";
 $PMF_LANG['msgAverageVote'] = "Durchschnittliche Bewertung";
-$PMF_LANG['msgVoteUseability'] = "Bewertung der FAQ";
+$PMF_LANG['msgVoteUsability'] = "Bewertung der FAQ";
 $PMF_LANG['msgVoteFrom'] = "von";
 $PMF_LANG['msgVoteBad'] = "vollkommen überflüssig";
 $PMF_LANG['msgVoteGood'] = "sehr wertvoll";
@@ -508,7 +508,7 @@ $PMF_LANG['rightsLanguage']['restore'] = "Sicherung wiederherstellen";
 $PMF_LANG['rightsLanguage']['delquestion'] = "Offene Fragen löschen";
 $PMF_LANG['rightsLanguage']['changebtrevs'] = "Revisionen bearbeiten";
 
-$PMF_LANG['msgAttachedFiles'] = "angehängte Dateien";
+$PMF_LANG['msgAttachedFiles'] = "Angehängte Dateien";
 
 // Added v1.3.3 - 27.05.2003 - Thorsten
 $PMF_LANG['ad_user_action'] = "Aktion";

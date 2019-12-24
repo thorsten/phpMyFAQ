@@ -17,6 +17,8 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Services\Gravatar;
+
 /**
  * Class Comment
  *
@@ -66,8 +68,8 @@ class Comment
     /**
      * Returns all user comments (HTML formatted) from a record by type.
      *
-     * @param  int    $id   Comment ID
-     * @param  string $type Comment type: {faq|news}
+     * @param int $id Comment ID
+     * @param string $type Comment type: {faq|news}
      * @return string
      * @throws \Exception
      * @todo   Move this code to a helper class
@@ -77,28 +79,31 @@ class Comment
         $comments = $this->getCommentsData($id, $type);
         $date = new Date($this->config);
         $mail = new Mail($this->config);
+        $gravatar = new Gravatar();
 
         $output = '';
         foreach ($comments as $item) {
-            $output .= '<article class="pmf-comment">';
-            $output .= '    <header class="clearfix">';
-            $output .= '        <div class="pmf-commment-meta">';
+            $output .= '<div class="row mt-2 mb-2">';
+            $output .= '  <div class="col-sm-1">';
+            $output .= '    <div class="thumbnail">';
+            $output .= $gravatar->getImage($item['email'], ['class' => 'img-thumbnail']);
+            $output .= '   </div>';
+            $output .= '  </div>';
+
+            $output .= '  <div class="col-sm-11">';
+            $output .= '    <div class="card">';
+            $output .= '     <div class="card-header">';
             $output .= sprintf(
-                '            <h3><a href="mailto:%s">%s</a></h3>',
+                '<strong><a href="mailto:%s">%s</a></strong>',
                 $mail->safeEmail($item['email']),
                 $item['user']
             );
-            $output .= sprintf(
-                '            <span class="pmf-comment-date">%s</span>',
-                $date->format($item['date'])
-            );
-            $output .= '        </div>';
-            $output .= '    </header>';
-            $output .= sprintf(
-                '    <div class="pmf-comment-body">%s</div>',
-                $this->showShortComment($id, $item['content'])
-            );
-            $output .= '</article>';
+            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item['date']));
+            $output .= '     </div>';
+            $output .= sprintf('<div class="card-body">%s</div>', $this->showShortComment($id, $item['content']));
+            $output .= '   </div>';
+            $output .= '  </div>';
+            $output .= '</div>';
         }
 
         return $output;
@@ -107,7 +112,7 @@ class Comment
     /**
      * Returns all user comments from a record by type.
      *
-     * @param int    $id   record id
+     * @param int $id record id
      * @param string $type record type: {faq|news}
      *
      * @return array
@@ -150,8 +155,8 @@ class Comment
     /**
      * Adds some fancy HTML if a comment is too long.
      *
-     * @param  int    $id
-     * @param  string $comment
+     * @param int $id
+     * @param string $comment
      * @return string
      */
     private function showShortComment(int $id, string $comment): string
@@ -211,7 +216,7 @@ class Comment
     /**
      * Deletes a comment.
      *
-     * @param int $recordId  Record id
+     * @param int $recordId Record id
      * @param int $commentId Comment id
      *
      * @return bool

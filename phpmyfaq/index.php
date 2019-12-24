@@ -688,11 +688,11 @@ if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
         'socialLinks',
         [
             'baseHref' => $faqSystem->getSystemUri($faqConfig),
-            'writePDFTag' => $PMF_LANG['msgPDF'],
-            'writePrintMsgTag' => $PMF_LANG['msgPrintArticle'],
+            'msgPdf' => $PMF_LANG['msgPDF'],
+            'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
             'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
             'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
-            'link_pdf' => $faqServices->getPdfLink()
+            'linkToPdf' => $faqServices->getPdfLink()
         ]
     );
 }

@@ -16,6 +16,7 @@
  * @since 2002-08-27
  */
 
+use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Comment;
@@ -26,12 +27,12 @@ use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\LanguageHelper;
 use phpMyFAQ\Helper\SearchHelper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Link;
 use phpMyFAQ\LinkVerifier;
 use phpMyFAQ\Rating;
 use phpMyFAQ\Relation;
 use phpMyFAQ\Search\SearchResultSet as SearchResultset;
+use phpMyFAQ\Services;
 use phpMyFAQ\Strings;
 use phpMyFAQ\Tags;
 use phpMyFAQ\User\CurrentUser;
@@ -43,7 +44,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
         $protocol = 'https';
     }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    header('Location: ' . $protocol . '://' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['SCRIPT_NAME']));
     exit();
 }
 
@@ -103,9 +104,11 @@ $answer = $oGlossary->insertItemsIntoContent($answer);
 $categoryName = $category->getPath($currentCategory, ' &raquo; ', true, '');
 
 $highlight = Filter::filterInput(INPUT_GET, 'highlight', FILTER_SANITIZE_STRIPPED);
-if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen($highlight) > 3) {
+if (!is_null($highlight) && $highlight != '/' && $highlight != '<' && $highlight != '>' && Strings::strlen(
+        $highlight
+    ) > 3) {
     $highlight = str_replace("'", '´', $highlight);
-    $highlight = str_replace(array('^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'), '', $highlight);
+    $highlight = str_replace(['^', '.', '?', '*', '+', '{', '}', '(', ')', '[', ']'], '', $highlight);
     $highlight = preg_quote($highlight, '/');
     $searchItems = explode(' ', $highlight);
 
@@ -124,7 +127,7 @@ if (isset($linkArray['href'])) {
         $xpos = strpos($_url, 'index.php?action=faq');
         if (!($xpos === false)) {
             // Get the FaqHelper link title
-            $matches = array();
+            $matches = [];
             preg_match('/id=([\d]+)/ism', $_url, $matches);
             $_id = $matches[1];
             $_title = $faq->getRecordTitle($_id);
@@ -132,7 +135,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new Link(Link::getSystemRelativeUri().$_link, $faqConfig);
+            $oLink = new Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -144,18 +147,20 @@ if (isset($linkArray['href'])) {
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
-    } catch (\phpMyFAQ\Attachment\AttachmentException $e) {
+    } catch (AttachmentException $e) {
         // handle exception
     }
     $outstr = '';
 
     foreach ($attList as $att) {
-        $outstr .= sprintf('<a href="%s">%s</a>, ',
+        $outstr .= sprintf(
+            '<a href="%s">%s</a>, ',
             $att->buildUrl(),
-            $att->getFilename());
+            $att->getFilename()
+        );
     }
     if (count($attList) > 0) {
-        $answer .= '<p>'.$PMF_LANG['msgAttachedFiles'].' '.Strings::substr($outstr, 0, -2).'</p>';
+        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ':<br>' . Strings::substr($outstr, 0, -2) . '</p>';
     }
 }
 
@@ -191,7 +196,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         '<i aria-hidden="true" class="fa fa-pencil"></i> <a class="data" href="./admin/index.php?action=editentry&id=%d&lang=%s">%s</a>',
         $recordId,
         $lang,
-        $PMF_LANG['ad_entry_edit_1'].' '.$PMF_LANG['ad_entry_edit_2']
+        $PMF_LANG['ad_entry_edit_1'] . ' ' . $PMF_LANG['ad_entry_edit_2']
     );
 }
 
@@ -215,7 +220,7 @@ $translationUrl = sprintf(
         '%',
         '%%',
         Link::getSystemRelativeUri('index.php')
-    ).'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
+    ) . 'index.php?%saction=translate&amp;cat=%s&amp;id=%d&amp;srclang=%s',
     $sids,
     $currentCategory,
     $recordId,
@@ -261,7 +266,7 @@ if ('-' !== $faqTagging->getAllLinkTagsById($recordId)) {
         'mainPageContent',
         'tagsAvailable',
         [
-            'renderTags' => $PMF_LANG['msg_tags'].': '.$faqTagging->getAllLinkTagsById($recordId),
+            'renderTags' => $PMF_LANG['msg_tags'] . ': ' . $faqTagging->getAllLinkTagsById($recordId),
         ]
     );
 }
@@ -293,38 +298,53 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $numComments = $faqComment->getNumberOfComments();
 
+// We need some Links from social networks
+$faqServices = new Services($faqConfig);
+$faqServices->setCategoryId($cat);
+$faqServices->setFaqId($id);
+$faqServices->setLanguage($lang);
+$faqServices->setQuestion($faq->getRecordTitle($id));
+
 // Check if category ID and FAQ ID are linked together
-$isLinkedFAQ = $category->categoryHasLinkToFaq($recordId, $currentCategory);
-if (!$isLinkedFAQ) {
+if (!$category->categoryHasLinkToFaq($recordId, $currentCategory)) {
     $http->sendStatus(404);
 }
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
-        'writeRubrik' => $categoryName,
-        'solution_id' => $faq->faqRecord['solution_id'],
-        'solution_id_link' => Link::getSystemRelativeUri().'?solution_id='.$faq->faqRecord['solution_id'],
-        'writeThema' => $question,
-        'mainPageContent' => $answer,
-        'writeDateMsg' => $date->format($faq->faqRecord['date']),
-        'writeAuthor' => $faq->faqRecord['author'],
+        'solutionId' => $faq->faqRecord['solution_id'],
+        'solutionIdLink' => Link::getSystemRelativeUri() . '?solution_id=' . $faq->faqRecord['solution_id'],
+        'question' => $question,
+        'answer' => $answer,
+        'faqDate' => $date->format($faq->faqRecord['date']),
+        'faqAuthor' => $faq->faqRecord['author'],
         'numberOfComments' => sprintf(
             '%d %s',
             isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
             $PMF_LANG['ad_start_comments']
         ),
         'editThisEntry' => $editThisEntry,
+        'msgPdf' => $PMF_LANG['msgPDF'],
+        'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
+        'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
+        'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
+        'linkToPdf' => $faqServices->getPdfLink(),
         'translationUrl' => $translationUrl,
-        'languageSelection' => LanguageHelper::renderSelectLanguage($faqLangCode, false, $availableLanguages, 'translation'),
+        'languageSelection' => LanguageHelper::renderSelectLanguage(
+            $faqLangCode,
+            false,
+            $availableLanguages,
+            'translation'
+        ),
         'msgTranslateSubmit' => $PMF_LANG['msgTranslateSubmit'],
         'saveVotingPATH' => sprintf(
             str_replace(
                 '%',
                 '%%',
                 Link::getSystemRelativeUri('index.php')
-            ).'index.php?%saction=savevoting',
+            ) . 'index.php?%saction=savevoting',
             $sids
         ),
         'saveVotingID' => $recordId,
@@ -333,7 +353,7 @@ $template->parse(
         'renderVotingStars' => '',
         'printVotings' => $faqRating->getVotingResult($recordId),
         'switchLanguage' => $faqHelper->renderChangeLanguageSelector($faq, $currentCategory),
-        'msgVoteUseability' => $PMF_LANG['msgVoteUseability'],
+        'msgVoteUsability' => $PMF_LANG['msgVoteUsability'],
         'msgVoteBad' => $PMF_LANG['msgVoteBad'],
         'msgVoteGood' => $PMF_LANG['msgVoteGood'],
         'msgVoteSubmit' => $PMF_LANG['msgVoteSubmit'],
@@ -349,9 +369,9 @@ $template->parse(
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'writeComments' => $faqComment->getComments($recordId, Comment::COMMENT_TYPE_FAQ),
+        'renderComments' => $faqComment->getComments($recordId, Comment::COMMENT_TYPE_FAQ),
         'msg_about_faq' => $PMF_LANG['msg_about_faq'],
-    )
+    ]
 );
 
 $template->parseBlock(

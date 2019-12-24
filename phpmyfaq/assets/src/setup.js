@@ -60,7 +60,7 @@ $(document).ready(function() {
   setupType.on('change', selectDatabaseSetup);
 
   if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {
-    $dbSqlite.show().removeClass('hide');
+    $dbSqlite.show().removeClass('d-none');
     $dbFull.hide();
   }
 });

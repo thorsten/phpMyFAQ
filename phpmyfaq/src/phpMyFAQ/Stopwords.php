@@ -241,7 +241,7 @@ class Stopwords
         // Check if we check more than one word
         $checkWords = explode(' ', $content);
         if (1 === count($checkWords)) {
-            $checkWords = array($content);
+            $checkWords = [$content];
         }
 
         $bannedWords = $this->getBannedWords();

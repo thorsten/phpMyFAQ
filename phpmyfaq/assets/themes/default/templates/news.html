@@ -1,5 +1,4 @@
 <section>
-
   <article>
     <header>
       <h3>{{ writeHeader }}</h3>
@@ -13,7 +12,7 @@
 
   <div class="tab-content">
     <div class="tab-pane active" id="authorInfo">
-      {{ writeDateMsg }}<br>{{ writeAuthor }}<br>{{ editThisEntry }}
+      {{ writeDateMsg }}<br />{{ writeAuthor }}<br />{{ editThisEntry }}
     </div>
   </div>
 
@@ -21,23 +20,23 @@
 
   <!-- Comment Form -->
   <a name="comment"></a>
-  <div id="commentForm" class="hide">
+  <div id="commentForm" class="d-none">
     <form id="formValues" action="#" method="post" accept-charset="utf-8">
-      <input type="hidden" name="newsid" value="{{ newsId }}">
-      <input type="hidden" name="lang" value="{{ newsLang }}">
-      <input type="hidden" name="type" value="news">
+      <input type="hidden" name="newsid" value="{{ newsId }}" />
+      <input type="hidden" name="lang" value="{{ newsLang }}" />
+      <input type="hidden" name="type" value="news" />
 
       <div class="control-group">
         <label class="form-control-label" for="user">{{ msgNewContentName }}</label>
         <div class="controls">
-          <input type="text" id="user" name="user" value="{{ defaultContentName }}" required="required">
+          <input type="text" id="user" name="user" value="{{ defaultContentName }}" required="required" />
         </div>
       </div>
 
       <div class="control-group">
         <label class="form-control-label" for="mail">{{ msgNewContentMail }}</label>
         <div class="controls">
-          <input type="email" id="mail" name="mail" value="{{ defaultContentMail }}" required="required">
+          <input type="email" id="mail" name="mail" value="{{ defaultContentMail }}" required="required" />
         </div>
       </div>
 
@@ -55,30 +54,28 @@
           {{ msgNewContentSubmit }}
         </button>
       </div>
-
     </form>
   </div>
   <!-- /Comment Form -->
 
   <div id="loader"></div>
   <div id="comments">
-    {{ writeComments }}
+    {{ renderComments }}
   </div>
 
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-          $('abbr[rel="tooltip"]').tooltip();
-          $('.show-comment-form').on('click', (event) => {
-              event.preventDefault();
-              $('#commentForm').removeClass('hide');
-          });
-
-          $('form#formValues').on('submit', (event) => {
-              event.preventDefault();
-              saveFormValues('savecomment', 'comment');
-              return false;
-          });
+    document.addEventListener('DOMContentLoaded', () => {
+      $('abbr[rel="tooltip"]').tooltip();
+      $('.show-comment-form').on('click', event => {
+        event.preventDefault();
+        $('#commentForm').removeClass('d-none');
       });
-  </script>
 
+      $('form#formValues').on('submit', event => {
+        event.preventDefault();
+        saveFormValues('savecomment', 'comment');
+        return false;
+      });
+    });
+  </script>
 </section>

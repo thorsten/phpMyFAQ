@@ -142,7 +142,7 @@ $template->parse(
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'writeComments' => $comment->getComments($newsId, Comment::COMMENT_TYPE_NEWS),
+        'renderComments' => $comment->getComments($newsId, Comment::COMMENT_TYPE_NEWS),
     )
 );
 

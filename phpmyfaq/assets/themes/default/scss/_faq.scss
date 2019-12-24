@@ -1,0 +1,82 @@
+@import 'variables';
+
+// FAQ meta data
+.pmf-faq-meta {
+  background-color: $gray-600;
+  border-radius: 0.25em;
+  color: $gray-100;
+  display: flex;
+  padding: 0.5em;
+  margin-bottom: 1em;
+
+  .pmf-faq-author,
+  .pmf-faq-date,
+  .pmf-faq-comments,
+  .pmf-faq-edit,
+  .pmf-social-links {
+    flex: 1 0 auto;
+  }
+}
+
+// Rating stars
+.pmf-stars {
+  margin: auto;
+}
+
+.pmf-star-rating {
+  direction: rtl;
+  font-size: 30px;
+  line-height: 50px;
+  padding: 2px;
+  text-align: center;
+  unicode-bidi: bidi-override;
+
+  > span {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+  }
+
+  > span:hover:before,
+  > span:hover ~ span:before {
+    content: '\2605';
+    cursor: pointer;
+    position: absolute;
+  }
+}
+
+// Comments
+.thumbnail {
+  padding: 0;
+}
+
+.card {
+  position: relative;
+}
+
+.card > .card-header:after,
+.panel > .card-header:before {
+  position: absolute;
+  top: 11px;
+  left: -16px;
+  right: 100%;
+  width: 0;
+  height: 0;
+  display: block;
+  content: ' ';
+  border-color: transparent;
+  border-style: solid solid outset;
+  pointer-events: none;
+}
+
+.card > .card-header:after {
+  border-width: 7px;
+  border-right-color: $card-border-color;
+  margin-top: 1px;
+  margin-left: 2px;
+}
+
+.card > .card-header:before {
+  border-right-color: $card-border-color;
+  border-width: 8px;
+}

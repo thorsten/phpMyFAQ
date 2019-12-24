@@ -2,19 +2,19 @@
   <article class="pmf-faq">
     <header>
       <div class="float-right d-print-none" id="solution_id">
-        <a class="badge badge-info" href="{{ solution_id_link }}">
-          ID #{{ solution_id }}
+        <a class="badge badge-info" href="{{ solutionIdLink }}">
+          ID #{{ solutionId }}
         </a>
       </div>
-      <h1>{{ writeThema }}</h1>
+      <h2>{{ question }}</h2>
       <div class="pmf-faq-meta clearfix">
         <div class="pmf-faq-author">
           <i aria-hidden="true" class="fa fa-user"></i>
-          <span class="data" rel="author">{{ writeAuthor }}</span>
+          <span class="data" rel="author">{{ faqAuthor }}</span>
         </div>
         <div class="pmf-faq-date">
           <i aria-hidden="true" class="fa fa-calendar"></i>
-          <span class="data">{{ writeDateMsg }}</span>
+          <span class="data">{{ faqDate }}</span>
         </div>
         <div class="pmf-faq-comments">
           <i aria-hidden="true" class="fa fa-comments"></i>
@@ -23,16 +23,22 @@
         <div class="pmf-faq-edit">
           {{ editThisEntry }}
         </div>
+        <div class="pmf-social-links">
+          <i aria-hidden="true" class="fa fa-file-pdf-o"></i>
+          <a target="_blank" href="{{ linkToPdf }}" rel="nofollow" title="{{ msgPdf }}">
+            {{ msgPdf }}
+          </a>
+        </div>
+        <div class="pmf-social-links">
+          {{ sendToFriend }}
+        </div>
+        <div class="pmf-social-links">
+          {{ shareOnTwitter }}
+        </div>
       </div>
     </header>
     <div class="pmf-faq-body">
-
-      {{ mainPageContent }}
-
-      [tagsAvailable]
-      {{ renderTags }}
-      [/tagsAvailable]
-      [privateNotes]
+      {{ answer }} [tagsAvailable] {{ renderTags }} [/tagsAvailable] [privateNotes]
       <div class="pmf-private-notes">
         <h4>
           {{ notesHeader }}
@@ -41,12 +47,11 @@
           {{ notes }}
         </p>
       </div>
-      [/privateNotes]
-      [relatedFaqs]
-      <aside id="faqAccordion" class="accordion related-faqs d-print-none">
+      [/privateNotes] [relatedFaqs]
+      <aside id="accordionFaqs" class="accordion related-faqs d-print-none mt-3 mb-3">
         <div class="accordion-group">
           <div class="accordion-heading">
-            <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#faqAccordion" data-toggle="collapse">
+            <a class="accordion-toggle" href="#collapseRelatedFaqs" data-parent="#accordionFaqs" data-toggle="collapse">
               {{ renderRelatedArticlesHeader }}
             </a>
           </div>
@@ -55,13 +60,16 @@
           </div>
         </div>
       </aside>
-      [/relatedFaqs]
-      [relatedCategories]
-      <aside id="faqAccordion" class="accordion related-categories d-print-none">
+      [/relatedFaqs] [relatedCategories]
+      <aside id="accordionCategories" class="accordion related-categories d-print-none mt-3 mb-3">
         <div class="accordion-group">
           <div class="accordion-heading">
-            <a class="accordion-toggle" href="#collapseRelatedCategories" data-parent="#faqAccordion"
-               data-toggle="collapse">
+            <a
+              class="accordion-toggle"
+              href="#collapseRelatedCategories"
+              data-parent="#accordionCategories"
+              data-toggle="collapse"
+            >
               {{ renderRelatedCategoriesHeader }}
             </a>
           </div>
@@ -71,26 +79,24 @@
         </div>
       </aside>
       [/relatedCategories]
-
     </div>
-
   </article>
 
-  <ul id="tab" class="nav nav-tabs d-print-none">
-    <li class="active"><a href="#votingForm" data-toggle="tab">{{ msgVoteUseability }}</a></li>
+  <ul id="tab" class="nav nav-tabs d-print-none" role="tablist">
+    <li class="nav-item"><a class="nav-link active" href="#votingForm" data-toggle="tab">{{ msgVoteUsability }}</a></li>
     [switchLanguage]
-    <li><a href="#switchAvailableLanguage" data-toggle="tab">{{ msgChangeLanguage }}</a></li>
-    [/switchLanguage]
-    [addTranslation]
-    <li><a href="#addTranslation" data-toggle="tab">{{ msgTranslate }}</a></li>
+    <li class="nav-item">
+      <a class="nav-link" href="#switchAvailableLanguage" data-toggle="tab">{{ msgChangeLanguage }}</a>
+    </li>
+    [/switchLanguage] [addTranslation]
+    <li class="nav-item"><a class="nav-link" href="#addTranslation" data-toggle="tab">{{ msgTranslate }}</a></li>
     [/addTranslation]
   </ul>
 
   <div class="tab-content pmf-faq-info d-print-none">
     <div class="tab-pane active d-print-none" id="votingForm">
       <form action="#" method="post" class="form-inline">
-        <input type="hidden" name="artikel" value="{{ saveVotingID }}">
-        <div id="votings"></div>
+        <input type="hidden" name="artikel" value="{{ saveVotingID }}" />
         <div class="pmf-stars">
           <div class="pmf-star-rating" data-rating="{{ msgAverageVote }}">
             <span data-stars="5">☆</span>
@@ -101,10 +107,9 @@
           </div>
         </div>
 
-        <div class="float-right">
-          <strong>{{ msgAverageVote }}</strong><span id="rating">{{ printVotings }}</span>
-        </div>
+        <div class="text-right"><strong>{{ msgAverageVote }}</strong><span id="rating">{{ printVotings }}</span></div>
       </form>
+      <div id="votings"></div>
     </div>
     <div class="tab-pane d-print-none" id="switchAvailableLanguage">
       {{ switchLanguage }}
@@ -119,38 +124,61 @@
     </div>
   </div>
 
-  <p class="d-print-none">{{ writeCommentMsg }}</p>
+  <p class="d-print-none d-none">{{ writeCommentMsg }}</p>
 
-  <aside class="pmf-create-comment d-print-none hide" id="pmf-create-comment">
-
-    <hr>
+  <aside class="pmf-create-comment d-print-none d-none" id="pmf-create-comment">
+    <hr />
 
     <div id="loader"></div>
 
-    <h2><i aria-hidden="true" class="fa fa-heart"></i> {{ msgCommentHeader }}</h2>
+    <h4><i aria-hidden="true" class="fa fa-heart"></i> {{ msgCommentHeader }}</h4>
 
     <form id="formValues" action="#" method="post" accept-charset="utf-8">
-      <input type="hidden" name="id" id="id" value="{{ id }}">
-      <input type="hidden" name="lang" id="lang" value="{{ lang }}">
-      <input type="hidden" name="type" id="type" value="faq">
+      <input type="hidden" name="id" id="id" value="{{ id }}" />
+      <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+      <input type="hidden" name="type" id="type" value="faq" />
 
-      <div class="row">
-        <div class="col-md-6">
-          <input type="text" name="user" id="user" class="form-control form-control-lg" required
-                 placeholder="{{ msgNewContentName }}" value="{{ defaultContentName }}">
+      <div class="form-row">
+        <div class="form-group col">
+          <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+          <input
+            type="text"
+            name="user"
+            id="user"
+            class="form-control"
+            required
+            placeholder="{{ msgNewContentName }}"
+            value="{{ defaultContentName }}"
+          />
         </div>
-        <div class="col-md-6">
-          <input type="email" name="mail" id="mail" class="form-control form-control-lg" required
-                 placeholder="{{ msgNewContentMail }}" value="{{ defaultContentMail }}">
+        <div class="form-group col">
+          <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+          <input
+            type="email"
+            name="mail"
+            id="mail"
+            class="form-control"
+            required
+            placeholder="{{ msgNewContentMail }}"
+            value="{{ defaultContentMail }}"
+          />
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group col">
+          <textarea
+            rows="10"
+            name="comment_text"
+            id="comment_text"
+            class="form-control"
+            placeholder="{{ msgYourComment }}"
+          ></textarea>
         </div>
       </div>
 
-      <textarea rows="10" name="comment_text" id="comment_text" class="form-control form-control-lg"
-                placeholder="{{ msgYourComment }}"></textarea>
-
       {{ captchaFieldset }}
 
-      <div class="pmf-buttons clearfix">
+      <div class="text-right">
         <button class="btn btn-primary" id="submitcomment" type="submit">
           {{ msgNewContentSubmit }}
         </button>
@@ -158,23 +186,10 @@
     </form>
   </aside>
 
-  <aside class="pmf-comments d-print-none" id="comments">
-    <hr>
-    {{ writeComments }}
-  </aside>
-
+  <div class="d-print-none" id="comments">
+    {{ renderComments }}
+  </div>
 </section>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        'use strict';
-        $(() => {
-            $('div.pmf-stars > div.pmf-star-rating > span').on('click', (event) => {
-                const numStars = $(event.target).data('stars');
-                saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
-            });
-        });
-    });
-</script>
 <script src="assets/js/libs/highlight.pack.js"></script>
-<link rel="stylesheet" href="assets/js/libs/default.css">
+<link rel="stylesheet" href="assets/js/libs/default.css" />

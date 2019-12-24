@@ -83,15 +83,9 @@ class FaqHelper extends Helper
             return '';
         }
 
-        $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fa fa-twitter fa-stack-1x"></i>
-                    </span>';
-
         return sprintf(
-            '<a rel="nofollow" href="%s" target="_blank">%s</a>',
-            $url,
-            $icon
+            '<a rel="nofollow" href="%s" target="_blank"><i aria-hidden="true" class="fa fa-twitter"></i></a>',
+            $url
         );
     }
 
@@ -107,15 +101,9 @@ class FaqHelper extends Helper
             return '';
         }
 
-        $icon = '<span class="fa-stack fa-lg">
-                        <i aria-hidden="true" class="fa fa-square-o fa-stack-2x"></i>
-                        <i aria-hidden="true" class="fa fa-envelope fa-stack-1x"></i>
-                    </span>';
-
         return sprintf(
-            '<a rel="nofollow" href="%s">%s</a>',
-            $url,
-            $icon
+            '<a rel="nofollow" href="%s"><i aria-hidden="true" class="fa fa-envelope"></i></a>',
+            $url
         );
     }
 
