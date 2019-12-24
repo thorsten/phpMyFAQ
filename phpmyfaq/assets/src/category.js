@@ -16,7 +16,7 @@
 
 /*global $: false */
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   let menuCounter = 0;
