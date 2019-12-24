@@ -72,7 +72,7 @@ $template->parse(
         'defaultContentMail' => ($user instanceof CurrentUser) ? $user->getUserData('email') : '',
         'defaultContentName' => ($user instanceof CurrentUser) ? $user->getUserData('display_name') : '',
         'msgAskCategory' => $PMF_LANG['msgAskCategory'],
-        'printCategoryOptions' => $categoryHelper->renderOptions($categoryId),
+        'renderCategoryOptions' => $categoryHelper->renderOptions($categoryId),
         'msgAskYourQuestion' => $PMF_LANG['msgAskYourQuestion'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'ask', $PMF_LANG['msgCaptcha'], $auth),
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],

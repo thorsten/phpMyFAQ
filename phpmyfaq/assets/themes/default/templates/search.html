@@ -1,72 +1,79 @@
-<section>
-            [searchTagsSection]
-            <div class="pmf-tag-cloud">
-              {{ searchTags }}
-            </div>
-            [/searchTagsSection]
+<section class="col-12">
+  <h1>
+    {{ pageHeader }}
+  </h1>
+  [searchTagsSection]
+  <div class="pmf-tag-cloud">
+    {{ searchTags }}
+  </div>
+  [/searchTagsSection] [tagListSection]
+  <h3>{{ msgTags }}</h3>
+  <div class="clearfix">
+    {{ tagList }}
+  </div>
+  [/tagListSection] [relatedTags]
+  <h4>{{ relatedTagsHeader }}</h4>
+  <div class="pmf-tag-cloud">
+    {{ relatedTags }}
+  </div>
+  [/relatedTags] {{ printResult }} [searchBoxSection]
+  <div class="jumbotron justify-content-center col-12" id="searchBox">
+    <form action="{{ writeSendAdress }}" method="get">
+      <input type="hidden" name="action" value="search" />
 
-            [tagListSection]
-            <h3>{{ msgTags }}</h3>
-            <div class="clearfix">
-              {{ tagList }}
-            </div>
-            [/tagListSection]
+      <div class="form-row align-items-center">
+        <div class="col-auto">
+          <label class="sr-only" for="searchcategory">{{ selectCategories }}</label>
+          <select class="form-control form-control-lg mb-2" name="searchcategory" id="searchcategory">
+            <option value="%" selected="selected">{{ allCategories }}</option>
+            {{ renderCategoryOptions }}
+          </select>
+        </div>
 
-            [relatedTags]
-            <h4>{{ relatedTagsHeader }}</h4>
-            <div class="pmf-tag-cloud">
-              {{ relatedTags }}
-            </div>
-            [/relatedTags]
+        <div class="col-5">
+          <label class="sr-only" for="searchfield">{{ msgSearch }}</label>
+          <input
+            id="searchfield"
+            type="search"
+            name="search"
+            value="{{ searchString }}"
+            class="form-control form-control-lg mb-2"
+            placeholder="{{ msgSearch }}"
+          />
+        </div>
 
-            {{ printResult }}
+        <div class="col-auto">
+          <div class="form-check mb-2">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              {{
+              checkedAllLanguages
+              }}
+              name="langs"
+              id="langs"
+              value="all"
+            />
+            <label class="form-check-label" for="langs">
+              {{ searchOnAllLanguages }}
+            </label>
+          </div>
+        </div>
 
-            [searchBoxSection]
-            <section class="well" id="searchBox">
-                <form action="{{ writeSendAdress }}" method="get">
-                    <input type="hidden" name="action" value="search">
-
-                    <div class="input-group pmf-search-advanced">
-                        <input id="searchfield" type="search" name="search" value="{{ searchString }}"
-                               class="form-control form-control-lg" placeholder="{{ msgSearch }}">
-                            <span class="input-group-addon">
-                                <button type="submit" class="btn btn-lg" aria-label="{{ msgSearch }}">
-                                    <span class="fa fa-search"></span>
-                                </button>
-                            </span>
-                    </div>
-
-
-                    <div class="form-group row">
-                        <div class="checkbox">
-                            <label>
-                                <input type="checkbox" {{ checkedAllLanguages }} name="langs" id="langs" value="all">
-                                {{ searchOnAllLanguages }}
-                            </label>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label>
-                            {{ selectCategories }}
-                        </label>
-                        <select class="form-control form-control-lg" name="searchcategory">
-                            <option value="%" selected="selected">{{ allCategories }}</option>
-                            {{ printCategoryOptions }}
-                        </select>
-                    </div>
-
-                </form>
-            </section>
-            [/searchBoxSection]
-
-            [popularSearchesSection]
-            <h4>{{ msgMostPopularSearches }}</h4>
-            <div class="clearfix">
-                <ul class="pmf-tags">
-                    {{ printMostPopularSearches }}
-                </ul>
-            </div>
-            [/popularSearchesSection]
-
-        </section>
+        <div class="col-auto">
+          <button type="submit" class="btn btn-lg btn-primary mb-2" aria-label="{{ msgSearch }}">
+            <span class="fa fa-search"></span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+  [/searchBoxSection] [popularSearchesSection]
+  <h4>{{ msgMostPopularSearches }}</h4>
+  <div class="clearfix">
+    <ul class="pmf-tags">
+      {{ printMostPopularSearches }}
+    </ul>
+  </div>
+  [/popularSearchesSection]
+</section>

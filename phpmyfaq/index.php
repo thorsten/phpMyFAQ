@@ -554,6 +554,7 @@ $tplMainPage = [
     'msgEmail' => $PMF_LANG['ad_entry_email'],
     'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
     'loginPageMessage' => $PMF_LANG['loginPageMessage'],
+    'msgAdvancedSearch' => $PMF_LANG['msgAdvancedSearch']
 ];
 
 $template->parseBlock(

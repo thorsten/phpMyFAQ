@@ -15,7 +15,8 @@
   "homepage": "https://www.phpmyfaq.de/",
   "main": "Gruntfile.js",
   "scripts": {
-    "build": "webpack"
+    "build": "webpack",
+    "watch": "webpack --watch"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",

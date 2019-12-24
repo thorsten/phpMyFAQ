@@ -213,13 +213,13 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 }
 
 // Pagination options
-$options = array(
+$options = [
     'baseUrl' => $baseUrl,
     'total' => $faqSearchResult->getNumberOfResults(),
     'perPage' => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName' => 'seite',
-    'layoutTpl' => '<div class="text-center"><ul class="pagination">{LAYOUT_CONTENT}</ul></div>',
-);
+    'layoutTpl' => '<div class="text-center"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></div>',
+];
 
 $faqPagination = new Pagination($faqConfig, $options);
 $categoryHelper = new CategoryHelper();
@@ -235,7 +235,11 @@ $searchHelper->setPlurals($plr);
 $searchHelper->setSessionId($sids);
 
 if ('' == $searchResult && !is_null($inputSearchTerm)) {
-    $searchResult = $searchHelper->renderSearchResult($faqSearchResult, $page);
+    try {
+        $searchResult = $searchHelper->renderSearchResult($faqSearchResult, $page);
+    } catch (Exception $e) {
+        // @todo handle exception
+    }
 }
 
 if ($tagSearch) {
@@ -276,7 +280,7 @@ if ($tagSearch) {
             'checkedAllLanguages' => $allLanguages ? ' checked' : '',
             'selectCategories' => $PMF_LANG['msgSelectCategories'],
             'allCategories' => $PMF_LANG['msgAllCategories'],
-            'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
+            'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
             'msgSearch' => $PMF_LANG['msgSearch']
         ]
     );
@@ -294,6 +298,7 @@ if ($tagSearch) {
 $template->parse(
     'mainPageContent',
     [
+        'pageHeader' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
         'printResult' => $searchResult,
@@ -303,17 +308,9 @@ $template->parse(
         'checkedAllLanguages' => $allLanguages ? ' checked' : '',
         'selectCategories' => $PMF_LANG['msgSelectCategories'],
         'allCategories' => $PMF_LANG['msgAllCategories'],
-        'printCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
+        'renderCategoryOptions' => $categoryHelper->renderOptions($inputCategory),
         'msgSearch' => $PMF_LANG['msgSearch'],
         'msgMostPopularSearches' => $PMF_LANG['msgMostPopularSearches'],
         'printMostPopularSearches' => $searchHelper->renderMostPopularSearches($mostPopularSearchData)
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch'])
     ]
 );

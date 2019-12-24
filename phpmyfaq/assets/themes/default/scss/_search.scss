@@ -1,6 +1,5 @@
 // Search page
 
-
 // Search masthead
 .pmf-search-section {
   background-color: fade-out($gray-500, 0.8);
@@ -21,7 +20,6 @@
   text-align: center;
 
   form {
-
     button {
       position: absolute;
       right: 25px;
@@ -41,13 +39,12 @@
   border: 2px solid $gray-500;
   padding: 0 30px;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: 0;
   height: 60px;
   -webkit-appearance: none;
 }
 
 .typeahead {
-
   &.dropdown-menu {
     background-color: transparent !important;
 

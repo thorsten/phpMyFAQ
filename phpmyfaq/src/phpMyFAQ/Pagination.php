@@ -109,8 +109,7 @@ class Pagination
      *
      * @var string
      */
-    protected $layoutTpl =
-        '<nav class="pmf-pagination"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></nav>';
+    protected $layoutTpl = '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>';
 
     /**
      * Current page index.
@@ -159,7 +158,7 @@ class Pagination
      * no pageParamName, first page is asumed
      *
      * @param Configuration $config
-     * @param array         $options initialization options,
+     * @param array $options initialization options,
      *                               possible options: -
      *                               baseUrl (default "") -
      *                               total - perPage -
@@ -334,8 +333,8 @@ class Pagination
     /**
      * Render url for a given page.
      *
-     * @param string $url  url
-     * @param int    $page page number
+     * @param string $url url
+     * @param int $page page number
      *
      * @return string
      */
@@ -344,7 +343,7 @@ class Pagination
         if ($this->useRewrite) {
             $url = sprintf($this->rewriteUrl, $page);
         } else {
-            $cleanedUrl = Strings::preg_replace(array('$&(amp;|)' . $this->pageParamName . '=(\d+)$'), '', $url);
+            $cleanedUrl = Strings::preg_replace(['$&(amp;|)' . $this->pageParamName . '=(\d+)$'], '', $url);
             $url = sprintf('%s&amp;%s=%d', $cleanedUrl, $this->pageParamName, $page);
         }
 
@@ -354,16 +353,16 @@ class Pagination
     /**
      * Render a link.
      *
-     * @param string $tpl      link template
-     * @param string $url      url value for template container
+     * @param string $tpl link template
+     * @param string $url url value for template container
      * @param string $linkText text value for template container
      *
      * @return string
      */
     protected function renderLink($tpl, $url, $linkText)
     {
-        $search = array(self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT);
-        $replace = array($url, $linkText);
+        $search = [self::TPL_VAR_LINK_URL, self::TPL_VAR_LINK_TEXT];
+        $replace = [$url, $linkText];
 
         return str_replace($search, $replace, $tpl);
     }

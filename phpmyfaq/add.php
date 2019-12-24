@@ -98,7 +98,7 @@ $template->parse(
         'msgNewContentName' => $PMF_LANG['msgNewContentName'],
         'msgNewContentMail' => $PMF_LANG['msgNewContentMail'],
         'msgNewContentCategory' => $PMF_LANG['msgNewContentCategory'],
-        'printCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
+        'renderCategoryOptions' => $categoryHelper->renderOptions($selectedCategory),
         'msgNewContentTheme' => $PMF_LANG['msgNewContentTheme'],
         'readonly' => $readonly,
         'printQuestion' => $question,
