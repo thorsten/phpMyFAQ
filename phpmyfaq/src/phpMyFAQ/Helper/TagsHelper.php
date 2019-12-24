@@ -65,14 +65,14 @@ class TagsHelper extends Helper
 
         return ($taggingIds != '') ?
             sprintf(
-                '<a class="btn btn-primary" href="?action=search&amp;tagging_id=%s">%s ' .
+                '<a class="btn btn-primary m-1" href="?action=search&amp;tagging_id=%s">%s ' .
                 '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $taggingIds,
                 $tagName
             )
             :
             sprintf(
-                '<a class="btn btn-primary" href="?action=search&amp;search=">%s ' .
+                '<a class="btn btn-primary m-1" href="?action=search&amp;search=">%s ' .
                 '<i aria-hidden="true" class="fa fa-minus-square"></i></a> ',
                 $tagName
             );

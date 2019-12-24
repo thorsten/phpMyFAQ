@@ -470,7 +470,7 @@ class Tags
     }
 
     /**
-     * @param integer $limit
+     * @param int $limit
      * @return string
      */
     public function renderPopularTags(int $limit = 0): string
@@ -479,8 +479,8 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $html .= sprintf(
-                '<a class="btn btn-primary pmf-btn-tag-cloud" href="?action=search&tagging_id=%d">%s ' .
-                '<span class="badge badge-dark">%d</span></a>',
+                '<a class="btn btn-primary m-1" href="?action=search&tagging_id=%d">%s ' .
+                '<span class="badge badge-info">%d</span></a>',
                 $tagId,
                 $tagName,
                 $tagFreq

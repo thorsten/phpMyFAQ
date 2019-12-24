@@ -306,29 +306,27 @@ class SearchHelper extends Helper
     }
 
     /**
+     * Renders the scoring stars
      * @param int $relevance
-     *
      * @return string
      */
     private function renderScore(int $relevance = 0): string
     {
         $html = sprintf('<span title="%01.2f%%">', $relevance);
+        $emptyStar = '<i aria-hidden="true" class="fa fa-star-o"></i>';
+        $fullStar = '<i aria-hidden="true" class="fa fa-star"></i>';
 
         if (0 === (int)$relevance) {
-            $html .= '<i aria-hidden="true" class="fa fa-star-o"></i><i aria-hidden="true" class="fa fa-star-o"></i>
-                      <i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= $emptyStar . $emptyStar . $emptyStar;
         } elseif ($relevance < 33) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star-o"></i>
-                      <i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= $fullStar . $emptyStar . $emptyStar;
         } elseif ($relevance < 66) {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>
-                      <i aria-hidden="true" class="fa fa-star-o"></i>';
+            $html .= $fullStar . $fullStar . $emptyStar;
         } else {
-            $html .= '<i aria-hidden="true" class="fa fa-star"></i><i aria-hidden="true" class="fa fa-star"></i>
-                      <i aria-hidden="true" class="fa fa-star"></i>';
+            $html .= $fullStar . $fullStar . $fullStar;
         }
 
-        return $html . '</span>';
+        return $html . '</span> ';
     }
 
     /**
@@ -337,7 +335,7 @@ class SearchHelper extends Helper
      *
      * @return string
      */
-    public function renderRelatedFaqs(SearchResultSet $resultSet, int $recordId)
+    public function renderRelatedFaqs(SearchResultSet $resultSet, int $recordId): string
     {
         $html = '';
         $numOfResults = $resultSet->getNumberOfResults();
@@ -387,8 +385,8 @@ class SearchHelper extends Helper
         foreach ($mostPopularSearches as $searchItem) {
             if (Strings::strlen($searchItem['searchterm']) > 0) {
                 $html .= sprintf(
-                    '<li><a class="btn btn-primary" href="?search=%s&submit=Search&action=search">%s ' .
-                    '<span class="badge badge-info">%dx</span> </a></li>',
+                    '<a class="btn btn-primary m-1" href="?search=%s&submit=Search&action=search">%s ' .
+                    '<span class="badge badge-info">%dx</span> </a>',
                     urlencode($searchItem['searchterm']),
                     $searchItem['searchterm'],
                     $searchItem['number']

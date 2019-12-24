@@ -16,7 +16,7 @@
   <div class="pmf-tag-cloud">
     {{ relatedTags }}
   </div>
-  [/relatedTags] {{ printResult }} [searchBoxSection]
+  [/relatedTags] {{ renderSearchResults }} [searchBoxSection]
   <div class="jumbotron justify-content-center col-12" id="searchBox">
     <form action="{{ writeSendAdress }}" method="get">
       <input type="hidden" name="action" value="search" />
@@ -71,9 +71,7 @@
   [/searchBoxSection] [popularSearchesSection]
   <h4>{{ msgMostPopularSearches }}</h4>
   <div class="clearfix">
-    <ul class="pmf-tags">
-      {{ printMostPopularSearches }}
-    </ul>
+    {{ printMostPopularSearches }}
   </div>
   [/popularSearchesSection]
 </section>

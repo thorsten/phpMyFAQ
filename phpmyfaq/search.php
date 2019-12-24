@@ -301,7 +301,7 @@ $template->parse(
         'pageHeader' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgAdvancedSearch' => ($tagSearch ? $PMF_LANG['msgTagSearch'] : $PMF_LANG['msgAdvancedSearch']),
         'msgSearchWord' => $PMF_LANG['msgSearchWord'],
-        'printResult' => $searchResult,
+        'renderSearchResults' => $searchResult,
         'writeSendAdress' => '?' . $sids . 'action=search',
         'searchString' => Strings::htmlspecialchars($inputSearchTerm, ENT_QUOTES, 'utf-8'),
         'searchOnAllLanguages' => $PMF_LANG['msgSearchOnAllLanguages'],
