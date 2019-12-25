@@ -227,8 +227,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf('%s 1.%d', $PMF_LANG['ad_entry_revision'], $selectedRevisionId);
         $faqUrl = sprintf(
-            '%sindex.php?action=faq&id=%d&artlang=%s',
+            '%sindex.php?action=faq&cat=%s&id=%d&artlang=%s',
             $faqConfig->getDefaultUrl(),
+            array_values($categories)[0]['category_id'],
             $faqData['id'],
             $faqData['lang']
         );
@@ -243,11 +244,11 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
             <div class="btn-group mr-2">
-              <span class="btn btn-sm     btn-info">
+              <span class="btn btn-sm btn-info">
                 <i class="fa fa-hashtag" aria-hidden="true"></i>
                 <?= $currentRevision ?>
               </span>
-              <a href="<?= $link->toString() ?>" class="btn btn-sm     btn-success">
+              <a href="<?= $link->toString() ?>" class="btn btn-sm btn-success">
                 <i class="fa fa-arrow-alt-circle-right" aria-hidden="true"></i>
                   <?= $PMF_LANG['ad_view_faq'] ?>
               </a>
@@ -578,7 +579,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                 </div>
 
                 <div class="tab-pane" id="tab-notes-changelog">
-                  <h6 class="card-title">
+                  <h6 class="card-title sr-only">
                       <?= $PMF_LANG['ad_entry_changelog'] ?>
                   </h6>
                   <div class="form-group row">
@@ -619,24 +620,25 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                       </h6>
                     </div>
                     <div class="col-lg-10">
+                        <ul>
                       <?php foreach ($changelog->getChangeEntries($faqData['id']) as $entry) {
                             $entryUser = new User($faqConfig);
                             $entryUser->getUserById($entry['user']);
                             ?>
-                        <p class="small pt-0">
+                        <li class="small pt-0">
                             <?php printf(
-                                    '%s  1.%d | %s | %s %s',
+                                    '<i class="fa fa-hand-o-right"></i> %s  1.%d <i class="fa fa-calendar"></i> %s <i class="fa fa-user"></i> %s',
                                     $PMF_LANG['ad_entry_revision'],
                                     $entry['revision_id'],
                                     $date->format(date('Y-m-d H:i', $entry['date'])),
-                                    $PMF_LANG['ad_entry_author'],
                                     $entryUser->getUserData('display_name')
                                 );
                                 ?>
                             <br>
                             <?= $entry['changelog'] ?>
-                        </p>
+                        </li>
                       <?php } ?>
+                        </ul>
                     </div>
                   </div>
                 </div>
