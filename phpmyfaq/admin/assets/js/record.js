@@ -13,8 +13,97 @@
  * @since 2013-11-17
  */
 
+$(function() {
+  // Show help for keywords and users
+  $('#keywords').on('focus', () => {
+    showHelp('keywords');
+  });
+  $('#tags').on('focus', () => {
+    showHelp('tags');
+  });
+
+  let categories = $('#phpmyfaq-categories option:selected')
+    .map(function() {
+      return $(this).val();
+    })
+    .get();
+
+  getPermissions(categories);
+
+  // Override FAQ permissions with Category permission to avoid confused users
+  $('#phpmyfaq-categories').on('click', () => {
+    categories = $('#phpmyfaq-categories option:selected')
+      .map(function() {
+        return $(this).val();
+      })
+      .get();
+    getPermissions(categories);
+  });
+});
+
+function getPermissions(categories) {
+  $.ajax({
+    type: 'POST',
+    url: 'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
+    data: 'categories=' + categories,
+    success: permissions => {
+      setPermissions(permissions);
+    },
+  });
+}
+
+function setPermissions(permissions) {
+  const perms = permissions;
+
+  if (-1 === parseInt(perms.user[0])) {
+    $('#restrictedusers')
+      .prop('checked', false)
+      .prop('disabled', true);
+    $('#allusers')
+      .prop('checked', true)
+      .prop('disabled', false);
+  } else {
+    $('#allusers')
+      .prop('checked', false)
+      .prop('disabled', true);
+    $('#restrictedusers')
+      .prop('checked', true)
+      .prop('disabled', false);
+    $.each(perms.user, function(key, value) {
+      $(".selected-users option[value='" + value + "']").prop('selected', true);
+    });
+  }
+  if (-1 === parseInt(perms.group[0])) {
+    $('#restrictedgroups')
+      .prop('checked', false)
+      .prop('disabled', true);
+    $('#allgroups')
+      .prop('checked', true)
+      .prop('disabled', false);
+  } else {
+    $('#allgroups')
+      .prop('checked', false)
+      .prop('disabled', true);
+    $('#restrictedgroups')
+      .prop('checked', true)
+      .prop('disabled', false);
+    $.each(perms.group, function(key, value) {
+      $("#selected-groups option[value='" + value + "']").prop('selected', true);
+    });
+  }
+}
+
+function showHelp(option) {
+  const optionHelp = $('#' + option + 'Help');
+  optionHelp.removeClass('hide');
+  optionHelp.fadeOut(2500);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
+
+  /** Initialize the custom file input plugin */
+  bsCustomFileInput.init();
 
   /** File upload handling. */
   $('#filesToUpload').on('change', function() {
@@ -121,10 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   });
 
-  /**
-   * Delete questions
-   *
-   */
+  /** Delete questions */
   $('#submitDeleteQuestions').on('click', function() {
     const questions = $('#questionSelection').serialize(),
       indicator = $('#saving_data_indicator');
@@ -157,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
       answer.height(answerHeight);
     }
 
-    // when reszied, store the textarea's height
+    // when resized, store the textarea's height
     answer.on('mouseup', function() {
       localStorage.setItem('textarea.answer.height', $(this).height());
     });
