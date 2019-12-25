@@ -19,10 +19,7 @@
 use phpMyFAQ\Helper\CaptchaHelper;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-        $protocol = 'https';
-    }
+    http_response_code(400);
     exit();
 }
 

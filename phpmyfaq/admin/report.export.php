@@ -21,11 +21,7 @@ use phpMyFAQ\Report;
 use phpMyFAQ\HttpStreamer;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
-    $protocol = 'http';
-    if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
-        $protocol = 'https';
-    }
-    header('Location: '.$protocol.'://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+    http_response_code(400);
     exit();
 }
 

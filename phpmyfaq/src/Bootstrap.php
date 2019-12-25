@@ -36,8 +36,6 @@ if (DEBUG) {
     error_reporting(0);
 }
 
-
-
 //
 // Fix the PHP include path if PMF is running under a "strange" PHP configuration
 //

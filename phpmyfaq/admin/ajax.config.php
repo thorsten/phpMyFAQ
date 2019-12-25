@@ -28,8 +28,8 @@ use phpMyFAQ\Meta;
 use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 use phpMyFAQ\User;
 
-if (!defined('IS_VALID_PHPMYFAQ') || !$user->perm->checkRight($user->getUserId(), 'editconfig')) {
-    header('Location: http://'.$_SERVER['HTTP_HOST'].dirname($_SERVER['SCRIPT_NAME']));
+if (!defined('IS_VALID_PHPMYFAQ')) {
+    http_response_code(400);
     exit();
 }
 
