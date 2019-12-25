@@ -80,7 +80,8 @@ class Tags
     {
         $tags = [];
 
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 dt.tagging_id AS tagging_id, 
                 t.tagging_name AS tagging_name
@@ -91,7 +92,11 @@ class Tags
             AND
                 dt.tagging_id = t.tagging_id
             ORDER BY
-                t.tagging_name', Database::getTablePrefix(), Database::getTablePrefix(), $recordId);
+                t.tagging_name',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $recordId
+        );
 
         $result = $this->config->getDb()->query($query);
         if ($result) {
@@ -123,36 +128,56 @@ class Tags
         foreach ($tags as $tagName) {
             $tagName = trim($tagName);
             if (Strings::strlen($tagName) > 0) {
-                if (!in_array(Strings::strtolower($tagName), array_map(array('String', 'strtolower'), $currentTags))) {
+                if (
+                    !in_array(
+                        Strings::strtolower($tagName),
+                        array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
+                    )
+                ) {
                     // Create the new tag
                     $newTagId = $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqtags', 'tagging_id');
-                    $query = sprintf("
+                    $query = sprintf(
+                        "
                         INSERT INTO
                             %sfaqtags
                         (tagging_id, tagging_name)
                             VALUES
-                        (%d, '%s')", Database::getTablePrefix(), $newTagId, $tagName);
+                        (%d, '%s')",
+                        Database::getTablePrefix(),
+                        $newTagId,
+                        $tagName
+                    );
                     $this->config->getDb()->query($query);
 
                     // Add the tag reference for the faq record
-                    $query = sprintf('
+                    $query = sprintf(
+                        '
                         INSERT INTO
                             %sfaqdata_tags
                         (record_id, tagging_id)
                             VALUES
-                        (%d, %d)', Database::getTablePrefix(), $recordId, $newTagId);
+                        (%d, %d)',
+                        Database::getTablePrefix(),
+                        $recordId,
+                        $newTagId
+                    );
                     $this->config->getDb()->query($query);
                 } else {
                     // Add the tag reference for the faq record
-                    $query = sprintf('
+                    $query = sprintf(
+                        '
                         INSERT INTO
                             %sfaqdata_tags
                         (record_id, tagging_id)
                             VALUES
-                        (%d, %d)', Database::getTablePrefix(), $recordId, array_search(
-                        Strings::strtolower($tagName),
-                        array_map(array('String', 'strtolower'), $currentTags)
-                    ));
+                        (%d, %d)',
+                        Database::getTablePrefix(),
+                        $recordId,
+                        array_search(
+                            Strings::strtolower($tagName),
+                            array_map(['phpMyFAQ\Strings', 'strtolower'], $currentTags)
+                        )
+                    );
                     $this->config->getDb()->query($query);
                 }
             }
@@ -165,8 +190,8 @@ class Tags
      * Returns all tags.
      *
      * @param string $search Move the returned result set to be the result of a start-with search
-     * @param int    $limit Limit the returned result set
-     * @param bool   $showInactive Show inactive tags
+     * @param int $limit Limit the returned result set
+     * @param bool $showInactive Show inactive tags
      * @return array
      */
     public function getAllTags(
@@ -240,11 +265,15 @@ class Tags
      */
     public function deleteTagsFromRecordId(int $recordId): bool
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             DELETE FROM
                 %sfaqdata_tags
             WHERE
-                record_id = %d', Database::getTablePrefix(), $recordId);
+                record_id = %d',
+            Database::getTablePrefix(),
+            $recordId
+        );
 
         $this->config->getDb()->query($query);
 
@@ -259,13 +288,18 @@ class Tags
      */
     public function updateTag(EntityTags $entity): bool
     {
-        $query = sprintf("
+        $query = sprintf(
+            "
             UPDATE
                 %sfaqtags
             SET
                 tagging_name = '%s'
             WHERE
-                tagging_id = %d", Database::getTablePrefix(), $entity->getName(), $entity->getId());
+                tagging_id = %d",
+            Database::getTablePrefix(),
+            $entity->getName(),
+            $entity->getId()
+        );
 
         return $this->config->getDb()->query($query);
     }
@@ -279,11 +313,15 @@ class Tags
     public function deleteTag(int $tagId): bool
     {
         try {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 DELETE FROM
                     %sfaqtags
                 WHERE
-                    tagging_id = %d', Database::getTablePrefix(), $tagId);
+                    tagging_id = %d',
+                Database::getTablePrefix(),
+                $tagId
+            );
 
             $this->config->getDb()->query($query);
         } catch (Exception $e) {
@@ -291,11 +329,15 @@ class Tags
         }
 
         try {
-            $query = sprintf('
+            $query = sprintf(
+                '
                 DELETE FROM
                     %sfaqdata_tags
                 WHERE
-                    tagging_id = %d', Database::getTablePrefix(), $tagId);
+                    tagging_id = %d',
+                Database::getTablePrefix(),
+                $tagId
+            );
 
             $this->config->getDb()->query($query);
         } catch (Exception $e) {
@@ -448,7 +490,8 @@ class Tags
      */
     public function getFaqsByTagId(int $tagId): array
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 d.record_id AS record_id
             FROM
@@ -458,7 +501,11 @@ class Tags
             AND
                 t.tagging_id = %d
             GROUP BY
-                record_id', Database::getTablePrefix(), Database::getTablePrefix(), $tagId);
+                record_id',
+            Database::getTablePrefix(),
+            Database::getTablePrefix(),
+            $tagId
+        );
 
         $records = [];
         $result = $this->config->getDb()->query($query);
@@ -536,13 +583,17 @@ class Tags
      */
     public function getTagNameById(int $tagId): string
     {
-        $query = sprintf('
+        $query = sprintf(
+            '
             SELECT
                 tagging_name
             FROM
                 %sfaqtags
             WHERE
-                tagging_id = %d', Database::getTablePrefix(), $tagId);
+                tagging_id = %d',
+            Database::getTablePrefix(),
+            $tagId
+        );
 
         $result = $this->config->getDb()->query($query);
         if ($row = $this->config->getDb()->fetchObject($result)) {
@@ -553,10 +604,10 @@ class Tags
     /**
      * Returns the popular Tags as an array
      *
-     * @param integer $limit
+     * @param int $limit
      * @return array
      */
-    public function getPopularTagsAsArray($limit = 0)
+    public function getPopularTagsAsArray(int $limit = 0): array
     {
         $data = [];
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {

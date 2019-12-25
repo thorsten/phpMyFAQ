@@ -211,11 +211,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         // If Elasticsearch is enabled, update active or delete inactive FAQ document
         if ($faqConfig->get('search.enableElasticsearch')) {
             $esInstance = new Elasticsearch($faqConfig);
-            try {
-                $esInstance->delete($solutionId);
-            } catch (Missing404Exception $e) {
-
-            }
+            $esInstance->delete($solutionId);
             if ('yes' === $active) {
                 $esInstance->index(
                     [
@@ -235,8 +231,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
         $languages = Filter::filterInput(INPUT_POST, 'used_translated_languages', FILTER_SANITIZE_STRING);
         ?>
       <script>
-        (function () {
-          setTimeout(function () {
+        (() => {
+          setTimeout(() => {
             window.location = "index.php?action=editentry&id=<?= $recordId ?>&lang=<?= $recordData['lang'] ?>";
           }, 5000);
         })();
