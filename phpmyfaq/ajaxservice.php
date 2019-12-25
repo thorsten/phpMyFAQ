@@ -267,8 +267,9 @@ switch ($action) {
                     }
                 }
 
-                $mailer->subject = '%sitename%: ' . $title;
+                $mailer->subject = $faqConfig->get('main.titleFAQ') . ': New comment for "' . $title . '"';
                 $mailer->message = strip_tags($commentMail);
+
                 $result = $mailer->send();
                 unset($mailer);
 
@@ -282,7 +283,7 @@ switch ($action) {
                 $message = ['error' => $PMF_LANG['err_SaveComment']];
             }
         } else {
-            $message = ['error' => 'xxxxPlease add your name, your e-mail address and a comment!'];
+            $message = ['error' => 'Please add your name, your e-mail address and a comment!'];
         }
         break;
 
@@ -328,9 +329,8 @@ switch ($action) {
             $answer = $translatedAnswer;
         }
 
-        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopWords->checkBannedWord(strip_tags($question)) &&
-            !is_null($answer) && !empty($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
+        if (!is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(strip_tags($question)) &&
+            !is_null($answer) && $stopWords->checkBannedWord(strip_tags($answer)) &&
             ((is_null($faqId) && !is_null($categories['rubrik'])) || (!is_null($faqId) && !is_null($faqLanguage) &&
                     Language::isASupportedLanguage($faqLanguage)))) {
             $isNew = true;
@@ -458,7 +458,7 @@ switch ($action) {
                 }
             }
 
-            $mailer->subject = '%sitename%';
+            $mailer->subject = $faqConfig->get('main.titleFAQ') . ': New FAQ was added.';
 
             // @todo let the email contains the faq article both as plain text and as HTML
             $mailer->message = html_entity_decode(
@@ -507,8 +507,7 @@ switch ($action) {
             $save = true;
         }
 
-        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
-            !is_null($question) && !empty($question) && $stopWords->checkBannedWord(
+        if (!is_null($author) && !is_null($email) && !is_null($question) && $stopWords->checkBannedWord(
                 Strings::htmlspecialchars($question)
             )) {
             if ($faqConfig->get('records.enableVisibilityQuestions')) {
@@ -604,8 +603,7 @@ switch ($action) {
         $loginName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
 
-        if (!is_null($loginName) && !empty($loginName) && !is_null($email) && !empty($email) &&
-            !is_null($realname) && !empty($realname)) {
+        if (!is_null($loginName) && !is_null($email) && !is_null($realname)) {
             $message = [];
             $user = new User($faqConfig);
 
@@ -723,7 +721,7 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
-        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
+        if (!is_null($author) && !is_null($email) && !is_null($question) &&
             !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n\n %s",
@@ -770,8 +768,7 @@ switch ($action) {
             ]
         );
 
-        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) &&
-            is_array($mailto) && !empty($mailto['mailto'][0]) &&
+        if (!is_null($author) && !is_null($email) && is_array($mailto) && !empty($mailto['mailto'][0]) &&
             $stopWords->checkBannedWord(Strings::htmlspecialchars($attached))) {
             foreach ($mailto['mailto'] as $recipient) {
                 $recipient = trim(strip_tags($recipient));
@@ -896,7 +893,7 @@ switch ($action) {
             $email = $faqConfig->get('main.administrationMail');
         }
 
-        if (!is_null($author) && !empty($author) && !is_null($email) && !empty($email) && !is_null($question) &&
+        if (!is_null($author) && !is_null($email) && !is_null($question) &&
             !empty($question) && $stopWords->checkBannedWord(Strings::htmlspecialchars($question))) {
             $question = sprintf(
                 "%s %s\n%s %s\n%s %s\n\n %s",
@@ -912,7 +909,7 @@ switch ($action) {
             $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($email, $author);
             $mailer->addTo($faqConfig->get('main.administrationMail'));
-            $mailer->subject = 'Remove User Request: %sitename%';
+            $mailer->subject = $faqConfig->get('main.titleFAQ') . ': Remove User Request';
             $mailer->message = $question;
             $result = $mailer->send();
             unset($mailer);
