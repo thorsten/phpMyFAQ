@@ -37,59 +37,52 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     <div class="col-lg-12">
 
       <p>
-          <?= $PMF_LANG['ad_stopwords_desc'] ?>
+        <?= $PMF_LANG['ad_stopwords_desc'] ?>
       </p>
       <p>
+        <label for="stopwords_lang_selector"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
         <select onchange="loadStopWordsByLang(this.options[this.selectedIndex].value)"
                 id="stopwords_lang_selector">
           <option value="none">---</option>
-            <?php foreach ($sortedLanguageCodes as $key => $value) {
-                ?>
-              <option value="<?= strtolower($key);
-              ?>"><?= $value;
-                  ?></option>
-                <?php
-            }
-            ?>
+            <?php foreach ($sortedLanguageCodes as $key => $value) { ?>
+              <option value="<?= strtolower($key) ?>"><?= $value ?></option>
+            <?php } ?>
         </select>
         <span id="stopwords_loading_indicator"></span>
       </p>
 
-      <div id="stopwords_content"></div>
+      <div class="mb-3" id="stopwords_content"></div>
 
       <script>
 
         /**
          * column count in the stop words table
          */
-        var max_cols = 4;
-
+        const maxCols = 4;
 
         /**
          * Load stop words by language, build html and put
-         * it into stopwords_content container
+         * it into stop words_content container
          *
-         * @param lang language to retrieve the stopwords by
-         *
+         * @param lang language to retrieve the stop words by
          * @return void
          */
         function loadStopWordsByLang(lang) {
-          if ('none' == lang) {
+          if ('none' === lang) {
             return;
           }
 
-          $('#stopwords_loading_indicator').html('<img src="../assets/svg/spinning-circles.svg">');
+          $('#stopwords_loading_indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Loading...</span>');
 
-          $.get("index.php",
-            {action: "ajax", ajax: 'config', ajaxaction: "load_stop_words_by_lang", stopwords_lang: lang},
-            function (data, textStatus) {
+          $.get('index.php',
+            { action: 'ajax', ajax: 'config', ajaxaction: 'load_stop_words_by_lang', stopwords_lang: lang },
+            (data) => {
               $('#stopwords_content').html(buildStopWordsHTML(data));
-              $('#stopwords_loading_indicator').html('');
+              $('#stopwords_loading_indicator').html('<i class="fa fa-spell-check" aria-hidden="true"></i>');
             },
-            'json'
+            'json',
           );
         }
-
 
         /**
          * Build complete html contents to view and edit stop words
@@ -103,30 +96,28 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
             return '';
           }
 
-          var html = '<table class="list">';
-          var elem_id;
-          for (var i = 0; i < data.length; i++) {
+          let html = '<table class="table table-hover">';
+          let elem_id;
+          for (let i = 0; i < data.length; i++) {
 
-            if (i % max_cols == 0) {
+            if (i % maxCols === 0) {
               html += '<tr id="stopwords_group_' + i + '">';
             }
 
-            /**
-             * id atribute is of the format stopword_<id>_<lang>
-             */
+            // id attribute is of the format stopword_<id>_<lang>
             elem_id = buildStopWordInputElemId(data[i].id, data[i].lang);
 
             html += '<td>';
             html += buildStopWordInputElement(elem_id, data[i].stopword);
             html += '</td>';
 
-            if (i % max_cols == max_cols - 1) {
+            if (i % maxCols === maxCols - 1) {
               html += '</tr>';
             }
           }
 
           html += '</table>';
-          html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-add fa fa-white"></i> <?= $PMF_LANG['ad_config_stopword_input'] ?></a>';
+          html += '<a class="btn btn-primary" href="javascript: addStopWordInputElem();"><i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_config_stopword_input'] ?></a>';
 
           return html;
         }
@@ -135,22 +126,20 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
         /**
          * Build an input element to view and edit stop word
          *
-         * @param elem_id id of the html element
+         * @param elementId id of the html element
          * @param stopword
          *
          * @return string
          */
-        function buildStopWordInputElement(elem_id, stopword) {
-          elem_id = elem_id || buildStopWordInputElemId();
+        function buildStopWordInputElement(elementId, stopword) {
+          elementId = elementId || buildStopWordInputElemId();
           stopword = stopword || '';
-          var attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWordHandleEnter(this.id, event)" onfocus="saveOldValue(this.id)"';
-          var element = '<input class="form-control" id="' + elem_id + '" value="' + stopword + '" ' + attrs + '>';
-
-          return element;
+          const attrs = 'onblur="saveStopWord(this.id)" onkeydown="saveStopWordHandleEnter(this.id, event)" onfocus="saveOldValue(this.id)"';
+          return '<input class="form-control form-control-sm" id="' + elementId + '" value="' + stopword + '" ' + attrs + '>';
         }
 
         /**
-         * Id atribute is of the format stopword_<id>_<lang>
+         * Id attribute is of the format stopword_<id>_<lang>
          *
          * @param id database id of the word
          * @param lang
@@ -172,30 +161,31 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          * @return object
          */
         function parseStopWordInputElemId(elem_id) {
-          var info = elem_id.split('_');
+          const info = elem_id.split('_');
 
-          return {id: info[1], lang: info[2]};
+          return { id: info[1], lang: info[2] };
         }
 
         /**
          * Handle enter press on a stop word input element
          *
          * @param elem_id input element id
-         * @param e event
+         * @param event
          *
          * @return void
          */
-        function saveStopWordHandleEnter(elem_id, e) {
-          e = e || window.event || undefined;
+        function saveStopWordHandleEnter(elem_id, event) {
+          const element = $('#' + elem_id);
+          event = event || window.event || undefined;
 
-          if (undefined != e) {
-            var key = e.charCode || e.keyCode || 0;
-            if (13 == key) {
-              if ('' == $('#' + elem_id).val()) {
+          if (undefined !== event) {
+            const key = event.charCode || event.keyCode || 0;
+            if (13 === key) {
+              if ('' === element.val()) {
                 deleteStopWord(elem_id);
               } else {
                 // this blur action will cause saveStopWord() call
-                $('#' + elem_id).blur();
+                element.blur();
               }
             }
           }
@@ -205,28 +195,27 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          * Save stopword doing an ajax call
          *
          * @param elem_id input element id
-         *
          * @return void
          */
         function saveStopWord(elem_id) {
-          var info = parseStopWordInputElemId(elem_id);
+          const info = parseStopWordInputElemId(elem_id);
+          const element = $('#' + elem_id);
 
-          if ($('#' + elem_id).attr('old_value') !== $('#' + elem_id).val()) {
-            $.get("index.php", {
-                action: "ajax",
+          if (element.attr('old_value') !== element.val()) {
+            $.get('index.php', {
+                action: 'ajax',
                 ajax: 'config',
-                ajaxaction: "save_stop_word",
+                ajaxaction: 'save_stop_word',
                 stopword_id: info.id,
-                stopword: $('#' + elem_id).val(),
+                stopword: element.val(),
                 stopwords_lang: info.lang,
                 csrf: '<?= $user->getCsrfTokenFromSession();
-                    ?>'
-              }
+                    ?>',
+              },
             );
           } else {
-            if (0 > info.id && '' == $('#' + elem_id).val()) {
-              $('#' + elem_id).remove();
-              return;
+            if (0 > info.id && '' === element.val()) {
+              element.remove();
             }
           }
         }
@@ -240,7 +229,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          * @return void
          */
         function saveOldValue(elem_id) {
-          $('#' + elem_id).attr('old_value', $('#' + elem_id).val());
+          const element = $('#' + elem_id);
+          element.attr('old_value', element.val());
         }
 
 
@@ -252,22 +242,22 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          * @return void
          */
         function deleteStopWord(elem_id) {
-          var info = parseStopWordInputElemId(elem_id);
+          const info = parseStopWordInputElemId(elem_id);
+          const element = $('#' + elem_id);
 
-          $('#' + elem_id).fadeOut('slow');
+          element.fadeOut('slow');
 
-          $.get("index.php", {
-              action: "ajax",
+          $.get('index.php', {
+              action: 'ajax',
               ajax: 'config',
-              ajaxaction: "delete_stop_word",
+              ajaxaction: 'delete_stop_word',
               stopword_id: info.id,
               stopwords_lang: info.lang,
-              csrf: '<?= $user->getCsrfTokenFromSession();
-                  ?>'
+              csrf: '<?= $user->getCsrfTokenFromSession() ?>',
             },
-            function () {
-              loadStopWordsByLang(info.lang)
-            }
+            function() {
+              loadStopWordsByLang(info.lang);
+            },
           );
         }
 
@@ -277,22 +267,21 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
          * @return void
          */
         function addStopWordInputElem() {
-          var word = prompt('<?= $PMF_LANG['ad_config_stopword_input']?>', '');
-          var lang = $('#stopwords_lang_selector').val();
+          const word = prompt('<?= $PMF_LANG['ad_config_stopword_input']?>', '');
+          const lang = $('#stopwords_lang_selector').val();
 
           if (!!word) {
-            $.get("index.php", {
-                action: "ajax",
+            $.get('index.php', {
+                action: 'ajax',
                 ajax: 'config',
-                ajaxaction: "save_stop_word",
+                ajaxaction: 'save_stop_word',
                 stopword: word,
                 stopwords_lang: lang,
-                csrf: '<?= $user->getCsrfTokenFromSession();
-                    ?>'
+                csrf: '<?= $user->getCsrfTokenFromSession() ?>',
               },
-              function () {
-                loadStopWordsByLang(lang)
-              }
+              function() {
+                loadStopWordsByLang(lang);
+              },
             );
           }
         }
@@ -300,7 +289,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
     </div>
   </div>
     <?php
-
 } else {
     echo $PMF_LANG['err_NotAuth'];
 }

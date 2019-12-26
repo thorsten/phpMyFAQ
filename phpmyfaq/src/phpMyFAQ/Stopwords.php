@@ -97,7 +97,8 @@ class Stopwords
     {
         if (!$this->match($word)) {
             $sql = sprintf(
-                "INSERT INTO $this->table_name VALUES(%d, '%s', '%s')",
+                "INSERT INTO %s VALUES(%d, '%s', '%s')",
+                $this->table_name,
                 $this->config->getDb()->nextId($this->table_name, 'id'),
                 $this->language,
                 $word
@@ -113,36 +114,40 @@ class Stopwords
     /**
      * Update a word in the stop words dictionary.
      *
-     * @param int    $id
+     * @param int $id
      * @param string $word
+     * @return bool
      */
-    public function update($id, $word)
+    public function update($id, $word): bool
     {
-        $sql = "UPDATE $this->table_name SET stopword = '%s' WHERE id = %d AND lang = '%s'";
+        $sql = "UPDATE %s SET stopword = '%s' WHERE id = %d AND lang = '%s'";
         $sql = sprintf(
             $sql,
+            $this->table_name,
             $word,
             $id,
             $this->language
         );
 
-        $this->config->getDb()->query($sql);
+        return (bool) $this->config->getDb()->query($sql);
     }
 
     /**
      * Remove a word from the stop word dictionary.
      *
      * @param int $id
+     * @return bool
      */
-    public function remove($id)
+    public function remove($id): bool
     {
         $sql = sprintf(
-            "DELETE FROM $this->table_name WHERE id = %d AND lang = '%s'",
+            "DELETE FROM %s WHERE id = %d AND lang = '%s'",
+            $this->table_name,
             $id,
             $this->language
         );
 
-        $this->config->getDb()->query($sql);
+        return (bool) $this->config->getDb()->query($sql);
     }
 
     /**
@@ -155,7 +160,8 @@ class Stopwords
     public function match($word)
     {
         $sql = sprintf(
-            "SELECT id FROM $this->table_name WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
+            "SELECT id FROM %s WHERE LOWER(stopword) = LOWER('%s') AND lang = '%s'",
+            $this->table_name,
             $word,
             $this->language
         );
@@ -177,7 +183,8 @@ class Stopwords
     {
         $lang = is_null($lang) ? $this->config->getLanguage()->getLanguage() : $lang;
         $sql = sprintf(
-            "SELECT id, lang, LOWER(stopword) AS stopword FROM $this->table_name WHERE lang = '%s'",
+            "SELECT id, lang, LOWER(stopword) AS stopword FROM %s WHERE lang = '%s'",
+            $this->table_name,
             $lang
         );
 

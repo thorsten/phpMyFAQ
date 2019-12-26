@@ -22,7 +22,7 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
-use phpMyFAQ\Instance\Database\Stopwords;
+use phpMyFAQ\Stopwords;
 use phpMyFAQ\Language;
 use phpMyFAQ\Meta;
 use phpMyFAQ\Entity\MetaEntity as MetaEntity;
@@ -46,7 +46,6 @@ $stopwords = new Stopwords($faqConfig);
 switch ($ajaxAction) {
 
     case 'add_instance':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
@@ -59,11 +58,11 @@ switch ($ajaxAction) {
         $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
         $password = Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
-        $data = array(
+        $data = [
             'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
             'instance' => $instance,
             'comment' => $comment,
-        );
+        ];
 
         $faqInstance = new Instance($faqConfig);
         $instanceId = $faqInstance->addInstance($data);
@@ -76,19 +75,19 @@ switch ($ajaxAction) {
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
             $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
-            $clientSetup = new setUp(): void;
+            $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
 
             $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
 
-            $dbSetup = array(
+            $dbSetup = [
                 'dbServer' => $DB['server'],
                 'dbUser' => $DB['user'],
                 'dbPassword' => $DB['password'],
                 'dbDatabaseName' => $DB['db'],
                 'dbPrefix' => substr($hostname, 0, strpos($hostname, '.')),
                 'dbType' => $DB['type'],
-            );
+            ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
             $faqInstanceClient->setClientUrl('http://'.$hostname);
@@ -100,10 +99,10 @@ switch ($ajaxAction) {
             $instanceAdmin = new User($faqConfig);
             $instanceAdmin->createUser($admin, $password, null, 1);
             $instanceAdmin->setStatus('protected');
-            $instanceAdminData = array(
+            $instanceAdminData = [
                 'display_name' => '',
                 'email' => $email,
-            );
+            ];
             $instanceAdmin->setUserData($instanceAdminData);
 
             // Add anonymous user account
@@ -112,30 +111,27 @@ switch ($ajaxAction) {
             Database::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
-            $payload = array('error' => 'Cannot create instance.');
+            $payload = ['error' => 'Cannot create instance.'];
         }
-
         if (0 !== $instanceId) {
-            $payload = array('added' => $instanceId, 'url' => $data['url']);
+            $payload = ['added' => $instanceId, 'url' => $data['url']];
         } else {
-            $payload = array('error' => $instanceId);
+            $payload = ['error' => $instanceId];
         }
         $http->sendJsonWithHeaders($payload);
         break;
 
     case 'delete_instance':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
-
         if (null !== $instanceId) {
             $faqInstance = new Instance($faqConfig);
             if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
-                $payload = array('deleted' => $instanceId);
+                $payload = ['deleted' => $instanceId];
             } else {
-                $payload = array('error' => $instanceId);
+                $payload = ['error' => $instanceId];
             }
             $http->sendJsonWithHeaders($payload);
         }
@@ -145,9 +141,9 @@ switch ($ajaxAction) {
         if (null !== $instanceId) {
             $faqInstance = new Instance($faqConfig);
             if ($faqInstance->removeInstance($instanceId)) {
-                $payload = array('deleted' => $instanceId);
+                $payload = ['deleted' => $instanceId];
             } else {
-                $payload = array('error' => $instanceId);
+                $payload = ['error' => $instanceId];
             }
             $http->sendJsonWithHeaders($payload);
         }
@@ -170,7 +166,6 @@ switch ($ajaxAction) {
         break;
 
     case 'save_stop_word':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
@@ -178,6 +173,7 @@ switch ($ajaxAction) {
 
         if (null != $stopword && Language::isASupportedLanguage($stopwordsLang)) {
             $stopwords->setLanguage($stopwordsLang);
+
             if (null !== $stopwordId && -1 < $stopwordId) {
                 echo $stopwords->update($stopwordId, $stopword);
             } elseif (!$stopwords->match($stopword)) {
@@ -187,7 +183,6 @@ switch ($ajaxAction) {
         break;
 
     case 'add_meta':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
@@ -204,16 +199,14 @@ switch ($ajaxAction) {
         $metaId = $meta->add($entity);
 
         if (0 !== $metaId) {
-            $payload = array('added' => $metaId);
+            $payload = ['added' => $metaId];
         } else {
-            $payload = array('error' => $metaId);
+            $payload = ['error' => $metaId];
         }
         $http->sendJsonWithHeaders($payload);
         break;
 
-
     case 'delete_meta':
-
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
@@ -223,9 +216,9 @@ switch ($ajaxAction) {
         $metaId = Filter::filterInput(INPUT_GET, 'meta_id', FILTER_SANITIZE_STRING);
 
         if ($meta->delete($metaId)) {
-            $payload = array('deleted' => $metaId);
+            $payload = ['deleted' => $metaId];
         } else {
-            $payload = array('error' => $metaId);
+            $payload = ['error' => $metaId];
         }
 
         $http->sendJsonWithHeaders($payload);
