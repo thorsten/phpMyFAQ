@@ -12,8 +12,5 @@ jobs:
       - name: Build the Docker image
         run: docker build . --file Dockerfile --tag latest:$(date +%s)
 
-      - name: Tag the Docker image
-        run: docker tag phpmyfaq/phpmyfaq:latest docker.pkg.github.com/thorsten/phpmyfaq/phpmyfaq:latest
-
       - name: Push the Docker image to Github Registry
-        run: docker push docker.pkg.github.com/thorsten/phpmyfaq/phpmyfaq:latest
+        run: docker push docker.pkg.github.com/thorsten/phpmyfaq/phpmyfaq:latest:$(date +%s)
