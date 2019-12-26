@@ -350,7 +350,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'updateinstance':
             case 'instances':         require 'instances.php'; break;
             case 'editinstance':      require 'instances.edit.php'; break;
-            case 'stopwordsconfig':   require 'stopwordsconfig.main.php'; break;
+            case 'stopwordsconfig':   require 'stopwords.php'; break;
             case 'elasticsearch':     require 'elasticsearch.php'; break;
             case 'meta':
             case 'meta.update'; require 'meta.php'; break;
