@@ -1,76 +1,67 @@
 {
-    "name": "thorsten/phpmyfaq",
-    "description": "FAQ System",
-    "keywords": [
-        "phpMyFAQ",
-        "FAQ"
-    ],
-    "homepage": "https://www.phpmyfaq.de",
-    "license": "MPL-2.0",
-    "type": "application",
-    "authors": [
-        {
-            "name": "Thorsten Rinne",
-            "email": "thorsten@phpmyfaq.de"
-        }
-    ],
-    "repositories": [
-        {
-            "type": "package",
-            "package": {
-                "name": "tcpdf",
-                "version": "master",
-                "source": {
-                    "url": "http://git.code.sf.net/p/tcpdf/code",
-                    "type": "git",
-                    "reference": "master"
-                }
-            }
-        }
-    ],
-    "require": {
-        "php": ">=7.2.0",
-        "phpseclib/phpseclib": "~2.0",
-        "swiftmailer/swiftmailer": "~5.0",
-        "erusev/parsedown": "~1.0",
-        "erusev/parsedown-extra": "~0.7.0",
-        "tecnickcom/tcpdf": "~6.0",
-        "elasticsearch/elasticsearch": "~7.0",
-        "monolog/monolog": "~1.",
-        "abraham/twitteroauth": "^0.7.4",
-        "myclabs/deep-copy": "~1.0",
-        "ext-json": "*",
-        "ext-xmlwriter": "*",
-        "ext-zlib": "*",
-        "ext-gd": "*"
-    },
-    "require-dev": {
-        "phpunit/phpunit": "8.*",
-        "phpunit/dbunit": "1.3.*",
-        "doctrine/instantiator": "1.*",
-        "symfony/yaml": "3.*",
-        "phpdocumentor/reflection-docblock": "3.*",
-        "phpunit/php-token-stream": "*",
-        "squizlabs/php_codesniffer": "*"
-    },
-    "suggest": {
-        "ext-mysqli": "*",
-        "ext-mbstring": "*",
-        "ext-ldap": "*"
-    },
-    "config": {
-        "secure-http": true
-    },
-    "minimum-stability": "stable",
-    "scripts": {
-        "test": "vendor/bin/phpunit",
-        "lint": "vendor/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
-        "lint-fix": "vendor/bin/phpcbf  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
-        "post-install-cmd": [
-            "scripts/reorgVendoredDeps.php"
-        ],
-        "post-update-cmd": [
-            "scripts/reorgVendoredDeps.php"
-        ]
+  "name": "thorsten/phpmyfaq",
+  "description": "FAQ System",
+  "keywords": [
+    "phpMyFAQ",
+    "FAQ"
+  ],
+  "homepage": "https://www.phpmyfaq.de",
+  "license": "MPL-2.0",
+  "type": "application",
+  "authors": [
+    {
+      "name": "Thorsten Rinne",
+      "email": "thorsten@phpmyfaq.de"
     }
+  ],
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "tcpdf",
+        "version": "master",
+        "source": {
+          "url": "http://git.code.sf.net/p/tcpdf/code",
+          "type": "git",
+          "reference": "master"
+        }
+      }
+    }
+  ],
+  "require": {
+    "php": ">=7.2.0",
+    "phpseclib/phpseclib": "~2.0",
+    "swiftmailer/swiftmailer": "~5.0",
+    "erusev/parsedown": "~1.0",
+    "erusev/parsedown-extra": "~0.7.0",
+    "tecnickcom/tcpdf": "~6.0",
+    "elasticsearch/elasticsearch": "~7.0",
+    "monolog/monolog": "~1.",
+    "abraham/twitteroauth": "^0.7.4",
+    "myclabs/deep-copy": "~1.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "8.*",
+    "phpunit/dbunit": "1.3.*",
+    "doctrine/instantiator": "1.*",
+    "symfony/yaml": "3.*",
+    "phpdocumentor/reflection-docblock": "3.*",
+    "phpunit/php-token-stream": "*",
+    "squizlabs/php_codesniffer": "*"
+  },
+  "config": {
+    "secure-http": true
+  },
+  "minimum-stability": "stable",
+  "scripts": {
+    "test": "vendor/bin/phpunit",
+    "lint": "vendor/bin/phpcs  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
+    "lint-fix": "vendor/bin/phpcbf  --standard=PSR12 ./phpmyfaq/src/phpMyFAQ",
+    "post-install-cmd": [
+      "scripts/reorgVendoredDeps.php"
+    ],
+    "post-update-cmd": [
+      "scripts/reorgVendoredDeps.php"
+    ]
+  }
 }
