@@ -221,7 +221,7 @@ document.addEventListener('DOMContentLoaded', () => {
       url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
       data: questions,
       success: function(msg) {
-        indicator.html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
+        indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
         $('tr td input:checked')
           .parent()
           .parent()

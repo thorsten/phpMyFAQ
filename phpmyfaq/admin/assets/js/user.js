@@ -72,7 +72,9 @@ document.addEventListener('DOMContentLoaded', () => {
       data: $('#pmf-modal-user-password-override form').serialize(),
       dataType: 'json',
       beforeSend: function() {
-        $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+        $('#saving_data_indicator').html(
+          '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
+        );
       },
       success: function(message) {
         $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');

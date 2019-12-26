@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const result = $('.result'),
         indicator = $('#saving_data_indicator');
 
-      indicator.html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+      indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>');
       result.empty();
       if (message.error) {
         result.append('<p class="alert alert-danger">✗ ' + message.error + '</p>');

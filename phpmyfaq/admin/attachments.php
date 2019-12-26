@@ -102,7 +102,7 @@ $pagination = new Pagination(
    */
   function deleteAttachment(attachmentId, csrf) {
     if (confirm('<?= $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-      $('#saving_data_indicator').html('<img alt="Deleting ..." src="../assets/svg/spinning-circles.svg"> Deleting ...');
+      $('#saving_data_indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
       $.ajax({
         type: "GET",
         url: "index.php?action=ajax&ajax=att&ajaxaction=delete",

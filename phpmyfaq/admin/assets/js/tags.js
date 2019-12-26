@@ -42,7 +42,9 @@ document.addEventListener('DOMContentLoaded', () => {
       data: 'id=' + id + '&tag=' + tag + '&csrf=' + csrf,
       dataType: 'json',
       beforeSend: function() {
-        $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Saving ...');
+        $('#saving_data_indicator').html(
+          '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
+        );
       },
       success: function(message) {
         input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');

@@ -617,7 +617,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     {
         if (confirm('<?= addslashes($PMF_LANG['ad_entry_del_1'].' '.$PMF_LANG['ad_entry_del_3']);
         ?>')) {
-            $('#saving_data_indicator').html('<img src="../assets/svg/spinning-circles.svg"> Deleting ...');
+            $('#saving_data_indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
             $.ajax({
                 type:    "POST",
                 url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
