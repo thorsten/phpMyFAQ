@@ -13,7 +13,6 @@
     "phpMyFAQ"
   ],
   "homepage": "https://www.phpmyfaq.de/",
-  "main": "Gruntfile.js",
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch"
