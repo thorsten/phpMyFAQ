@@ -1260,12 +1260,12 @@ $PMF_LANG['rightsLanguage']['delete_section'] = 'Bereiche löschen';
 $PMF_LANG['rightsLanguage']['administrate_sections'] = 'Bereiche administrieren';
 $PMF_LANG['rightsLanguage']['administrate_groups'] = 'Gruppen administrieren';
 $PMF_LANG['ad_group_rights'] = 'Rechte der Gruppe';
-$PMF_LANG['ad_menu_meta'] = 'Metadaten';
-$PMF_LANG['ad_meta_add'] = 'Metadaten hinzufügen';
+$PMF_LANG['ad_menu_meta'] = 'Template-Metadaten';
+$PMF_LANG['ad_meta_add'] = 'Template-Metadaten hinzufügen';
 $PMF_LANG['ad_meta_page_id'] = 'Seitentyp';
 $PMF_LANG['ad_meta_type'] = 'Inhaltstyp';
 $PMF_LANG['ad_meta_content'] = 'Inhalt';
-$PMF_LANG['ad_meta_copy_snippet'] = 'Metadaten Snippet für Templates kopieren';
+$PMF_LANG['ad_meta_copy_snippet'] = 'Code-Snippet für Templates kopieren';
 
 // added v3.0.0-alpha.3 - 2018-09-20 by Timo
 $PMF_LANG['ad_menu_section_administration'] = "Bereichsverwaltung";

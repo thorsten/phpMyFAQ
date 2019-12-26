@@ -14,7 +14,7 @@
  * @since 2018-08-10
  */
 
-use phpMyFAQ\Entity\MetaEntity as MetaEntity;
+use phpMyFAQ\Entity\MetaEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Meta;
 
@@ -36,7 +36,7 @@ $metaId = Filter::filterInput(INPUT_POST, 'meta_id', FILTER_VALIDATE_INT);
   </h1>
   <div class="btn-toolbar mb-2 mb-md-0">
     <div class="btn-group mr-2">
-      <button class="btn btn-sm     btn-success" data-toggle="modal" data-target="#addMetaModal">
+      <button class="btn btn-sm btn-success" data-toggle="modal" data-target="#addMetaModal">
         <i aria-hidden="true" class="fa fa-plus"></i>
           <?= $PMF_LANG['ad_meta_add'] ?>
       </button>
@@ -101,7 +101,7 @@ $metaData = $meta->getAll();
       <td><?= $data->getPageId() ?></td>
       <td><?= $data->getType() ?></td>
       <td><?= $data->getContent() ?></td>
-      <td>
+      <td class="text-right">
         <a href="?action=meta.edit&id=<?= $data->getId() ?>" class="btn btn-success">
           <i aria-hidden="true" class="fa fa-pencil"></i>
         </a>
@@ -178,10 +178,11 @@ $metaData = $meta->getAll();
         </button>
       </div>
       <div class="modal-body">
-        <code> </code>
+        <label class="sr-only" for="copy-code-snippet"><?= $PMF_LANG['ad_meta_copy_snippet'] ?></label>
+        <textarea class="form-control" id="copy-code-snippet"></textarea>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal"><?= $PMF_LANG['ad_att_close'] ?></button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal"><?= $PMF_LANG['ad_att_close'] ?></button>
       </div>
     </div>
   </div>

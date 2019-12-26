@@ -107,6 +107,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = $(event.relatedTarget);
     const codeSnippet = button.data('code-snippet');
     const modal = $(this);
-    modal.find('.modal-body code').append('{{ ' + codeSnippet + ' | meta }}');
+    modal.find('.modal-body textarea').val('{{ ' + codeSnippet + ' | meta }}');
   });
 });
