@@ -61,7 +61,7 @@ RUN set -ex \
 #=== php default ===
 ENV PMF_TIMEZONE="Europe/Berlin" \
     PMF_ENABLE_UPLOADS=On \
-    PMF_MEMORY_LIMIT=64M \
+    PMF_MEMORY_LIMIT=128M \
     PMF_DISABLE_HTACCESS="" \
     PHP_LOG_ERRORS=On \
     PHP_ERROR_REPORTING=E_ALL|E_STRICT \

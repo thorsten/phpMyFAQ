@@ -2,7 +2,7 @@
 
 /**
  * The export function to import the phpMyFAQ backups.
- * 
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -31,7 +31,7 @@ define('IS_VALID_PHPMYFAQ', null);
 //
 // Bootstrapping
 //
-require PMF_ROOT_DIR.'/src/Bootstrap.php';
+require PMF_ROOT_DIR . '/src/Bootstrap.php';
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 
@@ -49,7 +49,7 @@ if ($user) {
 
 if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     $tables = $tableNames = $faqConfig->getDb()->getTableNames(Database::getTablePrefix());
-    $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix().'.phpmyfaq' : 'phpmyfaq';
+    $tablePrefix = (Database::getTablePrefix() !== '') ? Database::getTablePrefix() . '.phpmyfaq' : 'phpmyfaq';
     $tableNames = '';
     $majorVersion = substr($faqConfig->get('main.currentVersion'), 0, 3);
     $dbHelper = new DatabaseHelper($faqConfig);
@@ -60,24 +60,26 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
     switch ($action) {
         case 'backup_content' :
             foreach ($tables as $table) {
-                if ((Database::getTablePrefix().'faqadminlog' == trim($table)) || (Database::getTablePrefix().'faqsessions' == trim($table))) {
+                if ((Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
+                        ) . 'faqsessions' == trim($table))) {
                     continue;
                 }
-                $tableNames .= $table.' ';
+                $tableNames .= $table . ' ';
             }
             break;
         case 'backup_logs' :
             foreach ($tables as $table) {
-                if ((Database::getTablePrefix().'faqadminlog' == trim($table)) || (Database::getTablePrefix().'faqsessions' == trim($table))) {
-                    $tableNames .= $table.' ';
+                if ((Database::getTablePrefix() . 'faqadminlog' == trim($table)) || (Database::getTablePrefix(
+                        ) . 'faqsessions' == trim($table))) {
+                    $tableNames .= $table . ' ';
                 }
             }
             break;
     }
 
-    $text[] = '-- pmf'.$majorVersion.': '.$tableNames;
+    $text[] = '-- pmf' . $majorVersion . ': ' . $tableNames;
     $text[] = '-- DO NOT REMOVE THE FIRST LINE!';
-    $text[] = '-- pmftableprefix: '.Database::getTablePrefix();
+    $text[] = '-- pmftableprefix: ' . Database::getTablePrefix();
     $text[] = '-- DO NOT REMOVE THE LINES ABOVE!';
     $text[] = '-- Otherwise this backup will be broken.';
 
@@ -96,7 +98,9 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             $httpHelper->addAdditionalHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
                 echo implode("\r\n", $text);
-                $text = $dbHelper->buildInsertQueries('SELECT * FROM '.$table, $table);
+                if ('' !== $table) {
+                    $text = $dbHelper->buildInsertQueries('SELECT * FROM ' . $table, $table);
+                }
             }
             break;
         case 'backup_logs' :
@@ -113,7 +117,9 @@ if ($user->perm->checkRight($user->getUserId(), 'backup')) {
             $httpHelper->addAdditionalHeader($header);
             foreach (explode(' ', $tableNames) as $table) {
                 echo implode("\r\n", $text);
-                $text = $dbHelper->buildInsertQueries('SELECT * FROM '.$table, $table);
+                if ('' !== $table) {
+                    $text = $dbHelper->buildInsertQueries('SELECT * FROM ' . $table, $table);
+                }
             }
             break;
     }

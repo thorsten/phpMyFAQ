@@ -2,8 +2,6 @@
 /**
  * The main configuration frontend.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -169,7 +167,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         </li>
                     </ul>
 
-                    <div class="tab-content" style="margin-top: 20px;">
+                    <div class="tab-content p-2 pt-4">
                         <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
                         <div role="tabpanel" class="tab-pane fade" id="records"></div>
                         <div role="tabpanel" class="tab-pane fade" id="search"></div>
