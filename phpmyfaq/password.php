@@ -28,12 +28,12 @@ try {
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
         'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
         'msgUsername' => $PMF_LANG['ad_auth_user'],
         'msgEmail' => $PMF_LANG['ad_entry_email'],
         'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    )
+    ]
 );
 
 $template->parseBlock(

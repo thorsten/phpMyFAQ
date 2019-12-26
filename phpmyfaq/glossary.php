@@ -77,10 +77,6 @@ $template->parse(
     'mainPageContent',
     [
         'pageHeader' => $PMF_LANG['ad_menu_glossary'],
-        'msgGlossary' => $PMF_LANG['ad_menu_glossary'],
-        'msgGlossrayItem' => $PMF_LANG['ad_glossary_item'],
-        'msgGlossaryDescription' => $PMF_LANG['ad_glossary_definition'],
         'pagination' => $pagination->render(),
-        'glossaryData' => '',
     ]
 );

@@ -31,7 +31,6 @@ try {
         'mainPageContent',
         [
             'pageHeader' => $PMF_LANG['msgOpenQuestions'],
-            'msgOpenQuestions' => $PMF_LANG['msgOpenQuestions'],
             'msgQuestionText' => $PMF_LANG['msgQuestionText'],
             'msgDate_User' => $PMF_LANG['msgDate_User'],
             'msgQuestion2' => $PMF_LANG['msgQuestion2'],

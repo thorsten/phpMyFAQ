@@ -34,7 +34,10 @@ if ($user instanceof CurrentUser) {
         $gravatar = new Gravatar($faqConfig);
         $gravatarImg = sprintf(
             '<a target="_blank" href="http://www.gravatar.com">%s</a>',
-            $gravatar->getImage($user->getUserData('email'), ['class' => 'rounded-circle', 'size' => 125])
+            $gravatar->getImage(
+                $user->getUserData('email'),
+                ['class' => 'img-responsive rounded-circle', 'size' => 125]
+            )
         );
     } else {
         $gravatarImg = '';
@@ -42,7 +45,7 @@ if ($user instanceof CurrentUser) {
 
     $template->parse(
         'mainPageContent',
-        array(
+        [
             'headerUserControlPanel' => $PMF_LANG['headerUserControlPanel'],
             'ucpGravatarImage' => $gravatarImg,
             'userid' => $user->getUserId(),
@@ -55,7 +58,7 @@ if ($user instanceof CurrentUser) {
             'msgConfirm' => $PMF_LANG['ad_user_confirm'],
             'msgSave' => $PMF_LANG['msgSave'],
             'msgCancel' => $PMF_LANG['msgCancel'],
-        )
+        ]
     );
 
     $template->parseBlock(
@@ -65,7 +68,6 @@ if ($user instanceof CurrentUser) {
             'breadcrumbHeadline' => $PMF_LANG['headerUserControlPanel']
         ]
     );
-
 } else {
     // Redirect to login
     header('Location: ' . $faqConfig->getDefaultUrl());

@@ -74,9 +74,9 @@ if ($faqConfig->get('main.enableWysiwygEditorFrontend')) {
     $template->parseBlock(
         'mainPageContent',
         'enableWysiwygEditor',
-        array(
+        [
             'currentTimestamp' => $_SERVER['REQUEST_TIME'],
-        )
+        ]
     );
 }
 

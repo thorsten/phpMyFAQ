@@ -17,6 +17,7 @@
 
 define('IS_VALID_PHPMYFAQ', null);
 
+use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comment;
@@ -50,7 +51,7 @@ $http->addHeader();
 // Set user permissions
 //
 $currentUser = -1;
-$currentGroups = array(-1);
+$currentGroups = [-1];
 $auth = false;
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
@@ -208,7 +209,7 @@ switch ($action) {
         $attachments = $result = [];
         try {
             $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
-        } catch (\phpMyFAQ\Attachment\AttachmentException $e) {
+        } catch (AttachmentException $e) {
             $result = ['error' => $e->getMessage()];
         }
         foreach ($attachments as $attachment) {
