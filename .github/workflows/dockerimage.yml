@@ -3,12 +3,17 @@ name: Docker Image CI
 on: [push]
 
 jobs:
-
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v1
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      - uses: actions/checkout@v1
+
+      - name: Build the Docker image
+        run: docker build . --file Dockerfile --tag latest:$(date +%s)
+
+      - name: Tag the Docker image
+        run: docker tag phpmyfaq/phpmyfaq:latest docker.pkg.github.com/thorsten/phpmyfaq/phpmyfaq:latest
+
+      - name: Push the Docker image to Github Registry
+        run: docker push docker.pkg.github.com/thorsten/phpmyfaq/phpmyfaq:latest
