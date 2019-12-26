@@ -16,14 +16,13 @@
  */
 
 use phpMyFAQ\Services\Gravatar;
-use phpMyFAQ\User\CurrentUser;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
     exit();
 }
 
-if ($user instanceof CurrentUser) {
+if ($user->isLoggedIn()) {
     try {
         $faqSession->userTracking('user_control_panel', $user->getUserId());
     } catch (Exception $e) {
