@@ -23,7 +23,10 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Installer;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 
 define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -69,11 +72,12 @@ $loader->register()
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
       <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSetup"
+                aria-controls="navbarSetup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarSetup">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
@@ -99,9 +103,9 @@ $loader->register()
           phpMyFAQ <?= System::getVersion() ?>
         </h1>
         <p class="text-center">
-          Did you already read the
-          <a target="_blank" href="https://www.phpmyfaq.de/documentation">documentation</a>
-          carefully before starting the phpMyFAQ setup?</p>
+          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
+          carefully before starting the phpMyFAQ setup?
+          </p>
       </div>
     </div>
 
@@ -147,21 +151,21 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"for="sql_user">User:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_user" id="sql_user" class="form-control">
                                 <small class="form-text text-muted">Please enter your database user.</small>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"for="sql_password">Password:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_password">Password:</label>
                             <div class="col-sm-9">
                                 <input name="sql_password" type="password" id="sql_password" class="form-control">
                                 <small class="form-text text-muted">Please enter your database password.</small>
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"for="sql_db">Database:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_db">Database:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_db" id="sql_db" class="form-control">
                                 <small class="form-text text-muted">Please enter your existing database name.</small>
@@ -171,7 +175,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
                     <div id="dbsqlite" style="display: none;">
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label"for="sql_sqlitefile">SQLite database file:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_sqlitefile">SQLite database file:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
                                        value="<?= dirname(__DIR__) ?>">
@@ -209,7 +213,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="ldap_server">Host:</label>
+                        <label class="col-sm-3 col-form-label" for="ldap_server">Host:</label>
                         <div class="col-sm-9">
                             <input type="text" name="ldap_server" id="ldap_server" class="form-control"
                                    placeholder="127.0.0.1">
@@ -217,28 +221,28 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="ldap_port">Port:</label>
+                        <label class="col-sm-3 col-form-label" for="ldap_port">Port:</label>
                         <div class="col-sm-9">
                             <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
                             <small class="form-text text-muted">Please enter the port of your LDAP server.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="ldap_user">User DN:</label>
+                        <label class="col-sm-3 col-form-label" for="ldap_user">User DN:</label>
                         <div class="col-sm-9">
                             <input type="text" name="ldap_user" id="ldap_user" class="form-control">
                             <small class="form-text text-muted">Please enter your specified RDN username.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="ldap_password">Password:</label>
+                        <label class="col-sm-3 col-form-label" for="ldap_password">Password:</label>
                         <div class="col-sm-9">
                             <input name="ldap_password" type="password" id="ldap_password" class="form-control">
                             <small class="form-text text-muted">Please enter your LDAP password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="ldap_base">Base DN:</label>
+                        <label class="col-sm-3 col-form-label" for="ldap_base">Base DN:</label>
                         <div class="col-sm-9">
                         <input type="text" name="ldap_base" id="ldap_base" class="form-control">
                             <small class="form-text text-muted">
@@ -261,13 +265,13 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 <fieldset>
                 <legend>phpMyFAQ setup</legend>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="language">Default language:</label>
+                        <label class="col-sm-3 col-form-label" for="language">Default language:</label>
                         <div class="col-sm-9">
                             <select name="language" id="language" class="form-control">
                             <?php
-                                if ($dir = @opendir(PMF_ROOT_DIR.'/lang')) {
-                                    $options = array();
-                                    while ($dat = @readdir($dir)) {
+                                if ($dir = opendir(PMF_ROOT_DIR.'/lang')) {
+                                    $options = [];
+                                    while ($dat = readdir($dir)) {
                                         $option = '';
                                         if (substr($dat, -4) === '.php') {
                                             $option .= sprintf('<option value="%s"', $dat);
