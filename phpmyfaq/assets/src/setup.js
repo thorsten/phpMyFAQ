@@ -18,32 +18,31 @@
 $(document).ready(function() {
   'use strict';
 
-  var setupForm = $('.form-horizontal'),
-    setupType = $('#sql_type'),
+  const setupType = $('#sql_type'),
     setupTypeOptions = $('#sql_type option'),
     $dbSqlite = $('#dbsqlite'),
     $dbFull = $('#dbdatafull');
+  let lastIpSegment = 2;
 
-  var addInput = function(event) {
-    var current = $(event.currentTarget);
-    var tag = current.parent().parent();
-
+  const addInput = event => {
+    const current = $(event.currentTarget);
     if ('add' === current.attr('data-action')) {
-      tag.after(
-        tag
-          .clone()
-          .find('input')
-          .val('')
-          .find('span.input-group-addon')
-          .remove()
-          .end()
-      );
+      const wrapper = document.querySelector('#elasticsearch_server-wrapper');
+      const div = document.createElement('div');
+      div.className = 'input-group';
+      const input = document.createElement('input');
+      input.className = 'form-control';
+      input.className += ' mt-1';
+      input.type = 'text';
+      input.name = 'elasticsearch_server[]';
+      input.placeholder = `127.0.0.${lastIpSegment++}:9200`;
+      div.appendChild(input);
+      wrapper.append(div);
     }
-
     return false;
   };
 
-  var selectDatabaseSetup = function() {
+  const selectDatabaseSetup = function() {
     switch ($(this).val()) {
       case 'sqlite3':
         $dbSqlite.show();
@@ -56,7 +55,7 @@ $(document).ready(function() {
     }
   };
 
-  setupForm.find('a').on('click', addInput);
+  $('#phpmyfaq-setup-form a.pmf-add-elasticsearch-host').on('click', addInput);
   setupType.on('change', selectDatabaseSetup);
 
   if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {

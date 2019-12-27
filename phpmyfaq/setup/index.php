@@ -23,10 +23,7 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Installer;
-use phpMyFAQ\Strings;
-use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
 
 define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
@@ -62,9 +59,9 @@ $loader->register()
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion() ?>">
   <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
-  <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
-  <script src="../assets/themes/default/js/vendors.min.js"></script>
-  <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
+  <link rel="stylesheet" href="../assets/dist/styles.css?v=1">
+  <script src="../assets/dist/vendors.js"></script>
+  <script src="../assets/dist/phpmyfaq.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
 <body class="d-flex flex-column" >
@@ -125,7 +122,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 ?>
         </div>
 
-        <form  action="index.php" method="post">
+        <form  action="index.php" method="post" id="phpmyfaq-setup-form">
         <div class="row">
             <div class="col-sm">
                 <fieldset>
@@ -136,7 +133,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <select name="sql_type" id="sql_type" class="form-control">
                                 <?= implode('', $system->getSupportedSafeDatabases(true)) ?>
                             </select>
-                            <p class="form-text text-muted">Please select your preferred database type.</p>
+                            <small class="form-text text-muted">Please select your preferred database type.</small>
                         </div>
                     </div>
 
@@ -146,28 +143,28 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <div class="col-sm-9">
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="e.g. 127.0.0.1">
-                                <p class="form-text text-muted">Please enter the host or path to the socket of your database server.</p>
+                                <small class="form-text text-muted">Please enter the host or path to the socket of your database server.</small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label"for="sql_user">User:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_user" id="sql_user" class="form-control">
-                                <p class="form-text text-muted">Please enter your database user.</p>
+                                <small class="form-text text-muted">Please enter your database user.</small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label"for="sql_password">Password:</label>
                             <div class="col-sm-9">
                                 <input name="sql_password" type="password" id="sql_password" class="form-control">
-                                <p class="form-text text-muted">Please enter your database password.</p>
+                                <small class="form-text text-muted">Please enter your database password.</small>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-3 col-form-label"for="sql_db">Database:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_db" id="sql_db" class="form-control">
-                                <p class="form-text text-muted">Please enter your existing database name.</p>
+                                <small class="form-text text-muted">Please enter your existing database name.</small>
                             </div>
                         </div>
                     </div>
@@ -178,10 +175,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <div class="col-sm-9">
                                 <input type="text" name="sql_sqlitefile" id="sql_sqlitefile" class="form-control"
                                        value="<?= dirname(__DIR__) ?>">
-                                <p class="form-text text-muted">
+                                <small class="form-text text-muted">
                                     Please enter the full path to your SQLite datafile which should be outside your
                                     docroot.
-                                </p>
+                                </small>
                             </div>
                         </div>
                     </div>
@@ -190,10 +187,10 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <label class="col-sm-3 col-form-label" for="sqltblpre">Table prefix:</label>
                         <div class="col-sm-9">
                             <input type="text" name="sqltblpre" id="sqltblpre" class="form-control">
-                            <p class="form-text text-muted">
+                            <small class="form-text text-muted">
                                 Please enter a table prefix here if you want to install more phpMyFAQ installations on
                                 one database.
-                            </p>
+                            </small>
                         </div>
                     </div>
                 </fieldset>
@@ -216,37 +213,37 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <div class="col-sm-9">
                             <input type="text" name="ldap_server" id="ldap_server" class="form-control"
                                    placeholder="127.0.0.1">
-                            <p class="form-text text-muted">Please enter the host of your LDAP server.</p>
+                            <small class="form-text text-muted">Please enter the host of your LDAP server.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="ldap_port">Port:</label>
                         <div class="col-sm-9">
                             <input type="number" name="ldap_port" value="389" id="ldap_port" class="form-control">
-                            <p class="form-text text-muted">Please enter the port of your LDAP server.</p>
+                            <small class="form-text text-muted">Please enter the port of your LDAP server.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="ldap_user">User DN:</label>
                         <div class="col-sm-9">
                             <input type="text" name="ldap_user" id="ldap_user" class="form-control">
-                            <p class="form-text text-muted">Please enter your specified RDN username.</p>
+                            <small class="form-text text-muted">Please enter your specified RDN username.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="ldap_password">Password:</label>
                         <div class="col-sm-9">
                             <input name="ldap_password" type="password" id="ldap_password" class="form-control">
-                            <p class="form-text text-muted">Please enter your LDAP password.</p>
+                            <small class="form-text text-muted">Please enter your LDAP password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="ldap_base">Base DN:</label>
                         <div class="col-sm-9">
                         <input type="text" name="ldap_base" id="ldap_base" class="form-control">
-                            <p class="form-text text-muted">
+                            <small class="form-text text-muted">
                                 Please enter your distinguished name, e.g. 'cn=John Doe,ou=Accounts,o=My Company,c=US'.
-                            </p>
+                            </small>
                         </div>
                     </div>
                     <p class="alert alert-info">
@@ -289,7 +286,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                 }
                             ?>
                             </select>
-                            <p class="form-text text-muted">Please select your default language.</p>
+                            <small class="form-text text-muted">Please select your default language.</small>
                         </div>
                     </div>
 
@@ -301,44 +298,44 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                     <option value="medium">Medium (with group support)</option>
                                     <option value="large">Large (with sections support)</option>
                             </select>
-                            <p class="form-text text-muted">
+                            <small class="form-text text-muted">
                                 Complexity of rights and permissions.
-                            </p>
+                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="realname">Your name:</label>
                         <div class="col-sm-9">
                             <input type="text" name="realname" id="realname" class="form-control">
-                            <p class="form-text text-muted">Please enter your real name.</p>
+                            <small class="form-text text-muted">Please enter your real name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="email">Your email address:</label>
                         <div class="col-sm-9">
                             <input type="email" name="email" id="email" class="form-control">
-                            <p class="form-text text-muted">Please enter your email adress.</p>
+                            <small class="form-text text-muted">Please enter your email adress.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="loginname">Your login name:</label>
                         <div class="col-sm-9">
                             <input type="text" name="loginname" id="loginname" class="form-control">
-                            <p class="form-text text-muted">Please enter your login name.</p>
+                            <small class="form-text text-muted">Please enter your login name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password">Your password:</label>
                         <div class="col-sm-9">
                             <input type="password" name="password" id="password" class="form-control">
-                            <p class="form-text text-muted">Please enter your password.</p>
+                            <small class="form-text text-muted">Please enter your password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password_retype">Retype password:</label>
                         <div class="col-sm-9">
                             <input type="password" name="password_retyped" id="password_retype" class="form-control">
-                            <p class="form-text text-muted">Please retype your password.</p>
+                            <small class="form-text text-muted">Please retype your password.</small>
                         </div>
                     </div>
                 </fieldset>
@@ -357,27 +354,30 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="elasticsearch_server">Host:</label>
+                        <label class="col-sm-3 col-form-label" for="elasticsearch_server">Server(s):</label>
                         <div class="col-sm-9">
-                            <div class="input-group">
+                            <div class="input-group" id="elasticsearch_server-wrapper">
                                 <input type="text" name="elasticsearch_server[]" id="elasticsearch_server"
                                        class="form-control" placeholder="127.0.0.1:9200">
-                                <span class="input-group-addon">
-                                    <a title="Add more Elasticsearch hosts" style="cursor: pointer;" data-action="add">
+                                <div class="input-group-append">
+                                    <div class="input-group-text">
+                                      <a title="Add more Elasticsearch hosts" style="cursor: pointer;" data-action="add"
+                                         class="pmf-add-elasticsearch-host">
                                         <i aria-hidden="true" class="fa fa-plus-circle"></i>
                                     </a>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                            <p class="form-text text-muted">
+                            <small class="form-text text-muted">
                                 Please enter the host (domain or IP) with port number of your Elasticsearch server.
-                            </p>
+                            </small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="elasticsearch_index">Index name:</label>
                         <div class="col-sm-9">
                             <input type="text" name="elasticsearch_index" id="elasticsearch_index" class="form-control">
-                            <p class="form-text text-muted">Please enter your Elasticsearch index name.</p>
+                            <small class="form-text text-muted">Please enter your Elasticsearch index name.</small>
                         </div>
                     </div>
                 </fieldset>
@@ -387,8 +387,8 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
 
         <div class="row">
           <div class="col-sm">
-              <div class="form-group row">
-                  <button class="btn btn-success btn-lg btn-block" type="submit">
+              <div class="form-group row justify-content-center">
+                  <button class="btn btn-primary btn-lg" type="submit">
                          Click to install phpMyFAQ <?= System::getVersion() ?>
                   </button>
               </div>
