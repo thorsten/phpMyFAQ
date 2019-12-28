@@ -80,7 +80,7 @@ class QuestionHelper
         if (!empty($userEmail) && $mainAdminEmail != $userEmail) {
             $mailer->addCc($userEmail);
         }
-        $mailer->subject = '%sitename%';
+        $mailer->subject = $this->config->get('main.titleFAQ') . ': New Question was added.';
         $mailer->message = $questionMail;
         $mailer->send();
         unset($mailer);

@@ -738,7 +738,7 @@ switch ($action) {
             $mailer = new Mail($faqConfig);
             $mailer->setReplyTo($email, $author);
             $mailer->addTo($faqConfig->get('main.administrationMail'));
-            $mailer->subject = 'Feedback: %sitename%';
+            $mailer->subject = Utils::resolveMarkers('Feedback: %sitename%', $faqConfig);
             $mailer->message = $question;
             $result = $mailer->send();
 
@@ -870,7 +870,7 @@ switch ($action) {
 
                 $mailer = new Mail($faqConfig);
                 $mailer->addTo($email);
-                $mailer->subject = '[%sitename%] Username / password request';
+                $mailer->subject = Utils::resolveMarkers('[%sitename%] Username / password request', $faqConfig);
                 $mailer->message = $text;
                 $result = $mailer->send();
                 unset($mailer);
