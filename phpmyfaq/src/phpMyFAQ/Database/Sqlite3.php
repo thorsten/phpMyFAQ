@@ -64,10 +64,10 @@ class Sqlite3 implements DatabaseDriver
      * @param string
      * @param string
      * @param string
-     *
-     * @return null|boolean
+     * @param int|null $port
+     * @return null|bool
      */
-    public function connect($host, $user, $passwd, $db = '')
+    public function connect($host, $user, $passwd, $db = '', $port = null)
     {
         $this->conn = new \SQLite3($host);
 

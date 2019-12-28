@@ -2,8 +2,6 @@
 /**
  * Abstract class for manage different databases.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -17,16 +15,10 @@
  * @since 2010-01-03
  */
 
+use phpMyFAQ\Database;
+
 /**
- * Database_AbstractTest
- *
- * @package phpMyFAQ
- * @package   PMF_Tests
- * @author Gustavo Solt <gustavo.solt@mayflower.de>
- * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- * @link https://www.phpmyfaq.de
- * @copyright 2009-2019 phpMyFAQ Team
- * @since 2009-05-16
+ * Class Database_AbstractTest
  */
 abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCase
 {
@@ -42,7 +34,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
      *
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * Each Database class must return the connection settings.
@@ -56,6 +48,7 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
      * 2. Connect using the PHPUnit unit for run the tests.
      *
      * @return PHPUnit_Extensions_Database_DB_IDatabaseConnection
+     * @throws \phpMyFAQ\Exception
      */
     protected function getConnection()
     {
@@ -63,14 +56,20 @@ abstract class Database_AbstractTest extends PHPUnit_Extensions_Database_TestCas
         $this->data = $this->getDbData();
 
         // phpMyFAQ connection
-        $db = phpMyFAQ\Database::factory($this->data["type"]);
-        $db->connect($this->data["server"], $this->data["user"], $this->data["password"], $this->data["db"]);
+        $db = Database::factory($this->data['type']);
+        $db->connect(
+            $this->data['server'],
+            $this->data['user'],
+            $this->data['password'],
+            $this->data['db'],
+            $this->data['port']
+        );
         $this->db = $db;
 
         // PHPunit connection
-        $pdo = new PDO($this->data["type"] . ":host=" . $this->data["server"]
-            . ";dbname=" . $this->data["db"], $this->data["user"], $this->data["password"]);
+        $pdo = new PDO($this->data['type'] . ':host=' . $this->data['server']
+            . ';dbname=' . $this->data['db'], $this->data['user'], $this->data['password']);
 
-        return $this->createDefaultDBConnection($pdo, $this->data["db"]);
+        return $this->createDefaultDBConnection($pdo, $this->data['db']);
     }
 }

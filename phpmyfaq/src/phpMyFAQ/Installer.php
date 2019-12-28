@@ -540,7 +540,7 @@ class Installer
 
         if (!is_readable(PMF_ROOT_DIR . '/inc/data.php') && !is_readable(PMF_ROOT_DIR . '/config/database.php')) {
             echo '<p class="alert alert-danger">It seems you never run a version of phpMyFAQ.<br>' .
-                'Please use the <a href="setup.php">install script</a>.</p>';
+                'Please use the <a href="index.php">install script</a>.</p>';
             System::renderFooter();
         }
 
@@ -681,6 +681,13 @@ class Installer
             System::renderFooter(true);
         }
 
+        $dbSetup['dbPort'] = Filter::filterInput(INPUT_POST, 'sql_port', FILTER_VALIDATE_INT);
+        if (is_null($dbSetup['dbPort']) && ! System::isSqlite($dbSetup['dbType'])) {
+            echo "<p class=\"alert alert-error\"><strong>Error:</strong> Please add a valid database port.</p>\n";
+            System::renderFooter(true);
+        }
+
+
         $dbSetup['dbUser'] = Filter::filterInput(INPUT_POST, 'sql_user', FILTER_SANITIZE_STRING, '');
         if (is_null($dbSetup['dbUser']) && !System::isSqlite($dbSetup['dbType'])) {
             echo "<p class=\"alert alert-danger\"><strong>Error:</strong> Please add a database username.</p>\n";
@@ -717,7 +724,13 @@ class Installer
         Database::setTablePrefix($dbSetup['dbPrefix']);
         $db = Database::factory($dbSetup['dbType']);
         try {
-            $db->connect($dbSetup['dbServer'], $dbSetup['dbUser'], $dbSetup['dbPassword'], $dbSetup['dbDatabaseName']);
+            $db->connect(
+                $dbSetup['dbServer'],
+                $dbSetup['dbUser'],
+                $dbSetup['dbPassword'],
+                $dbSetup['dbDatabaseName'],
+                $dbSetup['dbPort']
+            );
         } catch (Exception $e) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $e->getMessage());
         }
@@ -917,7 +930,7 @@ class Installer
             System::renderFooter(true);
         }
 
-        $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
+        $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], $DB['port']);
         if (!$db) {
             printf("<p class=\"alert alert-danger\"><strong>DB Error:</strong> %s</p>\n", $db->error());
             $this->system->cleanInstallation();

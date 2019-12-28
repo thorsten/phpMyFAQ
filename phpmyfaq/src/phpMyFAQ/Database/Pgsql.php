@@ -57,14 +57,15 @@ class Pgsql implements DatabaseDriver
      * @param string $user     Database username
      * @param string $password Password
      * @param string $database Database name
-     *
-     * @return null|boolean true, if connected, otherwise false
+     * @param int|null $port
+     * @return null|bool true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $database = '')
+    public function connect($host, $user, $password, $database = '', $port = 5432)
     {
         $connectionString = sprintf(
-            'host=%s port=5432 dbname=%s user=%s password=%s',
+            'host=%s port=%d dbname=%s user=%s password=%s',
             $host,
+            $port,
             $database,
             $user,
             $password

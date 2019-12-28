@@ -28,14 +28,14 @@ interface DatabaseDriver
     /**
      * Connects to the database server.
      *
-     * @param string $host     Hostname
-     * @param string $user     Username
+     * @param string $host Hostname
+     * @param string $user Username
      * @param string $password Password
-     * @param string $db       Database name
-     *
+     * @param string $db Database name
+     * @param int|null $port
      * @return bool
      */
-    public function connect($host, $user, $password, $db = '');
+    public function connect($host, $user, $password, $db = '', $port = null);
 
     /**
      * This function sends a query to the database.

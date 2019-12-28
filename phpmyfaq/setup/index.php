@@ -151,6 +151,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label class="col-sm-3 col-form-label" for="sql_port">port:</label>
+                            <div class="col-sm-9">
+                                <input type="number" name="sql_port" id="sql_port" class="form-control"
+                                    value="3306">
+                                <small class="form-text text-muted">Please enter the port your database server.</small>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label class="col-sm-3 col-form-label" for="sql_user">User:</label>
                             <div class="col-sm-9">
                                 <input type="text" name="sql_user" id="sql_user" class="form-control">

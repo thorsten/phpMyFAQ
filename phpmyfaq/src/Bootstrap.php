@@ -127,7 +127,7 @@ set_error_handler('pmf_error_handler');
 try {
     Database::setTablePrefix($DB['prefix']);
     $db = Database::factory($DB['type']);
-    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db']);
+    $db->connect($DB['server'], $DB['user'], $DB['password'], $DB['db'], isset($DB['port']) ? $DB['port'] : null);
 } catch (Exception $e) {
     Database::errorPage($e->getMessage());
     exit(-1);

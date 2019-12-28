@@ -63,14 +63,14 @@ class Sqlsrv implements DatabaseDriver
      * @param string $password Specifies the password associated with the User ID to be used when connecting with
      *                         SQL Server Authentication
      * @param string $database Specifies the name of the database in use for the connection being established
-     *
+     * @param int|null $port
      * @return bool true, if connected, otherwise false
      */
-    public function connect($host, $user, $password, $database = '')
+    public function connect($host, $user, $password, $database = '', $port = 1433)
     {
         $this->setConnectionOptions($user, $password, $database);
 
-        $this->conn = sqlsrv_connect($host, $this->connectionOptions);
+        $this->conn = sqlsrv_connect($host . ', ' . $port, $this->connectionOptions);
         if (!$this->conn) {
             Database::errorPage((string)sqlsrv_errors());
             die();
@@ -89,12 +89,12 @@ class Sqlsrv implements DatabaseDriver
      */
     private function setConnectionOptions($user, $passwd, $database)
     {
-        $this->connectionOptions = array(
+        $this->connectionOptions = [
             'UID' => $user,
             'PWD' => $passwd,
             'Database' => $database,
             'CharacterSet' => 'UTF-8',
-        );
+        ];
     }
 
     /**

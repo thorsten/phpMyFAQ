@@ -20,11 +20,40 @@ $(document).ready(function() {
 
   const setupType = $('#sql_type'),
     setupTypeOptions = $('#sql_type option'),
+    setupDatabasePort = document.getElementById('sql_port'),
     $dbSqlite = $('#dbsqlite'),
     $dbFull = $('#dbdatafull');
   let lastIpSegment = 2;
 
-  const addInput = event => {
+  const selectDatabaseSetup = event => {
+    switch (event.target.value) {
+      case 'mysqli':
+        setupDatabasePort.value = 3306;
+        $dbSqlite.hide();
+        $dbFull.show();
+        break;
+      case 'pgsql':
+        setupDatabasePort.value = 5432;
+        $dbSqlite.hide();
+        $dbFull.show();
+        break;
+      case 'sqlsrv':
+        setupDatabasePort.value = 1433;
+        $dbSqlite.hide();
+        $dbFull.show();
+        break;
+      case 'sqlite3':
+        $dbSqlite.show();
+        $dbFull.hide();
+        break;
+      default:
+        $dbSqlite.hide();
+        $dbFull.show();
+        break;
+    }
+  };
+
+  const addElasticsearchServerInput = event => {
     const current = $(event.currentTarget);
     if ('add' === current.attr('data-action')) {
       const wrapper = document.querySelector('#elasticsearch_server-wrapper');
@@ -42,20 +71,7 @@ $(document).ready(function() {
     return false;
   };
 
-  const selectDatabaseSetup = function() {
-    switch ($(this).val()) {
-      case 'sqlite3':
-        $dbSqlite.show();
-        $dbFull.hide();
-        break;
-      default:
-        $dbSqlite.hide();
-        $dbFull.show();
-        break;
-    }
-  };
-
-  $('#phpmyfaq-setup-form a.pmf-add-elasticsearch-host').on('click', addInput);
+  $('#phpmyfaq-setup-form a.pmf-add-elasticsearch-host').on('click', addElasticsearchServerInput);
   setupType.on('change', selectDatabaseSetup);
 
   if (setupTypeOptions.length === 1 && setupType.val() === 'sqlite3') {

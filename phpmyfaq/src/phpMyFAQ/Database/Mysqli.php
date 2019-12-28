@@ -54,22 +54,22 @@ class Mysqli implements DatabaseDriver
     /**
      * Connects to the database.
      *
-     * @param string $host     Hostname or path to socket
-     * @param string $user     Username
+     * @param string $host Hostname or path to socket
+     * @param string $user Username
      * @param string $password Password
      * @param string $database Database name
-     *
-     * @return null|boolean true, if connected, otherwise false
+     * @param int|null $port
+     * @return null|bool true, if connected, otherwise false
      * @throws Exception
      */
-    public function connect($host, $user, $password, $database = '')
+    public function connect($host, $user, $password, $database = '', $port = 3306)
     {
         if (substr($host, 0, 1) === '/') {
             // Connect to MySQL via socket
-            $this->conn = new \mysqli(null, $user, $password, null, null, $host);
+            $this->conn = new \mysqli(null, $user, $password, null, $port, $host);
         } else {
             // Connect to MySQL via network
-            $this->conn = new \mysqli($host, $user, $password);
+            $this->conn = new \mysqli($host, $user, $password, null, $port);
         }
 
         if ($this->conn->connect_error) {
