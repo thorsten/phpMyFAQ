@@ -500,9 +500,9 @@ class Installer
         }
 
         if (!$this->system->checkphpMyFAQInstallation()) {
-            echo '<p class="alert alert-danger">The file <code>config/database.php</code> was detected. It seems' .
-                ' you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update script' .
-                '</a>.</p>';
+            echo '<p class="alert alert-danger">The setup script found the file <code>config/database.php</code>. It ' .
+                'looks like you\'re already running a version of phpMyFAQ. Please run the <a href="update.php">update' .
+                ' script</a>.</p>';
             System::renderFooter();
         }
     }

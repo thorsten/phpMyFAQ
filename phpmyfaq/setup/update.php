@@ -55,22 +55,22 @@ require PMF_ROOT_DIR.'/config/database.php';
   <meta name="viewport" content="width=device-width;">
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
   <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
-  <link rel="stylesheet" href="../admin/assets/css/style.min.css?v=1">
-  <script src="../assets/themes/default/js/vendors.min.js"></script>
-  <script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
-  <link rel="shortcut icon" href="../assets/themes/default/favicon.ico">
+  <link rel="stylesheet" href="../assets/dist/styles.css?v=1">
+  <script src="../assets/dist/vendors.js"></script>
+  <script src="../assets/dist/phpmyfaq.js"></script>
+  <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">
 </head>
 <body>
 
   <header>
     <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark justify-content-between">
       <div class="container">
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
-                aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSetup"
+                aria-controls="navbarSetup" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <div class="collapse navbar-collapse" id="navbarSetup">
           <ul class="navbar-nav mr-auto">
             <li class="nav-item">
               <a class="nav-link" target="_blank" href="https://www.phpmyfaq.de/documentation">Documentation</a>
@@ -92,9 +92,13 @@ require PMF_ROOT_DIR.'/config/database.php';
 
   <div class="jumbotron">
     <div class="container">
-      <h1 class="display-4 text-center">
+      <h1 class="display-4 text-center mt-5">
         phpMyFAQ <?= System::getVersion() ?> Update
       </h1>
+      <p class="text-center">
+        Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
+        carefully before updating your phpMyFAQ installation?
+      </p>
     </div>
   </div>
 
@@ -138,7 +142,7 @@ if ($step === 1) { ?>
 
       <div class="row setup-content" id="step1">
         <div class="col">
-          <div class="alert alert-warning text-center" role="alert">
+          <div class="alert alert-danger text-center mt-2" role="alert">
             <strong>
               <i aria-hidden="true" class="fa fa-info-circle"></i>
               Please create a full backup of your database, your templates,
@@ -154,7 +158,6 @@ if ($step === 1) { ?>
           <ul>
             <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
             <li>phpMyFAQ 2.9.x</li>
-            <li>phpMyFAQ 2.10.x</li>
           </ul>
         </div>
         <div class="col">
@@ -702,7 +705,7 @@ if ($step == 3) {
 
     // Perform the queries for optimizing the database
     if (isset($query)) {
-        echo '<div class="center">';
+        echo '<div class="text-center">';
         foreach ($query as $executeQuery) {
             $result = $faqConfig->getDb()->query($executeQuery);
             printf('<span title="%s"><i aria-hidden="true" class="fa fa-circle"></i></span>', $executeQuery);
@@ -731,13 +734,13 @@ if ($step == 3) {
 
     // Remove backup files
     foreach (glob(PMF_ROOT_DIR.'/config/*.bak.php') as $filename) {
-        if (!@unlink($filename)) {
+        if (!unlink($filename)) {
             printf("<p class=\"alert alert-info\">Please remove the backup file %s manually.</p>\n", $filename);
         }
     }
 
-    // Remove 'setup.php' file
-    if (is_writeable(__DIR__.'/index.php') && @unlink(__DIR__.'/index.php')) {
+    // Remove 'setup/index.php' file
+    if (is_writeable(__DIR__.'/index.php') && unlink(__DIR__.'/index.php')) {
         echo "<p class=\"alert alert-success\">The file <em>./setup/index.php</em> was deleted automatically.</p>\n";
     } else {
         echo "<p class=\"alert alert-danger\">Please delete the file <em>./setup/index.php</em> manually.</p>\n";
