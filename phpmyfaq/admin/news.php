@@ -15,7 +15,11 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Comment;use phpMyFAQ\Date;use phpMyFAQ\Filter;use phpMyFAQ\Helper\LanguageHelper;use phpMyFAQ\Language;use phpMyFAQ\News;
+use phpMyFAQ\Comments;
+use phpMyFAQ\Date;
+use phpMyFAQ\Entity\CommentType;use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\LanguageHelper;
+use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -373,8 +377,8 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                 </form>
 <?php
     $newsId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
-    $oComment = new Comment($faqConfig);
-    $comments = $oComment->getCommentsData($newsId, Comment::COMMENT_TYPE_NEWS);
+    $oComment = new Comments($faqConfig);
+    $comments = $oComment->getCommentsData($newsId, CommentType::NEWS);
     if (count($comments) > 0) {
         ?>
                 <div class="form-group row"><strong><?= $PMF_LANG['ad_entry_comment'] ?></strong></div>
@@ -390,7 +394,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </a>:<br>
                     <?= $item['content'] ?><br>
                     <?= $PMF_LANG['newsCommentDate'].Date::createIsoDate($item['date'], 'Y-m-d H:i', false) ?>
-                    <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= Comment::COMMENT_TYPE_NEWS ?>">
+                    <a href="?action=delcomment&artid=<?= $newsId ?>&cmtid=<?= $item['id'] ?>&type=<?= CommentType::NEWS ?>">
                         <i aria-hidden="true" class="fa fa-trash"></i>
                     </a>
                 </div>

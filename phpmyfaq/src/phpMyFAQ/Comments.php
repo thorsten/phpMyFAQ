@@ -17,29 +17,16 @@
 
 namespace phpMyFAQ;
 
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\Entity\Comment;
 
 /**
- * Class Comment
- *
+ * Class Comments
  * @package phpMyFAQ
  */
-class Comment
+class Comments
 {
-    /**
-     * FAQ type.
-     *
-     * @const string
-     */
-    public const COMMENT_TYPE_FAQ = 'faq';
-
-    /**
-     * News type.
-     *
-     * @const string
-     */
-    public const COMMENT_TYPE_NEWS = 'news';
-
     /**
      * @var Configuration
      */
@@ -86,7 +73,7 @@ class Comment
             $output .= '<div class="row mt-2 mb-2">';
             $output .= '  <div class="col-sm-1">';
             $output .= '    <div class="thumbnail">';
-            $output .= $gravatar->getImage($item['email'], ['class' => 'img-thumbnail']);
+            $output .= $gravatar->getImage($item->getEmail(), ['class' => 'img-thumbnail']);
             $output .= '   </div>';
             $output .= '  </div>';
 
@@ -95,12 +82,12 @@ class Comment
             $output .= '     <div class="card-header">';
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
-                $mail->safeEmail($item['email']),
-                $item['user']
+                $mail->safeEmail($item->getEmail()),
+                $item->getUsername()
             );
-            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item['date']));
+            $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item->getDate()));
             $output .= '     </div>';
-            $output .= sprintf('<div class="card-body">%s</div>', $this->showShortComment($id, $item['content']));
+            $output .= sprintf('<div class="card-body">%s</div>', $this->showShortComment($id, $item->getComment()));
             $output .= '   </div>';
             $output .= '  </div>';
             $output .= '</div>';
@@ -112,12 +99,12 @@ class Comment
     /**
      * Returns all user comments from a record by type.
      *
-     * @param int $id record id
+     * @param int $referenceId record id
      * @param string $type record type: {faq|news}
      *
-     * @return array
+     * @return Comment[]
      */
-    public function getCommentsData(int $id, string $type): array
+    public function getCommentsData(int $referenceId, string $type): array
     {
         $comments = [];
 
@@ -133,19 +120,20 @@ class Comment
                 id = %d",
             Database::getTablePrefix(),
             $type,
-            $id
+            $referenceId
         );
 
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $comments[] = array(
-                    'id' => (int)$row->id_comment,
-                    'content' => $row->comment,
-                    'date' => Date::createIsoDate($row->datum, DATE_ISO8601, false),
-                    'user' => $row->usr,
-                    'email' => $row->email,
-                );
+                $comment = new Comment();
+                $comment
+                    ->setId($row->id_comment)
+                    ->setComment($row->comment)
+                    ->setDate(Date::createIsoDate($row->datum, DATE_ISO8601, false))
+                    ->setUsername($row->usr)
+                    ->setEmail($row->email);
+                $comments[] = $comment;
             }
         }
 
@@ -181,13 +169,11 @@ class Comment
     }
 
     /**
-     * Adds a comment.
-     *
-     * @param array $commentData Array with comment dara
-     *
+     * Adds a new comment.
+     * @param Comment $comment
      * @return bool
      */
-    public function addComment(array $commentData): bool
+    public function addComment(Comment $comment): bool
     {
         $query = sprintf(
             "
@@ -197,13 +183,13 @@ class Comment
                 (%d, %d, '%s', '%s', '%s', '%s', %d, '%s')",
             Database::getTablePrefix(),
             $this->config->getDb()->nextId(Database::getTablePrefix() . 'faqcomments', 'id_comment'),
-            $commentData['record_id'],
-            $commentData['type'],
-            $commentData['username'],
-            $this->config->getDb()->escape($commentData['usermail']),
-            $this->config->getDb()->escape($commentData['comment']),
-            $commentData['date'],
-            $commentData['helped']
+            $comment->getRecordId(),
+            $comment->getType(),
+            $comment->getUsername(),
+            $this->config->getDb()->escape($comment->getEmail()),
+            $this->config->getDb()->escape($comment->getComment()),
+            $comment->getDate(),
+            $comment->hasHelped()
         );
 
         if (!$this->config->getDb()->query($query)) {
@@ -254,7 +240,7 @@ class Comment
      *
      * @return array
      */
-    public function getNumberOfComments($type = self::COMMENT_TYPE_FAQ)
+    public function getNumberOfComments($type = CommentType::FAQ)
     {
         $num = [];
 
@@ -288,9 +274,9 @@ class Comment
      *
      * @param string $type Type of comment: faq or news
      *
-     * @return array
+     * @return Comment[]
      */
-    public function getAllComments($type = self::COMMENT_TYPE_FAQ)
+    public function getAllComments($type = CommentType::FAQ)
     {
         $comments = [];
 
@@ -309,9 +295,9 @@ class Comment
             %s
             WHERE
                 type = '%s'",
-            ($type == self::COMMENT_TYPE_FAQ) ? "fcg.category_id,\n" : '',
+            ($type == CommentType::FAQ) ? "fcg.category_id,\n" : '',
             Database::getTablePrefix(),
-            ($type == self::COMMENT_TYPE_FAQ) ? 'LEFT JOIN
+            ($type == CommentType::FAQ) ? 'LEFT JOIN
                 ' . Database::getTablePrefix() . "faqcategoryrelations fcg
             ON
                 fc.id = fcg.record_id\n" : '',
@@ -321,15 +307,21 @@ class Comment
         $result = $this->config->getDb()->query($query);
         if ($this->config->getDb()->numRows($result) > 0) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $comments[] = array(
-                    'comment_id' => $row->comment_id,
-                    'record_id' => $row->record_id,
-                    'category_id' => (isset($row->category_id) ? $row->category_id : null),
-                    'content' => $row->comment,
-                    'date' => $row->comment_date,
-                    'username' => $row->username,
-                    'email' => $row->email,
-                );
+                $comment = new Comment();
+                $comment
+                    ->setId($row->comment_id)
+                    ->setRecordId($row->record_id)
+                    ->setType($type)
+                    ->setComment($row->comment)
+                    ->setDate($row->comment_date)
+                    ->setUsername($row->username)
+                    ->setEmail($row->email);
+
+                if (isset($row->category_id)) {
+                    $comment->setCategoryId($row->category_id);
+                }
+
+                $comments[] = $comment;
             }
         }
 

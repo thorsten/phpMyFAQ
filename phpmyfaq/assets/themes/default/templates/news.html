@@ -20,36 +20,53 @@
 
   <!-- Comment Form -->
   <a name="comment"></a>
-  <div id="commentForm" class="d-none">
+  <div id="commentForm" class="d-none mb-2">
     <form id="formValues" action="#" method="post" accept-charset="utf-8">
-      <input type="hidden" name="newsid" value="{{ newsId }}" />
-      <input type="hidden" name="lang" value="{{ newsLang }}" />
-      <input type="hidden" name="type" value="news" />
+      <input type="hidden" name="id" id="id" value="{{ id }}" />
+      <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
+      <input type="hidden" name="type" id="type" value="news" />
 
-      <div class="control-group">
-        <label class="form-control-label" for="user">{{ msgNewContentName }}</label>
-        <div class="controls">
-          <input type="text" id="user" name="user" value="{{ defaultContentName }}" required="required" />
+      <div class="form-row">
+        <div class="form-group col">
+          <label class="sr-only" for="user">{{ msgNewContentName }}</label>
+          <input
+            type="text"
+            name="user"
+            id="user"
+            class="form-control"
+            required
+            placeholder="{{ msgNewContentName }}"
+            value="{{ defaultContentName }}"
+          />
+        </div>
+        <div class="form-group col">
+          <label class="sr-only" for="mail">{{ msgNewContentMail }}</label>
+          <input
+            type="email"
+            name="mail"
+            id="mail"
+            class="form-control"
+            required
+            placeholder="{{ msgNewContentMail }}"
+            value="{{ defaultContentMail }}"
+          />
         </div>
       </div>
-
-      <div class="control-group">
-        <label class="form-control-label" for="mail">{{ msgNewContentMail }}</label>
-        <div class="controls">
-          <input type="email" id="mail" name="mail" value="{{ defaultContentMail }}" required="required" />
-        </div>
-      </div>
-
-      <div class="control-group">
-        <label class="form-control-label" for="comment_text">{{ msgYourComment }}</label>
-        <div class="controls">
-          <textarea id="comment_text" name="comment_text" required="required"></textarea>
+      <div class="form-row">
+        <div class="form-group col">
+          <textarea
+            rows="10"
+            name="comment_text"
+            id="comment_text"
+            class="form-control"
+            placeholder="{{ msgYourComment }}"
+          ></textarea>
         </div>
       </div>
 
       {{ captchaFieldset }}
 
-      <div class="form-actions">
+      <div class="text-right">
         <button class="btn btn-primary" id="submitcomment" type="submit">
           {{ msgNewContentSubmit }}
         </button>
@@ -59,7 +76,7 @@
   <!-- /Comment Form -->
 
   <div id="loader"></div>
-  <div id="comments">
+  <div class="d-print-none" id="comments">
     {{ renderComments }}
   </div>
 

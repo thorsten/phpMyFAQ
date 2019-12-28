@@ -19,8 +19,9 @@
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Captcha;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
@@ -49,7 +50,7 @@ $oGlossary = new Glossary($faqConfig);
 $faqTagging = new Tags($faqConfig);
 $faqRelation = new Relation($faqConfig);
 $faqRating = new Rating($faqConfig);
-$faqComment = new Comment($faqConfig);
+$faqComment = new Comments($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
 
@@ -365,7 +366,7 @@ $template->parse(
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'renderComments' => $faqComment->getComments($recordId, Comment::COMMENT_TYPE_FAQ),
+        'renderComments' => $faqComment->getComments($recordId, CommentType::FAQ),
         'msg_about_faq' => $PMF_LANG['msg_about_faq'],
     ]
 );

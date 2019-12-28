@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Shows all comments in the categories and provides a link to delete comments.
  *
@@ -15,10 +16,10 @@
  */
 
 use phpMyFAQ\Category;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
-use phpMyFAQ\Strings;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -37,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 echo '<div id="returnMessage"></div>';
 
 if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
-    $comment = new Comment($faqConfig);
+    $comment = new Comments($faqConfig);
     $category = new Category($faqConfig, [], false);
     $category->setUser($currentAdminUser);
     $category->setGroups($currentAdminGroups);
@@ -45,7 +46,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
     $date = new Date($faqConfig);
 
     $category->buildTree();
-    $faqComments = $comment->getAllComments('faq');
+    $faqComments = $comment->getAllComments(CommentType::FAQ);
 
     printf("<header><h3>%s</h3></header>\n", $PMF_LANG['ad_comment_faqs']);
     if (count($faqComments)) {
@@ -57,36 +58,36 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
             <?php
             $lastCommentId = 0;
             foreach ($faqComments as $faqComment) {
-                if ($faqComment['comment_id'] == $lastCommentId) {
+                if ($faqComment->getId() == $lastCommentId) {
                     continue;
                 }
                 ?>
-              <tr id="comments_<?= $faqComment['comment_id'] ?>">
+              <tr id="comments_<?= $faqComment->getId() ?>">
                 <td>
                   <label>
-                    <input id="faq_comments[<?= $faqComment['comment_id'] ?>]"
-                           name="faq_comments[<?= $faqComment['comment_id'] ?>]"
-                           value="<?= $faqComment['record_id'] ?>" type="checkbox">
+                    <input id="faq_comments[<?= $faqComment->getId() ?>]"
+                           name="faq_comments[<?= $faqComment->getId() ?>]"
+                           value="<?= $faqComment->getRecordId() ?>" type="checkbox">
                   </label>
                 </td>
                 <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?= $faqComment['email'] ?>">
-                        <?= $faqComment['username'] ?>
+                    <a href="mailto:<?= $faqComment->getEmail() ?>">
+                        <?= $faqComment->getUsername() ?>
                     </a> |
-                    <?= $date->format(date('Y-m-d H:i', $faqComment['date'])) ?> |
+                    <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
                     <a href="<?php printf('../?action=faq&cat=%d&id=%d&artlang=%s',
-                        $faqComment['category_id'],
-                        $faqComment['record_id'],
+                        $faqComment->getCategoryId(),
+                        $faqComment->getRecordId(),
                         $faqLangCode) ?>">
-                        <?= $faq->getRecordTitle($faqComment['record_id']) ?>
+                        <?= $faq->getRecordTitle($faqComment->getRecordId()) ?>
                     </a>
                 </span><br/>
-                    <?= Strings::htmlspecialchars($faqComment['content']) ?>
+                    <?= $faqComment->getComment() ?>
                 </td>
               </tr>
                 <?php
-                $lastCommentId = $faqComment['comment_id'];
+                $lastCommentId = $faqComment->getId();
             }
             ?>
         </table>
@@ -102,7 +103,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
         echo '<p><strong>n/a</strong></p>';
     }
 
-    $newsComments = $comment->getAllComments('news');
+    $newsComments = $comment->getAllComments(CommentType::NEWS);
 
     printf("<header><h3>%s</h3></header>\n", $PMF_LANG['ad_comment_news']);
     if (count($newsComments)) {
@@ -113,21 +114,25 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
         <table class="table table-striped">
             <?php
             foreach ($newsComments as $newsComment) { ?>
-              <tr id="comments_<?= $newsComment['comment_id'] ?>">
+              <tr id="comments_<?= $newsComment->getId() ?>">
                 <td>
                   <label>
-                    <input id="news_comments[<?= $newsComment['comment_id'] ?>]"
-                           name="news_comments[<?= $newsComment['comment_id'] ?>]"
-                           value="<?= $newsComment['record_id'] ?>" type="checkbox">
+                    <input id="news_comments[<?= $newsComment->getId() ?>]"
+                           name="news_comments[<?= $newsComment->getId() ?>]"
+                           value="<?= $newsComment->getRecordId() ?>" type="checkbox">
                   </label>
                 </td>
                 <td>
                 <span style="font-weight: bold;">
-                    <a href="mailto:<?= $newsComment['email'] ?>">
-                        <?= $newsComment['username'] ?>
+                    <a href="mailto:<?= $newsComment->getEmail() ?>">
+                        <?= $newsComment->getUsername() ?>
+                    </a> |
+                    <?= $date->format(date('Y-m-d H:i', $faqComment->getDate())) ?> |
+                    <a href="<?php printf('../?action=news&id=%d&artlang=%s', $faqComment->getRecordId(), $faqLangCode) ?>">
+                        <i class="fa fa-newspaper-o" aria-hidden="true"></i>
                     </a>
                 </span><br/>
-                    <?= Strings::htmlspecialchars($newsComment['content']) ?>
+                    <?= $newsComment->getComment() ?>
                 </td>
               </tr>
                 <?php

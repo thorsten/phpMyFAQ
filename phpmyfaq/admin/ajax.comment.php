@@ -15,7 +15,7 @@
  * @since 2009-03-20
  */
 
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 
@@ -30,7 +30,7 @@ $http->setContentType('application/json');
 $http->addHeader();
 
 if ('delete' === $ajaxAction && $user->perm->checkRight($user->getUserId(), 'delcomment')) {
-    $comment = new Comment($faqConfig);
+    $comment = new Comments($faqConfig);
     $checkFaqs = [
         'filter' => FILTER_VALIDATE_INT,
         'flags' => FILTER_REQUIRE_ARRAY,

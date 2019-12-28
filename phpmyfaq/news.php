@@ -18,8 +18,9 @@
  */
 
 use phpMyFAQ\Captcha;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
 use phpMyFAQ\Helper\CaptchaHelper;
@@ -32,7 +33,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $captcha = new Captcha($faqConfig);
-$comment = new Comment($faqConfig);
+$comment = new Comments($faqConfig);
 
 $captcha->setSessionId($sids);
 if (!is_null($showCaptcha)) {
@@ -117,7 +118,7 @@ $captchaHelper = new CaptchaHelper($faqConfig);
 
 $template->parse(
     'mainPageContent',
-    array(
+    [
         'writeNewsHeader' => $newsMainHeader,
         'writeNewsRSS' => $newsFeed,
         'writeHeader' => $newsHeader,
@@ -138,8 +139,8 @@ $template->parse(
         'msgYourComment' => $PMF_LANG['msgYourComment'],
         'msgNewContentSubmit' => $PMF_LANG['msgNewContentSubmit'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'writecomment', $PMF_LANG['msgCaptcha'], $auth),
-        'renderComments' => $comment->getComments($newsId, Comment::COMMENT_TYPE_NEWS),
-    )
+        'renderComments' => $comment->getComments($newsId, CommentType::NEWS),
+    ]
 );
 
 $template->parseBlock(

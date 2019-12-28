@@ -17,7 +17,7 @@
 
 use phpMyFAQ\Category;
 use phpMyFAQ\Category\CategoryRelation;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Date;
 use phpMyFAQ\Database;
 use phpMyFAQ\Faq;
@@ -184,7 +184,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     <form id="recordSelection" name="recordSelection" method="post" accept-charset="utf-8">
         <div class="accordion" id="accordion" role="tablist" aria-multiselectable="true">
 <?php
-    $comment = new Comment($faqConfig);
+    $comment = new Comments($faqConfig);
     $numCommentsByFaq = $comment->getNumberOfComments();
     $numCommentsByCat = [];
     $numRecordsByCat = $categoryRelation->getNumberOfFaqsPerCategory(

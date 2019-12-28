@@ -19,7 +19,9 @@ define('IS_VALID_PHPMYFAQ', null);
 
 use phpMyFAQ\Captcha;
 use phpMyFAQ\Category;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
+use phpMyFAQ\Entity\Comment;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\FaqHelper;
@@ -139,7 +141,7 @@ switch ($action) {
         }
 
         $faq = new Faq($faqConfig);
-        $oComment = new Comment($faqConfig);
+        $oComment = new Comments($faqConfig);
         $category = new Category($faqConfig);
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
@@ -183,17 +185,16 @@ switch ($action) {
                 // @todo handle the exception
             }
 
-            $commentData = [
-                'record_id' => $id,
-                'type' => $type,
-                'username' => $username,
-                'usermail' => $mailer,
-                'comment' => nl2br($comment),
-                'date' => $_SERVER['REQUEST_TIME'],
-                'helped' => '',
-            ];
+            $commentEntity = new Comment();
+            $commentEntity
+                ->setRecordId($id)
+                ->setType($type)
+                ->setUsername($username)
+                ->setEmail($mailer)
+                ->setComment(nl2br($comment))
+                ->setDate($_SERVER['REQUEST_TIME']);
 
-            if ($oComment->addComment($commentData)) {
+            if ($oComment->addComment($commentEntity)) {
                 $emailTo = $faqConfig->get('main.administrationMail');
                 $title = '';
                 $urlToContent = '';
@@ -236,7 +237,7 @@ switch ($action) {
                 }
 
                 $commentMail =
-                    'User: ' . $commentData['username'] . ', mailto:' . $commentData['usermail'] . "\n" .
+                    'User: ' . $commentEntity->getUsername() . ', mailto:' . $commentEntity->getEmail() . "\n" .
                     'Title: ' . $title . "\n" .
                     'New comment posted here: ' . $urlToContent .
                     "\n\n" .
@@ -244,25 +245,27 @@ switch ($action) {
 
                 $send = [];
                 $mailer = new Mail($faqConfig);
-                $mailer->setReplyTo($commentData['usermail'], $commentData['username']);
+                $mailer->setReplyTo($commentEntity->getEmail(), $commentEntity->getUsername());
                 $mailer->addTo($emailTo);
 
                 $send[$emailTo] = 1;
                 $send[$faqConfig->get('main.administrationMail')] = 1;
 
-                // Let the category owner get a copy of the message
-                $category = new Category($faqConfig);
-                $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
-                foreach ($categories as $_category) {
-                    $userId = $category->getOwner($_category);
-                    $catUser = new User($faqConfig);
-                    $catUser->getUserById($userId);
-                    $catOwnerEmail = $catUser->getUserData('email');
+                if ($type === CommentType::FAQ) {
+                    // Let the category owner of a FAQ get a copy of the message
+                    $category = new Category($faqConfig);
+                    $categories = $category->getCategoryIdsFromFaq($faq->faqRecord['id']);
+                    foreach ($categories as $_category) {
+                        $userId = $category->getOwner($_category);
+                        $catUser = new User($faqConfig);
+                        $catUser->getUserById($userId);
+                        $catOwnerEmail = $catUser->getUserData('email');
 
-                    if ($catOwnerEmail !== '') {
-                        if (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo) {
-                            $mailer->addCc($catOwnerEmail);
-                            $send[$catOwnerEmail] = 1;
+                        if ($catOwnerEmail !== '') {
+                            if (!isset($send[$catOwnerEmail]) && $catOwnerEmail !== $emailTo) {
+                                $mailer->addCc($catOwnerEmail);
+                                $send[$catOwnerEmail] = 1;
+                            }
                         }
                     }
                 }
