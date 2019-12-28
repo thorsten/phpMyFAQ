@@ -137,18 +137,14 @@ switch ($action) {
 
         $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
-        try {
-            $searchResults = $search->search($searchString, false);
-            $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
-            $faqSearchResult->reviewResultSet($searchResults);
-            foreach ($faqSearchResult->getResultSet() as $data) {
-                $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-                $data->answer = Utils::makeShorterText($data->answer, 12);
-                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-                $result[] = $data;
-            }
-        } catch (Search\Exception $e) {
-            $result = ['error' => $e->getMessage()];
+        $searchResults = $search->search($searchString, false);
+        $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
+        $faqSearchResult->reviewResultSet($searchResults);
+        foreach ($faqSearchResult->getResultSet() as $data) {
+            $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+            $data->answer = Utils::makeShorterText($data->answer, 12);
+            $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+            $result[] = $data;
         }
         break;
 
@@ -163,7 +159,11 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $result = $faq->getAllRecordPerCategory($categoryId);
+        try {
+            $result = $faq->getAllRecordPerCategory($categoryId);
+        } catch (Exception $e) {
+            // @todo Handle exception
+        }
         break;
 
     case 'getFAQsByTag':
@@ -172,7 +172,11 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $result = $faq->getRecordsByIds($recordIds);
+        try {
+            $result = $faq->getRecordsByIds($recordIds);
+        } catch (Exception $e) {
+            // @todo Handle exception
+        }
         break;
 
     case 'getFaq':
