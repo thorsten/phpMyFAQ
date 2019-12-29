@@ -89,7 +89,6 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
               action="?action=config&amp;config_action=saveConfig">
             <input type="hidden" name="csrf" value="<?= $currentToken ?>">
 
-
             <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                 <h1 class="h2">
                     <i aria-hidden="true" class="fa fa-wrench"></i>
@@ -97,10 +96,10 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                 </h1>
                 <div class="btn-toolbar mb-2 mb-md-0">
                     <div class="btn-group mr-2">
-                        <button class="btn btn-sm     btn-warning" type="reset">
+                        <button class="btn btn-sm btn-warning" type="reset">
                             <?= $PMF_LANG['ad_config_reset'] ?>
                         </button>
-                        <button class="btn btn-sm     btn-success" type="submit">
+                        <button class="btn btn-sm btn-success" type="submit">
                             <?= $PMF_LANG['ad_config_save'] ?>
                         </button>
                     </div>
@@ -167,7 +166,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editconfig')) {
                         </li>
                     </ul>
 
-                    <div class="tab-content p-2 pt-4">
+                    <div class="tab-content p-2 pt-4 pmf-configuration-panel">
                         <div role="tabpanel" class="tab-pane fade show active" id="main"></div>
                         <div role="tabpanel" class="tab-pane fade" id="records"></div>
                         <div role="tabpanel" class="tab-pane fade" id="search"></div>

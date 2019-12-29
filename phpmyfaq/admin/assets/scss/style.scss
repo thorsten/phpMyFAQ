@@ -193,6 +193,15 @@ $fa-font-path: '~fork-awesome/fonts';
 }
 
 //
+// CONFIGURATION
+//
+.pmf-configuration-panel {
+  background: $white;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+}
+
+//
 // TinyMCE
 //
 label.mce-label {
