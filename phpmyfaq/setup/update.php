@@ -683,6 +683,14 @@ if ($step == 3) {
         $faqConfig->delete('socialnetworks.enableFacebookSupport');
     }
 
+    //
+    // UPDATES FROM 3.0.0-RC
+    //
+    if (version_compare($version, '3.0.0-RC', '<=')) {
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'main.customPdfFooter'
+            WHERE config_name = 'main.customPdfHFooter'";
+    }
+
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {
         $faqConfig->update(['main.currentApiVersion' => System::getApiVersion()]);
