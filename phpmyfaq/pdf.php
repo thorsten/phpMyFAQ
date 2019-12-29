@@ -79,14 +79,14 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     if ($user->perm instanceof MediumPermission) {
         $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
     if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
 } else {
     $currentUser = -1;
-    $currentGroups = array(-1);
+    $currentGroups = [-1];
 }
 
 $currentCategory = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
@@ -111,8 +111,6 @@ if (true === $getAll) {
     $category->buildTree();
 }
 $tags = new Tags($faqConfig);
-
-session_cache_limiter('private');
 
 $headers = [
     'Pragma: public',
