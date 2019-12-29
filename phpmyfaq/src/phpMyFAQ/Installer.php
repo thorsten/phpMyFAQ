@@ -348,7 +348,7 @@ class Installer
         'main.enableGzipCompression' => 'true',
         'main.enableLinkVerification' => 'true',
         'main.customPdfHeader' => '',
-        'main.customPdfHFooter' => '',
+        'main.customPdfFooter' => '',
         'main.enableSmartAnswering' => 'true',
         'main.enableCategoryRestrictions' => 'true',
         'main.enableSendToFriend' => 'true',
