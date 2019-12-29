@@ -236,12 +236,10 @@ if (!$internal) {
         } catch (Exception $e) {
             $pmfExceptions[] = $e->getMessage();
         }
-    } else {
-        if (!is_null($sidCookie)) {
+    } elseif (!is_null($sidCookie)) {
             $faqSession->checkSessionId($sidCookie, $_SERVER['REMOTE_ADDR']);
-        } else {
-            $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
-        }
+    } else {
+        $faqSession->checkSessionId($sidGet, $_SERVER['REMOTE_ADDR']);
     }
 }
 
@@ -262,11 +260,9 @@ if ($faqConfig->get('main.enableUserTracking')) {
             }
         }
     }
-} else {
-    if (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId,
-        $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
-        $sids = sprintf('lang=%s&amp;', $faqLangCode);
-    }
+} elseif (!$faqSession->setCookie(Session::PMF_COOKIE_NAME_SESSIONID, $sessionId,
+    $_SERVER['REQUEST_TIME'] + PMF_LANGUAGE_EXPIRED_TIME)) {
+    $sids = sprintf('lang=%s&amp;', $faqLangCode);
 }
 
 //
@@ -333,7 +329,7 @@ if (!is_null($id)) {
     $currentPageUrl = $faqLink->toString(true);
 } else {
     $id = '';
-    $title = ' -  powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
+    $title = ' - powered by phpMyFAQ ' . $faqConfig->get('main.currentVersion');
     $keywords = '';
     $metaDescription = str_replace('"', '', $faqConfig->get('main.metaDescription'));
 }
@@ -450,13 +446,13 @@ if ($faqConfig->get('security.enableLoginOnly')) {
         switch ($action) {
             case 'register':
             case 'thankyou':
-                $indexSet = 'indexNewUser.html';
+                $indexSet = 'new-user.page.html';
                 break;
             case 'password':
-                $indexSet = 'indexPassword.html';
+                $indexSet = 'password.page.html';
                 break;
             default:
-                $indexSet = 'indexLogin.html';
+                $indexSet = 'login.page.html';
                 break;
         }
     }
@@ -468,7 +464,7 @@ if ($faqConfig->get('security.enableLoginOnly')) {
 // phpMyFAQ installation is in maintenance mode
 //
 if ($faqConfig->get('main.maintenanceMode')) {
-    $indexSet = 'indexMaintenance.html';
+    $indexSet = 'maintenance.page.html';
 }
 
 //
@@ -533,7 +529,6 @@ $tplMainPage = [
     'languageBox' => $PMF_LANG['msgLanguageSubmit'],
     'renderUri' => $renderUri,
     'switchLanguages' => LanguageHelper::renderSelectLanguage($faqLangCode, true),
-    // 'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
     'copyright' => 'powered with ❤️ and ☕️ by <a href="https://www.phpmyfaq.de" target="_blank">phpMyFAQ</a> ' .
         $faqConfig->get('main.currentVersion'),
     'registerUser' => $faqConfig->get('security.enableRegistration') ? '<a href="?action=register">' .
@@ -662,12 +657,12 @@ if (isset($auth)) {
     $template->parseBlock(
         'index',
         'notLoggedIn',
-        array(
+        [
             'msgRegisterUser' => $faqConfig->get('security.enableRegistration') ? '<a class="dropdown-item" href="?action=register">' . $PMF_LANG['msgRegisterUser'] . '</a>' : '',
             'msgLoginUser' => sprintf($msgLoginUser, $PMF_LANG['msgLoginUser']),
             'activeRegister' => ('register' == $action) ? 'active' : '',
             'activeLogin' => ('login' == $action) ? 'active' : '',
-        )
+        ]
     );
 }
 
@@ -752,7 +747,7 @@ $http->startCompression();
 if ($http->getStatusCode() === 404 || $action === '404') {
     $template = new Template(
         [
-            'index' => '404.html'
+            'index' => '404.page.html'
         ],
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')

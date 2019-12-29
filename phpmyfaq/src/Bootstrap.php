@@ -27,7 +27,7 @@ use phpMyFAQ\Init;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -117,9 +117,9 @@ require PMF_SRC_DIR . '/libs/parsedown/Parsedown.php';
 require PMF_SRC_DIR . '/libs/parsedown/ParsedownExtra.php';
 
 //
-// Set the error handler to our pmf_error_handler() function
+// Set the error handler to our phpMyFAQErrorHandler() function
 //
-set_error_handler('pmf_error_handler');
+set_error_handler('phpMyFAQErrorHandler');
 
 //
 // Create a database connection
@@ -216,7 +216,7 @@ if (!isset($_SERVER['HTTP_HOST'])) {
         $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_SERVER'];
     } else {
         $_SERVER['HTTP_HOST'] = $_SERVER['HTTP_X_FORWARDED_HOST'];
-    };
+    }
 }
 
 //
@@ -247,12 +247,9 @@ $pmfExceptions = [];
  * @param string $message The error message.
  * @param string $filename The filename that the error was raised in.
  * @param int $line The line number the error was raised at.
- * @param mixed $context It optionally contains an array of every variable
- *                         that existed in the scope the error was triggered in.
- *
- * @return boolean|null
+ * @return bool|null
  */
-function pmf_error_handler($level, $message, $filename, $line, $context)
+function phpMyFAQErrorHandler($level, $message, $filename, $line)
 {
     // Sanity check
     // Note: when DEBUG mode is true we want to track any error!
@@ -269,7 +266,7 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
     // Cleanup potential sensitive data
     $filename = (DEBUG ? $filename : basename($filename));
 
-    $errorTypes = array(
+    $errorTypes = [
         E_ERROR => 'error',
         E_WARNING => 'warning',
         E_PARSE => 'parse error',
@@ -285,7 +282,7 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
         E_RECOVERABLE_ERROR => 'recoverable error',
         E_DEPRECATED => 'deprecated warning',
         E_USER_DEPRECATED => 'user deprecated warning',
-    );
+    ];
     $errorType = 'unknown error';
     if (isset($errorTypes[$level])) {
         $errorType = $errorTypes[$level];
@@ -302,7 +299,7 @@ function pmf_error_handler($level, $message, $filename, $line, $context)
     );
 
     if (ini_get('display_errors')) {
-        print $errorMessage;
+        echo $errorMessage;
     }
     if (ini_get('log_errors')) {
         error_log(sprintf('phpMyFAQ %s:  %s in %s on line %d',
