@@ -151,13 +151,14 @@ if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['a
 
     foreach ($attList as $att) {
         $outstr .= sprintf(
-            '<a href="%s">%s</a>, ',
+            '<li><a href="%s">%s</a> (%s)</li>',
             $att->buildUrl(),
-            $att->getFilename()
+            $att->getFilename(),
+            $att->getMimeType()
         );
     }
     if (count($attList) > 0) {
-        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ':<br>' . Strings::substr($outstr, 0, -2) . '</p>';
+        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ':</p><ul>' . Strings::substr($outstr, 0, -2) . '</ul>';
     }
 }
 

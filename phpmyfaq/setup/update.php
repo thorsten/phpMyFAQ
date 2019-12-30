@@ -55,7 +55,7 @@ require PMF_ROOT_DIR.'/config/database.php';
   <meta name="viewport" content="width=device-width;">
   <meta name="application-name" content="phpMyFAQ <?= System::getVersion(); ?>">
   <meta name="copyright" content="(c) 2001-<?= date('Y'); ?> phpMyFAQ Team">
-  <link rel="stylesheet" href="../assets/dist/styles.css?v=1">
+  <link rel="stylesheet" href="../assets/dist/styles.css">
   <script src="../assets/dist/vendors.js"></script>
   <script src="../assets/dist/phpmyfaq.js"></script>
   <link rel="shortcut icon" href="../assets/themes/default/img/favicon.ico">

@@ -312,6 +312,15 @@ abstract class AttachmentAbstract
     }
 
     /**
+     * Returns the MIME type
+     * @return string
+     */
+    public function getMimeType(): string
+    {
+        return $this->mimeType;
+    }
+
+    /**
      * Update several meta things after it was saved.
      */
     protected function postUpdateMeta()

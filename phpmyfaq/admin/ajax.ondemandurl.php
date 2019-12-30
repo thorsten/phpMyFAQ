@@ -54,8 +54,7 @@ if (count(ob_list_handlers()) > 0) {
 }
 ?>
 <!DOCTYPE html>
-<!--[if IE 9 ]> <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!--> <html lang="<?= $PMF_LANG['metaLanguage']; ?>" class="no-js"> <!--<![endif]-->
+<html lang="<?= $PMF_LANG['metaLanguage']; ?>">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -67,14 +66,15 @@ if (count(ob_list_handlers()) > 0) {
     <meta name="author" content="phpMyFAQ Team">
     <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0;">
     <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
-    <meta name="copyright" content="(c) 2001-2019 phpMyFAQ Team">
+    <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
     <meta name="MSSmartTagsPreventParsing" content="true">
 
-    <link rel="stylesheet" href="assets/css/style.min.css?v=1">
+  <link rel="stylesheet" href="../assets/dist/admin-styles.css">
 
-    <script src="../assets/js/phpmyfaq.min.js"></script>
-
+  <script src="../assets/dist/vendors.js"></script>
+  <script src="../assets/dist/phpmyfaq.js"></script>
+  <script src="../assets/dist/backend.js"></script>
 </head>
 <body dir="<?= $PMF_LANG['dir']; ?>">
 <?php
