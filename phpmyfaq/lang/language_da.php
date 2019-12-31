@@ -13,7 +13,7 @@
  * @package phpMyFAQ
  * @author Max Andersen <max@militant.dk>
  * @author Poul Melgaard <pcm@surfray.com>
- * @copyright 2004-2019 phpMyFAQ Team
+ * @copyright 2004-2020 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2004-06-24

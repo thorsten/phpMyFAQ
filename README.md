@@ -2,9 +2,8 @@
 
 [![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/3.0.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
 [![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-%23777BB4.svg?style=flat-square)](https://php.net/)
-[![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com) 
+[![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thorsten/phpMyFAQ.svg)](https://greenkeeper.io/)
-
 
 ## What is phpMyFAQ?
 
@@ -12,38 +11,36 @@ phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports
 various databases to store all data, PHP 7.2+ is needed in order to
 access this data. phpMyFAQ also offers a multi-language Content Management
 System with a WYSIWYG editor and an Image Manager, real time search support with
-Elasticsearch, flexible multi-user support with user and group based permissions 
-on categories and records, a wiki-like revision feature, a news system, 
-user-tracking, 40+ supported languages, enhanced automatic content negotiation, 
-HTML5/CSS3 based responsive templates, PDF-support, a backup-system, a dynamic 
-sitemap, related FAQs, tagging, RSS feeds, built-in spam protection systems, 
-OpenLDAP and Microsoft Active Directory support, and an easy to use installation 
+Elasticsearch, flexible multi-user support with user and group based permissions
+on categories and records, a wiki-like revision feature, a news system,
+user-tracking, 40+ supported languages, enhanced automatic content negotiation,
+HTML5/CSS3 based responsive templates, PDF-support, a backup-system, a dynamic
+sitemap, related FAQs, tagging, RSS feeds, built-in spam protection systems,
+OpenLDAP and Microsoft Active Directory support, and an easy to use installation
 script.
-
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 7.1 and up, you need a database as well. 
-Supported databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL 
-Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search 
-engine, you need Elasticsearch 5.x or later as well. Check our detailed 
-requirements on [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more 
+phpMyFAQ is only supported on PHP 7.1 and up, you need a database as well.
+Supported databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL
+Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search
+engine, you need Elasticsearch 5.x or later as well. Check our detailed
+requirements on [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more
 information.
-
 
 ## Installation
 
 ### phpMyFAQ package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download),
-unzip the package and open http://www.example.org/phpmyfaq/setup/index.php 
+unzip the package and open http://www.example.org/phpmyfaq/setup/index.php
 in your browser.
 
 ### phpMyFAQ with Docker
 
 #### Dockerfile
 
-The Dockerfile provided in this repo only build an environment to run any 
+The Dockerfile provided in this repo only build an environment to run any
 release it's for development purpose. It does not contain any code as the
 phpmyfaq folder is meant to be mount as the `/var/www/html` folder in the
 container.
@@ -61,15 +58,18 @@ source code from your local repo.
 The command above starts 5 containers as following.
 
 _Specific images started once to prepare the project:_
+
 - **composer**: update composer dependencies
 - **yarn**: update yarn dependencies
 
 _Running using named volumes:_
+
 - **mariadb**: image with xtrabackup support
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **phpmyadmin**: a PHP tool to have a look on your database.
 
 _Running apache web server with PHP 7.3 support:_
+
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 
 Then services will be available at following addresses:
@@ -84,15 +84,14 @@ To run the test using Docker you have to install the Composer development depend
     $ curl -s https://getcomposer.org/installer | php
     $ php composer.phar install
 
-
 #### Quote from ElasticSearch documentation
 
-The vm.max_map_count kernel setting needs to be set to at least 262144 for 
+The vm.max_map_count kernel setting needs to be set to at least 262144 for
 production use. Depending on your platform:
 
 ##### Linux
 
-The vm.max_map_count setting should be set permanently in _/etc/sysctl.conf_:
+The vm.max*map_count setting should be set permanently in */etc/sysctl.conf\_:
 
     $ grep vm.max_map_count /etc/sysctl.conf
     vm.max_map_count=262144
@@ -105,7 +104,7 @@ The vm.max_map_count setting must be set within the xhyve virtual machine:
 
     $ screen ~/Library/Containers/com.docker.docker/Data/com.docker.driver.amd64-linux/tty
 
-Log in with root and no password. Then configure the sysctl setting as you 
+Log in with root and no password. Then configure the sysctl setting as you
 would for Linux:
 
     $ sysctl -w vm.max_map_count=262144
@@ -149,9 +148,9 @@ Releases will be numbered with the following format:
 
 And constructed with the following guidelines:
 
-* Breaking backward compatibility bumps the major (and resets the minor and patch)
-* New additions without breaking backward compatibility bumps the minor (and resets the patch)
-* Bug fixes and misc changes bumps the patch
+- Breaking backward compatibility bumps the major (and resets the minor and patch)
+- New additions without breaking backward compatibility bumps the minor (and resets the patch)
+- Bug fixes and misc changes bumps the patch
 
 For more information on SemVer, please visit http://semver.org/.
 
@@ -168,9 +167,8 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation)
 
-
 ## License
 
 Mozilla Public License 2.0, see LICENSE for more information.
 
-Copyright (c) 2001-2019 Thorsten Rinne and the phpMyFAQ Team
+Copyright (c) 2001-2020 Thorsten Rinne and the phpMyFAQ Team

@@ -10,7 +10,7 @@
  *
  * @package phpMyFAQ
  * @author Florian Anderiasch <florian@phpmyfaq.de>
- * @copyright 2019 phpMyFAQ Team
+ * @copyright 2019-2020 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
  * @link https://www.phpmyfaq.de
  * @since 2019-09-24
