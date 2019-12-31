@@ -24,6 +24,7 @@ use phpMyFAQ\Date;
 use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Glossary;
+use phpMyFAQ\Helper\AttachmentHelper;
 use phpMyFAQ\Helper\CaptchaHelper;
 use phpMyFAQ\Helper\FaqHelper as HelperFaq;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -53,6 +54,7 @@ $faqRating = new Rating($faqConfig);
 $faqComment = new Comments($faqConfig);
 $markDown = new \ParsedownExtra();
 $faqHelper = new HelperFaq($faqConfig);
+$attachmentHelper = new AttachmentHelper();
 
 if (is_null($user)) {
     $user = new CurrentUser($faqConfig);
@@ -144,21 +146,9 @@ if (isset($linkArray['href'])) {
 if ($faqConfig->get('records.disableAttachments') && 'yes' == $faq->faqRecord['active']) {
     try {
         $attList = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        $answer .= $attachmentHelper->renderAttachmentList($attList);
     } catch (AttachmentException $e) {
         // handle exception
-    }
-    $outstr = '';
-
-    foreach ($attList as $att) {
-        $outstr .= sprintf(
-            '<li><a href="%s">%s</a> (%s)</li>',
-            $att->buildUrl(),
-            $att->getFilename(),
-            $att->getMimeType()
-        );
-    }
-    if (count($attList) > 0) {
-        $answer .= '<p>' . $PMF_LANG['msgAttachedFiles'] . ':</p><ul>' . Strings::substr($outstr, 0, -2) . '</ul>';
     }
 }
 

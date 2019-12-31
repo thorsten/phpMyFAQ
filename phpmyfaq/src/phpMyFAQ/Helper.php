@@ -63,7 +63,7 @@ abstract class Helper
     /**
      * phpMyFAQ's session ID.
      *
-     * @var integer
+     * @var int
      */
     protected $sessionId = null;
 
