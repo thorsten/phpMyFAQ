@@ -4,7 +4,7 @@ This endpoint returns the default language as language code.
 
 **URL** : `/api/2.0/search`
 
-**HTTP Header** : `Accept-Language: en-US`
+**HTTP Header** : `Accept-Language: en-US,en`
 
 **Query parameters** : `q=[string]`
 

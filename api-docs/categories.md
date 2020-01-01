@@ -4,7 +4,7 @@ This endpoint returns the categories for the given language provided by "Accept-
 
 **URL** : `/api/2.0/categories`
 
-**HTTP Header** : `Accept-Language: en-US`
+**HTTP Header** : `Accept-Language: en-US,en`
 
 **Method** : `GET`
 
