@@ -38,7 +38,8 @@
     "elasticsearch/elasticsearch": "~7.0",
     "monolog/monolog": "~1.",
     "abraham/twitteroauth": "^0.7.4",
-    "myclabs/deep-copy": "~1.0"
+    "myclabs/deep-copy": "~1.0",
+    "ext-json": "*"
   },
   "require-dev": {
     "phpunit/phpunit": "8.*",

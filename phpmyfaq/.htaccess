@@ -125,7 +125,7 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagg
 # * http://[...]/tags/<ID>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
 
-# REST/JSON API
+# REST/JSON API v1
 # * http://[...]/api/<ACTION>/<LANGUAGE CODE>/<...>
 RewriteRule api/getVersion                                  api.php?action=getVersion [L,QSA]
 RewriteRule api/getApiVersion                               api.php?action=getApiVersion [L,QSA]
@@ -146,3 +146,10 @@ RewriteRule api/getPopularSearches/([a-z\-]+)               api.php?action=getPo
 RewriteRule api/getPopularTags                              api.php?action=getPopularTags [L,QSA]
 RewriteRule api/getFAQsByTag/([a-z\-]+)/([0-9]+)            api.php?action=getFAQsByTag&lang=$1&tagId=$2 [L,QSA]
 RewriteRule api/login                                       api.php?action=login [L,QSA]
+
+# REST API v2.0
+# * http://[...]/api/v2.0/<ACTION>
+RewriteRule api/2.0/version                                  api.php?action=version [L,QSA]
+RewriteRule api/2.0/language                                 api.php?action=language [L,QSA]
+RewriteRule api/2.0/search                                   api.php?action=search [L,QSA]
+RewriteRule api/2.0/categories                               api.php?action=categories [L,QSA]

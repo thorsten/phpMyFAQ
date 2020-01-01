@@ -103,6 +103,7 @@ class Api
 
     /**
      * @return array
+     * @throws \Exception
      */
     public function getVerificationIssues(): array
     {

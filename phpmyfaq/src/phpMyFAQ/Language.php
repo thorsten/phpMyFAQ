@@ -38,7 +38,7 @@ class Language
      *
      * @var string
      */
-    public $acceptedLanguage = '';
+    private $acceptLanguage = '';
 
     /**
      * @var Configuration
@@ -53,6 +53,14 @@ class Language
     public function __construct(Configuration $config)
     {
         $this->config = $config;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAcceptLanguage(): string
+    {
+        return $this->acceptLanguage;
     }
 
     /**
@@ -160,14 +168,14 @@ class Language
 
         // Get the language from the config
         if (isset($configLanguage)) {
-            $confLangCode = str_replace(array('language_', '.php'), '', $configLanguage);
+            $confLangCode = str_replace(['language_', '.php'], '', $configLanguage);
             if (self::isASupportedLanguage($confLangCode)) {
                 $detectedLang['config'] = $confLangCode;
             }
         }
         // Detect the browser's language
-        if ((true === $configDetection) && self::isASupportedLanguage($this->acceptedLanguage)) {
-            $detectedLang['detection'] = strtolower($this->acceptedLanguage);
+        if ((true === $configDetection) && self::isASupportedLanguage($this->acceptLanguage)) {
+            $detectedLang['detection'] = strtolower($this->acceptLanguage);
         }
         // Select the language
         if (isset($detectedLang['post'])) {
@@ -195,6 +203,16 @@ class Language
         }
 
         return $_SESSION['lang'] = self::$language;
+    }
+
+    /**
+     * @return string
+     */
+    public function setLanguageByAcceptLanguage(): string
+    {
+        self::getUserAgentLanguage();
+
+        return $this->acceptLanguage;
     }
 
     /**
@@ -227,7 +245,7 @@ class Language
             }
             foreach ($languages as $lang => $val) {
                 if (self::isASupportedLanguage(strtoupper($lang))) {
-                    $this->acceptedLanguage = $lang;
+                    $this->acceptLanguage = $lang;
                     break;
                 }
             }

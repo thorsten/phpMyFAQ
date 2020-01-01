@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The REST API.
+ * The REST API
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -20,7 +20,7 @@ define('IS_VALID_PHPMYFAQ', null);
 use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
-use phpMyFAQ\Comment;
+use phpMyFAQ\Comments;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -55,7 +55,7 @@ $currentGroups = [-1];
 $auth = false;
 
 $action = Filter::filterInput(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
-$language = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
+$lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING, 'en');
 $categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
@@ -66,21 +66,21 @@ $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_ST
 //
 // Get language (default: english)
 //
-$Language = new Language($faqConfig);
-$language = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
+$language = new Language($faqConfig);
+$currentLanguage = $language->setLanguageByAcceptLanguage();
 
 //
 // Set language
 //
-if (Language::isASupportedLanguage($language)) {
-    require LANGUAGE_DIR . '/language_' . $language . '.php';
+if (Language::isASupportedLanguage($currentLanguage)) {
+    require LANGUAGE_DIR . '/language_' . $currentLanguage . '.php';
 } else {
     require LANGUAGE_DIR . '/language_en.php';
 }
-$faqConfig->setLanguage($Language);
+$faqConfig->setLanguage($language);
 
 $plr = new Plurals($PMF_LANG);
-Strings::init($language);
+Strings::init($currentLanguage);
 
 //
 // Set empty result
@@ -108,23 +108,49 @@ if (is_null($faqusername) && is_null($faqpassword)) {
 //
 switch ($action) {
 
+    //
+    // v1
+    //
     case 'getVersion':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
         $result = ['version' => $faqConfig->get('main.currentVersion')];
         break;
 
     case 'getApiVersion':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
         $result = ['apiVersion' => $faqConfig->get('main.currentApiVersion')];
         break;
 
     case 'getCount':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $result = ['faqCount' => $faq->getNumberOfRecords($language)];
+        $result = ['faqCount' => $faq->getNumberOfRecords($currentLanguage)];
         break;
 
     case 'getDefaultLanguage':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
         $result = ['defaultLanguage' => $faqConfig->getLanguage()->getLanguage()];
+        break;
+
+    case 'getCategories':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $category = new Category($faqConfig, $currentGroups, true);
+        $category->setUser($currentUser);
+        $category->setGroups($currentGroups);
+        $result = array_values($category->getAllCategories());
+        break;
+
+    //
+    // v2
+    //
+    case 'version':
+        $result = $faqConfig->get('main.currentVersion');
+        break;
+
+    case 'language':
+        $result = $faqConfig->getLanguage()->getLanguage();
         break;
 
     case 'search':
@@ -140,19 +166,27 @@ switch ($action) {
         $searchResults = $search->search($searchString, false);
         $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
         $faqSearchResult->reviewResultSet($searchResults);
-        foreach ($faqSearchResult->getResultSet() as $data) {
-            $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
-            $data->answer = Utils::makeShorterText($data->answer, 12);
-            $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
-            $result[] = $data;
+        if ($faqSearchResult->getNumberOfResults() > 0) {
+            foreach ($faqSearchResult->getResultSet() as $data) {
+                $data->answer = html_entity_decode(strip_tags($data->answer), ENT_COMPAT, 'utf-8');
+                $data->answer = Utils::makeShorterText($data->answer, 12);
+                $data->link = sprintf($url, $data->category_id, $data->id, $data->lang);
+                $result[] = $data;
+            }
+        } else {
+            $http->sendStatus(404);
         }
         break;
 
-    case 'getCategories':
+    case 'categories':
         $category = new Category($faqConfig, $currentGroups, true);
         $category->setUser($currentUser);
         $category->setGroups($currentGroups);
+        $category->setLanguage($currentLanguage);
         $result = array_values($category->getAllCategories());
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
         break;
 
     case 'getFaqs':
@@ -188,7 +222,7 @@ switch ($action) {
         break;
 
     case 'getComments':
-        $comment = new Comment($faqConfig);
+        $comment = new Comments($faqConfig);
         $result = $comment->getCommentsData($recordId, 'faq');
         break;
 
@@ -196,14 +230,14 @@ switch ($action) {
         $faq = new Faq($faqConfig);
         $faq->setUser($currentUser);
         $faq->setGroups($currentGroups);
-        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $language]);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
         $result = $faq->faqRecords;
         break;
 
     case 'getFaqAsPdf':
         $service = new Services($faqConfig);
         $service->setFaqId($recordId);
-        $service->setLanguage($language);
+        $service->setLanguage($currentLanguage);
         $service->setCategoryId($categoryId);
 
         $result = ['pdfUrl' => $service->getPdfApiLink()];
