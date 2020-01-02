@@ -45,7 +45,7 @@ This endpoint returns the results for the query string search term.
 
 **Condition** : If the search returns no results.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

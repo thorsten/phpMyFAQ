@@ -53,7 +53,7 @@ This endpoint returns the categories for the given language provided by "Accept-
 
 **Condition** : If the search returns no results.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

@@ -49,7 +49,7 @@ This endpoint returns the open questions for the given language provided by "Acc
 
 **Condition** : If no tags are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

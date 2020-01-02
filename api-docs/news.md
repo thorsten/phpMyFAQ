@@ -61,7 +61,7 @@ This endpoint returns the news for the given language provided by "Accept-Langua
 
 **Condition** : If no news are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

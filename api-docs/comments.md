@@ -51,7 +51,7 @@ This endpoint returns the comments of a given FAQ ID and the given language prov
 
 **Condition** : If the FAQ has no comments.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

@@ -51,7 +51,7 @@ This endpoint returns all the FAQs for the given category ID and the language pr
 
 **Condition** : If there are no FAQs for the given category ID.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

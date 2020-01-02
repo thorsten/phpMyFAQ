@@ -37,7 +37,7 @@ This endpoint returns the attached files as URLs of a given FAQ ID and the given
 
 **Condition** : If the FAQ has no attachments.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

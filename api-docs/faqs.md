@@ -65,7 +65,7 @@ This endpoint returns all the FAQs for the given language provided by "Accept-La
 
 **Condition** : If there are no FAQs.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

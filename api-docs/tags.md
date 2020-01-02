@@ -37,7 +37,7 @@ This endpoint returns the tags for the given language provided by "Accept-Langua
 
 **Condition** : If no tags are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

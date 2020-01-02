@@ -41,7 +41,7 @@ This endpoint returns the popular FAQs for the given language provided by "Accep
 
 **Condition** : If search terms are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

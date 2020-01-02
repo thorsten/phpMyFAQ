@@ -46,7 +46,7 @@ Used to login a registered user.
 
 **Condition** : If 'username' and 'password' combination is wrong.
 
-**Code** : 400 BAD REQUEST
+**Code** : `400 BAD REQUEST`
 
 **Content** :
 

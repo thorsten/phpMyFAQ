@@ -35,7 +35,7 @@ This endpoint returns the sticky FAQs for the given language provided by "Accept
 
 **Condition** : If search terms are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 

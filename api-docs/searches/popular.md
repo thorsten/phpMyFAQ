@@ -45,7 +45,7 @@ This endpoint returns the popular search terms for the given language provided b
 
 **Condition** : If search terms are stored.
 
-**Code** : 404 NOT FOUND
+**Code** : `404 NOT FOUND`
 
 **Content** :
 
