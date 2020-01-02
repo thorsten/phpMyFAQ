@@ -17,12 +17,12 @@ Open endpoints require no Authentication.
 - [Tags](api-docs/tags.md): `GET /api/v2.0/tags`
 - [Open Questions](api-docs/open-questions.md): `GET /api/v2.0/open-questions`
 
-# Search related APIs
+### Search related APIs
 
 - [Search](api-docs/search.md): `GET /api/v2.0/search?q=<search string>`
 - [Popular Searches](api-docs/searches/popular.md): `GET /api/v2.0/searches/popular`
 
-# FAQ related APIs
+### FAQ related APIs
 
 - [Attachments](api-docs/attachments.md): `GET /api/v2.0/attachments`
 - [Comments](api-docs/comments.md): `GET /api/v2.0/comments`
@@ -32,6 +32,6 @@ Open endpoints require no Authentication.
 - [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v2.0/faqs/popular`
 - [Sticky FAQs](api-docs/faqs/sticky.md): `GET /api/v2.0/faqs/sticky`
 
-## Login APIs
+### Login APIs
 
 - [Login](api-docs/login.md): `POST /api/v2.0/login`
