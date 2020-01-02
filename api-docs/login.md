@@ -1,6 +1,6 @@
 # Login
 
-Used to login a registered User.
+Used to login a registered user.
 
 **URL** : `/api/v2.0/login`
 
@@ -30,7 +30,7 @@ Used to login a registered User.
 
 ## Success Response
 
-**Condition** : If there's at least one news entry.
+**Condition** : If 'username' and 'password' combination is correct.
 
 **Code** : `200 OK`
 
@@ -38,8 +38,7 @@ Used to login a registered User.
 
 ```json
 {
-  "loggedin": true,
-  "token": ""
+  "loggedin": true
 }
 ```
 
