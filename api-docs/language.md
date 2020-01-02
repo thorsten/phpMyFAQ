@@ -2,7 +2,7 @@
 
 This endpoint returns the default language as language code.
 
-**URL** : `/api/2.0/language`
+**URL** : `/api/v2.0/language`
 
 **Method** : `GET`
 

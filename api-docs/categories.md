@@ -2,7 +2,7 @@
 
 This endpoint returns the categories for the given language provided by "Accept-Language".
 
-**URL** : `/api/2.0/categories`
+**URL** : `/api/v2.0/categories`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 

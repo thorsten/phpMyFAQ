@@ -2815,8 +2815,8 @@ class Faq
 
         if (count($result) > 0) {
             foreach ($result as $row) {
-                $output['title'][] = Utils::makeShorterText($row['thema'], 8);
-                $output['preview'][] = $row['thema'];
+                $output['title'][] = Utils::makeShorterText($row['question'], 8);
+                $output['preview'][] = $row['question'];
                 $output['url'][] = $row['url'];
             }
         } else {
@@ -2831,7 +2831,7 @@ class Faq
      *
      * @return array
      */
-    private function getStickyRecordsData()
+    public function getStickyRecordsData()
     {
         global $sids;
 
@@ -2898,7 +2898,7 @@ class Faq
         $oldId = 0;
         while (($row = $this->config->getDb()->fetchObject($result))) {
             if ($oldId != $row->id) {
-                $data['thema'] = $row->thema;
+                $data['question'] = $row->thema;
 
                 $title = $row->thema;
                 $url = sprintf(

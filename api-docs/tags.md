@@ -2,7 +2,7 @@
 
 This endpoint returns the tags for the given language provided by "Accept-Language".
 
-**URL** : `/api/2.0/tags`
+**URL** : `/api/v2.0/tags`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 

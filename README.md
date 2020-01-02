@@ -21,7 +21,7 @@ script.
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 7.1 and up, you need a database as well.
+phpMyFAQ is only supported on PHP 7.2 and up, you need a database as well.
 Supported databases are MySQL, Percona Server, PostgreSQL, Microsoft SQL
 Server, SQLite3 and MariaDB. If you want to use Elasticsearch as main search
 engine, you need Elasticsearch 5.x or later as well. Check our detailed
@@ -161,11 +161,16 @@ Before opening any issue, please search for existing issues.
 
 ## Contributing
 
-Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyfaq.de/contribute)
+Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyfaq.de/contribute).
 
 ## Documentation
 
-You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation)
+You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
+
+## API
+
+The REST API v2 documentation is located [here in this repository](API.md) and also on
+[phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
 ## License
 

@@ -1,8 +1,8 @@
 # Language
 
-This endpoint returns the default language as language code.
+This endpoint returns the results for the query string search term.
 
-**URL** : `/api/2.0/search`
+**URL** : `/api/v2.0/search`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 

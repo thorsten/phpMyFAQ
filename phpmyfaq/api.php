@@ -21,6 +21,7 @@ use phpMyFAQ\Attachment\AttachmentException;
 use phpMyFAQ\Attachment\AttachmentFactory;
 use phpMyFAQ\Category;
 use phpMyFAQ\Comments;
+use phpMyFAQ\Entity\CommentType;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
@@ -61,8 +62,8 @@ $categoryId = Filter::filterInput(INPUT_GET, 'categoryId', FILTER_VALIDATE_INT);
 $recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
-$faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
+$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
 
 //
 // Get language (default: english)
@@ -90,8 +91,7 @@ $result = [];
 //
 // Check if user is already authenticated
 //
-if (is_null($faqusername) && is_null($faqpassword)) {
-
+if (is_null($faqUsername) && is_null($faqPassword)) {
     $currentUser = CurrentUser::getFromCookie($faqConfig);
     // authenticate with session information
     if (!$currentUser instanceof CurrentUser) {
@@ -155,6 +155,70 @@ switch ($action) {
         $result = $search->getMostPopularSearches(7, true);
         break;
 
+    case 'getComments':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $comment = new Comments($faqConfig);
+        $result = $comment->getCommentsData($recordId, 'faq');
+        break;
+
+    case 'getAttachmentsFromFaq':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $attachments = [];
+        try {
+            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        } catch (AttachmentException $e) {
+            $result = ['error' => $e->getMessage()];
+        }
+        foreach ($attachments as $attachment) {
+            $result[] = [
+                'filename' => $attachment->getFilename(),
+                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
+            ];
+        }
+        break;
+
+    case 'getNews':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $news = new News($faqConfig);
+        $result = $news->getLatestData(false, true, true);
+        break;
+
+    case 'getFaqs':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        try {
+            $result = $faq->getAllRecordPerCategory($categoryId);
+        } catch (Exception $e) {
+            // @todo Handle exception
+        }
+        break;
+
+    case 'getAllFaqs':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
+        $result = $faq->faqRecords;
+        break;
+
+    case 'getPopular':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
+        break;
+
+    case 'getLatest':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser);
+        $faq->setGroups($currentGroups);
+        $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
+        break;
     //
     // v2
     //
@@ -227,18 +291,114 @@ switch ($action) {
         }
         break;
 
-
-
-    case 'getFaqs':
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-        try {
-            $result = $faq->getAllRecordPerCategory($categoryId);
-        } catch (Exception $e) {
-            // @todo Handle exception
+    case 'comments':
+        $comment = new Comments($faqConfig);
+        $result = $comment->getCommentsData($recordId, CommentType::FAQ);
+        if (count($result) === 0) {
+            $http->sendStatus(404);
         }
         break;
+
+    case 'attachments':
+        $attachments = $result = [];
+        try {
+            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
+        } catch (AttachmentException $e) {
+            $result = [];
+        }
+        foreach ($attachments as $attachment) {
+            $result[] = [
+                'filename' => $attachment->getFilename(),
+                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
+            ];
+        }
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+    case 'news':
+        $news = new News($faqConfig);
+        $result = $news->getLatestData(false, true, true);
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+
+    case 'faqs':
+        $filter = Filter::filterInput(INPUT_GET, 'filter', FILTER_SANITIZE_STRING);
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentUser->getUserId());
+        $faq->setGroups($currentGroups);
+
+        // api/v2.0/faqs/:categoryId
+        if (!is_null($categoryId)) {
+            try {
+                $result = $faq->getAllRecordPerCategory($categoryId);
+            } catch (Exception $e) {
+                $http->sendStatus(400);
+            }
+        }
+
+        // api/v2.0/faqs/popular
+        if ('popular' === $filter) {
+            $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
+        }
+
+        // api/v2.0/faqs/latest
+        if ('latest' === $filter) {
+            $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
+        }
+
+        // api/v2.0/faqs/sticky
+        if ('sticky' === $filter) {
+            $result = array_values($faq->getStickyRecordsData());
+        }
+
+        // api/v2.0/faqs
+        if (is_null($categoryId) && is_null($filter)) {
+            $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
+            $result = $faq->faqRecords;
+        }
+
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+    case 'login':
+        $currentUser = new CurrentUser($faqConfig);
+
+        if ($currentUser->login($faqUsername, $faqPassword)) {
+            if ($currentUser->getStatus() !== 'blocked') {
+                $auth = true;
+                $result = [
+                    'loggedin' => true
+                ];
+            } else {
+                $auth = false;
+                $http->sendStatus(400);
+                $result = [
+                    'loggedin' => false,
+                    'error' => $PMF_LANG['ad_auth_fail']
+                ];
+            }
+        } else {
+            $auth = false;
+            $http->sendStatus(400);
+            $result = [
+                'loggedin' => false,
+                'error' => $PMF_LANG['ad_auth_fail']
+            ];
+        }
+        break;
+
+
+
+
+
+
 
     case 'getFAQsByTag':
         $tags = new Tags($faqConfig);
@@ -261,19 +421,6 @@ switch ($action) {
         $result = $faq->faqRecord;
         break;
 
-    case 'getComments':
-        $comment = new Comments($faqConfig);
-        $result = $comment->getCommentsData($recordId, 'faq');
-        break;
-
-    case 'getAllFaqs':
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-        $faq->getAllRecords(FAQ_SORTING_TYPE_CATID_FAQID, ['lang' => $currentLanguage]);
-        $result = $faq->faqRecords;
-        break;
-
     case 'getFaqAsPdf':
         $service = new Services($faqConfig);
         $service->setFaqId($recordId);
@@ -283,61 +430,7 @@ switch ($action) {
         $result = ['pdfUrl' => $service->getPdfApiLink()];
         break;
 
-    case 'getAttachmentsFromFaq':
-        $attachments = $result = [];
-        try {
-            $attachments = AttachmentFactory::fetchByRecordId($faqConfig, $recordId);
-        } catch (AttachmentException $e) {
-            $result = ['error' => $e->getMessage()];
-        }
-        foreach ($attachments as $attachment) {
-            $result[] = [
-                'filename' => $attachment->getFilename(),
-                'url' => $faqConfig->getDefaultUrl() . $attachment->buildUrl(),
-            ];
-        }
-        break;
 
-    case 'getPopular':
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-        $result = array_values($faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN));
-        break;
-
-    case 'getLatest':
-        $faq = new Faq($faqConfig);
-        $faq->setUser($currentUser);
-        $faq->setGroups($currentGroups);
-        $result = array_values($faq->getLatestData(PMF_NUMBER_RECORDS_LATEST));
-        break;
-
-    case 'getNews':
-        $news = new News($faqConfig);
-        $result = $news->getLatestData(false, true, true);
-        break;
-
-    case 'login':
-        $currentUser = new CurrentUser($faqConfig);
-        if ($currentUser->login($faqusername, $faqpassword)) {
-            if ($currentUser->getStatus() != 'blocked') {
-                $auth = true;
-                $result = [
-                    'loggedin' => true
-                ];
-            } else {
-                $result = [
-                    'loggedin' => false,
-                    'error' => $PMF_LANG['ad_auth_fail'] . ' (' . $faqusername . ')'
-                ];
-            }
-        } else {
-            $result = [
-                'loggedin' => false,
-                'error' => $PMF_LANG['ad_auth_fail']
-            ];
-        }
-        break;
 }
 
 //

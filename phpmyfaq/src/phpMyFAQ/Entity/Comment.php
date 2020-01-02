@@ -24,31 +24,31 @@ namespace phpMyFAQ\Entity;
 class Comment
 {
     /** @var int */
-    private $id;
+    public $id;
 
     /** @var int */
-    private $recordId;
+    public $recordId;
 
     /** @var int */
-    private $categoryId;
+    public $categoryId;
 
     /** @var string */
-    private $type;
+    public $type;
 
     /** @var string */
-    private $username;
+    public $username;
 
     /** @var string */
-    private $email;
+    public $email;
 
     /** @var string */
-    private $comment;
+    public $comment;
 
     /** @var string */
-    private $date;
+    public $date;
 
     /** @var bool|null */
-    private $helped;
+    public $helped;
 
     /**
      * @return int

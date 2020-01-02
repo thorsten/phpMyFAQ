@@ -111,7 +111,7 @@ class Comments
         $query = sprintf(
             "
             SELECT
-                id_comment, usr, email, comment, datum
+                id_comment, id, usr, email, comment, datum
             FROM
                 %sfaqcomments
             WHERE
@@ -129,10 +129,12 @@ class Comments
                 $comment = new Comment();
                 $comment
                     ->setId($row->id_comment)
+                    ->setRecordId($row->id)
                     ->setComment($row->comment)
                     ->setDate(Date::createIsoDate($row->datum, DATE_ISO8601, false))
                     ->setUsername($row->usr)
-                    ->setEmail($row->email);
+                    ->setEmail($row->email)
+                    ->setType($type);
                 $comments[] = $comment;
             }
         }

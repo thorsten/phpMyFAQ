@@ -2,7 +2,7 @@
 
 This endpoint returns the popular search terms for the given language provided by "Accept-Language".
 
-**URL** : `/api/2.0/searches/popular`
+**URL** : `/api/v2.0/searches/popular`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 

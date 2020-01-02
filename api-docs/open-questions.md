@@ -2,7 +2,7 @@
 
 This endpoint returns the open questions for the given language provided by "Accept-Language".
 
-**URL** : `/api/2.0/open-questions`
+**URL** : `/api/v2.0/open-questions`
 
 **HTTP Header** : `Accept-Language: en-US,en`
 

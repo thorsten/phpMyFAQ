@@ -2,7 +2,7 @@
 
 This endpoint returns the phpMyFAQ version number as string.
 
-**URL** : `/api/2.0/version`
+**URL** : `/api/v2.0/version`
 
 **Method** : `GET`
 
