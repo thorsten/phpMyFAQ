@@ -26,8 +26,11 @@ Open endpoints require no Authentication.
 
 - [Attachments](api-docs/attachments.md): `GET /api/v2.0/attachments`
 - [Comments](api-docs/comments.md): `GET /api/v2.0/comments`
-- [FAQs](api-docs/faqs.md): `GET /api/v2.0/faqs`
-- [FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v2.0/faqs/:categoryId`
+- [All FAQs](api-docs/faqs.md): `GET /api/v2.0/faqs`
+- [All FAQs per Category](api-docs/faqs/categoryId.md): `GET /api/v2.0/faqs/:categoryId`
+- [All FAQs per Tags](api-docs/faqs/tags.md): `GET /api/v2.0/faqs/tags/:tagId`
+- [FAQ](api-docs/faq.md): `GET /api/v2.0/faq/:faqId`
+- [FAQ as PDF](api-docs/faq/pdf.md): `GET /api/v2.0/faq/:faqId?filter=pdf`
 - [Latest FAQs](api-docs/faqs/latest.md): `GET /api/v2.0/faqs/latest`
 - [Popular FAQs](api-docs/faqs/popular.md): `GET /api/v2.0/faqs/popular`
 - [Sticky FAQs](api-docs/faqs/sticky.md): `GET /api/v2.0/faqs/sticky`

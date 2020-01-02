@@ -146,6 +146,9 @@ class HttpHelper extends Helper
                     header('HTTP/1.0 404 Not Found');
                 }
                 break;
+            case 418:
+                header('HTTP/1.1 418 I\'m a teapot');
+                break;
             case 500:
                 header('HTTP/1.1 500 Internal Server Error');
                 break;
