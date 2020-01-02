@@ -212,7 +212,7 @@ class Language
     {
         self::getUserAgentLanguage();
 
-        return $this->acceptLanguage;
+        return self::$language = $this->acceptLanguage;
     }
 
     /**

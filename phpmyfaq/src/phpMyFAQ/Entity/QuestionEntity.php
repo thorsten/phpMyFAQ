@@ -27,47 +27,47 @@ class QuestionEntity
     /**
      * @var int
      */
-    private $id;
+    public $id;
 
     /**
      * @var string
      */
-    private $lang;
+    public $lang;
 
     /**
      * @var string
      */
-    private $username;
+    public $username;
 
     /**
      * @var string
      */
-    private $email;
+    public $email;
 
     /**
      * @var int
      */
-    private $categoryId;
+    public $categoryId;
 
     /**
      * @var string
      */
-    private $question;
+    public $question;
 
     /**
      * @var string
      */
-    private $created;
+    public $created;
 
     /**
      * @var int
      */
-    private $answerId;
+    public $answerId;
 
     /**
      * @var string
      */
-    private $isVisible;
+    public $isVisible;
 
     /**
      * QuestionEntity constructor.

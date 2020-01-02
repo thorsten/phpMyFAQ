@@ -151,5 +151,22 @@ RewriteRule api/login                                       api.php?action=login
 # * http://[...]/api/v2.0/<ACTION>
 RewriteRule api/2.0/version                                  api.php?action=version [L,QSA]
 RewriteRule api/2.0/language                                 api.php?action=language [L,QSA]
-RewriteRule api/2.0/search                                   api.php?action=search [L,QSA]
 RewriteRule api/2.0/categories                               api.php?action=categories [L,QSA]
+RewriteRule api/2.0/searches/popular                         api.php?action=searches&filter=popular [L,QSA]
+RewriteRule api/2.0/search                                   api.php?action=search [L,QSA]
+RewriteRule api/2.0/tags                                     api.php?action=tags [L,QSA]
+RewriteRule api/2.0/open-questions                           api.php?action=open-questions [L,QSA]
+
+# not implemented yet
+
+RewriteRule api/2.0/faqs/([a-z\-]+)                          api.php?action=faqs&lang=$1 [L,QSA]
+RewriteRule api/2.0/faqs/([a-z\-]+)/popular                  api.php?action=faqs&lang=$1&filter=popular [L,QSA]
+RewriteRule api/2.0/faqs/([a-z\-]+)/latest                   api.php?action=faqs&lang=$1&filter=latest [L,QSA]
+RewriteRule api/2.0/faqs/([a-z\-]+)/sticky                   api.php?action=faqs&lang=$1&filter=sticky [L,QSA]
+RewriteRule api/2.0/faqs/([a-z\-]+)/([0-9]+)                 api.php?action=faqs&lang=$1&categoryId=$2 [L,QSA]
+RewriteRule api/2.0/faq/([a-z\-]+)/([0-9]+)/([0-9]+)         api.php?action=faq&lang=$1&categoryId=$2&recordId=$3 [L,QSA]
+RewriteRule api/2.0/comments/([0-9]+)                        api.php?action=comments&recordId=$1 [L,QSA]
+RewriteRule api/2.0/attachments/([a-z\-]+)/([0-9]+)          api.php?action=attachments&lang=$1&recordId=$2 [L,QSA]
+RewriteRule api/2.0/news/([a-z\-]+)                          api.php?action=news&lang=$1 [L,QSA]
+RewriteRule api/2.0/login                                    api.php?action=login [L,QSA]
+RewriteRule api/2.0/register                                 api.php?action=register [L,QSA]

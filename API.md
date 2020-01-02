@@ -12,3 +12,6 @@ Open endpoints require no Authentication.
 - [Language](api-docs/language.md): `GET /api/2.0/language`
 - [Search](api-docs/search.md): `GET /api/2.0/search?q=<search string>`
 - [Categories](api-docs/categories.md): `GET /api/2.0/categories`
+- [Tags](api-docs/tags.md): `GET /api/2.0/tags`
+- [Open Questions](api-docs/open-questions.md): `GET /api/2.0/tags`
+- [Popular Searches](api-docs/searches/popular.md): `GET /api/2.0/tags`

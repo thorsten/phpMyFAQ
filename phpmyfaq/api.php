@@ -27,6 +27,7 @@ use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Language\Plurals;
 use phpMyFAQ\News;
+use phpMyFAQ\Question;
 use phpMyFAQ\Search;
 use phpMyFAQ\Search\SearchResultSet;
 use phpMyFAQ\Services;
@@ -142,6 +143,18 @@ switch ($action) {
         $result = array_values($category->getAllCategories());
         break;
 
+    case 'getPopularTags':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $tags = new Tags($faqConfig);
+        $result = $tags->getPopularTagsAsArray(16);
+        break;
+
+    case 'getPopularSearches':
+        // @deprecated This API will be removed in phpMyFAQ 3.1
+        $search = new Search($faqConfig);
+        $result = $search->getMostPopularSearches(7, true);
+        break;
+
     //
     // v2
     //
@@ -160,8 +173,8 @@ switch ($action) {
         $user = new CurrentUser($faqConfig);
         $search = new Search($faqConfig);
         $search->setCategory(new Category($faqConfig));
-
         $faqSearchResult = new SearchResultSet($user, $faq, $faqConfig);
+
         $searchString = Filter::filterInput(INPUT_GET, 'q', FILTER_SANITIZE_STRIPPED);
         $searchResults = $search->search($searchString, false);
         $url = $faqConfig->getDefaultUrl() . 'index.php?action=faq&cat=%d&id=%d&artlang=%s';
@@ -176,6 +189,7 @@ switch ($action) {
         } else {
             $http->sendStatus(404);
         }
+
         break;
 
     case 'categories':
@@ -188,6 +202,32 @@ switch ($action) {
             $http->sendStatus(404);
         }
         break;
+
+    case 'tags':
+        $tags = new Tags($faqConfig);
+        $result = $tags->getPopularTagsAsArray(16);
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+    case 'open-questions':
+        $questions = new Question($faqConfig);
+        $result = $questions->getAllOpenQuestions();
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+    case 'searches':
+        $search = new Search($faqConfig);
+        $result = $search->getMostPopularSearches(7, true);
+        if (count($result) === 0) {
+            $http->sendStatus(404);
+        }
+        break;
+
+
 
     case 'getFaqs':
         $faq = new Faq($faqConfig);
@@ -275,16 +315,6 @@ switch ($action) {
     case 'getNews':
         $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);
-        break;
-
-    case 'getPopularSearches':
-        $search = new Search($faqConfig);
-        $result = $search->getMostPopularSearches(7, true);
-        break;
-
-    case 'getPopularTags':
-        $tags = new Tags($faqConfig);
-        $result = $tags->getPopularTagsAsArray(16);
         break;
 
     case 'login':

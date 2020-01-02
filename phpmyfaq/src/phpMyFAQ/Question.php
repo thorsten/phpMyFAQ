@@ -152,7 +152,7 @@ class Question
     /**
      * Returns all open questions.
      *
-     * @param  boolean $showAll
+     * @param bool $showAll
      * @return QuestionEntity[]
      */
     public function getAllOpenQuestions(bool $showAll = true): array
@@ -178,7 +178,7 @@ class Question
         if ($result = $this->config->getDb()->query($query)) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $question = new QuestionEntity();
-                $questions[] = $question
+                $question
                     ->setId($row->id)
                     ->setLang($row->lang)
                     ->setUsername($row->username)
@@ -188,6 +188,8 @@ class Question
                     ->setCreated($row->created)
                     ->setAnswerId($row->answer_id)
                     ->setIsVisible($row->is_visible);
+
+                $questions[] = $question;
             }
         }
 

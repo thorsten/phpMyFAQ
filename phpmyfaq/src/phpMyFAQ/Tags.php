@@ -563,6 +563,7 @@ class Tags
         );
 
         $result = $this->config->getDb()->query($query);
+
         if ($result) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $tags[$row->tagging_id] = $row->freq;
@@ -599,6 +600,8 @@ class Tags
         if ($row = $this->config->getDb()->fetchObject($result)) {
             return $row->tagging_name;
         }
+
+        return '';
     }
 
     /**
@@ -613,7 +616,7 @@ class Tags
         foreach ($this->getPopularTags($limit) as $tagId => $tagFreq) {
             $tagName = $this->getTagNameById($tagId);
             $data[] = [
-                'tagId' => $tagId,
+                'tagId' => (int)$tagId,
                 'tagName' => $tagName,
                 'tagFrequency' => (int)$tagFreq
             ];
