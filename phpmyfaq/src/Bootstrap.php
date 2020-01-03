@@ -27,7 +27,7 @@ use phpMyFAQ\Init;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
