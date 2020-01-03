@@ -19,6 +19,7 @@ namespace phpMyFAQ\Search;
 
 use Elasticsearch\Client;
 use phpMyFAQ\Configuration;
+use stdClass;
 
 /**
  * Class Elasticsearch
@@ -99,7 +100,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         if (0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
-                $resultSet = new \stdClass();
+                $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
                 $resultSet->lang = $hit['_source']['lang'];
                 $resultSet->question = $hit['_source']['question'];
@@ -178,7 +179,7 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
 
         if (0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
-                $resultSet = new \stdClass();
+                $resultSet = new stdClass();
                 $resultSet->id = $hit['_source']['id'];
                 $resultSet->lang = $hit['_source']['lang'];
                 $resultSet->question = $hit['_source']['question'];

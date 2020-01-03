@@ -150,18 +150,16 @@ if (!is_null($inputSearchTerm) || !is_null($searchTerm)) {
     $faqSearch->setCategory($category);
     $faqSearch->setCategoryId($inputCategory);
 
-    $searchResults = [];
-
-    try {
-        $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
-    } catch (Search\Exception $e) {
-        // @todo handle the exception
-    }
+    $searchResults = $faqSearch->search($inputSearchTerm, $allLanguages);
 
     $faqSearchResult->reviewResultSet($searchResults);
 
     $inputSearchTerm = stripslashes($inputSearchTerm);
-    $faqSearch->logSearchTerm($inputSearchTerm);
+    try {
+        $faqSearch->logSearchTerm($inputSearchTerm);
+    } catch (Exception $e) {
+        // @todo handle exception
+    }
 }
 
 // Change a little bit the $searchCategory value;
@@ -190,7 +188,8 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 
 // Set base URL scheme
 if ($faqConfig->get('main.enableRewriteRules')) {
-    $baseUrl = sprintf('%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d',
+    $baseUrl = sprintf(
+        '%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d',
         Link::getSystemRelativeUri('index.php'),
         urlencode($inputSearchTerm),
         $page,
@@ -198,7 +197,8 @@ if ($faqConfig->get('main.enableRewriteRules')) {
         $inputCategory
     );
 } else {
-    $baseUrl = sprintf('%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
+    $baseUrl = sprintf(
+        '%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
         Link::getSystemRelativeUri(),
         empty($sids) ? '' : 'sids=' . $sids . '&amp;',
         urlencode($inputSearchTerm),
@@ -214,7 +214,7 @@ $options = [
     'total' => $faqSearchResult->getNumberOfResults(),
     'perPage' => $faqConfig->get('records.numberOfRecordsPerPage'),
     'pageParamName' => 'seite',
-    'layoutTpl' => '<div class="text-center"><ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul></div>',
+    'layoutTpl' => '<ul class="pagination justify-content-center">{LAYOUT_CONTENT}</ul>',
 ];
 
 $faqPagination = new Pagination($faqConfig, $options);
