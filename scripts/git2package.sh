@@ -55,7 +55,7 @@ cd $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/
 # add dependencies
 composer install --no-dev
 yarn install
-grunt build
+yarn build
 
 # prepare packaging
 cd $cwd
