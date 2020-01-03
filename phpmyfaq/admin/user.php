@@ -790,7 +790,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
          * @param identifier
          */
         function activateUser(identifier) {
-          if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
+          if (confirm('<?= $PMF_LANG['ad_user_active'] ?>')) {
             const csrf = $(identifier).data('csrf-token');
             const userId = $(identifier).data('user-id');
             $.getJSON("index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=" + userId + "&csrf=" + csrf,
