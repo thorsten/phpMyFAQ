@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
       $('#update_group_id').val(data.group_id);
       $('#update_group_name').val(data.name);
       $('#update_group_description').val(data.description);
-      if (1 === data.auto_join) {
+      if (1 === parseInt(data.auto_join)) {
         $('#update_group_auto_join').attr('checked', true);
       } else {
         $('#update_group_auto_join').attr('checked', false);
@@ -69,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   const clearGroupRights = () => {
-    console.log('foo');
     $('#groupRights input[type=checkbox]').prop('checked', false);
   };
 

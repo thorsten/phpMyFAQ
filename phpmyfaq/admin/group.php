@@ -2,8 +2,6 @@
 /**
  * Displays the group management frontend.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -83,10 +81,12 @@ if ($groupAction == 'update_members' && $user->perm->checkRight($user->getUserId
         foreach ($groupMembers as $memberId) {
             $perm->addToGroup((int)$memberId, $groupId);
         }
-        $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+        $message .= sprintf(
+            '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
             $PMF_LANG['ad_msg_savedsuc_1'],
             $perm->getGroupName($groupId),
-            $PMF_LANG['ad_msg_savedsuc_2']);
+            $PMF_LANG['ad_msg_savedsuc_2']
+        );
     }
 }
 
@@ -107,10 +107,12 @@ if ($groupAction == 'update_rights' && $user->perm->checkRight($user->getUserId(
         foreach ($groupRights as $rightId) {
             $perm->grantGroupRight($groupId, (int)$rightId);
         }
-        $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+        $message .= sprintf(
+            '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
             $PMF_LANG['ad_msg_savedsuc_1'],
             $perm->getGroupName($groupId),
-            $PMF_LANG['ad_msg_savedsuc_2']);
+            $PMF_LANG['ad_msg_savedsuc_2']
+        );
     }
 }
 
@@ -123,7 +125,7 @@ if ($groupAction == 'update_data' && $user->perm->checkRight($user->getUserId(),
         $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
     } else {
         $groupData = [];
-        $dataFields = array('name', 'description', 'auto_join');
+        $dataFields = ['name', 'description', 'auto_join'];
         foreach ($dataFields as $field) {
             $groupData[$field] = Filter::filterInput(INPUT_POST, $field, FILTER_SANITIZE_STRING, '');
         }
@@ -131,15 +133,17 @@ if ($groupAction == 'update_data' && $user->perm->checkRight($user->getUserId(),
         $perm = $user->perm;
         if (!$perm->changeGroup($groupId, $groupData)) {
             $message .= sprintf(
-            '<p class="alert alert-danger">%s<br>%s</p>',
-            $PMF_LANG['ad_msg_mysqlerr'],
-            $db->error()
+                '<p class="alert alert-danger">%s<br>%s</p>',
+                $PMF_LANG['ad_msg_mysqlerr'],
+                $db->error()
             );
         } else {
-            $message .= sprintf('<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
+            $message .= sprintf(
+                '<p class="alert alert-success">%s <strong>%s</strong> %s</p>',
                 $PMF_LANG['ad_msg_savedsuc_1'],
                 $perm->getGroupName($groupId),
-                $PMF_LANG['ad_msg_savedsuc_2']);
+                $PMF_LANG['ad_msg_savedsuc_2']
+            );
         }
     }
 }
@@ -151,39 +155,38 @@ if ($groupAction == 'delete_confirm' && $user->perm->checkRight($user->getUserId
     $perm = $user->perm;
     $groupId = Filter::filterInput(INPUT_POST, 'group_list_select', FILTER_VALIDATE_INT, 0);
     if ($groupId <= 0) {
-        $message    .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
+        $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_user_error_noId']);
         $groupAction = $defaultGroupAction;
     } else {
         $groupData = $perm->getGroupData($groupId);
         ?>
-        <header class="row">
-            <div class="col-lg-12">
-                <h2 class="page-header">
-                    <i aria-hidden="true" class="fa fa-users fa-fw"></i>
-                    <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
-                </h2>
-            </div>
-        </header>
-
-        <div class="row">
-            <div class="col-lg-12">
-                <p><?= $PMF_LANG['ad_group_deleteQuestion'] ?></p>
-                <form action ="?action=group&amp;group_action=delete" method="post">
-                    <input type="hidden" name="group_id" value="<?= $groupId ?>">
-                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession()?>">
-                    <p>
-                        <button class="btn btn-inverse" type="submit" name="cancel">
-                            <?= $PMF_LANG['ad_gen_cancel'] ?>
-                        </button>
-                        <button class="btn btn-primary" type="submit">
-                            <?= $PMF_LANG['ad_gen_save'] ?>
-                        </button>
-                    </p>
-                </form>
-            </div>
+      <header class="row">
+        <div class="col-lg-12">
+          <h2 class="page-header">
+            <i aria-hidden="true" class="fa fa-users fa-fw"></i>
+              <?= $PMF_LANG['ad_group_deleteGroup'] ?> "<?= $groupData['name'] ?>"
+          </h2>
         </div>
-<?php
+      </header>
 
+      <div class="row">
+        <div class="col-lg-12">
+          <p><?= $PMF_LANG['ad_group_deleteQuestion'] ?></p>
+          <form action="?action=group&amp;group_action=delete" method="post">
+            <input type="hidden" name="group_id" value="<?= $groupId ?>">
+            <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <p>
+              <button class="btn btn-inverse" type="submit" name="cancel">
+                  <?= $PMF_LANG['ad_gen_cancel'] ?>
+              </button>
+              <button class="btn btn-primary" type="submit">
+                  <?= $PMF_LANG['ad_gen_save'] ?>
+              </button>
+            </p>
+          </form>
+        </div>
+      </div>
+        <?php
     }
 }
 
@@ -232,11 +235,11 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
     // ok, let's go
     if (count($messages) == 0 && $csrfOkay) {
         // create group
-        $groupData = array(
+        $groupData = [
             'name' => $groupName,
             'description' => $groupDescription,
             'auto_join' => $groupAutoJoin,
-        );
+        ];
 
         if ($user->perm->addGroup($groupData) <= 0) {
             $messages[] = $PMF_LANG['ad_adus_dberr'];
@@ -246,12 +249,12 @@ if ($groupAction == 'addsave' && $user->perm->checkRight($user->getUserId(), 'ad
     if (count($messages) == 0) {
         $groupAction = $defaultGroupAction;
         $message = sprintf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_group_suc']);
-    // display error messages and show form again
+        // display error messages and show form again
     } else {
         $groupAction = 'add';
         $message = '<p class="alert alert-danger">';
         foreach ($messages as $err) {
-            $message .= $err.'<br>';
+            $message .= $err . '<br>';
         }
         $message .= '</p>';
     }
@@ -266,84 +269,84 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
     $user = new CurrentUser($faqConfig);
     ?>
 
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-users"></i>
-              <?= $PMF_LANG['ad_group_add'] ?>
-          </h1>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="fa fa-users"></i>
+        <?= $PMF_LANG['ad_group_add'] ?>
+    </h1>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div id="user_message"><?= $message ?></div>
+      <form name="group_create" action="?action=group&amp;group_action=addsave" method="post">
+        <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
+          <div class="col-lg-3">
+            <input type="text" name="group_name" id="group_name" autofocus class="form-control"
+                   value="<?= (isset($groupName) ? $groupName : '') ?>" tabindex="1">
+          </div>
         </div>
 
-        <div class="row">
-            <div class="col-lg-12">
-                <div id="user_message"><?= $message ?></div>
-                <form  name="group_create" action="?action=group&amp;group_action=addsave" method="post">
-                    <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-
-                    <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="group_name"><?= $PMF_LANG['ad_group_name'] ?></label>
-                        <div class="col-lg-3">
-                            <input type="text" name="group_name" id="group_name" autofocus class="form-control"
-                                   value="<?=(isset($groupName) ? $groupName : '') ?>" tabindex="1">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
-                        <div class="col-lg-3">
+        <div class="form-group row">
+          <label class="col-lg-2 col-form-label"
+                 for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
+          <div class="col-lg-3">
                             <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
-                                      rows="<?= $descriptionRows ?>" tabindex="2"  class="form-control"
-                                ><?=(isset($groupDescription) ? $groupDescription : '') ?></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
-                        <div class="col-lg-3">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
-                                    <?=((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <div class="offset-lg-2 col-lg-3">
-                            <button class="btn btn-info" type="reset" name="cancel">
-                                <?= $PMF_LANG['ad_gen_cancel'] ?>
-                            </button>
-                            <button class="btn btn-primary" type="submit">
-                                <?= $PMF_LANG['ad_gen_save'] ?>
-                            </button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+                                      rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
+                            ><?= (isset($groupDescription) ? $groupDescription : '') ?></textarea>
+          </div>
         </div>
-<?php
 
+        <div class="form-group row">
+          <label class="col-lg-2 col-form-label" for="group_auto_join"><?= $PMF_LANG['ad_group_autoJoin'] ?></label>
+          <div class="col-lg-3">
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" name="group_auto_join" id="group_auto_join" value="1" tabindex="3"
+                       <?= ((isset($groupAutoJoin) && $groupAutoJoin) ? ' checked' : '') ?>>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <div class="offset-lg-2 col-lg-3">
+            <button class="btn btn-info" type="reset" name="cancel">
+                <?= $PMF_LANG['ad_gen_cancel'] ?>
+            </button>
+            <button class="btn btn-primary" type="submit">
+                <?= $PMF_LANG['ad_gen_save'] ?>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+    <?php
 } // end if ($groupAction == 'add')
 
 // show list of users
 if ('list' === $groupAction) {
     ?>
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-          <h1 class="h2">
-            <i aria-hidden="true" class="fa fa-users"></i>
-              <?= $PMF_LANG['ad_menu_group_administration'] ?>
-          </h1>
-          <div class="btn-toolbar mb-2 mb-md-0">
-            <div class="btn-group mr-2">
-              <a class="btn btn-sm     btn-success" href="?action=group&amp;group_action=add">
-                  <?= $PMF_LANG['ad_group_add_link'] ?>
-              </a>
-            </div>
-          </div>
-        </div>
+  <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+      <i aria-hidden="true" class="fa fa-users"></i>
+        <?= $PMF_LANG['ad_menu_group_administration'] ?>
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+        <a class="btn btn-sm     btn-success" href="?action=group&amp;group_action=add">
+            <?= $PMF_LANG['ad_group_add_link'] ?>
+        </a>
+      </div>
+    </div>
+  </div>
 
-        <script src="assets/js/user.js"></script>
-        <script src="assets/js/groups.js"></script>
+  <script src="assets/js/user.js"></script>
+  <script src="assets/js/groups.js"></script>
 
   <div id="user_message"><?= $message ?></div>
 
@@ -463,13 +466,13 @@ if ('list' === $groupAction) {
                        value="<?= $PMF_LANG['ad_group_removeMember'] ?>">
               </div>
             </div>
-        </div>
+          </div>
 
-        <ul class="list-group list-group-flush">
+          <ul class="list-group list-group-flush">
             <li class="list-group-item"><?= $PMF_LANG['ad_group_members']; ?></li>
-        </ul>
+          </ul>
 
-        <div class="card-body">
+          <div class="card-body">
             <div class="form-group row">
               <div class="float-right">
                 <span class="select_all">
@@ -520,22 +523,22 @@ if ('list' === $groupAction) {
           </div>
 
           <div class="card-body">
-            <?php foreach ($user->perm->getAllRightsData() as $right): ?>
-              <div class="form-check">
-                <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
-                       name="group_rights[]" value="<?= $right['right_id'] ?>"
-                       class="form-check-input permission">
-                <label class="form-check-label">
-                    <?php
-                    if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                        echo $PMF_LANG['rightsLanguage'][$right['name']];
-                    } else {
-                        echo $right['description'];
-                    }
-                    ?>
-                </label>
-              </div>
-            <?php endforeach; ?>
+              <?php foreach ($user->perm->getAllRightsData() as $right): ?>
+                <div class="form-check">
+                  <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
+                         name="group_rights[]" value="<?= $right['right_id'] ?>"
+                         class="form-check-input permission">
+                  <label class="form-check-label">
+                      <?php
+                      if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                          echo $PMF_LANG['rightsLanguage'][$right['name']];
+                      } else {
+                          echo $right['description'];
+                      }
+                      ?>
+                  </label>
+                </div>
+              <?php endforeach; ?>
           </div>
           <div class="card-footer">
             <div class="card-button text-right">
@@ -548,6 +551,5 @@ if ('list' === $groupAction) {
       </form>
     </div>
   </div>
-<?php
-
+    <?php
 }
