@@ -101,7 +101,7 @@ define('PMF_SRC_DIR', __DIR__);
 /*
  * The directory where the translations reside
  */
-define('LANGUAGE_DIR', dirname(__DIR__) . '/lang');
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
 // Setting up autoloader

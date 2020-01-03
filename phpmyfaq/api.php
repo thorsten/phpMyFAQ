@@ -74,9 +74,9 @@ $currentLanguage = $language->setLanguageByAcceptLanguage();
 // Set language
 //
 if (Language::isASupportedLanguage($currentLanguage)) {
-    require LANGUAGE_DIR . '/language_' . $currentLanguage . '.php';
+    require PMF_LANGUAGE_DIR . '/language_' . $currentLanguage . '.php';
 } else {
-    require LANGUAGE_DIR . '/language_en.php';
+    require PMF_LANGUAGE_DIR . '/language_en.php';
 }
 $faqConfig->setLanguage($language);
 
