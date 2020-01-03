@@ -1,4 +1,4 @@
-# phpMyFAQ 3.0
+# phpMyFAQ 3.1
 
 [![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/3.0.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
 [![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-%23777BB4.svg?style=flat-square)](https://php.net/)
