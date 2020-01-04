@@ -49,7 +49,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC';
+    private const VERSION_PRE_RELEASE = '';
 
     /**
      * API version.
