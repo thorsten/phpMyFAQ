@@ -25,5 +25,3 @@ try {
 } catch (Exception $e) {
     // @todo handle the exception
 }
-
-require 'startpage.php';

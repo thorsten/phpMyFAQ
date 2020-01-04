@@ -19,6 +19,7 @@
 
 namespace phpMyFAQ;
 
+use DateTime;
 use phpMyFAQ\Search\Elasticsearch;
 use phpMyFAQ\Search\SearchFactory;
 
@@ -140,45 +141,46 @@ class Search
         if (!is_null($this->getCategoryId()) && 0 < $this->getCategoryId()) {
             if ($this->getCategory() instanceof Category) {
                 $children = $this->getCategory()->getChildNodes($this->getCategoryId());
-                $selectedCategory = array(
+                $selectedCategory = [
                     $fcrTable . '.category_id' => array_merge((array)$this->getCategoryId(), $children),
-                );
+                ];
             } else {
-                $selectedCategory = array(
+                $selectedCategory = [
                     $fcrTable . '.category_id' => $this->getCategoryId(),
-                );
+                ];
             }
             $condition = array_merge($selectedCategory, $condition);
         }
 
         if ((!$allLanguages) && (!is_numeric($searchTerm))) {
-            $selectedLanguage = array('fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'");
+            $selectedLanguage = ['fd.lang' => "'" . $this->config->getLanguage()->getLanguage() . "'"];
             $condition        = array_merge($selectedLanguage, $condition);
         }
 
         $search->setTable($fdTable)
             ->setResultColumns(
-                array(
+                [
                 'fd.id AS id',
                 'fd.lang AS lang',
                 'fd.solution_id AS solution_id',
                 $fcrTable . '.category_id AS category_id',
                 'fd.thema AS question',
-                'fd.content AS answer')
+                'fd.content AS answer'
+                ]
             )
             ->setJoinedTable($fcrTable)
             ->setJoinedColumns(
-                array(
+                [
                 'fd.id = ' . $fcrTable . '.record_id',
                 'fd.lang = ' . $fcrTable . '.record_lang'
-                )
+                ]
             )
             ->setConditions($condition);
 
         if (is_numeric($searchTerm)) {
-            $search->setMatchingColumns(array('fd.solution_id'));
+            $search->setMatchingColumns(['fd.solution_id']);
         } else {
-            $search->setMatchingColumns(array('fd.thema', 'fd.content', 'fd.keywords'));
+            $search->setMatchingColumns(['fd.thema', 'fd.content', 'fd.keywords']);
         }
 
         $result = $search->search($searchTerm);
@@ -217,9 +219,7 @@ class Search
             $esSearch->setLanguage($this->config->getLanguage()->getLanguage());
         }
 
-        $result = $esSearch->search($searchTerm);
-
-        return $result;
+        return $esSearch->search($searchTerm);
     }
 
     /**
@@ -230,11 +230,11 @@ class Search
      */
     public function logSearchTerm($searchTerm)
     {
-        if (Strings::strlen($searchTerm) == 0) {
+        if (Strings::strlen($searchTerm) === 0) {
             return;
         }
 
-        $date = new \DateTime();
+        $date = new DateTime();
         $query = sprintf(
             "
             INSERT INTO
@@ -358,8 +358,6 @@ class Search
     }
 
     /**
-     * Returns the CategoryHelper object.
-     *
      * @return Category
      */
     public function getCategory(): Category

@@ -1,4 +1,4 @@
-# REST API v2.0 for phpMyFAQ v3.0.x
+# REST API v2.0 for phpMyFAQ 3.0
 
 phpMyFAQ offers interfaces to access phpMyFAQ installations with other clients like the iPhone App. phpMyFAQ includes a
 RESTful API and offers APIs for various services like fetching the phpMyFAQ version or doing a search against the

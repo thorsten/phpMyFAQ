@@ -1,11 +1,11 @@
-phpMyFAQ 3.0.0-RC
+phpMyFAQ 3.0.0
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-RC - 2019-12-
+Version 3.0.0 - 2020-01-
 - changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
@@ -685,7 +685,7 @@ Version 2.5.1 - 2009-08-10
 - added support for LDAP-datamapping, e.g. against an Active Directory Server (Lars Scheithauer)
 - added support for multi-domain-authentication, e.g. against an ADS-Global Catalog (Lars Scheithauer)
 - added support for PHP LDAP options (Lars Scheithauer)
-- Added Lithuanian translation (Aurimas Fiseras)
+- added Lithuanian translation (Aurimas Fiseras)
 - fixed LDAP issues (Lars Scheithauer)
 - fixed some Oracle issues (Thorsten)
 - improved svn2package script (Rene Treffer)
@@ -1159,7 +1159,7 @@ Version 1.3.9 - 2003-11-26
 - some fixes for PHP5
 - some bug fixes
 
-Version 1.3.8 - 23.10.2003
+Version 1.3.8 - 2003-10-23
 - added latvian language file
 - fixed italian language file
 - bugfix in backup module (IE problem)
@@ -1172,7 +1172,7 @@ Version 1.3.8 - 23.10.2003
 - fixed a bug in the language files
 - many, many minor bug fixes
 
-Version 1.3.7 - 19.09.2003
+Version 1.3.7 - 2003-09-19
 - dedicated to Johnny Cash
 - added patch against Verisign
 - fixed Windows bug in Send2Friend
@@ -1180,10 +1180,10 @@ Version 1.3.7 - 19.09.2003
 - fixed some layout problems
 - many, many minor bug fixes
 
-Version 1.3.6 - 01.09.2003
+Version 1.3.6 - 2003-09-01
 - fixed bug in installer
 
-Version 1.3.5 - 31.08.2003
+Version 1.3.5 - 2003-08-31
 - basic internal linking of FAQ records
 - RSS-Feed-Export via Cronjob
 - solved some PDF problems
@@ -1191,20 +1191,20 @@ Version 1.3.5 - 31.08.2003
 - some improvements in the BB-Code-Parser
 - some bug fixes
 
-Version 1.3.4 - 03.08.2003
+Version 1.3.4 - 2003-08-03
 - improvements at highlighting searched words
-- fixed bug in installer (Bug-ID 0000004)
+- fixed bug in installer
 - added new BB-Code-Parser
 - added italian translation
 - updated dutch and french language file
 - little changes in the language files
 - many, many minor bug fixes
 
-Version 1.3.3 - 26.06.2003
+Version 1.3.3 - 2003-06-26
 - better installation
 - default password removed
 - added IP ban lists
-- added portugues translation
+- added portuguese translation
 - added spanish translation
 - selection of default language and setting the password at installation
 - changed default language from german to english
@@ -1219,7 +1219,7 @@ Version 1.3.3 - 26.06.2003
 - fixed bug when deleting comments
 - many minor bug fixes
 
-Version 1.3.2 - 25.05.2003
+Version 1.3.2 - 2003-05-25
 - more verifications in update script
 - added new category sorting
 - added polish language file
@@ -1229,11 +1229,11 @@ Version 1.3.2 - 25.05.2003
 - better navigation
 - minor bug fixes
 
-Version 1.3.1 - 02.05.2003
+Version 1.3.1 - 2003-05-02
 - added preview at record editing
 - added RSS-Feeds from Top 10, News and latest records
 - better navigation in admin area
-- system informationen in admin area
+- system information in admin area
 - added french language file
 - fixed bug in session search
 - fixed bugs in adding records
@@ -1242,7 +1242,7 @@ Version 1.3.1 - 02.05.2003
 - fixed delimiter bug with Apache2 and PHP 4.3
 - minor bug fixes
 
-Version 1.3.0 - 17.04.2003
+Version 1.3.0 - 2003-04-17
 - support for multi language records
 - enhanced security
 - crypted passwords
@@ -1255,36 +1255,37 @@ Version 1.3.0 - 17.04.2003
 - english documentation
 - many bugfixes
 
-Version 1.2.5b - 24.03.2003
+Version 1.2.5b - 2003-03-24
 - bugfixes
 
-Version 1.2.5a - 04.03.2003
+Version 1.2.5a - 2003-03-04
 - UBB code bugfixes
 - top ten bugfix
 
-Version 1.2.5 - 02.02.2003
+Version 1.2.5 - 2003-02-02
 - bugfixes
 
-Version 1.2.4 - 31.01.2003
+Version 1.2.4 - 2003-01-31
 - better checking of variables
 - bugs in admin area fixed
 - better printing function
 
-Version 1.2.3 - 30.11.2002
-- check wether installation oder update script isn't deleted
+Version 1.2.3 - 2002-11-30
+- check whether installation oder update script isn't deleted
 - fixed bugs in language files, the news module and open questions
 - automatic langauge detection in admin area
 
-Version 1.2.2 - 04.11.2002
+Version 1.2.2 - 2002-11-04
 - minor bug fixes
 
-Version 1.2.1 - 24.10.2002
+Version 1.2.1 - 2002-10-24
 - better update function and language selection
 - solved cookie problems
 - many bug fixes, thanks to sascha AT rootforum DOT de
 
-Version 1.2.0 - 09.10.2002
-- Template system for free layouts
+Version 1.2.0 - 2002-10-09
+- phpMyFAQ is now Open Source software
+- template system for free layouts
 - fully compatible with PHP 4.1, PHP 4.2 and PHP 4.3 (register_globals = off)
 - all color and font definitions with CSS
 - better SQL queries
@@ -1294,39 +1295,39 @@ Version 1.2.0 - 09.10.2002
 - better installation script
 - many bugfixes
 
-Version 1.1.5 - 23.06.2002
+Version 1.1.5 - 2002-06-23
 - minor bug fixes
 - russian language file
 
-Version 1.1.4a - 08.06.2002
+Version 1.1.4a - 2002-06-08
 - minor bug fixes for PHP 4.1.0
 
-Version 1.1.4 - 24.05.2002
+Version 1.1.4 - 2002-05-24
 - minor bug fixes
 - rewrite of PHP code for better performance
 - change of the CSS file from style.php to style.css
 - better HTML code
 - voting can be switched off
 
-Version 1.1.3 - 01.05.2002
+Version 1.1.3 - 2002-05-01
 - fixed bug in UBB parser
 - fixed bugs in viewing comments
 - rewrite of the PHP code
 
-Version 1.1.2 - 22.03.2002
-- added Send2Friend funktion
+Version 1.1.2 - 2002-03-22
+- added Send2Friend function
 - minor bug fixes
 
-Version 1.1.1 - 06.03.2002
+Version 1.1.1 - 2002-03-06
 - minor bug fixes
 
-Version 1.1.0 - 11.02.2002
+Version 1.1.0 - 2002-02-11
+- porting to PHP4
 - many bugfixes
 - more functions in the attachments module
 - support for sub categories
 - user tracking and admin logging can be switched off
 - better installation script
-- porting to PHP4
 - better PHP code
 - admin area supports Netscape 4.x
 - no actions could be performed without any records
@@ -1334,45 +1335,45 @@ Version 1.1.0 - 11.02.2002
 - admin account cannot be deleted (security fix)
 - better documention
 
-Version 1.0.1a - 15.10.2001
+Version 1.0.1a - 2001-10-15
 - file ending .php instead of .php3
 
-Version 1.0.1 - 10.10.2001
+Version 1.0.1 - 2001-10-10
 - fixed bugs in installation and update script
 
-Version 1.0 - 30.09.2001
+Version 1.0 - 2001-09-30
 - minor bug fixes
 
-Version 0.95 - 11.09.2001
+Version 0.95 - 2001-09-11
 - cleaned MySQL table names
 - Documentation
 - phpMyFAQ is HTML 4.0 valid
 - minor bug fixes
 
-Version 0.90 - 23.08.2001
+Version 0.90 - 2001-08-23
 - added update function for version 0.80
 - added question - answer - system
 - configurable design of the admin area
 - minor bug fixes
 
-Version 0.87 - 20.07.2001
+Version 0.87 - 2001-07-20
 - Top Ten and newest records can be switched off
 - minor bug fixes
 
-Version 0.86 - 10.07.2001
+Version 0.86 - 2001-07-10
 - UBB parser fixed
 - minor bug fixes
 
-Version 0.85 - 08.07.2001
+Version 0.85 - 2001-07-08
 - added backup module (Import and Export)
 - UBB-Code support
 - records can be exported to XML
 - minor bug fixes
 
-Version 0.80a - 07.06.2001
+Version 0.80a - 2001-06-07
 - minor bug fixes
 
-Version 0.80 - 30.05.2001
+Version 0.80 - 2001-05-30
 - added form for questions
 - added Top 5 of the newest articles
 - added support fo attachments in reocrds in admin area
@@ -1383,28 +1384,28 @@ Version 0.80 - 30.05.2001
 - better support in writing comments
 - bugfix: fixed bad output in comments with HTML
 
-Version 0.70 - 27.04.2001
+Version 0.70 - 2001-04-27
 - installation script
 - better right management in admin area
 - free designs in configuration possible
 - added support for language files (german, english)
 - bugfix: fixed problem when deleting comments
 
-Version 0.666 - 10.04.2001
+Version 0.666 - 2001-04-10
 - added support for categories
 - added voting system
 - added support for deleting comments
 - minor bug fixes
 
-Version 0.65 - 18.03.2001
+Version 0.65 - 2001-03-18
 - added support for comments
 - added support for FAQ news
 - better search engine
 
-Version 0.60 - 22.02.2001
+Version 0.60 - 2001-02-22
 - first released version
 
-Versions below 0.60 were developer version
+All versions before 0.60 were internal developer versions.
 
 This Source Code Form is subject to the terms of the Mozilla Public License,
 v. 2.0. If a copy of the MPL was not distributed with this file, You can

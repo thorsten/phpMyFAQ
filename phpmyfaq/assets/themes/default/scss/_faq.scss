@@ -58,8 +58,8 @@
   position: relative;
 }
 
-.card > .card-header:after,
-.card > .card-header:before {
+.card > .card-header-comments:after,
+.card > .card-header-comments:before {
   position: absolute;
   top: 11px;
   left: -16px;
@@ -73,14 +73,14 @@
   pointer-events: none;
 }
 
-.card > .card-header:after {
+.card > .card-header-comments:after {
   border-width: 7px;
   border-right-color: $card-border-color;
   margin-top: 1px;
   margin-left: 2px;
 }
 
-.card > .card-header:before {
+.card > .card-header-comments:before {
   border-right-color: $card-border-color;
   border-width: 8px;
 }

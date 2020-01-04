@@ -27,7 +27,7 @@ use phpMyFAQ\Init;
 // - false      debug mode disabled
 // - true       debug mode enabled
 //
-define('DEBUG', true);
+define('DEBUG', false);
 if (DEBUG) {
     ini_set('display_errors', 1);
     ini_set('display_startup_errors', 1);
@@ -101,7 +101,7 @@ define('PMF_SRC_DIR', __DIR__);
 /*
  * The directory where the translations reside
  */
-define('LANGUAGE_DIR', dirname(__DIR__) . '/lang');
+define('PMF_LANGUAGE_DIR', dirname(__DIR__) . '/lang');
 
 //
 // Setting up autoloader

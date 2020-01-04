@@ -40,7 +40,7 @@ services:
   yarn:
     image: node:10
     restart: 'no'
-    command: sh -c "npm install node-sass bower grunt-cli -g --unsafe-perm && yarn install && yarn build"
+    command: sh -c "npm install node-sass -g --unsafe-perm && yarn install && yarn build"
     working_dir: /app
     stdin_open: true
     tty: true

@@ -754,7 +754,9 @@ class Category
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $numFaqs = '(' . $plr->GetMsg('plmsgEntries', $number[$parent]) . ')</span>';
+                $numFaqs = ' <span class="badge badge-primary">' .
+                    $plr->GetMsg('plmsgEntries', $number[$parent]) .
+                    '</span>';
             }
 
             $url = sprintf(

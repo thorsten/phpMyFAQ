@@ -1,4 +1,4 @@
-<section>
+<section class="col-12">
   <h1>
     {{ pageHeader }}
   </h1>
@@ -6,9 +6,7 @@
 
   <p>
     {{ msgContactPrivacyNote }}
-    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank">
-      {{ msgPrivacyNote }}</a
-    >
+    <a title="{{ msgPrivacyNote }}" href="{{ privacyURL }}" target="_blank"> {{ msgPrivacyNote }}</a>
   </p>
   <p><strong>{{ msgContactRemove }}</strong></p>
 
@@ -19,9 +17,7 @@
     <input type="hidden" name="lang" id="lang" value="{{ lang }}" />
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="name"
-        >{{ ad_user_loginname }}</label
-      >
+      <label class="col-sm-3 form-control-label" for="name">{{ ad_user_loginname }}</label>
       <div class="col-sm-9">
         <input
           type="text"
@@ -36,9 +32,7 @@
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="name"
-        >{{ msgNewContentName }}</label
-      >
+      <label class="col-sm-3 form-control-label" for="name">{{ msgNewContentName }}</label>
       <div class="col-sm-9">
         <input
           type="text"
@@ -53,9 +47,7 @@
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="email"
-        >{{ msgNewContentMail }}</label
-      >
+      <label class="col-sm-3 form-control-label" for="email">{{ msgNewContentMail }}</label>
       <div class="col-sm-9">
         <input
           type="email"
@@ -70,18 +62,9 @@
     </div>
 
     <div class="form-group row">
-      <label class="col-sm-3 form-control-label" for="question"
-        >{{ msgMessage }}</label
-      >
+      <label class="col-sm-3 form-control-label" for="question">{{ msgMessage }}</label>
       <div class="col-sm-9">
-        <textarea
-          class="form-control"
-          cols="37"
-          rows="5"
-          name="question"
-          id="question"
-          required
-        ></textarea>
+        <textarea class="form-control" cols="37" rows="5" name="question" id="question" required></textarea>
       </div>
     </div>
 

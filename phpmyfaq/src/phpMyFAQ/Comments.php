@@ -79,7 +79,7 @@ class Comments
 
             $output .= '  <div class="col-sm-11">';
             $output .= '    <div class="card">';
-            $output .= '     <div class="card-header">';
+            $output .= '     <div class="card-header card-header-comments">';
             $output .= sprintf(
                 '<strong><a href="mailto:%s">%s</a></strong>',
                 $mail->safeEmail($item->getEmail()),
