@@ -17,8 +17,8 @@
 use phpMyFAQ\Helper\AdministrationHelper;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\LanguageHelper;
-use phpMyFAQ\Language;
 use phpMyFAQ\Services\Gravatar;
+use phpMyFAQ\System;
 use phpMyFAQ\Template;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -226,7 +226,7 @@ switch ($action) {
             <div class="sidebar-brand-icon rotate-n-15">
               <i class="fas fa-laugh-wink"></i>
             </div>
-            <div class="sidebar-brand-text mx-4">phpMyFAQ <?= $faqConfig->get('main.currentVersion') ?></div>
+            <div class="sidebar-brand-text mx-4">phpMyFAQ <?= System::getVersion() ?></div>
           </a>
         </li>
 
