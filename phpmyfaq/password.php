@@ -29,17 +29,9 @@ try {
 $template->parse(
     'mainPageContent',
     [
-        'headerChangePassword' => $PMF_LANG['ad_passwd_cop'],
+        'pageHeader' => $PMF_LANG['lostPassword'],
         'msgUsername' => $PMF_LANG['ad_auth_user'],
         'msgEmail' => $PMF_LANG['ad_entry_email'],
         'msgSubmit' => $PMF_LANG['msgNewContentSubmit'],
-    ]
-);
-
-$template->parseBlock(
-    'index',
-    'breadcrumb',
-    [
-        'breadcrumbHeadline' => $PMF_LANG['ad_passwd_cop']
     ]
 );
