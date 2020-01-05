@@ -337,13 +337,6 @@ switch ($action) {
           <hr class="sidebar-divider d-none d-md-block">
         </li>
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <li>
-          <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-          </div>
-        </li>
-
       </ul>
       <!-- End of Sidebar -->
     <?php endif; ?>
