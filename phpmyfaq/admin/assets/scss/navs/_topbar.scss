@@ -34,6 +34,12 @@
         outline: none;
       }
     }
+    .navbar-text {
+      height: $topbar-base-height;
+      display: flex;
+      align-items: center;
+      padding: 0 0.75rem;
+    }
     &:focus {
       outline: none;
     }
@@ -80,7 +86,7 @@
           position: absolute;
           bottom: 0;
           right: 0;
-          border: .125rem solid $white;
+          border: 0.125rem solid $white;
         }
       }
       .text-truncate {
@@ -111,7 +117,8 @@
   }
 }
 
-.topbar.navbar-dark {}
+.topbar.navbar-dark {
+}
 
 .topbar.navbar-light {
   .navbar-nav {

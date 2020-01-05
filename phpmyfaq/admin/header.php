@@ -383,6 +383,13 @@ switch ($action) {
             </div>
           </li>
 
+          <li class="nav-item">
+            <div class="navbar-text text-gray-600 small">
+              <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:
+              <span id="sessioncounter" class="pl-2"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
+            </div>
+          </li>
+
           <div class="topbar-divider d-none d-sm-block"></div>
 
             <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
