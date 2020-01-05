@@ -14,3 +14,6 @@
  */
 
 import 'cookieconsent';
+import { calculateReadingTime } from './reading-time';
+
+calculateReadingTime();
