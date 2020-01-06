@@ -350,7 +350,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 );
                 printf(
                     '<span>%s %s</span>',
-                    $numSubCategories > 0 ? '<i class="fa fa-caret-right"></i>' : '',
+                    $numSubCategories > 0 ? '<i class="fa fa-caret-right pmf-has-subcategories"></i>' : '',
                     $categoryName
                 );
 

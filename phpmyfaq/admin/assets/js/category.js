@@ -15,11 +15,11 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
-  $(function() {
+  () => {
     $('.list-group-item').on('click', function() {
-      $('.fa', this)
+      $('.fa.pmf-has-subcategories', this)
         .toggleClass('fa-caret-right')
         .toggleClass('fa-caret-down');
     });
-  });
+  };
 });
