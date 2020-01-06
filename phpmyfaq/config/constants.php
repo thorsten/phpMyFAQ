@@ -40,77 +40,77 @@ define('PMF_SESSION_SAVE_PATH', '');
 /**
  * Timeout for the admin section, in minutes
  *
- * @var integer
+ * @var int
  */
 define('PMF_AUTH_TIMEOUT', 30);
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes
  *
- * @var integer
+ * @var int
  */
 define('PMF_AUTH_TIMEOUT_WARNING', 5);
 
 /**
  * Start value for the solution IDs
  *
- * @var integer
+ * @var int
  */
 define('PMF_SOLUTION_ID_START_VALUE', 1000);
 
 /**
  * Incremental value for the solution IDs
  *
- * @var integer
+ * @var int
  */
 define('PMF_SOLUTION_ID_INCREMENT_VALUE', 1);
 
 /**
  * Number of records for the Top 10
  *
- * @var integer
+ * @var int
  */
 define('PMF_NUMBER_RECORDS_TOPTEN', 10);
 
 /**
  * Number of records for the latest entries
  *
- * @var integer
+ * @var int
  */
 define('PMF_NUMBER_RECORDS_LATEST', 5);
 
 /**
  * This is the max number of open questions returned by the feed
  *
- * @var integer
+ * @var int
  */
 define('PMF_RSS_OPENQUESTIONS_MAX', 50);
 
 /**
  * This is the flag with which Latest and Topten RSS feeds will be forced to use the current PMF SEO URL schema
  *
- * @var boolean
+ * @var bool
  */
 define('PMF_RSS_USE_SEO', true);
 
 /**
  * This is the flag with which Google sitemap will be forced to use the current PMF SEO URL schema
  *
- * @var boolean
+ * @var bool
  */
 define('PMF_SITEMAP_GOOGLE_USE_SEO', true);
 
 /**
  * This is the flag with which the Tags Cloud list is limited to
  *
- * @var integer
+ * @var int
  */
 define('PMF_TAGS_CLOUD_RESULT_SET_SIZE', 50);
 
 /**
  * This is the flag with which the auto complete list is limited to
  *
- * @var integer
+ * @var int
  */
 define('PMF_TAGS_AUTOCOMPLETE_RESULT_SET_SIZE', 20);
 

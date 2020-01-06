@@ -20,7 +20,6 @@
 
 namespace phpMyFAQ;
 
-use mysql_xdevapi\Warning;
 use phpMyFAQ\Category\CategoryEntity;
 use phpMyFAQ\Helper\LanguageHelper;
 
@@ -128,9 +127,9 @@ class Category
     /**
      * Constructor.
      *
-     * @param Configuration $config   Configuration object
-     * @param array         $groups   Array with group IDs
-     * @param bool          $withPerm With or without permission check
+     * @param Configuration $config Configuration object
+     * @param array $groups Array with group IDs
+     * @param bool $withPerm With or without permission check
      */
     public function __construct(Configuration $config, array $groups = [], bool $withPerm = true)
     {
@@ -287,7 +286,7 @@ class Category
      * Gets the main categories and write them in an array.
      *
      * @param array $categories Array of parent category ids
-     * @param bool  $parentId   Only top level categories?
+     * @param bool $parentId Only top level categories?
      *
      * @return array
      */
@@ -393,7 +392,13 @@ class Category
             $categories['url'][] = $link->toString();
             $categories['name'][] = $row['name'];
             $categories['description'][] = $row['description'];
-            $categories['image'][] = $row['image'];
+            if ('' === $row['image']) {
+                $image = 'data:image/png;base64,' .
+                    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=';
+            } else {
+                $image = 'images/' . $row['image'];
+            }
+            $categories['image'][] = $image;
         }
 
         return $categories;
@@ -434,7 +439,7 @@ class Category
      * Builds the category tree.
      *
      * @param int $parentId Parent id
-     * @param int $indent    Indention
+     * @param int $indent Indention
      */
     public function buildTree(int $parentId = 0, int $indent = 0)
     {
@@ -854,12 +859,12 @@ class Category
     /**
      * Creates a category link.
      *
-     * @param string $sids         Session id
-     * @param int    $categoryId   Parent category
+     * @param string $sids Session id
+     * @param int $categoryId Parent category
      * @param string $categoryName Entity name
-     * @param string $description  Description
-     * @param bool   $hasChildren  Child categories available
-     * @param bool   $isActive     Sets a link active via CSS
+     * @param string $description Description
+     * @param bool $hasChildren Child categories available
+     * @param bool $isActive Sets a link active via CSS
      *
      * @return string
      */
@@ -939,10 +944,10 @@ class Category
     /**
      * Gets the path from root to child as breadcrumbs.
      *
-     * @param int    $id                Entity ID
-     * @param string $separator         Path separator
-     * @param bool   $renderAsMicroData Renders breadcrumbs as HTML5 microdata
-     * @param string $useCssClass       Use CSS class "breadcrumb"
+     * @param int $id Entity ID
+     * @param string $separator Path separator
+     * @param bool $renderAsMicroData Renders breadcrumbs as HTML5 microdata
+     * @param string $useCssClass Use CSS class "breadcrumb"
      *
      * @return string
      */
@@ -1137,8 +1142,8 @@ class Category
      * Adds a new category entry.
      *
      * @param array $categoryData Array of category data
-     * @param int   $parentId     Parent id
-     * @param int   $id           Entity id
+     * @param int $parentId Parent id
+     * @param int $id Entity id
      *
      * @return int
      */
@@ -1217,7 +1222,7 @@ class Category
      * Move the categories ownership for users.
      *
      * @param int $from Old user id
-     * @param int $to   New user id
+     * @param int $to New user id
      *
      * @return bool
      */
@@ -1247,7 +1252,7 @@ class Category
     /**
      * Checks if a language is already defined for a category id.
      *
-     * @param int    $category_id   Entity id
+     * @param int $category_id Entity id
      * @param string $category_lang Entity language
      *
      * @return bool
@@ -1374,7 +1379,7 @@ class Category
      * Updates the parent category.
      *
      * @param int $category_id Entity id
-     * @param int $parent_id   Parent category id
+     * @param int $parent_id Parent category id
      *
      * @return bool
      */
@@ -1404,9 +1409,9 @@ class Category
     /**
      * Deletes a category.
      *
-     * @param int    $category_id   Entity id
+     * @param int $category_id Entity id
      * @param string $category_lang Categiry language
-     * @param bool   $delete_all    Delete all languages?
+     * @param bool $delete_all Delete all languages?
      *
      * @return bool
      */
@@ -1472,7 +1477,7 @@ class Category
     /**
      * Create all languages which can be used for translation as <option>.
      *
-     * @param int    $category_id   Entity id
+     * @param int $category_id Entity id
      * @param string $selected_lang Selected language
      *
      * @return string
@@ -1551,9 +1556,9 @@ class Category
     /**
      * Adds the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories ID of the current category
-     * @param array  $ids        Array of group or user IDs
+     * @param string $mode 'group' or 'user'
+     * @param array $categories ID of the current category
+     * @param array $ids Array of group or user IDs
      *
      * @return bool
      */
@@ -1597,8 +1602,8 @@ class Category
     /**
      * Deletes the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories ID of the current category
+     * @param string $mode 'group' or 'user'
+     * @param array $categories ID of the current category
      *
      * @return bool
      */
@@ -1632,7 +1637,7 @@ class Category
      * Returns true, if a given category has user or group permissions.
      * Otherwise, the methods returns false.
      *
-     * @param  int $categoryId
+     * @param int $categoryId
      * @return bool
      */
     public function hasPermissions(int $categoryId): bool
@@ -1650,8 +1655,8 @@ class Category
     /**
      * Returns the category permissions for users and groups.
      *
-     * @param string $mode       'group' or 'user'
-     * @param array  $categories Array of category ids
+     * @param string $mode 'group' or 'user'
+     * @param array $categories Array of category ids
      *
      * @return array
      */
@@ -1690,7 +1695,7 @@ class Category
     /**
      * Returns the user id of the category owner
      *
-     * @param  integer $categoryId
+     * @param integer $categoryId
      * @return int
      */
     public function getOwner(int $categoryId): int

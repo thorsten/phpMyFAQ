@@ -4,8 +4,6 @@
  * session expiration and to give him the contextual possibility for
  * refreshing the session by clicking <OK>.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -70,44 +68,45 @@ $refreshTime = (PMF_AUTH_TIMEOUT - PMF_AUTH_TIMEOUT_WARNING)*60;
     <meta name="application-name" content="phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?>">
     <meta name="copyright" content="(c) 2001-2020 phpMyFAQ Team">
     <meta name="publisher" content="phpMyFAQ Team">
-<?php if (isset($user) && ($refreshTime > 0)) {
-    ?>
+    <?php if (isset($user) && ($refreshTime > 0)) { ?>
     <script>
-
-    function _PMFSessionTimeoutWarning() {
-        if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING);
-    ?>')) {
+        const sessionTimeoutWarning = () => {
+          if (window.confirm('<?php printf($PMF_LANG['ad_session_expiring'], PMF_AUTH_TIMEOUT_WARNING); ?>')) {
             location.href = location.href;
-        }
-    }
+          }
+        };
 
-    function _PMFSessionTimeoutClock(topRef, expire) {
-        expire.setSeconds(expire.getSeconds() - 1);
-        if (expire.getFullYear() < 2009) {
+        const sessionTimeoutClock = (topRef, sessionStart, expire) => {
+          expire.setSeconds(expire.getSeconds() - 1);
+          const duration = expire - sessionStart;
+
+          if (expire.getFullYear() < 2020) {
             parent.location.search = '?action=logout';
             return;
-        }
+          }
 
-        if (topRef) {
-            topRef.innerHTML = ('' + expire).match(/\d\d:\d\d:\d\d/);
-        }
-    }
+          if (topRef) {
+            topRef.innerHTML = new Date(duration).toISOString().substr(11, 8);
+          }
+        };
 
-    window.onload = function() {
-        var expire = new Date();
-        expire.setSeconds(<?= PMF_AUTH_TIMEOUT ?> * 60);
-        var topRef = top.document.getElementById('sessioncounter');
+        window.onload = () => {
+          const expire = new Date();
+          const sessionStart = new Date();
+          expire.setSeconds(<?= PMF_AUTH_TIMEOUT ?> * 60);
 
-        window.setTimeout(_PMFSessionTimeoutWarning, <?= $refreshTime ?> * 1000);
-        window.setInterval(
-            function() {
-                _PMFSessionTimeoutClock(topRef, expire);
+          const topRef = top.document.getElementById('sessioncounter');
+
+          window.setTimeout(sessionTimeoutWarning, <?= $refreshTime ?> * 1000);
+          window.setInterval(
+            () => {
+              sessionTimeoutClock(topRef, sessionStart, expire);
             },
-            1000
-        );
-    }
-    </script>
-<?php } ?>
+            1000,
+          );
+        };
+      </script>
+      <?php } ?>
 </head>
 <body>
 

@@ -14,3 +14,9 @@
  */
 
 import 'cookieconsent';
+import { calculateReadingTime } from './reading-time';
+
+const faqBody = document.querySelector('.pmf-faq-body');
+if (faqBody !== null) {
+  calculateReadingTime();
+}

@@ -50,30 +50,62 @@ $edAutoSave = (('editentry' === $action) && $faqConfig->get('records.autosaveAct
 $adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);
 
-$secLevelEntries['user'] = $adminHelper->addMenuEntry('add_user+edit_user+delete_user', 'user',
-    'ad_menu_user_administration', $action);
+$secLevelEntries['user'] = $adminHelper->addMenuEntry(
+    'add_user+edit_user+delete_user',
+    'user',
+    'ad_menu_user_administration',
+    $action
+);
 if ($faqConfig->get('security.permLevel') !== 'basic') {
-    $secLevelEntries['user'] .= $adminHelper->addMenuEntry('addgroup+editgroup+delgroup', 'group',
-        'ad_menu_group_administration', $action);
+    $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
+        'addgroup+editgroup+delgroup',
+        'group',
+        'ad_menu_group_administration',
+        $action
+    );
 }
 if ($faqConfig->get('security.permLevel') === 'large') {
-    $secLevelEntries['user'] .= $adminHelper->addMenuEntry('add_section+edit_section+del_section', 'section',
-        'ad_menu_section_administration', $action);
+    $secLevelEntries['user'] .= $adminHelper->addMenuEntry(
+        'add_section+edit_section+del_section',
+        'section',
+        'ad_menu_section_administration',
+        $action
+    );
 }
-$secLevelEntries['content'] = $adminHelper->addMenuEntry('addcateg+editcateg+delcateg', 'category',
-    'ad_menu_categ_edit', $action);
+$secLevelEntries['content'] = $adminHelper->addMenuEntry(
+    'addcateg+editcateg+delcateg',
+    'category',
+    'ad_menu_categ_edit',
+    $action
+);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('add_faq', 'editentry', 'ad_entry_add', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'view', 'ad_menu_entry_edit', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq+delete_faq', 'searchfaqs', 'ad_menu_searchfaqs',
-    $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'edit_faq+delete_faq',
+    'searchfaqs',
+    'ad_menu_searchfaqs',
+    $action
+);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delcomment', 'comments', 'ad_menu_comments', $action);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('delquestion', 'question', 'ad_menu_open', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('addglossary+editglossary+delglossary', 'glossary',
-    'ad_menu_glossary', $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('addnews+editnews+delnews', 'news', 'ad_menu_news_edit',
-    $action);
-$secLevelEntries['content'] .= $adminHelper->addMenuEntry('addattachment+editattachment+delattachment', 'attachments',
-    'ad_menu_attachments', $action);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'addglossary+editglossary+delglossary',
+    'glossary',
+    'ad_menu_glossary',
+    $action
+);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'addnews+editnews+delnews',
+    'news',
+    'ad_menu_news_edit',
+    $action
+);
+$secLevelEntries['content'] .= $adminHelper->addMenuEntry(
+    'addattachment+editattachment+delattachment',
+    'attachments',
+    'ad_menu_attachments',
+    $action
+);
 $secLevelEntries['content'] .= $adminHelper->addMenuEntry('edit_faq', 'tags', 'ad_entry_tags', $action);
 
 $secLevelEntries['statistics'] = $adminHelper->addMenuEntry('viewlog', 'statistics', 'ad_menu_stat', $action);
@@ -88,10 +120,18 @@ $secLevelEntries['backup'] = $adminHelper->addMenuEntry('editconfig', 'backup', 
 
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'config', 'ad_menu_editconfig', $action);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'system', 'ad_system_info', $action, false);
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editinstances+addinstances+delinstances', 'instances',
-    'ad_menu_instances', $action);
-$secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'stopwordsconfig', 'ad_menu_stopwordsconfig',
-    $action);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+    'editinstances+addinstances+delinstances',
+    'instances',
+    'ad_menu_instances',
+    $action
+);
+$secLevelEntries['config'] .= $adminHelper->addMenuEntry(
+    'editconfig',
+    'stopwordsconfig',
+    'ad_menu_stopwordsconfig',
+    $action
+);
 $secLevelEntries['config'] .= $adminHelper->addMenuEntry('editconfig', 'meta', 'ad_menu_meta', $action);
 if ($faqConfig->get('search.enableElasticsearch')) {
     $secLevelEntries['config'] .= $adminHelper->addMenuEntry(
@@ -184,8 +224,7 @@ switch ($action) {
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 
-  <title><?= $faqConfig->get('main.titleFAQ'); ?> - powered by
-    phpMyFAQ <?= $faqConfig->get('main.currentVersion'); ?></title>
+  <title><?= $faqConfig->get('main.titleFAQ'); ?> - powered by phpMyFAQ <?= System::getVersion() ?></title>
   <base href="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/">
 
   <meta name="description" content="Only Chuck Norris can divide by zero.">
@@ -218,7 +257,8 @@ switch ($action) {
 <div id="wrapper">
 
   <!-- Sidebar -->
-    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin())): ?>
+    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
+            ))): ?>
       <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
         <li>
@@ -337,17 +377,9 @@ switch ($action) {
           <hr class="sidebar-divider d-none d-md-block">
         </li>
 
-        <!-- Sidebar Toggler (Sidebar) -->
-        <li>
-          <div class="text-center d-none d-md-inline">
-            <button class="rounded-circle border-0" id="sidebarToggle"></button>
-          </div>
-        </li>
-
       </ul>
       <!-- End of Sidebar -->
     <?php endif; ?>
-
 
   <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">
@@ -383,9 +415,18 @@ switch ($action) {
             </div>
           </li>
 
-          <div class="topbar-divider d-none d-sm-block"></div>
+            <?php if (isset($auth) && (count(
+                        $user->perm->getAllUserRights($user->getUserId())
+                    ) > 0 || $user->isSuperAdmin())): ?>
+              <li class="nav-item">
+                <div class="navbar-text text-gray-600 small">
+                  <i class="fa fa-clock-o fa-fw"></i> <?= $PMF_LANG['ad_session_expiration']; ?>:
+                  <span id="sessioncounter" class="pl-2"><i aria-hidden="true" class="fa fa-spinner fa-spin"></i> Loading...</span>
+                </div>
+              </li>
 
-            <?php if (isset($auth) && count($user->perm->getAllUserRights($user->getUserId())) > 0): ?>
+              <div class="topbar-divider d-none d-sm-block"></div>
+
               <li class="nav-item dropdown no-arrow">
                 <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown"
                    aria-haspopup="true" aria-expanded="false">
@@ -395,8 +436,10 @@ switch ($action) {
                     <?php
                     if ($faqConfig->get('main.enableGravatarSupport')) {
                         $avatar = new Gravatar($faqConfig);
-                        echo $avatar->getImage($user->getUserData('email'),
-                            ['size' => 24, 'class' => 'img-profile rounded-circle']);
+                        echo $avatar->getImage(
+                            $user->getUserData('email'),
+                            ['size' => 24, 'class' => 'img-profile rounded-circle']
+                        );
                     } else {
                         echo '<i aria-hidden="true" class="fa fa-user"></i>';
                     }
