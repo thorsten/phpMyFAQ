@@ -30,13 +30,13 @@ information.
 
 ## Installation
 
-### phpMyFAQ package for end-users
+### phpMyFAQ installation package for end-users
 
 The best way to install phpMyFAQ is to download it on [phpmyfaq.de](https://www.phpmyfaq.de/download),
 unzip the package and open http://www.example.org/phpmyfaq/setup/index.php
 in your browser.
 
-### phpMyFAQ with Docker
+### phpMyFAQ installation with Docker
 
 #### Dockerfile
 
@@ -116,7 +116,7 @@ The vm.max_map_count setting must be set via docker-machine:
     $ docker-machine ssh
     $ sudo sysctl -w vm.max_map_count=262144
 
-### Git for developers
+### phpMyFAQ installation from Github
 
     $ git clone git://github.com/thorsten/phpMyFAQ.git
     $ cd phpMyFAQ
@@ -131,9 +131,11 @@ Then just open http://www.example.org/phpmyfaq/setup/index.php in your browser.
 
 ## Testing
 
-To run our unit tests via PHPUnit v5.x, just execute this command on your CLI
+To run our unit tests via PHPUnit v8.x, just execute this command on your CLI
 
-    $ ./bin/phpunit
+    $ curl -s https://getcomposer.org/installer | php
+    $ php composer.phar install
+    $ ./vendor/bin/phpunit
 
 Please note that phpMyFAQ needs to be installed via Composer.
 
@@ -167,7 +169,7 @@ Please check out our page about contributing on [phpmyfaq.de](https://www.phpmyf
 
 You can find the full documentation on [phpmyfaq.de](https://www.phpmyfaq.de/documentation).
 
-## API
+## REST API v2
 
 The REST API v2 documentation is located [here in this repository](API.md) and also on
 [phpmyfaq.de](https://www.phpmyfaq.de/documentation).

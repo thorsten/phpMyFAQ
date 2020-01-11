@@ -67,9 +67,9 @@ class Sqlite3 implements DatabaseDriver
      * @param int|null $port
      * @return null|bool
      */
-    public function connect($host, $user, $passwd, $db = '', $port = null)
+    public function connect($host, $user = '', $passwd = '', $db = '', $port = null)
     {
-        $this->conn = new \SQLite3($host);
+        $this->conn = new \Sqlite3($host);
 
         if (!$this->conn) {
             Database::errorPage($this->conn->lastErrorMsg());
