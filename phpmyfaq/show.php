@@ -28,7 +28,7 @@ $selectedCategoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT)
 $subCategoryContent = '';
 
 if (!is_null($selectedCategoryId) && !isset($category->categoryName[$selectedCategoryId])) {
-    $http->sendStatus(404);
+    $http->setStatus(404);
 }
 
 if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCategoryId])) {

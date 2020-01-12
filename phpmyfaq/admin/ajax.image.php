@@ -51,20 +51,20 @@ switch ($ajaxAction) {
                     if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
                         $http->sendCorsHeader();
                     } else {
-                        $http->sendStatus(403);
+                        $http->setStatus(403);
                         return;
                     }
                 }
 
                 // Sanitize input
                 if (preg_match("/([^\w\s\d\-_~,;:\[\]\(\).])|([\.]{2,})/", $temp['name'])) {
-                    $http->sendStatus(400);
+                    $http->setStatus(400);
                     return;
                 }
 
                 // Verify extension
                 if (!in_array(strtolower(pathinfo($temp['name'], PATHINFO_EXTENSION)), $validFileExtensions)) {
-                    $http->sendStatus(400);
+                    $http->setStatus(400);
                     return;
                 }
 
@@ -75,10 +75,10 @@ switch ($ajaxAction) {
                 // Respond to the successful upload with JSON.
                 $http->sendJsonWithHeaders(['location' => $fileToWrite]);
             } else {
-                $http->sendStatus(500);
+                $http->setStatus(500);
             }
         } else {
-            $http->sendStatus(401);
+            $http->setStatus(401);
         }
         break;
 }

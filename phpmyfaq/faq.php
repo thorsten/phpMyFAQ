@@ -295,7 +295,7 @@ $faqServices->setQuestion($faq->getRecordTitle($id));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($recordId, $currentCategory)) {
-    $http->sendStatus(404);
+    $http->setStatus(404);
 }
 
 $template->parse(

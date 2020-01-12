@@ -56,7 +56,7 @@ try {
         case 'upload':
 
             if (!isset($_FILES['filesToUpload'])) {
-                $http->sendStatus(400);
+                $http->setStatus(400);
                 return;
             }
 
@@ -86,7 +86,7 @@ try {
                         'faqLanguage' => $recordLang
                     ];
                 } else {
-                    $http->sendStatus(400);
+                    $http->setStatus(400);
                     $http->sendJsonWithHeaders('The image is too large.');
                     return;
                 }

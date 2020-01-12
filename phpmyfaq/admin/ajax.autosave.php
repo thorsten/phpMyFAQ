@@ -174,6 +174,6 @@ if ('insertentry' === $do &&
         $http->sendJsonWithHeaders($out);
     }
 } else {
-    $http->sendStatus(401);
+    $http->setStatus(401);
     $http->sendJsonWithHeaders(['msg' => 'Missing article rights']);
 }

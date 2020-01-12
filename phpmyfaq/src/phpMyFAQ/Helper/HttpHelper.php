@@ -114,45 +114,19 @@ class HttpHelper extends Helper
         // Before a redirection we must force the PHP session update
         // for preventing data loss
         session_write_close();
-        $this->sendStatus(301);
+        $this->setStatus(301);
         header('Location: ' . $url);
     }
 
     /**
-     * Returns a HTTP status header.
+     * Sets a HTTP status header.
      *
      * @param int $code HTTP status code
      */
-    public function sendStatus(int $code)
+    public function setStatus(int $code)
     {
         $this->statusCode = $code;
-        switch ($code) {
-            case 301:
-                header('HTTP/1.1 301 Moved Permanently');
-                break;
-            case 400:
-                header('HTTP/1.1 400 Bad Request');
-                break;
-            case 401:
-                header('HTTP/1.1 401 Unauthorized');
-                break;
-            case 403:
-                header('HTTP/1.1 403 Forbidden');
-                break;
-            case 404:
-                if (('cgi' == Strings::substr(PHP_SAPI, 0, 3)) || isset($_SERVER['ALL_HTTP'])) {
-                    header('Status: 404 Not Found');
-                } else {
-                    header('HTTP/1.0 404 Not Found');
-                }
-                break;
-            case 418:
-                header('HTTP/1.1 418 I\'m a teapot');
-                break;
-            case 500:
-                header('HTTP/1.1 500 Internal Server Error');
-                break;
-        }
+        http_response_code($code);
     }
 
     /**
