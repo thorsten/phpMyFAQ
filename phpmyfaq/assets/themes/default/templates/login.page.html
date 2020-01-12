@@ -21,20 +21,6 @@
     <link rel="apple-touch-icon" href="{{ baseHref }}assets/themes/{{ tplSetName }}/img/apple-touch-icon.png" />
     <link rel="canonical" href="{{ currentPageUrl }}" />
 
-    <link rel="alternate" title="News RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/news/rss.php" />
-    <link rel="alternate" title="TopTen RSS Feed" type="application/rss+xml" href="{{ baseHref }}feed/topten/rss.php" />
-    <link
-      rel="alternate"
-      title="Latest FAQ Records RSS Feed"
-      type="application/rss+xml"
-      href="{{ baseHref }}feed/latest/rss.php"
-    />
-    <link
-      rel="alternate"
-      title="Open Questions RSS Feed"
-      type="application/rss+xml"
-      href="{{ baseHref }}feed/openquestions/rss.php"
-    />
     <link rel="search" type="application/opensearchdescription+xml" title="{{ metaTitle }}" href="{{ opensearch }}" />
 
     <style>
@@ -64,60 +50,80 @@
     </style>
   </head>
   <body dir="{{ dir }}" class="flex-column">
-    <form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
-      <div class="text-center mb-4">
-        <img class="mb-4 rounded" src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png" alt="{{ header }}" />
-        <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
-        [useSslForLogins]
-        <p>
-          <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
-        </p>
-        [/useSslForLogins]
+    <section id="wrapper" class="mt-3">
+      <div class="container">
+        <div class="row">
+          <div class="container py-5">
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="row">
+                  <div class="col-lg-6 mx-auto">
+                    <form class="form-signin" action="{{ writeLoginPath }}" method="post" role="form">
+                      <div class="text-center mb-4">
+                        <img
+                          class="mb-4 rounded"
+                          src="{{ baseHref }}assets/themes/{{ tplSetName }}/img/logo.png"
+                          alt="{{ header }}"
+                        />
+                        <h1 class="h3 mb-3 font-weight-normal">{{ loginPageMessage }} {{ header }}</h1>
+                        [useSslForLogins]
+                        <p>
+                          <a href="{{ secureloginurl }}">{{ securelogintext }}</a>
+                        </p>
+                        [/useSslForLogins]
 
-        <p>{{ loginMessage }}</p>
-      </div>
+                        <p>{{ loginMessage }}</p>
+                      </div>
 
-      <div class="form-label-group">
-        <input
-          type="text"
-          name="faqusername"
-          id="faqusername"
-          class="form-control"
-          placeholder="{{ username }}"
-          required
-          autofocus
-        />
-        <label for="faqusername">{{ username }}</label>
-      </div>
+                      <div class="form-label-group">
+                        <input
+                          type="text"
+                          name="faqusername"
+                          id="faqusername"
+                          class="form-control"
+                          placeholder="{{ username }}"
+                          required
+                          autofocus
+                        />
+                        <label for="faqusername">{{ username }}</label>
+                      </div>
 
-      <div class="form-label-group">
-        <input
-          type="password"
-          name="faqpassword"
-          id="faqpassword"
-          class="form-control"
-          placeholder="{{ password }}"
-          required
-        />
-        <label for="faqpassword">{{ password }}</label>
-      </div>
+                      <div class="form-label-group">
+                        <input
+                          type="password"
+                          name="faqpassword"
+                          id="faqpassword"
+                          class="form-control"
+                          placeholder="{{ password }}"
+                          required
+                        />
+                        <label for="faqpassword">{{ password }}</label>
+                      </div>
 
-      <div class="checkbox mb-3">
-        <label>
-          <input type="checkbox" name="faqrememberme" value="rememberMe" id="faqrememberme" /> {{ rememberMe }}
-        </label>
+                      <div class="checkbox mb-3">
+                        <label>
+                          <input type="checkbox" name="faqrememberme" value="rememberMe" id="faqrememberme" />
+                          {{ rememberMe }}
+                        </label>
+                      </div>
+                      <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
+                    </form>
+                    <p class="mt-5 mb-3 text-center">
+                      {{ sendPassword }} <br />
+                      {{ registerUser }}
+                    </p>
+                    <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
+                      {{ switchLanguages }}
+                      <input type="hidden" name="action" value="" />
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <button class="btn btn-lg btn-primary btn-block" type="submit">{{ loginHeader }}</button>
-      <p class="mt-5 mb-3 text-center">
-        {{ sendPassword }} <br />
-        {{ registerUser }}
-      </p>
-      <br />
-      <form action="{{ renderUri }}" method="post" accept-charset="utf-8" class="mt-5">
-        {{ switchLanguages }}
-        <input type="hidden" name="action" value="" />
-      </form>
-    </form>
+    </section>
 
     <script src="{{ baseHref }}assets/dist/vendors.js"></script>
     <script src="{{ baseHref }}assets/dist/phpmyfaq.js"></script>
