@@ -2,8 +2,6 @@
 /**
  * The import function to import the phpMyFAQ backups.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -17,7 +15,7 @@
  */
 
 use phpMyFAQ\Database;
-use phpMyFAQ\Db\Helper;
+use phpMyFAQ\Database\DatabaseHelper;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Strings;
 
@@ -94,7 +92,7 @@ if ($user->perm->checkRight($user->getUserId(), 'restore') && $csrfCheck) {
             $num = count($mquery);
             $kg = '';
             for ($i = 0; $i < $num; ++$i) {
-                $mquery[$i] = Helper::alignTablePrefix($mquery[$i], $tablePrefix, Database::getTablePrefix());
+                $mquery[$i] = DatabaseHelper::alignTablePrefix($mquery[$i], $tablePrefix, Database::getTablePrefix());
                 $kg = $faqConfig->getDb()->query($mquery[$i]);
                 if (!$kg) {
                     printf(
