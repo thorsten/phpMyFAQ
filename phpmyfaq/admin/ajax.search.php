@@ -39,6 +39,7 @@ switch ($ajaxAction) {
         if ($search->deleteSearchTerm($searchTerm)) {
             $http->sendWithHeaders(true);
         } else {
+            $http->setStatus(400);
             $http->sendWithHeaders(false);
         }
 

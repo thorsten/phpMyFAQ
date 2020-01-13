@@ -72,7 +72,8 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
 
         case 'activate_user':
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
                 exit(1);
             }
 
@@ -84,7 +85,8 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
 
         case 'delete_user':
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
                 exit(1);
             }
 
@@ -117,7 +119,8 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
             $retypedPassword = Filter::filterInput(INPUT_POST, 'bpass', FILTER_SANITIZE_STRING);
 
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
-                $http->sendJsonWithHeaders(array('error' => $PMF_LANG['err_NotAuth']));
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
                 exit(1);
             }
 
@@ -128,10 +131,12 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
 
             if ($newPassword === $retypedPassword) {
                 if (!$user->changePassword($newPassword)) {
-                    echo $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
+                    $http->setStatus(400);
+                    $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
                 }
                 $http->sendJsonWithHeaders(['success' => $PMF_LANG['ad_passwdsuc']]);
             } else {
+                $http->setStatus(400);
                 $http->sendJsonWithHeaders(['error' => $PMF_LANG['ad_passwd_fail']]);
             }
 

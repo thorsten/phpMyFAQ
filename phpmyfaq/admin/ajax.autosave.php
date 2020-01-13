@@ -46,12 +46,13 @@ if ('insertentry' === $do &&
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
     $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
-    $categories = Filter::filterInputArray(INPUT_POST, array(
-        'rubrik' => array(
+    $categories = Filter::filterInputArray(INPUT_POST, [
+        'rubrik' => [
             'filter' => FILTER_VALIDATE_INT,
             'flags' => FILTER_REQUIRE_ARRAY,
-        )
-    ));
+        ]
+    ]
+    );
     $record_lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
@@ -83,7 +84,7 @@ if ('insertentry' === $do &&
             $categories['rubrik'] = [];
         }
 
-        $recordData = array(
+        $recordData = [
             'id' => $record_id,
             'lang' => $record_lang,
             'revision_id' => $revision_id,
@@ -95,12 +96,12 @@ if ('insertentry' === $do &&
             'author' => $author,
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => empty($date) ? date('YmdHis') : str_replace(array('-', ':', ' '), '', $date),
+            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', $date),
             'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
-        );
+        ];
 
         if ('saveentry' == $do || $record_id) {
             /* Create a revision anyway, it's autosaving */
