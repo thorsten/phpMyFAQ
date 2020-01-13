@@ -169,9 +169,6 @@ RewriteRule api/v2.0/faqs/tags/([0-9]+)            api.php?action=faqs&tagId=$1 
 RewriteRule api/v2.0/faqs                          api.php?action=faqs [L,QSA]
 RewriteRule api/v2.0/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId=$1&recordId=$2 [L,QSA]
 
-# not implemented yet
-#RewriteRule api/v2.0/faq/([0-9]+)/([0-9]+)         api.php?action=faq&categoryId=$1&recordId=$2&filter=pdf [L,QSA]
-
 # REST API v2.1 - not implemented yet
 # * http://[...]/api/v2.1/<ACTION>
 RewriteRule api/v2.1/register                      api.php?action=register [L,QSA]
