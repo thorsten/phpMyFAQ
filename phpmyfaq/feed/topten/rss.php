@@ -3,19 +3,15 @@
 /**
  * The RSS feed with the top ten.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @author Matteo Scaramuccia <matteo@phpmyfaq.de>
  * @copyright 2004-2020 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2004-11-05
  */
@@ -85,23 +81,23 @@ if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     if ($user->perm instanceof MediumPermission) {
         $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
     if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
 } else {
     $currentUser = -1;
-    $currentGroups = array(-1);
+    $currentGroups = [-1];
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init($faqLangCode);
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
-    exit();
+    exit('The RSS Feeds are disabled.');
 }
 
 $faq = new Faq($faqConfig);
@@ -111,7 +107,7 @@ $faq->setGroups($currentGroups);
 $rssData = $faq->getTopTenData(PMF_NUMBER_RECORDS_TOPTEN);
 $num = count($rssData);
 
-$rss = new \XMLWriter();
+$rss = new XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
@@ -123,7 +119,7 @@ $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ').' - '.$PMF_LANG['msgTopTen']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->getDefaultUrl());
-$rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
+$rss->startElementNs('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
 $rss->writeAttribute('href', $faqConfig->getDefaultUrl().'feed/topten/rss.php');
@@ -165,10 +161,10 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
-$headers = array(
+$headers = [
     'Content-Type: application/rss+xml',
     'Content-Length: '.strlen($rssData),
-);
+];
 
 $http = new HttpHelper();
 $http->sendWithHeaders($rssData, $headers);

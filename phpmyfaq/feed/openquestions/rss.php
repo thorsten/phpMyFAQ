@@ -50,7 +50,7 @@ if (isset($faqLangCode) && Language::isASupportedLanguage($faqLangCode)) {
 }
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init($faqLangCode);
 
@@ -86,18 +86,18 @@ if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     if ($user->perm instanceof MediumPermission) {
         $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
     if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
 } else {
     $currentUser = -1;
-    $currentGroups = array(-1);
+    $currentGroups = [-1];
 }
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
-    exit();
+    exit('The RSS Feeds are disabled.');
 }
 
 $question = new Question($faqConfig);
@@ -116,7 +116,7 @@ $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ') . ' - ' . $PMF_LANG['msgOpenQuestions']);
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->getDefaultUrl());
-$rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
+$rss->startElementNs('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
 $rss->writeAttribute('href', $faqConfig->getDefaultUrl() . 'feed/openquestions/rss.php');
@@ -154,10 +154,10 @@ $rss->endElement();
 $rss->endElement();
 $openQuestions = $rss->outputMemory();
 
-$headers = array(
+$headers = [
     'Content-Type: application/rss+xml',
     'Content-Length: ' . strlen($openQuestions),
-);
+];
 
 $http = new HttpHelper();
 $http->sendWithHeaders($openQuestions, $headers);

@@ -3,18 +3,14 @@
 /**
  * The RSS feed for categories.
  *
- * 
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
  *
  * @package phpMyFAQ
- *
  * @author Thorsten Rinne <thorsten@phpmyfaq.de>
  * @copyright 2008-2020 phpMyFAQ Team
  * @license http://www.mozilla.org/MPL/2.0/ Mozilla Public License Version 2.0
- *
  * @link https://www.phpmyfaq.de
  * @since 2008-01-25
  */
@@ -45,7 +41,7 @@ $Language = new Language($faqConfig);
 $faqLangCode = $Language->setLanguage($faqConfig->get('main.languageDetection'), $faqConfig->get('main.language'));
 
 //
-// Initalizing static string wrapper
+// Initializing static string wrapper
 //
 Strings::init($faqLangCode);
 
@@ -85,18 +81,18 @@ if (isset($user) && !is_null($user) && $user instanceof CurrentUser) {
     if ($user->perm instanceof MediumPermission) {
         $currentGroups = $user->perm->getUserGroups($currentUser);
     } else {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
     if (0 == count($currentGroups)) {
-        $currentGroups = array(-1);
+        $currentGroups = [-1];
     }
 } else {
     $currentUser = -1;
-    $currentGroups = array(-1);
+    $currentGroups = [-1];
 }
 
 if (!$faqConfig->get('main.enableRssFeeds')) {
-    exit();
+    exit('The RSS Feeds are disabled.');
 }
 
 $category_id = Filter::filterInput(INPUT_GET, 'category_id', FILTER_VALIDATE_INT);
@@ -108,13 +104,16 @@ $faq = new Faq($faqConfig);
 $faq->setUser($currentUser);
 $faq->setGroups($currentGroups);
 
-$records = $faq->getAllRecordPerCategory(
-    $category_id,
-    $faqConfig->get('records.orderby'),
-    $faqConfig->get('records.sortby')
-);
+try {
+    $records = $faq->getAllRecordPerCategory(
+        $category_id,
+        $faqConfig->get('records.orderby'),
+        $faqConfig->get('records.sortby')
+    );
+} catch (Exception $e) {
+}
 
-$rss = new \XMLWriter();
+$rss = new XMLWriter();
 $rss->openMemory();
 $rss->setIndent(true);
 
@@ -126,7 +125,7 @@ $rss->startElement('channel');
 $rss->writeElement('title', $faqConfig->get('main.titleFAQ').' - ');
 $rss->writeElement('description', html_entity_decode($faqConfig->get('main.metaDescription')));
 $rss->writeElement('link', $faqConfig->getDefaultUrl());
-$rss->startElementNS('atom', 'link', 'http://www.w3.org/2005/Atom');
+$rss->startElementNs('atom', 'link', 'http://www.w3.org/2005/Atom');
 $rss->writeAttribute('rel', 'self');
 $rss->writeAttribute('type', 'application/rss+xml');
 $rss->writeAttribute('href', $faqConfig->getDefaultUrl().'feed/category/rss.php');
@@ -165,10 +164,10 @@ $rss->endElement();
 $rss->endElement();
 $rssData = $rss->outputMemory();
 
-$headers = array(
+$headers = [
     'Content-Type: application/rss+xml',
     'Content-Length: '.strlen($rssData),
-);
+];
 
 $http = new HttpHelper();
 $http->sendWithHeaders($rssData, $headers);
