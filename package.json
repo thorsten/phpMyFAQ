@@ -55,8 +55,8 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "composer lint && composer test && pretty-quick --staged",
-      "pre-push": "composer lint && composer test && pretty-quick --staged"
+      "pre-commit": "composer lint && composer validate && composer test && pretty-quick --staged",
+      "pre-push": "composer lint && composer validate && composer test && pretty-quick --staged"
     }
   }
 }
