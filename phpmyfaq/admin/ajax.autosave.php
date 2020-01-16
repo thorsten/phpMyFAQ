@@ -133,7 +133,7 @@ if ('insertentry' === $do &&
             $faq->addPermission('user', $record_id, $restricted_users);
             $category->deletePermission('user', $categories['rubrik']);
             $category->addPermission('user', $categories['rubrik'], $restricted_users);
-            if ($faqConfig->get('security.permLevel') != 'basic') {
+            if ($faqConfig->get('security.permLevel') !== 'basic') {
                 $faq->deletePermission('group', $record_id);
                 $faq->addPermission('group', $record_id, $restricted_groups);
                 $category->deletePermission('group', $categories['rubrik']);
@@ -159,7 +159,7 @@ if ('insertentry' === $do &&
                 $faq->addPermission('user', $record_id, $restricted_users);
                 $category->addPermission('user', $categories['rubrik'], $restricted_users);
 
-                if ($faqConfig->get('security.permLevel') != 'basic') {
+                if ($faqConfig->get('security.permLevel') !== 'basic') {
                     $faq->addPermission('group', $record_id, $restricted_groups);
                     $category->addPermission('group', $categories['rubrik'], $restricted_groups);
                 }

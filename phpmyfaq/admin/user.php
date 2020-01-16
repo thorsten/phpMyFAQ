@@ -222,7 +222,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 $oCat->moveOwnership($userId, 1);
 
                 // Remove the user from groups
-                if ('medium' == $faqConfig->get('security.permLevel')) {
+                if ('basic' !== $faqConfig->get('security.permLevel')) {
                     $oPerm = Permission::selectPerm('medium', $faqConfig);
                     $oPerm->removeFromAllGroups($userId);
                 }

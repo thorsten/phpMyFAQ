@@ -101,7 +101,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
                     $category->moveOwnership($userId, 1);
 
                     // Remove the user from groups
-                    if ('medium' == $faqConfig->get('security.permLevel')) {
+                    if ('basic' !== $faqConfig->get('security.permLevel')) {
                         $permissions = Permission::selectPerm('medium', $faqConfig);
                         $permissions->removeFromAllGroups($userId);
                     }

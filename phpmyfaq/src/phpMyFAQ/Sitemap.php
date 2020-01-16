@@ -61,7 +61,7 @@ class Sitemap
     {
         $this->config = $config;
 
-        if ($this->config->get('security.permLevel') == 'medium') {
+        if ($this->config->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }

@@ -104,7 +104,7 @@ class SearchResultSet
 
         $duplicateResults = [];
 
-        if ('medium' === $this->config->get('security.permLevel')) {
+        if ('basic' !== $this->config->get('security.permLevel')) {
             $currentGroupIds = $this->user->perm->getUserGroups($this->user->getUserId());
         } else {
             $currentGroupIds = [-1];
