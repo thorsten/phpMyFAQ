@@ -96,6 +96,9 @@ class Search
      */
     public function search($searchTerm, $allLanguages = true)
     {
+        if (is_numeric($searchTerm)) {
+            return $this->searchDatabase($searchTerm, $allLanguages);
+        }
         if ($this->config->get('search.enableElasticsearch')) {
             return $this->searchElasticsearch($searchTerm, $allLanguages);
         } else {
