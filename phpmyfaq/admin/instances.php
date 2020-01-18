@@ -152,7 +152,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-lg-4">
+              <label class="col-form-label col-lg-4" for="instance">
                   <?= $PMF_LANG['ad_instance_path'] ?>:
               </label>
               <div class="col-lg-8">
@@ -160,7 +160,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-lg-4">
+              <label class="col-form-label col-lg-4" for="comment">
                   <?= $PMF_LANG['ad_instance_name'] ?>:
               </label>
               <div class="col-lg-8">
@@ -176,7 +176,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
               </div>
             </div>
             <div class="form-group row">
-              <label class="col-form-label col-lg-4">
+              <label class="col-form-label col-lg-4" for="admin">
                   <?= $PMF_LANG['ad_instance_admin'] ?>:
               </label>
               <div class="col-lg-8">
