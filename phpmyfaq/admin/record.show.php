@@ -220,10 +220,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     } else {
         $fdTable = Database::getTablePrefix().'faqdata';
         $fcrTable = Database::getTablePrefix().'faqcategoryrelations';
-        $search = SearchFactory::create($faqConfig, array('database' => Database::getType()));
+        $search = SearchFactory::create($faqConfig, ['database' => Database::getType()]);
 
         $search->setTable($fdTable)
-            ->setResultColumns(array(
+            ->setResultColumns(
+                [
                     $fdTable.'.id AS id',
                     $fdTable.'.lang AS lang',
                     $fdTable.'.solution_id AS solution_id',
@@ -232,24 +233,29 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                     $fdTable.'.active AS active',
                     $fdTable.'.thema AS thema',
                     $fdTable.'.content AS content',
-                    $fdTable.'.updated AS updated',))
+                    $fdTable.'.updated AS updated',
+                ]
+            )
             ->setJoinedTable($fcrTable)
-            ->setJoinedColumns(array(
+            ->setJoinedColumns(
+                [
                     $fdTable.'.id = '.$fcrTable.'.record_id',
-                    $fdTable.'.lang = '.$fcrTable.'.record_lang',));
+                    $fdTable.'.lang = '.$fcrTable.'.record_lang',
+                ]
+            );
 
         if (is_numeric($searchTerm)) {
-            $search->setMatchingColumns(array($fdTable.'.solution_id'));
+            $search->setMatchingColumns([$fdTable.'.solution_id']);
         } else {
-            $search->setMatchingColumns(array($fdTable.'.thema', $fdTable.'.content', $fdTable.'.keywords'));
+            $search->setMatchingColumns([$fdTable.'.thema', $fdTable.'.content', $fdTable.'.keywords']);
         }
 
         $result = $search->search($searchTerm);
         $laction = 'view';
         $internalSearch = '&search='.$searchTerm;
         $wasSearch = true;
-        $idsFound = array();
-        $faqsFound = array();
+        $idsFound = [];
+        $faqsFound = [];
 
         while ($row = $faqConfig->getDb()->fetchObject($result)) {
             if ($searchCat != 0 && $searchCat != (int)$row->category_id) {
@@ -472,7 +478,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                           <?php if ($user->perm->checkRight($user->getUserId(),
                                     'approverec') && isset($numVisits[$record['id']])) { ?>
                             <label>
-                              <input type="checkbox" lang="<?= $record['lang'] ?>"
+                              <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
                                      onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
                                      id="active_record_<?= $cid.'_'.$record['id'] ?>"
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
@@ -580,27 +586,19 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
         if ('active' === type) {
           for (let j = 0; j < sameRecords.length; j++) {
             $('#' + sameRecords[j].id).attr('checked', status);
-
             const catid = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-            const current_item_count = $('#js-active-records-' + catid).html();
-            const delta = 'checked' === status ? -1 : 1;
-
-            $('#js-active-records-' + catid).html(current_item_count * 1 + delta);
+            $('#js-active-records-' + catid).html($('.active-records-category-' + cid + ':not(:checked)').length);
           }
         } else {
           for (let j = 0; j < sameRecords.length; j++) {
             $('#' + sameRecords[j].id).attr('checked', status);
-
             const catid = sameRecords[j].id.match(/active_record_(\d+)_\d+/)[1];
-            const current_item_count = $('#js-active-records-' + catid).html();
-            const delta = 'checked' === status ? -1 : 1;
-
-            $('#js-active-records-' + catid).html(current_item_count * 1 + delta);
+            $('#js-active-records-' + catid).html($('.active-records-category-' + cid + ':not(:checked)').length);
           }
         }
       }
 
-      $.get("index.php", data, null);
+      $.get('index.php', data, null);
       indicator.html('<?= $PMF_LANG['ad_entry_savedsuc'] ?>');
     }
 
