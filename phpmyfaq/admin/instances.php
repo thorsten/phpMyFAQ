@@ -217,39 +217,38 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         const admin = $('#admin').val();
         const password = $('#password').val();
 
-        $.get('index.php',
-          {
+        $.ajax({
+          url: 'index.php',
+          type: 'GET',
+          data: {
             action: 'ajax', ajax: 'config', ajaxaction: 'add_instance', csrf: csrf, url: url,
             instance: instance, comment: comment, email: email, admin: admin, password: password,
           },
-          function(data) {
-            if (typeof (data.added) === 'undefined') {
-              $('.table').after(
-                '<div class="alert alert-danger">Could not add instance</div>',
-              );
-            } else {
-              $('.modal').modal('hide');
-              $('.table tbody').append(
-                '<tr id="row-instance-' + data.added + '">' +
-                '<td>' + data.added + '</td>' +
-                '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
-                '<td>' + instance + '</td>' +
-                '<td>' + comment + '</td>' +
-                '<td>' +
-                '<a href="?action=editinstance&instance_id=' + data.added +
-                '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
-                '</td>' +
-                '<td>' +
-                '<a href="javascript:;" id="delete-instance-' + data.added +
-                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
-                '</td>' +
-                '</tr>',
-              );
-            }
+          success: (data) => {
+            $('.modal').modal('hide');
+            $('.table tbody').append(
+              '<tr id="row-instance-' + data.added + '">' +
+              '<td>' + data.added + '</td>' +
+              '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
+              '<td>' + instance + '</td>' +
+              '<td>' + comment + '</td>' +
+              '<td>' +
+              '<a href="?action=editinstance&instance_id=' + data.added +
+              '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
+              '</td>' +
+              '<td>' +
+              '<a href="javascript:;" id="delete-instance-' + data.added +
+              '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
+              '</td>' +
+              '</tr>',
+            );
           },
-          'json',
-        );
-
+          error: (data) => {
+            $('.table').after(
+              '<div class="alert alert-danger">Could not add instance</div>',
+            );
+          }
+        });
       });
 
       // Delete instance
