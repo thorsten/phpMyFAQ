@@ -31,23 +31,21 @@ document.addEventListener('DOMContentLoaded', () => {
    * @return void
    */
   selectSelectAll = function selectSelectAll(select_id) {
-    var selectOptions = $('#' + select_id + ' option'),
-      i = 0;
-    for (i = 0; i < selectOptions.length; i += 1) {
+    const selectOptions = $('#' + select_id + ' option');
+    for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = true;
     }
   };
 
   /**
-   * unselects all list options in the select with the given ID.
+   * deselects all list options in the select with the given ID.
    *
    * @param select_id
    * @return void
    */
   selectUnselectAll = function selectUnselectAll(select_id) {
-    var selectOptions = $('#' + select_id + ' option'),
-      i = 0;
-    for (i = 0; i < selectOptions.length; i += 1) {
+    const selectOptions = $('#' + select_id + ' option');
+    for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = false;
     }
   };
@@ -65,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   window.saveFormValues = function saveFormValues(action, formName) {
     const formValues = $('#formValues');
     const loader = $('#loader');
+    const formNameId = $('#' + formName + 's');
 
     loader
       .show()
@@ -79,24 +78,24 @@ document.addEventListener('DOMContentLoaded', () => {
       cache: false,
       success: function(json) {
         if (json.success === undefined) {
-          $('#' + formName + 's').html(
+          formNameId.html(
             '<p class="alert alert-danger">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else {
-          $('#' + formName + 's').html(
+          formNameId.html(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
               '</p>'
           );
-          $('#' + formName + 's').fadeIn('slow');
-          $('#loader').hide();
+          formNameId.fadeIn('slow');
+          loader.hide();
           $('#' + formName + 'Form').hide();
-          $('#formValues')[0].reset();
+          formValues[0].reset();
           // @todo add reload of content
         }
       },
@@ -208,7 +207,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   $('#captcha-button').on('click', function() {
-    var action = $(this).data('action');
+    const action = $(this).data('action');
     $.ajax({
       url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
       success: function() {
