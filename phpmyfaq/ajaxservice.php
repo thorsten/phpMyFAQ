@@ -486,6 +486,9 @@ switch ($action) {
 
         break;
 
+    //
+    // Add question
+    //
     case 'savequestion':
 
         if (!$faqConfig->get('records.allowQuestionsForGuests') &&

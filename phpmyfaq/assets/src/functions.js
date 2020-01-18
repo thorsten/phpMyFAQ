@@ -21,7 +21,7 @@
 
 let selectSelectAll, selectUnselectAll, saveVoting;
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /**
@@ -114,6 +114,8 @@ $(document).ready(function() {
    * @param lang
    */
   saveVoting = function saveVoting(type, id, value, lang) {
+    const votings = $('#votings');
+    const loader = $('#loader');
     $.ajax({
       type: 'post',
       url: 'ajaxservice.php?action=savevoting',
@@ -122,15 +124,15 @@ $(document).ready(function() {
       cache: false,
       success: function(json) {
         if (json.success === undefined) {
-          $('#votings').append(
+          votings.append(
             '<p class="alert alert-danger">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else {
-          $('#votings').append(
+          votings.append(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
@@ -139,8 +141,8 @@ $(document).ready(function() {
           $('#rating')
             .empty()
             .append(json.rating);
-          $('#votings').fadeIn('slow');
-          $('#loader').hide();
+          votings.fadeIn('slow');
+          loader.hide();
         }
       },
     });
@@ -153,12 +155,14 @@ $(document).ready(function() {
    *
    */
   window.checkQuestion = function checkQuestion() {
-    var formValues = $('#formValues');
+    const formValues = $('#formValues');
+    const loader = $('#loader');
+    const answerForm = $('#answerForm');
+    const answers = $('#answers');
+    const hintSuggestions = $('.hint-search-suggestion');
 
-    $('#loader').show();
-    $('#loader')
-      .fadeIn(400)
-      .html('<img src="assets/img/ajax-loader.gif">Saving ...');
+    loader.show();
+    loader.fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
 
     $.ajax({
       type: 'post',
@@ -174,27 +178,28 @@ $(document).ready(function() {
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else if (json.success === undefined) {
           $('#qerror').empty();
-          $('.hint-search-suggestion').show();
+          hintSuggestions.removeClass('d-none');
           $('#questionForm').fadeOut('slow');
-          $('#answerForm').html(json.result);
-          $('#answerForm').fadeIn('slow');
-          $('#loader').hide();
-          $('#formValues').append('<input type="hidden" name="save" value="1" />');
+          answerForm.html(json.result);
+          answerForm.fadeIn('slow');
+          loader.hide();
+          formValues.append('<input type="hidden" name="save" value="1">');
           $('#captcha').val('');
         } else {
-          $('#answers').html(
+          answers.html(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
               '</p>'
           );
-          $('#answers').fadeIn('slow');
-          $('#answerForm').fadeOut('slow');
-          $('#loader').hide();
-          $('#formValues').hide();
+          answers.fadeIn('slow');
+          answerForm.fadeOut('slow');
+          hintSuggestions.fadeOut('slow');
+          loader.hide();
+          formValues.hide();
         }
       },
     });
@@ -202,12 +207,12 @@ $(document).ready(function() {
     return false;
   };
 
-  $('#captcha-button').click(function() {
+  $('#captcha-button').on('click', function() {
     var action = $(this).data('action');
     $.ajax({
       url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
       success: function() {
-        var captcha = $('#captcha');
+        const captcha = $('#captcha');
         $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
         captcha.val('');
         captcha.focus();
