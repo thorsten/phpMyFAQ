@@ -25,31 +25,31 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 ?>
-    <header class="row">
-        <div class="col-lg-12">
-            <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
-                <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
-                          is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')): ?>
-                    <div class="float-right">
-                        <a class="btn btn-sm btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
-                            <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
-                        </a>
-                    </div>
-                <?php endif; ?>
-            </h2>
-        </div>
-    </header>
+  <header class="row">
+    <div class="col-lg-12">
+      <h2 class="page-header">
+        <i aria-hidden="true" class="fa fa-wrench fa-fw"></i> <?= $PMF_LANG['ad_menu_instances']; ?>
+          <?php if ($user->perm->checkRight($user->getUserId(), 'addinstances') &&
+              is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')): ?>
+            <div class="float-right">
+              <a class="btn btn-sm btn-success" data-toggle="modal" href="#pmf-modal-add-instance">
+                <i aria-hidden="true" class="fa fa-plus"></i> <?= $PMF_LANG['ad_instance_add'] ?>
+              </a>
+            </div>
+          <?php endif; ?>
+      </h2>
+    </div>
+  </header>
 
-    <div class="row">
-        <div class="col-lg-12">
+  <div class="row">
+  <div class="col-lg-12">
 <?php
 if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
     $instance = new Instance($faqConfig);
     $instanceId = Filter::filterInput(INPUT_POST, 'instance_id', FILTER_VALIDATE_INT);
 
     // Check, if /multisite is writeable
-    if (!is_writable(PMF_ROOT_DIR.DIRECTORY_SEPARATOR.'multisite')) {
+    if (!is_writable(PMF_ROOT_DIR . DIRECTORY_SEPARATOR . 'multisite')) {
         printf(
             '<p class="alert alert-danger">%s</p>',
             $PMF_LANG['ad_instance_error_notwritable']
@@ -63,6 +63,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
 
         // Collect data for database
         $data = [];
+        $data['url'] = Filter::filterInput(INPUT_POST, 'url', FILTER_SANITIZE_STRING);
         $data['instance'] = Filter::filterInput(INPUT_POST, 'instance', FILTER_SANITIZE_STRING);
         $data['comment'] = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
 
@@ -82,202 +83,207 @@ if ($user->perm->checkRight($user->getUserId(), 'editinstances')) {
         }
     }
     ?>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th><?= $PMF_LANG['ad_instance_url'] ?></th>
-            <th><?= $PMF_LANG['ad_instance_path'] ?></th>
-            <th colspan="3"><?= $PMF_LANG['ad_instance_name'] ?></th>
-        </tr>
-        </thead>
-        <tbody>
-        <?php
-        foreach ($instance->getAllInstances() as $site):
-            $currentInstance = new Instance($faqConfig);
-            $currentInstance->getInstanceById($site->id);
-            $currentInstance->setId($site->id);
-            ?>
-        <tr id="row-instance-<?= $site->id ?>">
-            <td><?= $site->id ?></td>
-            <td><a href="<?= $site->url.$site->instance ?>"><?= $site->url ?></a></td>
-            <td><?= $site->instance ?></td>
-            <td><?= $site->comment ?></td>
-            <td>
-                <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
-                    <i aria-hidden="true" class="fa fa-pencil"></i>
-                </a>
-            </td>
-            <td>
-                <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
-                <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
-                   class="btn btn-danger pmf-instance-delete"
-                   data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
-                    <i aria-hidden="true" class="fa fa-trash"></i>
-                </a>
-                <?php endif; ?>
-            </td>
-        </tr>
-        <?php endforeach; ?>
-        </tbody>
-    </table>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>#</th>
+      <th><?= $PMF_LANG['ad_instance_url'] ?></th>
+      <th><?= $PMF_LANG['ad_instance_path'] ?></th>
+      <th colspan="3"><?= $PMF_LANG['ad_instance_name'] ?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php
+    foreach ($instance->getAllInstances() as $site):
+        $currentInstance = new Instance($faqConfig);
+        $currentInstance->getInstanceById($site->id);
+        $currentInstance->setId($site->id);
+        ?>
+      <tr id="row-instance-<?= $site->id ?>">
+        <td><?= $site->id ?></td>
+        <td><a href="<?= $site->url . $site->instance ?>"><?= $site->url ?></a></td>
+        <td><?= $site->instance ?></td>
+        <td><?= $site->comment ?></td>
+        <td>
+          <a href="?action=editinstance&instance_id=<?= $site->id ?>" class="btn btn-info">
+            <i aria-hidden="true" class="fa fa-pencil"></i>
+          </a>
+        </td>
+        <td>
+            <?php if ($currentInstance->getConfig('isMaster') !== true): ?>
+              <a href="javascript:;" id="delete-instance-<?= $site->id ?>"
+                 class="btn btn-danger pmf-instance-delete"
+                 data-csrf-token="<?= $user->getCsrfTokenFromSession() ?>">
+                <i aria-hidden="true" class="fa fa-trash"></i>
+              </a>
+            <?php endif; ?>
+        </td>
+      </tr>
+    <?php endforeach; ?>
+    </tbody>
+  </table>
 
-    <div class="modal fade" id="pmf-modal-add-instance">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <a class="close" data-dismiss="modal">×</a>
-                    <h3><?= $PMF_LANG['ad_instance_add'] ?></h3>
-                </div>
-                <div class="modal-body">
-                    <form  action="#" method="post" accept-charset="utf-8">
-                        <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4">
-                                <?= $PMF_LANG['ad_instance_url'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <div class="input-group">
-                                    <span class="input-group-addon">http://</span>
-                                    <input class="form-control" type="text" name="url" id="url" required>
-                                    <span class="input-group-addon">.<?= $_SERVER['SERVER_NAME'] ?></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4">
-                                <?= $PMF_LANG['ad_instance_path'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="text" name="instance" id="instance" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4">
-                                <?= $PMF_LANG['ad_instance_name'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="text" name="comment" id="comment" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4" for="email">
-                                <?= $PMF_LANG['ad_instance_email'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="email" name="email" id="email" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4">
-                                <?= $PMF_LANG['ad_instance_admin'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="text" name="admin" id="admin" required>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-form-label col-lg-4" for="password">
-                                <?= $PMF_LANG['ad_instance_password'] ?>:
-                            </label>
-                            <div class="col-lg-8">
-                                <input class="form-control" type="password" name="password" id="password" required>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-                <div class="modal-footer">
-                    <p><?= $PMF_LANG['ad_instance_hint'] ?></p>
-                    <button class="btn btn-primary pmf-instance-add">
-                        <?= $PMF_LANG['ad_instance_button'] ?>
-                    </button>
-                </div>
-            </div>
+  <div class="modal fade" id="pmf-modal-add-instance">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4><?= $PMF_LANG['ad_instance_add'] ?></h4>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
+        <div class="modal-body">
+          <form action="#" method="post" accept-charset="utf-8">
+            <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4" for="url">
+                  <?= $PMF_LANG['ad_instance_url'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <div class="input-group">
+                  <div class="input-group-prepend">
+                    <div class="input-group-text">http://</div>
+                  </div>
+                  <input class="form-control" type="text" name="url" id="url" required>
+                  <div class="input-group-append">
+                    <div class="input-group-text">.<?= $_SERVER['SERVER_NAME'] ?></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4">
+                  <?= $PMF_LANG['ad_instance_path'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="instance" id="instance" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4">
+                  <?= $PMF_LANG['ad_instance_name'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="comment" id="comment" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4" for="email">
+                  <?= $PMF_LANG['ad_instance_email'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <input class="form-control" type="email" name="email" id="email" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4">
+                  <?= $PMF_LANG['ad_instance_admin'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <input class="form-control" type="text" name="admin" id="admin" required>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-form-label col-lg-4" for="password">
+                  <?= $PMF_LANG['ad_instance_password'] ?>:
+              </label>
+              <div class="col-lg-8">
+                <input class="form-control" type="password" name="password" id="password" required>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <p><?= $PMF_LANG['ad_instance_hint'] ?></p>
+          <button class="btn btn-primary pmf-instance-add">
+              <?= $PMF_LANG['ad_instance_button'] ?>
+          </button>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        (function() {
+  <script>
+    (function() {
 
-            // Add instance
-            $('.pmf-instance-add').click(function(event) {
-                event.preventDefault();
-                var csrf     = $('#csrf').val();
-                var url      = $('#url').val();
-                var instance = $('#instance').val();
-                var comment  = $('#comment').val();
-                var email    = $('#email').val();
-                var admin    = $('#admin').val();
-                var password = $('#password').val();
+      // Add instance
+      $('.pmf-instance-add').on('click', function(event) {
+        event.preventDefault();
+        const csrf = $('#csrf').val();
+        const url = $('#url').val();
+        const instance = $('#instance').val();
+        const comment = $('#comment').val();
+        const email = $('#email').val();
+        const admin = $('#admin').val();
+        const password = $('#password').val();
 
-                $.get('index.php',
-                    {
-                        action: 'ajax', ajax: 'config', ajaxaction: 'add_instance', csrf: csrf, url: url,
-                        instance: instance, comment: comment, email: email, admin: admin, password: password
-                    },
-                    function(data) {
-                        if (typeof(data.added) === 'undefined') {
-                            $('.table').after(
-                                '<div class="alert alert-danger">Could not add instance</div>'
-                            );
-                        } else {
-                            $('.modal').modal('hide');
-                            $('.table tbody').append(
-                                '<tr id="row-instance-' + data.added + '">' +
-                                '<td>' + data.added + '</td>' +
-                                '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
-                                '<td>' + instance + '</td>' +
-                                '<td>' + comment + '</td>' +
-                                '<td>' +
-                                '<a href="?action=editinstance&instance_id=' + data.added +
-                                '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
-                                '</td>' +
-                                '<td>' +
-                                '<a href="javascript:;" id="delete-instance-' + data.added +
-                                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
-                                '</td>' +
-                                '</tr>'
-                            );
-                        }
-                    },
-                    'json'
+        $.get('index.php',
+          {
+            action: 'ajax', ajax: 'config', ajaxaction: 'add_instance', csrf: csrf, url: url,
+            instance: instance, comment: comment, email: email, admin: admin, password: password,
+          },
+          function(data) {
+            if (typeof (data.added) === 'undefined') {
+              $('.table').after(
+                '<div class="alert alert-danger">Could not add instance</div>',
+              );
+            } else {
+              $('.modal').modal('hide');
+              $('.table tbody').append(
+                '<tr id="row-instance-' + data.added + '">' +
+                '<td>' + data.added + '</td>' +
+                '<td><a href="' + data.url + '">' + data.url + '</a></td>' +
+                '<td>' + instance + '</td>' +
+                '<td>' + comment + '</td>' +
+                '<td>' +
+                '<a href="?action=editinstance&instance_id=' + data.added +
+                '" class="btn btn-info"><i aria-hidden="true" class="fa fa-pencil"></i></a>' +
+                '</td>' +
+                '<td>' +
+                '<a href="javascript:;" id="delete-instance-' + data.added +
+                '" class="btn btn-danger pmf-instance-delete"><i aria-hidden="true" class="fa fa-trash"></i></a>' +
+                '</td>' +
+                '</tr>',
+              );
+            }
+          },
+          'json',
+        );
+
+      });
+
+      // Delete instance
+      $('.pmf-instance-delete').click(function(event) {
+        event.preventDefault();
+        const targetId = event.target.id.split('-');
+        const id = targetId[2];
+        const csrf = this.getAttribute('data-csrf-token');
+
+        if (confirm('Are you sure?')) {
+          $.get('index.php',
+            { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
+            function(data) {
+              if (typeof (data.deleted) === 'undefined') {
+                $('.table').after(
+                  '<div class="alert alert-danger">' +
+                  '<?= $PMF_LANG['ad_instance_error_cannotdelete'] ?> ' + data.error +
+                  '</div>',
                 );
+              } else {
+                $('#row-instance-' + id).fadeOut('slow');
+              }
+            },
+            'json',
+          );
+        }
+      });
 
-            });
+    })();
+  </script>
 
-            // Delete instance
-            $('.pmf-instance-delete').click(function(event) {
-                event.preventDefault();
-                var targetId = event.target.id.split('-');
-                var id = targetId[2];
-                var csrf = this.getAttribute('data-csrf-token');
-
-                if (confirm('Are you sure?')) {
-                    $.get('index.php',
-                        { action: 'ajax', ajax: 'config', ajaxaction: 'delete_instance', instanceId: id, csrf: csrf },
-                        function(data) {
-                            if (typeof(data.deleted) === 'undefined') {
-                                $('.table').after(
-                                    '<div class="alert alert-danger">' +
-                                    '<?= $PMF_LANG['ad_instance_error_cannotdelete'] ?> ' + data.error +
-                                    '</div>'
-                                );
-                            } else {
-                                $('#row-instance-' + id).fadeOut('slow');
-                            }
-                        },
-                        'json'
-                    );
-                }
-            });
-
-        })();
-    </script>
-
-    </div>
-    </div>
-<?php
-
+  </div>
+  </div>
+    <?php
 } else {
     print $PMF_LANG['err_NotAuth'];
 }

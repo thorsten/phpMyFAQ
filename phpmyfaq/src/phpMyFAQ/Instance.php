@@ -152,10 +152,11 @@ class Instance
     public function updateInstance(int $id, array $data): bool
     {
         $update = sprintf(
-            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",
+            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
             $data['instance'],
             $data['comment'],
+            $data['url'],
             (int)$id
         );
 
