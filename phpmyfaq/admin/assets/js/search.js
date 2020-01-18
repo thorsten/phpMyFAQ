@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       dataType: 'json',
     }).done(message => {
       const result = $('.result'),
-        indicator = $('#saving_data_indicator');
+        indicator = $('#pmf-admin-saving-data-indicator');
 
       indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>');
       result.empty();

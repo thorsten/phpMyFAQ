@@ -560,7 +560,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
      * @return void
      */
     function saveStatus(cid, ids, type, csrf) {
-      const indicator = $('#saving_data_indicator'),
+      const indicator = $('#pmf-admin-saving-data-indicator'),
         data = {
           action: 'ajax',
           ajax: 'records',
@@ -615,14 +615,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
     {
         if (confirm('<?= addslashes($PMF_LANG['ad_entry_del_1'].' '.$PMF_LANG['ad_entry_del_3']);
         ?>')) {
-            $('#saving_data_indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
+            $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
             $.ajax({
                 type:    "POST",
                 url:     "index.php?action=ajax&ajax=records&ajaxaction=delete_record",
                 data:    "record_id=" + record_id + "&record_lang=" + record_lang + "&csrf=" + csrf_token,
                 success: function() {
                     $("#record_" + record_id + "_" + record_lang).fadeOut("slow");
-                    $('#saving_data_indicator').html('<?= $PMF_LANG['ad_entry_delsuc'];
+                    $('#pmf-admin-saving-data-indicator').html('<?= $PMF_LANG['ad_entry_delsuc'];
         ?>');
                 }
             });

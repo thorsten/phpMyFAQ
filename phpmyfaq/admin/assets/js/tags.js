@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded', () => {
       data: 'id=' + id + '&tag=' + tag + '&csrf=' + csrf,
       dataType: 'json',
       beforeSend: function() {
-        $('#saving_data_indicator').html(
+        $('#pmf-admin-saving-data-indicator').html(
           '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
         );
       },
       success: function(message) {
         input.replaceWith('<span data-tag-id="' + id + '">' + input.val().replace(/\//g, '&#x2F;') + '</span>');
         $('span[data-tag-id="' + id + '"]');
-        $('#saving_data_indicator').html(message);
+        $('#pmf-admin-saving-data-indicator').html(message);
       },
     });
 

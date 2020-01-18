@@ -378,7 +378,7 @@ switch ($action) {
         </li>
 
         <li>
-          <div class="text-center small" id="saving_data_indicator"></div>
+          <div class="text-center small" id="pmf-admin-saving-data-indicator"></div>
         </li>
 
       <?php endif; ?>

@@ -72,14 +72,14 @@ document.addEventListener('DOMContentLoaded', () => {
       data: $('#pmf-modal-user-password-override form').serialize(),
       dataType: 'json',
       beforeSend: function() {
-        $('#saving_data_indicator').html(
+        $('#pmf-admin-saving-data-indicator').html(
           '<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Saving ...</span>'
         );
       },
       success: function(message) {
         $('.pmf-admin-override-password').replaceWith('<p>✓ ' + message.success + '</p>');
         $('#pmf-modal-user-password-override').modal('hide');
-        $('#saving_data_indicator').fadeOut();
+        $('#pmf-admin-saving-data-indicator').fadeOut();
       },
     });
     return false;

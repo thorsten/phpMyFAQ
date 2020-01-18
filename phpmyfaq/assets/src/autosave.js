@@ -74,7 +74,7 @@ $(document).ready(function() {
         success: function(r) {
           var resp = $.parseJSON(r);
 
-          $('#saving_data_indicator').html(resp.msg);
+          $('#pmf-admin-saving-data-indicator').html(resp.msg);
 
           ed.isNotDirty = true;
 
