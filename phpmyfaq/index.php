@@ -692,19 +692,9 @@ if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
     );
 }
 
-if ($faqConfig->get('main.enableRssFeeds')) {
-    $rssFeedTopTen = '<a href="feed/topten/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
-    $rssFeedLatest = '<a href="feed/latest/rss.php" target="_blank"><i class="fa fa-rss-square"></i></a>';
-} else {
-    $rssFeedTopTen = '';
-    $rssFeedLatest = '';
-}
-
 $tplHeaders = [
     'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-    'rssFeedTopTen' => $rssFeedTopTen,
     'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-    'rssFeedLatest' => $rssFeedLatest,
     'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
     'writeTags' => $oTag->renderTagCloud(),
     'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
