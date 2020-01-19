@@ -257,7 +257,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             $csrfOkay = false;
         }
 
-        if ($userPassword != $userPasswordConfirm) {
+        if ($userPassword !== $userPasswordConfirm) {
             $userPassword = '';
             $userPasswordConfirm = '';
             $messages[] = $PMF_LANG['ad_user_error_passwordsDontMatch'];
@@ -290,7 +290,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 $messages[] = $newUser->error();
             } else {
                 // set user data (realname, email)
-                $newUser->userdata->set(array('display_name', 'email'), array($userRealName, $userEmail));
+                $newUser->userdata->set(['display_name', 'email'], [$userRealName, $userEmail]);
                 // set user status
                 $newUser->setStatus($defaultUserStatus);
                 $newUser->setSuperAdmin($userIsSuperAdmin === 'on' ? true : false);
@@ -300,11 +300,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         // no errors, send notification to user and show list
         if (count($messages) === 0) {
             $text = sprintf(
-                "You have been registrated as a new user:\n\nName: %s\nLogin name: %s\n\nPassword: %\n\n" .
-                'Check it out here: %s.',
+                "You have been registered as a new user:\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" .
+                'Check it out here: %s',
                 $userRealName,
                 $userName,
-                $user->createPassword(),
+                $userPassword,
                 $faqConfig->getDefaultUrl()
             );
 
@@ -423,11 +423,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <a class="btn btn-sm     btn-success" href="?action=user&amp;user_action=add">
+            <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
                 <?= $PMF_LANG['ad_user_add'] ?>
             </a>
               <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')): ?>
-                <a class="btn btn-sm     btn-info" href="?action=user&amp;user_action=listallusers">
+                <a class="btn btn-sm btn-info" href="?action=user&amp;user_action=listallusers">
                     <?= $PMF_LANG['list_all_users'] ?>
                 </a>
               <?php endif ?>
@@ -668,15 +668,15 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <a class="btn btn-sm     btn-success" href="?action=user&amp;user_action=add">
-                <?= $PMF_LANG['ad_user_add'] ?>
+            <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
+              <?= $PMF_LANG['ad_user_add'] ?>
             </a>
           </div>
         </div>
       </div>
 
-      <div id="user_message"><?= $message;
-          ?></div>
+      <div id="user_message"><?= $message ?></div>
+
       <table class="table table-striped">
         <thead class="thead-dark">
         <tr>
@@ -692,8 +692,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
           <?php if ($perPage < $numUsers): ?>
             <tfoot>
             <tr>
-              <td colspan="8"><?= $pagination->render();
-                  ?></td>
+              <td colspan="8"><?= $pagination->render() ?></td>
             </tr>
             </tfoot>
           <?php endif;
@@ -716,7 +715,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             ?>
           <tr class="row_user_id_<?= $user->getUserId() ?>">
             <td><?= $user->getUserId() ?></td>
-            <td><i class="fa <?php
+            <td class="text-center"><i class="fa <?php
                 switch ($user->getStatus()) {
                     case 'active':
                         echo 'fa-check-circle-o';
@@ -729,7 +728,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                         break;
                 }
                 ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
-            <td><i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i></td>
+            <td class="text-center">
+              <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
+            </td>
             <td><?= $user->getUserData('display_name') ?></td>
             <td><?= $user->getLogin() ?></td>
             <td>
