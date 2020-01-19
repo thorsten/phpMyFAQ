@@ -172,7 +172,7 @@ class Instance
      */
     public function removeInstance(int $id)
     {
-        $deletes = array(
+        $deletes = [
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
                 Database::getTablePrefix(),
@@ -183,7 +183,7 @@ class Instance
                 Database::getTablePrefix(),
                 (int)$id
             ),
-        );
+        ];
 
         foreach ($deletes as $delete) {
             $success = $this->config->getDb()->query($delete);
