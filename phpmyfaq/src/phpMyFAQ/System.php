@@ -68,12 +68,12 @@ class System
      */
     private $requiredExtensions = [
         'curl',
+        'fileinfo',
+        'filter',
         'gd',
         'json',
-        'xmlwriter',
-        'filter',
         'zip',
-        'fileinfo'
+        'xml'
     ];
 
     /**
