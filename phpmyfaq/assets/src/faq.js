@@ -23,8 +23,3 @@ $('pre code').each((i, block) => {
   'use strict';
   hljs.highlightBlock(block);
 });
-
-$('div.pmf-stars > div.pmf-star-rating > span').on('click', event => {
-  const numStars = $(event.target).data('stars');
-  saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
-});
