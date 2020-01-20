@@ -16,7 +16,7 @@
 export const calculateReadingTime = () => {
   const wordsPerMinute = 200;
   const answer = document.getElementsByClassName('pmf-faq-body');
-  let result;
+  let result = '';
 
   let textLength = answer[0].innerText.split(' ').length;
   if (textLength > 0) {
