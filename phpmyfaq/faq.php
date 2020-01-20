@@ -201,6 +201,17 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
         $PMF_LANG['msgYouCan'],
         $PMF_LANG['msgWriteComment']
     );
+    $template->parseBlock(
+        'mainPageContent',
+        'enableComments',
+        [
+            'numberOfComments' => sprintf(
+                '%d %s',
+                isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
+                $PMF_LANG['ad_start_comments']
+            ),
+        ]
+    );
 }
 
 $translationUrl = sprintf(
@@ -308,11 +319,6 @@ $template->parse(
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => $faq->faqRecord['author'],
-        'numberOfComments' => sprintf(
-            '%d %s',
-            isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
-            $PMF_LANG['ad_start_comments']
-        ),
         'editThisEntry' => $editThisEntry,
         'msgPdf' => $PMF_LANG['msgPDF'],
         'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
