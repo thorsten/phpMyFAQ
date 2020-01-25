@@ -42,17 +42,17 @@ if ($user->perm->checkRight($user->getUserId(), 'add_section') ||
         $sections = [];
         foreach ($sectionList as $sectionId) {
             $data = $user->perm->getSectionData($sectionId);
-            $sections[] = array(
+            $sections[] = [
                 'section_id' => $data['id'],
                 'name' => $data['name'],
-            );
+            ];
         }
         $http->sendJsonWithHeaders($sections);
     }
 
     // Return the section data
     if ('get_section_data' == $ajaxAction) {
-        echo json_encode($user->perm->getSectionData($sectionId));
+        $http->sendJsonWithHeaders($user->perm->getSectionData($sectionId));
     }
 
     // Returns all section members

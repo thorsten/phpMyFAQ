@@ -6,7 +6,7 @@ php:
   - '7.4'
 
 sudo: required
-dist: trusty
+dist: xenial
 group: edge
 
 env:

@@ -35,10 +35,6 @@ if (!is_null($archived)) {
     $archived = true;
 } else {
     $writeNewsHeader = ' ' . $PMF_LANG['msgNews'];
-    if ($faqConfig->get('main.enableRssFeeds')) {
-        $writeNewsRSS = '&nbsp;<a href="feed/news/rss.php" target="_blank">' .
-            '<i class="fa fa-rss-square"></i></a>';
-    }
     $showAllNews = sprintf('<a href="?%snewsid=0">%s</a>', $sids, $PMF_LANG['newsShowArchive']);
 }
 

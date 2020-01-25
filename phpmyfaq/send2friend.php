@@ -31,7 +31,7 @@ $captcha = new Captcha($faqConfig);
 $captchaHelper = new CaptchaHelper($faqConfig);
 
 if (!$faqConfig->get('main.enableSendToFriend')) {
-    $http->sendStatus(403);
+    $http->setStatus(403);
     $http->redirect($faqConfig->getDefaultUrl());
 }
 

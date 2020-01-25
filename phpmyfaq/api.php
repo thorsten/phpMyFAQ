@@ -122,7 +122,6 @@ if (!is_null($user) && $user instanceof CurrentUser) {
     $currentGroups = [-1];
 }
 
-
 //
 // Handle actions
 //
@@ -304,7 +303,7 @@ switch ($action) {
                 $result[] = $data;
             }
         } else {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
 
         break;
@@ -316,7 +315,7 @@ switch ($action) {
         $category->setLanguage($currentLanguage);
         $result = array_values($category->getAllCategories());
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -324,7 +323,7 @@ switch ($action) {
         $tags = new Tags($faqConfig);
         $result = $tags->getPopularTagsAsArray(16);
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -332,7 +331,7 @@ switch ($action) {
         $questions = new Question($faqConfig);
         $result = $questions->getAllOpenQuestions();
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -340,7 +339,7 @@ switch ($action) {
         $search = new Search($faqConfig);
         $result = $search->getMostPopularSearches(7, true);
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -348,7 +347,7 @@ switch ($action) {
         $comment = new Comments($faqConfig);
         $result = $comment->getCommentsData($recordId, CommentType::FAQ);
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -366,7 +365,7 @@ switch ($action) {
             ];
         }
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -374,7 +373,7 @@ switch ($action) {
         $news = new News($faqConfig);
         $result = $news->getLatestData(false, true, true);
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -390,7 +389,7 @@ switch ($action) {
             try {
                 $result = $faq->getAllRecordPerCategory($categoryId);
             } catch (Exception $e) {
-                $http->sendStatus(400);
+                $http->setStatus(400);
             }
         }
 
@@ -401,7 +400,7 @@ switch ($action) {
             try {
                 $result = $faq->getRecordsByIds($recordIds);
             } catch (Exception $e) {
-                $http->sendStatus(400);
+                $http->setStatus(400);
             }
         }
 
@@ -427,7 +426,7 @@ switch ($action) {
         }
 
         if (count($result) === 0) {
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
         break;
 
@@ -443,7 +442,7 @@ switch ($action) {
 
         if (count($result) === 0 || $result['solution_id'] === 42) {
             $result = new stdClass();
-            $http->sendStatus(404);
+            $http->setStatus(404);
         }
 
         if ('pdf' === $filter) {
@@ -467,7 +466,7 @@ switch ($action) {
                 ];
             } else {
                 $auth = false;
-                $http->sendStatus(400);
+                $http->setStatus(400);
                 $result = [
                     'loggedin' => false,
                     'error' => $PMF_LANG['ad_auth_fail']
@@ -475,7 +474,7 @@ switch ($action) {
             }
         } else {
             $auth = false;
-            $http->sendStatus(400);
+            $http->setStatus(400);
             $result = [
                 'loggedin' => false,
                 'error' => $PMF_LANG['ad_auth_fail']
@@ -484,7 +483,7 @@ switch ($action) {
         break;
 
     case 'register':
-        $http->sendStatus(418);
+        $http->setStatus(418);
         break;
 }
 
@@ -492,12 +491,9 @@ switch ($action) {
 // Check if FAQ should be secured
 //
 if (!$auth && $faqConfig->get('security.enableLoginOnly')) {
-    $http->sendJsonWithHeaders(
-        [
-            'error' => 'You are not allowed to view this content.'
-        ]
-    );
-    $http->sendStatus(403);
+    $http->setStatus(403);
+    $http->sendJsonWithHeaders([ 'error' => 'You are not allowed to view this content.' ]);
+    exit();
 }
 
 $http->sendJsonWithHeaders($result);

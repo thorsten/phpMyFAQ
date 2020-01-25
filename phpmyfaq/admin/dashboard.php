@@ -190,7 +190,7 @@ $faqSession = new Session($faqConfig);
                       $versions = $api->getVersions();
                       printf(
                           '<p class="alert alert-%s">%s <a href="https://www.phpmyfaq.de" target="_blank">phpmyfaq.de</a>: <strong>phpMyFAQ %s</strong>',
-                          (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'primary',
+                          (-1 == version_compare($versions['installed'], $versions['current'])) ? 'danger' : 'info',
                           $PMF_LANG['ad_xmlrpc_latest'],
                           $versions['current']
                       );
@@ -206,9 +206,8 @@ $faqSession = new Session($faqConfig);
                 <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
                       accept-charset="utf-8">
                   <input type="hidden" name="param" value="version"/>
-                  <button class="btn btn-primary" type="submit">
-                    <i aria-hidden="true" class="fa fa-check fa fa-white"></i> <?= $PMF_LANG['ad_xmlrpc_button'];
-                      ?>
+                  <button class="btn btn-info" type="submit">
+                    <?= $PMF_LANG['ad_xmlrpc_button'] ?>
                   </button>
                 </form>
                   <?php
@@ -249,7 +248,7 @@ $faqSession = new Session($faqConfig);
                               printf('<p class="alert alert-success">%s</p>', $PMF_LANG['ad_verification_okay']);
                           }
                       }
-                  } catch (Exception $e) {
+                  } catch (\Exception $e) {
                       printf('<p class="alert alert-danger">%s</p>', $e->getMessage());
                   }
               } else {
@@ -257,9 +256,8 @@ $faqSession = new Session($faqConfig);
                 <form action="<?= $faqSystem->getSystemUri($faqConfig) ?>admin/index.php" method="post"
                       accept-charset="utf-8">
                   <input type="hidden" name="getJson" value="verify"/>
-                  <button class="btn btn-primary" type="submit">
-                    <i aria-hidden="true"
-                       class="fa fa-certificate fa fa-white"></i> <?= $PMF_LANG['ad_verification_button'] ?>
+                  <button class="btn btn-info" type="submit">
+                    <?= $PMF_LANG['ad_verification_button'] ?>
                   </button>
                 </form>
                   <?php

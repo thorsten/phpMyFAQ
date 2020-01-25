@@ -20,10 +20,12 @@
           <i aria-hidden="true" class="fa fa-calendar"></i>
           <span class="data">{{ faqDate }}</span>
         </div>
+        [enableComments]
         <div class="pmf-faq-comments">
           <i aria-hidden="true" class="fa fa-comments"></i>
           <span class="data"><a class="show-comment-form" href="#">{{ numberOfComments }}</a></span>
         </div>
+        [/enableComments]
         <div class="pmf-faq-edit">
           {{ editThisEntry }}
         </div>
@@ -195,5 +197,14 @@
   </div>
 </section>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    'use strict';
+    $('div.pmf-stars > div.pmf-star-rating > span').on('click', event => {
+      const numStars = $(event.target).data('stars');
+      saveVoting('faq', '{{ id }}', numStars, '{{ lang }}');
+    });
+  });
+</script>
 <script src="assets/js/libs/highlight.pack.js"></script>
 <link rel="stylesheet" href="assets/js/libs/default.css" />

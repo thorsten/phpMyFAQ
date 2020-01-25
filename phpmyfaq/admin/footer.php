@@ -223,9 +223,9 @@ if (isset($auth)) {
             });
 
             function phpMyFAQSave() {
-              var indicator = $('#saving_data_indicator'),
+              const indicator = $('#pmf-admin-saving-data-indicator'),
                 input = document.createElement('input');
-              indicator.html('<img src="images/indicator.gif"> Saving ...');
+              indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i> Saving ...');
               input.setAttribute('name', $('button:submit')[0].name);
               input.setAttribute('id', 'temporarySaveButton');
               $('#answer')[0].parentNode.appendChild(input);

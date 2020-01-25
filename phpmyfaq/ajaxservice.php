@@ -131,7 +131,9 @@ if (isset($message['error'])) {
 
 // Save user generated content
 switch ($action) {
+    //
     // Comments
+    //
     case 'savecomment':
 
         if (!$faqConfig->get('records.allowCommentsForGuests') &&
@@ -145,7 +147,7 @@ switch ($action) {
         $category = new Category($faqConfig);
         $type = Filter::filterInput(INPUT_POST, 'type', FILTER_SANITIZE_STRING);
         $faqId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT, 0);
-        $newsId = Filter::filterInput(INPUT_POST, 'newsid', FILTER_VALIDATE_INT);
+        $newsId = Filter::filterInput(INPUT_POST, 'newsId', FILTER_VALIDATE_INT);
         $username = Filter::filterInput(INPUT_POST, 'user', FILTER_SANITIZE_STRING);
         $mailer = Filter::filterInput(INPUT_POST, 'mail', FILTER_VALIDATE_EMAIL);
         $comment = Filter::filterInput(INPUT_POST, 'comment_text', FILTER_SANITIZE_STRING);
@@ -172,6 +174,7 @@ switch ($action) {
                 break;
             }
         }
+
         if (!is_null($username) && !is_null($mailer) && !is_null($comment) && $stopWords->checkBannedWord(
                 $comment
             ) && !$faq->commentDisabled(
@@ -483,6 +486,9 @@ switch ($action) {
 
         break;
 
+    //
+    // Add question
+    //
     case 'savequestion':
 
         if (!$faqConfig->get('records.allowQuestionsForGuests') &&

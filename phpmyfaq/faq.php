@@ -201,6 +201,17 @@ if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGues
         $PMF_LANG['msgYouCan'],
         $PMF_LANG['msgWriteComment']
     );
+    $template->parseBlock(
+        'mainPageContent',
+        'enableComments',
+        [
+            'numberOfComments' => sprintf(
+                '%d %s',
+                isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
+                $PMF_LANG['ad_start_comments']
+            ),
+        ]
+    );
 }
 
 $translationUrl = sprintf(
@@ -295,7 +306,7 @@ $faqServices->setQuestion($faq->getRecordTitle($id));
 
 // Check if category ID and FAQ ID are linked together
 if (!$category->categoryHasLinkToFaq($recordId, $currentCategory)) {
-    $http->sendStatus(404);
+    $http->setStatus(404);
 }
 
 $template->parse(
@@ -308,11 +319,6 @@ $template->parse(
         'answer' => $answer,
         'faqDate' => $date->format($faq->faqRecord['date']),
         'faqAuthor' => $faq->faqRecord['author'],
-        'numberOfComments' => sprintf(
-            '%d %s',
-            isset($numComments[$recordId]) ? $numComments[$recordId] : 0,
-            $PMF_LANG['ad_start_comments']
-        ),
         'editThisEntry' => $editThisEntry,
         'msgPdf' => $PMF_LANG['msgPDF'],
         'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],

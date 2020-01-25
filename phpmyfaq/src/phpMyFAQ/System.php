@@ -68,12 +68,12 @@ class System
      */
     private $requiredExtensions = [
         'curl',
+        'fileinfo',
+        'filter',
         'gd',
         'json',
-        'xmlwriter',
-        'filter',
         'zip',
-        'fileinfo'
+        'xml'
     ];
 
     /**
@@ -323,15 +323,15 @@ class System
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $hashes = array(
+        $hashes = [
             'created' => $created->format('Y-m-d H:i:sP'),
-        );
-        $blacklist = array(
+        ];
+        $blacklist = [
             '/config/constants.php' => false,
             '/config/constants_elasticsearch.php' => false,
             '/config/database.php' => false,
             '/config/ldap.php' => false,
-        );
+        ];
         $current = '';
 
         try {

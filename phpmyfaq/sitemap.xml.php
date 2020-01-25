@@ -135,7 +135,7 @@ if (!is_null($getGzip) && (1 == $getGzip)) {
         echo $sitemapGz;
     } else {
         $http = new HttpHelper();
-        $http->sendStatus(404);
+        $http->setStatus(404);
     }
 } else {
     header('Content-Type: text/xml');

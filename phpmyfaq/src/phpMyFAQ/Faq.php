@@ -125,7 +125,7 @@ class Faq
         $this->translation = $PMF_LANG;
         $this->plurals = $plr;
 
-        if ($this->config->get('security.permLevel') == 'medium') {
+        if ($this->config->get('security.permLevel') !== 'basic') {
             $this->groupSupport = true;
         }
     }

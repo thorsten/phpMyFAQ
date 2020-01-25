@@ -50,7 +50,7 @@ $id = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
 $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
 
 if (!(isset($id) && isset($lang))) {
-    $http->sendStatus(401);
+    $http->setStatus(401);
     exit();
 }
 
@@ -58,7 +58,7 @@ $faq->faqRecord = null;
 $faq->getRecord($id);
 
 if (!isset($faq->faqRecord['content'])) {
-    $http->sendStatus(401);
+    $http->setStatus(401);
     exit();
 }
 

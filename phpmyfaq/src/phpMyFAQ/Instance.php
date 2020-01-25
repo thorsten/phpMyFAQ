@@ -152,10 +152,11 @@ class Instance
     public function updateInstance(int $id, array $data): bool
     {
         $update = sprintf(
-            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s' WHERE id = %d",
+            "UPDATE %sfaqinstances SET instance = '%s', comment = '%s', url = '%s' WHERE id = %d",
             Database::getTablePrefix(),
             $data['instance'],
             $data['comment'],
+            $data['url'],
             (int)$id
         );
 
@@ -171,7 +172,7 @@ class Instance
      */
     public function removeInstance(int $id)
     {
-        $deletes = array(
+        $deletes = [
             sprintf(
                 'DELETE FROM %sfaqinstances WHERE id = %d',
                 Database::getTablePrefix(),
@@ -182,7 +183,7 @@ class Instance
                 Database::getTablePrefix(),
                 (int)$id
             ),
-        );
+        ];
 
         foreach ($deletes as $delete) {
             $success = $this->config->getDb()->query($delete);

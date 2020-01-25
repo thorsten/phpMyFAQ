@@ -21,7 +21,7 @@
 
 let selectSelectAll, selectUnselectAll, saveVoting;
 
-$(document).ready(function() {
+document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
   /**
@@ -31,23 +31,21 @@ $(document).ready(function() {
    * @return void
    */
   selectSelectAll = function selectSelectAll(select_id) {
-    var selectOptions = $('#' + select_id + ' option'),
-      i = 0;
-    for (i = 0; i < selectOptions.length; i += 1) {
+    const selectOptions = $('#' + select_id + ' option');
+    for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = true;
     }
   };
 
   /**
-   * unselects all list options in the select with the given ID.
+   * deselects all list options in the select with the given ID.
    *
    * @param select_id
    * @return void
    */
   selectUnselectAll = function selectUnselectAll(select_id) {
-    var selectOptions = $('#' + select_id + ' option'),
-      i = 0;
-    for (i = 0; i < selectOptions.length; i += 1) {
+    const selectOptions = $('#' + select_id + ' option');
+    for (let i = 0; i < selectOptions.length; i += 1) {
       selectOptions[i].selected = false;
     }
   };
@@ -65,6 +63,7 @@ $(document).ready(function() {
   window.saveFormValues = function saveFormValues(action, formName) {
     const formValues = $('#formValues');
     const loader = $('#loader');
+    const formNameId = $('#' + formName + 's');
 
     loader
       .show()
@@ -79,24 +78,24 @@ $(document).ready(function() {
       cache: false,
       success: function(json) {
         if (json.success === undefined) {
-          $('#' + formName + 's').html(
+          formNameId.html(
             '<p class="alert alert-danger">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else {
-          $('#' + formName + 's').html(
+          formNameId.html(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
               '</p>'
           );
-          $('#' + formName + 's').fadeIn('slow');
-          $('#loader').hide();
+          formNameId.fadeIn('slow');
+          loader.hide();
           $('#' + formName + 'Form').hide();
-          $('#formValues')[0].reset();
+          formValues[0].reset();
           // @todo add reload of content
         }
       },
@@ -114,6 +113,8 @@ $(document).ready(function() {
    * @param lang
    */
   saveVoting = function saveVoting(type, id, value, lang) {
+    const votings = $('#votings');
+    const loader = $('#loader');
     $.ajax({
       type: 'post',
       url: 'ajaxservice.php?action=savevoting',
@@ -122,15 +123,15 @@ $(document).ready(function() {
       cache: false,
       success: function(json) {
         if (json.success === undefined) {
-          $('#votings').append(
+          votings.append(
             '<p class="alert alert-danger">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else {
-          $('#votings').append(
+          votings.append(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
@@ -139,8 +140,8 @@ $(document).ready(function() {
           $('#rating')
             .empty()
             .append(json.rating);
-          $('#votings').fadeIn('slow');
-          $('#loader').hide();
+          votings.fadeIn('slow');
+          loader.hide();
         }
       },
     });
@@ -153,12 +154,14 @@ $(document).ready(function() {
    *
    */
   window.checkQuestion = function checkQuestion() {
-    var formValues = $('#formValues');
+    const formValues = $('#formValues');
+    const loader = $('#loader');
+    const answerForm = $('#answerForm');
+    const answers = $('#answers');
+    const hintSuggestions = $('.hint-search-suggestion');
 
-    $('#loader').show();
-    $('#loader')
-      .fadeIn(400)
-      .html('<img src="assets/img/ajax-loader.gif">Saving ...');
+    loader.show();
+    loader.fadeIn(400).html('<img src="assets/img/ajax-loader.gif">Saving ...');
 
     $.ajax({
       type: 'post',
@@ -174,27 +177,28 @@ $(document).ready(function() {
               json.error +
               '</p>'
           );
-          $('#loader').hide();
+          loader.hide();
         } else if (json.success === undefined) {
           $('#qerror').empty();
-          $('.hint-search-suggestion').show();
+          hintSuggestions.removeClass('d-none');
           $('#questionForm').fadeOut('slow');
-          $('#answerForm').html(json.result);
-          $('#answerForm').fadeIn('slow');
-          $('#loader').hide();
-          $('#formValues').append('<input type="hidden" name="save" value="1" />');
+          answerForm.html(json.result);
+          answerForm.fadeIn('slow');
+          loader.hide();
+          formValues.append('<input type="hidden" name="save" value="1">');
           $('#captcha').val('');
         } else {
-          $('#answers').html(
+          answers.html(
             '<p class="alert alert-success">' +
               '<button type="button" class="close" data-dismiss="alert">&times;</button>' +
               json.success +
               '</p>'
           );
-          $('#answers').fadeIn('slow');
-          $('#answerForm').fadeOut('slow');
-          $('#loader').hide();
-          $('#formValues').hide();
+          answers.fadeIn('slow');
+          answerForm.fadeOut('slow');
+          hintSuggestions.fadeOut('slow');
+          loader.hide();
+          formValues.hide();
         }
       },
     });
@@ -202,12 +206,12 @@ $(document).ready(function() {
     return false;
   };
 
-  $('#captcha-button').click(function() {
-    var action = $(this).data('action');
+  $('#captcha-button').on('click', function() {
+    const action = $(this).data('action');
     $.ajax({
       url: 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime(),
       success: function() {
-        var captcha = $('#captcha');
+        const captcha = $('#captcha');
         $('#captchaImage').attr('src', 'index.php?action=' + action + '&gen=img&ck=' + new Date().getTime());
         captcha.val('');
         captcha.focus();

@@ -17,15 +17,15 @@
  */
 
 use phpMyFAQ\Database;
+use phpMyFAQ\Entity\MetaEntity as MetaEntity;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Instance;
 use phpMyFAQ\Instance\Client;
 use phpMyFAQ\Instance\Setup;
-use phpMyFAQ\Stopwords;
 use phpMyFAQ\Language;
 use phpMyFAQ\Meta;
-use phpMyFAQ\Entity\MetaEntity as MetaEntity;
+use phpMyFAQ\Stopwords;
 use phpMyFAQ\User;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -44,9 +44,9 @@ $http = new HttpHelper();
 $stopwords = new Stopwords($faqConfig);
 
 switch ($ajaxAction) {
-
     case 'add_instance':
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
@@ -58,8 +58,14 @@ switch ($ajaxAction) {
         $admin = Filter::filterInput(INPUT_GET, 'admin', FILTER_SANITIZE_STRING);
         $password = Filter::filterInput(INPUT_GET, 'password', FILTER_SANITIZE_STRING);
 
+        if (empty($url) || empty($instance) || empty($comment) || empty($email) || empty($admin) || empty($password)) {
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders(['error' => 'Cannot create instance.']);
+            exit(1);
+        }
+
         $data = [
-            'url' => 'http://'.$url.'.'.$_SERVER['SERVER_NAME'],
+            'url' => 'http://' . $url . '.' . $_SERVER['SERVER_NAME'],
             'instance' => $instance,
             'comment' => $comment,
         ];
@@ -74,11 +80,14 @@ switch ($ajaxAction) {
         $hostname = $urlParts['host'];
 
         if ($faqInstanceClient->createClientFolder($hostname)) {
-            $clientDir = PMF_ROOT_DIR.'/multisite/'.$hostname;
+            $clientDir = PMF_ROOT_DIR . '/multisite/' . $hostname;
             $clientSetup = new Setup();
             $clientSetup->setRootDir($clientDir);
 
-            $faqInstanceClient->copyConstantsFile($clientDir.'/constants.php');
+            try {
+                $faqInstanceClient->copyConstantsFile($clientDir . '/constants.php');
+            } catch (\phpMyFAQ\Exception $e) {
+            }
 
             $dbSetup = [
                 'dbServer' => $DB['server'],
@@ -90,7 +99,7 @@ switch ($ajaxAction) {
             ];
             $clientSetup->createDatabaseFile($dbSetup, '');
 
-            $faqInstanceClient->setClientUrl('http://'.$hostname);
+            $faqInstanceClient->setClientUrl('http://' . $hostname);
             $faqInstanceClient->createClientTables($dbSetup['dbPrefix']);
 
             Database::setTablePrefix($dbSetup['dbPrefix']);
@@ -111,11 +120,14 @@ switch ($ajaxAction) {
             Database::setTablePrefix($DB['prefix']);
         } else {
             $faqInstance->removeInstance($instanceId);
+            $http->setStatus(400);
             $payload = ['error' => 'Cannot create instance.'];
         }
         if (0 !== $instanceId) {
+            $http->setStatus(200);
             $payload = ['added' => $instanceId, 'url' => $data['url']];
         } else {
+            $http->setStatus(400);
             $payload = ['error' => $instanceId];
         }
         $http->sendJsonWithHeaders($payload);
@@ -123,14 +135,17 @@ switch ($ajaxAction) {
 
     case 'delete_instance':
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->setStatus(400);
             $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
             exit(1);
         }
         if (null !== $instanceId) {
             $faqInstance = new Instance($faqConfig);
             if (1 !== $instanceId && $faqInstance->removeInstance($instanceId)) {
+                $http->setStatus(200);
                 $payload = ['deleted' => $instanceId];
             } else {
+                $http->setStatus(400);
                 $payload = ['error' => $instanceId];
             }
             $http->sendJsonWithHeaders($payload);
@@ -141,8 +156,10 @@ switch ($ajaxAction) {
         if (null !== $instanceId) {
             $faqInstance = new Instance($faqConfig);
             if ($faqInstance->removeInstance($instanceId)) {
+                $http->setStatus(200);
                 $payload = ['deleted' => $instanceId];
             } else {
+                $http->setStatus(400);
                 $payload = ['error' => $instanceId];
             }
             $http->sendJsonWithHeaders($payload);

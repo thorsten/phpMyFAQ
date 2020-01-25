@@ -257,23 +257,23 @@ switch ($action) {
 <div id="wrapper">
 
   <!-- Sidebar -->
-    <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
-            ))): ?>
-      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+  <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
-        <li>
-          <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
-            <div class="sidebar-brand-icon rotate-n-15">
-              <i class="fas fa-laugh-wink"></i>
-            </div>
-            <div class="sidebar-brand-text mx-4">phpMyFAQ <?= System::getVersion() ?></div>
-          </a>
-        </li>
+    <li>
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="../">
+        <div class="sidebar-brand-icon rotate-n-15">
+          <i class="fas fa-laugh-wink"></i>
+        </div>
+        <div class="sidebar-brand-text mx-4">phpMyFAQ <?= System::getVersion() ?></div>
+      </a>
+    </li>
 
-        <li>
-          <hr class="sidebar-divider my-0">
-        </li>
+    <li>
+      <hr class="sidebar-divider my-0">
+    </li>
 
+      <?php if (isset($auth) && (count($user->perm->getAllUserRights($user->getUserId())) > 0 || $user->isSuperAdmin(
+              ))): ?>
         <li class="nav-item active">
           <a class="nav-link" href="index.php">
             <i class="fa fa-tachometer"></i>
@@ -377,9 +377,13 @@ switch ($action) {
           <hr class="sidebar-divider d-none d-md-block">
         </li>
 
-      </ul>
-      <!-- End of Sidebar -->
-    <?php endif; ?>
+        <li>
+          <div class="text-center small" id="pmf-admin-saving-data-indicator"></div>
+        </li>
+
+      <?php endif; ?>
+  </ul>
+  <!-- End of Sidebar -->
 
   <!-- Content Wrapper -->
   <div id="content-wrapper" class="d-flex flex-column">

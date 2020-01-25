@@ -72,6 +72,7 @@ switch ($ajaxAction) {
         $csrfToken = Filter::filterInput(INPUT_POST, 'csrf', FILTER_SANITIZE_STRING);
 
         if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->setStatus(400);
             $http->sendJsonWithHeaders($PMF_LANG['err_NotAuth']);
             exit(1);
         }
@@ -83,6 +84,7 @@ switch ($ajaxAction) {
         if ($oTag->updateTag($entity)) {
             $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_suc']);
         } else {
+            $http->setStatus(400);
             $http->sendJsonWithHeaders($PMF_LANG['ad_entryins_fail']);
         }
         break;

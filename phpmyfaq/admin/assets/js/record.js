@@ -213,7 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
   /** Delete questions */
   $('#submitDeleteQuestions').on('click', function() {
     const questions = $('#questionSelection').serialize(),
-      indicator = $('#saving_data_indicator');
+      indicator = $('#pmf-admin-saving-data-indicator');
 
     $('#returnMessage').empty();
     $.ajax({

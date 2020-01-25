@@ -102,14 +102,14 @@ $pagination = new Pagination(
    */
   function deleteAttachment(attachmentId, csrf) {
     if (confirm('<?= $PMF_LANG['msgAttachmentsWannaDelete'] ?>')) {
-      $('#saving_data_indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
+      $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
       $.ajax({
         type: "GET",
         url: "index.php?action=ajax&ajax=att&ajaxaction=delete",
         data: {attId: attachmentId, csrf: csrf},
         success: function (msg) {
           $('.att_' + attachmentId).fadeOut('slow');
-          $('#saving_data_indicator').html('<p class="alert alert-success">' + msg + '</p>');
+          $('#pmf-admin-saving-data-indicator').html('<p class="alert alert-success">' + msg + '</p>');
         }
       });
     }
