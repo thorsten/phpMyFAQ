@@ -49,7 +49,7 @@ class System
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = 'RC.2';
+    private const VERSION_PRE_RELEASE = null;
 
     /**
      * API version.
@@ -323,15 +323,15 @@ class System
             RecursiveIteratorIterator::SELF_FIRST
         );
 
-        $hashes = array(
+        $hashes = [
             'created' => $created->format('Y-m-d H:i:sP'),
-        );
-        $blacklist = array(
+        ];
+        $blacklist = [
             '/config/constants.php' => false,
             '/config/constants_elasticsearch.php' => false,
             '/config/database.php' => false,
             '/config/ldap.php' => false,
-        );
+        ];
         $current = '';
 
         try {

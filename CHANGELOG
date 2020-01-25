@@ -1,11 +1,11 @@
-phpMyFAQ 3.0.0-RC.2
+phpMyFAQ 3.0.0
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.0-RC.2 - 2020-01-24
+Version 3.0.0 - 2020-02-12
 - changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
