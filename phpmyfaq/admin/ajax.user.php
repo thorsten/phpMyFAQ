@@ -78,7 +78,6 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
             }
 
             $user->getUserById($userId, true);
-            $user->setStatus('active');
             $user->activateUser();
             $http->sendJsonWithHeaders($user->getStatus());
             break;
