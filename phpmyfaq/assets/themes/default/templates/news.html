@@ -87,12 +87,6 @@
         event.preventDefault();
         $('#commentForm').removeClass('d-none');
       });
-
-      $('form#formValues').on('submit', event => {
-        event.preventDefault();
-        saveFormValues('savecomment', 'comment');
-        return false;
-      });
     });
   </script>
 </section>
