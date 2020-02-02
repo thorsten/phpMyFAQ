@@ -294,9 +294,9 @@ if ($groupAction == 'add' && $user->perm->checkRight($user->getUserId(), 'addgro
           <label class="col-lg-2 col-form-label"
                  for="group_description"><?= $PMF_LANG['ad_group_description'] ?></label>
           <div class="col-lg-3">
-                            <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
-                                      rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
-                            ><?= (isset($groupDescription) ? $groupDescription : '') ?></textarea>
+            <textarea name="group_description" id="group_description" cols="<?= $descriptionCols ?>"
+                      rows="<?= $descriptionRows ?>" tabindex="2" class="form-control"
+            ><?= (isset($groupDescription) ? $groupDescription : '') ?></textarea>
           </div>
         </div>
 
@@ -338,8 +338,8 @@ if ('list' === $groupAction) {
     </h1>
     <div class="btn-toolbar mb-2 mb-md-0">
       <div class="btn-group mr-2">
-        <a class="btn btn-sm     btn-success" href="?action=group&amp;group_action=add">
-            <?= $PMF_LANG['ad_group_add_link'] ?>
+        <a class="btn btn-sm btn-success" href="?action=group&amp;group_action=add">
+          <?= $PMF_LANG['ad_group_add_link'] ?>
         </a>
       </div>
     </div>
@@ -357,7 +357,7 @@ if ('list' === $groupAction) {
         <form id="group_select" name="group_select" action="?action=group&amp;group_action=delete_confirm"
               method="post">
           <div class="card-header">
-              <?= $PMF_LANG['ad_groups'] ?>
+            <i aria-hidden="true" class="fa fa-users"></i> <?= $PMF_LANG['ad_groups'] ?>
           </div>
           <div class="card-body">
             <select name="group_list_select" id="group_list_select" class="form-control"
@@ -395,10 +395,10 @@ if ('list' === $groupAction) {
                   <?= $PMF_LANG['ad_group_description'] ?>
               </label>
               <div class="col-lg-9">
-                                    <textarea id="update_group_description" name="description" class="form-control"
-                                              rows="<?= $descriptionRows ?>"
-                                              tabindex="2"><?php
-                                        echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
+                <textarea id="update_group_description" name="description" class="form-control"
+                          rows="<?= $descriptionRows ?>"
+                          tabindex="2"><?php
+                    echo(isset($groupDescription) ? $groupDescription : '') ?></textarea>
               </div>
             </div>
             <div class="form-group row">
@@ -431,23 +431,23 @@ if ('list' === $groupAction) {
         <input id="update_member_group_id" type="hidden" name="group_id" value="0">
         <div class="card">
           <div class="card-header">
-              <?= $PMF_LANG['ad_group_membership'] ?>
+            <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_membership'] ?>
           </div>
           <div class="card-body">
             <div class="form-group row">
               <div class="text-right">
-                                <span class="select_all">
-                                    <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectSelectAll('group_user_list')">
-                                        <i aria-hidden="true" class="fa fa-user-plus"></i>
-                                    </a>
-                                </span>
+                <span class="select_all">
+                  <a class="btn btn-primary btn-sm"
+                     href="javascript:selectSelectAll('group_user_list')">
+                      <i aria-hidden="true" class="fa fa-user-plus"></i>
+                  </a>
+                </span>
                 <span class="unselect_all">
-                                    <a class="btn btn-primary btn-sm"
-                                       href="javascript:selectUnselectAll('group_user_list')">
-                                        <i aria-hidden="true" class="fa fa-user-times"></i>
-                                    </a>
-                                </span>
+                  <a class="btn btn-primary btn-sm"
+                     href="javascript:selectUnselectAll('group_user_list')">
+                      <i aria-hidden="true" class="fa fa-user-times"></i>
+                  </a>
+                </span>
               </div>
             </div>
 
@@ -469,7 +469,8 @@ if ('list' === $groupAction) {
           </div>
 
           <ul class="list-group list-group-flush">
-            <li class="list-group-item"><?= $PMF_LANG['ad_group_members']; ?></li>
+            <li class="list-group-item">
+              <i aria-hidden="true" class="fa fa-user-circle"></i> <?= $PMF_LANG['ad_group_members']; ?></li>
           </ul>
 
           <div class="card-body">
@@ -528,7 +529,7 @@ if ('list' === $groupAction) {
                   <input id="group_right_<?= $right['right_id'] ?>" type="checkbox"
                          name="group_rights[]" value="<?= $right['right_id'] ?>"
                          class="form-check-input permission">
-                  <label class="form-check-label">
+                  <label class="form-check-label" for="group_right_<?= $right['right_id'] ?>">
                       <?php
                       if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
                           echo $PMF_LANG['rightsLanguage'][$right['name']];
