@@ -274,7 +274,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
         <div class="row">
             <div class="col-lg-9">
-                <div class="card">
+                <div class="card shadow mb-4">
                     <div class="card-header">
                         <ul class="nav nav-tabs card-header-tabs" id="nav-tab" role="tablist">
                             <li class="nav-item">
@@ -677,7 +677,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
             <!-- Sidebar -->
             <div class="col-lg-3">
                 <div id="accordion" role="tablist">
-                    <div class="card">
+                    <div class="card shadow mb-4">
                         <div class="card-header text-center" role="tab" id="pmf-heading-date">
                             <?php if ($selectedRevisionId === $faqData['revision_id']): ?>
                                 <button class="btn btn-lg btn-info" type="reset">

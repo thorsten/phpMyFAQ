@@ -203,10 +203,10 @@ if ($sectionAction == 'addsave' && $user->perm->checkRight($user->getUserId(), '
     // ok, let's go
     if (count($messages) == 0 && $csrfOkay) {
         // create section
-        $sectionData = array(
+        $sectionData = [
             'name' => $sectionName,
             'description' => $sectionDescription
-        );
+        ];
 
         if ($user->perm->addSection($sectionData) <= 0) {
             $messages[] = $PMF_LANG['ad_adus_dberr'];
@@ -309,7 +309,7 @@ if ('list' === $sectionAction) {
   <div class="row">
 
     <div class="col-lg-6" id="section_list">
-      <div class="card">
+      <div class="card shadow mb-4">
         <form id="section_select" name="section_select" action="?action=section&amp;section_action=delete_confirm"
               method="post">
           <div class="card-header">
@@ -330,7 +330,7 @@ if ('list' === $sectionAction) {
         </form>
       </div>
 
-      <div id="section_data" class="card">
+      <div id="section_data" class="card shadow mb-4">
         <div class="card-header">
             <?= $PMF_LANG['ad_section_details'] ?>
         </div>
@@ -372,7 +372,7 @@ if ('list' === $sectionAction) {
       <form id="section_membership" name="section_membership" method="post"
             action="?action=section&amp;section_action=update_members">
         <input id="update_member_section_id" type="hidden" name="section_id" value="0">
-        <div class="card">
+        <div class="card shadow mb-4">
           <div class="card-header">
               <?= $PMF_LANG['ad_section_membership'] ?>
           </div>
@@ -449,6 +449,8 @@ if ('list' === $sectionAction) {
           </div>
         </div>
       </form>
+    </div>
+  </div>
 <?php
 
 }
