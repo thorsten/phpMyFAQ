@@ -50,10 +50,10 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
         $groups = [];
         foreach ($groupList as $groupId) {
             $data = $user->perm->getGroupData($groupId);
-            $groups[] = array(
+            $groups[] = [
                 'group_id' => $data['group_id'],
                 'name' => $data['name'],
-            );
+            ];
         }
         $http->sendJsonWithHeaders($groups);
     }
@@ -73,10 +73,10 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
         $users = [];
         foreach ($userList as $singleUser) {
             $user->getUserById($singleUser, true);
-            $users[] = array(
+            $users[] = [
                 'user_id' => $user->getUserId(),
                 'login' => $user->getLogin(),
-            );
+            ];
         }
         $http->sendJsonWithHeaders($users);
     }
@@ -87,10 +87,10 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
         $members = [];
         foreach ($memberList as $singleMember) {
             $user->getUserById($singleMember, true);
-            $members[] = array(
+            $members[] = [
                 'user_id' => $user->getUserId(),
                 'login' => $user->getLogin(),
-            );
+            ];
         }
         $http->sendJsonWithHeaders($members);
     }
