@@ -154,7 +154,7 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
     ?>
 
   <script>
-    (function () {
+    (() => {
       $('#submitFaqComments').on('click', () => {
         deleteComments('faq');
         return false;
@@ -166,21 +166,23 @@ if ($user->perm->checkRight($user->getUserId(), 'delcomment')) {
     })();
 
     function deleteComments(type) {
-      const comments = $('#' + type + 'CommentSelection').serialize();
+      const savingIndicator = $('#pmf-admin-saving-data-indicator'),
+        returnMessage = $('#returnMessage'),
+        comments = $('#' + type + 'CommentSelection').serialize();
 
-      $('#returnMessage').empty();
+      returnMessage.empty();
       $.ajax({
         type: 'POST',
         url: 'index.php?action=ajax&ajax=comment',
         data: comments,
         success: function (msg) {
-          if (msg === '1') {
-            $('#pmf-admin-saving-data-indicator').html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
+          if (msg === 1) {
+            savingIndicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
             $('tr td input:checked').parent().parent().parent().fadeOut('slow');
-            $('#pmf-admin-saving-data-indicator').fadeOut('slow');
-            $('#returnMessage').html('<p class="alert alert-success"><?= $PMF_LANG['ad_entry_commentdelsuc'] ?></p>');
+            savingIndicator.fadeOut('slow');
+            returnMessage.html('<p class="alert alert-success"><?= $PMF_LANG['ad_entry_commentdelsuc'] ?></p>');
           } else {
-            $('#returnMessage').html('<p class="alert alert-danger"><?= $PMF_LANG['ad_entry_commentdelfail'] ?></p>');
+            returnMessage.html('<p class="alert alert-danger"><?= $PMF_LANG['ad_entry_commentdelfail'] ?></p>');
           }
         }
       });

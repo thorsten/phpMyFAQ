@@ -56,6 +56,7 @@ if ('delete' === $ajaxAction && $user->perm->checkRight($user->getUserId(), 'del
         }
     }
 
+    $http->setStatus(200);
     $http->sendWithHeaders($success);
 } else {
     $http->setStatus(401);
