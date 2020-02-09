@@ -156,8 +156,8 @@ if ($step === 1) { ?>
         <div class="col">
           <p>This update script will work <strong>only</strong> for the following versions:</p>
           <ul>
-            <li>phpMyFAQ 2.8.x (out of support since end of 2016)</li>
             <li>phpMyFAQ 2.9.x</li>
+            <li>phpMyFAQ 3.0.x</li>
           </ul>
         </div>
         <div class="col">
@@ -169,6 +169,7 @@ if ($step === 1) { ?>
             <li>phpMyFAQ 2.5.x</li>
             <li>phpMyFAQ 2.6.x</li>
             <li>phpMyFAQ 2.7.x</li>
+            <li>phpMyFAQ 2.8.x</li>
           </ul>
         </div>
       </div>
@@ -176,8 +177,8 @@ if ($step === 1) { ?>
       <div class="row">
         <div class="col">
             <?php
-                // We only support updates from 2.8+
-            if (version_compare($version, '2.8.0', '>')) {
+                // We only support updates from 2.9+
+            if (version_compare($version, '2.9.0', '>')) {
                 printf(
                     '<div class="alert alert-success text-center" role="alert">Your current phpMyFAQ version: %s %s</div>',
                     $version,
@@ -188,7 +189,7 @@ if ($step === 1) { ?>
                     '<div class="alert alert-danger text-center" role="alert">Your current phpMyFAQ version: %s</div>',
                     $version
                 );
-                echo '<p>Please update to the latest phpMyFAQ 2.8 version first.</p>';
+                echo '<p>Please update to the latest phpMyFAQ 2.9 version first.</p>';
             }
             if ('hash' !== PMF_ENCRYPTION_TYPE) {
                 printf(
