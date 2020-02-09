@@ -1,14 +1,14 @@
 # phpMyFAQ 3.1
 
 [![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/3.0.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
-[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.2-%23777BB4.svg?style=flat-square)](https://php.net/)
+[![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.3-%23777BB4.svg?style=flat-square)](https://php.net/)
 [![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com)
 [![Greenkeeper badge](https://badges.greenkeeper.io/thorsten/phpMyFAQ.svg)](https://greenkeeper.io/)
 
 ## What is phpMyFAQ?
 
 phpMyFAQ is a multilingual, completely database-driven FAQ-system. It supports various databases to store all data, PHP
-7.2+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
+7.3+ is needed in order to access this data. phpMyFAQ also offers a multi-language Content Management System with a
 WYSIWYG editor and an Image Manager, real time search support with Elasticsearch, flexible multi-user support with user
 and group based permissions on categories and records, a wiki-like revision feature, a news system, user-tracking, 40+
 supported languages, enhanced automatic content negotiation, HTML5/CSS3 based responsive templates, PDF-support, a
@@ -17,7 +17,7 @@ systems, OpenLDAP and Microsoft Active Directory support, and an easy to use ins
 
 ## Requirements
 
-phpMyFAQ is only supported on PHP 7.2 and up, you need a database as well. Supported databases are MySQL, MariaDB,
+phpMyFAQ is only supported on PHP 7.3 and up, you need a database as well. Supported databases are MySQL, MariaDB,
 Percona Server, PostgreSQL, Microsoft SQL Server and SQLite3. If you want to use Elasticsearch as main search
 engine, you need Elasticsearch 5.x or later as well. Check our detailed requirements on
 [phpmyfaq.de](https://www.phpmyfaq.de/requirements) for more information.
