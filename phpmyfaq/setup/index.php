@@ -150,7 +150,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label class="col-sm-3 col-form-label" for="sql_port">port:</label>
+                            <label class="col-sm-3 col-form-label" for="sql_port">Port:</label>
                             <div class="col-sm-9">
                                 <input type="number" name="sql_port" id="sql_port" class="form-control"
                                     value="3306">
