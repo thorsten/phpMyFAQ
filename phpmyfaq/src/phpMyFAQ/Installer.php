@@ -334,7 +334,7 @@ class Installer
         'main.metaKeywords' => '',
         'main.metaPublisher' => '__PHPMYFAQ_PUBLISHER__',
         'main.send2friendText' => '',
-        'main.titleFAQ' => 'phpMyFAQ Codename Phobos',
+        'main.titleFAQ' => 'phpMyFAQ Codename Poseidon',
         'main.urlValidateInterval' => '86400',
         'main.enableWysiwygEditor' => 'true',
         'main.enableWysiwygEditorFrontend' => 'false',
