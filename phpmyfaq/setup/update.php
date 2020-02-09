@@ -22,12 +22,12 @@ use phpMyFAQ\Installer;
 use phpMyFAQ\Permission\BasicPermission;
 use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2019 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
+define('COPYRIGHT', '&copy; 2001-2020 <a target="_blank" href="//www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('IS_VALID_PHPMYFAQ', null);
 
-if (version_compare(PHP_VERSION, '7.1.0') < 0) {
-    die('Sorry, but you need PHP 7.1.0 or later!');
+if (version_compare(PHP_VERSION, '7.2.0') < 0) {
+    die('Sorry, but you need PHP 7.2.0 or later!');
 }
 
 set_time_limit(0);
