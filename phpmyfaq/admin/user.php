@@ -334,10 +334,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     // show new user form
     if ($userAction === 'add' && $user->perm->checkRight($user->getUserId(), 'add_user')) { ?>
 
-      <div
-          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
-          <i aria-hidden="" class="fa fa-user"></i>
+          <i aria-hidden="true" class="fa fa-user-plus"></i>
             <?= $PMF_LANG['ad_adus_adduser'] ?>
         </h1>
       </div>
@@ -415,8 +414,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
     // show list of users
     if ($userAction === 'list') { ?>
 
-      <div
-          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
           <i aria-hidden="true" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
@@ -424,11 +422,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
-                <?= $PMF_LANG['ad_user_add'] ?>
+              <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
             </a>
               <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')): ?>
                 <a class="btn btn-sm btn-info" href="?action=user&amp;user_action=listallusers">
-                    <?= $PMF_LANG['list_all_users'] ?>
+                  <i class="fa fa-users" aria-label="true"></i> <?= $PMF_LANG['list_all_users'] ?>
                 </a>
               <?php endif ?>
           </div>
@@ -493,7 +491,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         <div class="col-lg-4">
           <form name="user_select" id="user_select" action="?action=user&amp;user_action=delete_confirm"
                 method="post" role="form" class="form_inline">
-            <div class="card">
+            <div class="card shadow mb-4">
               <div class="card-header">
                 <i aria-hidden="true" class="fa fa-search"></i> <?= $PMF_LANG['msgSearch'] ?>
               </div>
@@ -509,7 +507,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         </div>
 
         <div class="col-lg-4">
-          <div class="card">
+          <div class="card shadow mb-4">
             <div class="card-header" id="user_data_legend">
               <i aria-hidden="true" class="fa fa-user"></i> <?= $PMF_LANG['ad_user_profou'] ?>
             </div>
@@ -547,7 +545,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
             <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
             <input type="hidden" name="user_id" id="rights_user_id" value="0">
 
-            <div class="card">
+            <div class="card shadow mb-4">
               <div class="card-header" id="user_rights_legend">
                 <i aria-hidden="true" class="fa fa-lock"></i> <?= $PMF_LANG['ad_user_rights'] ?>
                 <span class="float-right">
@@ -669,6 +667,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
             <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
+              <i class="fa fa-user-plus" aria-label="true"></i>
               <?= $PMF_LANG['ad_user_add'] ?>
             </a>
           </div>
