@@ -1,10 +1,9 @@
 <?php
+
 /**
  * The main phpMyFAQ Setup.
- *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,6 +20,7 @@
  * @link https://www.phpmyfaq.de
  * @since 2002-08-20
  */
+
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
@@ -28,7 +28,7 @@ use phpMyFAQ\System;
 
 define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
-define('PMF_SRC_DIR', PMF_ROOT_DIR.'/src');
+define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
 define('IS_VALID_PHPMYFAQ', null);
 
 if (version_compare(PHP_VERSION, '7.3.0') < 0) {
@@ -44,9 +44,9 @@ if (!defined('DEBUG')) {
 session_name('phpmyfaq-setup');
 session_start();
 
-require PMF_ROOT_DIR.'/src/libs/autoload.php';
-require PMF_ROOT_DIR.'/config/constants.php';
-require PMF_ROOT_DIR.'/config/constants_elasticsearch.php';
+require PMF_ROOT_DIR . '/src/libs/autoload.php';
+require PMF_ROOT_DIR . '/config/constants.php';
+require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
 
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
@@ -122,7 +122,7 @@ $installer->checkFilesystemPermissions();
 // not yet POSTed
 if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST['sql_db'])) {
     $installer->checkNoncriticalSettings()
-?>
+    ?>
         </div>
 
         <form  action="index.php" method="post" id="phpmyfaq-setup-form">
@@ -146,7 +146,9 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                             <div class="col-sm-9">
                                 <input type="text" name="sql_server" id="sql_server" class="form-control"
                                     placeholder="e.g. 127.0.0.1">
-                                <small class="form-text text-muted">Please enter the host or path to the socket of your database server.</small>
+                                <small class="form-text text-muted">
+                                  Please enter the host or path to the socket of your database server.
+                                </small>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -207,13 +209,14 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </fieldset>
             </div>
 
-            <?php if (extension_loaded('ldap')): ?>
+            <?php if (extension_loaded('ldap')) : ?>
             <div class="col-sm">
                 <fieldset>
                 <legend>LDAP setup</legend>
                     <div class="form-group">
                         <div class="form-check">
-                          <input id="ldap_enabled" class="form-check-input" type="checkbox" name="ldap_enabled" value="yes">
+                          <input id="ldap_enabled" class="form-check-input" type="checkbox" name="ldap_enabled"
+                                 value="yes">
                           <label class="form-check-label" for="ldap_enabled">
                             Enable LDAP support?
                           </label>
@@ -276,25 +279,25 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         <div class="col-sm-9">
                             <select name="language" id="language" class="form-control">
                             <?php
-                                if ($dir = opendir(PMF_ROOT_DIR.'/lang')) {
-                                    $options = [];
-                                    while ($dat = readdir($dir)) {
-                                        $option = '';
-                                        if (substr($dat, -4) === '.php') {
-                                            $option .= sprintf('<option value="%s"', $dat);
-                                            if ($dat == 'language_en.php') {
-                                                $option .= ' selected="selected"';
-                                            }
-                                            $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
-                                            $option  .= sprintf('>%s</option>', $language);
-                                            $options[$language] = $option;
+                            if ($dir = opendir(PMF_ROOT_DIR . '/lang')) {
+                                $options = [];
+                                while ($dat = readdir($dir)) {
+                                    $option = '';
+                                    if (substr($dat, -4) === '.php') {
+                                        $option .= sprintf('<option value="%s"', $dat);
+                                        if ($dat == 'language_en.php') {
+                                            $option .= ' selected="selected"';
                                         }
+                                        $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
+                                        $option  .= sprintf('>%s</option>', $language);
+                                        $options[$language] = $option;
                                     }
-                                    ksort($options);
-                                    echo implode("\n", $options);
-                                } else {
-                                    echo '<option>english</option>';
                                 }
+                                ksort($options);
+                                echo implode("\n", $options);
+                            } else {
+                                echo '<option>english</option>';
+                            }
                             ?>
                             </select>
                             <small class="form-text text-muted">Please select your default language.</small>
@@ -352,7 +355,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                 </fieldset>
             </div>
 
-            <?php if (extension_loaded('curl')): ?>
+            <?php if (extension_loaded('curl')) : ?>
             <div class="col-sm">
                 <fieldset>
                     <legend>Elasticsearch setup</legend>
@@ -416,7 +419,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             </div>
         </div>
         </form>
-<?php
+    <?php
     System::renderFooter();
 } else {
     $installer->startInstall();
@@ -429,7 +432,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
             You can visit <a href="../index.php">your version of phpMyFAQ</a> or login into your
             <a href="../admin/index.php">admin section</a>.
          </p>
-<?php
+    <?php
     $installer->cleanUpFiles();
     System::renderFooter();
 }

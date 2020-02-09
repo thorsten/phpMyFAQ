@@ -81,8 +81,8 @@ services:
     volumes:
       - ./volumes/sessions:/sessions
   elasticsearch:
-    image: docker.elastic.co/elasticsearch/elasticsearch:5.6.9
-    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:6.8.6
+    container_name: elasticsearch-v6
     restart: always
     environment:
       - cluster.name=phpmyfaq-cluster
