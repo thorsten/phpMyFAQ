@@ -447,7 +447,7 @@ class Category
         $x = 0;
 
         foreach ($this->categories as $categoryId => $n) {
-            if (isset($n['parent_id']) && $n['parent_id'] == $parentId) {
+            if (isset($n['parent_id']) && $n['parent_id'] == $parentId && $categoryId > 0) {
                 $tt[$x++] = $categoryId;
             }
         }
