@@ -407,6 +407,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                                 <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked' : '' ?>>
                               <?= $PMF_LANG['ad_record_active'] ?>
                           </label>
+                        <?php } else { ?>
+                          <i aria-hidden="true" class="fa fa-ban"></i>
                         <?php } ?>
                     </th>
                     <th colspan="2">
