@@ -25,9 +25,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $news = new News($faqConfig);
-
 $archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
-$writeNewsRSS = '';
 
 if (!is_null($archived)) {
     $writeNewsHeader = $PMF_LANG['newsArchive'];
@@ -77,20 +75,20 @@ if (!isset($toptenParams['error'])) {
     $template->parseBlock(
         'mainPageContent',
         'toptenList',
-        array(
+        [
             'toptenUrl' => $toptenParams['url'],
             'toptenTitle' => $toptenParams['title'],
             'toptenPreview' => $toptenParams['preview'],
             'toptenVisits' => $toptenParams[$param],
-        )
+        ]
     );
 } else {
     $template->parseBlock(
         'mainPageContent',
         'toptenListError',
-        array(
+        [
             'errorMsgTopTen' => $toptenParams['error'],
-        )
+        ]
     );
 }
 
@@ -99,12 +97,12 @@ if (!isset($latestEntriesParams['error'])) {
     $template->parseBlock(
         'mainPageContent',
         'latestEntriesList',
-        array(
+        [
             'latestEntriesUrl' => $latestEntriesParams['url'],
             'latestEntriesTitle' => $latestEntriesParams['title'],
             'latestEntriesPreview' => $latestEntriesParams['preview'],
             'latestEntriesDate' => $latestEntriesParams['date'],
-        )
+        ]
     );
 } else {
     $template->parseBlock(
@@ -132,11 +130,8 @@ $template->parse(
         'baseHref' => $faqSystem->getSystemUri($faqConfig),
         'stickyRecordsHeader' => $PMF_LANG['stickyRecordsHeader'],
         'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-        'rssFeedTopTen' => $rssFeedTopTen,
         'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-        'rssFeedLatest' => $rssFeedLatest,
         'writeNewsHeader' => $writeNewsHeader,
-        'writeNewsRSS' => $writeNewsRSS,
         'writeNews' => $news->getNews($archived),
         'showAllNews' => $showAllNews,
         'writeNumberOfArticles' => $plr->getMsg('plmsgHomeArticlesOnline', $faq->getNumberOfRecords($faqLangCode)),
