@@ -125,29 +125,6 @@ RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagg
 # * http://[...]/tags/<ID>/<HEADER>.htm
 RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
 
-# REST/JSON API v1
-# * http://[...]/api/<ACTION>/<LANGUAGE CODE>/<...>
-# @deprecated These APIs will be removed in phpMyFAQ 3.1
-RewriteRule api/getVersion                                  api.php?action=getVersion [L,QSA]
-RewriteRule api/getApiVersion                               api.php?action=getApiVersion [L,QSA]
-RewriteRule api/getCount                                    api.php?action=getCount [L,QSA]
-RewriteRule api/getDefaultLanguage                          api.php?action=getDefaultLanguage [L,QSA]
-RewriteRule api/search/([a-z\-]+)/([a-z\-]+)$               api.php?action=search&lang=$1&q=$2 [L,QSA]
-RewriteRule api/getCategories/([a-z\-]+)                    api.php?action=getCategories&lang=$1 [L,QSA]
-RewriteRule api/getFaqs/([a-z\-]+)/([0-9]+)                 api.php?action=getFaqs&lang=$1&categoryId=$2 [L,QSA]
-RewriteRule api/getFaq/([a-z\-]+)/([0-9]+)                  api.php?action=getFaq&lang=$1&recordId=$2 [L,QSA]
-RewriteRule api/getComments/([0-9]+)                        api.php?action=getComments&recordId=$1 [L,QSA]
-RewriteRule api/getAllFaqs/([a-z\-]+)                       api.php?action=getAllFaqs&lang=$1 [L,QSA]
-RewriteRule api/getFaqAsPdf/([a-z\-]+)/([0-9]+)/([0-9]+)    api.php?action=getFaqAsPdf&lang=$1&categoryId=$2&recordId=$3 [L,QSA]
-RewriteRule api/getAttachmentsFromFaq/([a-z\-]+)/([0-9]+)   api.php?action=getAttachmentsFromFaq&lang=$1&recordId=$2 [L,QSA]
-RewriteRule api/getPopular/([a-z\-]+)                       api.php?action=getPopular&lang=$1 [L,QSA]
-RewriteRule api/getLatest/([a-z\-]+)                        api.php?action=getLatest&lang=$1 [L,QSA]
-RewriteRule api/getNews/([a-z\-]+)                          api.php?action=getNews&lang=$1 [L,QSA]
-RewriteRule api/getPopularSearches/([a-z\-]+)               api.php?action=getPopularSearches&lang=$1 [L,QSA]
-RewriteRule api/getPopularTags                              api.php?action=getPopularTags [L,QSA]
-RewriteRule api/getFAQsByTag/([a-z\-]+)/([0-9]+)            api.php?action=getFAQsByTag&lang=$1&tagId=$2 [L,QSA]
-RewriteRule api/login                                       api.php?action=login [L,QSA]
-
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
 RewriteRule api/v2.0/version                       api.php?action=version [L,QSA]
