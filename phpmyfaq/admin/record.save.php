@@ -39,12 +39,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     // Get submit action
     $submit = Filter::filterInputArray(
         INPUT_POST,
-        array(
-            'submit' => array(
+        [
+            'submit' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
-            ),
-        )
+            ],
+        ]
     );
 
     // FAQ data
@@ -53,12 +53,12 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     $question = Filter::filterInput(INPUT_POST, 'question', FILTER_SANITIZE_STRING);
     $categories = Filter::filterInputArray(
         INPUT_POST,
-        array(
-            'rubrik' => array(
+        [
+            'rubrik' => [
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
-            ),
-        )
+            ],
+        ]
     );
     $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
@@ -85,34 +85,34 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
     // Permissions
     $permissions = [];
     if ('all' === Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING)) {
-        $permissions += array(
-            'restricted_user' => array(
+        $permissions += [
+            'restricted_user' => [
                 -1,
-            ),
-        );
+            ],
+        ];
     } else {
-        $permissions += array(
-            'restricted_user' => array(
+        $permissions += [
+            'restricted_user' => [
                 Filter::filterInput(INPUT_POST, 'restricted_users', FILTER_VALIDATE_INT),
-            ),
-        );
+            ],
+        ];
     }
 
     if ('all' === Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING)) {
-        $permissions += array(
-            'restricted_groups' => array(
+        $permissions += [
+            'restricted_groups' => [
                 -1,
-            ),
-        );
+            ],
+        ];
     } else {
         $permissions += Filter::filterInputArray(
             INPUT_POST,
-            array(
-                'restricted_groups' => array(
+            [
+                'restricted_groups' => [
                     'filter' => FILTER_VALIDATE_INT,
                     'flags' => FILTER_REQUIRE_ARRAY,
-                ),
-            )
+                ],
+            ]
         );
     }
 
@@ -134,7 +134,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             ++$revisionId;
         }
 
-        $recordData = array(
+        $recordData = [
             'id' => $recordId,
             'lang' => $recordLang,
             'revision_id' => $revisionId,
@@ -146,13 +146,13 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
             'author' => $author,
             'email' => $email,
             'comment' => (!is_null($comment) ? 'y' : 'n'),
-            'date' => empty($date) ? date('YmdHis') : str_replace(array('-', ':', ' '), '', $date),
+            'date' => empty($date) ? date('YmdHis') : str_replace(['-', ':', ' '], '', $date),
             'dateStart' => (empty($dateStart) ? '00000000000000' : str_replace('-', '', $dateStart) . '000000'),
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
             'notes' => Filter::removeAttributes($notes)
-        );
+        ];
 
         // Create ChangeLog entry
         $changelog = new Changelog($faqConfig);

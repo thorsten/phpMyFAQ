@@ -28,7 +28,7 @@ $(() => {
     document.getElementById('pmf-create-comment').scrollIntoView();
   });
 
-  $('.pmf-comments-show-more').on('click', event => {
+  $('.pmf-comments-show-more').on('click', function(event) {
     event.preventDefault();
     const commentId = $(this).data('comment-id');
     showLongComment(commentId);

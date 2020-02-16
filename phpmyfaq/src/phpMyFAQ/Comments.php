@@ -160,8 +160,8 @@ class Comments
             if (15 === $numWords) {
                 $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
                     '<a data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
-                    ' pointer">' . $this->pmfStr['msgShowMore'] . '</a>' .
-                    '<span class="comment-more-' . $id . ' hide">';
+                    '">' . $this->pmfStr['msgShowMore'] . '</a>' .
+                    '<span class="comment-more-' . $id . ' d-none">';
             }
             ++$numWords;
         }

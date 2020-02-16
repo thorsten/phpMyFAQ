@@ -407,6 +407,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                                 <?= $numRecordsByCat[$cid] == $numActiveByCat[$cid] ? 'checked' : '' ?>>
                               <?= $PMF_LANG['ad_record_active'] ?>
                           </label>
+                        <?php } else { ?>
+                          <span class="fa-stack">
+                              <i class="fa fa-check fa-stack-1x"></i>
+                              <i class="fa fa-ban fa-stack-2x text-danger"></i>
+                            </span>
                         <?php } ?>
                     </th>
                     <th colspan="2">
@@ -475,8 +480,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                         </label>
                       </td>
                       <td>
-                          <?php if ($user->perm->checkRight($user->getUserId(),
-                                    'approverec') && isset($numVisits[$record['id']])) { ?>
+                          <?php if ($user->perm->checkRight($user->getUserId(), 'approverec')) { ?>
                             <label>
                               <input type="checkbox" lang="<?= $record['lang'] ?>" class="active-records-category-<?= $cid ?>"
                                      onclick="saveStatus(<?= $cid.', ['.$record['id'].']' ?>, 'active', '<?= $user->getCsrfTokenFromSession() ?>');"
@@ -484,8 +488,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                                   <?= 'yes' == $record['active'] ? 'checked' : '    ' ?>>
                             </label>
                           <?php } else { ?>
-                            <span class="badge badge-important">
-                              <i aria-hidden="true" class="fa fa-white fa fa-ban-circle"></i>
+                            <span class="fa-stack">
+                              <i class="fa fa-check fa-stack-1x"></i>
+                              <i class="fa fa-ban fa-stack-2x text-danger"></i>
                             </span>
                           <?php } ?>
                       </td>

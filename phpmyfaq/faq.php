@@ -191,6 +191,9 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq')) {
 // Is the faq expired?
 $expired = (date('YmdHis') > $faq->faqRecord['dateEnd']);
 
+// Number of comments
+$numComments = $faqComment->getNumberOfComments();
+
 // Does the user have the right to add a comment?
 if ((-1 === $user->getUserId() && !$faqConfig->get('records.allowCommentsForGuests')) ||
     ($faq->faqRecord['active'] === 'no') || ('n' === $faq->faqRecord['comment']) || $expired) {
@@ -294,8 +297,6 @@ if ('' !== $relatedFaqs) {
 
 $date = new Date($faqConfig);
 $captchaHelper = new CaptchaHelper($faqConfig);
-
-$numComments = $faqComment->getNumberOfComments();
 
 // We need some Links from social networks
 $faqServices = new Services($faqConfig);

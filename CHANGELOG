@@ -9,7 +9,7 @@ Version 3.1.0-dev
 - changed PHP requirement to PHP 7.3+ (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
 
-Version 3.0.0 - 2020-02-12
+Version 3.0.0 - 2020-02-16
 - changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
