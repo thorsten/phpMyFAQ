@@ -87,7 +87,10 @@ class Comments
             );
             $output .= sprintf(' <span class="text-muted">(%s)</span>', $date->format($item->getDate()));
             $output .= '     </div>';
-            $output .= sprintf('<div class="card-body">%s</div>', $this->showShortComment($id, $item->getComment()));
+            $output .= sprintf(
+                '<div class="card-body">%s</div>',
+                $this->showShortComment($item->getId(), $item->getComment())
+            );
             $output .= '   </div>';
             $output .= '  </div>';
             $output .= '</div>';
@@ -159,7 +162,7 @@ class Comments
             $comment .= $word . ' ';
             if (15 === $numWords) {
                 $comment .= '<span class="comment-dots-' . $id . '">&hellip; </span>' .
-                    '<a data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
+                    '<a href="#" data-comment-id="' . $id . '" class="pmf-comments-show-more comment-show-more-' . $id .
                     '">' . $this->pmfStr['msgShowMore'] . '</a>' .
                     '<span class="comment-more-' . $id . ' d-none">';
             }

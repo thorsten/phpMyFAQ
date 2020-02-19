@@ -6,7 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.1 - 2020-03
--
+- fixed minor bugs (Thorsten)
 
 Version 3.0.0 - 2020-02-16
 - changed PHP requirement to PHP 7.2+ (Thorsten)

@@ -167,10 +167,11 @@ class FaqHelper extends Helper
     /**
      * Creates an overview with all categories with their FAQs.
      *
-     * @param  Category $category
-     * @param  Faq      $faq
-     * @param  string   $language
+     * @param Category $category
+     * @param Faq $faq
+     * @param string $language
      * @return string
+     * @throws Exception
      */
     public function createOverview(Category $category, Faq $faq, $language = ''): string
     {
