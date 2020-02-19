@@ -713,6 +713,22 @@ if (DEBUG) {
 }
 
 //
+// Redirect old "action=artikel" URLs via 301 to new location
+//
+if ('artikel' === $action) {
+    $url = sprintf(
+        '%sindex.php?action=faq&cat=%d&id=%d&artlang=%s',
+        $faqConfig->getDefaultUrl(),
+        $category->getCategoryIdFromFaq($id),
+        $id,
+        $lang
+    );
+    $http->setStatus(301);
+    $http->redirect($url);
+    exit();
+}
+
+//
 // Include requested PHP file
 //
 require $includePhp;
