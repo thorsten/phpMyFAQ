@@ -44,7 +44,7 @@ class System
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 0;
+    private const VERSION_PATCH_LEVEL = 1;
 
     /**
      * Pre-release version.
@@ -376,11 +376,11 @@ class System
     {
         // Remove './config/database.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-            @unlink(PMF_ROOT_DIR . '/config/database.php');
+            unlink(PMF_ROOT_DIR . '/config/database.php');
         }
         // Remove './config/ldap.php' file: no need of prompt anything to the user
         if (file_exists(PMF_ROOT_DIR . '/config/ldap.php')) {
-            @unlink(PMF_ROOT_DIR . '/config/ldap.php');
+            unlink(PMF_ROOT_DIR . '/config/ldap.php');
         }
     }
 

@@ -188,6 +188,7 @@ $botBlacklist = [
 $allowedVariables = [
     'add' => 1,
     'faq' => 1,
+    'artikel' => 1,
     'ask' => 1,
     'attachment' => 1,
     'contact' => 1,

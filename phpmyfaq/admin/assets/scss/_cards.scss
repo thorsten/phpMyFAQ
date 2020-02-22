@@ -11,7 +11,7 @@
     }
   }
   // Collapsable Card Styling
-  .card-header[data-toggle="collapse"] {
+  .card-header[data-toggle='collapse'] {
     text-decoration: none;
     position: relative;
     padding: 0.75rem 3.25rem 0.75rem 1.25rem;
@@ -32,5 +32,20 @@
         content: '\f105';
       }
     }
+  }
+}
+
+.card-columns {
+  @include media-breakpoint-only(xl) {
+    column-count: 4;
+  }
+  @include media-breakpoint-only(lg) {
+    column-count: 3;
+  }
+  @include media-breakpoint-only(md) {
+    column-count: 2;
+  }
+  @include media-breakpoint-only(sm) {
+    column-count: 1;
   }
 }

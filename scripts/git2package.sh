@@ -57,6 +57,9 @@ composer install --no-dev
 yarn install
 yarn build
 
+# create md5 hashes for file verification
+php scripts/createHashes.php > $cwd/hashes-${PMF_VERSION}.json
+
 # prepare packaging
 cd $cwd
 mv $cwd/build/checkout/${PMF_PACKAGE_FOLDER}/phpmyfaq $cwd/build/package/${PMF_PACKAGE_FOLDER}

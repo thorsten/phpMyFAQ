@@ -78,7 +78,7 @@ RewriteCond %{REQUEST_URI}          /login\.html$ [NC]
 RewriteRule ^(.*)$                  index.php?action=login [L,QSA]
 
 # start page
-RewriteRule ^index.html$                 index.php [PT]
+RewriteRule ^index.html$            index.php [PT]
 
 # a solution id page
 RewriteCond %{REQUEST_URI}              solution_id_([0-9]+)\.html$ [NC]
@@ -92,38 +92,38 @@ RewriteRule content/([0-9]+)/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?ac
 # PMF category page with page count
 # * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.htm
 # * http://[...]/category/1/<PAGE NUMBER/<CATEGORY NAME>.html
-RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=show&cat=$1&seite=$2 [L,QSA]
+RewriteRule category/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$               index.php?action=show&cat=$1&seite=$2 [L,QSA]
 
 # PMF category page
 # * http://[...]/category/1/<CATEGORY NAME>.htm
 # * http://[...]/category/1/<CATEGORY NAME>.html
-RewriteRule category/([0-9]+)/(.+)\.htm(l?)$    index.php?action=show&cat=$1 [L,QSA]
+RewriteRule category/([0-9]+)/(.+)\.htm(l?)$                        index.php?action=show&cat=$1 [L,QSA]
 
 # PMF news page
 # * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.htm
 # * http://[...]/news/<ID>/<LANGUAGE CODE>/<HEADER>.html
-RewriteRule news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$     index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
+RewriteRule news/([0-9]+)/([a-z\-]+)/(.+)\.htm(l?)$                 index.php?action=news&newsid=$1&newslang=$2 [L,QSA]
 
 # PMF sitemap
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.htm
 # * http://[...]/sitemap/<LETTER>/<LANGUAGE CODE>.html
-RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
+RewriteRule sitemap/([^\/]+)/([a-z\-]+)\.htm(l?)$                   index.php?action=sitemap&letter=$1&lang=$2 [L,QSA]
 
 # PMF Google sitemap
 # * http://[...]/sitemap.xml
 # * http://[...]/sitemap.gz
 # * http://[...]/sitemap.xml.gz
-RewriteRule sitemap.xml$        sitemap.xml.php [L]
-RewriteRule sitemap.gz$         sitemap.xml.php?gz=1 [L]
-RewriteRule sitemap.xml.gz$     sitemap.xml.php?gz=1 [L]
+RewriteRule sitemap.xml$                                            sitemap.xml.php [L]
+RewriteRule sitemap.gz$                                             sitemap.xml.php?gz=1 [L]
+RewriteRule sitemap.xml.gz$                                         sitemap.xml.php?gz=1 [L]
 
 # PMF tags page with page count
 # * http://[...]/tags/<ID>/<PAGE NUMBER>/<HEADER>.htm
-RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
+RewriteRule tags/([0-9]+)/([0-9]+)/(.+)\.htm(l?)$                   index.php?action=search&tagging_id=$1&seite=$2 [L,QSA]
 
 # PMF tags page
 # * http://[...]/tags/<ID>/<HEADER>.htm
-RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$     index.php?action=search&tagging_id=$1 [L,QSA] 
+RewriteRule tags/([0-9]+)/([^\/]+)\.htm(l?)$                        index.php?action=search&tagging_id=$1 [L,QSA]
 
 # REST API v2.0
 # * http://[...]/api/v2.0/<ACTION>
