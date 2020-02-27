@@ -246,9 +246,7 @@ class Pgsql implements DatabaseDriver
     public function nextId($table, $id)
     {
         $result = $this->query("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
-        $currentID = pg_result($result);
-
-        return ($currentID);
+        return ($result[0]);
     }
 
     /**
