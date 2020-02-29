@@ -96,7 +96,7 @@ class Visits
             $_SERVER['REQUEST_TIME']
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**
@@ -123,7 +123,7 @@ class Visits
             $this->config->getLanguage()->getLanguage()
         );
 
-        return $this->config->getDb()->query($query);
+        return (bool) $this->config->getDb()->query($query);
     }
 
     /**

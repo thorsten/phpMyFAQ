@@ -1271,7 +1271,7 @@ class Faq
      * @param int    $recordId   Record id
      * @param string $language   Language
      *
-     * @return boolean
+     * @return bool
      */
     public function addCategoryRelations(array $categories, $recordId, $language)
     {
