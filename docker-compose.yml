@@ -13,6 +13,17 @@ services:
       - MYSQL_PASSWORD=phpmyfaq
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
+  postgres:
+    image: postgres:10.1
+    restart: always
+    environment:
+      - POSTGRES_DB=phpmyfaq
+      - POSTGRES_USER=phpmyfaq
+      - POSTGRES_PASSWORD=phpmyfaq
+    ports:
+      - 5432:5432
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
   phpmyfaq:
     build: .
     restart: always
