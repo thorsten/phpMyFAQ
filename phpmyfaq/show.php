@@ -79,7 +79,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
         $up = $oLink->toHtmlAnchor();
     }
 
-    if (!is_null($categoryData->getImage())) {
+    if (!is_null($categoryData->getImage()) && strlen($categoryData->getImage()) > 0) {
         $template->parseBlock(
             'mainPageContent',
             'categoryImage',
