@@ -285,12 +285,12 @@ class Category
     /**
      * Gets the main categories and write them in an array.
      *
-     * @param array $categories Array of parent category ids
+     * @param string $categories String of parent category ids
      * @param bool $parentId Only top level categories?
      *
      * @return array
      */
-    public function getCategories(array $categories, bool $parentId = true): array
+    public function getCategories(string $categories, bool $parentId = true): array
     {
         $_query = '';
         $query = sprintf(
