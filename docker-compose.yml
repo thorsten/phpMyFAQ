@@ -11,6 +11,9 @@ services:
       - MYSQL_DATABASE=phpmyfaq
       - MYSQL_USER=phpmyfaq
       - MYSQL_PASSWORD=phpmyfaq
+      - MYSQL_ROOT_HOST=%
+    ports:
+      - '3306:3306'
     volumes:
       - ./volumes/mariadb:/var/lib/mysql
   postgres:
