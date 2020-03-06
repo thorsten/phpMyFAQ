@@ -1,7 +1,7 @@
 <?php
+
 /**
  * Displays the user management frontend.
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -32,9 +32,12 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
-if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
-    $user->perm->checkRight($user->getUserId(), 'delete_user') ||
-    $user->perm->checkRight($user->getUserId(), 'add_user')) {
+if (
+    $user->perm->checkRight($user->getUserId(), 'edit_user') || $user->perm->checkRight(
+        $user->getUserId(),
+        'delete_user'
+    ) || $user->perm->checkRight($user->getUserId(), 'add_user')
+) {
     ?>
   <script src="assets/js/user.js"></script>
     <?php
@@ -49,7 +52,6 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         'delete_confirm',
         'delete',
         'addsave',
-        'add',
         'list',
         'listallusers'
     ];
@@ -129,8 +131,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 }
             }
 
-            if (!$user->userdata->set(array_keys($userData), array_values($userData)) ||
-                !$user->setStatus($userStatus) /*||
+            if (
+                !$user->userdata->set(array_keys($userData), array_values($userData)) || !$user->setStatus($userStatus) /*||
                 !$user->setSuperAdmin($isSuperAdmin)*/
             ) {
                 $message .= sprintf('<p class="alert alert-danger">%s</p>', $PMF_LANG['ad_msg_mysqlerr']);
@@ -300,8 +302,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         // no errors, send notification to user and show list
         if (count($messages) === 0) {
             $text = sprintf(
-                "You have been registered as a new user:\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" .
-                'Check it out here: %s',
+                "You have been registered as a new user:\n\nName: %s\nLogin name: %s\nPassword: %s\n\n" . 'Check it out here: %s',
                 $userRealName,
                 $userName,
                 $userPassword,
@@ -331,100 +332,22 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         $message = '';
     }
 
-    // show new user form
-    if ($userAction === 'add' && $user->perm->checkRight($user->getUserId(), 'add_user')) { ?>
-
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-        <h1 class="h2">
-          <i aria-hidden="true" class="fa fa-user-plus"></i>
-            <?= $PMF_LANG['ad_adus_adduser'] ?>
-        </h1>
-      </div>
-
-      <div id="user_message"><?= $message ?></div>
-      <div id="user_create">
-
-        <form action="?action=user&amp;user_action=addsave" method="post" role="form">
-          <input type="hidden" name="csrf" value="<?= $currentUser->getCsrfTokenFromSession() ?>">
-
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label" for="user_name"><?= $PMF_LANG['ad_adus_name'] ?></label>
-            <div class="col-lg-4">
-              <input type="text" name="user_name" id="user_name" required tabindex="1" class="form-control"
-                     value="<?= (isset($userName) ? $userName : '') ?>">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label" for="user_realname"><?= $PMF_LANG['ad_user_realname'] ?></label>
-            <div class="col-lg-4">
-              <input type="text" name="user_realname" id="user_realname" required tabindex="2" class="form-control"
-                     value="<?= (isset($userRealName) ? $userRealName : '') ?>">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label" for="user_email"><?= $PMF_LANG['ad_entry_email'] ?></label>
-            <div class="col-lg-4">
-              <input type="email" name="user_email" id="user_email" required tabindex="3" class="form-control"
-                     value="<?= (isset($userEmail) ? $userEmail : '') ?>">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label" for="password"><?= $PMF_LANG['ad_adus_password'] ?></label>
-            <div class="col-lg-4">
-              <input type="password" name="user_password" id="password" required tabindex="4" class="form-control"
-                     value="<?= (isset($userPassword) ? $userPassword : '') ?>">
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-lg-2 col-form-label" for="password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
-            <div class="col-lg-4">
-              <input type="password" name="user_password_confirm" id="password_confirm" required class="form-control"
-                     tabindex="5" value="<?= (isset($userPasswordConfirm) ? $userPasswordConfirm : '') ?>">
-            </div>
-          </div>
-
-          <div class="form-group form-check row">
-            <div class="offset-lg-2 col-lg-4">
-              <input class="form-check-input" type="checkbox" id="is_superadmin" name="user_is_superadmin">
-              <label class="form-check-label" for="is_superadmin">
-                  <?= $PMF_LANG['ad_user_is_superadmin'] ?>
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <div class="offset-lg-2 col-lg-10">
-              <a class="btn btn-info" href="?action=user">
-                  <?= $PMF_LANG['ad_gen_cancel'] ?>
-              </a>
-              <button class="btn btn-success" type="submit">
-                  <?= $PMF_LANG['ad_gen_save'] ?>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-        <?php
-    }
-
     // show list of users
     if ($userAction === 'list') { ?>
-
-      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+      <div
+          class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
         <h1 class="h2">
           <i aria-hidden="true" class="fa fa-user"></i>
             <?= $PMF_LANG['ad_user'] ?>
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
-              <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
-            </a>
-              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')): ?>
+              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addUserModal">
+                  <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
+                </button>
+              <?php endif ?>
+              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'edit_user')) : ?>
                 <a class="btn btn-sm btn-info" href="?action=user&amp;user_action=listallusers">
                   <i class="fa fa-users" aria-label="true"></i> <?= $PMF_LANG['list_all_users'] ?>
                 </a>
@@ -557,19 +480,19 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 </span>
               </div>
               <div class="card-body">
-                  <?php foreach ($user->perm->getAllRightsData() as $right): ?>
+                  <?php foreach ($user->perm->getAllRightsData() as $right) : ?>
                     <div class="form-check">
                       <input id="user_right_<?= $right['right_id'] ?>" type="checkbox"
                              name="user_rights[]" value="<?= $right['right_id'] ?>"
                              class="form-check-input permission">
                       <label class="form-check-label">
                           <?php
-                          if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
-                              echo $PMF_LANG['rightsLanguage'][$right['name']];
-                          } else {
-                              echo $right['description'];
-                          }
-                          ?>
+                            if (isset($PMF_LANG['rightsLanguage'][$right['name']])) {
+                                echo $PMF_LANG['rightsLanguage'][$right['name']];
+                            } else {
+                                echo $right['description'];
+                            }
+                            ?>
                       </label>
                     </div>
                   <?php endforeach; ?>
@@ -666,10 +589,11 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         </h1>
         <div class="btn-toolbar mb-2 mb-md-0">
           <div class="btn-group mr-2">
-            <a class="btn btn-sm btn-success" href="?action=user&amp;user_action=add">
-              <i class="fa fa-user-plus" aria-label="true"></i>
-              <?= $PMF_LANG['ad_user_add'] ?>
-            </a>
+              <?php if ($currentUser->perm->checkRight($user->getUserId(), 'add_user')) : ?>
+                <button type="button" class="btn btn-sm btn-success" data-toggle="modal" data-target="#addUserModal">
+                  <i class="fa fa-user-plus" aria-label="true"></i> <?= $PMF_LANG['ad_user_add'] ?>
+                </button>
+              <?php endif ?>
           </div>
         </div>
       </div>
@@ -688,14 +612,14 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
           <th colspan="3">&nbsp;</th>
         </tr>
         </thead>
-          <?php if ($perPage < $numUsers): ?>
+          <?php if ($perPage < $numUsers) : ?>
             <tfoot>
             <tr>
               <td colspan="8"><?= $pagination->render() ?></td>
             </tr>
             </tfoot>
           <?php endif;
-          ?>
+            ?>
         <tbody>
         <?php
         $counter = $displayedCounter = 0;
@@ -715,18 +639,18 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
           <tr class="row_user_id_<?= $user->getUserId() ?>">
             <td><?= $user->getUserId() ?></td>
             <td class="text-center"><i class="fa <?php
-                switch ($user->getStatus()) {
-                    case 'active':
-                        echo 'fa-check-circle-o';
-                        break;
-                    case 'blocked':
-                        echo 'fa-ban';
-                        break;
-                    case 'protected':
-                        echo 'fa-lock';
-                        break;
-                }
-                ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
+            switch ($user->getStatus()) {
+                case 'active':
+                    echo 'fa-check-circle-o';
+                    break;
+                case 'blocked':
+                    echo 'fa-ban';
+                    break;
+                case 'protected':
+                    echo 'fa-lock';
+                    break;
+            }
+            ?> icon_user_id_<?= $user->getUserId() ?>"></i></td>
             <td class="text-center">
               <i class="fa <?= $user->isSuperAdmin() ? 'fa-user-secret' : 'fa-user-times' ?>"></i>
             </td>
@@ -743,7 +667,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
               </a>
             </td>
             <td>
-                <?php if ($user->getStatus() === 'blocked'): ?>
+                <?php if ($user->getStatus() === 'blocked') : ?>
                   <a onclick="activateUser(this); return false;"
                      href="#" class="btn btn-success btn_user_id_<?= $user->getUserData('user_id') ?>"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
@@ -754,7 +678,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
                 ?>
             </td>
             <td>
-                <?php if ($user->getStatus() !== 'protected'): ?>
+                <?php if ($user->getStatus() !== 'protected') : ?>
                   <a href="#" onclick="deleteUser(this); return false;" class="btn btn-danger"
                      data-csrf-token="<?= $currentUser->getCsrfTokenFromSession() ?>"
                      data-user-id="<?= $user->getUserData('user_id') ?>">
@@ -769,47 +693,198 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         ?>
         </tbody>
       </table>
-
-      <script>
-        /**
-         * Ajax call to delete user
-         *
-         * @param identifier
-         */
-        function deleteUser(identifier) {
-          if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
-            const csrf = $(identifier).data('csrf-token');
-            const userId = $(identifier).data('user-id');
-
-            $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=' + userId + '&csrf=' + csrf,
-              (response) => {
-                $('#user_message').html(response);
-                $('.row_user_id_' + userId).fadeOut('slow');
-              });
-          }
-        }
-
-        /**
-         * Ajax call to delete user
-         *
-         * @param identifier
-         */
-        function activateUser(identifier) {
-          if (confirm('<?= $PMF_LANG['ad_user_active'] ?>')) {
-            const csrf = $(identifier).data('csrf-token');
-            const userId = $(identifier).data('user-id');
-            $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=' + userId + '&csrf=' + csrf,
-              () => {
-                const icon = $('.icon_user_id_' + userId);
-                icon.toggleClass('fa-lock fa-check');
-                $('.btn_user_id_' + userId).remove();
-              });
-          }
-        }
-
-      </script>
         <?php
     }
+    ?>
+
+  <!-- Modal to add a new user -->
+  <div class="modal fade" id="addUserModal" tabindex="-1" role="dialog" aria-labelledby="addUserModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addUserModalLabel">
+            <i aria-hidden="true" class="fa fa-user-plus"></i> <?= $PMF_LANG['ad_adus_adduser'] ?>
+          </h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form action="#" method="post" role="form" id="pmf-add-user-form" class="needs-validation" novalidate>
+
+            <input type="hidden" id="add_user_csrf" name="add_user_csrf"
+                   value="<?= $currentUser->getCsrfTokenFromSession() ?>">
+
+            <div class="form-group row">
+              <label class="col-lg-4 col-form-label" for="add_user_name"><?= $PMF_LANG['ad_adus_name'] ?></label>
+              <div class="col-lg-8">
+                <input type="text" name="add_user_name" id="add_user_name" required tabindex="1" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-lg-4 col-form-label"
+                     for="add_user_realname"><?= $PMF_LANG['ad_user_realname'] ?></label>
+              <div class="col-lg-8">
+                <input type="text" name="add_user_realname" id="add_user_realname" required tabindex="2"
+                       class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-lg-4 col-form-label" for="add_user_email"><?= $PMF_LANG['ad_entry_email'] ?></label>
+              <div class="col-lg-8">
+                <input type="email" name="user_email" id="add_user_email" required tabindex="3" class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-lg-4 col-form-label"
+                     for="add_user_password"><?= $PMF_LANG['ad_adus_password'] ?></label>
+              <div class="col-lg-8">
+                <input type="password" name="add_user_password" id="add_user_password" required tabindex="4"
+                       class="form-control">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-lg-4 col-form-label"
+                     for="add_user_password_confirm"><?= $PMF_LANG['ad_passwd_con'] ?></label>
+              <div class="col-lg-8">
+                <input type="password" name="add_user_password_confirm" id="add_user_password_confirm" required
+                       class="form-control" tabindex="5">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-lg-4"></div>
+              <div class="col-lg-8">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="add_user_is_superadmin" name="user_is_superadmin">
+                  <label class="form-check-label" for="add_user_is_superadmin">
+                      <?= $PMF_LANG['ad_user_is_superadmin'] ?>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+              <?= $PMF_LANG['ad_gen_cancel'] ?>
+          </button>
+          <button type="button" class="btn btn-primary" id="pmf-add-user-action">
+              <?= $PMF_LANG['ad_gen_save'] ?>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const modal = document.getElementById('addUserModal');
+      const addUser = document.getElementById('pmf-add-user-action');
+      const addUserForm = document.getElementById('pmf-add-user-form');
+
+      addUser.addEventListener('click', (event) => {
+        event.preventDefault();
+        const csrf = document.getElementById('add_user_csrf').value;
+        const userName = document.getElementById('add_user_name').value;
+        const realName = document.getElementById('add_user_realname').value;
+        const email = document.getElementById('add_user_email').value;
+        const password = document.getElementById('add_user_password').value;
+        const passwordConfirm = document.getElementById('add_user_password_confirm').value;
+        const isSuperAdmin = document.querySelector('#add_user_is_superadmin').checked;
+
+        addUserForm.classList.add('was-validated');
+
+        const userData = {
+          userName, realName, email, password, passwordConfirm, isSuperAdmin
+        };
+
+        postUserData('index.php?action=ajax&ajax=user&ajaxaction=add_user&csrf=' + csrf, userData)
+          .then(async (data) => {
+            if (data.status !== 201) {
+              console.log('1. Request failure: ', data);
+            } else {
+              const result = await data.json();
+              console.log('result to handle', result);
+
+              modal.style.display = 'none';
+              modal.classList.remove('show');
+            }
+          })
+          .catch((error) => {
+            console.log('Final Request failure: ', error);
+          });
+          /*
+          .then((response) => response.json())
+          .then((responseData) => {
+            console.log(responseData);
+            //
+          })
+          .catch((error) => {
+            console.log('error', error);
+          })
+          */
+      });
+
+      async function postUserData(url = '', data = {}) {
+        return await fetch(url, {
+          method: 'POST',
+          cache: 'no-cache',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          redirect: 'follow',
+          referrerPolicy: 'no-referrer',
+          body: JSON.stringify(data)
+        });
+      }
+    });
+
+    /**
+     * Ajax call to delete user
+     *
+     * @param identifier
+     */
+    function deleteUser(identifier) {
+      if (confirm('<?= $PMF_LANG['ad_user_del_3'] ?>')) {
+        const csrf = $(identifier).data('csrf-token');
+        const userId = $(identifier).data('user-id');
+
+        $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=delete_user&user_id=' + userId + '&csrf=' + csrf,
+          (response) => {
+            $('#user_message').html(response);
+            $('.row_user_id_' + userId).fadeOut('slow');
+          });
+      }
+    }
+
+    /**
+     * Ajax call to delete user
+     *
+     * @param identifier
+     */
+    function activateUser(identifier) {
+      if (confirm('<?= $PMF_LANG['ad_user_active'] ?>')) {
+        const csrf = $(identifier).data('csrf-token');
+        const userId = $(identifier).data('user-id');
+        $.getJSON('index.php?action=ajax&ajax=user&ajaxaction=activate_user&user_id=' + userId + '&csrf=' + csrf,
+          () => {
+            const icon = $('.icon_user_id_' + userId);
+            icon.toggleClass('fa-lock fa-check');
+            $('.btn_user_id_' + userId).remove();
+          });
+      }
+    }
+
+  </script>
+
+    <?php
     if (isset($_GET['user_id'])) {
         $userId = Filter::filterInput(INPUT_GET, 'user_id', FILTER_VALIDATE_INT, 0);
         echo '        <script>updateUser(' . $userId . ');</script>';

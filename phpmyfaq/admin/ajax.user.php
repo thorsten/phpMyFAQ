@@ -19,6 +19,7 @@ use phpMyFAQ\Auth;
 use phpMyFAQ\Category;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
+use phpMyFAQ\Helper\MailHelper;
 use phpMyFAQ\Permission;
 use phpMyFAQ\User;
 
@@ -37,13 +38,14 @@ $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
 
-if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
+if (
+    $user->perm->checkRight($user->getUserId(), 'add_user') ||
     $user->perm->checkRight($user->getUserId(), 'edit_user') ||
-    $user->perm->checkRight($user->getUserId(), 'delete_user')) {
+    $user->perm->checkRight($user->getUserId(), 'delete_user')
+) {
     $user = new User($faqConfig);
 
     switch ($ajaxAction) {
-
         case 'get_user_list':
             $allUsers = [];
             foreach ($user->searchUsers($userSearch) as $singleUser) {
@@ -82,6 +84,60 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
             $http->sendJsonWithHeaders($user->getStatus());
             break;
 
+        case 'add_user':
+            if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+                $http->setStatus(400);
+                $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+                exit(1);
+            }
+
+            $errorMessage = [];
+            $successMessage = '';
+
+            $postData = json_decode(file_get_contents('php://input'), true);
+
+            $userName = Filter::filterVar($postData['userName'], FILTER_SANITIZE_STRING);
+            $userRealName = Filter::filterVar($postData['realName'], FILTER_SANITIZE_STRING);
+            $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_STRING);
+            $userEmail = Filter::filterVar($postData['email'], FILTER_VALIDATE_EMAIL);
+            $userPassword = Filter::filterVar($postData['password'], FILTER_SANITIZE_STRING);
+            $userPasswordConfirm = Filter::filterVar($postData['passwordConfirm'], FILTER_SANITIZE_STRING);
+            $userIsSuperAdmin = Filter::filterVar($postData['isSuperAdmin'], FILTER_VALIDATE_BOOLEAN);
+
+            $newUser = new User($faqConfig);
+
+            if (!$newUser->isValidLogin($userName)) {
+                $errorMessage[] = $PMF_LANG['ad_user_error_loginInvalid'];
+            }
+            if ($newUser->getUserByLogin($userName)) {
+                $errorMessage[] = $PMF_LANG['ad_adus_exerr'];
+            }
+            if ($userRealName === '') {
+                $errorMessage[] = $PMF_LANG['ad_user_error_noRealName'];
+            }
+            if (is_null($userEmail)) {
+                $errorMessage[] = $PMF_LANG['ad_user_error_noEmail'];
+            }
+            if (count($errorMessage) === 0) {
+                if (!$newUser->createUser($userName, $userPassword)) {
+                    $errorMessage[] = $newUser->error();
+                } else {
+                    $newUser->userdata->set(['display_name', 'email'], [$userRealName, $userEmail]);
+                    $newUser->setStatus('active');
+                    $newUser->setSuperAdmin($userIsSuperAdmin);
+                    $mailHelper = new MailHelper($faqConfig);
+                    $mailHelper->sendMailToNewUser($newUser, $userPassword);
+                    $successMessage = [ 'data' => $PMF_LANG['ad_adus_suc'] ];
+                }
+
+                $http->setStatus(201);
+                $http->sendJsonWithHeaders($successMessage);
+                exit(1);
+            }
+            $http->setStatus(400);
+            $http->sendJsonWithHeaders($errorMessage);
+            break;
+
         case 'delete_user':
             if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
                 $http->setStatus(400);
@@ -91,7 +147,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
 
             $user->getUserById($userId, true);
             if ($user->getStatus() == 'protected' || $userId == 1) {
-                $message = '<p class="error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
+                $message = '<p class="alert alert-error">' . $PMF_LANG['ad_user_error_protectedAccount'] . '</p>';
             } else {
                 if (!$user->deleteUser()) {
                     $message = $PMF_LANG['ad_user_error_delete'];
@@ -105,7 +161,7 @@ if ($user->perm->checkRight($user->getUserId(), 'add_user') ||
                         $permissions->removeFromAllGroups($userId);
                     }
 
-                    $message = '<p class="success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
+                    $message = '<p class="alert alert-success">' . $PMF_LANG['ad_user_deleted'] . '</p>';
                 }
             }
             $http->sendJsonWithHeaders($message);
