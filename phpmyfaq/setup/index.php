@@ -23,12 +23,9 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Installer;
-use phpMyFAQ\Strings;
-use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
+define('COPYRIGHT', '&copy; 2001-2020 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
 define('IS_VALID_PHPMYFAQ', null);
@@ -352,35 +349,36 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="realname">Your name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="realname" id="realname" class="form-control">
+                            <input type="text" name="realname" id="realname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your real name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="email">Your email address:</label>
                         <div class="col-sm-9">
-                            <input type="email" name="email" id="email" class="form-control">
+                            <input type="email" name="email" id="email" class="form-control" required>
                             <small class="form-text text-muted">Please enter your email adress.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="loginname">Your login name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="loginname" id="loginname" class="form-control">
+                            <input type="text" name="loginname" id="loginname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your login name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password">Your password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password" id="password" class="form-control">
+                            <input type="password" name="password" id="password" class="form-control" required>
                             <small class="form-text text-muted">Please enter your password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password_retype">Retype password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password_retyped" id="password_retype" class="form-control">
+                            <input type="password" name="password_retyped" id="password_retype" class="form-control"
+                                   required>
                             <small class="form-text text-muted">Please retype your password.</small>
                         </div>
                     </div>
