@@ -59,7 +59,7 @@ _Running using named volumes:_
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **phpmyadmin**: a PHP tool to have a look on your database.
 
-_Running apache web server with PHP 7.3 support:_
+_Running apache web server with PHP 7.4 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 

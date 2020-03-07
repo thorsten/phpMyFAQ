@@ -2,6 +2,7 @@
 
 /**
  * The main phpMyFAQ Setup.
+ *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
  * This Source Code Form is subject to the terms of the Mozilla Public License,
@@ -21,12 +22,9 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;
-use phpMyFAQ\Installer;
-use phpMyFAQ\Strings;
-use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
 
-define('COPYRIGHT', '&copy; 2001-2019 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
+define('COPYRIGHT', '&copy; 2001-2020 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a> | Follow us on <a href="http://twitter.com/phpMyFAQ">Twitter</a> ');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
 define('PMF_SRC_DIR', PMF_ROOT_DIR . '/src');
 define('IS_VALID_PHPMYFAQ', null);
@@ -50,10 +48,10 @@ require PMF_ROOT_DIR . '/config/constants_elasticsearch.php';
 
 $loader = new ClassLoader();
 $loader->add('phpMyFAQ', PMF_SRC_DIR);
-$loader->register()
+$loader->register();
 ?>
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -102,7 +100,7 @@ $loader->register()
           phpMyFAQ <?= System::getVersion() ?>
         </h1>
         <p class="text-center">
-          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.0">documentation</a>
+          Did you already read the <a target="_blank" href="https://www.phpmyfaq.de/docs/3.1">documentation</a>
           carefully before starting the phpMyFAQ setup?
           </p>
       </div>
@@ -320,35 +318,36 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="realname">Your name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="realname" id="realname" class="form-control">
+                            <input type="text" name="realname" id="realname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your real name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="email">Your email address:</label>
                         <div class="col-sm-9">
-                            <input type="email" name="email" id="email" class="form-control">
+                            <input type="email" name="email" id="email" class="form-control" required>
                             <small class="form-text text-muted">Please enter your email adress.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="loginname">Your login name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="loginname" id="loginname" class="form-control">
+                            <input type="text" name="loginname" id="loginname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your login name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password">Your password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password" id="password" class="form-control">
+                            <input type="password" name="password" id="password" class="form-control" required>
                             <small class="form-text text-muted">Please enter your password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password_retype">Retype password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password_retyped" id="password_retype" class="form-control">
+                            <input type="password" name="password_retyped" id="password_retype" class="form-control"
+                                   required>
                             <small class="form-text text-muted">Please retype your password.</small>
                         </div>
                     </div>

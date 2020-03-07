@@ -1,25 +1,25 @@
 #
-# This image uses a php:7.3-apache base image and do not have any phpMyFAQ code with it.
+# This image uses a php:7.4-apache base image and do not have any phpMyFAQ code with it.
 # It's for development only, it's meant to be run with docker-compose
 #
 
 #####################################
 #=== Unique stage without payload ===
 #####################################
-FROM php:7.3-apache
+FROM php:7.4-apache
 
-#=== Install gd php dependencie ===
+#=== Install gd PHP dependencies ===
 RUN set -x \
- && buildDeps="libpng-dev libjpeg-dev libfreetype6-dev" \
+ && buildDeps="libfreetype6-dev libjpeg62-turbo-dev libpng-dev" \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
  \
- && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
- && docker-php-ext-install gd \
+ && docker-php-ext-configure gd --with-freetype --with-jpeg \
+ && docker-php-ext-install -j$(nproc) gd \
  \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
 
-#=== Install ldap php dependencie ===
+#=== Install ldap PHP dependencies ===
 RUN set -x \
  && buildDeps="libldap2-dev" \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
@@ -30,7 +30,7 @@ RUN set -x \
  && apt-get purge -y ${buildDeps} \
  && rm -rf /var/lib/apt/lists/*
 
-#=== Install intl, soap opcache, and zip php dependencie ===
+#=== Install intl, opcache and zip PHP dependencies ===
 RUN set -x \
  && buildDeps="libicu-dev zlib1g-dev libxml2-dev libzip-dev"  \
  && apt-get update && apt-get install -y ${buildDeps} --no-install-recommends \
@@ -45,7 +45,7 @@ RUN set -x \
 
 #=== Install mysqli php dependencie ===
 RUN set -x \
- && docker-php-ext-install mysqli
+ && docker-php-ext-install pdo pdo_mysql  mysqli
 
 #=== Install pgsql dependencie ===
 RUN set -ex \
