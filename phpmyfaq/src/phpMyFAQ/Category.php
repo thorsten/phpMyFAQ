@@ -386,7 +386,7 @@ class Category
         }
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%s?action=show&amp;cat=%d', Link::getSystemRelativeUri(), $row['id']);
+            $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
             $categories['url'][] = $link->toString();
@@ -766,7 +766,7 @@ class Category
 
             $url = sprintf(
                 '%s?%saction=show&amp;cat=%d',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 $sids,
                 $parent
             );
@@ -878,7 +878,7 @@ class Category
     ) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
-            Link::getSystemRelativeUri(),
+            $this->config->getDefaultUrl(),
             $sids,
             $categoryId
         );
@@ -980,7 +980,7 @@ class Category
             foreach ($temp as $k => $category) {
                 $url = sprintf(
                     '%s?%saction=show&amp;cat=%d',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $catid[$k]
                 );

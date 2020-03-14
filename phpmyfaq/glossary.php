@@ -40,7 +40,7 @@ $itemsPerPage = 10;
 
 $baseUrl = sprintf(
     '%s?action=glossary&amp;page=%d',
-    Link::getSystemRelativeUri(),
+    $faqConfig->getDefaultUrl(),
     $page
 );
 

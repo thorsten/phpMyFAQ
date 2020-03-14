@@ -234,7 +234,7 @@ class CategoryHelper extends Helper
 
                 $url = sprintf(
                     '%s?%saction=show&amp;cat=%d',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $parent
                 );
