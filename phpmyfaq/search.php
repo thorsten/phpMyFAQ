@@ -190,7 +190,7 @@ $mostPopularSearchData = $faqSearch->getMostPopularSearches($faqConfig->get('sea
 if ($faqConfig->get('main.enableRewriteRules')) {
     $baseUrl = sprintf(
         '%ssearch.html?search=%s&amp;seite=%d%s&amp;searchcategory=%d',
-        Link::getSystemRelativeUri('index.php'),
+        $faqConfig->getDefaultUrl(),
         urlencode($inputSearchTerm),
         $page,
         $languages,
@@ -199,7 +199,7 @@ if ($faqConfig->get('main.enableRewriteRules')) {
 } else {
     $baseUrl = sprintf(
         '%s?%saction=search&amp;search=%s&amp;seite=%d%s&amp;searchcategory=%d',
-        Link::getSystemRelativeUri(),
+        $faqConfig->getDefaultUrl(),
         empty($sids) ? '' : 'sids=' . $sids . '&amp;',
         urlencode($inputSearchTerm),
         $page,

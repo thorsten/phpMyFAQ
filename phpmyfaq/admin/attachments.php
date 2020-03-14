@@ -35,11 +35,11 @@ $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 
 $pagination = new Pagination(
     $faqConfig,
-    array(
-        'baseUrl' => Link::getSystemRelativeUri() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+    [
+        'baseUrl' => $faqConfig->getDefaultUrl() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total' => count($allCrumbs),
         'perPage' => $itemsPerPage,
-    )
+    ]
 );
 ?>
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
