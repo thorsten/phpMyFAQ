@@ -11,6 +11,7 @@ Version 3.1.0-dev
 - removed REST API v1 (Thorsten)
 
 Version 3.0.1 - 2020-03
+- re-added tag cloud on several pages (Thorsten)
 - fixed minor bugs (Thorsten)
 - fixed update issues for PostgreSQL (Thorsten)
 

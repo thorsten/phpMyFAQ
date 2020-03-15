@@ -427,15 +427,15 @@ class Tags
         $i = 0;
         foreach ($tags as $tag) {
             ++$i;
-            $html .= '<li>';
             $title = Strings::htmlspecialchars($tag['name'] . ' (' . $tag['count'] . ')', ENT_QUOTES, 'utf-8');
             $url = sprintf('%s?action=search&amp;tagging_id=%d', $this->config->getDefaultUrl(), $tag['id']);
             $oLink = new Link($url, $this->config);
             $oLink->itemTitle = $tag['name'];
             $oLink->text = $tag['name'];
             $oLink->tooltip = $title;
+            $oLink->class = 'btn btn-primary m-1';
             $html .= $oLink->toHtmlAnchor();
-            $html .= (count($tags) == $i ? '' : ' ') . '</li>';
+            $html .= (count($tags) == $i ? '' : ' ');
         }
 
         return $html;
