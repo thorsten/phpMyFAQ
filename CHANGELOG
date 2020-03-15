@@ -6,6 +6,7 @@ CHANGELOG
 This is a log of major user-visible changes in each phpMyFAQ release.
 
 Version 3.0.1 - 2020-03-
+- re-added tag cloud on several pages (Thorsten)
 - fixed minor bugs (Thorsten)
 - fixed update issues for PostgreSQL (Thorsten)
 
