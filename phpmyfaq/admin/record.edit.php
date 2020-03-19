@@ -264,14 +264,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
     <?php } ?>
 
-    <form id="faqEditor" action="?action=<?= $queryString ?>" method="post" style="width: 100%;">
-        <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
-        <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
-        <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-        <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
-        <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
-        <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
-
         <div class="row">
             <div class="col-lg-9">
                 <div class="card shadow mb-4">
@@ -309,9 +301,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     if (count($revisions)) { ?>
                                         <div class="form-group">
                                             <form id="selectRevision" name="selectRevision" method="post"
-                                                  accept-charset="utf-8"
                                                   action="?action=editentry&amp;id=<?= $faqData['id'] ?>&amp;lang=<?= $faqData['lang'] ?>">
-                                                <select name="revisionid_selected" onchange="selectRevision.submit();"
+                                                <select name="revisionid_selected" onchange="this.form.submit();"
                                                         class="form-control">
                                                     <option value="<?= $faqData['revision_id'] ?>">
                                                         <?= $PMF_LANG['ad_changerev'] ?>
@@ -346,6 +337,14 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                         $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
                                     }
                                 } ?>
+
+                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post" style="width: 100%;">
+                                <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
+                                <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
+                                <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                                <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
+                                <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
+                                <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
 
                                 <!-- Question -->
                                 <div class="form-group">
