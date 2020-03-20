@@ -15,11 +15,7 @@
  * @since 2003-02-23
  */
 
-use phpMyFAQ\Comments;
-use phpMyFAQ\Date;
-use phpMyFAQ\Entity\CommentType;use phpMyFAQ\Filter;
-use phpMyFAQ\Helper\LanguageHelper;
-use phpMyFAQ\News;
+use phpMyFAQ\Comments;use phpMyFAQ\Date;use phpMyFAQ\Entity\CommentType;use phpMyFAQ\Filter;use phpMyFAQ\Helper\LanguageHelper;use phpMyFAQ\News;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
     http_response_code(400);
@@ -45,46 +41,46 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
-                <form  id="faqEditor" name="faqEditor" action="?action=save-news" method="post" accept-charset="utf-8">
+            <div class="col-12">
+                <form id="faqEditor" name="faqEditor" action="?action=save-news" method="post" novalidate>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="newsheader">
+                        <label class="col-3 col-form-label" for="newsheader">
                             <?= $PMF_LANG['ad_news_header'] ?>
                         </label>
-                        <div class="col-lg-4">
+                        <div class="col-9">
                             <input class="form-control" type="text" name="newsheader" id="newsheader">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
+                        <div class="col-9">
                             <textarea name="news" rows="5" class="form-control" id="news"></textarea>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
+                        <div class="col-9">
                             <input class="form-control" type="text" name="authorName" id="authorName"
                                    value="<?= $user->getUserData('display_name') ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
+                        <div class="col-9">
                             <input class="form-control" type="email" name="authorEmail" id="authorEmail"
                                    value="<?= $user->getUserData('email') ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="active">
+                        <label class="col-3 col-form-label" for="active">
                             <?= $PMF_LANG['ad_news_set_active'] ?>:
                         </label>
-                        <div class="col-lg-4 checkbox">
+                        <div class="col-9 checkbox">
                             <label>
                                 <input type="checkbox" name="active" id="active" value="y">
                                 <?= $PMF_LANG['ad_gen_yes'] ?>
@@ -93,8 +89,8 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
-                        <div class="col-lg-4 checkbox">
+                        <label class="col-3 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
+                        <div class="col-9 checkbox">
                             <label>
                                 <input type="checkbox" name="comment" id="comment" value="y">
                                 <?= $PMF_LANG['ad_gen_yes'] ?>
@@ -103,22 +99,22 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
+                        <div class="col-9">
                             <input class="form-control" type="url" name="link" id="link" placeholder="http://www.example.com/">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
+                        <div class="col-9">
                             <input type="text" name="linkTitle" id="linkTitle" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" ><?= $PMF_LANG['ad_news_link_target'] ?></label>
-                        <div class="col-lg-4 radio">
+                        <label class="col-3 col-form-label" ><?= $PMF_LANG['ad_news_link_target'] ?></label>
+                        <div class="col-9 radio">
                             <label>
                                 <input type="radio" name="target" value="blank">
                                 <?= $PMF_LANG['ad_news_link_window'] ?>
@@ -132,36 +128,38 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
+                        <div class="col-9">
                             <?= LanguageHelper::renderSelectLanguage($faqLangCode, false, [], 'langTo') ?>
                         </div>
                     </div>
 
                     <legend><?= $PMF_LANG['ad_news_expiration_window'] ?></legend>
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
-                        <div class="col-lg-2">
-                            <input type="datetime-local" name="dateStart" id="dateStart" class="form-control">
+                        <label class="col-3 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
+                        <div class="col-3">
+                            <input type="date" name="dateStart" id="dateStart" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
-                        <div class="col-lg-2">
-                            <input type="datetime-local" name="dateEnd" id="dateEnd" class="form-control">
+                        <label class="col-3 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
+                        <div class="col-3">
+                            <input type="date" name="dateEnd" id="dateEnd" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <div class="offset-lg-2 col-lg-4">
-                            <button class="btn btn-primary" type="submit">
-                                <?= $PMF_LANG['ad_news_add'] ?>
-                            </button>
-                            <a class="btn btn-info" href="?action=news">
-                                <?= $PMF_LANG['ad_entry_back'] ?>
-                            </a>
+                      <div class="col-12">
+                        <div class="btn-group float-right mt-2" role="group">
+                          <a class="btn btn-info" href="?action=news">
+                            <?= $PMF_LANG['ad_entry_back'] ?>
+                          </a>
+                          <button class="btn btn-primary" type="submit">
+                            <?= $PMF_LANG['ad_news_add'] ?>
+                          </button>
                         </div>
+                      </div>
                     </div>
                 </form>
             </div>
@@ -187,7 +185,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
                 <table class="table table-hover">
                 <thead class="thead-dark">
                     <tr>
@@ -244,21 +242,21 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
                 <form  action="?action=update-news" method="post" accept-charset="utf-8">
                     <input type="hidden" name="id" value="<?= $newsData['id'] ?>">
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="newsheader"><?= $PMF_LANG['ad_news_header'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="newsheader"><?= $PMF_LANG['ad_news_header'] ?></label>
+                        <div class="col-9">
                             <input type="text" name="newsheader" id="newsheader" class="form-control"
                                    value="<?= $newsData['header'] ?? '' ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="news"><?= $PMF_LANG['ad_news_text'] ?>:</label>
+                        <div class="col-9">
                             <noscript>Please enable JavaScript to use the WYSIWYG editor!</noscript>
                             <textarea id="news" name="news" class="form-control" rows="5"><?php
                                 if (isset($newsData['content'])) {
@@ -268,24 +266,24 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="authorName"><?= $PMF_LANG['ad_news_author_name'] ?></label>
+                        <div class="col-9">
                             <input type="text" name="authorName" value="<?= $newsData['authorName'] ?>" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="authorEmail"><?= $PMF_LANG['ad_news_author_email'] ?></label>
+                        <div class="col-9">
                             <input type="email" name="authorEmail" value="<?= $newsData['authorEmail'] ?>" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="active">
+                        <label class="col-3 col-form-label" for="active">
                             <?= $PMF_LANG['ad_news_set_active'] ?>:
                         </label>
-                        <div class="col-lg-4">
+                        <div class="col-9">
                             <label>
                                 <input type="checkbox" name="active" id="active" value="y"
                                     <?php if (isset($newsData['active']) && $newsData['active']) { echo ' checked'; } ?>
@@ -296,8 +294,8 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="comment"><?= $PMF_LANG['ad_news_allowComments'] ?></label>
+                        <div class="col-9">
                             <label>
                                 <input type="checkbox" name="comment" id="comment" value="y"
                                 <?php if (isset($newsData['allowComments']) && $newsData['allowComments']) { echo ' checked'; } ?>>
@@ -307,23 +305,23 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="link"><?= $PMF_LANG['ad_news_link_url'] ?></label>
+                        <div class="col-9">
                             <input type="url" id="link" name="link" value="<?= $newsData['link'] ?>" class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="linkTitle"><?= $PMF_LANG['ad_news_link_title'] ?></label>
+                        <div class="col-9">
                             <input type="text" id="linkTitle" name="linkTitle" value="<?= $newsData['linkTitle'] ?>"
                             class="form-control">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="target"><?= $PMF_LANG['ad_news_link_target'] ?></label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="target"><?= $PMF_LANG['ad_news_link_target'] ?></label>
+                        <div class="col-9">
                         <label>
                                 <input type="radio" name="target" value="blank"
                                 <?php if ('blank' == $newsData['target']) { echo ' checked'; } ?>>
@@ -341,8 +339,8 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
-                        <div class="col-lg-4">
+                        <label class="col-3 col-form-label" for="langTo"><?= $PMF_LANG['ad_entry_locale'] ?>:</label>
+                        <div class="col-9">
                         <?= LanguageHelper::renderSelectLanguage($newsData['lang'], false, [], 'langTo') ?>
                         </div>
                     </div>
@@ -351,28 +349,30 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
     $dateEnd = ($newsData['dateEnd'] != '99991231235959' ? Date::createIsoDate($newsData['dateEnd'], 'Y-m-d') : '');
 ?>
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
-                        <div class="col-lg-4">
-                            <input type="datetime-local" name="dateStart" id="dateStart" class="form-control" value="<?= $dateStart ?>">
+                        <label class="col-3 col-form-label" for="dateStart"><?= $PMF_LANG['ad_news_from'] ?></label>
+                        <div class="col-9">
+                            <input type="date" name="dateStart" id="dateStart" class="form-control" value="<?= $dateStart ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label class="col-lg-2 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
-                        <div class="col-lg-4">
-                            <input type="datetime-local"  name="dateEnd" id="dateEnd" class="form-control" value="<?= $dateEnd ?>">
+                        <label class="col-3 col-form-label" for="dateEnd"><?= $PMF_LANG['ad_news_to'] ?></label>
+                        <div class="col-9">
+                            <input type="date"  name="dateEnd" id="dateEnd" class="form-control" value="<?= $dateEnd ?>">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <div class="offset-lg-2 col-lg-4">
-                            <button class="btn btn-primary" type="submit">
-                                <?= $PMF_LANG['ad_news_edit'] ?>
-                            </button>
-                            <a class="btn btn-info" href="?action=news">
-                                <?= $PMF_LANG['ad_entry_back'] ?>
-                            </a>
+                      <div class="col-12">
+                        <div class="btn-group float-right mt-2" role="group">
+                          <button class="btn btn-primary" type="submit">
+                            <?= $PMF_LANG['ad_news_edit'] ?>
+                          </button>
+                          <a class="btn btn-info" href="?action=news">
+                            <?= $PMF_LANG['ad_entry_back'] ?>
+                          </a>
                         </div>
+                      </div>
                     </div>
                 </form>
 <?php
@@ -413,7 +413,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
 <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
@@ -424,12 +424,12 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linktitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
-    $newslang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
 
     $newsData = array(
-        'lang' => $newslang,
+        'lang' => $newsLang,
         'header' => $header,
         'content' => html_entity_decode($content),
         'authorName' => $author,
@@ -439,7 +439,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart).'000000',
         'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959',
         'link' => $link,
-        'linkTitle' => $linktitle,
+        'linkTitle' => $linkTitle,
         'date' => date('YmdHis'),
         'target' => (is_null($target)) ? '' : $target,
     );
@@ -465,7 +465,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
 <?php
     $dateStart = Filter::filterInput(INPUT_POST, 'dateStart', FILTER_SANITIZE_STRING);
     $dateEnd = Filter::filterInput(INPUT_POST, 'dateEnd', FILTER_SANITIZE_STRING);
@@ -476,12 +476,12 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
     $link = Filter::filterInput(INPUT_POST, 'link', FILTER_VALIDATE_URL);
-    $linktitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
-    $newslang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
+    $linkTitle = Filter::filterInput(INPUT_POST, 'linkTitle', FILTER_SANITIZE_STRIPPED);
+    $newsLang = Filter::filterInput(INPUT_POST, 'langTo', FILTER_SANITIZE_STRING);
     $target = Filter::filterInput(INPUT_POST, 'target', FILTER_SANITIZE_STRIPPED);
 
-    $newsData = array(
-        'lang' => $newslang,
+    $newsData = [
+        'lang' => $newsLang,
         'header' => $header,
         'content' => html_entity_decode($content),
         'authorName' => $author,
@@ -491,10 +491,10 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         'dateStart' => (empty($dateStart)) ? '00000000000000' : str_replace('-', '', $dateStart).'000000',
         'dateEnd' => (empty($dateEnd)) ? '99991231235959' : str_replace('-', '', $dateEnd).'235959',
         'link' => $link,
-        'linkTitle' => $linktitle,
+        'linkTitle' => $linkTitle,
         'date' => date('YmdHis'),
         'target' => (is_null($target)) ? '' : $target,
-    );
+    ];
 
     $newsId = Filter::filterInput(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     if ($news->updateNewsEntry($newsId, $newsData)) {
@@ -518,7 +518,7 @@ if ('add-news' == $action && $user->perm->checkRight($user->getUserId(), 'addnew
         </div>
 
         <div class="row">
-            <div class="col-lg-12">
+            <div class="col-12">
 <?php
     $precheck = Filter::filterInput(INPUT_POST, 'really', FILTER_SANITIZE_STRING, 'no');
     $deleteId = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);
