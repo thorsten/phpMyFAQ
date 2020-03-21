@@ -86,7 +86,7 @@ if (isset($auth)) {
               // General options
               mode: 'exact',
               language: '<?=(Language::isASupportedTinyMCELanguage($faqLangCode) ? $faqLangCode : 'en') ?>',
-              elements: '<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
+              selector: 'textarea#<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               theme: 'modern',
               plugins: [
                 'advlist autolink lists link image charmap print preview hr anchor pagebreak',

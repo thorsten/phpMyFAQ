@@ -22,7 +22,7 @@ $(document).ready(function() {
       // General options
       mode: 'exact',
       language: 'en',
-      elements: 'answer',
+      selector: 'textarea#answer',
       theme: 'modern',
       plugins: [
         'advlist autolink lists link image charmap print preview hr anchor pagebreak',

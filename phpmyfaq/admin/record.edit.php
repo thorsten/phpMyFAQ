@@ -367,27 +367,30 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 <?php endif; ?>
                                 <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
                                     <div class="form-group row">
-                                        <div class="col-lg-12">
-                                            <ul class="nav nav-tabs markdown-tabs">
-                                                <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
-                                                <li><a data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="text">
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-12">
-                                    <textarea id="answer" name="answer" class="form-control" rows="7"
-                                              placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"><?= $faqData['content'] ?></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane" id="preview">
-                                                    <article class="markdown-preview">
-                                                    </article>
-                                                </div>
+                                      <div class="col-lg-12">
+                                        <ul class="nav nav-tabs markdown-tabs mb-2">
+                                          <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#text">Text</a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
+                                          </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                          <div class="tab-pane active" id="text">
+                                            <div class="form-group row">
+                                              <div class="col-lg-12">
+                                                <textarea id="answer-markdown" name="answer" class="form-control"
+                                                          rows="7" placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"
+                                                ><?= $faqData['content'] ?></textarea>
+                                              </div>
                                             </div>
+                                          </div>
+                                          <div class="tab-pane" id="preview">
+                                            <article class="markdown-preview"></article>
+                                          </div>
                                         </div>
+                                      </div>
                                     </div>
                                 <?php endif; ?>
                             </div>
