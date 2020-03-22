@@ -10,8 +10,13 @@ Version 3.1.0-dev
 - added support for Elasticsearch v6+ (Thorsten)
 - removed REST API v1 (Thorsten)
 
-Version 3.0.1 - 2020-03
+Version 3.0.2
+-
+
+Version 3.0.1 - 2020-03-17
+- re-added tag cloud on several pages (Thorsten)
 - fixed minor bugs (Thorsten)
+- fixed update issues for PostgreSQL (Thorsten)
 
 Version 3.0.0 - 2020-02-16
 - changed PHP requirement to PHP 7.2+ (Thorsten)

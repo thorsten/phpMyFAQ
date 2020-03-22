@@ -7,6 +7,7 @@ security vulnerability in phpMyFAQ, we appreciate your help in disclosing it to 
 
 | Version | Supported          |
 | ------- | ------------------ |
+| 3.1.x-dev   | :white_check_mark: |
 | 3.0.x   | :white_check_mark: |
 | < 2.9   | :x:                |
 

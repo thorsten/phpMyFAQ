@@ -643,7 +643,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
 
         $baseUrl = sprintf(
             '%s?action=user&amp;user_action=listallusers&amp;page=%d',
-            Link::getSystemRelativeUri(),
+            $faqConfig->getDefaultUrl(),
             $page
         );
 

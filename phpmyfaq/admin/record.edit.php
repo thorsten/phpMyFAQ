@@ -264,14 +264,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
     <?php } ?>
 
-    <form id="faqEditor" action="?action=<?= $queryString ?>" method="post" style="width: 100%;">
-        <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
-        <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
-        <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-        <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
-        <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
-        <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
-
         <div class="row">
             <div class="col-lg-9">
                 <div class="card shadow mb-4">
@@ -309,9 +301,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     if (count($revisions)) { ?>
                                         <div class="form-group">
                                             <form id="selectRevision" name="selectRevision" method="post"
-                                                  accept-charset="utf-8"
                                                   action="?action=editentry&amp;id=<?= $faqData['id'] ?>&amp;lang=<?= $faqData['lang'] ?>">
-                                                <select name="revisionid_selected" onchange="selectRevision.submit();"
+                                                <select name="revisionid_selected" onchange="this.form.submit();"
                                                         class="form-control">
                                                     <option value="<?= $faqData['revision_id'] ?>">
                                                         <?= $PMF_LANG['ad_changerev'] ?>
@@ -347,6 +338,14 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     }
                                 } ?>
 
+                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post" style="width: 100%;">
+                                <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
+                                <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
+                                <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
+                                <input type="hidden" name="openQuestionId" id="openQuestionId" value="<?= $questionId ?>">
+                                <input type="hidden" name="notifyUser" id="notifyUser" value="<?= $notifyUser ?>">
+                                <input type="hidden" name="notifyEmail" id="notifyEmail" value="<?= $notifyEmail ?>">
+
                                 <!-- Question -->
                                 <div class="form-group">
                                     <input type="text" name="question" id="question"
@@ -368,27 +367,30 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 <?php endif; ?>
                                 <?php if ($faqConfig->get('main.enableMarkdownEditor')): ?>
                                     <div class="form-group row">
-                                        <div class="col-lg-12">
-                                            <ul class="nav nav-tabs markdown-tabs">
-                                                <li class="active"><a data-toggle="tab" href="#text">Text</a></li>
-                                                <li><a data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
-                                                </li>
-                                            </ul>
-                                            <div class="tab-content">
-                                                <div class="tab-pane active" id="text">
-                                                    <div class="form-group row">
-                                                        <div class="col-lg-12">
-                                    <textarea id="answer" name="answer" class="form-control" rows="7"
-                                              placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"><?= $faqData['content'] ?></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="tab-pane" id="preview">
-                                                    <article class="markdown-preview">
-                                                    </article>
-                                                </div>
+                                      <div class="col-lg-12">
+                                        <ul class="nav nav-tabs markdown-tabs mb-2">
+                                          <li class="nav-item">
+                                            <a class="nav-link active" data-toggle="tab" href="#text">Text</a>
+                                          </li>
+                                          <li class="nav-item">
+                                            <a class="nav-link" data-toggle="tab" href="#preview" data-markdown-tab="preview">Preview</a>
+                                          </li>
+                                        </ul>
+                                        <div class="tab-content">
+                                          <div class="tab-pane active" id="text">
+                                            <div class="form-group row">
+                                              <div class="col-lg-12">
+                                                <textarea id="answer-markdown" name="answer" class="form-control"
+                                                          rows="7" placeholder="<?= $PMF_LANG['ad_entry_content'] ?>"
+                                                ><?= $faqData['content'] ?></textarea>
+                                              </div>
                                             </div>
+                                          </div>
+                                          <div class="tab-pane" id="preview">
+                                            <article class="markdown-preview"></article>
+                                          </div>
                                         </div>
+                                      </div>
                                     </div>
                                 <?php endif; ?>
                             </div>

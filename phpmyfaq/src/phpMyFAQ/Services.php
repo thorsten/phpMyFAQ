@@ -202,7 +202,7 @@ class Services
     {
         return sprintf(
             '%spdf.php?cat=%d&id=%d&artlang=%s',
-            Link::getSystemRelativeUri('index.php'),
+            $this->config->getDefaultUrl(),
             $this->getCategoryId(),
             $this->getFaqId(),
             $this->getLanguage()

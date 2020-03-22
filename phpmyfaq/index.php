@@ -430,10 +430,8 @@ if ($action !== 'main') {
 //
 // Set right column
 //
-if (($action === 'faq') || ($action === 'show')) {
-    $sidebarTemplate = $action === 'faq' ? 'sidebar-categories-tags.html' : 'sidebar-tagcloud.html';
-} else {
-    $sidebarTemplate = 'sidebar-categories-tags.html';
+if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
+    $sidebarTemplate = 'sidebar-tagcloud.html';
 }
 
 //
@@ -666,40 +664,15 @@ if (isset($auth)) {
     );
 }
 
-if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
-
-    // We need some Links from social networks
-    $faqServices = new Services($faqConfig);
-    $faqServices->setCategoryId($cat);
-    $faqServices->setFaqId($id);
-    $faqServices->setLanguage($lang);
-    $faqServices->setQuestion($faq->getRecordTitle($id));
-
-    $faqHelper = new HelperFaq($faqConfig);
-    $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
-
-    $template->parseBlock(
-        'index',
-        'socialLinks',
-        [
-            'baseHref' => $faqSystem->getSystemUri($faqConfig),
-            'msgPdf' => $PMF_LANG['msgPDF'],
-            'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
-            'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
-            'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
-            'linkToPdf' => $faqServices->getPdfLink()
-        ]
-    );
-}
-
-$tplHeaders = [
-    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-    'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
-    'writeTags' => $oTag->renderTagCloud(),
-    'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
-];
+$template->parse(
+    'sidebar',
+    [
+        'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
+        'writeTags' => $oTag->renderTagCloud(),
+        'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
+        'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
+    ]
+);
 
 if (DEBUG) {
     $template->parseBlock(
@@ -736,7 +709,8 @@ require $includePhp;
 //
 // Get main template, set main variables
 //
-$template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+$template->parse('index', array_merge($tplMainPage, $tplNavigation));
+$template->merge('sidebar', 'index');
 $template->merge('mainPageContent', 'index');
 
 //

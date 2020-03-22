@@ -45,7 +45,7 @@ For development purposes you can start a full stack to run your current PhpMyFAQ
 
     $ docker-compose up
 
-The command above starts 5 containers as following.
+The command above starts 6 containers for multi database development as following.
 
 _Specific images started once to prepare the project:_
 
@@ -54,11 +54,12 @@ _Specific images started once to prepare the project:_
 
 _Running using named volumes:_
 
-- **mariadb**: image with xtrabackup support
+- **mariadb**: image with MariaDB database with xtrabackup support
+- **postgres**: image with PostgreSQL database
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **phpmyadmin**: a PHP tool to have a look on your database.
 
-_Running apache web server with PHP 7.3 support:_
+_Running apache web server with PHP 7.4 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 

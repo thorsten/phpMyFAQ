@@ -442,7 +442,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -479,11 +479,11 @@ class Faq
         if ($pages > 1) {
             // Set rewrite URL, if needed
             if ($this->config->get('main.enableRewriteRules')) {
-                $link = new Link(Link::getSystemRelativeUri('index.php'), $this->config);
+                $link = new Link($this->config->getDefaultUrl(), $this->config);
                 $useRewrite = true;
                 $rewriteUrl = sprintf(
                     '%scategory/%d/%%d/%s.html',
-                    Link::getSystemRelativeUri('index.php'),
+                    $this->config->getDefaultUrl(),
                     $categoryId,
                     $link->getSEOItemTitle($title)
                 );
@@ -493,7 +493,7 @@ class Faq
             }
             $baseUrl = sprintf(
                 '%s?%saction=show&amp;cat=%d&amp;seite=%d',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 (empty($sids) ? '' : $sids),
                 $categoryId,
                 $page
@@ -640,7 +640,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -674,7 +674,7 @@ class Faq
             $next = $page + 1;
             if ($vor != 0) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgPrevious'];
                 $oLink->tooltip = $this->translation['msgPrevious'];
@@ -683,7 +683,7 @@ class Faq
             $output .= ' ';
             if ($next <= $pages) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgNext'];
                 $oLink->tooltip = $this->translation['msgNext'];
@@ -1271,7 +1271,7 @@ class Faq
      * @param int    $recordId   Record id
      * @param string $language   Language
      *
-     * @return boolean
+     * @return bool
      */
     public function addCategoryRelations(array $categories, $recordId, $language)
     {
@@ -2078,7 +2078,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2622,7 +2622,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2903,7 +2903,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2959,7 +2959,7 @@ class Faq
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
                     '%s?action=editentry&id=%d&lang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $row->id,
                     $row->lang
                 );

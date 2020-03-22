@@ -323,7 +323,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                 }
 
                 // Category is shown on start page
-                if ($cat['show_home']) {
+                if (isset($cat['show_home'])) {
                     $categoryName .= ' <i class="fa fa-star"></i>';
                 }
 

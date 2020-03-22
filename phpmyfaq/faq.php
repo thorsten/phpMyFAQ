@@ -134,7 +134,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
+            $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -338,7 +338,7 @@ $template->parse(
             str_replace(
                 '%',
                 '%%',
-                Link::getSystemRelativeUri('index.php')
+                $faqConfig->getDefaultUrl()
             ) . 'index.php?%saction=savevoting',
             $sids
         ),

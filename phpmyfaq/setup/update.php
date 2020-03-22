@@ -564,7 +564,7 @@ if ($step == 3) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN show_home SMALLINT DEFAULT NULL';
         } else {
             $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD image VARCHAR(255) DEFAULT NULL';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD show_home INT(1) DEFAULT NULL';
+            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD show_home INTEGER DEFAULT NULL';
         }
     }
 
@@ -599,7 +599,7 @@ if ($step == 3) {
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD is_superadmin INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INTEGER DEFAULT 0';
         }
         $query[] = 'UPDATE ' . $prefix . 'faquser SET is_superadmin = 1 WHERE user_id = 1';
 
@@ -614,16 +614,16 @@ if ($step == 3) {
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD for_sections INT(11) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD for_sections INTEGER DEFAULT 0';
         }
 
         // Add new tables
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqcategory_news (category_id INT(11) NOT NULL, news_id INT(11) NOT NULL, PRIMARY KEY (category_id, news_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsections (id INT(11) NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_category (section_id INT(11) NOT NULL, category_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_group (section_id INT(11) NOT NULL, group_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqsection_news (section_id INT(11) NOT NULL, news_id INT(11) NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
-        $query[] = 'CREATE TABLE ' . $prefix . 'faqmeta (id INT NOT NULL, lang VARCHAR(5) DEFAULT NULL, page_id VARCHAR(48) DEFAULT NULL, type VARCHAR(48) DEFAULT NULL, content TEXT NULL, PRIMARY KEY (id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqcategory_news (category_id INTEGER NOT NULL, news_id INTEGER NOT NULL, PRIMARY KEY (category_id, news_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsections (id INTEGER NOT NULL, name VARCHAR(255) NOT NULL, description VARCHAR(255) DEFAULT NULL, PRIMARY KEY (id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_category (section_id INTEGER NOT NULL, category_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, category_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_group (section_id INTEGER NOT NULL, group_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, group_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqsection_news (section_id INTEGER NOT NULL, news_id INTEGER NOT NULL DEFAULT -1, PRIMARY KEY (section_id, news_id))';
+        $query[] = 'CREATE TABLE '.$prefix.'faqmeta (id INT NOT NULL, lang VARCHAR(5) DEFAULT NULL, page_id VARCHAR(48) DEFAULT NULL, type VARCHAR(48) DEFAULT NULL, content TEXT NULL, PRIMARY KEY (id))';
 
         // Add new rights
         $perm->addRight(['name' => 'view_faqs', 'description' => 'Right to view FAQs']);
@@ -654,7 +654,7 @@ if ($step == 3) {
         if ('sqlite3' === $DB['type']) {
             $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD login_attempts INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD login_attempts INTEGER DEFAULT 0';
         }
     }
 

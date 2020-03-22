@@ -51,17 +51,17 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
 
     $baseUrl = sprintf(
         '%s?action=adminlog&amp;page=%d',
-        Link::getSystemRelativeUri(),
+        $faqConfig->getDefaultUrl(),
         $page
     );
 
     // Pagination options
-    $options = array(
+    $options = [
         'baseUrl' => $baseUrl,
         'total' => $logging->getNumberOfEntries(),
         'perPage' => $perpage,
         'pageParamName' => 'page',
-    );
+    ];
     $pagination = new Pagination($faqConfig, $options);
 
     $loggingData = $logging->getAll();

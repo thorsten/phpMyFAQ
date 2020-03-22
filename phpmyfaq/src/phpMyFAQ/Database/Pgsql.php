@@ -71,14 +71,12 @@ class Pgsql implements DatabaseDriver
             $password
         );
 
-        $this->conn = pg_pconnect($connectionString);
+        $this->conn = pg_connect($connectionString);
 
         if (empty($database) || $this->conn == false) {
             Database::errorPage(pg_last_error($this->conn));
             die();
         }
-
-        $this->query('SET standard_conforming_strings=on');
 
         return true;
     }
@@ -245,10 +243,7 @@ class Pgsql implements DatabaseDriver
      */
     public function nextId($table, $id)
     {
-        $result = $this->query("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
-        $currentID = pg_result($result);
-
-        return ($currentID);
+        return (int) $this->getOne("SELECT nextval('" . $table . '_' . $id . "_seq') as current_id;");
     }
 
     /**

@@ -285,12 +285,12 @@ class Category
     /**
      * Gets the main categories and write them in an array.
      *
-     * @param array $categories Array of parent category ids
+     * @param string $categories String of parent category ids
      * @param bool $parentId Only top level categories?
      *
      * @return array
      */
-    public function getCategories(array $categories, bool $parentId = true): array
+    public function getCategories(string $categories, bool $parentId = true): array
     {
         $_query = '';
         $query = sprintf(
@@ -386,7 +386,7 @@ class Category
         }
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%s?action=show&amp;cat=%d', Link::getSystemRelativeUri(), $row['id']);
+            $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
             $categories['url'][] = $link->toString();
@@ -766,7 +766,7 @@ class Category
 
             $url = sprintf(
                 '%s?%saction=show&amp;cat=%d',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 $sids,
                 $parent
             );
@@ -878,7 +878,7 @@ class Category
     ) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
-            Link::getSystemRelativeUri(),
+            $this->config->getDefaultUrl(),
             $sids,
             $categoryId
         );
@@ -980,7 +980,7 @@ class Category
             foreach ($temp as $k => $category) {
                 $url = sprintf(
                     '%s?%saction=show&amp;cat=%d',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $catid[$k]
                 );

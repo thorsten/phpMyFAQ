@@ -70,7 +70,7 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
 
     $baseUrl = sprintf(
         '%s?action=searchstats&amp;page=%d',
-        Link::getSystemRelativeUri(),
+        $faqConfig->getDefaultUrl(),
         $page
     );
 

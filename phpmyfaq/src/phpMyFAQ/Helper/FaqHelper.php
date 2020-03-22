@@ -126,7 +126,7 @@ class FaqHelper extends Helper
             $faq->faqRecord['id']
         );
 
-        $oLink = new Link(Link::getSystemRelativeUri() . $faqUrl, $this->config);
+        $oLink = new Link($this->config->getDefaultUrl() . $faqUrl, $this->config);
         $oLink->itemTitle = $faq->faqRecord['title'];
         $availableLanguages = $this->config->getLanguage()->languageAvailable($faq->faqRecord['id']);
 
