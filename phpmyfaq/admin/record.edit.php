@@ -516,38 +516,40 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
                                     <fieldset class="form-group">
                                         <div class="row">
-                                            <legend class="col-lg-2 col-form-label pt-0"><?= $PMF_LANG['ad_entry_grouppermission'] ?></legend>
+                                            <legend class="col-lg-2 col-form-label pt-0">
+                                              <?= $PMF_LANG['ad_entry_grouppermission'] ?>
+                                            </legend>
                                             <div class="col-lg-10">
-                                                <div class="form-check">
-                                                    <input type="radio" id="allgroups" name="grouppermission"
-                                                           value="all" class="form-check-input"
-                                                        <?php echo($allGroups ? 'checked' : ''); ?>>
-                                                    <label class="form-check-label" for="allgroups">
-                                                        <?= $PMF_LANG['ad_entry_all_groups'] ?>
-                                                    </label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="radio" id="restrictedgroups" name="grouppermission"
-                                                           class="form-check-input"
-                                                           value="restricted" <?php echo($restrictedGroups ? 'checked' : ''); ?>>
-                                                    <label for="selected-groups" class="form-check-label"
-                                                           for="restrictedgroups">
-                                                        <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
-                                                    </label>
-                                                    <select id="selected-groups" name="restricted_groups[]" size="3"
-                                                            class="form-control" multiple>
-                                                        <?php
-                                                        if ($faqConfig->get('main.enableCategoryRestrictions')) {
-                                                            echo $user->perm->getAllGroupsOptions(
-                                                                $groupPermission,
-                                                                $currentUserId
-                                                            );
-                                                        } else {
-                                                            echo $user->perm->getAllGroupsOptions($groupPermission);
-                                                        }
-                                                        ?>
-                                                    </select>
-                                                </div>
+                                              <div class="form-check">
+                                                <input type="radio" id="allgroups" name="grouppermission"
+                                                       value="all" class="form-check-input"
+                                                  <?php echo($allGroups ? 'checked' : ''); ?>>
+                                                <label class="form-check-label" for="allgroups">
+                                                  <?= $PMF_LANG['ad_entry_all_groups'] ?>
+                                                </label>
+                                              </div>
+                                              <div class="form-check">
+                                                <input type="radio" id="restrictedgroups" name="grouppermission"
+                                                       class="form-check-input"
+                                                       value="restricted" <?php echo($restrictedGroups ? 'checked' : ''); ?>>
+                                                <label for="selected-groups" class="form-check-label"
+                                                       for="restrictedgroups">
+                                                  <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
+                                                </label>
+                                                <select id="selected-groups" name="restricted_groups[]" size="3"
+                                                        class="form-control" multiple>
+                                                    <?php
+                                                    if ($faqConfig->get('main.enableCategoryRestrictions')) {
+                                                        echo $user->perm->getAllGroupsOptions(
+                                                            $groupPermission,
+                                                            $currentUserId
+                                                        );
+                                                    } else {
+                                                        echo $user->perm->getAllGroupsOptions($groupPermission);
+                                                    }
+                                                    ?>
+                                                </select>
+                                              </div>
                                             </div>
                                         </div>
                                     </fieldset>
