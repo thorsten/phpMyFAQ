@@ -33,7 +33,7 @@
     "phpseclib/phpseclib": "~2.0",
     "swiftmailer/swiftmailer": "~5.0",
     "erusev/parsedown": "~1.0",
-    "erusev/parsedown-extra": "~0.7.0",
+    "erusev/parsedown-extra": "~0.8.1",
     "tecnickcom/tcpdf": "~6.0",
     "elasticsearch/elasticsearch": "~7.0",
     "monolog/monolog": "~1.",
