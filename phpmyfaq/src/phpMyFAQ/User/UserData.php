@@ -188,7 +188,8 @@ class UserData
             SELECT
                 last_modified, 
                 display_name, 
-                email
+                email,
+                is_visible
             FROM
                 %sfaquserdata
             WHERE
@@ -221,13 +222,15 @@ class UserData
             SET
                 last_modified = '%s',
                 display_name  = '%s',
-                email         = '%s'
+                email         = '%s',
+                is_visible    = %d
             WHERE
                 user_id = %d",
             Database::getTablePrefix(),
             date('YmdHis', $_SERVER['REQUEST_TIME']),
             $this->config->getDb()->escape($this->data['display_name']),
             $this->config->getDb()->escape($this->data['email']),
+            $this->data['is_visible'],
             $this->userId
         );
 
@@ -259,9 +262,9 @@ class UserData
             "
             INSERT INTO
                 %sfaquserdata
-            (user_id, last_modified)
+            (user_id, last_modified, is_visible)
                 VALUES
-            (%d, '%s')",
+            (%d, '%s', 1)",
             Database::getTablePrefix(),
             $this->userId,
             date('YmdHis', $_SERVER['REQUEST_TIME'])
