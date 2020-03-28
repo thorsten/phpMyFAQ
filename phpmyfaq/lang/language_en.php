@@ -698,6 +698,7 @@ $PMF_LANG['ad_export_download_view'] = 'Download or view inline?';
 $PMF_LANG['ad_export_download'] = 'download';
 $PMF_LANG['ad_export_view'] = 'view in-line';
 $PMF_LANG['ad_export_gen_xhtml'] = 'Create XHTML file';
+$PMF_LANG['ad_export_gen_docbook'] = "Create DocBook XML file";
 
 // added v2.0.0 - 2006-07-22 by Matteo
 $PMF_LANG['ad_news_data'] = 'FAQ News';
@@ -1320,10 +1321,6 @@ $PMF_LANG['ad_section_error_noName'] = "Please enter a section name. ";
 $PMF_LANG['ad_section_suc'] = "Section <strong>successfully</strong> added.";
 $PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
 $PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';
-
-// added v3.0.0-alpha.4 - 2019-01-05 by Thorsten // duplicated
-// duplicated - 2020.03.28 by kralizeck
-// $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'An Freunde senden aktivieren'];
 
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = [0 => 'input', 1 => 'SMTP server port'];
