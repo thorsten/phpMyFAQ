@@ -338,7 +338,8 @@ class Pgsql extends Database implements Driver
             user_id SERIAL NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
-            email VARCHAR(128) NULL)',
+            email VARCHAR(128) NULL,
+            is_visible SMALLINT NULL DEFAULT 0)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,

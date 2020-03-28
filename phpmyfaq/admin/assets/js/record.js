@@ -58,7 +58,7 @@ function setPermissions(permissions) {
   if (-1 === parseInt(perms.user[0])) {
     $('#restrictedusers')
       .prop('checked', false)
-      .prop('disabled', true);
+      .prop('disabled', false);
     $('#allusers')
       .prop('checked', true)
       .prop('disabled', false);
@@ -68,7 +68,7 @@ function setPermissions(permissions) {
       .prop('disabled', true);
     $('#restrictedusers')
       .prop('checked', true)
-      .prop('disabled', false);
+      .prop('disabled', true);
     $.each(perms.user, function(key, value) {
       $(".selected-users option[value='" + value + "']").prop('selected', true);
     });
@@ -76,7 +76,7 @@ function setPermissions(permissions) {
   if (-1 === parseInt(perms.group[0])) {
     $('#restrictedgroups')
       .prop('checked', false)
-      .prop('disabled', true);
+      .prop('disabled', false);
     $('#allgroups')
       .prop('checked', true)
       .prop('disabled', false);

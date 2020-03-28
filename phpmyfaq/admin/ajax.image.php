@@ -50,9 +50,6 @@ switch ($ajaxAction) {
                 if (isset($_SERVER['HTTP_ORIGIN'])) {
                     if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
                         $http->sendCorsHeader();
-                    } else {
-                        $http->setStatus(403);
-                        return;
                     }
                 }
 

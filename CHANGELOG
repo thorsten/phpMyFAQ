@@ -1,11 +1,11 @@
-phpMyFAQ 3.1.0-dev
+phpMyFAQ 3.1.0-alpha
 Codename "Poseidon"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.1.0-dev
+Version 3.1.0-alpha
 - changed PHP requirement to PHP 7.3+ (Thorsten)
 - added support for Elasticsearch v6+ (Thorsten)
 - removed REST API v1 (Thorsten)
