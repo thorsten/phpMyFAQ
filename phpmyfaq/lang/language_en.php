@@ -1336,3 +1336,6 @@ $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP server encry
 $PMF_LANG['ad_record_faq'] = 'Q&A';
 $PMF_LANG['ad_record_permissions'] = 'Authorizations';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
