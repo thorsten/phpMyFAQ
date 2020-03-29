@@ -55,6 +55,7 @@ $template->parse(
         'loginname' => $PMF_LANG['ad_user_loginname'],
         'realname' => $PMF_LANG['ad_user_realname'],
         'email' => $PMF_LANG['ad_entry_email'],
+        'is_visible' => $PMF_LANG['ad_user_data_is_visible'],
         'submitRegister' => $PMF_LANG['submitRegister'],
         'captchaFieldset' => $captchaHelper->renderCaptcha($captcha, 'register', $PMF_LANG['msgCaptcha'], $auth),
     ]
