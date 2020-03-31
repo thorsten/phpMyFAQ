@@ -337,7 +337,8 @@ class Sqlsrv extends Database implements Driver
             user_id INTEGER NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
-            email VARCHAR(128) NULL)',
+            email VARCHAR(128) NULL,
+            is_visible INTEGER NULL DEFAULT 0)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,

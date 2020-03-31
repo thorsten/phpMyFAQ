@@ -432,6 +432,8 @@ if ($action !== 'main') {
 //
 if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
     $sidebarTemplate = 'sidebar-tagcloud.html';
+} else {
+    $sidebarTemplate = '';
 }
 
 //

@@ -39,27 +39,27 @@ class System
     /**
      * Minor version.
      */
-    private const VERSION_MINOR = 0;
+    private const VERSION_MINOR = 1;
 
     /**
      * Patch level.
      */
-    private const VERSION_PATCH_LEVEL = 2;
+    private const VERSION_PATCH_LEVEL = 0;
 
     /**
      * Pre-release version.
      */
-    private const VERSION_PRE_RELEASE = null;
+    private const VERSION_PRE_RELEASE = 'alpha';
 
     /**
      * API version.
      */
-    private const VERSION_API = '2.0';
+    private const VERSION_API = '2.1';
 
     /**
      * Minimum required PHP version.
      */
-    public const VERSION_MINIMUM_PHP = '7.2.0';
+    public const VERSION_MINIMUM_PHP = '7.3.0';
 
     /**
      * Array of required PHP extensions.

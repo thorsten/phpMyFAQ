@@ -336,7 +336,8 @@ class Mysqli extends Database implements Driver
             user_id INT(11) NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
-            email VARCHAR(128) NULL)',
+            email VARCHAR(128) NULL,
+            is_visible INT(1) NULL DEFAULT 0)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,
