@@ -38,7 +38,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 $currentUserId = $user->getUserId();
 
 if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
-        $user->perm->checkRight($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
+     $user->perm->checkRight($currentUserId, 'add_faq')) && !Database::checkOnEmptyTable('faqcategories')) {
     $category = new Category($faqConfig, [], false);
 
     if ($faqConfig->get('main.enableCategoryRestrictions')) {
@@ -220,7 +220,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         $faqData['comment'] = '';
     }
 
-
     // Header
     if (0 !== $faqData['id'] && 'copyentry' !== $action) {
         $currentRevision = sprintf('%s 1.%d', $PMF_LANG['ad_entry_revision'], $selectedRevisionId);
@@ -338,7 +337,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     }
                                 } ?>
 
-                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post" style="width: 100%;">
+                              <form id="faqEditor" action="?action=<?= $queryString ?>" method="post">
                                 <input type="hidden" name="revision_id" id="revision_id" value="<?= $faqData['revision_id'] ?>">
                                 <input type="hidden" name="record_id" id="record_id" value="<?= $faqData['id'] ?>">
                                 <input type="hidden" name="csrf" id="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">

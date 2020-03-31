@@ -38,7 +38,7 @@ switch ($ajaxAction) {
         $category->setGroups($currentAdminGroups);
 
         $ajaxData = Filter::filterInputArray(
-            INPUT_POST,
+            INPUT_GET,
             [
                 'categories' => [
                     'filter' => FILTER_SANITIZE_STRING,
