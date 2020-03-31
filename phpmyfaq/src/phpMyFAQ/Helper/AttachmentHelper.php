@@ -44,6 +44,10 @@ class AttachmentHelper
      */
     public function renderAttachmentList(array $attachmentList): string
     {
+        if (count($attachmentList) === 0) {
+            return '';
+        }
+
         $html = sprintf('<p>%s:</p><ul>', $this->translation['msgAttachedFiles']);
 
         foreach ($attachmentList as $attachment) {
