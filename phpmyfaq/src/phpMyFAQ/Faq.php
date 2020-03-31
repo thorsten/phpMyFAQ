@@ -2504,17 +2504,21 @@ class Faq
     /**
      * Returns the record permissions for users and groups.
      *
-     * @param string $mode     'group' or 'user'
-     * @param int    $recordId
+     * @param string $mode 'group' or 'user'
+     * @param int $recordId
      *
      * @return array
      */
-    public function getPermission($mode, $recordId)
+    public function getPermission(string $mode, int $recordId): array
     {
         $permissions = [];
 
         if (!($mode == 'user' || $mode == 'group')) {
             return $permissions;
+        }
+
+        if (0 === $recordId) {
+            return [-1];
         }
 
         $query = sprintf(

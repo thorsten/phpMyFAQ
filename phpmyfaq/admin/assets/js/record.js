@@ -28,7 +28,7 @@ $(function() {
     })
     .get();
 
-  getPermissions(categories);
+  getCategoryPermissions(categories);
 
   // Override FAQ permissions with Category permission to avoid confused users
   $('#phpmyfaq-categories').on('click', () => {
@@ -37,42 +37,52 @@ $(function() {
         return $(this).val();
       })
       .get();
-    getPermissions(categories);
+    getCategoryPermissions(categories);
   });
+
+  const faqId = document.getElementById('record_id').value;
+  if (faqId > 0) {
+    getFaqPermissions(faqId);
+  }
 });
 
-function getPermissions(categories) {
-  $.ajax({
-    type: 'POST',
-    url: 'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
-    data: 'categories=' + categories,
-    success: permissions => {
+function getCategoryPermissions(categories) {
+  fetch(`index.php?action=ajax&ajax=categories&ajaxaction=getpermissions&categories=${categories}`)
+    .then(response => {
+      return response.json();
+    })
+    .then(permissions => {
       setPermissions(permissions);
-    },
-  });
+    });
+}
+
+function getFaqPermissions(faqId) {
+  const csrfToken = document.getElementById('csrf').value;
+  fetch(`index.php?action=ajax&ajax=records&ajaxaction=permissions&faq-id=${faqId}&csrf=${csrfToken}`)
+    .then(response => {
+      return response.json();
+    })
+    .then(permissions => {
+      setPermissions(permissions);
+    });
 }
 
 function setPermissions(permissions) {
   const perms = permissions;
 
+  // Users
   if (-1 === parseInt(perms.user[0])) {
-    $('#restrictedusers')
-      .prop('checked', false)
-      .prop('disabled', false);
-    $('#allusers')
-      .prop('checked', true)
-      .prop('disabled', false);
+    $('#restrictedusers').prop('checked', false);
+    $('#allusers').prop('checked', true);
   } else {
-    $('#allusers')
-      .prop('checked', false)
-      .prop('disabled', true);
-    $('#restrictedusers')
-      .prop('checked', true)
-      .prop('disabled', true);
+    $('#allusers').prop('checked', false);
+    $('#restrictedusers').prop('checked', true);
     $.each(perms.user, function(key, value) {
       $(".selected-users option[value='" + value + "']").prop('selected', true);
     });
   }
+
+  // Groups
   if (-1 === parseInt(perms.group[0])) {
     $('#restrictedgroups')
       .prop('checked', false)

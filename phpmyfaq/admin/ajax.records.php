@@ -21,6 +21,7 @@ use phpMyFAQ\Attachment\Filesystem\File\FileException;
 use phpMyFAQ\Category;
 use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\HttpHelper;
 use phpMyFAQ\Helper\SearchHelper;
 use phpMyFAQ\Language;
 use phpMyFAQ\Logging;
@@ -51,6 +52,25 @@ if (!isset($items[0][2])) {
 }
 
 switch ($ajaxAction) {
+
+    // Get permissions
+    case 'permissions':
+        $faqId = Filter::filterInput(INPUT_GET, 'faq-id', FILTER_VALIDATE_INT);
+        $http = new HttpHelper();
+        $http->setContentType('application/json');
+        $http->addHeader();
+
+        $faq = new Faq($faqConfig);
+        $faq->setUser($currentAdminUser);
+        $faq->setGroups($currentAdminGroups);
+
+        $http->sendJsonWithHeaders(
+            [
+                'user' => $faq->getPermission('user', $faqId),
+                'group' => $faq->getPermission('group', $faqId)
+            ]
+        );
+        break;
 
     // save active FAQs
     case 'save_active_records':
@@ -138,10 +158,10 @@ switch ($ajaxAction) {
     // delete open questions
     case 'delete_question':
         if ($user->perm->checkRight($user->getUserId(), 'delquestion')) {
-            $checks = array(
+            $checks = [
                 'filter' => FILTER_VALIDATE_INT,
                 'flags' => FILTER_REQUIRE_ARRAY,
-            );
+            ];
             $questionIds = Filter::filterInputArray(INPUT_POST, array('questions' => $checks));
             $question = new Question($faqConfig);
 
