@@ -91,6 +91,7 @@ switch ($ajaxAction) {
 
             $dbSetup = [
                 'dbServer' => $DB['server'],
+                'dbPort' => $DB['port'],
                 'dbUser' => $DB['user'],
                 'dbPassword' => $DB['password'],
                 'dbDatabaseName' => $DB['db'],
