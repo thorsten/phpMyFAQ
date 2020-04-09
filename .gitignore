@@ -74,3 +74,4 @@ backup/*
 
 # PHPUnit
 .phpunit.result.cache
+phpmyfaq/lang/language_es-es.php
