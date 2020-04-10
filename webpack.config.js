@@ -45,7 +45,6 @@ module.exports = {
       fileName: 'phpmyfaq.js',
       filesToConcat: [
         path.resolve(__dirname, 'phpmyfaq/assets/src/add.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/autosave.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/category.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/comments.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/editor.js'),
