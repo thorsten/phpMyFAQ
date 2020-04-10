@@ -89,10 +89,10 @@ if (isset($auth)) {
               selector: 'textarea#<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               theme: 'modern',
               plugins: [
-                'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-                'searchreplace wordcount visualblocks visualchars code codesample fullscreen',
-                'insertdatetime media nonbreaking save table contextmenu directionality',
-                'emoticons template paste textcolor autosave phpmyfaq'
+                'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen',
+                'image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime',
+                'advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help autosave',
+                'phpmyfaq'
               ],
               relative_urls: false,
               convert_urls: false,
@@ -102,8 +102,8 @@ if (isset($auth)) {
               paste_remove_spans: true,
               entities: '10',
               entity_encoding: 'raw',
-              toolbar1: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | paste codesample",
-              toolbar2: "link image preview media | forecolor backcolor emoticons | phpmyfaq print",
+              toolbar1: 'formatselect | styleselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat',
+              toolbar2: 'insertfile | paste codesample | link image preview media | forecolor backcolor emoticons | phpmyfaq print',
               height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
@@ -230,17 +230,17 @@ if (isset($auth)) {
               input.setAttribute('id', 'temporarySaveButton');
               $('#answer')[0].parentNode.appendChild(input);
               // Submit the form by an ajax request
-                <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
-              var data = {
+              <?php if (isset($faqData['id']) && $faqData['id'] === 0): ?>
+              let data = {
                 action: 'ajax',
                 ajax: 'recordAdd'
               };
-                <?php else: ?>
-              var data = {
+              <?php else: ?>
+              let data = {
                 action: 'ajax',
                 ajax: 'recordSave'
               };
-                <?php endif; ?>
+              <?php endif; ?>
               $.each($('#faqEditor').serializeArray(), function (i, field) {
                 data[field.name] = field.value;
               });
