@@ -58,8 +58,8 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
 
     foreach ($report->getReportingData() as $data) {
         $i = $data['faq_id'];
-        if ($useCategory) {
-            if (0 != $data['category_parent']) {
+        if ($useCategory && isset($data['category_name'])) {
+            if (0 !== $data['category_parent']) {
                 $text[$i][] = $data['category_parent'];
             } else {
                 $text[$i][] = $report->convertEncoding($data['category_name']);
@@ -75,7 +75,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         if ($useTranslation) {
             $text[$i][] = $data['faq_translations'];
         }
-        if ($useLanguage) {
+        if ($useLanguage && isset($languageCodes[strtoupper($data['faq_language'])])) {
             $text[$i][] = $report->convertEncoding($languageCodes[strtoupper($data['faq_language'])]);
         }
         if ($useId) {
@@ -93,7 +93,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         if ($useOwner) {
             $text[$i][] = $report->convertEncoding($data['faq_org_author']);
         }
-        if ($useLastModified) {
+        if ($useLastModified && isset($data['faq_last_author'])) {
             $text[$i][] = $report->convertEncoding($data['faq_last_author']);
         }
         if ($useUrl) {
