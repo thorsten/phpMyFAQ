@@ -103,7 +103,7 @@ class Report
             if ($row->id == $lastId) {
                 $report[$row->id]['faq_translations'] += 1;
             } else {
-                $report[$row->id] = array(
+                $report[$row->id] = [
                     'faq_id' => $row->id,
                     'faq_language' => $row->lang,
                     'category_id' => $row->category_id,
@@ -116,7 +116,7 @@ class Report
                     'faq_updated' => Date::createIsoDate($row->updated),
                     'faq_visits' => $row->visits,
                     'faq_last_author' => $row->last_author,
-                );
+                ];
             }
             $lastId = $row->id;
         }
@@ -131,7 +131,7 @@ class Report
      * @param  string $outputString String to encode.
      * @return string Encoded string.
      */
-    public function convertEncoding(string $outputString): string
+    public function convertEncoding(string $outputString = ''): string
     {
         $outputString = html_entity_decode($outputString, ENT_QUOTES, 'utf-8');
         $outputString = str_replace(',', ' ', $outputString);
