@@ -551,7 +551,7 @@ $LANG_CONF['records.maxAttachmentSize'] = [0 => "input", 1 => "Maximalgröße vo
 $LANG_CONF['records.disableAttachments'] = [0 => "checkbox", 1 => "Anhänge unter den Beiträgen anzeigen"];
 $LANG_CONF['main.enableUserTracking'] = [0 => "checkbox", 1 => "User-Tracking aktiviert?"];
 $LANG_CONF['main.enableAdminLog'] = [0 => "checkbox", 1 => "Admin-Logging aktiviert?"];
-$LANG_CONF["main.enableCategoryRestrictions"] = array(0 => "checkbox", 1 => "Kategoriebeschränkungen aktivieren");
+$LANG_CONF["main.enableCategoryRestrictions"] = [0 => "checkbox", 1 => "Kategoriebeschränkungen aktivieren"];
 $LANG_CONF['security.ipCheck'] = [0 => "checkbox", 1 => "Soll die IP zur Überprüfung im Administrationsbereich herangezogen werden?"];
 $LANG_CONF['records.numberOfRecordsPerPage'] = [0 => "input", 1 => "Anzahl der FAQs pro Seite"];
 $LANG_CONF['records.numberOfShownNewsEntries'] = [0 => "input", 1 => "Anzahl der angezeigten News"];
@@ -982,9 +982,6 @@ $PMF_LANG['rightsLanguage']['approverec'] = "Eintrag freigeben";
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
 $LANG_CONF['records.enableAttachmentEncryption'] = [0 => "checkbox", 1 => "Verschlüsselung der Anhänge"];
 $LANG_CONF['records.defaultAttachmentEncKey'] = [0 => "input", 1 => "Standardschlüssel für Verschlüsselung<br/><small style=\"color: red\">Warnung: Nach dem Aktivieren der Verschlüsselung nicht mehr ändern!</small>"];
-//$LANG_CONF['records.attachmentsStorageType'] = array(0 => "select", 1 => "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = "Filesystem";
-//$PMF_LANG['att_storage_type'][1] = "Database";
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = "Aktualisieren";
@@ -1216,7 +1213,7 @@ $LANG_CONF['mail.remoteSMTP'] = [0 => 'checkbox', 1 => 'Verwendung eines externe
 $LANG_CONF['mail.remoteSMTPServer'] = [0 => 'input', 1 => 'SMTP Server'];
 $LANG_CONF['mail.remoteSMTPUsername'] = [0 => 'input', 1 => 'SMTP Username'];
 $LANG_CONF['mail.remoteSMTPPassword'] = [0 => 'password', 1 => 'SMTP Passwort'];
-$LANG_CONF['security.enableRegistration'] = array('checkbox', 'Erlaube Registrierung externer Besucher');
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'Erlaube Registrierung externer Besucher'];
 
 // added v2.9.0-alpha3 - 2015-02-08 by Thorsten
 $LANG_CONF['main.customPdfHeader'] = ['area', 'Eigener PDF Header (HTML erlaubt)'];
