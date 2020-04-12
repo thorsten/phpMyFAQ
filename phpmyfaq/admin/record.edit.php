@@ -329,11 +329,12 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     <?php }
                                     if (isset($selectedRevisionId) &&
                                         isset($faqData['revision_id']) &&
-                                        $selectedRevisionId != $faqData['revision_id']) {
+                                        $selectedRevisionId !== $faqData['revision_id']) {
                                         $faq->language = $faqData['lang'];
                                         $faq->getRecord($faqData['id'], $selectedRevisionId, true);
                                         $faqData = $faq->faqRecord;
                                         $faqData['tags'] = implode(', ', $tagging->getAllTagsById($faqData['id']));
+                                        $faqData['revision_id'] = $selectedRevisionId;
                                     }
                                 } ?>
 
