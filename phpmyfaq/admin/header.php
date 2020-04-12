@@ -45,7 +45,7 @@ $statisticsPage = false;
 $exportsPage = false;
 $backupPage = false;
 $configurationPage = false;
-$edAutoSave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
+$editorAutoSave = (('editentry' === $action) && $faqConfig->get('records.autosaveActive'));
 
 $adminHelper = new AdministrationHelper();
 $adminHelper->setUser($user);
@@ -234,6 +234,7 @@ switch ($action) {
   <meta name="copyright" content="(c) 2001-<?= date('Y') ?> phpMyFAQ Team">
   <meta name="publisher" content="phpMyFAQ Team">
   <meta name="robots" content="<?= $faqConfig->get('seo.metaTagsAdmin') ?>">
+  <meta name="phpmyfaq-config-autosave-seconds" content="<?= $faqConfig->get('records.autosaveSecs') ?>">
 
   <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="../assets/dist/admin-styles.css">
@@ -244,9 +245,8 @@ switch ($action) {
   <script src="assets/js/sidebar.js"></script>
   <script src="assets/js/editor/tinymce.min.js?<?= time(); ?>"></script>
 
-    <?php if ($edAutoSave): ?>
-      <script>let pmfAutosaveInterval = <?= $faqConfig->get('records.autosaveSecs') ?>;</script>
-      <script src="../assets/src/autosave.js" async></script>
+    <?php if ($editorAutoSave): ?>
+      <script src="assets/js/autosave.js" async></script>
     <?php endif; ?>
 
   <link rel="shortcut icon" href="../assets/themes/<?= Template::getTplSetName(); ?>/img/favicon.ico">

@@ -1110,8 +1110,8 @@ $PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully v
 $PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
-$LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Close open question after answer?");
-$LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Delete open question after answer?");
+$LANG_CONF["records.enableCloseQuestion"] = [0 => "checkbox", 1 => "Close open question after answer?"];
+$LANG_CONF["records.enableDeleteQuestion"] = [0 => "checkbox", 1 => "Delete open question after answer?"];
 $PMF_LANG["msg2answerFAQ"] = "Answered";
 
 // added v2.8.0-alpha - 2012-01-16 by Thorsten
@@ -1122,12 +1122,12 @@ $PMF_LANG["rememberMe"] = 'Log me on automatically next time';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
 
 // added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ auto-saving');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for auto-saving in seconds, default 180');
+$LANG_CONF['records.autosaveActive'] = [0 => 'checkbox', 1 => 'Activate FAQ auto-saving'];
+$LANG_CONF['records.autosaveSecs'] = [0 => 'input', 1 => 'Interval for auto-saving in seconds, default 180'];
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
-$LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "Set FAQ in maintenance mode");
+$LANG_CONF["main.maintenanceMode"] = [0 => "checkbox", 1 => "Set FAQ in maintenance mode"];
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ is in maintenance";
 $PMF_LANG['msgOnlineMode'] = "FAQ is online";
@@ -1138,11 +1138,11 @@ $PMF_LANG['msgQuestionAnswered'] = "Question answered";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Please check it here";
 
 // added v2.8.0-beta - 2012-12-24 by Thorsten
-$LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Sort FAQs randomly");
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend");
+$LANG_CONF["records.randomSort"] = [0 => "checkbox", 1 => "Sort FAQs randomly"];
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = [0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend"];
 
 // added v2.8.0-beta3 - 2013-01-15 by Thorsten
-$LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar Support");
+$LANG_CONF["main.enableGravatarSupport"] = [0 => "checkbox", 1 => "Gravatar Support"];
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stop words.";
@@ -1319,6 +1319,6 @@ $PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = [0 => 'input', 1 => 'SMTP server port'];
 $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP server encryption'];
-$PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
-$PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
+$PMF_LANG['ad_record_faq'] = 'Question and answer';
+$PMF_LANG['ad_record_permissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';

@@ -15,7 +15,7 @@
   "homepage": "https://www.phpmyfaq.de/",
   "scripts": {
     "build": "webpack",
-    "watch": "webpack --watch"
+    "build:watch": "webpack --watch"
   },
   "dependencies": {
     "bootstrap": "^4.2.1",
