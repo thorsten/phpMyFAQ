@@ -583,29 +583,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     </div>
                                 </fieldset>
 
-                                <?php if ($queryString != 'insertentry' && !$faqConfig->get(
-                                        'records.enableAutoRevisions'
-                                    )): ?>
-                                    <fieldset class="form-group">
-                                        <div class="row">
-                                            <legend class="col-form-label col-lg-2 pt-0"><?= $PMF_LANG['ad_entry_new_revision'] ?></legend>
-                                            <div class="col-lg-10">
-                                                <div class="form-check">
-                                                    <input type="radio" name="revision" id="revision" value="yes"
-                                                           class="form-check-input">
-                                                    <label class="form-check-label"
-                                                           for="revision"><?= $PMF_LANG['ad_gen_yes'] ?></label>
-                                                </div>
-                                                <div class="form-check">
-                                                    <input type="radio" name="revision" id="no-revision" value="no"
-                                                           checked class="form-check-input">
-                                                    <label class="form-check-label"
-                                                           for="no-revision"><?= $PMF_LANG['ad_gen_no'] ?></label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                <?php endif ?>
                             </div>
 
                             <div class="tab-pane" id="tab-notes-changelog">
@@ -693,9 +670,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
                         </div>
                         <div class="card-body">
-                            <h6 class="mb-0">
+                            <h5 class="mb-0">
                                 <?= $PMF_LANG['ad_entry_date'] ?>
-                            </h6>
+                            </h5>
                             <div class="form-group">
                                 <div class="form-check">
                                     <input type="radio" id="dateActualize" checked name="recordDateHandling"
@@ -725,9 +702,9 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                            placeholder="<?= $faqData['date'] ?>">
                                 </div>
                             </div>
-                            <h6 class="mb-0">
+                            <h5 class="mb-0">
                                 <?= $PMF_LANG['ad_entry_status'] ?>
-                            </h6>
+                            </h5>
                             <div class="form-group">
                                 <!-- active or not -->
                                 <?php if ($user->perm->checkRight($currentUserId, 'approverec')):
@@ -769,6 +746,26 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                     </div>
                                 <?php endif; ?>
                             </div>
+
+                            <?php if ($queryString != 'insertentry' && !$faqConfig->get('records.enableAutoRevisions')): ?>
+                              <h5 class="mb-0">
+                                  <?= $PMF_LANG['ad_entry_new_revision'] ?>
+                              </h5>
+                              <div class="form-group">
+                                <div class="form-check">
+                                  <input type="radio" name="revision" id="revision" value="yes"
+                                         class="form-check-input">
+                                  <label class="form-check-label"
+                                         for="revision"><?= $PMF_LANG['ad_gen_yes'] ?></label>
+                                </div>
+                                <div class="form-check">
+                                  <input type="radio" name="revision" id="no-revision" value="no"
+                                         checked class="form-check-input">
+                                  <label class="form-check-label"
+                                         for="no-revision"><?= $PMF_LANG['ad_gen_no'] ?></label>
+                                </div>
+                              </div>
+                            <?php endif ?>
 
                             <div class="form-group">
                                 <!-- sticky or not -->
