@@ -389,16 +389,21 @@ class Category
             $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
-            $categories['url'][] = $link->toString();
-            $categories['name'][] = $row['name'];
-            $categories['description'][] = $row['description'];
             if ('' === $row['image']) {
                 $image = 'data:image/png;base64,' .
                     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=';
             } else {
                 $image = 'images/' . $row['image'];
             }
-            $categories['image'][] = $image;
+
+            $category = [
+                'url' => $link->toString(),
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'image' => $image
+            ];
+
+            $categories[] = $category;
         }
 
         return $categories;
