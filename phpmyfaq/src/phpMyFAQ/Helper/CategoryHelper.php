@@ -115,10 +115,10 @@ class CategoryHelper extends Helper
                 } else {
                     if ($this->Category->treeTab[$y]['symbol'] == 'minus') {
                         $name = ($this->Category->treeTab[$y]['parent_id'] === 0)
-                                ?
-                                $name
-                                :
-                                $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
+                            ?
+                            $name
+                            :
+                            $this->Category->categoryName[$this->Category->treeTab[$y]['id']]['name'];
                         $output .= $this->Category->addCategoryLink(
                             $sids,
                             $categoryId,
@@ -292,14 +292,14 @@ class CategoryHelper extends Helper
         $categories = '';
 
         if (!is_array($categoryId)) {
-            $categoryId = array(
-                array(
+            $categoryId = [
+                [
                     'category_id' => $categoryId,
                     'category_lang' => '',
-                ),
-            );
+                ],
+            ];
         } elseif (isset($categoryId['category_id'])) {
-            $categoryId = array($categoryId);
+            $categoryId = [$categoryId];
         }
 
         $i = 0;
@@ -326,5 +326,47 @@ class CategoryHelper extends Helper
         }
 
         return $categories;
+    }
+
+    /**
+     * Renders the start page category card decks
+     * @param array $categories
+     * @return string
+     */
+    public function renderStartPageCategories(array $categories): string
+    {
+        if (count($categories) === 0) {
+            return '';
+        }
+
+        $decks = '';
+        $key = 1;
+        foreach ($categories as $category) {
+            $decks .=
+                '<div class="card mb-4">' .
+                '<a href="' . $category['url'] . '">' .
+                '<img class="card-img-top img-fluid" width="200" src="' . $category['image'] . '" alt="' .
+                $category['name'] . '" />' .
+                '</a>' .
+                '<div class="card-body">' .
+                '<h4 class="card-title text-center">' .
+                '<a href="{{ categoryUrl }}">' . $category['name'] . '</a>' .
+                '</h4>' .
+                '<p class="card-text">' . $category['description'] . '</p>' .
+                '</div>' .
+                '</div>';
+            if ($key % 2 === 0) {
+                $decks .= '<div class="w-100 d-none d-sm-block d-md-none"></div>';
+            }
+            if ($key % 3 === 0) {
+                $decks .= '<div class="w-100 d-none d-md-block d-lg-none"></div>';
+            }
+            if ($key % 4 === 0) {
+                $decks .= '<div class="w-100 d-none d-lg-block d-xl-block"></div>';
+            }
+            $key++;
+        }
+
+        return $decks;
     }
 }

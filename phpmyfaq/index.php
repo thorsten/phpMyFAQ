@@ -428,10 +428,12 @@ if ($action !== 'main') {
 }
 
 //
-// Set right column
+// Set sidebar column
 //
 if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
     $sidebarTemplate = 'sidebar-tagcloud.html';
+} else {
+    $sidebarTemplate = '';
 }
 
 //

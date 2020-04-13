@@ -1,7 +1,7 @@
 <?php
 
 /**
- * The main start page with the Top10 and the latest messages.
+ * The main start page with the start page categories, the Top 10 and the latest messages.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Filter;
+use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\News;
 use phpMyFAQ\Strings;
 
@@ -25,6 +26,7 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $news = new News($faqConfig);
+$categoryHelper = new CategoryHelper();
 $archived = Filter::filterInput(INPUT_GET, 'newsid', FILTER_VALIDATE_INT);
 
 if (!is_null($archived)) {
@@ -42,10 +44,7 @@ if (count($startPageCategories) > 0) {
         'mainPageContent',
         'startPageCategories',
         [
-            'categoryUrl' => $startPageCategories['url'],
-            'categoryName' => $startPageCategories['name'],
-            'categoryDescription' => $startPageCategories['description'],
-            'categoryImage' => $startPageCategories['image']
+            'startPageCategoryDecks' => $categoryHelper->renderStartPageCategories($startPageCategories)
         ]
     );
 }
