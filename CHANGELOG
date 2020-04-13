@@ -22,7 +22,7 @@ Version 3.0.1 - 2020-03-17
 - fixed minor bugs (Thorsten)
 - fixed update issues for PostgreSQL (Thorsten)
 
-Version 3.0.0 - 2020-02-12
+Version 3.0.0 - 2020-02-16
 - changed PHP requirement to PHP 7.2+ (Thorsten)
 - added PHP namespaces (Thorsten)
 - added Docker support (Adrien Estanove)
