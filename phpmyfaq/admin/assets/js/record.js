@@ -145,6 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     $('#filesize').html('');
     $('.pmf-attachment-upload-files li').remove();
     $('.pmf-attachment-upload-files').addClass('invisible');
+    $('.custom-file-input').removeClass('is-invalid');
     $('#attachmentForm')[0].reset();
   });
 
@@ -182,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         return xhr;
       },
-      success: function(attachments) {
+      success: attachments => {
         attachments.forEach(function(attachment) {
           $('.adminAttachments').append(
             '<li>' +
@@ -209,8 +210,10 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#attachmentForm')[0].reset();
         $('#attachmentModal').modal('hide');
       },
-      error: function(data) {
-        console.log(data);
+      error: () => {
+        $('.custom-file-input').addClass('is-invalid');
+        $('.pmf-attachment-upload-files').addClass('invisible');
+        $('.progress').addClass('invisible');
       },
       data: formData,
       cache: false,
