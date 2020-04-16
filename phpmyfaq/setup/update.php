@@ -206,7 +206,7 @@ if ($step === 1) { ?>
         </div>
       </div>
     </form>
-<?php
+    <?php
     System::renderFooter();
 }
 
@@ -295,7 +295,7 @@ if ($step == 2) {
             </div>
         </div>
         </form>
-<?php
+        <?php
         System::renderFooter();
     } else {
         echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
@@ -639,7 +639,7 @@ if ($step == 3) {
         // Rename rights
         $perm->renameRight('adduser', 'add_user');
         $perm->renameRight('edituser', 'edit_user');
-        $perm->renameRight('deluser', 'delete_user');
+        $perm->renameRight('delete_user', 'delete_user');
     }
 
     //
