@@ -5,8 +5,8 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.2
-- improved handling of multiple startpage categories (Thorsten)
+Version 3.0.2 - 2020-04-16
+- improved handling of multiple homepage categories (Thorsten)
 - improved FAQ editing (Thorsten)
 - fixed minor bugs (Thorsten)
 
