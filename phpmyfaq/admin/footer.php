@@ -89,11 +89,11 @@ if (isset($auth)) {
               selector: 'textarea#<?= ('add-news' == $action || 'edit-news' == $action) ? 'news' : 'answer' ?>',
               theme: 'modern',
               plugins: [
-                'print preview fullpage searchreplace autolink directionality visualblocks visualchars fullscreen',
-                'image link media template codesample table charmap hr pagebreak nonbreaking anchor toc insertdatetime',
-                'advlist lists textcolor wordcount imagetools contextmenu colorpicker textpattern help autosave',
-                'phpmyfaq'
-              ],
+                'advlist anchor autolink lists link image imagetools charmap print preview hr anchor pagebreak',
+                'searchreplace wordcount visualblocks visualchars code codesample fullscreen colorpicker help',
+                'insertdatetime media nonbreaking save table contextmenu directionality textpattern',
+                'emoticons template paste textcolor autosave toc phpmyfaq'
+                ],
               relative_urls: false,
               convert_urls: false,
               document_base_url: '<?= $faqConfig->getDefaultUrl() ?>',
@@ -148,7 +148,7 @@ if (isset($auth)) {
               end_container_on_empty_block: true,
               extended_valid_elements: "code[class],video[*],audio[*],source[*],iframe[*]",
               removeformat: [
-                {selector: '*', attributes: ['style'], split: false, expand: false, deep: true}
+                { selector: '*', attributes: ['style'], split: false, expand: false, deep: true }
               ],
               importcss_append: true,
 
