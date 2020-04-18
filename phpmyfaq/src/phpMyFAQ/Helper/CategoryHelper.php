@@ -350,7 +350,7 @@ class CategoryHelper extends Helper
                 '</a>' .
                 '<div class="card-body">' .
                 '<h4 class="card-title text-center">' .
-                '<a href="{{ categoryUrl }}">' . $category['name'] . '</a>' .
+                '<a href="' . $category['url'] . '">' . $category['name'] . '</a>' .
                 '</h4>' .
                 '<p class="card-text">' . $category['description'] . '</p>' .
                 '</div>' .
