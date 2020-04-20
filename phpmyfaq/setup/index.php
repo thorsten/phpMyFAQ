@@ -274,7 +274,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="language">Default language:</label>
                         <div class="col-sm-9">
-                            <select name="language" id="language" class="form-control">
+                            <select name="language" id="language" class="form-control" required>
                             <?php
                                 if ($dir = opendir(PMF_ROOT_DIR.'/lang')) {
                                     $options = [];
@@ -283,7 +283,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                                         if (substr($dat, -4) === '.php') {
                                             $option .= sprintf('<option value="%s"', $dat);
                                             if ($dat == 'language_en.php') {
-                                                $option .= ' selected="selected"';
+                                                $option .= ' selected';
                                             }
                                             $language = $languageCodes[substr(strtoupper($dat), 9, -4)];
                                             $option  .= sprintf('>%s</option>', $language);
@@ -304,7 +304,7 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label" for="permLevel">Permission level:</label>
                         <div class="col-sm-9">
-                                <select id="permLevel" name="permLevel" class="form-control">
+                                <select id="permLevel" name="permLevel" class="form-control" required>
                                     <option value="basic">Basic (no group support)</option>
                                     <option value="medium">Medium (with group support)</option>
                                     <option value="large">Large (with sections support)</option>
@@ -317,35 +317,36 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="realname">Your name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="realname" id="realname" class="form-control">
+                            <input type="text" name="realname" id="realname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your real name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="email">Your email address:</label>
                         <div class="col-sm-9">
-                            <input type="email" name="email" id="email" class="form-control">
+                            <input type="email" name="email" id="email" class="form-control" required>
                             <small class="form-text text-muted">Please enter your email adress.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="loginname">Your login name:</label>
                         <div class="col-sm-9">
-                            <input type="text" name="loginname" id="loginname" class="form-control">
+                            <input type="text" name="loginname" id="loginname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your login name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password">Your password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password" id="password" class="form-control">
+                            <input type="password" name="password" id="password" class="form-control" required>
                             <small class="form-text text-muted">Please enter your password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-3 col-form-label"for="password_retype">Retype password:</label>
                         <div class="col-sm-9">
-                            <input type="password" name="password_retyped" id="password_retype" class="form-control">
+                            <input type="password" name="password_retyped" id="password_retype" class="form-control"
+                                   required>
                             <small class="form-text text-muted">Please retype your password.</small>
                         </div>
                     </div>
