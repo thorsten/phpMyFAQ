@@ -39,7 +39,7 @@ $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query = [];
 
 if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
-    header('Location: setup.php');
+    header('Location: index.php');
     exit();
 }
 
