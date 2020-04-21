@@ -90,13 +90,18 @@ try {
 $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews($recordId);
 
-// Add Glossary entries for answers only
 $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
 } else {
     $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }
+
+// Rewrite URL fragments
+$currentUrl = htmlspecialchars("//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", ENT_QUOTES, 'UTF-8');
+$answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
+
+// Add Glossary entries for answers only
 $answer = $oGlossary->insertItemsIntoContent($answer);
 
 // Set the path of the current category
