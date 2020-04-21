@@ -642,7 +642,7 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_user') ||
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(
-            '%s?action=user&amp;user_action=listallusers&amp;page=%d',
+            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
             $faqConfig->getDefaultUrl(),
             $page
         );

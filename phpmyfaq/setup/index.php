@@ -2,8 +2,10 @@
 
 /**
  * The main phpMyFAQ Setup.
+ *
  * This script checks the complete environment, writes the database connection
  * parameters into the file config/database.php and the configuration into the database.
+ *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -21,7 +23,10 @@
  * @since 2002-08-20
  */
 
-use Composer\Autoload\ClassLoader;use phpMyFAQ\Installer;use phpMyFAQ\Strings;use phpMyFAQ\System;
+use Composer\Autoload\ClassLoader;
+use phpMyFAQ\Installer;
+use phpMyFAQ\Strings;
+use phpMyFAQ\System;
 
 define('COPYRIGHT', '&copy; 2001-2020 <a href="https://www.phpmyfaq.de/">phpMyFAQ Team</a>');
 define('PMF_ROOT_DIR', dirname(dirname(__FILE__)));
