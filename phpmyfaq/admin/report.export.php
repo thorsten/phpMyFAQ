@@ -95,6 +95,8 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         }
         if ($useLastModified && isset($data['faq_last_author'])) {
             $text[$i][] = $report->convertEncoding($data['faq_last_author']);
+        } else {
+            $text[$i][] = '';
         }
         if ($useUrl) {
             $text[$i][] = $report->convertEncoding(
