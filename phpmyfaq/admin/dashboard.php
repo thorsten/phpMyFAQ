@@ -88,21 +88,7 @@ $faqSession = new Session($faqConfig);
                 $session = new Session($faqConfig);
                 $visits = $session->getLast30DaysVisits();
                 ?>
-              <script src="assets/js/plugins/jquery.sparkline.min.js"></script>
-              <script>
-                $(function() {
-                  const visits = [<?= implode(',', $visits) ?>];
-                  $('.visits').sparkline(
-                    visits, {
-                      type: 'bar',
-                      barColor: '#7797b2',
-                      barWidth: 12,
-                      height: 268,
-                      tooltipSuffix: ' <?= $PMF_LANG['ad_visits_per_day'] ?>',
-                    });
-                });
-              </script>
-              <span class="visits">Loading...</span>
+              <canvas id="pmf-chart-visits" width="400" height="400"></canvas>
             </div>
           </div>
         <?php endif; ?>

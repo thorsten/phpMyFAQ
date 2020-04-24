@@ -12,3 +12,11 @@
  * @link https://www.phpmyfaq.de
  * @since 2019-12-20
  */
+
+import { renderVisitorCharts } from './dashboard';
+
+document.addEventListener('DOMContentLoaded', () => {
+  'use strict';
+
+  renderVisitorCharts();
+});
