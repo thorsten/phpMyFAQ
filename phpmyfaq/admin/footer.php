@@ -103,7 +103,7 @@ if (isset($auth)) {
               entities: '10',
               entity_encoding: 'raw',
               toolbar1: 'formatselect | styleselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat',
-              toolbar2: 'insertfile | paste codesample | link image preview media | forecolor backcolor emoticons | phpmyfaq print',
+              toolbar2: 'insertfile | paste codesample | image preview media | forecolor backcolor emoticons | phpmyfaq print',
               height: '<?= ('add-news' == $action || 'edit-news' == $action) ? '20vh' : '50vh' ?>',
               image_advtab: true,
               image_class_list: [
