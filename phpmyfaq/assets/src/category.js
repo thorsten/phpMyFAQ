@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     });
 
-  if (menuCounter > 5) {
+  if (menuCounter > 50) {
     $('.pmf-main-category')
       .find('ul')
       .addClass('d-none');
