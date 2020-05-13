@@ -5,8 +5,9 @@ CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
 
-Version 3.0.3
+Version 3.0.3 2020-05
 - improved FAQ editing (Thorsten)
+- updated to Bootstrap v4.5 (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 3.0.2 - 2020-04-16
