@@ -10,8 +10,9 @@ Version 3.1.0-alpha
 - added support for Elasticsearch v6+ (Thorsten)
 - removed REST API v1 (Thorsten)
 
-Version 3.0.3
+Version 3.0.3 2020-05
 - improved FAQ editing (Thorsten)
+- updated to Bootstrap v4.5 (Thorsten)
 - fixed minor bugs (Thorsten)
 
 Version 3.0.2 - 2020-04-16
