@@ -1,4 +1,4 @@
-# Tags
+# News
 
 This endpoint returns the news for the given language provided by "Accept-Language".
 
