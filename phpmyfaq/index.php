@@ -734,7 +734,7 @@ if ($http->getStatusCode() === 404 || $action === '404') {
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')
     );
-    $template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+    $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 }
 
 echo $template->render();
