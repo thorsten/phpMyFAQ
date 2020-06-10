@@ -20,16 +20,6 @@ matrix:
   allow_failures:
     - php: nightly
 
-matrix:
-  include:
-    - php: 7.3
-      env: deps=high
-    - php: 7.4
-      env: deps=low
-    - php: nightly
-      services: [memcached]
-  fast_finish: true
-
 cache:
   yarn: true
   directories:
