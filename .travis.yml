@@ -9,7 +9,7 @@ group: edge
 env:
   global:
     - MIN_PHP=7.2.5
-    - NODE_VERSION=10
+    - NODE_VERSION=12
 
 matrix:
   include:
@@ -22,6 +22,8 @@ matrix:
     - php: nightly
       services: [memcached]
   fast_finish: true
+  allow_failures:
+    - php: nightly
 
 cache:
   yarn: true
@@ -30,15 +32,34 @@ cache:
     - $HOME/.composer/cache/files
 
 before_install:
-  - nvm install $NODE_VERSION
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+  - |
+    # Install NodeJS
+    nvm install $NODE_VERSION
+
+  - |
+    # Download yarn
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
+
   - export PATH="$HOME/.yarn/bin:$PATH"
   - composer self-update
-  - npm install yarn -g
+  - npm i yarn -g
 
 install:
-  - travis_retry composer install --no-interaction --prefer-source
-  - yarn install
-  - yarn build
+  - |
+    # Set composer's platform to php 7.4 if we're on php 8.
+    if [[ $PHP = nightly ]]; then
+        composer config platform.php 7.4.99
+    fi
+  - |
+    # Install phpMyFAQ via Composer
+    composer install --no-interaction --prefer-source --no-progress
+
+  - |
+    # Install NodeJS dependencies
+    yarn install
+
+  - |
+    # Run Webpack build
+    yarn build
 
 script: ./vendor/bin/phpunit --configuration phpunit.xml
