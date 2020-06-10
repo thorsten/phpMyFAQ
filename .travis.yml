@@ -8,19 +8,15 @@ group: edge
 
 env:
   global:
-    - MIN_PHP=7.2.5
+    - MIN_PHP=7.2.0
     - NODE_VERSION=12
 
 matrix:
   include:
     - php: 7.2
-      env: php_extra="7.4"
     - php: 7.3
-      env: deps=high
     - php: 7.4
-      env: deps=low
     - php: nightly
-      services: [memcached]
   fast_finish: true
   allow_failures:
     - php: nightly
@@ -40,14 +36,22 @@ before_install:
     # Download yarn
     curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
 
-  - export PATH="$HOME/.yarn/bin:$PATH"
-  - composer self-update
-  - npm i yarn -g
+  - |
+    # Add yarn to PATH
+    export PATH="$HOME/.yarn/bin:$PATH"
+
+  - |
+    # Update composer
+    composer self-update
+
+  - |
+    # Install yarn
+    npm i yarn -g
 
 install:
   - |
     # Set composer's platform to php 7.4 if we're on php 8.
-    if [[ $PHP = nightly ]]; then
+    if [[ $TRAVIS_PHP_VERSION = nightly ]]; then
         composer config platform.php 7.4.99
     fi
   - |
