@@ -414,9 +414,10 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
                     if ($category->numParent($cat['parent_id']) > 1) {
                         // move category (if current language) AND more than 1 category at the same level)
                         printf(
-                            '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fa fa-copy" title="%s"></i></a> ',
+                            '<a class="btn btn-warning btn-sm" href="?action=movecategory&amp;cat=%s&amp;parent_id=%s"><i aria-hidden="true" class="fa fa-arrow-up" title="%s"></i><i aria-hidden="true" class="fa fa-arrow-down" title="%s"></i></a> ',
                             $cat['id'],
                             $cat['parent_id'],
+                            $PMF_LANG['ad_categ_move'],
                             $PMF_LANG['ad_categ_move']
                         );
                     }
