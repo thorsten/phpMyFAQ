@@ -1,10 +1,5 @@
 language: php
 
-php:
-  - '7.3'
-  - '7.4'
-
-sudo: required
 dist: xenial
 
 sudo: required
@@ -14,12 +9,19 @@ group: edge
 env:
   global:
     - MIN_PHP=7.3.0
-    - NODE_VERSION=10
+    - NODE_VERSION=12
 
 matrix:
   include:
-    - php: 7.2
-      env: php_extra="7.4"
+    - php: 7.3
+    - php: 7.4
+    - php: nightly
+  fast_finish: true
+  allow_failures:
+    - php: nightly
+
+matrix:
+  include:
     - php: 7.3
       env: deps=high
     - php: 7.4
@@ -35,15 +37,42 @@ cache:
     - $HOME/.composer/cache/files
 
 before_install:
-  - nvm install $NODE_VERSION
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
-  - export PATH="$HOME/.yarn/bin:$PATH"
-  - composer self-update
-  - npm install yarn -g
+  - |
+    # Install NodeJS
+    nvm install $NODE_VERSION
+
+  - |
+    # Download yarn
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.4
+
+  - |
+    # Add yarn to PATH
+    export PATH="$HOME/.yarn/bin:$PATH"
+
+  - |
+    # Update composer
+    composer self-update
+
+  - |
+    # Install yarn
+    npm i yarn -g
 
 install:
-  - travis_retry composer install --no-interaction --prefer-source
-  - yarn install
-  - yarn build
+  - |
+    # Set composer's platform to php 7.4 if we're on php 8.
+    if [[ $TRAVIS_PHP_VERSION = nightly ]]; then
+        composer config platform.php 7.4.99
+    fi
+  - |
+    # Install phpMyFAQ via Composer
+    composer install --no-interaction --prefer-source --no-progress
+
+  - |
+    # Install NodeJS dependencies
+    yarn install
+
+  - |
+    # Run Webpack build
+    yarn build
 
 script: ./vendor/bin/phpunit --configuration phpunit.xml
