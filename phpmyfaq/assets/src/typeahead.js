@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
               return {
                 url: item.faqLink,
                 question: item.faqQuestion,
+                category: item.categoryName,
               };
             })
           );
@@ -43,6 +44,9 @@ document.addEventListener('DOMContentLoaded', () => {
     },
     afterSelect: event => {
       window.location.href = event.url;
+    },
+    matcher: item => {
+      return item;
     },
   });
 });
