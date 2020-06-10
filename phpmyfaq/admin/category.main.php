@@ -299,6 +299,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 
             if ($faqConfig->get('main.enableCategoryRestrictions')) {
                 $category = new Category($faqConfig, $currentAdminGroups, true);
+            } else {
+                $category = new Category($faqConfig, $currentAdminGroups, false);
             }
 
             $category->setUser($currentAdminUser);
