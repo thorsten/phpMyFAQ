@@ -494,7 +494,7 @@ class MediumPermission extends BasicPermission
         );
 
         $res = $this->config->getDb()->query($select);
-        $result = array(-1);
+        $result = [-1];
         while ($row = $this->config->getDb()->fetchArray($res)) {
             $result[] = $row['group_id'];
         }
@@ -505,15 +505,15 @@ class MediumPermission extends BasicPermission
     /**
      * Get all groups in <option> tags.
      *
-     * @param  array   $groups Selected groups
-     * @param  integer $userId
+     * @param array $groups Selected groups
+     * @param CurrentUser $user
      * @return string
      * @todo   Move into the Helper class
      */
-    public function getAllGroupsOptions(array $groups, int $userId = 1): string
+    public function getAllGroupsOptions(array $groups, CurrentUser $user): string
     {
         $options = '';
-        $allGroups = $this->getAllGroups($userId);
+        $allGroups = $this->getAllGroups($user);
 
         foreach ($allGroups as $groupId) {
             if (-1 != $groupId) {
@@ -531,22 +531,20 @@ class MediumPermission extends BasicPermission
 
     /**
      * Returns an array with the IDs of all groups stored in the
-     * database if no user ID is passed.
+     * database if no user is passed.
      *
-     * @param  int userId
+     * @param CurrentUser $user
      * @return array
      */
-    public function getAllGroups(int $userId = 1): array
+    public function getAllGroups(CurrentUser $user): array
     {
-        $select = sprintf(
-            '
-            SELECT
-                group_id
-            FROM
-                %sfaqgroup',
-            Database::getTablePrefix()
-        );
-        if ($userId != 1) {
+        $select = sprintf('SELECT group_id FROM %sfaqgroup', Database::getTablePrefix());
+
+        if (
+            !$this->config->get('main.enableCategoryRestrictions') &&
+            $user->getUserId() !== 1 &&
+            !$user->isSuperAdmin()
+        ) {
             $select = sprintf(
                 '
                 SELECT
@@ -559,7 +557,7 @@ class MediumPermission extends BasicPermission
                     fug.user_id = %d',
                 Database::getTablePrefix(),
                 Database::getTablePrefix(),
-                $userId
+                $user->getUserId()
             );
         }
 

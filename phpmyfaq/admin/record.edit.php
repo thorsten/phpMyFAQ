@@ -538,16 +538,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                                 </label>
                                                 <select id="selected-groups" name="restricted_groups[]" size="3"
                                                         class="form-control" multiple>
-                                                    <?php
-                                                    if ($faqConfig->get('main.enableCategoryRestrictions')) {
-                                                        echo $user->perm->getAllGroupsOptions(
-                                                            $groupPermission,
-                                                            $currentUserId
-                                                        );
-                                                    } else {
-                                                        echo $user->perm->getAllGroupsOptions($groupPermission);
-                                                    }
-                                                    ?>
+                                                    <?= $user->perm->getAllGroupsOptions($groupPermission, $user) ?>
                                                 </select>
                                               </div>
                                             </div>
