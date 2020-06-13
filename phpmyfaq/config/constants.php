@@ -153,11 +153,11 @@ define('PMF_ENCRYPTION_TYPE', 'hash');
 $denyUploadExts = [];
 
 /*
- * Bot Blacklist
+ * Bots ignore list
  *
  * @var array
  */
-$botBlacklist = [
+$botIgnoreList = [
     'nustcrape',
     'webpost',
     'GoogleBot',

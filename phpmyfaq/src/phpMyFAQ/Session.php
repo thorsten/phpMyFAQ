@@ -53,7 +53,7 @@ class Session
      */
     public function userTracking(string $action, $data = null)
     {
-        global $sessionId, $user, $botBlacklist;
+        global $sessionId, $user, $botIgnoreList;
 
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
@@ -69,7 +69,7 @@ class Session
                 $sessionId = null;
             }
 
-            foreach ($botBlacklist as $bot) {
+            foreach ($botIgnoreList as $bot) {
                 if ((bool)Strings::strstr($agent, $bot)) {
                     ++$bots;
                 }

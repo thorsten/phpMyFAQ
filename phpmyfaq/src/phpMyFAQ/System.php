@@ -326,7 +326,7 @@ class System
         $hashes = [
             'created' => $created->format('Y-m-d H:i:sP'),
         ];
-        $blacklist = [
+        $ignoredFiles = [
             '/config/constants.php' => false,
             '/config/constants_elasticsearch.php' => false,
             '/config/database.php' => false,
@@ -342,7 +342,7 @@ class System
                 ) {
                     $current = str_replace(PMF_ROOT_DIR, '', $file->getPathname());
 
-                    if (isset($blacklist[$current])) {
+                    if (isset($ignoredFiles[$current])) {
                         continue;
                     }
                     $hashes[$current] = sha1(file_get_contents($file->getPathname()));
