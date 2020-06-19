@@ -457,13 +457,14 @@ class Session
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
             $protocol = 'https';
         }
+
         return setcookie(
             $name,
             $sessionId,
             $_SERVER['REQUEST_TIME'] + $timeout,
             dirname($_SERVER['SCRIPT_NAME']),
-            $this->config->getDefaultUrl(),
-            ('https' === $protocol) ? true : false,
+            parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+            'https' === $protocol,
             true
         );
     }
