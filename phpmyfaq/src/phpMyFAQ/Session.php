@@ -53,7 +53,7 @@ class Session
      */
     public function userTracking(string $action, $data = null)
     {
-        global $sessionId, $user, $botBlacklist;
+        global $sessionId, $user, $botIgnoreList;
 
         if ($this->config->get('main.enableUserTracking')) {
             $bots = 0;
@@ -69,7 +69,7 @@ class Session
                 $sessionId = null;
             }
 
-            foreach ($botBlacklist as $bot) {
+            foreach ($botIgnoreList as $bot) {
                 if ((bool)Strings::strstr($agent, $bot)) {
                     ++$bots;
                 }
@@ -457,13 +457,14 @@ class Session
         if (isset($_SERVER['HTTPS']) && strtoupper($_SERVER['HTTPS']) === 'ON') {
             $protocol = 'https';
         }
+
         return setcookie(
             $name,
             $sessionId,
             $_SERVER['REQUEST_TIME'] + $timeout,
             dirname($_SERVER['SCRIPT_NAME']),
-            $this->config->getDefaultUrl(),
-            ('https' === $protocol) ? true : false,
+            parse_url($this->config->getDefaultUrl(), PHP_URL_HOST),
+            'https' === $protocol,
             true
         );
     }

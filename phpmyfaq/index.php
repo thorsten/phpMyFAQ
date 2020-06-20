@@ -114,7 +114,7 @@ $loginVisibility = 'hidden';
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
 $faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -125,7 +125,7 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
-    if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
+    if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {

@@ -216,7 +216,7 @@ class CurrentUser extends User
             $this->saveCrsfTokenToSession();
 
             // save remember me cookie if set
-            if (true === $this->rememberMe) {
+            if ($this->rememberMe) {
                 $rememberMe = sha1(session_id());
                 $this->setRememberMe($rememberMe);
                 $this->session->setCookie(
