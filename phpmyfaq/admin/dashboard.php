@@ -149,10 +149,6 @@ $faqSession = new Session($faqConfig);
                 <em><?= $faqTableInfo[Database::getTablePrefix() . 'faquser'] - 1; ?></em>
               </span>
             </a>
-            <a target="_blank" href="https://itunes.apple.com/app/phpmyfaq/id977896957" class="list-group-item">
-              <i aria-hidden="true" class="fa fa-apple"></i> Available on the App Store
-              <span class="float-right text-muted small"><i aria-hidden="true" class="fa fa-heart"></i></span>
-            </a>
           </div>
         </div>
       </div>

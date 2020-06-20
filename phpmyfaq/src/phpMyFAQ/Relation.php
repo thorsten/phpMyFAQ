@@ -22,22 +22,19 @@ use phpMyFAQ\Search\SearchFactory;
 
 /**
  * Class Relation
- *
  * @package phpMyFAQ
  */
 class Relation
 {
     /**
-     * DB handle.
-     *
+     * Configuration object.
      * @var Configuration
      */
     private $config;
 
     /**
-     * Constructor.
-     *
-     * @param Configuration
+     * Relation constructor.
+     * @param Configuration $config
      */
     public function __construct(Configuration $config)
     {
@@ -47,13 +44,12 @@ class Relation
     /**
      * Returns all relevant articles for a FAQ record with the same language.
      *
-     * @param int    $recordId FAQ ID
      * @param string $question FAQ title
      * @param string $keywords FAQ keywords
      *
      * @return array
      */
-    public function getAllRelatedById($recordId, $question, $keywords)
+    public function getAllRelatedByQuestion($question, $keywords)
     {
         $terms = str_replace('-', ' ', $question) . ' ' . $keywords;
         $search = SearchFactory::create(

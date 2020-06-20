@@ -172,8 +172,7 @@ if (count($multiCategories) > 1) {
 
 // Related FAQs
 $faqSearchResult->reviewResultSet(
-    $faqRelation->getAllRelatedById(
-        $recordId,
+    $faqRelation->getAllRelatedByQuestion(
         $faq->faqRecord['title'],
         $faq->faqRecord['keywords']
     )
