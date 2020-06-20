@@ -42,7 +42,7 @@ define('PMF_SESSION_SAVE_PATH', '');
  *
  * @var int
  */
-define('PMF_AUTH_TIMEOUT', 30);
+define('PMF_AUTH_TIMEOUT', 300);
 
 /**
  * Timeout for the warning about session timeout for the admin section, in minutes
