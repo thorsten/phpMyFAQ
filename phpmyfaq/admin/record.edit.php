@@ -296,7 +296,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                                 <!-- Revision -->
                                 <?php
                                 if ($user->perm->checkRight($currentUserId, 'changebtrevs')) {
-                                    $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang']);
+                                    $revisions = $faq->getRevisionIds($faqData['id'], $faqData['lang'], $faqData['author']);
                                     if (count($revisions)) { ?>
                                         <div class="form-group">
                                             <form id="selectRevision" name="selectRevision" method="post"
