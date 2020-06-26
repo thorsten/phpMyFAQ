@@ -1655,30 +1655,27 @@ class Faq
     /**
      * Gets all revisions from a given record ID.
      *
-     * @param int    $recordId   Record id
-     * @param string $recordLang Record language
-     *
+     * @param int $faqId
+     * @param string $faqLang
+     * @param string $faqAuthor
      * @return array
      */
-    public function getRevisionIds($recordId, $recordLang)
+    public function getRevisionIds($faqId, $faqLang, $faqAuthor): array
     {
         $revisionData = [];
 
         $query = sprintf(
-            "
-            SELECT
-                revision_id, updated, author
-            FROM
-                %sfaqdata_revisions
+            "SELECT 
+                revision_id, updated, author FROM %sfaqdata_revisions
             WHERE
                 id = %d
             AND
                 lang = '%s'
-            ORDER BY
+            ORDER BY 
                 revision_id",
             Database::getTablePrefix(),
-            $recordId,
-            $recordLang
+            $faqId,
+            $faqLang
         );
 
         $result = $this->config->getDb()->query($query);
@@ -1687,8 +1684,8 @@ class Faq
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $revisionData[] = [
                     'revision_id' => $row->revision_id,
-                    'updated' => $row->updated,
-                    'author' => $row->author,
+                    'updated' => $faqId === 0 ? date('YmdHis') : $row->updated,
+                    'author' => $faqId === 0 ? ucfirst($faqAuthor) : $row->author,
                 ];
             }
         }
