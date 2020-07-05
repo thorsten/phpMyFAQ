@@ -62,7 +62,7 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 function buildSiteMapNode($location, $lastModified = null)
 {
     if (!isset($lastModified)) {
-        $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
+        $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], 'Y-m-d', false);
     }
     $node =
         '<url>'
@@ -102,7 +102,7 @@ $siteMap =
 // 1st entry: the faq server itself
 $siteMap .= buildSiteMapNode(
     $faqConfig->getDefaultUrl(),
-    Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_ISO8601, false)
+    Date::createIsoDate($_SERVER['REQUEST_TIME'], 'Y-m-d', false)
 );
 
 // nth entry: each faq
@@ -119,7 +119,7 @@ foreach ($items as $item) {
     }
     $siteMap .= buildSiteMapNode(
         $link,
-        Date::createIsoDate($item['date'], DATE_ISO8601)
+        Date::createIsoDate($item['date'], 'Y-m-d')
     );
 }
 
