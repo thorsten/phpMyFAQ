@@ -1967,7 +1967,7 @@ class Faq
                 }
 
                 $data['visits'] = (int)$row->visits;
-                $data['question'] = $row->question;
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
                 $data['last_visit'] = date('c', $row->last_visit);
@@ -2189,17 +2189,17 @@ class Faq
         if ($result) {
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->user_id, [-1, $this->user]) || !in_array($row->group_id, $this->groups)) {
                         continue;
                     }
                 } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                    if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
                 }
 
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
-                $data['question'] = $row->question;
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['answer'] = $row->content;
                 $data['visits'] = (int)$row->visits;
 
@@ -2213,7 +2213,7 @@ class Faq
                     $row->lang
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $row->question;
+                $oLink->itemTitle = $title;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
