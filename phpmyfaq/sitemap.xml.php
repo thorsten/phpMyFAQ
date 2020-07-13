@@ -61,7 +61,7 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 // {{{ Functions
 function buildSiteMapNode($location, $lastModified = null)
 {
-    if (!isset($lastModified)) {
+    if (empty($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], 'Y-m-d', false);
     }
     $node =
@@ -117,10 +117,7 @@ foreach ($items as $item) {
             $link = $oL->toString();
         }
     }
-    $siteMap .= buildSiteMapNode(
-        $link,
-        Date::createIsoDate($item['date'], 'Y-m-d')
-    );
+    $siteMap .= buildSiteMapNode($link,$item['date']);
 }
 
 $siteMap .= '</urlset>';
