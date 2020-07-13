@@ -61,7 +61,7 @@ if (false === $faqConfig->get('seo.enableXMLSitemap')) {
 // {{{ Functions
 function buildSiteMapNode($location, $lastModified = null)
 {
-    if ( empty($lastModified) ) {
+    if (empty($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
     $node =
