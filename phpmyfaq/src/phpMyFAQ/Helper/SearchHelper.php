@@ -146,7 +146,7 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for Instant Response.
      *
-     * @param SearchResultSet $resultSet PMF_Search_Resultset object
+     * @param SearchResultSet $resultSet SearchResultSet object
      *
      * @return string
      */
@@ -171,7 +171,7 @@ class SearchHelper extends Helper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = sprintf('index.php?solution_id=%d', $solutionId);
+                $currentUrl = $this->config->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
 
                 $html .= sprintf(
                     '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br>',
