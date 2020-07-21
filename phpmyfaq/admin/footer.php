@@ -198,6 +198,7 @@ if (isset($auth)) {
               images_upload_url: 'index.php?action=ajax&ajax=image&ajaxaction=upload',
 
               // override default upload handler to simulate successful upload
+              // @todo rewrite this piece of code...
               images_upload_handler: (blobInfo, success, failure) => {
                 let xhr, formData;
 

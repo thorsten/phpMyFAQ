@@ -47,7 +47,7 @@ if ($user) {
 }
 ?>
 <style>
-    @import url('assets/css/style.min.css');
+    @import url('../assets/dist/admin-styles.css');
     body { padding: 10px; }
 </style>
 
@@ -78,17 +78,19 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
             '<div class="mce-file" data-src="%s"><img src="%s" class="mce-file-preview">%s</div>',
             $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename(),
             $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename(),
-            $path.'/'.$file->getFilename()
+            $faqConfig->getDefaultUrl().$path.'/'.$file->getFilename()
         );
     }
 }
 ?>
-<script src="../assets/themes/default/js/phpmyfaq.min.js"></script>
+<script src="../assets/dist/vendors.js"></script>
+<script src="../assets/dist/phpmyfaq.js"></script>
+<script src="../assets/dist/backend.js"></script>
 <script src="assets/js/editor/tinymce.min.js"></script>
 <script>
     $('#filter').on('keyup', function () {
-        var filter = $(this).val(), count = 0;
-        $('div.mce-file').each(function(){
+      const filter = $(this).val();
+      $('div.mce-file').each(function(){
             if ($(this).text().search(new RegExp(filter, 'i')) < 0) {
                 $(this).fadeOut();
             } else {
@@ -98,12 +100,11 @@ if (!is_dir(PMF_ROOT_DIR.'/images')) {
     });
 
     $(document).on('click', 'div.mce-file', function () {
-        var itemUrl = $(this).data('src'),
-            args = top.tinymce.activeEditor.windowManager.getParams(),
-            win = (args.window),
-            input = (args.input);
-        
-        win.document.getElementById(input).value = itemUrl;
+      const args = top.tinymce.activeEditor.windowManager.getParams(),
+        win = (args.window),
+        input = (args.input);
+
+      win.document.getElementById(input).value = $(this).data('src');
         top.tinymce.activeEditor.windowManager.close();
     });
 </script>
