@@ -552,7 +552,7 @@ class MediumPermission extends BasicPermission
                 FROM
                     %sfaqgroup fg
                 LEFT JOIN
-                    %sfaquser_group fug ON fg.group_id=fug.group_id
+                    %sfaquser_group fug ON fg.group_id = fug.group_id
                 WHERE
                     fug.user_id = %d',
                 Database::getTablePrefix(),
