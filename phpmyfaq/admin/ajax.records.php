@@ -117,18 +117,14 @@ switch ($ajaxAction) {
             $searchString = Filter::filterInput(INPUT_POST, 'search', FILTER_SANITIZE_STRIPPED);
 
             if (!is_null($searchString)) {
-                try {
-                    $searchResult = $faqSearch->search($searchString, false);
+                $searchResult = $faqSearch->search($searchString, false);
 
-                    $faqSearchResult->reviewResultSet($searchResult);
+                $faqSearchResult->reviewResultSet($searchResult);
 
-                    $searchHelper = new SearchHelper($faqConfig);
-                    $searchHelper->setSearchterm($searchString);
+                $searchHelper = new SearchHelper($faqConfig);
+                $searchHelper->setSearchterm($searchString);
 
-                    echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
-                } catch (Search\Exception $e) {
-                    //
-                }
+                echo $searchHelper->renderAdminSuggestionResult($faqSearchResult);
             }
         } else {
             echo $PMF_LANG['err_NotAuth'];

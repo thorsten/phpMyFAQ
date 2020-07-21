@@ -32,11 +32,11 @@ module.exports = {
         to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/themes/'),
       },
       {
-        from: 'node_modules/highlightjs/highlight.pack.js',
+        from: 'node_modules/highlight.js/lib/highlight.js',
         to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
       },
       {
-        from: 'node_modules/highlightjs/styles/default.css',
+        from: 'node_modules/highlight.js/styles/default.css',
         to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
       },
     ]),

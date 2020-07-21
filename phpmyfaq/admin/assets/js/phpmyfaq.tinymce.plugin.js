@@ -20,8 +20,7 @@ tinymce.PluginManager.add('phpmyfaq', function(editor) {
 
   editor.addButton('phpmyfaq', {
     image: 'images/phpmyfaq.gif',
-    onclick: function() {
-      // Open window
+    onclick: () => {
       editor.windowManager.open(
         {
           title: 'Internal links',
@@ -31,11 +30,11 @@ tinymce.PluginManager.add('phpmyfaq', function(editor) {
             { type: 'textbox', name: 'search', label: 'Search', id: 'pmf-internal-links' },
             { type: 'container', name: 'pmf-faq-list', id: 'pmf-faq-list', minHeight: 240 },
           ],
-          onkeyup: function() {
-            var search = $('#pmf-internal-links').val();
-            var url = location.protocol + '//' + location.host + location.pathname;
-            var args = top.tinymce.activeEditor.windowManager.getParams();
-            var list = $('#pmf-faq-list');
+          onkeyup: () => {
+            const search = $('#pmf-internal-links').val();
+            const url = location.protocol + '//' + location.host + location.pathname;
+            const args = top.tinymce.activeEditor.windowManager.getParams();
+            const list = $('#pmf-faq-list');
             if (search.length > 0) {
               $.ajax({
                 type: 'POST',
@@ -50,11 +49,11 @@ tinymce.PluginManager.add('phpmyfaq', function(editor) {
               });
             }
           },
-          onsubmit: function() {
-            var selected = $('input:radio[name=faqURL]:checked');
-            var url = selected.val();
-            var title = selected.parent().text();
-            var anchor = '<a class="pmf-internal-link" href="' + url + '">' + title + '</a>';
+          onsubmit: () => {
+            const selected = $('input:radio[name=faqURL]:checked');
+            const url = selected.val();
+            const title = selected.parent().text();
+            const anchor = '<a class="pmf-internal-link" href="' + url + '">' + title + '</a>';
             editor.insertContent(anchor);
           },
         },
