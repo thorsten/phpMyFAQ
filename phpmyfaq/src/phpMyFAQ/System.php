@@ -156,7 +156,7 @@ class System
         foreach (new DirectoryIterator(PMF_ROOT_DIR . '/assets/themes/') as $item) {
             $basename = $item->getBasename();
             if (!$item->isDot() && $item->isDir()) {
-                $templates[$basename] = (Template::getTplSetName() === $basename ? true : false);
+                $templates[$basename] = Template::getTplSetName() === $basename;
             }
         }
 
@@ -298,14 +298,12 @@ class System
      * Returns true or false on SQLite3.
      *
      * @static
-     *
      * @param string $dbType
-     *
      * @return bool
      */
-    public static function isSqlite($dbType)
+    public static function isSqlite(string $dbType): bool
     {
-        return ('sqlite3' === $dbType) ? true : false;
+        return 'sqlite3' === $dbType;
     }
 
     /**

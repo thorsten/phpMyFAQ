@@ -21,6 +21,7 @@
  * @link https://www.phpmyfaq.de
  * @since 2002-08-20
  */
+
 use Composer\Autoload\ClassLoader;
 use phpMyFAQ\Installer;
 use phpMyFAQ\Strings;
@@ -53,7 +54,7 @@ $loader->add('phpMyFAQ', PMF_SRC_DIR);
 $loader->register()
 ?>
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -315,35 +316,35 @@ if (!isset($_POST['sql_server']) && !isset($_POST['sql_user']) && !isset($_POST[
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="realname">Your name:</label>
+                        <label class="col-sm-3 col-form-label" for="realname">Your name:</label>
                         <div class="col-sm-9">
                             <input type="text" name="realname" id="realname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your real name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="email">Your email address:</label>
+                        <label class="col-sm-3 col-form-label" for="email">Your email address:</label>
                         <div class="col-sm-9">
                             <input type="email" name="email" id="email" class="form-control" required>
                             <small class="form-text text-muted">Please enter your email adress.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="loginname">Your login name:</label>
+                        <label class="col-sm-3 col-form-label" for="loginname">Your login name:</label>
                         <div class="col-sm-9">
                             <input type="text" name="loginname" id="loginname" class="form-control" required>
                             <small class="form-text text-muted">Please enter your login name.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="password">Your password:</label>
+                        <label class="col-sm-3 col-form-label" for="password">Your password:</label>
                         <div class="col-sm-9">
                             <input type="password" name="password" id="password" class="form-control" required>
                             <small class="form-text text-muted">Please enter your password.</small>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 col-form-label"for="password_retype">Retype password:</label>
+                        <label class="col-sm-3 col-form-label" for="password_retype">Retype password:</label>
                         <div class="col-sm-9">
                             <input type="password" name="password_retyped" id="password_retype" class="form-control"
                                    required>

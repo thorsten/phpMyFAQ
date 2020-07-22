@@ -351,6 +351,7 @@ if ($step == 3) {
     if (version_compare($version, '2.8.16', '<')) {
         $query[] = 'CREATE INDEX index_time ON '.$prefix.'faqsessions (time)';
     }
+
     //
     // UPDATES FROM 2.9.0-alpha
     //
