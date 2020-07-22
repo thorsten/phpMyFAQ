@@ -31,12 +31,12 @@ class Captcha
      *
      * @var int
      */
-    public $caplength = 6;
+    public $captchaLength = 6;
 
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * The phpMyFAQ session id.
@@ -50,21 +50,18 @@ class Captcha
 
     /**
      * Array of fonts.
-     *
      * @var array
      */
-    private $fonts = [];
+    private $fonts;
 
     /**
      * The captcha code.
-     *
      * @var string
      */
     private $code = '';
 
     /**
      * Array of characters.
-     *
      * @var array
      */
     private $letters = [
@@ -107,52 +104,36 @@ class Captcha
 
     /**
      * Width of the image.
-     *
      * @var int
      */
     private $width = 165;
 
     /**
      * Height of the image.
-     *
      * @var int
      */
     private $height = 40;
 
     /**
      * JPEG quality in percents.
-     *
      * @var int
      */
     private $quality = 60;
 
-    /**
-     * Random background color RGB components.
-     *
-     * @var array
-     */
+    /** @var array */
     private $backgroundColor;
 
-    /**
-     * Generated image.
-     *
-     * @var resource
-     */
+    /** @var resource */
     private $img;
 
-    /**
-     * The user agent string.
-     *
-     * @var string
-     */
+    /** @var string */
     private $userAgent;
 
-    /**
-     * Timestamp.
-     *
-     * @var int
-     */
+    /** @var int */
     private $timestamp;
+
+    /** @var string */
+    private $ip;
 
     /**
      * Constructor.
@@ -236,7 +217,7 @@ class Captcha
     {
         $this->createBackground();
         $this->drawLines();
-        $this->generateCaptchaCode($this->caplength);
+        $this->generateCaptchaCode($this->captchaLength);
         $this->drawText();
         if (function_exists('imagejpeg')) {
             header('Content-Type: image/jpeg');

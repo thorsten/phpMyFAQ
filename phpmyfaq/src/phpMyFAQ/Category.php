@@ -66,7 +66,7 @@ class Category
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * User ID.
@@ -150,7 +150,7 @@ class Category
     public function setGroups(array $groups)
     {
         if (0 === count($groups)) {
-            $groups = array(-1);
+            $groups = [-1];
         }
         $this->groups = $groups;
     }
@@ -519,7 +519,7 @@ class Category
         }
 
         if ($id > 0) {
-            $this->treeTab[] = array(
+            $this->treeTab[] = [
                 'id' => $id,
                 'symbol' => $symbol,
                 'name' => $name,
@@ -532,7 +532,7 @@ class Category
                 'active' => $active,
                 'image' => $image,
                 'show_home' => $showHome
-            );
+            ];
         }
 
         foreach ($tabs as $i) {
@@ -601,7 +601,7 @@ class Category
 
         if (isset($this->children[$id])) {
             foreach (array_keys($this->children[$id]) as $childId) {
-                $children = array_merge($children, array($childId));
+                $children = array_merge($children, [$childId]);
                 $children = array_merge($children, $this->getChildNodes($childId));
             }
         }
@@ -765,7 +765,7 @@ class Category
                 $numFaqs = '';
             } else {
                 $numFaqs = ' <span class="badge badge-primary">' .
-                    $plr->GetMsg('plmsgEntries', $number[$parent]) .
+                    $plr->getMsg('plmsgEntries', $number[$parent]) .
                     '</span>';
             }
 
@@ -1700,7 +1700,7 @@ class Category
     /**
      * Returns the user id of the category owner
      *
-     * @param integer $categoryId
+     * @param int $categoryId
      * @return int
      */
     public function getOwner(int $categoryId): int
