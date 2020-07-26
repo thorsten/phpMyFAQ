@@ -16,7 +16,6 @@
 
 use phpMyFAQ\Attachment\AttachmentCollection;
 use phpMyFAQ\Filter;
-use phpMyFAQ\Link;
 use phpMyFAQ\Pagination;
 
 if (!defined('IS_VALID_PHPMYFAQ')) {
@@ -28,7 +27,7 @@ $page = Filter::filterInput(INPUT_GET, 'page', FILTER_VALIDATE_INT);
 $page = 1 > $page ? 1 : $page;
 
 $attachmentCollection = new AttachmentCollection($faqConfig);
-$itemsPerPage = 32;
+$itemsPerPage = 24;
 $allCrumbs = $attachmentCollection->getBreadcrumbs();
 
 $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
@@ -36,7 +35,7 @@ $crumbs = array_slice($allCrumbs, ($page - 1) * $itemsPerPage, $itemsPerPage);
 $pagination = new Pagination(
     $faqConfig,
     [
-        'baseUrl' => $faqConfig->getDefaultUrl() . '?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
+        'baseUrl' => $faqConfig->getDefaultUrl() . 'admin/?' . str_replace('&', '&amp;', $_SERVER['QUERY_STRING']),
         'total' => count($allCrumbs),
         'perPage' => $itemsPerPage,
     ]
