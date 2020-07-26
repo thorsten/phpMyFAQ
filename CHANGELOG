@@ -1,9 +1,12 @@
-phpMyFAQ 3.0.4
+phpMyFAQ 3.0.5
 Codename "Phobos"
 
 CHANGELOG
 
 This is a log of major user-visible changes in each phpMyFAQ release.
+
+Version 3.0.5 -
+-
 
 Version 3.0.4 - 2020-07-26
 - session timeout extended to 5 hours (Thorsten)
