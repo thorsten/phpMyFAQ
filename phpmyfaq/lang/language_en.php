@@ -1334,3 +1334,4 @@ $PMF_LANG['loginPageMessage'] = 'Log in to ';
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
+$PMF_LANG['ad_categ_save_order'] = 'Save order';

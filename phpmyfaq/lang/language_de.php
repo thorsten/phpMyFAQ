@@ -1331,3 +1331,4 @@ $PMF_LANG['loginPageMessage'] = 'Login für ';
 
 // added v3.1.0-alpha - 2020-03-27 by Thorsten
 $PMF_LANG['ad_user_data_is_visible'] = 'Benutzername soll sichtbar sein';
+$PMF_LANG['ad_categ_save_order'] = 'Sortierung speichern';

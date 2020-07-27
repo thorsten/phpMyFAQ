@@ -97,6 +97,11 @@ class Sqlsrv extends Database implements Driver
             news_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, news_id))',
 
+        'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
+            category_id INTEGER NOT NULL,
+            position INTEGER NOT NULL,
+            PRIMARY KEY (category_id))',
+
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,

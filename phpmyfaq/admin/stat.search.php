@@ -62,14 +62,14 @@ if ($user->perm->checkRight($user->getUserId(), 'viewlog')) {
     $searchesList = $search->getMostPopularSearches($searchesCount + 1, true);
 
     if (is_null($pages)) {
-        $pages = round((count($searchesList) + ($perPage/3))/$perPage, 0);
+        $pages = round((count($searchesList) + ($perPage / 3))/$perPage, 0);
     }
 
     $start = ($page - 1)*$perPage;
     $end = $start + $perPage;
 
     $baseUrl = sprintf(
-        '%s?action=searchstats&amp;page=%d',
+        '%sadmin/?action=searchstats&amp;page=%d',
         $faqConfig->getDefaultUrl(),
         $page
     );

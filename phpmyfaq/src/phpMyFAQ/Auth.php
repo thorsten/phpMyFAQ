@@ -106,7 +106,7 @@ class Auth
         $message = '';
 
         if (!is_array($this->errors)) {
-            $this->errors = array((string)$this->errors);
+            $this->errors = [(string)$this->errors];
         }
         foreach ($this->errors as $error) {
             $message .= $error . "\n";

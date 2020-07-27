@@ -60,4 +60,12 @@ switch ($ajaxAction) {
             ]
         );
         break;
+
+    case 'update-order':
+
+        $category = new Category($faqConfig, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        break;
 }

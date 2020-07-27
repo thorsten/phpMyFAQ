@@ -15,11 +15,45 @@
 
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
-  () => {
-    $('.list-group-item').on('click', function() {
-      $('.fa.pmf-has-subcategories', this)
-        .toggleClass('fa-caret-right')
-        .toggleClass('fa-caret-down');
+
+  $('.list-group-item').on('click', function() {
+    $('.fa.pmf-has-subcategories', this)
+      .toggleClass('fa-caret-right')
+      .toggleClass('fa-caret-down');
+  });
+
+  // Sort categories by drag and drop
+  $('.list-group.list-group-root').sortable({
+    axis: 'y',
+    start: (event, ui) => {
+      ui.item.startPos = ui.item.index();
+    },
+    stop: (event, ui) => {
+      console.log('Start position: ' + ui.item.startPos);
+      console.log('New position: ' + ui.item.index());
+    },
+  });
+
+  // Save sorted categories
+  $('.pmf-save-category-order').on('click', function(event) {
+    event.preventDefault();
+    let data = $('.list-group.list-group-root').sortable('toArray', {
+      attribute: 'id',
     });
-  };
+
+    console.log(data);
+
+    $.ajax({
+      type: 'POST',
+      url: "category.order.php",
+      data: {data},
+      success: (response) => {
+        location.reload();
+      },
+      error: () => {
+        location.reload();
+      }
+    });
+  });
+
 });

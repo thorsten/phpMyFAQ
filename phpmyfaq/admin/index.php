@@ -311,6 +311,7 @@ if (isset($auth) && ($numRights > 0 || $user->isSuperAdmin())) {
             case 'category':
             case 'savecategory':
             case 'updatecategory':
+            case 'checkIfCategoryExists':
             case 'removecategory':
             case 'changecategory':
             case 'pastecategory':     require 'category.main.php'; break;
