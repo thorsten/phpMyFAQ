@@ -69,7 +69,7 @@ class CaptchaHelper extends Helper
                 '<input type="text" class="form-control" name="%s" id="%s" size="%d" autocomplete="off" required>',
                 self::FORM_ID,
                 self::FORM_ID,
-                $captcha->caplength
+                $captcha->captchaLength
             );
             $html .= '            <span class="input-group-btn">';
             $html .= sprintf(

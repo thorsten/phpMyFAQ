@@ -60,10 +60,10 @@ class Setup
         $anonymous = new User($faqConfig);
         $anonymous->createUser('anonymous', null, null, -1);
         $anonymous->setStatus('protected');
-        $anonymousData = array(
+        $anonymousData = [
             'display_name' => 'Anonymous User',
             'email' => null,
-        );
+        ];
         $anonymous->setUserData($anonymousData);
     }
 

@@ -29,6 +29,10 @@ class Changelog
      */
     private $config;
 
+    /**
+     * Changelog constructor.
+     * @param Configuration $config
+     */
     public function __construct(Configuration $config)
     {
         $this->config = $config;
@@ -90,12 +94,12 @@ class Changelog
 
         if ($result = $this->config->getDb()->query($query)) {
             while ($row = $this->config->getDb()->fetchObject($result)) {
-                $entries[] = array(
+                $entries[] = [
                     'revision_id' => $row->revision_id,
                     'user' => $row->usr,
                     'date' => $row->datum,
                     'changelog' => $row->what,
-                );
+                ];
             }
         }
 

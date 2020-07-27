@@ -139,10 +139,7 @@ class Database
 
     /**
      * Error page, if the database connection is not possible.
-     *
      * @param string $method
-     *
-     * @return string
      */
     public static function errorPage($method)
     {
