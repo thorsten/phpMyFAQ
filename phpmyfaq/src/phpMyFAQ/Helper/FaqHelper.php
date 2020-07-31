@@ -229,13 +229,13 @@ class FaqHelper extends Helper
      * @param  $faqLang
      * @return string
      */
-    public function createFaqTranslationLinkList($faqId, $faqLang): string
+    public function createFaqTranslationLinkList(int $faqId, string $faqLang): string
     {
         global $languageCodes;
         $output = '';
 
-        $languages = $this->config->getLanguage()->languageAvailable(0, 'faqcategories');
-        foreach ($languages as $languageCode) {
+        $availableLanguages = $this->config->getLanguage()->languageAvailable(0, 'faqcategories');
+        foreach ($availableLanguages as $languageCode) {
             if ($languageCode !== $faqLang) {
                 $output .= sprintf(
                     '<a class="dropdown-item" href="?action=editentry&id=%d&translateTo=%s">%s %s</a>',
@@ -244,6 +244,8 @@ class FaqHelper extends Helper
                     'Translate to',
                     $languageCodes[strtoupper($languageCode)]
                 );
+            } else {
+                $output .= '<a class="dropdown-item">n/a</a>';
             }
         }
 

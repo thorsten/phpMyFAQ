@@ -464,7 +464,8 @@ if ($user->perm->checkRight($user->getUserId(), 'edit_faq') || $user->perm->chec
                           <a class="btn btn-primary dropdown-toggle" href="#" role="button"
                              id="dropdownAddNewTranslation" data-toggle="dropdown" aria-haspopup="true"
                              aria-expanded="false">
-                            <i aria-hidden="true" class="fa fa-globe"></i>
+                            <i aria-hidden="true" class="fa fa-globe"
+                               title="<?= $PMF_LANG['msgTransToolAddNewTranslation'] ?>"></i>
                           </a>
                           <div class="dropdown-menu" aria-labelledby="dropdownAddNewTranslation">
                               <?= $faqHelper->createFaqTranslationLinkList($record['id'], $record['lang']) ?>
