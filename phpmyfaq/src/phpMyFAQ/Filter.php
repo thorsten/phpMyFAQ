@@ -36,7 +36,7 @@ class Filter
      */
     public static function filterInput($type, $variableName, $filter, $default = null)
     {
-        $return = filter_input($type, $variableName, $filter);
+        $return = filter_input($type, $variableName, $filter, $default);
 
         return (is_null($return) || $return === false) ? $default : $return;
     }
@@ -65,7 +65,7 @@ class Filter
      */
     public static function filterVar($variable, $filter, $default = null)
     {
-        $return = filter_var($variable, $filter);
+        $return = filter_var($variable, $filter, $default);
 
         return ($return === false) ? $default : $return;
     }
