@@ -112,7 +112,7 @@ $auth = $error = null;
 $loginVisibility = 'hidden';
 
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
 $rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
