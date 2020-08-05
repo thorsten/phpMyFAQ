@@ -62,7 +62,7 @@ $recordId = Filter::filterInput(INPUT_GET, 'recordId', FILTER_VALIDATE_INT);
 $tagId = Filter::filterInput(INPUT_GET, 'tagId', FILTER_VALIDATE_INT);
 
 $faqUsername = Filter::filterInput(INPUT_POST, 'username', FILTER_SANITIZE_STRING);
-$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING);
+$faqPassword = Filter::filterInput(INPUT_POST, 'password', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 
 //
 // Get language (default: english)
