@@ -1296,16 +1296,16 @@
         },
         {
             "name": "nikic/php-parser",
-            "version": "v4.7.0",
+            "version": "v4.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/nikic/PHP-Parser.git",
-                "reference": "21dce06dfbf0365c6a7cc8fdbdc995926c6a9300"
+                "reference": "8c58eb4cd4f3883f82611abeac2efbc3dbed787e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/21dce06dfbf0365c6a7cc8fdbdc995926c6a9300",
-                "reference": "21dce06dfbf0365c6a7cc8fdbdc995926c6a9300",
+                "url": "https://api.github.com/repos/nikic/PHP-Parser/zipball/8c58eb4cd4f3883f82611abeac2efbc3dbed787e",
+                "reference": "8c58eb4cd4f3883f82611abeac2efbc3dbed787e",
                 "shasum": ""
             },
             "require": {
@@ -1313,8 +1313,8 @@
                 "php": ">=7.0"
             },
             "require-dev": {
-                "ircmaxell/php-yacc": "0.0.5",
-                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0"
+                "ircmaxell/php-yacc": "^0.0.6",
+                "phpunit/phpunit": "^6.5 || ^7.0 || ^8.0 || ^9.0"
             },
             "bin": [
                 "bin/php-parse"
@@ -1322,7 +1322,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "4.7-dev"
+                    "dev-master": "4.8-dev"
                 }
             },
             "autoload": {
@@ -1344,7 +1344,7 @@
                 "parser",
                 "php"
             ],
-            "time": "2020-07-25T13:18:53+00:00"
+            "time": "2020-08-09T10:23:20+00:00"
         },
         {
             "name": "phar-io/manifest",
@@ -1720,16 +1720,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "9.0.0",
+            "version": "9.1.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "ee24e82baca11d7d6fb3513e127d6000f541cf90"
+                "reference": "9e17fe39fcaf66375f3d9d2258b025c3f48e42ac"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/ee24e82baca11d7d6fb3513e127d6000f541cf90",
-                "reference": "ee24e82baca11d7d6fb3513e127d6000f541cf90",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/9e17fe39fcaf66375f3d9d2258b025c3f48e42ac",
+                "reference": "9e17fe39fcaf66375f3d9d2258b025c3f48e42ac",
                 "shasum": ""
             },
             "require": {
@@ -1757,7 +1757,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "9.0-dev"
+                    "dev-master": "9.1-dev"
                 }
             },
             "autoload": {
@@ -1789,7 +1789,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-07T04:12:30+00:00"
+            "time": "2020-08-10T04:37:38+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -2067,16 +2067,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "9.3.0",
+            "version": "9.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "05c76e25f90e40af2cf2b1b39e6d49c5e74aa84c"
+                "reference": "0bc9739bf78b91dfbcbdcb8122db68f03dc1f53c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/05c76e25f90e40af2cf2b1b39e6d49c5e74aa84c",
-                "reference": "05c76e25f90e40af2cf2b1b39e6d49c5e74aa84c",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/0bc9739bf78b91dfbcbdcb8122db68f03dc1f53c",
+                "reference": "0bc9739bf78b91dfbcbdcb8122db68f03dc1f53c",
                 "shasum": ""
             },
             "require": {
@@ -2092,7 +2092,7 @@
                 "phar-io/version": "^3.0.2",
                 "php": "^7.3 || ^8.0",
                 "phpspec/prophecy": "^1.11.1",
-                "phpunit/php-code-coverage": "^9.0",
+                "phpunit/php-code-coverage": "^9.1.1",
                 "phpunit/php-file-iterator": "^3.0.4",
                 "phpunit/php-invoker": "^3.1",
                 "phpunit/php-text-template": "^2.0.2",
@@ -2161,7 +2161,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2020-08-07T04:24:24+00:00"
+            "time": "2020-08-10T06:00:18+00:00"
         },
         {
             "name": "sebastian/code-unit",
