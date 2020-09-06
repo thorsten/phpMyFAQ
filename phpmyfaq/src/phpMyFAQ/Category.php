@@ -754,15 +754,13 @@ class Category
 
             if ($level > $open) {
                 $output .= sprintf(
-                    '<ul class="list-group"><li class="%s" data-category-id="%d" data-category-level="%d">',
-                    'list-group-item-action list-group-item d-flex justify-content-between align-items-center',
+                    '<ul><li data-category-id="%d" data-category-level="%d">',
                     $parent,
                     $level
                 );
             } else {
                 $output .= sprintf(
-                    '<li class="%s" data-category-id="%d" data-category-level="%d">',
-                    'list-group-item-action list-group-item d-flex justify-content-between align-items-center',
+                    '<li data-category-id="%d" data-category-level="%d">',
                     $parent,
                     $level
                 );
