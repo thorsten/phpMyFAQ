@@ -76,6 +76,13 @@ interface DatabaseDriver
     public function fetchArray($result);
 
     /**
+     * Fetch a result row.
+     * @param $result
+     * @return false|mixed
+     */
+    public function fetchRow($result);
+
+    /**
      * Fetches a complete result as an object.
      *
      * @param resource $result Resultset

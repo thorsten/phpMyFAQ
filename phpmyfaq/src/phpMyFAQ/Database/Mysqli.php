@@ -128,10 +128,19 @@ class Mysqli implements DatabaseDriver
     }
 
     /**
+     * Fetch a result row.
+     * @param $result
+     * @return false|mixed
+     */
+    public function fetchRow($result)
+    {
+        return $result->fetch_row()[0] ?? false;
+    }
+
+    /**
      * Fetches a complete result as an object.
      *
      * @param mysqli_result $result Result set
-     *
      * @return array
      * @throws Exception
      */

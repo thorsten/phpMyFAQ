@@ -166,6 +166,16 @@ class Pgsql implements DatabaseDriver
     }
 
     /**
+     * Fetch a result row.
+     * @param $result
+     * @return false|mixed
+     */
+    public function fetchRow($result)
+    {
+        return pg_fetch_row($result);
+    }
+
+    /**
      * Number of rows in a result.
      *
      * @param mixed $result

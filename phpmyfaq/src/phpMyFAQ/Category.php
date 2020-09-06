@@ -394,16 +394,21 @@ class Category
             $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
-            $categories['url'][] = $link->toString();
-            $categories['name'][] = $row['name'];
-            $categories['description'][] = $row['description'];
             if ('' === $row['image']) {
                 $image = 'data:image/png;base64,' .
                     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=';
             } else {
                 $image = 'images/' . $row['image'];
             }
-            $categories['image'][] = $image;
+
+            $category = [
+                'url' => $link->toString(),
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'image' => $image
+            ];
+
+            $categories[] = $category;
         }
 
         return $categories;
@@ -746,31 +751,18 @@ class Category
             } elseif ($level == $open && $y != 0) {
                 $output .= '</li>';
             }
-            /*
-                        if ($level > $open) {
-                            $output .= sprintf(
-                                '<ul><li data-category-id="%d" data-category-level="%d">',
-                                $parent,
-                                $level
-                            );
-                        } else {
-                            $output .= sprintf(
-                                '<li data-category-id="%d" data-category-level="%d">',
-                                $parent,
-                                $level
-                            );
-                        } */
-
 
             if ($level > $open) {
                 $output .= sprintf(
-                    '<ul class="list-group"><li class=" list-group-item-action list-group-item d-flex justify-content-between align-items-center" data-category-id="%d" data-category-level="%d">',
+                    '<ul class="list-group"><li class="%s" data-category-id="%d" data-category-level="%d">',
+                    'list-group-item-action list-group-item d-flex justify-content-between align-items-center',
                     $parent,
                     $level
                 );
             } else {
                 $output .= sprintf(
-                    '<li class=" list-group-item-action list-group-item d-flex justify-content-between align-items-center" data-category-id="%d" data-category-level="%d">',
+                    '<li class="%s" data-category-id="%d" data-category-level="%d">',
+                    'list-group-item-action list-group-item d-flex justify-content-between align-items-center',
                     $parent,
                     $level
                 );
@@ -1349,35 +1341,35 @@ class Category
         foreach ($tables as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            'UPDATE %s SET %s = %d WHERE %s = %d',
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $temp_cat,
-                            $_field,
-                            $category_id_2
-                        )
-                    );
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $temp_cat,
+                        $_field,
+                        $category_id_2
+                    )
+                );
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            'UPDATE %s SET %s = %d WHERE %s = %d',
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $category_id_2,
-                            $_field,
-                            $category_id_1
-                        )
-                    );
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_2,
+                        $_field,
+                        $category_id_1
+                    )
+                );
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            'UPDATE %s SET %s = %d WHERE %s = %d',
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $category_id_1,
-                            $_field,
-                            $temp_cat
-                        )
-                    );
+                    sprintf(
+                        'UPDATE %s SET %s = %d WHERE %s = %d',
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_1,
+                        $_field,
+                        $temp_cat
+                    )
+                );
             }
         }
 
@@ -1386,35 +1378,35 @@ class Category
         foreach ($tables2 as $pair) {
             foreach ($pair as $_table => $_field) {
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $temp_cat,
-                            $_field,
-                            $category_id_2
-                        )
-                    );
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $temp_cat,
+                        $_field,
+                        $category_id_2
+                    )
+                );
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $category_id_2,
-                            $_field,
-                            $category_id_1
-                        )
-                    );
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_2,
+                        $_field,
+                        $category_id_1
+                    )
+                );
                 $result = $result && $this->config->getDb()->query(
-                        sprintf(
-                            "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
-                            Database::getTablePrefix() . $_table,
-                            $_field,
-                            $category_id_1,
-                            $_field,
-                            $temp_cat
-                        )
-                    );
+                    sprintf(
+                        "UPDATE %s SET %s = '%d' WHERE %s = '%d'",
+                        Database::getTablePrefix() . $_table,
+                        $_field,
+                        $category_id_1,
+                        $_field,
+                        $temp_cat
+                    )
+                );
             }
         }
 

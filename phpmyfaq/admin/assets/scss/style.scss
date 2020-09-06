@@ -176,6 +176,7 @@ $fa-font-path: '~fork-awesome/fonts';
 }
 
 .list-group-item {
+  cursor: move;
   &.fas {
     margin-right: 5px;
   }
