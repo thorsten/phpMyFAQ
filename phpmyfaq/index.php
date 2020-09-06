@@ -112,9 +112,9 @@ $auth = $error = null;
 $loginVisibility = 'hidden';
 
 $faqusername = Filter::filterInput(INPUT_POST, 'faqusername', FILTER_SANITIZE_STRING);
-$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING);
+$faqpassword = Filter::filterInput(INPUT_POST, 'faqpassword', FILTER_SANITIZE_STRING, FILTER_FLAG_NO_ENCODE_QUOTES);
 $faqaction = Filter::filterInput(INPUT_POST, 'faqloginaction', FILTER_SANITIZE_STRING);
-$faqremember = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
+$rememberMe = Filter::filterInput(INPUT_POST, 'faqrememberme', FILTER_SANITIZE_STRING);
 
 // Set username via SSO
 if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
@@ -125,7 +125,7 @@ if ($faqConfig->get('security.ssoSupport') && isset($_SERVER['REMOTE_USER'])) {
 // Login via local DB or LDAP or SSO
 if (!is_null($faqusername) && !is_null($faqpassword)) {
     $user = new CurrentUser($faqConfig);
-    if (!is_null($faqremember) && 'rememberMe' === $faqremember) {
+    if (!is_null($rememberMe) && 'rememberMe' === $rememberMe) {
         $user->enableRememberMe();
     }
     if ($faqConfig->get('ldap.ldapSupport') && function_exists('ldap_connect')) {
@@ -428,12 +428,12 @@ if ($action !== 'main') {
 }
 
 //
-// Set right column
+// Set sidebar column
 //
-if (($action === 'faq') || ($action === 'show')) {
-    $sidebarTemplate = $action === 'faq' ? 'sidebar-categories-tags.html' : 'sidebar-tagcloud.html';
+if (($action === 'faq') || ($action === 'show') || ($action === 'main')) {
+    $sidebarTemplate = 'sidebar-tagcloud.html';
 } else {
-    $sidebarTemplate = 'sidebar-categories-tags.html';
+    $sidebarTemplate = '';
 }
 
 //
@@ -666,40 +666,15 @@ if (isset($auth)) {
     );
 }
 
-if ('faq' == $action || 'show' == $action || is_numeric($solutionId)) {
-
-    // We need some Links from social networks
-    $faqServices = new Services($faqConfig);
-    $faqServices->setCategoryId($cat);
-    $faqServices->setFaqId($id);
-    $faqServices->setLanguage($lang);
-    $faqServices->setQuestion($faq->getRecordTitle($id));
-
-    $faqHelper = new HelperFaq($faqConfig);
-    $faqHelper->setSsl((isset($_SERVER['HTTPS']) && is_null($_SERVER['HTTPS']) ? false : true));
-
-    $template->parseBlock(
-        'index',
-        'socialLinks',
-        [
-            'baseHref' => $faqSystem->getSystemUri($faqConfig),
-            'msgPdf' => $PMF_LANG['msgPDF'],
-            'msgPrintFaq' => $PMF_LANG['msgPrintArticle'],
-            'sendToFriend' => $faqHelper->renderSendToFriend($faqServices->getSuggestLink()),
-            'shareOnTwitter' => $faqHelper->renderTwitterShareLink($faqServices->getShareOnTwitterLink()),
-            'linkToPdf' => $faqServices->getPdfLink()
-        ]
-    );
-}
-
-$tplHeaders = [
-    'writeTopTenHeader' => $PMF_LANG['msgTopTen'],
-    'writeNewestHeader' => $PMF_LANG['msgLatestArticles'],
-    'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
-    'writeTags' => $oTag->renderTagCloud(),
-    'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
-    'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
-];
+$template->parse(
+    'sidebar',
+    [
+        'writeTagCloudHeader' => $PMF_LANG['msg_tags'],
+        'writeTags' => $oTag->renderTagCloud(),
+        'msgAllCatArticles' => $PMF_LANG['msgAllCatArticles'],
+        'allCatArticles' => $faq->getRecordsWithoutPagingByCategoryId($cat)
+    ]
+);
 
 if (DEBUG) {
     $template->parseBlock(
@@ -736,7 +711,8 @@ require $includePhp;
 //
 // Get main template, set main variables
 //
-$template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+$template->parse('index', array_merge($tplMainPage, $tplNavigation));
+$template->merge('sidebar', 'index');
 $template->merge('mainPageContent', 'index');
 
 //
@@ -758,7 +734,7 @@ if ($http->getStatusCode() === 404 || $action === '404') {
         new TemplateHelper($faqConfig),
         $faqConfig->get('main.templateSet')
     );
-    $template->parse('index', array_merge($tplMainPage, $tplNavigation, $tplHeaders));
+    $template->parse('index', array_merge($tplMainPage, $tplNavigation));
 }
 
 echo $template->render();

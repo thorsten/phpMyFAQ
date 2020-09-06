@@ -34,12 +34,12 @@ class Api
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * @var System
      */
-    private $system = null;
+    private $system;
 
     /**
      * @var string

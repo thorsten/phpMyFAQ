@@ -66,7 +66,7 @@ class Glossary
             return '';
         }
 
-        $attributes = array(
+        $attributes = [
             'href',
             'src',
             'title',
@@ -152,7 +152,7 @@ class Glossary
             'onpaste',
             'onbeforescriptexecute',
             'onafterscriptexecute',
-        );
+        ];
 
         foreach ($this->getAllGlossaryItems() as $item) {
             $this->definition = $item['definition'];
@@ -170,7 +170,7 @@ class Glossary
                 // e. the glossary item could be at the end of the string as a distinct word
                 . '(\W+)(' . $item['item'] . ')$'
                 . '/mis',
-                array($this, 'setTooltip'),
+                [$this, 'setTooltip'],
                 $content,
                 1
             );
@@ -204,11 +204,11 @@ class Glossary
         $result = $this->config->getDb()->query($query);
 
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $items[] = array(
+            $items[] = [
                 'id' => $row->id,
                 'item' => stripslashes($row->item),
                 'definition' => stripslashes($row->definition),
-            );
+            ];
         }
 
         return $items;
@@ -283,11 +283,11 @@ class Glossary
         $result = $this->config->getDb()->query($query);
 
         while ($row = $this->config->getDb()->fetchObject($result)) {
-            $item = array(
+            $item = [
                 'id' => $row->id,
                 'item' => stripslashes($row->item),
                 'definition' => stripslashes($row->definition),
-            );
+            ];
         }
 
         return $item;

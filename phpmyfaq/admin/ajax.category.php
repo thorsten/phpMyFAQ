@@ -16,6 +16,7 @@
  */
 
 use phpMyFAQ\Category;
+use phpMyFAQ\Category\CategoryOrder;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\HttpHelper;
 
@@ -25,6 +26,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
 }
 
 $ajaxAction = Filter::filterInput(INPUT_GET, 'ajaxaction', FILTER_SANITIZE_STRING);
+$csrfToken = Filter::filterInput(INPUT_GET, 'csrf', FILTER_SANITIZE_STRING);
+
 $http = new HttpHelper();
 $http->setContentType('application/json');
 $http->addHeader();
@@ -38,7 +41,7 @@ switch ($ajaxAction) {
         $category->setGroups($currentAdminGroups);
 
         $ajaxData = Filter::filterInputArray(
-            INPUT_POST,
+            INPUT_GET,
             [
                 'categories' => [
                     'filter' => FILTER_SANITIZE_STRING,
@@ -59,5 +62,52 @@ switch ($ajaxAction) {
                 'group' => $category->getPermissions('group', $categories)
             ]
         );
+        break;
+
+    case 'update-order':
+
+        if (!isset($_SESSION['phpmyfaq_csrf_token']) || $_SESSION['phpmyfaq_csrf_token'] !== $csrfToken) {
+            $http->sendJsonWithHeaders(['error' => $PMF_LANG['err_NotAuth']]);
+            $http->setStatus(401);
+            return;
+        }
+
+        $category = new Category($faqConfig, [], false);
+        $category->setUser($currentAdminUser);
+        $category->setGroups($currentAdminGroups);
+
+        $categoryOrder = new CategoryOrder($faqConfig);
+
+        $rawData = Filter::filterInputArray(INPUT_POST, [
+            'data' => [
+                'filter' => FILTER_SANITIZE_STRING,
+                'flags' => FILTER_REQUIRE_ARRAY,
+            ],
+        ]);
+
+        function filterElement($element){
+            ucfirst($element);
+            return $element !== '';
+        }
+
+        $sortedData = array_filter($rawData['data'], 'filterElement');
+
+        $order = 1;
+        foreach ($sortedData as $key => $position) {
+            $id = explode('-', $position);
+            $currentPosition = $categoryOrder->getPositionById($id[1]);
+
+            if (!$currentPosition) {
+                $categoryOrder->setPositionById($id[1], $order);
+            } else {
+                $categoryOrder->updatePositionById($id[1], $order);
+            }
+            $order++;
+        }
+
+        $http->sendJsonWithHeaders(
+            []
+        );
+
         break;
 }

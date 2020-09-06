@@ -32,11 +32,11 @@ module.exports = {
         to: path.resolve(__dirname, 'phpmyfaq/admin/assets/js/editor/themes/'),
       },
       {
-        from: 'node_modules/highlightjs/highlight.pack.js',
+        from: 'node_modules/highlight.js/lib/highlight.js',
         to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
       },
       {
-        from: 'node_modules/highlightjs/styles/default.css',
+        from: 'node_modules/highlight.js/styles/default.css',
         to: path.resolve(__dirname, 'phpmyfaq/assets/js/libs'),
       },
     ]),
@@ -45,7 +45,6 @@ module.exports = {
       fileName: 'phpmyfaq.js',
       filesToConcat: [
         path.resolve(__dirname, 'phpmyfaq/assets/src/add.js'),
-        path.resolve(__dirname, 'phpmyfaq/assets/src/autosave.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/category.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/comments.js'),
         path.resolve(__dirname, 'phpmyfaq/assets/src/editor.js'),

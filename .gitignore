@@ -32,7 +32,7 @@ phpmyfaq/attachments/*
 phpmyfaq/src/libs/abraham
 phpmyfaq/src/libs/composer
 phpmyfaq/src/libs/elasticsearch
-phpmyfaq/src/libs/guzzlehttp
+phpmyfaq/src/libs/ezimuel
 phpmyfaq/src/libs/monolog
 phpmyfaq/src/libs/myclabs
 phpmyfaq/src/libs/parsedown
@@ -74,3 +74,4 @@ backup/*
 
 # PHPUnit
 .phpunit.result.cache
+phpmyfaq/lang/language_es-es.php

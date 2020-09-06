@@ -123,6 +123,16 @@ class Sqlite3 implements DatabaseDriver
     }
 
     /**
+     * Fetch a result row.
+     * @param $result
+     * @return false|mixed
+     */
+    public function fetchRow($result)
+    {
+        return $result->fetchSingle();
+    }
+
+    /**
      * Fetches a complete result as an object.
      *
      * @param resource $result Resultset

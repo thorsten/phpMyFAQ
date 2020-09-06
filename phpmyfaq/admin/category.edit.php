@@ -66,7 +66,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
             <input type="hidden" id="catlang" name="catlang" value="<?= $categoryData->getLang() ?>">
             <input type="hidden" name="parent_id" value="<?= $categoryData->getParentId() ?>">
             <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
-            <input type="hidden" name="existing_image" value="<?= $categoryData->getImage() ?>">
+            <input type="hidden" name="existing_image" value="<?= $categoryData->getImage() ?>"
+                   id="pmf-category-existing-image">
 
             <div class="form-group row">
               <label class="col-lg-2 col-form-label">
@@ -115,24 +116,33 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
 
             <div class="form-group row">
               <label class="col-lg-2 col-form-label" for="pmf-category-image-upload">
-                  <?= $PMF_LANG['ad_category_image'] ?>:
+                  <?= $PMF_LANG['ad_category_image'] ?>
               </label>
               <div class="col-lg-4">
-                <div class="custom-file">
-                  <input type="file" class="custom-file-input" name="image" id="pmf-category-image-upload"
-                         value="<?= $categoryData->getImage() ?>">
-                  <label class="custom-file-label" for="pmf-category-image-upload"><?= $categoryData->getImage() ?></label>
+                <div class="form-group">
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" name="image" id="pmf-category-image-upload"
+                           value="<?= $categoryData->getImage() ?>">
+                    <label class="custom-file-label" for="pmf-category-image-upload" id="pmf-category-image-label">
+                        <?= $categoryData->getImage() ?>
+                    </label>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <button type="button" class="btn btn-info" id="button-reset-category-image">
+                    Reset category image
+                  </button>
                 </div>
               </div>
             </div>
 
 
             <div class="form-group row">
-              <label class="col-lg-2 col-form-label">
-                  <?= $PMF_LANG['ad_categ_owner'] ?>:
+              <label class="col-lg-2 col-form-label" for="user_id">
+                  <?= $PMF_LANG['ad_categ_owner'] ?>
               </label>
               <div class="col-lg-4">
-                <select name="user_id" class="form-control">
+                <select id="user_id" name="user_id" class="form-control">
                     <?= $user->getAllUserOptions($categoryData->getUserId()) ?>
                 </select>
               </div>
@@ -143,24 +153,18 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                   <label class="col-lg-2 col-form-label" for="group_id"><?= $PMF_LANG['ad_categ_moderator'] ?>:</label>
                   <div class="col-lg-4">
                     <select name="group_id" id="group_id" class="form-control">
-                        <?php
-                        if ($faqConfig->get('main.enableCategoryRestrictions')) {
-                            echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $currentUserId);
-                        } else {
-                            echo $user->perm->getAllGroupsOptions([$categoryData->getGroupId()]);
-                        }
-                        ?>
+                        <?= $user->perm->getAllGroupsOptions([$categoryData->getGroupId()], $user) ?>
                     </select>
                   </div>
                 </div>
 
                 <div class="form-group row">
-                  <label class="col-lg-2 col-form-label">
+                  <label class="col-lg-2 col-form-label" for="grouppermission">
                       <?= $PMF_LANG['ad_entry_grouppermission'] ?>
                   </label>
                   <div class="col-lg-4">
                     <div class="radio">
-                      <input type="radio" name="grouppermission" value="all"
+                      <input type="radio" id="grouppermission" name="grouppermission" value="all"
                           <?php echo($allGroups ? 'checked' : '') ?>>
                         <?= $PMF_LANG['ad_entry_all_groups'] ?>
                     </div>
@@ -170,14 +174,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                         <?= $PMF_LANG['ad_entry_restricted_groups'] ?>
                     </label>
                     <select name="restricted_groups[]" size="3" class="form-control" multiple>
-                        <?php
-                        if ($faqConfig->get('main.enableCategoryRestrictions')) {
-                            echo $user->perm->getAllGroupsOptions($groupPermission, $currentUserId);
-                        } else {
-                            echo $user->perm->getAllGroupsOptions($groupPermission);
-                        }
-                        ?>
-
+                        <?= $user->perm->getAllGroupsOptions($groupPermission, $user) ?>
                     </select>
                   </div>
                 </div>
@@ -189,16 +186,16 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
                   <?= $PMF_LANG['ad_entry_userpermission'] ?>
               </label>
               <div class="col-lg-4">
-                <label class="radio">
+                <div class="radio">
                   <input type="radio" name="userpermission" value="all"
                       <?= ($allUsers ? 'checked' : '') ?>>
                     <?= $PMF_LANG['ad_entry_all_users'] ?>
-                </label>
-                <label class="radio">
+                </div>
+                <div class="radio">
                   <input type="radio" name="userpermission" value="restricted"
                       <?= ($restrictedUsers ? 'checked' : '') ?>>
                     <?= $PMF_LANG['ad_entry_restricted_users'] ?>
-                </label>
+                </div>
                 <select name="restricted_users" class="form-control">
                     <?= $user->getAllUserOptions($userPermission[0]) ?>
                 </select>
@@ -217,7 +214,17 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         </div>
         <script>
           document.addEventListener('DOMContentLoaded', () => {
-            bsCustomFileInput.init()
+            bsCustomFileInput.init();
+
+            const resetButton = document.getElementById('button-reset-category-image');
+            const categoryExistingImage = document.getElementById('pmf-category-existing-image');
+            const categoryImageInput = document.getElementById('pmf-category-image-upload');
+            const categoryImageLabel = document.getElementById('pmf-category-image-label');
+            resetButton.addEventListener('click', () => {
+              categoryImageInput.value = '';
+              categoryExistingImage.value = '';
+              categoryImageLabel.innerHTML = '';
+            });
           });
         </script>
 <?php

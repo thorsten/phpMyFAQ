@@ -69,7 +69,7 @@ if (!is_null($selectedCategoryId) && isset($category->categoryName[$selectedCate
     if ($categoryData->getParentId() !== 0) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
-            Link::getSystemRelativeUri(),
+            $faqConfig->getDefaultUrl(),
             $sids,
             $categoryData->getParentId()
         );

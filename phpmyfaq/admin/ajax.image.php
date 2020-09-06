@@ -50,9 +50,6 @@ switch ($ajaxAction) {
                 if (isset($_SERVER['HTTP_ORIGIN'])) {
                     if ($_SERVER['HTTP_ORIGIN'] . '/' === $faqConfig->getDefaultUrl()) {
                         $http->sendCorsHeader();
-                    } else {
-                        $http->setStatus(403);
-                        return;
                     }
                 }
 
@@ -69,11 +66,11 @@ switch ($ajaxAction) {
                 }
 
                 // Accept upload if there was no origin, or if it is an accepted origin
-                $fileToWrite = $uploadDir . $timestamp . $temp['name'];
-                move_uploaded_file($temp['tmp_name'], $fileToWrite);
+                $fileName = $timestamp . $temp['name'];
+                move_uploaded_file($temp['tmp_name'], $uploadDir . $fileName);
 
-                // Respond to the successful upload with JSON.
-                $http->sendJsonWithHeaders(['location' => $fileToWrite]);
+                // Respond to the successful upload with JSON with the full URL of the uploaded image.
+                $http->sendJsonWithHeaders(['location' => $faqConfig->getDefaultUrl() . 'images/' . $fileName]);
             } else {
                 $http->setStatus(500);
             }

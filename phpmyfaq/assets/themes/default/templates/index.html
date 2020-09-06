@@ -96,9 +96,11 @@
                 </div>
                 [/notLoggedIn] [userloggedIn]
                 <div>
-                  {{ msgUserControlDropDown }} {{ msgUserControl }} {{ msgLogoutUser }}
+                  {{ msgUserControlDropDown }} {{ msgUserControl }}
                   <div class="dropdown-divider"></div>
                   {{ msgUserRemoval }}
+                  <div class="dropdown-divider"></div>
+                  {{ msgLogoutUser }}
                 </div>
                 [/userloggedIn]
               </div>
@@ -148,7 +150,7 @@
     <section id="wrapper" class="mt-3">
       <div class="container">
         <div class="row">
-          {{ mainPageContent }}
+          {{ mainPageContent }} {{ sidebar }}
         </div>
       </div>
     </section>

@@ -120,7 +120,7 @@ class SearchHelper extends Helper
                 // Build the link to the faq record
                 $currentUrl = sprintf(
                     '%s?%saction=faq&cat=%d&id=%d&artlang=%s&highlight=%s',
-                    Link::getSystemRelativeUri('ajaxresponse.php') . 'index.php',
+                    $this->config->getDefaultUrl() . 'index.php',
                     $this->sessionId,
                     $result->category_id,
                     $result->id,
@@ -146,7 +146,7 @@ class SearchHelper extends Helper
     /**
      * Renders the result page for Instant Response.
      *
-     * @param SearchResultSet $resultSet PMF_Search_Resultset object
+     * @param SearchResultSet $resultSet SearchResultSet object
      *
      * @return string
      */
@@ -171,7 +171,7 @@ class SearchHelper extends Helper
                 }
 
                 // Build the link to the faq record
-                $currentUrl = sprintf('index.php?solution_id=%d', $solutionId);
+                $currentUrl = $this->config->getDefaultUrl() . sprintf('index.php?solution_id=%d', $solutionId);
 
                 $html .= sprintf(
                     '<label for="%d"><input id="%d" type="radio" name="faqURL" value="%s"> %s</label><br>',
@@ -266,7 +266,7 @@ class SearchHelper extends Helper
                 // Build the link to the faq record
                 $currentUrl = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s&amp;highlight=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $this->sessionId,
                     $result->category_id,
                     $result->id,
@@ -354,7 +354,7 @@ class SearchHelper extends Helper
 
                 $url = sprintf(
                     '%s?action=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $result->category_id,
                     $result->id,
                     $result->lang

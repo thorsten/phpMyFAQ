@@ -47,11 +47,17 @@
 .typeahead {
   &.dropdown-menu {
     background-color: transparent !important;
+    border: none;
 
     li {
       background-color: rgba(255, 255, 255, 0.9);
       border-left: 1px solid rgba(0, 0, 0, 0.2);
       border-right: 1px solid rgba(0, 0, 0, 0.2);
+
+      &.dropdown-header {
+        font-size: 0.75rem;
+        padding-bottom: 0;
+      }
 
       &:first-child {
         border-top: 1px solid rgba(0, 0, 0, 0.2);

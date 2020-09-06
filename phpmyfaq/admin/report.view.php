@@ -92,7 +92,7 @@ if ($user->perm->checkRight($user->getUserId(), 'reports')) {
         if ($useTranslation) {
             printf('<td>%d</td>', $data['faq_translations']);
         }
-        if ($useLanguage) {
+        if ($useLanguage && isset($languageCodes[strtoupper($data['faq_language'])])) {
             printf('<td>%s</td>', $languageCodes[strtoupper($data['faq_language'])]);
         }
         if ($useId) {

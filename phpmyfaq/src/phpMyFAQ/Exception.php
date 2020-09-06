@@ -26,12 +26,11 @@ class Exception extends \Exception
 {
     /**
      * Converts Exception to a string.
-     *
      * @return string
      */
     public function __toString()
     {
-        $exception = sprintf(
+        return sprintf(
             "Exception %s with message %s in %s: %s\nStack trace:\n%s",
             get_class(),
             $this->getMessage(),
@@ -39,7 +38,5 @@ class Exception extends \Exception
             $this->getLine(),
             $this->getTraceAsString()
         );
-
-        return $exception;
     }
 }

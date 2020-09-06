@@ -15,7 +15,7 @@
 
 /*global $: false */
 
-$(document).ready(function() {
+$(document).ready(function () {
   'use strict';
 
   const setupType = $('#sql_type'),
@@ -25,7 +25,7 @@ $(document).ready(function() {
     $dbFull = $('#dbdatafull');
   let lastIpSegment = 2;
 
-  const selectDatabaseSetup = event => {
+  const selectDatabaseSetup = (event) => {
     switch (event.target.value) {
       case 'mysqli':
         setupDatabasePort.value = 3306;
@@ -53,7 +53,7 @@ $(document).ready(function() {
     }
   };
 
-  const addElasticsearchServerInput = event => {
+  const addElasticsearchServerInput = (event) => {
     const current = $(event.currentTarget);
     if ('add' === current.attr('data-action')) {
       const wrapper = document.querySelector('#elasticsearch_server-wrapper');
@@ -78,4 +78,53 @@ $(document).ready(function() {
     $dbSqlite.show().removeClass('d-none');
     $dbFull.hide();
   }
+
+  const navListItems = $('div.setup-panel div a'),
+    allWells = $('.setup-content'),
+    allNextButton = $('.btn-next');
+
+  allWells.hide();
+
+  navListItems.on('click', function (e) {
+    e.preventDefault();
+    const $target = $($(this).attr('href')),
+      $item = $(this);
+
+    if (!$item.hasClass('disabled')) {
+      navListItems.removeClass('btn-primary').addClass('btn-default');
+      $item.addClass('btn-primary');
+      allWells.hide();
+      $target.show();
+      $target.find('input:eq(0)').focus();
+    }
+  });
+
+  allNextButton.on('click', function () {
+    let curStep = $(this).closest('.setup-content'),
+      curStepBtn = curStep.attr('id'),
+      nextStepWizard = $('div.setup-panel div a[href="#' + curStepBtn + '"]')
+        .parent()
+        .next()
+        .children('a'),
+      curInputs = curStep.find(
+        "input[type='text'],input[type='url'],input[type='email'],input[type='number'],input[type='password']"
+      ),
+      isValid = true;
+
+    console.log('Button clicked', curStepBtn);
+
+    $('.form-group.row input').removeClass('is-invalid');
+    for (let i = 0; i < curInputs.length; i++) {
+      console.log(curInputs[i].validity.valid);
+
+      if (!curInputs[i].validity.valid) {
+        isValid = false;
+        $(curInputs[i]).closest('.form-group.row input').addClass('is-invalid');
+      }
+    }
+
+    if (isValid) nextStepWizard.removeAttr('disabled').trigger('click');
+  });
+
+  $('div.setup-panel div a.btn-primary').trigger('click');
 });

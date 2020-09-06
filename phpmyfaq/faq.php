@@ -90,13 +90,18 @@ try {
 $faqVisits = new Visits($faqConfig);
 $faqVisits->logViews($recordId);
 
-// Add Glossary entries for answers only
 $question = $faq->getRecordTitle($recordId);
 if ($faqConfig->get('main.enableMarkdownEditor')) {
     $answer = $markDown->text($faq->faqRecord['content']);
 } else {
     $answer = $faqHelper->renderMarkupContent($faq->faqRecord['content']);
 }
+
+// Rewrite URL fragments
+$currentUrl = htmlspecialchars("//{$_SERVER['HTTP_HOST']}{$_SERVER['REQUEST_URI']}", ENT_QUOTES, 'UTF-8');
+$answer = $faqHelper->rewriteUrlFragments($answer, $currentUrl);
+
+// Add Glossary entries for answers only
 $answer = $oGlossary->insertItemsIntoContent($answer);
 
 // Set the path of the current category
@@ -134,7 +139,7 @@ if (isset($linkArray['href'])) {
             if (strpos($_url, '&amp;') === false) {
                 $_link = str_replace('&', '&amp;', $_link);
             }
-            $oLink = new Link(Link::getSystemRelativeUri() . $_link, $faqConfig);
+            $oLink = new Link($faqConfig->getDefaultUrl() . $_link, $faqConfig);
             $oLink->itemTitle = $oLink->tooltip = $_title;
             $newFaqPath = $oLink->toString();
             $answer = str_replace($_url, $newFaqPath, $answer);
@@ -167,8 +172,7 @@ if (count($multiCategories) > 1) {
 
 // Related FAQs
 $faqSearchResult->reviewResultSet(
-    $faqRelation->getAllRelatedById(
-        $recordId,
+    $faqRelation->getAllRelatedByQuestion(
         $faq->faqRecord['title'],
         $faq->faqRecord['keywords']
     )
@@ -338,7 +342,7 @@ $template->parse(
             str_replace(
                 '%',
                 '%%',
-                Link::getSystemRelativeUri('index.php')
+                $faqConfig->getDefaultUrl()
             ) . 'index.php?%saction=savevoting',
             $sids
         ),

@@ -2,8 +2,6 @@
 /**
  * Overview of actions in the admin section.
  *
- *
- *
  * This Source Code Form is subject to the terms of the Mozilla Public License,
  * v. 2.0. If a copy of the MPL was not distributed with this file, You can
  * obtain one at http://mozilla.org/MPL/2.0/.
@@ -46,22 +44,22 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
         $pages = round(($logging->getNumberOfEntries() + ($perpage/3))/$perpage, 0);
     }
 
-    $start = ($page - 1)*$perpage;
-    $ende = $start + $perpage;
+    $start = ($page - 1) * $perpage;
+    $lastPage = $start + $perpage;
 
     $baseUrl = sprintf(
-        '%s?action=adminlog&amp;page=%d',
-        Link::getSystemRelativeUri(),
+        '%sadmin/?action=adminlog&amp;page=%d',
+        $faqConfig->getDefaultUrl(),
         $page
     );
 
     // Pagination options
-    $options = array(
+    $options = [
         'baseUrl' => $baseUrl,
         'total' => $logging->getNumberOfEntries(),
         'perPage' => $perpage,
         'pageParamName' => 'page',
-    );
+    ];
     $pagination = new Pagination($faqConfig, $options);
 
     $loggingData = $logging->getAll();
@@ -69,8 +67,7 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     <header class="row">
         <div class="col-lg-12">
             <h2 class="page-header">
-                <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'];
-    ?>
+                <i aria-hidden="true" class="fa fa-tasks"></i> <?= $PMF_LANG['ad_menu_adminlog'] ?>
                 <div class="float-right">
                     <a class="btn btn-danger"
                        href="?action=deleteadminlog&csrf=<?= $user->getCsrfTokenFromSession() ?>">
@@ -84,27 +81,22 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
     <table class="table table-striped">
     <thead>
         <tr>
-            <th><?= $PMF_LANG['ad_categ_id'];
-    ?></th>
-            <th><?= $PMF_LANG['ad_adminlog_date'];
-    ?></th>
-            <th><?= $PMF_LANG['ad_adminlog_user'];
-    ?></th>
-            <th colspan="2"><?= $PMF_LANG['ad_adminlog_ip'];
-    ?></th>
+            <th><?= $PMF_LANG['ad_categ_id'] ?></th>
+            <th><?= $PMF_LANG['ad_adminlog_date'] ?></th>
+            <th><?= $PMF_LANG['ad_adminlog_user'] ?></th>
+            <th colspan="2"><?= $PMF_LANG['ad_adminlog_ip'] ?></th>
         </tr>
     </thead>
     <tfoot>
         <tr>
-            <td colspan="5"><?= $pagination->render();
-    ?></td>
+            <td colspan="5"><?= $pagination->render() ?></td>
         </tr>
     </tfoot>
     <tbody>
 <?php
     $counter = $displayedCounter = 0;
 
-    foreach ($loggingData as $logging_id => $logging_value) {
+    foreach ($loggingData as $loggingId => $loggingValue) {
         if ($displayedCounter >= $perpage) {
             ++$displayedCounter;
             continue;
@@ -116,19 +108,15 @@ if ($user->perm->checkRight($user->getUserId(), 'adminlog') && 'adminlog' == $ac
         }
         ++$displayedCounter;
 
-        $user->getUserById($logging_value['usr'], true);
+        $user->getUserById($loggingValue['usr'], true);
         ?>
         <tr>
-            <td><?= $logging_id;
-        ?></td>
-            <td><?= $date->format(date('Y-m-d H:i', $logging_value['time']));
-        ?></td>
-            <td><?= $user->getLogin();
-        ?></td>
-            <td><?= $logging_value['ip'];
-        ?></td>
+            <td><?= $loggingId ?></td>
+            <td><?= $date->format(date('Y-m-d H:i', $loggingValue['time'])) ?></td>
+            <td><?= $user->getLogin() ?></td>
+            <td><?= $loggingValue['ip'] ?></td>
             <td><small><?php
-            $text = $logging_value['text'];
+            $text = $loggingValue['text'];
             $text = str_replace('Loginerror', $PMF_LANG['ad_log_lger'], $text);
             $text = str_replace('Session expired', $PMF_LANG['ad_log_sess'], $text);
             $text = str_replace('Useredit, ', $PMF_LANG['ad_log_edit'], $text);

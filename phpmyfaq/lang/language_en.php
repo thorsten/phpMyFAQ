@@ -37,7 +37,6 @@ $PMF_LANG["metaLanguage"] = "en";
 $PMF_LANG["language"] = "english";
 // ltr: left to right (e.g. English language); rtl: right to left (e.g. Arabic language)
 $PMF_LANG["dir"] = "ltr";
-
 $PMF_LANG["nplurals"] = "2";
 
 // Navigation
@@ -120,7 +119,6 @@ $PMF_LANG["msgNewContentLink"] = "Link for this FAQ";
 $PMF_LANG["msgNewContentSubmit"] = "submit";
 $PMF_LANG["msgInfo"] = "More information: ";
 $PMF_LANG["msgNewContentThanks"] = "Thank you for your suggestion!";
-$PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions.";
 
 // ask Question
 $PMF_LANG["msgNewQuestion"] = "Ask your question below";
@@ -131,24 +129,25 @@ $PMF_LANG["msgDate_User"] = "Date / User";
 $PMF_LANG["msgQuestion2"] = "Question";
 $PMF_LANG["msg2answer"] = "Answer";
 $PMF_LANG["msgQuestionText"] = "Here you can see questions asked by other users. If you answer these question, your answers may be inserted into the FAQ.";
+$PMF_LANG["msgNoQuestionsAvailable"] = "Currently there are no pending questions.";
 
 // Contact
 $PMF_LANG["msgContactEMail"] = "Email the FAQ owner";
 $PMF_LANG["msgMessage"] = "Your message";
 
-// Startseite
+// Homepage
 $PMF_LANG["msgTopTen"] = "Most popular FAQs";
 $PMF_LANG["msgHomeThereAre"] = "There are ";
 $PMF_LANG["msgHomeArticlesOnline"] = " FAQs online";
 $PMF_LANG["msgNoNews"] = "No news is good news.";
 $PMF_LANG["msgLatestArticles"] = "Latest FAQs";
 
-// E-Mailbenachrichtigung
+// E-mail notification
 $PMF_LANG["msgMailThanks"] = "Many thanks for your proposal to the FAQ.";
 $PMF_LANG["msgMailCheck"] = "There's a new entry in the FAQ! Please check the admin section!";
 $PMF_LANG["msgMailContact"] = "Your message has been sent to the administrator.";
 
-// Fehlermeldungen
+// Error messages
 $PMF_LANG["err_noDatabase"] = "No database connection available.";
 $PMF_LANG["err_noHeaders"] = "No category found.";
 $PMF_LANG["err_noArticles"] = "No FAQs available.";
@@ -162,7 +161,7 @@ $PMF_LANG["err_noVote"] = "You did not rate the question!";
 $PMF_LANG["err_noMailAdress"] = "Your email address is not correct.";
 $PMF_LANG["err_sendMail"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>!";
 
-// Hilfe zur Suche
+// Search help
 $PMF_LANG["help_search"] = "<strong>Search for records:</strong><br>With an entry like <strong style=\"color: Red;\">word1 word2</strong> you can do a relevance descending search for two or more search criterion.<strong>Notice:</strong> Your search criterion has to be at least 4 letters long otherwise your request will be rejected.";
 
 // Menu
@@ -183,7 +182,7 @@ $PMF_LANG["ad_menu_passwd"] = "Change Password";
 $PMF_LANG["ad_menu_logout"] = "Logout";
 $PMF_LANG["ad_menu_startpage"] = "Startpage";
 
-// Nachrichten
+// Messages
 $PMF_LANG["ad_msg_identify"] = "Please identify yourself.";
 $PMF_LANG["ad_msg_passmatch"] = "Both passwords must <strong>match</strong>!";
 $PMF_LANG["ad_msg_savedsuc_1"] = "The profile of";
@@ -191,7 +190,7 @@ $PMF_LANG["ad_msg_savedsuc_2"] = "was saved successfully.";
 $PMF_LANG["ad_msg_mysqlerr"] = "Due to a <strong>database error</strong>, the profile could not be saved.";
 $PMF_LANG["ad_msg_noauth"] = "You are not authorized.";
 
-// Allgemein
+// General
 $PMF_LANG["ad_gen_page"] = "Page";
 $PMF_LANG["ad_gen_of"] = "of";
 $PMF_LANG["ad_gen_lastpage"] = "Previous page";
@@ -203,8 +202,9 @@ $PMF_LANG["ad_gen_no"] = "No";
 $PMF_LANG["ad_gen_top"] = "Top of page";
 $PMF_LANG["ad_gen_ncf"] = "No category found!";
 $PMF_LANG["ad_gen_delete"] = "Delete";
+$PMF_LANG['ad_gen_or'] = "oder";
 
-// Benutzerverwaltung
+// User administration
 $PMF_LANG["ad_user"] = "User administration";
 $PMF_LANG["ad_user_username"] = "Registered users";
 $PMF_LANG["ad_user_rights"] = "User rights";
@@ -215,14 +215,13 @@ $PMF_LANG["ad_user_profou"] = "Profile of the user";
 $PMF_LANG["ad_user_name"] = "Name";
 $PMF_LANG["ad_user_password"] = "Password";
 $PMF_LANG["ad_user_confirm"] = "Confirm";
-$PMF_LANG["ad_user_rights"] = "Rights";
 $PMF_LANG["ad_user_del_1"] = "The User";
 $PMF_LANG["ad_user_del_2"] = "shall be deleted?";
 $PMF_LANG["ad_user_del_3"] = "Are you sure?";
 $PMF_LANG["ad_user_deleted"] = "The user was successfully deleted.";
 $PMF_LANG["ad_user_checkall"] = "Select all";
 
-// Beitragsverwaltung
+// Contribution management
 $PMF_LANG["ad_entry_aor"] = "FAQ administration";
 $PMF_LANG["ad_entry_id"] = "ID";
 $PMF_LANG["ad_entry_topic"] = "Topic";
@@ -257,8 +256,7 @@ $PMF_LANG["ad_entry_delsuc"] = "Issue <strong>successfully</strong> deleted.";
 $PMF_LANG["ad_entry_delfail"] = "Issue was <strong>not deleted</strong>!";
 $PMF_LANG["ad_entry_back"] = "Back";
 
-
-// Newsverwaltung
+// News management
 $PMF_LANG["ad_news_header"] = "Article header";
 $PMF_LANG["ad_news_text"] = "Text of the Record";
 $PMF_LANG["ad_news_link_url"] = "Link";
@@ -281,7 +279,7 @@ $PMF_LANG["ad_news_nodelete"] = "no";
 $PMF_LANG["ad_news_delsuc"] = "The news has been successfully deleted.";
 $PMF_LANG["ad_news_updatenews"] = "News item updated.";
 
-// Kategorieverwaltung
+// Category management
 $PMF_LANG["ad_categ_new"] = "Add new category";
 $PMF_LANG["ad_categ_catnum"] = "Entity number";
 $PMF_LANG["ad_categ_subcatnum"] = "Subcategory number";
@@ -363,8 +361,9 @@ $PMF_LANG["ad_sess_ai_artikel"] = "Record";
 $PMF_LANG["ad_sess_ai_sb"] = "Search-Strings";
 $PMF_LANG["ad_sess_ai_sid"] = "Session ID";
 $PMF_LANG["ad_sess_back"] = "Back";
+$PMF_LANG['ad_sess_noentry'] = "No entry";
 
-// Statistik
+// Statistics
 $PMF_LANG["ad_rs"] = "Rating Statistics";
 $PMF_LANG["ad_rs_rating_1"] = "The ranking of";
 $PMF_LANG["ad_rs_rating_2"] = "users shows";
@@ -390,7 +389,6 @@ $PMF_LANG["ad_config_reset"] = "Reset";
 $PMF_LANG["ad_config_saved"] = "The configuration has been saved successfully.";
 $PMF_LANG["ad_menu_editconfig"] = "Edit configuration";
 $PMF_LANG["ad_att_none"] = "No attachments available";
-$PMF_LANG["ad_att_att"] = "Attachments";
 $PMF_LANG["ad_att_add"] = "Add new attachment";
 $PMF_LANG["ad_entryins_suc"] = "Record successfully saved.";
 $PMF_LANG["ad_entryins_fail"] = "An error occurred.";
@@ -406,7 +404,7 @@ $PMF_LANG["ad_csv_link"] = "Download the backup";
 $PMF_LANG["ad_csv_head"] = "Create a backup";
 $PMF_LANG["ad_att_addto"] = "Add an attachment to the issue";
 $PMF_LANG["ad_att_addto_2"] = "";
-$PMF_LANG["ad_att_att"] = "File";
+$PMF_LANG["ad_att_att"] = "Select attachment";
 $PMF_LANG["ad_att_butt"] = "OK";
 $PMF_LANG["ad_att_suc"] = "The file has been attached successfully.";
 $PMF_LANG["ad_att_fail"] = "An error occurred while attaching the file.";
@@ -436,7 +434,6 @@ $PMF_LANG["ad_cookie"] = "Cookies";
 $PMF_LANG["ad_sess_head"] = "View sessions";
 
 // Added v1.1 - 06.01.2002 - Bastian
-$PMF_LANG["ad_menu_categ_edit"] = "FAQ Categories";
 $PMF_LANG["ad_menu_stat"] = "Rating Statistics";
 $PMF_LANG["ad_kateg_add"] = "Add top-level category";
 $PMF_LANG["ad_kateg_rename"] = "Edit";
@@ -474,7 +471,6 @@ $PMF_LANG["ad_log_bede"] = "Deleted the following entry: ";
 $PMF_LANG["ad_start_visits"] = "Visits";
 $PMF_LANG["ad_start_articles"] = "Articles";
 $PMF_LANG["ad_start_comments"] = "Comments";
-
 
 // Added v1.1 - 30.01.2002 - Bastian
 $PMF_LANG["ad_categ_paste"] = "paste";
@@ -541,31 +537,31 @@ $PMF_LANG["err_bannedIP"] = "Your IP address has been banned.";
 $PMF_LANG["err_SaveQuestion"] = "Required fields are <strong>your name</strong>, <strong>your email address</strong>, <strong>your question</strong> and, when requested, the <strong><a href=\"http://en.wikipedia.org/wiki/Captcha\" title=\"Read more on Captcha at Wikipedia\" target=\"_blank\">Captcha</a> code</strong>.";
 
 // added v1.4.0 - 2003-12-04 by Thorsten / Mathias
-$LANG_CONF['main.language'] = array(0 => "select", 1 => "Language");
-$LANG_CONF["main.languageDetection"] = array(0 => "checkbox", 1 => "Enable automatic language detection");
-$LANG_CONF['main.titleFAQ'] = array(0 => "input", 1 => "Title of your FAQ");
-$LANG_CONF['main.currentVersion'] = array(0 => "print", 1 => "phpMyFAQ Version");
-$LANG_CONF["main.metaDescription"] = array(0 => "input", 1 => "Description");
-$LANG_CONF["main.metaKeywords"] = array(0 => "input", 1 => "Keywords for Spiders");
-$LANG_CONF["main.metaPublisher"] = array(0 => "input", 1 => "Name of the Publisher");
-$LANG_CONF['main.administrationMail'] = array(0 => "input", 1 => "Email address of the Admin");
-$LANG_CONF["main.contactInformations"] = array(0 => "area", 1 => "Contact information");
-$LANG_CONF["main.send2friendText"] = array(0 => "area", 1 => "Text for the send to friend page");
-$LANG_CONF['records.maxAttachmentSize'] = array(0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)");
-$LANG_CONF["records.disableAttachments"] = array(0 => "checkbox", 1 => "Enable visibilty of attachments");
-$LANG_CONF["main.enableUserTracking"] = array(0 => "checkbox", 1 => "Enable user tracking");
-$LANG_CONF["main.enableAdminLog"] = array(0 => "checkbox", 1 => "use Adminlog?");
-$LANG_CONF["main.enableCategoryRestrictions"] = array(0 => "checkbox", 1 => "Enable category restrictions");
-$LANG_CONF["security.ipCheck"] = array(0 => "checkbox", 1 => "Check the IP in administration");
-$LANG_CONF["records.numberOfRecordsPerPage"] = array(0 => "input", 1 => "Number of displayed topics per page");
-$LANG_CONF["records.numberOfShownNewsEntries"] = array(0 => "input", 1 => "Number of news articles");
-$LANG_CONF['security.bannedIPs'] = array(0 => "area", 1 => "Ban these IPs");
-$LANG_CONF["main.enableRewriteRules"] = array(0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)");
-$LANG_CONF["ldap.ldapSupport"] = array(0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)");
-$LANG_CONF["main.referenceURL"] = array(0 => "input", 1 => "URL of your FAQ (e.g.: http://www.example.org/faq/)");
-$LANG_CONF["main.urlValidateInterval"] = array(0 => "input", 1 => "Interval between AJAX link verification (in seconds)");
-$LANG_CONF["records.enableVisibilityQuestions"] = array(0 => "checkbox", 1 => "Disable visibility of new questions?");
-$LANG_CONF['security.permLevel'] = array(0 => "select", 1 => "Permission level");
+$LANG_CONF['main.language'] = [0 => "select", 1 => "Language"];
+$LANG_CONF["main.languageDetection"] = [0 => "checkbox", 1 => "Enable automatic language detection"];
+$LANG_CONF['main.titleFAQ'] = [0 => "input", 1 => "Title of your FAQ"];
+$LANG_CONF['main.currentVersion'] = [0 => "print", 1 => "phpMyFAQ Version"];
+$LANG_CONF["main.metaDescription"] = [0 => "input", 1 => "Description"];
+$LANG_CONF["main.metaKeywords"] = [0 => "input", 1 => "Keywords for Spiders"];
+$LANG_CONF["main.metaPublisher"] = [0 => "input", 1 => "Name of the Publisher"];
+$LANG_CONF['main.administrationMail'] = [0 => "input", 1 => "Email address of the Admin"];
+$LANG_CONF["main.contactInformations"] = [0 => "area", 1 => "Contact information"];
+$LANG_CONF["main.send2friendText"] = [0 => "area", 1 => "Text for the send to friend page"];
+$LANG_CONF['records.maxAttachmentSize'] = [0 => "input", 1 => "Maximum size for attachments in Bytes (max. %sByte)"];
+$LANG_CONF["records.disableAttachments"] = [0 => "checkbox", 1 => "Enable visibilty of attachments"];
+$LANG_CONF["main.enableUserTracking"] = [0 => "checkbox", 1 => "Enable user tracking"];
+$LANG_CONF["main.enableAdminLog"] = [0 => "checkbox", 1 => "use Adminlog?"];
+$LANG_CONF["main.enableCategoryRestrictions"] = [0 => "checkbox", 1 => "Enable category restrictions"];
+$LANG_CONF["security.ipCheck"] = [0 => "checkbox", 1 => "Check the IP in administration"];
+$LANG_CONF["records.numberOfRecordsPerPage"] = [0 => "input", 1 => "Number of displayed topics per page"];
+$LANG_CONF["records.numberOfShownNewsEntries"] = [0 => "input", 1 => "Number of news articles"];
+$LANG_CONF['security.bannedIPs'] = [0 => "area", 1 => "Ban these IPs"];
+$LANG_CONF["main.enableRewriteRules"] = [0 => "checkbox", 1 => "Enable URL rewrite support? (default: disabled)"];
+$LANG_CONF["ldap.ldapSupport"] = [0 => "checkbox", 1 => "Enable LDAP support? (default: disabled)"];
+$LANG_CONF["main.referenceURL"] = [0 => "input", 1 => "URL of your FAQ (e.g.: http://www.example.org/faq/)"];
+$LANG_CONF["main.urlValidateInterval"] = [0 => "input", 1 => "Interval between AJAX link verification (in seconds)"];
+$LANG_CONF["records.enableVisibilityQuestions"] = [0 => "checkbox", 1 => "Disable visibility of new questions?"];
+$LANG_CONF['security.permLevel'] = [0 => "select", 1 => "Permission level"];
 
 $PMF_LANG["ad_categ_new_main_cat"] = "as new main category";
 $PMF_LANG["ad_categ_paste_error"] = "Moving this category isn't possible.";
@@ -599,7 +595,6 @@ $PMF_LANG['ad_entry_solution_id'] = 'Unique solution ID';
 $PMF_LANG['ad_entry_faq_record'] = 'FAQ record';
 $PMF_LANG['ad_entry_new_revision'] = 'Create new revision?';
 $PMF_LANG['ad_entry_record_administration'] = 'Record administration';
-$PMF_LANG['ad_entry_changelog'] = 'Changelog';
 $PMF_LANG['ad_entry_revision'] = 'Revision';
 $PMF_LANG['ad_changerev'] = 'Select Revision';
 $PMF_LANG['msgCaptcha'] = "Please enter the captcha code";
@@ -608,11 +603,11 @@ $PMF_LANG['msgAllCategories'] = '... all categories';
 $PMF_LANG['ad_you_should_update'] = 'Your phpMyFAQ installation is outdated. You should update to the latest available version.';
 $PMF_LANG['msgAdvancedSearch'] = 'Advanced search';
 
-// added v1.6.1 - 2006-04-25 by Matteoï and Thorsten
+// added v1.6.1 - 2006-04-25 by Matteo and Thorsten
 $PMF_LANG['spamControlCenter'] = 'Spam control center';
-$LANG_CONF["spam.enableSafeEmail"] = array(0 => "checkbox", 1 => "Print user email in a safe way.");
-$LANG_CONF["spam.checkBannedWords"] = array(0 => "checkbox", 1 => "Check public form content against banned words.");
-$LANG_CONF["spam.enableCaptchaCode"] = array(0 => "checkbox", 1 => "Use a captcha code to allow public form submission.");
+$LANG_CONF["spam.enableSafeEmail"] = [0 => "checkbox", 1 => "Print user email in a safe way."];
+$LANG_CONF["spam.checkBannedWords"] = [0 => "checkbox", 1 => "Check public form content against banned words."];
+$LANG_CONF["spam.enableCaptchaCode"] = [0 => "checkbox", 1 => "Use a captcha code to allow public form submission."];
 $PMF_LANG['ad_session_expiring'] = 'Your session will expire in %d minutes: would you like to go on working?';
 
 // added v1.6.2 - 2006-06-13 by Matteo
@@ -757,7 +752,7 @@ $PMF_LANG['ad_linkcheck_feedback_url-noscript'] = 'No Script';
 
 // added v2.0.0 - 2006-09-02 by Thomas
 $PMF_LANG['msg_related_articles'] = 'Related entries';
-$LANG_CONF['records.numberOfRelatedArticles'] = array(0 => "input", 1 => "Number of related entries");
+$LANG_CONF['records.numberOfRelatedArticles'] = [0 => "input", 1 => "Number of related entries"];
 
 // added v2.0.0 - 2006-09-09 by Rudi
 $PMF_LANG['ad_categ_trans_1'] = 'Translate';
@@ -837,8 +832,8 @@ $PMF_LANG['msgPDF'] = 'PDF version';
 $PMF_LANG['ad_groups'] = 'Groups';
 
 // added v2.0.0 - 2007-03-10 by Thorsten
-$LANG_CONF['records.orderby'] = array(0 => 'select', 1 => 'Record sorting (according to property)');
-$LANG_CONF['records.sortby'] = array(0 => 'select', 1 => 'Record sorting (descending or ascending)');
+$LANG_CONF['records.orderby'] = [0 => 'select', 1 => 'Record sorting (according to property)'];
+$LANG_CONF['records.sortby'] = [0 => 'select', 1 => 'Record sorting (descending or ascending)'];
 $PMF_LANG['ad_conf_order_id'] = 'ID<br>(default)';
 $PMF_LANG['ad_conf_order_thema'] = 'Title';
 $PMF_LANG['ad_conf_order_visits'] = 'Number of visitors';
@@ -850,8 +845,8 @@ $PMF_LANG['mainControlCenter'] = 'Main';
 $PMF_LANG['recordsControlCenter'] = 'FAQs';
 
 // added v2.0.0 - 2007-03-29 by Thorsten
-$LANG_CONF['records.defaultActivation'] = array(0 => "checkbox", 1 => "Activate new records");
-$LANG_CONF['records.defaultAllowComments'] = array(0 => "checkbox", 1 => "Allow comments for new records<br>(default: disallowed)");
+$LANG_CONF['records.defaultActivation'] = [0 => "checkbox", 1 => "Activate new records"];
+$LANG_CONF['records.defaultAllowComments'] = [0 => "checkbox", 1 => "Allow comments for new records<br>(default: disallowed)"];
 
 // added v2.0.0 - 2007-04-04 by Thorsten
 $PMF_LANG['msgAllCatArticles'] = 'Records in this category';
@@ -874,7 +869,7 @@ $PMF_LANG['emailRegSubject'] = '[%sitename%] Registration: new user';
 
 // added 2.5.0-alpha2 - 2009-01-24 by Thorsten
 $PMF_LANG['msgMostPopularSearches'] = 'The most popular searches are:';
-$LANG_CONF['main.enableWysiwygEditor'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor");
+$LANG_CONF['main.enableWysiwygEditor'] = [0 => "checkbox", 1 => "Enable bundled WYSIWYG editor"];
 
 // added 2.5.0-beta - 2009-03-30 by Anatoliy
 $PMF_LANG['ad_menu_searchstats'] = 'Search Statistics';
@@ -938,11 +933,10 @@ $PMF_LANG['msgTransToolErrorSendingFile'] = 'There was an error while sending th
 $PMF_LANG['msgTransToolPercent'] = 'Percentage';
 
 // added 2.5.0-RC3 - 2009-06-23 by Anatoliy
-$LANG_CONF['records.attachmentsPath'] = array(0 => "input", 1 => "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>");
+$LANG_CONF['records.attachmentsPath'] = [0 => "input", 1 => "Path where attachments will be saved.<br><small>Relative path means a folder within web root</small>"];
 
 // added 2.5.0-RC3 - 2009-06-24 by Anatoliy
 $PMF_LANG['msgAttachmentNotFound'] = "The file you're trying to download was not found on this server";
-$PMF_LANG['ad_sess_noentry'] = "No entry";
 
 // added 2.6.0-alpha - 2009-07-30 by Aurimas Fišeras
 //P.S. "One User online" is also possible, since sprintf just ignores extra args
@@ -950,7 +944,7 @@ $PMF_LANG["plmsgUserOnline"][0] = "%d user online";
 $PMF_LANG["plmsgUserOnline"][1] = "%d users online";
 
 // added 2.6.0-alpha - 2009-08-02 by Anatoliy
-$LANG_CONF['main.templateSet'] = array(0 => "select", 1 => "Template set to be used");
+$LANG_CONF['main.templateSet'] = [0 => "select", 1 => "Template set to be used"];
 
 // added 2.6.0-alpha - 2009-08-16 by Aurimas Fišeras
 $PMF_LANG['msgTransToolRemove'] = 'Remove';
@@ -985,16 +979,13 @@ $PMF_LANG["rightsLanguage"]['deltranslation'] = "delete translation";
 $PMF_LANG["rightsLanguage"]['approverec'] = "approve records";
 
 // added 2.6.0-alpha - 2009-09-9 by Anatoliy Belsky
-$LANG_CONF["records.enableAttachmentEncryption"] = array(0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>");
-$LANG_CONF["records.defaultAttachmentEncKey"] = array(0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>');
-//$LANG_CONF["records.attachmentsStorageType"] = array(0 => "select", 1 => "Attachment storage type");
-//$PMF_LANG['att_storage_type'][0] = 'Filesystem';
-//$PMF_LANG['att_storage_type'][1] = 'Database';
+$LANG_CONF["records.enableAttachmentEncryption"] = [0 => "checkbox", 1 => "Enable attachment encryption <br><small>Ignored when attachments is disabled</small>"];
+$LANG_CONF["records.defaultAttachmentEncKey"] = [0 => "input", 1 => 'Default attachment encryption key <br><small>Ignored if attachment encryption is disabled</small><br><small><^font color="red">WARNING: Do not change this once set and enabled file encryption!!!</font></small>'];
 
 // added 2.6.0-alpha - 2009-09-06 by Thorsten
 $PMF_LANG['ad_menu_upgrade'] = 'Upgrade';
 $PMF_LANG['ad_you_shouldnt_update'] = 'You have the latest version of phpMyFAQ. You do not need to upgrade.';
-$LANG_CONF['security.useSslForLogins'] = array(0 => 'checkbox', 1 => "Only allow logins over SSL connection?");
+$LANG_CONF['security.useSslForLogins'] = [0 => 'checkbox', 1 => "Only allow logins over SSL connection?"];
 $PMF_LANG['msgSecureSwitch'] = "Switch to secure mode to login!";
 
 // added 2.6.0-alpha - 2009-10-03 by Anatoliy Belsky
@@ -1010,8 +1001,8 @@ $PMF_LANG['ad_record_active'] = 'Active';
 $PMF_LANG['msgAttachmentInvalid'] = 'The attachment is invalid, please inform admin';
 
 // added 2.6.0-alpha - 2009-11-02 by max
-$LANG_CONF['search.numberSearchTerms'] = array(0 => 'input', 1 => 'Number of listed search terms');
-$LANG_CONF['records.orderingPopularFaqs'] = array(0 => "select", 1 => "Sorting of the top FAQ's");
+$LANG_CONF['search.numberSearchTerms'] = [0 => 'input', 1 => 'Number of listed search terms'];
+$LANG_CONF['records.orderingPopularFaqs'] = [0 => "select", 1 => "Sorting of the top FAQ's"];
 $PMF_LANG['list_all_users'] = 'List all users';
 
 $PMF_LANG['records.orderingPopularFaqs.visits'] = "list most visited entries";
@@ -1024,11 +1015,11 @@ $PMF_LANG['msgShowHelp'] = 'Please separate words by comma.';
 $PMF_LANG['msgUpdateFaqDate'] = 'update';
 $PMF_LANG['msgKeepFaqDate'] = 'keep';
 $PMF_LANG['msgEditFaqDat'] = 'edit';
-$LANG_CONF['main.optionalMailAddress'] = array(0 => 'checkbox', 1 => 'Mail address as mandatory field');
+$LANG_CONF['main.optionalMailAddress'] = [0 => 'checkbox', 1 => 'Mail address as mandatory field'];
 
 // added v2.6.99 - 2010-11-24 by Gustavo Solt
-$LANG_CONF['search.relevance'] = array(0 => 'select', 1 => 'Sort by relevance');
-$LANG_CONF["search.enableRelevance"] = array(0 => "checkbox", 1 => "Activate relevance support?");
+$LANG_CONF['search.relevance'] = [0 => 'select', 1 => 'Sort by relevance'];
+$LANG_CONF["search.enableRelevance"] = [0 => "checkbox", 1 => "Activate relevance support?"];
 $PMF_LANG['searchControlCenter'] = 'Search';
 $PMF_LANG['search.relevance.thema-content-keywords'] = 'Question - Answer - Keywords';
 $PMF_LANG['search.relevance.thema-keywords-content'] = 'Question - Keywords - Answer';
@@ -1040,13 +1031,13 @@ $PMF_LANG['search.relevance.keywords-thema-content'] = 'Keywords - Question - An
 // added 2.7.0-alpha - 2010-09-13 by Thorsten
 $PMF_LANG['msgLoginUser'] = 'Login';
 $PMF_LANG['socialNetworksControlCenter'] = 'Social networks';
-$LANG_CONF['socialnetworks.enableTwitterSupport'] = array(0 => 'checkbox', 1 => 'Twitter support');
-$LANG_CONF['socialnetworks.twitterConsumerKey'] = array(0 => 'input', 1 => 'Twitter Consumer Key');
-$LANG_CONF['socialnetworks.twitterConsumerSecret'] = array(0 => 'input', 1 => 'Twitter Consumer Secret');
+$LANG_CONF['socialnetworks.enableTwitterSupport'] = [0 => 'checkbox', 1 => 'Twitter support'];
+$LANG_CONF['socialnetworks.twitterConsumerKey'] = [0 => 'input', 1 => 'Twitter Consumer Key'];
+$LANG_CONF['socialnetworks.twitterConsumerSecret'] = [0 => 'input', 1 => 'Twitter Consumer Secret'];
 
 // added 2.7.0-alpha - 2010-10-14 by Tom Zeithaml
-$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = array(0 => 'input', 1 => 'Twitter Access Token Key');
-$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = array(0 => 'input', 1 => 'Twitter Access Token Secret');
+$LANG_CONF['socialnetworks.twitterAccessTokenKey'] = [0 => 'input', 1 => 'Twitter Access Token Key'];
+$LANG_CONF['socialnetworks.twitterAccessTokenSecret'] = [0 => 'input', 1 => 'Twitter Access Token Secret'];
 
 // added 2.7.0-alpha - 2010-12-21 by Anatoliy Belsky
 $PMF_LANG["ad_menu_attachments"] = "FAQ Attachments";
@@ -1084,10 +1075,10 @@ $PMF_LANG['msgRegistrationNote'] = 'After successful registration you will recei
 $PMF_LANG['ad_entry_changelog_history'] = "Changelog history";
 
 // added v2.7.0-beta2 - 2011-06-22 by Thorsten
-$LANG_CONF['security.ssoSupport'] = array(0 => 'checkbox', 1 => 'Single Sign On Support');
-$LANG_CONF['security.ssoLogoutRedirect'] = array(0 => 'input', 1 => 'Single Sign On logout redirect service URL');
-$LANG_CONF['main.dateFormat'] = array(0 => 'input', 1 => 'Date format (default: Y-m-d H:i)');
-$LANG_CONF['security.enableLoginOnly'] = array(0 => 'checkbox', 1 => 'Complete secured FAQ');
+$LANG_CONF['security.ssoSupport'] = [0 => 'checkbox', 1 => 'Single Sign On Support'];
+$LANG_CONF['security.ssoLogoutRedirect'] = [0 => 'input', 1 => 'Single Sign On logout redirect service URL'];
+$LANG_CONF['main.dateFormat'] = [0 => 'input', 1 => 'Date format (default: Y-m-d H:i)'];
+$LANG_CONF['security.enableLoginOnly'] = [0 => 'checkbox', 1 => 'Complete secured FAQ'];
 
 // added v2.7.0-RC - 2011-08-18 by Thorsten
 $PMF_LANG['securityControlCenter'] = 'Security';
@@ -1096,7 +1087,7 @@ $PMF_LANG['ad_search_delfail'] = 'The search term was not deleted.';
 
 // added 2.7.1 - 2011-09-30 by Thorsten
 $PMF_LANG['msg_about_faq'] = 'About this FAQ';
-$LANG_CONF['security.useSslOnly'] = array(0 => 'checkbox', 1 => 'FAQ with SSL only');
+$LANG_CONF['security.useSslOnly'] = [0 => 'checkbox', 1 => 'FAQ with SSL only'];
 $PMF_LANG['msgTableOfContent'] = 'Table of Content';
 
 // added 2.7.5 - 2012-03-02 by Thorsten
@@ -1110,8 +1101,8 @@ $PMF_LANG["ad_verification_okay"] = "Your version of phpMyFAQ was successfully v
 $PMF_LANG['ad_menu_searchfaqs'] = 'Search for FAQs';
 
 // added v2.8.0-alpha - 2012-01-13 by Peter
-$LANG_CONF["records.enableCloseQuestion"] = array(0 => "checkbox", 1 => "Close open question after answer?");
-$LANG_CONF["records.enableDeleteQuestion"] = array(0 => "checkbox", 1 => "Delete open question after answer?");
+$LANG_CONF["records.enableCloseQuestion"] = [0 => "checkbox", 1 => "Close open question after answer?"];
+$LANG_CONF["records.enableDeleteQuestion"] = [0 => "checkbox", 1 => "Delete open question after answer?"];
 $PMF_LANG["msg2answerFAQ"] = "Answered";
 
 // added v2.8.0-alpha - 2012-01-16 by Thorsten
@@ -1122,12 +1113,12 @@ $PMF_LANG["rememberMe"] = 'Log me on automatically next time';
 $PMF_LANG["ad_menu_instances"] = "FAQ Multi-sites";
 
 // added v2.8.0-alpha2 - 2012-07-07 by Anatoliy
-$LANG_CONF['records.autosaveActive'] = array(0 => 'checkbox', 1 => 'Activate FAQ auto-saving');
-$LANG_CONF['records.autosaveSecs'] = array(0 => 'input', 1 => 'Interval for auto-saving in seconds, default 180');
+$LANG_CONF['records.autosaveActive'] = [0 => 'checkbox', 1 => 'Activate FAQ auto-saving'];
+$LANG_CONF['records.autosaveSecs'] = [0 => 'input', 1 => 'Interval for auto-saving in seconds, default 180'];
 
 // added v2.8.0-alpha2 - 2012-08-06 by Thorsten
 $PMF_LANG['ad_record_inactive'] = 'FAQs inactive';
-$LANG_CONF["main.maintenanceMode"] = array(0 => "checkbox", 1 => "Set FAQ in maintenance mode");
+$LANG_CONF["main.maintenanceMode"] = [0 => "checkbox", 1 => "Set FAQ in maintenance mode"];
 $PMF_LANG['msgMode'] = "Modus";
 $PMF_LANG['msgMaintenanceMode'] = "FAQ is in maintenance";
 $PMF_LANG['msgOnlineMode'] = "FAQ is online";
@@ -1137,12 +1128,26 @@ $PMF_LANG['msgShowMore'] = "show more";
 $PMF_LANG['msgQuestionAnswered'] = "Question answered";
 $PMF_LANG['msgMessageQuestionAnswered'] = "Your question at %s was answered. Please check it here";
 
+// added v2.8.0-alpha3 - 2012-11-03 by Thorsten
+$PMF_LANG['rightsLanguage']['addattachment'] = "Add attachments";
+$PMF_LANG['rightsLanguage']['editattachment'] = "Edit attachments";
+$PMF_LANG['rightsLanguage']['delattachment'] = "Delete attachments";
+$PMF_LANG['rightsLanguage']['dlattachment'] = "Download attachments";
+$PMF_LANG['rightsLanguage']['reports'] = "Generate reports";
+$PMF_LANG['rightsLanguage']['addfaq'] = "Add FAQs in the frontend";
+$PMF_LANG['rightsLanguage']['addquestion'] = "Add questions in the frontend";
+$PMF_LANG['rightsLanguage']['addcomment'] = "Add comments in the frontend";
+$PMF_LANG['rightsLanguage']['editinstances'] = "Edit Multi-Sites";
+$PMF_LANG['rightsLanguage']['addinstances'] = "Add Multi-Sites";
+$PMF_LANG['rightsLanguage']['delinstances'] = "Delete Multi-Sites";
+$PMF_LANG['rightsLanguage']['export'] = "Export FAQs";
+
 // added v2.8.0-beta - 2012-12-24 by Thorsten
-$LANG_CONF["records.randomSort"] = array(0 => "checkbox", 1 => "Sort FAQs randomly");
-$LANG_CONF['main.enableWysiwygEditorFrontend'] = array(0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend");
+$LANG_CONF["records.randomSort"] = [0 => "checkbox", 1 => "Sort FAQs randomly"];
+$LANG_CONF['main.enableWysiwygEditorFrontend'] = [0 => "checkbox", 1 => "Enable bundled WYSIWYG editor in frontend"];
 
 // added v2.8.0-beta3 - 2013-01-15 by Thorsten
-$LANG_CONF["main.enableGravatarSupport"] = array(0 => "checkbox", 1 => "Gravatar Support");
+$LANG_CONF["main.enableGravatarSupport"] = [0 => "checkbox", 1 => "Gravatar Support"];
 
 // added v2.8.0-RC - 2013-01-29 by Thorsten
 $PMF_LANG["ad_stopwords_desc"] = "Please select a language to add or edit stop words.";
@@ -1173,60 +1178,60 @@ $PMF_LANG['msgSeeFAQinFrontend'] = 'See FAQ in Frontend';
 
 // added v.2.9.0-alpha - 2013-12-26 by Thorsten
 $PMF_LANG["msgRelatedTags"] = 'Add Search Word';
-$PMF_LANG["msgPopularTags"] = 'Popular Search Words';
-$LANG_CONF["search.enableHighlighting"] = array(0 => "checkbox", 1 => "Highlight search terms");
-$LANG_CONF["main.enableRssFeeds"] = array(0 => "checkbox", 1 => "RSS Feeds");
-$LANG_CONF["records.allowCommentsForGuests"] = array(0 => "checkbox", 1 => "Allow comments for guests");
-$LANG_CONF["records.allowQuestionsForGuests"] = array(0 => "checkbox", 1 => "Allow adding questions for guests");
-$LANG_CONF["records.allowNewFaqsForGuests"] = array(0 => "checkbox", 1 => "Allow adding new FAQs");
+$PMF_LANG["msgPopularTags"] = 'Most popular searches';
+$LANG_CONF["search.enableHighlighting"] = [0 => "checkbox", 1 => "Highlight search terms"];
+$LANG_CONF["main.enableRssFeeds"] = [0 => "checkbox", 1 => "RSS Feeds"];
+$LANG_CONF["records.allowCommentsForGuests"] = [0 => "checkbox", 1 => "Allow comments for guests"];
+$LANG_CONF["records.allowQuestionsForGuests"] = [0 => "checkbox", 1 => "Allow adding questions for guests"];
+$LANG_CONF["records.allowNewFaqsForGuests"] = [0 => "checkbox", 1 => "Allow adding new FAQs"];
 $PMF_LANG["ad_searchterm_del"] = 'Delete all logged search terms';
 $PMF_LANG["ad_searchterm_del_suc"] = 'Deleted successfully all search terms.';
 $PMF_LANG["ad_searchterm_del_err"] = 'Couldn\'t delete all search terms.';
-$LANG_CONF["records.hideEmptyCategories"] = array(0 => "checkbox", 1 => "Hide empty categories");
-$LANG_CONF["search.searchForSolutionId"] = array(0 => "checkbox", 1 => "Search for solution ID");
-$LANG_CONF["socialnetworks.disableAll"] = array(0 => "checkbox", 1 => "Disable all social networks");
-$LANG_CONF["main.enableGzipCompression"] = array(0 => "checkbox", 1 => "Enable GZIP compression");
+$LANG_CONF["records.hideEmptyCategories"] = [0 => "checkbox", 1 => "Hide empty categories"];
+$LANG_CONF["search.searchForSolutionId"] = [0 => "checkbox", 1 => "Search for solution ID"];
+$LANG_CONF["socialnetworks.disableAll"] = [0 => "checkbox", 1 => "Disable all social networks"];
+$LANG_CONF["main.enableGzipCompression"] = [0 => "checkbox", 1 => "Enable GZIP compression"];
 
 // added v2.9.0-alpha2 - 2014-08-16 by Thorsten
 $PMF_LANG["ad_tag_delete_success"] = "The tag was deleted successfully.";
 $PMF_LANG["ad_tag_delete_error"] = "The tag was not deleted because an error occurred.";
 $PMF_LANG["seoCenter"] = "SEO";
-$LANG_CONF["seo.metaTagsHome"] = array(0 => "select", 1 => "Meta Tags start page");
-$LANG_CONF["seo.metaTagsFaqs"] = array(0 => "select", 1 => "Meta Tags FAQs");
-$LANG_CONF["seo.metaTagsCategories"] = array(0 => "select", 1 => "Meta Tags category pages");
-$LANG_CONF["seo.metaTagsPages"] = array(0 => "select", 1 => "Meta Tags static pages");
-$LANG_CONF["seo.metaTagsAdmin"] = array(0 => "select", 1 => "Meta Tags Admin");
+$LANG_CONF["seo.metaTagsHome"] = [0 => "select", 1 => "Meta Tags start page"];
+$LANG_CONF["seo.metaTagsFaqs"] = [0 => "select", 1 => "Meta Tags FAQs"];
+$LANG_CONF["seo.metaTagsCategories"] = [0 => "select", 1 => "Meta Tags category pages"];
+$LANG_CONF["seo.metaTagsPages"] = [0 => "select", 1 => "Meta Tags static pages"];
+$LANG_CONF["seo.metaTagsAdmin"] = [0 => "select", 1 => "Meta Tags Admin"];
 $PMF_LANG["msgMatchingQuestions"] = "The following results closely matched your question";
 $PMF_LANG["msgFinishSubmission"] = "If none of the suggestions above match your question, click the button below to finish submitting your question.";
-$LANG_CONF["main.enableLinkVerification"] = array(0 => "checkbox", 1 => "Enable automatic link verification");
-$LANG_CONF['spam.manualActivation'] = array(0 => 'checkbox', 1 => 'Manually activate new users (default: activated)');
+$LANG_CONF["main.enableLinkVerification"] = [0 => "checkbox", 1 => "Enable automatic link verification"];
+$LANG_CONF['spam.manualActivation'] = [0 => 'checkbox', 1 => 'Manually activate new users (default: activated)'];
 
 // added v2.9.0-alpha2 - 2014-10-13 by Christopher Andrews ( Chris--A )
 $PMF_LANG['mailControlCenter'] = 'Mail setup';
-$LANG_CONF['mail.remoteSMTP'] = array(0 => 'checkbox', 1 => 'Use remote SMTP server (default: deactivated)');
-$LANG_CONF['mail.remoteSMTPServer'] = array(0 => 'input', 1 => 'Server address');
-$LANG_CONF['mail.remoteSMTPUsername'] = array(0 => 'input', 1 => 'User name');
-$LANG_CONF['mail.remoteSMTPPassword'] = array(0 => 'password', 1 => 'Password');
-$LANG_CONF['security.enableRegistration'] = array('checkbox', 'Enable registration for visitors');
+$LANG_CONF['mail.remoteSMTP'] = [0 => 'checkbox', 1 => 'Use remote SMTP server (default: deactivated)'];
+$LANG_CONF['mail.remoteSMTPServer'] = [0 => 'input', 1 => 'Server address'];
+$LANG_CONF['mail.remoteSMTPUsername'] = [0 => 'input', 1 => 'User name'];
+$LANG_CONF['mail.remoteSMTPPassword'] = [0 => 'password', 1 => 'Password'];
+$LANG_CONF['security.enableRegistration'] = ['checkbox', 'Enable registration for visitors'];
 
 // added v2.9.0-alpha3 - 2015-02-08 by Thorsten
-$LANG_CONF['main.customPdfHeader'] = array('area', 'Custom PDF Header (HTML allowed)');
-$LANG_CONF['main.customPdfFooter'] = array('area', 'Custom PDF Footer (HTML allowed)');
-$LANG_CONF['records.allowDownloadsForGuests'] = array('checkbox', 'Allow downloads for guests');
+$LANG_CONF['main.customPdfHeader'] = ['area', 'Custom PDF Header (HTML allowed)'];
+$LANG_CONF['main.customPdfFooter'] = ['area', 'Custom PDF Footer (HTML allowed)'];
+$LANG_CONF['records.allowDownloadsForGuests'] = ['checkbox', 'Allow downloads for guests'];
 $PMF_LANG["ad_msgNoteAboutPasswords"] = "Attention! If you enter a password, you overwrite the password of the user.";
 $PMF_LANG["ad_delete_all_votings"] = "Clear all votings";
 $PMF_LANG["ad_categ_moderator"] = "Moderators";
 $PMF_LANG['ad_clear_all_visits'] = "Clear all visits";
 $PMF_LANG['ad_reset_visits_success'] = 'The visits were resetted successfully.';
-$LANG_CONF['main.enableMarkdownEditor'] = array('checkbox', 'Enable bundled Markdown editor');
+$LANG_CONF['main.enableMarkdownEditor'] = ['checkbox', 'Enable bundled Markdown editor'];
 
 // added v2.9.0-beta - 2015-09-27 by Thorsten
 $PMF_LANG['faqOverview'] = 'FAQ Overview';
 $PMF_LANG['ad_dir_missing'] = 'The directory %s is missing.';
-$LANG_CONF['main.enableSmartAnswering'] = array('checkbox', 'Enable smart answering for user questions');
+$LANG_CONF['main.enableSmartAnswering'] = ['checkbox', 'Enable smart answering for user questions'];
 
 // added v2.9.0-beta2 - 2015-12-23 by Thorsten
-$LANG_CONF['search.enableElasticsearch'] = array('checkbox', 'Enable Elasticsearch support');
+$LANG_CONF['search.enableElasticsearch'] = ['checkbox', 'Enable Elasticsearch support'];
 $PMF_LANG['ad_menu_elasticsearch'] = 'Elasticsearch configuration';
 $PMF_LANG['ad_es_create_index'] = 'Create Index';
 $PMF_LANG['ad_es_drop_index'] = 'Drop Index';
@@ -1244,20 +1249,20 @@ $PMF_LANG['ad_admin_notes_hint'] = '%s (only visible for editors)';
 $PMF_LANG['ad_quick_entry'] = 'Add new FAQ in this category';
 
 // added 2.10.0-alpha - 2016-08-08 by Thorsten
-$LANG_CONF['ldap.ldap_mapping.nae'] = array(0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.username'] = array(0 => 'input', 1 => 'LDAP mapping for username, "samAccountName" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.mail'] = array(0 => 'input', 1 => 'LDAP mapping for email, "mail" when using an ADS');
-$LANG_CONF['ldap.ldap_mapping.memberOf'] = array(0 => 'input', 1 => 'LDAP mapping for "member of" when using LDAP groups');
-$LANG_CONF['ldap.ldap_use_domain_prefix'] = array('checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"');
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = array(0 => 'input', 1 => 'LDAP protocol version (default: 3)');
-$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = array(0 => 'input', 1 => 'LDAP referrals (default: 0)');
-$LANG_CONF['ldap.ldap_use_memberOf'] = array('checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"');
-$LANG_CONF['ldap.ldap_use_sasl'] = array('checkbox', 'Enable LDAP SASL support');
-$LANG_CONF['ldap.ldap_use_multiple_servers'] = array('checkbox', 'Enable multiple LDAP servers support');
-$LANG_CONF['ldap.ldap_use_anonymous_login'] = array('checkbox', 'Enable anonymous LDAP connections');
-$LANG_CONF['ldap.ldap_use_dynamic_login'] = array('checkbox', 'Enable LDAP dynamic user binding');
-$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = array(0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS');
-$LANG_CONF['seo.enableXMLSitemap'] = array('checkbox', 'Enable XML sitemap');
+$LANG_CONF['ldap.ldap_mapping.nae'] = [0 => 'input', 1 => 'LDAP mapping for name, "cn" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.username'] = [0 => 'input', 1 => 'LDAP mapping for username, "samAccountName" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.mail'] = [0 => 'input', 1 => 'LDAP mapping for email, "mail" when using an ADS'];
+$LANG_CONF['ldap.ldap_mapping.memberOf'] = [0 => 'input', 1 => 'LDAP mapping for "member of" when using LDAP groups'];
+$LANG_CONF['ldap.ldap_use_domain_prefix'] = ['checkbox', 'LDAP domain prefix, e.g. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_PROTOCOL_VERSION'] = [0 => 'input', 1 => 'LDAP protocol version (default: 3)'];
+$LANG_CONF['ldap.ldap_options.LDAP_OPT_REFERRALS'] = [0 => 'input', 1 => 'LDAP referrals (default: 0)'];
+$LANG_CONF['ldap.ldap_use_memberOf'] = ['checkbox', 'Enable LDAP group support, e.g. "DOMAIN\username"'];
+$LANG_CONF['ldap.ldap_use_sasl'] = ['checkbox', 'Enable LDAP SASL support'];
+$LANG_CONF['ldap.ldap_use_multiple_servers'] = ['checkbox', 'Enable multiple LDAP servers support'];
+$LANG_CONF['ldap.ldap_use_anonymous_login'] = ['checkbox', 'Enable anonymous LDAP connections'];
+$LANG_CONF['ldap.ldap_use_dynamic_login'] = ['checkbox', 'Enable LDAP dynamic user binding'];
+$LANG_CONF['ldap.ldap_dynamic_login_attribute'] = [0 => 'input', 1 => 'LDAP attribute for dynamic user binding, "uid" when using an ADS'];
+$LANG_CONF['seo.enableXMLSitemap'] = ['checkbox', 'Enable XML sitemap'];
 $PMF_LANG['ad_category_image'] = 'Entity image';
 $PMF_LANG["ad_user_show_home"] = "Show on startpage";
 
@@ -1316,9 +1321,17 @@ $PMF_LANG['ad_section_suc'] = "Section <strong>successfully</strong> added.";
 $PMF_LANG['ad_section_deleted'] = "The section was successfully deleted.";
 $PMF_LANG['rightsLanguage']['viewadminlink'] = 'View admin link';
 
+// added v3.0.0-alpha.4 - 2019-01-05 by Thorsten // duplicated
+// duplicated - 2020.03.28 by kralizeck
+// $LANG_CONF['main.enableSendToFriend'] = ['checkbox', 'An Freunde senden aktivieren'];
+
 // added v3.0.0-beta.3 - 2019-09-22 by Thorsten
 $LANG_CONF['mail.remoteSMTPPort'] = [0 => 'input', 1 => 'SMTP server port'];
 $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP server encryption'];
-$PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
-$PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
+$PMF_LANG['ad_record_faq'] = 'Question and answer';
+$PMF_LANG['ad_record_permissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
+
+// added v3.1.0-alpha - 2020-03-27 by Thorsten
+$PMF_LANG['ad_user_data_is_visible'] = 'Username should be visible';
+$PMF_LANG['ad_categ_save_order'] = 'Save order';

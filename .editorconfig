@@ -7,16 +7,11 @@ end_of_line = LF
 insert_final_newline = true
 
 # PHP files
-[{*.php}]
+[*.php]
 indent_style = space
 indent_size = 4
 
-# HTML, SCSS and JS files
-[{*.html,*.scss,*.js}]
-indent_style = space
-indent_size = 2
-
-# JSON and LESS files
-[{package.json,.travis.yml,*.less}]
+# HTML, SCSS, JS, YAML and JSON files
+[{*.html,*.scss,*.js,*.json,*.yml}]
 indent_style = space
 indent_size = 2

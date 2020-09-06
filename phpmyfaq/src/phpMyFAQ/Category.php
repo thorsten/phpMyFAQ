@@ -66,7 +66,7 @@ class Category
     /**
      * @var Configuration
      */
-    private $config = null;
+    private $config;
 
     /**
      * User ID.
@@ -150,7 +150,7 @@ class Category
     public function setGroups(array $groups)
     {
         if (0 === count($groups)) {
-            $groups = array(-1);
+            $groups = [-1];
         }
         $this->groups = $groups;
     }
@@ -220,6 +220,10 @@ class Category
             ON
                 fc.id = fg.category_id
             LEFT JOIN
+                %sfaqcategory_order fco
+            ON
+                fc.id = fco.category_id
+            LEFT JOIN
                 %sfaqcategory_user fu
             ON
                 fc.id = fu.category_id
@@ -228,7 +232,8 @@ class Category
                 fc.id, fc.lang, fc.parent_id, fc.name, fc.description, fc.user_id, fc.group_id, fc.active, fc.image, 
                 fc.show_home
             ORDER BY
-                fc.parent_id, fc.id',
+                fco.position, fc.id ASC',
+            Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
             Database::getTablePrefix(),
@@ -285,12 +290,12 @@ class Category
     /**
      * Gets the main categories and write them in an array.
      *
-     * @param array $categories Array of parent category ids
+     * @param string $categories String of parent category ids
      * @param bool $parentId Only top level categories?
      *
      * @return array
      */
-    public function getCategories(array $categories, bool $parentId = true): array
+    public function getCategories(string $categories, bool $parentId = true): array
     {
         $_query = '';
         $query = sprintf(
@@ -386,19 +391,24 @@ class Category
         }
         $result = $this->config->getDb()->query($query);
         while ($row = $this->config->getDb()->fetchArray($result)) {
-            $url = sprintf('%s?action=show&amp;cat=%d', Link::getSystemRelativeUri(), $row['id']);
+            $url = sprintf('%s?action=show&amp;cat=%d', $this->config->getDefaultUrl(), $row['id']);
             $link = new Link($url, $this->config);
             $link->itemTitle = $row['name'];
-            $categories['url'][] = $link->toString();
-            $categories['name'][] = $row['name'];
-            $categories['description'][] = $row['description'];
             if ('' === $row['image']) {
                 $image = 'data:image/png;base64,' .
                     'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8Xw8AAoMBgDTD2qgAAAAASUVORK5CYII=';
             } else {
                 $image = 'images/' . $row['image'];
             }
-            $categories['image'][] = $image;
+
+            $category = [
+                'url' => $link->toString(),
+                'name' => $row['name'],
+                'description' => $row['description'],
+                'image' => $image
+            ];
+
+            $categories[] = $category;
         }
 
         return $categories;
@@ -514,7 +524,7 @@ class Category
         }
 
         if ($id > 0) {
-            $this->treeTab[] = array(
+            $this->treeTab[] = [
                 'id' => $id,
                 'symbol' => $symbol,
                 'name' => $name,
@@ -527,7 +537,7 @@ class Category
                 'active' => $active,
                 'image' => $image,
                 'show_home' => $showHome
-            );
+            ];
         }
 
         foreach ($tabs as $i) {
@@ -596,7 +606,7 @@ class Category
 
         if (isset($this->children[$id])) {
             foreach (array_keys($this->children[$id]) as $childId) {
-                $children = array_merge($children, array($childId));
+                $children = array_merge($children, [$childId]);
                 $children = array_merge($children, $this->getChildNodes($childId));
             }
         }
@@ -759,14 +769,14 @@ class Category
             if (0 === $number[$parent] && 0 === $level) {
                 $numFaqs = '';
             } else {
-                $numFaqs = ' <span class="badge badge-primary">' .
-                    $plr->GetMsg('plmsgEntries', $number[$parent]) .
+                $numFaqs = ' <span class="badge badge-primary badge-pill">' .
+                    $plr->getMsg('plmsgEntries', $number[$parent]) .
                     '</span>';
             }
 
             $url = sprintf(
                 '%s?%saction=show&amp;cat=%d',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 $sids,
                 $parent
             );
@@ -878,7 +888,7 @@ class Category
     ) {
         $url = sprintf(
             '%s?%saction=show&amp;cat=%d',
-            Link::getSystemRelativeUri(),
+            $this->config->getDefaultUrl(),
             $sids,
             $categoryId
         );
@@ -980,7 +990,7 @@ class Category
             foreach ($temp as $k => $category) {
                 $url = sprintf(
                     '%s?%saction=show&amp;cat=%d',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $catid[$k]
                 );
@@ -1176,6 +1186,32 @@ class Category
         $this->config->getDb()->query($query);
 
         return $id;
+    }
+
+    /**
+     * Check if category already exists.
+     *
+     * @param array $categoryData Array of category data
+     *
+     * @return int
+     */
+    public function checkIfCategoryExists(array $categoryData)
+    {
+        $query = sprintf(
+            "
+            SELECT name from
+                %sfaqcategories
+            WHERE
+                name = '%s'
+            AND
+                lang = '%s'",
+            Database::getTablePrefix(),
+            $categoryData['name'],
+            $categoryData['lang']
+        );
+
+        $result = $this->config->getDb()->query($query);
+        return $this->config->getDb()->numRows($result);
     }
 
     /**
@@ -1695,7 +1731,7 @@ class Category
     /**
      * Returns the user id of the category owner
      *
-     * @param integer $categoryId
+     * @param int $categoryId
      * @return int
      */
     public function getOwner(int $categoryId): int

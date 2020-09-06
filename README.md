@@ -2,8 +2,6 @@
 
 [![Travis branch](https://img.shields.io/travis/thorsten/phpMyFAQ/3.0.svg?style=flat-square)](https://travis-ci.org/thorsten/phpMyFAQ)
 [![Minimum PHP Version](https://img.shields.io/badge/PHP-%3E%3D7.3-%23777BB4.svg?style=flat-square)](https://php.net/)
-[![Slack](https://phpmyfaq.herokuapp.com/badge.svg?style=flat-square)](https://phpmyfaq.herokuapp.com)
-[![Greenkeeper badge](https://badges.greenkeeper.io/thorsten/phpMyFAQ.svg)](https://greenkeeper.io/)
 
 ## What is phpMyFAQ?
 
@@ -59,7 +57,7 @@ _Running using named volumes:_
 - **elasticsearch**: Open Source Software image (it means it does not have XPack installed)
 - **phpmyadmin**: a PHP tool to have a look on your database.
 
-_Running apache web server with PHP 7.3 support:_
+_Running apache web server with PHP 7.4 support:_
 
 - **phpmyfaq**: mounts the `phpmyfaq` folder in place of `/var/www/html`.
 

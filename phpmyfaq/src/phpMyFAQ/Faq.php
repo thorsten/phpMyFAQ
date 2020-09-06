@@ -442,7 +442,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -479,11 +479,11 @@ class Faq
         if ($pages > 1) {
             // Set rewrite URL, if needed
             if ($this->config->get('main.enableRewriteRules')) {
-                $link = new Link(Link::getSystemRelativeUri('index.php'), $this->config);
+                $link = new Link($this->config->getDefaultUrl(), $this->config);
                 $useRewrite = true;
                 $rewriteUrl = sprintf(
                     '%scategory/%d/%%d/%s.html',
-                    Link::getSystemRelativeUri('index.php'),
+                    $this->config->getDefaultUrl(),
                     $categoryId,
                     $link->getSEOItemTitle($title)
                 );
@@ -493,7 +493,7 @@ class Faq
             }
             $baseUrl = sprintf(
                 '%s?%saction=show&amp;cat=%d&amp;seite=%d',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 (empty($sids) ? '' : $sids),
                 $categoryId,
                 $page
@@ -640,7 +640,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -674,7 +674,7 @@ class Faq
             $next = $page + 1;
             if ($vor != 0) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $vor;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgPrevious'];
                 $oLink->tooltip = $this->translation['msgPrevious'];
@@ -683,7 +683,7 @@ class Faq
             $output .= ' ';
             if ($next <= $pages) {
                 $url = $sids . '&amp;action=search&amp;tagging_id=' . $taggingId . '&amp;seite=' . $next;
-                $oLink = new Link(Link::getSystemRelativeUri() . '?' . $url, $this->config);
+                $oLink = new Link($this->config->getDefaultUrl() . '?' . $url, $this->config);
                 $oLink->itemTitle = 'tag';
                 $oLink->text = $this->translation['msgNext'];
                 $oLink->tooltip = $this->translation['msgNext'];
@@ -1655,30 +1655,27 @@ class Faq
     /**
      * Gets all revisions from a given record ID.
      *
-     * @param int    $recordId   Record id
-     * @param string $recordLang Record language
-     *
+     * @param int $faqId
+     * @param string $faqLang
+     * @param string $faqAuthor
      * @return array
      */
-    public function getRevisionIds($recordId, $recordLang)
+    public function getRevisionIds($faqId, $faqLang, $faqAuthor): array
     {
         $revisionData = [];
 
         $query = sprintf(
-            "
-            SELECT
-                revision_id, updated, author
-            FROM
-                %sfaqdata_revisions
+            "SELECT 
+                revision_id, updated, author FROM %sfaqdata_revisions
             WHERE
                 id = %d
             AND
                 lang = '%s'
-            ORDER BY
+            ORDER BY 
                 revision_id",
             Database::getTablePrefix(),
-            $recordId,
-            $recordLang
+            $faqId,
+            $faqLang
         );
 
         $result = $this->config->getDb()->query($query);
@@ -1687,8 +1684,8 @@ class Faq
             while ($row = $this->config->getDb()->fetchObject($result)) {
                 $revisionData[] = [
                     'revision_id' => $row->revision_id,
-                    'updated' => $row->updated,
-                    'author' => $row->author,
+                    'updated' => $faqId === 0 ? date('YmdHis') : $row->updated,
+                    'author' => $faqId === 0 ? ucfirst($faqAuthor) : $row->author,
                 ];
             }
         }
@@ -1970,7 +1967,7 @@ class Faq
                 }
 
                 $data['visits'] = (int)$row->visits;
-                $data['question'] = $row->question;
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['answer'] = $row->answer;
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
                 $data['last_visit'] = date('c', $row->last_visit);
@@ -2078,7 +2075,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2192,17 +2189,17 @@ class Faq
         if ($result) {
             while (($row = $this->config->getDb()->fetchObject($result))) {
                 if ($this->groupSupport) {
-                    if (!in_array($row->user_id, array(-1, $this->user)) || !in_array($row->group_id, $this->groups)) {
+                    if (!in_array($row->user_id, [-1, $this->user]) || !in_array($row->group_id, $this->groups)) {
                         continue;
                     }
                 } else {
-                    if (!in_array($row->user_id, array(-1, $this->user))) {
+                    if (!in_array($row->user_id, [-1, $this->user])) {
                         continue;
                     }
                 }
 
                 $data['date'] = Date::createIsoDate($row->updated, DATE_ISO8601, true);
-                $data['question'] = $row->question;
+                $data['question'] = Filter::filterVar($row->question, FILTER_SANITIZE_STRING);
                 $data['answer'] = $row->content;
                 $data['visits'] = (int)$row->visits;
 
@@ -2216,7 +2213,7 @@ class Faq
                     $row->lang
                 );
                 $oLink = new Link($url, $this->config);
-                $oLink->itemTitle = $row->question;
+                $oLink->itemTitle = $title;
                 $oLink->tooltip = $title;
                 $data['url'] = $oLink->toString();
 
@@ -2504,17 +2501,21 @@ class Faq
     /**
      * Returns the record permissions for users and groups.
      *
-     * @param string $mode     'group' or 'user'
-     * @param int    $recordId
+     * @param string $mode 'group' or 'user'
+     * @param int $recordId
      *
      * @return array
      */
-    public function getPermission($mode, $recordId)
+    public function getPermission(string $mode, int $recordId): array
     {
         $permissions = [];
 
         if (!($mode == 'user' || $mode == 'group')) {
             return $permissions;
+        }
+
+        if (0 === $recordId) {
+            return [-1];
         }
 
         $query = sprintf(
@@ -2622,7 +2623,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2903,7 +2904,7 @@ class Faq
                 $title = $row->thema;
                 $url = sprintf(
                     '%s?%saction=faq&amp;cat=%d&amp;id=%d&amp;artlang=%s',
-                    Link::getSystemRelativeUri(),
+                    $this->config->getDefaultUrl(),
                     $sids,
                     $row->category_id,
                     $row->id,
@@ -2958,8 +2959,8 @@ class Faq
             if ($oldId != $row->id) {
                 $data['question'] = $row->thema;
                 $data['url'] = sprintf(
-                    '%s?action=editentry&id=%d&lang=%s',
-                    Link::getSystemRelativeUri(),
+                    '%sadmin/?action=editentry&id=%d&lang=%s',
+                    $this->config->getDefaultUrl(),
                     $row->id,
                     $row->lang
                 );

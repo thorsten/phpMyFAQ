@@ -23,8 +23,6 @@ use phpMyFAQ\Export\Json;
 use phpMyFAQ\Export\Pdf;
 use phpMyFAQ\Export\Xml;
 
-//require_once PMF_CONFIG_DIR . '/constants.php';
-
 /**
  * Class Export
  *

@@ -100,6 +100,11 @@ class Pgsql extends Database implements Driver
             news_id INTEGER NOT NULL,
             PRIMARY KEY (category_id, news_id))',
 
+        'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
+            category_id INTEGER NOT NULL,
+            position INTEGER NOT NULL,
+            PRIMARY KEY (category_id))',
+
         'faqcategory_user' => 'CREATE TABLE %sfaqcategory_user (
             category_id INTEGER NOT NULL,
             user_id INTEGER NOT NULL,
@@ -338,7 +343,8 @@ class Pgsql extends Database implements Driver
             user_id SERIAL NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
-            email VARCHAR(128) NULL)',
+            email VARCHAR(128) NULL,
+            is_visible SMALLINT NULL DEFAULT 0)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,

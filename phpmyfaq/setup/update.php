@@ -39,8 +39,8 @@ $step = Filter::filterInput(INPUT_GET, 'step', FILTER_VALIDATE_INT, 1);
 $version = Filter::filterInput(INPUT_POST, 'version', FILTER_SANITIZE_STRING);
 $query = [];
 
-if (!file_exists(PMF_ROOT_DIR . '/config/database.php')) {
-    header('Location: setup.php');
+if (!file_exists(PMF_ROOT_DIR.'/config/database.php')) {
+    header('Location: index.php');
     exit();
 }
 
@@ -113,6 +113,7 @@ $installer->checkAvailableDatabaseTables($db);
 
 /**************************** STEP 1 OF 3 ***************************/
 if ($step === 1) { ?>
+
     <form action="update.php?step=2" method="post">
       <input name="version" type="hidden" value="<?= $version ?>">
       <div class="row">
@@ -206,7 +207,7 @@ if ($step === 1) { ?>
         </div>
       </div>
     </form>
-    <?php
+<?php
     System::renderFooter();
 }
 
@@ -295,7 +296,7 @@ if ($step == 2) {
             </div>
         </div>
         </form>
-        <?php
+<?php
         System::renderFooter();
     } else {
         echo '<p class="alert alert-danger"><strong>Error:</strong> Your version of phpMyFAQ could not updated.</p>';
@@ -333,7 +334,7 @@ if ($step == 3) {
         </div>
         <div class="row setup-content" id="step2">
             <div class="col">
-    <?php
+<?php
     $images = [];
     $prefix = Database::getTablePrefix();
     $faqConfig->getAll();
@@ -367,11 +368,11 @@ if ($step == 3) {
         $faqConfig->add('main.enableGzipCompression', 'true');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN success INT(1) NULL DEFAULT 1';
         } elseif ('pgsql' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success SMALLINT NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success SMALLINT NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD success INTEGER NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD success INTEGER NULL DEFAULT 1';
         }
     }
 
@@ -394,9 +395,9 @@ if ($step == 3) {
         $faqConfig->delete('search.useAjaxSearchOnStartpage');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN active INT(1) NULL DEFAULT 1';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD active INT NULL DEFAULT 1';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD active INT NULL DEFAULT 1';
         }
     }
 
@@ -412,13 +413,13 @@ if ($step == 3) {
         $faqConfig->add('records.numberMaxStoredRevisions', '10');
 
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD COLUMN lang VARCHAR(5) NOT NULL DEFAULT \'\'';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD COLUMN group_id INT NULL DEFAULT -1';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ADD group_id INT NULL DEFAULT -1';
+            $query[] = 'ALTER TABLE '.$prefix.'faqquestions ADD lang VARCHAR(5) NOT NULL DEFAULT \'\'';
+            $query[] = 'ALTER TABLE '.$prefix.'faqcategories ADD group_id INT NULL DEFAULT -1';
         }
-        $query[] = 'UPDATE ' . $prefix . "faqquestions SET lang = '" . $faqConfig->getDefaultLanguage() . "'";
+        $query[] = 'UPDATE '.$prefix."faqquestions SET lang = '".$faqConfig->getDefaultLanguage()."'";
     }
 
     //
@@ -427,18 +428,18 @@ if ($step == 3) {
     if (version_compare($version, '2.9.0-alpha4', '<')) {
         switch ($DB['type']) {
             case 'pgsql':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions RENAME COLUMN datum TO updated';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions RENAME COLUMN datum TO updated';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created TIMESTAMP DEFAULT CURRENT_TIMESTAMP';
                 break;
             case 'mssql':
             case 'sqlsrv':
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata.datum', 'updated', 'COLUMN'";
-                $query[] = "EXEC sp_RENAME '" . $prefix . "faqdata_revisions.datum', 'updated', 'COLUMN'";
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
-                break;
+                $query[] = "EXEC sp_RENAME '".$prefix."faqdata.datum', 'updated', 'COLUMN'";
+                $query[] = "EXEC sp_RENAME '".$prefix."faqdata_revisions.datum', 'updated', 'COLUMN'";
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
+                $query[] = 'ALTER TABLE '.$prefix.'faqdata_revisions ADD created DATETIME DEFAULT CURRENT_TIMESTAMP';
+            break;
             case 'mysqli':
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqdata CHANGE datum updated VARCHAR(15) NOT NULL';
                 $query[] = 'ALTER TABLE ' . $prefix . 'faqdata_revisions CHANGE datum updated VARCHAR(15) NOT NULL';
@@ -597,22 +598,22 @@ if ($step == 3) {
         $faqConfig->add('records.enableAutoRevisions', 'false');
         // Add superadmin flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN is_superadmin INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD is_superadmin INTEGER DEFAULT 0';
         }
-        $query[] = 'UPDATE ' . $prefix . 'faquser SET is_superadmin = 1 WHERE user_id = 1';
+        $query[] = 'UPDATE '.$prefix.'faquser SET is_superadmin = 1 WHERE user_id = 1';
 
         // Add domain flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD COLUMN domain VARCHAR(255) DEFAULT NULL';
         } else {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
+            $query[] = 'ALTER TABLE '.$prefix.'faquserlogin ADD domain VARCHAR(255) DEFAULT NULL';
         }
 
         // Update section flag for faqright table
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faqright ADD COLUMN for_sections INT(11) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faqright ADD for_sections INTEGER DEFAULT 0';
         }
@@ -639,7 +640,7 @@ if ($step == 3) {
         // Rename rights
         $perm->renameRight('adduser', 'add_user');
         $perm->renameRight('edituser', 'edit_user');
-        $perm->renameRight('delete_user', 'delete_user');
+        $perm->renameRight('deluser', 'delete_user');
     }
 
     //
@@ -652,7 +653,7 @@ if ($step == 3) {
 
         // Add login attempts flag
         if ('sqlite3' === $DB['type']) {
-            $query[] = 'ALTER TABLE ' . $prefix . 'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
+            $query[] = 'ALTER TABLE '.$prefix.'faquser ADD COLUMN login_attempts INT(1) DEFAULT 0';
         } else {
             $query[] = 'ALTER TABLE '.$prefix.'faquser ADD login_attempts INTEGER DEFAULT 0';
         }
@@ -665,10 +666,10 @@ if ($step == 3) {
         // Fix category table
         switch ($DB['type']) {
             case 'mysqli':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories MODIFY parent_id INTEGER';
+                $query[] = 'ALTER TABLE '.$prefix.'faqcategories MODIFY parent_id INTEGER';
                 break;
             case 'pgsql':
-                $query[] = 'ALTER TABLE ' . $prefix . 'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
+                $query[] = 'ALTER TABLE '.$prefix.'faqcategories ALTER COLUMN parent_id TYPE INTEGER;';
                 break;
         }
 
@@ -681,13 +682,30 @@ if ($step == 3) {
     // UPDATES FROM 3.0.0-RC
     //
     if (version_compare($version, '3.0.0-RC', '<=')) {
-        $query[] = 'UPDATE ' . $prefix . "faqconfig SET config_name = 'main.customPdfFooter'
+        $query[] = 'UPDATE '.$prefix."faqconfig SET config_name = 'main.customPdfFooter'
             WHERE config_name = 'main.customPdfHFooter'";
     }
 
     //
     // UPDATES FROM 3.1.0-alpha
     //
+    if (version_compare($version, '3.1.0-alpha', '<=')) {
+        // Add isVisible flag for user data
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
+        }
+    }
+
+    if (version_compare($version, '3.1.0-alpha', '<=')) {
+        // Add isVisible flag for user data
+        if ('sqlite3' === $DB['type']) {
+            $query[] = 'ALTER TABLE ' . $prefix . 'faquserdata ADD COLUMN is_visible INT(1) DEFAULT 0';
+        } else {
+            $query[] = 'ALTER TABLE '.$prefix.'faquserdata ADD is_visible INTEGER DEFAULT 0';
+        }
+    }
 
     // Always the last step: Update version number
     if (version_compare($version, System::getVersion(), '<')) {

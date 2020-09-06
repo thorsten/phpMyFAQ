@@ -101,6 +101,11 @@ class Mysqli extends Database implements Driver
             user_id INT(11) NOT NULL,
             PRIMARY KEY (category_id, user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
 
+        'faqcategory_order' => 'CREATE TABLE %sfaqcategory_order (
+            category_id int(11) NOT NULL,
+            position int(11) NOT NULL,
+            PRIMARY KEY (category_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci',
+        
         'faqchanges' => 'CREATE TABLE %sfaqchanges (
             id INT(11) NOT NULL,
             beitrag SMALLINT NOT NULL,
@@ -336,7 +341,8 @@ class Mysqli extends Database implements Driver
             user_id INT(11) NOT NULL,
             last_modified VARCHAR(14) NULL,
             display_name VARCHAR(128) NULL,
-            email VARCHAR(128) NULL)',
+            email VARCHAR(128) NULL,
+            is_visible INT(1) NULL DEFAULT 0)',
 
         'faquserlogin' => 'CREATE TABLE %sfaquserlogin (
             login VARCHAR(128) NOT NULL,

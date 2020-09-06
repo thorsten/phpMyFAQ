@@ -53,7 +53,7 @@ if ('insertentry' === $do &&
         ]
     ]
     );
-    $record_lang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
+    $recordLang = Filter::filterInput(INPUT_POST, 'lang', FILTER_SANITIZE_STRING);
     $tags = Filter::filterInput(INPUT_POST, 'tags', FILTER_SANITIZE_STRING);
     $active = Filter::filterInput(INPUT_POST, 'active', FILTER_SANITIZE_STRING);
     $sticky = Filter::filterInput(INPUT_POST, 'sticky', FILTER_SANITIZE_STRING);
@@ -62,17 +62,17 @@ if ('insertentry' === $do &&
     $author = Filter::filterInput(INPUT_POST, 'author', FILTER_SANITIZE_STRING);
     $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
     $comment = Filter::filterInput(INPUT_POST, 'comment', FILTER_SANITIZE_STRING);
-    $record_id = Filter::filterInput(INPUT_POST, 'record_id', FILTER_VALIDATE_INT);
-    $solution_id = Filter::filterInput(INPUT_POST, 'solution_id', FILTER_VALIDATE_INT);
-    $revision_id = Filter::filterInput(INPUT_POST, 'revision_id', FILTER_VALIDATE_INT);
-    $changed = Filter::filterInput(INPUT_POST, 'changed', FILTER_SANITIZE_STRING);
+    $recordId = Filter::filterInput(INPUT_POST, 'recordId', FILTER_VALIDATE_INT);
+    $solutionId = Filter::filterInput(INPUT_POST, 'solutionId', FILTER_VALIDATE_INT);
+    $revisionId = Filter::filterInput(INPUT_POST, 'revisionId', FILTER_VALIDATE_INT);
+    $changed = '';
 
     $user_permission = Filter::filterInput(INPUT_POST, 'userpermission', FILTER_SANITIZE_STRING);
-    $restricted_users = ('all' == $user_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_users',
-        FILTER_VALIDATE_INT);
+    $restrictedUsers = ('all' == $user_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restrictedUsers',
+                                                                              FILTER_VALIDATE_INT);
     $group_permission = Filter::filterInput(INPUT_POST, 'grouppermission', FILTER_SANITIZE_STRING);
-    $restricted_groups = ('all' == $group_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restricted_groups',
-        FILTER_VALIDATE_INT);
+    $restrictedGroups = ('all' == $group_permission) ? -1 : Filter::filterInput(INPUT_POST, 'restrictedGroups',
+                                                                                FILTER_VALIDATE_INT);
 
     if (!is_null($question) && !is_null($categories)) {
         $tagging = new Tags($faqConfig);
@@ -85,9 +85,9 @@ if ('insertentry' === $do &&
         }
 
         $recordData = [
-            'id' => $record_id,
-            'lang' => $record_lang,
-            'revision_id' => $revision_id,
+            'id' => $recordId,
+            'lang' => $recordLang,
+            'revisionId' => $revisionId,
             'active' => $active,
             'sticky' => (!is_null($sticky) ? 1 : 0),
             'thema' => html_entity_decode($question),
@@ -101,75 +101,76 @@ if ('insertentry' === $do &&
             'dateEnd' => (empty($dateEnd) ? '99991231235959' : str_replace('-', '', $dateEnd) . '235959'),
             'linkState' => '',
             'linkDateCheck' => 0,
+            'notes' => ''
         ];
 
-        if ('saveentry' == $do || $record_id) {
+        if ('saveentry' == $do || $recordId) {
             /* Create a revision anyway, it's autosaving */
-            $faq->addNewRevision($record_id, $record_lang);
-            ++$revision_id;
+            $faq->addNewRevision($recordId, $recordLang);
+            ++$revisionId;
 
             $changelog = new Changelog($faqConfig);
-            $changelog->addEntry($record_id, $user->getUserId(), nl2br($changed), $record_lang, $revision_id);
+            $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordLang, $revisionId);
 
             $visits = new Visits($faqConfig);
-            $visits->logViews($record_id);
+            $visits->logViews($recordId);
 
-            if ($faq->hasTranslation($record_id, $record_lang)) {
+            if ($faq->hasTranslation($recordId, $recordLang)) {
                 $faq->updateRecord($recordData);
             } else {
-                $record_id = $faq->addRecord($recordData, false);
+                $recordId = $faq->addRecord($recordData, false);
             }
 
-            $faq->deleteCategoryRelations($record_id, $record_lang);
-            $faq->addCategoryRelations($categories['rubrik'], $record_id, $record_lang);
+            $faq->deleteCategoryRelations($recordId, $recordLang);
+            $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordLang);
 
             if ($tags != '') {
-                $tagging->saveTags($record_id, explode(',', $tags));
+                $tagging->saveTags($recordId, explode(',', $tags));
             } else {
-                $tagging->deleteTagsFromRecordId($record_id);
+                $tagging->deleteTagsFromRecordId($recordId);
             }
 
-            $faq->deletePermission('user', $record_id);
-            $faq->addPermission('user', $record_id, $restricted_users);
+            $faq->deletePermission('user', $recordId);
+            $faq->addPermission('user', $recordId, [$restrictedUsers]);
             $category->deletePermission('user', $categories['rubrik']);
-            $category->addPermission('user', $categories['rubrik'], $restricted_users);
+            $category->addPermission('user', $categories['rubrik'], [$restrictedUsers]);
             if ($faqConfig->get('security.permLevel') !== 'basic') {
-                $faq->deletePermission('group', $record_id);
-                $faq->addPermission('group', $record_id, $restricted_groups);
+                $faq->deletePermission('group', $recordId);
+                $faq->addPermission('group', $recordId, [$restrictedGroups]);
                 $category->deletePermission('group', $categories['rubrik']);
-                $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+                $category->addPermission('group', $categories['rubrik'], [$restrictedGroups]);
             }
         } elseif ('insertentry' == $do) {
             unset($recordData['id']);
-            unset($recordData['revision_id']);
-            $revision_id = 1;
-            $record_id = $faq->addRecord($recordData);
-            if ($record_id) {
+            unset($recordData['revisionId']);
+            $revisionId = 1;
+            $recordId = $faq->addRecord($recordData);
+            if ($recordId) {
                 $changelog = new Changelog($faqConfig);
-                $changelog->addEntry($record_id, $user->getUserId(), nl2br($changed), $recordData['lang']);
+                $changelog->addEntry($recordId, $user->getUserId(), nl2br($changed), $recordData['lang']);
                 $visits = new Visits($faqConfig);
-                $visits->add($record_id);
+                $visits->add($recordId);
 
-                $faq->addCategoryRelations($categories['rubrik'], $record_id, $recordData['lang']);
+                $faq->addCategoryRelations($categories['rubrik'], $recordId, $recordData['lang']);
 
                 if ($tags != '') {
-                    $tagging->saveTags($record_id, explode(',', $tags));
+                    $tagging->saveTags($recordId, explode(',', $tags));
                 }
 
-                $faq->addPermission('user', $record_id, $restricted_users);
-                $category->addPermission('user', $categories['rubrik'], $restricted_users);
+                $faq->addPermission('user', $recordId, [$restrictedUsers]);
+                $category->addPermission('user', $categories['rubrik'], [$restrictedUsers]);
 
                 if ($faqConfig->get('security.permLevel') !== 'basic') {
-                    $faq->addPermission('group', $record_id, $restricted_groups);
-                    $category->addPermission('group', $categories['rubrik'], $restricted_groups);
+                    $faq->addPermission('group', $recordId, [$restrictedGroups]);
+                    $category->addPermission('group', $categories['rubrik'], [$restrictedGroups]);
                 }
             }
         }
 
         $out = [
-            'msg' => sprintf('Item auto-saved at revision %d', $revision_id),
-            'revision_id' => $revision_id,
-            'record_id' => $record_id,
+            'msg' => sprintf('Item auto-saved at revision %d', $revisionId),
+            'revisionId' => $revisionId,
+            'recordId' => $recordId,
         ];
 
         $http->sendJsonWithHeaders($out);

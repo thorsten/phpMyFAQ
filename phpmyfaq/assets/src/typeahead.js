@@ -26,23 +26,27 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'search=' + request,
-        success: data => {
+        success: (data) => {
           response(
-            data.map(item => {
+            data.map((item) => {
               return {
                 url: item.faqLink,
                 question: item.faqQuestion,
+                category: item.categoryName,
               };
             })
           );
         },
       });
     },
-    displayText: item => {
+    displayText: (item) => {
       return typeof item !== 'undefined' && typeof item.question !== 'undefined' ? item.question : item;
     },
-    afterSelect: event => {
+    afterSelect: (event) => {
       window.location.href = event.url;
+    },
+    matcher: (item) => {
+      return item;
     },
   });
 });

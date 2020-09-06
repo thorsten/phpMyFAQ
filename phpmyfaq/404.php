@@ -20,6 +20,8 @@ if (!defined('IS_VALID_PHPMYFAQ')) {
     exit();
 }
 
+$template->parse('mainPageContent', []);
+
 try {
     $faqSession->userTracking('404', 0);
 } catch (Exception $e) {

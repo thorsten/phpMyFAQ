@@ -170,7 +170,7 @@ switch ($action) {
         if (false === $isLoggedIn) {
             $user = new User($faqConfig);
             if (true === $user->checkDisplayName($username) && true === $user->checkMailAddress($mailer)) {
-                echo json_encode(['error' => $PMF_LANG['err_SaveComment']]);
+                $message = ['error' => '-'.$PMF_LANG['err_SaveComment']];
                 break;
             }
         }
@@ -611,6 +611,7 @@ switch ($action) {
         $realname = Filter::filterInput(INPUT_POST, 'realname', FILTER_SANITIZE_STRING);
         $loginName = Filter::filterInput(INPUT_POST, 'name', FILTER_SANITIZE_STRING);
         $email = Filter::filterInput(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+        $isVisible = Filter::filterInput(INPUT_POST, 'is_visible', FILTER_SANITIZE_STRING);
 
         if (!is_null($loginName) && !is_null($email) && !is_null($realname)) {
             $message = [];
@@ -622,8 +623,8 @@ switch ($action) {
                 $message = ['error' => $user->error()];
             } else {
                 $user->userdata->set(
-                    ['display_name', 'email'],
-                    [$realname, $email]
+                    ['display_name', 'email', 'is_visible'],
+                    [$realname, $email,  $isVisible === 'on' ? 1 : 0]
                 );
                 // set user status
                 $user->setStatus('blocked');

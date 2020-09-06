@@ -15,20 +15,20 @@
 
 /*global document: false, $: false, tinyMCE: false */
 
-$(document).ready(function() {
+$(document).ready(function () {
   'use strict';
   if (typeof tinyMCE !== 'undefined' && undefined !== tinyMCE) {
     tinyMCE.init({
       // General options
       mode: 'exact',
       language: 'en',
-      elements: 'answer',
+      selector: 'textarea#answer',
       theme: 'modern',
       plugins: [
-        'advlist autolink lists link image charmap print preview hr anchor pagebreak',
-        'searchreplace wordcount visualblocks visualchars code fullscreen',
-        'insertdatetime media nonbreaking save table contextmenu directionality',
-        'emoticons template paste textcolor',
+        'advlist anchor autolink lists link image imagetools charmap print preview hr anchor pagebreak',
+        'searchreplace wordcount visualblocks visualchars code codesample fullscreen colorpicker help',
+        'insertdatetime media nonbreaking save table contextmenu directionality textpattern',
+        'emoticons template paste textcolor autosave toc',
       ],
       relative_urls: false,
       convert_urls: false,
@@ -37,11 +37,15 @@ $(document).ready(function() {
       paste_remove_spans: true,
       entities: '10',
       entity_encoding: 'raw',
-
       toolbar1:
-        'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent',
-      toolbar2: 'link | forecolor backcolor emoticons | print',
+        'formatselect | styleselect | bold italic strikethrough forecolor backcolor | link | alignleft aligncenter alignright alignjustify | numlist bullist outdent indent | removeformat',
+      toolbar2: 'insertfile | paste codesample | link image preview media | forecolor backcolor emoticons | phpmyfaq',
       image_advtab: true,
+      image_class_list: [
+        { title: 'None', value: '' },
+        { title: 'Responsive', value: 'img-fluid' },
+      ],
+      image_dimensions: true,
 
       // Formatting
       style_formats: [
@@ -76,18 +80,12 @@ $(document).ready(function() {
         },
       ],
 
+      paste_word_valid_elements: 'b,strong,i,em,h1,h2,h3,h4,h5,h6',
+      paste_data_images: true,
       visualblocks_default_state: true,
       end_container_on_empty_block: true,
-      extended_valid_elements: 'code[class],video[*],audio[*],source[*]',
-      removeformat: [
-        {
-          selector: '*',
-          attributes: ['style'],
-          split: false,
-          expand: false,
-          deep: true,
-        },
-      ],
+      extended_valid_elements: 'code[class],video[*],audio[*],source[*],iframe[*]',
+      removeformat: [{ selector: '*', attributes: ['style'], split: false, expand: false, deep: true }],
       importcss_append: true,
     });
   }

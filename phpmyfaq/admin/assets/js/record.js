@@ -13,7 +13,7 @@
  * @since 2013-11-17
  */
 
-$(function() {
+$(function () {
   // Show help for keywords and users
   $('#keywords').on('focus', () => {
     showHelp('keywords');
@@ -23,71 +23,73 @@ $(function() {
   });
 
   let categories = $('#phpmyfaq-categories option:selected')
-    .map(function() {
+    .map(function () {
       return $(this).val();
     })
     .get();
 
-  getPermissions(categories);
+  getCategoryPermissions(categories);
 
   // Override FAQ permissions with Category permission to avoid confused users
   $('#phpmyfaq-categories').on('click', () => {
     categories = $('#phpmyfaq-categories option:selected')
-      .map(function() {
+      .map(function () {
         return $(this).val();
       })
       .get();
-    getPermissions(categories);
+    getCategoryPermissions(categories);
   });
+
+  const faqId = document.getElementById('record_id').value;
+  if (faqId > 0) {
+    getFaqPermissions(faqId);
+  }
 });
 
-function getPermissions(categories) {
-  $.ajax({
-    type: 'POST',
-    url: 'index.php?action=ajax&ajax=categories&ajaxaction=getpermissions',
-    data: 'categories=' + categories,
-    success: permissions => {
+function getCategoryPermissions(categories) {
+  fetch(`index.php?action=ajax&ajax=categories&ajaxaction=getpermissions&categories=${categories}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((permissions) => {
       setPermissions(permissions);
-    },
-  });
+    });
+}
+
+function getFaqPermissions(faqId) {
+  const csrfToken = document.getElementById('csrf').value;
+  fetch(`index.php?action=ajax&ajax=records&ajaxaction=permissions&faq-id=${faqId}&csrf=${csrfToken}`)
+    .then((response) => {
+      return response.json();
+    })
+    .then((permissions) => {
+      setPermissions(permissions);
+    });
 }
 
 function setPermissions(permissions) {
   const perms = permissions;
 
+  // Users
   if (-1 === parseInt(perms.user[0])) {
-    $('#restrictedusers')
-      .prop('checked', false)
-      .prop('disabled', true);
-    $('#allusers')
-      .prop('checked', true)
-      .prop('disabled', false);
+    $('#restrictedusers').prop('checked', false);
+    $('#allusers').prop('checked', true);
   } else {
-    $('#allusers')
-      .prop('checked', false)
-      .prop('disabled', true);
-    $('#restrictedusers')
-      .prop('checked', true)
-      .prop('disabled', false);
-    $.each(perms.user, function(key, value) {
+    $('#allusers').prop('checked', false);
+    $('#restrictedusers').prop('checked', true);
+    $.each(perms.user, function (key, value) {
       $(".selected-users option[value='" + value + "']").prop('selected', true);
     });
   }
+
+  // Groups
   if (-1 === parseInt(perms.group[0])) {
-    $('#restrictedgroups')
-      .prop('checked', false)
-      .prop('disabled', true);
-    $('#allgroups')
-      .prop('checked', true)
-      .prop('disabled', false);
+    $('#restrictedgroups').prop('checked', false).prop('disabled', false);
+    $('#allgroups').prop('checked', true).prop('disabled', false);
   } else {
-    $('#allgroups')
-      .prop('checked', false)
-      .prop('disabled', true);
-    $('#restrictedgroups')
-      .prop('checked', true)
-      .prop('disabled', false);
-    $.each(perms.group, function(key, value) {
+    $('#allgroups').prop('checked', false).prop('disabled', true);
+    $('#restrictedgroups').prop('checked', true).prop('disabled', false);
+    $.each(perms.group, function (key, value) {
       $("#selected-groups option[value='" + value + "']").prop('selected', true);
     });
   }
@@ -106,7 +108,7 @@ document.addEventListener('DOMContentLoaded', () => {
   bsCustomFileInput.init();
 
   /** File upload handling. */
-  $('#filesToUpload').on('change', function() {
+  $('#filesToUpload').on('change', function () {
     const files = $('#filesToUpload')[0].files,
       fileSize = $('#filesize'),
       fileList = $('.pmf-attachment-upload-files');
@@ -131,15 +133,16 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /** Handler for closing the modal */
-  $('#pmf-attachment-modal-close').on('click', function() {
+  $('#pmf-attachment-modal-close').on('click', function () {
     $('#filesize').html('');
     $('.pmf-attachment-upload-files li').remove();
     $('.pmf-attachment-upload-files').addClass('invisible');
+    $('.custom-file-input').removeClass('is-invalid');
     $('#attachmentForm')[0].reset();
   });
 
   /** File upload via Ajax */
-  $('#pmf-attachment-modal-upload').on('click', function(event) {
+  $('#pmf-attachment-modal-upload').on('click', function (event) {
     event.preventDefault();
     event.stopImmediatePropagation();
 
@@ -157,11 +160,11 @@ document.addEventListener('DOMContentLoaded', () => {
     $.ajax({
       url: 'index.php?action=ajax&ajax=att&ajaxaction=upload',
       type: 'POST',
-      xhr: function() {
+      xhr: function () {
         const xhr = new window.XMLHttpRequest();
         xhr.upload.addEventListener(
           'progress',
-          function(event) {
+          function (event) {
             if (event.lengthComputable) {
               let percentComplete = event.loaded / event.total;
               percentComplete = parseInt(percentComplete * 100);
@@ -172,8 +175,8 @@ document.addEventListener('DOMContentLoaded', () => {
         );
         return xhr;
       },
-      success: function(attachments) {
-        attachments.forEach(function(attachment) {
+      success: (attachments) => {
+        attachments.forEach(function (attachment) {
           $('.adminAttachments').append(
             '<li>' +
               '<a href="../index.php?action=attachment&id=' +
@@ -199,8 +202,10 @@ document.addEventListener('DOMContentLoaded', () => {
         $('#attachmentForm')[0].reset();
         $('#attachmentModal').modal('hide');
       },
-      error: function(data) {
-        console.log(data);
+      error: () => {
+        $('.custom-file-input').addClass('is-invalid');
+        $('.pmf-attachment-upload-files').addClass('invisible');
+        $('.progress').addClass('invisible');
       },
       data: formData,
       cache: false,
@@ -211,7 +216,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   /** Delete questions */
-  $('#submitDeleteQuestions').on('click', function() {
+  $('#submitDeleteQuestions').on('click', function () {
     const questions = $('#questionSelection').serialize(),
       indicator = $('#pmf-admin-saving-data-indicator');
 
@@ -220,13 +225,9 @@ document.addEventListener('DOMContentLoaded', () => {
       type: 'POST',
       url: 'index.php?action=ajax&ajax=records&ajaxaction=delete_question',
       data: questions,
-      success: function(msg) {
+      success: function (msg) {
         indicator.html('<i class="fa fa-cog fa-spin fa-fw"></i><span class="sr-only">Deleting ...</span>');
-        $('tr td input:checked')
-          .parent()
-          .parent()
-          .parent()
-          .fadeOut('slow');
+        $('tr td input:checked').parent().parent().parent().fadeOut('slow');
         indicator.fadeOut('slow');
         $('#returnMessage').html('<p class="alert alert-success">' + msg + '</p>');
       },
@@ -234,28 +235,33 @@ document.addEventListener('DOMContentLoaded', () => {
     return false;
   });
 
-  $(function() {
+  $(function () {
     // set the textarea to its previous height
     const answerHeight = localStorage.getItem('textarea.answer.height'),
-      answer = $('#answer');
+      answer = $('#answer-markdown');
 
     if (answerHeight !== 'undefined') {
       answer.height(answerHeight);
     }
 
     // when resized, store the textarea's height
-    answer.on('mouseup', function() {
+    answer.on('mouseup', function () {
       localStorage.setItem('textarea.answer.height', $(this).height());
     });
 
     // on clicking the Preview tab, refresh the preview
     $('.markdown-tabs')
       .find('a')
-      .on('click', function() {
+      .on('click', function () {
         if ($(this).attr('data-markdown-tab') === 'preview') {
           $('.markdown-preview').height(answer.height());
-          $.post('index.php?action=ajax&ajax=markdown', { text: answer.val() }, function(result) {
-            $('.markdown-preview').html(result);
+          $.ajax({
+            type: 'POST',
+            url: 'index.php?action=ajax&ajax=markdown',
+            data: 'text=' + answer.val(),
+            success: (data) => {
+              $('.markdown-preview').html(data);
+            },
           });
         }
       });
@@ -280,9 +286,9 @@ document.addEventListener('DOMContentLoaded', () => {
         type: 'GET',
         dataType: 'JSON',
         data: 'q=' + request.trim(),
-        success: data => {
+        success: (data) => {
           response(
-            data.map(tags => {
+            data.map((tags) => {
               return {
                 tagName: tags.tagName,
               };
@@ -291,10 +297,10 @@ document.addEventListener('DOMContentLoaded', () => {
         },
       });
     },
-    displayText: tags => {
+    displayText: (tags) => {
       return typeof tags !== 'undefined' && typeof tags.tagName !== 'undefined' ? tags.tagName : tags;
     },
-    updater: event => {
+    updater: (event) => {
       const tags = $('#tags');
       let currentTags = tags.data('tag-list');
       if (typeof currentTags === 'undefined') {

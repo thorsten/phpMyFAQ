@@ -31,13 +31,13 @@
   "require": {
     "php": ">=7.3.0",
     "phpseclib/phpseclib": "~2.0",
-    "swiftmailer/swiftmailer": "~5.0",
+    "swiftmailer/swiftmailer": "~6.2",
     "erusev/parsedown": "~1.0",
-    "erusev/parsedown-extra": "~0.7.0",
+    "erusev/parsedown-extra": "~0.8.1",
     "tecnickcom/tcpdf": "~6.0",
-    "elasticsearch/elasticsearch": "~7.0",
-    "monolog/monolog": "~1.",
-    "abraham/twitteroauth": "^0.7.4",
+    "elasticsearch/elasticsearch": "~7.7",
+    "monolog/monolog": "~2.",
+    "abraham/twitteroauth": "^1.1.0",
     "myclabs/deep-copy": "~1.0",
     "ext-curl": "*",
     "ext-fileinfo": "*",
@@ -48,11 +48,11 @@
     "ext-zip": "*"
   },
   "require-dev": {
-    "phpunit/phpunit": "8.*",
+    "phpunit/phpunit": "9.*",
     "phpunit/dbunit": "1.3.*",
     "doctrine/instantiator": "1.*",
-    "symfony/yaml": "3.*",
-    "phpdocumentor/reflection-docblock": "3.*",
+    "symfony/yaml": "5.*",
+    "phpdocumentor/reflection-docblock": "5.*",
     "phpunit/php-token-stream": "*",
     "squizlabs/php_codesniffer": "*"
   },

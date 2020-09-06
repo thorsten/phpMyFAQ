@@ -66,7 +66,7 @@ class News
         foreach ($news as $item) {
             $url = sprintf(
                 '%s?action=news&amp;newsid=%d&amp;newslang=%s',
-                Link::getSystemRelativeUri(),
+                $this->config->getDefaultUrl(),
                 $item['id'],
                 $item['lang']
             );

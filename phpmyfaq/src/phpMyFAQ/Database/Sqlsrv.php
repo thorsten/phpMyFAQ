@@ -122,6 +122,16 @@ class Sqlsrv implements DatabaseDriver
     }
 
     /**
+     * Fetch a result row.
+     * @param $result
+     * @return false|mixed
+     */
+    public function fetchRow($result)
+    {
+        return $this->fetchArray($result)[0];
+    }
+
+    /**
      * Fetches a complete result as an object.
      *
      * @param resource $result Resultset

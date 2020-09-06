@@ -441,7 +441,7 @@ class Configuration
             $this->getDb()->escape(trim($name))
         );
 
-        return $this->getDb()->query($delete);
+        return (bool)$this->getDb()->query($delete);
     }
 
     /**

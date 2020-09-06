@@ -25,3 +25,7 @@ window.bsCustomFileInput = require('bs-custom-file-input');
 
 require('cookieconsent');
 require('handlebars');
+
+require('jquery-ui');
+require('jquery-ui/ui/widgets/sortable');
+require('jquery-ui/ui/disable-selection');

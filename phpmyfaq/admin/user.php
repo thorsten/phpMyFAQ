@@ -565,8 +565,8 @@ if (
         $firstPage = $lastPage - $perPage;
 
         $baseUrl = sprintf(
-            '%s?action=user&amp;user_action=listallusers&amp;page=%d',
-            Link::getSystemRelativeUri(),
+            '%sadmin/?action=user&amp;user_action=listallusers&amp;page=%d',
+            $faqConfig->getDefaultUrl(),
             $page
         );
 

@@ -1,4 +1,4 @@
-# Language
+# Search
 
 This endpoint returns the results for the query string search term.
 
