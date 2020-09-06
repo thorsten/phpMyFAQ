@@ -16,6 +16,7 @@ Version 3.0.5 -
 
 Version 3.0.4 - 2020-07-26
 - session timeout extended to 5 hours (Thorsten)
+- fixed minor bugs (Thorsten)
 
 Version 3.0.3 - 2020-05-21
 - improved FAQ editing (Thorsten)
