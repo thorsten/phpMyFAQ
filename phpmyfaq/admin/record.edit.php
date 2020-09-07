@@ -832,8 +832,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
               <input type="hidden" name="csrf" value="<?= $user->getCsrfTokenFromSession() ?>">
 
               <div class="custom-file">
-                <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload"
-                       multiple accept="image/x-png,image/gif,image/jpeg">
+                <input type="file" class="custom-file-input" name="filesToUpload[]" id="filesToUpload" multiple>
                 <label class="custom-file-label" for="filesToUpload">
                     <?= $PMF_LANG['ad_att_att'] ?>
                 </label>
