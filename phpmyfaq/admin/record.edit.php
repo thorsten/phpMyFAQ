@@ -20,6 +20,7 @@ use phpMyFAQ\Category\CategoryRelation;
 use phpMyFAQ\Changelog;
 use phpMyFAQ\Database;
 use phpMyFAQ\Date;
+use phpMyFAQ\Faq;
 use phpMyFAQ\Filter;
 use phpMyFAQ\Helper\CategoryHelper;
 use phpMyFAQ\Helper\LanguageHelper;
@@ -53,6 +54,8 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
 
     $categoryHelper = new CategoryHelper();
     $categoryHelper->setCategory($category);
+
+    $faq = new Faq($faqConfig);
 
     $questionObject = new Question($faqConfig);
 
@@ -132,6 +135,11 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
         $lang = Filter::filterInput(INPUT_GET, 'lang', FILTER_SANITIZE_STRING);
         $translateTo = Filter::filterInput(INPUT_GET, 'translateTo', FILTER_SANITIZE_STRING);
         $categoryId = Filter::filterInput(INPUT_GET, 'cat', FILTER_VALIDATE_INT);
+
+        if (!is_null($translateTo)) {
+            $faqData['lang'] = $lang = $translateTo;
+        }
+
         if ((!isset($selectedCategory) && !isset($faqData['title'])) || !is_null($id)) {
             $logging = new Logging($faqConfig);
             $logging->logAdmin($user, 'admin-edit-faq, ' . $id);
@@ -147,9 +155,6 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
             if (isset($categoryId)) {
                 $categories = ['category_id' => $categoryId, 'category_lang' => $lang];
             }
-        }
-        if (!is_null($translateTo)) {
-            $faqData['lang'] = $translateTo;
         }
     } elseif ('copyentry' === $action) {
         $faqData['id'] = Filter::filterInput(INPUT_GET, 'id', FILTER_VALIDATE_INT);

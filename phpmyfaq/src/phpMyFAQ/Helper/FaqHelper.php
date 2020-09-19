@@ -244,8 +244,6 @@ class FaqHelper extends Helper
                     'Translate to',
                     $languageCodes[strtoupper($languageCode)]
                 );
-            } else {
-                $output .= '<a class="dropdown-item">n/a</a>';
             }
         }
 
