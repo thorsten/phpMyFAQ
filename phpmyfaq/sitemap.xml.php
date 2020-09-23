@@ -64,6 +64,9 @@ function buildSiteMapNode($location, $lastModified = null)
     if (empty($lastModified)) {
         $lastModified = Date::createIsoDate($_SERVER['REQUEST_TIME'], DATE_W3C, false);
     }
+    if (preg_match('/^[1|2][0-9]{3}-[0|1][0-9]-[0|1|2|3][0-9]$/', $lastModified)) {
+        $lastModified .= 'T'.date('H:i:sO');
+    }
     $node =
         '<url>'
         . '<loc>' . Strings::htmlspecialchars($location) . '</loc>'
