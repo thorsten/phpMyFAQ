@@ -43,8 +43,8 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
         $showcat = 'no';
     }
 
-    $userPermission = $category->getPermissions('user', array($id));
-    $groupPermission = $category->getPermissions('group', array($id));
+    $userPermission = $category->getPermissions('user', [$id]);
+    $groupPermission = $category->getPermissions('group', [$id]);
     ?>
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2">
@@ -58,6 +58,7 @@ if ($user->perm->checkRight($user->getUserId(), 'editcateg')) {
               <input type="hidden" name="id" value="<?= $id ?>">
               <input type="hidden" name="parent_id" value="<?= $category->categoryName[$id]['parent_id'] ?>">
               <input type="hidden" name="showcat" value="<?= $showcat ?>">
+              <input type="hidden" name="active" value="<?= $category->categoryName[$id]['active'] ?>">
                 <?php if ($faqConfig->get('security.permLevel') !== 'basic'): ?>
                   <input type="hidden" name="restricted_groups[]" value="<?= $groupPermission[0] ?>">
                 <?php else: ?>

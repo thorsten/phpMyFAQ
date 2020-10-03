@@ -1148,7 +1148,7 @@ class Category
      *
      * @param array $categoryData Array of category data
      * @param int $parentId Parent id
-     * @param int $id Entity id
+     * @param null $id Entity id
      *
      * @return int
      */
@@ -1296,13 +1296,13 @@ class Category
     {
         $temp_cat = rand(200000, 400000);
 
-        $tables = array(
-            array('faqcategories' => 'id'),
-            array('faqcategories' => 'parent_id'),
-            array('faqcategoryrelations' => 'category_id'),
-            array('faqcategory_group' => 'category_id'),
-            array('faqcategory_user' => 'category_id'),
-        );
+        $tables = [
+            ['faqcategories' => 'id'],
+            ['faqcategories' => 'parent_id'],
+            ['faqcategoryrelations' => 'category_id'],
+            ['faqcategory_group' => 'category_id'],
+            ['faqcategory_user' => 'category_id'],
+        ];
 
         $result = true;
         foreach ($tables as $pair) {
