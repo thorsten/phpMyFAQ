@@ -18,6 +18,7 @@
 namespace phpMyFAQ\Search;
 
 use Elasticsearch\Client;
+use Elasticsearch\Common\Exceptions\NoNodesAvailableException;
 use phpMyFAQ\Configuration;
 use stdClass;
 
@@ -96,7 +97,11 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             ]
         ];
 
-        $result = $this->client->search($searchParams);
+        try {
+            $result = $this->client->search($searchParams);
+        } catch (NoNodesAvailableException $e) {
+            return [];
+        }
 
         if (0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {
@@ -175,7 +180,11 @@ class Elasticsearch extends AbstractSearch implements SearchInterface
             ]
         ];
 
-        $result = $this->client->search($searchParams);
+        try {
+            $result = $this->client->search($searchParams);
+        } catch (NoNodesAvailableException $e) {
+            return [];
+        }
 
         if (0 !== $result['hits']['total']) {
             foreach ($result['hits']['hits'] as $hit) {

@@ -280,7 +280,7 @@ if (($user->perm->checkRight($currentUserId, 'edit_faq') ||
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" data-toggle="tab" href="#tab-meta-data" role="tab">
-                                    <i class="fa fa-database"></i> <?= $PMF_LANG['ad_menu_meta'] ?>
+                                    <i class="fa fa-database"></i> <?= $PMF_LANG['ad_menu_faq_meta'] ?>
                                 </a>
                             </li>
                             <li class="nav-item">
