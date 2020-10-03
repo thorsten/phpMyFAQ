@@ -1327,3 +1327,6 @@ $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP server encry
 $PMF_LANG['ad_record_faq'] = 'Question and answer';
 $PMF_LANG['ad_record_permissions'] = 'Permissions';
 $PMF_LANG['loginPageMessage'] = 'Log in to ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';

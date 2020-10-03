@@ -1328,3 +1328,6 @@ $LANG_CONF['mail.remoteSMTPEncryption'] = [0 => 'input', 1 => 'SMTP Server Versc
 $PMF_LANG['ad_record_faq'] = 'Frage und Antwort';
 $PMF_LANG['ad_record_permissions'] = 'Berechtigungen';
 $PMF_LANG['loginPageMessage'] = 'Login für ';
+
+// added v3.0.5 - 2020-10-03 by Thorsten
+$PMF_LANG['ad_menu_faq_meta'] = 'FAQ-Metadaten';
